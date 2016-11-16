@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/pageboard/pageboard-editor/issues"
   },
-  "homepage": "https://github.com/pageboard/pageboard-editor#readme"
+  "homepage": "https://github.com/pageboard/pageboard-editor#readme",
+  "dependencies": {
+    "coed": "^0.3.0"
+  }
 }
