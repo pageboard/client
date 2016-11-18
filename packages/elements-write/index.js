@@ -1,8 +1,5 @@
-module.exports = function(plugins) {
-  plugins.files.push(init);
+exports.file = function(app, api, config) {
+	config.statics.mounts.push(__dirname + '/public');
+	config.components.push(__dirname + '/public/js/coed-link.js');
 };
-
-function init(app, api, config) {
-	config.statics.files.push('public/js/coed.js');
-}
 
