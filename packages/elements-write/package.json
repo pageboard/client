@@ -1,5 +1,5 @@
 {
-  "name": "pageboard-editor",
+  "name": "pageboard-write",
   "version": "0.1.0",
   "description": "",
   "main": "index.js",
@@ -8,18 +8,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pageboard/pageboard-editor.git"
+    "url": "git+https://github.com/pageboard/pageboard-write.git"
   },
   "author": "Jérémy Lal <kapouer@melix.org>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/pageboard/pageboard-editor/issues"
+    "url": "https://github.com/pageboard/pageboard-write/issues"
   },
-  "homepage": "https://github.com/pageboard/pageboard-editor#readme",
+  "homepage": "https://github.com/pageboard/pageboard-write#readme",
   "dependencies": {
     "coed": "^0.3.0",
-    "morphdom": "^2.2.0",
-    "window-agent": "^1.0.0",
-    "window-page": "^1.0.2"
+    "morphdom": "^2.2.0"
   }
 }
