@@ -17,6 +17,9 @@
   },
   "homepage": "https://github.com/pageboard/pageboard-editor#readme",
   "dependencies": {
-    "coed": "^0.3.0"
+    "coed": "^0.3.0",
+    "morphdom": "^2.2.0",
+    "window-agent": "^1.0.0",
+    "window-page": "^1.0.2"
   }
 }
