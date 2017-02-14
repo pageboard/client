@@ -38,8 +38,19 @@ Page.setup(function(state) {
 		var content = contentNode.cloneNode(true);
 		contentNode.textContent = "";
 
-		// EditorMenu must be running from parent
-		win.Pagecut.Editor.EditorMenu = Pagecut.Editor.EditorMenu;
+		// render EditorMenu in parent window, but run in editor document
+		win.Pagecut.EditorMenu.prototype.init = function(schema) {
+			var parentItems = Pagecut.Setup.buildMenuItems(schema);
+			var items = win.Pagecut.Setup.buildMenuItems(schema);
+			Object.keys(parentItems).forEach(function(key) {
+				var item = parentItems[key];
+				if (item.spec) item.spec.run = items[key].spec.run;
+			});
+			this.menu = parentItems.fullMenu;
+		};
+
+		win.Pagecut.EditorMenu.prototype.update = Pagecut.EditorMenu.prototype.update;
+
 
 		// and the editor must be running from child
 		var editor = new win.Pagecut.Editor({
