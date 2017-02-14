@@ -36,7 +36,7 @@ Page.setup(function(state) {
 
 	function editorSetup(win, contentNode) {
 		var content = contentNode.cloneNode(true);
-		contentNode.innerHTML = "";
+		contentNode.textContent = "";
 
 		// EditorMenu must be running from parent
 		win.Pagecut.Editor.EditorMenu = Pagecut.Editor.EditorMenu;
