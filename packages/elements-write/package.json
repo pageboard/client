@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/pageboard/pageboard-write#readme",
   "dependencies": {
-    "coed": "^0.3.0",
+    "pagecut": "^1.0.0",
     "morphdom": "^2.2.0"
   }
 }
