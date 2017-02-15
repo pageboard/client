@@ -1,27 +1,19 @@
+if (!Pagecut.icons) Pagecut.icons = {};
+Pagecut.icons.link = Pagecut.Menu.icons.link;
+
 Page.setup(function(state) {
-	// setup "read" iframe in develop mode
-	var iframe = document.createElement('iframe');
-	document.getElementById('pageboard-read').appendChild(iframe);
 
-	var loc = Page.parse();
-	loc.query.develop = null;
-	delete loc.query.write;
-
-	// iframe.contentWindow will be cleared somewhere after setting iframe.src,
-	// so one cannot setup a listener event just after
-	iframe.onload = function() {
-		iframe.contentWindow.addEventListener('pageroute', iframeRoute);
-	};
-	iframe.src = Page.format(loc);
+	iframeSetup();
 
 	function iframeRoute(e) {
 		var win = this;
 		win.removeEventListener('pageroute', iframeRoute);
 		var doc = e.state.document;
-		doc.head.insertAdjacentHTML('beforeend', [
-			'<script src="/public/js/pagecut-editor.js"></script',
-			'link href="/public/css/pagecut.css" rel="stylesheet">'
-		].join('>\n<'));
+		doc.head.insertAdjacentHTML('beforeEnd', [
+			'<script src="/public/js/pagecut-editor.js"></script>',
+			'<link href="/public/css/pageboard-inject-in-read.css" rel="stylesheet">',
+			'<link href="/public/css/pagecut.css" rel="stylesheet">'
+		].join('\n'));
 
 		this.addEventListener('click', function(e) {
 			if (window.editor) return;
@@ -30,30 +22,78 @@ Page.setup(function(state) {
 			if (node == win.document.documentElement) {
 				node = win.document.body;
 			}
-			window.editor = editorSetup(this, node);
+			window.editor = editorSetup(win, node);
+			window.editor.view.focus();
 		});
 	}
 
+	function iframeSetup() {
+		// setup "read" iframe in develop mode
+		var iframe = document.createElement('iframe');
+		document.getElementById('pageboard-read').appendChild(iframe);
+
+		var loc = Page.parse(); // get a copy of state
+		loc.query.develop = null;
+		delete loc.query.write;
+
+		// iframe.contentWindow will be cleared somewhere after setting iframe.src,
+		// so one cannot setup a listener event just after
+		iframe.onload = function() {
+			iframe.contentWindow.addEventListener('pageroute', iframeRoute);
+		};
+		iframe.src = Page.format(loc);
+	}
+
 	function editorSetup(win, contentNode) {
+		var Editor = win.Pagecut.Editor;
+
 		var content = contentNode.cloneNode(true);
 		contentNode.textContent = "";
-
 		// render EditorMenu in parent window, but run in editor document
-		win.Pagecut.EditorMenu.prototype.init = function(schema) {
-			var parentItems = Pagecut.Setup.buildMenuItems(schema);
-			var items = win.Pagecut.Setup.buildMenuItems(schema);
-			Object.keys(parentItems).forEach(function(key) {
-				var item = parentItems[key];
-				if (item.spec) item.spec.run = items[key].spec.run;
+		win.Pagecut.EditorMenu.prototype.init = function(main, schema) {
+			var items = [];
+			Object.keys(main.elements).forEach(function(name) {
+				var nodeType = schema.nodes['root_' + name];
+				if (!nodeType) return;
+				var icon = Pagecut.icons[name];
+				if (!icon) return;
+				var el = main.elements[name];
+				items.push(new Pagecut.Menu.MenuItem({
+					title: el.name,
+					onDeselected: 'disable',
+					icon: icon,
+					run: function(state, dispatch, view) {
+						// that one won't work because it is not that smart
+						// it cannot know it must wrap inside the content node of the link
+						// win.Pagecut.Commands.wrapIn(schema.nodes['blockquote'])(state, dispatch);
+						// TODO manage two cases: inline anchors (wrapIn) or block anchors
+						// dispatch(state.tr.replaceSelectionWith(this.create()));
+
+						// TODO this is the case where we want to split current block
+						var block = {
+							id: - Date.now(),
+							type: el.name,
+							content: {content: 'test'} // remove me
+						};
+						main.modules.id.set(block);
+						var dom = main.render(block, true);
+						var frag = main.parse(dom);
+						dispatch(state.tr.replaceSelectionWith(frag.content[0]));
+					},
+					select: function(state) {
+						return canInsert(state, nodeType);
+					}
+				}));
 			});
-			this.menu = parentItems.fullMenu;
+			this.menu = [items];
 		};
 
 		win.Pagecut.EditorMenu.prototype.update = Pagecut.EditorMenu.prototype.update;
 
+		Editor.defaults.markSpec = Editor.defaults.markSpec.remove('link');
 
 		// and the editor must be running from child
-		var editor = new win.Pagecut.Editor({
+		var editor = new Editor({
 			menubar: document.querySelector('.pagecut-menu'),
 			place: contentNode,
 			change: function(me, block) {
@@ -68,5 +108,16 @@ Page.setup(function(state) {
 		});
 		editor.menu.update(editor.view);
 		return editor;
+	}
+
+	function canInsert(state, nodeType, attrs) {
+		var $from = state.selection.$from;
+		for (var d = $from.depth; d >= 0; d--) {
+			var index = $from.index(d);
+			if ($from.node(d).canReplaceWith(index, index, nodeType, attrs)) {
+				return true;
+			}
+		}
+		return false;
 	}
 });
