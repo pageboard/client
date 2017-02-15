@@ -11,7 +11,6 @@ Page.setup(function(state) {
 		var doc = e.state.document;
 		doc.head.insertAdjacentHTML('beforeEnd', [
 			'<script src="/public/js/pagecut-editor.js"></script>',
-			'<link href="/public/css/pageboard-inject-in-read.css" rel="stylesheet">',
 			'<link href="/public/css/pagecut.css" rel="stylesheet">'
 		].join('\n'));
 
