@@ -91,17 +91,19 @@ Page.setup(function(state) {
 
 		Editor.defaults.markSpec = Editor.defaults.markSpec.remove('link');
 
+		var throttledSave = Throttle(save, 1000);
+
 		// and the editor must be running from child
 		var editor = new Editor({
 			menubar: document.querySelector('.pagecut-menu'),
 			place: contentNode,
-			change: function(me, block) {
+			change: function(main, block) {
 				// TODO
 				// 1) the document should be considered a block here, so root changes are received
 				// 2) update the online blocks store (which has DOM Nodes inside content, not html)
 				// 3) optimization: update preview by block
+				throttledSave(main, block);
 
-				// console.log(block);
 			},
 			content: content
 		});
@@ -119,4 +121,12 @@ Page.setup(function(state) {
 		}
 		return false;
 	}
+
+	function save(editor, block) {
+		var store = {};
+		var root = editor.modules.id.to(store);
+		console.log("Saving", root, store);
+	}
 });
+
+
