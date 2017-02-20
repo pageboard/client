@@ -21,10 +21,11 @@
 	top:0;
 	bottom:0;
 }
-#pageboard-write .pagecut-menu:empty {
+
+#menu:empty {
 	display:none;
 }
-#pageboard-write .pagecut-menu {
+#menu {
 	border:1px solid gray;
 	margin:1em;
 }

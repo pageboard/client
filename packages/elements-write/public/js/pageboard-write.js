@@ -1,4 +1,5 @@
 if (!Pagecut.icons) Pagecut.icons = {};
+
 Pagecut.icons.link = Pagecut.Menu.icons.link;
 
 Page.setup(function(state) {
@@ -62,17 +63,14 @@ Page.setup(function(state) {
 					onDeselected: 'disable',
 					icon: icon,
 					run: function(state, dispatch, view) {
-						// that one won't work because it is not that smart
-						// it cannot know it must wrap inside the content node of the link
+						// TODO manage inline node insertion (and wrapping, but the problem is similar
+						// with blocks). Use Marks ?
 						// win.Pagecut.Commands.wrapIn(schema.nodes['blockquote'])(state, dispatch);
-						// TODO manage two cases: inline anchors (wrapIn) or block anchors
-						// dispatch(state.tr.replaceSelectionWith(this.create()));
-
-						// TODO this is the case where we want to split current block
 						var block = {
 							id: - Date.now(),
 							type: el.name,
-							content: {content: 'test'} // remove me
+							// TODO populate with current selection when possible
+							content: {content: 'placeholder'}
 						};
 						main.modules.id.set(block);
 						var dom = main.render(block, true);
@@ -92,10 +90,11 @@ Page.setup(function(state) {
 		Editor.defaults.markSpec = Editor.defaults.markSpec.remove('link');
 
 		var throttledSave = Throttle(save, 1000);
+		var throttledUpdate = Throttle(update, 250);
 
 		// and the editor must be running from child
 		var editor = new Editor({
-			menubar: document.querySelector('.pagecut-menu'),
+			menubar: document.querySelector('#menu'),
 			place: contentNode,
 			change: function(main, block) {
 				// TODO
@@ -103,7 +102,20 @@ Page.setup(function(state) {
 				// 2) update the online blocks store (which has DOM Nodes inside content, not html)
 				// 3) optimization: update preview by block
 				throttledSave(main, block);
-
+			},
+			update: function(main, tr) {
+				var prevSel = main.view.state.selection;
+				var curSel = tr.selection;
+				if (prevSel.from == curSel.from && prevSel.to == curSel.to) return; // nothing changed
+				var parents;
+				if (curSel.from != curSel.to) {
+					parents = [];
+				} else {
+					parents = main.parents(curSel.$from, true).map(function(item) {
+						return editor.nodeToBlock(item.node.root);
+					});
+				}
+				throttledUpdate(editor, parents);
 			},
 			content: content
 		});
@@ -126,6 +138,35 @@ Page.setup(function(state) {
 		var store = {};
 		var root = editor.modules.id.to(store);
 		console.log("Saving", root, store);
+	}
+
+	function update(editor, parents) {
+		// menu is already taken care of
+		// repaint breadcrumb
+		// repaint data form
+		var block = parents.slice(-1).pop();
+		updateForm(editor, block);
+	}
+
+	function updateForm(editor, block) {
+		var $form = $('#form');
+		$form.empty();
+		if (!block) return;
+		var el = editor.elements[block.type];
+		if (!el) {
+			// TODO display this block has no data to be edited
+			return;
+		}
+		var form = new Semafor({
+			type: 'object',
+			properties: el.properties,
+			required: el.required
+		}, $form[0]);
+
+		form.set(block.data);
+		form.$node.on('change', function() {
+			console.log(form.get());
+		});
 	}
 });
 
