@@ -87,7 +87,7 @@ Page.setup(function(state) {
 
 		win.Pagecut.EditorMenu.prototype.update = Pagecut.EditorMenu.prototype.update;
 
-		Editor.defaults.markSpec = Editor.defaults.markSpec.remove('link');
+		Editor.defaults.marks = Editor.defaults.marks.remove('link');
 
 		var throttledSave = Throttle(save, 1000);
 		var throttledUpdate = Throttle(update, 250);
