@@ -124,7 +124,7 @@ types.string = function(key, schema, el, fields) {
 types.oneOf = function(key, schema, el, fields) {
 	var field = el.append('div', {class: 'field'});
 	if (schema.title) field.append('label', schema.title);
-	var select = field.append('select');
+	var select = field.append('select', {name: key});
 	var item;
 	for (var i=0; i < schema.oneOf.length; i++) {
 		item = schema.oneOf[i];
