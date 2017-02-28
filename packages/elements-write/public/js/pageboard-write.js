@@ -1,6 +1,4 @@
-if (!Pagecut.icons) Pagecut.icons = {};
-
-Pagecut.icons.link = Pagecut.Menu.icons.link;
+window.Pagecut = {modules:{}};
 
 Page.setup(function(state) {
 
@@ -9,7 +7,13 @@ Page.setup(function(state) {
 	function iframeRoute(e) {
 		var win = this;
 		win.removeEventListener('pageroute', iframeRoute);
+		for (var type in window.Pagecut.modules) {
+			if (!win.Pagecut.modules[type]) win.Pagecut.modules[type] = {};
+			Object.assign(win.Pagecut.modules[type], window.Pagecut.modules[type]);
+		}
+
 		var doc = e.state.document;
+
 		doc.head.insertAdjacentHTML('beforeEnd', [
 			'<script src="/public/js/pagecut-editor.js"></script>',
 			'<link href="/public/css/pagecut.css" rel="stylesheet">'
@@ -49,43 +53,6 @@ Page.setup(function(state) {
 
 		var content = contentNode.cloneNode(true);
 		contentNode.textContent = "";
-		// render EditorMenu in parent window, but run in editor document
-		win.Pagecut.EditorMenu.prototype.init = function(main, schema) {
-			var items = [];
-			Object.keys(main.elements).forEach(function(name) {
-				var nodeType = schema.nodes['root_' + name];
-				if (!nodeType) return;
-				var icon = Pagecut.icons[name];
-				if (!icon) return;
-				var el = main.elements[name];
-				items.push(new Pagecut.Menu.MenuItem({
-					title: el.name,
-					onDeselected: 'disable',
-					icon: icon,
-					run: function(state, dispatch, view) {
-						// TODO manage inline node insertion (and wrapping, but the problem is similar
-						// with blocks). Use Marks ?
-						// win.Pagecut.Commands.wrapIn(schema.nodes['blockquote'])(state, dispatch);
-						var block = {
-							id: - Date.now(),
-							type: el.name,
-							// TODO populate with current selection when possible
-							content: {content: 'placeholder'}
-						};
-						main.modules.id.set(block);
-						var dom = main.render(block, true);
-						var frag = main.parse(dom);
-						dispatch(state.tr.replaceSelectionWith(frag.content[0]));
-					},
-					select: function(state) {
-						return canInsert(state, nodeType);
-					}
-				}));
-			});
-			this.menu = [items];
-		};
-
-		win.Pagecut.EditorMenu.prototype.update = Pagecut.EditorMenu.prototype.update;
 
 		Editor.defaults.marks = Editor.defaults.marks.remove('link');
 
@@ -94,7 +61,6 @@ Page.setup(function(state) {
 
 		// and the editor must be running from child
 		var editor = new Editor({
-			menubar: document.querySelector('#menu'),
 			place: contentNode,
 			change: function(main, block) {
 				// TODO
@@ -119,8 +85,48 @@ Page.setup(function(state) {
 			},
 			content: content
 		});
+
+		editor.menu = new Pagecut.Menubar({
+			place: document.querySelector('#menu'),
+			items: getMenuItems(editor)
+		});
 		editor.menu.update(editor.view);
 		return editor;
+	}
+
+	function getMenuItems(main) {
+		var items = [];
+		for (var i=0; i < main.elements.length; i++) {
+			var el = main.elements[i];
+			var nodeType = main.view.state.schema.nodes['root_' + el.name];
+			if (!nodeType) continue;
+			if (!el.icon) continue;
+
+			items.push(new Pagecut.Menubar.Menu.MenuItem({
+				title: el.name,
+				onDeselected: 'disable',
+				icon: el.icon,
+				run: function(state, dispatch, view) {
+					// TODO manage inline node insertion (and wrapping, but the problem is similar
+					// with blocks). Use Marks ?
+					// win.Pagecut.Commands.wrapIn(schema.nodes['blockquote'])(state, dispatch);
+					var block = {
+						id: - Date.now(),
+						type: this.name,
+						// TODO populate with current selection when possible
+						content: {content: 'placeholder'}
+					};
+					main.modules.id.set(block);
+					var dom = main.render(block, true);
+					var frag = main.parse(dom);
+					dispatch(state.tr.replaceSelectionWith(frag.content[0]));
+				}.bind({name: el.name}),
+				select: function(state) {
+					return canInsert(state, nodeType);
+				}
+			}));
+		}
+		return [items];
 	}
 
 	function canInsert(state, nodeType, attrs) {
@@ -152,7 +158,7 @@ Page.setup(function(state) {
 		var $form = $('#form');
 		$form.empty();
 		if (!block) return;
-		var el = editor.elements[block.type];
+		var el = editor.map[block.type];
 		if (!el) {
 			// TODO display this block has no data to be edited
 			return;
