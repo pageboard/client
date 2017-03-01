@@ -17,8 +17,6 @@ function Semafor(schema, node) {
 	process(null, schema, EL(node), fields);
 
 	// then initialize the form using semantic-ui form behavior
-	console.log(node.outerHTML);
-	console.log(fields);
 	this.$node.form({
 		on: 'blur',
 		fields: fields
