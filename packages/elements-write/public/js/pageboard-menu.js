@@ -11,9 +11,12 @@ Pageboard.setupMenu = function(selector, editor) {
 
 function getMenuItems(main) {
 	var items = [];
+	var schema = main.view.state.schema;
+	var win = main.view.root.defaultView;
+
 	for (var i=0; i < main.elements.length; i++) {
 		var el = main.elements[i];
-		var nodeType = main.view.state.schema.nodes['root_' + el.name];
+		var nodeType = schema.nodes[el.name] || schema.marks[el.name];
 		if (!nodeType) continue;
 		if (!el.icon) continue;
 
@@ -22,22 +25,30 @@ function getMenuItems(main) {
 			onDeselected: 'disable',
 			icon: el.icon,
 			run: function(state, dispatch, view) {
-				// TODO manage inline node insertion (and wrapping, but the problem is similar
-				// with blocks). Use Marks ?
-				// win.Pagecut.Commands.wrapIn(schema.nodes['blockquote'])(state, dispatch);
 				var block = {
 					id: - Date.now(),
-					type: this.name,
-					// TODO populate with current selection when possible
-					content: {content: 'placeholder'}
+					type: this.name
 				};
 				main.modules.id.set(block);
-				var dom = main.render(block, true);
-				var frag = main.parse(dom);
-				dispatch(state.tr.replaceSelectionWith(frag.content[0]));
+
+				if (el.inline) {
+					// TODO select whole node to do that
+					win.Pagecut.Commands.toggleMark(
+						nodeType,
+						{block_id: block.id}
+					)(state, dispatch);
+				} else {
+					var node = main.parse(main.render(block, true)).content[0];
+					dispatch(state.tr.replaceSelectionWith(node));
+				}
 			}.bind({name: el.name}),
 			select: function(state) {
+				if (el.inline) return true;
 				return canInsert(state, nodeType);
+			},
+			active: function(state) {
+				if (!el.inline) return true;
+				return markActive(state, nodeType);
 			}
 		}));
 	}
@@ -53,6 +64,15 @@ function canInsert(state, nodeType, attrs) {
 		}
 	}
 	return false;
+}
+
+function markActive(state, type) {
+	var sel = state.selection;
+	if (sel.empty) {
+		return type.isInSet(state.storedMarks || sel.$from.marks());
+	}	else {
+		return state.doc.rangeHasMark(sel.from, sel.to, type);
+	}
 }
 
 })(window.Pageboard, window.Pagecut);

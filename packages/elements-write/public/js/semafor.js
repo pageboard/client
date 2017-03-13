@@ -3,6 +3,10 @@
 // References
 // https://github.com/json-schema-org/json-schema-spec/issues/67
 
+// addons for semantic ui
+// slider
+// https://github.com/tyleryasaka/semantic-ui-range
+
 window.Semafor = Semafor;
 
 function Semafor(schema, node) {

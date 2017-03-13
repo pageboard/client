@@ -1,6 +1,6 @@
 (function(Pageboard, Pagecut) {
 
-Pageboard.setup = function() {
+Pageboard.setup = function(state) {
 	// setup "read" iframe in develop mode
 	var iframe = document.createElement('iframe');
 	document.getElementById('pageboard-read').appendChild(iframe);
@@ -26,6 +26,7 @@ function routeListener(e) {
 	}
 
 	var doc = e.state.document;
+	var viewer = win.Pagecut.viewerInstance;
 
 	doc.head.insertAdjacentHTML('beforeEnd', [
 		'<script src="/public/js/pagecut-editor.js"></script>',
@@ -33,24 +34,38 @@ function routeListener(e) {
 	].join('\n'));
 
 	this.addEventListener('click', function(e) {
+		e.preventDefault();
 		if (Pageboard.editor) return;
-		var node = e.target.closest('[block-id]');
-		if (!node) return;
-		if (node == win.document.documentElement) {
-			node = win.document.body;
-		}
-		var editor = editorSetup(win, node);
+		var editor = editorSetup(win, e.target, viewer);
 		editor.menu = Pageboard.setupMenu('#menu', editor);
-		editor.view.focus();
 		Pageboard.editor = editor;
+		Pageboard.form = new Pageboard.Form(editor, '#form');
 	});
 }
 
-function editorSetup(win, contentNode) {
+function editorSetup(win, target, viewer) {
+	var node = target.closest('[block-id]');
+	if (!node) return;
+	var block = viewer.modules.id.get(node.getAttribute('block-id'));
+	if (!block) {
+		console.error("Cannot edit a block with unknown id", block.id);
+		return;
+	}
+	var el = viewer.map[block.type];
+	if (!el) {
+		console.error("Cannot edit a block with unknown type", block.type);
+		return;
+	}
+	if (el.inline) {
+		node = node.parentNode.closest('[block-id]') || node;
+	}
+	if (node == win.document.documentElement) {
+		node = win.document.body;
+	}
 	var Editor = win.Pagecut.Editor;
 
-	var content = contentNode.cloneNode(true);
-	contentNode.textContent = "";
+	var content = node.cloneNode(true);
+	node.textContent = "";
 
 	Editor.defaults.marks = Editor.defaults.marks.remove('link');
 
@@ -59,7 +74,7 @@ function editorSetup(win, contentNode) {
 
 	// and the editor must be running from child
 	var editor = new Editor({
-		place: contentNode,
+		place: node,
 		change: function(main, block) {
 			// TODO
 			// 1) the document should be considered a block here, so root changes are received
@@ -70,33 +85,31 @@ function editorSetup(win, contentNode) {
 		update: function(main, tr) {
 			var prevSel = main.view.state.selection;
 			var curSel = tr.selection;
-			if (prevSel.from == curSel.from && prevSel.to == curSel.to) return; // nothing changed
-			var parents;
-			if (curSel.from != curSel.to) {
-				parents = [];
-			} else {
-				parents = main.parents(curSel.$from, true).map(function(item) {
-					return editor.nodeToBlock(item.node.root);
-				});
+			if (!tr.docChanged && prevSel.from == curSel.from && prevSel.to == curSel.to) {
+				// selection did not change, but transaction might be something else !
+				return;
 			}
+			var parents = main.selectionParents(curSel);
+			parents.forEach(function(item) {
+				item.block = editor.nodeToBlock(item.root.node);
+			});
 			throttledUpdate(editor, parents);
-		},
-		content: content
+		}
 	});
+	editor.modules.id.store = viewer.modules.id.store;
+	editor.set(content);
 
 	return editor;
 }
 
 function update(editor, parents) {
 	// TODO repaint breadcrumb
-	var block = parents.slice(-1).pop();
-	Pageboard.form.update(editor, block);
+	if (Pageboard.form) Pageboard.form.update(parents);
 }
 
 function save(editor, block) {
-	var store = {};
-	var root = editor.modules.id.to(store);
-	console.log("Saving", root, store);
+	var root = editor.modules.id.to();
+	console.log("Saving", root, editor.modules.id.store);
 }
 
 })(window.Pageboard, window.Pagecut);
