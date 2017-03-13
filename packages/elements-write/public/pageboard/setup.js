@@ -40,6 +40,7 @@ function routeListener(e) {
 		editor.menu = Pageboard.setupMenu('#menu', editor);
 		Pageboard.editor = editor;
 		Pageboard.form = new Pageboard.Form(editor, '#form');
+		Pageboard.breadcrumb = new Pageboard.Breadcrumb(editor, '#breadcrumb');
 	});
 }
 
@@ -103,8 +104,8 @@ function editorSetup(win, target, viewer) {
 }
 
 function update(editor, parents) {
-	// TODO repaint breadcrumb
 	if (Pageboard.form) Pageboard.form.update(parents);
+	if (Pageboard.breadcrumb) Pageboard.breadcrumb.update(parents);
 }
 
 function save(editor, block) {

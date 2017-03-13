@@ -11,6 +11,7 @@
 	<script src="/public/pageboard/write.js"></script>
 	<script src="/public/pageboard/form.js"></script>
 	<script src="/public/pageboard/menu.js"></script>
+	<script src="/public/pageboard/breadcrumb.js"></script>
 	<script src="/public/pageboard/setup.js"></script>
 	<script src="/public/js/pagecut-menu.js"></script>
 
@@ -20,13 +21,20 @@
 	<link rel="stylesheet" href="/public/semantic-ui/reset.css" />
 	<link rel="stylesheet" href="/public/semantic-ui/segment.css" />
 	<link rel="stylesheet" href="/public/semantic-ui/form.css" />
+	<link rel="stylesheet" href="/public/semantic-ui/breadcrumb.css" />
 	<link rel="stylesheet" href="/public/pageboard/write.css" />
 </head>
 <body>
 <div id="pageboard-read"></div>
 <div id="pageboard-write">
+	<div id="breadcrumb" class="ui breadcrumb">
+		<a class="section"></a>
+		<i class="right chevron icon divider"></i>
+	</div>
 	<div id="menu"></div>
-	<div id="form" class="ui segment form"></div>
+	<div class="ui basic segment">
+		<div id="form" class="ui form"></div>
+	</div>
 </div>
 </body>
 </html>
