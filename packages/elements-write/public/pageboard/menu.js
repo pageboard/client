@@ -14,6 +14,18 @@ function getMenuItems(main) {
 	var schema = main.view.state.schema;
 	var win = main.view.root.defaultView;
 
+	// TODO
+
+	// this is how the menu looks
+
+	/*
+	[[inlineItem1, inlineItem2, ...], [dropDownWithIcon1, dropDownWithIcon2, ...]]
+	inline items are always shown (but there are very few of them)
+	dropDowns are always shown, and are "opened" automatically when focusing a block
+	the dropDowns icons are not configurable
+	the menu items in dropDowns can configure their display as usual, but we'll put their name for now
+	*/
+
 	for (var i=0; i < main.elements.length; i++) {
 		var el = main.elements[i];
 		var nodeType = schema.nodes[el.name] || schema.marks[el.name];
