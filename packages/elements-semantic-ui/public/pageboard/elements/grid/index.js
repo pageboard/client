@@ -17,8 +17,7 @@ exports.grid_column.properties = {
 		title: 'Column width',
 		type: "integer",
 		minimum: 1,
-		maximum: 4,
-		default: 1
+		maximum: 10
 	}
 };
 exports.grid_column.specs = {

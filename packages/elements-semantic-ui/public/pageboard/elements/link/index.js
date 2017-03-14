@@ -2,6 +2,8 @@
 
 if (!exports.link) exports.link = {};
 
+exports.link.title = "Link";
+
 exports.link.properties = {
 	url: {
 		title: 'Address',
