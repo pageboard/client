@@ -10,7 +10,7 @@ Pageboard.setupMenu = function(selector, editor) {
 };
 
 function getItem(editor, el, nodeType) {
-	return {
+	var item = {
 		title: el.name,
 		onDeselected: 'disable',
 		icon: el.icon,
@@ -40,6 +40,9 @@ function getItem(editor, el, nodeType) {
 			}
 		}
 	};
+	if (el.icon) item.icon = el.icon;
+	else if (el.title) item.label = el.title;
+	return item;
 }
 
 function getMenuItems(editor) {
