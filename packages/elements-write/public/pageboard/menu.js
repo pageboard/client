@@ -17,11 +17,11 @@ function getItem(editor, el, nodeType) {
 		run: function(state, dispatch, view) {
 			// TODO give a way to remove marks of current selected root node(s)
 			var block = {
-				id: - Date.now(),
 				type: el.name
 			};
-			editor.modules.id.set(block);
-			editor.replace(state.tr.selection, block);
+			var sel = state.tr.selection;
+			sel = editor.select(sel) || sel;
+			editor.insert(block, sel);
 		},
 		select: function(state) {
 			if (el.inline) {
