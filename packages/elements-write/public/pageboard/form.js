@@ -51,7 +51,7 @@ Form.prototype.change = function(info, el) {
 	}
 	this.replacing = true;
 	var oldSel = view.state.tr.selection; // do we need to copy that ?
-	this.editor.replace(blockNode, block);
+	this.editor.replace(block, blockNode);
 	view.dispatch(view.state.tr.setSelection(oldSel));
 	this.replacing = false;
 };
