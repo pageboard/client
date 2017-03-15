@@ -17,8 +17,8 @@ Form.prototype.clear = function() {
 Form.prototype.update = function(parents) {
 	if (this.replacing) return;
 	this.clear();
-	var info = parents.slice(-1).pop();
-	if (!info) return;
+	if (!parents.length) return;
+	var info = parents[0];
 	var block = info.block;
 	if (!block) return;
 	var el = this.editor.map[block.type];

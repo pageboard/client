@@ -11,7 +11,7 @@ function Breadcrumb(editor, selector) {
 
 Breadcrumb.prototype.update = function(parents) {
 	this.clear();
-	for (var i=0; i < parents.length; i++) {
+	for (var i = parents.length - 1; i >= 0; i--) {
 		var block = parents[i].block;
 		this.$node.append(this.item(block));
 	}
@@ -36,7 +36,6 @@ Breadcrumb.prototype.click = function(e) {
 	var id = e.target.getAttribute('block-id');
 	var node = this.editor.view.root.querySelector('[block-id="'+id+'"]');
 	if (!node) console.warn("block node not found", id);
-	if (node.firstChild) node = node.firstChild; // workaround parents() not able to select rpos.nodeAfter
 	var sel = this.editor.select(node);
 	if (sel) {
 		this.editor.view.dispatch(this.editor.view.state.tr.setSelection(sel));
