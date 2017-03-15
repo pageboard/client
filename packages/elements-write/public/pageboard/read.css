@@ -1,0 +1,6 @@
+@import "/public/css/pagecut.css";
+
+.ProseMirror-selectednode {
+	outline: 2px inset #4183C4;
+}
+

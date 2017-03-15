@@ -30,7 +30,7 @@ function routeListener(e) {
 
 	doc.head.insertAdjacentHTML('beforeEnd', [
 		'<script src="/public/js/pagecut-editor.js"></script>',
-		'<link href="/public/css/pagecut.css" rel="stylesheet">'
+		'<link href="/public/pageboard/read.css" rel="stylesheet">'
 	].join('\n'));
 
 	this.addEventListener('click', function(e) {
