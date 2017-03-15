@@ -74,10 +74,7 @@ function getMenuItems(editor) {
 
 	for (var i=0; i < groups.length; i++) {
 		dropdowns.push(new Pagecut.Menubar.Menu.Dropdown(groups[i], {
-			label: groups[i].menu,
-			title: "my title",
-			class: "myclass",
-			css: "mycss"
+			label: groups[i].menu
 		}));
 	}
 
