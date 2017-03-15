@@ -135,10 +135,32 @@ types.oneOf = function(key, schema, el, fields) {
 	}
 };
 
-types.boolean = function(key, schema, node, fields) {
+types.oneOf = function(key, schema, el, fields) {
 };
 
-types.integer = function(key, schema, node, fields) {
+types.integer = function(key, schema, el, fields) {
+	var field = el.append('div', {class: 'field'});
+	if (schema.title) {
+		field.append('label', schema.title);
+	}
+
+	var two = field.append('div', {class: 'two fields'});
+
+	var input =  two.append('div', {class: 'two wide field'}).append('input', {
+		name: key
+	}).node;
+
+	$(two.append('div', {class: 'fourteen wide field'}).append('div', {
+		class: 'ui range'
+	}).node).range({
+		min: schema.minimum,
+		max: schema.maximum,
+		start: schema.default != null ? schema.default : schema.minimum,
+		input: input,
+		onChange: function(val, meta) {
+			if (meta.triggeredByUser) $(input).trigger('change');
+		}
+	});
 };
 
 types.number = function(key, schema, node, fields) {

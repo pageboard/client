@@ -29,3 +29,8 @@
 	border:1px solid gray;
 	margin:1em 0;
 }
+
+.ui.range {
+	height:auto;
+	padding: 0.67857143em 1em; /* this is the padding value of .field
+}
