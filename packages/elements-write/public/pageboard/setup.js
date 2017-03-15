@@ -36,7 +36,10 @@ function routeListener(e) {
 	this.addEventListener('click', function(e) {
 		e.preventDefault();
 		if (Pageboard.editor) return;
-		var editor = editorSetup(win, e.target, viewer);
+		// setup editor on whole body instead of e.target
+		// setting it up on a block requires managing context (topNode in parser, probably)
+		var target = e.target.ownerDocument.body;
+		var editor = editorSetup(win, target, viewer);
 		editor.menu = Pageboard.setupMenu('#menu', editor);
 		Pageboard.editor = editor;
 		Pageboard.form = new Pageboard.Form(editor, '#form');
