@@ -5,7 +5,8 @@ Pageboard.Form = Form;
 function Form(editor, selector) {
 	this.editor = editor;
 	this.$node = $(selector);
-	this.replacing = false;
+	this.template = this.$node.html();
+	this.clear();
 }
 
 Form.prototype.clear = function() {
@@ -23,7 +24,7 @@ Form.prototype.update = function(parents) {
 	if (!block) return;
 	var el = this.editor.map[block.type];
 	if (!el) {
-		// TODO display this block has no data to be edited
+		this.$node.html(this.template);
 		return;
 	}
 	this.form = new Semafor({
