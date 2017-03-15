@@ -25,9 +25,9 @@ function getItem(editor, el, nodeType) {
 		},
 		select: function(state) {
 			if (el.inline) {
-				return canMark(state, nodeType);
+				return editor.canMark(state, nodeType);
 			} else {
-				return canInsert(state, nodeType);
+				return editor.canInsert(state, nodeType);
 			}
 		},
 		active: function(state) {
@@ -36,7 +36,7 @@ function getItem(editor, el, nodeType) {
 				var parent = parents[parents.length - 1];
 				return parent && parent.block.type == el.name;
 			} else {
-				return markActive(state, nodeType);
+				return editor.markActive(state, nodeType);
 			}
 		}
 	};
@@ -82,36 +82,6 @@ function getMenuItems(editor) {
 	}
 
 	return items;
-}
-
-function canMark(state, nodeType) {
-	var can = state.doc.contentMatchAt(0).allowsMark(nodeType);
-	var sel = state.tr.selection;
-	state.doc.nodesBetween(sel.from, sel.to, function(node) {
-		if (can) return false;
-		can = node.isTextblock && node.contentMatchAt(0).allowsMark(nodeType);
-	});
-	return can;
-}
-
-function canInsert(state, nodeType, attrs) {
-	var $from = state.selection.$from;
-	for (var d = $from.depth; d >= 0; d--) {
-		var index = $from.index(d);
-		if ($from.node(d).canReplaceWith(index, index, nodeType, attrs)) {
-			return true;
-		}
-	}
-	return false;
-}
-
-function markActive(state, type) {
-	var sel = state.selection;
-	if (sel.empty) {
-		return type.isInSet(state.storedMarks || sel.$from.marks());
-	}	else {
-		return state.doc.rangeHasMark(sel.from, sel.to, type);
-	}
 }
 
 })(window.Pageboard, window.Pagecut);
