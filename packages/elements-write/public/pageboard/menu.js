@@ -34,7 +34,7 @@ function getItem(editor, el, nodeType) {
 			if (!el.inline) {
 				var parents = editor.selectionParents(state.tr.selection);
 				var parent = parents[parents.length - 1];
-				return parent && parent.block.type == el.name;
+				return parent && parent.root.node.type.name == el.name;
 			} else {
 				return editor.markActive(state, nodeType);
 			}
