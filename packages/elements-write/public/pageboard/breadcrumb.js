@@ -6,7 +6,7 @@ function Breadcrumb(editor, selector) {
 	this.editor = editor;
 	this.template = this.$node[0].cloneNode(true);
 	this.clear();
-	this.$node.on('click', 'a', this.click);
+	this.$node.on('click', 'a', this.click.bind(this));
 }
 
 Breadcrumb.prototype.update = function(parents) {
@@ -33,7 +33,15 @@ Breadcrumb.prototype.item = function(block) {
 }
 
 Breadcrumb.prototype.click = function(e) {
-	console.log('clicked breadcrumb item pointing to block-id', this.getAttribute('block-id'));
+	var id = e.target.getAttribute('block-id');
+	var node = this.editor.view.root.querySelector('[block-id="'+id+'"]');
+	if (!node) console.warn("block node not found", id);
+	if (node.firstChild) node = node.firstChild; // workaround parents() not able to select rpos.nodeAfter
+	var sel = this.editor.select(node);
+	if (sel) {
+		this.editor.view.dispatch(this.editor.view.state.tr.setSelection(sel));
+		this.editor.view.focus();
+	}
 };
 
 })(window.Pageboard);
