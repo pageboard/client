@@ -11,7 +11,7 @@ Pageboard.setupMenu = function(selector, editor) {
 
 function getItem(editor, el, nodeType) {
 	var item = {
-		title: el.name,
+		title: el.title,
 		onDeselected: 'disable',
 		icon: el.icon,
 		run: function(state, dispatch, view) {
