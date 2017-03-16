@@ -87,6 +87,7 @@ function editorSetup(win, target, viewer) {
 			throttledSave(main, block);
 		},
 		update: function(main, tr) {
+			if (tr.addToHistory === false) return;
 			var prevSel = main.view.state.selection;
 			var curSel = tr.selection;
 			if (!tr.docChanged && prevSel.from == curSel.from && prevSel.to == curSel.to) {
