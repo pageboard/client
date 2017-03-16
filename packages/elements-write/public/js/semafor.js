@@ -192,6 +192,12 @@ formats.email = function() {
 	};
 };
 
+formats.uri = function() {
+	return {
+		type: 'url'
+	};
+};
+
 keywords.pattern = function(value) {
 	return {
 		type: 'regExp',
