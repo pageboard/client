@@ -51,31 +51,43 @@ function getMenuItems(editor) {
 	var dropdowns = [];
 	var items = [singles, dropdowns];
 	var menuGroups = {};
-	var groups = [];
-	var schema = editor.view.state.schema;
-
+	var groups = [{
+		id: 'layout',
+		title: 'Layout'
+	}];
 	var group, item;
+
+	// initialize menuGroups cache
+	for (var i=0; i < groups.length; i++) {
+		group = groups[i];
+		menuGroups[group.id] = group;
+	}
+
+	var schema = editor.view.state.schema;
 	for (var i=0; i < editor.elements.length; i++) {
 		var el = editor.elements[i];
 		var nodeType = schema.nodes[el.name] || schema.marks[el.name];
 		if (!nodeType || (!el.menu && !el.icon)) continue;
 		item = new Pagecut.Menubar.Menu.MenuItem(getItem(editor, el, nodeType));
 		if (el.menu) {
-			group = menuGroups[el.menu]
+			group = menuGroups[el.menu];
 			if (!group) {
-				group = menuGroups[el.menu] = [];
-				group.menu = el.menu;
+				// in case of unknown groups
+				group = menuGroups[el.menu] = {title: el.menu};
 				groups.push(group);
 			}
-			group.push(item);
+			if (!group.items) group.items = [];
+			group.items.push(item);
 		} else if (el.icon) {
 			singles.push(item);
 		}
 	}
 
 	for (var i=0; i < groups.length; i++) {
-		dropdowns.push(new Pagecut.Menubar.Menu.Dropdown(groups[i], {
-			label: groups[i].menu
+		group = groups[i];
+		dropdowns.push(new Pagecut.Menubar.Menu.Dropdown(group.items, {
+			label: group.title,
+			title: group.title
 		}));
 	}
 
