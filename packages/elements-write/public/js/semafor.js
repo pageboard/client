@@ -80,15 +80,16 @@ function process(key, schema, el, fields) {
 	var type = schema.type;
 	// TODO support array of types (user selects the type he needs)
 	if (type && types[type]) {
-		if (!key && type != 'object') {
+		if (type == 'object') {
+			types[type](key, schema, el, fields);
+		} else if (!key) {
 			console.error('Properties of type', type, 'must have a name');
 		} else {
-			types[type](key, schema, el, fields);
 			var field = fields[key] = {};
 			field.identifier = key; // TODO check if really needed
 			field.rules = [];
 			if (schema.format && formats[schema.format]) {
-				field.rules.push(formats[schema.format]);
+				field.rules.push(formats[schema.format](schema));
 			}
 			if (schema.required && schema.required.indexOf(key) >= 0) { // TODO problem key != name if nested
 				field.rules.push({type: 'empty'});
@@ -104,6 +105,7 @@ function process(key, schema, el, fields) {
 				].indexOf(kw) >= 0) continue;
 				if (keywords[kw]) field.rules.push(keywords[kw](schema[kw]));
 			}
+			types[type](key, schema, el, fields);
 		}
 	} else if (!type && schema.oneOf) {
 		types.oneOf(key, schema, el, fields);
@@ -135,35 +137,31 @@ types.oneOf = function(key, schema, el, fields) {
 	}
 };
 
-types.oneOf = function(key, schema, el, fields) {
+types.integer = function(key, schema, el, fields) {
+	schema = Object.assign({}, schema);
+	schema.multipleOf = 1;
+	types.number(key, schema, el, fields);
+	fields[key].type = 'integer';
 };
 
-types.integer = function(key, schema, el, fields) {
-	var field = el.append('div', {class: 'field'});
+types.number = function(key, schema, el, fields) {
+	var field = el.append('div', {class: 'inline field'});
 	if (schema.title) {
 		field.append('label', schema.title);
 	}
 
-	var two = field.append('div', {class: 'two fields'});
+	var attrs = {
+		name: key,
+		type: 'number'
+	};
 
-	var input =  two.append('div', {class: 'two wide field'}).append('input', {
-		name: key
-	}).node;
-
-	$(two.append('div', {class: 'fourteen wide field'}).append('div', {
-		class: 'ui range'
-	}).node).range({
-		min: schema.minimum,
-		max: schema.maximum,
-		start: schema.default != null ? schema.default : schema.minimum,
-		input: input,
-		onChange: function(val, meta) {
-			if (meta.triggeredByUser) $(input).trigger('change');
-		}
-	});
-};
-
-types.number = function(key, schema, node, fields) {
+	attrs.type = 'number';
+	if (schema.description) attrs.title = schema.description;
+	if (schema.minimum != null) attrs.min = schema.minimum;
+	if (schema.maximum != null) attrs.max = schema.maximum;
+	if (schema.multipleOf != null) attrs.step = schema.multipleOf;
+	field.append('input', attrs);
+	fields[key].type = 'number';
 };
 
 types.object = function(key, schema, el, fields) {
