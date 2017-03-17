@@ -36,7 +36,7 @@ Breadcrumb.prototype.click = function(e) {
 	var id = e.target.getAttribute('block-id');
 	var node = this.editor.view.root.querySelector('[block-id="'+id+'"]');
 	if (!node) console.warn("block node not found", id);
-	var sel = this.editor.select(node);
+	var sel = this.editor.select(node, true);
 	if (sel) {
 		this.editor.view.dispatch(this.editor.view.state.tr.setSelection(sel));
 		this.editor.view.focus();

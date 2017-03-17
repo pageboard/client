@@ -15,12 +15,11 @@ function getItem(editor, el, nodeType) {
 		onDeselected: 'disable',
 		icon: el.icon,
 		run: function(state, dispatch, view) {
-			// TODO give a way to remove marks of current selected root node(s)
 			var block = {
 				type: el.name
 			};
 			var sel = state.tr.selection;
-			sel = editor.select(sel) || sel;
+			sel = editor.select(sel, true) || sel;
 			editor.insert(block, sel);
 		},
 		select: function(state) {
@@ -58,7 +57,7 @@ function getMenuItems(editor) {
 	var group, item;
 
 	// initialize menuGroups cache
-	for (var i=0; i < groups.length; i++) {
+	for (var i = 0; i < groups.length; i++) {
 		group = groups[i];
 		menuGroups[group.id] = group;
 	}

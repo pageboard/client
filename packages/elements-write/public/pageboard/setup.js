@@ -87,11 +87,11 @@ function editorSetup(win, target, viewer) {
 			throttledSave(main, block);
 		},
 		update: function(main, tr) {
-			if (tr.addToHistory === false) return;
+			if (tr.addToHistory === false || tr.ignoreUpdate) return;
 			var prevSel = main.view.state.selection;
 			var curSel = tr.selection;
-			if (!tr.docChanged && prevSel.from == curSel.from && prevSel.to == curSel.to) {
-				// selection did not change, but transaction might be something else !
+			if (prevSel.eq(curSel)) {
+				// selection did not change
 				return;
 			}
 			var parents = main.selectionParents(curSel);

@@ -2,7 +2,7 @@
 	display:block;
 	position:absolute;
 	left:0;
-	right:40%;
+	right:30%;
 	top:0;
 	bottom:0;
 	background-color:#EEE;
@@ -16,7 +16,7 @@
 #pageboard-write {
 	display:block;
 	position:absolute;
-	left:60%;
+	left:70%;
 	right:0;
 	top:0;
 	bottom:0;

@@ -7,26 +7,36 @@ function Form(editor, selector) {
 	this.$node = $(selector);
 	this.template = this.$node.html();
 	this.clear();
+	this.$node.on('change input', Throttle(this.change.bind(this), 25));
 }
 
 Form.prototype.clear = function() {
 	this.$node.empty();
-	this.$node.off('change');
-	this.replacing = false;
+	delete this.block;
 };
 
 Form.prototype.update = function(parents) {
-	if (this.replacing) return;
-	this.clear();
-	if (!parents.length) return;
+	if (this.ignore) return;
+	if (!parents.length) {
+		this.clear();
+		return;
+	}
 	var info = parents[0];
 	var block = info.block;
-	if (!block) return;
+	if (!block) {
+		this.clear();
+		return;
+	}
 	var el = this.editor.map[block.type];
 	if (!el) {
 		this.$node.html(this.template);
 		return;
 	}
+	if (this.block && this.block.id == block.id) {
+		return;
+	}
+	this.clear();
+
 	this.form = new Semafor({
 		type: 'object',
 		properties: el.properties,
@@ -35,26 +45,31 @@ Form.prototype.update = function(parents) {
 
 	this.form.set(block.data);
 	this.block = block;
-	this.$node.on('change', this.change.bind(this, info, el));
 };
 
-Form.prototype.change = function(info, el) {
-	var block = info.block;
+Form.prototype.change = function() {
+	if (!this.block) return;
 	var data = this.form.get();
-	Object.assign(block.data, data);
-	this.editor.modules.id.set(block);
+	Object.assign(this.block.data, data);
 	var view = this.editor.view;
-	var blockNode = view.dom.querySelector('[block-id="' + block.id + '"]');
+	var blockNode = view.dom.querySelector('[block-id="' + this.block.id + '"]');
 	if (!blockNode) {
-		console.error("blockNode was not found");
+		console.error("blockNode was not found", this.block);
 		this.clear();
 		return;
 	}
-	this.replacing = true;
-	var oldSel = view.state.tr.selection; // do we need to copy that ?
-	this.editor.replace(block, blockNode);
-	view.dispatch(view.state.tr.setSelection(oldSel));
-	this.replacing = false;
+
+	// selection is not restored because dispatched transaction must not cause an update
+	var oldSel = view.state.tr.selection;
+	this.editor.modules.id.set(this.block);
+	var tr = this.editor.replaceTr(this.block, blockNode);
+	tr.ignoreUpdate = true;
+	view.dispatch(tr);
+	tr = view.state.tr.setSelection(oldSel);
+	tr.ignoreUpdate = true;
+	tr.addToHistory = false;
+	view.dispatch(tr);
+	view.focus();
 };
 
 })(window.Pageboard, window.Pagecut);
