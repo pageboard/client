@@ -9,15 +9,15 @@ exports.grid.specs = {
 exports.grid.menu = 'layout';
 exports.grid.group = "block";
 
-
 if (!exports.grid_column) exports.grid_column = {};
 exports.grid_column.title = "Column";
 exports.grid_column.properties = {
 	width: {
 		title: 'Column width',
+		description: 'Between 1 and 16, set to 0 for auto',
 		type: "integer",
-		minimum: 1,
-		maximum: 10
+		minimum: 0,
+		maximum: 16
 	}
 };
 exports.grid_column.specs = {
