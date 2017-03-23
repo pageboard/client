@@ -101,7 +101,8 @@ function process(key, schema, el, fields) {
 					"format",
 					"title",
 					"description",
-					"id"
+					"id",
+					"default"
 				].indexOf(kw) >= 0) continue;
 				if (keywords[kw]) field.rules.push(keywords[kw](schema[kw]));
 			}
@@ -119,10 +120,12 @@ types.string = function(key, schema, el, fields) {
 	if (schema.title) {
 		field.append('label', schema.title);
 	}
-	field.append('input', {
+	var attrs = {
 		type: 'text',
 		name: key
-	});
+	};
+	if (schema.default !== undefined) attrs.value = schema.default;
+	field.append('input', attrs);
 };
 
 types.oneOf = function(key, schema, el, fields) {
@@ -154,6 +157,7 @@ types.number = function(key, schema, el, fields) {
 		name: key,
 		type: 'number'
 	};
+	if (schema.default !== undefined) attrs.value = schema.default;
 
 	attrs.type = 'number';
 	if (schema.description) attrs.title = schema.description;
