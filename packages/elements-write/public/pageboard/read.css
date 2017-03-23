@@ -1,6 +1,11 @@
 @import "/public/css/pagecut.css";
 
 .ProseMirror-selectednode {
-	outline: 2px inset #4183C4;
+	outline: 3px solid #4183C4 !important;
+	cursor:pointer !important;
+}
+
+[block-focused="last"] {
+	outline: 1px solid #4183C4;
 }
 
