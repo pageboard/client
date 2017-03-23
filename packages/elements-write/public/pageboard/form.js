@@ -27,6 +27,11 @@ Form.prototype.update = function(parents) {
 		this.clear();
 		return;
 	}
+	if (info.content && info.content.name) {
+		this.clear();
+		return;
+	}
+
 	var el = this.editor.map[block.type];
 	if (!el) {
 		this.$node.html(this.template);
@@ -62,14 +67,16 @@ Form.prototype.change = function() {
 	// selection is not restored because dispatched transaction must not cause an update
 	var oldSel = view.state.tr.selection;
 	this.editor.modules.id.set(this.block);
-	var tr = this.editor.replaceTr(this.block, blockNode);
+
+	var tr = this.editor.replaceTr(this.block, blockNode, true);
+	if (!tr) {
+		console.error("Cannot update block", blockNode);
+		return;
+	}
 	tr.ignoreUpdate = true;
 	view.dispatch(tr);
-	tr = view.state.tr.setSelection(oldSel);
-	tr.ignoreUpdate = true;
-	tr.addToHistory = false;
-	view.dispatch(tr);
-	view.focus();
+
+
 };
 
 })(window.Pageboard, window.Pagecut);
