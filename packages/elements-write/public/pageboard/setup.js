@@ -87,14 +87,14 @@ function editorSetup(win, target, viewer) {
 			throttledSave(main, block);
 		},
 		update: function(main, tr) {
-			if (tr.addToHistory === false || tr.ignoreUpdate) return;
-			var prevSel = main.view.state.selection;
-			var curSel = tr.selection;
-			if (prevSel.eq(curSel)) {
-				// selection did not change
+			if (tr.addToHistory === false || tr.ignoreUpdate) {
 				return;
 			}
-			var parents = main.selectionParents(curSel);
+			var sel = tr.selection;
+			if (tr.steps.length == 0 && !tr.selectionSet) {
+				return;
+			}
+			var parents = main.selectionParents(sel);
 			parents.forEach(function(item) {
 				item.block = editor.nodeToBlock(item.root.node);
 			});
