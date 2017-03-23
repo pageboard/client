@@ -1,8 +1,2 @@
 @import "/public/semantic-ui/grid.css";
 
-.ui.grid {
-	border: 1px solid black;
-}
-.ui.grid .column {
-	border: 1px dotted black;
-}
