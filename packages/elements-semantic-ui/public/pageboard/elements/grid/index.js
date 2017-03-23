@@ -3,8 +3,11 @@
 if (!exports.grid) exports.grid = {};
 exports.grid.title = "Grid";
 exports.grid.properties = {};
-exports.grid.specs = {
-	columns: "grid_column+"
+exports.grid.contents = {
+	columns: {
+		spec: "grid_column+",
+		title: 'Columns'
+	}
 };
 exports.grid.menu = 'layout';
 exports.grid.group = "block";
@@ -21,8 +24,11 @@ exports.grid_column.properties = {
 		maximum: 16
 	}
 };
-exports.grid_column.specs = {
-	content: "block+"
+exports.grid_column.contents = {
+	content: {
+		spec: "block+",
+		title: 'Content'
+	}
 };
 exports.grid_column.menu = 'layout';
 
