@@ -16,6 +16,7 @@ exports.grid_column.properties = {
 		title: 'Column width',
 		description: 'Between 1 and 16, set to 0 for auto',
 		type: "integer",
+		default: 0,
 		minimum: 0,
 		maximum: 16
 	}
