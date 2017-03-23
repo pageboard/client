@@ -20,7 +20,11 @@ function getItem(editor, el, nodeType) {
 			};
 			var sel = state.tr.selection;
 			sel = editor.select(sel, true) || sel;
-			editor.insert(block, sel);
+			if (el.inline && editor.markActive(state, nodeType)) {
+				dispatch(state.tr.removeMark(sel.from, sel.to, nodeType));
+			} else {
+				editor.insert(block, sel);
+			}
 		},
 		select: function(state) {
 			if (el.inline) {
