@@ -94,7 +94,7 @@ function editorSetup(win, target, viewer) {
 			if (tr.steps.length == 0 && !tr.selectionSet) {
 				return;
 			}
-			var parents = main.selectionParents(sel);
+			var parents = main.selectionParents(tr, sel);
 			parents.forEach(function(item) {
 				item.block = editor.nodeToBlock(item.root.node);
 			});

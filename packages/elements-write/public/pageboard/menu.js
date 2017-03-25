@@ -18,12 +18,13 @@ function getItem(editor, el, nodeType) {
 			var block = {
 				type: el.name
 			};
-			var sel = editor.selectTr(state.tr, state.tr.selection, true);
-			var tr;
+			var tr = state.tr;
+			var sel = editor.selectTr(tr, tr.selection, true);
+
 			if (el.inline && editor.markActive(state, nodeType)) {
-				tr = state.tr.removeMark(sel.from, sel.to, nodeType);
+				tr = tr.removeMark(sel.from, sel.to, nodeType);
 			} else {
-				tr = editor.insertTr(block, sel);
+				tr = editor.insertTr(tr, block, sel);
 			}
 			if (tr) dispatch(tr);
 		},
@@ -36,7 +37,7 @@ function getItem(editor, el, nodeType) {
 		},
 		active: function(state) {
 			if (!el.inline) {
-				var parents = editor.selectionParents(state.tr.selection);
+				var parents = editor.selectionParents(state.tr);
 				if (!parents.length) return false;
 				var parent = parents[0];
 				return parent.root.node.type.name == el.name;
