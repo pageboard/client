@@ -64,19 +64,15 @@ Form.prototype.change = function() {
 		return;
 	}
 
-	// selection is not restored because dispatched transaction must not cause an update
-	var oldSel = view.state.tr.selection;
 	this.editor.modules.id.set(this.block);
 
-	var tr = this.editor.replaceTr(this.block, blockNode, true);
+	var tr = this.editor.replaceTr(view.state.tr, this.block, blockNode, true);
 	if (!tr) {
 		console.error("Cannot update block", blockNode);
 		return;
 	}
 	tr.ignoreUpdate = true;
 	view.dispatch(tr);
-
-
 };
 
 })(window.Pageboard, window.Pagecut);
