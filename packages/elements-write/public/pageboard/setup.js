@@ -73,7 +73,7 @@ function editorSetup(win, target, viewer) {
 
 	Editor.defaults.marks = Editor.defaults.marks.remove('link');
 
-	var throttledSave = Throttle(save, 1000);
+	var throttledSave = Throttle(save, 500);
 	var throttledUpdate = Throttle(update, 250);
 
 	// and the editor must be running from child
@@ -114,7 +114,7 @@ function update(editor, parents) {
 
 function save(editor, block) {
 	var root = editor.modules.id.to();
-	console.log("Saving", root, editor.modules.id.store);
+	// console.log("Saving", root, editor.modules.id.store);
 }
 
 })(window.Pageboard, window.Pagecut);
