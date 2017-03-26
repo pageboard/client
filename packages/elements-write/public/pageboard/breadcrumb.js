@@ -39,9 +39,16 @@ Breadcrumb.prototype.item = function(block) {
 
 Breadcrumb.prototype.click = function(e) {
 	var id = e.target.getAttribute('block-id');
-	var node = this.editor.view.root.querySelector('[block-id="'+id+'"]');
-	if (!node) console.warn("block node not found", id);
-	var sel = this.editor.select(node);
+	var nodes = this.editor.view.root.querySelectorAll('[block-focused][block-id="'+id+'"]');
+	if (nodes.length == 0) {
+		console.warn("No block nodes found for id", id);
+		return;
+	}
+	if (nodes.length > 1) {
+		console.warn("Only one node should have focus and id", id);
+		return;
+	}
+	var sel = this.editor.select(nodes[0]);
 	if (sel) {
 		this.editor.view.dispatch(this.editor.view.state.tr.setSelection(sel));
 		this.editor.view.focus();
