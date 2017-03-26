@@ -73,7 +73,7 @@ function editorSetup(win, target, viewer) {
 
 	Editor.defaults.marks = Editor.defaults.marks.remove('link');
 
-	var throttledSave = Throttle(save, 500);
+	var throttledSyncStore = Throttle(syncStore, 500);
 	var throttledUpdate = Throttle(update, 250);
 
 	// and the editor must be running from child
@@ -84,7 +84,7 @@ function editorSetup(win, target, viewer) {
 			// 1) the document should be considered a block here, so root changes are received
 			// 2) update the online blocks store (which has DOM Nodes inside content, not html)
 			// 3) optimization: update preview by block
-			throttledSave(main, block);
+			throttledSyncStore(main, block);
 		},
 		update: function(main, tr) {
 			if (tr.addToHistory === false || tr.ignoreUpdate) {
@@ -112,7 +112,7 @@ function update(editor, parents) {
 	if (Pageboard.breadcrumb) Pageboard.breadcrumb.update(parents);
 }
 
-function save(editor, block) {
+function syncStore(editor, block) {
 	var root = editor.modules.id.to();
 	// console.log("Saving", root, editor.modules.id.store);
 }
