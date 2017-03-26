@@ -57,22 +57,28 @@ Form.prototype.change = function() {
 	var data = this.form.get();
 	Object.assign(this.block.data, data);
 	var view = this.editor.view;
-	var blockNode = view.dom.querySelector('[block-id="' + this.block.id + '"]');
-	if (!blockNode) {
-		console.error("blockNode was not found", this.block);
+	var id = this.block.id;
+	var nodes = view.dom.querySelectorAll('[block-id="' + id + '"]');
+	if (nodes.length == 0) {
+		console.warn("No block nodes found for id", id);
 		this.clear();
 		return;
 	}
-
 	this.editor.modules.id.set(this.block);
-
-	var tr = this.editor.replaceTr(view.state.tr, this.block, blockNode, true);
-	if (!tr) {
-		console.error("Cannot update block", blockNode);
-		return;
+	var tr = view.state.tr, curtr, count = 0;
+	for (var i=0; i < nodes.length; i++) {
+		curtr = this.editor.replaceTr(tr, this.block, nodes[i], true);
+		if (!curtr) {
+			console.warn("Cannot update", nodes[i]);
+		} else {
+			count++;
+			tr = curtr;
+		}
 	}
-	tr.ignoreUpdate = true;
-	view.dispatch(tr);
+	if (count) {
+		tr.ignoreUpdate = true;
+		view.dispatch(tr);
+	}
 };
 
 })(window.Pageboard, window.Pagecut);
