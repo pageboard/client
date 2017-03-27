@@ -6,7 +6,6 @@ exports.grid.view = function(doc, block) {
 	var div = doc.createElement('div');
 	div.className = 'ui doubling stackable equal width grid';
 	div.setAttribute('block-content', 'columns');
-	div.setAttribute('block-type', 'grid');
 	return div;
 };
 
@@ -38,7 +37,6 @@ exports.grid_column.view = function(doc, block) {
 	if (prefix) prefix += " wide ";
 	div.className = prefix + 'column';
 	div.setAttribute('block-content', 'content');
-	div.setAttribute('block-type', 'gridcolumn');
 	return div;
 };
 
