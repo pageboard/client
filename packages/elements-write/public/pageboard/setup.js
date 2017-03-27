@@ -39,11 +39,14 @@ function routeListener(e) {
 		// setup editor on whole body instead of e.target
 		// setting it up on a block requires managing context (topNode in parser, probably)
 		var target = e.target.ownerDocument.body;
+
 		var editor = editorSetup(win, target, viewer);
 		editor.menu = Pageboard.setupMenu('#menu', editor);
 		Pageboard.editor = editor;
+
 		Pageboard.form = new Pageboard.Form(editor, '#form');
 		Pageboard.breadcrumb = new Pageboard.Breadcrumb(editor, '#breadcrumb');
+		Pageboard.store = new Pageboard.Store(editor, '#commands');
 	});
 }
 
@@ -73,9 +76,6 @@ function editorSetup(win, target, viewer) {
 
 	Editor.defaults.marks = Editor.defaults.marks.remove('link');
 
-	var throttledSyncStore = Throttle(syncStore, 500);
-	var throttledUpdate = Throttle(update, 250);
-
 	// and the editor must be running from child
 	var editor = new Editor({
 		place: node,
@@ -84,7 +84,6 @@ function editorSetup(win, target, viewer) {
 			// 1) the document should be considered a block here, so root changes are received
 			// 2) update the online blocks store (which has DOM Nodes inside content, not html)
 			// 3) optimization: update preview by block
-			throttledSyncStore(main, block);
 		},
 		update: function(main, tr) {
 			if (tr.addToHistory === false || tr.ignoreUpdate) {
@@ -98,7 +97,12 @@ function editorSetup(win, target, viewer) {
 			parents.forEach(function(item) {
 				item.block = editor.nodeToBlock(item.root.node);
 			});
-			throttledUpdate(editor, parents);
+
+			if (Pageboard.form) Pageboard.form.update(parents);
+			if (Pageboard.breadcrumb) Pageboard.breadcrumb.update(parents);
+			if (Pageboard.store) setTimeout(function() {
+				Pageboard.store.update();
+			});
 		}
 	});
 	editor.modules.id.store = viewer.modules.id.store;
@@ -107,15 +111,7 @@ function editorSetup(win, target, viewer) {
 	return editor;
 }
 
-function update(editor, parents) {
-	if (Pageboard.form) Pageboard.form.update(parents);
-	if (Pageboard.breadcrumb) Pageboard.breadcrumb.update(parents);
-}
 
-function syncStore(editor, block) {
-	var root = editor.modules.id.to();
-	// console.log("Saving", root, editor.modules.id.store);
-}
 
 })(window.Pageboard, window.Pagecut);
 
