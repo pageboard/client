@@ -29,7 +29,7 @@ function routeListener(e) {
 	var viewer = win.Pagecut.viewerInstance;
 
 	doc.head.insertAdjacentHTML('beforeEnd', [
-		'<script src="/public/pageboard/pagecut-editor.js"></script>',
+		'<script src="/public/pageboard/pagecut/editor.js"></script>',
 		'<link href="/public/pageboard/read.css" rel="stylesheet">'
 	].join('\n'));
 

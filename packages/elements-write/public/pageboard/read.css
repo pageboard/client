@@ -1,4 +1,4 @@
-@import "/public/pageboard/pagecut.css";
+@import "/public/pageboard/pagecut/pagecut.css";
 
 .ProseMirror-selectednode {
 	outline: 3px solid #4183C4 !important;
