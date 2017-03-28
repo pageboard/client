@@ -99,7 +99,7 @@ function editorSetup(win, target, viewer) {
 			}
 			var parents = main.selectionParents(tr, sel);
 			parents.forEach(function(item) {
-				item.block = editor.nodeToBlock(item.root.node);
+				item.block = editor.nodeToBlock(item.root.mark || item.root.node);
 			});
 
 			if (Pageboard.form) Pageboard.form.update(parents);
