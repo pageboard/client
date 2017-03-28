@@ -45,6 +45,7 @@ Store.prototype.restore = function(data) {
 		return;
 	}
 	var editor = this.editor;
+	editor.modules.id.store = obj.store;
 	editor.modules.id.from(obj.root).then(function(fragment) {
 		// set fragment inside node with block-content, is this a workaround ?
 		var content = fragment.ownerDocument.createElement("div");
