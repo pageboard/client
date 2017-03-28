@@ -13,12 +13,14 @@ Pageboard.setup = function(state) {
 	// so one cannot setup a listener event just after
 	iframe.onload = function() {
 		iframe.contentWindow.addEventListener('pageroute', routeListener);
+		iframe.contentWindow.addEventListener('pagesetup', setupListener);
 	};
 	iframe.src = Page.format(loc);
 };
 
 function routeListener(e) {
 	var win = Pageboard.window = this;
+	Pageboard.viewer = win.Pagecut.viewerInstance;
 	win.removeEventListener('pageroute', routeListener);
 	for (var type in Pagecut.modules) {
 		if (!win.Pagecut.modules[type]) win.Pagecut.modules[type] = {};
@@ -26,13 +28,15 @@ function routeListener(e) {
 	}
 
 	var doc = e.state.document;
-	var viewer = win.Pagecut.viewerInstance;
 
 	doc.head.insertAdjacentHTML('beforeEnd', [
 		'<script src="/public/pageboard/pagecut/editor.js"></script>',
 		'<link href="/public/pageboard/read.css" rel="stylesheet">'
 	].join('\n'));
+}
 
+function setupListener(e) {
+	var win = this;
 	this.addEventListener('click', function(e) {
 		e.preventDefault();
 		if (Pageboard.editor) return;
@@ -40,7 +44,7 @@ function routeListener(e) {
 		// setting it up on a block requires managing context (topNode in parser, probably)
 		var target = e.target.ownerDocument.body;
 
-		var editor = editorSetup(win, target, viewer);
+		var editor = editorSetup(win, target, Pageboard.viewer);
 		editor.menu = Pageboard.setupMenu('#menu', editor);
 		Pageboard.editor = editor;
 
