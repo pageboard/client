@@ -51,6 +51,8 @@ function setupListener(e) {
 		Pageboard.form = new Pageboard.Form(editor, '#form');
 		Pageboard.breadcrumb = new Pageboard.Breadcrumb(editor, '#breadcrumb');
 		Pageboard.store = new Pageboard.Store(editor, '#commands');
+
+		document.querySelector('#pageboard-write').removeAttribute('hidden');
 	});
 }
 
