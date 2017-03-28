@@ -8,16 +8,20 @@ function Store(editor, selector) {
 		.on('click', this.save.bind(this));
 	this.uiDiscard = this.$node.find('[data-command="discard"]')
 		.on('click', this.discard.bind(this));
+
+	// restore unsavedData
+	this.initialData = this.serialize();
 	this.unsavedData = this.get();
 	if (this.unsavedData) {
 		this.restore(this.unsavedData);
 	}
+
 	this.uiUpdate();
 }
 
 Store.prototype.uiUpdate = function() {
 	this.uiSave.toggleClass('disabled', !this.unsavedData);
-	this.uiDiscard.toggleClass('disabled', !this.unsavedData || !this.initialData);
+	this.uiDiscard.toggleClass('disabled', !this.unsavedData);
 };
 
 Store.prototype.get = function() {
@@ -36,24 +40,32 @@ Store.prototype.key = function() {
 	return "pageboard-store-" + document.location.toString();
 };
 
+Store.prototype.serialize = function() {
+	var root = this.editor.modules.id.to();
+	var data = JSON.stringify({
+		root: root,
+		store: this.editor.modules.id.store
+	}, null, " ");
+	return data;
+};
+
 Store.prototype.restore = function(data) {
 	var obj;
 	try {
 		obj = JSON.parse(data);
 	} catch(ex) {
 		this.clear();
-		return;
+		return Promise.resolve();
 	}
 	var editor = this.editor;
 	editor.modules.id.store = obj.store;
-	editor.modules.id.from(obj.root).then(function(fragment) {
+	return editor.modules.id.from(obj.root).then(function(fragment) {
 		// set fragment inside node with block-content, is this a workaround ?
 		var content = fragment.ownerDocument.createElement("div");
 		content.setAttribute('block-content', 'body');
 		content.appendChild(fragment);
 		this.ignoreNext = true;
 		editor.set(content);
-		this.uiUpdate();
 	}.bind(this)).catch(function(err) {
 		console.error(err);
 	});
@@ -64,13 +76,7 @@ Store.prototype.update = function() {
 		delete this.ignoreNext;
 		return;
 	}
-	var editor = this.editor;
-	var root = editor.modules.id.to();
-
-	var data = JSON.stringify({
-		root: root,
-		store: editor.modules.id.store
-	}, null, " ");
+	var data = this.serialize();
 
 	if (!this.initialData) {
 		this.initialData = data;
@@ -82,10 +88,11 @@ Store.prototype.update = function() {
 };
 
 Store.prototype.save = function(e) {
+	console.log("TODO: save to /api");
+	return;
+
 	this.initialData = this.unsavedData;
 	delete this.unsavedData;
-
-	console.log("TODO: save to /api")
 
 	this.uiUpdate();
 };
@@ -93,7 +100,10 @@ Store.prototype.save = function(e) {
 Store.prototype.discard = function(e) {
 	delete this.unsavedData;
 	this.clear();
-	this.restore(this.initialData);
+	this.restore(this.initialData).then(function() {
+		delete this.unsavedData;
+		this.uiUpdate();
+	}.bind(this));
 };
 
 })(window.Pageboard);
