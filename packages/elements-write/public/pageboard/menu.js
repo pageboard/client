@@ -1,6 +1,7 @@
 (function(Pageboard, Pagecut) {
 
 Pageboard.Controls.Menu = Menu;
+
 function Menu(editor, selector) {
 	this.editor = editor;
 	this.menu = new Pagecut.Menubar({
