@@ -1,5 +1,5 @@
 (function(Pageboard) {
-Pageboard.Store = Store;
+Pageboard.Controls.Store = Store;
 
 function Store(editor, selector) {
 	this.$node = $(selector);

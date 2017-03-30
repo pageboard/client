@@ -1,15 +1,24 @@
 (function(Pageboard, Pagecut) {
 
-Pageboard.setupMenu = function(selector, editor) {
-	var menu = new Pagecut.Menubar({
+Pageboard.Controls.Menu = Menu;
+function Menu(editor, selector) {
+	this.editor = editor;
+	this.menu = new Pagecut.Menubar({
 		place: document.querySelector(selector),
-		items: getMenuItems(editor)
+		items: this.items()
 	});
-	menu.update(editor.view);
-	return menu;
+	this.update();
+}
+
+Menu.prototype.update = function() {
+	// because updates are done by the editor
+	setTimeout(function() {
+		this.menu.update(this.editor.view);
+	}.bind(this));
 };
 
-function getItem(editor, el, nodeType) {
+Menu.prototype.item = function(el, nodeType) {
+	var editor = this.editor;
 	var item = {
 		title: el.title,
 		onDeselected: 'disable',
@@ -49,9 +58,9 @@ function getItem(editor, el, nodeType) {
 	if (el.icon) item.icon = el.icon;
 	else if (el.title) item.label = el.title;
 	return item;
-}
+};
 
-function getMenuItems(editor) {
+Menu.prototype.items = function() {
 	var singles = [];
 	var dropdowns = [];
 	var items = [singles, dropdowns];
@@ -68,12 +77,12 @@ function getMenuItems(editor) {
 		menuGroups[group.id] = group;
 	}
 
-	var schema = editor.view.state.schema;
-	for (var i=0; i < editor.elements.length; i++) {
-		var el = editor.elements[i];
+	var schema = this.editor.view.state.schema;
+	for (var i=0; i < this.editor.elements.length; i++) {
+		var el = this.editor.elements[i];
 		var nodeType = schema.nodes[el.name] || schema.marks[el.name];
 		if (!nodeType || (!el.menu && !el.icon)) continue;
-		item = new Pagecut.Menubar.Menu.MenuItem(getItem(editor, el, nodeType));
+		item = new Pagecut.Menubar.Menu.MenuItem(this.item(el, nodeType));
 		if (el.menu) {
 			group = menuGroups[el.menu];
 			if (!group) {
@@ -97,7 +106,7 @@ function getMenuItems(editor) {
 	}
 
 	return items;
-}
+};
 
 })(window.Pageboard, window.Pagecut);
 

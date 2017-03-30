@@ -45,13 +45,12 @@ function setupListener(e) {
 		var target = e.target.ownerDocument.body;
 
 		var editor = editorSetup(win, target, Pageboard.viewer);
-		editor.menu = Pageboard.setupMenu('#menu', editor);
 		Pageboard.editor = editor;
-
-		Pageboard.form = new Pageboard.Form(editor, '#form');
-		Pageboard.breadcrumb = new Pageboard.Breadcrumb(editor, '#breadcrumb');
-		Pageboard.store = new Pageboard.Store(editor, '#commands');
-
+		editor.controls = {};
+		for (var key in Pageboard.Controls) {
+			var lKey = key.toLowerCase();
+			editor.controls[lKey] = new Pageboard.Controls[key](editor, '#' + lKey);
+		}
 		document.querySelector('#pageboard-write').removeAttribute('hidden');
 	});
 }
@@ -104,10 +103,9 @@ function editorSetup(win, target, viewer) {
 				item.block = editor.nodeToBlock(item.root.mark || item.root.node);
 			});
 
-			if (Pageboard.form) Pageboard.form.update(parents);
-			if (Pageboard.breadcrumb) Pageboard.breadcrumb.update(parents);
-			if (Pageboard.store) setTimeout(function() {
-				Pageboard.store.update();
+			if (editor.controls) Object.keys(editor.controls).forEach(function(key) {
+				var c = editor.controls[key];
+				if (c.update) c.update(parents);
 			});
 		}
 	});

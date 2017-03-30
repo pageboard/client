@@ -1,6 +1,6 @@
 (function(Pageboard, Pagecut) {
 
-Pageboard.Form = Form;
+Pageboard.Controls.Form = Form;
 
 function Form(editor, selector) {
 	this.editor = editor;

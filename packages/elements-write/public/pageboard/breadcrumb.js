@@ -1,5 +1,5 @@
 (function(Pageboard) {
-Pageboard.Breadcrumb = Breadcrumb;
+Pageboard.Controls.Breadcrumb = Breadcrumb;
 
 function Breadcrumb(editor, selector) {
 	this.$node = $(selector);
