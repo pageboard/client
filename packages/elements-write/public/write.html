@@ -16,32 +16,33 @@
 	<script src="/public/pageboard/setup.js"></script>
 	<script src="/public/pageboard/pagecut/menu.js"></script>
 
-	<script src="/public/pageboard/elements/link/index.js"></script>
-	<script src="/public/pageboard/elements/grid/index.js"></script>
+	<script src="/public/pageboard/elements/page.js"></script>
+	<script src="/public/pageboard/elements/link.js"></script>
+	<script src="/public/pageboard/elements/grid.js"></script>
 
 	<link rel="stylesheet" href="/public/semantic-ui/components/reset.css" />
+	<link rel="stylesheet" href="/public/semantic-ui/components/container.css" />
 	<link rel="stylesheet" href="/public/semantic-ui/components/segment.css" />
 	<link rel="stylesheet" href="/public/semantic-ui/components/form.css" />
 	<link rel="stylesheet" href="/public/semantic-ui/components/menu.css" />
+	<link rel="stylesheet" href="/public/semantic-ui/components/image.css" />
 	<link rel="stylesheet" href="/public/semantic-ui/components/icon.css" />
 	<link rel="stylesheet" href="/public/semantic-ui/components/message.css" />
 	<link rel="stylesheet" href="/public/semantic-ui/components/breadcrumb.css" />
 	<link rel="stylesheet" href="/public/semantic-ui/components/sticky.css" />
 
-	<link rel="stylesheet" href="/public/pageboard/pagecut/menu.css" />
 	<link rel="stylesheet" href="/public/pageboard/write.css" />
 </head>
 <body>
 <div id="pageboard-read"></div>
-<div id="pageboard-write" hidden>
+<div id="pageboard-write" hidden class="ui basic segment">
 	<div id="breadcrumb" class="ui breadcrumb">
 		<a class="section"></a>
-		<i class="divider"> &gt; </i>
+		<i class="right chevron icon divider"></i>
 	</div>
-	<div id="menu"></div>
-	<div class="ui basic segment">
-		<div id="form" class="ui form"></div>
-	</div>
+	<div id="menu" class="ui mini fluid labeled icon menu"></div>
+	<div id="form" class="ui form"></div>
+	<div id="library" class="ui doubling stackable grid"></div>
 	<div class="ui bound bottom sticky">
 		<div id="store" class="ui top attached mini menu">
 			<a class="item" data-command="save">
