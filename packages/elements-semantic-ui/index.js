@@ -7,7 +7,9 @@ module.exports = function(opt) {
 	var elementsRoot = Path.join(__dirname, 'public/pageboard/elements');
 
 	fs.readdirSync(elementsRoot).forEach(function(mpath) {
-		opt.elements.push(Path.join(elementsRoot, mpath));
+		if (/^(\.js|)$/.test(Path.extname(mpath))) {
+			opt.elements.push(Path.join(elementsRoot, mpath));
+		}
 	});
 };
 

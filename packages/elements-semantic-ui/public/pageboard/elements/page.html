@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Page element</title>
+<script>
+(function(exports) {
+exports.page = Object.assign(exports.page || {}, {
+	view: function(doc, block) {
+		doc.head.innerHTML = '<link rel="stylesheet" href="/public/semantic-ui/components/container.css" />';
+		doc.body.setAttribute('block-content', 'body');
+		doc.body.className = "ui container";
+		return doc.documentElement;
+	}
+});
+})(typeof exports == "undefined" ? window.Pagecut.modules : exports);
+</script>
+</head>
+</html>
+

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Header element</title>
+<link href="/public/semantic-ui/components/header.css" rel="stylesheet" />
+<script>
+(function(exports) {
+
+if (!exports.header) exports.header = {};
+
+exports.header.view = function(doc, block) {
+	var div = doc.createElement('div');
+	div.className = "ui header";
+	div.setAttribute('block-content', 'content');
+	return div;
+};
+
+})(window.Pagecut.modules);
+
+</script>
+</head>
+<body></body>
+</html>
+
