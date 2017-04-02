@@ -13,17 +13,45 @@ function Menu(editor, selector) {
 
 Menu.prototype.update = function() {
 	// because updates are done by the editor
-	setTimeout(function() {
-		this.menu.update(this.editor.view);
-	}.bind(this));
+	var frag = document.createDocumentFragment();
+	var needSep = false;
+	var content = this.menu.items;
+	for (var i = 0; i < content.length; i++) {
+		var items = content[i];
+		var added = false;
+		for (var j = 0; j < items.length; j++) {
+			var rendered = renderItem.call(items[j], this.editor);
+			if (rendered) {
+				if (!added && needSep) {
+					frag.appendChild(separator());
+				}
+				frag.appendChild(rendered);
+				added = true;
+			}
+		}
+		if (added) {
+			needSep = true;
+		}
+	}
+	this.menu.place.textContent = ""
+	this.menu.place.appendChild(document.adoptNode(frag));
 };
 
-Menu.prototype.item = function(el, nodeType) {
+function separator() {
+	var div = document.createElement("div");
+	div.className = "divider";
+	return div;
+}
+
+Menu.prototype.item = function(el) {
 	var editor = this.editor;
+	var schema = editor.state.schema;
+	var nodeType = schema.nodes[el.name] || schema.marks[el.name];
+	if (!nodeType || (!el.menu && !el.icon)) return;
+
 	var item = {
-		title: el.title,
+		element: el,
 		onDeselected: 'disable',
-		icon: el.icon,
 		run: function(state, dispatch, view) {
 			var block = {
 				type: el.name
@@ -56,15 +84,57 @@ Menu.prototype.item = function(el, nodeType) {
 			}
 		}
 	};
-	if (el.icon) item.icon = el.icon;
-	else if (el.title) item.label = el.title;
 	return item;
 };
+
+
+function renderItem(view) {
+	var disabled = false;
+	var spec = this.spec;
+	if (spec.select && !spec.select(view.state)) {
+		if (spec.onDeselected == "disable") {
+			disabled = true;
+		} else {
+			return null;
+		}
+	}
+	var active = spec.active && !disabled && spec.active(view.state);
+
+	var dom = document.createElement('a');
+	dom.className = "item";
+
+	var icon = spec.element.icon;
+	if (icon) {
+		// can be a string formatted as SVG, or an URL
+		if (/<svg/i.test(icon)) {
+			dom.insertAdjacentHTML('afterbegin', icon);
+			dom.querySelector('svg').setAttribute('class', 'icon');
+		} else {
+			dom.insertAdjacentHTML('afterbegin', '<img class="icon" src="'+icon+'" />');
+		}
+	}
+	dom.appendChild(document.createTextNode('\n' + translate(view, spec.element.title)));
+	if (active) {
+		dom.classList.add("active");
+	}
+	if (spec.element.description) {
+		dom.setAttribute("title", translate(view, translate(spec.element.description)));
+	}
+	if (disabled) {
+		dom.classList.add("disabled");
+	} else {
+		dom.addEventListener("mousedown", function (e) {
+			e.preventDefault()
+			spec.run(view.state, view.dispatch, view);
+		});
+	}
+	return dom;
+}
 
 Menu.prototype.items = function() {
 	var singles = [];
 	var dropdowns = [];
-	var items = [singles, dropdowns];
+	var items = [singles];
 	var menuGroups = {};
 	var groups = [{
 		id: 'layout',
@@ -78,12 +148,12 @@ Menu.prototype.items = function() {
 		menuGroups[group.id] = group;
 	}
 
-	var schema = this.editor.view.state.schema;
+
 	for (var i=0; i < this.editor.elements.length; i++) {
 		var el = this.editor.elements[i];
-		var nodeType = schema.nodes[el.name] || schema.marks[el.name];
-		if (!nodeType || (!el.menu && !el.icon)) continue;
-		item = new Pagecut.Menubar.Menu.MenuItem(this.item(el, nodeType));
+		var itemSpec = this.item(el);
+		if (!itemSpec) continue;
+		item = new Pagecut.Menubar.Menu.MenuItem(itemSpec);
 		if (el.menu) {
 			group = menuGroups[el.menu];
 			if (!group) {
@@ -100,14 +170,19 @@ Menu.prototype.items = function() {
 
 	for (var i=0; i < groups.length; i++) {
 		group = groups[i];
-		dropdowns.push(new Pagecut.Menubar.Menu.Dropdown(group.items, {
-			label: group.title,
-			title: group.title
-		}));
+		items.push(group.items);
+		// dropdowns.push(new Pagecut.menubar.menu.dropdown(group.items, {
+		// 	label: group.title,
+		// 	title: group.title
+		// }));
 	}
 
 	return items;
 };
+
+function translate(view, text) {
+	return view._props.translate ? view._props.translate(text) : text;
+}
 
 })(window.Pageboard, window.Pagecut);
 

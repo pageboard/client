@@ -39,7 +39,7 @@ Breadcrumb.prototype.item = function(block) {
 
 Breadcrumb.prototype.click = function(e) {
 	var id = e.target.getAttribute('block-id');
-	var nodes = this.editor.view.root.querySelectorAll('[block-focused][block-id="'+id+'"]');
+	var nodes = this.editor.root.querySelectorAll('[block-focused][block-id="'+id+'"]');
 	if (nodes.length == 0) {
 		console.warn("No block nodes found for id", id);
 		return;
@@ -50,8 +50,8 @@ Breadcrumb.prototype.click = function(e) {
 	}
 	var sel = this.editor.select(nodes[0]);
 	if (sel) {
-		this.editor.view.dispatch(this.editor.view.state.tr.setSelection(sel));
-		this.editor.view.focus();
+		this.editor.dispatch(this.editor.state.tr.setSelection(sel));
+		this.editor.focus();
 	}
 };
 

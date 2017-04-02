@@ -56,16 +56,15 @@ Form.prototype.change = function() {
 	if (!this.block) return;
 	var data = this.form.get();
 	Object.assign(this.block.data, data);
-	var view = this.editor.view;
 	var id = this.block.id;
-	var nodes = view.dom.querySelectorAll('[block-id="' + id + '"]');
+	var nodes = this.editor.dom.querySelectorAll('[block-id="' + id + '"]');
 	if (nodes.length == 0) {
 		console.warn("No block nodes found for id", id);
 		this.clear();
 		return;
 	}
 	this.editor.modules.id.set(this.block);
-	var tr = view.state.tr, curtr, count = 0;
+	var tr = this.editor.state.tr, curtr, count = 0;
 	for (var i=0; i < nodes.length; i++) {
 		curtr = this.editor.replaceTr(tr, this.block, nodes[i], true);
 		if (!curtr) {
@@ -77,7 +76,7 @@ Form.prototype.change = function() {
 	}
 	if (count) {
 		tr.ignoreUpdate = true;
-		view.dispatch(tr);
+		this.editor.dispatch(tr);
 	}
 };
 

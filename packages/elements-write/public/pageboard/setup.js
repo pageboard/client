@@ -80,34 +80,25 @@ function editorSetup(win, target, viewer) {
 	node.textContent = "";
 
 	Editor.defaults.marks = Editor.defaults.marks.remove('link');
+	Editor.defaults.nodes = Editor.defaults.nodes.remove('doc');
 
 	// and the editor must be running from child
 	var editor = new Editor({
+		topNode: 'page',
 		place: node,
-		change: function(main, block) {
-			// TODO
-			// 1) the document should be considered a block here, so root changes are received
-			// 2) update the online blocks store (which has DOM Nodes inside content, not html)
-			// 3) optimization: update preview by block
-		},
-		update: function(main, tr) {
-			if (tr.addToHistory === false || tr.ignoreUpdate) {
-				return;
+		plugins: [{
+			update: function(editor, state) {
+				var tr = editor.state.tr;
+				var parents = editor.selectionParents(tr, tr.selection);
+				parents.forEach(function(item) {
+					item.block = editor.nodeToBlock(item.root.mark || item.root.node);
+				});
+				if (editor.controls) Object.keys(editor.controls).forEach(function(key) {
+					var c = editor.controls[key];
+					if (c.update) c.update(parents);
+				});
 			}
-			var sel = tr.selection;
-			if (tr.steps.length == 0 && !tr.selectionSet) {
-				return;
-			}
-			var parents = main.selectionParents(tr, sel);
-			parents.forEach(function(item) {
-				item.block = editor.nodeToBlock(item.root.mark || item.root.node);
-			});
-
-			if (editor.controls) Object.keys(editor.controls).forEach(function(key) {
-				var c = editor.controls[key];
-				if (c.update) c.update(parents);
-			});
-		}
+		}]
 	});
 	editor.modules.id.store = viewer.modules.id.store;
 	editor.set(content);
