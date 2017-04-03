@@ -110,6 +110,10 @@ function process(key, schema, el, fields) {
 		}
 	} else if (!type && schema.oneOf) {
 		types.oneOf(key, schema, el, fields);
+	} else if (Array.isArray(type)) {
+		type.forEach(function(type) {
+			types[type](key, schema, el, fields);
+		});
 	} else {
 		console.error('Unsupported type', type);
 	}
