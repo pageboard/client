@@ -16,7 +16,7 @@ Breadcrumb.prototype.update = function(parents) {
 		parent = parents[i];
 		this.$node.append(this.item(parent.block));
 	}
-	if (parent && parent.content && parent.content.name) {
+	if (parent && parent.content && !(this.editor.state.selection instanceof this.editor.root.defaultView.Pagecut.State.AllSelection)) {
 		var contentTitle = this.editor.map[parent.block.type].contents[parent.content.name].title;
 		if (contentTitle) {
 			this.$node.append($('<span class="section">' + contentTitle + '</span>'));
@@ -39,7 +39,13 @@ Breadcrumb.prototype.item = function(block) {
 
 Breadcrumb.prototype.click = function(e) {
 	var id = e.target.getAttribute('block-id');
-	var nodes = this.editor.root.querySelectorAll('[block-focused][block-id="'+id+'"]');
+	var rootId = this.editor.dom.getAttribute('block-id');
+	var nodes;
+	if (rootId == id) {
+		nodes = [this.editor.dom];
+	} else {
+		nodes = this.editor.root.querySelectorAll('[block-focused][block-id="'+id+'"]');
+	}
 	if (nodes.length == 0) {
 		console.warn("No block nodes found for id", id);
 		return;

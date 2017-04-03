@@ -27,7 +27,7 @@ Form.prototype.update = function(parents) {
 		this.clear();
 		return;
 	}
-	if (info.content && info.content.name) {
+	if (info.content && !(this.editor.state.selection instanceof this.editor.root.defaultView.Pagecut.State.AllSelection)) {
 		this.clear();
 		return;
 	}
@@ -56,14 +56,22 @@ Form.prototype.change = function() {
 	if (!this.block) return;
 	var data = this.form.get();
 	Object.assign(this.block.data, data);
+	this.editor.modules.id.set(this.block);
+
 	var id = this.block.id;
-	var nodes = this.editor.dom.querySelectorAll('[block-id="' + id + '"]');
+	var rootId = this.editor.dom.getAttribute('block-id');
+	var nodes;
+	if (rootId == id) {
+		return;
+	} else {
+		nodes = this.editor.dom.querySelectorAll('[block-id="' + id + '"]');
+	}
 	if (nodes.length == 0) {
 		console.warn("No block nodes found for id", id);
 		this.clear();
 		return;
 	}
-	this.editor.modules.id.set(this.block);
+
 	var tr = this.editor.state.tr, curtr, count = 0;
 	for (var i=0; i < nodes.length; i++) {
 		curtr = this.editor.replaceTr(tr, this.block, nodes[i], true);

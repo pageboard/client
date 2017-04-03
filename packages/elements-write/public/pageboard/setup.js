@@ -71,13 +71,11 @@ function editorSetup(win, target, viewer) {
 	if (el.inline) {
 		node = node.parentNode.closest('[block-id]') || node;
 	}
-	if (node == win.document.documentElement) {
-		node = win.document.body;
-	}
+
 	var Editor = win.Pagecut.Editor;
 
-	var content = node.cloneNode(true);
-	node.textContent = "";
+	var content = node.ownerDocument.createDocumentFragment();
+	while (node.firstChild) content.appendChild(node.firstChild);
 
 	Editor.defaults.marks = Editor.defaults.marks.remove('link');
 	Editor.defaults.nodes = Editor.defaults.nodes.remove('doc');
@@ -101,6 +99,8 @@ function editorSetup(win, target, viewer) {
 		}]
 	});
 	editor.modules.id.store = viewer.modules.id.store;
+	// work around not being able to parse dom as doc - we need it to carry block_id
+	editor.state.doc.attrs.block_id = block.id;
 	editor.set(content);
 
 	return editor;
