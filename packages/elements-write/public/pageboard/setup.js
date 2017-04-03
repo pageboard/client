@@ -89,7 +89,7 @@ function editorSetup(win, target, viewer) {
 				var tr = editor.state.tr;
 				var parents = editor.selectionParents(tr, tr.selection);
 				parents.forEach(function(item) {
-					item.block = editor.nodeToBlock(item.root.mark || item.root.node);
+					item.block = editor.modules.id.get((item.root.mark || item.root.node).attrs.block_id);
 				});
 				if (editor.controls) Object.keys(editor.controls).forEach(function(key) {
 					var c = editor.controls[key];
