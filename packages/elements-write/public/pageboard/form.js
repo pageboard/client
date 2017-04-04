@@ -60,12 +60,7 @@ Form.prototype.change = function() {
 
 
 	if (this.block.type == "page") {
-		// yes this is a huge shortcut
-		this.editor.root.title = this.block.data.title;
-		Page.replace({
-			pathname: this.block.data.url,
-			query: Page.state.query
-		});
+		this.editor.pageUpdate(this.block);
 		return;
 	}
 	var id = this.block.id;

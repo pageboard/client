@@ -52,12 +52,34 @@ function setupListener(e) {
 
 		var editor = editorSetup(win, target, Pageboard.viewer);
 		Pageboard.editor = editor;
+		editor.pageUpdate = pageUpdate;
 		editor.controls = {};
 		for (var key in Pageboard.Controls) {
 			var lKey = key.toLowerCase();
 			editor.controls[lKey] = new Pageboard.Controls[key](editor, '#' + lKey);
 		}
 		document.querySelector('#pageboard-write').removeAttribute('hidden');
+	});
+}
+
+function pageUpdate(page) {
+	this.root.title = page.data.title;
+	Page.replace({
+		pathname: page.data.url,
+		query: Page.state.query
+	});
+	editorUpdate(this);
+}
+
+function editorUpdate(editor, state) {
+	var tr = editor.state.tr; // do not use state.tr to avoid being before modifications
+	var parents = editor.selectionParents(tr, tr.selection);
+	parents.forEach(function(item) {
+		item.block = editor.modules.id.get((item.root.mark || item.root.node).attrs.block_id);
+	});
+	if (editor.controls) Object.keys(editor.controls).forEach(function(key) {
+		var c = editor.controls[key];
+		if (c.update) c.update(parents);
 	});
 }
 
@@ -92,17 +114,7 @@ function editorSetup(win, target, viewer) {
 		topNode: 'page',
 		place: node,
 		plugins: [{
-			update: function(editor, state) {
-				var tr = editor.state.tr;
-				var parents = editor.selectionParents(tr, tr.selection);
-				parents.forEach(function(item) {
-					item.block = editor.modules.id.get((item.root.mark || item.root.node).attrs.block_id);
-				});
-				if (editor.controls) Object.keys(editor.controls).forEach(function(key) {
-					var c = editor.controls[key];
-					if (c.update) c.update(parents);
-				});
-			}
+			update: editorUpdate
 		}]
 	});
 	editor.modules.id.store = viewer.modules.id.store;

@@ -12,6 +12,7 @@ function Store(editor, selector) {
 	// restore unsavedData
 	this.initialData = this.serialize();
 	this.unsavedData = this.get();
+
 	if (this.unsavedData) {
 		this.restore(this.unsavedData);
 	}
@@ -65,11 +66,7 @@ Store.prototype.restore = function(data) {
 		me.ignoreNext = true;
 		editor.set(frag);
 		if (obj.root.type == "page") {
-			editor.root.title = obj.root.data.title;
-			Page.replace({
-				pathname: obj.root.data.url,
-				query: Page.state.query
-			});
+			editor.pageUpdate(obj.root);
 		}
 	}).catch(function(err) {
 		me.clear();
