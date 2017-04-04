@@ -55,7 +55,7 @@ Form.prototype.update = function(parents) {
 Form.prototype.change = function() {
 	if (!this.block) return;
 	var data = this.form.get();
-	Object.assign(this.block.data, data);
+	this.block.data = Object.assign(this.block.data || {}, data);
 	this.editor.modules.id.set(this.block);
 
 
