@@ -42,7 +42,7 @@
 .ui.icon.menu .item.disabled {
 	opacity:0.45;
 }
-.ui.menu .item.disabled, .ui.menu .item.disabled:hover {
+.ui.icon.menu .item.disabled, .ui.icon.menu .item.disabled:hover {
 	color:inherit;
 }
 
