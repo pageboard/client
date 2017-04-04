@@ -37,6 +37,12 @@ function routeListener(e) {
 
 function setupListener(e) {
 	var win = this;
+	Page.patch(function() {
+		document.title = win.document.title + '*';
+	});
+	Page.replace({
+		path: e.state.path
+	});
 	this.addEventListener('click', function(e) {
 		e.preventDefault();
 		if (Pageboard.editor) return;
@@ -72,10 +78,11 @@ function editorSetup(win, target, viewer) {
 		node = node.parentNode.closest('[block-id]') || node;
 	}
 
-	var Editor = win.Pagecut.Editor;
-
-	var content = node.ownerDocument.createDocumentFragment();
+	// just steal the content - no need to clone deep
+	var content = node.cloneNode();
 	while (node.firstChild) content.appendChild(node.firstChild);
+
+	var Editor = win.Pagecut.Editor;
 
 	Editor.defaults.marks = Editor.defaults.marks.remove('link');
 	Editor.defaults.nodes = Editor.defaults.nodes.remove('doc');

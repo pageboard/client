@@ -59,14 +59,20 @@ Store.prototype.restore = function(data) {
 	}
 	var editor = this.editor;
 	editor.modules.id.store = obj.store;
-	return editor.modules.id.from(obj.root).then(function(fragment) {
-		// set fragment inside node with block-content, is this a workaround ?
-		var content = fragment.ownerDocument.createElement("div");
-		content.setAttribute('block-content', 'body');
-		content.appendChild(fragment);
-		this.ignoreNext = true;
-		editor.set(content);
-	}.bind(this)).catch(function(err) {
+
+	var me = this;
+	return editor.modules.id.from(obj.root).then(function(frag) {
+		me.ignoreNext = true;
+		editor.set(frag);
+		if (obj.root.type == "page") {
+			editor.root.title = obj.root.data.title;
+			Page.replace({
+				pathname: obj.root.data.url,
+				query: Page.state.query
+			});
+		}
+	}).catch(function(err) {
+		me.clear();
 		console.error(err);
 	});
 };

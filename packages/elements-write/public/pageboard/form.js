@@ -58,14 +58,19 @@ Form.prototype.change = function() {
 	Object.assign(this.block.data, data);
 	this.editor.modules.id.set(this.block);
 
-	var id = this.block.id;
-	var rootId = this.editor.dom.getAttribute('block-id');
-	var nodes;
-	if (rootId == id) {
+
+	if (this.block.type == "page") {
+		// yes this is a huge shortcut
+		this.editor.root.title = this.block.data.title;
+		Page.replace({
+			pathname: this.block.data.url,
+			query: Page.state.query
+		});
 		return;
-	} else {
-		nodes = this.editor.dom.querySelectorAll('[block-id="' + id + '"]');
 	}
+	var id = this.block.id;
+	var nodes = this.editor.dom.querySelectorAll('[block-id="' + id + '"]');
+
 	if (nodes.length == 0) {
 		console.warn("No block nodes found for id", id);
 		this.clear();
