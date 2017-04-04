@@ -37,15 +37,16 @@ function routeListener(e) {
 
 function setupListener(e) {
 	var win = this;
-	Page.patch(function() {
-		document.title = win.document.title + '*';
-	});
-	Page.replace({
-		path: e.state.path
-	});
+	var state = e.state;
 	this.addEventListener('click', function(e) {
 		e.preventDefault();
 		if (Pageboard.editor) return;
+		Page.patch(function() {
+			document.title = win.document.title + (editor.controls.store.unsavedData ? '*' : '');
+		});
+		Page.replace({
+			path: state.path
+		});
 		// setup editor on whole body instead of e.target
 		// setting it up on a block requires managing context (topNode in parser, probably)
 		var target = e.target.ownerDocument.body;
@@ -81,6 +82,7 @@ function editorUpdate(editor, state) {
 		var c = editor.controls[key];
 		if (c.update) c.update(parents);
 	});
+	Page.replace(Page.state);
 }
 
 function editorSetup(win, target, viewer) {
