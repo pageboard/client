@@ -2,11 +2,16 @@
 <html>
 <head>
 <title>Page element</title>
+<link rel="stylesheet" href="/public/semantic-ui/components/container.css" />
 <script>
 (function(exports) {
 exports.page = Object.assign(exports.page || {}, {
 	view: function(doc, block) {
-		doc.head.innerHTML = '<link rel="stylesheet" href="/public/semantic-ui/components/container.css" />';
+	// la page est-elle responsable de lister les ressources dont elle a besoin pour être affichée ?
+	// les éléments ont-ils besoin de leur "vues" pour être affichés ?
+	// qu'on ajoute les imports au moment de merger ou qu'on les ajoute avant,
+	// il faut absolument ajouter les feuilles de style de chaque élément au document final,
+	// CE QUI N'est pas spécialement fait par l'import actuel
 		doc.body.setAttribute('block-content', 'body');
 		doc.body.className = "ui container";
 
