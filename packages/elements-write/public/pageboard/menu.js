@@ -54,8 +54,10 @@ Menu.prototype.item = function(el) {
 		onDeselected: 'disable',
 		run: function(state, dispatch, view) {
 			var block = {
+				id: 'id' + Date.now(),
 				type: el.name
 			};
+			editor.modules.id.set(block);
 			var tr = state.tr;
 			var sel = editor.selectTr(tr, tr.selection, true);
 
