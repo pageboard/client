@@ -40,6 +40,12 @@
 	background-color:#353535;
 }
 .ui.icon.menu .item.disabled {
+	/* opacity:0.45; */
+	display:none;
+}
+/* keep menu size */
+.ui.icon.menu .item.disabled:first-child {
+	display:block;
 	opacity:0.45;
 }
 .ui.icon.menu .item.disabled, .ui.icon.menu .item.disabled:hover {
