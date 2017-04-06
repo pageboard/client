@@ -74,9 +74,15 @@ function pageUpdate(page) {
 
 function editorUpdate(editor, state) {
 	var tr = editor.state.tr; // do not use state.tr to avoid being before modifications
-	var parents = editor.selectionParents(tr, tr.selection);
-	parents.forEach(function(item) {
-		item.block = editor.modules.id.get((item.root.mark || item.root.node).attrs.block_id);
+	var parents = [];
+	editor.selectionParents(tr, tr.selection).forEach(function(item) {
+		var block = editor.modules.id.get((item.root.mark || item.root.node).attrs.block_id);
+		if (!block) {
+			console.warn("no block for", item);
+		} else {
+			item.block = block;
+			parents.push(item);
+		}
 	});
 	if (editor.controls) Object.keys(editor.controls).forEach(function(key) {
 		var c = editor.controls[key];
