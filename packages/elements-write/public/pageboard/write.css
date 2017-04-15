@@ -23,6 +23,12 @@
 	margin-top:0;
 }
 
+#messages {
+	display: block !important;
+	margin:-1em;
+	margin-bottom:0;
+}
+
 #breadcrumb:empty {
 	display:none;
 }
@@ -50,6 +56,74 @@
 }
 .ui.icon.menu .item.disabled, .ui.icon.menu .item.disabled:hover {
 	color:inherit;
+}
+
+.ui.avatar.icon.image {
+	width:16px;
+	height:16px;
+	vertical-align:top;
+}
+
+/* style href */
+.ui.href.items {
+	max-height:100%;
+	overflow:auto;
+}
+
+.ui.href.items > .item > .content {
+	max-width:100%;
+}
+
+.ui.href.items > .item > .content > .header {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	background: black;
+	color: white;
+	border-radius: 0.5em 0.5em 0 0;
+	display:block;
+	padding: 0.2em 0.3em;
+	margin:0;
+}
+
+.ui.href.items > .item > .content > .meta {
+	margin-top:0;
+	padding-left:0.3em;
+	/* let div.meta grow with its content */
+	position:relative;
+	overflow:hidden;
+}
+
+.ui.href.items > a.item:hover > .content > .header {
+	color:white;
+}
+
+.ui.href.items > .item:hover > .content > .meta {
+	outline: 1px solid black;
+	outline-offset:-1px;
+}
+
+.ui.href.items > .item > .content > .meta > .right.image {
+	margin-bottom:0;
+}
+
+.ui.href.items:empty {
+	display:none;
+}
+
+#pageboard-write.href > div:not(#breadcrumb):not(#form),
+#pageboard-write.href > #form > .field:not(.href),
+#pageboard-write.href > #form > .field.href > label,
+#pageboard-write.href > #form > .field.href input:not(.search) {
+	display:none !important;
+}
+
+#pageboard-write:not(.href) > #form > .field:not(.href) input.search {
+	display:none;
+}
+
+#form {
+	margin-top:1em;
 }
 
 #menu:empty {

@@ -15,15 +15,15 @@ function Semafor(schema, node) {
 	// a jquery node selector
 	this.node = node;
 	this.$node = $(node);
-	var fields = {};
+	this.fields = {};
 	// populates node with form markup matching schema,
 	// and configure fields object
-	process(null, schema, EL(node), fields);
+	process(null, schema, EL(node), this.fields);
 
 	// then initialize the form using semantic-ui form behavior
 	this.$node.form({
 		on: 'blur',
-		fields: fields
+		fields: this.fields
 	});
 }
 

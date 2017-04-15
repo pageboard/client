@@ -2,13 +2,17 @@
 <html>
 <head>
 	<script src="/public/js/window-page.js"></script>
+	<script src="/public/js/agent.js"></script>
 	<script src="/public/js/jquery.js"></script>
+	<script src="/public/js/moment.js"></script>
 
 	<script src="/public/semantic-ui/components/form.js"></script>
+	<script src="/public/semantic-ui/components/progress.js"></script>
 
 	<script src="/public/pageboard/semafor.js"></script>
 	<script src="/public/pageboard/throttle.js"></script>
 	<script src="/public/pageboard/write.js"></script>
+	<script src="/public/pageboard/href.js"></script>
 	<script src="/public/pageboard/form.js"></script>
 	<script src="/public/pageboard/menu.js"></script>
 	<script src="/public/pageboard/breadcrumb.js"></script>
@@ -25,9 +29,13 @@
 	<link rel="stylesheet" href="/public/semantic-ui/components/container.css" />
 	<link rel="stylesheet" href="/public/semantic-ui/components/segment.css" />
 	<link rel="stylesheet" href="/public/semantic-ui/components/form.css" />
+	<link rel="stylesheet" href="/public/semantic-ui/components/input.css" />
+	<link rel="stylesheet" href="/public/semantic-ui/components/button.css" />
+	<link rel="stylesheet" href="/public/semantic-ui/components/item.css" />
 	<link rel="stylesheet" href="/public/semantic-ui/components/menu.css" />
 	<link rel="stylesheet" href="/public/semantic-ui/components/image.css" />
 	<link rel="stylesheet" href="/public/semantic-ui/components/icon.css" />
+	<link rel="stylesheet" href="/public/semantic-ui/components/progress.css" />
 	<link rel="stylesheet" href="/public/semantic-ui/components/message.css" />
 	<link rel="stylesheet" href="/public/semantic-ui/components/breadcrumb.css" />
 	<link rel="stylesheet" href="/public/semantic-ui/components/sticky.css" />
@@ -37,6 +45,7 @@
 <body>
 <div id="pageboard-read"></div>
 <div id="pageboard-write" hidden class="ui basic segment">
+	<div id="messages"></div>
 	<div id="breadcrumb" class="ui breadcrumb">
 		<a class="section"></a>
 		<i class="right chevron icon divider"></i>

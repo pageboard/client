@@ -11,6 +11,10 @@ function Form(editor, selector) {
 }
 
 Form.prototype.clear = function() {
+	if (this.href) {
+		this.href.destroy();
+		delete this.href;
+	}
 	this.$node.empty();
 	delete this.block;
 };
@@ -42,14 +46,22 @@ Form.prototype.update = function(parents) {
 	}
 	this.clear();
 
+	var node = this.$node[0];
+
 	this.form = new Semafor({
 		type: 'object',
 		properties: el.properties,
 		required: el.required
-	}, this.$node[0]);
+	}, node);
 
 	this.form.set(block.data);
 	this.block = block;
+
+	Object.keys(el.properties).forEach(function(key) {
+		if (el.properties[key].format == "uri") {
+			this.href = new Pageboard.Href(node.querySelector('[name="'+key+'"]'));
+		}
+	}.bind(this));
 };
 
 Form.prototype.change = function() {
