@@ -5,12 +5,12 @@ var root;
 Pageboard.notify = function(title, text) {
 	var parent = Pageboard.notify.dom();
 	parent.insertAdjacentHTML('beforeEnd', [
-	'<div class="ui negative message">',
+	'<div class="ui attached negative message">',
 		'<i class="close icon"></i>',
 		'<div class="header">',
 			title,
 		'</div>',
-		'<p>' + text + '</p>',
+		text ? '<p>' + text + '</p>' : '',
 	'</div>'
 	].join('\n'));
 	var msg = parent.lastChild;
