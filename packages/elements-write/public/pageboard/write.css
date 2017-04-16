@@ -65,9 +65,15 @@
 }
 
 .ui.href.items .button[data-action="remove"] {
+	display:none;
 	margin:0 !important;
-	padding:0.4em;
+	padding:0.3em;
 	font-size: 0.85714286rem;
+}
+
+.ui.href.items > .item:hover .button[data-action="remove"],
+.ui.href.items > .item:focus .button[data-action="remove"] {
+	display:block;
 }
 
 /* style href */
