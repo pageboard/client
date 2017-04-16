@@ -5,12 +5,18 @@ exports.link = Object.assign(exports.link || {}, {
 	properties: {
 		url: {
 			title: 'Address',
+			description: 'Local or remote URL',
 			type: "string",
 			format: "uri"
 		},
 		target: {
 			title: 'Target',
+			description: 'Choose how to open link',
+			default: "",
 			oneOf: [{
+				constant: "",
+				title: "auto target"
+			}, {
 				constant: "_blank",
 				title: "new window"
 			}, {
