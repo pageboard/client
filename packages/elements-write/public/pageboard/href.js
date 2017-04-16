@@ -10,7 +10,7 @@ function Href(input) {
 		'<div class="ui right action input">',
 		// '<div class="ui right action left icon input">',
 		// '<i class="search icon"></i>',
-		'<button class="ui teal right icon button">',
+		'<button class="ui blue right icon button">',
 		' <i class="add icon"></i>',
 		'</button>',
 		'</div><div class="ui href items"></div>'
