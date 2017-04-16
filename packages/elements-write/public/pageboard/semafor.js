@@ -129,20 +129,27 @@ types.string = function(key, schema, el, fields) {
 		name: key
 	};
 	if (schema.default !== undefined) attrs.value = schema.default;
+	if (schema.description) attrs.title = schema.description;
 	field.append('input', attrs);
 };
 
 types.oneOf = function(key, schema, el, fields) {
 	var field = el.append('div', {class: 'field'});
 	if (schema.title) field.append('label', schema.title);
-	var select = field.append('select', {name: key, class: 'ui dropdown'});
-	$(select.node).dropdown();
+	var attrs = {
+		name: key,
+		class: 'ui dropdown'
+	};
+	var select = field.append('select', attrs);
 	var item;
 	for (var i=0; i < schema.oneOf.length; i++) {
 		item = schema.oneOf[i];
-		if (!item.constant) console.error("We can't really support non-constant oneOf here");
+		if (item.constant == null) console.error("We can't really support non-constant oneOf here");
 		select.append('option', {value: item.constant}, item.title || item.constant);
 	}
+	var $node = $(select.node);
+	$node.dropdown();
+	if (schema.description) $node.parent().attr('title', schema.description);
 };
 
 types.integer = function(key, schema, el, fields) {
