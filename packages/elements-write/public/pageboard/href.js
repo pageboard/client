@@ -85,11 +85,24 @@ function Href(input) {
 			e.stopPropagation();
 			return;
 		}
+		var href = item.getAttribute('href');
+		var remove = e.target.closest('[data-action="remove"]');
+		if (remove) {
+			remove.classList.add("loading");
+			me.remove(href).then(function() {
+				item.remove();
+			}).catch(function(err) {
+				remove.classList.remove("loading");
+				Pageboard.notify("Remove failed", err);
+			});
+			return;
+		}
+
 		Array.from(this.list.querySelectorAll('.item')).forEach(function(item) {
 			item.classList.remove('selected');
 		});
 		item.classList.add('selected');
-		input.value = item.getAttribute('href');
+		input.value = href;
 		var event = document.createEvent('Event');
 		event.initEvent('change', true, true);
 		input.dispatchEvent(event);
@@ -143,7 +156,9 @@ Href.prototype.upload = function() {
 
 			xhr.upload.addEventListener("progress", function(e) {
 				if (e.lengthComputable) {
-					tracker(Math.round((e.loaded * 100) / e.total));
+					var percent = Math.round((e.loaded * 100) / e.total);
+					if (percent >= 100) percent = 99; // only load event can reach 100
+					tracker(percent);
 				}
 			});
 
@@ -176,7 +191,7 @@ Href.prototype.upload = function() {
 
 Href.prototype.uploading = function() {
 	var str = '<div class="ui attached progress"><div class="bar"></div></div>';
-	var root = document.querySelector('#messages');
+	var root = Pageboard.notify.dom();
 	root.insertAdjacentHTML('beforeEnd', str);
 	var progress = root.lastChild;
 	var $node = $(progress).progress({
@@ -193,24 +208,14 @@ Href.prototype.uploading = function() {
 			$node.progress({percent: percent});
 			if (percent < 100) return;
 		} else {
-			// error
-			console.error(percent)
-			progress.insertAdjacentHTML('afterEnd', [
-			'<div class="ui negative message">',
-				'<i class="close icon"></i>',
-				'<div class="header">',
-					"Upload failed",
-				'</div>',
-				'<p>' + percent + '</p>',
-			'</div>'
-			].join('\n'));
-			var msg = progress.nextSibling;
-			msg.addEventListener('click', function() {
-				msg.remove();
-			});
+			Pageboard.notify("Upload failed", percent);
 		}
 		progress.remove();
 	};
+};
+
+Href.prototype.remove = function(href) {
+	return DELETE('/api/href', {url: href});
 };
 
 Href.prototype.set = function(val) {
@@ -268,6 +273,11 @@ Href.prototype.show = function(results) {
 		content.className = 'content';
 		content.innerHTML = '<div class="ui tiny header"></div>';
 		content.firstChild.textContent = obj.title;
+		content.firstChild.insertAdjacentHTML('beforeEnd', [
+			'<div class="ui right floated tiny compact black circular icon button" data-action="remove">',
+			'<i class="icon close"></i>',
+			'</div>'
+		].join('\n'));
 		item.appendChild(content);
 		if (obj.icon) {
 			var img = document.createElement('img');

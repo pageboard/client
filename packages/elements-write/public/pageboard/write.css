@@ -23,7 +23,7 @@
 	margin-top:0;
 }
 
-#messages {
+#notifications {
 	display: block !important;
 	margin:-1em;
 	margin-bottom:0;
@@ -61,7 +61,13 @@
 .ui.avatar.icon.image {
 	width:16px;
 	height:16px;
-	vertical-align:top;
+	vertical-align:sub;
+}
+
+.ui.href.items .button[data-action="remove"] {
+	margin:0 !important;
+	padding:0.4em;
+	font-size: 0.85714286rem;
 }
 
 /* style href */
