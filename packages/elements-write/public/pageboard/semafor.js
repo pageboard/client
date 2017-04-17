@@ -18,7 +18,7 @@ function Semafor(schema, node) {
 	this.fields = {};
 	// populates node with form markup matching schema,
 	// and configure fields object
-	process(null, schema, EL(node), this.fields);
+	process(null, schema, node, this.fields);
 
 	// then initialize the form using semantic-ui form behavior
 	this.$node.form({
@@ -47,41 +47,12 @@ var keywords = Semafor.keywords = {
 	// json schema allows custom keywords
 };
 
-function EL(node) {
-	function create(tag, attrs, text) {
-		var child = node.ownerDocument.createElement(tag);
-		if (typeof attrs == 'string' && text === undefined) {
-			text = attrs;
-			attrs = {};
-		}
-		for (var k in attrs) child.setAttribute(k, attrs[k]);
-		if (text != null) child.textContent = text;
-		return EL(child);
-	}
-	function append(tag, attrs, text) {
-		var child;
-		if (typeof tag == 'string') {
-			child = create(tag, attrs, text);
-		} else {
-			if (!tag.node) child = EL(tag);
-			else child = tag;
-		}
-		node.appendChild(child.node);
-		return child;
-	}
-	return {
-		append: append,
-		create: create,
-		node: node
-	};
-}
-
-function process(key, schema, el, fields) {
+function process(key, schema, node, fields) {
 	var type = schema.type;
 	// TODO support array of types (user selects the type he needs)
 	if (type && types[type]) {
 		if (type == 'object') {
-			types[type](key, schema, el, fields);
+			types[type](key, schema, node, fields);
 		} else if (!key) {
 			console.error('Properties of type', type, 'must have a name');
 		} else {
@@ -106,89 +77,78 @@ function process(key, schema, el, fields) {
 				].indexOf(kw) >= 0) continue;
 				if (keywords[kw]) field.rules.push(keywords[kw](schema[kw]));
 			}
-			types[type](key, schema, el, fields);
+			types[type](key, schema, node, fields);
 		}
 	} else if (!type && schema.oneOf) {
-		types.oneOf(key, schema, el, fields);
+		types.oneOf(key, schema, node, fields);
 	} else if (Array.isArray(type)) {
 		type.forEach(function(type) {
-			types[type](key, schema, el, fields);
+			types[type](key, schema, node, fields);
 		});
 	} else {
 		console.error('Unsupported type', type);
 	}
 }
 
-types.string = function(key, schema, el, fields) {
-	var field = el.append('div', {class: 'field'});
-	if (schema.title) {
-		field.append('label', schema.title);
-	}
-	var attrs = {
-		type: 'text',
-		name: key
-	};
-	if (schema.default !== undefined) attrs.value = schema.default;
-	if (schema.description) attrs.title = schema.description;
-	field.append('input', attrs);
+types.string = function(key, schema, node, fields) {
+	node.appendChild(html`<div class="field">
+		<label>${schema.title}</label>
+		<input type="text" name="${key}"
+			value="${schema.default || ''}"
+			title="${schema.description || ''}"
+		/>
+	</div>`);
 };
 
-types.oneOf = function(key, schema, el, fields) {
-	var field = el.append('div', {class: 'field'});
-	if (schema.title) field.append('label', schema.title);
-	var attrs = {
-		name: key,
-		class: 'ui dropdown'
-	};
-	var select = field.append('select', attrs);
-	var item;
-	for (var i=0; i < schema.oneOf.length; i++) {
-		item = schema.oneOf[i];
-		if (item.constant == null) console.error("We can't really support non-constant oneOf here");
-		select.append('option', {value: item.constant}, item.title || item.constant);
-	}
-	var $node = $(select.node);
-	$node.dropdown();
-	if (schema.description) $node.parent().attr('title', schema.description);
+types.oneOf = function(key, schema, node, fields) {
+	var field = html`<div class="field" title="${schema.description || ''}">
+		<label>${schema.title}</label>
+		<select name="${key}" class="ui dropdown">
+			${schema.oneOf.map(getSelectOption)}
+		</select>
+	</div>`;
+	node.appendChild(field);
+	$(field).find('.dropdown').dropdown();
 };
 
-types.integer = function(key, schema, el, fields) {
+function getSelectOption(item) {
+	if (item.constant == null) console.error("We can't really support non-constant oneOf here");
+	return html`<option value="${item.constant}">${item.title || item.constant}</option>`;
+}
+
+types.integer = function(key, schema, node, fields) {
 	schema = Object.assign({}, schema);
 	schema.multipleOf = 1;
-	types.number(key, schema, el, fields);
+	types.number(key, schema, node, fields);
 	fields[key].type = 'integer';
 };
 
-types.number = function(key, schema, el, fields) {
-	var field = el.append('div', {class: 'inline field'});
-	if (schema.title) {
-		field.append('label', schema.title);
-	}
+types.number = function(key, schema, node, fields) {
+	node.appendChild(html`<div class="inline field">
+		<label>${schema.title || ''}</label>
+		<input type="number" name="${key}"
+			value="${schema.default !== undefined ? schema.default : ''}"
+			title="${schema.description || ''}"
+			min="${schema.minimum != null ? schema.minimum : ''}"
+			max="${schema.maximum != null ? schema.maximum : ''}"
+			step="${schema.multipleOf != null ? schema.multipleOf : ''}"
+		/>
+	</div>`);
 
-	var attrs = {
-		name: key,
-		type: 'number'
-	};
-	if (schema.default !== undefined) attrs.value = schema.default;
-
-	attrs.type = 'number';
-	if (schema.description) attrs.title = schema.description;
-	if (schema.minimum != null) attrs.min = schema.minimum;
-	if (schema.maximum != null) attrs.max = schema.maximum;
-	if (schema.multipleOf != null) attrs.step = schema.multipleOf;
-	field.append('input', attrs);
 	fields[key].type = 'number';
 };
 
-types.object = function(key, schema, el, fields) {
+types.object = function(key, schema, node, fields) {
 	if (schema.title) {
-		el = el.append('fieldset').append('legend', schema.title);
+		node.appendChild(html`<fieldset>
+			<legend>${schema.title}</legend>
+		</fieldset>`);
 	}
 
 	for (var name in schema.properties) {
 		var propSchema = schema.properties[name];
 		if (key) name = key + '.' + name;
-		process(name, propSchema, el, fields);
+		process(name, propSchema, node, fields);
 	}
 };
 
