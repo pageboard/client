@@ -311,41 +311,49 @@ Href.prototype.show = function(results) {
 	return results.map(function(obj) {
 		map[obj.url] = obj;
 		var olditem = list.querySelector('[href="'+obj.url+'"]');
-		var item = html`<a href="${obj.url}" class="item" title="${obj.meta.description || ""}">
-			<div class="content">
-				<div class="ui tiny header">
-					<div class="ui tiny compact circular icon button" data-action="set">
-						<i class="icon checkmark"></i>
-					</div>
-					<img src="${obj.icon}" class="ui avatar icon image" />
-					${obj.title}
-					<div class="ui right floated tiny compact circular icon button" data-action="remove">
-						<i class="icon close"></i>
-					</div>
-				</div>
-				<div class="left floated meta">
-					${obj.mime}<em class="right">${obj.mime.size || ''}</em><br>
-					${tplDims(obj)}<br>
-					${moment(obj.updated_at).fromNow()}
-				</div>
-				${tplThumbnail(obj.meta.thumbnail)}
-			</div>
-		</a>`;
-
+		var item = mergeItem(obj);
 		if (olditem) list.replaceChild(item, olditem);
 		else list.appendChild(item);
 		return item;
 	});
 };
 
+function mergeItem(obj) {
+	return html`<a href="${obj.url}" class="item" title="${obj.meta.description || ""}">
+		<div class="content">
+			<div class="ui tiny header">
+				<div class="ui tiny compact circular icon button" data-action="set">
+					<i class="icon checkmark"></i>
+				</div>
+				<img src="${obj.icon}" class="ui avatar icon image" />
+				${obj.title}
+				<div class="ui right floated tiny compact circular icon button" data-action="remove">
+					<i class="icon close"></i>
+				</div>
+			</div>
+			<div class="left floated meta">
+				${obj.mime}<em>${tplSize(obj.meta.size)}</em><br>
+				${tplDims(obj)}<br>
+				${moment(obj.updated_at).fromNow()}
+			</div>
+			${tplThumbnail(obj.meta.thumbnail)}
+		</div>
+	</a>`;
+}
+
+function tplSize(size) {
+	if (!size) return '';
+	return ' (' + PrettyBytes(size) + ')';
+}
+
 function tplDims(obj) {
 	var str = "";
 	if (obj.type == "video" || obj.type == "image") {
 		if (obj.meta.width) {
-			str += obj.meta.width + 'w';
+			str += 'width ' + obj.meta.width + 'px';
 		}
 		if (obj.meta.height) {
-			str += " " + obj.meta.height + 'h';
+			str += ", height " + obj.meta.height  + 'px';
 		}
 	}
 	if (obj.meta.duration) {

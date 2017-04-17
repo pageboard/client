@@ -95,6 +95,7 @@
 
 .ui.href.items > .item > .content {
 	max-width:100%;
+	max-height:7em;
 	border:1px solid #999;
 	border-radius:0.28571429rem;
 	overflow:hidden;
@@ -135,11 +136,14 @@
 	margin-bottom:0;
 }
 
-.ui.href.items > .item.selected > .content > .header,
 .ui.href.items > .item.selected > .content .button.circular {
 	color: #2185D0;
 	border-color:#2185D0;
 	visibility: visible;
+}
+.ui.href.items > .item.selected > .content > .header {
+	background-color: #2185D0;
+	color:white;
 }
 .ui.href.items > .item [data-action="set"],
 .ui.href.items > .item.selected .avatar {
@@ -148,10 +152,6 @@
 .ui.href.items > .item.selected [data-action="set"] {
 	display:inline-block;
 	vertical-align:top;
-}
-
-.ui.href.items > .item.selected > .content {
-	border-color:#2185D0;
 }
 
 .ui.href.items:empty {
