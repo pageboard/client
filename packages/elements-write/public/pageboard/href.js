@@ -5,14 +5,18 @@ function Href(input) {
 	this.show = this.show.bind(this);
 	this.input = input;
 	this.value = input.value;
+	this.map = {};
 
 	input.insertAdjacentHTML('afterEnd', [
-		'<div class="ui right action input">',
-		// '<div class="ui right action left icon input">',
-		// '<i class="search icon"></i>',
-		'<button class="ui blue right icon button">',
-		' <i class="add icon"></i>',
-		'</button>',
+		'<div class="ui left icon input">',
+			'<i class="search icon"></i>',
+			'<div class="ui icon top right pointing dropdown blue button">',
+				'<i class="add icon"></i>',
+				'<div class="menu">',
+					'<div class="item" data-action="upload">Upload file(s)</div>',
+					'<div class="item" data-action="paste">Paste URL</div>',
+				'</div>',
+			'</div>',
 		'</div><div class="ui href items"></div>'
 	].join('\n'));
 	// move the input to keep form validation working
@@ -22,7 +26,9 @@ function Href(input) {
 		if (e.target.closest('a')) e.preventDefault();
 	}, true);
 	var button = this.node.querySelector('.button');
+	$(button).dropdown();
 	var icon = this.icon = button.querySelector('.icon');
+	var menu = button.querySelector('.menu');
 
 	this.node.insertBefore(input, button);
 
@@ -42,7 +48,7 @@ function Href(input) {
 	input.addEventListener('keypress', function(e) {
 		e.preventDefault();
 		if (!me.searching) {
-			me.search.value = e.key;
+			if (e.key.length == 1) me.search.value = e.key;
 			me.searchStart();
 			me.uiLoad(GET('/api/href', {
 				text: me.search.value
@@ -59,22 +65,17 @@ function Href(input) {
 	});
 
 	// setup upload
-	button.addEventListener('click', function() {
+	button.addEventListener('click', function(e) {
 		if (icon.classList.contains('add')) {
-			me.upload().then(function(files) {
-				if (!files) return;
-				var p = Promise.resolve();
-				files.forEach(function(file) {
-					p = p.then(function() {
-						return me.add(file);
-					});
-				});
-			});
+			var action = e.target.dataset.action;
+			if (!action || !me[action]) return;
+			me[action]();
 		} else if (icon.classList.contains('remove')) {
 			me.clear();
 			if (me.searching) {
 				me.searchStop();
 			}
+			input.focus();
 		}
 	});
 
@@ -97,11 +98,8 @@ function Href(input) {
 			});
 			return;
 		}
+		me.set(me.map[href]);
 
-		Array.from(this.list.querySelectorAll('.item')).forEach(function(item) {
-			item.classList.remove('selected');
-		});
-		item.classList.add('selected');
 		input.value = href;
 		var event = document.createEvent('Event');
 		event.initEvent('change', true, true);
@@ -110,7 +108,9 @@ function Href(input) {
 
 	// initialize
 	if (input.value) {
-		this.set(input.value);
+		this.get(input.value).then(function(item) {
+			me.set(item);
+		});
 	}
 }
 
@@ -120,7 +120,6 @@ Href.prototype.searchStart = function() {
 	this.node.closest('.field').classList.add('href');
 	this.node.classList.add('left');
 	this.node.classList.add('icon');
-	this.node.insertAdjacentHTML('afterBegin', '<i class="search icon"></i>');
 	this.icon.classList.remove('add');
 	this.icon.classList.add('remove');
 	this.search.focus();
@@ -133,7 +132,38 @@ Href.prototype.searchStop = function() {
 	this.node.closest('.field').classList.remove('href');
 	this.node.classList.remove('left');
 	this.node.classList.remove('icon');
-	this.node.querySelector('.search.icon').remove();
+};
+
+// display mode
+// the current url is not shown inside search field
+// the current href is shown alone below the field, selected
+
+// focus input -> search mode
+// the list takes all height (search mode)
+// the current href is shown at the top of the list,
+// latest href are listed below
+
+// search mode -> input input
+// the current href is shown at the top of the list,
+// the list is updated with search results
+
+// in search mode, a click on some href selects it
+// in search mode, a second click on a selected href changes input.value and closes search mode
+// in search mode, a click on x button closes search mode
+
+// upload mode
+// there is no upload mode - uploading notifications take place in notification, that's all
+// to see uploaded files, just go into search mode
+
+// paste mode
+// show an input (without search icon) with a placeholder "paste url here"
+// and focus it
+// the + button is now a x button for leaving "paste mode"
+// when a url is pasted, change input value and close paste mode
+
+Href.prototype.paste = function() {
+	// TODO
+
 };
 
 Href.prototype.upload = function() {
@@ -186,11 +216,20 @@ Href.prototype.upload = function() {
 			xhr.send(fd);
 		});
 		input.click();
+	}).then(function(files) {
+		if (!files) return;
+		var p = Promise.resolve();
+		files.forEach(function(file) {
+			p = p.then(function() {
+				return me.add(file);
+			});
+		});
+		return p;
 	});
 };
 
 Href.prototype.uploading = function() {
-	var str = '<div class="ui attached progress"><div class="bar"></div></div>';
+	var str = '<div class="ui blue attached progress"><div class="bar"></div></div>';
 	var root = Pageboard.notify.dom();
 	root.insertAdjacentHTML('beforeEnd', str);
 	var progress = root.lastChild;
@@ -218,16 +257,18 @@ Href.prototype.remove = function(href) {
 	return DELETE('/api/href', {url: href});
 };
 
-Href.prototype.set = function(val) {
-	if (val == null || val == "") return this.clear();
-	this.input.value = val;
+Href.prototype.get = function(href) {
+	return this.uiLoad(GET('/api/href', {url: href}));
+};
+
+Href.prototype.set = function(result) {
 	this.icon.classList.remove('add');
 	this.icon.classList.add('remove');
-	var query = {};
-	if (val[0] == '/' || /^https?:\/\//.test(val)) query.url = val;
-	else query.text = val;
-	this.list.textContent = "";
-	return this.uiLoad(GET('/api/href', query)).then(this.show);
+	var item = this.show(result)[0];
+	Array.from(this.list.querySelectorAll('.item')).forEach(function(item) {
+		item.classList.remove('selected');
+	});
+	item.classList.add('selected');
 };
 
 Href.prototype.clear = function() {
@@ -261,58 +302,62 @@ Href.prototype.show = function(results) {
 	if (!Array.isArray(results)) {
 		clear = false;
 		results = [results];
+	} else {
+		this.map = {};
 	}
 	var list = this.list;
 	if (clear) list.textContent = "";
-	results.forEach(function(obj) {
-		var item = document.createElement('a');
-		item.className = 'item';
-		if (obj.meta.description) item.title = obj.meta.description;
-		item.setAttribute('href', obj.url);
-		var content = document.createElement('div');
-		content.className = 'content';
-		content.innerHTML = '<div class="ui tiny header"></div>';
-		content.firstChild.textContent = obj.title;
-		content.firstChild.insertAdjacentHTML('beforeEnd', [
-			'<div class="ui right floated tiny compact black circular icon button" data-action="remove">',
-			'<i class="icon close"></i>',
-			'</div>'
-		].join('\n'));
-		item.appendChild(content);
-		if (obj.icon) {
-			var img = document.createElement('img');
-			img.className = 'ui avatar icon image';
-			img.src = obj.icon;
-			content.firstChild.insertBefore(img, content.firstChild.firstChild);
-		}
+	var map = this.map;
+	return results.map(function(obj) {
+		map[obj.url] = obj;
+		var olditem = list.querySelector('[href="'+obj.url+'"]');
+		var item = html`<a href="${obj.url}" class="item" title="${obj.meta.description || ""}">
+			<div class="content">
+				<div class="ui tiny header">
+					<div class="ui tiny compact circular icon button" data-action="set">
+						<i class="icon checkmark"></i>
+					</div>
+					<img src="${obj.icon}" class="ui avatar icon image" />
+					${obj.title}
+					<div class="ui right floated tiny compact circular icon button" data-action="remove">
+						<i class="icon close"></i>
+					</div>
+				</div>
+				<div class="left floated meta">
+					${obj.mime}<em class="right">${obj.mime.size || ''}</em><br>
+					${tplDims(obj)}<br>
+					${moment(obj.updated_at).fromNow()}
+				</div>
+				${tplThumbnail(obj.meta.thumbnail)}
+			</div>
+		</a>`;
 
-		var meta = document.createElement('div');
-		meta.className = 'meta';
-		meta.textContent = obj.mime;
-		meta.appendChild(document.createElement('br'));
-		if (obj.type == "video" || obj.type == "image") {
-			if (obj.meta.width) {
-				meta.appendChild(document.createTextNode(obj.meta.width + 'w'));
-			}
-			if (obj.meta.height) {
-				meta.appendChild(document.createTextNode(" " + obj.meta.height + 'h'));
-			}
-		}
-		if (obj.meta.duration) {
-			meta.appendChild(document.createTextNode(" - " + obj.meta.duration));
-		}
-		if (meta.lastChild.nodeName != "BR") meta.appendChild(document.createElement('br'));
-		meta.appendChild(document.createTextNode(moment(obj.updated_at).fromNow()));
-		if (obj.meta.thumbnail) {
-			var img = document.createElement('img');
-			img.src = obj.meta.thumbnail;
-			img.className = 'ui tiny right floated image';
-			meta.insertBefore(img, meta.firstChild);
-		}
-		content.appendChild(meta);
-		list.appendChild(item);
+		if (olditem) list.replaceChild(item, olditem);
+		else list.appendChild(item);
+		return item;
 	});
 };
+
+function tplDims(obj) {
+	var str = "";
+	if (obj.type == "video" || obj.type == "image") {
+		if (obj.meta.width) {
+			str += obj.meta.width + 'w';
+		}
+		if (obj.meta.height) {
+			str += " " + obj.meta.height + 'h';
+		}
+	}
+	if (obj.meta.duration) {
+		str += " - " + obj.meta.duration;
+	}
+	return str;
+}
+
+function tplThumbnail(src) {
+	if (src) return html`<img src="${src}" class="ui tiny right floated image" />`;
+	else return '';
+}
 
 Href.prototype.destroy = function() {
 	document.querySelector('#pageboard-write').classList.remove('href');

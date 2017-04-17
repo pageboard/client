@@ -68,21 +68,23 @@
 }
 
 .ui.avatar.icon.image {
-	width:16px;
-	height:16px;
-	vertical-align:sub;
+	width:1.2em;
+	height:1.2em;
+	vertical-align:top;
+	margin-top:0.24em;
 }
 
-.ui.href.items .button[data-action="remove"] {
-	display:none;
-	margin:0 !important;
-	padding:0.3em;
+.ui.href.items .button.circular {
+	visibility:hidden; /* so .item height won't change when .button is shown */
+	padding:0.24em;
 	font-size: 0.85714286rem;
+	background-color:white;
+	border:1px solid #999;
 }
 
-.ui.href.items > .item:hover .button[data-action="remove"],
-.ui.href.items > .item:focus .button[data-action="remove"] {
-	display:block;
+.ui.href.items > .item:hover .button.circular,
+.ui.href.items > .item:focus .button.circular {
+	visibility:visible;
 }
 
 /* style href */
@@ -93,39 +95,63 @@
 
 .ui.href.items > .item > .content {
 	max-width:100%;
+	border:1px solid #999;
+	border-radius:0.28571429rem;
+	overflow:hidden;
 }
 
 .ui.href.items > .item > .content > .header {
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	background: black;
-	color: white;
-	border-radius: 0.5em 0.5em 0 0;
+	color: #777;
 	display:block;
 	padding: 0.2em 0.3em;
 	margin:0;
 }
 
 .ui.href.items > .item > .content > .meta {
-	margin-top:0;
+	margin-top:0.15em;
+	margin-bottom:0.15em;
 	padding-left:0.3em;
 	/* let div.meta grow with its content */
 	position:relative;
 	overflow:hidden;
 }
 
-.ui.href.items > a.item:hover > .content > .header {
-	color:white;
+.ui.href.items > a.item > .content > .header {
+	color:#555;
+	border-bottom:1px solid #999;
 }
 
+/*
 .ui.href.items > .item:hover > .content > .meta {
 	outline: 1px solid black;
 	outline-offset:-1px;
 }
+*/
 
-.ui.href.items > .item > .content > .meta > .right.image {
+.ui.href.items > .item > .content .right.floated.image {
 	margin-bottom:0;
+}
+
+.ui.href.items > .item.selected > .content > .header,
+.ui.href.items > .item.selected > .content .button.circular {
+	color: #2185D0;
+	border-color:#2185D0;
+	visibility: visible;
+}
+.ui.href.items > .item [data-action="set"],
+.ui.href.items > .item.selected .avatar {
+	display:none;
+}
+.ui.href.items > .item.selected [data-action="set"] {
+	display:inline-block;
+	vertical-align:top;
+}
+
+.ui.href.items > .item.selected > .content {
+	border-color:#2185D0;
 }
 
 .ui.href.items:empty {
@@ -141,6 +167,11 @@
 
 #pageboard-write:not(.href) > #form > .field:not(.href) input.search {
 	display:none;
+}
+
+.ui .left.icon {
+	left:0;
+	right:auto;
 }
 
 #form {
