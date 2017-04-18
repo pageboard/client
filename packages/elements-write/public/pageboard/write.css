@@ -21,6 +21,27 @@
 	margin-top:0 !important;
 	padding-top:0 !important;
 }
+#notifications:empty {
+	display:none;
+}
+#notifications {
+	max-height:66%;
+}
+#notifications .message:nth-last-child(n+4) {
+	display:none;
+}
+#notifications .message > p {
+	display:none;
+}
+#notifications .message:last-child > p {
+	display:block;
+}
+#breadcrumb:empty {
+	display:none;
+}
+#form {
+	margin-top:1em;
+}
 
 .wide {
 	margin-top:0 !important;
@@ -33,160 +54,13 @@
 	width:100%;
 }
 
-#notifications:empty {
-	display:none;
-}
-
-
-#breadcrumb:empty {
-	display:none;
-}
-.ui.menu {
-	flex-wrap:wrap;
-}
-.ui.menu .item > img:not(.ui) {
-	width:1.5em;
-}
-.ui.menu .item:before {
-	display:none;
-}
-.ui.menu .divider {
-	width:1px;
-	background-color:#353535;
-}
-.ui.icon.menu .item.disabled {
-	/* opacity:0.45; */
-	display:none;
-}
-/* keep menu size */
-.ui.icon.menu .item.disabled:first-child {
-	display:block;
-	opacity:0.45;
-}
-.ui.icon.menu .item.disabled, .ui.icon.menu .item.disabled:hover {
-	color:inherit;
-}
-
-.ui.avatar.icon.image {
-	width:1.2em;
-	height:1.2em;
-	vertical-align:top;
-	margin-top:0.24em;
-}
-
-.ui.href.items .button.circular {
-	visibility:hidden; /* so .item height won't change when .button is shown */
-	padding:0.24em;
-	font-size: 0.85714286rem;
-	background-color:white;
-	border:1px solid #999;
-}
-
-.ui.href.items > .item:hover .button.circular,
-.ui.href.items > .item:focus .button.circular {
-	visibility:visible;
-}
-
-/* style href */
-.ui.href.items {
-	max-height:100%;
-	overflow:auto;
-}
-
-.ui.href.items > .item > .content {
-	max-width:100%;
-	max-height:7em;
-	border:1px solid #999;
-	border-radius:0.28571429rem;
-	overflow:hidden;
-}
-
-.ui.href.items > .item > .content > .header {
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	color: #777;
-	display:block;
-	padding: 0.2em 0.3em;
-	margin:0;
-}
-
-.ui.href.items > .item > .content > .meta {
-	margin-top:0.15em;
-	margin-bottom:0.15em;
-	padding-left:0.3em;
-	/* let div.meta grow with its content */
-	position:relative;
-	overflow:hidden;
-}
-
-.ui.href.items > a.item > .content > .header {
-	color:#555;
-	border-bottom:1px solid #999;
-}
-
-/*
-.ui.href.items > .item:hover > .content > .meta {
-	outline: 1px solid black;
-	outline-offset:-1px;
-}
-*/
-
-.ui.href.items > .item > .content .right.floated.image {
-	margin-bottom:0;
-}
-
-.ui.href.items > .item.selected > .content .button.circular {
-	color: #2185D0;
-	border-color:#2185D0;
-	visibility: visible;
-}
-.ui.href.items > .item.selected > .content > .header {
-	background-color: #2185D0;
-	color:white;
-}
-.ui.href.items > .item [data-action="set"],
-.ui.href.items > .item.selected .avatar {
-	display:none;
-}
-.ui.href.items > .item.selected [data-action="set"] {
-	display:inline-block;
-	vertical-align:top;
-}
-
-.ui.href.items:empty {
-	display:none;
-}
-
-#pageboard-write.href > div:not(#breadcrumb):not(#form),
-#pageboard-write.href > #form > .field:not(.href),
-#pageboard-write.href > #form > .field.href > label,
-#pageboard-write.href > #form > .field.href input:not(.search) {
-	display:none !important;
-}
-
-#pageboard-write:not(.href) > #form > .field:not(.href) input.search {
-	display:none;
-}
-
 .ui .left.icon {
 	left:0;
 	right:auto;
-}
-
-#form {
-	margin-top:1em;
-}
-
-#menu:empty {
-	display:none;
-}
-#menu {
-	border:1px solid gray;
-	margin:1em 0;
 }
 
 .ui.range {
 	height:auto;
 	padding: 0.67857143em 1em; /* this is the padding value of .field */
 }
+

@@ -1,0 +1,108 @@
+.field.href .ui.avatar.icon.image {
+	width:1.2em;
+	height:1.2em;
+	vertical-align:top;
+	margin-top:0.24em;
+}
+
+.field.href .items .button.circular {
+	visibility:hidden; /* so .item height won't change when .button is shown */
+	padding:0.24em;
+	font-size: 0.85714286rem;
+	background-color:white;
+	border:1px solid #999;
+}
+
+.field.href .items > .item:hover .button.circular,
+.field.href .items > .item:focus .button.circular {
+	visibility:visible;
+}
+
+/* style href */
+.field.href .items {
+	max-height:100%;
+	overflow:auto;
+}
+
+.field.href .items > .item > .content {
+	max-width:100%;
+	max-height:7em;
+	border:1px solid #999;
+	border-radius:0.28571429rem;
+	overflow:hidden;
+}
+
+.field.href .items > .item > .content > .header {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	color: #777;
+	display:block;
+	padding: 0.2em 0.3em;
+	margin:0;
+}
+
+.field.href .items > .item > .content > .meta {
+	margin-top:0.15em;
+	margin-bottom:0.15em;
+	padding-left:0.3em;
+	/* let div.meta grow with its content */
+	position:relative;
+	overflow:hidden;
+}
+
+.field.href .items > a.item > .content > .header {
+	color:#555;
+	border-bottom:1px solid #999;
+}
+
+/*
+.field.href .items > .item:hover > .content > .meta {
+	outline: 1px solid black;
+	outline-offset:-1px;
+}
+*/
+
+.field.href .items > .item > .content .right.floated.image {
+	margin-bottom:0;
+}
+
+.field.href .items > .item.selected > .content .button.circular {
+	color: #2185D0;
+	border-color:#2185D0;
+	visibility: visible;
+}
+.field.href .items > .item.selected > .content > .header {
+	background-color: #2185D0;
+	color:white;
+}
+.field.href .items > .item [data-action="set"],
+.field.href .items > .item.selected .avatar {
+	display:none;
+}
+.field.href .items > .item.selected [data-action="set"] {
+	display:inline-block;
+	vertical-align:top;
+}
+
+.field.href .items:empty {
+	display:none;
+}
+
+#pageboard-write.href > div:not(#breadcrumb):not(#form):not(#notifications),
+#pageboard-write.href .field:not(.href),
+#pageboard-write.href .field.href > label,
+.field.href input:not(.search) {
+	display:none !important;
+}
+
+.field.href .search + .dropdown {
+	margin-right:0;
+	border-top-left-radius:0 !important;
+	border-bottom-left-radius:0 !important;
+}
+
+.field.href .search {
+	border-top-right-radius:0 !important;
+	border-bottom-right-radius:0 !important;
+}

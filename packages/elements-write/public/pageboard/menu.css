@@ -1,0 +1,36 @@
+#menu:empty {
+	display:none;
+}
+
+#menu {
+	border:1px solid gray;
+	margin:1em 0;
+}
+
+#menu {
+	flex-wrap:wrap;
+}
+#menu .item > img:not(.ui) {
+	width:1.5em;
+}
+#menu .item:before {
+	display:none;
+}
+#menu .divider {
+	width:1px;
+	background-color:#353535;
+}
+#menu .item.disabled {
+	/* opacity:0.45; */
+	display:none;
+}
+/* keep menu size */
+#menu .item.disabled:first-child {
+	display:block;
+	opacity:0.45;
+}
+#menu .item.disabled,
+#menu .item.disabled:hover {
+	color:inherit;
+}
+
