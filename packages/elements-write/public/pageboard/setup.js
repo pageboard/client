@@ -74,10 +74,11 @@ function pageUpdate(page) {
 	});
 }
 
-function editorUpdate(editor, state) {
+function editorUpdate(editor, state, focusParents) {
 	var tr = editor.state.tr; // do not use state.tr to avoid being before modifications
 	var parents = [];
-	editor.selectionParents(tr, tr.selection).forEach(function(item) {
+
+	(focusParents || editor.selectionParents(tr, tr.selection)).forEach(function(item) {
 		var block = editor.modules.id.get((item.root.mark || item.root.node).attrs.block_id);
 		if (!block) {
 			console.warn("no block for", item);
@@ -120,11 +121,28 @@ function editorSetup(win, target, viewer) {
 	Editor.defaults.nodes = Editor.defaults.nodes.remove('doc');
 
 	// and the editor must be running from child
+	var lastFocusParents;
 	var editor = new Editor({
 		topNode: 'page',
 		place: node,
 		plugins: [{
-			update: editorUpdate
+			filterTransaction: function(tr) {
+				// filters all transactions
+				var focusParents = tr.getMeta('focus-plugin');
+				if (focusParents) {
+					lastFocusParents = focusParents;
+				}
+				return true;
+			},
+			view: function() {
+				return {
+					update: function(editor, state) {
+						// called after all current transactions have been applied
+						editorUpdate(editor, state, lastFocusParents);
+						lastFocusParents = null;
+					}
+				}
+			}
 		}]
 	});
 	editor.modules.id.store = viewer.modules.id.store;
@@ -134,7 +152,6 @@ function editorSetup(win, target, viewer) {
 
 	return editor;
 }
-
 
 
 })(window.Pageboard, window.Pagecut);
