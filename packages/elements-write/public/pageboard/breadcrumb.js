@@ -9,6 +9,16 @@ function Breadcrumb(editor, selector) {
 	this.$node.on('click', '.section', this.click.bind(this));
 }
 
+function isAllSelected(editor) {
+	var AllSelection = editor.root.defaultView.Pagecut.State.AllSelection;
+	var sel = editor.state.selection;
+	return (sel instanceof AllSelection);
+}
+
+function contentOption(contents, name) {
+	return html`<div class="item" data-value="${name}">${contents[name].title}</div>`;
+}
+
 Breadcrumb.prototype.update = function(parents) {
 	this.clear();
 	var parent;
@@ -16,10 +26,39 @@ Breadcrumb.prototype.update = function(parents) {
 		parent = parents[i];
 		this.$node.append(this.item(parent.block));
 	}
-	if (parent && parent.content && !(this.editor.state.selection instanceof this.editor.root.defaultView.Pagecut.State.AllSelection)) {
-		var contentTitle = this.editor.map[parent.block.type].contents[parent.content.name].title;
-		if (contentTitle) {
-			this.$node.append($('<span class="section">' + contentTitle + '</span>'));
+	var contents = this.editor.map[parent.block.type].contents;
+	if (contents) {
+		var contentName = parent.content && parent.content.name;
+		var contentSpec = contentName && contents[contentName] || {};
+		var contentKeys = Object.keys(contents);
+		if (contentName && contentKeys.length == 1) {
+			contentSpec = contents[contentKeys[0]];
+			this.$node.append(html`<div class="ui inline dropdown">
+				<div class="text">${contentSpec.title}</div>
+			</div>`);
+		} else {
+			var select = html`<div class="ui inline dropdown">
+				<div class="text">${contentSpec.title || ''}</div>
+				<i class="dropdown icon"></i>
+				<div class="menu">
+					${contentKeys.map(contentOption.bind(null, contents))}
+				</div>
+			</div>`;
+			this.$node.append(select);
+			var editor = this.editor;
+			$(select).dropdown({
+				onChange: function(val, text) {
+					var node = editor.modules.id.domQuery(parent.block.id, {
+						content: val,
+						focused: true
+					});
+					if (!node) {
+						console.error("dom node not found", parent.block.id, val);
+					} else {
+						editor.modules.id.domSelect(node);
+					}
+				}
+			});
 		}
 	}
 	this.$node.find('.section').last().addClass('active').next('.divider').remove();
