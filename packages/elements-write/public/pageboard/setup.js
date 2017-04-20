@@ -64,12 +64,14 @@ function setupListener(e) {
 }
 
 function pageUpdate(page) {
-	this.root.title = page.data.title;
+	var editor = this;
+	editor.root.title = page.data.title;
 	Page.replace({
 		pathname: page.data.url,
 		query: Page.state.query
+	}).then(function() {
+		editorUpdate(editor);
 	});
-	editorUpdate(this);
 }
 
 function editorUpdate(editor, state) {
