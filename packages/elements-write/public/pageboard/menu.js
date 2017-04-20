@@ -111,7 +111,7 @@ function renderItem(view) {
 			dom.insertAdjacentHTML('afterbegin', icon);
 			dom.querySelector('svg').setAttribute('class', 'icon');
 		} else {
-			dom.insertAdjacentHTML('afterbegin', '<img class="icon" src="'+icon+'" />');
+			dom.insertAdjacentHTML('afterbegin', `<img class="icon" src="${icon}" />`);
 		}
 	}
 	dom.appendChild(document.createTextNode('\n' + translate(view, spec.element.title)));
