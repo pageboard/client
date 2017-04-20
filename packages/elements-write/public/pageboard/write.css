@@ -39,6 +39,9 @@
 #breadcrumb:empty {
 	display:none;
 }
+#breadcrumb {
+	line-height:1.4; /* prettier multiple lines */
+}
 #form {
 	margin-top:1em;
 }
