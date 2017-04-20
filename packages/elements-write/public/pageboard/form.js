@@ -59,24 +59,23 @@ Form.prototype.update = function(parents) {
 
 	Object.keys(el.properties).forEach(function(key) {
 		if (el.properties[key].format == "uri") {
-			this.href = new Pageboard.Href(node.querySelector('[name="'+key+'"]'));
+			this.href = new Pageboard.Href(node.querySelector(`[name="${key}"]`));
 		}
 	}.bind(this));
 };
 
 Form.prototype.change = function() {
 	if (!this.block) return;
+	var editor = this.editor;
 	var data = this.form.get();
 	this.block.data = Object.assign(this.block.data || {}, data);
-	this.editor.modules.id.set(this.block);
-
-
-	if (this.block.type == "page") {
-		this.editor.pageUpdate(this.block);
+	editor.modules.id.set(this.block);
+	if (this.block.type == editor.state.doc.type.name) {
+		editor.pageUpdate(this.block);
 		return;
 	}
 	var id = this.block.id;
-	var nodes = this.editor.dom.querySelectorAll('[block-id="' + id + '"]');
+	var nodes = editor.dom.querySelectorAll(`[block-id="${id}"]`);
 
 	if (nodes.length == 0) {
 		console.warn("No block nodes found for id", id);
@@ -84,9 +83,9 @@ Form.prototype.change = function() {
 		return;
 	}
 
-	var tr = this.editor.state.tr, curtr, count = 0;
+	var tr = editor.state.tr, curtr, count = 0;
 	for (var i=0; i < nodes.length; i++) {
-		curtr = this.editor.replaceTr(tr, this.block, nodes[i], true);
+		curtr = editor.replaceTr(tr, this.block, nodes[i], true);
 		if (!curtr) {
 			console.warn("Cannot update", nodes[i]);
 		} else {
@@ -95,8 +94,7 @@ Form.prototype.change = function() {
 		}
 	}
 	if (count) {
-		tr.ignoreUpdate = true;
-		this.editor.dispatch(tr);
+		editor.dispatch(tr);
 	}
 };
 
