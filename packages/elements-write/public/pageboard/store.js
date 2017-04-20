@@ -65,7 +65,7 @@ Store.prototype.restore = function(data) {
 	return editor.modules.id.from(obj.root).then(function(frag) {
 		me.ignoreNext = true;
 		editor.set(frag);
-		if (obj.root.type == "page") {
+		if (obj.root.type == editor.state.doc.type.name) {
 			editor.pageUpdate(obj.root);
 		}
 	}).catch(function(err) {
