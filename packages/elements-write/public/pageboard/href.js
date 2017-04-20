@@ -281,10 +281,9 @@ Href.prototype.clear = function() {
 Href.prototype.uiLoad = function(p) {
 	var classList = this.node.classList;
 	classList.add('loading');
-	classList.remove('error');
 	return p.catch(function(err) {
 		classList.remove('loading');
-		classList.add('error');
+		Pageboard.notify("Loading error", err);
 		// rethrow, we don't want to show any result
 		throw err;
 	}).then(function(results) {
