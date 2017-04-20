@@ -38,26 +38,16 @@ Breadcrumb.prototype.item = function(block) {
 }
 
 Breadcrumb.prototype.click = function(e) {
+	var editor = this.editor;
 	var id = e.target.getAttribute('block-id');
-	var rootId = this.editor.dom.getAttribute('block-id');
-	var nodes;
-	if (rootId == id) {
-		nodes = [this.editor.dom];
-	} else {
-		nodes = this.editor.root.querySelectorAll('[block-focused][block-id="'+id+'"]');
+	var node = editor.modules.id.domQuery(id, {focused: true});
+	if (!node) {
+		throw new Error(`No node found with block-id ${id}`);
 	}
-	if (nodes.length == 0) {
-		console.warn("No block nodes found for id", id);
-		return;
-	}
-	if (nodes.length > 1) {
-		console.warn("Only one node should have focus and id", id);
-		return;
-	}
-	var sel = this.editor.select(nodes[0]);
+	var sel = editor.select(node);
 	if (sel) {
-		this.editor.dispatch(this.editor.state.tr.setSelection(sel));
-		this.editor.focus();
+		editor.dispatch(editor.state.tr.setSelection(sel));
+		editor.focus();
 	}
 };
 
