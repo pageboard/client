@@ -1,3 +1,7 @@
+[hidden] {
+	display:none !important;
+}
+
 #pageboard-read {
 	width:70%;
 	box-shadow:0 0 1em grey;
