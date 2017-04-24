@@ -1,23 +1,19 @@
 #pageboard-read {
-	position:absolute;
-	left:0;
-	right:30%;
-	top:0;
-	bottom:0;
-	background-color:#EEE;
+	width:70%;
+	box-shadow:0 0 1em grey;
+	min-height:100%;
 }
 #pageboard-read > iframe {
 	border:0;
 	width:100%;
-	height:100%;
+	min-height:100%;
 	display:block;
+	overflow:hidden;
 }
 #pageboard-write {
-	position:absolute;
-	left:70%;
-	right:0;
 	top:0;
-	bottom:0;
+	vertical-align:top;
+	width:30%;
 	margin-top:0 !important;
 	padding-top:0 !important;
 }

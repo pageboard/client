@@ -1,10 +1,13 @@
 (function(Pageboard, Pagecut) {
 
 Pageboard.setup = function(state) {
-	// setup "read" iframe in develop mode
-	var iframe = document.createElement('iframe');
-	document.getElementById('pageboard-read').appendChild(iframe);
+	var parentRead = document.getElementById('pageboard-read');
+	var iframe = Pageboard.read = document.createElement('iframe');
+	iframe.setAttribute('scrolling', 'no');
+	parentRead.appendChild(iframe);
+	Pageboard.write = document.getElementById('pageboard-write');
 
+	// setup "read" iframe in develop mode
 	var loc = Page.parse(); // get a copy of state
 	loc.query.develop = null;
 	delete loc.query.write;
@@ -14,9 +17,75 @@ Pageboard.setup = function(state) {
 	iframe.onload = function() {
 		iframe.contentWindow.addEventListener('pageroute', routeListener);
 		iframe.contentWindow.addEventListener('pagesetup', setupListener);
+
+		// resize iframe height
+		iframeResizer(iframe);
+		setInterval(function() {
+			iframeResizer(iframe);
+		}, 50);
 	};
 	iframe.src = Page.format(loc);
 };
+
+function setupScroll(read, write) {
+	var reading = false;
+	var writing = false;
+	function writeDown() {
+		if (writing) return;
+		writing = true;
+		reading = false;
+		var top = -document.body.scrollTop;
+		var height = read.parentNode.offsetHeight;
+		// make sure top + div height >= view height
+		if (top + height < document.body.offsetHeight) {
+			top = document.body.offsetHeight - height;
+			if (top > 0) top = 0;
+		}
+		Object.assign(read.parentNode.style, {
+			position: 'fixed',
+			height: '100%',
+		});
+		read.style.minHeight = null;
+
+		Object.assign(write.style, {
+			position: 'absolute',
+			right: 0,
+			top: null
+		});
+		read.contentWindow.document.body.scrollTop = -top;
+	}
+	function readDown(e) {
+		if (reading) return;
+		if (e) {
+			// TODO fix this workaround, pagecut focus handler uses mousedown too,
+			// and won't get right abs coordinates from event because they are changed below
+			e.stopImmediatePropagation();
+		}
+		reading = true;
+		writing = false;
+		var top = read.contentWindow.document.body.scrollTop;
+		Object.assign(write.style, {
+			position: 'fixed',
+			right: 0,
+			top: 0,
+			bottom: 0
+		});
+
+		Object.assign(read.parentNode.style, {
+			position: 'relative',
+			height: null,
+			top: null
+		});
+		iframeResizer(read);
+		document.body.scrollTop = top;
+	}
+	write.addEventListener('mousedown', writeDown, true);
+	write.addEventListener('touchstart', writeDown, true);
+	read.contentWindow.addEventListener('mousedown', readDown, true);
+	read.contentWindow.addEventListener('touchstart', readDown, true);
+
+	readDown(); // initialize with fixed write and scrolling read
+}
 
 function routeListener(e) {
 	var win = Pageboard.window = this;
@@ -38,29 +107,40 @@ function routeListener(e) {
 function setupListener(e) {
 	var win = this;
 	var state = e.state;
-	this.addEventListener('click', function(e) {
-		e.preventDefault();
-		if (Pageboard.editor) return;
-		Page.patch(function() {
-			document.title = win.document.title + (editor.controls.store.unsavedData ? '*' : '');
-		});
-		Page.replace({
-			path: state.path
-		});
-		// setup editor on whole body instead of e.target
-		// setting it up on a block requires managing context (topNode in parser, probably)
-		var target = e.target.ownerDocument.body;
 
-		var editor = editorSetup(win, target, Pageboard.viewer);
-		Pageboard.editor = editor;
-		editor.pageUpdate = pageUpdate;
-		editor.controls = {};
-		for (var key in Pageboard.Controls) {
-			var lKey = key.toLowerCase();
-			editor.controls[lKey] = new Pageboard.Controls[key](editor, '#' + lKey);
-		}
-		document.querySelector('#pageboard-write').removeAttribute('hidden');
+	Page.patch(function() {
+		document.title = win.document.title + (editor.controls.store.unsavedData ? '*' : '');
 	});
+	Page.replace({
+		path: state.path
+	});
+	// setup editor on whole body instead of e.target
+	// setting it up on a block requires managing context (topNode in parser, probably)
+	var target = win.document.body;
+
+	var editor = editorSetup(win, target, Pageboard.viewer);
+	Pageboard.editor = editor;
+	editor.pageUpdate = pageUpdate;
+	editor.controls = {};
+	for (var key in Pageboard.Controls) {
+		var lKey = key.toLowerCase();
+		editor.controls[lKey] = new Pageboard.Controls[key](editor, '#' + lKey);
+	}
+	Pageboard.write.removeAttribute('hidden');
+	// scroll read or write
+	setupScroll(Pageboard.read, Pageboard.write);
+}
+
+function iframeResizer(iframe) {
+	if (iframe.parentNode.style.position == "fixed") {
+		iframe.style.minHeight = null;
+		return;
+	}
+	var doc = iframe.contentWindow.document;
+	var height = doc.documentElement.offsetHeight;
+	var parentHeight = document.body.offsetHeight;
+	if (height < parentHeight) height = parentHeight;
+	iframe.style.minHeight = height + 'px';
 }
 
 function pageUpdate(page) {
@@ -137,6 +217,7 @@ function editorSetup(win, target, viewer) {
 			view: function() {
 				return {
 					update: function(editor, state) {
+						iframeResizer(Pageboard.read);
 						// called after all current transactions have been applied
 						editorUpdate(editor, state, lastFocusParents);
 						lastFocusParents = null;

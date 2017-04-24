@@ -9,3 +9,6 @@
 	outline: 1px solid #4183C4;
 }
 
+html,body {
+	overflow:visible;
+}
