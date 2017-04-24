@@ -3,27 +3,54 @@
 var root;
 var list = [];
 
-Pageboard.notify = function(title, text) {
-	text = text.toString();
+Pageboard.notify = function(title, obj) {
+	var type = 'info';
+	var text;
+	if (obj == null) {
+		obj = {};
+	} else if (obj instanceof Error) {
+		type = 'negative';
+		text = obj.toString();
+		obj = {};
+	} else if (typeof obj == "string") {
+		text = obj;
+		obj = {};
+	} else {
+		text = obj.text || null;
+	}
+	if (obj.type) type = obj.type;
 	if (list.length) {
 		var last = list[list.length - 1];
 		if (last.title == title && last.text == text) {
-			// do nothing
-			console.info("Repeated error", title);
-			return;
+			if (last.node) {
+				last.node.remove();
+			} else {
+				// do nothing
+				console.info("Repeated notification", title);
+				return;
+			}
 		}
 	}
-	list.push({
+	var item = {
 		title: title,
 		text: text
-	});
+	};
+	list.push(item);
+
 	var parent = Pageboard.notify.dom();
 
-	var msg = html`<div class="ui attached negative message">
+	var msg = html`<div class="ui attached ${type} message">
 		<i class="close icon"></i>
 		<div class="header">${title}</div>
 		${withText(text)}
 	</div>`;
+
+	if (obj.timeout) {
+		item.node = msg;
+		setTimeout(function() {
+			msg.remove();
+		}, obj.timeout * 1000);
+	}
 
 	parent.appendChild(msg);
 };
