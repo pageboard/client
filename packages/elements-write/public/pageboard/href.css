@@ -8,14 +8,19 @@
 .field.href .items .button.circular {
 	visibility:hidden; /* so .item height won't change when .button is shown */
 	padding:0.24em;
-	font-size: 0.85714286rem;
-	background-color:white;
-	border:1px solid #999;
+	color:#4165A0;
+	border-color:#4165A0;
+	background:transparent;
 }
 
 .field.href .items > .item:hover .button.circular,
 .field.href .items > .item:focus .button.circular {
 	visibility:visible;
+}
+
+.field.href .items > .item.selected > .content .button.circular {
+	color: white;
+	visibility: visible;
 }
 
 .field.href .items > .item > .content {
@@ -54,11 +59,7 @@
 	margin-bottom:0;
 }
 
-.field.href .items > .item.selected > .content .button.circular {
-	color: #2185D0;
-	border-color:#2185D0;
-	visibility: visible;
-}
+
 .field.href .items > .item.selected > .content > .header {
 	background-color: #4165A0;
 	border-bottom:1px solid #4165A0;

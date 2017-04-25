@@ -63,7 +63,7 @@ Href.prototype.init = function() {
 		var remove = e.target.closest('[data-action="remove"]');
 		if (remove) {
 			return this.uiLoad(remove, this.remove(href)).then(function() {
-				item.remove();
+				me.renderList();
 			});
 		} else {
 			if (href == input.value) {
@@ -295,7 +295,15 @@ Href.prototype.uploading = function() {
 };
 
 Href.prototype.remove = function(href) {
-	return DELETE('/api/href', {url: href});
+	var me = this;
+	return DELETE('/api/href', {url: href}).then(function(obj) {
+		var list = [];
+		me.map[href] = obj;
+		me.list.forEach(function(obj) {
+			if (obj.url != href) list.push(obj);
+		});
+		me.list = list;
+	});
 };
 
 Href.prototype.get = function(href) {
@@ -341,37 +349,53 @@ Href.prototype.renderList = function(list) {
 	}
 	list.rendered = true;
 	container.textContent = ' ';
+	var containsSelected = false;
 	list.forEach(function(obj) {
-		var item = html`<a href="${obj.url}" class="item" title="${obj.meta.description || ""}">
-			<div class="content">
-				<div class="ui tiny header">
-					<img src="${obj.icon || ''}" class="ui avatar icon image" />
-					${obj.title}
-					<div class="ui right floated tiny compact circular icon button" data-action="remove">
-						<i class="icon close"></i>
-					</div>
-				</div>
-				<div class="left floated meta">
-					${obj.mime}<em>${tplSize(obj.meta.size)}</em><br>
-					${tplDims(obj)}<br>
-					${moment(obj.updated_at).fromNow()}
-				</div>
-				${tplThumbnail(obj.meta.thumbnail)}
-			</div>
-		</a>`;
-		if (!obj.icon) {
-			item.querySelector('.icon.image').replaceWith(
-				html`<i class="ui avatar external icon"></i>`
-			);
-		}
+		var item = renderItem(obj);
 		if (obj.url == selected) {
+			containsSelected = true;
 			item.classList.add('selected');
 			container.insertBefore(item, container.firstChild);
 		} else {
 			container.appendChild(item);
 		}
 	});
+
+	if (!containsSelected) {
+		var item = renderItem(this.map[selected]);
+		item.classList.add('selected');
+		container.insertBefore(item, container.firstChild);
+	}
 };
+
+function renderItem(obj) {
+	var item = html`<a href="${obj.url}" class="item" title="${obj.meta.description || ""}">
+		<div class="content">
+			<div class="ui tiny header">
+				<img src="${obj.icon || ''}" class="ui avatar icon image" />
+				${obj.title}
+				<div class="ui right floated compact circular icon button" data-action="remove">
+					<i class="icon ban"></i>
+				</div>
+			</div>
+			<div class="left floated meta">
+				${obj.mime}<em>${tplSize(obj.meta.size)}</em><br>
+				${tplDims(obj)}<br>
+				${moment(obj.updated_at).fromNow()}
+			</div>
+			${tplThumbnail(obj.meta.thumbnail)}
+		</div>
+	</a>`;
+	if (!obj.icon) {
+		item.querySelector('.icon.image').replaceWith(
+			html`<i class="ui avatar external icon"></i>`
+		);
+	}
+	if (!obj.visible) {
+		item.querySelector('[data-action="remove"]').remove();
+	}
+	return item;
+}
 
 function tplSize(size) {
 	if (!size) return '';
