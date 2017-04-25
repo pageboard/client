@@ -56,11 +56,6 @@ function setupScroll(read, write) {
 	}
 	function readDown(e) {
 		if (reading) return;
-		if (e) {
-			// TODO fix this workaround, pagecut focus handler uses mousedown too,
-			// and won't get right abs coordinates from event because they are changed below
-			e.stopImmediatePropagation();
-		}
 		reading = true;
 		writing = false;
 		var top = read.contentWindow.document.body.scrollTop;
@@ -81,8 +76,8 @@ function setupScroll(read, write) {
 	}
 	write.addEventListener('mousedown', writeDown, true);
 	write.addEventListener('touchstart', writeDown, true);
-	read.contentWindow.addEventListener('mousedown', readDown, true);
-	read.contentWindow.addEventListener('touchstart', readDown, true);
+	read.contentWindow.addEventListener('mousedown', readDown, false);
+	read.contentWindow.addEventListener('touchstart', readDown, false);
 
 	readDown(); // initialize with fixed write and scrolling read
 }
