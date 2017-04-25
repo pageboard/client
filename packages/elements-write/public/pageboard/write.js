@@ -5,6 +5,7 @@ window.Pageboard = {
 		var e = document.createEvent('Event');
 		e.initEvent(event, true, true);
 		node.dispatchEvent(e);
+		if (window.Pageboard.editor) window.Pageboard.editor.focus();
 	}
 };
 
