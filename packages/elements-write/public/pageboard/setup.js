@@ -154,11 +154,16 @@ function editorUpdate(editor, state, focusParents) {
 	var parents = [];
 
 	(focusParents || editor.selectionParents(tr, tr.selection)).forEach(function(item) {
-		var block = editor.modules.id.get((item.root.mark || item.root.node).attrs.block_id);
-		if (!block) {
+		var node = item.root.mark || item.root.node;
+		// TODO this should be handled by module id transparently
+		var nodeBlock = editor.nodeToBlock(node);
+		var storedBlock = editor.modules.id.get(nodeBlock.id);
+		Object.assign(storedBlock.data, nodeBlock.data);
+
+		if (!storedBlock) {
 			console.warn("no block for", item);
 		} else {
-			item.block = block;
+			item.block = storedBlock;
 			parents.push(item);
 		}
 	});
@@ -232,10 +237,3 @@ function editorSetup(win, target, viewer) {
 
 })(window.Pageboard, window.Pagecut);
 
-
-
-
-
-
-
-	
