@@ -80,12 +80,10 @@ Href.prototype.init = function() {
 			}
 		}
 	}.bind(this));
+};
 
-
-	input.addEventListener('change', function(e) {
-		console.log("input changed", input.value)
-		// me.set(input.value);
-	});
+Href.prototype.change = function() {
+	this.renderList();
 };
 
 Href.prototype.act = function(action) {

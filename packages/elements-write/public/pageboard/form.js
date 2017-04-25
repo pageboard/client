@@ -54,10 +54,13 @@ Form.prototype.update = function(parents) {
 			required: el.required
 		}, node);
 	}
+
 	this.form.set(block.data);
+
 	Object.keys(el.properties).forEach(function(key) {
 		if (el.properties[key].format == "uri") {
 			if (!this.href) this.href = new Pageboard.Href(node.querySelector(`[name="${key}"]`));
+			else this.href.change();
 		}
 	}.bind(this));
 
