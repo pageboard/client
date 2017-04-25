@@ -17,6 +17,7 @@ Form.prototype.clear = function() {
 	}
 	this.$node.empty();
 	delete this.block;
+	delete this.form;
 };
 
 Form.prototype.update = function(parents) {
@@ -38,30 +39,29 @@ Form.prototype.update = function(parents) {
 
 	var el = this.editor.map[block.type];
 	if (!el) {
-		this.$node.html(this.template);
+		throw new Error(`Unknown element type ${block.type}`);
 		return;
 	}
-	if (this.block && this.block.id == block.id) {
-		return;
-	}
-	this.clear();
+
+	if (this.block && this.block.id != block.id) this.clear();
 
 	var node = this.$node[0];
 
-	this.form = new Semafor({
-		type: 'object',
-		properties: el.properties,
-		required: el.required
-	}, node);
-
+	if (!this.form) {
+		this.form = new Semafor({
+			type: 'object',
+			properties: el.properties,
+			required: el.required
+		}, node);
+	}
 	this.form.set(block.data);
-	this.block = block;
-
 	Object.keys(el.properties).forEach(function(key) {
 		if (el.properties[key].format == "uri") {
-			this.href = new Pageboard.Href(node.querySelector(`[name="${key}"]`));
+			if (!this.href) this.href = new Pageboard.Href(node.querySelector(`[name="${key}"]`));
 		}
 	}.bind(this));
+
+	this.block = block;
 };
 
 Form.prototype.change = function() {
