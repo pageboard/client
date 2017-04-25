@@ -99,8 +99,8 @@ Href.prototype.act = function(action) {
 		}
 	}
 	this.action = action;
-	this[action + 'Start']();
 	this.renderField();
+	this[action + 'Start']();
 };
 
 Href.prototype.renderField = function() {
@@ -351,7 +351,7 @@ Href.prototype.renderList = function(list) {
 	var containsSelected = false;
 	list.forEach(function(obj) {
 		var item = renderItem(obj);
-		if (obj.url == selected) {
+		if (selected && obj.url == selected) {
 			containsSelected = true;
 			item.classList.add('selected');
 			container.insertBefore(item, container.firstChild);
@@ -360,7 +360,7 @@ Href.prototype.renderList = function(list) {
 		}
 	});
 
-	if (!containsSelected) {
+	if (selected && !containsSelected) {
 		var item = renderItem(this.map[selected]);
 		item.classList.add('selected');
 		container.insertBefore(item, container.firstChild);

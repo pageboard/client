@@ -158,6 +158,7 @@ function editorUpdate(editor, state, focusParents) {
 		// TODO this should be handled by module id transparently
 		var nodeBlock = editor.nodeToBlock(node);
 		var storedBlock = editor.modules.id.get(nodeBlock.id);
+		if (!storedBlock.data) storedBlock.data = {};
 		Object.assign(storedBlock.data, nodeBlock.data);
 
 		if (!storedBlock) {
