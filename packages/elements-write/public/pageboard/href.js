@@ -62,6 +62,7 @@ Href.prototype.init = function() {
 		var href = item.getAttribute('href');
 		var remove = e.target.closest('[data-action="remove"]');
 		if (remove) {
+			e.stopPropagation();
 			return this.uiLoad(remove, this.remove(href)).then(function() {
 				me.renderList();
 			});
