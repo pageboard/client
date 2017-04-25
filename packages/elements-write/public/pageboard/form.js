@@ -82,6 +82,8 @@ Form.prototype.change = function() {
 		this.clear();
 		return;
 	}
+	// editor need focus to handle history
+	editor.focus();
 
 	var tr = editor.state.tr, curtr, count = 0;
 	for (var i=0; i < nodes.length; i++) {
