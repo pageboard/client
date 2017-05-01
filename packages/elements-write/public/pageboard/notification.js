@@ -39,7 +39,7 @@ Pageboard.notify = function(title, obj) {
 
 	var parent = Pageboard.notify.dom();
 
-	var msg = html`<div class="ui attached ${type} message">
+	var msg = dom`<div class="ui attached ${type} message">
 		<i class="close icon"></i>
 		<div class="header">${title}</div>
 		${withText(text)}
@@ -56,7 +56,7 @@ Pageboard.notify = function(title, obj) {
 };
 
 function withText(text) {
-	if (text) return html`<p>${text}</p>`;
+	if (text) return dom`<p>${text}</p>`;
 	else return '';
 }
 

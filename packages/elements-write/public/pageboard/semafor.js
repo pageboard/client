@@ -91,7 +91,7 @@ function process(key, schema, node, fields) {
 }
 
 types.string = function(key, schema, node, fields) {
-	node.appendChild(html`<div class="field">
+	node.appendChild(dom`<div class="field">
 		<label>${schema.title}</label>
 		<input type="text" name="${key}"
 			value="${schema.default || ''}"
@@ -101,7 +101,7 @@ types.string = function(key, schema, node, fields) {
 };
 
 types.oneOf = function(key, schema, node, fields) {
-	var field = html`<div class="field" title="${schema.description || ''}">
+	var field = dom`<div class="field" title="${schema.description || ''}">
 		<label>${schema.title}</label>
 		<select name="${key}" class="ui dropdown">
 			${schema.oneOf.map(getSelectOption)}
@@ -113,7 +113,7 @@ types.oneOf = function(key, schema, node, fields) {
 
 function getSelectOption(item) {
 	if (item.constant == null) console.error("We can't really support non-constant oneOf here");
-	return html`<option value="${item.constant}">${item.title || item.constant}</option>`;
+	return dom`<option value="${item.constant}">${item.title || item.constant}</option>`;
 }
 
 types.integer = function(key, schema, node, fields) {
@@ -124,7 +124,7 @@ types.integer = function(key, schema, node, fields) {
 };
 
 types.number = function(key, schema, node, fields) {
-	node.appendChild(html`<div class="inline field">
+	node.appendChild(dom`<div class="inline field">
 		<label>${schema.title || ''}</label>
 		<input type="number" name="${key}"
 			value="${schema.default !== undefined ? schema.default : ''}"
@@ -140,7 +140,7 @@ types.number = function(key, schema, node, fields) {
 
 types.object = function(key, schema, node, fields) {
 	if (schema.title) {
-		node.appendChild(html`<fieldset>
+		node.appendChild(dom`<fieldset>
 			<legend>${schema.title}</legend>
 		</fieldset>`);
 	}

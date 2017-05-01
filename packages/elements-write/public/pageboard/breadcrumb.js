@@ -16,7 +16,7 @@ function isAllSelected(editor) {
 }
 
 function contentOption(contents, name) {
-	return html`<div class="item" data-value="${name}">${contents[name].title}</div>`;
+	return dom`<div class="item" data-value="${name}">${contents[name].title}</div>`;
 }
 
 Breadcrumb.prototype.update = function(parents) {
@@ -33,11 +33,11 @@ Breadcrumb.prototype.update = function(parents) {
 		var contentKeys = Object.keys(contents);
 		if (contentName && contentKeys.length == 1) {
 			contentSpec = contents[contentKeys[0]];
-			this.$node.append(html`<div class="ui inline dropdown">
+			this.$node.append(dom`<div class="ui inline dropdown">
 				<div class="text">${contentSpec.title}</div>
 			</div>`);
 		} else {
-			var select = html`<div class="ui inline dropdown">
+			var select = dom`<div class="ui inline dropdown">
 				<div class="text">${contentSpec.title || ''}</div>
 				<i class="dropdown icon"></i>
 				<div class="menu">

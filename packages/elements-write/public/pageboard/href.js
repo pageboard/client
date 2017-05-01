@@ -107,7 +107,7 @@ Href.prototype.renderField = function() {
 	var content;
 	switch (this.action) {
 	case "paste":
-		content = html`<input class="search" type="text" placeholder="Paste url..." />
+		content = dom`<input class="search" type="text" placeholder="Paste url..." />
 		<div class="ui blue icon buttons">
 			<div class="ui button" data-action="search" title="Search">
 				<i class="search icon"></i>
@@ -121,7 +121,7 @@ Href.prototype.renderField = function() {
 		</div>`;
 	break;
 	case "search":
-		content = html`<input class="search" type="text" placeholder="Search..." />
+		content = dom`<input class="search" type="text" placeholder="Search..." />
 		<div class="ui blue icon buttons">
 			<div class="ui active button" data-action="search" title="Search">
 				<i class="search icon"></i>
@@ -135,7 +135,7 @@ Href.prototype.renderField = function() {
 		</div>`;
 	break;
 	default:
-		content = html`<input class="search" type="text" placeholder="Search..." />
+		content = dom`<input class="search" type="text" placeholder="Search..." />
 		<div class="ui blue icon buttons">
 			<div class="ui button" data-action="search" title="Search">
 				<i class="search icon"></i>
@@ -368,7 +368,7 @@ Href.prototype.renderList = function(list) {
 };
 
 function renderItem(obj) {
-	var item = html`<a href="${obj.url}" class="item" title="${obj.meta.description || ""}">
+	var item = dom`<a href="${obj.url}" class="item" title="${obj.meta.description || ""}">
 		<div class="content">
 			<div class="ui tiny header">
 				<img src="${obj.icon || ''}" class="ui avatar icon image" />
@@ -387,7 +387,7 @@ function renderItem(obj) {
 	</a>`;
 	if (!obj.icon) {
 		item.querySelector('.icon.image').replaceWith(
-			html`<i class="ui avatar external icon"></i>`
+			dom`<i class="ui avatar external icon"></i>`
 		);
 	}
 	if (!obj.visible) {
@@ -418,7 +418,7 @@ function tplDims(obj) {
 }
 
 function tplThumbnail(src) {
-	if (src) return html`<img src="${src}" class="ui tiny right floated image" />`;
+	if (src) return dom`<img src="${src}" class="ui tiny right floated image" />`;
 	else return '';
 }
 
