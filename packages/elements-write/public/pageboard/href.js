@@ -63,7 +63,7 @@ Href.prototype.init = function() {
 		var remove = e.target.closest('[data-action="remove"]');
 		if (remove) {
 			e.stopPropagation();
-			return this.uiLoad(remove, this.remove(href)).then(function() {
+			return Pageboard.uiLoad(remove, this.remove(href)).then(function() {
 				me.renderList();
 			});
 		} else {
@@ -184,7 +184,7 @@ Href.prototype.searchStart = function() {
 };
 
 Href.prototype.searchUpdate = function() {
-	return this.uiLoad(this.node, GET('/api/href', {
+	return Pageboard.uiLoad(this.node, GET('/api/href', {
 		text: this.node.querySelector('input').value
 	})).then(this.cache).then(this.renderList);
 };
@@ -306,26 +306,12 @@ Href.prototype.remove = function(href) {
 };
 
 Href.prototype.get = function(href) {
-	return this.uiLoad(this.node, GET('/api/href', {url: href}));
-};
-
-Href.prototype.uiLoad = function(what, p) {
-	var classList = what.classList;
-	classList.add('loading');
-	return p.catch(function(err) {
-		classList.remove('loading');
-		Pageboard.notify("Loading error", err);
-		// rethrow, we don't want to show any result
-		throw err;
-	}).then(function(results) {
-		classList.remove('loading');
-		return results;
-	});
+	return Pageboard.uiLoad(this.node, GET('/api/href', {url: href}));
 };
 
 Href.prototype.insert = function(url) {
 	var me = this;
-	return this.uiLoad(this.node, POST('/api/href', {url: url})).then(function(result) {
+	return Pageboard.uiLoad(this.node, POST('/api/href', {url: url})).then(function(result) {
 		me.cache([result]);
 		me.renderList(me.list.concat(result));
 	});
