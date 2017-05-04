@@ -102,19 +102,11 @@ function routeListener(e) {
 function setupListener(e) {
 	var win = this;
 	var state = e.state;
-
-	Page.patch(function() {
-		document.title = win.document.title + (editor.controls.store.unsavedData ? '*' : '');
-	});
-	Page.replace({
-		path: state.path
-	});
+	var target = win.document.body;
 	// setup editor on whole body instead of e.target
 	// setting it up on a block requires managing context (topNode in parser, probably)
-	var target = win.document.body;
+	var editor = Pageboard.editor = editorSetup(win, target, Pageboard.viewer);
 
-	var editor = editorSetup(win, target, Pageboard.viewer);
-	Pageboard.editor = editor;
 	editor.pageUpdate = pageUpdate;
 	editor.controls = {};
 	for (var key in Pageboard.Controls) {
@@ -124,6 +116,13 @@ function setupListener(e) {
 	Pageboard.write.removeAttribute('hidden');
 	// scroll read or write
 	setupScroll(Pageboard.read, Pageboard.write);
+
+	Page.patch(function() {
+		document.title = win.document.title + (editor.controls.store.unsavedData ? '*' : '');
+	});
+	Page.replace({
+		path: state.path
+	});
 }
 
 function iframeResizer(iframe) {
@@ -158,15 +157,14 @@ function editorUpdate(editor, state, focusParents) {
 		// TODO this should be handled by module id transparently
 		var nodeBlock = editor.nodeToBlock(node);
 		var storedBlock = editor.modules.id.get(nodeBlock.id);
+		if (!storedBlock) {
+			console.warn("no block for", nodeBlock);
+			return;
+		}
 		if (!storedBlock.data) storedBlock.data = {};
 		Object.assign(storedBlock.data, nodeBlock.data);
-
-		if (!storedBlock) {
-			console.warn("no block for", item);
-		} else {
-			item.block = storedBlock;
-			parents.push(item);
-		}
+		item.block = storedBlock;
+		parents.push(item);
 	});
 	if (editor.controls) Object.keys(editor.controls).forEach(function(key) {
 		var c = editor.controls[key];
@@ -227,7 +225,8 @@ function editorSetup(win, target, viewer) {
 			}
 		}]
 	});
-	editor.modules.id.store = viewer.modules.id.store;
+	// copy reader id module blocks
+	editor.modules.id.blocks = viewer.modules.id.blocks;
 	// work around not being able to parse dom as doc - we need it to carry block_id
 	editor.state.doc.attrs.block_id = block.id;
 	editor.set(content);
