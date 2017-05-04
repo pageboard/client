@@ -376,7 +376,7 @@ function renderItem(obj) {
 			<div class="ui tiny header">
 				<img src="${obj.icon || ''}" class="ui avatar icon image" />
 				${obj.title}
-				<div class="ui right floated compact circular icon button" data-action="remove">
+				<div class="ui pinned right compact circular icon button" data-action="remove">
 					<i class="icon ban"></i>
 				</div>
 			</div>

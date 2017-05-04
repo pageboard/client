@@ -13,6 +13,12 @@
 	background:transparent;
 }
 
+.field.href .items .pinned.right {
+	position:absolute;
+	right:1px;
+	margin-right:0;
+}
+
 .field.href .items > .item:hover .button.circular,
 .field.href .items > .item:focus .button.circular {
 	visibility:visible;
@@ -53,6 +59,7 @@
 .field.href .items > a.item > .content > .header {
 	color:#555;
 	border-bottom:1px solid #999;
+	padding-right:1.7em; /* leave space for pinned right button */
 }
 
 .field.href .items > .item > .content .right.floated.image {
