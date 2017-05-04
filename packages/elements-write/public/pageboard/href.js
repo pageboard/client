@@ -13,9 +13,19 @@ function Href(input) {
 	this.renderField();
 	// initialize
 	var me = this;
-	if (input.value) {
-		this.get(input.value).then(this.cache).then(function() {
-			me.set(input.value);
+
+	var val = input.value;
+	if (val) {
+		// restore baseUrl on input value
+		var urlObj = Page.parse(val);
+		if (!urlObj.hostname) {
+			urlObj.hostname = document.location.hostname;
+			urlObj.protocol = document.location.protocol;
+			urlObj.port = document.location.port;
+			val = Page.format(urlObj);
+		}
+		this.get(val).then(this.cache).then(function() {
+			me.set(val);
 		});
 	} else {
 		this.act('search');
@@ -63,7 +73,8 @@ Href.prototype.init = function() {
 		var remove = e.target.closest('[data-action="remove"]');
 		if (remove) {
 			e.stopPropagation();
-			return Pageboard.uiLoad(remove, this.remove(href)).then(function() {
+
+			return Pageboard.uiLoad(remove, this.remove(this.map[href].url)).then(function() {
 				me.renderList();
 			});
 		} else {
@@ -71,7 +82,7 @@ Href.prototype.init = function() {
 				if (this.action == 'search') {
 					this.searchStop();
 				} else {
-					this.set(this.input.value);
+					this.set(input.value);
 				}
 			} else {
 				input.value = href;
@@ -80,6 +91,10 @@ Href.prototype.init = function() {
 			}
 		}
 	}.bind(this));
+};
+
+Href.prototype.destroy = function() {
+	Pageboard.write.classList.remove('href');
 };
 
 Href.prototype.change = function() {
@@ -155,7 +170,7 @@ Href.prototype.renderField = function() {
 Href.prototype.cache = function(list) {
 	var map = this.map;
 	for (var i=0; i < list.length; i++) {
-		map[list[i].url] = list[i];
+		map[normUrl(list[i].url)] = list[i];
 	}
 	return list;
 };
@@ -199,6 +214,7 @@ Href.prototype.set = function(str) {
 	if (!str) {
 		this.list = [];
 	} else {
+		str = normUrl(str);
 		if (this.map[str]) this.list = [this.map[str]];
 	}
 	this.renderList(this.list);
@@ -297,7 +313,7 @@ Href.prototype.remove = function(href) {
 	var me = this;
 	return DELETE('/api/href', {url: href}).then(function(obj) {
 		var list = [];
-		me.map[href] = obj;
+		me.map[normUrl(href)] = obj; // remove is actually "hide from others" so keep a ref to it
 		me.list.forEach(function(obj) {
 			if (obj.url != href) list.push(obj);
 		});
@@ -323,6 +339,7 @@ Href.prototype.renderList = function(list) {
 	if (!list) throw new Error("Need a list to render");
 	var container = this.container;
 	var selected = this.input.value;
+	if (selected) selected = normUrl(selected);
 	if (list.rendered) {
 		Array.from(container.childNodes).forEach(function(child) {
 			if (child.nodeType != Node.ELEMENT_NODE) return;
@@ -337,7 +354,7 @@ Href.prototype.renderList = function(list) {
 	var containsSelected = false;
 	list.forEach(function(obj) {
 		var item = renderItem(obj);
-		if (selected && obj.url == selected) {
+		if (selected && item.getAttribute('href') == selected) {
 			containsSelected = true;
 			item.classList.add('selected');
 			container.insertBefore(item, container.firstChild);
@@ -354,7 +371,7 @@ Href.prototype.renderList = function(list) {
 };
 
 function renderItem(obj) {
-	var item = dom`<a href="${obj.url}" class="item" title="${obj.meta.description || ""}">
+	var item = dom`<a href="${normUrl(obj.url)}" class="item" title="${obj.meta.description || ""}">
 		<div class="content">
 			<div class="ui tiny header">
 				<img src="${obj.icon || ''}" class="ui avatar icon image" />
@@ -408,9 +425,10 @@ function tplThumbnail(src) {
 	else return '';
 }
 
-Href.prototype.destroy = function() {
-	Pageboard.write.classList.remove('href');
-};
+function normUrl(url) {
+	// keeps only path if same domain
+	return Page.format(Page.parse(url));
+}
 
 })(window.Pageboard);
 
