@@ -270,6 +270,7 @@ Href.prototype.uploadStart = function() {
 			xhr.send(fd);
 		});
 		input.click();
+		input.value = null;
 	}).then(function(files) {
 		if (!files) return;
 		var p = Promise.resolve();
