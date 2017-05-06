@@ -19,6 +19,7 @@
   "homepage": "https://github.com/pageboard/pageboard-write#readme",
   "dependencies": {
     "dom-template-strings": "^1.0.0",
+    "esequal": "^0.1.15",
     "jquery": "^3.1.1",
     "moment": "^2.18.1",
     "morphdom": "^2.2.0",

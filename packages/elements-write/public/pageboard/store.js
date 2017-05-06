@@ -2,35 +2,55 @@
 Pageboard.Controls.Store = Store;
 
 function Store(editor, selector) {
-	this.$node = $(selector);
+	this.menu = document.querySelector(selector);
 	this.editor = editor;
-	this.uiSave = this.$node.find('[data-command="save"]')
-		.on('click', this.save.bind(this));
-	this.uiDiscard = this.$node.find('[data-command="discard"]')
-		.on('click', this.discard.bind(this));
+	editor.modules.id.genId = this.genId;
+	this.uiSave = this.menu.querySelector('[data-command="save"]');
+	this.uiSave.addEventListener('click', this.save.bind(this));
+	this.uiDiscard = this.menu.querySelector('[data-command="discard"]');
+	this.uiDiscard.addEventListener('click', this.discard.bind(this));
 
-	// restore unsavedData
-	this.initialData = this.serialize();
-	this.unsavedData = this.get();
-
-	if (this.unsavedData) {
-		this.restore(this.unsavedData);
+	this.update();
+	if (this.unsaved) {
+		try {
+			this.restore(this.unsaved);
+		} catch(ex) {
+			Pageboard.notify("Unsaved work not readable, discarding", ex);
+		}
 	}
-
-	this.uiUpdate();
 }
 
+Store.prototype.genId = function() {
+	var arr = new Uint8Array(8);
+	window.crypto.getRandomValues(arr);
+	var str = "", byte;
+	for (var i=0; i < arr.length; i++) {
+		byte = arr[i].toString(16);
+		if (byte.length == 1) byte = "0" + byte;
+		str += byte;
+	}
+	return str;
+};
+
 Store.prototype.uiUpdate = function() {
-	this.uiSave.toggleClass('disabled', !this.unsavedData);
-	this.uiDiscard.toggleClass('disabled', !this.unsavedData);
+	this.uiSave.classList.toggle('disabled', !this.unsaved);
+	this.uiDiscard.classList.toggle('disabled', !this.unsaved);
 };
 
 Store.prototype.get = function() {
-	return window.sessionStorage.getItem(this.key());
+	var json = window.sessionStorage.getItem(this.key());
+	if (!json) return;
+	try {
+		return JSON.parse(json);
+	} catch(ex) {
+		console.error("corrupted local backup for", this.key());
+		this.clear();
+	}
 };
 
-Store.prototype.set = function(str) {
-	window.sessionStorage.setItem(this.key(), str);
+Store.prototype.set = function(obj) {
+	var json = JSON.stringify(obj, null, " ");
+	window.sessionStorage.setItem(this.key(), json);
 };
 
 Store.prototype.clear = function() {
@@ -41,37 +61,21 @@ Store.prototype.key = function() {
 	return "pageboard-store-" + document.location.toString();
 };
 
-Store.prototype.serialize = function() {
-	var root = this.editor.modules.id.to();
-	var data = JSON.stringify({
-		root: root,
-		store: this.editor.modules.id.store
-	}, null, " ");
-	return data;
-};
-
-Store.prototype.restore = function(data) {
-	var obj;
+Store.prototype.restore = function(state) {
+	var editor = this.editor;
 	try {
-		obj = JSON.parse(data);
+		var frag = editor.modules.id.from(state.root, state.blocks);
+		this.ignoreNext = true;
+		editor.set(frag);
 	} catch(ex) {
 		this.clear();
-		return Promise.resolve();
+		throw ex;
 	}
-	var editor = this.editor;
-	editor.modules.id.store = obj.store;
 
-	var me = this;
-	return editor.modules.id.from(obj.root).then(function(frag) {
-		me.ignoreNext = true;
-		editor.set(frag);
-		if (obj.root.type == editor.state.doc.type.name) {
-			editor.pageUpdate(obj.root);
-		}
-	}).catch(function(err) {
-		me.clear();
-		console.error(err);
-	});
+	// keep in mind edited document will not always be the whole page
+	if (state.root.type == editor.state.doc.type.name) {
+		editor.pageUpdate(block);
+	}
 };
 
 Store.prototype.update = function() {
@@ -79,35 +83,74 @@ Store.prototype.update = function() {
 		delete this.ignoreNext;
 		return;
 	}
-	var data = this.serialize();
+	var blocks = {};
 
-	if (!this.initialData) {
-		this.initialData = data;
-	} else if (this.initialData != data) {
-		this.unsavedData = data;
-		this.set(data);
+	var root = this.editor.modules.id.to(blocks);
+	delete root.children;
+
+	var state = {
+		root: root,
+		blocks: blocks
+	};
+
+	if (!this.initial) {
+		this.initial = state;
+	} else if (!equal(this.initial, state)) {
+		this.unsaved = state;
+		this.set(state);
 	}
 	this.uiUpdate();
 };
 
 Store.prototype.save = function(e) {
-	console.log("TODO: save to /api");
-	return;
-
-	this.initialData = this.unsavedData;
-	delete this.unsavedData;
-
-	this.uiUpdate();
-};
-
-Store.prototype.discard = function(e) {
-	delete this.unsavedData;
-	this.clear();
-	this.restore(this.initialData).then(function() {
-		delete this.unsavedData;
+	var changes = getChanges(this.initial, this.unsaved);
+	Pageboard.uiLoad(this.uiSave, PUT('/api/page', changes))
+	.then(function(result) {
+		console.log(result);
+		this.initial = this.unsaved;
+		delete this.unsaved;
 		this.uiUpdate();
 	}.bind(this));
 };
+
+Store.prototype.discard = function(e) {
+	delete this.unsaved;
+	this.clear();
+	try {
+		this.restore(this.initial);
+	} catch(ex) {
+		Pageboard.notify("Impossible to restore<br><a href=''>please reload</a>", ex);
+	}
+	delete this.unsaved;
+	this.uiUpdate();
+};
+
+function getChanges(initial, unsaved) {
+	var remove = [];
+	var add = [];
+	var update = [];
+	var block;
+	for (var id in initial.blocks) {
+		block = unsaved.blocks[id];
+		if (!block) {
+			remove.push({id: id});
+		} else {
+			if (!equal(initial.blocks[id], block)) {
+				update.push(block);
+			}
+		}
+	}
+	for (var id in unsaved.blocks) {
+		if (!initial.blocks[id]) add.push(unsaved.blocks[id]);
+	}
+
+	return {
+		id: unsaved.root.id,
+		remove: remove,
+		add: add,
+		update: update
+	};
+}
 
 })(window.Pageboard);
 
