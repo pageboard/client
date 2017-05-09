@@ -6,10 +6,16 @@ exports.header = Object.assign(exports.header || {}, {
 	contents: {
 		content: {
 			spec: "block+",
-			title: 'Content'
+			title: 'content'
 		}
 	},
-	menu: 'layout'
+	menu: 'layout',
+	view: function(doc, block) {
+		return doc.dom`<div class="ui header" block-content="content"></div>`;
+	},
+	stylesheets: [
+		'/public/semantic-ui/components/header.css'
+	]
 });
 
 })(typeof exports == "undefined" ? window.Pagecut.modules : exports);

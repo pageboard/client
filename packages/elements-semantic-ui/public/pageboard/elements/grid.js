@@ -7,13 +7,27 @@ exports.grid = Object.assign(exports.grid || {}, {
 	properties: {},
 	group: "block",
 	contents: {
+		header: {
+			spec: "text*",
+			title: "header"
+		},
 		columns: {
 			spec: "grid_column+",
-			title: 'Columns'
+			title: 'columns'
 		}
 	},
 	menu: 'layout',
-	icon: gridIcon
+	icon: gridIcon,
+	view: function(doc, block) {
+		return doc.dom`<div>
+			<div class="ui header" block-content="header"></div>
+			<div class="ui doubling stackable equal width grid" block-content="columns"></div>
+		</div>`;
+	},
+	stylesheets: [
+		'/public/semantic-ui/components/grid.css',
+		'/public/semantic-ui/components/header.css'
+	]
 });
 
 
@@ -32,11 +46,35 @@ exports.grid_column = Object.assign(exports.grid_column || {}, {
 	contents: {
 		content: {
 			spec: "block+",
-			title: 'Content'
+			title: 'content'
 		}
 	},
 	menu: 'layout',
-	icon: gridIcon
+	icon: gridIcon,
+	view: function(doc, block) {
+		var prefix = '';
+		if (block.data.width != null) prefix = {
+			0: '',
+			1: 'one',
+			2: 'two',
+			3: 'three',
+			4: 'four',
+			5: 'five',
+			6: 'six',
+			7: 'seven',
+			8: 'eight',
+			9: 'nine',
+			10: 'ten',
+			11: 'eleven',
+			12: 'twelve',
+			13: 'thirteen',
+			14: 'fourteen',
+			15: 'fifteen',
+			16: 'sixteen'
+		}[block.data.width];
+		if (prefix) prefix += " wide ";
+		return doc.dom`<div class="${prefix} column" block-content="content"></div>`;
+	}
 });
 
 })(typeof exports == "undefined" ? window.Pagecut.modules : exports);
