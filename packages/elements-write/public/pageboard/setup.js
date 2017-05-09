@@ -86,10 +86,6 @@ function routeListener(e) {
 	var win = Pageboard.window = this;
 	Pageboard.viewer = win.Pagecut.viewerInstance;
 	win.removeEventListener('pageroute', routeListener);
-	for (var type in Pagecut.modules) {
-		if (!win.Pagecut.modules[type]) win.Pagecut.modules[type] = {};
-		Object.assign(win.Pagecut.modules[type], Pagecut.modules[type]);
-	}
 
 	var doc = e.state.document;
 
