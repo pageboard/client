@@ -74,12 +74,8 @@ Store.prototype.restore = function(state) {
 		this.clear();
 		throw ex;
 	}
-
-	// keep in mind edited document will not always be the whole page
-	if (state.root.type == editor.state.doc.type.name) {
-		editor.pageUpdate(state.root);
-	}
 	this.uiUpdate();
+	this.pageUpdate();
 };
 
 Store.prototype.update = function() {
@@ -102,6 +98,8 @@ Store.prototype.update = function() {
 	} else if (!equal(this.initial, state)) {
 		this.unsaved = state;
 		this.set(state);
+	} else {
+		delete this.unsaved;
 	}
 	this.uiUpdate();
 };
@@ -110,10 +108,11 @@ Store.prototype.save = function(e) {
 	var changes = getChanges(this.initial, this.unsaved);
 	Pageboard.uiLoad(this.uiSave, PUT('/api/page', changes))
 	.then(function(result) {
-		console.log(result);
 		this.initial = this.unsaved;
 		delete this.unsaved;
+		this.clear();
 		this.uiUpdate();
+		this.pageUpdate();
 	}.bind(this));
 };
 
@@ -126,6 +125,15 @@ Store.prototype.discard = function(e) {
 		Pageboard.notify("Impossible to restore<br><a href=''>please reload</a>", ex);
 	}
 	this.uiUpdate();
+	this.pageUpdate();
+};
+
+Store.prototype.pageUpdate = function() {
+	// keep in mind edited document will not always be the whole page
+	var state = this.unsaved || this.initial;
+	if (state.root.type == this.editor.state.doc.type.name) {
+		this.editor.pageUpdate(state.root);
+	}
 };
 
 function getChanges(initial, unsaved) {
