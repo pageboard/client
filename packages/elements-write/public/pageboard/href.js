@@ -48,7 +48,7 @@ Href.prototype.init = function() {
 	var me = this;
 
 	this.node.addEventListener('input', function(e) {
-		if (me.searching) me.searchUpdate();
+		if (me.action == "search") me.searchUpdate();
 	});
 
 	this.node.addEventListener('focusin', function(e) {
