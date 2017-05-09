@@ -1,5 +1,9 @@
 @import "/public/pageboard/pagecut/pagecut.css";
 
+.ProseMirror {
+	white-space:normal;
+}
+
 .ProseMirror-selectednode {
 	outline: 3px solid #4183C4 !important;
 	cursor:pointer !important;
