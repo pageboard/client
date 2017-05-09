@@ -115,7 +115,8 @@ function setupListener(e) {
 	setupScroll(Pageboard.read, Pageboard.write);
 
 	Page.patch(function() {
-		document.title = win.document.title + (editor.controls.store.unsaved ? '*' : '');
+		var unsaved = editor.controls.store && editor.controls.store.unsaved;
+		document.title = win.document.title + (unsaved ? '*' : '');
 	});
 
 	Page.replace(Page.state);
