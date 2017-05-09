@@ -15,6 +15,7 @@ Pageboard.setup = function(state) {
 	// iframe.contentWindow will be cleared somewhere after setting iframe.src,
 	// so one cannot setup a listener event just after
 	iframe.onload = function() {
+		// NOTE that if read.html does not load window-page.js, this won't work at all
 		iframe.contentWindow.addEventListener('pageroute', routeListener);
 		iframe.contentWindow.addEventListener('pagesetup', setupListener);
 
