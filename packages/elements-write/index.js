@@ -9,5 +9,5 @@ function init(All) {
 	All.app.get('*', function(req, res, next) {
 		if (req.query.write !== undefined) next();
 		else next('route');
-	}, All.dom('write').load());
+	}, All.dom('write'));
 }
