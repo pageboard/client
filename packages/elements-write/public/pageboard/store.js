@@ -11,13 +11,16 @@ function Store(editor, selector) {
 	this.uiDiscard.addEventListener('click', this.discard.bind(this));
 
 	this.update();
+	this.unsaved = this.get();
 	if (this.unsaved) {
 		try {
 			this.restore(this.unsaved);
 		} catch(ex) {
 			Pageboard.notify("Unsaved work not readable, discarding", ex);
+			this.discard();
 		}
 	}
+
 }
 
 Store.prototype.genId = function() {
@@ -74,8 +77,9 @@ Store.prototype.restore = function(state) {
 
 	// keep in mind edited document will not always be the whole page
 	if (state.root.type == editor.state.doc.type.name) {
-		editor.pageUpdate(block);
+		editor.pageUpdate(state.root);
 	}
+	this.uiUpdate();
 };
 
 Store.prototype.update = function() {
@@ -121,7 +125,6 @@ Store.prototype.discard = function(e) {
 	} catch(ex) {
 		Pageboard.notify("Impossible to restore<br><a href=''>please reload</a>", ex);
 	}
-	delete this.unsaved;
 	this.uiUpdate();
 };
 
