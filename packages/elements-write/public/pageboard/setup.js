@@ -115,11 +115,10 @@ function setupListener(e) {
 	setupScroll(Pageboard.read, Pageboard.write);
 
 	Page.patch(function() {
-		document.title = win.document.title + (editor.controls.store.unsavedData ? '*' : '');
+		document.title = win.document.title + (editor.controls.store.unsaved ? '*' : '');
 	});
-	Page.replace({
-		path: state.path
-	});
+
+	Page.replace(Page.state);
 }
 
 function iframeResizer(iframe) {
