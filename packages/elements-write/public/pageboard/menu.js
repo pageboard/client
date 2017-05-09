@@ -110,6 +110,8 @@ function renderItem(view) {
 		if (/<svg/i.test(icon)) {
 			dom.insertAdjacentHTML('afterbegin', icon);
 			dom.querySelector('svg').setAttribute('class', 'icon');
+		} else if (icon.startsWith('<')) {
+			dom.insertAdjacentHTML('afterbegin', icon);
 		} else {
 			dom.insertAdjacentHTML('afterbegin', `<img class="icon" src="${icon}" />`);
 		}
