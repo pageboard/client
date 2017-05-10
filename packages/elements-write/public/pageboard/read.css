@@ -16,3 +16,7 @@
 html,body {
 	overflow:visible;
 }
+
+*::selection {
+	color:inherit;
+}
