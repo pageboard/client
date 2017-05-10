@@ -4,7 +4,7 @@ Pageboard.Controls.Store = Store;
 function Store(editor, selector) {
 	this.menu = document.querySelector(selector);
 	this.editor = editor;
-	editor.modules.id.genId = this.genId;
+	editor.modules.id.genId = Pageboard.genId;
 	this.uiSave = this.menu.querySelector('[data-command="save"]');
 	this.uiSave.addEventListener('click', this.save.bind(this));
 	this.uiDiscard = this.menu.querySelector('[data-command="discard"]');
@@ -20,20 +20,7 @@ function Store(editor, selector) {
 			this.discard();
 		}
 	}
-
 }
-
-Store.prototype.genId = function() {
-	var arr = new Uint8Array(8);
-	window.crypto.getRandomValues(arr);
-	var str = "", byte;
-	for (var i=0; i < arr.length; i++) {
-		byte = arr[i].toString(16);
-		if (byte.length == 1) byte = "0" + byte;
-		str += byte;
-	}
-	return str;
-};
 
 Store.prototype.uiUpdate = function() {
 	this.uiSave.classList.toggle('disabled', !this.unsaved);
