@@ -104,12 +104,6 @@ function setupListener(e) {
 	// setting it up on a block requires managing context (topNode in parser, probably)
 	var editor = Pageboard.editor = editorSetup(win, target, Pageboard.viewer);
 
-	editor.pageUpdate = pageUpdate;
-	editor.controls = {};
-	for (var key in Pageboard.Controls) {
-		var lKey = key.toLowerCase();
-		editor.controls[lKey] = new Pageboard.Controls[key](editor, '#' + lKey);
-	}
 	Pageboard.write.removeAttribute('hidden');
 	// scroll read or write
 	setupScroll(Pageboard.read, Pageboard.write);
@@ -187,7 +181,6 @@ function editorSetup(win, target, viewer) {
 		node = node.parentNode.closest('[block-id]') || node;
 	}
 
-	// just steal the content - no need to clone deep
 	var content = node.cloneNode();
 	while (node.firstChild) content.appendChild(node.firstChild);
 
@@ -224,9 +217,18 @@ function editorSetup(win, target, viewer) {
 	});
 	// copy reader id module blocks
 	editor.modules.id.blocks = viewer.modules.id.blocks;
+
 	// work around not being able to parse dom as doc - we need it to carry block_id
 	editor.state.doc.attrs.block_id = block.id;
 	editor.set(content);
+
+	editor.pageUpdate = pageUpdate;
+
+	editor.controls = {};
+	for (var key in Pageboard.Controls) {
+		var lKey = key.toLowerCase();
+		editor.controls[lKey] = new Pageboard.Controls[key](editor, '#' + lKey);
+	}
 
 	return editor;
 }
