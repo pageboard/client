@@ -36,7 +36,7 @@ Breadcrumb.prototype.update = function(parents) {
 			this.$node.append(dom`<div class="ui inline dropdown">
 				<div class="text">${contentSpec.title}</div>
 			</div>`);
-		} else {
+		} else if (contentKeys.length) {
 			var select = dom`<div class="ui inline dropdown">
 				<div class="text">${contentSpec.title || ''}</div>
 				<i class="dropdown icon"></i>
