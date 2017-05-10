@@ -1,9 +1,12 @@
 (function(exports) {
 
 exports.site = {
-	required: ['name'],
+	required: ['name', 'url'],
 	properties : {
 		name: {
+			type: 'string'
+		},
+		url: {
 			type: 'string'
 		}
 	}
