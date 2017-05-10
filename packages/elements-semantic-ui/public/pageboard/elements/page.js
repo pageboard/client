@@ -1,6 +1,7 @@
 (function(exports) {
 	exports.page = {
 		title: 'Page',
+		group: 'page',
 		properties: {
 			title: {
 				title: 'Title',
@@ -39,5 +40,19 @@
 			'/public/js/window-page.js'
 		]
 	};
+
+	exports.notfound = Object.assign({}, exports.page, {
+		title: 'Page not found',
+		properties: {
+			title: {
+				title: 'Title',
+				type: ['string', 'null']
+			}
+		},
+		view: function(doc, block) {
+			doc.head.appendChild(doc.dom`<meta http-equiv="Status" content="404 Not Found">`);
+			return exports.page.view(doc, block);
+		},
+	});
 })(typeof exports == "undefined" ? window.Pagecut.modules : exports);
 
