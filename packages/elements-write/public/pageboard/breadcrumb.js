@@ -55,7 +55,9 @@ Breadcrumb.prototype.update = function(parents) {
 					if (!node) {
 						console.error("dom node not found", parent.block.id, val);
 					} else {
-						editor.modules.id.domSelect(node);
+						setTimeout(function() {
+							editor.modules.id.domSelect(node.firstChild);
+						});
 					}
 				}
 			});
