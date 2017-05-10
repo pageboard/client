@@ -79,7 +79,7 @@ Menu.prototype.item = function(el) {
 				var parents = editor.selectionParents(state.tr);
 				if (!parents.length) return false;
 				var parent = parents[0];
-				return parent.root.node.type.name == el.name;
+				return parent.root && parent.root.node.type.name == el.name;
 			} else {
 				return editor.markActive(state, nodeType);
 			}
