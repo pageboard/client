@@ -109,6 +109,7 @@ Store.prototype.discard = function(e) {
 	try {
 		this.restore(this.initial);
 	} catch(ex) {
+		console.error(ex);
 		Pageboard.notify("Impossible to restore<br><a href=''>please reload</a>", ex);
 	}
 	this.uiUpdate();
