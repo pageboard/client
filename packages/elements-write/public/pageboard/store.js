@@ -84,7 +84,6 @@ Store.prototype.update = function() {
 		return;
 	}
 	var blocks = {};
-
 	var root = this.editor.modules.id.to(blocks);
 	delete root.children;
 
@@ -100,6 +99,7 @@ Store.prototype.update = function() {
 		this.set(state);
 	} else {
 		delete this.unsaved;
+		this.clear();
 	}
 	this.uiUpdate();
 };
