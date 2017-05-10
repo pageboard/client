@@ -13,7 +13,7 @@ exports.image = Object.assign(exports.image || {}, {
 		}
 	},
 	contents: {
-		content: {
+		legend: {
 			spec: "block+",
 			title: 'content'
 		}
@@ -24,20 +24,19 @@ exports.image = Object.assign(exports.image || {}, {
 		var url = block.data.url || '/public/pageboard/ui/placeholder.png';
 		var prefix = '/public/uploads/';
 		if (url.startsWith(prefix)) url = '/public/images/' + url.substring(prefix.length);
-		return doc.dom`<div class="ui card">
-			<div class="image">
-				<img src="${url}"
-					srcset="${url}?rs=w:160 160w,
-					${url}?rs=w:320 320w,
-					${url}?rs=w:640 640w,
-					${url}?rs=w:1280 1280w" />
-			</div>
-			<div class="content" block-content="content"></div>
-		</div>`;
+		return doc.dom`<div class="ui basic segment"><div class="ui fluid image">
+			<img src="${url}"
+				srcset="${url}?rs=w:160 160w,
+				${url}?rs=w:320 320w,
+				${url}?rs=w:640 640w,
+				${url}?rs=w:1280 1280w" />
+			<div class="ui black bottom attached label" block-content="legend"></div>
+		</div></div>`;
 	},
 	stylesheets: [
+		'/public/semantic-ui/components/segment.css',
 		'/public/semantic-ui/components/image.css',
-		'/public/semantic-ui/components/card.css'
+		'/public/semantic-ui/components/label.css'
 	]
 });
 
