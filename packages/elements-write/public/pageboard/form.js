@@ -32,10 +32,6 @@ Form.prototype.update = function(parents) {
 		this.clear();
 		return;
 	}
-	if (info.content && !(this.editor.state.selection instanceof this.editor.root.defaultView.Pagecut.State.AllSelection)) {
-		this.clear();
-		return;
-	}
 
 	var el = this.editor.map[block.type];
 	if (!el) {
