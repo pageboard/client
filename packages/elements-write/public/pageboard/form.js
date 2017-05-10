@@ -69,7 +69,9 @@ Form.prototype.change = function() {
 	var data = this.form.get();
 	this.block.data = Object.assign(this.block.data || {}, data);
 	editor.modules.id.set(this.block);
-	if (this.block.type == editor.state.doc.type.name) {
+
+	var el = editor.map[this.block.type];
+	if (el.group == editor.state.doc.type.spec.group) {
 		editor.pageUpdate(this.block);
 		return;
 	}

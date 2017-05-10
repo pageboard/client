@@ -131,7 +131,8 @@ Store.prototype.discard = function(e) {
 Store.prototype.pageUpdate = function() {
 	// keep in mind edited document will not always be the whole page
 	var state = this.unsaved || this.initial;
-	if (state.root.type == this.editor.state.doc.type.name) {
+	var el = this.editor.map[state.root.type];
+	if (el.group == this.editor.state.doc.type.spec.group) {
 		this.editor.pageUpdate(state.root);
 	}
 };
