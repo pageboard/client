@@ -187,6 +187,7 @@ function editorSetup(win, target, viewer) {
 	var Editor = win.Pagecut.Editor;
 
 	Editor.defaults.marks = Editor.defaults.marks.remove('link');
+	Editor.defaults.marks = Editor.defaults.marks.remove('code');
 	Editor.defaults.nodes = Editor.defaults.nodes.remove('doc');
 
 	// and the editor must be running from child
