@@ -22,6 +22,10 @@ Form.prototype.clear = function() {
 
 Form.prototype.update = function(parents) {
 	if (this.ignore) return;
+	if (this.ignoreNext) {
+		this.ignoreNext = false;
+		return;
+	}
 	if (!parents.length) {
 		this.clear();
 		return;
@@ -95,6 +99,12 @@ Form.prototype.change = function() {
 		}
 	}
 	if (count) {
+		var from = tr.selection.from;
+		var sel = editor.selectTr(tr, from, true);
+		if (sel) {
+			tr.setSelection(sel);
+		}
+		this.ignoreNext = true;
 		editor.dispatch(tr);
 	}
 };
