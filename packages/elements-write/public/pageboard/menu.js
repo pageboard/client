@@ -14,34 +14,17 @@ function Menu(editor, selector) {
 Menu.prototype.update = function() {
 	// because updates are done by the editor
 	var frag = document.createDocumentFragment();
-	var needSep = false;
 	var content = this.menu.items;
 	for (var i = 0; i < content.length; i++) {
 		var items = content[i];
-		var added = false;
 		for (var j = 0; j < items.length; j++) {
 			var rendered = renderItem.call(items[j], this.editor);
-			if (rendered) {
-				if (!added && needSep) {
-					frag.appendChild(separator());
-				}
-				frag.appendChild(rendered);
-				added = true;
-			}
-		}
-		if (added) {
-			needSep = true;
+			if (rendered) frag.appendChild(rendered);
 		}
 	}
 	this.menu.place.textContent = ""
 	this.menu.place.appendChild(document.adoptNode(frag));
 };
-
-function separator() {
-	var div = document.createElement("div");
-	div.className = "divider";
-	return div;
-}
 
 Menu.prototype.item = function(el) {
 	var editor = this.editor;
