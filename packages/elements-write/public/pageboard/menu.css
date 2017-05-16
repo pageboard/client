@@ -24,11 +24,6 @@
 	/* opacity:0.45; */
 	display:none;
 }
-/* keep menu size */
-#menu .item.disabled:first-child {
-	display:block;
-	opacity:0.45;
-}
 #menu .item.disabled,
 #menu .item.disabled:hover {
 	color:inherit;
