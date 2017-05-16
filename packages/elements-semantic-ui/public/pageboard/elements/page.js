@@ -41,6 +41,7 @@
 		]
 	};
 
+	// extend page
 	exports.notfound = Object.assign({}, exports.page, {
 		title: 'Page not found',
 		properties: {
