@@ -1,6 +1,6 @@
 (function(exports) {
 
-exports.login = Object.assign(exports.login || {}, {
+exports.login = {
 	title: "Login form",
 	properties: {
 	},
@@ -24,7 +24,7 @@ exports.login = Object.assign(exports.login || {}, {
 	scripts: [
 		'/public/pageboard/ui/login.js'
 	]
-});
+};
 
 })(typeof exports == "undefined" ? window.Pagecut.modules : exports);
 

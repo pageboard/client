@@ -1,6 +1,6 @@
 (function(exports) {
 
-exports.header = Object.assign(exports.header || {}, {
+exports.header = {
 	title: "Header",
 	properties: {},
 	contents: {
@@ -16,7 +16,7 @@ exports.header = Object.assign(exports.header || {}, {
 	stylesheets: [
 		'/public/semantic-ui/components/header.css'
 	]
-});
+};
 
 })(typeof exports == "undefined" ? window.Pagecut.modules : exports);
 

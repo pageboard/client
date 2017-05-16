@@ -2,7 +2,7 @@
 
 var gridIcon = '<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><path fill="#666" d="M0 0h20v20H0z"/><path fill="#FFF" d="M2.727 5.455h3.636v2.727H2.727zM2.727 10h3.636v2.727H2.727zM2.727 14.545h3.636v2.727H2.727zM8.182 5.455h3.636v2.727H8.182zM8.182 10h3.636v2.727H8.182zM8.182 14.545h3.636v2.727H8.182zM13.636 5.455h3.636v2.727h-3.636zM13.636 10h3.636v2.727h-3.636zM13.636 14.545h3.636v2.727h-3.636z"/></g></svg>';
 
-exports.grid = Object.assign(exports.grid || {}, {
+exports.grid = {
 	title: "Grid",
 	properties: {},
 	group: "block",
@@ -28,10 +28,10 @@ exports.grid = Object.assign(exports.grid || {}, {
 		'/public/semantic-ui/components/grid.css',
 		'/public/semantic-ui/components/header.css'
 	]
-});
+};
 
 
-exports.grid_column = Object.assign(exports.grid_column || {}, {
+exports.grid_column = {
 	title: "Column",
 	properties: {
 		width: {
@@ -75,7 +75,7 @@ exports.grid_column = Object.assign(exports.grid_column || {}, {
 		if (prefix) prefix += " wide ";
 		return doc.dom`<div class="${prefix} column" block-content="content"></div>`;
 	}
-});
+};
 
 })(typeof exports == "undefined" ? window.Pagecut.modules : exports);
 
