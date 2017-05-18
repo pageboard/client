@@ -89,8 +89,11 @@ Form.prototype.change = function() {
 	}
 
 	var tr = editor.state.tr, curtr, count = 0;
+	// factor rendering
+	var newNode = editor.render(this.block, true);
+
 	for (var i=0; i < nodes.length; i++) {
-		curtr = editor.replaceTr(tr, this.block, nodes[i], true);
+		curtr = editor.replaceTr(tr, newNode, nodes[i], !!el.inline);
 		if (!curtr) {
 			console.warn("Cannot update", nodes[i]);
 		} else {
