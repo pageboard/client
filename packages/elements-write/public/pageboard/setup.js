@@ -227,6 +227,7 @@ function editorSetup(win, target, viewer) {
 	editor.modules.id.blocks = viewer.modules.id.blocks;
 
 	// work around not being able to parse dom as doc - we need it to carry block_id
+	// TODO use editorProps 'attributes' for this ?
 	editor.state.doc.attrs.block_id = block.id;
 	editor.set(content);
 
