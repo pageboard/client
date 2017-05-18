@@ -92,6 +92,7 @@ Store.prototype.update = function() {
 };
 
 Store.prototype.save = function(e) {
+	if (this.unsaved == null) return;
 	var changes = getChanges(this.initial, this.unsaved);
 	Pageboard.uiLoad(this.uiSave, PUT('/api/page', changes))
 	.then(function(result) {
@@ -104,6 +105,7 @@ Store.prototype.save = function(e) {
 };
 
 Store.prototype.discard = function(e) {
+	if (this.unsaved == null) return;
 	delete this.unsaved;
 	this.clear();
 	try {
