@@ -147,7 +147,10 @@ function editorUpdate(editor, state, focusParents) {
 
 	(focusParents || editor.selectionParents(tr, tr.selection)).forEach(function(item) {
 		var node = item.root.mark || item.root.node;
-		// TODO this should be handled by module id transparently
+		// TODO create pagecut#id module api to handle this
+		// nodeBlock is created on demand,
+		// but here we want to allow in-place modification of the stored block,
+		// so it must be updated with its last known modified content and data
 		var nodeBlock = editor.nodeToBlock(node);
 		var storedBlock = editor.modules.id.get(nodeBlock.id);
 		if (!storedBlock) {
@@ -156,6 +159,8 @@ function editorUpdate(editor, state, focusParents) {
 		}
 		if (!storedBlock.data) storedBlock.data = {};
 		Object.assign(storedBlock.data, nodeBlock.data);
+		if (!storedBlock.content) storedBlock.content = {};
+		Object.assign(storedBlock.content, nodeBlock.content);
 		item.block = storedBlock;
 		parents.push(item);
 	});
