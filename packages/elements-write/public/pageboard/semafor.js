@@ -28,7 +28,7 @@ function Semafor(schema, node) {
 }
 
 Semafor.prototype.get = function() {
-	return this.$node.form('get values');
+	return convertVals(this.$node.form('get values'), this.fields);
 };
 
 Semafor.prototype.set = function(obj) {
@@ -46,6 +46,25 @@ var formats = Semafor.formats = {
 var keywords = Semafor.keywords = {
 	// json schema allows custom keywords
 };
+
+function convertVals(vals, fields) {
+	var obj = {};
+	var field, val;
+	for (var name in vals) {
+		field = fields[name];
+		val = vals[name];
+		if (field) {
+			if (field.type == "integer") {
+				val = parseInt(val);
+			} else if (field.type == "object") {
+				// TODO recursive
+				console.warn("semafor unsupported type object");
+			}
+		}
+		obj[name] = val;
+	}
+	return obj;
+}
 
 function process(key, schema, node, fields) {
 	var type = schema.type;
