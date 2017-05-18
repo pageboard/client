@@ -58,6 +58,7 @@ Form.prototype.update = function(parents) {
 	this.form.set(block.data);
 
 	Object.keys(el.properties).forEach(function(key) {
+		// TODO make this pluggable from the element definition
 		if (el.properties[key].format == "uri") {
 			if (!this.href) this.href = new Pageboard.Href(node.querySelector(`[name="${key}"]`));
 			else this.href.change();
@@ -72,15 +73,17 @@ Form.prototype.change = function() {
 	var editor = this.editor;
 	var data = this.form.get();
 	this.block.data = Object.assign(this.block.data || {}, data);
-	editor.modules.id.set(this.block);
+	var idModule = editor.modules.id;
+	idModule.set(this.block);
 
 	var el = editor.map[this.block.type];
+	// node.type.name == tr.doc.type.name ?
 	if (el.group == editor.state.doc.type.spec.group) {
 		editor.pageUpdate(this.block);
 		return;
 	}
 	var id = this.block.id;
-	var nodes = editor.dom.querySelectorAll(`[block-id="${id}"]`);
+	var nodes = idModule.domQuery(id, {all: true});
 
 	if (nodes.length == 0) {
 		console.warn("No block nodes found for id", id);
@@ -89,24 +92,26 @@ Form.prototype.change = function() {
 	}
 
 	var tr = editor.state.tr, curtr, count = 0;
+	var el = this.editor.map[this.block.type];
+
 	// factor rendering
 	var newNode = editor.render(this.block, true);
 
+	var oldNode, focusedNode;
 	for (var i=0; i < nodes.length; i++) {
-		curtr = editor.replaceTr(tr, newNode, nodes[i], !!el.inline);
+		oldNode = nodes[i];
+		if (oldNode.getAttribute('block-focused') == "last") focusedNode = oldNode;
+		curtr = editor.replaceTr(tr, newNode, oldNode, !!el.inline);
 		if (!curtr) {
-			console.warn("Cannot update", nodes[i]);
+			console.warn("Cannot update", oldNode);
 		} else {
 			count++;
 			tr = curtr;
 		}
 	}
 	if (count) {
-		var from = tr.selection.from;
-		var sel = editor.selectTr(tr, from, true);
-		if (sel) {
-			tr.setSelection(sel);
-		}
+		var focusPos = focusedNode ? editor.posFromDOM(focusedNode) : tr.selection.from;
+		if (focusPos != null) tr.setMeta('focus-please', focusPos);
 		this.ignoreNext = true;
 		editor.dispatch(tr);
 	}
