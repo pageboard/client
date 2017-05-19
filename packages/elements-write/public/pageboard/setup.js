@@ -78,9 +78,9 @@ function setupScroll(read, write) {
 	write.addEventListener('mousedown', writeDown, true);
 	write.addEventListener('touchstart', writeDown, true);
 	write.addEventListener('mousewheel', writeDown, true);
-	read.contentWindow.addEventListener('mousedown', readDown, false);
-	read.contentWindow.addEventListener('touchstart', readDown, false);
-	read.contentWindow.addEventListener('mousewheel', readDown, false);
+	read.contentWindow.addEventListener('mousedown', readDown, true);
+	read.contentWindow.addEventListener('touchstart', readDown, true);
+	read.contentWindow.addEventListener('mousewheel', readDown, true);
 
 	readDown(); // initialize with fixed write and scrolling read
 }

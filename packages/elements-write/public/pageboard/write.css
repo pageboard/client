@@ -2,6 +2,11 @@
 	display:none !important;
 }
 
+body {
+	/* this is needed to avoid width changes when changing which document controls the scroll */
+	overflow-y:scroll;
+}
+
 #pageboard-read {
 	width:70%;
 	box-shadow:0 0 1em grey;
