@@ -364,7 +364,7 @@ Href.prototype.renderList = function(list) {
 		}
 	});
 
-	if (selected && !containsSelected) {
+	if (selected && !containsSelected && this.map[selected]) {
 		var item = renderItem(this.map[selected]);
 		item.classList.add('selected');
 		container.insertBefore(item, container.firstChild);
