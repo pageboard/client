@@ -1,7 +1,5 @@
 (function(exports) {
 
-var gridIcon = '<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><path fill="#666" d="M0 0h20v20H0z"/><path fill="#FFF" d="M2.727 5.455h3.636v2.727H2.727zM2.727 10h3.636v2.727H2.727zM2.727 14.545h3.636v2.727H2.727zM8.182 5.455h3.636v2.727H8.182zM8.182 10h3.636v2.727H8.182zM8.182 14.545h3.636v2.727H8.182zM13.636 5.455h3.636v2.727h-3.636zM13.636 10h3.636v2.727h-3.636zM13.636 14.545h3.636v2.727h-3.636z"/></g></svg>';
-
 exports.grid = {
 	title: "Grid",
 	properties: {},
@@ -17,7 +15,7 @@ exports.grid = {
 		}
 	},
 	menu: 'layout',
-	icon: gridIcon,
+	icon: '<i class="icon grid layout"></i>',
 	view: function(doc, block) {
 		return doc.dom`<div>
 			<div class="ui header" block-content="header"></div>
@@ -50,7 +48,7 @@ exports.grid_column = {
 		}
 	},
 	menu: 'layout',
-	icon: gridIcon,
+	icon: '<i class="icon columns"></i>',
 	view: function(doc, block) {
 		var prefix = '';
 		if (block.data.width != null) prefix = {
