@@ -23,6 +23,7 @@
     "moment": "^2.18.1",
     "morphdom": "^2.2.0",
     "pagecut": "^1.0.0",
+    "perfect-scrollbar": "^0.7.1",
     "semantic-ui-css": "^2.2.10"
   },
   "devDependencies": {

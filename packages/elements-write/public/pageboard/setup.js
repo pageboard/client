@@ -3,7 +3,6 @@
 Pageboard.setup = function(state) {
 	var parentRead = document.getElementById('pageboard-read');
 	var iframe = Pageboard.read = document.createElement('iframe');
-	iframe.setAttribute('scrolling', 'no');
 	parentRead.appendChild(iframe);
 	Pageboard.write = document.getElementById('pageboard-write');
 
@@ -18,72 +17,9 @@ Pageboard.setup = function(state) {
 		// NOTE that if read.html does not load window-page.js, this won't work at all
 		iframe.contentWindow.addEventListener('pageroute', routeListener);
 		iframe.contentWindow.addEventListener('pagesetup', setupListener);
-
-		// resize iframe height
-		iframeResizer(iframe);
-		setInterval(function() {
-			iframeResizer(iframe);
-		}, 50);
 	};
 	iframe.src = Page.format(loc);
 };
-
-function setupScroll(read, write) {
-	var reading = false;
-	var writing = false;
-	function writeDown() {
-		if (writing) return;
-		writing = true;
-		reading = false;
-		var top = -document.body.scrollTop;
-		var height = read.parentNode.offsetHeight;
-		// make sure top + div height >= view height
-		if (top + height < document.body.offsetHeight) {
-			top = document.body.offsetHeight - height;
-			if (top > 0) top = 0;
-		}
-		Object.assign(read.parentNode.style, {
-			position: 'fixed',
-			height: '100%',
-		});
-		read.style.minHeight = null;
-
-		Object.assign(write.style, {
-			position: 'absolute',
-			right: 0,
-			top: null
-		});
-		read.contentWindow.document.body.scrollTop = -top;
-	}
-	function readDown(e) {
-		if (reading) return;
-		reading = true;
-		writing = false;
-		var top = read.contentWindow.document.body.scrollTop;
-		Object.assign(write.style, {
-			position: 'fixed',
-			right: 0,
-			top: 0,
-			bottom: 0
-		});
-
-		Object.assign(read.parentNode.style, {
-			position: 'relative',
-			height: null,
-			top: null
-		});
-		iframeResizer(read);
-		document.body.scrollTop = top;
-	}
-	write.addEventListener('mousedown', writeDown, true);
-	write.addEventListener('touchstart', writeDown, true);
-	write.addEventListener('mousewheel', writeDown, true);
-	read.contentWindow.addEventListener('mousedown', readDown, true);
-	read.contentWindow.addEventListener('touchstart', readDown, true);
-	read.contentWindow.addEventListener('mousewheel', readDown, true);
-
-	readDown(); // initialize with fixed write and scrolling read
-}
 
 function routeListener(e) {
 	var win = Pageboard.window = this;
@@ -92,10 +28,10 @@ function routeListener(e) {
 
 	var doc = e.state.document;
 
-	doc.head.insertAdjacentHTML('beforeEnd', [
-		'<script src="/public/pageboard/pagecut/editor.js"></script>',
-		'<link href="/public/pageboard/read.css" rel="stylesheet">'
-	].join('\n'));
+	doc.head.insertAdjacentHTML('beforeEnd', `
+	<script src="/public/pageboard/pagecut/editor.js"></script>
+	<link rel="stylesheet" href="/public/pageboard/read.css" />
+	`);
 }
 
 function setupListener(e) {
@@ -107,8 +43,7 @@ function setupListener(e) {
 	var editor = Pageboard.editor = editorSetup(win, target, Pageboard.viewer);
 
 	Pageboard.write.removeAttribute('hidden');
-	// scroll read or write
-	setupScroll(Pageboard.read, Pageboard.write);
+	Ps.initialize(Pageboard.write);
 
 	Page.patch(function() {
 		var unsaved = editor.controls.store && editor.controls.store.unsaved;
@@ -116,18 +51,6 @@ function setupListener(e) {
 	});
 
 	Page.replace(Page.state);
-}
-
-function iframeResizer(iframe) {
-	if (iframe.parentNode.style.position == "fixed") {
-		iframe.style.minHeight = null;
-		return;
-	}
-	var doc = iframe.contentWindow.document;
-	var height = doc.documentElement.offsetHeight;
-	var parentHeight = document.body.offsetHeight;
-	if (height < parentHeight) height = parentHeight;
-	iframe.style.minHeight = height + 'px';
 }
 
 function pageUpdate(page) {
@@ -214,7 +137,6 @@ function editorSetup(win, target, viewer) {
 			view: function() {
 				return {
 					update: function(editor, state) {
-						iframeResizer(Pageboard.read);
 						// called after all current transactions have been applied
 						editorUpdate(editor, state, lastFocusParents);
 						lastFocusParents = null;

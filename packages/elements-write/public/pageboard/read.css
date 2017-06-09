@@ -13,11 +13,6 @@
 	outline: 1px solid #4183C4;
 }
 
-html,body {
-	overflow:visible;
-	height:auto;
-}
-
 *::selection {
 	color:inherit;
 }

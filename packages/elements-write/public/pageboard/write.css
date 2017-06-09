@@ -2,29 +2,27 @@
 	display:none !important;
 }
 
-body {
-	/* this is needed to avoid width changes when changing which document controls the scroll */
-	overflow-y:scroll;
-}
-
 #pageboard-read {
 	width:70%;
+	height:100%;
 	box-shadow:0 0 1em grey;
-	min-height:100%;
 }
 #pageboard-read > iframe {
 	border:0;
 	width:100%;
-	min-height:100%;
+	height:100%;
 	display:block;
-	overflow:hidden;
+	overflow:auto;
 }
 #pageboard-write {
+	position:absolute;
 	top:0;
-	vertical-align:top;
-	width:30%;
+	bottom:0;
+	left:70%;
+	right:0;
 	margin-top:0 !important;
 	padding-top:0 !important;
+	overflow:auto;
 }
 #notifications:empty {
 	display:none;
