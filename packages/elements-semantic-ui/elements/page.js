@@ -21,7 +21,6 @@ Pageboard.elements.page = {
 	},
 	icon: '<i class="icon file outline"></i>',
 	view: function(doc, block) {
-		// TODO insert site-level stylesheets here
 		doc.body.setAttribute('block-content', "body");
 		// title
 		var title = doc.head.querySelector('title');
