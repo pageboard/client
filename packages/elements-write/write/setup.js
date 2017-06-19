@@ -29,8 +29,8 @@ function routeListener(e) {
 	var doc = e.state.document;
 
 	doc.head.insertAdjacentHTML('beforeEnd', `
-	<script src="/public/pageboard/pagecut/editor.js"></script>
-	<link rel="stylesheet" href="/public/pageboard/read.css" />
+	<script src="/.pageboard/pagecut/editor.js"></script>
+	<link rel="stylesheet" href="/.pageboard/read/read.css" />
 	`);
 }
 

@@ -71,7 +71,17 @@ Store.prototype.update = function() {
 		return;
 	}
 	var blocks = {};
-	var root = this.editor.modules.id.to(blocks);
+	var root;
+	try {
+		root = this.editor.modules.id.to(blocks);
+	} catch(ex) {
+		console.error(ex);
+		Pageboard.notify("Impossible to store<br><a href=''>please reload</a>", ex);
+		delete this.unsaved;
+		this.clear();
+		this.uiUpdate();
+		return;
+	}
 	delete root.children;
 
 	var state = {
@@ -94,7 +104,7 @@ Store.prototype.update = function() {
 Store.prototype.save = function(e) {
 	if (this.unsaved == null) return;
 	var changes = getChanges(this.initial, this.unsaved);
-	Pageboard.uiLoad(this.uiSave, PUT('/api/page', changes))
+	Pageboard.uiLoad(this.uiSave, PUT('/.api/page', changes))
 	.then(function(result) {
 		this.initial = this.unsaved;
 		delete this.unsaved;
@@ -131,6 +141,7 @@ function getChanges(initial, unsaved) {
 	var remove = [];
 	var add = [];
 	var update = [];
+
 	var block;
 	for (var id in initial.blocks) {
 		block = unsaved.blocks[id];
@@ -143,11 +154,15 @@ function getChanges(initial, unsaved) {
 		}
 	}
 	for (var id in unsaved.blocks) {
-		if (!initial.blocks[id]) add.push(unsaved.blocks[id]);
+		block = unsaved.blocks[id];
+		if (!initial.blocks[id]) add.push(block);
+		if (block.orphan && !block.standalone) {
+			throw new Error(`Only a standalone block can be orphan ${block.type} ${id}`);
+		}
 	}
 
 	return {
-		id: unsaved.root.id,
+		page: unsaved.root.id,
 		remove: remove,
 		add: add,
 		update: update

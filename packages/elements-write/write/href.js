@@ -199,7 +199,7 @@ Href.prototype.searchStart = function() {
 };
 
 Href.prototype.searchUpdate = function() {
-	return Pageboard.uiLoad(this.node, GET('/api/href', {
+	return Pageboard.uiLoad(this.node, GET('/.api/href', {
 		text: this.node.querySelector('input').value
 	})).then(this.cache).then(this.renderList);
 };
@@ -312,7 +312,7 @@ Href.prototype.uploading = function() {
 
 Href.prototype.remove = function(href) {
 	var me = this;
-	return DELETE('/api/href', {url: href}).then(function(obj) {
+	return DELETE('/.api/href', {url: href}).then(function(obj) {
 		var list = [];
 		me.map[normUrl(href)] = obj; // remove is actually "hide from others" so keep a ref to it
 		me.list.forEach(function(obj) {
@@ -323,12 +323,12 @@ Href.prototype.remove = function(href) {
 };
 
 Href.prototype.get = function(href) {
-	return Pageboard.uiLoad(this.node, GET('/api/href', {url: href}));
+	return Pageboard.uiLoad(this.node, GET('/.api/href', {url: href}));
 };
 
 Href.prototype.insert = function(url) {
 	var me = this;
-	return Pageboard.uiLoad(this.node, POST('/api/href', {url: url})).then(function(result) {
+	return Pageboard.uiLoad(this.node, POST('/.api/href', {url: url})).then(function(result) {
 		me.cache([result]);
 		me.renderList(me.list.concat(result));
 	});
