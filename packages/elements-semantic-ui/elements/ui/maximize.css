@@ -1,0 +1,14 @@
+.maximize {
+	height:100%;
+}
+
+.maximize > * {
+	height:100%;
+}
+
+.maximize > .carousel .carousel-cell {
+	height: 100vh;
+}
+.maximize > .carousel .carousel-cell img {
+	height:100%;
+}

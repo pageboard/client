@@ -1,6 +1,4 @@
-(function(exports) {
-
-exports.grid = {
+Pageboard.elements.grid = {
 	title: "Grid",
 	properties: {},
 	group: "block",
@@ -23,13 +21,13 @@ exports.grid = {
 		</div>`;
 	},
 	stylesheets: [
-		'/public/semantic-ui/components/grid.css',
-		'/public/semantic-ui/components/header.css'
+		'/.pageboard/semantic-ui/components/grid.css',
+		'/.pageboard/semantic-ui/components/header.css'
 	]
 };
 
 
-exports.grid_column = {
+Pageboard.elements.grid_column = {
 	title: "Column",
 	properties: {
 		width: {
@@ -74,6 +72,4 @@ exports.grid_column = {
 		return doc.dom`<div class="${prefix} column" block-content="content"></div>`;
 	}
 };
-
-})(typeof exports == "undefined" ? window.Pagecut.modules : exports);
 

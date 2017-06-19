@@ -1,6 +1,4 @@
-(function(exports) {
-
-exports.header = {
+Pageboard.elements.header = {
 	title: "Header",
 	properties: {},
 	contents: {
@@ -14,9 +12,7 @@ exports.header = {
 		return doc.dom`<div class="ui header" block-content="content"></div>`;
 	},
 	stylesheets: [
-		'/public/semantic-ui/components/header.css'
+		'/.pageboard/semantic-ui/components/header.css'
 	]
 };
-
-})(typeof exports == "undefined" ? window.Pagecut.modules : exports);
 

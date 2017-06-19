@@ -1,6 +1,4 @@
-(function(exports) {
-
-exports.login = {
+Pageboard.elements.login = {
 	title: "Login form",
 	properties: {
 	},
@@ -18,13 +16,11 @@ exports.login = {
 		</form>`;
 	},
 	stylesheets: [
-		'/public/semantic-ui/components/form.css',
-		'/public/semantic-ui/components/button.css'
+		'/.pageboard/semantic-ui/components/form.css',
+		'/.pageboard/semantic-ui/components/button.css'
 	],
 	scripts: [
-		'/public/pageboard/ui/login.js'
+		'/.pageboard/elements/ui/login.js'
 	]
 };
-
-})(typeof exports == "undefined" ? window.Pagecut.modules : exports);
 

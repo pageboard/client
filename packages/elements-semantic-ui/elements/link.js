@@ -1,6 +1,4 @@
-(function(exports) {
-
-exports.link = {
+Pageboard.elements.link = {
 	title: "Link",
 	properties: {
 		url: {
@@ -32,6 +30,4 @@ exports.link = {
 		return doc.dom`<a href="${block.data.url}" target="${block.data.target}">new link</a>`;
 	}
 };
-
-})(typeof exports == "undefined" ? window.Pagecut.modules : exports);
 

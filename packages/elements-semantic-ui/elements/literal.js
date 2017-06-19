@@ -1,6 +1,4 @@
-(function(exports) {
-
-exports.literal = {
+Pageboard.elements.literal = {
 	title: "Literal",
 	properties: {
 		code: {
@@ -26,6 +24,4 @@ exports.literal = {
 		dom.textContent = result;
 	}
 };
-
-})(typeof exports == "undefined" ? window.Pagecut.modules : exports);
 

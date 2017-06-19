@@ -1,6 +1,4 @@
-(function(exports) {
-
-exports.user = {
+Pageboard.elements.user = {
 	required: ['email', 'password', 'nickname', 'name'],
 	properties: {
 		email: {
@@ -34,4 +32,3 @@ exports.user = {
 	}
 };
 
-})(typeof exports == "undefined" ? window.Pagecut.modules : exports);
