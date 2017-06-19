@@ -10,9 +10,6 @@ Pageboard.elements.site = {
 		title: {
 			type: 'string'
 		}
-	},
-	view: function(doc, block) {
-
 	}
 };
 
