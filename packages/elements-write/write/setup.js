@@ -16,22 +16,25 @@ Pageboard.setup = function(state) {
 	iframe.onload = function() {
 		// NOTE that if read.html does not load window-page.js, this won't work at all
 		iframe.contentWindow.addEventListener('pageroute', routeListener);
+		iframe.contentWindow.addEventListener('pagebuild', buildListener);
 		iframe.contentWindow.addEventListener('pagesetup', setupListener);
 	};
 	iframe.src = Page.format(loc);
 };
 
 function routeListener(e) {
-	var win = Pageboard.window = this;
-	Pageboard.viewer = win.Pagecut.viewerInstance;
-	win.removeEventListener('pageroute', routeListener);
+	Pageboard.window = this;
+	this.removeEventListener('pageroute', routeListener);
 
-	var doc = e.state.document;
-
-	doc.head.insertAdjacentHTML('beforeEnd', `
+	e.state.document.head.insertAdjacentHTML('beforeEnd', `
 	<script src="/.pageboard/pagecut/editor.js"></script>
-	<link rel="stylesheet" href="/.pageboard/read/read.css" />
+	<link rel="stylesheet" href="/.pageboard/write/read.css" />
 	`);
+}
+
+function buildListener(e) {
+	Pageboard.viewer = this.Pagecut.viewerInstance;
+	this.removeEventListener('pagebuild', buildListener);
 }
 
 function setupListener(e) {
