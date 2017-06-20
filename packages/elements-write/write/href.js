@@ -233,7 +233,7 @@ Href.prototype.uploadStart = function() {
 				fd.append("files", input.files[i]);
 			}
 			var xhr = new XMLHttpRequest();
-			xhr.open("POST", "/public/uploads", true);
+			xhr.open("POST", "/.api/upload", true);
 			xhr.setRequestHeader('Accept', "application/json; q=1.0");
 			var tracker = me.uploading();
 			tracker(0);
