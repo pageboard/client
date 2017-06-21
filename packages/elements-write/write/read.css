@@ -5,12 +5,14 @@
 }
 
 .ProseMirror-selectednode {
-	outline: 3px solid #4183C4 !important;
+	outline: 2px solid #61A3E4 !important;
+	outline-offset:-2px !important;
 	cursor:pointer !important;
 }
 
 [block-focused="last"] {
-	outline: 1px solid #4183C4;
+	outline: 1px solid #888;
+	outline-offset:-1px;
 }
 
 *::selection {
