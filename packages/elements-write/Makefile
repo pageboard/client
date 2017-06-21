@@ -5,6 +5,8 @@ scrollbar := $(shell node -p "require('path').dirname(require.resolve('perfect-s
 moment := $(shell node -p "require('path').dirname(require.resolve('moment'))")
 esequal := $(shell node -p "require('path').dirname(require.resolve('esequal'))")
 jquery := $(shell node -p "require('path').dirname(require.resolve('jquery'))")
+throttleit := $(shell node -p "require('path').dirname(require.resolve('throttleit'))")
+prettybytes := $(shell node -p "require('path').dirname(require.resolve('pretty-bytes'))")
 
 install: write/lib write/lib/pretty-bytes.js write/lib/throttle.js
 	mkdir -p semantic-ui
@@ -20,10 +22,10 @@ install: write/lib write/lib/pretty-bytes.js write/lib/throttle.js
 	ln -sf ${jquery}/jquery.js write/lib/
 	ln -sf ${esequal}/esequal.js write/lib/
 
-write/lib/throttle.js: node_modules/throttleit/index.js
+write/lib/throttle.js: ${throttleit}/index.js
 	$(BROWSERIFY) --standalone Throttle --outfile $@ $<
 
-write/lib/pretty-bytes.js: node_modules/pretty-bytes/index.js
+write/lib/pretty-bytes.js: ${prettybytes}/index.js
 	$(BROWSERIFY) --standalone PrettyBytes --outfile $@ $<
 
 write/lib:
