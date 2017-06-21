@@ -28,13 +28,15 @@ function routeListener(e) {
 
 	e.state.document.head.insertAdjacentHTML('beforeEnd', `
 	<script src="/.pageboard/pagecut/editor.js"></script>
-	<link rel="stylesheet" href="/.pageboard/write/read.css" />
 	`);
 }
 
 function buildListener(e) {
 	Pageboard.viewer = this.Pagecut.viewerInstance;
 	this.removeEventListener('pagebuild', buildListener);
+	this.document.head.insertAdjacentHTML('beforeEnd', `
+	<link rel="stylesheet" href="/.pageboard/write/read.css" />
+	`);
 }
 
 function setupListener(e) {
