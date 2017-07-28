@@ -37,7 +37,7 @@ Form.prototype.update = function(parents) {
 		return;
 	}
 
-	var el = this.editor.map[block.type];
+	var el = this.editor.element(block.type);
 	if (!el) {
 		throw new Error(`Unknown element type ${block.type}`);
 		return;
@@ -73,17 +73,16 @@ Form.prototype.change = function() {
 	var editor = this.editor;
 	var data = this.form.get();
 	this.block.data = Object.assign(this.block.data || {}, data);
-	var idModule = editor.modules.id;
-	idModule.set(this.block);
+	editor.blocks.set(this.block);
 
-	var el = editor.map[this.block.type];
+	var el = editor.element(this.block.type);
 	// node.type.name == tr.doc.type.name ?
 	if (el.group == editor.state.doc.type.spec.group) {
 		editor.pageUpdate(this.block);
 		return;
 	}
 	var id = this.block.id;
-	var nodes = idModule.domQuery(id, {all: true});
+	var nodes = editor.blocks.domQuery(id, {all: true});
 
 	if (nodes.length == 0) {
 		console.warn("No block nodes found for id", id);
@@ -92,7 +91,7 @@ Form.prototype.change = function() {
 	}
 
 	var tr = editor.state.tr, curtr, count = 0;
-	var el = this.editor.map[this.block.type];
+	var el = this.editor.element(this.block.type);
 
 	// factor rendering
 	var newNode = editor.render(this.block, true);
@@ -101,7 +100,7 @@ Form.prototype.change = function() {
 	for (var i=0; i < nodes.length; i++) {
 		oldNode = nodes[i];
 		if (oldNode.getAttribute('block-focused') == "last") focusedNode = oldNode;
-		curtr = editor.replaceTr(tr, newNode, oldNode, !!el.inline);
+		curtr = editor.utils.replaceTr(tr, newNode, oldNode, !!el.inline);
 		if (!curtr) {
 			console.warn("Cannot update", oldNode);
 		} else {
@@ -110,7 +109,7 @@ Form.prototype.change = function() {
 		}
 	}
 	if (count) {
-		var focusPos = focusedNode ? editor.posFromDOM(focusedNode) : tr.selection.from;
+		var focusPos = focusedNode ? editor.utils.posFromDOM(focusedNode) : tr.selection.from;
 		if (focusPos != null) tr.setMeta('focus-please', focusPos);
 		this.ignoreNext = true;
 		editor.dispatch(tr);

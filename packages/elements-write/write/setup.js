@@ -42,10 +42,7 @@ function buildListener(e) {
 function setupListener(e) {
 	var win = this;
 	var state = e.state;
-	var target = win.document.body;
-	// setup editor on whole body instead of e.target
-	// setting it up on a block requires managing context (topNode in parser, probably)
-	var editor = Pageboard.editor = editorSetup(win, target, Pageboard.viewer);
+	var editor = Pageboard.editor = editorSetup(win, Pageboard.viewer);
 
 	Pageboard.write.removeAttribute('hidden');
 	Ps.initialize(Pageboard.write);
@@ -73,22 +70,18 @@ function editorUpdate(editor, state, focusParents) {
 	var tr = editor.state.tr; // do not use state.tr to avoid being before modifications
 	var parents = [];
 
-	(focusParents || editor.selectionParents(tr, tr.selection)).forEach(function(item) {
+	(focusParents || editor.utils.selectionParents(tr, tr.selection)).forEach(function(item) {
 		var node = item.root.mark || item.root.node;
 		// TODO create pagecut#id module api to handle this
 		// nodeBlock is created on demand,
 		// but here we want to allow in-place modification of the stored block,
 		// so it must be updated with its last known modified content and data
-		var nodeBlock = editor.nodeToBlock(node);
-		var storedBlock = editor.modules.id.get(nodeBlock.id);
+		var storedBlock = editor.blocks.get(node.attrs.block_id);
 		if (!storedBlock) {
-			console.warn("no block for", nodeBlock);
+			console.warn("no block for", node.attrs.block_id);
 			return;
 		}
 		if (!storedBlock.data) storedBlock.data = {};
-		Object.assign(storedBlock.data, nodeBlock.data);
-		if (!storedBlock.content) storedBlock.content = {};
-		Object.assign(storedBlock.content, nodeBlock.content);
 		item.block = storedBlock;
 		parents.push(item);
 	});
@@ -99,26 +92,7 @@ function editorUpdate(editor, state, focusParents) {
 	Page.replace(Page.state);
 }
 
-function editorSetup(win, target, viewer) {
-	var node = target.closest('[block-id]');
-	if (!node) return;
-	var block = viewer.modules.id.get(node.getAttribute('block-id'));
-	if (!block) {
-		console.error("Cannot edit a block with unknown id", block.id);
-		return;
-	}
-	var el = viewer.map[block.type];
-	if (!el) {
-		console.error("Cannot edit a block with unknown type", block.type);
-		return;
-	}
-	if (el.inline) {
-		node = node.parentNode.closest('[block-id]') || node;
-	}
-
-	var content = node.cloneNode();
-	while (node.firstChild) content.appendChild(node.firstChild);
-
+function editorSetup(win, viewer) {
 	var Editor = win.Pagecut.Editor;
 
 	Editor.defaults.marks = Editor.defaults.marks.remove('link');
@@ -129,7 +103,8 @@ function editorSetup(win, target, viewer) {
 	var lastFocusParents;
 	var editor = new Editor({
 		topNode: 'page',
-		place: node,
+		place: win.document.body,
+		content: win.document.body.cloneNode(true),
 		plugins: [{
 			filterTransaction: function(tr) {
 				// filters all transactions
@@ -150,15 +125,11 @@ function editorSetup(win, target, viewer) {
 			}
 		}]
 	});
-	// copy reader id module blocks
-	editor.modules.id.blocks = viewer.modules.id.blocks;
-
-	// work around not being able to parse dom as doc - we need it to carry block_id
-	// TODO use editorProps 'attributes' for this ?
-	editor.state.doc.attrs.block_id = block.id;
-	editor.set(content);
 
 	editor.pageUpdate = pageUpdate;
+
+	editor.blocks = viewer.blocks;
+	editor.blocks.view = editor;
 
 	editor.controls = {};
 	for (var key in Pageboard.Controls) {

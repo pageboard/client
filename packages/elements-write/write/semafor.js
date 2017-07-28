@@ -110,7 +110,7 @@ function process(key, schema, node, fields) {
 }
 
 types.string = function(key, schema, node, fields) {
-	node.appendChild(dom`<div class="field">
+	node.appendChild(node.dom`<div class="field">
 		<label>${schema.title}</label>
 		<input type="text" name="${key}"
 			value="${schema.default || ''}"
@@ -120,7 +120,7 @@ types.string = function(key, schema, node, fields) {
 };
 
 types.oneOf = function(key, schema, node, fields) {
-	var field = dom`<div class="field" title="${schema.description || ''}">
+	var field = node.dom`<div class="field" title="${schema.description || ''}">
 		<label>${schema.title}</label>
 		<select name="${key}" class="ui dropdown">
 			${schema.oneOf.map(getSelectOption)}
@@ -143,7 +143,7 @@ types.integer = function(key, schema, node, fields) {
 };
 
 types.number = function(key, schema, node, fields) {
-	node.appendChild(dom`<div class="inline field">
+	node.appendChild(node.dom`<div class="inline field">
 		<label>${schema.title || ''}</label>
 		<input type="number" name="${key}"
 			value="${schema.default !== undefined ? schema.default : ''}"
@@ -159,7 +159,7 @@ types.number = function(key, schema, node, fields) {
 
 types.object = function(key, schema, node, fields) {
 	if (schema.title) {
-		node.appendChild(dom`<fieldset>
+		node.appendChild(node.dom`<fieldset>
 			<legend>${schema.title}</legend>
 		</fieldset>`);
 	}

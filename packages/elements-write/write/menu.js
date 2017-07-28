@@ -37,34 +37,36 @@ Menu.prototype.item = function(el) {
 		onDeselected: 'disable',
 		run: function(state, dispatch, view) {
 			var block = {
-				type: el.name
+				type: el.name,
+				data: {},
+				content: {}
 			};
-			editor.modules.id.set(block);
+			editor.blocks.set(block);
 			var tr = state.tr;
-			var sel = editor.selectTr(tr, tr.selection, true);
+			var sel = editor.utils.selectTr(tr, tr.selection, true);
 
-			if (el.inline && editor.markActive(state, nodeType)) {
+			if (el.inline && editor.utils.markActive(state, nodeType)) {
 				tr = tr.removeMark(sel.from, sel.to, nodeType);
 			} else {
-				tr = editor.insertTr(tr, block, sel);
+				tr = editor.utils.insertTr(tr, block, sel);
 			}
 			if (tr) dispatch(tr);
 		},
 		select: function(state) {
 			if (el.inline) {
-				return editor.canMark(state, nodeType);
+				return editor.utils.canMark(state, nodeType);
 			} else {
-				return editor.canInsert(state, nodeType);
+				return editor.utils.canInsert(state, nodeType);
 			}
 		},
 		active: function(state) {
 			if (!el.inline) {
-				var parents = editor.selectionParents(state.tr);
+				var parents = editor.utils.selectionParents(state.tr);
 				if (!parents.length) return false;
 				var parent = parents[0];
 				return parent.root && parent.root.node && parent.root.node.type.name == el.name;
 			} else {
-				return editor.markActive(state, nodeType);
+				return editor.utils.markActive(state, nodeType);
 			}
 		}
 	};

@@ -16,7 +16,7 @@ function isAllSelected(editor) {
 }
 
 function contentOption(contents, name) {
-	return dom`<div class="item" data-value="${name}">${contents[name].title}</div>`;
+	return document.dom`<div class="item" data-value="${name}">${contents[name].title}</div>`;
 }
 
 Breadcrumb.prototype.update = function(parents) {
@@ -26,18 +26,18 @@ Breadcrumb.prototype.update = function(parents) {
 		parent = parents[i];
 		this.$node.append(this.item(parent.block));
 	}
-	var contents = this.editor.map[parent.block.type].contents;
+	var contents = this.editor.element(parent.block.type).contents;
 	if (contents) {
 		var contentName = parent.content && parent.content.name;
 		var contentSpec = contentName && contents[contentName] || {};
 		var contentKeys = Object.keys(contents);
 		if (contentName && contentKeys.length == 1) {
 			contentSpec = contents[contentKeys[0]];
-			this.$node.append(dom`<div class="ui inline dropdown">
+			this.$node.append(document.dom`<div class="ui inline dropdown">
 				<div class="text">${contentSpec.title}</div>
 			</div>`);
 		} else if (contentKeys.length) {
-			var select = dom`<div class="ui inline dropdown">
+			var select = document.dom`<div class="ui inline dropdown">
 				<div class="text">${contentSpec.title || ''}</div>
 				<i class="dropdown icon"></i>
 				<div class="menu">
@@ -48,7 +48,7 @@ Breadcrumb.prototype.update = function(parents) {
 			var editor = this.editor;
 			$(select).dropdown({
 				onChange: function(val, text) {
-					var node = editor.modules.id.domQuery(parent.block.id, {
+					var node = editor.blocks.domQuery(parent.block.id, {
 						content: val,
 						focused: true
 					});
@@ -56,7 +56,7 @@ Breadcrumb.prototype.update = function(parents) {
 						console.error("dom node not found", parent.block.id, val);
 					} else {
 						setTimeout(function() {
-							editor.modules.id.domSelect(node.firstChild || node);
+							editor.blocks.domSelect(node.firstChild || node);
 						});
 					}
 				}
@@ -73,7 +73,7 @@ Breadcrumb.prototype.clear = function() {
 Breadcrumb.prototype.item = function(block) {
 	var node = this.template.cloneNode(true);
 	var item = node.querySelector('.section');
-	item.textContent = this.editor.map[block.type].title;
+	item.textContent = this.editor.element(block.type).title;
 	item.setAttribute('block-id', block.id);
 	return node.innerHTML;
 }
@@ -81,11 +81,11 @@ Breadcrumb.prototype.item = function(block) {
 Breadcrumb.prototype.click = function(e) {
 	var editor = this.editor;
 	var id = e.target.getAttribute('block-id');
-	var node = editor.modules.id.domQuery(id, {focused: true});
+	var node = editor.blocks.domQuery(id, {focused: true});
 	if (!node) {
 		throw new Error(`No node found with block-id ${id}`);
 	}
-	var sel = editor.select(node);
+	var sel = editor.utils.select(node);
 	if (sel) {
 		editor.dispatch(editor.state.tr.setSelection(sel));
 		editor.focus();

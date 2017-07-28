@@ -4,7 +4,9 @@ Pageboard.Controls.Store = Store;
 function Store(editor, selector) {
 	this.menu = document.querySelector(selector);
 	this.editor = editor;
-	editor.modules.id.genId = Pageboard.genId;
+	this.pageId = editor.state.doc.attrs.block_id;
+	editor.blocks.genId = Pageboard.genId;
+
 	this.uiSave = this.menu.querySelector('[data-command="save"]');
 	this.uiSave.addEventListener('click', this.save.bind(this));
 	this.uiDiscard = this.menu.querySelector('[data-command="discard"]');
@@ -54,9 +56,9 @@ Store.prototype.key = function() {
 Store.prototype.restore = function(state) {
 	var editor = this.editor;
 	try {
-		var frag = editor.modules.id.from(state.root, state.blocks);
+		var frag = editor.from(state.blocks);
 		this.ignoreNext = true;
-		editor.set(frag);
+		editor.utils.setDom(frag);
 	} catch(ex) {
 		this.clear();
 		throw ex;
@@ -73,7 +75,7 @@ Store.prototype.update = function() {
 	var blocks = {};
 	var root;
 	try {
-		root = this.editor.modules.id.to(blocks);
+		root = this.editor.to(blocks);
 	} catch(ex) {
 		console.error(ex);
 		Pageboard.notify("Impossible to store<br><a href=''>please reload</a>", ex);
@@ -85,7 +87,6 @@ Store.prototype.update = function() {
 	delete root.children;
 
 	var state = {
-		root: root,
 		blocks: blocks
 	};
 
@@ -103,7 +104,7 @@ Store.prototype.update = function() {
 
 Store.prototype.save = function(e) {
 	if (this.unsaved == null) return;
-	var changes = getChanges(this.initial, this.unsaved);
+	var changes = getChanges(this.pageId, this.initial, this.unsaved);
 	Pageboard.uiLoad(this.uiSave, PUT('/.api/page', changes))
 	.then(function(result) {
 		this.initial = this.unsaved;
@@ -129,15 +130,14 @@ Store.prototype.discard = function(e) {
 };
 
 Store.prototype.pageUpdate = function() {
-	// keep in mind edited document will not always be the whole page
-	var state = this.unsaved || this.initial;
-	var el = this.editor.map[state.root.type];
+	var root = this.editor.blocks.get(this.pageId);
+	var el = this.editor.element(root.type);
 	if (el.group == this.editor.state.doc.type.spec.group) {
-		this.editor.pageUpdate(state.root);
+		this.editor.pageUpdate(root);
 	}
 };
 
-function getChanges(initial, unsaved) {
+function getChanges(pageId, initial, unsaved) {
 	var remove = [];
 	var add = [];
 	var update = [];
@@ -155,6 +155,9 @@ function getChanges(initial, unsaved) {
 	}
 	for (var id in unsaved.blocks) {
 		block = unsaved.blocks[id];
+		if (block.deleted) {
+			console.warn("pagecut deleted this block", block);
+		}
 		if (!initial.blocks[id]) add.push(block);
 		if (block.orphan && !block.standalone) {
 			throw new Error(`Only a standalone block can be orphan ${block.type} ${id}`);
@@ -162,7 +165,7 @@ function getChanges(initial, unsaved) {
 	}
 
 	return {
-		page: unsaved.root.id,
+		page: pageId,
 		remove: remove,
 		add: add,
 		update: update
