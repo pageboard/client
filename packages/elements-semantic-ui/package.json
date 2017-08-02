@@ -16,9 +16,13 @@
     "url": "https://github.com/pageboard/elements/issues"
   },
   "homepage": "https://github.com/pageboard/elements#readme",
-  "dependencies": {},
+  "dependencies": {
+    "@webcomponents/custom-elements": "^1.0.0"
+  },
   "pageboard": {
-    "directories": ["elements"],
+    "directories": [
+      "elements"
+    ],
     "elements": [
       "elements/page.js",
       "elements/site.js",

@@ -37,7 +37,9 @@ Pageboard.elements.page = {
 		'/.pageboard/semantic-ui/components/container.css'
 	],
 	scripts: [
-		'/.pageboard/read/window-page.js'
+		'/.pageboard/read/window-page.js',
+		'/.pageboard/read/dom-template-strings.js',
+		'ui/custom-elements.min.js'
 	]
 };
 
