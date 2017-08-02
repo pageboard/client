@@ -6,8 +6,8 @@ Pageboard.elements.login = {
 	},
 	group: "block",
 	icon: '<i class="ui sign in icon"></i>',
-		return doc.dom`<form action="/api/login" class="ui form" method="post">
 	render: function(doc, block) {
+		return doc.dom`<form action="/.api/login" class="ui form" method="post">
 			<div class="field">
 				<label>Email</label>
 				<input type="text" name="email" placeholder="myname@mymail.com">
@@ -20,7 +20,7 @@ Pageboard.elements.login = {
 		'/.pageboard/semantic-ui/components/button.css'
 	],
 	scripts: [
-		'/.pageboard/elements/ui/login.js'
+		'ui/login.js'
 	]
 };
 

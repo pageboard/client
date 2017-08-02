@@ -18,7 +18,7 @@ Pageboard.elements.shutter = {
 	},
 	stylesheets: [
 		'/.pageboard/semantic-ui/components/grid.css',
-		'/.pageboard/elements/ui/shutter.css'
+		'ui/shutter.css'
 	]
 };
 
