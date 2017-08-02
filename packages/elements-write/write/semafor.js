@@ -132,12 +132,12 @@ types.oneOf = function(key, schema, node, fields) {
 	</div>`;
 	node.appendChild(field);
 	$(field).find('.dropdown').dropdown();
-};
 
-function getSelectOption(item) {
-	if (item.constant == null) console.error("We can't really support non-constant oneOf here");
-	return dom`<option value="${item.constant}">${item.title || item.constant}</option>`;
-}
+	function getSelectOption(item) {
+		if (item.constant == null) console.error("We can't really support non-constant oneOf here");
+		return node.dom`<option value="${item.constant}">${item.title || item.constant}</option>`;
+	}
+};
 
 types.integer = function(key, schema, node, fields) {
 	schema = Object.assign({}, schema);
