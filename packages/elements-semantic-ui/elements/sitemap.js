@@ -10,7 +10,7 @@ Pageboard.elements.sitemap = {
 	},
 	group: "block",
 	icon: '<i class="icon sitemap"></i>',
-	view: function(doc, block, viewer) {
+	render: function(doc, block, view) {
 		var dom = doc.dom`<div class="ui list" block-content="map"></div>`;
 		if (!this.loadCalled && block.id && viewer.dom) {
 			this.load(block, viewer.modules.id);
@@ -74,7 +74,7 @@ Pageboard.elements.sitepage = {
 		block.type = 'page';
 	},
 	icon: '<i class="icon file outline"></i>',
-	view: function(doc, block) {
+	render: function(doc, block) {
 		return doc.dom`<div class="item">
 			<i class="file icon"></i>
 			<div class="content">
@@ -117,7 +117,7 @@ Pageboard.elements.sitedir = {
 	// 	return Object.assign(block, {type: 'page'});
 	// },
 	icon: '<i class="icon folder outline"></i>',
-	view: function(doc, block) {
+	render: function(doc, block) {
 		return doc.dom`<div class="item">
 			<i class="folder icon"></i>
 			<div class="content">

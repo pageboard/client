@@ -11,7 +11,7 @@ Pageboard.elements.image = {
 	contents: {},
 	group: "block",
 	icon: '<i class="icon image"></i>',
-	view: function(doc, block) {
+	render: function(doc, block) {
 		var url = block.data.url || '/.pageboard/elements/ui/placeholder.png';
 		var sep = '?';
 		if (url.startsWith('/') == false) {

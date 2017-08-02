@@ -20,8 +20,8 @@ Pageboard.elements.page = {
 		}
 	},
 	icon: '<i class="icon file outline"></i>',
-	view: function(doc, block) {
 		doc.body.setAttribute('block-content', "body");
+	render: function(doc, block) {
 		// title
 		var title = doc.head.querySelector('title');
 		if (!title) {
@@ -52,9 +52,9 @@ Pageboard.elements.notfound = Object.assign({}, Pageboard.elements.page, {
 			type: ['string', 'null']
 		}
 	},
-	view: function(doc, block) {
+	render: function(doc, block) {
 		doc.head.appendChild(doc.dom`<meta http-equiv="Status" content="404 Not Found">`);
-		return Pageboard.elements.page.view(doc, block);
+		return Pageboard.elements.page.render(doc, block);
 	},
 });
 

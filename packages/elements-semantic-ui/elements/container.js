@@ -9,7 +9,7 @@ Pageboard.elements.container = {
 	},
 	menu: 'layout',
 	icon: '<i class="icon resize horizontal"></i>',
-	view: function(doc, block) {
+	render: function(doc, block) {
 		return doc.dom`<div class="ui container" block-content="content"></div>`;
 	},
 	stylesheets: [
@@ -29,7 +29,7 @@ Pageboard.elements.maximize = {
 	menu: 'layout',
 	group: 'block',
 	icon: '<i class="icon resize vertical"></i>',
-	view: function(doc, block) {
+	render: function(doc, block) {
 		return doc.dom`<div class="maximize" block-content="content"></div>`;
 	},
 	stylesheets: [

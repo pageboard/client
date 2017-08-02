@@ -10,7 +10,7 @@ Pageboard.elements.literal = {
 	},
 	inline: true,
 	icon: '<b class="icon">${...}</b>',
-	view: function(doc, block) {
+	render: function(doc, block) {
 		return doc.dom`<code class="literal">${block.data.code || 'uninitialized literal'}</code>`;
 	},
 	foreign: function(dom, block) {

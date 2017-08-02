@@ -10,7 +10,7 @@ Pageboard.elements.shutter = {
 	},
 	menu: 'layout',
 	icon: '<b class="icon">Shu</b>',
-	view: function(doc, block) {
+	render: function(doc, block) {
 		return doc.dom`<div
 			class="ui shutter stackable equal width grid"
 			block-content="tabs"
@@ -51,7 +51,7 @@ Pageboard.elements.shutter_item = {
 	},
 	menu: 'layout',
 	icon: '<b class="icon">Tab</b>',
-	view: function(doc, block) {
+	render: function(doc, block) {
 		var invert = block.data.invert == "normal" ? "" : "invert";
 		return doc.dom`<div class="column ${invert}">
 			<div block-content="image"></div>

@@ -8,7 +8,7 @@ Pageboard.elements.header = {
 		}
 	},
 	menu: 'layout',
-	view: function(doc, block) {
+	render: function(doc, block) {
 		return doc.dom`<div class="ui header" block-content="content"></div>`;
 	},
 	stylesheets: [

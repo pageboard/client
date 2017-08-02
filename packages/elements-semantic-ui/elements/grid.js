@@ -14,7 +14,7 @@ Pageboard.elements.grid = {
 	},
 	menu: 'layout',
 	icon: '<i class="icon grid layout"></i>',
-	view: function(doc, block) {
+	render: function(doc, block) {
 		return doc.dom`<div>
 			<div class="ui header" block-content="header"></div>
 			<div class="ui doubling stackable equal width grid" block-content="columns"></div>
@@ -47,7 +47,7 @@ Pageboard.elements.grid_column = {
 	},
 	menu: 'layout',
 	icon: '<i class="icon columns"></i>',
-	view: function(doc, block) {
+	render: function(doc, block) {
 		var prefix = '';
 		if (block.data.width != null) prefix = {
 			0: '',

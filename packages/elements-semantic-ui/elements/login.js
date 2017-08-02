@@ -6,8 +6,8 @@ Pageboard.elements.login = {
 	},
 	group: "block",
 	icon: '<i class="ui sign in icon"></i>',
-	view: function(doc, block) {
 		return doc.dom`<form action="/api/login" class="ui form" method="post">
+	render: function(doc, block) {
 			<div class="field">
 				<label>Email</label>
 				<input type="text" name="email" placeholder="myname@mymail.com">

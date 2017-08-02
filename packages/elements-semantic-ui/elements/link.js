@@ -26,7 +26,7 @@ Pageboard.elements.link = {
 	inline: true,
 	group: "inline",
 	icon: '<i class="icon linkify"></i>',
-	view: function(doc, block) {
+	render: function(doc, block) {
 		return doc.dom`<a href="${block.data.url}" target="${block.data.target}">new link</a>`;
 	}
 };
