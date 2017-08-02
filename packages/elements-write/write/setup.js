@@ -97,8 +97,11 @@ function editorUpdate(editor, state, focusParents) {
 function editorSetup(win, viewer) {
 	var Editor = win.Pagecut.Editor;
 
+	// because we have a link element
 	Editor.defaults.marks = Editor.defaults.marks.remove('link');
+	// because we will have some kind of code element (literal is doing stuff with code)
 	Editor.defaults.marks = Editor.defaults.marks.remove('code');
+	// because page element replaces doc
 	Editor.defaults.nodes = Editor.defaults.nodes.remove('doc');
 
 	var content = win.document.body.cloneNode(true);
