@@ -20,8 +20,8 @@ Pageboard.elements.page = {
 		}
 	},
 	icon: '<i class="icon file outline"></i>',
-		doc.body.setAttribute('block-content', "body");
 	render: function(doc, block) {
+		doc.body.setAttribute('block-content', "body");
 		// title
 		var title = doc.head.querySelector('title');
 		if (!title) {
