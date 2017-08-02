@@ -45,6 +45,8 @@ function setupListener(e) {
 	var editor = Pageboard.editor = editorSetup(win, Pageboard.viewer);
 
 	Pageboard.write.removeAttribute('hidden');
+
+	// Perfect Scrollbar
 	Ps.initialize(Pageboard.write);
 
 	Page.patch(function() {
