@@ -130,6 +130,7 @@ function editorSetup(win, viewer) {
 
 	editor.blocks = viewer.blocks;
 	editor.blocks.view = editor;
+	editor.blocks.genId = Pageboard.genId;
 
 	editor.controls = {};
 	for (var key in Pageboard.Controls) {

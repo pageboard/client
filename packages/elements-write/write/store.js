@@ -5,7 +5,6 @@ function Store(editor, selector) {
 	this.menu = document.querySelector(selector);
 	this.editor = editor;
 	this.pageId = editor.state.doc.attrs.block_id;
-	editor.blocks.genId = Pageboard.genId;
 
 	this.uiSave = this.menu.querySelector('[data-command="save"]');
 	this.uiSave.addEventListener('click', this.save.bind(this));
