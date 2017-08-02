@@ -99,12 +99,13 @@ function editorSetup(win, viewer) {
 	Editor.defaults.marks = Editor.defaults.marks.remove('code');
 	Editor.defaults.nodes = Editor.defaults.nodes.remove('doc');
 
+	var content = win.document.body.cloneNode(true);
+
 	// and the editor must be running from child
 	var lastFocusParents;
 	var editor = new Editor({
 		topNode: 'page',
 		place: win.document.body,
-		content: win.document.body.cloneNode(true),
 		plugins: [{
 			filterTransaction: function(tr) {
 				// filters all transactions
@@ -131,6 +132,7 @@ function editorSetup(win, viewer) {
 	editor.blocks = viewer.blocks;
 	editor.blocks.view = editor;
 	editor.blocks.genId = Pageboard.genId;
+	editor.utils.setDom(content);
 
 	editor.controls = {};
 	for (var key in Pageboard.Controls) {
