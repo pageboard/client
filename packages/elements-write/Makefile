@@ -3,7 +3,6 @@ BROWSERIFY = $(shell node -p 'require.resolve("browserify/bin/cmd.js")')
 semanticui := $(shell node -p "require('path').dirname(require.resolve('semantic-ui-css'))")
 scrollbar := $(shell node -p "require('path').dirname(require.resolve('perfect-scrollbar'))")
 moment := $(shell node -p "require('path').dirname(require.resolve('moment'))")
-esequal := $(shell node -p "require('path').dirname(require.resolve('esequal'))")
 jquery := $(shell node -p "require('path').dirname(require.resolve('jquery'))")
 throttleit := $(shell node -p "require('path').dirname(require.resolve('throttleit'))")
 prettybytes := $(shell node -p "require('path').dirname(require.resolve('pretty-bytes'))")
@@ -20,7 +19,6 @@ install: write/lib write/lib/pretty-bytes.js write/lib/throttle.js
 	ln -sf ${moment}/moment.js write/lib/
 	ln -sf ${moment}/locale write/lib/moment-locales
 	ln -sf ${jquery}/jquery.js write/lib/
-	ln -sf ${esequal}/esequal.js write/lib/
 
 write/lib/throttle.js: ${throttleit}/index.js
 	$(BROWSERIFY) --standalone Throttle --outfile $@ $<

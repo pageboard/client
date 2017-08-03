@@ -91,7 +91,7 @@ Store.prototype.update = function() {
 
 	if (!this.initial) {
 		this.initial = state;
-	} else if (!equal(this.initial, state)) {
+	} else if (!this.editor.utils.equal(this.initial, state)) {
 		this.unsaved = state;
 		this.set(state);
 	} else {
@@ -103,8 +103,7 @@ Store.prototype.update = function() {
 
 Store.prototype.save = function(e) {
 	if (this.unsaved == null) return;
-	var changes = getChanges(this.pageId, this.initial, this.unsaved);
-	Pageboard.uiLoad(this.uiSave, PUT('/.api/page', changes))
+	Pageboard.uiLoad(this.uiSave, PUT('/.api/page', this.changes()))
 	.then(function(result) {
 		this.initial = this.unsaved;
 		delete this.unsaved;
@@ -136,7 +135,9 @@ Store.prototype.pageUpdate = function() {
 	}
 };
 
-function getChanges(pageId, initial, unsaved) {
+Store.prototype.changes = function() {
+	var initial = this.initial;
+	var unsaved = this.unsaved;
 	var remove = [];
 	var add = [];
 	var update = [];
@@ -147,7 +148,7 @@ function getChanges(pageId, initial, unsaved) {
 		if (!block) {
 			remove.push({id: id});
 		} else {
-			if (!equal(initial.blocks[id], block)) {
+			if (!this.editor.utils.equal(initial.blocks[id], block)) {
 				update.push(block);
 			}
 		}
@@ -164,12 +165,12 @@ function getChanges(pageId, initial, unsaved) {
 	}
 
 	return {
-		page: pageId,
+		page: this.pageId,
 		remove: remove,
 		add: add,
 		update: update
 	};
-}
+};
 
 })(window.Pageboard);
 
