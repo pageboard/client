@@ -12,22 +12,22 @@ Pageboard.elements.sitemap = {
 	icon: '<i class="icon sitemap"></i>',
 	render: function(doc, block, view) {
 		var dom = doc.dom`<div class="ui list" block-content="map"></div>`;
-		if (!this.loadCalled && block.id && viewer.dom) {
-			this.load(block, viewer.modules.id);
+		if (!this.loadCalled && block.id && view.dom) {
+			this.load(block, view);
 		} else if (this.pages) {
 			this.populate(dom, this.pages);
 		}
 		return dom;
 	},
-	load: function(block, idModule) {
+	load: function(block, view) {
 		this.loadCalled = true;
 		GET('/api/pages').then(function(pages) {
 			this.pages = pages;
 			pages.forEach(function(page) {
 				page.type = 'sitepage';
 			});
-			idModule.set(pages);
-			this.populate(idModule.domQuery(block.id), pages);
+			view.store.set(pages);
+			this.populate(view.store.domQuery(block.id), pages);
 		}.bind(this));
 	},
 	populate: function(dom, pages) {
@@ -41,10 +41,10 @@ Pageboard.elements.sitemap = {
 			dom.appendChild(child);
 		});
 	},
-	// from: function(block, idModule) {
+	// from: function(block, view) {
 	// 	console.log(block.id, block.type)
 	// },
-	to: function(block, idModule) {
+	to: function(block, view) {
 		delete block.content.map;
 	},
 	stylesheets: [
