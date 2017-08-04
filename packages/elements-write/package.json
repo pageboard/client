@@ -24,7 +24,7 @@
     "moment": "^2.18.1",
     "morphdom": "^2.2.0",
     "perfect-scrollbar": "^0.7.1",
-    "postinstall-links": "kapouer/postinstall-links",
+    "postinstall-links": "^0.1.1",
     "pretty-bytes": "^4.0.2",
     "semantic-ui-css": "^2.2.10",
     "throttleit": "^1.0.0"
