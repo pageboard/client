@@ -91,10 +91,9 @@ Form.prototype.change = function() {
 	}
 
 	var tr = editor.state.tr, curtr, count = 0;
-	var el = this.editor.element(this.block.type);
 
 	// factor rendering
-	var newNode = editor.render(this.block, true);
+	var newNode = editor.render(this.block);
 
 	var oldNode, focusedNode;
 	for (var i=0; i < nodes.length; i++) {
