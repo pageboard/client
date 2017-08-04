@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "make install"
+    "build": "make build",
+    "postinstall": "postinstall-links"
   },
   "repository": {
     "type": "git",
@@ -23,9 +24,19 @@
     "moment": "^2.18.1",
     "morphdom": "^2.2.0",
     "perfect-scrollbar": "^0.7.1",
+    "postinstall-links": "kapouer/postinstall-links",
     "pretty-bytes": "^4.0.2",
     "semantic-ui-css": "^2.2.10",
     "throttleit": "^1.0.0"
+  },
+  "links": {
+    "semantic-ui-css/components": "semantic-ui/",
+    "semantic-ui-css/themes": "semantic-ui/",
+    "perfect-scrollbar/dist/css/perfect-scrollbar.css": "write/lib/",
+    "perfect-scrollbar/dist/js/perfect-scrollbar.js": "write/lib/",
+    "moment/moment.js": "write/lib/",
+    "moment/locale": "write/lib/moment-locales",
+    "jquery/jquery.js": "write/lib/"
   },
   "pageboard": {
     "directories": [
