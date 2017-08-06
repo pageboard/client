@@ -89,30 +89,10 @@ Form.prototype.change = function() {
 		this.clear();
 		return;
 	}
-
-	var tr = editor.state.tr, curtr, count = 0;
-
-	// factor rendering
-	var newNode = editor.render(this.block);
-
-	var oldNode, focusedNode;
-	for (var i=0; i < nodes.length; i++) {
-		oldNode = nodes[i];
-		if (oldNode.getAttribute('block-focused') == "last") focusedNode = oldNode;
-		curtr = editor.utils.replaceTr(tr, newNode, oldNode, !!el.inline);
-		if (!curtr) {
-			console.warn("Cannot update", oldNode);
-		} else {
-			count++;
-			tr = curtr;
-		}
-	}
-	if (count) {
-		var focusPos = focusedNode ? editor.utils.posFromDOM(focusedNode) : tr.selection.from;
-		if (focusPos != null) tr.setMeta('focus-please', focusPos);
-		this.ignoreNext = true;
-		editor.dispatch(tr);
-	}
+	this.ignoreNext = true;
+	nodes.forEach(function(node) {
+		editor.utils.refresh(node);
+	});
 };
 
 })(window.Pageboard, window.Pagecut);
