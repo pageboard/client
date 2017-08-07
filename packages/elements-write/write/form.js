@@ -93,6 +93,13 @@ Form.prototype.change = function() {
 	nodes.forEach(function(node) {
 		editor.utils.refresh(node);
 	});
+	var node = editor.blocks.domQuery(id, {focused: true});
+	if (node) {
+		var sel = editor.utils.select(node);
+		if (sel) {
+			editor.dispatch(editor.state.tr.setSelection(sel));
+		}
+	}
 };
 
 })(window.Pageboard, window.Pagecut);
