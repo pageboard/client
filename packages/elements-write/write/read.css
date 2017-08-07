@@ -11,7 +11,7 @@
 }
 
 [block-focused="last"] {
-	outline: 1px solid #888;
+	outline: 1px dashed #888;
 	outline-offset:-1px;
 }
 
