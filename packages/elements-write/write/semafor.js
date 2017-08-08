@@ -58,15 +58,19 @@ Semafor.prototype.convert = function(vals) {
 	for (var name in vals) {
 		field = schema[name];
 		val = vals[name];
-		if (field) {
-			if (field.type == "integer") {
+		if (field) switch(field.type) {
+			case "integer":
 				val = parseInt(val);
-			} else if (field.type == "object") {
-				// TODO recursive
-				console.warn("semafor unsupported type object");
-			} else if (field.type == "boolean") {
+			break;
+			case "number":
+				val = parseFloat(val);
+			break;
+			case "boolean":
 				val = val == "true";
-			}
+			break;
+			case "object":
+				console.error("Cannot convert object");
+			break;
 		}
 		obj[name] = val;
 	}
