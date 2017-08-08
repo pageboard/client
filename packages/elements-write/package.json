@@ -24,7 +24,7 @@
     "moment": "^2.18.1",
     "morphdom": "^2.2.0",
     "perfect-scrollbar": "^0.7.1",
-    "postinstall-links": "^0.1.1",
+    "postinstall-links": "^0.2.0",
     "pretty-bytes": "^4.0.2",
     "semantic-ui-css": "^2.2.10",
     "throttleit": "^1.0.0"
@@ -36,7 +36,8 @@
     "perfect-scrollbar/dist/js/perfect-scrollbar.js": "write/lib/",
     "moment/moment.js": "write/lib/",
     "moment/locale": "write/lib/moment-locales",
-    "jquery/jquery.js": "write/lib/"
+    "jquery/dist/jquery.slim.min.js": "write/lib/jquery.min.js",
+    "jquery/dist/jquery.slim.min.map": "write/lib/jquery.min.js.map"
   },
   "pageboard": {
     "directories": [
