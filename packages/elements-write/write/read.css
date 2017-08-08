@@ -4,15 +4,41 @@
 	white-space:normal;
 }
 
+/* replaced elements cannot have pseudo elements,
+ * that is why we must define is for both cases */
 .ProseMirror-selectednode {
 	outline: 2px solid #61A3E4 !important;
 	outline-offset:-2px !important;
 	cursor:pointer !important;
 }
+.ProseMirror-selectednode::after {
+	outline: 2px solid #61A3E4 !important;
+	outline-offset:-2px !important;
+	content:' ';
+	display:block;
+	position:absolute;
+	top:0;
+	left:0;
+	right:0;
+	bottom:0;
+}
 
+/* replaced elements cannot have pseudo elements,
+ * that is why we must define is for both cases */
 [block-focused="last"] {
 	outline: 1px dashed #888;
 	outline-offset:-1px;
+}
+[block-focused="last"]::after {
+	outline: 1px dashed #888;
+	outline-offset:-1px;
+	content:'';
+	display:block;
+	position:absolute;
+	top:0;
+	left:0;
+	right:0;
+	bottom:0;
 }
 
 *::selection {
