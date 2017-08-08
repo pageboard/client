@@ -19,7 +19,7 @@
   "homepage": "https://github.com/pageboard/elements#readme",
   "dependencies": {
     "@webcomponents/custom-elements": "^1.0.0",
-    "postinstall-links": "^0.2.0"
+    "postinstall-links": "^0.3.0"
   },
   "links": {
     "@webcomponents/custom-elements/custom-elements.min.js": "elements/ui/",
