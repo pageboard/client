@@ -30,17 +30,7 @@
       "elements"
     ],
     "elements": [
-      "elements/page.js",
-      "elements/site.js",
-      "elements/user.js",
-      "elements/sitemap.js",
-      "elements/link.js",
-      "elements/image.js",
-      "elements/header.js",
-      "elements/grid.js",
-      "elements/container.js",
-      "elements/login.js",
-      "elements/shutter.js"
+      "elements/"
     ]
   }
 }
