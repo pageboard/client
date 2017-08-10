@@ -40,7 +40,7 @@ Pageboard.elements.page = {
 	scripts: [
 		'/.pageboard/read/window-page.js',
 		'/.pageboard/read/dom-template-strings.js',
-		'ui/custom-elements.min.js'
+		'../ui/custom-elements.min.js'
 	]
 };
 

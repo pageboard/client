@@ -33,7 +33,7 @@ Pageboard.elements.maximize = {
 		return doc.dom`<div class="maximize" block-content="content"></div>`;
 	},
 	stylesheets: [
-		'ui/maximize.css'
+		'../ui/maximize.css'
 	]
 };
 

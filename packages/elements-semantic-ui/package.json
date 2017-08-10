@@ -22,12 +22,13 @@
     "postinstall-links": "^0.3.0"
   },
   "links": {
-    "@webcomponents/custom-elements/custom-elements.min.js": "elements/ui/",
-    "@webcomponents/custom-elements/custom-elements.min.js.map": "elements/ui/"
+    "@webcomponents/custom-elements/custom-elements.min.js": "ui/",
+    "@webcomponents/custom-elements/custom-elements.min.js.map": "ui/"
   },
   "pageboard": {
     "directories": [
-      "elements"
+      "elements",
+      "ui"
     ],
     "elements": [
       "elements/"

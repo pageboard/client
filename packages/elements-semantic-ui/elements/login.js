@@ -20,7 +20,7 @@ Pageboard.elements.login = {
 		'/.pageboard/semantic-ui/components/button.css'
 	],
 	scripts: [
-		'ui/login.js'
+		'../ui/login.js'
 	]
 };
 
