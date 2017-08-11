@@ -12,6 +12,11 @@ Pageboard.elements.page = {
 			title: 'Address',
 			type: "string",
 			pattern: "(\/[a-zA-Z0-9-.]*)+"
+		},
+		redirect: {
+			title: 'Redirect',
+			type: "string",
+			pattern: "(\/[a-zA-Z0-9-.]*)+"
 		}
 	},
 	contents: {
@@ -22,6 +27,10 @@ Pageboard.elements.page = {
 	},
 	icon: '<i class="icon file outline"></i>',
 	render: function(doc, block) {
+		if (block.data.redirect && block.data.redirect != block.data.url) {
+			doc.head.appendChild(doc.dom`<meta http-equiv="Status" content="302 Found">
+	<meta http-equiv="Location" content="${block.data.redirect}">`);
+		}
 		doc.body.setAttribute('block-content', "body");
 		// title
 		var title = doc.head.querySelector('title');
