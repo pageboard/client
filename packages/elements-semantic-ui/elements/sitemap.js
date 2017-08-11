@@ -4,48 +4,28 @@ Pageboard.elements.sitemap = {
 	},
 	contents: {
 		map: {
-			spec: "(sitedir | sitepage)+",
-			title: 'Root directory'
+			spec: "sitepage*",
+			title: 'Pages'
 		}
 	},
 	group: "block",
 	icon: '<i class="icon sitemap"></i>',
 	render: function(doc, block, view) {
-		var dom = doc.dom`<div class="ui list" block-content="map"></div>`;
-		if (!this.loadCalled && block.id && view.dom) {
-			this.load(block, view);
-		} else if (this.pages) {
-			this.populate(dom, this.pages);
-		}
-		return dom;
+		return doc.dom`<div class="ui list" block-content="map"></div>`;
 	},
-	load: function(block, view) {
-		this.loadCalled = true;
-		GET('/api/pages').then(function(pages) {
-			this.pages = pages;
-			pages.forEach(function(page) {
-				page.type = 'sitepage';
-			});
-			view.store.set(pages);
-			this.populate(view.store.domQuery(block.id), pages);
-		}.bind(this));
-	},
-	populate: function(dom, pages) {
-		if (!dom) {
-			console.info("nothing to populate yet");
-			return;
-		}
-		dom.textContent = '';
-		pages.forEach(function(page) {
-			var child = dom.ownerDocument.dom`<div block-id="${page.id}" block-type="sitepage"></div>`;
-			dom.appendChild(child);
-		});
-	},
-	// from: function(block, view) {
-	// 	console.log(block.id, block.type)
-	// },
-	to: function(block, view) {
+	unmount: function(block) {
 		delete block.content.map;
+	},
+	mount: function(block, view) {
+		if (!this.loader) this.loader = GET('/.api/pages').then(function(pages) {
+			block.content.map = view.doc.dom`-${pages.map(function(page) {
+				page.type = 'sitepage';
+				view.blocks.set(page);
+				return view.render(page);
+			})}`;
+			block.content.map.removeChild(block.content.map.firstChild);
+		});
+		return this.loader;
 	},
 	stylesheets: [
 		'/.pageboard/semantic-ui/components/list.css',
@@ -64,15 +44,17 @@ Pageboard.elements.sitepage = {
 			title: 'Address',
 			type: "string",
 			pattern: "(\/[a-zA-Z0-9-.]*)+"
+		},
+		redirect: {
+			title: 'Redirect',
+			type: "string",
+			pattern: "(\/[a-zA-Z0-9-.]*)+"
 		}
 	},
-	from: function(block) {
-		block.type = 'sitepage';
-	},
-	to: function(block) {
-		block.standalone = true;
-		block.orphan = true;
-		block.type = 'page';
+	unmount: function(copy) {
+		copy.standalone = true; // a page is always standalone
+		copy.orphan = true; // avoid relating to this page
+		copy.type = 'page'; // sitepage -> page
 	},
 	icon: '<i class="icon file outline"></i>',
 	render: function(doc, block) {
