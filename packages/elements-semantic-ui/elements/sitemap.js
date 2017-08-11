@@ -48,7 +48,8 @@ Pageboard.elements.sitemap = {
 		delete block.content.map;
 	},
 	stylesheets: [
-		'/.pageboard/semantic-ui/components/list.css'
+		'/.pageboard/semantic-ui/components/list.css',
+		'../ui/sitemap.css'
 	]
 };
 

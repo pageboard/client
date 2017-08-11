@@ -1,0 +1,10 @@
+[block-type="sitemap"] {
+	min-height:2em;
+	position:relative;
+}
+.ui.list[block-type="sitemap"] {
+	padding:0.5em;
+	margin:0.5em;
+	border:1px solid gray;
+	border-radius:5px;
+}
