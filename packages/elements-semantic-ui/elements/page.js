@@ -1,6 +1,6 @@
 
 Pageboard.elements.page = {
-	priority: Infinity,
+	priority: -1,
 	title: 'Page',
 	group: 'page',
 	properties: {
