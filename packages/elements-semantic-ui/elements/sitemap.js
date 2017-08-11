@@ -78,10 +78,10 @@ Pageboard.elements.sitepage = {
 	render: function(doc, block) {
 		return doc.dom`<div class="item">
 			<i class="file icon"></i>
-			<div class="content">
-				<div class="header">${block.data.url}</div>
-				<div class="description">${block.data.title}</div>
-			</div>
+			<a class="content" href="${block.data.url}">
+				<div class="header">${block.data.title}</div>
+				<div class="description">${block.data.url}</div>
+			</a>
 		</div>`;
 	},
 	stylesheets: [
