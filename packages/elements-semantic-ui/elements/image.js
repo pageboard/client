@@ -12,7 +12,7 @@ Pageboard.elements.image = {
 	group: "block",
 	icon: '<i class="icon image"></i>',
 	render: function(doc, block) {
-		var url = block.data.url || '/.pageboard/elements/ui/placeholder.png';
+		var url = block.data.url || '/.pageboard/ui/placeholder.png';
 		var sep = '?';
 		if (url.startsWith('/') == false) {
 			url = ".api/image?url=" + encodeURIComponent(url);
