@@ -87,8 +87,8 @@ Breadcrumb.prototype.click = function(e) {
 	}
 	var sel = editor.utils.select(node);
 	if (sel) {
-		editor.dispatch(editor.state.tr.setSelection(sel));
 		editor.focus();
+		editor.dispatch(editor.state.tr.setSelection(sel));
 	}
 };
 
