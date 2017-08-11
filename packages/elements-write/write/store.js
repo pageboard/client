@@ -103,7 +103,12 @@ Store.prototype.update = function() {
 
 Store.prototype.save = function(e) {
 	if (this.unsaved == null) return;
-	Pageboard.uiLoad(this.uiSave, PUT('/.api/page', this.changes()))
+	var changes = this.changes();
+	if (Pageboard.test) {
+		console.warn("Pageboard.test - saving disabled", changes);
+		return;
+	}
+	Pageboard.uiLoad(this.uiSave, PUT('/.api/page', changes))
 	.then(function(result) {
 		this.initial = this.unsaved;
 		delete this.unsaved;
