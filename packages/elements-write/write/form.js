@@ -37,7 +37,7 @@ Form.prototype.update = function(parents) {
 		return;
 	}
 
-	var el = this.editor.element(block.type);
+	var el = this.editor.element(info.type);
 	if (!el) {
 		throw new Error(`Unknown element type ${block.type}`);
 		return;

@@ -24,9 +24,9 @@ Breadcrumb.prototype.update = function(parents) {
 	var parent;
 	for (var i = parents.length - 1; i >= 0; i--) {
 		parent = parents[i];
-		this.$node.append(this.item(parent.block));
+		this.$node.append(this.item(parent));
 	}
-	var contents = this.editor.element(parent.block.type).contents;
+	var contents = this.editor.element(parent.type).contents;
 	if (contents) {
 		var contentName = parent.content && parent.content.name;
 		var contentSpec = contentName && contents[contentName] || {};
@@ -70,11 +70,11 @@ Breadcrumb.prototype.clear = function() {
 	this.$node.empty();
 };
 
-Breadcrumb.prototype.item = function(block) {
+Breadcrumb.prototype.item = function(parent) {
 	var node = this.template.cloneNode(true);
 	var item = node.querySelector('.section');
-	item.textContent = this.editor.element(block.type).title;
-	item.setAttribute('block-id', block.id);
+	item.textContent = this.editor.element(parent.type).title;
+	item.setAttribute('block-id', parent.block.id);
 	return node.innerHTML;
 }
 

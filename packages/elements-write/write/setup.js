@@ -85,6 +85,7 @@ function editorUpdate(editor, state, focusParents) {
 		}
 		if (!storedBlock.data) storedBlock.data = {};
 		item.block = storedBlock;
+		item.type = node.attrs.block_type || block.type;
 		parents.push(item);
 	});
 	if (editor.controls) Object.keys(editor.controls).forEach(function(key) {
