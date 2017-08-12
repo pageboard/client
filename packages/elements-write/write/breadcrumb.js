@@ -28,7 +28,7 @@ Breadcrumb.prototype.update = function(parents) {
 	}
 	var contents = this.editor.element(parent.type).contents;
 	if (contents) {
-		var contentName = parent.content && parent.content.name;
+		var contentName = parent.container && parent.container.name;
 		var contentSpec = contentName && contents[contentName] || {};
 		var contentKeys = Object.keys(contents);
 		if (contentName && contentKeys.length == 1) {
