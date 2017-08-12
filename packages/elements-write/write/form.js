@@ -75,13 +75,11 @@ Form.prototype.change = function() {
 	this.block.data = Object.assign(this.block.data || {}, data);
 	editor.blocks.set(this.block);
 
-	var el = editor.element(this.block.type);
-	// node.type.name == tr.doc.type.name ?
-	if (el.group == editor.state.doc.type.spec.group) {
-		editor.pageUpdate(this.block);
-		return;
-	}
 	var id = this.block.id;
+	if (id == editor.state.doc.attrs.block_id) {
+		editor.pageUpdate(this.block);
+	}
+
 	var nodes = editor.blocks.domQuery(id, {all: true});
 
 	if (nodes.length == 0) {
