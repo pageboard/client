@@ -37,28 +37,29 @@ Menu.prototype.item = function(el) {
 		onDeselected: 'disable',
 		run: function(state, dispatch, view) {
 			var block = editor.blocks.create(el.name);
-			editor.blocks.set(block);
-			var tr = state.tr;
-			var sel = editor.utils.selectTr(tr, tr.selection, true);
-			var inserts = false;
+			editor.blocks.from(block).then(function(fragment) {
+				var tr = state.tr;
+				var sel = editor.utils.selectTr(tr, tr.selection, true);
+				var inserts = false;
 
-			if (el.inline && editor.utils.markActive(state, nodeType)) {
-				tr = tr.removeMark(sel.from, sel.to, nodeType);
-			} else {
-				tr = editor.utils.insertTr(tr, block, sel);
-				inserts = true;
-			}
-			dispatch(tr);
-			if (!inserts) return;
-			var node = editor.blocks.domQuery(block.id);
-			if (!node) {
-				throw new Error(`No node found with block-id ${block.id}`);
-			}
-			var sel = editor.utils.select(node);
-			if (sel) {
-				editor.dispatch(editor.state.tr.setSelection(sel));
-				editor.focus();
-			}
+				if (el.inline && editor.utils.markActive(state, nodeType)) {
+					tr = tr.removeMark(sel.from, sel.to, nodeType);
+				} else {
+					tr = editor.utils.insertTr(tr, fragment, sel);
+					inserts = true;
+				}
+				dispatch(tr);
+				if (!inserts) return;
+				var node = editor.blocks.domQuery(block.id);
+				if (!node) {
+					throw new Error(`No node found with block-id ${block.id}`);
+				}
+				var sel = editor.utils.select(node);
+				if (sel) {
+					editor.dispatch(editor.state.tr.setSelection(sel));
+					editor.focus();
+				}
+			});
 		},
 		select: function(state) {
 			if (el.inline) {
