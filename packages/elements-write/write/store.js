@@ -13,13 +13,12 @@ function Store(editor, selector) {
 
 	this.update();
 	this.unsaved = this.get();
+
 	if (this.unsaved) {
-		try {
-			this.restore(this.unsaved);
-		} catch(ex) {
-			Pageboard.notify("Unsaved work not readable, discarding", ex);
-			this.discard();
-		}
+		this.restore(this.unsaved).catch(function(err) {
+			Pageboard.notify("Unsaved work not readable, discarding", err);
+			return this.discard();
+		}.bind(this));
 	}
 }
 
@@ -53,17 +52,17 @@ Store.prototype.key = function() {
 };
 
 Store.prototype.restore = function(state) {
-	var editor = this.editor;
-	try {
-		var frag = editor.from(state.blocks);
-		this.ignoreNext = true;
-		editor.utils.setDom(frag);
-	} catch(ex) {
-		this.clear();
-		throw ex;
-	}
-	this.uiUpdate();
-	this.pageUpdate();
+	var self = this;
+	return this.editor.from(state.blocks).then(function(frag) {
+		self.ignoreNext = true;
+		self.editor.utils.setDom(frag);
+	}).catch(function(err) {
+		self.clear();
+		throw err;
+	}).then(function() {
+		self.uiUpdate();
+		self.pageUpdate();
+	});
 };
 
 Store.prototype.update = function() {
@@ -122,14 +121,13 @@ Store.prototype.discard = function(e) {
 	if (this.unsaved == null) return;
 	delete this.unsaved;
 	this.clear();
-	try {
-		this.restore(this.initial);
-	} catch(ex) {
-		console.error(ex);
-		Pageboard.notify("Impossible to restore<br><a href=''>please reload</a>", ex);
-	}
-	this.uiUpdate();
-	this.pageUpdate();
+	return this.restore(this.initial).catch(function(err) {
+		console.error(err);
+		Pageboard.notify("Impossible to restore<br><a href=''>please reload</a>", err);
+	}).then(function() {
+		this.uiUpdate();
+		this.pageUpdate();
+	}.bind(this));
 };
 
 Store.prototype.pageUpdate = function() {
