@@ -81,7 +81,11 @@ Breadcrumb.prototype.item = function(parent) {
 Breadcrumb.prototype.click = function(e) {
 	var editor = this.editor;
 	var id = e.target.getAttribute('block-id');
-	var node = editor.blocks.domQuery(id, {focused: true});
+	var position;
+	if ($(e.target).nextAll('.section').length == 0) position = "last";
+	else if ($(e.target).prevAll('.section').length == 0) position = "first";
+	else position = "middle";
+	var node = editor.blocks.domQuery(id, {focused: position});
 	if (!node) {
 		throw new Error(`No node found with block-id ${id}`);
 	}
