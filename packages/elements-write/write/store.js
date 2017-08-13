@@ -4,6 +4,7 @@ Pageboard.Controls.Store = Store;
 function Store(editor, selector) {
 	this.menu = document.querySelector(selector);
 	this.editor = editor;
+	this.children = Object.keys(editor.blocks.store);
 	this.pageId = editor.state.doc.attrs.block_id;
 
 	this.uiSave = this.menu.querySelector('[data-command="save"]');
@@ -110,6 +111,7 @@ Store.prototype.save = function(e) {
 	Pageboard.uiLoad(this.uiSave, PUT('/.api/page', changes))
 	.then(function(result) {
 		this.initial = this.unsaved;
+		this.children = Object.keys(this.initial);
 		delete this.unsaved;
 		this.clear();
 		this.uiUpdate();
@@ -145,17 +147,18 @@ Store.prototype.changes = function() {
 	var add = [];
 	var update = [];
 
-	var block;
-	for (var id in initial.blocks) {
-		block = unsaved.blocks[id];
-		if (!block) {
+	this.children.forEach(function(id) {
+		var block = unsaved.blocks[id];
+		if (!block || !initial.blocks[id]) {
 			remove.push({id: id});
 		} else {
 			if (!this.editor.utils.equal(initial.blocks[id], block)) {
 				update.push(block);
 			}
 		}
-	}
+	}, this);
+
+	var block;
 	for (var id in unsaved.blocks) {
 		block = unsaved.blocks[id];
 		if (block.deleted) {
