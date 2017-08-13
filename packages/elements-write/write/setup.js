@@ -71,8 +71,9 @@ function pageUpdate(page) {
 function editorUpdate(editor, state, focusParents) {
 	var tr = editor.state.tr; // do not use state.tr to avoid being before modifications
 	var parents = [];
+	var selectedParents = editor.utils.selectionParents(tr, tr.selection);
 
-	(focusParents || editor.utils.selectionParents(tr, tr.selection)).forEach(function(item) {
+	(focusParents || selectedParents).forEach(function(item) {
 		var node = item.root.mark || item.root.node;
 		// TODO create pagecut#id module api to handle this
 		// nodeBlock is created on demand,
