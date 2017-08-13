@@ -24,6 +24,9 @@ Menu.prototype.update = function() {
 	}
 	this.menu.place.textContent = ""
 	this.menu.place.appendChild(document.adoptNode(frag));
+	if (!this.menu.place.querySelector('.item:not(.disabled)')) {
+		this.menu.place.appendChild(document.dom`<a class="item">Text only content</a>`);
+	}
 };
 
 Menu.prototype.item = function(el) {
