@@ -14,18 +14,19 @@ Pageboard.elements.sitemap = {
 		return doc.dom`<div class="ui list" block-content="map"></div>`;
 	},
 	unmount: function(block) {
-		delete block.content.map;
+		if (block.content.map != null) {
+			delete block.content.map;
+		}
 	},
 	mount: function(block, view) {
-		if (!this.loader) this.loader = GET('/.api/pages').then(function(pages) {
-			block.content.map = view.doc.dom`-${pages.map(function(page) {
-				page.type = 'sitepage';
-				view.blocks.set(page);
-				return view.render(page);
+		return GET('/.api/pages').then(function(pages) {
+			block.content.map = view.doc.dom`${pages.map(function(page) {
+				var block = view.blocks.get(page.id);
+				if (block) page = block;
+				else view.blocks.set(page);
+				return view.render(page, 'sitepage');
 			})}`;
-			block.content.map.removeChild(block.content.map.firstChild);
 		});
-		return this.loader;
 	},
 	stylesheets: [
 		'/.pageboard/semantic-ui/components/list.css',
