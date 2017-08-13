@@ -10,6 +10,7 @@
 	outline: 2px solid #61A3E4 !important;
 	outline-offset:-2px !important;
 	cursor:pointer !important;
+	position:relative;
 }
 .ProseMirror-selectednode::after {
 	outline: 2px solid #61A3E4 !important;
@@ -28,6 +29,7 @@
 [block-focused="last"] {
 	outline: 1px dashed #888;
 	outline-offset:-1px;
+	position:relative;
 }
 [block-focused="last"]::after {
 	outline: 1px dashed #888;
