@@ -7,7 +7,7 @@ function Form(editor, selector) {
 	this.$node = $(selector);
 	this.template = this.$node.html();
 	this.clear();
-	this.$node.on('change input', Throttle(this.change.bind(this), 25));
+	this.$node.on('change input', Throttle(this.change.bind(this), 50));
 }
 
 Form.prototype.clear = function() {
