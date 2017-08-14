@@ -22,7 +22,7 @@ Pageboard.elements.sitemap = {
 		return GET('/.api/pages').then(function(pages) {
 			block.content.map = view.doc.dom`${pages.map(function(page) {
 				var block = view.blocks.get(page.id);
-				if (block) page = block;
+				if (block) page = block; // do not overwrite the actual page object
 				else view.blocks.set(page);
 				return view.render(page, 'sitepage');
 			})}`;
