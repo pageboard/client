@@ -85,9 +85,10 @@ Store.prototype.update = function() {
 	}
 	delete root.children;
 
-	var state = {
+	// import data into this context
+	var state = JSON.parse(JSON.stringify({
 		blocks: blocks
-	};
+	}));
 
 	if (!this.initial) {
 		this.initial = state;
