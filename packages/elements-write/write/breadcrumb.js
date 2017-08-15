@@ -9,12 +9,6 @@ function Breadcrumb(editor, selector) {
 	this.$node.on('click', '.section', this.click.bind(this));
 }
 
-function isAllSelected(editor) {
-	var AllSelection = editor.root.defaultView.Pagecut.State.AllSelection;
-	var sel = editor.state.selection;
-	return (sel instanceof AllSelection);
-}
-
 function contentOption(contents, name) {
 	return document.dom`<div class="item" data-value="${name}">${contents[name].title}</div>`;
 }
