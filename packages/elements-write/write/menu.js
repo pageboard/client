@@ -11,8 +11,9 @@ function Menu(editor, selector) {
 	this.update();
 }
 
-Menu.prototype.update = function() {
+Menu.prototype.update = function(parents, sel) {
 	// because updates are done by the editor
+	this.selection = sel || this.editor.state.tr.selection;
 	var frag = document.createDocumentFragment();
 	var content = this.menu.items;
 	for (var i = 0; i < content.length; i++) {
@@ -35,6 +36,8 @@ Menu.prototype.item = function(el) {
 	var nodeType = schema.nodes[el.name] || schema.marks[el.name];
 	if (!nodeType || (!el.menu && !el.icon)) return;
 
+	var self = this;
+
 	var item = {
 		element: el,
 		onDeselected: 'disable',
@@ -42,7 +45,7 @@ Menu.prototype.item = function(el) {
 			var block = editor.blocks.create(el.name);
 			editor.blocks.from(block).then(function(fragment) {
 				var tr = state.tr;
-				var sel = editor.utils.selectTr(tr, tr.selection, true);
+				var sel = editor.utils.selectTr(tr, self.selection, true);
 				var inserts = false;
 
 				if (el.inline && editor.utils.markActive(state, nodeType)) {
@@ -66,9 +69,9 @@ Menu.prototype.item = function(el) {
 		},
 		select: function(state) {
 			if (el.inline) {
-				return editor.utils.canMark(state, nodeType);
+				return editor.utils.canMark(self.selection, nodeType);
 			} else {
-				return editor.utils.canInsert(state, nodeType);
+				return editor.utils.canInsert(self.selection, nodeType);
 			}
 		},
 		active: function(state) {
@@ -78,7 +81,7 @@ Menu.prototype.item = function(el) {
 				var parent = parents[0];
 				return parent.root && parent.root.node && parent.root.node.type.name == el.name;
 			} else {
-				return editor.utils.markActive(state, nodeType);
+				return editor.utils.markActive(self.selection, nodeType);
 			}
 		}
 	};

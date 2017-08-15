@@ -68,12 +68,14 @@ function pageUpdate(page) {
 	});
 }
 
-function editorUpdate(editor, state, focusParents) {
-	var tr = editor.state.tr; // do not use state.tr to avoid being before modifications
+function editorUpdate(editor, state, focusParents, focusSelection) {
+	if (!focusParents || !focusSelection) {
+		console.info("editor is updated only from focus changes");
+		return;
+	}
 	var parents = [];
-	var selectedParents = editor.utils.selectionParents(tr, tr.selection);
 
-	(focusParents || selectedParents).forEach(function(item) {
+	focusParents.forEach(function(item) {
 		var node = item.root.mark || item.root.node;
 		var storedBlock = editor.blocks.get(node.attrs.block_id);
 		if (!storedBlock) {
@@ -85,9 +87,10 @@ function editorUpdate(editor, state, focusParents) {
 		item.type = node.attrs.block_type || block.type;
 		parents.push(item);
 	});
+
 	if (editor.controls) Object.keys(editor.controls).forEach(function(key) {
 		var c = editor.controls[key];
-		if (c.update) c.update(parents);
+		if (c.update) c.update(parents, focusSelection);
 	});
 	Page.replace(Page.state);
 }
