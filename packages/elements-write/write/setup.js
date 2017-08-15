@@ -77,7 +77,7 @@ function editorUpdate(editor, state, focusParents) {
 		var node = item.root.mark || item.root.node;
 		var storedBlock = editor.blocks.get(node.attrs.block_id);
 		if (!storedBlock) {
-			console.warn("no block for", node.attrs.block_id);
+			console.warn("no block for", node);
 			return;
 		}
 		if (!storedBlock.data) storedBlock.data = {};
