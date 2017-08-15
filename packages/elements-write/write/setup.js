@@ -75,10 +75,6 @@ function editorUpdate(editor, state, focusParents) {
 
 	(focusParents || selectedParents).forEach(function(item) {
 		var node = item.root.mark || item.root.node;
-		// TODO create pagecut#id module api to handle this
-		// nodeBlock is created on demand,
-		// but here we want to allow in-place modification of the stored block,
-		// so it must be updated with its last known modified content and data
 		var storedBlock = editor.blocks.get(node.attrs.block_id);
 		if (!storedBlock) {
 			console.warn("no block for", node.attrs.block_id);
