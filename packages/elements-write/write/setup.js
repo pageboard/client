@@ -95,12 +95,20 @@ function editorUpdate(editor, state, focusParents) {
 function editorSetup(win, viewer) {
 	var Editor = win.Pagecut.Editor;
 
-	// because we have a link element
-	Editor.defaults.marks = Editor.defaults.marks.remove('link');
-	// because we will have some kind of code element (literal is doing stuff with code)
-	Editor.defaults.marks = Editor.defaults.marks.remove('code');
-	// because page element replaces doc
-	Editor.defaults.nodes = Editor.defaults.nodes.remove('doc');
+	if (viewer.elementsMap.link) {
+		Editor.defaults.marks = Editor.defaults.marks.remove('link');
+	}
+	if (viewer.elementsMap.code) {
+		Editor.defaults.marks = Editor.defaults.marks.remove('code');
+	}
+	if (viewer.elementsMap.page) {
+		// because page element replaces doc
+		Editor.defaults.nodes = Editor.defaults.nodes.remove('doc');
+	}
+	if (viewer.elementsMap.paragraph) {
+		// because we need a paragraph as a block
+		Editor.defaults.nodes = Editor.defaults.nodes.remove('paragraph');
+	}
 
 	var content = win.document.body.cloneNode(true);
 
@@ -108,6 +116,7 @@ function editorSetup(win, viewer) {
 	var lastFocusParents;
 	var editor = new Editor({
 		topNode: 'page',
+		elements: viewer.elementsMap,
 		place: win.document.body,
 		plugins: [{
 			filterTransaction: function(tr) {
