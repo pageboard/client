@@ -54,7 +54,9 @@ Menu.prototype.item = function(el) {
 					tr = editor.utils.insertTr(tr, fragment, sel);
 					inserts = true;
 				}
-				dispatch(tr);
+				if (tr) dispatch(tr);
+				else console.warn("not able to insert", nodeType);
+
 				if (!inserts) return;
 				var node = editor.blocks.domQuery(block.id);
 				if (!node) {
