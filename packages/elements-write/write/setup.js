@@ -114,6 +114,7 @@ function editorSetup(win, viewer) {
 
 	// and the editor must be running from child
 	var lastFocusParents;
+	var lastFocusSelection;
 	var editor = new Editor({
 		topNode: 'page',
 		elements: viewer.elementsMap,
@@ -125,14 +126,17 @@ function editorSetup(win, viewer) {
 				if (focusParents) {
 					lastFocusParents = focusParents;
 				}
+				var focusSelection = tr.getMeta('focus-selection');
+				if (focusSelection) {
+					lastFocusSelection = focusSelection;
+				}
 				return true;
 			},
 			view: function() {
 				return {
 					update: function(editor, state) {
 						// called after all current transactions have been applied
-						editorUpdate(editor, state, lastFocusParents);
-						lastFocusParents = null;
+						editorUpdate(editor, state, lastFocusParents, lastFocusSelection);
 					}
 				}
 			}
