@@ -148,6 +148,23 @@ Store.prototype.changes = function() {
 	var add = [];
 	var update = [];
 
+	var block;
+	for (var id in unsaved.blocks) {
+		block = unsaved.blocks[id];
+		if (block.deleted) {
+			console.warn("pagecut deleted this block", block);
+		}
+		if (block.added) {
+			delete block.added;
+			initial.blocks[id] = block;
+		} else if (!initial.blocks[id]) {
+			add.push(block);
+		}
+		if (block.orphan && !block.standalone) {
+			console.warn(`Only a standalone block can be orphan ${block.type} ${id}`);
+		}
+	}
+
 	this.children.forEach(function(id) {
 		var block = unsaved.blocks[id];
 		if (!block || !initial.blocks[id]) {
@@ -158,18 +175,6 @@ Store.prototype.changes = function() {
 			}
 		}
 	}, this);
-
-	var block;
-	for (var id in unsaved.blocks) {
-		block = unsaved.blocks[id];
-		if (block.deleted) {
-			console.warn("pagecut deleted this block", block);
-		}
-		if (!initial.blocks[id]) add.push(block);
-		if (block.orphan && !block.standalone) {
-			throw new Error(`Only a standalone block can be orphan ${block.type} ${id}`);
-		}
-	}
 
 	return {
 		page: this.pageId,
