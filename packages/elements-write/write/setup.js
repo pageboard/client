@@ -77,13 +77,12 @@ function editorUpdate(editor, state, focusParents, focusSelection) {
 
 	focusParents.forEach(function(item) {
 		var node = item.root.mark || item.root.node;
-		var storedBlock = editor.blocks.get(node.attrs.block_id);
-		if (!storedBlock) {
-			console.warn("no block for", node);
-			return;
+		var block = editor.blocks.get(node.attrs.block_id);
+		if (!block) {
+			block = editor.utils.attrToBlock(node.attrs);
+			delete node.attrs.block_id;
 		}
-		if (!storedBlock.data) storedBlock.data = {};
-		item.block = storedBlock;
+		item.block = block;
 		item.type = node.attrs.block_type || block.type;
 		parents.push(item);
 	});

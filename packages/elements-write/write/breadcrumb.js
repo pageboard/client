@@ -21,7 +21,7 @@ Breadcrumb.prototype.update = function(parents) {
 		this.$node.append(this.item(parent));
 	}
 	var contents = this.editor.element(parent.type).contents;
-	if (contents) {
+	if (contents && typeof contents != "string") {
 		var contentName = parent.container && parent.container.name;
 		var contentSpec = contentName && contents[contentName] || {};
 		var contentKeys = Object.keys(contents);
@@ -68,20 +68,20 @@ Breadcrumb.prototype.item = function(parent) {
 	var node = this.template.cloneNode(true);
 	var item = node.querySelector('.section');
 	item.textContent = this.editor.element(parent.type).title;
-	item.setAttribute('block-id', parent.block.id);
+	if (parent.block.id) item.setAttribute('block-id', parent.block.id);
 	return node.innerHTML;
 }
 
 Breadcrumb.prototype.click = function(e) {
 	var editor = this.editor;
-	var id = e.target.getAttribute('block-id');
 	var position;
 	if ($(e.target).nextAll('.section').length == 0) position = "last";
 	else if ($(e.target).prevAll('.section').length == 0) position = "first";
 	else position = "middle";
+	var id = e.target.getAttribute('block-id') || null;
 	var node = editor.blocks.domQuery(id, {focused: position});
 	if (!node) {
-		throw new Error(`No node found with block-id ${id}`);
+		throw new Error(`No node found with block-id ${id} and focus ${position}`);
 	}
 	var sel = editor.utils.select(node);
 	if (sel) {
