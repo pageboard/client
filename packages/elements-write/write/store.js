@@ -2,6 +2,7 @@
 Pageboard.Controls.Store = Store;
 
 function Store(editor, selector) {
+	editor.blocks.genId = this.genId.bind(this);
 	this.menu = document.querySelector(selector);
 	this.editor = editor;
 	this.children = Object.keys(editor.blocks.store);
@@ -22,6 +23,18 @@ function Store(editor, selector) {
 		}.bind(this));
 	}
 }
+
+Store.prototype.genId = function() {
+	var arr = new Uint8Array(8);
+	window.crypto.getRandomValues(arr);
+	var str = "", byte;
+	for (var i=0; i < arr.length; i++) {
+		byte = arr[i].toString(16);
+		if (byte.length == 1) byte = "0" + byte;
+		str += byte;
+	}
+	return str;
+};
 
 Store.prototype.uiUpdate = function() {
 	this.uiSave.classList.toggle('disabled', !this.unsaved);

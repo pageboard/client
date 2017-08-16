@@ -150,7 +150,9 @@ function editorSetup(win, viewer) {
 
 	editor.blocks = viewer.blocks;
 	editor.blocks.view = editor;
-	editor.blocks.genId = Pageboard.genId;
+	editor.blocks.genId = function() {
+		throw new Error("Transient genId called before store.genId is setup");
+	};
 	editor.utils.setDom(content);
 
 	editor.controls = {};

@@ -19,22 +19,10 @@ window.Pageboard = {
 			classList.remove('loading');
 			return res;
 		});
-	},
-	genId: function genId() {
-		var arr = new Uint8Array(8);
-		window.crypto.getRandomValues(arr);
-		var str = "", byte;
-		for (var i=0; i < arr.length; i++) {
-			byte = arr[i].toString(16);
-			if (byte.length == 1) byte = "0" + byte;
-			str += byte;
-		}
-		return str;
 	}
 };
 
 Page.setup(function(state) {
 	Pageboard.setup();
 });
-
 
