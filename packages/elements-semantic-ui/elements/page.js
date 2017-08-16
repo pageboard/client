@@ -43,7 +43,7 @@ Pageboard.elements.page = {
 	},
 	stylesheets: [
 		'/.pageboard/semantic-ui/components/reset.css',
-		'/.pageboard/semantic-ui/components/site.css',
+		'../ui/site.css',
 		'/.pageboard/semantic-ui/components/container.css'
 	],
 	scripts: [
