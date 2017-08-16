@@ -20,12 +20,18 @@ Pageboard.elements.sitemap = {
 	},
 	mount: function(block, view) {
 		return GET('/.api/pages').then(function(pages) {
-			block.content.map = view.doc.dom`${pages.map(function(page) {
+			function process(page) {
 				var block = view.blocks.get(page.id);
-				if (block) page = block; // do not overwrite the actual page object
-				else view.blocks.set(page);
+				if (block) {
+					// do not overwrite the actual page object, use it for up-to-date render
+					page = block;
+				} else {
+					page.added = true;
+					view.blocks.set(page);
+				}
 				return view.render(page, 'sitepage');
-			})}`;
+			}
+			block.content.map = view.doc.dom`${pages.map(process)}`;
 		});
 	},
 	stylesheets: [
