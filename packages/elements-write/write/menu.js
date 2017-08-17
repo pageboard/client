@@ -46,26 +46,12 @@ Menu.prototype.item = function(el) {
 			editor.blocks.from(block).then(function(fragment) {
 				var tr = state.tr;
 				var sel = editor.utils.selectTr(tr, self.selection, true);
-				var inserts = false;
 
 				if (el.inline && editor.utils.markActive(state, nodeType)) {
-					tr = tr.removeMark(sel.from, sel.to, nodeType);
-				} else {
-					tr = editor.utils.insertTr(tr, fragment, sel);
-					inserts = true;
-				}
-				if (tr) dispatch(tr);
-				else console.warn("not able to insert", nodeType);
-
-				if (!inserts) return;
-				var node = editor.blocks.domQuery(block.id);
-				if (!node) {
-					throw new Error(`No node found with block-id ${block.id}`);
-				}
-				var sel = editor.utils.select(node);
-				if (sel) {
-					editor.dispatch(editor.state.tr.setSelection(sel));
-					editor.focus();
+					tr.removeMark(sel.from, sel.to, nodeType);
+					dispatch(tr);
+				} else if (editor.utils.insertTr(tr, fragment, sel)) {
+					dispatch(tr);
 				}
 			});
 		},
