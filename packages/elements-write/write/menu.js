@@ -43,6 +43,10 @@ Menu.prototype.item = function(el) {
 		onDeselected: 'disable',
 		run: function(state, dispatch, view) {
 			var block = editor.blocks.create(el.name);
+			if (typeof el.contents == "string") {
+				// dirty trick to make "from" not generate an id for that block
+				block.id = null;
+			}
 			editor.blocks.from(block).then(function(fragment) {
 				var tr = state.tr;
 				var sel = editor.utils.selectTr(tr, self.selection, true);
