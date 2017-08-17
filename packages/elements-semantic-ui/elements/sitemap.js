@@ -13,25 +13,22 @@ Pageboard.elements.sitemap = {
 	render: function(doc, block, view) {
 		return doc.dom`<div class="ui list" block-content="map"></div>`;
 	},
-	unmount: function(block) {
-		if (block.content.map != null) {
-			delete block.content.map;
-		}
-	},
 	mount: function(block, view) {
 		return GET('/.api/pages').then(function(pages) {
-			function process(page) {
-				var block = view.blocks.get(page.id);
-				if (block) {
+			if (!block.content.map) block.content.map = view.doc.createDocumentFragment();
+			pages.forEach(function(page) {
+				var storedPage = view.blocks.get(page.id);
+				if (storedPage) {
 					// do not overwrite the actual page object, use it for up-to-date render
-					page = block;
+					page = storedPage;
 				} else {
-					page.added = true;
 					view.blocks.set(page);
 				}
-				return view.render(page, 'sitepage');
-			}
-			block.content.map = view.doc.dom`${pages.map(process)}`;
+				var place = block.content.map.querySelector(`[block-id="${page.id}"]`);
+				var dom = view.render(page, 'sitepage');
+				if (place) place.parentNode.replaceChild(dom, place);
+				else block.content.map.appendChild(dom);
+			});
 		});
 	},
 	stylesheets: [
