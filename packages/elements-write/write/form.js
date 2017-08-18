@@ -86,7 +86,6 @@ Form.prototype.change = function() {
 
 	if (nodes.length == 0) {
 		if (!found) console.warn("No dom nodes found for this block", this.block);
-		this.clear();
 		return;
 	}
 	this.ignoreNext = true;
