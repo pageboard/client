@@ -23,17 +23,12 @@ Pageboard.elements.link = {
 			}]
 		}
 	},
-	contents: {
-		text: {
-			spec: "text*",
-			title: 'inline content'
-		}
-	},
+	contents: "text*",
 	inline: true,
 	group: "inline",
 	icon: '<i class="icon linkify"></i>',
 	render: function(doc, block) {
-		return doc.dom`<a block-content="text" href="${block.data.url}" target="${block.data.target}"></a>`;
+		return doc.dom`<a href="${block.data.url}" target="${block.data.target}"></a>`;
 	}
 };
 
