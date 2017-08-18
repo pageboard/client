@@ -29,6 +29,7 @@
 }
 #notifications {
 	max-height:66%;
+	margin-bottom:0;
 }
 #notifications .message:nth-last-child(n+4) {
 	display:none;

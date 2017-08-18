@@ -39,7 +39,7 @@ Pageboard.notify = function(title, obj) {
 
 	var parent = Pageboard.notify.dom();
 
-	var msg = document.dom`<div class="ui attached ${type} message">
+	var msg = document.dom`<div class="ui ${type} message">
 		<i class="close icon"></i>
 		<div class="header">${title}</div>
 		${withText(text)}
@@ -48,7 +48,9 @@ Pageboard.notify = function(title, obj) {
 	if (obj.timeout) {
 		item.node = msg;
 		setTimeout(function() {
-			msg.remove();
+			$(msg).transition('fade down', function() {
+				msg.remove();
+			});
 		}, obj.timeout * 1000);
 	}
 
