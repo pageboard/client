@@ -97,20 +97,18 @@ function editorUpdate(editor, state, focusParents, focusSelection) {
 function editorSetup(win, view) {
 	var Editor = win.Pagecut.Editor;
 
-	if (viewer.elementsMap.link) {
-		Editor.defaults.marks = Editor.defaults.marks.remove('link');
-	}
-	if (viewer.elementsMap.code) {
-		Editor.defaults.marks = Editor.defaults.marks.remove('code');
-	}
-	if (viewer.elementsMap.page) {
-		// because page element replaces doc
-		Editor.defaults.nodes = Editor.defaults.nodes.remove('doc');
-	}
-	if (viewer.elementsMap.paragraph) {
-		// because we need a paragraph as a block
-		Editor.defaults.nodes = Editor.defaults.nodes.remove('paragraph');
-	}
+	var keyMap = {doc: 'page'};
+
+	Editor.defaults.marks.forEach(function(key) {
+		var nkey = keyMap[key] || key;
+		var val = view.elementsMap[nkey];
+		if (val) Editor.defaults.marks.update(key, val, nkey);
+	});
+	Editor.defaults.nodes.forEach(function(key) {
+		var nkey = keyMap[key] || key;
+		var val = view.elementsMap[nkey];
+		if (val) Editor.defaults.nodes.update(key, val, nkey);
+	});
 
 	var content = win.document.body.cloneNode(true);
 
