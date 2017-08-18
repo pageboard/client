@@ -1,4 +1,4 @@
-(function(Pageboard, Pagecut) {
+(function(Pageboard) {
 
 Pageboard.setup = function(state) {
 	var parentRead = document.getElementById('pageboard-read');
@@ -32,7 +32,7 @@ function routeListener(e) {
 }
 
 function buildListener(e) {
-	Pageboard.viewer = this.Pagecut.viewerInstance;
+	Pageboard.view = this.Pageboard.view;
 	this.removeEventListener('pagebuild', buildListener);
 	this.document.head.insertAdjacentHTML('beforeEnd', `
 	<link rel="stylesheet" href="/.pageboard/write/read.css" />
@@ -42,7 +42,7 @@ function buildListener(e) {
 function setupListener(e) {
 	var win = this;
 	var state = e.state;
-	var editor = Pageboard.editor = editorSetup(win, Pageboard.viewer);
+	var editor = Pageboard.editor = editorSetup(win, Pageboard.view);
 
 	Pageboard.write.removeAttribute('hidden');
 
@@ -94,7 +94,7 @@ function editorUpdate(editor, state, focusParents, focusSelection) {
 	Page.replace(Page.state);
 }
 
-function editorSetup(win, viewer) {
+function editorSetup(win, view) {
 	var Editor = win.Pagecut.Editor;
 
 	if (viewer.elementsMap.link) {
@@ -119,7 +119,7 @@ function editorSetup(win, viewer) {
 	var lastFocusSelection;
 	var editor = new Editor({
 		topNode: 'page',
-		elements: viewer.elementsMap,
+		elements: view.elementsMap,
 		place: win.document.body,
 		plugins: [{
 			filterTransaction: function(tr) {
@@ -147,7 +147,7 @@ function editorSetup(win, viewer) {
 
 	editor.pageUpdate = pageUpdate;
 
-	editor.blocks = viewer.blocks;
+	editor.blocks = view.blocks;
 	editor.blocks.view = editor;
 	editor.blocks.genId = function() {
 		throw new Error("Transient genId called before store.genId is setup");
@@ -164,5 +164,5 @@ function editorSetup(win, viewer) {
 }
 
 
-})(window.Pageboard, window.Pagecut);
+})(window.Pageboard);
 
