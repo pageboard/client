@@ -120,7 +120,8 @@ Store.prototype.save = function(e) {
 	if (this.unsaved == null) return;
 	var changes = this.changes();
 	if (Pageboard.test) {
-		console.warn("Pageboard.test - saving disabled", changes);
+		console.warn("Pageboard.test - saving disabled")
+		console.log(changes);
 		return;
 	}
 	Pageboard.uiLoad(this.uiSave, PUT('/.api/page', changes))
