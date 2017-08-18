@@ -59,6 +59,7 @@ Store.prototype.set = function(obj) {
 };
 
 Store.prototype.clear = function() {
+	this.ids = {};
 	window.sessionStorage.removeItem(this.key());
 };
 
@@ -127,7 +128,6 @@ Store.prototype.save = function(e) {
 	Pageboard.uiLoad(this.uiSave, PUT('/.api/page', changes))
 	.then(function(result) {
 		this.initial = this.unsaved;
-		this.children = Object.keys(this.initial);
 		delete this.unsaved;
 		this.clear();
 		this.uiUpdate();
