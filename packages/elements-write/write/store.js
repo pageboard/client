@@ -5,7 +5,7 @@ function Store(editor, selector) {
 	editor.blocks.genId = this.genId.bind(this);
 	this.menu = document.querySelector(selector);
 	this.editor = editor;
-	this.children = Object.keys(editor.blocks.store);
+	this.ids = {};
 	this.pageId = editor.state.doc.attrs.block_id;
 
 	this.uiSave = this.menu.querySelector('[data-command="save"]');
@@ -33,6 +33,7 @@ Store.prototype.genId = function() {
 		if (byte.length == 1) byte = "0" + byte;
 		str += byte;
 	}
+	this.ids[str] = true;
 	return str;
 };
 
@@ -161,16 +162,12 @@ Store.prototype.changes = function() {
 	var add = [];
 	var update = [];
 
+	var ids = this.ids;
+
 	var block;
 	for (var id in unsaved.blocks) {
 		block = unsaved.blocks[id];
-		if (block.deleted) {
-			console.warn("pagecut deleted this block", block);
-		}
-		if (block.added) {
-			delete block.added;
-			initial.blocks[id] = block;
-		} else if (!initial.blocks[id]) {
+		if (ids[id]) {
 			add.push(block);
 		}
 		if (block.orphan && !block.standalone) {
@@ -178,16 +175,16 @@ Store.prototype.changes = function() {
 		}
 	}
 
-	this.children.forEach(function(id) {
-		var block = unsaved.blocks[id];
-		if (!block || !initial.blocks[id]) {
+	for (var id in initial.blocks) {
+		block = unsaved.blocks[id];
+		if (!block) {
 			remove.push({id: id});
 		} else {
 			if (!this.editor.utils.equal(initial.blocks[id], block)) {
 				update.push(block);
 			}
 		}
-	}, this);
+	}
 
 	return {
 		page: this.pageId,
