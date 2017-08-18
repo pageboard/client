@@ -70,7 +70,7 @@ function pageUpdate(page) {
 
 function editorUpdate(editor, state, focusParents, focusSelection) {
 	if (!focusParents || !focusSelection) {
-		console.info("editor is updated only from focus changes");
+		// editor is updated only from focus changes
 		return;
 	}
 	var parents = [];
