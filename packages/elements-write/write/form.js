@@ -76,13 +76,15 @@ Form.prototype.change = function() {
 	editor.blocks.set(this.block);
 
 	var id = this.block.id;
+	var found = false;
 	if (id == editor.state.doc.attrs.block_id) {
+		found = true;
 		editor.pageUpdate(this.block);
 	}
 
 	var nodes = editor.blocks.domQuery(id, {all: true});
 
-	if (nodes.length == 0) {
+	if (nodes.length == 0 && !found) {
 		console.warn("No block nodes found for id", id);
 		this.clear();
 		return;
