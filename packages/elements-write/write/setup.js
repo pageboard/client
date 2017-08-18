@@ -5,56 +5,95 @@ Pageboard.setup = function(state) {
 	var iframe = Pageboard.read = document.createElement('iframe');
 	parentRead.appendChild(iframe);
 	Pageboard.write = document.getElementById('pageboard-write');
+	Ps.initialize(Pageboard.write);
 
 	// setup "read" iframe in develop mode
 	var loc = Page.parse(); // get a copy of state
 	loc.query.develop = null;
 	delete loc.query.write;
 
-	// iframe.contentWindow will be cleared somewhere after setting iframe.src,
-	// so one cannot setup a listener event just after
-	iframe.onload = function() {
-		// NOTE that if read.html does not load window-page.js, this won't work at all
-		iframe.contentWindow.addEventListener('pageroute', routeListener);
-		iframe.contentWindow.addEventListener('pagebuild', buildListener);
-		iframe.contentWindow.addEventListener('pagesetup', setupListener);
-	};
+	iframe.addEventListener('load', function(e) {
+		iframe.contentWindow.addEventListener('pagebuild', function() {
+			buildListener(iframe.contentWindow);
+		});
+		if (iframe.contentWindow.Page.stage() >= 2) {
+			buildListener(iframe.contentWindow);
+		}
+	});
 	iframe.src = Page.format(loc);
 };
 
-function routeListener(e) {
-	Pageboard.window = this;
-	this.removeEventListener('pageroute', routeListener);
-
-	e.state.document.head.insertAdjacentHTML('beforeEnd', `
-	<script src="/.pageboard/pagecut/editor.js"></script>
-	`);
+var lastClicked;
+var lastClickedOnce;
+function anchorListener(e) {
+	var clicked = e.target.closest('a,button[type="submit"]');
+	if (clicked) {
+		if (clicked == lastClicked) {
+			if (!lastClickedOnce) {
+				lastClickedOnce = true;
+				e.preventDefault();
+				Pageboard.notify(
+					"Click again to " + (clicked.matches('a') ? 'open link' : 'submit form'),
+					{timeout: 2}
+				);
+			} else {
+				lastClicked = null;
+				if (Pageboard.window.Page.sameDomain(Pageboard.window.Page.state, clicked.href)) {
+					e.preventDefault();
+					Pageboard.window.Page.push(Pageboard.window.Page.parse(clicked.href));
+				} else {
+					clicked.target = "_blank";
+				}
+			}
+		} else {
+			e.preventDefault();
+			lastClickedOnce = false;
+		}
+	}
+	lastClicked = clicked;
 }
 
-function buildListener(e) {
-	Pageboard.view = this.Pageboard.view;
-	this.removeEventListener('pagebuild', buildListener);
-	this.document.head.insertAdjacentHTML('beforeEnd', `
+function unloadListener(e) {
+	console.log("unload listener called");
+	if (Pageboard.editor.controls.store.unsaved) {
+		Pageboard.notify("Modifications saved locally.<br>Navigate back to save or discard.", {timeout: 2});
+	}
+}
+
+function buildListener(win) {
+	Pageboard.window = win;
+	Pageboard.view = win.Pageboard.view;
+
+	var node = win.document.createElement('script');
+	node.onload = function() {
+		node.remove();
+		setupListener(win);
+	};
+	node.src = '/.pageboard/pagecut/editor.js';
+	win.document.head.appendChild(node);
+
+	win.document.head.insertAdjacentHTML('beforeEnd', `
 	<link rel="stylesheet" href="/.pageboard/write/read.css" />
 	`);
 }
 
-function setupListener(e) {
-	var win = this;
-	var state = e.state;
-	var editor = Pageboard.editor = editorSetup(win, Pageboard.view);
-
-	Pageboard.write.removeAttribute('hidden');
-
-	// Perfect Scrollbar
-	Ps.initialize(Pageboard.write);
+function setupListener(win) {
+	win.addEventListener('click', anchorListener);
+	win.addEventListener('beforeunload', unloadListener);
 
 	Page.patch(function() {
-		var unsaved = editor.controls.store && editor.controls.store.unsaved;
+		var ed = Pageboard.editor;
+		var unsaved = ed && ed.controls.store.unsaved;
 		document.title = win.document.title + (unsaved ? '*' : '');
 	});
 
-	Page.replace(Page.state);
+	var state = win.Page.parse();
+	delete state.query.develop;
+	state.query.write = null;
+
+	Page.replace(state).then(function() {
+		Pageboard.editor = editorSetup(win, win.Pageboard.view);
+	});
 }
 
 function pageUpdate(page) {
