@@ -16,6 +16,15 @@ Pageboard.elements.sitemap = {
 	mount: function(block, view) {
 		return GET('/.api/pages').then(function(pages) {
 			if (!block.content.map) block.content.map = view.doc.createDocumentFragment();
+			var pagesMap = {};
+			var child;
+			var children = block.content.map.children;
+			for (var i=0; i < children.length; i++) {
+				child = children[i];
+				if (child.getAttribute('block-type') == "sitepage") {
+					pagesMap[child.getAttribute('block-id')] = child;
+				}
+			}
 			pages.forEach(function(page) {
 				var storedPage = view.blocks.get(page.id);
 				if (storedPage) {
@@ -24,11 +33,19 @@ Pageboard.elements.sitemap = {
 				} else {
 					view.blocks.set(page);
 				}
-				var place = block.content.map.querySelector(`[block-id="${page.id}"]`);
 				var dom = view.render(page, 'sitepage');
-				if (place) place.parentNode.replaceChild(dom, place);
-				else block.content.map.appendChild(dom);
+				var pdom = pagesMap[page.id];
+				if (pdom) {
+					pdom.parentNode.replaceChild(dom, pdom);
+					delete pagesMap[page.id];
+				} else {
+					block.content.map.appendChild(dom);
+				}
 			});
+			for (var id in pagesMap) {
+				child = pagesMap[id];
+				child.parentNode.removeChild(child);
+			}
 		});
 	},
 	stylesheets: [
