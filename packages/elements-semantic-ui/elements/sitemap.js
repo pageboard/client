@@ -55,10 +55,13 @@ Pageboard.elements.sitepage = {
 			pattern: "(\/[a-zA-Z0-9-.]*)+"
 		}
 	},
-	unmount: function(copy) {
-		copy.standalone = true; // a page is always standalone
-		copy.orphan = true; // avoid relating to this page
-		copy.type = 'page'; // sitepage -> page
+	unmount: function(block) {
+		block.standalone = true; // a page is always standalone
+		block.orphan = true; // avoid relating to this page
+		block.type = 'page'; // sitepage -> page
+	},
+	mount: function(block) {
+		block.type = 'page';
 	},
 	icon: '<i class="icon file outline"></i>',
 	render: function(doc, block) {
