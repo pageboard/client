@@ -32,7 +32,6 @@ Pageboard.elements.page = {
 	<meta http-equiv="Location" content="${block.data.redirect}">`);
 		}
 		doc.body.setAttribute('block-content', "body");
-		// title
 		var title = doc.head.querySelector('title');
 		if (!title) {
 			title = doc.createElement('title');
