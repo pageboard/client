@@ -84,8 +84,8 @@ Form.prototype.change = function() {
 
 	var nodes = editor.blocks.domQuery(id, {all: true});
 
-	if (nodes.length == 0 && !found) {
-		console.warn("No block nodes found for id", id);
+	if (nodes.length == 0) {
+		if (!found) console.warn("No dom nodes found for this block", this.block);
 		this.clear();
 		return;
 	}
