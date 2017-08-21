@@ -42,22 +42,28 @@ Menu.prototype.item = function(el) {
 		element: el,
 		onDeselected: 'disable',
 		run: function(state, dispatch, view) {
-			var block = editor.blocks.create(el.name);
-			if (typeof el.contents == "string") {
-				// dirty trick to make "from" not generate an id for that block
-				block.id = null;
-			}
-			editor.blocks.from(block).then(function(fragment) {
-				var tr = state.tr;
-				var sel = editor.utils.selectTr(tr, self.selection, true);
-
-				if (el.inline && editor.utils.markActive(state, nodeType)) {
-					tr.removeMark(sel.from, sel.to, nodeType);
+			var tr = state.tr;
+			var sel = tr.selection;
+			if (el.inline) {
+				editor.utils.toggleMark(nodeType)(state, function(tr) {
+					tr.setMeta('editor', true);
 					dispatch(tr);
-				} else if (editor.utils.insertTr(tr, fragment, sel)) {
-					dispatch(tr);
+				});
+			} else {
+				var block = editor.blocks.create(el.name);
+				if (typeof el.contents == "string") {
+					// dirty trick to make "from" not generate an id for that block
+					block.id = null;
 				}
-			});
+
+				editor.blocks.from(block).then(function(fragment) {
+					sel = editor.utils.selectTr(tr, self.selection, true);
+					if (editor.utils.insertTr(tr, fragment, sel)) {
+						tr.setMeta('editor', true);
+						dispatch(tr);
+					}
+				});
+			}
 		},
 		select: function(state) {
 			if (el.inline) {
