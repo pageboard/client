@@ -5,7 +5,6 @@ Pageboard.Controls.Form = Form;
 function Form(editor, selector) {
 	this.editor = editor;
 	this.$node = $(selector);
-	this.template = this.$node.html();
 	this.clear();
 	this.$node.on('change input', Throttle(this.change.bind(this), 50));
 }
