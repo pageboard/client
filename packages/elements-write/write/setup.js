@@ -103,9 +103,12 @@ function pageUpdate(page) {
 		pathname: page.data.url,
 		query: Page.state.query
 	}).then(function() {
-		editorUpdate(editor);
+		editorUpdate(editor, editor.state, lastFocusParents, lastFocusSelection);
 	});
 }
+
+var lastFocusParents;
+var lastFocusSelection;
 
 function editorUpdate(editor, state, focusParents, focusSelection) {
 	if (!focusParents || !focusSelection) {
@@ -152,8 +155,6 @@ function editorSetup(win, view) {
 	var content = win.document.body.cloneNode(true);
 
 	// and the editor must be running from child
-	var lastFocusParents;
-	var lastFocusSelection;
 	var editor = new Editor({
 		topNode: 'page',
 		elements: view.elementsMap,
