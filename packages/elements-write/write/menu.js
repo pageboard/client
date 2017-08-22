@@ -4,30 +4,30 @@ Pageboard.Controls.Menu = Menu;
 
 function Menu(editor, selector) {
 	this.editor = editor;
+	this.node = document.querySelector(selector);
+	this.blocks = this.node.dom`<div id="menu" class="ui mini labeled icon menu"></div>`;
+	this.inlines = this.node.dom`<div id="menu" class="ui mini icon menu"></div>`;
+	this.node.appendChild(this.blocks);
+	this.node.appendChild(this.inlines);
 	this.menu = new Pagecut.Menubar({
-		place: document.querySelector(selector),
 		items: this.items()
 	});
-	this.update();
 }
 
 Menu.prototype.update = function(parents, sel) {
+	if (!sel || !parents) return;
 	// because updates are done by the editor
-	this.selection = sel || this.editor.state.tr.selection;
-	var frag = document.createDocumentFragment();
-	var content = this.menu.items;
-	for (var i = 0; i < content.length; i++) {
-		var items = content[i];
-		for (var j = 0; j < items.length; j++) {
-			var rendered = renderItem.call(items[j], this.editor);
-			if (rendered) frag.appendChild(rendered);
-		}
-	}
-	this.menu.place.textContent = ""
-	this.menu.place.appendChild(document.adoptNode(frag));
-	if (!this.menu.place.querySelector('.item:not(.disabled)')) {
-		this.menu.place.appendChild(document.dom`<a class="item">Text only content</a>`);
-	}
+	this.selection = sel;
+	this.parents = parents;
+	this.blocks.textContent = "";
+	this.inlines.textContent = "";
+	this.menu.items.forEach(function(item) {
+		var dom = renderItem(item, this.editor);
+		if (!dom) return;
+		if (item.spec.element.inline) this.inlines.appendChild(dom);
+		else this.blocks.appendChild(dom);
+	}, this);
+
 };
 
 Menu.prototype.item = function(el) {
@@ -40,7 +40,6 @@ Menu.prototype.item = function(el) {
 
 	var item = {
 		element: el,
-		onDeselected: 'disable',
 		run: function(state, dispatch, view) {
 			var tr = state.tr;
 			var sel = tr.selection;
@@ -67,16 +66,14 @@ Menu.prototype.item = function(el) {
 		},
 		select: function(state) {
 			if (el.inline) {
-				return editor.utils.canMark(self.selection, nodeType);
+				return !self.selection.node && editor.utils.canMark(self.selection, nodeType);
 			} else {
-				return editor.utils.canInsert(self.selection, nodeType);
+				return editor.utils.canInsert(self.selection.$from, nodeType);
 			}
 		},
 		active: function(state) {
-			if (!el.inline) {
-				var parents = editor.utils.selectionParents(state.tr);
-				if (!parents.length) return false;
-				var parent = parents[0];
+			if (!el.inline && self.parents.length) {
+				var parent = self.parents[0];
 				return parent.root && parent.root.node && parent.root.node.type.name == el.name;
 			} else {
 				return editor.utils.markActive(self.selection, nodeType);
@@ -87,9 +84,9 @@ Menu.prototype.item = function(el) {
 };
 
 
-function renderItem(view) {
+function renderItem(item, view) {
 	var disabled = false;
-	var spec = this.spec;
+	var spec = item.spec;
 	if (spec.select && !spec.select(view.state)) {
 		if (spec.onDeselected == "disable") {
 			disabled = true;
@@ -114,7 +111,9 @@ function renderItem(view) {
 			dom.insertAdjacentHTML('afterbegin', `<img class="icon" src="${icon}" />`);
 		}
 	}
-	dom.appendChild(document.createTextNode('\n' + translate(view, spec.element.title)));
+	if (!spec.element.inline) {
+		dom.appendChild(document.createTextNode('\n' + translate(view, spec.element.title)));
+	}
 	if (active) {
 		dom.classList.add("active");
 	}
@@ -133,52 +132,15 @@ function renderItem(view) {
 }
 
 Menu.prototype.items = function() {
-	var singles = [];
-	var dropdowns = [];
-	var items = [singles];
-	var menuGroups = {};
-	var groups = [{
-		id: 'layout',
-		title: 'Layout'
-	}];
-	var group, item;
-
-	// initialize menuGroups cache
-	for (var i = 0; i < groups.length; i++) {
-		group = groups[i];
-		menuGroups[group.id] = group;
-	}
-
-
+	var list = [];
 	for (var i=0; i < this.editor.elements.length; i++) {
 		var el = this.editor.elements[i];
 		var itemSpec = this.item(el);
 		if (!itemSpec) continue;
 		item = new Pagecut.Menubar.Menu.MenuItem(itemSpec);
-		if (el.menu) {
-			group = menuGroups[el.menu];
-			if (!group) {
-				// in case of unknown groups
-				group = menuGroups[el.menu] = {title: el.menu};
-				groups.push(group);
-			}
-			if (!group.items) group.items = [];
-			group.items.push(item);
-		} else if (el.icon) {
-			singles.push(item);
-		}
+		list.push(item);
 	}
-
-	for (var i=0; i < groups.length; i++) {
-		group = groups[i];
-		items.push(group.items);
-		// dropdowns.push(new Pagecut.menubar.menu.dropdown(group.items, {
-		// 	label: group.title,
-		// 	title: group.title
-		// }));
-	}
-
-	return items;
+	return list;
 };
 
 function translate(view, text) {

@@ -1,13 +1,12 @@
-#menu:empty {
+#menu > .menu:empty {
 	display:none;
 }
 
 #menu {
-	border:1px solid gray;
 	margin:1em 0;
 }
 
-#menu {
+#menu > .menu {
 	flex-wrap:wrap;
 }
 #menu .item > img:not(.ui) {
