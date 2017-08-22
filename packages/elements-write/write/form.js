@@ -42,7 +42,9 @@ Form.prototype.update = function(parents) {
 		return;
 	}
 
-	if (this.block && this.block.id != block.id) this.clear();
+	if (this.type != info.type) this.clear();
+
+	this.type = info.type;
 
 	var node = this.$node[0];
 
