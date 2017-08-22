@@ -64,6 +64,6 @@ Pageboard.elements.notfound = Object.assign({}, Pageboard.elements.page, {
 	render: function(doc, block) {
 		doc.head.appendChild(doc.dom`<meta http-equiv="Status" content="404 Not Found">`);
 		return Pageboard.elements.page.render(doc, block);
-	},
+	}
 });
 
