@@ -7,7 +7,6 @@ Pageboard.elements.header = {
 			title: 'content'
 		}
 	},
-	menu: 'layout',
 	render: function(doc, block) {
 		return doc.dom`<div class="ui header" block-content="content"></div>`;
 	},

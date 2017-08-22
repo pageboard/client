@@ -12,7 +12,6 @@ Pageboard.elements.grid = {
 			title: 'columns'
 		}
 	},
-	menu: 'layout',
 	icon: '<i class="icon grid layout"></i>',
 	render: function(doc, block) {
 		return doc.dom`<div>
@@ -45,7 +44,6 @@ Pageboard.elements.grid_column = {
 			title: 'content'
 		}
 	},
-	menu: 'layout',
 	icon: '<i class="icon columns"></i>',
 	render: function(doc, block) {
 		var prefix = '';

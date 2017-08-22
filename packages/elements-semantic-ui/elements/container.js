@@ -7,7 +7,6 @@ Pageboard.elements.container = {
 			title: 'content'
 		}
 	},
-	menu: 'layout',
 	icon: '<i class="icon resize horizontal"></i>',
 	render: function(doc, block) {
 		return doc.dom`<div class="ui container" block-content="content"></div>`;
@@ -26,7 +25,6 @@ Pageboard.elements.maximize = {
 			title: 'content'
 		}
 	},
-	menu: 'layout',
 	group: 'block',
 	icon: '<i class="icon resize vertical"></i>',
 	render: function(doc, block) {

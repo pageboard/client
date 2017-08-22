@@ -8,7 +8,6 @@ Pageboard.elements.shutter = {
 			title: 'Tabs'
 		}
 	},
-	menu: 'layout',
 	icon: '<b class="icon">Shu</b>',
 	render: function(doc, block) {
 		return doc.dom`<div
@@ -49,7 +48,6 @@ Pageboard.elements.shutter_item = {
 			title: "content"
 		}
 	},
-	menu: 'layout',
 	icon: '<b class="icon">Tab</b>',
 	render: function(doc, block) {
 		var invert = block.data.invert == "normal" ? "" : "invert";
