@@ -61,8 +61,12 @@ Form.prototype.update = function(parents) {
 	if (el.properties) Object.keys(el.properties).forEach(function(key) {
 		// TODO make this pluggable from the element definition
 		if (el.properties[key].format == "uri") {
-			if (!this.href) this.href = new Pageboard.Href(node.querySelector(`[name="${key}"]`));
-			else this.href.change();
+			if (!this.href) {
+				var input = node.querySelector(`[name="${key}"]`);
+				this.href = new Pageboard.Href(input);
+			} else {
+				this.href.change();
+			}
 		}
 	}.bind(this));
 
