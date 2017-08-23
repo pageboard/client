@@ -159,7 +159,6 @@ Store.prototype.pageUpdate = function() {
 Store.prototype.changes = function() {
 	var initial = this.initial;
 	var unsaved = this.unsaved;
-	var remove = [];
 	var add = [];
 	var update = [];
 
@@ -176,16 +175,26 @@ Store.prototype.changes = function() {
 		}
 	}
 
+	var removals = {};
 	for (var id in initial.blocks) {
 		block = unsaved.blocks[id];
 		if (!block) {
-			remove.push({id: id});
+			removals[id] = true;
 		} else {
 			if (!this.editor.utils.equal(initial.blocks[id], block)) {
 				update.push(block);
 			}
 		}
 	}
+
+	// fail-safe: compare to initial children list
+	var kids = this.editor.blocks.store;
+	for (var id in kids) {
+		if (!unsaved.blocks[id]) removals[id] = true;
+	}
+	var remove = Object.keys(removals).map(function(id) {
+		return {id: id};
+	});
 
 	return {
 		page: this.pageId,
