@@ -27,10 +27,12 @@ Breadcrumb.prototype.update = function(parents) {
 		var contentKeys = Object.keys(contents);
 		if (contentName && contentKeys.length == 1) {
 			contentSpec = contents[contentKeys[0]];
-			this.$node.append(document.dom`<div class="ui inline dropdown">
-				<div class="text">${contentSpec.title}</div>
-			</div>`);
-		} else if (contentKeys.length) {
+			if (typeof contentSpec != "string" && contentSpec.title) {
+				this.$node.append(document.dom`<div class="ui inline dropdown">
+					<div class="text">${contentSpec.title}</div>
+				</div>`);
+			}
+		} else if (contentKeys.length > 1) {
 			var select = document.dom`<div class="ui inline dropdown">
 				<div class="text">${contentSpec.title || ''}</div>
 				<i class="dropdown icon"></i>
