@@ -23,7 +23,9 @@ Pageboard.elements.link = {
 			}]
 		}
 	},
-	contents: "text*",
+	contents: {
+		text: "text*"
+	},
 	inline: true,
 	group: "inline",
 	icon: '<i class="icon linkify"></i>',
