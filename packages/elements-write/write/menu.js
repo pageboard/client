@@ -43,18 +43,19 @@ Menu.prototype.item = function(el) {
 		run: function(state, dispatch, view) {
 			var tr = state.tr;
 			var sel = tr.selection;
+			var block = editor.blocks.create(el.name);
+			if (!el.inplace) {
+				block.id = editor.blocks.genId();
+				editor.blocks.set(block);
+			}
 			if (el.inline) {
-				editor.utils.toggleMark(nodeType)(state, function(tr) {
+				var wasActive = editor.utils.markActive(self.selection, nodeType);
+				editor.utils.toggleMark(nodeType, editor.utils.blockToAttr(block))(state, function(tr) {
 					tr.setMeta('editor', true);
+					if (wasActive) tr.removeStoredMark(nodeType);
 					dispatch(tr);
 				});
 			} else {
-				var block = editor.blocks.create(el.name);
-				if (typeof el.contents == "string") {
-					// dirty trick to make "from" not generate an id for that block
-					block.id = null;
-				}
-
 				editor.blocks.from(block).then(function(fragment) {
 					sel = editor.utils.selectTr(tr, self.selection, true);
 					if (editor.utils.insertTr(tr, fragment, sel)) {
