@@ -188,7 +188,7 @@ function editorSetup(win, view) {
 	editor.blocks = view.blocks;
 	editor.blocks.view = editor;
 	editor.blocks.genId = function() {
-		throw new Error("Transient genId called before store.genId is setup");
+		console.error("Transient genId called before store.genId is setup");
 	};
 	editor.utils.setDom(content);
 
