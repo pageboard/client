@@ -57,10 +57,14 @@ Menu.prototype.item = function(el) {
 				});
 			} else {
 				editor.blocks.from(block).then(function(fragment) {
-					sel = editor.utils.selectTr(tr, self.selection, true);
-					if (editor.utils.insertTr(tr, fragment, sel)) {
-						tr.setMeta('editor', true);
+					if (sel.node && !sel.empty) {
+						tr.setSelection(editor.utils.selectTr(tr, sel.from, true));
+					}
+					var pos = editor.utils.insertTr(tr, fragment);
+					if (pos != null) {
 						dispatch(tr);
+						sel = editor.utils.selectTr(tr, pos);
+						if (sel) dispatch(view.state.tr.setSelection(sel));
 					}
 				});
 			}
