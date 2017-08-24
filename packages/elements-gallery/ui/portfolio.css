@@ -1,0 +1,21 @@
+element-portfolio {
+	display:block; /* mandatory for custom elements */
+	position:relative;
+}
+element-portfolio > .sizer,
+element-portfolio.four.wide > .sizer {
+	width:25%;
+}
+element-portfolio.three.wide > .sizer {
+	width:33.33%;
+}
+element-portfolio.two.wide > .sizer {
+	width:50%;
+}
+element-portfolio.five.wide > .sizer {
+	width:20%;
+}
+@media screen and (min-width: 768px) {
+	/* TODO */
+}
+
