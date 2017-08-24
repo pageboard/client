@@ -2,19 +2,37 @@ element-portfolio {
 	display:block; /* mandatory for custom elements */
 	position:relative;
 }
-element-portfolio > .sizer,
-element-portfolio.four.wide > .sizer {
+element-portfolio {
+	border:1px solid gray;
+	border-radius:5px;
+	min-height:4em;
+}
+element-portfolio > .item {
+	height:100px;
+	border:1px solid #DDF;
+}
+element-portfolio.four.wide > .item {
 	width:25%;
 }
-element-portfolio.three.wide > .sizer {
+element-portfolio.three.wide > .item {
 	width:33.33%;
 }
-element-portfolio.two.wide > .sizer {
+element-portfolio.two.wide > .item {
 	width:50%;
 }
-element-portfolio.five.wide > .sizer {
+element-portfolio.five.wide > .item {
 	width:20%;
 }
+element-portfolio.one.wide > .item {
+	width:100%;
+}
+element-portfolio > .item.one-one {
+	height:100px;
+}
+element-portfolio > .item.one-two {
+	height:200px;
+}
+
 @media screen and (min-width: 768px) {
 	/* TODO */
 }

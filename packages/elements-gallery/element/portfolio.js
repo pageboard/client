@@ -12,7 +12,7 @@ Pageboard.elements.portfolio = {
 	},
 	contents: {
 		items: {
-			spec: "portfolio_sizer portfolio_item*",
+			spec: "portfolio_item*",
 			title: 'items'
 		}
 	},
@@ -62,12 +62,7 @@ Pageboard.elements.portfolio_item = {
 	},
 	icon: '<b class="icon">Cell</b>',
 	render: function(doc, block) {
-		return doc.dom`<div block-content="cell" class="item"></div>`;
+		return doc.dom`<div block-content="cell" class="item ${block.data.ratio}"></div>`;
 	}
 };
 
-Pageboard.elements.portfolio_sizer = {
-	render: function(doc, block) {
-		return doc.dom`<div class="sizer"></div>`;
-	}
-};

@@ -3,7 +3,7 @@ class HTMLElementPortfolio extends HTMLElement {
 		super();
 		this._options = {
 			masonry: {
-				columnWidth: '.sizer'
+				columnWidth: '.item'
 			},
 			itemSelector: '.item',
 			percentPosition: true
