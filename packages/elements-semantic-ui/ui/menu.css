@@ -1,0 +1,7 @@
+.ui.dropdown[block-focused] > .menu {
+	overflow: visible;
+	width: auto;
+	height: auto;
+	top: 100% !important;
+	opacity: 1;
+}
