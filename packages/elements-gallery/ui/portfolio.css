@@ -48,6 +48,9 @@ element-portfolio.gutter > .item.high > .image > img {
 	element-portfolio.gutter > .item.large {
 		width:calc(66.66% - 10px);
 	}
+	element-portfolio.gutter > .item.high.large {
+		width:calc(66.66% - 6px);
+	}
 }
 
 element-portfolio > .item > .image {
