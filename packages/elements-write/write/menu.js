@@ -42,7 +42,7 @@ Menu.prototype.item = function(el) {
 		element: el,
 		run: function(state, dispatch, view) {
 			var tr = state.tr;
-			var sel = tr.selection;
+			var sel = self.selection;
 			var block = editor.blocks.create(el.name);
 			if (!el.inplace) {
 				block.id = editor.blocks.genId();
@@ -58,9 +58,10 @@ Menu.prototype.item = function(el) {
 			} else {
 				editor.blocks.from(block).then(function(fragment) {
 					if (sel.node && !sel.empty) {
-						tr.setSelection(editor.utils.selectTr(tr, sel.from, true));
+						sel = editor.utils.selectTr(tr, sel.from, true);
+						tr.setSelection(sel);
 					}
-					var pos = editor.utils.insertTr(tr, fragment);
+					var pos = editor.utils.insertTr(tr, fragment, sel);
 					if (pos != null) {
 						dispatch(tr);
 						sel = editor.utils.selectTr(tr, pos);
