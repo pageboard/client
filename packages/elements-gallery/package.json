@@ -18,11 +18,13 @@
   },
   "homepage": "https://github.com/pageboard/elements-portfolio#readme",
   "dependencies": {
+    "imagesloaded": "^4.1.3",
     "isotope-layout": "^3.0.4",
     "postinstall-links": "^0.2.0"
   },
   "links": {
-    "isotope-layout/dist/isotope.pkgd.js": "ui/isotope.js"
+    "isotope-layout/dist/isotope.pkgd.js": "ui/isotope.js",
+    "imagesloaded/imagesloaded.pkgd.js": "ui/imagesloaded.js"
   },
   "pageboard": {
     "directories": [

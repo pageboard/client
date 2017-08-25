@@ -27,6 +27,7 @@ Pageboard.elements.portfolio = {
 		'../ui/portfolio.css'
 	],
 	scripts: [
+		'../ui/imagesloaded.js',
 		'../ui/isotope.js',
 		'../ui/portfolio.js'
 	]
