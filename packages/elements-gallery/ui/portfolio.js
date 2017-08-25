@@ -16,18 +16,18 @@ class HTMLElementPortfolio extends HTMLElement {
 		}
 		this.configure();
 		this.portfolio = new Isotope(this, this._options);
-		this._imagesLoaded = new imagesLoaded(this);
-		this._imagesLoaded.on('progress', function() {
-			if (this.portfolio) this.portfolio.layout();
-		}.bind(this));
+		this.addEventListener('load', this._loadListener, true);
+	}
+
+	_loadListener() {
+		if (this.portfolio) this.portfolio.layout();
 	}
 
 	_teardown() {
 		if (this.portfolio) {
 			this.portfolio.destroy();
 			delete this.portfolio;
-			this._imagesLoaded.off('progress');
-			delete this._imagesLoaded;
+			this.removeEventListener('load', this._loadListener, true);
 		}
 	}
 
