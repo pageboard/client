@@ -51,7 +51,7 @@ Pageboard.elements.portfolio_item = {
 	},
 	contents: {
 		cell: {
-			spec: "inline+",
+			spec: "paragraph*",
 			title: "cell"
 		}
 	},
