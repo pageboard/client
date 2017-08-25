@@ -1,5 +1,12 @@
 Pageboard.elements.portfolio = {
 	title: "Portfolio",
+	properties: {
+		gutter: {
+			title: 'Gutter',
+			type: 'boolean',
+			default: false,
+		}
+	},
 	contents: {
 		items: {
 			spec: "portfolio_item+",
@@ -9,7 +16,7 @@ Pageboard.elements.portfolio = {
 	group: 'block',
 	icon: '<b class="icon">Por</b>',
 	render: function(doc, block, view) {
-		return doc.dom`<element-portfolio block-content="items"></element-portfolio>`;
+		return doc.dom`<element-portfolio block-content="items" class="${block.data.gutter ? 'gutter' : ''}"></element-portfolio>`;
 	},
 	stylesheets: [
 		'../ui/portfolio.css'

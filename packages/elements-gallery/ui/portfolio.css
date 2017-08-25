@@ -2,14 +2,7 @@ element-portfolio {
 	display:block; /* mandatory for custom elements */
 	position:relative;
 }
-element-portfolio {
-	border:1px solid gray;
-	border-radius:5px;
-/*	min-height:3em;*/
-}
 element-portfolio > .item {
-/*	min-height:3em;*/
-	border:1px solid #DDF;
 	position:relative;
 	overflow:hidden;
 }
@@ -20,12 +13,27 @@ element-portfolio > .item.large {
 	width:50%;
 }
 
+element-portfolio.gutter {
+	margin-right:-10px;
+	margin-bottom:-10px;
+}
+element-portfolio.gutter > .item {
+	width:calc(25% - 10px);
+	margin-bottom:10px;
+}
+
 @media screen and (max-width: 768px) {
 	element-portfolio > .item {
 		width:33.33%;
 	}
 	element-portfolio > .item.large {
 		width:66.66%;
+	}
+	element-portfolio.gutter > .item {
+		width:calc(33.33% - 10px);
+	}
+	element-portfolio.gutter > .item.large {
+		width:calc(66.66% - 10px);
 	}
 }
 
@@ -35,6 +43,12 @@ element-portfolio > .item.large {
 	}
 	element-portfolio > .item.large {
 		width:40%;
+	}
+	element-portfolio.gutter > .item {
+		width:calc(20% - 10px);
+	}
+	element-portfolio.gutter > .item.large {
+		width:calc(40% - 10px);
 	}
 }
 

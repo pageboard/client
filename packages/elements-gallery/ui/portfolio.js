@@ -3,7 +3,8 @@ class HTMLElementPortfolio extends HTMLElement {
 		super();
 		this._options = {
 			masonry: {
-				columnWidth: '.item'
+				columnWidth: '.item',
+				gutter: '.item'
 			},
 			itemSelector: '.item',
 			percentPosition: true
@@ -40,11 +41,18 @@ class HTMLElementPortfolio extends HTMLElement {
 	}
 
 	configure() {
-
+		var prev = this._options.masonry.gutter;
+		if (this.matches('.gutter')) {
+			var mb = window.getComputedStyle(this.querySelector('.item')).marginBottom;
+			this._options.masonry.gutter = parseInt(mb);
+		} else {
+			delete this._options.masonry.gutter;
+		}
+		return prev != this._options.masonry.gutter;
 	}
 
 	update() {
-		this._setup();
+		if (this.configure()) this._setup();
 	}
 }
 
