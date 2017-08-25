@@ -21,6 +21,12 @@ Pageboard.elements.link = {
 				constant: "_self",
 				title: "same window"
 			}]
+		},
+		button: {
+			title: 'Button',
+			description: 'Show link as button',
+			type: 'boolean',
+			default: false
 		}
 	},
 	contents: {
@@ -30,7 +36,9 @@ Pageboard.elements.link = {
 	group: "inline",
 	icon: '<i class="icon linkify"></i>',
 	render: function(doc, block) {
-		return doc.dom`<a href="${block.data.url}" target="${block.data.target}"></a>`;
-	}
+		var a = doc.dom`<a href="${block.data.url}" target="${block.data.target}"></a>`;
+		if (block.data.button) a.className = 'ui button';
+	},
+	stylesheets: ['/.pageboard/semantic-ui/components/button.css']
 };
 
