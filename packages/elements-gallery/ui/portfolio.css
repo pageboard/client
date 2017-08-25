@@ -38,7 +38,9 @@ element-portfolio > .item.large {
 	}
 }
 
-
+element-portfolio > .item > .image {
+	min-height:1em;
+}
 element-portfolio > .item > .image > img {
 	width:100%;
 	max-height:auto;
