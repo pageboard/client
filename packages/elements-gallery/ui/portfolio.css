@@ -24,7 +24,15 @@ element-portfolio.gutter > .item {
 	width:calc(25% - 10px);
 }
 element-portfolio.gutter > .item.large {
-	width:calc(50% - 10px);
+	width:calc(50% - 10px); /* mind the gap, see just below */
+}
+element-portfolio.gutter > .item.large > .image > img {
+	margin-top:-2px;
+	margin-bottom:-3px;
+}
+element-portfolio.gutter > .item.high > .image > img {
+	margin-top:0;
+	margin-bottom:0;
 }
 
 @media screen and (max-width: 768px) {

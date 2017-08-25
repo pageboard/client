@@ -70,6 +70,7 @@ Pageboard.elements.portfolio_item = {
 		}
 		ratio = ratio.split(':');
 		var large = ratio[0] == 2;
+		var high = ratio[1] == 2;
 		var url = block.data.url;
 		var img = "";
 		if (url) {
@@ -86,7 +87,7 @@ Pageboard.elements.portfolio_item = {
 				${url}${sep}rs=w:${2*w}%2Ch:${2*h}%2Cenlarge 640w,
 				${url}${sep}rs=w:${3*w}%2Ch:${3*h}%2Cenlarge 1280w" />`;
 		}
-		return doc.dom`<div class="item ${large ? 'large' : ''}">
+		return doc.dom`<div class="item ${large ? 'large' : ''} ${high ? 'high' : ''}">
 			<div class="image">${img}</div>
 			<div block-content="cell"></div>
 		</div>`;
