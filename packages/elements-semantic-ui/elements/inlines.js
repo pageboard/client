@@ -1,6 +1,5 @@
 Pageboard.elements.strong = {
 	title: "Strong",
-	properties: {},
 	contents: "text*",
 	inplace: true,
 	inline: true,
@@ -13,7 +12,6 @@ Pageboard.elements.strong = {
 
 Pageboard.elements.em = {
 	title: "Emphasize",
-	properties: {},
 	contents: "text*",
 	inline: true,
 	inplace: true,

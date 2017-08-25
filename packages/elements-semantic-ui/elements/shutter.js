@@ -1,6 +1,5 @@
 Pageboard.elements.shutter = {
 	title: "Shutter",
-	properties: {},
 	group: "block",
 	contents: {
 		tabs: {

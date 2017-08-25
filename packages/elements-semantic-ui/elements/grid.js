@@ -1,6 +1,5 @@
 Pageboard.elements.grid = {
 	title: "Grid",
-	properties: {},
 	group: "block",
 	contents: {
 		header: {

@@ -8,7 +8,6 @@ Pageboard.elements.image = {
 			format: "uri"
 		}
 	},
-	contents: {},
 	group: "block",
 	icon: '<i class="icon image"></i>',
 	render: function(doc, block) {

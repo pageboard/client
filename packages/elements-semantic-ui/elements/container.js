@@ -1,6 +1,5 @@
 Pageboard.elements.container = {
 	title: "Container",
-	properties: {},
 	contents: {
 		content: {
 			spec: "block+",
@@ -18,7 +17,6 @@ Pageboard.elements.container = {
 
 Pageboard.elements.maximize = {
 	title: "Maximize",
-	properties: {},
 	contents: {
 		content: {
 			spec: "block+",

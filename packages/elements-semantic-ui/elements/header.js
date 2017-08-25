@@ -1,6 +1,5 @@
 Pageboard.elements.header = {
 	title: "Header",
-	properties: {},
 	contents: {
 		content: {
 			spec: "block+",

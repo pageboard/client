@@ -1,7 +1,5 @@
 Pageboard.elements.sitemap = {
 	title: "Site map",
-	properties: {
-	},
 	contents: {
 		map: {
 			spec: "sitepage*",
