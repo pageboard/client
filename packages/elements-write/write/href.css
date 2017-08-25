@@ -77,7 +77,6 @@
 	display:none;
 }
 
-#pageboard-write.href .field:not(.href),
 .field.href input:not(.search) {
 	display:none !important;
 }
