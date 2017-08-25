@@ -52,7 +52,7 @@ class HTMLElementPortfolio extends HTMLElement {
 	}
 
 	update() {
-		if (this.configure()) this._setup();
+		this._setup();
 	}
 }
 
