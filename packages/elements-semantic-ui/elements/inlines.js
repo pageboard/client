@@ -21,3 +21,15 @@ Pageboard.elements.em = {
 		return doc.dom`<em></em>`;
 	}
 };
+
+Pageboard.elements.light = {
+	title: "Light",
+	contents: "text*",
+	inline: true,
+	inplace: true,
+	group: "inline",
+	icon: '<i class="icon" style="font-weight:lighter">L</i>',
+	render: function(doc, block) {
+		return doc.dom`<span class="lighter"></span>`;
+	}
+};
