@@ -50,21 +50,6 @@ element-portfolio.gutter > .item.high > .image > img {
 	}
 }
 
-@media screen and (min-width: 1024px) {
-	element-portfolio > .item {
-		width:20%;
-	}
-	element-portfolio > .item.large {
-		width:40%;
-	}
-	element-portfolio.gutter > .item {
-		width:calc(20% - 10px);
-	}
-	element-portfolio.gutter > .item.large {
-		width:calc(40% - 10px);
-	}
-}
-
 element-portfolio > .item > .image {
 	min-height:1em;
 }
