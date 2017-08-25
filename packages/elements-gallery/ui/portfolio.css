@@ -5,35 +5,67 @@ element-portfolio {
 element-portfolio {
 	border:1px solid gray;
 	border-radius:5px;
-	min-height:4em;
+/*	min-height:3em;*/
 }
 element-portfolio > .item {
-	height:100px;
+/*	min-height:3em;*/
 	border:1px solid #DDF;
+	position:relative;
+	overflow:hidden;
 }
-element-portfolio.four.wide > .item {
+element-portfolio > .item {
 	width:25%;
 }
-element-portfolio.three.wide > .item {
-	width:33.33%;
-}
-element-portfolio.two.wide > .item {
+element-portfolio > .item.large {
 	width:50%;
 }
-element-portfolio.five.wide > .item {
-	width:20%;
+
+@media screen and (max-width: 768px) {
+	element-portfolio > .item {
+		width:33.33%;
+	}
+	element-portfolio > .item.large {
+		width:66.66%;
+	}
 }
-element-portfolio.one.wide > .item {
+
+@media screen and (min-width: 1024px) {
+	element-portfolio > .item {
+		width:20%;
+	}
+	element-portfolio > .item.large {
+		width:40%;
+	}
+}
+
+
+element-portfolio > .item > .image > img {
 	width:100%;
-}
-element-portfolio > .item.one-one {
-	height:100px;
-}
-element-portfolio > .item.one-two {
-	height:200px;
+	max-height:auto;
+	margin:0 auto;
+	display:block;
 }
 
-@media screen and (min-width: 768px) {
-	/* TODO */
+element-portfolio > .item > [block-content="cell"] {
+	position:absolute;
+	top:0;
+	left:0;
+	width:100%;
+	height:100%;
+	overflow:hidden;
+	visibility:hidden;
+	background-color:rgba(0, 0, 0, 0.5);
+	color:white;
+}
+element-portfolio > .item > [block-content="cell"] {
+	background-color:rgba(0, 0, 0, 0.5);
+	color:white;
+	text-align:center;
+}
+element-portfolio > .item:hover > [block-content="cell"],
+element-portfolio > .item[block-focused] > [block-content="cell"] {
+	visibility:visible;
 }
 
+/* quand on définit un portfolio, on doit préciser la hauteur d'une row,
+et tout le reste en découle. */
