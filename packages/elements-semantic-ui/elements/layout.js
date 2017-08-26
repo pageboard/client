@@ -31,6 +31,12 @@ Pageboard.elements.layout = {
 				title: "bottom"
 			}]
 		},
+		fullwidth: {
+			title: 'full width',
+			description: 'Use 100% width',
+			default: true,
+			type: 'boolean'
+		},
 		fullheight: {
 			title: 'full height',
 			description: 'Use 100% height',

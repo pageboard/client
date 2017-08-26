@@ -22,7 +22,6 @@
 
 .fullheight {
 	height:100%;
-	position:relative;
 }
 .fullpage > [block-type] {
 	height:100%;
@@ -30,4 +29,6 @@
 	display:block;
 	margin:0 auto;
 }
-
+.fullwidth {
+	width:100%;
+}
