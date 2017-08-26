@@ -61,8 +61,8 @@ Pageboard.elements.layout = {
 		var d = doc.dom`<div class="layout" block-content="content"></div>`;
 		var data = block.data;
 		d.classList.add(
-			data.horizontal,
-			data.vertical,
+			data.horizontal || '',
+			data.vertical || '',
 			data.fullwidth ? 'fullwidth' : '',
 			data.fullheight ? 'fullheight' : '',
 			data.stack ? 'stack' : ''
