@@ -60,13 +60,12 @@ Pageboard.elements.layout = {
 	render: function(doc, block) {
 		var d = doc.dom`<div class="layout" block-content="content"></div>`;
 		var data = block.data;
-		d.classList.add(
-			data.horizontal || '',
-			data.vertical || '',
-			data.fullwidth ? 'fullwidth' : '',
-			data.fullheight ? 'fullheight' : '',
-			data.stack ? 'stack' : ''
-		);
+		var list = d.classList;
+		if (data.horizontal) list.add(data.horizontal);
+		if (data.vertical) list.add(data.vertical);
+		if (data.fullwidth) list.add('fullwidth');
+		if (data.fullheight) list.add('fullheight');
+		if (data.stack) list.add('stack');
 		return d;
 	},
 	stylesheets: [
