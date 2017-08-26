@@ -57,7 +57,7 @@ Pageboard.elements.portfolio_item = {
 	},
 	contents: {
 		cell: {
-			spec: "paragraph+",
+			spec: "layout",
 			title: "cell"
 		}
 	},
