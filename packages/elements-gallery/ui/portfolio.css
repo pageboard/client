@@ -84,5 +84,7 @@ element-portfolio > .item[block-focused] > [block-content="cell"] {
 	visibility:visible;
 }
 
-/* quand on définit un portfolio, on doit préciser la hauteur d'une row,
-et tout le reste en découle. */
+.layout > element-portfolio {
+	/* layout is flexbox and it makes portfolio width collapse */
+	width:100%;
+}
