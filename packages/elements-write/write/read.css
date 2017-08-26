@@ -11,6 +11,8 @@
 	outline-offset:-2px !important;
 	cursor:pointer !important;
 	position:relative;
+	min-width:1em;
+	min-height:1em;
 }
 .ProseMirror-selectednode::after {
 	outline: 2px solid #61A3E4 !important;
@@ -23,6 +25,8 @@
 	right:0;
 	bottom:0;
 	pointer-events:none;
+	min-width:1em;
+	min-height:1em;
 }
 
 /* replaced elements cannot have pseudo elements,
@@ -31,6 +35,8 @@
 	outline: 1px dashed #888;
 	outline-offset:-1px;
 	position:relative;
+	min-width:1em;
+	min-height:1em;
 }
 [block-focused="last"]::after {
 	outline: 1px dashed #888;
@@ -43,6 +49,8 @@
 	right:0;
 	bottom:0;
 	pointer-events:none;
+	min-width:1em;
+	min-height:1em;
 }
 
 *::selection {
