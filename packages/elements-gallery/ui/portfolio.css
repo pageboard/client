@@ -84,7 +84,3 @@ element-portfolio > .item[block-focused] > [block-content="cell"] {
 	visibility:visible;
 }
 
-.layout > element-portfolio {
-	/* layout is flexbox and it makes portfolio width collapse */
-	width:100%;
-}
