@@ -42,6 +42,12 @@ Pageboard.elements.layout = {
 			description: 'Use 100% height',
 			default: false,
 			type: 'boolean'
+		},
+		stack: {
+			title: 'stack',
+			description: 'Stack layout vertically',
+			default: false,
+			type: 'boolean'
 		}
 	},
 	contents: {
@@ -52,7 +58,16 @@ Pageboard.elements.layout = {
 	group: 'block',
 	icon: '<i class="icon move"></i>',
 	render: function(doc, block) {
-		return doc.dom`<div class="layout ${block.data.horizontal} ${block.data.vertical} ${block.data.fullheight ? 'fullheight' : ''}" block-content="content"></div>`;
+		var d = doc.dom`<div class="layout" block-content="content"></div>`;
+		var data = block.data;
+		d.classList.add(
+			data.horizontal,
+			data.vertical,
+			data.fullwidth ? 'fullwidth' : '',
+			data.fullheight ? 'fullheight' : '',
+			data.stack ? 'stack' : ''
+		);
+		return d;
 	},
 	stylesheets: [
 		'../ui/layout.css'
