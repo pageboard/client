@@ -35,3 +35,9 @@
 .fullwidth {
 	width:100%;
 }
+
+.layout > [block-type="carousel"],
+.layout > [block-type="portfolio"],
+.layout > [block-type="shutter"] {
+	width:100%;
+}
