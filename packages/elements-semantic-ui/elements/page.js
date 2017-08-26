@@ -21,7 +21,7 @@ Pageboard.elements.page = {
 	},
 	contents: {
 		body: {
-			spec: '(block|container)+',
+			spec: 'block+',
 			title: 'body'
 		}
 	},

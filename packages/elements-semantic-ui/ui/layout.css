@@ -1,0 +1,33 @@
+.layout {
+	display:flex;
+}
+.layout.top {
+	align-items: flex-start;
+}
+.layout.vcenter {
+	align-items: center;
+}
+.layout.bottom {
+	align-items: flex-end;
+}
+.layout.left {
+	justify-content: flex-start;
+}
+.layout.hcenter {
+	justify-content: center;
+}
+.layout.right {
+	justify-content: flex-end;
+}
+
+.fullheight {
+	height:100%;
+	position:relative;
+}
+.fullpage > [block-type] {
+	height:100%;
+	width:auto;
+	display:block;
+	margin:0 auto;
+}
+
