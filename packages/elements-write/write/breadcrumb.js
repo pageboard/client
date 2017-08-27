@@ -76,14 +76,23 @@ Breadcrumb.prototype.item = function(parent) {
 
 Breadcrumb.prototype.click = function(e) {
 	var editor = this.editor;
-	var position;
-	if ($(e.target).nextAll('.section').length == 0) position = "last";
-	else if ($(e.target).prevAll('.section').length == 0) position = "first";
-	else position = "middle";
-	var id = e.target.getAttribute('block-id') || null;
-	var node = editor.blocks.domQuery(id, {focused: position});
+	var selectors = [];
+	var items = this.$node.find('.section');
+	items.each(function(i, item) {
+		var position;
+		if (i == items.length - 1) position = "last";
+		else if (i == 0) position = "first";
+		else position = "middle";
+		var sel = i > 0 ? `[block-focused="${position}"]` : '';
+		var id = item.getAttribute('block-id');
+		if (id) sel += `[block-id="${id}"]`;
+		selectors.push(sel);
+		if (item == e.target) return false;
+	});
+	var selector = selectors.join(' ');
+	var node = editor.root.querySelector(selector);
 	if (!node) {
-		throw new Error(`No node found with block-id ${id} and focus ${position}`);
+		throw new Error(`No node found with selector ${selector}`);
 	}
 	var sel = editor.utils.select(node);
 	if (sel) {
