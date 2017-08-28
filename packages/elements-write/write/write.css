@@ -71,3 +71,12 @@
 	padding: 0.67857143em 1em; /* this is the padding value of .field */
 }
 
+.ui.toggle.checkbox .box:hover::before,
+.ui.toggle.checkbox label:hover::before {
+	background-color: rgba(0, 0, 0, 0.4);
+}
+.ui.toggle.checkbox .box:before,
+.ui.toggle.checkbox label:before {
+	background-color: rgba(0, 0, 0, 0.2);
+}
+
