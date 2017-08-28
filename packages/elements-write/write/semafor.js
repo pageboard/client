@@ -17,7 +17,6 @@ function Semafor(schema, node) {
 	// a json schema
 	this.schema = schema;
 	// a jquery node selector
-	this.node = node;
 	this.$node = $(node);
 	this.fields = {};
 	// populates node with form markup matching schema,
