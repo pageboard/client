@@ -205,10 +205,12 @@ types.object = function(key, schema, node, fields) {
 };
 
 types.boolean = function(key, schema, node, fields) {
-	var field = node.dom`<div class="inline field">
-		<div class="ui toggle checkbox">
-			<input type="checkbox" name="${key}" class="hidden" value="true" />
-			<label>${schema.title}</label>
+	var field = node.dom`<div class="inline fields">
+		<label>${schema.title}</label>
+		<div class="field">
+			<div class="ui toggle checkbox">
+				<input type="checkbox" name="${key}" class="hidden" value="true" />
+			</div>
 		</div>
 	</div>`;
 	node.appendChild(field);
