@@ -130,14 +130,37 @@ types.string = function(key, schema, node, fields) {
 };
 
 types.oneOf = function(key, schema, node, fields) {
-	var field = node.dom`<div class="field" title="${schema.description || ''}">
-		<label>${schema.title}</label>
-		<select name="${key}" class="ui dropdown">
-			${schema.oneOf.map(getSelectOption)}
-		</select>
-	</div>`;
-	node.appendChild(field);
-	$(field).find('.dropdown').dropdown();
+	var field;
+	if (schema.oneOf.length == 2) {
+		var alts = schema.oneOf;
+		field = node.dom`<div class="inline fields">
+			<label for="${key}">${schema.title}</label>
+			<div class="field">
+				<div class="ui radio checkbox">
+					<input type="radio" name="${key}" value="${alts[0].constant}" checked="" tabindex="0" class="hidden">
+					<label>${alts[0].title}</label>
+				</div>
+			</div>
+			<div class="field">
+				<div class="ui radio checkbox">
+					<input type="radio" name="${key}" value="${alts[1].constant}" tabindex="0" class="hidden" />
+					<label>${alts[1].title}</label>
+				</div>
+			</div>
+		</div>`;
+		node.appendChild(field);
+		$(field).find('.radio.checkbox').checkbox();
+		if (schema.default !== null) $(field).find(`[name="${key}"][value="${schema.default}"]`).prop('checked', true);
+	} else {
+		field = node.dom`<div class="field" title="${schema.description || ''}">
+			<label>${schema.title}</label>
+			<select name="${key}" class="ui dropdown">
+				${schema.oneOf.map(getSelectOption)}
+			</select>
+		</div>`;
+		node.appendChild(field);
+		$(field).find('.dropdown').dropdown();
+	}
 
 	function getSelectOption(item) {
 		if (item.constant == null) console.error("We can't really support non-constant oneOf here");
