@@ -42,8 +42,7 @@ Pageboard.elements.page = {
 	},
 	stylesheets: [
 		'/.pageboard/semantic-ui/components/reset.css',
-		'../ui/site.css',
-		'/.pageboard/semantic-ui/components/container.css'
+		'../ui/site.css'
 	],
 	scripts: [
 		'/.pageboard/read/window-page.js',

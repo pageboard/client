@@ -31,11 +31,16 @@ Pageboard.elements.layout = {
 				title: "bottom"
 			}]
 		},
-		fullwidth: {
-			title: 'full width',
-			description: 'Use 100% width',
-			default: true,
-			type: 'boolean'
+		width: {
+			title: 'control width',
+			default: "full",
+			oneOf: [{
+				constant: "full",
+				title: "full"
+			}, {
+				constant: "contained",
+				title: "contained"
+			}]
 		},
 		fullheight: {
 			title: 'full height',
@@ -61,14 +66,16 @@ Pageboard.elements.layout = {
 		var d = doc.dom`<div class="layout" block-content="content"></div>`;
 		var data = block.data;
 		var list = d.classList;
+		if (data.width == "full") list.add('fullwidth');
+		else if (data.width == "contained") list.add('ui', 'container');
 		if (data.horizontal) list.add(data.horizontal);
 		if (data.vertical) list.add(data.vertical);
-		if (data.fullwidth) list.add('fullwidth');
 		if (data.fullheight) list.add('fullheight');
 		if (data.stack) list.add('stack');
 		return d;
 	},
 	stylesheets: [
+		'/.pageboard/semantic-ui/components/container.css',
 		'../ui/layout.css'
 	]
 };

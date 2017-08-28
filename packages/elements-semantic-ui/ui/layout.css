@@ -1,4 +1,5 @@
-.layout {
+.layout,
+.ui.container.layout {
 	display:flex;
 }
 .layout.top {
@@ -23,21 +24,14 @@
 	flex-direction: column;
 }
 
-.fullheight {
+.layout.fullheight {
 	height:100%;
 }
-.fullpage > [block-type] {
-	height:100%;
-	width:auto;
-	display:block;
-	margin:0 auto;
-}
-.fullwidth {
+.layout.fullwidth {
 	width:100%;
 }
 
-.layout > [block-type="carousel"],
-.layout > [block-type="portfolio"],
-.layout > [block-type="shutter"] {
+.layout.stack > [block-type] {
 	width:100%;
 }
+
