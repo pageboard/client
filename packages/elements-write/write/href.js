@@ -286,10 +286,9 @@ Href.prototype.uploadStart = function() {
 Href.prototype.uploadStop = function() {};
 
 Href.prototype.uploading = function() {
-	var str = '<div class="ui blue attached progress"><div class="bar"></div></div>';
 	var root = Pageboard.notify.dom();
-	root.insertAdjacentHTML('beforeEnd', str);
-	var progress = root.lastChild;
+	var progress = root.dom`<div class="ui blue attached progress"><div class="bar"></div></div>`;
+	root.appendChild(progress);
 	var $node = $(progress).progress({
 		percent: 0
 	});
