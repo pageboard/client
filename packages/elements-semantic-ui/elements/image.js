@@ -22,7 +22,7 @@ Pageboard.elements.image = {
 			sep = '&';
 		}
 
-		return doc.dom`<img src="${url}"
+		return doc.dom`<img class="ui image" src="${url}"
 				srcset="${url}${sep}rs=w:160 160w,
 				${url}${sep}rs=w:320 320w,
 				${url}${sep}rs=w:640 640w,
