@@ -26,7 +26,11 @@ Pageboard.elements.link = {
 			title: 'Address',
 			description: 'Local or remote URL',
 			type: "string",
-			format: "uri"
+			format: "uri",
+			input: {
+				name: 'href',
+				media: ["link", "file", "archive"]
+			}
 		}
 	},
 	contents: {

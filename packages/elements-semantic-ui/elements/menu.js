@@ -31,7 +31,11 @@ Pageboard.elements.menu_item = {
 			title: 'Address',
 			description: 'Local or remote URL',
 			type: "string",
-			format: "uri"
+			format: "uri",
+			input: {
+				name: 'href',
+				media: "link"
+			}
 		}
 	},
 	contents: {
