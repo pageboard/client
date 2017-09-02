@@ -10,10 +10,10 @@ function Form(editor, selector) {
 }
 
 Form.prototype.clear = function() {
-	if (this.href) {
-		this.href.destroy();
-		delete this.href;
+	if (this.inputs) for (var name in this.inputs) {
+		if (this.inputs[name].destroy) this.inputs[name].destroy();
 	}
+	this.inputs = {};
 	this.$node.empty();
 	delete this.block;
 	delete this.form;
@@ -59,14 +59,17 @@ Form.prototype.update = function(parents) {
 	this.form.set(block.data);
 
 	if (el.properties) Object.keys(el.properties).forEach(function(key) {
-		// TODO make this pluggable from the element definition
-		if (el.properties[key].format == "uri") {
-			if (!this.href) {
-				var input = node.querySelector(`[name="${key}"]`);
-				this.href = new Pageboard.Href(input);
-			} else {
-				this.href.change();
-			}
+		var props = el.properties[key];
+		if (!props.input || !props.input.name) return;
+		var CurInput = Pageboard.inputs[props.input.name];
+		if (!CurInput) {
+			console.error("Unknown input name", Pageboard.inputs, props, el);
+			return;
+		}
+		if (!this.inputs[key]) {
+			this.inputs[key] = new CurInput(node.querySelector(`[name="${key}"]`), props.input);
+		} else {
+			this.inputs[key].change();
 		}
 	}.bind(this));
 

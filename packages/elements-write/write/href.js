@@ -1,7 +1,7 @@
 (function(Pageboard) {
-Pageboard.Href = Href;
+Pageboard.inputs.href = Href;
 
-function Href(input) {
+function Href(input, opts) {
 	this.renderList = this.renderList.bind(this);
 	this.cache = this.cache.bind(this);
 	this.set = this.set.bind(this);

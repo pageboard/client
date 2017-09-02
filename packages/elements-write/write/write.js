@@ -1,6 +1,7 @@
 window.Pagecut = {modules:{}};
 window.Pageboard = {
 	Controls: {},
+	inputs: {},
 	trigger: function trigger(node, event) {
 		var e = document.createEvent('Event');
 		e.initEvent(event, true, true);
