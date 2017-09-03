@@ -41,7 +41,11 @@ Pageboard.elements.link = {
 	group: "inline",
 	icon: '<i class="icon linkify"></i>',
 	render: function(doc, block) {
-		var a = doc.dom`<a href="${block.data.url}" target="${block.data.target}"></a>`;
+		var a = doc.dom`<a href="${block.data.url}"></a>`;
+		if (a.hostname != document.location.hostname) {
+			a.rel = "noopener";
+		}
+		if (block.data.target) a.target = block.data.target;
 		if (block.data.button) a.className = 'ui button';
 		return a;
 	},
