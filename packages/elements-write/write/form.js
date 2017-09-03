@@ -42,7 +42,7 @@ Form.prototype.update = function(parents) {
 		return;
 	}
 
-	if (this.type != info.type) this.clear();
+	if (block != this.block) this.clear();
 
 	this.type = info.type;
 
@@ -57,6 +57,7 @@ Form.prototype.update = function(parents) {
 	}
 
 	this.form.set(block.data);
+	this.block = block;
 
 	if (el.properties) Object.keys(el.properties).forEach(function(key) {
 		var props = el.properties[key];
@@ -72,8 +73,6 @@ Form.prototype.update = function(parents) {
 			this.inputs[key].change();
 		}
 	}.bind(this));
-
-	this.block = block;
 };
 
 Form.prototype.change = function() {
