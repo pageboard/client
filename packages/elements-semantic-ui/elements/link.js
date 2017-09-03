@@ -36,6 +36,7 @@ Pageboard.elements.link = {
 	contents: {
 		text: "text*"
 	},
+	context: "paragraph/",
 	inline: true,
 	group: "inline",
 	icon: '<i class="icon linkify"></i>',
