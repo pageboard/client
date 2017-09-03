@@ -78,6 +78,7 @@ Breadcrumb.prototype.click = function(e) {
 	var editor = this.editor;
 	var selectors = [];
 	var items = this.$node.find('.section');
+	var target = e && e.target || items.filter('.active').get(0);
 	items.each(function(i, item) {
 		var position;
 		if (i == items.length - 1) position = "last";
@@ -87,7 +88,7 @@ Breadcrumb.prototype.click = function(e) {
 		var id = item.getAttribute('block-id');
 		if (id) sel += `[block-id="${id}"]`;
 		selectors.push(sel);
-		if (item == e.target) return false;
+		if (item == target) return false;
 	});
 	var selector = selectors.join(' ');
 	var node = editor.root.querySelector(selector);
