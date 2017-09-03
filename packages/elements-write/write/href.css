@@ -1,13 +1,11 @@
 .field.href .ui.avatar.icon.image {
 	width:1.2em;
 	height:1.2em;
-	vertical-align:top;
-	margin-top:0.24em;
 }
 
 .field.href .items .button.circular {
 	visibility:hidden; /* so .item height won't change when .button is shown */
-	padding:0.24em;
+	padding:0.2em;
 	color:#4165A0;
 	border-color:#4165A0;
 	background:transparent;
