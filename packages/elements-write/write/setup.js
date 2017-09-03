@@ -26,31 +26,22 @@ Pageboard.setup = function(state) {
 var lastClicked;
 var lastClickedOnce;
 function anchorListener(e) {
-	var clicked = e.target.closest('a,button[type="submit"]');
-	if (clicked) {
-		if (clicked == lastClicked) {
-			if (!lastClickedOnce) {
-				lastClickedOnce = true;
-				e.preventDefault();
-				Pageboard.notify(
-					"Click again to " + (clicked.matches('a') ? 'open link' : 'submit form'),
-					{timeout: 2}
-				);
-			} else {
-				lastClicked = null;
-				if (Pageboard.window.Page.sameDomain(Pageboard.window.Page.state, clicked.href)) {
-					e.preventDefault();
-					Pageboard.window.Page.push(Pageboard.window.Page.parse(clicked.href));
-				} else {
-					clicked.target = "_blank";
-				}
-			}
-		} else {
-			e.preventDefault();
-			lastClickedOnce = false;
+	var node = e.target.closest('a[href],button[type="submit"]');
+	if (!node) return;
+	e.preventDefault();
+	var msg;
+	if (node.matches('a')) {
+		// TODO remove this url modification when auth works
+		var href = Page.parse(node.href);
+		if (href.hostname == Page.state.hostname) {
+			href.query.write = null;
 		}
+
+		msg = `<a href="${Page.format(href)}" target="${node.target}" rel="${node.rel}"><i class="icon hand pointer"></i>Follow link <br>${node.href}</a>`;
+	} else if (node.matches('button')) {
+		// TODO submit form
 	}
-	lastClicked = clicked;
+	Pageboard.notify(msg, {timeout: 3});
 }
 
 function unloadListener(e) {
