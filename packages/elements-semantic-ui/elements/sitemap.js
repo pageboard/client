@@ -79,6 +79,7 @@ Pageboard.elements.sitepage = {
 		block.type = 'page';
 	},
 	icon: '<i class="icon file outline"></i>',
+	context: 'sitemap/',
 	render: function(doc, block) {
 		return doc.dom`<div class="item">
 			<i class="file icon"></i>
@@ -122,6 +123,7 @@ Pageboard.elements.sitedir = {
 	// 	return Object.assign(block, {type: 'page'});
 	// },
 	icon: '<i class="icon folder outline"></i>',
+	context: 'sitemap/',
 	render: function(doc, block) {
 		return doc.dom`<div class="item">
 			<i class="folder icon"></i>
