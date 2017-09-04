@@ -112,7 +112,7 @@ function editorUpdate(editor, state, focusParents, focusSelection) {
 		var node = item.root.mark || item.root.node;
 		var block = editor.blocks.get(node.attrs.block_id);
 		if (!block) {
-			block = editor.utils.attrToBlock(node.attrs);
+			block = editor.blocks.fromAttrs(node.attrs);
 			delete node.attrs.block_id;
 		}
 		item.block = block;

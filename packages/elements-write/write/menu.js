@@ -50,7 +50,7 @@ Menu.prototype.item = function(el) {
 			}
 			if (el.inline) {
 				var wasActive = editor.utils.markActive(self.selection, nodeType);
-				editor.utils.toggleMark(nodeType, editor.utils.blockToAttr(block))(state, function(tr) {
+				editor.utils.toggleMark(nodeType, editor.blocks.toAttrs(block))(state, function(tr) {
 					tr.setMeta('editor', true);
 					if (wasActive) tr.removeStoredMark(nodeType);
 					dispatch(tr);

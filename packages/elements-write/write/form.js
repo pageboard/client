@@ -79,8 +79,6 @@ Form.prototype.change = function() {
 	if (!this.block) return;
 	var editor = this.editor;
 	var data = this.form.get();
-	this.block.data = Object.assign(this.block.data || {}, data);
-	editor.blocks.set(this.block);
 
 	var id = this.block.id;
 	var found = false;
@@ -88,6 +86,11 @@ Form.prototype.change = function() {
 		found = true;
 		editor.pageUpdate(this.block);
 	}
+	editor.controls.breadcrumb.click();
+
+	// this must be done after reselecting with breadcrumb.click
+	this.block.data = Object.assign(this.block.data || {}, data);
+	editor.blocks.set(this.block);
 
 	var nodes = editor.blocks.domQuery(id, {all: true});
 
