@@ -35,6 +35,7 @@ Pageboard.elements.menu = {
 
 Pageboard.elements.menu_item_link = {
 	title: "Link Item",
+	priority: 10,
 	context: "menu//",
 	properties: {
 		url: {
@@ -62,6 +63,7 @@ Pageboard.elements.menu_item_link = {
 
 Pageboard.elements.menu_item_dropdown = {
 	title: "Dropdown",
+	priority: 11,
 	context: "menu//",
 	contents: {
 		title: {
