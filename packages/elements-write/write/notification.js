@@ -49,7 +49,7 @@ Pageboard.notify = function(title, obj) {
 	if (obj.timeout) {
 		item.node = msg;
 		setTimeout(function() {
-			$(msg).transition('fade down', function() {
+			if (msg.parentNode) $(msg).transition('fade down', function() {
 				msg.remove();
 			});
 		}, obj.timeout * 1000);
