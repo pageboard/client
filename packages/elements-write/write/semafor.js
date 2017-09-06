@@ -131,22 +131,11 @@ types.string = function(key, schema, node, fields) {
 
 types.oneOf = function(key, schema, node, fields) {
 	var field;
-	if (schema.oneOf.length == 2) {
+	if (schema.oneOf.length <= 3) {
 		var alts = schema.oneOf;
 		field = node.dom`<div class="inline fields">
 			<label for="${key}">${schema.title}</label>
-			<div class="field">
-				<div class="ui radio checkbox">
-					<input type="radio" name="${key}" value="${alts[0].constant}" checked="" tabindex="0" class="hidden">
-					<label>${alts[0].title}</label>
-				</div>
-			</div>
-			<div class="field">
-				<div class="ui radio checkbox">
-					<input type="radio" name="${key}" value="${alts[1].constant}" tabindex="0" class="hidden" />
-					<label>${alts[1].title}</label>
-				</div>
-			</div>
+			${alts.map(getRadioOption)}
 		</div>`;
 		node.appendChild(field);
 		$(field).find('.radio.checkbox').checkbox();
@@ -160,6 +149,15 @@ types.oneOf = function(key, schema, node, fields) {
 		</div>`;
 		node.appendChild(field);
 		$(field).find('.dropdown').dropdown();
+	}
+
+	function getRadioOption(item) {
+		return node.dom`<div class="field">
+			<div class="ui radio checkbox">
+				<input type="radio" name="${key}" value="${item.constant}" checked="" tabindex="0" class="hidden">
+				<label>${item.title}</label>
+			</div>
+		</div>`;
 	}
 
 	function getSelectOption(item) {
