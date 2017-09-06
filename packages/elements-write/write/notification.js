@@ -21,7 +21,7 @@ Pageboard.notify = function(title, obj) {
 	if (obj.type) type = obj.type;
 	if (list.length) {
 		var last = list[list.length - 1];
-		if (last.title == title && last.text == text) {
+		if ((last.title == title && last.text == text) || (last.label && last.label == obj.label)) {
 			if (last.node) {
 				last.node.remove();
 			} else {
@@ -33,7 +33,8 @@ Pageboard.notify = function(title, obj) {
 	}
 	var item = {
 		title: title,
-		text: text
+		text: text,
+		label: obj.label
 	};
 	list.push(item);
 

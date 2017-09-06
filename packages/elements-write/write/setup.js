@@ -41,7 +41,7 @@ function anchorListener(e) {
 	} else if (node.matches('button')) {
 		// TODO submit form
 	}
-	Pageboard.notify(msg, {timeout: 3});
+	Pageboard.notify(msg, {label: 'link', timeout: 3});
 }
 
 function unloadListener(e) {
