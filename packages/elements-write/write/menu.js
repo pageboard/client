@@ -72,9 +72,9 @@ Menu.prototype.item = function(el) {
 		},
 		select: function(state) {
 			if (el.inline) {
-				return !self.selection.node && editor.utils.canMark(self.selection, nodeType);
+				return !state.tr.selection.node && editor.utils.canMark(state.tr.selection, nodeType);
 			} else {
-				return editor.utils.canInsert(self.selection.$from, nodeType);
+				return editor.utils.canInsert(state.tr.selection.$from, nodeType);
 			}
 		},
 		active: function(state) {
@@ -82,7 +82,7 @@ Menu.prototype.item = function(el) {
 				var parent = self.parents[0];
 				return parent.root && parent.root.node && parent.root.node.type.name == el.name;
 			} else {
-				return editor.utils.markActive(self.selection, nodeType);
+				return editor.utils.markActive(state.tr.selection, nodeType);
 			}
 		}
 	};
