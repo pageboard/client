@@ -194,7 +194,7 @@ Href.prototype.pasteStop = function() {
 
 Href.prototype.searchStart = function() {
 	Pageboard.write.classList.add('href');
-	this.node.querySelector('input').focus();
+//	this.node.querySelector('input').focus();
 	return this.searchUpdate();
 };
 
