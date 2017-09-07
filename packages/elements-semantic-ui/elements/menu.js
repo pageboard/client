@@ -16,6 +16,9 @@ Pageboard.elements.menu = {
 			}, {
 				constant: "vertical",
 				title: "vertical"
+			}, {
+				constant: "compact",
+				title: "compact"
 			}]
 		}
 	},
@@ -57,7 +60,10 @@ Pageboard.elements.menu_item_link = {
 	group: 'menu_item',
 	icon: '<b class="icon">Item</b>',
 	render: function(doc, block) {
-		return doc.dom`<a class="item" href="${block.data.url}" block-content="content"></a>`;
+		var dom = Pageboard.elements.link.render(doc, block);
+		dom.className = "item";
+		dom.setAttribute('block-content', 'content');
+		return dom;
 	}
 };
 
