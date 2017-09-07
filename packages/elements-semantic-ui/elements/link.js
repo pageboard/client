@@ -3,18 +3,18 @@ Pageboard.elements.link = {
 	priority: 11,
 	properties: {
 		target: {
-			title: 'Target',
+			title: 'Target window',
 			description: 'Choose how to open link',
 			default: "",
 			oneOf: [{
 				constant: "",
-				title: "auto target"
+				title: "auto"
 			}, {
 				constant: "_blank",
-				title: "new window"
+				title: "new"
 			}, {
 				constant: "_self",
-				title: "same window"
+				title: "same"
 			}]
 		},
 		button: {
