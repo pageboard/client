@@ -86,7 +86,6 @@ Form.prototype.change = function() {
 		found = true;
 		editor.pageUpdate(this.block);
 	}
-	editor.controls.breadcrumb.click();
 
 	// this must be done after reselecting with breadcrumb.click
 	this.block.data = Object.assign(this.block.data || {}, data);
@@ -97,6 +96,7 @@ Form.prototype.change = function() {
 		// simply select focused node
 		var node = editor.root.querySelector('[block-focused="last"]');
 		if (node) {
+			this.ignoreNext = true;
 			editor.utils.refresh(node, this.block);
 			return;
 		}
@@ -109,7 +109,7 @@ Form.prototype.change = function() {
 	}
 	this.ignoreNext = true;
 	nodes.forEach(function(node) {
-		editor.utils.refresh(node);
+		editor.utils.refresh(node, this.block);
 	});
 	var node = editor.blocks.domQuery(id, {focused: true});
 	if (node) {
