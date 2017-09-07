@@ -92,6 +92,15 @@ Form.prototype.change = function() {
 	this.block.data = Object.assign(this.block.data || {}, data);
 	editor.blocks.set(this.block);
 
+	var el = editor.element(this.type);
+	if (el.inplace) {
+		// simply select focused node
+		var node = editor.root.querySelector('[block-focused="last"]');
+		if (node) {
+			editor.utils.refresh(node, this.block);
+			return;
+		}
+	}
 	var nodes = editor.blocks.domQuery(id, {all: true});
 
 	if (nodes.length == 0) {
