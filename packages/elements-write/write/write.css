@@ -3,6 +3,7 @@
 }
 
 #pageboard-read {
+	position:relative;
 	width:70%;
 	height:100%;
 	box-shadow:0 0 1em grey;
@@ -24,21 +25,25 @@
 	padding-top:0 !important;
 	overflow:auto;
 }
-#notifications:empty {
+.notifications:empty {
 	display:none;
 }
-#notifications {
+.notifications {
 	max-height:66%;
 	margin-bottom:0;
 }
-#notifications .message:nth-last-child(n+4) {
+.notifications .message:nth-last-child(n+4) {
 	display:none;
 }
-#notifications .message > p {
+.notifications .message > p {
 	display:none;
 }
-#notifications .message:last-child > p {
+.notifications .message:last-child > p {
 	display:block;
+}
+#pageboard-read > .notifications.wide {
+	margin-left:0.1rem !important;
+	margin-right:0.1rem !important;
 }
 #breadcrumb:empty {
 	display:none;

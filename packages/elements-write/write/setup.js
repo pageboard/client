@@ -3,7 +3,7 @@
 Pageboard.setup = function(state) {
 	var parentRead = document.getElementById('pageboard-read');
 	var iframe = Pageboard.read = document.createElement('iframe');
-	parentRead.appendChild(iframe);
+	parentRead.insertBefore(iframe, parentRead.lastElementChild);
 	Pageboard.write = document.getElementById('pageboard-write');
 	Ps.initialize(Pageboard.write);
 
@@ -37,11 +37,15 @@ function anchorListener(e) {
 			href.query.write = null;
 		}
 
-		msg = `<a href="${Page.format(href)}" target="${node.target}" rel="${node.rel}"><i class="icon hand pointer"></i>Follow link <br>${node.href}</a>`;
+		msg = `<a href="${Page.format(href)}" target="${node.target}" rel="${node.rel}"><i class="icon hand pointer"></i>Follow link: ${node.href}</a>`;
 	} else if (node.matches('button')) {
 		// TODO submit form
 	}
-	Pageboard.notify(msg, {label: 'link', timeout: 3});
+	Pageboard.notify(msg, {
+		label: 'link',
+		timeout: 3,
+		where: 'read'
+	});
 }
 
 function unloadListener(e) {

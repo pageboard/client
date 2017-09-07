@@ -1,6 +1,6 @@
 (function(Pageboard) {
 
-var root;
+var roots = {};
 var list = [];
 
 Pageboard.notify = function(title, obj) {
@@ -38,7 +38,7 @@ Pageboard.notify = function(title, obj) {
 	};
 	list.push(item);
 
-	var parent = Pageboard.notify.dom();
+	var parent = Pageboard.notify.dom(obj.where || 'write');
 
 	var msg = document.dom`<div class="ui ${type} message">
 		<i class="close icon"></i>
@@ -63,9 +63,10 @@ function withText(text) {
 	else return '';
 }
 
-Pageboard.notify.dom = function() {
-	if (root) return root;
-	root = document.getElementById('notifications');
+Pageboard.notify.dom = function(where) {
+	if (roots[where]) return roots[where];
+	var root = document.querySelector(`#pageboard-${where} > .notifications`);
+	roots[where] = root;
 	root.addEventListener('click', function(e) {
 		var msg = e.target.closest('.message');
 		if (!msg) return;
