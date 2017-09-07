@@ -84,9 +84,12 @@ Pageboard.elements.menu_item_dropdown = {
 	group: "menu_item",
 	icon: '<b class="icon">Pop</b>',
 	render: function(doc, block, view) {
+		// the empty div is only here to wrap
 		return doc.dom`<div class="ui simple dropdown item ${block.focused ? 'active' : ''}">
-			<div block-content="title"></div>
-			<i class="dropdown icon"></i>
+			<div>
+				<span block-content="title"></span>
+				<i class="dropdown icon"></i>
+			</div>
 			<div class="menu" block-content="items"></div>
 		</div>`;
 	},
