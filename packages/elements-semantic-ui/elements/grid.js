@@ -4,7 +4,7 @@ Pageboard.elements.grid = {
 	contents: {
 		header: {
 			spec: "text*",
-			title: "header"
+			title: "heading"
 		},
 		columns: {
 			spec: "grid_column+",
