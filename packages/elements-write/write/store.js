@@ -122,7 +122,7 @@ Store.prototype.update = function() {
 Store.prototype.save = function(e) {
 	if (this.unsaved == null) return;
 	var changes = this.changes();
-	if (Pageboard.test) {
+	if (e && e.shiftKey) {
 		console.warn("Pageboard.test - saving disabled")
 		console.log(changes);
 		return;
