@@ -23,9 +23,11 @@ Pageboard.elements.heading = {
 			maximum: 6
 		}
 	},
-	contents: "inline<_>*",
+	contents: {
+		"text": "inline<_>*"
+	},
 	group: "block",
-	inplace: true,
+//	inplace: true,
 	icon: '<i class="icon header"></i>',
 	tag: 'h1,h2,h3,h4,h5,h6',
 	parse: function(dom) {
@@ -33,6 +35,8 @@ Pageboard.elements.heading = {
 		return {level: level};
 	},
 	render: function(doc, block) {
-		return doc.createElement('h' + block.data.level);
+		var node = doc.createElement('h' + block.data.level);
+		node.setAttribute('block-content', 'text');
+		return node;
 	}
 };
