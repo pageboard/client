@@ -69,6 +69,7 @@ Store.prototype.key = function() {
 
 Store.prototype.restore = function(state) {
 	var self = this;
+	this.ids = state.ids;
 	return this.editor.from(state.blocks).then(function(frag) {
 		self.ignoreNext = true;
 		self.editor.utils.setDom(frag);
@@ -104,6 +105,7 @@ Store.prototype.update = function() {
 	var state = JSON.parse(JSON.stringify({
 		blocks: blocks
 	}));
+	state.ids = this.ids;
 
 	if (!this.initial) {
 		this.initial = state;
