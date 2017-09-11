@@ -108,9 +108,12 @@ Form.prototype.change = function() {
 		return;
 	}
 	this.ignoreNext = true;
+	var tr = editor.state.tr;
 	nodes.forEach(function(node) {
-		editor.utils.refresh(node, this.block);
+		editor.utils.refreshTr(tr, node, this.block);
 	});
+	editor.dispatch(tr);
+
 	var node = editor.blocks.domQuery(id, {focused: true});
 	if (node) {
 		var sel = editor.utils.select(node);
