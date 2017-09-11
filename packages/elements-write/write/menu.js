@@ -61,11 +61,11 @@ Menu.prototype.item = function(el) {
 						sel = editor.utils.selectTr(tr, sel.from, true);
 						tr.setSelection(sel);
 					}
-					var pos = editor.utils.insertTr(tr, fragment, sel);
+					var pos = editor.utils.insertTr(tr, fragment);
 					if (pos != null) {
-						dispatch(tr);
 						sel = editor.utils.selectTr(tr, pos);
-						if (sel) dispatch(view.state.tr.setSelection(sel));
+						if (sel) tr.setSelection(sel);
+						dispatch(tr);
 					}
 				});
 			}
