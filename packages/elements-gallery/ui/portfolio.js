@@ -1,10 +1,12 @@
+// there is a 1px rounding problem with percentWidth
+// see https://github.com/metafizzy/isotope/issues/916
+// to be fixed in next release
 class HTMLElementPortfolio extends HTMLElement {
 	constructor() {
 		super();
 		this._options = {
 			masonry: {
-				columnWidth: '.item',
-				gutter: '.item'
+				columnWidth: '.item'
 			},
 			itemSelector: '.item',
 			percentPosition: true
@@ -15,7 +17,6 @@ class HTMLElementPortfolio extends HTMLElement {
 		if (this.portfolio) {
 			this._teardown();
 		}
-		this.configure();
 		this.portfolio = new Isotope(this, this._options);
 		this.addEventListener('load', this._loadListener, true);
 	}
@@ -38,17 +39,6 @@ class HTMLElementPortfolio extends HTMLElement {
 
 	disconnectedCallback() {
 		this._teardown();
-	}
-
-	configure() {
-		var prev = this._options.masonry.gutter;
-		if (this.matches('.gutter')) {
-			var mb = window.getComputedStyle(this.querySelector('.item')).marginBottom;
-			this._options.masonry.gutter = parseInt(mb);
-		} else {
-			delete this._options.masonry.gutter;
-		}
-		return prev != this._options.masonry.gutter;
 	}
 
 	update() {

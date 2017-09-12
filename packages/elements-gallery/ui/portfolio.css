@@ -1,65 +1,55 @@
+/* Let n the number of columns and let g the gutter in width percent then
+ l = (100 - n * g) / n
+ L = 2 * l + g
+ (L and l being in percent)
+ For varying n, keep same L/l with
+ g(n) = (200 - 100r) / (n * (1 - r))
+*/
 element-portfolio {
 	display:block; /* mandatory for custom elements */
 	position:relative;
-}
-element-portfolio > .item {
-	position:relative;
+	margin-right:-0.75%;
+	margin-bottom:-0.75%;
 	overflow:hidden;
 }
 element-portfolio > .item {
-	width:25%;
+	width:24.25%;
+	margin-right:0.75%;
+	margin-bottom:0.75%;
 }
 element-portfolio > .item.large {
-	width:50%;
-}
-
-element-portfolio.gutter {
-	margin-right:-10px;
-	margin-bottom:-10px;
-}
-element-portfolio.gutter > .item {
-	margin-bottom:10px;
-}
-element-portfolio.gutter > .item {
-	width:calc(25% - 10px);
-}
-element-portfolio.gutter > .item.large {
-	width:calc(50% - 10px); /* mind the gap, see just below */
-}
-element-portfolio.gutter > .item.large > .image > img {
-	margin-top:-2px;
-	margin-bottom:-3px;
-}
-element-portfolio.gutter > .item.high > .image > img {
-	margin-top:0;
-	margin-bottom:0;
+	width:49.25%;
 }
 
 @media screen and (max-width: 768px) {
+	element-portfolio {
+		margin-right:-1%;
+		margin-bottom:-1%;
+	}
 	element-portfolio > .item {
-		width:33.33%;
+		width:32.33%;
+		margin-right:1%;
+		margin-bottom:1%;
 	}
 	element-portfolio > .item.large {
-		width:66.66%;
+		width:65.66%;
 	}
-	element-portfolio.gutter > .item {
-		width:calc(33.33% - 10px);
+}
+
+@media screen and (max-width: 512px) {
+	element-portfolio > .item {
+		width:100%;
 	}
-	element-portfolio.gutter > .item.large {
-		width:calc(66.66% - 10px);
-	}
-	element-portfolio.gutter > .item.high.large {
-		width:calc(66.66% - 6px);
+	element-portfolio > .item.large {
+		width:100%;
 	}
 }
 
 element-portfolio > .item > .image {
-	min-height:1em;
+	min-height:5em; /* editor */
 }
 element-portfolio > .item > .image > img {
 	width:100%;
-	max-height:auto;
-	margin:0 auto;
 	display:block;
 }
 

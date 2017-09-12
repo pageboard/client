@@ -1,12 +1,6 @@
 Pageboard.elements.portfolio = {
 	title: "Portfolio",
-	properties: {
-		gutter: {
-			title: 'Gutter',
-			type: 'boolean',
-			default: false,
-		}
-	},
+	properties: {},
 	contents: {
 		items: {
 			spec: "portfolio_item+",
@@ -16,7 +10,7 @@ Pageboard.elements.portfolio = {
 	group: 'block',
 	icon: '<b class="icon">Por</b>',
 	render: function(doc, block, view) {
-		return doc.dom`<element-portfolio block-content="items" class="${block.data.gutter ? 'gutter' : ''}"></element-portfolio>`;
+		return doc.dom`<element-portfolio block-content="items"></element-portfolio>`;
 	},
 	stylesheets: [
 		'../ui/portfolio.css'
@@ -67,14 +61,6 @@ Pageboard.elements.portfolio_item = {
 	},
 	icon: '<b class="icon">Cell</b>',
 	render: function(doc, block) {
-		var ratio = block.data.ratio;
-		if (!ratio) {
-			console.warn("ratio should have default value here", block);
-			ratio = Pageboard.elements.portfolio_item.properties.ratio.default;
-		}
-		ratio = ratio.split(':');
-		var large = ratio[0] == 2;
-		var high = ratio[1] == 2;
 		var url = block.data.url;
 		var img = "";
 		if (url) {
@@ -83,17 +69,23 @@ Pageboard.elements.portfolio_item = {
 				url = ".api/image?url=" + encodeURIComponent(url);
 				sep = '&';
 			}
-			var w = 100 * ratio[0];
-			var h = 100 * ratio[1];
+
+			var ratio = block.data.ratio.split(':');
+			var vals = {"1": 97, "2": 197};
+			// see portfolio.css for how to compute those numbers
+			var w = vals[ratio[0]];
+			var h = vals[ratio[1]];
+			var large = ratio[0] == 2;
+
 			img = doc.dom`<img src="${url}"
 				srcset="${url}${sep}rs=w:${w}%2Ch:${h}%2Cenlarge 160w,
-				${url}${sep}rs=w:${w}%2Ch:${h}%2Cenlarge 320w,
-				${url}${sep}rs=w:${2*w}%2Ch:${2*h}%2Cenlarge 640w,
-				${url}${sep}rs=w:${3*w}%2Ch:${3*h}%2Cenlarge 1280w" />`;
+				${url}${sep}rs=w:${2*w}%2Ch:${2*h}%2Cenlarge 320w,
+				${url}${sep}rs=w:${4*w}%2Ch:${4*h}%2Cenlarge 640w,
+				${url}${sep}rs=w:${8*w}%2Ch:${8*h}%2Cenlarge 1280w" />`;
 		}
-		return doc.dom`<div class="item ${large ? 'large' : ''} ${high ? 'high' : ''}">
-			<div class="image">${img}</div>
-			<div block-content="cell"></div>
+		return doc.dom`<div class="portfolio item ${large ? 'large' : ''}">
+			<div class="portfolio image">${img}</div>
+			<div class="portfolio cell" block-content="cell"></div>
 		</div>`;
 	}
 };
