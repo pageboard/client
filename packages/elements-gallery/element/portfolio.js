@@ -52,7 +52,11 @@ Pageboard.elements.portfolio_item = {
 			title: 'Image',
 			description: 'Local or remote URL',
 			type: "string",
-			format: "uri"
+			format: "uri",
+			input: {
+				name: 'href',
+				media: ["image", "svg"]
+			}
 		}
 	},
 	contents: {
