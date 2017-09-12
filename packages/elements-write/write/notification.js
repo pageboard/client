@@ -38,7 +38,7 @@ Pageboard.notify = function(title, obj) {
 	};
 	list.push(item);
 
-	var parent = Pageboard.notify.dom(obj.where || 'write');
+	var parent = Pageboard.notify.dom(obj.where);
 
 	var msg = document.dom`<div class="ui ${type} message">
 		<i class="close icon"></i>
@@ -64,6 +64,7 @@ function withText(text) {
 }
 
 Pageboard.notify.dom = function(where) {
+	if (!where) where = 'write';
 	if (roots[where]) return roots[where];
 	var root = document.querySelector(`#pageboard-${where} > .notifications`);
 	roots[where] = root;
