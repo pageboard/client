@@ -2,7 +2,7 @@ Pageboard.elements.paragraph = {
 	title: "Paragraph",
 	priority: -10,
 	properties: {},
-	contents: "inline<_>*",
+	contents: "inline*",
 	group: "block",
 	inplace: true,
 	icon: '<i class="icon paragraph"></i>',
@@ -24,7 +24,7 @@ Pageboard.elements.heading = {
 		}
 	},
 	contents: {
-		"text": "inline<_>*"
+		"text": "inline*"
 	},
 	group: "block",
 //	inplace: true,
