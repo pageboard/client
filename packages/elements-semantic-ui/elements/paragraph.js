@@ -1,13 +1,30 @@
 Pageboard.elements.paragraph = {
 	title: "Paragraph",
 	priority: -10,
-	properties: {},
+	properties: {
+		align: {
+			title: 'Align',
+			default: "",
+			oneOf: [{
+				constant: "",
+				title: "left"
+			}, {
+				constant: "center",
+				title: "center"
+			}, {
+				constant: "right",
+				title: "right"
+			}]
+		}
+	},
 	contents: "inline*",
 	group: "block",
 	inplace: true,
 	icon: '<i class="icon paragraph"></i>',
 	render: function(doc, block) {
-		return doc.dom`<p></p>`;
+		var p = doc.dom`<p></p>`;
+		if (block.data.align) p.classList.add(block.data.align, "aligned");
+		return p;
 	}
 };
 

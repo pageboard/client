@@ -96,6 +96,14 @@ p:last-child {
 	margin-bottom: 0em;
 }
 
+p.center.aligned {
+	text-align:center;
+}
+
+p.right.aligned {
+	text-align:right;
+}
+
 span.lighter {
 	font-weight:lighter;
 }
