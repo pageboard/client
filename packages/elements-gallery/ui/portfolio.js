@@ -75,7 +75,6 @@ class HTMLElementPortfolioImage extends HTMLElement {
 		// see portfolio.css for how to compute those numbers
 		var sizes = {"1": 97, "2": 197};
 		var shape = portfolio.dataset.shape;
-		if (sizes[shape] == null) shape = "square";
 		var w = sizes[item.dataset.scaleWidth || "1"];
 		var h = sizes[item.dataset.scaleHeight || "1"] * (shape == "rectangle" ? 1.6 : 1.0);
 
