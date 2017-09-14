@@ -4,29 +4,28 @@ Pageboard.elements.paragraph = {
 	properties: {
 		align: {
 			title: 'Align',
-			default: "",
+			default: "left",
 			oneOf: [{
-				constant: "",
-				title: "left"
+				constant: "left",
+				title: "left",
+				icon: '<i class="icon align left"></i>'
 			}, {
 				constant: "center",
-				title: "center"
+				title: "center",
+				icon: '<i class="icon align center"></i>'
 			}, {
 				constant: "right",
-				title: "right"
+				title: "right",
+				icon: '<i class="icon align right"></i>'
+			}, {
+				constant: "justify",
+				title: "justify",
+				icon: '<i class="icon align justify"></i>'
 			}]
 		}
 	},
 	parse: function(dom) {
-		var align = "";
-		if (dom.classList.contains("aligned")) {
-			if (dom.classList.contains("center")) {
-				align = "center";
-			} else if (dom.classList.contains("right")) {
-				align = "right";
-			}
-		}
-		return {align: align};
+		return {align: window.getComputedStyle(dom).textAlign};
 	},
 	contents: "inline*",
 	group: "block",
@@ -34,7 +33,8 @@ Pageboard.elements.paragraph = {
 	icon: '<i class="icon paragraph"></i>',
 	render: function(doc, block) {
 		var p = doc.dom`<p></p>`;
-		if (block.data.align) p.classList.add(block.data.align, "aligned");
+		var align = block.data.align || "left";
+		if (align != "left") p.classList.add(align, "aligned");
 		return p;
 	}
 };
