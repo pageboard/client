@@ -17,6 +17,17 @@ Pageboard.elements.paragraph = {
 			}]
 		}
 	},
+	parse: function(dom) {
+		var align = "";
+		if (dom.classList.contains("aligned")) {
+			if (dom.classList.contains("center")) {
+				align = "center";
+			} else if (dom.classList.contains("right")) {
+				align = "right";
+			}
+		}
+		return {align: align};
+	},
 	contents: "inline*",
 	group: "block",
 	inplace: true,
