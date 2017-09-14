@@ -2,10 +2,6 @@ Pageboard.elements.grid = {
 	title: "Grid",
 	group: "block",
 	contents: {
-		header: {
-			spec: "text*",
-			title: "heading"
-		},
 		columns: {
 			spec: "grid_column+",
 			title: 'columns'
@@ -13,14 +9,10 @@ Pageboard.elements.grid = {
 	},
 	icon: '<i class="icon grid layout"></i>',
 	render: function(doc, block) {
-		return doc.dom`<div>
-			<div class="ui header" block-content="header"></div>
-			<div class="ui doubling stackable equal width grid" block-content="columns"></div>
-		</div>`;
+		return doc.dom`<div class="ui doubling stackable equal width grid" block-content="columns"></div>`;
 	},
 	stylesheets: [
-		'/.pageboard/semantic-ui/components/grid.css',
-		'/.pageboard/semantic-ui/components/header.css'
+		'/.pageboard/semantic-ui/components/grid.css'
 	]
 };
 
