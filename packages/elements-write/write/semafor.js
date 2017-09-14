@@ -131,8 +131,15 @@ types.string = function(key, schema, node, fields) {
 
 types.oneOf = function(key, schema, node, fields) {
 	var field;
-	if (schema.oneOf.length <= 3) {
-		var alts = schema.oneOf;
+	var alts = schema.oneOf;
+	var icons = alts.every(function(item) { return !!item.icon; });
+	if (icons) {
+		field = node.dom`<div class="ui compact icon menu">
+			${alts.map(getIconOption)}
+		</div>`;
+		node.appendChild(field);
+		$(field).find('.radio.checkbox').checkbox();
+	} else if (alts.length <= 3) {
 		field = node.dom`<div class="inline fields">
 			<label for="${key}">${schema.title}</label>
 			${alts.map(getRadioOption)}
@@ -144,11 +151,18 @@ types.oneOf = function(key, schema, node, fields) {
 		field = node.dom`<div class="field" title="${schema.description || ''}">
 			<label>${schema.title}</label>
 			<select name="${key}" class="ui dropdown">
-				${schema.oneOf.map(getSelectOption)}
+				${alts.map(getSelectOption)}
 			</select>
 		</div>`;
 		node.appendChild(field);
 		$(field).find('.dropdown').dropdown();
+	}
+
+	function getIconOption(item) {
+		return `<div class="ui radio checkbox item" title="${item.title}">
+			<input type="radio" name="${key}" value="${item.constant}" checked="" tabindex="0" class="hidden">
+			<label>${item.icon}</label>
+		</div>`;
 	}
 
 	function getRadioOption(item) {

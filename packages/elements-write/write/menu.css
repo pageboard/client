@@ -6,7 +6,7 @@
 	margin:1em 0;
 }
 
-#menu > .menu {
+.ui.menu {
 	flex-wrap:wrap;
 }
 #menu .item > img:not(.ui) {
@@ -28,3 +28,14 @@
 	color:inherit;
 }
 
+.ui.icon.menu > .item.radio.checkbox > input,
+.ui.icon.menu > .item.radio.checkbox > label:before,
+.ui.icon.menu > .item.radio.checkbox > label:after {
+	display:none;
+}
+.ui.icon.menu > .item.radio.checkbox > label {
+	padding-left:0;
+}
+.ui.icon.menu > .item.radio.checkbox.checked {
+	background:#EEE;
+}
