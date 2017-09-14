@@ -6,7 +6,7 @@ function Menu(editor, selector) {
 	this.editor = editor;
 	this.node = document.querySelector(selector);
 	this.blocks = this.node.dom`<div id="menu" class="ui mini labeled icon menu"></div>`;
-	this.inlines = this.node.dom`<div id="menu" class="ui mini icon menu"></div>`;
+	this.inlines = this.node.dom`<div id="menu" class="ui icon menu"></div>`;
 	this.node.appendChild(this.blocks);
 	this.node.appendChild(this.inlines);
 	this.menu = new Pagecut.Menubar({
