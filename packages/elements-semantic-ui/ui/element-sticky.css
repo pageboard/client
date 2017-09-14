@@ -1,0 +1,9 @@
+element-sticky {
+	display:block;
+}
+.top.sticky {
+	top:0;
+}
+.bottom.sticky {
+	bottom:0;
+}
