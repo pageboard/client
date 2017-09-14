@@ -43,7 +43,6 @@ class HTMLElementPortfolio extends HTMLElement {
 
 	update() {
 		this._setup();
-		// TODO update isn't called when changing the portfolio properties
 		Array.from(this.querySelectorAll('element-portfolio-image')).forEach(function(node) {
 			node.update();
 		});
