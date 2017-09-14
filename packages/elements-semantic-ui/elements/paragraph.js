@@ -25,7 +25,16 @@ Pageboard.elements.paragraph = {
 		}
 	},
 	parse: function(dom) {
-		return {align: window.getComputedStyle(dom).textAlign};
+		var align = "left";
+		var prop = Pageboard.elements.paragraph.properties.align;
+		if (dom.classList.contains("aligned")) {
+			align = prop.oneOf.find(function(item) {
+				return dom.classList.contains(item.constant);
+			});
+			if (!align) align = prop.default;
+			else align = align.constant;
+		}
+		return {align: align};
 	},
 	contents: "inline*",
 	group: "block",
