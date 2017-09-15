@@ -42,11 +42,20 @@ Pageboard.elements.layout = {
 				title: "contained"
 			}]
 		},
-		fullheight: {
-			title: 'full height',
-			description: 'Use 100% height',
-			default: false,
-			type: 'boolean'
+		height: {
+			title: 'height',
+			description: 'control height',
+			default: '',
+			oneOf: [{
+				constant: "",
+				title: "auto"
+			}, {
+				constant: "half-height",
+				title: "half"
+			}, {
+				constant: "full-height",
+				title: "full"
+			}]
 		},
 		stack: {
 			title: 'stack',
@@ -70,7 +79,7 @@ Pageboard.elements.layout = {
 		else if (data.width == "contained") list.add('ui', 'container');
 		if (data.horizontal) list.add(data.horizontal);
 		if (data.vertical) list.add(data.vertical);
-		if (data.fullheight) list.add('fullheight');
+		if (data.height) list.add(data.height);
 		if (data.stack) list.add('stack');
 		return d;
 	},
