@@ -20,7 +20,7 @@
 .layout.right {
 	justify-content: flex-end;
 }
-.layout.stack {
+.layout.column {
 	flex-direction: column;
 }
 
@@ -33,7 +33,7 @@
 .layout.fullwidth {
 	width:100%;
 }
-.layout.stack > [block-type] {
+.layout.column > [block-type] {
 	width:100%;
 }
 

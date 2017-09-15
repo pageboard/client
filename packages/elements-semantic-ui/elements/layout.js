@@ -57,11 +57,16 @@ Pageboard.elements.layout = {
 				title: "full"
 			}]
 		},
-		stack: {
-			title: 'stack',
-			description: 'Stack layout vertically',
-			default: false,
-			type: 'boolean'
+		direction: {
+			title: 'direction',
+			default: "",
+			oneOf: [{
+				constant: "",
+				title: "Row"
+			}, {
+				constant: "column",
+				title: "Column"
+			}]
 		}
 	},
 	contents: {
@@ -80,7 +85,7 @@ Pageboard.elements.layout = {
 		if (data.horizontal) list.add(data.horizontal);
 		if (data.vertical) list.add(data.vertical);
 		if (data.height) list.add(data.height);
-		if (data.stack) list.add('stack');
+		if (data.direction) list.add(data.direction);
 		return d;
 	},
 	stylesheets: [
