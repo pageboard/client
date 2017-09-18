@@ -89,7 +89,6 @@ Form.prototype.change = function() {
 
 	// this must be done after reselecting with breadcrumb.click
 	this.block.data = Object.assign(this.block.data || {}, data);
-	editor.blocks.set(this.block);
 
 	var el = editor.element(this.type);
 	if (el.inplace) {
