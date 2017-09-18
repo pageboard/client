@@ -75,7 +75,7 @@ class HTMLElementPortfolioImage extends HTMLElement {
 		// and the values for gutters are copied in portfolio.css
 		// computeGutters(1.5, 1.5, 1, n)
 		// for n=4 gutter is 0.75, n=3 gutter is 1
-		// computeGutters(1.5, 1.5, 1.6180, n)
+		// computeGutters(1.5, 1.5, 1.299, n)
 		// same values for gutters
 		var sizes = {
 			square: {
@@ -84,7 +84,7 @@ class HTMLElementPortfolioImage extends HTMLElement {
 			},
 			rectangle: {
 				w: {"1":97, "2": 197},
-				h: {"1":156.946, "2": 316.892}
+				h: {"1":126, "2": 255}
 			}
 		};
 		var shape = portfolio.dataset.shape;
