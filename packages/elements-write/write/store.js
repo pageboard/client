@@ -5,7 +5,6 @@ function Store(editor, selector) {
 	editor.blocks.genId = this.genId.bind(this);
 	this.menu = document.querySelector(selector);
 	this.editor = editor;
-	this.ids = {};
 	this.pageId = editor.state.doc.attrs.block_id;
 
 	this.uiSave = this.menu.querySelector('[data-command="save"]');
@@ -14,7 +13,9 @@ function Store(editor, selector) {
 	this.uiDiscard.addEventListener('click', this.discard.bind(this));
 
 	this.update();
-	this.unsaved = this.get();
+	var state = this.get();
+	this.unsaved = state.blocks;
+	this.ids = state.ids || {};
 
 	if (this.unsaved) {
 		this.restore(this.unsaved).catch(function(err) {
@@ -44,13 +45,14 @@ Store.prototype.uiUpdate = function() {
 
 Store.prototype.get = function() {
 	var json = window.sessionStorage.getItem(this.key());
-	if (!json) return;
+	var state = {};
 	try {
-		return JSON.parse(json);
+		if (json) state = JSON.parse(json);
 	} catch(ex) {
 		console.error("corrupted local backup for", this.key());
 		this.clear();
 	}
+	return state;
 };
 
 Store.prototype.set = function(obj) {
@@ -59,7 +61,6 @@ Store.prototype.set = function(obj) {
 };
 
 Store.prototype.clear = function() {
-	this.ids = {};
 	window.sessionStorage.removeItem(this.key());
 };
 
@@ -67,10 +68,9 @@ Store.prototype.key = function() {
 	return "pageboard-store-" + document.location.toString();
 };
 
-Store.prototype.restore = function(state) {
+Store.prototype.restore = function(blocks) {
 	var self = this;
-	this.ids = state.ids;
-	return this.editor.from(state.blocks).then(function(frag) {
+	return this.editor.from(blocks).then(function(frag) {
 		self.ignoreNext = true;
 		self.editor.utils.setDom(frag);
 	}).catch(function(err) {
@@ -103,14 +103,14 @@ Store.prototype.update = function() {
 
 	// import data into this context
 	var state = JSON.parse(JSON.stringify({
-		blocks: blocks
+		blocks: blocks,
+		ids: this.ids
 	}));
-	state.ids = this.ids;
 
 	if (!this.initial) {
-		this.initial = state;
-	} else if (!this.editor.utils.equal(this.initial, state)) {
-		this.unsaved = state;
+		this.initial = state.blocks;
+	} else if (!this.editor.utils.equal(this.initial, state.blocks)) {
+		this.unsaved = state.blocks;
 		this.set(state);
 	} else {
 		delete this.unsaved;
@@ -131,6 +131,7 @@ Store.prototype.save = function(e) {
 	.then(function(result) {
 		this.initial = this.unsaved;
 		delete this.unsaved;
+		this.ids = {};
 		this.clear();
 		this.uiUpdate();
 		this.pageUpdate();
@@ -140,6 +141,7 @@ Store.prototype.save = function(e) {
 Store.prototype.discard = function(e) {
 	if (this.unsaved == null) return;
 	delete this.unsaved;
+	this.ids = {};
 	this.clear();
 	return this.restore(this.initial).catch(function(err) {
 		console.error(err);
@@ -167,8 +169,8 @@ Store.prototype.changes = function() {
 	var ids = this.ids;
 
 	var block;
-	for (var id in unsaved.blocks) {
-		block = unsaved.blocks[id];
+	for (var id in unsaved) {
+		block = unsaved[id];
 		if (ids[id]) {
 			add.push(block);
 		}
@@ -178,12 +180,12 @@ Store.prototype.changes = function() {
 	}
 
 	var removals = {};
-	for (var id in initial.blocks) {
-		block = unsaved.blocks[id];
+	for (var id in initial) {
+		block = unsaved[id];
 		if (!block) {
 			removals[id] = true;
 		} else {
-			if (!this.editor.utils.equal(initial.blocks[id], block)) {
+			if (!this.editor.utils.equal(initial[id], block)) {
 				update.push(block);
 			}
 		}
@@ -192,7 +194,7 @@ Store.prototype.changes = function() {
 	// fail-safe: compare to initial children list
 	var kids = this.editor.blocks.store;
 	for (var id in kids) {
-		if (!unsaved.blocks[id]) removals[id] = true;
+		if (!unsaved[id]) removals[id] = true;
 	}
 	var remove = Object.keys(removals).map(function(id) {
 		return {id: id};
