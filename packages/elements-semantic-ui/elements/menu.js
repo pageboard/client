@@ -60,10 +60,9 @@ Pageboard.elements.menu_item_link = {
 	group: 'menu_item',
 	icon: '<b class="icon">Item</b>',
 	render: function(doc, block) {
-		var dom = Pageboard.elements.link.render(doc, block);
-		dom.className = "item";
-		dom.setAttribute('block-content', 'content');
-		return dom;
+		var a = doc.dom`<a class="item" href="${block.data.url}" block-content="content"></a>`;
+		if (a.hostname != document.location.hostname) a.rel = "noopener";
+		return a;
 	}
 };
 
