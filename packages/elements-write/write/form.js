@@ -97,8 +97,8 @@ Form.prototype.change = function() {
 		if (node) {
 			this.ignoreNext = true;
 			editor.utils.refresh(node, this.block);
-			return;
 		}
+		return;
 	}
 	var nodes = editor.blocks.domQuery(id, {all: true});
 
