@@ -71,16 +71,30 @@ class HTMLElementPortfolioImage extends HTMLElement {
 			sep = '&';
 		}
 
-		// see portfolio.css for how to compute those numbers
-		var sizes = {"1": 97, "2": 197};
+		// computeGutters is used once to get those numbers,
+		// and the values for gutters are copied in portfolio.css
+		// computeGutters(1.5, 1.5, 1, n)
+		// for n=4 gutter is 0.75, n=3 gutter is 1
+		// computeGutters(1.5, 1.5, 1.6180, n)
+		// same values for gutters
+		var sizes = {
+			square: {
+				w: {"1":97, "2": 197},
+				h: {"1":97, "2": 197}
+			},
+			rectangle: {
+				w: {"1":97, "2": 197},
+				h: {"1":156.946, "2": 316.892}
+			}
+		};
 		var shape = portfolio.dataset.shape;
-		var w = sizes[item.dataset.scaleWidth || "1"];
-		var h = sizes[item.dataset.scaleHeight || "1"] * (shape == "rectangle" ? 1.6 : 1.0);
+		var w = sizes[shape].w[item.dataset.scaleWidth || "1"];
+		var h = sizes[shape].h[item.dataset.scaleHeight || "1"];
 
-		this.img.srcset = `${url}${sep}rs=w:${w}%2Ch:${h}%2Cenlarge 160w,
-			${url}${sep}rs=w:${2*w}%2Ch:${2*h}%2Cenlarge 320w,
-			${url}${sep}rs=w:${4*w}%2Ch:${4*h}%2Cenlarge 640w,
-			${url}${sep}rs=w:${8*w}%2Ch:${8*h}%2Cenlarge 1280w`;
+		this.img.srcset = `${url}${sep}rs=w:${w}%2Ch:${Math.round(h)}%2Cenlarge 160w,
+			${url}${sep}rs=w:${2*w}%2Ch:${Math.round(2*h)}%2Cenlarge 320w,
+			${url}${sep}rs=w:${3*w}%2Ch:${Math.round(3*h)}%2Cenlarge 640w,
+			${url}${sep}rs=w:${4*w}%2Ch:${Math.round(4*h)}%2Cenlarge 1280w`;
 	}
 	connectedCallback() {
 		this.update();
@@ -92,3 +106,36 @@ Page.setup(function() {
 	window.customElements.define('element-portfolio-image', HTMLElementPortfolioImage);
 });
 
+/*
+	p, q are initial x, y gutters for n=2
+	f is any h/w ratio one wants to impose on the grid cell
+
+function computeGutters(p, q, f, n) {
+	var s = 100*f - 2*f*p + q;
+	var t = 100 - p;
+	var u = 50 - p;
+	var a = s / u;
+	var b = f * u / t;
+	var c = s / t;
+	var P = (100 * (2*c - a)) / (n * (c - a));
+	var Q = (100 * (2*c*f - a*c)) / (n * (c - a));
+	var w = (100 / n) - P;
+	var h = f * w;
+	var W = 2*w + P;
+	var H = 2*h + Q;
+	var obj = {
+		gx: P,
+		gy: Q,
+		pw: w,
+		pW: W,
+		ph: h,
+		pH: H,
+		w: 4*w,
+		W: 4*W,
+		h: 4*h,
+		H: 4*H
+	};
+	for (var k in obj) obj[k] = Math.round(obj[k] * 10000) / 10000;
+	return obj;
+}
+*/
