@@ -30,7 +30,24 @@ Pageboard.elements.link = {
 			format: "uri",
 			input: {
 				name: 'href',
-				media: ["link", "file", "archive"]
+				filter: {
+					type: ["link", "file", "archive"]
+				}
+			}
+		},
+		icon: {
+			title: 'Icon',
+			type: "string",
+			format: "uri",
+			input: {
+				name: 'href',
+				display: 'icon',
+				filter: {
+					type: ["image", "svg"],
+					maxSize: 20000,
+					maxWidth: 320,
+					maxHeight: 320
+				}
 			}
 		}
 	},
@@ -44,10 +61,18 @@ Pageboard.elements.link = {
 	render: function(doc, block) {
 		var a = doc.dom`<a href="${block.data.url}"></a>`;
 		if (a.hostname != document.location.hostname) a.rel = "noopener";
-		if (block.data.target) a.target = block.data.target;
-		if (block.data.button) a.className = "ui button";
+		var d = block.data;
+		if (d.target) a.target = d.target;
+		if (d.button) a.className = "ui button";
+		if (d.icon) {
+			a.classList.add('icon');
+			a.style.backgroundImage = `url(${d.icon})`;
+		}
 		return a;
 	},
-	stylesheets: ['/.pageboard/semantic-ui/components/button.css']
+	stylesheets: [
+		'/.pageboard/semantic-ui/components/button.css',
+		'../ui/site.css'
+	]
 };
 

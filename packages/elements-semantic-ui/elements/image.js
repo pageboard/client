@@ -8,7 +8,9 @@ Pageboard.elements.image = {
 			format: "uri",
 			input: {
 				name: 'href',
-				media: ["image", "svg"]
+				filter: {
+					type: ["image", "svg"]
+				}
 			}
 		}
 	},

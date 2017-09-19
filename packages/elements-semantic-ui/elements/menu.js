@@ -48,7 +48,9 @@ Pageboard.elements.menu_item_link = {
 			format: "uri",
 			input: {
 				name: 'href',
-				media: "link"
+				filter: {
+					type: "link"
+				}
 			}
 		}
 	},
