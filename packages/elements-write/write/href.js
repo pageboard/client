@@ -372,6 +372,7 @@ Href.prototype.renderList = function(list) {
 };
 
 function renderItem(obj) {
+	var dims = tplDims(obj);
 	var item = document.dom`<a href="${normUrl(obj.url)}" class="item" title="${obj.meta.description || ""}">
 		<div class="content">
 			<div class="ui tiny header">
@@ -383,7 +384,7 @@ function renderItem(obj) {
 			</div>
 			<div class="left floated meta">
 				${obj.mime}<em>${tplSize(obj.meta.size)}</em><br>
-				${tplDims(obj)}<br>
+				${dims ? dims + '<br>' : ''}
 				${moment(obj.updated_at).fromNow()}
 			</div>
 			${tplThumbnail(obj.meta.thumbnail)}
