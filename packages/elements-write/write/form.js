@@ -61,14 +61,15 @@ Form.prototype.update = function(parents) {
 
 	if (el.properties) Object.keys(el.properties).forEach(function(key) {
 		var props = el.properties[key];
-		if (!props.input || !props.input.name) return;
-		var CurInput = Pageboard.inputs[props.input.name];
+		var opts = props.input;
+		if (!opts || !opts.name) return;
+		var CurInput = Pageboard.inputs[opts.name];
 		if (!CurInput) {
-			console.error("Unknown input name", Pageboard.inputs, props, el);
+			console.error("Unknown input name", Pageboard.inputs, opts, el);
 			return;
 		}
 		if (!this.inputs[key]) {
-			this.inputs[key] = new CurInput(node.querySelector(`[name="${key}"]`), props.input);
+			this.inputs[key] = new CurInput(node.querySelector(`[name="${key}"]`), opts);
 		} else {
 			this.inputs[key].change();
 		}

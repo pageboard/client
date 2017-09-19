@@ -5,7 +5,7 @@ function Href(input, opts) {
 	this.renderList = this.renderList.bind(this);
 	this.cache = this.cache.bind(this);
 	this.set = this.set.bind(this);
-	this.media = opts.media;
+	this.opts = opts;
 	this.action = null;
 	this.input = input;
 	this.list = [];
@@ -199,10 +199,11 @@ Href.prototype.searchStart = function() {
 };
 
 Href.prototype.searchUpdate = function() {
-	return Pageboard.uiLoad(this.node, GET('/.api/href', {
-		text: this.node.querySelector('input').value,
-		type: this.media
-	})).then(this.cache).then(this.renderList);
+	var filter = Object.assign({
+		text: this.node.querySelector('input').value
+	}, this.opts.filter);
+	return Pageboard.uiLoad(this.node, GET('/.api/href', filter))
+		.then(this.cache).then(this.renderList);
 };
 
 Href.prototype.searchStop = function() {
