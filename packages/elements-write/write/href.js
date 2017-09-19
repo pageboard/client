@@ -355,7 +355,7 @@ Href.prototype.renderList = function(list) {
 	container.textContent = ' ';
 	var containsSelected = false;
 	list.forEach(function(obj) {
-		var item = renderItem(obj);
+		var item = this.renderItem(obj);
 		if (selected && item.getAttribute('href') == selected) {
 			containsSelected = true;
 			item.classList.add('selected');
@@ -363,17 +363,20 @@ Href.prototype.renderList = function(list) {
 		} else {
 			container.appendChild(item);
 		}
-	});
+	}, this);
 
 	if (selected && !containsSelected && this.map[selected]) {
-		var item = renderItem(this.map[selected]);
+		var item = this.renderItem(this.map[selected]);
 		item.classList.add('selected');
 		container.insertBefore(item, container.firstChild);
 	}
+	container.className = `ui items ${this.opts.display}`;
 };
 
-function renderItem(obj) {
+Href.prototype.renderItem = function(obj) {
 	var dims = tplDims(obj);
+	var display = this.opts.display;
+
 	var item = document.dom`<a href="${normUrl(obj.url)}" class="item" title="${obj.meta.description || ""}">
 		<div class="content">
 			<div class="ui tiny header">
@@ -383,24 +386,30 @@ function renderItem(obj) {
 					<i class="icon ban"></i>
 				</div>
 			</div>
-			<div class="left floated meta">
-				${obj.mime}<em>${tplSize(obj.meta.size)}</em><br>
-				${dims ? dims + '<br>' : ''}
-				${moment(obj.updated_at).fromNow()}
-			</div>
-			${tplThumbnail(obj.meta.thumbnail)}
 		</div>
 	</a>`;
-	if (!obj.icon) {
-		item.querySelector('.icon.image').replaceWith(
-			document.dom`<i class="ui avatar external icon"></i>`
-		);
+	var content = item.firstElementChild;
+	if (display != "icon") {
+		content.appendChild(item.dom`<div class="left floated meta">
+			${obj.mime}<em>${tplSize(obj.meta.size)}</em><br>
+			${dims ? dims + '<br>' : ''}
+			${moment(obj.updated_at).fromNow()}
+		</div>
+		${tplThumbnail(obj.meta.thumbnail)}`);
+	} else {
+		content.appendChild(item.dom`<img class="ui tiny image" src="${obj.url}" />`);
 	}
 	if (!obj.visible) {
 		item.querySelector('[data-action="remove"]').remove();
 	}
+	if (!obj.icon) {
+		// TODO do not put "external" when it's actually a local svg
+		item.querySelector('.icon.image').replaceWith(
+			document.dom`<i class="ui avatar external icon"></i>`
+		);
+	}
 	return item;
-}
+};
 
 function tplSize(size) {
 	if (!size) return '';

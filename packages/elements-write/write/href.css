@@ -27,7 +27,19 @@
 	visibility: visible;
 }
 
+.field.href .items.icon {
+	display:flex;
+	flex-wrap:wrap;
+}
+.field.href .items.icon > .item {
+	flex: 1;
+	margin-right:1%;
+	margin-left:1%;
+	margin-top:0;
+}
+
 .field.href .items > .item > .content {
+	position:relative; /* for positioning the absolute icon on the right */
 	max-width:100%;
 	max-height:7em;
 	border:1px solid #999;
