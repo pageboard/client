@@ -49,7 +49,10 @@ Menu.prototype.item = function(el) {
 				editor.blocks.set(block);
 			}
 			if (el.inline) {
-				editor.utils.toggleMark(nodeType, editor.blocks.toAttrs(block))(state, dispatch);
+				editor.utils.toggleMark(nodeType, editor.blocks.toAttrs(block))(state, function(tr) {
+					tr.setMeta('editor', true);
+					dispatch(tr);
+				});
 			} else {
 				editor.blocks.from(block).then(function(fragment) {
 					if (sel.node && !sel.empty) {
