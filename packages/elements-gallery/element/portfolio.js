@@ -65,7 +65,9 @@ Pageboard.elements.portfolio_item = {
 			format: "uri",
 			input: {
 				name: 'href',
-				media: ["image", "svg"]
+				filter: {
+					type: ["image", "svg"]
+				}
 			}
 		}
 	},
