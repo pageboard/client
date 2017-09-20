@@ -36,6 +36,7 @@
 	margin-right:1%;
 	margin-left:1%;
 	margin-top:0;
+	width:31%;
 }
 
 .field.href .items > .item > .content {
@@ -106,6 +107,7 @@
 }
 
 .field.href .search {
+	width:100%; /* this fixes the default size of 20 chars */
 	border-top-right-radius:0 !important;
 	border-bottom-right-radius:0 !important;
 }

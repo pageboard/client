@@ -25,11 +25,7 @@ function Href(input, opts) {
 			urlObj.port = document.location.port;
 			val = Page.format(urlObj);
 		}
-		this.get(val).then(this.cache).then(function() {
-			me.set(val);
-		});
-	} else {
-		this.act('search');
+		this.get(val).then(this.cache);
 	}
 }
 
@@ -49,12 +45,24 @@ Href.prototype.init = function() {
 	var me = this;
 
 	this.node.addEventListener('input', function(e) {
-		if (me.action == "search") me.searchUpdate();
+		if (me.action == "search") {
+			me.searchUpdate();
+		} else if (!me.action) {
+			input.value = "";
+			Pageboard.trigger(input, 'change');
+			me.act("search");
+		}
 	});
 
 	this.node.addEventListener('focusin', function(e) {
 		if (!e.target.matches('input')) return;
-		if (!me.action) me.act('search');
+		if (!me.action) {
+			if (me.input.value) {
+				me.node.querySelector('input').select();
+			} else {
+				me.act('search');
+			}
+		}
 	});
 
 	this.node.addEventListener('click', function(e) {
@@ -80,9 +88,9 @@ Href.prototype.init = function() {
 		} else {
 			if (href == input.value) {
 				if (this.action == 'search') {
-					this.searchStop();
+					this.act(this.action);
 				} else {
-					this.set(input.value);
+//					this.set(input.value);
 				}
 			} else {
 				input.value = href;
@@ -150,7 +158,7 @@ Href.prototype.renderField = function() {
 		</div>`;
 	break;
 	default:
-		content = document.dom`<input class="search" type="text" placeholder="Search..." />
+		content = document.dom`<input class="search" type="text" placeholder="Search..." value="${this.input.value}" />
 		<div class="ui blue icon buttons">
 			<div class="ui button" data-action="search" title="Search">
 				<i class="search icon"></i>
@@ -188,7 +196,7 @@ Href.prototype.pasteStart = function() {
 };
 
 Href.prototype.pasteStop = function() {
-	this.set(this.input.value);
+//	this.set(this.input.value);
 	Pageboard.trigger(this.input, 'change');
 };
 
@@ -208,7 +216,7 @@ Href.prototype.searchUpdate = function() {
 
 Href.prototype.searchStop = function() {
 	Pageboard.write.classList.remove('href');
-	this.set(this.input.value);
+	this.renderList([]); // clear the list
 	Pageboard.trigger(this.input, 'change');
 };
 
@@ -365,11 +373,11 @@ Href.prototype.renderList = function(list) {
 		}
 	}, this);
 
-	if (selected && !containsSelected && this.map[selected]) {
-		var item = this.renderItem(this.map[selected]);
-		item.classList.add('selected');
-		container.insertBefore(item, container.firstChild);
-	}
+//	if (selected && !containsSelected && this.map[selected]) {
+//		var item = this.renderItem(this.map[selected]);
+//		item.classList.add('selected');
+//		container.insertBefore(item, container.firstChild);
+//	}
 	container.className = `ui items ${this.opts.display}`;
 };
 
@@ -397,7 +405,7 @@ Href.prototype.renderItem = function(obj) {
 		</div>
 		${tplThumbnail(obj.meta.thumbnail)}`);
 	} else {
-		content.appendChild(item.dom`<img class="ui tiny image" src="${obj.url}" />`);
+		content.appendChild(item.dom`<img class="ui tiny centered image" src="${obj.url}" />`);
 	}
 	if (!obj.visible) {
 		item.querySelector('[data-action="remove"]').remove();
