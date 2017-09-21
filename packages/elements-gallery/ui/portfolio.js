@@ -18,13 +18,15 @@ class HTMLElementPortfolio extends HTMLElement {
 			this._teardown();
 		}
 		this._items = this.querySelector('[block-content="items"]');
-		if (!this._items.className) this._items.className = 'cells';
-		this.portfolio = new Isotope(this._items, this._options);
-		this.addEventListener('load', this._loadListener, true);
+		var mode = this._items.className;
+		if (!mode) mode = this._items.className = 'cells';
+		if (mode == "cells") {
+			this.portfolio = new Isotope(this._items, this._options);
+			this.addEventListener('load', this._loadListener, true);
+		}
 		this.portfolioMenu = Array.prototype.find.call(this.children, function(node) {
 			return node.matches('.menu');
 		});
-		console.log("setup called", this.dataset);
 
 		if (this.dataset.dual == "true") {
 			if (!this.portfolioMenu) {
