@@ -44,6 +44,8 @@ Pageboard.elements.sitemap = {
 				child = pagesMap[id];
 				child.parentNode.removeChild(child);
 			}
+		}).catch(function(err) {
+			console.error("caught error", err);
 		});
 	},
 	stylesheets: [
