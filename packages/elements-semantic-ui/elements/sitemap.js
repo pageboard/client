@@ -75,6 +75,7 @@ Pageboard.elements.sitepage = {
 	unmount: function(block) {
 		block.standalone = true; // a page is always standalone
 		block.orphan = true; // avoid relating to this page
+		if (block.id != document.body.getAttribute('block-id')) delete block.content;
 		block.type = 'page'; // sitepage -> page
 	},
 	mount: function(block) {
