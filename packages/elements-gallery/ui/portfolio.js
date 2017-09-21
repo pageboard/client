@@ -17,12 +17,54 @@ class HTMLElementPortfolio extends HTMLElement {
 		if (this.portfolio) {
 			this._teardown();
 		}
-		this.portfolio = new Isotope(this, this._options);
+		this._items = this.querySelector('[block-content="items"]');
+		if (!this._items.className) this._items.className = 'cells';
+		this.portfolio = new Isotope(this._items, this._options);
 		this.addEventListener('load', this._loadListener, true);
+		this.portfolioMenu = Array.prototype.find.call(this.children, function(node) {
+			return node.matches('.menu');
+		});
+		console.log("setup called", this.dataset);
+
+		if (this.dataset.dual == "true") {
+			if (!this.portfolioMenu) {
+				this.portfolioMenu = this.dom`<div class="ui tiny compact icon menu">
+					<a class="icon item active" data-mode="cells"><b class="icon">P</b></a>
+					<a class="icon item" data-mode="articles"><b class="icon">L</b></a>
+				</div>`;
+				this.insertBefore(this.portfolioMenu, this._items);
+			}
+			this.portfolioMenu.addEventListener('click', this._switchListener, false);
+		} else {
+			if (this.portfolioMenu) {
+				this.portfolioMenu.remove();
+				delete this.portfolioMenu;
+			}
+			return;
+		}
 	}
 
 	_loadListener() {
 		if (this.portfolio) this.portfolio.layout();
+	}
+
+	_switchListener(e) {
+		var target = e.target.closest('.item');
+		if (!target || target.matches('.active')) return;
+		var portfolio = this.closest('element-portfolio');
+
+		Array.from(target.parentNode.querySelectorAll('.item')).forEach(function(node) {
+			node.classList.remove('active');
+			portfolio.classList.remove(node.dataset.mode);
+		}, this);
+		target.classList.add('active');
+		var mode = target.dataset.mode;
+		portfolio._items.className = mode;
+		if (mode == "articles") {
+			portfolio._teardown();
+		} else {
+			portfolio._setup();
+		}
 	}
 
 	_teardown() {
@@ -39,6 +81,10 @@ class HTMLElementPortfolio extends HTMLElement {
 
 	disconnectedCallback() {
 		this._teardown();
+		if (this.portfolioMenu) {
+			this.portfolioMenu.removeEventListener('click', this._switchListener, false);
+			delete this.portfolioMenu;
+		}
 	}
 
 	update() {

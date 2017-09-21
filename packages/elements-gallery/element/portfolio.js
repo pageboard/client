@@ -11,6 +11,12 @@ Pageboard.elements.portfolio = {
 				title: "Rectangle"
 			}],
 			default: "square"
+		},
+		dual: {
+			title: 'Dual mode',
+			description: 'Display menu for showing cells as articles',
+			type: "boolean",
+			default: false
 		}
 	},
 	contents: {
@@ -22,7 +28,10 @@ Pageboard.elements.portfolio = {
 	group: 'block',
 	icon: '<b class="icon">Por</b>',
 	render: function(doc, block) {
-		return doc.dom`<element-portfolio block-content="items" data-shape="${block.data.shape}"></element-portfolio>`;
+		var d = block.data;
+		return doc.dom`<element-portfolio data-shape="${d.shape}" data-dual="${d.dual}">
+			<div block-content="items"></div>
+		</element-portfolio>`;
 	},
 	stylesheets: [
 		'../ui/portfolio.css'
@@ -35,6 +44,7 @@ Pageboard.elements.portfolio = {
 
 Pageboard.elements.portfolio_item = {
 	title: "Item",
+	context: "portfolio/",
 	properties: {
 		scaleWidth: {
 			title: 'Scale width',
@@ -75,13 +85,20 @@ Pageboard.elements.portfolio_item = {
 		cell: {
 			spec: "layout",
 			title: "cell"
+		},
+		article: {
+			spec: "block+",
+			title: "article"
 		}
 	},
 	icon: '<b class="icon">Cell</b>',
 	render: function(doc, block) {
-		return doc.dom`<div class="portfolio item" data-scale-width="${block.data.scaleWidth}" data-scale-height="${block.data.scaleHeight}">
+		return doc.dom`<div class="item" data-scale-width="${block.data.scaleWidth}" data-scale-height="${block.data.scaleHeight}">
 			<element-portfolio-image src="${block.data.url}"></element-portfolio-image>
-			<div class="portfolio cell" block-content="cell"></div>
+			<div class="content">
+				<div class="cell" block-content="cell"></div>
+				<div class="article" block-content="article"></div>
+			</div>
 		</div>`;
 	}
 };

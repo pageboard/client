@@ -5,12 +5,12 @@ element-portfolio {
 	margin-bottom:-0.75%;
 	overflow:hidden;
 }
-element-portfolio > .item {
+element-portfolio > .cells > .item {
 	width:24.25%;
 	margin-right:0.75%;
 	margin-bottom:0.75%;
 }
-element-portfolio > .item[data-scale-width="2"] {
+element-portfolio > .cells > .item[data-scale-width="2"] {
 	width:49.25%;
 }
 
@@ -19,35 +19,46 @@ element-portfolio > .item[data-scale-width="2"] {
 		margin-right:-1%;
 		margin-bottom:-1%;
 	}
-	element-portfolio > .item {
+	element-portfolio > .cells > .item {
 		width:32.33%;
 		margin-right:1%;
 		margin-bottom:1%;
 	}
-	element-portfolio > .item[data-scale-width="2"] {
+	element-portfolio > .cells > .item[data-scale-width="2"] {
 		width:65.66%;
 	}
 }
 
 @media screen and (max-width: 512px) {
-	element-portfolio > .item {
+	element-portfolio > .cells > .item {
 		width:100%;
 	}
-	element-portfolio > .item[data-scale-width="2"] {
+	element-portfolio > .cells > .item[data-scale-width="2"] {
 		width:100%;
 	}
 }
 
-element-portfolio > .item > element-portfolio-image {
+element-portfolio > .cells > .item > element-portfolio-image {
 	display:block;
 	min-height:5em; /* editor */
 }
-element-portfolio > .item > element-portfolio-image > img {
+element-portfolio > .cells > .item > element-portfolio-image > img {
 	display:block;
 	width:100%;
 }
 
-element-portfolio > .item > [block-content="cell"] {
+element-portfolio > .cells > .item > .content {
+	position:absolute;
+	top:0;
+	bottom:0;
+	left:0;
+	right:0;
+}
+element-portfolio > .articles > .item > .content {
+	position:relative;
+}
+
+element-portfolio > .cells > .item > .content > [block-content="cell"] {
 	position:absolute;
 	top:0;
 	left:0;
@@ -58,13 +69,29 @@ element-portfolio > .item > [block-content="cell"] {
 	background-color:rgba(0, 0, 0, 0.5);
 	color:white;
 }
-element-portfolio > .item > [block-content="cell"] {
+element-portfolio > .cells > .item > .content > [block-content="cell"] {
 	background-color:rgba(0, 0, 0, 0.5);
 	color:white;
 	text-align:center;
 }
-element-portfolio > .item:hover > [block-content="cell"],
-element-portfolio > .item[block-focused] > [block-content="cell"] {
+element-portfolio > .cells > .item:hover > .content > [block-content="cell"],
+element-portfolio > .cells > .item[block-focused] > .content > [block-content="cell"] {
 	visibility:visible;
 }
 
+element-portfolio > .cells > .item > .content > .article,
+element-portfolio > .articles > .item > .content > .cell {
+	display:none;
+}
+element-portfolio > .articles > .item > .content > .article {
+	display:block;
+}
+element-portfolio > .articles > .item {
+	display:flex;
+}
+element-portfolio > .articles > .item > element-portfolio-image {
+	flex: 1 1;
+}
+element-portfolio > .articles > .item > .content {
+	flex: 8 0.5;
+}
