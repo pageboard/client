@@ -134,21 +134,25 @@ class HTMLElementPortfolioImage extends HTMLElement {
 				w: {"1":97, "2": 197},
 				h: {"1":126.0001, "2": 255.0002}
 			},
-			wide: { // computeGutters(1.5, 1.5, 0.76289, 3)
+			wide: { // computeGutters(1.5, 1.5, 0.62887, 3)
 				w: {"1":97, "2": 197},
-				h: {"1":74.0003, "2": 151.0007}
+				h: {"1":61.0004, "2": 125.0008}
+			},
+			article: {
+				w: {"1":194, "2": 194},
+				h: {"1":97, "2": 97}
 			}
 		};
 		var shape = portfolio.dataset.shape;
-		// legacy
-		if (shape == "rectangle") shape = "tall";
-		var sw, sh;
-		if (!portfolio._items.classList.contains('articles')) {
-			sw = item.dataset.scaleWidth;
-			sh = item.dataset.scaleHeight;
+		if (shape == "rectangle") {
+			// legacy
+			shape = "tall";
 		}
-		var w = sizes[shape].w[sw || "1"];
-		var h = sizes[shape].h[sh || "1"];
+		if (portfolio._items.classList.contains('articles')) {
+			shape = "article";
+		}
+		var w = sizes[shape].w[item.dataset.scaleWidth || "1"];
+		var h = sizes[shape].h[item.dataset.scaleHeight || "1"];
 
 		this.img.srcset = `${url}${sep}rs=w:${w}%2Ch:${Math.round(h)}%2Cenlarge 160w,
 			${url}${sep}rs=w:${2*w}%2Ch:${Math.round(2*h)}%2Cenlarge 320w,
