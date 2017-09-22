@@ -95,3 +95,10 @@ element-portfolio > .articles > .item > element-portfolio-image {
 element-portfolio > .articles > .item > .content {
 	flex: 8 0.5;
 }
+
+i.grid.icon:before {
+	content:'G';
+}
+i.list.icon:before {
+	content:'L';
+}

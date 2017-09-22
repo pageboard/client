@@ -31,8 +31,8 @@ class HTMLElementPortfolio extends HTMLElement {
 		if (this.dataset.dual == "true") {
 			if (!this.portfolioMenu) {
 				this.portfolioMenu = this.dom`<div class="ui tiny compact icon menu">
-					<a class="icon item active" data-mode="cells"><b class="icon">P</b></a>
-					<a class="icon item" data-mode="articles"><b class="icon">L</b></a>
+					<a class="icon item active" data-mode="cells"><i class="grid icon"></i></a>
+					<a class="icon item" data-mode="articles"><i class="list icon"></i></a>
 				</div>`;
 				this.insertBefore(this.portfolioMenu, this._items);
 			}
