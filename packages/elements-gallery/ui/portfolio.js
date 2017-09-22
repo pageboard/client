@@ -29,7 +29,7 @@ class HTMLElementPortfolio extends HTMLElement {
 			return node.matches('.menu');
 		});
 
-		if (this.dataset.dual == "true") {
+		if (this.dataset.listToggle == "true") {
 			if (!this.portfolioMenu) {
 				this.portfolioMenu = this.dom`<div class="ui tiny compact icon menu">
 					<a class="icon item active" data-mode="cells"><i class="grid icon"></i></a>
@@ -63,13 +63,24 @@ class HTMLElementPortfolio extends HTMLElement {
 		this.classList.add('carousel');
 	}
 
+	_destroyCarousel() {
+		var it = this.querySelector('element-carousel');
+		if (it) {
+			it.remove();
+			this.classList.remove('carousel');
+			this.portfolio.layout();
+		}
+	}
+
 	_itemClick(e) {
 		if (document.body.classList.contains('ProseMirror')) return;
 		var item = e.target.closest('[block-type="portfolio_item"]');
 		if (!item) return;
-		e.preventDefault();
 		var portfolio = item.closest('element-portfolio');
-		portfolio._initCarousel();
+		if (portfolio.dataset.carouselToggle == "true" && window.customElements.get('element-carousel')) {
+			e.preventDefault();
+			portfolio._initCarousel();
+		}
 	}
 
 	_loadListener() {
@@ -87,9 +98,7 @@ class HTMLElementPortfolio extends HTMLElement {
 		}, this);
 		var mode = target.dataset.mode;
 		if (mode == "carousel") {
-			portfolio.querySelector('element-carousel').remove();
-			portfolio.classList.remove('carousel');
-			portfolio.portfolio.layout();
+			portfolio._destroyCarousel();
 			return;
 		}
 		portfolio._items.className = mode;

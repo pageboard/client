@@ -15,11 +15,17 @@ Pageboard.elements.portfolio = {
 			}],
 			default: "square"
 		},
-		dual: {
-			title: 'Dual mode',
-			description: 'Display menu for showing cells as articles',
+		listToggle: {
+			title: 'Toggle to list',
+			description: 'Display a menu to switch between portfolio and list',
 			type: "boolean",
 			default: false
+		},
+		carouselToggle: {
+			title: 'Toggle to carousel',
+			description: 'Click on cells to switch to carousel',
+			type: "boolean",
+			default: true
 		}
 	},
 	contents: {
@@ -32,7 +38,7 @@ Pageboard.elements.portfolio = {
 	icon: '<b class="icon">Por</b>',
 	render: function(doc, block) {
 		var d = block.data;
-		return doc.dom`<element-portfolio data-shape="${d.shape}" data-dual="${d.dual}">
+		return doc.dom`<element-portfolio data-shape="${d.shape}" data-list-toggle="${d.listToggle}" data-carousel-toggle="${d.carouselToggle}">
 			<div block-content="items"></div>
 		</element-portfolio>`;
 	},
