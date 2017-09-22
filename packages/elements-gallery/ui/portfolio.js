@@ -18,6 +18,7 @@ class HTMLElementPortfolio extends HTMLElement {
 			this._teardown();
 		}
 		this._items = this.querySelector('[block-content="items"]');
+		this._items.addEventListener('click', this._itemClick, false);
 		var mode = this._items.className;
 		if (!mode) mode = this._items.className = 'cells';
 		if (mode == "cells") {
@@ -33,6 +34,7 @@ class HTMLElementPortfolio extends HTMLElement {
 				this.portfolioMenu = this.dom`<div class="ui tiny compact icon menu">
 					<a class="icon item active" data-mode="cells"><i class="grid icon"></i></a>
 					<a class="icon item" data-mode="articles"><i class="list icon"></i></a>
+					<a class="icon item" data-mode="carousel"><i class="close icon"></i></a>
 				</div>`;
 				this.insertBefore(this.portfolioMenu, this._items);
 			}
@@ -44,6 +46,30 @@ class HTMLElementPortfolio extends HTMLElement {
 			}
 			return;
 		}
+	}
+
+	_initCarousel(e) {
+		this.carousel = this.dom`<element-carousel data-page-dots="false">
+			<div class="flickity-viewport">
+				<div class="flickity-slider">${importImages(this)}</div>
+			</div>
+		</element-carousel>`;
+		function importImages(me) {
+			return Array.from(me.querySelectorAll('element-portfolio-image > img')).map(function(img) {
+				return me.dom`<div class="cell">${img.cloneNode(true)}</div>`;
+			});
+		}
+		this.appendChild(this.carousel);
+		this.classList.add('carousel');
+	}
+
+	_itemClick(e) {
+		if (document.body.classList.contains('ProseMirror')) return;
+		var item = e.target.closest('[block-type="portfolio_item"]');
+		if (!item) return;
+		e.preventDefault();
+		var portfolio = item.closest('element-portfolio');
+		portfolio._initCarousel();
 	}
 
 	_loadListener() {
@@ -59,9 +85,15 @@ class HTMLElementPortfolio extends HTMLElement {
 			node.classList.remove('active');
 			portfolio.classList.remove(node.dataset.mode);
 		}, this);
-		target.classList.add('active');
 		var mode = target.dataset.mode;
+		if (mode == "carousel") {
+			portfolio.querySelector('element-carousel').remove();
+			portfolio.classList.remove('carousel');
+			portfolio.portfolio.layout();
+			return;
+		}
 		portfolio._items.className = mode;
+		target.classList.add('active');
 		if (mode == "articles") {
 			portfolio._teardown();
 			Array.from(portfolio.querySelectorAll('element-portfolio-image')).forEach(function(node) {
@@ -77,6 +109,7 @@ class HTMLElementPortfolio extends HTMLElement {
 			this.portfolio.destroy();
 			delete this.portfolio;
 			this.removeEventListener('load', this._loadListener, true);
+			this._items.removeEventListener('click', this._itemClick, false);
 		}
 	}
 

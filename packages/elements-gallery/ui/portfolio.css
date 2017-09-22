@@ -112,9 +112,21 @@ element-portfolio > .articles > .item > .content {
 	flex: 8 0.5;
 }
 
+element-portfolio.carousel > [block-content="items"],
+element-portfolio.carousel > .menu > .item[data-mode],
+element-portfolio > .menu > .item[data-mode="carousel"] {
+	display:none !important;
+}
+element-portfolio.carousel > .menu > .item[data-mode="carousel"] {
+	display:block !important;
+}
+
 i.grid.icon:before {
 	content:'G';
 }
 i.list.icon:before {
 	content:'L';
+}
+i.close.icon:before {
+	content:'X';
 }
