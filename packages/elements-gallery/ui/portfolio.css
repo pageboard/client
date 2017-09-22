@@ -44,10 +44,12 @@ element-portfolio[data-shape="wide"] > .cells > .item[data-scale-width="2"] {
 }
 
 @media screen and (max-width: 512px) {
-	element-portfolio > .cells > .item {
+	element-portfolio > .cells > .item,
+	element-portfolio[data-shape="wide"] > .cells > .item {
 		width:100%;
 	}
-	element-portfolio > .cells > .item[data-scale-width="2"] {
+	element-portfolio > .cells > .item[data-scale-width="2"],
+	element-portfolio[data-shape="wide"] > .cells > .item[data-scale-width="2"] {
 		width:100%;
 	}
 }
