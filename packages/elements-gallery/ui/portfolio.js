@@ -64,8 +64,11 @@ class HTMLElementPortfolio extends HTMLElement {
 		portfolio._items.className = mode;
 		if (mode == "articles") {
 			portfolio._teardown();
+			Array.from(portfolio.querySelectorAll('element-portfolio-image')).forEach(function(node) {
+				node.update();
+			});
 		} else {
-			portfolio._setup();
+			portfolio.update();
 		}
 	}
 
@@ -142,8 +145,13 @@ class HTMLElementPortfolioImage extends HTMLElement {
 		var shape = portfolio.dataset.shape;
 		// legacy
 		if (shape == "rectangle") shape = "tall";
-		var w = sizes[shape].w[item.dataset.scaleWidth || "1"];
-		var h = sizes[shape].h[item.dataset.scaleHeight || "1"];
+		var sw, sh;
+		if (!portfolio._items.classList.contains('articles')) {
+			sw = item.dataset.scaleWidth;
+			sh = item.dataset.scaleHeight;
+		}
+		var w = sizes[shape].w[sw || "1"];
+		var h = sizes[shape].h[sh || "1"];
 
 		this.img.srcset = `${url}${sep}rs=w:${w}%2Ch:${Math.round(h)}%2Cenlarge 160w,
 			${url}${sep}rs=w:${2*w}%2Ch:${Math.round(2*h)}%2Cenlarge 320w,
