@@ -54,8 +54,17 @@ element-portfolio[data-shape="wide"] > .cells > .item[data-scale-width="2"] {
 	}
 }
 
-element-portfolio > .cells > .item > element-portfolio-image {
+element-portfolio-image {
 	display:block;
+	position:relative;
+}
+
+element-carousel .cell > element-portfolio-image {
+	width:100%;
+	text-align:center;
+}
+
+element-portfolio > .cells > .item > element-portfolio-image {
 	min-height:5em; /* editor */
 }
 element-portfolio > .cells > .item > element-portfolio-image > img {

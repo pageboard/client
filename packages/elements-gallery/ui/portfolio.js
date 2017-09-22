@@ -55,7 +55,7 @@ class HTMLElementPortfolio extends HTMLElement {
 			</div>
 		</element-carousel>`;
 		function importImages(me) {
-			return Array.from(me.querySelectorAll('element-portfolio-image > img')).map(function(img) {
+			return Array.from(me.querySelectorAll('element-portfolio-image')).map(function(img) {
 				return me.dom`<div class="cell">${img.cloneNode(true)}</div>`;
 			});
 		}
@@ -145,8 +145,11 @@ class HTMLElementPortfolio extends HTMLElement {
 class HTMLElementPortfolioImage extends HTMLElement {
 	constructor() {
 		super();
-		this.img = this.ownerDocument.createElement('img');
-		this.appendChild(this.img);
+		this.img = this.querySelector('img');
+		if (!this.img) {
+			this.img = this.ownerDocument.createElement('img');
+			this.appendChild(this.img);
+		}
 	}
 	update() {
 		var url = this.getAttribute('src');
@@ -157,7 +160,6 @@ class HTMLElementPortfolioImage extends HTMLElement {
 		var portfolio = this.closest('element-portfolio');
 		if (!portfolio) return;
 		var item = this.closest('[block-type="portfolio_item"]');
-		if (!item) return;
 		var sep = '?';
 		if (url.startsWith('/') == false) {
 			url = ".api/image?url=" + encodeURIComponent(url);
@@ -193,8 +195,8 @@ class HTMLElementPortfolioImage extends HTMLElement {
 		if (portfolio._items.classList.contains('articles')) {
 			shape = "article";
 		}
-		var w = sizes[shape].w[item.dataset.scaleWidth || "1"];
-		var h = sizes[shape].h[item.dataset.scaleHeight || "1"];
+		var w = sizes[shape].w[item && item.dataset.scaleWidth || "1"];
+		var h = sizes[shape].h[item && item.dataset.scaleHeight || "1"];
 
 		this.img.srcset = `${url}${sep}rs=w:${w}%2Ch:${Math.round(h)}%2Cenlarge 160w,
 			${url}${sep}rs=w:${2*w}%2Ch:${Math.round(2*h)}%2Cenlarge 320w,
