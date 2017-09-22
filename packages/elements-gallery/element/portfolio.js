@@ -36,9 +36,9 @@ Pageboard.elements.portfolio = {
 	},
 	group: 'block',
 	icon: '<b class="icon">Por</b>',
-	render: function(doc, block) {
+	render: function(doc, block, view) {
 		var d = block.data;
-		return doc.dom`<element-portfolio data-shape="${d.shape}" data-list-toggle="${d.listToggle}" data-carousel-toggle="${d.carouselToggle}">
+		return doc.dom`<element-portfolio data-shape="${d.shape}" data-list-toggle="${d.listToggle}" data-carousel-toggle="${!view.editable && d.carouselToggle}">
 			<div block-content="items"></div>
 		</element-portfolio>`;
 	},
