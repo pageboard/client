@@ -124,20 +124,17 @@ class HTMLElementPortfolioImage extends HTMLElement {
 
 		// computeGutters is used once to get those numbers,
 		// and the values for gutters are copied in portfolio.css
-		// computeGutters(1.5, 1.5, 1, n)
-		// for n=4 gutter is 0.75, n=3 gutter is 1
-		// computeGutters(1.5, 1.5, 1.299, n)
-		// same values for gutters
+		// for n=4 gutter is 0.75, n=3 gutter is 1, n=2 gutter is 1.5
 		var sizes = {
-			square: {
+			square: { // computeGutters(1.5, 1.5, 1, 4)
 				w: {"1":97, "2": 197},
 				h: {"1":97, "2": 197}
 			},
-			tall: {
+			tall: { // computeGutters(1.5, 1.5, 1.29897, 4)
 				w: {"1":97, "2": 197},
-				h: {"1":126, "2": 255}
+				h: {"1":126.0001, "2": 255.0002}
 			},
-			wide: { // computeGutters(1.5,1.5,0.76289,3)
+			wide: { // computeGutters(1.5, 1.5, 0.76289, 3)
 				w: {"1":97, "2": 197},
 				h: {"1":74.0003, "2": 151.0007}
 			}
