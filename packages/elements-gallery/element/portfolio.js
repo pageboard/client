@@ -7,8 +7,11 @@ Pageboard.elements.portfolio = {
 				constant: "square",
 				title: "Square",
 			}, {
-				constant: "rectangle",
-				title: "Rectangle"
+				constant: "tall",
+				title: "Tall"
+			}, {
+				constant: "wide",
+				title: "Wide"
 			}],
 			default: "square"
 		},

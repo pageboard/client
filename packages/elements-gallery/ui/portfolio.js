@@ -130,12 +130,18 @@ class HTMLElementPortfolioImage extends HTMLElement {
 				w: {"1":97, "2": 197},
 				h: {"1":97, "2": 197}
 			},
-			rectangle: {
+			tall: {
 				w: {"1":97, "2": 197},
 				h: {"1":126, "2": 255}
+			},
+			wide: { // computeGutters(1.5,1.5,0.76289,3)
+				w: {"1":97, "2": 197},
+				h: {"1":74.0003, "2": 151.0007}
 			}
 		};
 		var shape = portfolio.dataset.shape;
+		// legacy
+		if (shape == "rectangle") shape = "tall";
 		var w = sizes[shape].w[item.dataset.scaleWidth || "1"];
 		var h = sizes[shape].h[item.dataset.scaleHeight || "1"];
 
@@ -178,10 +184,10 @@ function computeGutters(p, q, f, n) {
 		pW: W,
 		ph: h,
 		pH: H,
-		w: 4*w,
-		W: 4*W,
-		h: 4*h,
-		H: 4*H
+		w: n*w,
+		W: n*W,
+		h: n*h,
+		H: n*H
 	};
 	for (var k in obj) obj[k] = Math.round(obj[k] * 10000) / 10000;
 	return obj;
