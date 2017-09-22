@@ -151,6 +151,22 @@ a.ui.button.icon {
 	padding-left:2.7em;
 }
 
+i.icon {
+	display:inline-block;
+	margin:0;
+	width:1.18em;
+	height:1em;
+	font-size:1em;
+	text-align:center;
+	speak:none;
+}
+i.icon:before {
+	display:block;
+	width:1.18em;
+	height:1em;
+	background-position: center center;
+	background-size:cover;
+}
 
 /*******************************
 				 Scrollbars
