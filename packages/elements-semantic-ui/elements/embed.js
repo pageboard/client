@@ -21,7 +21,7 @@ Pageboard.elements.embed = {
 		}
 	},
 	group: "block",
-	icon: '<i class="external icon"></i>',
+//	icon: '<i class="external icon"></i>',
 	parse: function(dom) {
 		var attrs = {};
 		if (dom.matches('iframe')) attrs.url = dom.getAttribute('src');
