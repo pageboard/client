@@ -197,6 +197,10 @@ class HTMLElementPortfolioImage extends HTMLElement {
 		}
 		var w = sizes[shape].w[item && item.dataset.scaleWidth || "1"];
 		var h = sizes[shape].h[item && item.dataset.scaleHeight || "1"];
+		if (!item) {
+			w *= 4;
+			h *= 4;
+		}
 
 		this.img.srcset = `${url}${sep}rs=w:${w}%2Ch:${Math.round(h)}%2Cenlarge 160w,
 			${url}${sep}rs=w:${2*w}%2Ch:${Math.round(2*h)}%2Cenlarge 320w,
