@@ -4,7 +4,7 @@ element-portfolio {
 	margin-right:-0.75%;
 	margin-bottom:-0.75%;
 	overflow:hidden;
-	width:100%;
+/*	width:100%;*/
 }
 element-portfolio > .cells > .item {
 	width:24.25%;
