@@ -1,0 +1,20 @@
+[block-type="sitemap"] {
+	min-height:2em;
+	position:relative;
+}
+.ui.list[block-type="sitemap"] {
+	padding:0.5em;
+	margin:0.5em;
+	border-left:2px solid gray;
+}
+
+.ui.list[block-type="sitemap"] .list > .item > .content > .list,
+.ui.list[block-type="sitemap"] > .item > .content > .list {
+	border: 1px dashed lightgray;
+	padding-right: 1em;
+}
+
+.ui.list[block-type="sitemap"] .list > .item {
+	margin-left:0.5em;
+}
+
