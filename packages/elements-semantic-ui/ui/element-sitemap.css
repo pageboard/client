@@ -18,3 +18,10 @@
 	margin-left:0.5em;
 }
 
+.ui.list[block-type="sitemap"] [block-type="sitepage"] > .content > .list:empty {
+	display:none;
+}
+
+.ui.list[block-type="sitemap"][block-focused] [block-type="sitepage"] > .content > .list:empty {
+	display:block;
+}
