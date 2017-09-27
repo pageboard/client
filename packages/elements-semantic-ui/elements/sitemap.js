@@ -10,7 +10,8 @@ Pageboard.elements.sitemap = {
 	title: "Site map",
 	contents: {
 		children: {
-			spec: "(virtual | sitepage)+"
+			spec: "(virtual | sitepage)+",
+			ignore: true
 		}
 	},
 	group: "block",
@@ -19,7 +20,6 @@ Pageboard.elements.sitemap = {
 		return doc.dom`<div class="ui list" block-content="children"></div>`;
 	},
 	mount: function(block, view) {
-		console.log("mount sitemap");
 		block.content.children = view.doc.createDocumentFragment();
 		return GET('/.api/pages').then(function(pages) {
 			var tree = {};
@@ -29,6 +29,8 @@ Pageboard.elements.sitemap = {
 					// do not overwrite the actual page object, use it for up-to-date render
 					page = storedPage;
 				} else {
+					// problem: this does not update store's initial block list
+					page.orphan = true;
 					view.blocks.set(page);
 				}
 				var branch = tree;
@@ -40,8 +42,8 @@ Pageboard.elements.sitemap = {
 				});
 			});
 			return tree;
-		}).then(fillChildren).then(function() {
-			console.log("done", block.content.children);
+		}).then(fillChildren).catch(function(err) {
+			console.error(err);
 		});
 
 		function fillChildren(tree, parent) {
@@ -96,19 +98,23 @@ Pageboard.elements.sitepage = {
 	contents: {
 		children: {
 			spec: "(virtual | sitepage)+",
-			title: 'pages'
+			title: 'pages',
+			ignore: true // won't serialize content
 		}
 	},
 	inherits: "page", // TODO support this, effectively replacing the need for mount/unmount here
 	unmount: function(block) {
 		block.standalone = true; // a page is always standalone
 		block.orphan = true; // avoid relating to this page
+
 		// TODO this should be replaced by a simple
 		// elements.sitepage.inherits = 'page'
-//		block.type = 'page'; // sitepage -> page
+		block.type = 'page'; // sitepage -> page
+		// avoid erasing content in database
+		if (block.content && Object.keys(block.content).length == 0) delete block.content;
 	},
 	mount: function(block) {
-//		block.type = 'page';
+		block.type = 'page';
 	},
 	icon: '<i class="icon file outline"></i>',
 	context: 'sitemap/ | sitepage/',
@@ -116,7 +122,7 @@ Pageboard.elements.sitepage = {
 		return doc.dom`<element-sitepage class="item" data-url="${block.data.url}">
 			<div class="content">
 				<div class="header">${block.data.title}</div>
-				<div class="description">${block.data.url}</div>
+				<a href="${block.data.url}" class="description">${block.data.url}</a>
 				<div class="list" block-content="children"></div>
 			</div>
 		</element-sitepage>`;
