@@ -10,7 +10,7 @@ Pageboard.elements.sitemap = {
 	title: "Site map",
 	contents: {
 		children: {
-			spec: "(virtual | sitepage)+",
+			spec: "sitepage*",
 			ignore: true
 		}
 	},
@@ -97,7 +97,7 @@ Pageboard.elements.sitepage = {
 	},
 	contents: {
 		children: {
-			spec: "(virtual | sitepage)+",
+			spec: "sitepage*",
 			title: 'pages',
 			ignore: true // won't serialize content
 		}
