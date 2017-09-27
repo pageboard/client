@@ -1,6 +1,8 @@
 Pageboard.elements.paragraph = {
 	title: "Paragraph",
 	priority: -10,
+	tag: 'p',
+	isolating: false,
 	properties: {
 		align: {
 			title: 'Align',
