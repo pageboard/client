@@ -61,7 +61,7 @@
 .field.href .items > .item > .content > .meta {
 	margin-top:0.15em;
 	margin-bottom:0.15em;
-	padding-left:0.3em;
+	padding-left:2em;
 	/* let div.meta grow with its content */
 	position:relative;
 	overflow:hidden;
