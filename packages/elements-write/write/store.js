@@ -3,6 +3,8 @@ Pageboard.Controls.Store = Store;
 
 function Store(editor, selector) {
 	editor.blocks.genId = this.genId.bind(this);
+	this._blocksSet = editor.blocks.set;
+	editor.blocks.set = this.blocksSet.bind(this);
 	this.menu = document.querySelector(selector);
 	this.editor = editor;
 	this.pageId = editor.state.doc.attrs.block_id;
@@ -36,6 +38,14 @@ Store.prototype.genId = function() {
 	}
 	this.ids[str] = true;
 	return str;
+};
+
+Store.prototype.blocksSet = function(data) {
+	var blocks = this.editor.blocks;
+	data = this._blocksSet.call(blocks, data);
+	data.forEach(function(block) {
+		if (block.standalone) this.initial[block.id] = JSON.parse(JSON.stringify(blocks.copy(block)));
+	}, this);
 };
 
 Store.prototype.uiUpdate = function() {
@@ -183,7 +193,7 @@ Store.prototype.changes = function() {
 	for (var id in initial) {
 		block = unsaved[id];
 		if (!block) {
-			removals[id] = true;
+			if (!initial[id].orphan) removals[id] = true;
 		} else {
 			if (!this.editor.utils.equal(initial[id], block)) {
 				update.push(block);
@@ -194,7 +204,9 @@ Store.prototype.changes = function() {
 	// fail-safe: compare to initial children list
 	var kids = this.editor.blocks.store;
 	for (var id in kids) {
-		if (!unsaved[id]) removals[id] = true;
+		if (!unsaved[id] && !kids[id].orphan) {
+			removals[id] = true;
+		}
 	}
 	var remove = Object.keys(removals).map(function(id) {
 		return {id: id};
