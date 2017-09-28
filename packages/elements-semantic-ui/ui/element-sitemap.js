@@ -1,22 +1,31 @@
 class HTMLElementSitepage extends HTMLElement {
 	constructor() {
 		super();
+		this.initialUrl = this.dataset.url;
 	}
 	connectedCallback() {
+		this.update(true);
+	}
+
+	update(check) {
 		var node = this;
 		var url = node.dataset.url || "";
+		var initialUrl = node.initialUrl;
 		var name = url.substring(1).split('/').pop();
-		// collect all parent element-sitepage
-		var parent = node.parentNode && node.parentNode.closest('element-sitepage');
-		var parentUrl = parent ? parent.dataset.url : '';
-		var newUrl = parentUrl + '/' + name;
-		if (url == newUrl) return;
 		// the mutations observer kicks in after this callback
 		setTimeout(function() {
-			Array.prototype.forEach.call(node.querySelectorAll('element-sitepage'), function(child) {
+			// collect all parent element-sitepage
+			var parent = node.parentNode && node.parentNode.closest('element-sitepage');
+			var parentUrl = parent ? parent.dataset.url : '';
+			var newUrl = parentUrl + '/' + name;
+			node.initialUrl = newUrl;
+			if (check && url == newUrl) return;
+			var children = node.querySelector('[block-content="children"]').children;
+			Array.prototype.forEach.call(children, function(child) {
+				if (!child.matches('element-sitepage')) return; // cursor
 				var childUrl = child.dataset.url;
-				if (childUrl.startsWith(url)) {
-					childUrl = newUrl + childUrl.substring(url.length);
+				if (childUrl.startsWith(initialUrl)) {
+					childUrl = newUrl + childUrl.substring(initialUrl.length);
 					child.setAttribute('data-url', childUrl);
 				}
 			});
