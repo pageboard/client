@@ -10,8 +10,7 @@ Pageboard.elements.sitemap = {
 	title: "Site map",
 	contents: {
 		children: {
-			spec: "sitepage*",
-			ignore: true
+			spec: "sitepage*"
 		}
 	},
 	group: "block",
@@ -98,20 +97,16 @@ Pageboard.elements.sitepage = {
 	contents: {
 		children: {
 			spec: "sitepage*",
-			title: 'pages',
-			ignore: true // won't serialize content
+			title: 'pages'
 		}
 	},
 	inherits: "page", // TODO support this, effectively replacing the need for mount/unmount here
 	unmount: function(block) {
 		block.standalone = true; // a page is always standalone
 		block.orphan = true; // avoid relating to this page
-
 		// TODO this should be replaced by a simple
 		// elements.sitepage.inherits = 'page'
 		block.type = 'page'; // sitepage -> page
-		// avoid erasing content in database
-		if (block.content && Object.keys(block.content).length == 0) delete block.content;
 	},
 	mount: function(block) {
 		block.type = 'page';
