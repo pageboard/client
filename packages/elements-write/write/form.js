@@ -6,7 +6,7 @@ function Form(editor, selector) {
 	this.editor = editor;
 	this.$node = $(selector);
 	this.clear();
-	this.$node.on('change input', Throttle(this.change.bind(this), 50));
+	this.changeListener = Throttle(this.change.bind(this), 50);
 }
 
 Form.prototype.clear = function() {
@@ -42,6 +42,8 @@ Form.prototype.update = function(parents) {
 		return;
 	}
 
+	this.$node.off('change input', this.changeListener);
+
 	if (block != this.block) this.clear();
 
 	this.type = info.type;
@@ -74,6 +76,7 @@ Form.prototype.update = function(parents) {
 			this.inputs[key].change();
 		}
 	}.bind(this));
+	this.$node.on('change input', this.changeListener);
 };
 
 Form.prototype.change = function() {
