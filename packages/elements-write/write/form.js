@@ -116,14 +116,6 @@ Form.prototype.change = function() {
 		editor.utils.refreshTr(tr, node, this.block);
 	});
 	editor.dispatch(tr);
-
-	var node = editor.blocks.domQuery(id, {focused: true});
-	if (node) {
-		var sel = editor.utils.select(node);
-		if (sel) {
-			editor.dispatch(editor.state.tr.setSelection(sel));
-		}
-	}
 };
 
 })(window.Pageboard, window.Pagecut);
