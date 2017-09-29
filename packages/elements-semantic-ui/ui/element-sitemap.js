@@ -23,7 +23,7 @@ class HTMLElementSitepage extends HTMLElement {
 		Array.prototype.forEach.call(children, function(child) {
 			if (!child.matches('element-sitepage')) return; // cursor
 			var childUrl = child.dataset.url;
-			if (childUrl.startsWith(initialUrl)) {
+			if (childUrl.startsWith(initialUrl + '/')) {
 				childUrl = newUrl + childUrl.substring(initialUrl.length);
 				child.setAttribute('data-url', childUrl);
 			}
