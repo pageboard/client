@@ -21,7 +21,3 @@
 element-sitepage > .content > .list:empty {
 	display:none;
 }
-
-element-sitepage[block-focused] > .content > .list:empty {
-	display:block;
-}
