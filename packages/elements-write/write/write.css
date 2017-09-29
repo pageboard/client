@@ -85,40 +85,49 @@ body {
 	padding: 0.67857143em 1em; /* this is the padding value of .field */
 }
 
-.ui.form .inline.fields .field {
+#form .inline.fields .field {
 	padding:0;
 }
 
-.ui.form > .inline.field,
-.ui.form > .inline.fields {
+#form .inline.fields .field > .radio {
+	margin:0em 0.85714286em 0em 0em;
+}
+
+#form .ui.radio.checkbox .box,
+#form .ui.radio.checkbox label {
+	padding-left:1.65714em;
+}
+
+#form > .inline.field,
+#form > .inline.fields {
 	justify-content:space-between;
 }
 
-.ui.toggle.checkbox .box,
-.ui.toggle.checkbox label {
+#form .ui.toggle.checkbox .box,
+#form .ui.toggle.checkbox label {
 	padding-left:2.3em; /* compensate absolute inner width, see below */
 }
 
-.ui.toggle.checkbox .box:hover::before,
-.ui.toggle.checkbox label:hover::before {
+#form .ui.toggle.checkbox .box:hover::before,
+#form .ui.toggle.checkbox label:hover::before {
 	background-color: rgba(0, 0, 0, 0.4);
 }
-.ui.toggle.checkbox .box:before,
-.ui.toggle.checkbox label:before {
+#form .ui.toggle.checkbox .box:before,
+#form .ui.toggle.checkbox label:before {
 	background-color: rgba(0, 0, 0, 0.2);
 	top:0.25rem;
 	width:2.3rem;
 	height:1rem;
 }
 
-.ui.toggle.checkbox input ~ .box:after,
-.ui.toggle.checkbox input ~ label:after,
-.ui.toggle.checkbox input:checked ~ .box:after,
-.ui.toggle.checkbox input:checked ~ label:after {
+#form .ui.toggle.checkbox input ~ .box:after,
+#form .ui.toggle.checkbox input ~ label:after,
+#form .ui.toggle.checkbox input:checked ~ .box:after,
+#form .ui.toggle.checkbox input:checked ~ label:after {
 	box-shadow:rgba(34, 36, 38, 0.15) 0px 1px 2px 0px,
 		rgba(34, 36, 38, 0.15) 0px 0px 0px 1px inset;
 }
-.ui.toggle.checkbox input:checked ~ .box:after,
-.ui.toggle.checkbox input:checked ~ label:after {
+#form .ui.toggle.checkbox input:checked ~ .box:after,
+#form .ui.toggle.checkbox input:checked ~ label:after {
 	left:0.8rem;
 }

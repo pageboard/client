@@ -142,7 +142,9 @@ types.oneOf = function(key, schema, node, fields) {
 	} else if (alts.length <= 3) {
 		field = node.dom`<div class="inline fields">
 			<label for="${key}">${schema.title}</label>
-			${alts.map(getRadioOption)}
+			<div class="field">
+				${alts.map(getRadioOption)}
+			</div>
 		</div>`;
 		node.appendChild(field);
 		$(field).find('.radio.checkbox').checkbox();
@@ -166,12 +168,10 @@ types.oneOf = function(key, schema, node, fields) {
 	}
 
 	function getRadioOption(item) {
-		return node.dom`<div class="field">
-			<div class="ui radio checkbox">
+		return node.dom`<div class="ui radio checkbox">
 				<input type="radio" name="${key}" value="${item.constant}" checked="" tabindex="0" class="hidden">
 				<label>${item.title}</label>
-			</div>
-		</div>`;
+			</div>`;
 	}
 
 	function getSelectOption(item) {
