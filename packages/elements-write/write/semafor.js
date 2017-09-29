@@ -188,15 +188,15 @@ types.integer = function(key, schema, node, fields) {
 };
 
 types.number = function(key, schema, node, fields) {
-	node.appendChild(node.dom`<div class="inline field">
+	node.appendChild(node.dom`<div class="inline fields">
 		<label>${schema.title || ''}</label>
-		<input type="number" name="${key}"
+		<div class="field"><input type="number" name="${key}"
 			value="${schema.default !== undefined ? schema.default : ''}"
 			title="${schema.description || ''}"
 			min="${schema.minimum != null ? schema.minimum : ''}"
 			max="${schema.maximum != null ? schema.maximum : ''}"
 			step="${schema.multipleOf != null ? schema.multipleOf : ''}"
-		/>
+		/></div>
 	</div>`);
 
 	fields[key].type = 'number';
