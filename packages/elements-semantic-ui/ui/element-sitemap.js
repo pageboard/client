@@ -27,7 +27,6 @@ class HTMLElementSitepage extends HTMLElement {
 				child.setAttribute('data-url', childUrl);
 			}
 		});
-		node.setAttribute('data-url', newUrl);
 	}
 }
 
