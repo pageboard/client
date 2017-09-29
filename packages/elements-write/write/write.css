@@ -98,6 +98,10 @@ body {
 	padding-left:1.65714em;
 }
 
+#form .ui.icon.menu .ui.item.radio.checkbox label {
+	padding-left:0;
+}
+
 #form > .inline.field,
 #form > .inline.fields {
 	justify-content:space-between;
