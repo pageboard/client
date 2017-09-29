@@ -6,7 +6,7 @@ function Form(editor, selector) {
 	this.editor = editor;
 	this.$node = $(selector);
 	this.clear();
-	this.changeListener = this.change.bind(this);
+	this.changeListener = Throttle(this.change.bind(this), 50);
 }
 
 Form.prototype.clear = function() {
