@@ -115,7 +115,7 @@ function process(key, schema, node, fields) {
 			types[type](key, schema, node, fields);
 		});
 	} else {
-		console.error('Unsupported type', type);
+		console.warn(key, 'has no supported type in schema', schema);
 	}
 }
 
