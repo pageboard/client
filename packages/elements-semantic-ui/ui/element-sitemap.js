@@ -1,10 +1,10 @@
 class HTMLElementSitepage extends HTMLElement {
 	constructor() {
 		super();
-		this.initialUrl = this.dataset.url;
 	}
 
 	connectedCallback() {
+		this.initialUrl = this.dataset.url;
 		this.update(true);
 	}
 
