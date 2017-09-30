@@ -399,7 +399,8 @@ Href.prototype.renderItem = function(obj) {
 	var content = item.firstElementChild;
 	if (display != "icon") {
 		content.appendChild(item.dom`<div class="left floated meta">
-			${obj.mime}<em>${tplSize(obj.meta.size)}</em><br>
+			${obj.type == 'link' ? (obj.pathname + '<br>') : ''}
+			${obj.mime.split(';').shift()}<em>${tplSize(obj.meta.size)}</em><br>
 			${dims ? dims + '<br>' : ''}
 			${moment(obj.updated_at).fromNow()}
 		</div>
