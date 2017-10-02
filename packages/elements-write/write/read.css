@@ -11,6 +11,8 @@
 	outline-offset:-2px !important;
 	cursor:pointer !important;
 	position:relative;
+}
+.ProseMirror-selectednode:not(img) {
 	min-width:1em;
 	min-height:1em;
 }
@@ -35,6 +37,8 @@
 	outline: 1px dashed #888;
 	outline-offset:-1px;
 	position:relative;
+}
+[block-focused="last"]:not(img) {
 	min-width:1em;
 	min-height:1em;
 }
