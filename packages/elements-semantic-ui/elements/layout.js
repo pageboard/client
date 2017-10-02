@@ -62,10 +62,10 @@ Pageboard.elements.layout = {
 			default: "",
 			oneOf: [{
 				constant: "",
-				title: "Row"
+				title: "row"
 			}, {
 				constant: "column",
-				title: "Column"
+				title: "column"
 			}]
 		}
 	},
