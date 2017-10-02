@@ -97,7 +97,8 @@ Pageboard.elements.sitepage = {
 	contents: {
 		children: {
 			spec: "sitepage*",
-			title: 'pages'
+			title: 'pages',
+			virtual: true // this drops block.content.children, and all
 		}
 	},
 	inherits: "page", // TODO support this, effectively replacing the need for mount/unmount here
