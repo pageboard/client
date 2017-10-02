@@ -67,6 +67,12 @@ Pageboard.elements.layout = {
 				constant: "column",
 				title: "column"
 			}]
+		},
+		invert: {
+			title: 'invert',
+			description: 'Invert background',
+			default: false,
+			type: 'boolean'
 		}
 	},
 	contents: {
@@ -86,6 +92,7 @@ Pageboard.elements.layout = {
 		if (data.vertical) list.add(data.vertical);
 		if (data.height) list.add(data.height);
 		if (data.direction) list.add(data.direction);
+		if (data.invert) list.add("inverted");
 		return d;
 	},
 	stylesheets: [

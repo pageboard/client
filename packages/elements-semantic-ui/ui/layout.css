@@ -41,3 +41,11 @@ body > .layout.half-height {
 	width:100%;
 }
 
+.inverted.layout {
+	background: rgba(0, 0, 0, 0.8);
+}
+
+.inverted.layout p {
+	color: white;
+}
+
