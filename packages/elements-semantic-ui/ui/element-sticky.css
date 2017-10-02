@@ -9,4 +9,5 @@ element-sticky {
 }
 element-sticky.always {
 	height:0;
+	z-index:100000;
 }
