@@ -44,10 +44,6 @@ Menu.prototype.item = function(el) {
 			var tr = state.tr;
 			var sel = self.selection;
 			var block = editor.blocks.create(el.name);
-			if (!el.inplace) {
-				block.id = editor.blocks.genId();
-				editor.blocks.set(block);
-			}
 			if (el.inline) {
 				editor.utils.toggleMark(nodeType, editor.blocks.toAttrs(block))(state, function(tr) {
 					tr.setMeta('editor', true);
