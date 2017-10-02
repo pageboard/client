@@ -3,6 +3,7 @@ Pageboard.elements.page = {
 	priority: -100,
 	title: 'Page',
 	group: 'page',
+	standalone: true, // besides site, can be child of zero or more parents
 	properties: {
 		title: {
 			title: 'Title',
