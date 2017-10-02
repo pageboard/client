@@ -178,9 +178,12 @@ Store.prototype.changes = function() {
 
 	var ids = this.ids;
 
-	var block;
+	var block, el;
 	for (var id in unsaved) {
 		block = unsaved[id];
+		// some blocks can be forced to be standalone, like pages
+		el = this.editor.element(block.type);
+		if (el.standalone) block.standalone = true;
 		if (ids[id]) {
 			add.push(block);
 		}
