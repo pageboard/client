@@ -182,7 +182,7 @@ types.oneOf = function(key, schema, node, fields) {
 
 types.integer = function(key, schema, node, fields) {
 	schema = Object.assign({}, schema);
-	schema.multipleOf = 1;
+	if (!schema.multipleOf) schema.multipleOf = 1;
 	types.number(key, schema, node, fields);
 	fields[key].type = 'integer';
 };
