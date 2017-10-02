@@ -12,6 +12,11 @@ Pageboard.elements.sticky = {
 				constant: "bottom",
 				title: "bottom"
 			}]
+		},
+		always: {
+			title: "Always",
+			default: false,
+			type: "boolean"
 		}
 	},
 	contents: {
@@ -22,7 +27,7 @@ Pageboard.elements.sticky = {
 	},
 	icon: '<i class="icon pin"></i>',
 	render: function(doc, block) {
-		return doc.dom`<element-sticky block-content="content" class="${block.data.position} sticky"></element-sticky>`;
+		return doc.dom`<element-sticky block-content="content" class="${block.data.position} ${block.data.always ? "always" : ""} sticky"></element-sticky>`;
 	},
 	stylesheets: [
 		'../ui/sticky-state.css',

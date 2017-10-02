@@ -7,3 +7,6 @@ element-sticky {
 .bottom.sticky {
 	bottom:0;
 }
+element-sticky.always {
+	height:0;
+}
