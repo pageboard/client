@@ -103,14 +103,12 @@ Pageboard.elements.sitepage = {
 	},
 	inherits: "page", // TODO support this, effectively replacing the need for mount/unmount here
 	unmount: function(block) {
-		block.standalone = true; // a page is always standalone
-		block.orphan = true; // avoid relating to this page
-		// TODO this should be replaced by a simple
-		// elements.sitepage.inherits = 'page'
-		block.type = 'page'; // sitepage -> page
-	},
-	mount: function(block) {
-		block.type = 'page';
+		// TODO a block that is not in any content *should* be orphan
+		// since block.content.children is dropped, sitepages do not belong to any
+		// block on the page, making them orphans. On the contrary all blocks that
+		// are not standalone and that are in the content of a block on the current page
+		// should be related to it.
+		block.orphan = true;
 	},
 	icon: '<i class="icon file outline"></i>',
 	context: 'sitemap/ | sitepage/',
