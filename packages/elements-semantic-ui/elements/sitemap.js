@@ -101,7 +101,6 @@ Pageboard.elements.sitepage = {
 			virtual: true // this drops block.content.children, and all
 		}
 	},
-	inherits: "page", // TODO support this, effectively replacing the need for mount/unmount here
 	unmount: function(block) {
 		// TODO a block that is not in any content *should* be orphan
 		// since block.content.children is dropped, sitepages do not belong to any
