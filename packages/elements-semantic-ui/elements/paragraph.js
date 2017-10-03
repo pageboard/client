@@ -43,10 +43,7 @@ Pageboard.elements.paragraph = {
 	inplace: true,
 	icon: '<i class="icon paragraph"></i>',
 	render: function(doc, block) {
-		var p = doc.dom`<p></p>`;
-		var align = block.data.align || "left";
-		if (align != "left") p.classList.add(align, "aligned");
-		return p;
+		return doc.dom`<p class="${block.data.align || 'left'} aligned"></p>`;
 	}
 };
 
