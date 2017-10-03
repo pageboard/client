@@ -134,8 +134,11 @@ types.oneOf = function(key, schema, node, fields) {
 	var alts = schema.oneOf;
 	var icons = alts.every(function(item) { return !!item.icon; });
 	if (icons) {
-		field = node.dom`<div class="ui compact icon menu">
-			${alts.map(getIconOption)}
+		field = node.dom`<div class="inline fields">
+			<label for="${key}">${schema.title}</label>
+			<div class="ui compact icon menu">
+				${alts.map(getIconOption)}
+			</div>
 		</div>`;
 		node.appendChild(field);
 		$(field).find('.radio.checkbox').checkbox();
