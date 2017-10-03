@@ -29,6 +29,9 @@ Pageboard.elements.image = {
 				${url}${sep}rs=w:320 320w,
 				${url}${sep}rs=w:640 640w,
 				${url}${sep}rs=w:1280 1280w" />`;
-	}
+	},
+	stylesheets: [
+		'/.pageboard/semantic-ui/components/image.css'
+	]
 };
 
