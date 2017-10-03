@@ -44,28 +44,22 @@ Pageboard.elements.layout = {
 		},
 		height: {
 			title: 'height',
-			description: 'control height',
-			default: '',
-			oneOf: [{
-				constant: "",
-				title: "auto"
-			}, {
-				constant: "half-height",
-				title: "half"
-			}, {
-				constant: "full-height",
-				title: "full"
-			}]
+			description: 'height in vh units',
+			type: 'number',
+			minimum: 0,
+			maximum: 999,
+			multipleOf: 10,
+			default: 0
 		},
 		direction: {
 			title: 'direction',
-			default: "",
+			default: "column",
 			oneOf: [{
-				constant: "",
-				title: "row"
-			}, {
 				constant: "column",
 				title: "column"
+			}, {
+				constant: "row",
+				title: "row"
 			}]
 		},
 		invert: {
@@ -90,7 +84,11 @@ Pageboard.elements.layout = {
 		else if (d.width == "contained") list.add('ui', 'container');
 		if (d.horizontal) list.add(d.horizontal);
 		if (d.vertical) list.add(d.vertical);
-		if (d.height) list.add(d.height);
+		if (d.height) {
+			node.style.height = d.height + 'vh';
+		} else {
+			node.style.height = "auto";
+		}
 		if (d.direction) list.add(d.direction);
 		if (d.invert) list.add("inverted");
 		return node;

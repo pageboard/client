@@ -19,6 +19,7 @@ footer[block-type="section"] {
 .layout,
 .ui.container.layout {
 	display:flex;
+	overflow:hidden;
 }
 .layout.top {
 	align-items: flex-start;
@@ -53,18 +54,6 @@ footer[block-type="section"] {
 	align-self:flex-end;
 }
 
-body > .layout.full-height {
-	height:100vh;
-}
-body > .layout.half-height {
-	height:50vh;
-}
-.layout.full-height {
-	height:100%;
-}
-.layout.half-height {
-	height:50%;
-}
 .layout.fullwidth {
 	width:100%;
 }
