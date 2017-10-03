@@ -135,3 +135,7 @@ body {
 #form .ui.toggle.checkbox input:checked ~ label:after {
 	left:0.8rem;
 }
+
+#form input[type="number"] {
+	padding:0.5em;
+}
