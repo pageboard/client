@@ -83,17 +83,17 @@ Pageboard.elements.layout = {
 	group: 'block',
 	icon: '<i class="icon move"></i>',
 	render: function(doc, block) {
-		var d = doc.dom`<div class="layout" block-content="content"></div>`;
-		var data = block.data;
-		var list = d.classList;
-		if (data.width == "full") list.add('fullwidth');
-		else if (data.width == "contained") list.add('ui', 'container');
-		if (data.horizontal) list.add(data.horizontal);
-		if (data.vertical) list.add(data.vertical);
-		if (data.height) list.add(data.height);
-		if (data.direction) list.add(data.direction);
-		if (data.invert) list.add("inverted");
-		return d;
+		var d = block.data;
+		var node = doc.dom`<div class="layout" block-content="content"></div>`;
+		var list = node.classList;
+		if (d.width == "full") list.add('fullwidth');
+		else if (d.width == "contained") list.add('ui', 'container');
+		if (d.horizontal) list.add(d.horizontal);
+		if (d.vertical) list.add(d.vertical);
+		if (d.height) list.add(d.height);
+		if (d.direction) list.add(d.direction);
+		if (d.invert) list.add("inverted");
+		return node;
 	},
 	stylesheets: [
 		'/.pageboard/semantic-ui/components/container.css',
