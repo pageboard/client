@@ -5,6 +5,7 @@ function Store(editor, selector) {
 	editor.blocks.genId = this.genId.bind(this);
 	this._blocksSet = editor.blocks.set;
 	editor.blocks.set = this.blocksSet.bind(this);
+	this.throttledUpdate = Throttle(this.realUpdate.bind(this), 1000);
 	this.menu = document.querySelector(selector);
 	this.editor = editor;
 	this.pageId = editor.state.doc.attrs.block_id;
@@ -14,7 +15,7 @@ function Store(editor, selector) {
 	this.uiDiscard = this.menu.querySelector('[data-command="discard"]');
 	this.uiDiscard.addEventListener('click', this.discard.bind(this));
 
-	this.update();
+	this.realUpdate();
 	var state = this.get();
 	this.unsaved = state.blocks;
 	this.ids = state.ids || {};
@@ -97,6 +98,10 @@ Store.prototype.update = function() {
 		delete this.ignoreNext;
 		return;
 	}
+	this.throttledUpdate();
+};
+
+Store.prototype.realUpdate = function() {
 	var blocks = {};
 	var root;
 	try {
