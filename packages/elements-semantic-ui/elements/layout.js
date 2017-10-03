@@ -101,3 +101,37 @@ Pageboard.elements.layout = {
 	]
 };
 
+Pageboard.elements.section = {
+	title: "Section",
+	properties: {
+		section: {
+			title: 'Section',
+			default: 'main',
+			oneOf: [{
+				constant: "main",
+				title: "main"
+			}, {
+				constant: "header",
+				title: "header"
+			}, {
+				constant: "footer",
+				title: "footer"
+			}]
+		}
+	},
+	contents: {
+		content: {
+			spec: "block+"
+		}
+	},
+	icon: '<b class="icon">Sec</b>',
+	context: 'page/',
+	render: function(doc, block) {
+		var d = block.data;
+		return doc.dom`<${d.section} block-content="content"></${d.section}>`;
+	},
+	stylesheets: [
+		'../ui/layout.css'
+	]
+};
+
