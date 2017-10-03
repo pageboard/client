@@ -18,6 +18,7 @@ footer[block-type="section"] {
 
 .layout,
 .ui.container.layout {
+	flex: 0 0 auto;
 	display:flex;
 	overflow:hidden;
 }
