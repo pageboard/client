@@ -20,12 +20,12 @@
   "dependencies": {
     "@webcomponents/custom-elements": "^1.0.0",
     "postinstall-links": "^0.3.0",
-    "sticky-state": "^2.4.1"
+    "stickybits": "^2.0.2"
   },
   "links": {
     "@webcomponents/custom-elements/custom-elements.min.js": "ui/",
     "@webcomponents/custom-elements/custom-elements.min.js.map": "ui/",
-    "sticky-state/dist/*": "ui/"
+    "stickybits/dist/stickybits.min.js": "ui/"
   },
   "pageboard": {
     "directories": [

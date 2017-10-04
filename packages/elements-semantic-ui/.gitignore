@@ -40,7 +40,5 @@ jspm_packages
 # find . -type l -not -path "./node_modules/*"
 
 ui/custom-elements.min.js.map
-ui/sticky-state.css
-ui/sticky-state.min.js
-ui/sticky-state.js
+ui/stickybits*
 ui/custom-elements.min.js
