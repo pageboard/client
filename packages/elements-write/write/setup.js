@@ -48,13 +48,6 @@ function anchorListener(e) {
 	});
 }
 
-function unloadListener(e) {
-	console.log("unload listener called");
-	if (Pageboard.editor.controls.store.unsaved) {
-		Pageboard.notify("Modifications saved locally.<br>Navigate back to save or discard.", {timeout: 2});
-	}
-}
-
 function buildListener(win) {
 	Pageboard.window = win;
 	Pageboard.view = win.Pageboard.view;
@@ -74,7 +67,6 @@ function buildListener(win) {
 
 function setupListener(win) {
 	win.addEventListener('click', anchorListener);
-	win.addEventListener('beforeunload', unloadListener);
 
 	Page.patch(function() {
 		var ed = Pageboard.editor;
