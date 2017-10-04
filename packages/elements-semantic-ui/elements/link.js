@@ -71,8 +71,7 @@ Pageboard.elements.link = {
 		return a;
 	},
 	stylesheets: [
-		'/.pageboard/semantic-ui/components/button.css',
-		'../ui/site.css'
+		'/.pageboard/semantic-ui/components/button.css'
 	]
 };
 
