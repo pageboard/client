@@ -20,7 +20,6 @@ footer[block-type="section"] {
 .ui.container.layout {
 	flex: 0 0 auto;
 	display:flex;
-	overflow:hidden;
 }
 .layout.top {
 	align-items: flex-start;
