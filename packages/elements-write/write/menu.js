@@ -66,9 +66,12 @@ Menu.prototype.item = function(el) {
 		},
 		select: function(state) {
 			if (el.inline) {
-				return !state.tr.selection.node && editor.utils.canMark(state.tr.selection, nodeType);
+				var parent = self.parents.length && self.parents[0];
+				if (parent.root && (parent.root.node && parent.root.node.isTextblock) || parent.root.mark) {
+					return !state.tr.selection.node && editor.utils.canMark(self.selection, nodeType);
+				} else return false;
 			} else {
-				return editor.utils.canInsert(state.tr.selection.$from, nodeType);
+				return editor.utils.canInsert(self.selection.$from, nodeType);
 			}
 		},
 		active: function(state) {
