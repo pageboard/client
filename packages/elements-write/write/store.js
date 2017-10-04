@@ -5,7 +5,7 @@ function Store(editor, selector) {
 	editor.blocks.genId = this.genId.bind(this);
 	this._blocksSet = editor.blocks.set;
 	editor.blocks.set = this.blocksSet.bind(this);
-	this.debounceUpdate = Debounce(this.realUpdate.bind(this), 1000);
+	this.debounceUpdate = Debounce(this.realUpdate.bind(this), 2000);
 	this.menu = document.querySelector(selector);
 	this.editor = editor;
 	this.pageId = editor.state.doc.attrs.block_id;
@@ -26,6 +26,8 @@ function Store(editor, selector) {
 			return this.discard();
 		}.bind(this));
 	}
+
+	window.addEventListener('beforeunload', this.flushUpdate.bind(this), false);
 }
 
 Store.prototype.genId = function() {
@@ -98,10 +100,20 @@ Store.prototype.update = function() {
 		delete this.ignoreNext;
 		return;
 	}
+	this.debounceWaiting = true;
 	this.debounceUpdate();
 };
 
+Store.prototype.flushUpdate = function() {
+	if (this.debounceWaiting) {
+		this.debounceWaiting = false;
+		this.debounceUpdate.clear();
+		this.realUpdate();
+	}
+};
+
 Store.prototype.realUpdate = function() {
+	this.debounceWaiting = false;
 	var blocks = {};
 	var root;
 	try {
@@ -135,6 +147,7 @@ Store.prototype.realUpdate = function() {
 };
 
 Store.prototype.save = function(e) {
+	this.flushUpdate();
 	if (this.unsaved == null) return;
 	var changes = this.changes();
 	if (e && e.shiftKey) {
