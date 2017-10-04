@@ -5,7 +5,7 @@ function Store(editor, selector) {
 	editor.blocks.genId = this.genId.bind(this);
 	this._blocksSet = editor.blocks.set;
 	editor.blocks.set = this.blocksSet.bind(this);
-	this.throttledUpdate = Throttle(this.realUpdate.bind(this), 1000);
+	this.debounceUpdate = Debounce(this.realUpdate.bind(this), 1000);
 	this.menu = document.querySelector(selector);
 	this.editor = editor;
 	this.pageId = editor.state.doc.attrs.block_id;
@@ -98,7 +98,7 @@ Store.prototype.update = function() {
 		delete this.ignoreNext;
 		return;
 	}
-	this.throttledUpdate();
+	this.debounceUpdate();
 };
 
 Store.prototype.realUpdate = function() {
