@@ -201,20 +201,47 @@ Href.prototype.pasteStop = function() {
 };
 
 Href.prototype.searchStart = function() {
+	var me = this;
+	this.infinite = new InfiniteScroll(this.container, {
+		path: function() {
+			var filter = Object.assign({
+				text: me.node.querySelector('input').value
+			}, me.opts.filter);
+			filter.paginate = this.pageIndex;
+			return Page.format({
+				pathname: '/.api/href',
+				query: filter
+			});
+		},
+		responseType: 'text',
+		scrollThreshold: 400,
+		elementScroll: Pageboard.write,
+		loadOnScroll: true,
+		history: false,
+		debug: false
+	});
+	this.infinite.on('load', function(response) {
+		response = JSON.parse(response);
+		var node = me.container.ownerDocument.createElement('div');
+		me.cache(response);
+		me.renderList(response, node);
+		this.appendItems(node.children);
+	});
 	Pageboard.write.classList.add('href');
-//	this.node.querySelector('input').focus();
 	return this.searchUpdate();
 };
 
 Href.prototype.searchUpdate = function() {
-	var filter = Object.assign({
-		text: this.node.querySelector('input').value
-	}, this.opts.filter);
-	return Pageboard.uiLoad(this.node, GET('/.api/href', filter))
-		.then(this.cache).then(this.renderList);
+	this.container.textContent = "";
+	this.infinite.pageIndex = 1;
+	this.infinite.loadNextPage();
 };
 
 Href.prototype.searchStop = function() {
+	if (this.infinite) {
+		this.infinite.destroy();
+		delete this.infinite;
+	}
 	Pageboard.write.classList.remove('href');
 	this.renderList([]); // clear the list
 	Pageboard.trigger(this.input, 'change');
@@ -343,11 +370,11 @@ Href.prototype.insert = function(url) {
 	});
 };
 
-Href.prototype.renderList = function(list) {
+Href.prototype.renderList = function(list, container) {
 	if (list) this.list = list;
 	else list = this.list;
 	if (!list) throw new Error("Need a list to render");
-	var container = this.container;
+	if (!container) container = this.container;
 	var selected = this.input.value;
 	if (selected) selected = normUrl(selected);
 	if (list.rendered) {
