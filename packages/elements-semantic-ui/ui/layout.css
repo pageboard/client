@@ -6,13 +6,13 @@ body {
 	flex-direction:column;
 	min-height:100%;
 }
-header[block-type="section"] {
+[block-type="header"] {
 	flex:none;
 }
-main[block-type="section"] {
+[block-type="main"] {
 	flex:1 0 auto;
 }
-footer[block-type="section"] {
+[block-type="footer"] {
 	flex:none;
 }
 

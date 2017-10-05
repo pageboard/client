@@ -22,7 +22,7 @@ Pageboard.elements.page = {
 	},
 	contents: {
 		body: {
-			spec: '(block|section)+',
+			spec: 'header main+ footer',
 			title: 'body'
 		}
 	},
