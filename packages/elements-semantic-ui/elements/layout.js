@@ -85,7 +85,7 @@ Pageboard.elements.layout = {
 		if (d.horizontal) list.add(d.horizontal);
 		if (d.vertical) list.add(d.vertical);
 		if (d.height) {
-			node.style.height = d.height + 'vh';
+			node.style.height = d.height + '%';
 		} else {
 			node.style.height = "auto";
 		}
@@ -98,5 +98,4 @@ Pageboard.elements.layout = {
 		'../ui/layout.css'
 	]
 };
-
 
