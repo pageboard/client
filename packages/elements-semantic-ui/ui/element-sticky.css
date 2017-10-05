@@ -1,13 +1,7 @@
 element-sticky {
 	display:block;
+	z-index:1000;
 }
-.top.sticky {
-	top:0;
-}
-.bottom.sticky {
-	bottom:0;
-}
-element-sticky.always {
+element-sticky[data-collapsed="true"] {
 	height:0;
-	z-index:100000;
 }

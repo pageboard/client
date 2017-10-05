@@ -13,8 +13,9 @@ Pageboard.elements.sticky = {
 				title: "bottom"
 			}]
 		},
-		always: {
-			title: "Always",
+		collapsed: {
+			title: "Collapsed",
+			description: "Collapse to zero height",
 			default: false,
 			type: "boolean"
 		}
@@ -27,14 +28,13 @@ Pageboard.elements.sticky = {
 	},
 	icon: '<i class="icon pin"></i>',
 	render: function(doc, block) {
-		return doc.dom`<element-sticky block-content="content" class="${block.data.position} ${block.data.always ? "always" : ""} sticky"></element-sticky>`;
+		return doc.dom`<element-sticky block-content="content" data-collapsed="${block.data.collapsed}" data-position="${block.data.position}"></element-sticky>`;
 	},
 	stylesheets: [
-		'../ui/sticky-state.css',
 		'../ui/element-sticky.css'
 	],
 	scripts: [
-		'../ui/sticky-state.min.js', // min version
+		'../ui/stickybits.min.js',
 		'../ui/element-sticky.js'
 	]
 };

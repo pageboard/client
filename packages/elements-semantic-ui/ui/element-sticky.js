@@ -2,17 +2,31 @@ class HTMLElementSticky extends HTMLElement {
 	constructor() {
 		super();
 	}
+	setup() {
+		HTMLElementSticky.manager.add(this, {
+			verticalPosition: this.dataset.position
+		});
+	}
+	destroy() {
+		HTMLElementSticky.manager.remove(this);
+	}
 	connectedCallback() {
-		this.sticky = new StickyState(this);
+		this.setup();
 	}
 	disconnectedCallback() {
-		if (this.sticky) {
-			this.sticky.destroy();
-			delete this.sticky;
-		}
+		this.destroy();
+	}
+	update() {
+		this.destroy();
+		this.setup();
 	}
 }
 
 Page.setup(function() {
+	HTMLElementSticky.manager = stickybits({
+		stickyClass: 'is-sticky',
+		parentClass: null,
+		useStickyClasses: true
+	});
 	window.customElements.define('element-sticky', HTMLElementSticky);
 });
