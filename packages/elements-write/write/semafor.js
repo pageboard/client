@@ -223,7 +223,7 @@ types.boolean = function(key, schema, node, fields) {
 	var field = node.dom`<div class="inline fields">
 		<label>${schema.title}</label>
 		<div class="field">
-			<div class="ui toggle checkbox">
+			<div class="ui toggle checkbox" title="${schema.description || ''}">
 				<input type="checkbox" name="${key}" class="hidden" value="true" />
 			</div>
 		</div>
