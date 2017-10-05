@@ -25,7 +25,9 @@ function Href(input, opts) {
 			urlObj.port = document.location.port;
 			val = Page.format(urlObj);
 		}
-		this.get(val).then(this.cache);
+		this.get(val).then(this.cache).then(function() {
+			me.set(val);
+		});
 	}
 }
 
@@ -243,7 +245,7 @@ Href.prototype.searchStop = function() {
 		delete this.infinite;
 	}
 	Pageboard.write.classList.remove('href');
-	this.renderList([]); // clear the list
+	this.set(this.input.value);
 	Ps.update(Pageboard.write);
 	Pageboard.trigger(this.input, 'change');
 };
