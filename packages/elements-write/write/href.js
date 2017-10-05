@@ -244,6 +244,7 @@ Href.prototype.searchStop = function() {
 	}
 	Pageboard.write.classList.remove('href');
 	this.renderList([]); // clear the list
+	Ps.update(Pageboard.write);
 	Pageboard.trigger(this.input, 'change');
 };
 
