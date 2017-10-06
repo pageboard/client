@@ -13,8 +13,7 @@ class HTMLElementSitepage extends HTMLElement {
 		var initialUrl = this.initialUrl;
 		var name = url.substring(1).split('/').pop();
 		var parent = this.parentNode && this.parentNode.closest('element-sitepage');
-		var parentUrl = parent ? parent.dataset.url : '';
-		var newUrl = parentUrl + '/' + name;
+		var newUrl = parent ? parent.dataset.url + '/' + name : url;
 		this.initialUrl = newUrl;
 		if (check && url == newUrl) {
 			return;
