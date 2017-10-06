@@ -51,14 +51,21 @@ Menu.prototype.item = function(el) {
 				});
 			} else {
 				editor.blocks.from(block).then(function(fragment) {
-					if (sel.node && !sel.empty) {
-						sel = editor.utils.selectTr(tr, sel.from, true);
-						tr.setSelection(sel);
+					var ipos;
+					if (sel.from == sel.$from.start() && editor.utils.canInsert(sel.$from, nodeType)) {
+						ipos = sel.from;
+					} else {
+						ipos = sel.to;
 					}
-					var pos = editor.utils.insertTr(tr, fragment);
+					sel = editor.utils.selectTr(tr, ipos, true);
+					var pos = editor.utils.insertTr(tr, fragment, sel);
 					if (pos != null) {
 						sel = editor.utils.selectTr(tr, pos);
-						if (sel) tr.setSelection(sel);
+						if (sel) {
+							tr.setSelection(sel);
+						}
+						tr.setMeta('editor', true); // ensures new nodes is focused
+						tr.scrollIntoView();
 						dispatch(tr);
 					}
 				});
@@ -71,7 +78,15 @@ Menu.prototype.item = function(el) {
 					return !state.tr.selection.node && editor.utils.canMark(self.selection, nodeType);
 				} else return false;
 			} else {
-				return editor.utils.canInsert(self.selection.$from, nodeType);
+				var can = false;
+				var sel = self.selection;
+				if (sel.from == sel.$from.start()) {
+					can = editor.utils.canInsert(sel.$from, nodeType);
+				}
+				if (!can) {
+					can = editor.utils.canInsert(sel.$to, nodeType);
+				}
+				return can;
 			}
 		},
 		active: function(state) {
