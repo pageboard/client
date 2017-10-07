@@ -206,16 +206,15 @@ types.number = function(key, schema, node, fields) {
 };
 
 types.object = function(key, schema, node, fields) {
+	var fieldset = node;
 	if (schema.title) {
-		node.appendChild(node.dom`<fieldset>
-			<legend>${schema.title}</legend>
-		</fieldset>`);
+		fieldset = node.dom`<fieldset><legend>${schema.title}</legend></fieldset>`;
+		node.appendChild(fieldset);
 	}
-
 	for (var name in schema.properties) {
 		var propSchema = schema.properties[name];
 		if (key) name = key + '.' + name;
-		process(name, propSchema, node, fields);
+		process(name, propSchema, fieldset, fields);
 	}
 };
 
