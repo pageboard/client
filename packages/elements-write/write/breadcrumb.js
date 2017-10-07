@@ -24,36 +24,11 @@ Breadcrumb.prototype.update = function(parents) {
 	}
 	var contentName = parent.container && parent.container.node.type.spec.contentName;
 	var contents = this.editor.element(parent.type).contents;
-	var contentKeys = typeof contents != "string" && Object.keys(contents) || [];
-	if (contentKeys.length > 1) {
-		var contentSpec = contents[contentName];
-		var select = document.dom`<div class="ui inline dropdown">
-			<div class="text">${contentSpec.title || ''}</div>
-			<i class="dropdown icon"></i>
-			<div class="menu">
-				${contentKeys.map(key => contentOption(contents, key))}
-			</div>
-		</div>`;
-		this.$node.append(select);
-		var editor = this.editor;
-		$(select).dropdown({
-			onChange: function(val, text) {
-				if (val == contentName) return;
-				var node = editor.blocks.domQuery(parent.block.id, {
-					content: val,
-					focused: true
-				});
-				if (!node) {
-					console.error("dom node not found", parent.block.id, val);
-				} else {
-					setTimeout(function() {
-						editor.blocks.domSelect(node.firstChild || node);
-					});
-				}
-			}
-		}).dropdown('set selected', contentName);
+	if (contentName) {
+		this.$node.append(contents[contentName].title);
+	} else {
+		this.$node.find('.section').last().addClass('active').next('.divider').remove();
 	}
-	this.$node.find('.section').last().addClass('active').next('.divider').remove();
 };
 
 Breadcrumb.prototype.clear = function() {
