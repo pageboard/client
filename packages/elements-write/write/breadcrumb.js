@@ -10,7 +10,9 @@ function Breadcrumb(editor, selector) {
 }
 
 function contentOption(contents, name) {
-	return document.dom`<div class="item" data-value="${name}">${contents[name].title}</div>`;
+	return document.dom`<div class="item" data-value="${name}">
+		${contents[name].title}
+	</div>`;
 }
 
 Breadcrumb.prototype.update = function(parents) {
@@ -20,44 +22,36 @@ Breadcrumb.prototype.update = function(parents) {
 		parent = parents[i];
 		this.$node.append(this.item(parent));
 	}
+	var contentName = parent.container && parent.container.node.type.spec.contentName;
 	var contents = this.editor.element(parent.type).contents;
-	if (contents && typeof contents != "string") {
-		var contentName = parent.container && parent.container.name;
-		var contentSpec = contentName && contents[contentName] || {};
-		var contentKeys = Object.keys(contents);
-		if (contentName && contentKeys.length == 1) {
-			contentSpec = contents[contentKeys[0]];
-			if (typeof contentSpec != "string" && contentSpec.title) {
-				this.$node.append(document.dom`<div class="ui inline dropdown">
-					<div class="text">${contentSpec.title}</div>
-				</div>`);
-			}
-		} else if (contentKeys.length > 1) {
-			var select = document.dom`<div class="ui inline dropdown">
-				<div class="text">${contentSpec.title || ''}</div>
-				<i class="dropdown icon"></i>
-				<div class="menu">
-					${contentKeys.map(contentOption.bind(null, contents))}
-				</div>
-			</div>`;
-			this.$node.append(select);
-			var editor = this.editor;
-			$(select).dropdown({
-				onChange: function(val, text) {
-					var node = editor.blocks.domQuery(parent.block.id, {
-						content: val,
-						focused: true
+	var contentKeys = typeof contents != "string" && Object.keys(contents) || [];
+	if (contentKeys.length > 1) {
+		var contentSpec = contents[contentName];
+		var select = document.dom`<div class="ui inline dropdown">
+			<div class="text">${contentSpec.title || ''}</div>
+			<i class="dropdown icon"></i>
+			<div class="menu">
+				${contentKeys.map(key => contentOption(contents, key))}
+			</div>
+		</div>`;
+		this.$node.append(select);
+		var editor = this.editor;
+		$(select).dropdown({
+			onChange: function(val, text) {
+				if (val == contentName) return;
+				var node = editor.blocks.domQuery(parent.block.id, {
+					content: val,
+					focused: true
+				});
+				if (!node) {
+					console.error("dom node not found", parent.block.id, val);
+				} else {
+					setTimeout(function() {
+						editor.blocks.domSelect(node.firstChild || node);
 					});
-					if (!node) {
-						console.error("dom node not found", parent.block.id, val);
-					} else {
-						setTimeout(function() {
-							editor.blocks.domSelect(node.firstChild || node);
-						});
-					}
 				}
-			});
-		}
+			}
+		}).dropdown('set selected', contentName);
 	}
 	this.$node.find('.section').last().addClass('active').next('.divider').remove();
 };
