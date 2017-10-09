@@ -106,11 +106,11 @@ Pageboard.elements.image = {
 //			}
 		}
 	},
-	contents: {
-		legend: {
-			spec: "inline*"
-		}
-	},
+//	contents: {
+//		legend: {
+//			spec: "inline*"
+//		}
+//	},
 	group: "block",
 	icon: '<i class="icon image"></i>',
 	tag: '.ui.image',
