@@ -241,6 +241,9 @@ types.object = function(key, schema, node, fields) {
 		fieldset = node.dom`<fieldset><legend>${schema.title}</legend></fieldset>`;
 		node.appendChild(fieldset);
 	}
+	if (schema.description) {
+		fieldset.appendChild(node.dom`<label>${schema.description}</label>`);
+	}
 	for (var name in schema.properties) {
 		var propSchema = schema.properties[name];
 		if (key) name = key + '.' + name;
