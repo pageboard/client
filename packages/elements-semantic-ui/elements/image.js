@@ -116,7 +116,7 @@ Pageboard.elements.image = {
 	tag: '.ui.image',
 	render: function(doc, block) {
 		var d = block.data;
-		var obj = Page.parse(d.url || '/.pageboard/ui/placeholder.png');
+		var obj = Page.parse(d.url || '/.files/@pageboard/elements/ui/placeholder.png');
 		if (obj.hostname && obj.hostname != document.location.hostname) {
 			obj = {
 				pathname: "/.api/image",
