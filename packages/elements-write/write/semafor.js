@@ -31,11 +31,11 @@ function Semafor(schema, node) {
 }
 
 Semafor.prototype.get = function() {
-	return this.convert(this.$node.form('get values'));
+	return this.convert(this.retree(this.$node.form('get values')));
 };
 
 Semafor.prototype.set = function(obj) {
-	this.$node.form('set values', obj);
+	this.$node.form('set values', this.flatten(obj));
 };
 
 var types = Semafor.types = {
@@ -50,10 +50,40 @@ var keywords = Semafor.keywords = {
 	// json schema allows custom keywords
 };
 
-Semafor.prototype.convert = function(vals) {
+Semafor.prototype.retree = function(map, obj) {
+	if (!obj) obj = {};
+	Object.keys(map).forEach(function(key) {
+		var list = key.split('.');
+		var val = obj;
+		list.forEach(function(sub, i) {
+			if (!val[sub]) {
+				if (i < list.length - 1) val[sub] = {};
+				else val[sub] = map[key];
+			}
+			val = val[sub];
+		});
+	});
+	return obj;
+};
+
+Semafor.prototype.flatten = function(tree, obj) {
+	if (!obj) obj = {};
+	Object.keys(tree).forEach(function(key) {
+		var val = tree[key];
+		if (typeof val == "object") {
+			var sub = this.flatten(val);
+			for (var k in sub) obj[key + '.' + k] = sub[k];
+		} else {
+			obj[key] = val;
+		}
+	}, this);
+	return obj;
+};
+
+Semafor.prototype.convert = function(vals, field) {
 	var obj = {};
 	var field, val;
-	var schema = this.schema.properties;
+	var schema = (field || this.schema).properties;
 	for (var name in vals) {
 		field = schema[name];
 		val = vals[name];
@@ -68,7 +98,7 @@ Semafor.prototype.convert = function(vals) {
 				val = val == "true";
 			break;
 			case "object":
-				console.error("Cannot convert object");
+				val = this.convert(val, field);
 			break;
 		}
 		obj[name] = val;
