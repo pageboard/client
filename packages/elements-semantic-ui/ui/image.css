@@ -1,0 +1,42 @@
+.ui.image {
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	overflow:hidden;
+	min-width: auto !important;
+	min-height: auto !important;
+}
+.ui.image.left {
+	justify-content:flex-start;
+}
+.ui.image.right {
+	justify-content:flex-end;
+}
+.ui.image > img {
+	display:block;
+	flex:0 0 auto;
+	width: auto;
+	height: auto;
+	align-self:center; /* not stretch */
+}
+.ui.image.top > img {
+	align-self:flex-start;
+}
+.ui.image.bottom > img {
+	align-self:flex-end;
+}
+.ui.image.horizontal {
+	width:100%;
+}
+.ui.image.horizontal > img {
+	min-width: 100%;
+	max-width: none;
+}
+.ui.image.vertical {
+	height:100%;
+}
+.ui.image.vertical > img {
+	min-height: 100%;
+	max-height: none;
+}
+
