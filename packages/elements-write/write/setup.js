@@ -120,6 +120,7 @@ function editorUpdate(editor, state, focusParents, focusSelection) {
 		var c = editor.controls[key];
 		if (c.update) c.update(parents, focusSelection);
 	});
+	Ps.update(Pageboard.write);
 	Page.replace(Page.state);
 }
 
