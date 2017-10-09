@@ -57,6 +57,27 @@ Pageboard.elements.heading = {
 			default: 1,
 			minimum: 1,
 			maximum: 6
+		},
+		align: {
+			title: 'Align',
+			default: "left",
+			oneOf: [{
+				constant: "left",
+				title: "left",
+				icon: '<i class="icon align left"></i>'
+			}, {
+				constant: "center",
+				title: "center",
+				icon: '<i class="icon align center"></i>'
+			}, {
+				constant: "right",
+				title: "right",
+				icon: '<i class="icon align right"></i>'
+			}, {
+				constant: "justify",
+				title: "justify",
+				icon: '<i class="icon align justify"></i>'
+			}]
 		}
 	},
 	contents: {
@@ -73,6 +94,7 @@ Pageboard.elements.heading = {
 	render: function(doc, block) {
 		var node = doc.createElement('h' + block.data.level);
 		node.setAttribute('block-content', 'text');
+		node.className = `${block.data.align || 'left'} aligned`;
 		return node;
 	}
 };

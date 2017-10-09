@@ -92,15 +92,15 @@ p:last-child {
 	margin-bottom: 0em;
 }
 
-p.center.aligned {
+.center.aligned {
 	text-align:center;
 }
 
-p.right.aligned {
+.right.aligned {
 	text-align:right;
 }
 
-p.justify.aligned {
+.justify.aligned {
 	text-align:justify;
 }
 
