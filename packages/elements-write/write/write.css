@@ -85,6 +85,14 @@ body {
 	padding: 0.67857143em 1em; /* this is the padding value of .field */
 }
 
+#form fieldset {
+	margin-top:0.5em;
+	padding-top:0.5em;
+}
+#form fieldset > .inline.fields:last-child {
+	margin-bottom:0em;
+}
+
 #form .inline.fields .field {
 	padding:0;
 }
