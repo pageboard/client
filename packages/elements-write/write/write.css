@@ -89,12 +89,19 @@ body {
 	margin-top:0.5em;
 	padding-top:0.5em;
 }
+#form fieldset > label {
+	display:block;
+	margin-top:-0.5em;
+	font-style:italic;
+	font-size:0.9em;
+}
 #form fieldset > .inline.fields:last-child {
 	margin-bottom:0em;
 }
 
 #form .inline.fields .field {
 	padding:0;
+	text-align:right;
 }
 
 #form .inline.fields .field > .radio {
@@ -114,7 +121,9 @@ body {
 #form .inline.fields {
 	justify-content:space-between;
 }
-
+#form .ui.toggle.checkbox {
+	vertical-align:middle;
+}
 #form .ui.toggle.checkbox .box,
 #form .ui.toggle.checkbox label {
 	padding-left:2.3em; /* compensate absolute inner width, see below */
