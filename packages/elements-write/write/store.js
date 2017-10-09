@@ -196,11 +196,10 @@ Store.prototype.changes = function() {
 
 	var ids = this.ids;
 
-	var block, el;
-	for (var id in unsaved) {
-		block = unsaved[id];
+	Object.keys(unsaved).forEach(function(id) {
+		var block = unsaved[id];
 		// some blocks can be forced to be standalone, like pages
-		el = this.editor.element(block.type);
+		var el = this.editor.element(block.type);
 		if (el.standalone) block.standalone = true;
 		if (ids[id]) {
 			add.push(block);
@@ -208,11 +207,11 @@ Store.prototype.changes = function() {
 		if (block.orphan && !block.standalone) {
 			console.warn(`Only a standalone block can be orphan ${block.type} ${id}`);
 		}
-	}
+	}, this);
 
 	var removals = {};
-	for (var id in initial) {
-		block = unsaved[id];
+	Object.keys(initial).forEach(function(id) {
+		var block = unsaved[id];
 		if (!block) {
 			if (!initial[id].orphan) removals[id] = true;
 		} else {
@@ -220,15 +219,15 @@ Store.prototype.changes = function() {
 				update.push(block);
 			}
 		}
-	}
+	}, this);
 
 	// fail-safe: compare to initial children list
 	var kids = this.editor.blocks.store;
-	for (var id in kids) {
+	Object.keys(kids).forEach(function(id) {
 		if (!unsaved[id] && !kids[id].orphan) {
 			removals[id] = true;
 		}
-	}
+	}, this);
 	var remove = Object.keys(removals).map(function(id) {
 		return {id: id};
 	});
