@@ -125,7 +125,7 @@ Pageboard.elements.image = {
 				}
 			};
 		}
-		var r = d.roi;
+		var r = d.crop;
 		if (r && (r.x != 50 || r.y != 50 || r.width != 100 || r.height != 100)) {
 			if (r.x - r.width / 2 < 0 || r.x + r.width / 2 > 100) {
 				r.width = 2 * Math.min(r.x, 100 - r.x);
