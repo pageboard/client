@@ -1,0 +1,124 @@
+class HTMLElementCarousel extends HTMLElement {
+	constructor() {
+		super();
+		this._options = {
+			noDomMod: true,
+			wrapAround: false,
+			lazyLoad: true,
+			cellSelector: 'element-carousel-cell',
+			adaptativeHeight: true,
+			initialIndex: 0,
+			cellAlign: 'left',
+			contain: true
+		};
+		this._saveIndex = this._saveIndex.bind(this);
+	}
+
+	_setup() {
+		if (this.carousel) {
+			this._teardown();
+		} else {
+			// because the element might have been setup on server
+			Array.from(this.querySelectorAll(
+				'.flickity-prev-next-button,.flickity-page-dots'
+			)).forEach(function(node) {
+				node.remove();
+			});
+		}
+		this.configure();
+		Array.prototype.forEach.call(
+			this.querySelectorAll('element-carousel-cell'),
+			function(cell) {
+				cell.dataset.width = this._options.width;
+				cell.dataset.height = this._options.height;
+				if (cell.update) cell.update();
+			},
+			this
+		);
+		this.carousel = new Flickity(this, this._options);
+		this.carousel.on('select', this._saveIndex);
+	}
+
+	_teardown() {
+		if (this.carousel) {
+			this.carousel.off('select', this._saveIndex);
+			this.carousel.destroy();
+			delete this.carousel;
+		}
+	}
+
+	_saveIndex(e) {
+		this._options.initialIndex = this.carousel.selectedIndex;
+	}
+
+	connectedCallback() {
+		// weird, but something needs to happen so that flickity can properly find layout
+		this._setup();
+	}
+
+	disconnectedCallback() {
+		this._teardown();
+	}
+
+	configure() {
+		var changed = false;
+		// TODO this ain't right buddy
+		// we have the schema that could convert data props for us
+		var opts = {
+			pageDots: this.dataset.pageDots == "true",
+			autoPlay: parseFloat(this.dataset.autoPlay) * 1000 || false,
+			draggable: this.dataset.draggable != "false",
+			prevNextButtons: this.dataset.prevNextButtons == "true",
+			initialIndex: parseInt(this.dataset.initialIndex) || 0,
+			width: this.dataset.width,
+			height: this.dataset.height
+		};
+
+		for (var k in opts) {
+			if (opts[k] !== this._options[k]) {
+				changed = true;
+				this._options[k] = opts[k];
+			}
+		}
+		return changed;
+	}
+
+	update() {
+		this._setup();
+	}
+}
+
+class HTMLElementCarouselCell extends HTMLElement {
+	constructor() {
+		super();
+	}
+	connectedCallback() {
+		this.carousel = this.closest('element-carousel');
+		this.update();
+		if (this.carousel) {
+			this.carousel.update();
+		}
+	}
+
+	disconnectedCallback() {
+		if (this.carousel) {
+			this.carousel.update();
+			delete this.carousel;
+		}
+	}
+
+	update() {
+		var width = parseFloat(this.dataset.width) || 0;
+		if (width) this.style.width = `${width}%`;
+		else this.style.width = null;
+		var height = parseFloat(this.dataset.height) || 0;
+		if (height) this.style.height = `${height}vh`;
+		else this.style.height = null;
+	}
+}
+
+Page.setup(function() {
+	window.customElements.define('element-carousel', HTMLElementCarousel);
+	window.customElements.define('element-carousel-cell', HTMLElementCarouselCell);
+});
+

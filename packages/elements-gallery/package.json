@@ -1,5 +1,5 @@
 {
-  "name": "@pageboard/elements-portfolio",
+  "name": "@pageboard/elements-gallery",
   "version": "0.1.0",
   "description": "",
   "main": "index.js",
@@ -9,26 +9,29 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pageboard/elements-portfolio.git"
+    "url": "git+https://github.com/pageboard/elements-gallery.git"
   },
   "author": "Jérémy Lal <kapouer@melix.org>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/pageboard/elements-portfolio/issues"
+    "url": "https://github.com/pageboard/elements-gallery/issues"
   },
-  "homepage": "https://github.com/pageboard/elements-portfolio#readme",
+  "homepage": "https://github.com/pageboard/elements-gallery#readme",
   "dependencies": {
     "isotope-layout": "^3.0.4",
+    "@pageboard/flickity": "^2.0.9-1",
     "postinstall-links": "^0.2.0"
   },
   "links": {
-    "isotope-layout/dist/isotope.pkgd.js": "ui/isotope.js"
+    "isotope-layout/dist/isotope.pkgd.js": "ui/isotope.js",
+    "@pageboard/flickity/dist/flickity.pkgd.js": "ui/flickity.js",
+    "@pageboard/flickity/dist/flickity.css": "ui/flickity.css"
   },
   "pageboard": {
     "directories": [
       "element",
       "ui"
     ],
-    "elements": "element/portfolio.js"
+    "elements": "element/"
   }
 }

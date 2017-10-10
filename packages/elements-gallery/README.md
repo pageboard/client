@@ -1,3 +1,7 @@
-# pageboard/elements-portfolio
+# pageboard/elements-gallery
 
-The portfolio element for pageboard
+The gallery element for pageboard.
+
+Provides portfolio, carousel, and list with sort/filter, a menu to navigate
+between them, and synchronization of their elements.
+
