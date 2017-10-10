@@ -10,7 +10,7 @@ Pageboard.elements.sitemap = {
 	title: "Site map",
 	contents: {
 		children: {
-			spec: "sitepage*"
+			spec: "sitepage+"
 		}
 	},
 	group: "block",
@@ -108,14 +108,16 @@ Pageboard.elements.sitepage = {
 		// are not standalone and that are in the content of a block on the current page
 		// should be related to it.
 		block.orphan = true;
+		// added pages NEED to have their type overriden
+		block.type = 'page';
 	},
 	icon: '<i class="icon file outline"></i>',
 	context: 'sitemap/ | sitepage/',
 	render: function(doc, block) {
 		return doc.dom`<element-sitepage class="item" data-url="${block.data.url}">
 			<div class="content">
-				<div class="header">${block.data.title}</div>
-				<a href="${block.data.url}" class="description">${block.data.url}</a>
+				<div class="header">${block.data.title || 'Untitled'}</div>
+				<a href="${block.data.url}" class="description">${block.data.url || '-'}</a>
 				<div class="list" block-content="children"></div>
 			</div>
 		</element-sitepage>`;
