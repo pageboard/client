@@ -34,6 +34,18 @@ Pageboard.elements.light = {
 	}
 };
 
+Pageboard.elements.sup = {
+	title: "Sup",
+	contents: "text*",
+	inline: true,
+	inplace: true,
+	group: "inline",
+	icon: '<b class="icon">S<sup>up</sup></b>',
+	render: function(doc, block) {
+		return doc.dom`<sup></sup>`;
+	}
+};
+
 Pageboard.elements.color = {
 	title: "Color",
 	properties: {
