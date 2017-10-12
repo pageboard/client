@@ -8,13 +8,13 @@ Pageboard.elements.medialist = {
 			title: 'items'
 		}
 	},
-	group: 'block',
 	icon: '<i class="list icon"></i>',
 	render: function(doc, block) {
 		return doc.dom`<div class="ui items unstackable medialist" block-content="items"></div>`;
 	},
 	stylesheets: [
 		'/.pageboard/semantic-ui/components/item.css',
+		'../ui/medialist.css',
 	]
 };
 

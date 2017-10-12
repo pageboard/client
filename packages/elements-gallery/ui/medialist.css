@@ -1,0 +1,6 @@
+.medialist > .item > .image > .image {
+	position: absolute;
+	overflow: hidden;
+	max-height: 100%;
+	max-width: 100%;
+}
