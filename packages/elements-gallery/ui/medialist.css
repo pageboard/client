@@ -1,3 +1,6 @@
+.ui.items.medialist {
+	margin:0;
+}
 .medialist > .item > .image > .image {
 	position: absolute;
 	overflow: hidden;
