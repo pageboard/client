@@ -408,7 +408,7 @@ Href.prototype.renderList = function(list, container) {
 //		item.classList.add('selected');
 //		container.insertBefore(item, container.firstChild);
 //	}
-	container.className = `ui items ${this.opts.display}`;
+	container.className = `ui items ${this.opts.display || ''}`;
 };
 
 Href.prototype.renderItem = function(obj) {
