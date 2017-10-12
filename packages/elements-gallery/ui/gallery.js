@@ -60,6 +60,7 @@ class HTMLElementGallery extends HTMLElement {
 	}
 
 	update() {
+		this._setupMenu();
 	}
 }
 
