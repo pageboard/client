@@ -56,6 +56,7 @@ element-portfolio-item {
 	margin-bottom:0.75%;
 	width:24.25%;
 	padding-bottom:24.25%;
+	background-color:#EEE; /* we need to see the item has the right dimensions */
 }
 element-portfolio-item[data-scale-width="2"] {
 	width:49.25%;
