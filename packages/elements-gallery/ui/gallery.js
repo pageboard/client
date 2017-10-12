@@ -1,6 +1,7 @@
 class HTMLElementGallery extends HTMLElement {
 	constructor() {
 		super();
+		this._switchListener = this._switchListener.bind(this);
 	}
 
 	get showMenu() {
@@ -12,13 +13,25 @@ class HTMLElementGallery extends HTMLElement {
 	}
 
 	_setup() {
-
+		this._galleries = Array.prototype.slice.call(this.lastElementChild.children);
+		if (!this._galleries.length) return;
+		if (!this.dataset.mode) {
+			this.dataset.mode = this._galleries[0].getAttribute('block-type');
+		}
 	}
 
 	_switchListener(e) {
 		var target = e.target.closest('.item');
 		if (!target || target.matches('.active')) return;
-
+		Array.prototype.forEach.call(this._galleryMenu.children, function(node) {
+			node.classList.remove('active');
+		});
+		target.classList.add('active');
+		var mode = this.dataset.mode = target.dataset.mode;
+		this._galleries.forEach(function(node) {
+			if (node._teardown) node._teardown();
+			if (node.getAttribute('block-type') == mode && node._setup) node._setup();
+		});
 	}
 
 	_teardown() {
@@ -38,14 +51,15 @@ class HTMLElementGallery extends HTMLElement {
 		this._galleryMenu = this.firstElementChild.matches('.menu') ? this.firstElementChild : null;
 		if (this.showMenu) {
 			if (!this._galleryMenu) {
-				this._galleryMenu = this.dom`<div class="ui tiny compact icon menu">
-					<a class="icon item active" data-mode="portfolio"><i class="grid icon"></i></a>
-					<a class="icon item" data-mode="medialist"><i class="list icon"></i></a>
-					<a class="icon item" data-mode="carousel"><i class="close icon"></i></a>
-				</div>`;
+				this._galleryMenu = this.dom`<div class="ui tiny compact icon menu"></div>`;
 				this.insertBefore(this._galleryMenu, this.firstElementChild);
+				this._galleryMenu.addEventListener('click', this._switchListener, false);
 			}
-			this._galleryMenu.addEventListener('click', this._switchListener, false);
+			this._galleryMenu.textContent = "";
+			this._galleries.forEach(function(node) {
+				var type = node.getAttribute('block-type');
+				this._galleryMenu.appendChild(node.dom`<a class="icon item ${this.dataset.mode == type ? 'active' : ''}" data-mode="${type}"><i class="${type} icon"></i></a>`);
+			}, this);
 		} else {
 			this._teardownMenu();
 		}
@@ -60,6 +74,7 @@ class HTMLElementGallery extends HTMLElement {
 	}
 
 	update() {
+		this._setup();
 		this._setupMenu();
 	}
 }
