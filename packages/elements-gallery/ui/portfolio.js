@@ -53,10 +53,12 @@ class HTMLElementPortfolioItem extends HTMLElement {
 		super();
 	}
 	connectedCallback() {
-		var pf = this.closest('element-portfolio');
-		if (pf) pf.update();
+		this.update();
 	}
 	disconnectedCallback() {
+		this.update();
+	}
+	update() {
 		var pf = this.closest('element-portfolio');
 		if (pf) pf.update();
 	}
