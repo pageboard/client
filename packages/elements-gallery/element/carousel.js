@@ -45,8 +45,7 @@ Pageboard.elements.carousel = {
 			title: 'cells'
 		}
 	},
-	group: 'block',
-	icon: '<b class="icon">Car</b>',
+	icon: '<i class="image icon"></i>',
 	tag: 'element-carousel',
 	render: function(doc, block, view) {
 		var d = block.data;
@@ -70,16 +69,23 @@ Pageboard.elements.carousel = {
 Pageboard.elements.carousel_item = {
 	title: "Cell",
 	contents: {
-		item: {
+		media: {
+			spec: "image",
+			title: "media"
+		},
+		content: {
 			spec: "block+",
-			title: "cell"
+			title: "content"
 		}
 	},
-	icon: '<b class="icon">Cell</b>',
+	icon: '<i class="add icon"></i>',
 	context: 'carousel/',
 	tag: 'element-carousel-cell',
 	render: function(doc, block) {
-		return doc.dom`<element-carousel-cell block-content="item"></element-carousel-cell>`;
+		return doc.dom`<element-carousel-cell>
+			<div class="media" block-content="media"></div>
+			<div class="content" block-content="content"></div>
+		</element-carousel-cell>`;
 	}
 };
 
