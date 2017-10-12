@@ -14,18 +14,6 @@ Pageboard.elements.portfolio = {
 				title: "Wide"
 			}],
 			default: "square"
-		},
-		listToggle: {
-			title: 'Toggle to list',
-			description: 'Display a menu to switch between portfolio and list',
-			type: "boolean",
-			default: false
-		},
-		carouselToggle: {
-			title: 'Toggle to carousel',
-			description: 'Click on cells to switch to carousel',
-			type: "boolean",
-			default: true
 		}
 	},
 	contents: {
@@ -34,8 +22,7 @@ Pageboard.elements.portfolio = {
 			title: 'items'
 		}
 	},
-	group: 'block',
-	icon: '<b class="icon">Por</b>',
+	icon: '<i class="grid layout icon"></i>',
 	render: function(doc, block, view) {
 		var d = block.data;
 		return doc.dom`<element-portfolio data-shape="${d.shape}" data-list-toggle="${d.listToggle}" data-carousel-toggle="${!view.editable && d.carouselToggle}">
@@ -76,39 +63,25 @@ Pageboard.elements.portfolio_item = {
 				title: "200%"
 			}],
 			default: "1"
-		},
-		url: {
-			title: 'Image',
-			description: 'Local or remote URL',
-			type: "string",
-			format: "uri",
-			input: {
-				name: 'href',
-				filter: {
-					type: ["image", "svg"]
-				}
-			}
 		}
 	},
 	contents: {
-		cell: {
-			spec: "layout",
-			title: "cell"
+		media: {
+			spec: "image",
+			title: "media"
 		},
-		article: {
+		content: {
 			spec: "block+",
-			title: "article"
+			title: "content"
 		}
 	},
-	icon: '<b class="icon">Cell</b>',
+	icon: '<i class="add icon"></i>',
+	tag: 'element-portfolio-item',
 	render: function(doc, block) {
-		return doc.dom`<div class="item" data-scale-width="${block.data.scaleWidth}" data-scale-height="${block.data.scaleHeight}">
-			<element-portfolio-image src="${block.data.url}"></element-portfolio-image>
-			<div class="content">
-				<div class="cell" block-content="cell"></div>
-				<div class="article" block-content="article"></div>
-			</div>
-		</div>`;
+		return doc.dom`<element-portfolio-item data-scale-width="${block.data.scaleWidth}" data-scale-height="${block.data.scaleHeight}">
+			<div class="media" block-content="media"></div>
+			<div class="content" block-content="content"></div>
+		</element-portfolio-item>`;
 	}
 };
 

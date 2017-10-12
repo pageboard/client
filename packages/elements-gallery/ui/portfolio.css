@@ -1,174 +1,148 @@
+/*
+computeGutters is used once to get those numbers
+for n=4 gutter is 0.75, n=3 gutter is 1, n=2 gutter is 1.5
+square computeGutters(1.5, 1.5, 1, 4)
+tall   computeGutters(1.5, 1.5, 1.29897, 4)
+wide   computeGutters(1.5, 1.5, 0.62887, 3)
+
+p, q are initial x, y gutters for n=2
+	f is any h/w ratio one wants to impose on the grid cell
+
+function computeGutters(p, q, f, n) {
+	var s = 100*f - 2*f*p + q;
+	var t = 100 - p;
+	var u = 50 - p;
+	var a = s / u;
+	var b = f * u / t;
+	var c = s / t;
+	var P = (100 * (2*c - a)) / (n * (c - a));
+	var Q = (100 * (2*c*f - a*c)) / (n * (c - a));
+	var w = (100 / n) - P;
+	var h = f * w;
+	var W = 2*w + P;
+	var H = 2*h + Q;
+	var obj = {
+		gx: P,
+		gy: Q,
+		pw: w,
+		pW: W,
+		ph: h,
+		pH: H,
+		w: n*w,
+		W: n*W,
+		h: n*h,
+		H: n*H
+	};
+	for (var k in obj) obj[k] = Math.round(obj[k] * 10000) / 10000;
+	return obj;
+}
+*/
 element-portfolio {
 	display:block; /* mandatory for custom elements */
 	position:relative;
 	margin-right:-0.75%;
 	margin-bottom:-0.75%;
 	overflow:hidden;
-/*	width:100%;*/
+	min-height:2em;
 }
-element-portfolio > .cells > .item {
-	width:24.25%;
+element-portfolio > .cells {
+/*	height:auto !important;*/
+}
+element-portfolio-item {
+	display:block;
+	position:relative;
+	overflow:hidden;
 	margin-right:0.75%;
 	margin-bottom:0.75%;
+	width:24.25%;
+	padding-bottom:24.25%;
 }
-element-portfolio > .cells > .item[data-scale-width="2"] {
+element-portfolio-item[data-scale-width="2"] {
 	width:49.25%;
+}
+element-portfolio-item[data-scale-height="2"] {
+	padding-bottom:49.25%;
+}
+
+element-portfolio[data-shape="tall"] element-portfolio-item {
+	padding-bottom:31.50%;
+}
+element-portfolio[data-shape="tall"] element-portfolio-item[data-scale-height="2"] {
+	padding-bottom:63.75%;
 }
 
 element-portfolio[data-shape="wide"] {
 	margin-right:-1%;
 	margin-bottom:-1%;
 }
-element-portfolio[data-shape="wide"] > .cells > .item {
-	width:32.33%;
+element-portfolio[data-shape="wide"] element-portfolio-item {
+	width:32.3333%;
+	padding-bottom:20.3333%;
 	margin-right:1%;
 	margin-bottom:1%;
 }
-element-portfolio[data-shape="wide"] > .cells > .item[data-scale-width="2"] {
-	width:65.66%;
+element-portfolio[data-shape="wide"] element-portfolio-item[data-scale-width="2"] {
+	width:65.6666%;
 }
+element-portfolio[data-shape="wide"] element-portfolio-item[data-scale-height="2"] {
+	padding-bottom:41.6666%;
+}
+
 
 @media screen and (max-width: 768px) {
 	element-portfolio {
 		margin-right:-1%;
 		margin-bottom:-1%;
 	}
-	element-portfolio > .cells > .item {
-		width:32.33%;
+	element-portfolio-item {
+		width:32.3333%;
+		padding-bottom:32.3333%;
 		margin-right:1%;
 		margin-bottom:1%;
 	}
-	element-portfolio > .cells > .item[data-scale-width="2"] {
-		width:65.66%;
+	element-portfolio-item[data-scale-width="2"] {
+		width:65.6666%;
+	}
+	element-portfolio-item[data-scale-height="2"] {
+		padding-bottom:65.6666%;
+	}
+	element-portfolio[data-shape="tall"] element-portfolio-item {
+		padding-bottom:42.00%;
+	}
+	element-portfolio[data-shape="tall"] element-portfolio-item[data-scale-height="2"] {
+		padding-bottom:85.00%;
 	}
 }
 
 @media screen and (max-width: 512px) {
-	element-portfolio > .cells > .item,
-	element-portfolio[data-shape="wide"] > .cells > .item {
+	element-portfolio-item,
+	element-portfolio[data-shape="wide"] element-portfolio-item {
 		width:100%;
 	}
-	element-portfolio > .cells > .item[data-scale-width="2"],
-	element-portfolio[data-shape="wide"] > .cells > .item[data-scale-width="2"] {
+	element-portfolio-item[data-scale-width="2"],
+	element-portfolio[data-shape="wide"] element-portfolio-item[data-scale-width="2"] {
 		width:100%;
 	}
 }
 
-element-portfolio-image {
-	display:block;
-	position:relative;
-}
-
-element-portfolio-image > img {
-	display:block;
-	max-width:100%;
-	max-height:100%;
-}
-
-element-portfolio > .cells > .item > element-portfolio-image {
-	min-height:5em; /* editor */
-}
-element-portfolio > .cells > .item > element-portfolio-image > img {
-	display:block;
-	width:100%;
-}
-
-element-portfolio > .cells > .item > .content {
+element-portfolio-item > .media,
+element-portfolio-item > .content {
 	position:absolute;
 	top:0;
 	bottom:0;
 	left:0;
 	right:0;
-}
-element-portfolio > .articles > .item > .content {
-	position:relative;
-}
-
-element-portfolio > .cells > .item > .content > [block-content="cell"] {
-	position:absolute;
-	top:0;
-	left:0;
-	width:100%;
-	height:100%;
 	overflow:hidden;
-	visibility:hidden;
+}
+
+element-portfolio-item:hover > .content {
 	background-color:rgba(0, 0, 0, 0.5);
 	color:white;
 }
-element-portfolio > .cells > .item > .content > [block-content="cell"] {
-	background-color:rgba(0, 0, 0, 0.5);
-	color:white;
-	text-align:center;
-}
-element-portfolio > .cells > .item:hover > .content > [block-content="cell"],
-element-portfolio > .cells > .item[block-focused] > .content > [block-content="cell"] {
-	visibility:visible;
-}
 
-element-portfolio > .cells > .item > .content > .article,
-element-portfolio > .articles > .item > .content > .cell {
-	display:none;
+.ProseMirror element-portfolio-item > .content {
+	pointer-events:none;
 }
-element-portfolio > .articles > .item > .content > .article {
-	display:block;
-}
-element-portfolio > .articles > .item {
-	display:flex;
-}
-element-portfolio > .articles > .item > element-portfolio-image {
-	flex: 4 1;
-}
-element-portfolio > .articles > .item > .content {
-	flex: 8 0.5;
-}
-element-portfolio.carousel {
-	position:fixed;
-	display:block;
-	top:0;
-	left:0;
-	right:0;
-	bottom:0;
-	z-index:10;
-	background:rgba(0, 0, 0, 0.9);
-	margin:0;
-}
-element-portfolio.carousel > element-carousel .cell {
-	display:block;
-	height:100vh;
-	width:100vw;
-	background:transparent;
-}
-element-portfolio.carousel > element-carousel .cell > element-portfolio-image {
-	width:100%;
-	height:100%;
-	display:flex;
-	align-items:center;
-}
-element-portfolio.carousel > element-carousel .cell > element-portfolio-image > img {
-	display:block;
-	margin:0 auto;
-}
-element-portfolio.carousel > [block-content="items"],
-element-portfolio.carousel > .menu > .item[data-mode],
-element-portfolio > .menu > .item[data-mode="carousel"] {
-	display:none !important;
-}
-element-portfolio.carousel > .menu > .item[data-mode="carousel"] {
-	display:block !important;
-}
-element-portfolio.carousel > .menu {
-	position:absolute;
-	right:0;
-	top:0;
-	z-index:1;
-}
-
-i.grid.icon:before {
-	content:'G';
-}
-i.list.icon:before {
-	content:'L';
-}
-i.close.icon:before {
-	content:'X';
+.ProseMirror element-portfolio-item > .content > * {
+	pointer-events:auto;
 }
