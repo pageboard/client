@@ -50,7 +50,7 @@ Menu.prototype.item = function(el) {
 					dispatch(tr);
 				});
 			} else {
-				editor.blocks.from(block).then(function(fragment) {
+				editor.blocks.parseFrom(block).then(function(fragment) {
 					var ipos;
 					if (sel.from == sel.$from.start() && editor.utils.canInsert(sel.$from, nodeType)) {
 						ipos = sel.from;
