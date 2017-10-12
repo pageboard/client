@@ -24,6 +24,7 @@ Pageboard.elements.gallery = {
 		'../ui/gallery.css'
 	],
 	scripts: [
+		'../ui/dift.js',
 		'../ui/gallery.js'
 	]
 };
