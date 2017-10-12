@@ -1,6 +1,3 @@
-// there is a 1px rounding problem with percentWidth
-// see https://github.com/metafizzy/isotope/issues/916
-// to be fixed in next release
 class HTMLElementPortfolio extends HTMLElement {
 	constructor() {
 		super();
