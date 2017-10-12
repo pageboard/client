@@ -1,0 +1,16 @@
+element-gallery {
+	display:block;
+	position:relative;
+}
+element-gallery > .menu {
+	position:absolute;
+	right:0;
+	top:-3.1em;
+}
+
+.medialist > .item > .image > .image {
+	position: absolute;
+	overflow: hidden;
+	max-height: 100%;
+	max-width: 100%;
+}
