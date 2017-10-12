@@ -8,9 +8,8 @@ Pageboard.elements.gallery = {
 		}
 	},
 	contents: {
-		lists: {
-			spec: "(medialist | portfolio | carousel)+",
-			title: 'lists'
+		galleries: {
+			spec: "(medialist | portfolio | carousel)+"
 		}
 	},
 	group: 'block',
@@ -18,7 +17,7 @@ Pageboard.elements.gallery = {
 	render: function(doc, block, view) {
 		var d = block.data;
 		return doc.dom`<element-gallery data-show-menu="${d.showMenu}">
-			<div block-content="lists"></div>
+			<div block-content="galleries"></div>
 		</element-gallery>`;
 	},
 	stylesheets: [
