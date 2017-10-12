@@ -18,13 +18,13 @@
   },
   "homepage": "https://github.com/pageboard/elements-gallery#readme",
   "dependencies": {
-    "isotope-layout": "^3.0.4",
+    "@pageboard/isotope-layout": "^3.0.4-1",
     "@pageboard/flickity": "^2.0.9-1",
     "postinstall-links": "^0.2.0"
   },
   "links": {
-    "isotope-layout/dist/isotope.pkgd.js": "ui/isotope.js",
-    "@pageboard/flickity/dist/flickity.pkgd.js": "ui/flickity.js",
+    "@pageboard/isotope-layout/dist/isotope.pkgd.min.js": "ui/isotope.js",
+    "@pageboard/flickity/dist/flickity.pkgd.min.js": "ui/flickity.js",
     "@pageboard/flickity/dist/flickity.css": "ui/flickity.css"
   },
   "pageboard": {
