@@ -52,7 +52,6 @@ class HTMLElementCarousel extends HTMLElement {
 	}
 
 	connectedCallback() {
-		// weird, but something needs to happen so that flickity can properly find layout
 		this._setup();
 	}
 
