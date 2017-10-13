@@ -2,8 +2,16 @@ class HTMLElementGallery extends HTMLElement {
 	constructor() {
 		super();
 		this._switchListener = this._switchListener.bind(this);
-		this.observer = new MutationObserver(function(mutations) {
+		if (!window.parent.Pageboard) return;
+		this._sync = window.parent.Pageboard.Debounce(this._sync, 200);
+		this.menuObserver = new MutationObserver(function(mutations) {
 			this._setupMenu();
+		}.bind(this));
+		this.itemsObserver = new MutationObserver(function(mutations) {
+			var inContent = mutations.some(function(rec) {
+				return rec.type == "childList" && rec.target.matches('[block-type="image"]');
+			});
+			if (inContent) this._sync();
 		}.bind(this));
 	}
 
@@ -16,6 +24,12 @@ class HTMLElementGallery extends HTMLElement {
 	}
 
 	_setup() {
+		this.menuObserver.observe(this.lastElementChild, {childList: true});
+		this.itemsObserver.observe(this.lastElementChild, {childList: true, subtree: true});
+	}
+	_teardown() {
+		this.menuObserver.disconnect();
+		this.itemsObserver.disconnect();
 	}
 
 	_switchListener(e) {
@@ -32,23 +46,18 @@ class HTMLElementGallery extends HTMLElement {
 		});
 	}
 
-	_teardown() {
-	}
-
 	_updateGalleries() {
 		this._galleries = Array.prototype.slice.call(this.lastElementChild.children);
 	}
 
 	connectedCallback() {
-		this._setup();
 		this._setupMenu();
-		this.observer.observe(this.lastElementChild, {childList: true});
+		if (window.parent.Pageboard) this._setup();
 	}
 
 	disconnectedCallback() {
-		this.observer.disconnect();
-		this._teardown();
 		this._teardownMenu();
+		if (window.parent.Pageboard) this._teardown();
 	}
 
 	_setupMenu() {
@@ -88,6 +97,75 @@ class HTMLElementGallery extends HTMLElement {
 	update() {
 		this._setup();
 		this._setupMenu();
+	}
+
+	_sync() {
+		if (this._syncing) return;
+		var editor = window.parent.Pageboard && window.parent.Pageboard.editor;
+		if (!editor) return;
+		var gallery = this.querySelector(`[block-type="${this.dataset.mode}"]`);
+		if (!gallery) return;
+		this._syncing = true;
+		var sel = '[block-content="media"] > .image';
+		var selItems = '[block-content="items"]';
+		var map = Array.prototype.map;
+		var dstList = gallery.querySelectorAll(sel);
+
+		this._galleries.forEach(function(gal) {
+			if (gal == gallery) return;
+			var blockType = gal.getAttribute('block-type');
+			var srcList = gal.querySelectorAll(sel);
+			var srcParent = gal.matches(selItems) ? gal : gal.querySelector(selItems);
+			if (!srcParent) return;
+			Dift.default(srcList, dstList, function(type, prev, next, pos) {
+				switch (type) {
+					case Dift.CREATE: // 0, prev = null, next = newItem, pos = positionToCreate
+					var block = editor.blocks.create(`${blockType}_item`);
+					var node = editor.render(block);
+					var subblock = editor.blocks.create(next.getAttribute('block-type'));
+					subblock.data.url = getKey(next);
+
+					editor.blocks.set(subblock);
+					node.querySelector('[block-content="media"]').appendChild(editor.render(subblock));
+					srcParent.insertBefore(node, srcParent.children[pos] || null);
+					break;
+					case Dift.UPDATE: // 1, prev = oldItem, next = newItem, pos is null
+					if (getKey(prev) == getKey(next)) return;
+					var copy = prev.cloneNode(true);
+					copy.innerHTML = next.innerHTML;
+					prev.parentNode.replaceChild(copy, prev);
+					break;
+					case Dift.MOVE: // 2, prev = oldItem, next = newItem, pos = newPosition
+					// move seems to be update + move
+					if (getKey(prev) != getKey(next)) {
+						prev.innerHTML = next.innerHTML;
+					}
+					srcParent.insertBefore(prev, srcParent.children[pos] || null);
+					break;
+					case Dift.REMOVE: // 3, prev = oldItem
+					prev.parentNode.closest('[block-type]').remove();
+					break;
+				}
+			}, getKey);
+		});
+
+		this._syncing = false;
+
+		function getKey(node) {
+			return node.querySelector('img').getAttribute('src');
+		}
+
+		function childPos(node) {
+			var pos = 0;
+			while (node=node.prevSibling) pos++;
+			return pos;
+		}
+
+		function copyItem(node) {
+			var copy = node.cloneNode(true);
+			copy.removeAttribute('block-id');
+			return copy;
+		}
 	}
 }
 

@@ -54,13 +54,9 @@ class HTMLElementPortfolioItem extends HTMLElement {
 	}
 	connectedCallback() {
 		this.update();
-		var gallery = this.closest('element-gallery');
-		if (gallery && gallery.syncAll) gallery.syncAll();
 	}
 	disconnectedCallback() {
 		this.update();
-		var gallery = this.closest('element-gallery');
-		if (gallery && gallery.syncAll) gallery.syncAll();
 	}
 	update() {
 		var pf = this.closest('element-portfolio');
