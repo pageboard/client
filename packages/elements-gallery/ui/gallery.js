@@ -2,6 +2,9 @@ class HTMLElementGallery extends HTMLElement {
 	constructor() {
 		super();
 		this._switchListener = this._switchListener.bind(this);
+		this.observer = new MutationObserver(function(mutations) {
+			this._setupMenu();
+		}.bind(this));
 	}
 
 	get showMenu() {
@@ -13,11 +16,6 @@ class HTMLElementGallery extends HTMLElement {
 	}
 
 	_setup() {
-		this._galleries = Array.prototype.slice.call(this.lastElementChild.children);
-		if (!this._galleries.length) return;
-		if (!this.dataset.mode) {
-			this.dataset.mode = this._galleries[0].getAttribute('block-type');
-		}
 	}
 
 	_switchListener(e) {
@@ -37,17 +35,31 @@ class HTMLElementGallery extends HTMLElement {
 	_teardown() {
 	}
 
+	_updateGalleries() {
+		this._galleries = Array.prototype.slice.call(this.lastElementChild.children);
+	}
+
 	connectedCallback() {
 		this._setup();
 		this._setupMenu();
+		this.observer.observe(this.lastElementChild, {childList: true});
 	}
 
 	disconnectedCallback() {
+		this.observer.disconnect();
 		this._teardown();
 		this._teardownMenu();
 	}
 
 	_setupMenu() {
+		this._galleries = Array.prototype.slice.call(this.lastElementChild.children);
+		if (!this._galleries.length) return;
+		if (!this._galleries.some(function(gal) {
+			return gal.getAttribute('block-type') == this.dataset.mode;
+		}, this)) this.dataset.mode = "";
+		if (!this.dataset.mode) {
+			this.dataset.mode = this._galleries[0].getAttribute('block-type');
+		}
 		this._galleryMenu = this.firstElementChild.matches('.menu') ? this.firstElementChild : null;
 		if (this.showMenu) {
 			if (!this._galleryMenu) {
