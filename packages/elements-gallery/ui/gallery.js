@@ -105,6 +105,7 @@ class HTMLElementGallery extends HTMLElement {
 		if (!editor) return;
 		var gallery = this.querySelector(`[block-type="${this.dataset.mode}"]`);
 		if (!gallery) return;
+		console.info("sync called");
 		this._syncing = true;
 		var sel = '[block-content="media"] > .image';
 		var selItems = '[block-content="items"]';
