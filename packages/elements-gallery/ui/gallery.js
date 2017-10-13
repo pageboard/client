@@ -9,7 +9,7 @@ class HTMLElementGallery extends HTMLElement {
 		}.bind(this));
 		this.itemsObserver = new MutationObserver(function(mutations) {
 			var inContent = mutations.some(function(rec) {
-				return rec.type == "childList" && rec.target.matches('[block-type="image"]');
+				return rec.type == "childList" && rec.target.matches('[block-content="items"],[block-type="image"]');
 			});
 			if (inContent) this._sync();
 		}.bind(this));
@@ -137,10 +137,10 @@ class HTMLElementGallery extends HTMLElement {
 					break;
 					case Dift.MOVE: // 2, prev = oldItem, next = newItem, pos = newPosition
 					// move seems to be update + move
-					if (getKey(prev) != getKey(next)) {
-						prev.innerHTML = next.innerHTML;
-					}
-					srcParent.insertBefore(prev, srcParent.children[pos] || null);
+					srcParent.insertBefore(
+						prev.parentNode.closest('[block-type]'),
+						srcParent.children[pos] || null
+					);
 					break;
 					case Dift.REMOVE: // 3, prev = oldItem
 					prev.parentNode.closest('[block-type]').remove();
