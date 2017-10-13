@@ -7,13 +7,13 @@ prettybytes := $(shell node -p "require('path').dirname(require.resolve('pretty-
 build: write/lib write/lib/pretty-bytes.js write/lib/throttle.js write/lib/debounce.js
 
 write/lib/throttle.js: ${throttleit}/index.js
-	$(BROWSERIFY) --standalone Throttle --outfile $@ $<
+	$(BROWSERIFY) --standalone Pageboard.Throttle --outfile $@ $<
 
 write/lib/debounce.js: ${debounce}/index.js
-	$(BROWSERIFY) --standalone Debounce --outfile $@ $<
+	$(BROWSERIFY) --standalone Pageboard.Debounce --outfile $@ $<
 
 write/lib/pretty-bytes.js: ${prettybytes}/index.js
-	$(BROWSERIFY) --standalone PrettyBytes --outfile $@ $<
+	$(BROWSERIFY) --standalone Pageboard.PrettyBytes --outfile $@ $<
 
 write/lib:
 	mkdir -p $@

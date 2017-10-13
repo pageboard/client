@@ -5,7 +5,7 @@ function Store(editor, selector) {
 	editor.blocks.genId = this.genId.bind(this);
 	this._blocksSet = editor.blocks.set;
 	editor.blocks.set = this.blocksSet.bind(this);
-	this.debounceUpdate = Debounce(this.realUpdate.bind(this), 2000);
+	this.debounceUpdate = Pageboard.Debounce(this.realUpdate.bind(this), 2000);
 	this.menu = document.querySelector(selector);
 	this.editor = editor;
 	this.pageId = editor.state.doc.attrs.block_id;
