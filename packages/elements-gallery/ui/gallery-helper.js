@@ -39,6 +39,7 @@ HTMLElementGallery.prototype._initHelper = function() {
 
 	this.menuObserver = new MutationObserver(function(mutations) {
 		this._setup();
+		this._syncAfter();
 	}.bind(this));
 
 	this.itemsObserver = new MutationObserver(function(mutations) {
