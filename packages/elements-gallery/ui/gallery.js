@@ -2,16 +2,20 @@ class HTMLElementGallery extends HTMLElement {
 	constructor() {
 		super();
 		this._switchListener = this._switchListener.bind(this);
-		if (!window.parent.Pageboard) return;
+		if (!window.parent.Pageboard) {
+			return;
+		}
 		this._sync = window.parent.Pageboard.Debounce(this._sync, 200);
 		this.menuObserver = new MutationObserver(function(mutations) {
 			this._setupMenu();
 		}.bind(this));
 		this.itemsObserver = new MutationObserver(function(mutations) {
-			var inContent = mutations.some(function(rec) {
-				return rec.type == "childList" && rec.target.matches('[block-content="items"],[block-type="image"]');
-			});
-			if (inContent) this._sync();
+			// we NEED to use href as key
+			var doSync = false;
+			var sel = '[block-content="items"],[block-type="image"]';
+			if (mutations.some(function(rec) {
+				return rec.type == "childList" && rec.target.matches(sel);
+			})) this._sync();
 		}.bind(this));
 	}
 
@@ -25,7 +29,7 @@ class HTMLElementGallery extends HTMLElement {
 
 	_setup() {
 		this.menuObserver.observe(this.lastElementChild, {childList: true});
-		this.itemsObserver.observe(this.lastElementChild, {childList: true, subtree: true});
+		this._initGallery();
 	}
 	_teardown() {
 		this.menuObserver.disconnect();
@@ -42,8 +46,31 @@ class HTMLElementGallery extends HTMLElement {
 		var mode = this.dataset.mode = target.dataset.mode;
 		this._galleries.forEach(function(node) {
 			if (node._teardown) node._teardown();
-			if (node.getAttribute('block-type') == mode && node._setup) node._setup();
+			if (node.getAttribute('block-type') == mode) {
+				if (node._setup) node._setup();
+				this._gallery = node;
+			}
+		}, this);
+		this._initGallery();
+	}
+
+	_initGallery() {
+		this._editor = window.parent.Pageboard && window.parent.Pageboard.editor;
+		if (!this._editor) return;
+		var node = this._gallery;
+		if (!node) return;
+		this.itemsObserver.disconnect();
+		this.itemsObserver.observe(node, {
+			childList: true,
+			subtree: true
 		});
+		var cache = {};
+		var bmg = this._editor.blocks;
+		Array.prototype.forEach.call(this._selectMedias(node), function(image) {
+			var block = bmg.get(image.getAttribute('block-id'));
+			cache[block.id] = block.data.url;
+		});
+		this._cache = cache;
 	}
 
 	_updateGalleries() {
@@ -52,7 +79,10 @@ class HTMLElementGallery extends HTMLElement {
 
 	connectedCallback() {
 		this._setupMenu();
-		if (window.parent.Pageboard) this._setup();
+		if (window.parent.Pageboard) {
+			this._editor = window.parent.Pageboard.editor;
+			this._setup();
+		}
 	}
 
 	disconnectedCallback() {
@@ -63,11 +93,13 @@ class HTMLElementGallery extends HTMLElement {
 	_setupMenu() {
 		this._galleries = Array.prototype.slice.call(this.lastElementChild.children);
 		if (!this._galleries.length) return;
-		if (!this._galleries.some(function(gal) {
-			return gal.getAttribute('block-type') == this.dataset.mode;
-		}, this)) this.dataset.mode = "";
-		if (!this.dataset.mode) {
-			this.dataset.mode = this._galleries[0].getAttribute('block-type');
+		var mode = this.dataset.mode;
+		this._gallery = this._galleries.find(function(gal) {
+			return gal.getAttribute('block-type') == mode;
+		});
+		if (!this._gallery || !mode) {
+			this._gallery = this._galleries[0];
+			mode = this.dataset.mode = this._gallery.getAttribute('block-type');
 		}
 		this._galleryMenu = this.firstElementChild.matches('.menu') ? this.firstElementChild : null;
 		if (this.showMenu) {
@@ -79,7 +111,7 @@ class HTMLElementGallery extends HTMLElement {
 			this._galleryMenu.textContent = "";
 			this._galleries.forEach(function(node) {
 				var type = node.getAttribute('block-type');
-				this._galleryMenu.appendChild(node.dom`<a class="icon item ${this.dataset.mode == type ? 'active' : ''}" data-mode="${type}"><i class="${type} icon"></i></a>`);
+				this._galleryMenu.appendChild(node.dom`<a class="icon item ${mode == type ? 'active' : ''}" data-mode="${type}"><i class="${type} icon"></i></a>`);
 			}, this);
 		} else {
 			this._teardownMenu();
@@ -99,77 +131,71 @@ class HTMLElementGallery extends HTMLElement {
 		this._setupMenu();
 	}
 
+	_selectMedias(gal) {
+		return gal.querySelectorAll('[block-content="media"] > .image');
+	}
+
 	_sync() {
-		if (this._syncing) return;
-		var editor = window.parent.Pageboard && window.parent.Pageboard.editor;
-		if (!editor) return;
-		var gallery = this.querySelector(`[block-type="${this.dataset.mode}"]`);
-		if (!gallery) return;
-		console.info("sync called");
+		if (this._syncing || !this._gallery || !this._editor) return;
 		this._syncing = true;
-		var sel = '[block-content="media"] > .image';
 		var selItems = '[block-content="items"]';
 		var map = Array.prototype.map;
-		var dstList = gallery.querySelectorAll(sel);
+		var gallery = this._gallery;
+		var dstList = this._selectMedias(gallery)
+		var cache = this._cache;
+		var editor = this._editor;
 
 		this._galleries.forEach(function(gal) {
 			if (gal == gallery) return;
 			var blockType = gal.getAttribute('block-type');
-			var srcList = gal.querySelectorAll(sel);
+			var srcList = this._selectMedias(gal)
 			var srcParent = gal.matches(selItems) ? gal : gal.querySelector(selItems);
 			if (!srcParent) return;
-			Dift.default(srcList, dstList, function(type, prev, next, pos) {
+			Dift.default(srcList, dstList, function(type, dest, src, pos) {
+				var destBlock = dest && editor.blocks.get(dest.getAttribute('block-id'));
+				var srcBlock = src && editor.blocks.get(src.getAttribute('block-id'));
 				switch (type) {
-					case Dift.CREATE: // 0, prev = null, next = newItem, pos = positionToCreate
-					var block = editor.blocks.create(`${blockType}_item`);
-					var node = editor.render(block);
-					var subblock = editor.blocks.create(next.getAttribute('block-type'));
-					subblock.data.url = getKey(next);
+				case Dift.CREATE: // 0, dest = null, src = newItem, pos = positionToCreate
+					var destItemBlock = editor.blocks.create(`${blockType}_item`);
+					var destItem = editor.render(destItemBlock);
+					destBlock = editor.blocks.copy(srcBlock);
+					delete destBlock.id;
+					editor.blocks.set(destBlock);
 
-					editor.blocks.set(subblock);
-					node.querySelector('[block-content="media"]').appendChild(editor.render(subblock));
-					srcParent.insertBefore(node, srcParent.children[pos] || null);
+					destItem.querySelector('[block-content="media"]')
+						.appendChild(editor.render(destBlock));
+					srcParent.insertBefore(destItem, srcParent.children[pos] || null);
 					break;
-					case Dift.UPDATE: // 1, prev = oldItem, next = newItem, pos is null
-					if (getKey(prev) == getKey(next)) return;
-					var copy = prev.cloneNode(true);
-					copy.innerHTML = next.innerHTML;
-					prev.parentNode.replaceChild(copy, prev);
+				case Dift.UPDATE: // 1, dest = oldItem, src = newItem, pos is null
+						if (cache[srcBlock.id] != cache[destBlock.id]) {
+							if (srcBlock.data.url != destBlock.data.url) {
+								destBlock.data.url = srcBlock.data.url
+								editor.utils.refresh(dest, destBlock);
+								cache[destBlock.id] = destBlock.data.url;
+							}
+						}
 					break;
-					case Dift.MOVE: // 2, prev = oldItem, next = newItem, pos = newPosition
-					// move seems to be update + move
+				case Dift.MOVE: // 2, dest = oldItem, src = newItem, pos = newPosition
 					srcParent.insertBefore(
-						prev.parentNode.closest('[block-type]'),
+						dest.parentNode.closest('[block-type]'),
 						srcParent.children[pos] || null
 					);
 					break;
-					case Dift.REMOVE: // 3, prev = oldItem
-					prev.parentNode.closest('[block-type]').remove();
+				case Dift.REMOVE: // 3, dest = oldItem
+					dest.parentNode.closest('[block-type]').remove();
 					break;
 				}
-			}, getKey);
-		});
+			}, function(node) {
+				var id = node.getAttribute('block-id');
+				if (cache[id]) return cache[id];
+				var block = editor.blocks.get(id);
+				return block.data.url;
+			});
+		}, this);
 
 		this._syncing = false;
-
-		function getKey(node) {
-			return node.querySelector('img').getAttribute('src');
-		}
-
-		function childPos(node) {
-			var pos = 0;
-			while (node=node.prevSibling) pos++;
-			return pos;
-		}
-
-		function copyItem(node) {
-			var copy = node.cloneNode(true);
-			copy.removeAttribute('block-id');
-			return copy;
-		}
 	}
 }
-
 
 Page.setup(function() {
 	window.customElements.define('element-gallery', HTMLElementGallery);
