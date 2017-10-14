@@ -79,7 +79,7 @@ function setupListener(win) {
 	state.query.write = null;
 
 	Page.replace(state).then(function() {
-		Pageboard.editor = editorSetup(win, win.Pageboard.view);
+		editorSetup(win, win.Pageboard.view);
 	});
 }
 
@@ -178,6 +178,8 @@ function editorSetup(win, view) {
 	editor.blocks.genId = function() {
 		console.error("Transient genId called before store.genId is setup");
 	};
+
+	Pageboard.editor = editor; // some custom elements might rely on editor
 	editor.utils.setDom(content);
 
 	editor.controls = {};
