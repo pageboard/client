@@ -1,4 +1,5 @@
 Pageboard.elements.medialist = {
+	priority: 20,
 	title: "List",
 	properties: {
 	},

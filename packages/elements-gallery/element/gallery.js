@@ -1,5 +1,6 @@
 Pageboard.elements.gallery = {
 	title: "Gallery",
+	priority: 20,
 	properties: {
 		showMenu: {
 			type: 'boolean',

@@ -1,5 +1,6 @@
 Pageboard.elements.carousel = {
 	title: "Carousel",
+	priority: 21,
 	group: 'block',
 	properties: {
 		autoPlay: {
