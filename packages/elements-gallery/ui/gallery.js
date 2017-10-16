@@ -3,7 +3,7 @@ class HTMLElementGallery extends HTMLElement {
 		super();
 		// so that helper can override init easily
 		this._init();
-		this._portfolioClick = this._portfolioClick.bind(this);
+		this._itemClick = this._itemClick.bind(this);
 	}
 
 	_init() {
@@ -53,16 +53,17 @@ class HTMLElementGallery extends HTMLElement {
 			});
 			this._galleryMenu.querySelector(`[data-mode="${mode}"]`).classList.add('active');
 		}
-		if (mode == "portfolio") {
-			this._gallery.addEventListener('click', this._portfolioClick, false);
+		if (mode != "carousel") {
+			this._gallery.addEventListener('click', this._itemClick, false);
 		} else {
-			this._gallery.removeEventListener('click', this._portfolioClick, false);
+			this._gallery.removeEventListener('click', this._itemClick, false);
 		}
 	}
 
-	_portfolioClick(e) {
-		var item = e.target.closest('element-portfolio-item');
-		if (!item) return;
+	_itemClick(e) {
+		var item = e.target.closest('[block-content="media"]');
+		if (!item || !item.parentNode) return;
+		item = item.parentNode;
 		var carousel = this._galleries.find(function(gal) {
 			return gal.getAttribute('block-type') == "carousel";
 		});
