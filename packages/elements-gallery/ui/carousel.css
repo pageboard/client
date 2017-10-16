@@ -49,3 +49,8 @@ element-carousel-cell > .content {
 body.fullpage {
 	overflow:hidden;
 }
+
+body.fullpage element-carousel {
+	position:fixed;
+	top:0;
+}
