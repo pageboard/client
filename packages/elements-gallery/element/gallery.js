@@ -9,7 +9,7 @@ Pageboard.elements.gallery = {
 	},
 	contents: {
 		galleries: {
-			spec: "(portfolio carousel medialist)|(portfolio carousel)|(portfolio medialist)|(carousel medialist)"
+			spec: "(portfolio? carousel?|carousel? portfolio?) medialist"
 		}
 	},
 	group: 'block',
