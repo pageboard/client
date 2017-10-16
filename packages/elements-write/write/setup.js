@@ -187,13 +187,13 @@ function editorSetup(win, view) {
 		editor.controls[lKey] = new Pageboard.Controls[key](editor, '#' + lKey);
 	}
 	editor.focus();
+	editor.dispatch(editor.state.tr.setSelection(editor.utils.select(0, true)).setMeta('editor', true));
 	try {
 		editor.utils.setDom(content);
 	} catch(ex) {
 		console.error(ex);
-		Pageboard.notify(ex);
+		Pageboard.notify("Catastrophic editor error<br>cannot read page<br>try to open front page and copy/paste to editor", {type: 'negative'});
 	}
-	editor.dispatch(editor.state.tr.setSelection(editor.utils.select(0, true)).setMeta('editor', true));
 
 	return editor;
 }
