@@ -14,7 +14,7 @@ class HTMLElementCarousel extends HTMLElement {
 		this._saveIndex = this._saveIndex.bind(this);
 	}
 
-	_setup() {
+	_setup(opts) {
 		if (this.carousel) {
 			this._teardown();
 		} else {
@@ -35,7 +35,7 @@ class HTMLElementCarousel extends HTMLElement {
 			},
 			this
 		);
-		this.carousel = new Flickity(this, this._options);
+		this.carousel = new Flickity(this, Object.assign({}, this._options, opts));
 		this.carousel.on('select', this._saveIndex);
 	}
 
