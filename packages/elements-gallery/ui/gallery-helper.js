@@ -5,6 +5,7 @@ HTMLElementGallery.prototype._init = function() {
 		this._syncGallery();
 	}.bind(this);
 	this._initHelper();
+	this._portfolioClick = function() {}; // do nothing
 };
 
 HTMLElementGallery.prototype.connectedCallback = function() {
