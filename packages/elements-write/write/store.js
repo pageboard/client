@@ -15,7 +15,8 @@ function Store(editor, selector) {
 	this.uiDiscard = this.menu.querySelector('[data-command="discard"]');
 	this.uiDiscard.addEventListener('click', this.discard.bind(this));
 
-	this.realUpdate();
+	window.addEventListener('beforeunload', this.flushUpdate.bind(this), false);
+
 	var state = this.get();
 	this.unsaved = state.blocks;
 	this.ids = state.ids || {};
@@ -26,8 +27,6 @@ function Store(editor, selector) {
 			return this.discard();
 		}.bind(this));
 	}
-
-	window.addEventListener('beforeunload', this.flushUpdate.bind(this), false);
 }
 
 Store.prototype.genId = function() {

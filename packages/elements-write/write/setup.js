@@ -175,26 +175,24 @@ function editorSetup(win, view) {
 
 	editor.blocks = view.blocks;
 	editor.blocks.view = editor;
-	editor.blocks.genId = function() {
-		console.error("Transient genId called before store.genId is setup");
-	};
 
 	Pageboard.editor = editor; // some custom elements might rely on editor
 
-	editor.controls = {};
-	for (var key in Pageboard.Controls) {
+	var controls = {};
+	Object.keys(Pageboard.Controls).forEach(function(key) {
 		var lKey = key.toLowerCase();
-		editor.controls[lKey] = new Pageboard.Controls[key](editor, '#' + lKey);
-	}
+		controls[lKey] = new Pageboard.Controls[key](editor, '#' + lKey);
+	});
+	editor.controls = controls;
+
 	editor.focus();
-	editor.dispatch(editor.state.tr.setSelection(editor.utils.select(0, true)).setMeta('editor', true));
 	try {
 		editor.utils.setDom(content);
 	} catch(ex) {
 		console.error(ex);
 		Pageboard.notify("Catastrophic editor error<br>cannot read page<br>try to open front page and copy/paste to editor", {type: 'negative'});
 	}
-
+	editor.controls.store.realUpdate();
 	return editor;
 }
 
