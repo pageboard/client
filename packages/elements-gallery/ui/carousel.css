@@ -39,3 +39,9 @@ element-carousel-cell > .content {
 	height:100%;
 }
 
+.ProseMirror element-carousel-cell > .content {
+	pointer-events:none;
+}
+.ProseMirror element-carousel-cell > .content > * {
+	pointer-events:auto;
+}
