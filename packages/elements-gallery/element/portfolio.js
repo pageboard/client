@@ -26,7 +26,7 @@ Pageboard.elements.portfolio = {
 	icon: '<i class="grid layout icon"></i>',
 	render: function(doc, block, view) {
 		var d = block.data;
-		return doc.dom`<element-portfolio data-shape="${d.shape}" data-list-toggle="${d.listToggle}" data-carousel-toggle="${!view.editable && d.carouselToggle}">
+		return doc.dom`<element-portfolio data-shape="${d.shape}">
 			<div block-content="items"></div>
 		</element-portfolio>`;
 	},
