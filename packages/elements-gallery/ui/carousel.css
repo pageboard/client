@@ -50,7 +50,11 @@ body.fullpage {
 	overflow:hidden;
 }
 
+body.fullpage element-gallery > [block-content="galleries"] > :not(element-carousel) {
+	display:none;
+}
 body.fullpage element-carousel {
+	display:block;
 	position:fixed;
 	top:0;
 }
