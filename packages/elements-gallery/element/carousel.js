@@ -1,5 +1,6 @@
 Pageboard.elements.carousel = {
 	title: "Carousel",
+	group: 'block',
 	properties: {
 		autoPlay: {
 			title: 'Autoplay delay',

@@ -1,5 +1,6 @@
 Pageboard.elements.portfolio = {
 	title: "Portfolio",
+	group: 'block',
 	properties: {
 		shape: {
 			title: 'Shape',
