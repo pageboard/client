@@ -35,7 +35,11 @@ class HTMLElementCarousel extends HTMLElement {
 			},
 			this
 		);
-		this.carousel = new Flickity(this, Object.assign({}, this._options, opts));
+		opts = Object.assign({}, this._options, opts);
+		if (opts.fullpage) {
+			this.ownerDocument.body.classList.add('fullpage');
+		}
+		this.carousel = new Flickity(this, opts);
 		this.carousel.on('select', this._saveIndex);
 	}
 
@@ -45,6 +49,7 @@ class HTMLElementCarousel extends HTMLElement {
 			this.carousel.destroy();
 			delete this.carousel;
 		}
+		this.ownerDocument.body.classList.remove('fullpage');
 	}
 
 	_saveIndex(e) {

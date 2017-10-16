@@ -45,3 +45,7 @@ element-carousel-cell > .content {
 .ProseMirror element-carousel-cell > .content > * {
 	pointer-events:auto;
 }
+
+body.fullpage {
+	overflow:hidden;
+}
