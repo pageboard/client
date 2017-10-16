@@ -20,6 +20,7 @@
   "homepage": "https://github.com/pageboard/write#readme",
   "dependencies": {
     "browserify": "^14.1.0",
+    "croppie": "^2.5.0",
     "debounce": "^1.0.2",
     "dom4": "^1.8.5",
     "infinite-scroll": "^3.0.2",
@@ -39,6 +40,8 @@
     "perfect-scrollbar/dist/js/perfect-scrollbar.js": "write/lib/",
     "moment/moment.js": "write/lib/",
     "moment/locale": "write/lib/moment-locales",
+    "croppie/croppie.min.js": "write/lib/",
+    "croppie/croppie.css": "write/lib/",
     "jquery/dist/jquery.slim.min.js": "write/lib/jquery.min.js",
     "jquery/dist/jquery.slim.min.map": "write/lib/jquery.min.js.map",
     "dom4/build/dom4.js": "write/lib/dom4.js",
