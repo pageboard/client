@@ -20,9 +20,16 @@ i.carousel.icon:before {
 element-gallery > [block-content="galleries"] > * {
 	display:none;
 }
+
 element-gallery[data-mode="medialist"] > [block-content="galleries"] > [block-type="medialist"],
 element-gallery[data-mode="portfolio"] > [block-content="galleries"] > [block-type="portfolio"],
 element-gallery[data-mode="carousel"] > [block-content="galleries"] > [block-type="carousel"] {
 	display:block;
 }
 
+element-gallery[block-focused]:not([block-focused="last"]) > [block-content="galleries"] > :not([block-focused]) {
+	display:none;
+}
+element-gallery[block-focused]:not([block-focused="last"]) > [block-content="galleries"] > [block-focused] {
+	display:block;
+}
