@@ -180,7 +180,6 @@ function editorSetup(win, view) {
 	};
 
 	Pageboard.editor = editor; // some custom elements might rely on editor
-	editor.utils.setDom(content);
 
 	editor.controls = {};
 	for (var key in Pageboard.Controls) {
@@ -188,6 +187,12 @@ function editorSetup(win, view) {
 		editor.controls[lKey] = new Pageboard.Controls[key](editor, '#' + lKey);
 	}
 	editor.focus();
+	try {
+		editor.utils.setDom(content);
+	} catch(ex) {
+		console.error(ex);
+		Pageboard.notify(ex);
+	}
 	editor.dispatch(editor.state.tr.setSelection(editor.utils.select(0, true)).setMeta('editor', true));
 
 	return editor;
