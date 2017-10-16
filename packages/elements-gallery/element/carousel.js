@@ -50,7 +50,7 @@ Pageboard.elements.carousel = {
 	tag: 'element-carousel',
 	render: function(doc, block, view) {
 		var d = block.data;
-		var node = doc.dom`<element-carousel data-page-dots="${d.pageDots}" data-auto-play="${d.autoPlay}" data-draggable="${!view.editable}" data-prev-next-buttons="${d.prevNextButtons}" data-width="${d.width || 'auto'}" data-height="${d.height || 'auto'}">
+		var node = doc.dom`<element-carousel data-page-dots="${d.pageDots}" data-auto-play="${view.editable ? 0 : d.autoPlay}" data-draggable="${!view.editable}" data-prev-next-buttons="${d.prevNextButtons}" data-width="${d.width || 'auto'}" data-height="${d.height || 'auto'}">
 			<div class="flickity-viewport">
 				<div class="flickity-slider" block-content="items"></div>
 			</div>
