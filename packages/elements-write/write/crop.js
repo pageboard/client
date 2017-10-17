@@ -28,7 +28,8 @@ Crop.prototype.init = function() {
 	this.croppie = new Croppie(this.container.children[0], {
 		enableResize: true,
 		mouseWheelZoom: false,
-		update: this.debouncedChange
+		update: this.debouncedChange,
+		relative: true
 	});
 	this.load();
 	this.input.closest('#form').addEventListener('change', this.formChange, false);
@@ -54,45 +55,26 @@ Crop.prototype.reset = function() {
 Crop.prototype.change = function(vals) {
 	if (!vals) return;
 	var p = vals.points;
-	var W = this.imageWidth;
-	var H = this.imageHeight;
-	if (!W || !H) return;
-	var x0 = parseFloat(p[0]);
-	var x1 = parseFloat(p[2]);
-	var y0 = parseFloat(p[1]);
-	var y1 = parseFloat(p[3]);
-	var w = 100 * (x1 - x0) / W;
-	var h = 100 * (y1 - y0) / H;
-	if (w > 100) w = 100;
-	if (h > 100) h = 100;
-	this.width.value = Math.round(w);
-	this.height.value = Math.round(h);
-	var x = Math.round(100 * (x0 + x1) / (2 * W));
-	this.x.value = Math.max(0, x);
-	var y = Math.round(100 * (y0 + y1) / (2 * H));
-	this.y.value = Math.max(0, y);
+	this.width.value = Math.round(p[2] - p[0]);
+	this.height.value = Math.round(p[3] - p[1]);
+	this.x.value = Math.round((p[0] + p[2]) / 2);
+	this.y.value = Math.round((p[1] + p[3]) / 2);
 	Pageboard.trigger(this.input, 'change');
 };
 
 Crop.prototype.load = function() {
+	var url = this.block.data.url;
+	if (url) url += '?rs=w:512';
+	else url = '/.files/@pageboard/elements/ui/placeholder.png';
 	this.croppie.bind({
-		url: this.block.data.url || '/.files/@pageboard/elements/ui/placeholder.png'
+		url: url
 	}).then(function() {
-		this.imageWidth = this.croppie._originalImageWidth;
-		this.imageHeight = this.croppie._originalImageHeight;
 		this.update();
 	}.bind(this));
 };
 
 Crop.prototype.update = function() {
-	var W = this.imageWidth;
-	var H = this.imageHeight;
-	if (!W || !H) return;
 	var data = this.block.data.crop;
-	var dw = data.width * W / 100;
-	var dh = data.height * H / 100;
-	var x0 = data.x * W / 100 - dw / 2;
-	var y0 = data.y * H / 100 - dh / 2;
 
 	var rect = this.croppie.elements.boundary.getBoundingClientRect();
 	var vpw = Math.round(data.width * rect.width / 200) + 'px';
@@ -104,9 +86,15 @@ Crop.prototype.update = function() {
 		resizer.style.width = vpw;
 		resizer.style.height = vph;
 	}
+
 	this.croppie.bind({
-		url: this.block.data.url || '/.files/@pageboard/elements/ui/placeholder.png',
-		points: [x0, y0, x0 + dw, y0 + dh]
+		url: this.croppie.data.url,
+		points: [
+			data.x - data.width / 2,
+			data.y - data.height / 2,
+			data.x + data.width / 2,
+			data.y + data.height / 2
+		]
 	});
 };
 
