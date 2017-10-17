@@ -238,7 +238,7 @@ types.number = function(key, schema, node, fields) {
 types.object = function(key, schema, node, fields) {
 	var fieldset = node;
 	if (schema.title) {
-		fieldset = node.dom`<fieldset><legend>${schema.title}</legend></fieldset>`;
+		fieldset = node.dom`<fieldset name="${key}"><legend>${schema.title}</legend></fieldset>`;
 		node.appendChild(fieldset);
 	}
 	if (schema.description) {

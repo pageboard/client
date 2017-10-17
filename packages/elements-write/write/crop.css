@@ -1,0 +1,21 @@
+#form fieldset.crop {
+	position:relative;
+}
+#form fieldset.crop > .fields {
+	display:none !important;
+}
+#form fieldset.crop > .crop {
+	position:relative;
+	width:100%;
+	padding-top:100%;
+}
+#form fieldset.crop > .crop > .croppie-container {
+	position:absolute;
+	top:0;
+}
+#form fieldset.crop > .button {
+	position: absolute;
+	right: 0.5em;
+	top: 1.2em;
+	padding: 0.5em;
+}

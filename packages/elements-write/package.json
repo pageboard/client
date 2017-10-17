@@ -40,7 +40,7 @@
     "perfect-scrollbar/dist/js/perfect-scrollbar.js": "write/lib/",
     "moment/moment.js": "write/lib/",
     "moment/locale": "write/lib/moment-locales",
-    "croppie/croppie.min.js": "write/lib/",
+    "croppie/croppie.min.js": "write/lib/croppie.js",
     "croppie/croppie.css": "write/lib/",
     "jquery/dist/jquery.slim.min.js": "write/lib/jquery.min.js",
     "jquery/dist/jquery.slim.min.map": "write/lib/jquery.min.js.map",

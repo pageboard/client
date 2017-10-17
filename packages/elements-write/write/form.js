@@ -58,8 +58,9 @@ Form.prototype.update = function(parents) {
 		}, node);
 	}
 
-	this.form.set(block.data);
 	this.block = block;
+	this.element = el;
+	this.form.set(block.data);
 
 	if (el.properties) Object.keys(el.properties).forEach(function(key) {
 		var props = el.properties[key];
@@ -71,11 +72,11 @@ Form.prototype.update = function(parents) {
 			return;
 		}
 		if (!this.inputs[key]) {
-			this.inputs[key] = new CurInput(node.querySelector(`[name="${key}"]`), opts);
+			this.inputs[key] = new CurInput(node.querySelector(`[name="${key}"]`), opts, props, block);
 		} else {
-			this.inputs[key].change();
+			this.inputs[key].update(block);
 		}
-	}.bind(this));
+	}, this);
 	this.$node.on('change input', this.changeListener);
 };
 
