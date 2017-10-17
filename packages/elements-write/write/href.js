@@ -227,7 +227,7 @@ Href.prototype.searchStart = function() {
 		var node = me.container.ownerDocument.createElement('div');
 		me.cache(response);
 		me.renderList(response, node);
-		this.appendItems(node.children);
+		this.appendItems(Array.from(node.children));
 	});
 	Pageboard.write.classList.add('href');
 	return this.searchUpdate();
