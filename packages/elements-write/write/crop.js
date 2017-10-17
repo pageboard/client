@@ -7,7 +7,6 @@ function Crop(input, opts, props, block) {
 	this.y = input.querySelector('[name="crop.y"]');
 	this.width = input.querySelector('[name="crop.width"]');
 	this.height = input.querySelector('[name="crop.height"]');
-	this.zoom = input.querySelector('[name="crop.zoom"]');
 	input.classList.add('crop');
 	this.button = input.dom`<div class="mini ui basic icon button">
 		<i class="compress icon"></i>
@@ -49,12 +48,11 @@ Crop.prototype.reset = function() {
 	crop.height = 100;
 	crop.x = 50;
 	crop.y = 50;
-	crop.zoom = 1.0;
 	this.update();
 };
 
 Crop.prototype.change = function(vals) {
-	if (!vals || vals.zoom == undefined) return;
+	if (!vals) return;
 	var p = vals.points;
 	var W = this.imageWidth;
 	var H = this.imageHeight;
@@ -73,7 +71,6 @@ Crop.prototype.change = function(vals) {
 	this.x.value = Math.max(0, x);
 	var y = Math.round(100 * (y0 + y1) / (2 * H));
 	this.y.value = Math.max(0, y);
-	this.zoom.value = vals.zoom;
 	Pageboard.trigger(this.input, 'change');
 };
 
@@ -109,8 +106,7 @@ Crop.prototype.update = function() {
 	}
 	this.croppie.bind({
 		url: this.block.data.url || '/.files/@pageboard/elements/ui/placeholder.png',
-		points: [x0, y0, x0 + dw, y0 + dh],
-		zoom: data.zoom
+		points: [x0, y0, x0 + dw, y0 + dh]
 	});
 };
 
