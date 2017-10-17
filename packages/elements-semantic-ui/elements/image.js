@@ -132,7 +132,7 @@ Pageboard.elements.image = {
 			};
 		}
 		var r = d.crop;
-		var zoom = 1.0;
+		var zoom = 1;
 		if (r && (r.x != 50 || r.y != 50 || r.width != 100 || r.height != 100 || r.zoom != 1.0)) {
 			if (r.x - r.width / 2 < 0 || r.x + r.width / 2 > 100) {
 				r.width = 2 * Math.min(r.x, 100 - r.x);
@@ -140,7 +140,7 @@ Pageboard.elements.image = {
 			if (r.y - r.height / 2 < 0 || r.y + r.height / 2 > 100) {
 				r.height = 2 * Math.min(r.y, 100 - r.y);
 			}
-			zoom = r.zoom;
+			zoom = r.zoom || 1;
 			obj.query.ex = `x:${r.x},y:${r.y},w:${r.width},h:${r.height}`;
 		}
 		var tUrl = Page.format(obj);
