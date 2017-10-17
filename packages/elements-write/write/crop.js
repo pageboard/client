@@ -95,8 +95,8 @@ Crop.prototype.update = function() {
 	var y0 = data.y * H / 100 - dh / 2;
 
 	var rect = this.croppie.elements.boundary.getBoundingClientRect();
-	var vpw = Math.round(data.width * rect.width / 100) + 'px';
-	var vph = Math.round(data.height * rect.height / 100) + 'px';
+	var vpw = Math.round(data.width * rect.width / 200) + 'px';
+	var vph = Math.round(data.height * rect.height / 200) + 'px';
 	this.croppie.elements.viewport.style.width = vpw;
 	this.croppie.elements.viewport.style.height = vph;
 	var resizer = this.croppie.elements.boundary.querySelector('.cr-resizer');
