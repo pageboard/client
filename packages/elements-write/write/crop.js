@@ -7,6 +7,7 @@ function Crop(input, opts, props, block) {
 	this.y = input.querySelector('[name="crop.y"]');
 	this.width = input.querySelector('[name="crop.width"]');
 	this.height = input.querySelector('[name="crop.height"]');
+	this.zoom = input.querySelector('[name="crop.zoom"]');
 	input.classList.add('crop');
 	this.button = input.dom`<div class="mini ui basic icon button">
 		<i class="compress icon"></i>
@@ -28,9 +29,15 @@ Crop.prototype.init = function() {
 	this.croppie = new Croppie(this.container.children[0], {
 		enableResize: true,
 		mouseWheelZoom: false,
-		update: this.debouncedChange,
+		update: function(vals) {
+			this.wrapVal.innerText = Math.round(this.croppie._currentZoom * 100 / 0.6) + '%';
+			this.debouncedChange(vals);
+		}.bind(this),
 		relative: true
 	});
+	var wrap = this.croppie.elements.zoomerWrap;
+	this.wrapVal = wrap.dom`<div class="wrap-value"></div>`;
+	wrap.appendChild(this.wrapVal);
 	this.load();
 	this.input.closest('#form').addEventListener('change', this.formChange, false);
 };
@@ -49,7 +56,10 @@ Crop.prototype.reset = function() {
 	crop.height = 100;
 	crop.x = 50;
 	crop.y = 50;
-	this.update();
+	crop.zoom = 100;
+	this.update().then(function() {
+		this.change(this.croppie.get());
+	}.bind(this));
 };
 
 Crop.prototype.change = function(vals) {
@@ -59,6 +69,7 @@ Crop.prototype.change = function(vals) {
 	this.height.value = Math.round(p[3] - p[1]);
 	this.x.value = Math.round((p[0] + p[2]) / 2);
 	this.y.value = Math.round((p[1] + p[3]) / 2);
+	if (vals.zoom != null) this.zoom.value = Math.round(vals.zoom * 100 / 0.6);
 	Pageboard.trigger(this.input, 'change');
 };
 
@@ -80,8 +91,9 @@ Crop.prototype.update = function() {
 	var data = this.block.data.crop;
 
 	var rect = this.croppie.elements.boundary.getBoundingClientRect();
-	var vpw = Math.round(data.width * rect.width / 200) + 'px';
-	var vph = Math.round(data.height * rect.height / 200) + 'px';
+	var zoom = (data.zoom || 100) * 0.6 / 100;
+	var vpw = Math.round((data.zoom || 100) / 100 * data.width * rect.width / 100) + 'px';
+	var vph = Math.round((data.zoom || 100) / 100 * data.height * rect.height / 100) + 'px';
 	this.croppie.elements.viewport.style.width = vpw;
 	this.croppie.elements.viewport.style.height = vph;
 	var resizer = this.croppie.elements.boundary.querySelector('.cr-resizer');
@@ -90,15 +102,19 @@ Crop.prototype.update = function() {
 		resizer.style.height = vph;
 	}
 
-	this.croppie.bind({
+	var points = [
+		data.x - data.width / 2,
+		data.y - data.height / 2,
+		data.x + data.width / 2,
+		data.y + data.height / 2
+	];
+
+	return this.croppie.bind({
 		url: this.croppie.data.url,
-		points: [
-			data.x - data.width / 2,
-			data.y - data.height / 2,
-			data.x + data.width / 2,
-			data.y + data.height / 2
-		]
-	});
+		points: points
+	}).then(function() {
+		this.croppie.setZoom(zoom);
+	}.bind(this));
 };
 
 Crop.prototype.destroy = function() {

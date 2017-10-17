@@ -21,6 +21,19 @@
 	padding: 0.6em;
 }
 
-.croppie-container .cr-slider-wrap {
+.croppie-container > .cr-slider-wrap {
 	margin:0.7em 0.2em;
+	width:auto;
+	text-align:left;
+	line-height:1.6em;
+}
+
+.croppie-container > .cr-slider-wrap > .cr-slider {
+	max-width:75%;
+	vertical-align:top;
+}
+
+.croppie-container .cr-slider-wrap > .wrap-value {
+	display:inline-block;
+	margin: 0 0.8em;
 }
