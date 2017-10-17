@@ -107,7 +107,7 @@ Href.prototype.destroy = function() {
 	Pageboard.write.classList.remove('href');
 };
 
-Href.prototype.update = function(block) {
+Href.prototype.update = function() {
 	this.renderList();
 };
 
