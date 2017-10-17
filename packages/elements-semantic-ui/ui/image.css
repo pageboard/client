@@ -30,13 +30,15 @@
 }
 .ui.image.horizontal > img {
 	min-width: 100%;
-	max-width: none;
+	max-width: none !important;
+	max-height: none !important;
 }
 .ui.image.vertical {
 	height:100%;
 }
 .ui.image.vertical > img {
 	min-height: 100%;
-	max-height: none;
+	max-width: none !important;
+	max-height: none !important;
 }
 
