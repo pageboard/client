@@ -21,6 +21,10 @@ body {
 	flex: 0 0 auto;
 	display:flex;
 }
+.layout.column {
+	flex-direction: column;
+	align-items:stretch;
+}
 .layout.top {
 	align-items: flex-start;
 }
@@ -38,10 +42,6 @@ body {
 }
 .layout.right {
 	justify-content: flex-end;
-}
-.layout.column {
-	flex-direction: column;
-	align-items:stretch;
 }
 .layout.column > img,
 .layout.column.left > img {
