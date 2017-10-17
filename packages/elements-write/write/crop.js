@@ -73,7 +73,6 @@ Crop.prototype.change = function(vals) {
 	this.x.value = Math.max(0, x);
 	var y = Math.round(100 * (y0 + y1) / (2 * H));
 	this.y.value = Math.max(0, y);
-	console.log("change", x, y, w, h);
 	this.zoom.value = vals.zoom;
 	Pageboard.trigger(this.input, 'change');
 };
