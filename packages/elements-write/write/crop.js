@@ -51,15 +51,21 @@ Crop.prototype.formChange = function(e) {
 };
 
 Crop.prototype.reset = function() {
-	var crop = this.block.data.crop;
-	crop.width = 100;
-	crop.height = 100;
-	crop.x = 50;
-	crop.y = 50;
-	crop.zoom = 100;
-	this.update().then(function() {
-		this.change(this.croppie.get());
-	}.bind(this));
+	this.change({
+		points: [0, 0, 100, 100],
+		zoom: 0.6
+	});
+	this.update({
+		data: {
+			crop: {
+				x: 50,
+				y: 50,
+				width: 100,
+				height: 100,
+				zoom: 100
+			}
+		}
+	});
 };
 
 Crop.prototype.change = function(vals) {
@@ -84,11 +90,11 @@ Crop.prototype.load = function() {
 	}.bind(this));
 };
 
-Crop.prototype.update = function() {
+Crop.prototype.update = function(block) {
 	if (this.croppie._originalImageWidth === undefined) {
 		return;
 	}
-	var data = this.block.data.crop;
+	var data = (block || this.block).data.crop;
 
 	var rect = this.croppie.elements.boundary.getBoundingClientRect();
 	var zoom = (data.zoom || 100) * 0.6 / 100;
