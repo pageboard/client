@@ -74,6 +74,9 @@ Crop.prototype.load = function() {
 };
 
 Crop.prototype.update = function() {
+	if (this.croppie._originalImageWidth === undefined) {
+		return;
+	}
 	var data = this.block.data.crop;
 
 	var rect = this.croppie.elements.boundary.getBoundingClientRect();
