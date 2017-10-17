@@ -8,7 +8,7 @@
 	position:relative;
 	width:100%;
 	padding-top:100%;
-	margin-bottom:2em;
+	margin-bottom:2.3em;
 }
 #form fieldset.crop > .crop > .croppie-container {
 	position:absolute;
@@ -16,11 +16,11 @@
 }
 #form fieldset.crop > .button {
 	position: absolute;
-	right: 0.8em;
-	bottom: 0.8em;
+	right: 0.7em;
+	bottom: 0.7em;
 	padding: 0.6em;
 }
 
 .croppie-container .cr-slider-wrap {
-	margin:0.5em auto;
+	margin:0.7em 0.2em;
 }

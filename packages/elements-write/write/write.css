@@ -87,7 +87,9 @@ body {
 
 #form fieldset {
 	margin-top:0.5em;
-	padding-top:0.5em;
+	margin-bottom:0.5em;
+	padding-top:0;
+	padding-bottom:0.5em;
 }
 #form fieldset > label {
 	display:block;
