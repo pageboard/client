@@ -64,8 +64,7 @@ Pageboard.elements.image = {
 			}
 		},
 		crop: {
-			title: 'Crop',
-			description: 'All values are percents of the original image',
+			title: 'Crop and zoom',
 			type: "object",
 			properties: {
 				x: {
@@ -90,7 +89,7 @@ Pageboard.elements.image = {
 					maximum: 100,
 					default: 100,
 					multipleOf: 5,
-					title: "Max width"
+					title: "Width"
 				},
 				height: {
 					type: "integer",
@@ -98,12 +97,19 @@ Pageboard.elements.image = {
 					maximum: 100,
 					default: 100,
 					multipleOf: 5,
-					title: "Max height"
+					title: "Height"
+				},
+				zoom: {
+					type: "number",
+					minimum: 0.0,
+					maximum: 10.0,
+					default: 1.0,
+					title: "Zoom"
 				}
 			},
-//			input: {
-//				name: 'roi'
-//			}
+			input: {
+				name: 'crop'
+			}
 		}
 	},
 //	contents: {
@@ -126,20 +132,22 @@ Pageboard.elements.image = {
 			};
 		}
 		var r = d.crop;
-		if (r && (r.x != 50 || r.y != 50 || r.width != 100 || r.height != 100)) {
+		var zoom = 1.0;
+		if (r && (r.x != 50 || r.y != 50 || r.width != 100 || r.height != 100 || r.zoom != 1.0)) {
 			if (r.x - r.width / 2 < 0 || r.x + r.width / 2 > 100) {
 				r.width = 2 * Math.min(r.x, 100 - r.x);
 			}
 			if (r.y - r.height / 2 < 0 || r.y + r.height / 2 > 100) {
 				r.height = 2 * Math.min(r.y, 100 - r.y);
 			}
+			zoom = r.zoom;
 			obj.query.ex = `x:${r.x},y:${r.y},w:${r.width},h:${r.height}`;
 		}
 		var tUrl = Page.format(obj);
 
 		function responsiveUrl(w) {
 			var obj = Page.parse(tUrl);
-			obj.query.rs = `w:${w}`;
+			obj.query.rs = `w:${Math.round(w / zoom)}`;
 			return `${Page.format(obj)} ${w}w`;
 		}
 
