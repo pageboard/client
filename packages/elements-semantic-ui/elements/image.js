@@ -98,6 +98,13 @@ Pageboard.elements.image = {
 					default: 100,
 					multipleOf: 5,
 					title: "Height"
+				},
+				zoom: {
+					type: "integer",
+					minimum: 1,
+					maximum: 150,
+					default: 100,
+					title: "Zoom"
 				}
 			},
 			input: {
@@ -124,8 +131,9 @@ Pageboard.elements.image = {
 				}
 			};
 		}
-		var r = d.crop;
-		if (r && (r.x != 50 || r.y != 50 || r.width != 100 || r.height != 100)) {
+		var r = d.crop || {};
+		var zoom = r.zoom || 100;
+		if (r.x != 50 || r.y != 50 || r.width != 100 || r.height != 100 || r.zoom != 100) {
 			if (r.x - r.width / 2 < 0 || r.x + r.width / 2 > 100) {
 				r.width = 2 * Math.min(r.x, 100 - r.x);
 			}
@@ -138,7 +146,7 @@ Pageboard.elements.image = {
 
 		function responsiveUrl(w) {
 			var obj = Page.parse(tUrl);
-			obj.query.rs = `w:${Math.round(w)}`;
+			obj.query.rs = `w:${Math.round(w * zoom / 100)}`;
 			return `${Page.format(obj)} ${w}w`;
 		}
 
