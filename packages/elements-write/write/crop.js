@@ -12,11 +12,11 @@ function Crop(input, opts, props, block) {
 	this.button = input.dom`<div class="mini ui basic icon button">
 		<i class="compress icon"></i>
 	</div>`;
-	input.appendChild(this.button);
 	this.reset = this.reset.bind(this);
 	this.button.addEventListener('click', this.reset, false);
 	this.container = input.dom`<div class="crop"><div></div></div>`;
 	input.appendChild(this.container);
+	input.appendChild(this.button);
 	this.debouncedChange = Pageboard.Debounce(this.change.bind(this), 500);
 
 	this.block = block;
