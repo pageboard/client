@@ -402,12 +402,6 @@ Href.prototype.renderList = function(list, container) {
 			container.appendChild(item);
 		}
 	}, this);
-
-//	if (selected && !containsSelected && this.map[selected]) {
-//		var item = this.renderItem(this.map[selected]);
-//		item.classList.add('selected');
-//		container.insertBefore(item, container.firstChild);
-//	}
 	container.className = `ui items ${this.opts.display || ''}`;
 };
 
