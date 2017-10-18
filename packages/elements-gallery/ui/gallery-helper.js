@@ -54,7 +54,7 @@ HTMLElementGallery.prototype._initHelper = function() {
 };
 
 HTMLElementGallery.prototype._selectMedias = function(gal) {
-	return gal.querySelectorAll('[block-content="media"] > .image');
+	return gal.querySelectorAll('[block-content="media"] > [block-type="image"]');
 };
 
 HTMLElementGallery.prototype._setupHelper = function() {
