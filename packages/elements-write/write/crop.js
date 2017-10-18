@@ -24,7 +24,7 @@ function Crop(input, opts, props, block) {
 
 	this.initControls();
 
-	window.cpr = this.cropper = new Cropper(this.image, {
+	this.cropper = new Cropper(this.image, {
 		viewMode: 1,
 		zoomOnTouch: false,
 		zoomOnWheel: false,
