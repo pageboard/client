@@ -3,154 +3,176 @@ Pageboard.inputs.crop = Crop;
 
 function Crop(input, opts, props, block) {
 	this.input = input;
+	this.block = block;
+
 	this.x = input.querySelector('[name="crop.x"]');
 	this.y = input.querySelector('[name="crop.y"]');
 	this.width = input.querySelector('[name="crop.width"]');
 	this.height = input.querySelector('[name="crop.height"]');
 	this.zoom = input.querySelector('[name="crop.zoom"]');
+
 	input.classList.add('crop');
-	this.button = input.dom`<div class="mini ui basic icon button">
-		<i class="compress icon"></i>
-	</div>`;
+
 	this.reset = this.reset.bind(this);
-	this.button.addEventListener('click', this.reset, false);
-	this.container = input.dom`<div class="crop"><div></div></div>`;
-	input.appendChild(this.container);
-	input.appendChild(this.button);
+	this.formChange = this.formChange.bind(this);
+	this.zoomChange = this.zoomChange.bind(this);
+
 	this.debouncedChange = Pageboard.Debounce(this.change.bind(this), 500);
 
-	this.block = block;
-	this.formChange = this.formChange.bind(this);
+	this.container = input.dom`<div class="crop"></div>`;
+	input.appendChild(this.container);
 
-	this.init();
-}
+	this.initControls();
 
-Crop.prototype.init = function() {
-	this.croppie = new Croppie(this.container.children[0], {
-		enableResize: true,
-		mouseWheelZoom: false,
-		update: function(vals) {
-			this.wrapVal.innerText = Math.round(this.croppie._currentZoom * 100 / 0.6) + '%';
-			this.debouncedChange(vals);
+	window.cpr = this.cropper = new Cropper(this.image, {
+		viewMode: 1,
+		zoomOnTouch: false,
+		zoomOnWheel: false,
+		dragMode: 'move',
+		toggleDragModeOnDblclick: false,
+		ready: this.ready.bind(this),
+		crop: function(e) {
+			this.updateCrop(e.detail);
+			this.debouncedChange(e.detail);
 		}.bind(this),
-		relative: true
+		zoom: function(e) {
+			this.updateZoom(e.detail);
+		}.bind(this)
 	});
-	var wrap = this.croppie.elements.zoomerWrap;
-	this.wrapVal = wrap.dom`<div class="wrap-value"></div>`;
-	wrap.appendChild(this.wrapVal);
-	this.load();
+
 	this.input.closest('#form').addEventListener('change', this.formChange, false);
+};
+
+Crop.prototype.ready = function() {
+	if (!this.cropper) return;
+	this.updateData();
 };
 
 Crop.prototype.formChange = function(e) {
 	if (!e.target.matches('[name="url"]')) return;
-	this.destroy();
 	setTimeout(function() {
-		this.init();
+		this.load();
 	}.bind(this));
 };
 
 Crop.prototype.reset = function() {
-	this.change({
-		points: [0, 0, 100, 100],
-		zoom: 0.6
-	});
-	this.update({
-		data: {
-			crop: {
-				x: 50,
-				y: 50,
-				width: 100,
-				height: 100,
-				zoom: 100
-			}
-		}
-	});
+	this.cropper.reset();
+	this.cropper.zoomTo(1);
 };
 
-Crop.prototype.change = function(vals) {
-	if (!vals) return;
-	this.fixRect();
-	var p = vals.points;
-	this.width.value = Math.round(p[2] - p[0]);
-	this.height.value = Math.round(p[3] - p[1]);
-	this.x.value = Math.round((p[0] + p[2]) / 2);
-	this.y.value = Math.round((p[1] + p[3]) / 2);
-	if (vals.zoom != null) this.zoom.value = Math.round(vals.zoom * 100 / 0.6);
+Crop.prototype.initControls = function() {
+	var doc = this.input.ownerDocument;
+	this.image = doc.dom`<img src="${this.thumbnail(this.block.data.url)}" />`;
+	this.container.appendChild(this.image);
+
+	this.slider = doc.dom`<div class="slider">
+		<input type="range" step="0.0001" min="0.0000" max="1.5000">
+	</div>`;
+	this.sliderValue = doc.dom`<div class="value"></div>`;
+	this.container.appendChild(this.slider);
+	this.slider.appendChild(this.sliderValue);
+	this.slider.addEventListener('input', this.zoomChange, false);
+
+	this.button = doc.dom`<div class="mini ui basic icon button">
+		<i class="compress icon"></i>
+	</div>`;
+	this.button.addEventListener('click', this.reset, false);
+	this.slider.appendChild(this.button);
+};
+
+Crop.prototype.updateCrop = function(obj) {
+	// TODO show crop final dimensions
+};
+
+Crop.prototype.zoomChange = function(e) {
+	this.cropper.zoomTo(e.target.value);
+};
+
+Crop.prototype.getRatio = function() {
+	var data = this.cropper.getCanvasData();
+	return data.width / data.naturalWidth;
+};
+
+Crop.prototype.updateZoom = function() {
+	setTimeout(function() {
+		var ratio = this.getRatio();
+		this.slider.querySelector('input').value = ratio;
+		this.sliderValue.textContent = Math.round(ratio * 100);
+	}.bind(this));
+};
+
+Crop.prototype.round = function(num) {
+	return Math.round(1000 * num) / 1000;
+};
+
+Crop.prototype.change = function(obj) {
+	if (!this.cropper) return;
+	var imgData = this.cropper.getImageData();
+	var W = imgData.naturalWidth;
+	var H = imgData.naturalHeight;
+
+	var x = 100 * (obj.x + obj.width / 2) / W;
+	this.x.value = this.round(x);
+
+	var y = 100 * (obj.y + obj.height / 2) / H;
+	this.y.value = this.round(y);
+
+	var w = 100 * obj.width / W;
+	this.width.value = this.round(w);
+
+	var h = 100 * obj.height / H;
+	this.height.value = this.round(h);
+
+	var z = 100 * this.getRatio();
+	this.zoom.value = this.round(z);
+
 	Pageboard.trigger(this.input, 'change');
 };
 
 Crop.prototype.load = function() {
 	var url = this.block.data.url;
-	if (url) url += '?rs=w:512';
+	if (url == this.lastUrl) return this.cropper.complete;
+	this.lastUrl = url;
+
+	this.cropper.replace(this.thumbnail(url));
+	return false;
+};
+
+Crop.prototype.thumbnail = function(url) {
+	if (url) url += '?rs=w:512&q=65';
 	else url = '/.files/@pageboard/elements/ui/placeholder.png';
-	this.croppie.bind({
-		url: url
-	}).then(function() {
-		this.update();
-	}.bind(this));
+	return url;
 };
 
-Crop.prototype.fixRect = function() {
-	var rect = this.croppie.elements.boundary.getBoundingClientRect();
-	var resizer = this.croppie.elements.boundary.querySelector('.cr-resizer');
-	var vp = this.croppie.elements.viewport;
-	var vpr = vp.getBoundingClientRect();
+Crop.prototype.updateData = function() {
+	var data = this.block.data.crop || {};
 
-	if (vpr.width > rect.width) {
-		vp.style.width = Math.floor(rect.width) + 'px';
-		if (resizer) resizer.style.width = vp.style.width;
-	}
-	if (vpr.height > rect.height) {
-		vp.style.height = Math.floor(rect.height) + 'px';
-		if (resizer) resizer.style.height = vp.style.height;
-	}
+	var imgData = this.cropper.getImageData();
+	var W = imgData.naturalWidth;
+	var H = imgData.naturalHeight;
+	var ratio = data.zoom / 100;
+	var box = {
+		x: (data.x - data.width / 2) * W / 100,
+		y: (data.y - data.height / 2) * H / 100,
+		width: data.width * W / 100,
+		height: data.height * H / 100
+	};
+	this.cropper.zoomTo(ratio).setData(box);
 };
 
-Crop.prototype.update = function(block) {
-	if (this.croppie._originalImageWidth === undefined) {
-		return;
+Crop.prototype.update = function() {
+	if (this.load()) {
+		this.updateData();
 	}
-	var data = (block || this.block).data.crop || {};
-
-	var ratio = this.croppie._originalImageHeight / this.croppie._originalImageWidth;
-	var ratiox = 1;
-	var ratioy = 1;
-	if (ratio > 1) ratioy = ratio;
-	if (ratio < 1) ratiox = ratio;
-
-	var zoom = (data.zoom || 100) * 0.6 / 100;
-	var rect = this.croppie.elements.boundary.getBoundingClientRect();
-
-	var vpw = Math.round((data.zoom || 100) / 100 * data.width * rect.width * ratiox / 100) + 'px';
-	var vph = Math.round((data.zoom || 100) / 100 * data.height * rect.height * ratioy / 100) + 'px';
-	this.croppie.elements.viewport.style.width = vpw;
-	this.croppie.elements.viewport.style.height = vph;
-	var resizer = this.croppie.elements.boundary.querySelector('.cr-resizer');
-	if (resizer) {
-		resizer.style.width = vpw;
-		resizer.style.height = vph;
-	}
-
-	var points = [
-		data.x - data.width / 2,
-		data.y - data.height / 2,
-		data.x + data.width / 2,
-		data.y + data.height / 2
-	];
-
-	return this.croppie.bind({
-		url: this.croppie.data.url,
-		points: points
-	}).then(function() {
-		this.croppie.setZoom(zoom);
-	}.bind(this));
 };
 
 Crop.prototype.destroy = function() {
-	this.croppie.destroy();
-	delete this.croppie;
+	this.cropper.destroy();
+	delete this.cropper;
+	this.slider.removeEventListener('input', this.zoomChange, false);
 	this.input.closest('#form').removeEventListener('change', this.formChange, false);
+	this.container.remove();
+	delete this.container;
 };
 
 })(window.Pageboard);
