@@ -70,6 +70,7 @@ Crop.prototype.reset = function() {
 
 Crop.prototype.change = function(vals) {
 	if (!vals) return;
+	this.fixRect();
 	var p = vals.points;
 	this.width.value = Math.round(p[2] - p[0]);
 	this.height.value = Math.round(p[3] - p[1]);
@@ -90,16 +91,39 @@ Crop.prototype.load = function() {
 	}.bind(this));
 };
 
+Crop.prototype.fixRect = function() {
+	var rect = this.croppie.elements.boundary.getBoundingClientRect();
+	var resizer = this.croppie.elements.boundary.querySelector('.cr-resizer');
+	var vp = this.croppie.elements.viewport;
+	var vpr = vp.getBoundingClientRect();
+
+	if (vpr.width > rect.width) {
+		vp.style.width = Math.floor(rect.width) + 'px';
+		if (resizer) resizer.style.width = vp.style.width;
+	}
+	if (vpr.height > rect.height) {
+		vp.style.height = Math.floor(rect.height) + 'px';
+		if (resizer) resizer.style.height = vp.style.height;
+	}
+};
+
 Crop.prototype.update = function(block) {
 	if (this.croppie._originalImageWidth === undefined) {
 		return;
 	}
-	var data = (block || this.block).data.crop;
+	var data = (block || this.block).data.crop || {};
 
-	var rect = this.croppie.elements.boundary.getBoundingClientRect();
+	var ratio = this.croppie._originalImageHeight / this.croppie._originalImageWidth;
+	var ratiox = 1;
+	var ratioy = 1;
+	if (ratio > 1) ratioy = ratio;
+	if (ratio < 1) ratiox = ratio;
+
 	var zoom = (data.zoom || 100) * 0.6 / 100;
-	var vpw = Math.round((data.zoom || 100) / 100 * data.width * rect.width / 100) + 'px';
-	var vph = Math.round((data.zoom || 100) / 100 * data.height * rect.height / 100) + 'px';
+	var rect = this.croppie.elements.boundary.getBoundingClientRect();
+
+	var vpw = Math.round((data.zoom || 100) / 100 * data.width * rect.width * ratiox / 100) + 'px';
+	var vph = Math.round((data.zoom || 100) / 100 * data.height * rect.height * ratioy / 100) + 'px';
 	this.croppie.elements.viewport.style.width = vpw;
 	this.croppie.elements.viewport.style.height = vph;
 	var resizer = this.croppie.elements.boundary.querySelector('.cr-resizer');
