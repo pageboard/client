@@ -93,7 +93,6 @@ body {
 }
 #form fieldset > label {
 	display:block;
-	margin-top:-0.5em;
 	font-style:italic;
 	font-size:0.9em;
 }
