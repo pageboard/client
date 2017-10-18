@@ -20,13 +20,13 @@ Pageboard.elements.image = {
 			properties: {
 				fit: {
 					oneOf: [{
-						title: "Natural",
+						title: "natural",
 						constant: "none"
 					}, {
-						title: "Contain",
+						title: "contain",
 						constant: "contain"
 					}, {
-						title: "Cover",
+						title: "cover",
 						constant: "cover"
 					}],
 					title: "fit",
@@ -63,43 +63,39 @@ Pageboard.elements.image = {
 			}
 		},
 		crop: {
-			title: 'Crop',
+			title: 'Crop and scale',
 			type: "object",
 			properties: {
 				x: {
-					type: "integer",
+					type: "number",
 					minimum: 0,
 					maximum: 100,
 					default: 50,
-					multipleOf: 5,
 					title: "Horizontal center"
 				},
 				y: {
+					type: "number",
 					minimum: 0,
 					maximum: 100,
 					default: 50,
-					multipleOf: 5,
-					type: "integer",
 					title: "Vertical center"
 				},
 				width: {
-					type: "integer",
+					type: "number",
 					minimum: 0,
 					maximum: 100,
 					default: 100,
-					multipleOf: 5,
 					title: "Width"
 				},
 				height: {
-					type: "integer",
+					type: "number",
 					minimum: 0,
 					maximum: 100,
 					default: 100,
-					multipleOf: 5,
 					title: "Height"
 				},
 				zoom: {
-					type: "integer",
+					type: "number",
 					minimum: 1,
 					maximum: 150,
 					default: 100,
