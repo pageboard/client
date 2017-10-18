@@ -51,15 +51,19 @@ Pageboard.elements.image = {
 			title: "Cover",
 			type: "object",
 			properties: {
-				horizontal: {
-					type: "boolean",
-					title: "Horizontal",
-					default: false
-				},
-				vertical: {
-					type: "boolean",
-					title: "Vertical",
-					default: false
+				fit: {
+					oneOf: [{
+						title: "Natural",
+						constant: "none"
+					}, {
+						title: "Contain",
+						constant: "contain"
+					}, {
+						title: "Cover",
+						constant: "cover"
+					}],
+					title: "Fit",
+					default: "contain"
 				}
 			}
 		},
@@ -156,9 +160,8 @@ Pageboard.elements.image = {
 			${responsiveUrl(640)},
 			${responsiveUrl(1280)}" />
 		</div>`;
-		if (d.cover) {
-			if (d.cover.horizontal) node.classList.add('horizontal');
-			if (d.cover.vertical) node.classList.add('vertical');
+		if (d.cover && d.cover.fit != "none") {
+			node.classList.add(d.cover.fit);
 		}
 		if (d.roi) {
 			if (d.roi.horizontal) node.classList.add(d.roi.horizontal);
