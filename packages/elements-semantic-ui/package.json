@@ -18,14 +18,16 @@
   },
   "homepage": "https://github.com/pageboard/elements#readme",
   "dependencies": {
+    "@pageboard/stickybits": "^3.0.0",
     "@webcomponents/custom-elements": "^1.0.0",
-    "postinstall-links": "^0.3.1",
-    "@pageboard/stickybits": "^3.0.0"
+    "object-fit-images": "^3.2.3",
+    "postinstall-links": "^0.3.1"
   },
   "links": {
     "@webcomponents/custom-elements/custom-elements.min.js": "ui/",
     "@webcomponents/custom-elements/custom-elements.min.js.map": "ui/",
-    "@pageboard/stickybits/dist/stickybits.min.js": "ui/"
+    "@pageboard/stickybits/dist/stickybits.min.js": "ui/",
+    "object-fit-images/dist/ofi.min.js": "ui/object-fit-images.js"
   },
   "pageboard": {
     "directories": [

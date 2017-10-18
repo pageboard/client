@@ -1,0 +1,54 @@
+element-image {
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	overflow:hidden;
+	min-width: auto;
+	min-height: auto;
+}
+
+element-image:not([data-fit="none"]),
+element-image:not([data-fit="none"]) > img {
+	width:100%;
+	height:100%;
+}
+element-image[data-fit="contain"] > img {
+	object-fit: contain;
+}
+element-image[data-fit="cover"] > img {
+	object-fit: cover;
+}
+
+element-image > img {
+	display:block;
+	flex:0 0 auto;
+	align-self:center; /* not stretch */
+}
+
+element-image[data-position="left top"] > img {
+	object-position:left top;
+}
+element-image[data-position="left center"] > img {
+	object-position:left center;
+}
+element-image[data-position="left bottom"] > img {
+	object-position:left bottom;
+}
+element-image[data-position="center top"] > img {
+	object-position:center top;
+}
+element-image[data-position="center center"] > img {
+	object-position:center center;
+}
+element-image[data-position="center bottom"] > img {
+	object-position:center bottom;
+}
+element-image[data-position="right top"] > img {
+	object-position:right top;
+}
+element-image[data-position="right center"] > img {
+	object-position:right center;
+}
+element-image[data-position="right bottom"] > img {
+	object-position:right bottom;
+}

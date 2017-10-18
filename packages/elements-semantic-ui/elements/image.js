@@ -13,10 +13,25 @@ Pageboard.elements.image = {
 				}
 			}
 		},
-		roi: {
-			title: "Region of interest",
+		display: {
+			title: "Display",
 			type: "object",
+			description: "A natural fit cannot be positioned",
 			properties: {
+				fit: {
+					oneOf: [{
+						title: "Natural",
+						constant: "none"
+					}, {
+						title: "Contain",
+						constant: "contain"
+					}, {
+						title: "Cover",
+						constant: "cover"
+					}],
+					title: "fit",
+					default: "contain"
+				},
 				horizontal: {
 					title: "horizontal",
 					oneOf: [{
@@ -44,26 +59,6 @@ Pageboard.elements.image = {
 						title: "bottom"
 					}],
 					default: "vcenter"
-				}
-			}
-		},
-		cover: {
-			title: "Cover",
-			type: "object",
-			properties: {
-				fit: {
-					oneOf: [{
-						title: "Natural",
-						constant: "none"
-					}, {
-						title: "Contain",
-						constant: "contain"
-					}, {
-						title: "Cover",
-						constant: "cover"
-					}],
-					title: "Fit",
-					default: "contain"
 				}
 			}
 		},
@@ -123,7 +118,7 @@ Pageboard.elements.image = {
 //	},
 	group: "block",
 	icon: '<i class="icon image"></i>',
-	tag: '.ui.image',
+	tag: 'element-image',
 	render: function(doc, block) {
 		var d = block.data;
 		var obj = Page.parse(d.url || '/.files/@pageboard/elements/ui/placeholder.png');
@@ -154,23 +149,35 @@ Pageboard.elements.image = {
 			return `${Page.format(obj)} ${w}w`;
 		}
 
-		var node = doc.dom`<div class="ui image"><img src="${tUrl}"
+		var node = doc.dom`<element-image><img src="${tUrl}"
 			srcset="${responsiveUrl(160)},
 			${responsiveUrl(320)},
 			${responsiveUrl(640)},
 			${responsiveUrl(1280)}" />
-		</div>`;
-		if (d.cover && d.cover.fit != "none") {
-			node.classList.add(d.cover.fit);
-		}
+		</element-image>`;
+
 		if (d.roi) {
-			if (d.roi.horizontal) node.classList.add(d.roi.horizontal);
-			if (d.roi.vertical) node.classList.add(d.roi.vertical);
+			// legacy property
+			d.display = d.roi;
+			delete d.roi;
+		}
+		var display = d.display;
+		if (display) {
+			node.dataset.fit = display.fit || "none";
+			var posx = display.horizontal;
+			if (posx == "hcenter") posx = display.horizontal = "center";
+			var posy = display.vertical;
+			if (posy == "vcenter") posy = display.vertical = "center";
+			node.dataset.position = `${posx || 'center'} ${posy || 'center'}`;
 		}
 		return node;
 	},
 	stylesheets: [
-		'../ui/image.css'
+		'../ui/element-image.css'
+	],
+	scripts: [
+		'../ui/object-fit-images.js',
+		'../ui/element-image.js'
 	]
 };
 
