@@ -36,6 +36,22 @@
 	float:right;
 	margin-right:0;
 }
+.crop > .bottom-buttons {
+	position:relative;
+	height:0;
+	overflow:visible;
+}
+.crop > .bottom-buttons > .right.button {
+	position:absolute;
+	right:0;
+	bottom:0;
+}
+.crop > .bottom-buttons > .left.button {
+	position:absolute;
+	right:3em;
+	left:auto;
+	bottom:0;
+}
 
 
 /*************************************/

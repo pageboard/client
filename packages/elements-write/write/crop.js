@@ -14,6 +14,8 @@ function Crop(input, opts, props, block) {
 	input.classList.add('crop');
 
 	this.reset = this.reset.bind(this);
+	this.zoomIn = this.zoomIn.bind(this);
+	this.zoomOut = this.zoomOut.bind(this);
 	this.formChange = this.formChange.bind(this);
 	this.zoomChange = this.zoomChange.bind(this);
 	this.valueChange = this.valueChange.bind(this);
@@ -21,12 +23,11 @@ function Crop(input, opts, props, block) {
 
 	this.debouncedChange = Pageboard.Debounce(this.change.bind(this), 500);
 
-	this.container = input.dom`<div class="crop"></div>`;
-	input.appendChild(this.container);
+	this.container = input.appendChild(input.dom`<div class="crop">
+		<img src="${this.thumbnail(this.block.data.url)}" />
+	</div>`);
 
-	this.initControls();
-
-	this.cropper = new Cropper(this.image, {
+	this.cropper = new Cropper(this.container.querySelector('img'), {
 		viewMode: 1,
 		zoomOnTouch: false,
 		zoomOnWheel: false,
@@ -38,6 +39,8 @@ function Crop(input, opts, props, block) {
 			this.debouncedChange(e.detail);
 		}.bind(this)
 	});
+
+	this.initControls();
 
 	this.input.closest('#form').addEventListener('change', this.formChange, false);
 };
@@ -59,27 +62,40 @@ Crop.prototype.reset = function() {
 	this.cropper.scale(1, 1);
 };
 
+Crop.prototype.zoomIn = function() {
+	this.cropper.zoom(0.1);
+};
+
+Crop.prototype.zoomOut = function() {
+	this.cropper.zoom(-0.1);
+};
+
 Crop.prototype.initControls = function() {
 	var doc = this.input.ownerDocument;
-	this.image = doc.dom`<img src="${this.thumbnail(this.block.data.url)}" />`;
-	this.container.appendChild(this.image);
 
-	this.slider = doc.dom`<div class="slider">
-		<input type="range" step="0.0001" min="0.0000" max="2.0000">
-	</div>`;
-	this.container.appendChild(this.slider);
+	var btnCont = this.container.appendChild(doc.dom`<div class="bottom-buttons"></div>`);
+	this.zoomOutButton = btnCont.appendChild(doc.dom`<div class="ui mini basic inverted circular icon button left">
+		<i class="compress icon"></i>
+	</div>`);
+	this.zoomInButton = btnCont.appendChild(doc.dom`<div class="ui mini basic inverted circular icon button right">
+		<i class="expand icon"></i>
+	</div>`);
+	this.zoomOutButton.addEventListener('click', this.zoomOut, false);
+	this.zoomInButton.addEventListener('click', this.zoomIn, false);
 
-	this.sliderValue = doc.dom`<textarea class="values"></textarea>`;
-	this.slider.appendChild(this.sliderValue);
+	this.slider = this.container.appendChild(doc.dom`<div class="slider">
+		<input type="range" step="0.0001" min="0.01" max="2.00">
+	</div>`);
+
+	this.sliderValue = this.slider.appendChild(doc.dom`<textarea class="values"></textarea>`);
 	this.slider.addEventListener('input', this.zoomChange, false);
 	this.sliderValue.addEventListener('input', this.valueChange, false);
 	this.sliderValue.addEventListener('focus', this.valueFocus, false);
 
-	this.button = doc.dom`<div class="mini ui basic icon button">
+	this.resetButton = this.slider.appendChild(doc.dom`<div class="mini ui basic icon button">
 		<i class="compress icon"></i>
-	</div>`;
-	this.button.addEventListener('click', this.reset, false);
-	this.slider.appendChild(this.button);
+	</div>`);
+	this.resetButton.addEventListener('click', this.reset, false);
 };
 
 Crop.prototype.valueChange = function() {
@@ -141,19 +157,19 @@ Crop.prototype.change = function(obj) {
 	var H = imgData.naturalHeight * obj.scaleY;
 
 	var x = 100 * (obj.x + obj.width / 2) / W;
-	this.x.value = this.round(x);
+	if (!isNaN(x)) this.x.value = this.round(x);
 
 	var y = 100 * (obj.y + obj.height / 2) / H;
-	this.y.value = this.round(y);
+	if (!isNaN(y)) this.y.value = this.round(y);
 
 	var w = 100 * obj.width / W;
-	this.width.value = this.round(w);
+	if (!isNaN(w)) this.width.value = this.round(w);
 
 	var h = 100 * obj.height / H;
-	this.height.value = this.round(h);
+	if (!isNaN(h)) this.height.value = this.round(h);
 
 	var z = 100 * obj.scaleX;
-	this.zoom.value = this.round(z);
+	if (!isNaN(z)) this.zoom.value = this.round(z);
 
 	Pageboard.trigger(this.input, 'change');
 };
@@ -204,6 +220,9 @@ Crop.prototype.destroy = function() {
 	this.sliderValue.removeEventListener('input', this.valueChange, false);
 	this.sliderValue.removeEventListener('focus', this.valueFocus, false);
 	this.input.closest('#form').removeEventListener('change', this.formChange, false);
+	this.resetButton.removeEventListener('click', this.reset, false);
+	this.zoomOutButton.removeEventListener('click', this.zoomOut, false);
+	this.zoomInButton.removeEventListener('click', this.zoomIn, false);
 	this.container.remove();
 	delete this.container;
 };
