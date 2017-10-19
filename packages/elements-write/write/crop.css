@@ -20,7 +20,8 @@
 }
 
 .crop > .slider > .values {
-	max-height: 3em !important;
+	height:auto;
+	max-height: 2em !important;
 	min-height: 0 !important;
 	font-size: smaller;
 	font-family: monospace;
@@ -28,7 +29,7 @@
 	margin-top:0.2em;
 	padding:0;
 	border:0;
-	width:80%;
+	width:100%;
 	line-height:1.1em;
 	resize:none;
 }
@@ -66,8 +67,8 @@ input[type="range"] {
 	width: 100%;
 /*required for proper track sizing in FF*/
 	max-width: 100%;
-	padding-top: 8px;
-	padding-bottom: 8px;
+	padding-top: 0.8em;
+	padding-bottom: 0.3em;
 	background-color: transparent;
 }
 
