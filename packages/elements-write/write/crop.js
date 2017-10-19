@@ -124,6 +124,7 @@ Crop.prototype.valueFocus = function() {
 };
 
 Crop.prototype.updateCrop = function(obj) {
+	if (!this.cropper) return;
 	this.sliderValue.value = `x:${this.round(obj.x)} y:${this.round(obj.y)} w:${this.round(obj.width)} h:${this.round(obj.height)} zoom:${this.round(this.getRatio() * 100)}`;
 };
 
@@ -138,6 +139,7 @@ Crop.prototype.getRatio = function() {
 
 Crop.prototype.updateZoom = function() {
 	setTimeout(function() {
+		if (!this.cropper) return;
 		var ratio = this.getRatio();
 		this.slider.querySelector('input').value = ratio;
 		this.sliderValue.textContent = Math.round(ratio * 100);
