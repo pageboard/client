@@ -8,28 +8,33 @@
 	position:relative;
 	width:100%;
 }
-.crop > .slider > .button {
-	float:right;
-}
+
 .crop > img {
 	max-width:100%;
 }
 .crop > .slider {
-	margin:0.7em 0.2em;
+	margin:0 0.2em;
 	width:auto;
 	text-align:left;
 	line-height:1.6em;
 }
 
-.crop > .slider > input[type="range"] {
-	width:75%;
-	vertical-align:middle;
+.crop > .slider > .values {
+	max-height: 3em !important;
+	min-height: 0 !important;
+	font-size: smaller;
+	font-family: monospace;
+	overflow:hidden;
+	margin-top:0.2em;
+	padding:0;
+	border:0;
+	width:80%;
+	line-height:1.1em;
+	resize:none;
 }
-
-.crop > .slider > .value {
-	display:inline-block;
-	margin: 0 0.6em;
-	vertical-align:middle;
+.crop > .slider > .button {
+	float:right;
+	margin-right:0;
 }
 
 
@@ -43,7 +48,7 @@ input[type="range"] {
 	-webkit-appearance: none;
 /*removes default webkit styles*/
 	/*border: 1px solid white; *//*fix for FF unable to apply focus style bug */
-	width: 300px;
+	width: 100%;
 /*required for proper track sizing in FF*/
 	max-width: 100%;
 	padding-top: 8px;

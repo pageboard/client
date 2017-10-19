@@ -16,6 +16,8 @@ function Crop(input, opts, props, block) {
 	this.reset = this.reset.bind(this);
 	this.formChange = this.formChange.bind(this);
 	this.zoomChange = this.zoomChange.bind(this);
+	this.valueChange = this.valueChange.bind(this);
+	this.valueFocus = this.valueFocus.bind(this);
 
 	this.debouncedChange = Pageboard.Debounce(this.change.bind(this), 500);
 
@@ -68,10 +70,13 @@ Crop.prototype.initControls = function() {
 	this.slider = doc.dom`<div class="slider">
 		<input type="range" step="0.0001" min="0.0000" max="1.5000">
 	</div>`;
-	this.sliderValue = doc.dom`<div class="value"></div>`;
 	this.container.appendChild(this.slider);
+
+	this.sliderValue = doc.dom`<textarea class="values"></textarea>`;
 	this.slider.appendChild(this.sliderValue);
 	this.slider.addEventListener('input', this.zoomChange, false);
+	this.sliderValue.addEventListener('input', this.valueChange, false);
+	this.sliderValue.addEventListener('focus', this.valueFocus, false);
 
 	this.button = doc.dom`<div class="mini ui basic icon button">
 		<i class="compress icon"></i>
@@ -80,8 +85,46 @@ Crop.prototype.initControls = function() {
 	this.slider.appendChild(this.button);
 };
 
+Crop.prototype.valueChange = function() {
+	var txt = this.sliderValue.value;
+	// try to parse this
+	if (!txt) return;
+	var box = {};
+	var ratio = null;
+	var fail = false;
+	var arr = txt.split(/\s+/);
+	for (var i=0; i < arr.length; i++) {
+		var parts = arr[i].split(':');
+		var key = parts[0];
+		var val = parseFloat(parts[1]);
+		if (isNaN(val)) {
+			fail = true;
+			break;
+		}
+		if (box.x == null && key == "x") {
+			box.x = val;
+		} else if (box.y == null && key == "y") {
+			box.y = val;
+		} else if (box.width == null && key == "w") {
+			box.width = val;
+		} else if (box.height == null && key == "h") {
+			box.height = val;
+		} else if (ratio == null && key == "zoom") {
+			ratio = val / 100;
+		} else {
+			fail = true;
+			break;
+		}
+	}
+	if (!fail) this.cropper.zoomTo(ratio).setData(box);
+};
+
+Crop.prototype.valueFocus = function() {
+	this.sliderValue.select();
+};
+
 Crop.prototype.updateCrop = function(obj) {
-	// TODO show crop final dimensions
+	this.sliderValue.value = `x:${this.round(obj.x)} y:${this.round(obj.y)} w:${this.round(obj.width)} h:${this.round(obj.height)} zoom:${this.round(this.getRatio() * 100)}`;
 };
 
 Crop.prototype.zoomChange = function(e) {
@@ -170,6 +213,8 @@ Crop.prototype.destroy = function() {
 	this.cropper.destroy();
 	delete this.cropper;
 	this.slider.removeEventListener('input', this.zoomChange, false);
+	this.sliderValue.removeEventListener('input', this.valueChange, false);
+	this.sliderValue.removeEventListener('focus', this.valueFocus, false);
 	this.input.closest('#form').removeEventListener('change', this.formChange, false);
 	this.container.remove();
 	delete this.container;
