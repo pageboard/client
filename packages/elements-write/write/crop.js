@@ -82,12 +82,17 @@ Crop.prototype.initControls = function() {
 	var doc = this.input.ownerDocument;
 
 	var btnCont = this.container.appendChild(doc.dom`<div class="bottom-buttons"></div>`);
-	this.zoomOutButton = btnCont.appendChild(doc.dom`<div class="ui mini basic inverted circular icon button left">
+	this.resetButton = btnCont.appendChild(doc.dom`<div class="mini ui basic inverted circular icon button">
+		<i class="maximize icon"></i>
+	</div>`);
+	this.zoomOutButton = btnCont.appendChild(doc.dom`<div class="ui mini basic inverted circular icon button out">
 		<i class="compress icon"></i>
 	</div>`);
-	this.zoomInButton = btnCont.appendChild(doc.dom`<div class="ui mini basic inverted circular icon button right">
+	this.zoomInButton = btnCont.appendChild(doc.dom`<div class="ui mini basic inverted circular icon button in">
 		<i class="expand icon"></i>
 	</div>`);
+
+	this.resetButton.addEventListener('click', this.reset, false);
 	this.zoomOutButton.addEventListener('click', this.zoomOut, false);
 	this.zoomInButton.addEventListener('click', this.zoomIn, false);
 
@@ -99,11 +104,6 @@ Crop.prototype.initControls = function() {
 	this.slider.addEventListener('input', this.zoomChange, false);
 	this.sliderValue.addEventListener('input', this.valueChange, false);
 	this.sliderValue.addEventListener('focus', this.valueFocus, false);
-
-	this.resetButton = this.slider.appendChild(doc.dom`<div class="mini ui basic icon button">
-		<i class="compress icon"></i>
-	</div>`);
-	this.resetButton.addEventListener('click', this.reset, false);
 };
 
 Crop.prototype.valueChange = function() {
