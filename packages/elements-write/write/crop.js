@@ -60,6 +60,14 @@ Crop.prototype.formChange = function(e) {
 Crop.prototype.reset = function() {
 	this.cropper.reset();
 	this.cropper.scale(1, 1);
+	this.block.data.crop = {
+		x:50,
+		y:50,
+		width:100,
+		height:100,
+		zoom:100
+	};
+	this.updateData();
 };
 
 Crop.prototype.zoomIn = function() {
