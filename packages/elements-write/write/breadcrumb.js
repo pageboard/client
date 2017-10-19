@@ -7,6 +7,7 @@ function Breadcrumb(editor, selector) {
 	this.template = this.$node[0].cloneNode(true);
 	this.clear();
 	this.$node.on('click', '.section', this.click.bind(this));
+	this.selectMenu = $('#select-menu').on('click', this.selectMenuClick.bind(this))[0];
 }
 
 function contentOption(contents, name) {
@@ -14,6 +15,22 @@ function contentOption(contents, name) {
 		${contents[name].title}
 	</div>`;
 }
+
+Breadcrumb.prototype.selectMenuClick = function(e) {
+	var item = e.target.closest('[data-command]');
+	if (!item || item.matches('.disabled')) return;
+	var command = item.dataset.command;
+	var tr = this.editor.state.tr;
+	if (command == "left") {
+		if (!this.editor.utils.move(tr, -1)) return;
+	} else if (command == "right") {
+		if (!this.editor.utils.move(tr, 1)) return;
+	} else if (command == "delete") {
+		if (!this.editor.utils.deleteTr(tr)) return;
+	}
+	this.editor.dispatch(tr);
+	this.editor.focus();
+};
 
 Breadcrumb.prototype.update = function(parents) {
 	this.clear();
@@ -29,6 +46,13 @@ Breadcrumb.prototype.update = function(parents) {
 	} else {
 		this.$node.find('.section').last().addClass('active').next('.divider').remove();
 	}
+	var tr = this.editor.state.tr;
+	this.selectMenu.querySelector('[data-command="left"]')
+		.classList.toggle('disabled', !this.editor.utils.move(tr, -1));
+	this.selectMenu.querySelector('[data-command="right"]')
+		.classList.toggle('disabled', !this.editor.utils.move(tr, 1));
+	this.selectMenu.querySelector('[data-command="delete"]')
+		.classList.toggle('disabled', !this.editor.utils.deleteTr(tr));
 };
 
 Breadcrumb.prototype.clear = function() {

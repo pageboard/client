@@ -39,3 +39,11 @@
 .ui.icon.menu > .item.radio.checkbox.checked {
 	background:#EEE;
 }
+
+#select-menu .item.disabled {
+	opacity:0.45;
+}
+#select-menu .item.disabled,
+#select-menu .item.disabled:hover {
+	color:inherit;
+}
