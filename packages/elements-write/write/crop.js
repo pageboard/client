@@ -36,9 +36,6 @@ function Crop(input, opts, props, block) {
 		crop: function(e) {
 			this.updateCrop(e.detail);
 			this.debouncedChange(e.detail);
-		}.bind(this),
-		zoom: function(e) {
-			this.updateZoom(e.detail);
 		}.bind(this)
 	});
 
@@ -59,7 +56,7 @@ Crop.prototype.formChange = function(e) {
 
 Crop.prototype.reset = function() {
 	this.cropper.reset();
-	this.cropper.zoomTo(1);
+	this.cropper.scale(1, 1);
 };
 
 Crop.prototype.initControls = function() {
@@ -68,7 +65,7 @@ Crop.prototype.initControls = function() {
 	this.container.appendChild(this.image);
 
 	this.slider = doc.dom`<div class="slider">
-		<input type="range" step="0.0001" min="0.0000" max="1.5000">
+		<input type="range" step="0.0001" min="0.0000" max="2.0000">
 	</div>`;
 	this.container.appendChild(this.slider);
 
@@ -116,7 +113,7 @@ Crop.prototype.valueChange = function() {
 			break;
 		}
 	}
-	if (!fail) this.cropper.zoomTo(ratio).setData(box);
+	if (!fail) this.cropper.scale(ratio, ratio).setData(box);
 };
 
 Crop.prototype.valueFocus = function() {
@@ -125,25 +122,12 @@ Crop.prototype.valueFocus = function() {
 
 Crop.prototype.updateCrop = function(obj) {
 	if (!this.cropper) return;
-	this.sliderValue.value = `x:${this.round(obj.x)} y:${this.round(obj.y)} w:${this.round(obj.width)} h:${this.round(obj.height)} zoom:${this.round(this.getRatio() * 100)}`;
+	this.sliderValue.value = `x:${this.round(obj.x)} y:${this.round(obj.y)} w:${this.round(obj.width)} h:${this.round(obj.height)} zoom:${this.round(obj.scaleX * 100)}`;
+	this.slider.querySelector('input').value = obj.scaleX;
 };
 
 Crop.prototype.zoomChange = function(e) {
-	this.cropper.zoomTo(e.target.value);
-};
-
-Crop.prototype.getRatio = function() {
-	var data = this.cropper.getCanvasData();
-	return data.width / data.naturalWidth;
-};
-
-Crop.prototype.updateZoom = function() {
-	setTimeout(function() {
-		if (!this.cropper) return;
-		var ratio = this.getRatio();
-		this.slider.querySelector('input').value = ratio;
-		this.sliderValue.textContent = Math.round(ratio * 100);
-	}.bind(this));
+	this.cropper.scale(e.target.value);
 };
 
 Crop.prototype.round = function(num) {
@@ -153,8 +137,8 @@ Crop.prototype.round = function(num) {
 Crop.prototype.change = function(obj) {
 	if (!this.cropper) return;
 	var imgData = this.cropper.getImageData();
-	var W = imgData.naturalWidth;
-	var H = imgData.naturalHeight;
+	var W = imgData.naturalWidth * obj.scaleX;
+	var H = imgData.naturalHeight * obj.scaleY;
 
 	var x = 100 * (obj.x + obj.width / 2) / W;
 	this.x.value = this.round(x);
@@ -168,7 +152,7 @@ Crop.prototype.change = function(obj) {
 	var h = 100 * obj.height / H;
 	this.height.value = this.round(h);
 
-	var z = 100 * this.getRatio();
+	var z = 100 * obj.scaleX;
 	this.zoom.value = this.round(z);
 
 	Pageboard.trigger(this.input, 'change');
@@ -193,16 +177,18 @@ Crop.prototype.updateData = function() {
 	var data = this.block.data.crop || {};
 
 	var imgData = this.cropper.getImageData();
-	var W = imgData.naturalWidth;
-	var H = imgData.naturalHeight;
 	var ratio = data.zoom / 100;
+	var W = imgData.naturalWidth * ratio;
+	var H = imgData.naturalHeight * ratio;
 	var box = {
 		x: (data.x - data.width / 2) * W / 100,
 		y: (data.y - data.height / 2) * H / 100,
 		width: data.width * W / 100,
-		height: data.height * H / 100
+		height: data.height * H / 100,
+		scaleX: ratio,
+		scaleY: ratio
 	};
-	this.cropper.zoomTo(ratio).setData(box);
+	this.cropper.setData(box);
 };
 
 Crop.prototype.update = function() {
