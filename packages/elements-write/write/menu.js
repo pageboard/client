@@ -51,13 +51,6 @@ Menu.prototype.item = function(el) {
 				});
 			} else {
 				editor.blocks.parseFrom(block).then(function(fragment) {
-					var ipos;
-					if (sel.from == sel.$from.start() && editor.utils.canInsert(sel.$from, nodeType)) {
-						ipos = sel.from;
-					} else {
-						ipos = sel.to;
-					}
-					sel = editor.utils.selectTr(tr, ipos, true);
 					var pos = editor.utils.insertTr(tr, fragment, sel);
 					if (pos != null) {
 						sel = editor.utils.selectTr(tr, pos);
