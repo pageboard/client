@@ -97,7 +97,7 @@ Pageboard.elements.image = {
 				zoom: {
 					type: "number",
 					minimum: 1,
-					maximum: 150,
+					maximum: 100,
 					default: 100,
 					title: "Zoom"
 				}
