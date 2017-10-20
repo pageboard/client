@@ -4,6 +4,7 @@ Pageboard.inputs.crop = Crop;
 function Crop(input, opts, props, block) {
 	this.input = input;
 	this.block = block;
+	this.props = props;
 
 	this.x = input.querySelector('[name="crop.x"]');
 	this.y = input.querySelector('[name="crop.y"]');
@@ -31,6 +32,8 @@ function Crop(input, opts, props, block) {
 		viewMode: 1,
 		zoomOnTouch: false,
 		zoomOnWheel: false,
+		scalable: true,
+		// rotatable: false, uncomment after cropperjs >= 1.1.3
 		dragMode: 'move',
 		toggleDragModeOnDblclick: false,
 		ready: this.ready.bind(this),
@@ -96,8 +99,10 @@ Crop.prototype.initControls = function() {
 	this.zoomOutButton.addEventListener('click', this.zoomOut, false);
 	this.zoomInButton.addEventListener('click', this.zoomIn, false);
 
+	var zoomProp = this.props.properties.zoom;
+
 	this.slider = this.container.appendChild(doc.dom`<div class="slider">
-		<input type="range" step="0.0001" min="0.01" max="2.00">
+		<input type="range" step="0.0001" min="${zoomProp.minimum / 100}" max="${zoomProp.maximum / 100}">
 	</div>`);
 
 	this.sliderValue = this.slider.appendChild(doc.dom`<textarea class="values"></textarea>`);
@@ -223,8 +228,7 @@ Crop.prototype.from = function(crop) {
 
 Crop.prototype.updateData = function() {
 	var data = this.block.data.crop || {};
-	var box = this.from(data);
-	this.cropper.setData(box);
+	this.cropper.setData(this.from(data));
 };
 
 Crop.prototype.update = function() {
