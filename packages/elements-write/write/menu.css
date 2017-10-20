@@ -23,10 +23,6 @@
 	/* opacity:0.45; */
 	display:none;
 }
-#menu .item.disabled,
-#menu .item.disabled:hover {
-	color:inherit;
-}
 
 .ui.icon.menu > .item.radio.checkbox > input,
 .ui.icon.menu > .item.radio.checkbox > label:before,
@@ -43,7 +39,8 @@
 #select-menu .item.disabled {
 	opacity:0.45;
 }
-#select-menu .item.disabled,
-#select-menu .item.disabled:hover {
+.ui.menu > .item.disabled,
+.ui.menu > .item.disabled:hover {
 	color:inherit;
+	cursor:pointer;
 }
