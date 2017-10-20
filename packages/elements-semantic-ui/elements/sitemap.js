@@ -71,7 +71,7 @@ Pageboard.elements.sitemap = {
 		'/.pageboard/semantic-ui/components/list.css',
 		'../ui/element-sitemap.css'
 	],
-	scripts: [
+	helpers: [
 		'../ui/element-sitemap.js'
 	]
 };
