@@ -69,10 +69,10 @@ Pageboard.elements.sitemap = {
 	},
 	stylesheets: [
 		'/.pageboard/semantic-ui/components/list.css',
-		'../ui/element-sitemap.css'
+		'../ui/sitemap.css'
 	],
 	helpers: [
-		'../ui/element-sitemap.js'
+		'../ui/sitemap-helper.js'
 	]
 };
 
@@ -81,12 +81,18 @@ Pageboard.elements.sitepage = {
 	properties: {
 		title: {
 			title: 'Title',
-			type: ['string', 'null']
+			type: ['string', 'null'],
+			input: {
+				name: 'pageTitle'
+			}
 		},
 		url: {
 			title: 'Address',
 			type: "string",
-			pattern: "(\/[a-zA-Z0-9-.]*)+"
+			pattern: "(\/[a-zA-Z0-9-.]*)+",
+			input: {
+				name: 'pageUrl'
+			}
 		},
 		redirect: {
 			title: 'Redirect',

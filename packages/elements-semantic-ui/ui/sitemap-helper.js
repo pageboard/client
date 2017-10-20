@@ -14,7 +14,7 @@ class HTMLElementSitepage extends HTMLElement {
 		var name = url.substring(1).split('/').pop();
 		var parent = this.parentNode && this.parentNode.closest('element-sitepage');
 		var newUrl = parent ? parent.dataset.url + '/' + name : url;
-		this.initialUrl = newUrl;
+		this.initialUrl = this.dataset.url = newUrl;
 		if (check && url == newUrl) {
 			return;
 		}
@@ -25,6 +25,8 @@ class HTMLElementSitepage extends HTMLElement {
 			if (childUrl.startsWith(initialUrl + '/')) {
 				childUrl = newUrl + childUrl.substring(initialUrl.length);
 				child.setAttribute('data-url', childUrl);
+			} else {
+				// not sure what to do here
 			}
 		});
 	}

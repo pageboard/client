@@ -31,11 +31,11 @@ Pageboard.elements.sticky = {
 		return doc.dom`<element-sticky block-content="content" data-collapsed="${block.data.collapsed}" data-position="${block.data.position}"></element-sticky>`;
 	},
 	stylesheets: [
-		'../ui/element-sticky.css'
+		'../ui/sticky.css'
 	],
 	scripts: [
 		'../ui/stickybits.min.js',
-		'../ui/element-sticky.js'
+		'../ui/sticky.js'
 	]
 };
 

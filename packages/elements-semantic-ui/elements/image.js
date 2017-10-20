@@ -169,11 +169,11 @@ Pageboard.elements.image = {
 		return node;
 	},
 	stylesheets: [
-		'../ui/element-image.css'
+		'../ui/image.css'
 	],
 	scripts: [
 		'../ui/object-fit-images.js',
-		'../ui/element-image.js'
+		'../ui/image.js'
 	]
 };
 

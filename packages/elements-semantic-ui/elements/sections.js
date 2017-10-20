@@ -24,12 +24,12 @@ Pageboard.elements.header = {
 		</element-sticky>`;
 	},
 	stylesheets: [
-		'../ui/element-sticky.css',
+		'../ui/sticky.css',
 		'../ui/layout.css'
 	],
 	scripts: [
 		'../ui/stickybits.min.js',
-		'../ui/element-sticky.js'
+		'../ui/sticky.js'
 	]
 };
 

@@ -34,10 +34,10 @@ Pageboard.elements.embed = {
 		if (d.placeholder) node.setAttribute('data-placeholder', d.thumbnail);
 		return node;
 	},
-	scripts: ['../ui/element-embed.js'],
+	scripts: ['../ui/embed.js'],
 	stylesheets: [
-		'../ui/element-embed.css',
-		'/.pageboard/semantic-ui/components/embed.css'
+		'/.pageboard/semantic-ui/components/embed.css',
+		'../ui/embed.css'
 	]
 };
 
