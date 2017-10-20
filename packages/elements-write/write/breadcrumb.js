@@ -46,13 +46,12 @@ Breadcrumb.prototype.update = function(parents) {
 	} else {
 		this.$node.find('.section').last().addClass('active').next('.divider').remove();
 	}
-	var tr = this.editor.state.tr;
 	this.selectMenu.querySelector('[data-command="left"]')
-		.classList.toggle('disabled', !this.editor.utils.move(tr, -1));
+		.classList.toggle('disabled', !this.editor.utils.move(this.editor.state.tr, -1));
 	this.selectMenu.querySelector('[data-command="right"]')
-		.classList.toggle('disabled', !this.editor.utils.move(tr, 1));
+		.classList.toggle('disabled', !this.editor.utils.move(this.editor.state.tr, 1));
 	this.selectMenu.querySelector('[data-command="delete"]')
-		.classList.toggle('disabled', !this.editor.utils.deleteTr(tr));
+		.classList.toggle('disabled', !this.editor.utils.deleteTr(this.editor.state.tr));
 };
 
 Breadcrumb.prototype.clear = function() {
