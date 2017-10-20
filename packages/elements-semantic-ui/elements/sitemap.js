@@ -18,19 +18,19 @@ Pageboard.elements.sitemap = {
 	render: function(doc, block, view) {
 		return doc.dom`<div class="ui list" block-content="children"></div>`;
 	},
-	mount: function(block, view) {
+	mount: function(block, blocks, view) {
 		block.content.children = view.doc.createDocumentFragment();
 		return GET('/.api/pages').then(function(pages) {
 			var tree = {};
 			pages.forEach(function(page) {
-				var storedPage = view.blocks.get(page.id);
+				var storedPage = blocks[page.id];
 				if (storedPage) {
 					// do not overwrite the actual page object, use it for up-to-date render
 					page = storedPage;
 				} else {
 					// problem: this does not update store's initial block list
 					page.orphan = true;
-					view.blocks.set(page);
+					blocks[page.id] = page;
 				}
 				var branch = tree;
 				var arr = page.data.url.substring(1).split('/');
