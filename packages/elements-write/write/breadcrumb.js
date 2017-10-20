@@ -28,6 +28,7 @@ Breadcrumb.prototype.selectMenuClick = function(e) {
 	} else if (command == "delete") {
 		if (!this.editor.utils.deleteTr(tr)) return;
 	}
+	tr.setMeta('editor', true);
 	this.editor.dispatch(tr);
 	this.editor.focus();
 };
