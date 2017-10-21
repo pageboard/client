@@ -58,6 +58,8 @@ Pageboard.elements.sitemap = {
 				}
 				if (!parent.content.children) {
 					parent.content.children = view.doc.createDocumentFragment();
+				} else {
+					parent.content.children.textContent = '';
 				}
 				parent.content.children.appendChild(view.render(page, 'sitepage'));
 				delete tree._;
