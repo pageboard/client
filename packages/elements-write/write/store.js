@@ -3,8 +3,6 @@ Pageboard.Controls.Store = Store;
 
 function Store(editor, selector) {
 	editor.blocks.genId = this.genId.bind(this);
-	this._blocksSet = editor.blocks.set;
-	editor.blocks.set = this.blocksSet.bind(this);
 	this.debounceUpdate = Pageboard.Debounce(this.realUpdate.bind(this), 2000);
 	this.menu = document.querySelector(selector);
 	this.editor = editor;
@@ -19,7 +17,6 @@ function Store(editor, selector) {
 
 	var state = this.get();
 	this.unsaved = state.blocks;
-	this.ids = state.ids || {};
 
 	if (this.unsaved) {
 		this.restore(this.unsaved).catch(function(err) {
@@ -38,16 +35,7 @@ Store.prototype.genId = function() {
 		if (byte.length == 1) byte = "0" + byte;
 		str += byte;
 	}
-	this.ids[str] = true;
 	return str;
-};
-
-Store.prototype.blocksSet = function(data) {
-	var blocks = this.editor.blocks;
-	data = this._blocksSet.call(blocks, data);
-	data.forEach(function(block) {
-		if (block.standalone) this.initial[block.id] = JSON.parse(JSON.stringify(blocks.copy(block)));
-	}, this);
 };
 
 Store.prototype.uiUpdate = function() {
@@ -129,8 +117,7 @@ Store.prototype.realUpdate = function() {
 
 	// import data into this context
 	var state = JSON.parse(JSON.stringify({
-		blocks: blocks,
-		ids: this.ids
+		blocks: blocks
 	}));
 
 	if (!this.initial) {
@@ -157,8 +144,8 @@ Store.prototype.save = function(e) {
 	Pageboard.uiLoad(this.uiSave, PUT('/.api/page', changes))
 	.then(function(result) {
 		this.initial = this.unsaved;
+		delete this.editor.blocks.initial;
 		delete this.unsaved;
-		this.ids = {};
 		this.clear();
 		this.uiUpdate();
 		this.pageUpdate();
@@ -168,7 +155,6 @@ Store.prototype.save = function(e) {
 Store.prototype.discard = function(e) {
 	if (this.unsaved == null) return;
 	delete this.unsaved;
-	this.ids = {};
 	this.clear();
 	return this.restore(this.initial).catch(function(err) {
 		console.error(err);
@@ -193,15 +179,17 @@ Store.prototype.changes = function() {
 	var add = [];
 	var update = [];
 
-	var ids = this.ids;
-
 	Object.keys(unsaved).forEach(function(id) {
 		var block = unsaved[id];
 		// some blocks can be forced to be standalone, like pages
 		var el = this.editor.element(block.type);
 		if (el.standalone) block.standalone = true;
-		if (ids[id]) {
-			add.push(block);
+		if (!initial[id]) {
+			if (!block.updated_at) {
+				add.push(block);
+			} else {
+				initial[id] = block;
+			}
 		}
 		if (block.orphan && !block.standalone) {
 			console.warn(`Only a standalone block can be orphan ${block.type} ${id}`);
@@ -221,9 +209,9 @@ Store.prototype.changes = function() {
 	}, this);
 
 	// fail-safe: compare to initial children list
-	var kids = this.editor.blocks.store;
-	Object.keys(kids).forEach(function(id) {
-		if (!unsaved[id] && !kids[id].orphan) {
+	var kids = this.editor.blocks.initial;
+	if (kids) Object.keys(kids).forEach(function(id) {
+		if (!unsaved[id] && !kids[id].orphan && !kids[id].standalone) {
 			removals[id] = true;
 		}
 	}, this);
