@@ -10,7 +10,8 @@ Pageboard.elements.sitemap = {
 	title: "Site map",
 	contents: {
 		children: {
-			spec: "sitepage+"
+			spec: "sitepage+",
+			virtual: true
 		}
 	},
 	group: "block",
