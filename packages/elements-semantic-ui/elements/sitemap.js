@@ -20,6 +20,7 @@ Pageboard.elements.sitemap = {
 		return doc.dom`<div class="ui list" block-content="children"></div>`;
 	},
 	mount: function(block, blocks, view) {
+		if (!block.content) block.content = {};
 		block.content.children = view.doc.createDocumentFragment();
 		return GET('/.api/pages').then(function(pages) {
 			var tree = {};
