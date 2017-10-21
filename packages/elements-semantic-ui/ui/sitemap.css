@@ -5,13 +5,16 @@
 .ui.list[block-type="sitemap"] {
 	padding:0.5em;
 	margin:0.5em;
-	border-left:2px solid gray;
+	box-shadow: -1px 1px 2px 1px grey;
 }
 
 .ui.list[block-type="sitemap"] .list > .item > .content > .list,
 .ui.list[block-type="sitemap"] > .item > .content > .list {
-	border: 1px dashed lightgray;
-	padding-right: 1em;
+	box-shadow: -1px 1px 2px 1px grey;
+	padding-right: 0.5em;
+	margin-bottom: 0.7em;
+	padding-top: 0.3em;
+	margin-top: 0.5em;
 }
 
 .ui.list[block-type="sitemap"] .list > .item {
