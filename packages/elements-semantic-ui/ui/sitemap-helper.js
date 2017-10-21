@@ -6,6 +6,28 @@ class HTMLElementSitepage extends HTMLElement {
 	connectedCallback() {
 		this.initialUrl = this.dataset.url;
 		this.update(true);
+		this.observer = new MutationObserver(function(mutations) {
+			this.updateChildren();
+		}.bind(this));
+		this.observer.observe(this.querySelector('[block-content="children"]'), {
+			childList: true
+		});
+	}
+
+	disconnectedCallback() {
+		this.observer.disconnect();
+	}
+
+	updateChildren() {
+		var parentUrl = this.dataset.url;
+		var children = this.querySelector('[block-content="children"]').children;
+		Array.prototype.forEach.call(children, function(child) {
+			if (!child.matches('element-sitepage')) return; // cursor
+			var childUrl = child.dataset.url;
+			var name = childUrl.split('/').pop();
+			// do not trigger update, it would process twice
+			child.dataset.url = parentUrl + '/' + name;
+		});
 	}
 
 	update(check) {
@@ -18,17 +40,7 @@ class HTMLElementSitepage extends HTMLElement {
 		if (check && url == newUrl) {
 			return;
 		}
-		var children = this.querySelector('[block-content="children"]').children;
-		Array.prototype.forEach.call(children, function(child) {
-			if (!child.matches('element-sitepage')) return; // cursor
-			var childUrl = child.dataset.url;
-			if (childUrl.startsWith(initialUrl + '/')) {
-				childUrl = newUrl + childUrl.substring(initialUrl.length);
-				child.setAttribute('data-url', childUrl);
-			} else {
-				// not sure what to do here
-			}
-		});
+		this.updateChildren();
 	}
 }
 
