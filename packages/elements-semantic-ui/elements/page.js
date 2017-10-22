@@ -17,7 +17,13 @@ Pageboard.elements.page = {
 		redirect: {
 			title: 'Redirect',
 			type: "string",
-			pattern: "(\/[a-zA-Z0-9-.]*)+"
+			format: "uri",
+			input: {
+				name: 'href',
+				filter: {
+					type: ["link", "file", "archive"]
+				}
+			}
 		}
 	},
 	contents: {
