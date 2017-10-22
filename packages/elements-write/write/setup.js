@@ -5,7 +5,7 @@ Pageboard.setup = function(state) {
 	var iframe = Pageboard.read = document.createElement('iframe');
 	parentRead.insertBefore(iframe, parentRead.lastElementChild);
 	Pageboard.write = document.getElementById('pageboard-write');
-	Ps.initialize(Pageboard.write);
+	Pageboard.scrollbar = new PerfectScrollbar(Pageboard.write);
 
 	// setup "read" iframe in develop mode
 	var loc = Page.parse(); // get a copy of state
@@ -120,7 +120,7 @@ function editorUpdate(editor, state, focusParents, focusSelection) {
 		var c = editor.controls[key];
 		if (c.update) c.update(parents, focusSelection);
 	});
-	Ps.update(Pageboard.write);
+	Pageboard.scrollbar.update();
 	Page.replace(Page.state);
 }
 
