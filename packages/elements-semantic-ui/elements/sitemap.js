@@ -21,7 +21,10 @@ Pageboard.elements.sitemap = {
 	},
 	mount: function(block, blocks, view) {
 		if (!block.content) block.content = {};
-		block.content.children = view.doc.createDocumentFragment();
+		if (!block.content.children) {
+			// restore might have already filled children
+			block.content.children = view.doc.createDocumentFragment();
+		}
 		return GET('/.api/pages').then(function(pages) {
 			var tree = {};
 			pages.forEach(function(page) {
@@ -52,14 +55,9 @@ Pageboard.elements.sitemap = {
 			var page = tree._;
 			if (page) {
 				if (!parent.content) parent.content = {};
-				if (typeof parent.content.children == "string") {
-					// not yet mounted
-					return;
-				}
 				if (!parent.content.children) {
+					// restore might have already filled children
 					parent.content.children = view.doc.createDocumentFragment();
-				} else {
-					parent.content.children.textContent = '';
 				}
 				parent.content.children.appendChild(view.render(page, 'sitepage'));
 				delete tree._;

@@ -4,8 +4,14 @@ class HTMLElementSitepage extends HTMLElement {
 	}
 
 	connectedCallback() {
-		this.initialUrl = this.dataset.url;
+		var url = this.dataset.url;
 		this.update(true);
+		if (url != this.dataset.url) {
+			// mutate dom to make the editor render this block again
+			setTimeout(function() {
+				this.setAttribute('data-url', this.dataset.url);
+			}.bind(this));
+		}
 		this.observer = new MutationObserver(function(mutations) {
 			this.updateChildren();
 		}.bind(this));
@@ -32,11 +38,19 @@ class HTMLElementSitepage extends HTMLElement {
 
 	update(check) {
 		var url = this.dataset.url || "";
-		var initialUrl = this.initialUrl;
 		var name = url.substring(1).split('/').pop();
-		var parent = this.parentNode && this.parentNode.closest('element-sitepage');
-		var newUrl = parent ? parent.dataset.url + '/' + name : url;
-		this.initialUrl = this.dataset.url = newUrl;
+		var parent = this.parentNode;
+		var parentUrl;
+		if (parent) {
+			if (parent.matches('[block-type="sitemap"]')) {
+				parentUrl = "";
+			} else {
+				parent = parent.closest('element-sitepage');
+				if (parent) parentUrl = parent.dataset.url;
+			}
+		}
+		var newUrl = parent ? parentUrl + '/' + name : url;
+		this.dataset.url = newUrl;
 		if (check && url == newUrl) {
 			return;
 		}
