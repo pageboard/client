@@ -40,6 +40,14 @@ Store.genId =  function() {
 	return str;
 };
 
+Store.prototype.checkUrl = function(pageId, pageUrl) {
+	return Object.keys(this.initial).some(function(id) {
+		var block = this.initial[id];
+		if (block.type != "page") return;
+		return block.id != pageId && block.data.url == pageUrl;
+	}, this);
+};
+
 Store.prototype.uiUpdate = function() {
 	this.uiSave.classList.toggle('disabled', !this.unsaved);
 	this.uiDiscard.classList.toggle('disabled', !this.unsaved);

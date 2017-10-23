@@ -509,6 +509,7 @@ PageTitle.prototype.change = function() {
 	var list = (this.block.data.url || '').split('/');
 	list[list.length - 1] = slug;
 	this.inputUrl.value = list.join('/');
+	$(this.inputUrl).trigger('title-input');
 };
 
 PageTitle.prototype.update = function() {
@@ -522,12 +523,27 @@ PageTitle.prototype.destroy = function() {
 
 Pageboard.inputs.pageUrl = PageUrl;
 
-function PageUrl(node, opts, key, data) {
-	this.node = node;
+function PageUrl(input, opts, props, block) {
+	this.field = input.closest('.field');
+	this.input = input;
+	this.block = block;
+	this.check = this.check.bind(this);
+	$(this.input).on('input title-input', this.check);
+	this.sameDom = this.field.dom`<div class="ui pointing red basic label">Another page has the same address</div>`;
 }
 
-PageUrl.prototype.update = function() {
+PageUrl.prototype.check = function() {
+	if (Pageboard.editor.controls.store.checkUrl(this.block.id, this.input.value)) {
+		this.field.appendChild(this.sameDom);
+	} else {
+		if (this.sameDom.parentNode) this.sameDom.remove();
+	}
+};
 
+PageUrl.prototype.update = function() {};
+
+PageUrl.prototype.destroy = function() {
+	$(this.input).off('input title-input', this.check);
 };
 
 })(window.Pageboard);
