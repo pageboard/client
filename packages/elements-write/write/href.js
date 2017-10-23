@@ -475,5 +475,60 @@ function normUrl(url) {
 	return Page.format(Page.parse(url));
 }
 
+Pageboard.inputs.pageTitle = PageTitle;
+
+function PageTitle(input, opts, props, block) {
+	this.input = input;
+	this.block = block;
+	this.inputUrl = input.closest('.form').querySelector('[name="url"]');
+	this.change = this.change.bind(this);
+	this.checkHandler = this.checkHandler.bind(this);
+	$(this.input).on('input', this.change);
+	$(this.inputUrl).on('input', this.checkHandler);
+	this.check();
+}
+
+PageTitle.prototype.checkHandler = function(e) {
+	this.check();
+};
+
+PageTitle.prototype.check = function(only) {
+	var nameUrl = (this.block.data.url || "").split("/").pop();
+	if (!nameUrl || getSlug(this.input.value) == nameUrl) {
+		this.tracking = true;
+	} else if (!only) {
+		this.tracking = false;
+	}
+};
+
+PageTitle.prototype.change = function() {
+	this.check(true);
+	if (!this.tracking) return;
+	var val = this.input.value;
+	var slug = getSlug(val);
+	var list = (this.block.data.url || '').split('/');
+	list[list.length - 1] = slug;
+	this.inputUrl.value = list.join('/');
+};
+
+PageTitle.prototype.update = function() {
+
+};
+
+PageTitle.prototype.destroy = function() {
+	$(this.input).off('input', this.change);
+	$(this.inputUrl).off('input', this.checkHandler);
+};
+
+Pageboard.inputs.pageUrl = PageUrl;
+
+function PageUrl(node, opts, key, data) {
+	this.node = node;
+}
+
+PageUrl.prototype.update = function() {
+
+};
+
 })(window.Pageboard);
 

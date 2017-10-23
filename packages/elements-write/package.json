@@ -31,6 +31,7 @@
     "postinstall-links": "^0.3.1",
     "pretty-bytes": "^4.0.2",
     "semantic-ui-css": "2.2.10",
+    "speakingurl": "^14.0.1",
     "throttleit": "^1.0.0"
   },
   "links": {
@@ -45,7 +46,8 @@
     "jquery/dist/jquery.slim.min.js": "write/lib/jquery.min.js",
     "jquery/dist/jquery.slim.min.map": "write/lib/jquery.min.js.map",
     "dom4/build/dom4.js": "write/lib/dom4.js",
-    "infinite-scroll/dist/infinite-scroll.pkgd.min.js": "write/lib/infinite-scroll.min.js"
+    "infinite-scroll/dist/infinite-scroll.pkgd.min.js": "write/lib/infinite-scroll.js",
+    "speakingurl/speakingurl.min.js": "write/lib/"
   },
   "pageboard": {
     "directories": [
