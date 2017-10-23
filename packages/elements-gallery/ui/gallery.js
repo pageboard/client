@@ -61,6 +61,7 @@ class HTMLElementGallery extends HTMLElement {
 	}
 
 	_itemClick(e) {
+		if (e.target.closest('a')) return;
 		var item = e.target.closest('[block-type="portfolio_item"],[block-type="medialist_item"]');
 		if (!item) return;
 		if (item.matches('[block-type="medialist_item"]') && !e.target.closest('[block-content="media"]')) {
