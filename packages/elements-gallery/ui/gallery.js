@@ -61,9 +61,12 @@ class HTMLElementGallery extends HTMLElement {
 	}
 
 	_itemClick(e) {
-		var item = e.target.closest('[block-content="media"]');
-		if (!item || !item.parentNode) return;
-		item = item.parentNode;
+		var item = e.target.closest('[block-type="portfolio_item"],[block-type="medialist_item"]');
+		if (!item) return;
+		if (item.matches('[block-type="medialist_item"]') && !e.target.closest('[block-content="media"]')) {
+			// only allow click on medialist's media
+			return;
+		}
 		var carousel = this._galleries.find(function(gal) {
 			return gal.getAttribute('block-type') == "carousel";
 		});
