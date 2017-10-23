@@ -33,3 +33,17 @@ element-gallery[block-focused]:not([block-focused="last"]) > [block-content="gal
 element-gallery[block-focused]:not([block-focused="last"]) > [block-content="galleries"] > [block-focused] {
 	display:block;
 }
+
+a.itemlink {
+	display: none;
+	width:100%;
+	height:100%;
+	text-align: center;
+	background-position: center center;
+	background-repeat: no-repeat;
+}
+
+element-portfolio-item:hover a.itemlink,
+element-carousel-item:hover a.itemlink {
+	display:block;
+}

@@ -73,7 +73,7 @@ Pageboard.elements.portfolio_item = {
 			title: "media"
 		},
 		content: {
-			spec: "block+",
+			spec: "(block|itemlink)+",
 			title: "content"
 		}
 	},
