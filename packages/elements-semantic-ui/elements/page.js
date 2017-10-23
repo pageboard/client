@@ -7,12 +7,18 @@ Pageboard.elements.page = {
 	properties: {
 		title: {
 			title: 'Title',
-			type: ['string', 'null']
+			type: ['string', 'null'],
+			input: {
+				name: 'pageTitle'
+			}
 		},
 		url: {
 			title: 'Address',
 			type: "string",
-			pattern: "(\/[a-zA-Z0-9-.]*)+"
+			pattern: "(\/[a-zA-Z0-9-.]*)+",
+			input: {
+				name: 'pageUrl'
+			}
 		},
 		redirect: {
 			title: 'Redirect',
