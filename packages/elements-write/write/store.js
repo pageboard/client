@@ -2,7 +2,6 @@
 Pageboard.Controls.Store = Store;
 
 function Store(editor, selector) {
-	editor.blocks.genId = this.genId.bind(this);
 	this.debounceUpdate = Pageboard.Debounce(this.realUpdate.bind(this), 2000);
 	this.menu = document.querySelector(selector);
 	this.editor = editor;
@@ -26,7 +25,9 @@ function Store(editor, selector) {
 	}
 }
 
-Store.prototype.genId = function() {
+Store.generated = {};
+
+Store.genId =  function() {
 	var arr = new Uint8Array(8);
 	window.crypto.getRandomValues(arr);
 	var str = "", byte;
@@ -35,6 +36,7 @@ Store.prototype.genId = function() {
 		if (byte.length == 1) byte = "0" + byte;
 		str += byte;
 	}
+	Store.generated[str] = true;
 	return str;
 };
 
@@ -132,6 +134,30 @@ Store.prototype.realUpdate = function() {
 	this.uiUpdate();
 };
 
+Store.prototype.quirkStart = function(invalidatePage) {
+	var prevkeys = Object.keys(Store.generated);
+	if (!invalidatePage && !prevkeys.length) return;
+	if (!this.unsaved) this.unsaved = {};
+	if (invalidatePage) {
+		this.unsaved[this.pageId] = this.initial[this.pageId];
+		this.initial[this.pageId] = JSON.parse(JSON.stringify(this.initial[this.pageId]));
+		this.initial[this.pageId].content.body = "";
+	}
+	prevkeys.forEach(function(id) {
+		if (id == this.pageId) {
+			return;
+		}
+		if (!this.initial[id]) {
+			delete Store.generated[id];
+			return;
+		}
+		this.unsaved[id] = this.initial[id];
+		delete this.initial[id];
+	}, this);
+	if (Object.keys(this.unsaved).length == 0) delete this.unsaved;
+	this.uiUpdate();
+};
+
 Store.prototype.save = function(e) {
 	this.flushUpdate();
 	if (this.unsaved == null) return;
@@ -144,6 +170,7 @@ Store.prototype.save = function(e) {
 	Pageboard.uiLoad(this.uiSave, PUT('/.api/page', changes))
 	.then(function(result) {
 		this.initial = this.unsaved;
+		Store.generated = {};
 		delete this.editor.blocks.initial;
 		delete this.unsaved;
 		this.clear();
@@ -154,6 +181,7 @@ Store.prototype.save = function(e) {
 
 Store.prototype.discard = function(e) {
 	if (this.unsaved == null) return;
+	Store.generated = {};
 	delete this.unsaved;
 	this.clear();
 	return this.restore(this.initial).catch(function(err) {
@@ -185,7 +213,7 @@ Store.prototype.changes = function() {
 		var el = this.editor.element(block.type);
 		if (el.standalone) block.standalone = true;
 		if (!initial[id]) {
-			if (!block.updated_at) {
+			if (Store.generated[id]) {
 				add.push(block);
 			} else {
 				initial[id] = block;
@@ -199,10 +227,11 @@ Store.prototype.changes = function() {
 	var removals = {};
 	Object.keys(initial).forEach(function(id) {
 		var block = unsaved[id];
+		var iblock = initial[id];
 		if (!block) {
-			if (!initial[id].orphan) removals[id] = true;
+			if (!iblock.orphan && !Store.generated[id]) removals[id] = iblock.type;
 		} else {
-			if (!this.editor.utils.equal(initial[id], block)) {
+			if (!this.editor.utils.equal(iblock, block)) {
 				update.push(block);
 			}
 		}
@@ -211,12 +240,13 @@ Store.prototype.changes = function() {
 	// fail-safe: compare to initial children list
 	var kids = this.editor.blocks.initial;
 	if (kids) Object.keys(kids).forEach(function(id) {
-		if (!unsaved[id] && !kids[id].orphan && !kids[id].standalone) {
-			removals[id] = true;
+		var kblock = kids[id];
+		if (!unsaved[id] && !kblock.orphan && !kblock.standalone && !Store.generated[id]) {
+			removals[id] = kblock.type;
 		}
 	}, this);
 	var remove = Object.keys(removals).map(function(id) {
-		return {id: id};
+		return {id: id, type: removals[id]};
 	});
 
 	return {

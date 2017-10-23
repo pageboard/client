@@ -147,6 +147,7 @@ function editorSetup(win, view) {
 		topNode: 'page',
 		elements: view.elementsMap,
 		place: win.document.body,
+		genId: Pageboard.Controls.Store.genId,
 		plugins: [{
 			filterTransaction: function(tr) {
 				// filters all transactions
@@ -173,8 +174,11 @@ function editorSetup(win, view) {
 
 	editor.pageUpdate = pageUpdate;
 
-	editor.blocks = view.blocks;
-	editor.blocks.view = editor;
+	Object.keys(view.blocks.store).forEach(function(id) {
+		if (!editor.blocks.store[id]) {
+			editor.blocks.store[id] = view.blocks.store[id];
+		}
+	});
 
 	Pageboard.editor = editor; // some custom elements might rely on editor
 
@@ -186,6 +190,8 @@ function editorSetup(win, view) {
 	editor.controls = controls;
 
 	editor.focus();
+	var contentSize = content.children.length;
+
 	try {
 		editor.utils.setDom(content);
 	} catch(ex) {
@@ -193,9 +199,9 @@ function editorSetup(win, view) {
 		Pageboard.notify("Catastrophic editor error<br>cannot read page<br>try to open front page and copy/paste to editor", {type: 'negative'});
 	}
 	editor.controls.store.realUpdate();
+	editor.controls.store.quirkStart(!contentSize && win.document.body.children.length > 0);
 	return editor;
 }
-
 
 })(window.Pageboard);
 
