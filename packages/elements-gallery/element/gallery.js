@@ -35,7 +35,6 @@ Pageboard.elements.gallery = {
 
 Pageboard.elements.itemlink = {
 	title: "Item Link",
-	priority: 10,
 	properties: {
 		target: {
 			title: 'Target window',
@@ -85,9 +84,8 @@ Pageboard.elements.itemlink = {
 			spec: "text*"
 		}
 	},
-	context: "portfolio_item_container_1/|carousel_item_container_1/",
+	context: "portfolio_item_container_content/",
 	icon: '<i class="icon linkify"></i>',
-	tag: 'a.itemlink',
 	render: function(doc, block) {
 		var a = doc.dom`<a class="itemlink" href="${block.data.url}" block-content="text"></a>`;
 		if (a.hostname != document.location.hostname) a.rel = "noopener";
