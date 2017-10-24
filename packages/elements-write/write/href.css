@@ -65,6 +65,7 @@
 
 .field.href .items > a.item > .content > .header {
 	color:#555;
+	background-color:#FCFCFC;
 	border-bottom:1px solid #999;
 	padding-right:1.7em; /* leave space for pinned right button */
 }
