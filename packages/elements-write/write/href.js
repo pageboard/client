@@ -86,6 +86,7 @@ Href.prototype.init = function() {
 			e.stopPropagation();
 			return Pageboard.uiLoad(remove, this.remove(this.map[href].url)).then(function() {
 				me.renderList();
+				Pageboard.scrollbar.update();
 			});
 		} else {
 			if (href == input.value) {
