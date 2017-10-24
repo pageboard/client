@@ -200,6 +200,7 @@ function editorSetup(win, view) {
 		Pageboard.notify("Catastrophic editor error<br>cannot read page<br>try to open front page and copy/paste to editor", {type: 'negative'});
 		editor.controls.store.reset();
 		contentSize = 0;
+		editor.utils.setDom(win.document.createTextNode(""));
 	}
 	editor.controls.store.realUpdate();
 	editor.controls.store.quirkStart(!contentSize && win.document.body.children.length > 0);
