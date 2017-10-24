@@ -30,6 +30,9 @@ body {
 	padding-top:0 !important;
 	overflow:auto;
 }
+#pageboard-write.loading > [id] {
+	display:none;
+}
 .notifications:empty {
 	display:none;
 }

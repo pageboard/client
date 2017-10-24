@@ -125,6 +125,7 @@ function editorUpdate(editor, state, focusParents, focusSelection) {
 }
 
 function editorSetup(win, view) {
+	Pageboard.write.classList.remove('loading');
 	var Editor = win.Pagecut.Editor;
 
 	var keyMap = {doc: 'page'};
