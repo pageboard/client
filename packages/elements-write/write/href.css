@@ -85,6 +85,7 @@
 
 .field.href .items {
 	box-shadow:inset 0px 0px 200px #DDD, 0px -18px 90px #CCC;
+	margin-top:1em;
 }
 
 .field.href .items > .item {
