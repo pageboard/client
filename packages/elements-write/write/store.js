@@ -54,6 +54,7 @@ Store.prototype.uiUpdate = function() {
 };
 
 Store.prototype.get = function() {
+	if (!Pageboard.enableLocalStorage) return {};
 	var json = window.sessionStorage.getItem(this.key());
 	var state = {};
 	try {
@@ -66,11 +67,13 @@ Store.prototype.get = function() {
 };
 
 Store.prototype.set = function(obj) {
+	if (!Pageboard.enableLocalStorage) return;
 	var json = JSON.stringify(obj, null, " ");
 	window.sessionStorage.setItem(this.key(), json);
 };
 
 Store.prototype.clear = function() {
+	if (!Pageboard.enableLocalStorage) return;
 	window.sessionStorage.removeItem(this.key());
 };
 
