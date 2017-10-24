@@ -87,13 +87,14 @@ Form.prototype.change = function() {
 
 	var id = this.block.id;
 	var found = false;
+
+	// this must be done after reselecting with breadcrumb.click
+	this.block.data = Object.assign(this.block.data || {}, data);
+
 	if (id == editor.state.doc.attrs.block_id) {
 		found = true;
 		editor.pageUpdate(this.block);
 	}
-
-	// this must be done after reselecting with breadcrumb.click
-	this.block.data = Object.assign(this.block.data || {}, data);
 
 	var el = editor.element(this.type);
 	if (el.inplace) {
