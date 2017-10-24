@@ -8,6 +8,7 @@ class HTMLElementCarousel extends HTMLElement {
 			cellSelector: 'element-carousel-cell',
 			adaptativeHeight: true,
 			initialIndex: 0,
+			imagesLoaded: true,
 			cellAlign: 'left',
 			contain: true
 		};
