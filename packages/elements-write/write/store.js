@@ -177,21 +177,27 @@ Store.prototype.save = function(e) {
 	}
 	Pageboard.uiLoad(this.uiSave, PUT('/.api/page', changes))
 	.then(function(result) {
-		this.initial = this.unsaved;
-		Store.generated = {};
-		delete this.editor.blocks.initial;
-		delete this.unsaved;
-		this.clear();
+		var unsaved = this.unsaved;
+		this.reset();
+		this.initial = unsaved;
 		this.uiUpdate();
 		this.pageUpdate();
 	}.bind(this));
 };
 
-Store.prototype.discard = function(e) {
-	if (this.unsaved == null) return;
+Store.prototype.reset = function() {
 	Store.generated = {};
-	delete this.unsaved;
 	this.clear();
+	delete this.unsaved;
+	delete this.editor.blocks.initial;
+	delete this.initial;
+};
+
+Store.prototype.discard = function(e) {
+	Store.generated = {};
+	this.clear();
+	if (this.unsaved == null) return;
+	delete this.unsaved;
 	return this.restore(this.initial).catch(function(err) {
 		console.error(err);
 		Pageboard.notify("Impossible to restore<br><a href=''>please reload</a>", err);
