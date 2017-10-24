@@ -44,3 +44,7 @@
 	color:inherit;
 	cursor:pointer;
 }
+
+.ui.compact.icon.menu > .ui.radio.checkbox.item {
+	padding: 0.7em;
+}
