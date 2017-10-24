@@ -493,8 +493,9 @@ PageTitle.prototype.checkHandler = function(e) {
 };
 
 PageTitle.prototype.check = function(only) {
-	var nameUrl = (this.block.data.url || "").split("/").pop();
-	if (!nameUrl || getSlug(this.input.value) == nameUrl) {
+	var url = this.block.data.url || "";
+	var nameUrl = url.split("/").pop();
+	if (getSlug(this.input.value) == nameUrl) {
 		this.tracking = true;
 	} else if (!only) {
 		this.tracking = false;
