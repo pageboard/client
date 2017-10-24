@@ -71,7 +71,7 @@ function setupListener(win) {
 	Page.patch(function() {
 		var ed = Pageboard.editor;
 		var unsaved = ed && ed.controls.store.unsaved;
-		document.title = win.document.title + (unsaved ? '*' : '');
+		document.title = (win.document.title || "") + (unsaved ? '*' : '');
 	});
 
 	var state = win.Page.parse();
@@ -85,7 +85,7 @@ function setupListener(win) {
 
 function pageUpdate(page) {
 	var editor = this;
-	editor.root.title = page.data.title;
+	editor.root.title = page.data.title || "";
 	Page.replace({
 		pathname: page.data.url,
 		query: Page.state.query
