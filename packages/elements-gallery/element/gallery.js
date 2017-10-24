@@ -84,7 +84,6 @@ Pageboard.elements.itemlink = {
 			spec: "text*"
 		}
 	},
-	context: "portfolio_item_container_content/",
 	icon: '<i class="icon linkify"></i>',
 	render: function(doc, block) {
 		var a = doc.dom`<a class="itemlink" href="${block.data.url}" block-content="text"></a>`;
