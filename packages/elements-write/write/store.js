@@ -158,12 +158,11 @@ Store.prototype.quirkStart = function(invalidatePage) {
 		if (id == this.pageId) {
 			return;
 		}
-		if (!this.initial[id]) {
-			delete Store.generated[id];
+		if (this.initial[id]) {
+			this.unsaved[id] = this.initial[id];
+			delete this.initial[id];
 			return;
 		}
-		this.unsaved[id] = this.initial[id];
-		delete this.initial[id];
 	}, this);
 	if (Object.keys(this.unsaved).length == 0) delete this.unsaved;
 	this.uiUpdate();
@@ -233,6 +232,7 @@ Store.prototype.changes = function() {
 			if (Store.generated[id]) {
 				add.push(block);
 			} else {
+				// if this id has never been generated it's an update
 				initial[id] = block;
 			}
 		}
