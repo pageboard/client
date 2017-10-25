@@ -27,13 +27,6 @@ element-gallery[data-mode="carousel"] > [block-content="galleries"] > [block-typ
 	display:block;
 }
 
-element-gallery[block-focused]:not([block-focused="last"]) > [block-content="galleries"] > :not([block-focused]) {
-	display:none;
-}
-element-gallery[block-focused]:not([block-focused="last"]) > [block-content="galleries"] > [block-focused] {
-	display:block;
-}
-
 a.itemlink {
 	display: none;
 	width:100%;
