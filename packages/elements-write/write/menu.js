@@ -61,6 +61,9 @@ Menu.prototype.item = function(el) {
 						tr.scrollIntoView();
 						dispatch(tr);
 					}
+				}).catch(function(err) {
+					console.error(err);
+					Pageboard.notify("Error while inserting " + el.title, {type:'negative'});
 				});
 			}
 		},
