@@ -13,7 +13,7 @@ Pageboard.setup = function(state) {
 	delete loc.query.write;
 
 	iframe.addEventListener('load', function(e) {
-		iframe.contentWindow.addEventListener('pagesetup', function() {
+		iframe.contentWindow.addEventListener('pagebuild', function() {
 			buildListener(iframe.contentWindow);
 		});
 		if (iframe.contentWindow.Page.stage() >= 2) {
