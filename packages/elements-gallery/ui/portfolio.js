@@ -20,7 +20,10 @@ class HTMLElementPortfolio extends HTMLElement {
 		if (!mode) mode = this._items.className = 'cells';
 		if (mode == "cells") {
 			this._loading = true;
+			var scrollX = window.scrollX;
+			var scrollY = window.scrollY;
 			this._portfolio = new Isotope(this._items, this._options);
+			window.scrollTo(scrollX, scrollY);
 			this.addEventListener('load', this._loadListener, true);
 		}
 	}
