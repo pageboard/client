@@ -70,8 +70,7 @@ Menu.prototype.item = function(el) {
 						dispatch(tr);
 					}
 				}).catch(function(err) {
-					console.error(err);
-					Pageboard.notify("Error while inserting " + el.title, {type:'negative'});
+					Pageboard.notify("Error while inserting " + el.title, err);
 				});
 			}
 		},

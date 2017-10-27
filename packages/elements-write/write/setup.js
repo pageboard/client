@@ -199,9 +199,8 @@ function editorSetup(win, view) {
 
 	try {
 		editor.utils.setDom(content);
-	} catch(ex) {
-		console.error(ex);
-		Pageboard.notify("Catastrophic editor error<br>cannot read page<br>try to open front page and copy/paste to editor", {type: 'negative'});
+	} catch(err) {
+		Pageboard.notify("Pageboard cannot read saved page", err);
 		editor.controls.store.reset();
 		contentSize = 0;
 		editor.utils.setDom(win.document.createTextNode(""));

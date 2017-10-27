@@ -118,9 +118,8 @@ Store.prototype.realUpdate = function() {
 	var root;
 	try {
 		root = this.editor.to(blocks);
-	} catch(ex) {
-		console.error(ex);
-		Pageboard.notify("Impossible to store<br><a href=''>please reload</a>", ex);
+	} catch(err) {
+		Pageboard.notify("Impossible to store<br><a href=''>please reload</a>", err);
 		delete this.unsaved;
 		this.clear();
 		this.uiUpdate();
@@ -201,7 +200,6 @@ Store.prototype.discard = function(e) {
 	if (this.unsaved == null) return;
 	delete this.unsaved;
 	return this.restore(this.initial).catch(function(err) {
-		console.error(err);
 		Pageboard.notify("Impossible to restore<br><a href=''>please reload</a>", err);
 	}).then(function() {
 		this.uiUpdate();

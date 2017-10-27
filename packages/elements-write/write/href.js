@@ -344,7 +344,10 @@ Href.prototype.uploading = function() {
 			$node.progress({percent: percent});
 			if (percent < 100) return;
 		} else {
-			Pageboard.notify("Upload failed", percent);
+			Pageboard.notify("Upload failed", {
+				type: 'negative',
+				text: percent
+			});
 		}
 		progress.remove();
 	};
