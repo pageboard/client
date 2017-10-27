@@ -50,7 +50,15 @@ Menu.prototype.item = function(el) {
 					dispatch(tr);
 				});
 			} else {
-				editor.blocks.parseFrom(block).then(function(fragment) {
+				var blocks = {};
+				editor.blocks.parseFrom(block, blocks).then(function(fragment) {
+					var store = {};
+					for (var id in blocks) {
+						editor.blocks.serializeTo(blocks[id], store);
+					}
+					for (var id in store) {
+						editor.controls.store.initial[id] = JSON.parse(JSON.stringify(store[id]));
+					}
 					var pos = editor.utils.insertTr(tr, fragment, sel);
 					if (pos != null) {
 						sel = editor.utils.selectTr(tr, pos);

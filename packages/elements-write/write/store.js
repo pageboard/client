@@ -232,8 +232,7 @@ Store.prototype.changes = function() {
 			if (Store.generated[id]) {
 				add.push(block);
 			} else {
-				// if this id has never been generated it's an update
-				initial[id] = block;
+				console.error("Ignoring ungenerated new block", block);
 			}
 		}
 		if (block.orphan && !block.standalone) {
