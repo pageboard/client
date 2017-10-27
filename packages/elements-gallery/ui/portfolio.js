@@ -11,6 +11,7 @@ class HTMLElementPortfolio extends HTMLElement {
 	}
 
 	_setup() {
+		if (this._loading) return;
 		if (this._portfolio) {
 			this._teardown();
 		}
@@ -18,16 +19,21 @@ class HTMLElementPortfolio extends HTMLElement {
 		var mode = this._items.className;
 		if (!mode) mode = this._items.className = 'cells';
 		if (mode == "cells") {
+			this._loading = true;
 			this._portfolio = new Isotope(this._items, this._options);
 			this.addEventListener('load', this._loadListener, true);
 		}
 	}
 
 	_loadListener() {
-		if (this._portfolio) this._portfolio.layout();
+		delete this._loading;
+		if (this._portfolio) {
+			this._portfolio.layout();
+		}
 	}
 
 	_teardown() {
+		delete this._loading;
 		if (this._portfolio) {
 			this._portfolio.destroy();
 			delete this._portfolio;
