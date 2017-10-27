@@ -54,7 +54,9 @@ Menu.prototype.item = function(el) {
 				editor.blocks.parseFrom(block, blocks).then(function(fragment) {
 					var store = {};
 					for (var id in blocks) {
-						editor.blocks.serializeTo(blocks[id], store);
+						if (!editor.controls.store.initial[id]) {
+							editor.blocks.serializeTo(blocks[id], store);
+						}
 					}
 					for (var id in store) {
 						editor.controls.store.initial[id] = JSON.parse(JSON.stringify(store[id]));
