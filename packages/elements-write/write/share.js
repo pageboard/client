@@ -10,17 +10,10 @@ function Share(editor, selector) {
 	this.disabled = true;
 }
 
-Share.prototype.destroy = function() {
-	this.toggle.off('change');
-};
-
-Share.prototype.clear = function() {
-	console.info("share.clear called");
-};
-
 Share.prototype.update = function(parents) {
 	this.block = parents[0].block;
-	this.toggle.checkbox(this.block.standalone ? 'check' : 'uncheck');
+	this.disabled = true;
+	this.toggle.checkbox(this.block.standalone ? 'set checked' : 'set unchecked');
 	var el = this.editor.element(this.block.type);
 	this.disabled = !this.block.id || el.standalone || el.inplace || el.inline;
 	this.toggle.checkbox(this.disabled ? 'set disabled' : 'set enabled');
@@ -28,19 +21,14 @@ Share.prototype.update = function(parents) {
 
 Share.prototype.change = function() {
 	if (!this.block || this.disabled) return;
+	this.block.standalone = this.toggle.checkbox('is checked');
+
 	var editor = this.editor;
-	var checked = this.toggle.checkbox('is checked');
-
-	this.block.standalone = checked;
-	var id = this.block.id;
-	var found = false;
-	var nodes = editor.blocks.domQuery(id, {all: true});
-
+	var nodes = editor.blocks.domQuery(this.block.id, {all: true});
 	if (nodes.length == 0) {
 		if (!found) console.warn("No dom nodes found for this block", this.block);
 		return;
 	}
-	this.ignoreNext = true;
 	var tr = editor.state.tr;
 	nodes.forEach(function(node) {
 		editor.utils.refreshTr(tr, node, this.block);
