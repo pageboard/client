@@ -6,9 +6,14 @@ var list = [];
 Pageboard.notify = function(title, obj) {
 	var type = 'info';
 	var text;
+	if (!obj && typeof title != "string") {
+		obj = title;
+		title = "";
+	}
 	if (obj == null) {
 		obj = {};
-	} else if (obj instanceof Error) {
+	} else if (obj.stack && obj.message) {
+		console.error(obj);
 		type = 'negative';
 		text = obj.toString();
 		obj = {};
@@ -30,6 +35,10 @@ Pageboard.notify = function(title, obj) {
 				return;
 			}
 		}
+	}
+	if (!title && text) {
+		title = text;
+		text = "";
 	}
 	var item = {
 		title: title,
