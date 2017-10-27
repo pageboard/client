@@ -118,7 +118,11 @@ function editorUpdate(editor, state, focusParents, focusSelection) {
 
 	if (editor.controls) Object.keys(editor.controls).forEach(function(key) {
 		var c = editor.controls[key];
-		if (c.update) c.update(parents, focusSelection);
+		try {
+			if (c.update) c.update(parents, focusSelection);
+		} catch(err) {
+			Pageboard.notify(`control.${key}`, err);
+		}
 	});
 	Pageboard.scrollbar.update();
 	Page.replace(Page.state);
