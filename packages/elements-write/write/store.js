@@ -14,8 +14,7 @@ function Store(editor, selector) {
 
 	window.addEventListener('beforeunload', this.flushUpdate.bind(this), false);
 
-	var state = this.get();
-	this.unsaved = state.blocks;
+	this.unsaved = this.get();
 
 	if (this.unsaved) {
 		this.restore(this.unsaved).catch(function(err) {
@@ -54,16 +53,16 @@ Store.prototype.uiUpdate = function() {
 };
 
 Store.prototype.get = function() {
-	if (!Pageboard.enableLocalStorage) return {};
+	if (!Pageboard.enableLocalStorage) return;
 	var json = window.sessionStorage.getItem(this.key());
-	var state = {};
+	var root;
 	try {
-		if (json) state = JSON.parse(json);
+		if (json) root = JSON.parse(json);
 	} catch(ex) {
 		console.error("corrupted local backup for", this.key());
 		this.clear();
 	}
-	return state;
+	return root;
 };
 
 Store.prototype.set = function(obj) {
@@ -114,10 +113,9 @@ Store.prototype.flushUpdate = function() {
 
 Store.prototype.realUpdate = function() {
 	this.debounceWaiting = false;
-	var blocks = {};
 	var root;
 	try {
-		root = this.editor.to(blocks);
+		root = this.editor.to();
 	} catch(err) {
 		Pageboard.notify("Impossible to store<br><a href=''>please reload</a>", err);
 		delete this.unsaved;
@@ -125,18 +123,15 @@ Store.prototype.realUpdate = function() {
 		this.uiUpdate();
 		return;
 	}
-	delete root.children;
 
 	// import data into this context
-	var state = JSON.parse(JSON.stringify({
-		blocks: blocks
-	}));
+	root = JSON.parse(JSON.stringify(root));
 
 	if (!this.initial) {
-		this.initial = state.blocks;
-	} else if (!this.editor.utils.equal(this.initial, state.blocks)) {
-		this.unsaved = state.blocks;
-		this.set(state);
+		this.initial = root;
+	} else if (!this.editor.utils.equal(this.initial, root)) {
+		this.unsaved = root;
+		this.set(root);
 	} else {
 		delete this.unsaved;
 		this.clear();
@@ -215,26 +210,54 @@ Store.prototype.pageUpdate = function() {
 	}
 };
 
+function flattenBlock(root, ancestorId, blocks) {
+	if (!blocks) blocks = {};
+	var shallowCopy = Object.assign({}, root);
+	if (ancestorId != root.id) shallowCopy.parent = ancestorId;
+	blocks[root.id] = shallowCopy;
+	if (root.children) {
+		root.children.forEach(function(child) {
+			flattenBlock(child, root.id, blocks);
+		});
+		delete shallowCopy.children;
+	}
+	if (root.links) delete shallowCopy.links;
+	return blocks;
+}
+
+function parentList(obj, block) {
+	var list = obj[block.parent];
+	if (!list) list = obj[block.parent] = [];
+	list.push(block.id);
+}
+
 Store.prototype.changes = function() {
-	var initial = this.initial;
-	var unsaved = this.unsaved;
-	var add = [];
-	var update = [];
+	var initial = flattenBlock(this.initial);
+	var unsaved = flattenBlock(this.unsaved);
+
+	var changes = {
+		// blocks removed from their standalone parent (grouped by parent)
+		unrelate: {},
+		// non-standalone blocks unrelated from site and deleted
+		remove: {},
+		// any block added and related to site
+		add: [],
+		// block does not change parent
+		update: [],
+		// block add to a new standalone parent (grouped by parent)
+		relate: {}
+	};
 
 	Object.keys(unsaved).forEach(function(id) {
 		var block = unsaved[id];
-		// some blocks can be forced to be standalone, like pages
-		var el = this.editor.element(block.type);
-		if (el.standalone) block.standalone = true;
 		if (!initial[id]) {
 			if (Store.generated[id]) {
-				add.push(block);
+				changes.add.push(block);
+				parentList(changes.relate, block);
+				delete block.parent;
 			} else {
 				console.error("Ignoring ungenerated new block", block);
 			}
-		}
-		if (block.orphan && !block.standalone) {
-			console.warn(`Only a standalone block can be orphan ${block.type} ${id}`);
 		}
 	}, this);
 
@@ -243,32 +266,41 @@ Store.prototype.changes = function() {
 		var block = unsaved[id];
 		var iblock = initial[id];
 		if (!block) {
-			if (!iblock.orphan && !Store.generated[id]) removals[id] = iblock.type;
+			if (!Store.generated[id]) {
+				changes.remove[id] = iblock;
+			}
 		} else {
 			if (!this.editor.utils.equal(iblock, block)) {
-				update.push(block);
+				changes.update.push(block);
+				if (block.parent != iblock.parent) {
+					parentList(changes.unrelate, iblock);
+					parentList(changes.relate, block);
+				}
+				delete block.parent;
 			}
 		}
 	}, this);
 
 	// fail-safe: compare to initial children list
 	var kids = this.editor.blocks.initial;
+	var pageId = this.pageId;
 	if (kids) Object.keys(kids).forEach(function(id) {
 		var kblock = kids[id];
-		if (!unsaved[id] && !kblock.orphan && !kblock.standalone && !Store.generated[id]) {
-			removals[id] = kblock.type;
+		if (!unsaved[id] && !kblock.standalone && !Store.generated[id]) {
+			changes.remove[id] = {
+				id: id,
+				parent: kblock.parent || pageId
+			};
+			console.warn("removing unused block", kblock.type, kblock.id);
 		}
 	}, this);
-	var remove = Object.keys(removals).map(function(id) {
-		return {id: id, type: removals[id]};
+
+	changes.remove = Object.keys(changes.remove).map(function(id) {
+		parentList(changes.unrelate, changes.remove[id]);
+		return id;
 	});
 
-	return {
-		page: this.pageId,
-		remove: remove,
-		add: add,
-		update: update
-	};
+	return changes;
 };
 
 })(window.Pageboard);
