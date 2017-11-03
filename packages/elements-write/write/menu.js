@@ -52,15 +52,7 @@ Menu.prototype.item = function(el) {
 			} else {
 				var blocks = {};
 				editor.blocks.parseFrom(block, blocks).then(function(fragment) {
-					var store = {};
-					for (var id in blocks) {
-						if (!editor.controls.store.initial[id]) {
-							editor.blocks.serializeTo(blocks[id], store);
-						}
-					}
-					for (var id in store) {
-						editor.controls.store.initial[id] = JSON.parse(JSON.stringify(store[id]));
-					}
+					editor.controls.store.importVirtuals(blocks);
 					var pos = editor.utils.insertTr(tr, fragment, sel);
 					if (pos != null) {
 						sel = editor.utils.selectTr(tr, pos);

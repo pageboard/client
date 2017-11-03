@@ -14,6 +14,7 @@ function Store(editor, selector) {
 
 	window.addEventListener('beforeunload', this.flushUpdate.bind(this), false);
 
+	this.virtuals = {};
 	this.unsaved = this.get();
 
 	if (this.unsaved) {
@@ -40,12 +41,16 @@ Store.genId =  function() {
 	return str;
 };
 
+Store.prototype.importVirtuals = function(blocks) {
+	for (var id in blocks) {
+		this.virtuals[id] = JSON.parse(JSON.stringify(this.editor.blocks.serializeTo(blocks[id])));
+	}
+};
+
 Store.prototype.checkUrl = function(pageId, pageUrl) {
-	return Object.keys(this.initial).some(function(id) {
-		var block = this.initial[id];
-		if (block.type != "page") return;
-		return block.id != pageId && block.data.url == pageUrl;
-	}, this);
+	return findInTreeBlock(this.initial, function(block) {
+		return block.type == "page" && block.id != pageId && block.data.url == pageUrl;
+	});
 };
 
 Store.prototype.uiUpdate = function() {
@@ -207,7 +212,7 @@ Store.prototype.pageUpdate = function() {
 function flattenBlock(root, ancestorId, blocks) {
 	if (!blocks) blocks = {};
 	var shallowCopy = Object.assign({}, root);
-	if (ancestorId != root.id) shallowCopy.parent = ancestorId;
+	if (ancestorId && ancestorId != root.id && !root.virtual) shallowCopy.parent = ancestorId;
 	blocks[root.id] = shallowCopy;
 	if (root.children) {
 		root.children.forEach(function(child) {
@@ -216,7 +221,21 @@ function flattenBlock(root, ancestorId, blocks) {
 		delete shallowCopy.children;
 	}
 	if (root.links) delete shallowCopy.links;
+	delete shallowCopy.virtual;
 	return blocks;
+}
+
+function findInTreeBlock(root, fun) {
+	var val = fun(root);
+	if (val) return val;
+	if (root.children) root.children.some(function(child) {
+		var ret = findInTreeBlock(child, fun);
+		if (ret) {
+			val = ret;
+			return true;
+		}
+	});
+	return val;
 }
 
 function parentList(obj, block) {
@@ -226,8 +245,18 @@ function parentList(obj, block) {
 }
 
 Store.prototype.changes = function() {
+	var kids = this.editor.blocks.initial;
 	var initial = flattenBlock(this.initial);
+	Object.keys(this.virtuals).forEach(function(id) {
+		var news = flattenBlock(this.virtuals[id]);
+		Object.keys(news).forEach(function(id) {
+			if (!initial[id]) {
+				initial[id] = news[id];
+			}
+		});
+	}, this);
 	var unsaved = flattenBlock(this.unsaved);
+	var pageId = this.pageId;
 	for (var id in Store.generatedBefore) {
 		delete initial[id];
 	}
@@ -255,10 +284,9 @@ Store.prototype.changes = function() {
 			} else {
 				console.error("Ignoring ungenerated new block", block);
 			}
-		}
+		} // else is dealt below
 	}, this);
 
-	var removals = {};
 	Object.keys(initial).forEach(function(id) {
 		var block = unsaved[id];
 		var iblock = initial[id];
@@ -270,8 +298,8 @@ Store.prototype.changes = function() {
 			if (!this.editor.utils.equal(iblock, block)) {
 				changes.update.push(block);
 				if (block.parent != iblock.parent) {
-					parentList(changes.unrelate, iblock);
-					parentList(changes.relate, block);
+					if (iblock.parent) parentList(changes.unrelate, iblock);
+					if (block.parent) parentList(changes.relate, block);
 				}
 				delete block.parent;
 			}
@@ -279,8 +307,7 @@ Store.prototype.changes = function() {
 	}, this);
 
 	// fail-safe: compare to initial children list
-	var kids = this.editor.blocks.initial;
-	var pageId = this.pageId;
+
 	if (kids) Object.keys(kids).forEach(function(id) {
 		var kblock = kids[id];
 		if (!unsaved[id] && !kblock.standalone && !Store.generated[id]) {
