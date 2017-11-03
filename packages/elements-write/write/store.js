@@ -24,6 +24,7 @@ function Store(editor, selector) {
 	}
 }
 
+Store.generatedBefore = {};
 Store.generated = {};
 
 Store.genId =  function() {
@@ -144,21 +145,13 @@ Store.prototype.quirkStart = function(invalidatePage) {
 	if (!invalidatePage && !prevkeys.length) return;
 	if (!this.unsaved) this.unsaved = {};
 	if (invalidatePage) {
-		this.unsaved[this.pageId] = this.initial[this.pageId];
-		this.initial[this.pageId] = JSON.parse(JSON.stringify(this.initial[this.pageId]));
-		this.initial[this.pageId].content.body = "";
+		this.unsaved = this.initial;
+		this.initial = JSON.parse(JSON.stringify(this.initial));
+		this.initial.content.body = "";
 	}
-	prevkeys.forEach(function(id) {
-		if (id == this.pageId) {
-			return;
-		}
-		if (this.initial[id]) {
-			this.unsaved[id] = this.initial[id];
-			delete this.initial[id];
-			return;
-		}
-	}, this);
-	if (Object.keys(this.unsaved).length == 0) delete this.unsaved;
+	Object.assign(Store.generatedBefore, Store.generated);
+
+	if (Object.keys(flattenBlock(this.unsaved)).length == 0) delete this.unsaved;
 	this.uiUpdate();
 };
 
@@ -183,6 +176,7 @@ Store.prototype.save = function(e) {
 
 Store.prototype.reset = function() {
 	Store.generated = {};
+	Store.generatedBefore = {};
 	this.clear();
 	delete this.unsaved;
 	delete this.editor.blocks.initial;
@@ -234,6 +228,9 @@ function parentList(obj, block) {
 Store.prototype.changes = function() {
 	var initial = flattenBlock(this.initial);
 	var unsaved = flattenBlock(this.unsaved);
+	for (var id in Store.generatedBefore) {
+		delete initial[id];
+	}
 
 	var changes = {
 		// blocks removed from their standalone parent (grouped by parent)
