@@ -212,7 +212,9 @@ Store.prototype.pageUpdate = function() {
 function flattenBlock(root, ancestorId, blocks) {
 	if (!blocks) blocks = {};
 	var shallowCopy = Object.assign({}, root);
-	if (ancestorId && ancestorId != root.id && !root.virtual) shallowCopy.parent = ancestorId;
+	if (ancestorId && ancestorId != root.id && !root.virtual) {
+		shallowCopy.parent = ancestorId;
+	}
 	blocks[root.id] = shallowCopy;
 	if (root.children) {
 		root.children.forEach(function(child) {
@@ -239,6 +241,14 @@ function findInTreeBlock(root, fun) {
 }
 
 function parentList(obj, block) {
+	if (block.virtual) {
+		delete block.virtual;
+		return;
+	}
+	if (!block.parent) {
+		console.warn("Cannot change relation without a parent", block);
+		return;
+	}
 	var list = obj[block.parent];
 	if (!list) list = obj[block.parent] = [];
 	list.push(block.id);
