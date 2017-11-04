@@ -294,6 +294,7 @@ Store.prototype.changes = function() {
 			} else if (block.standalone) {
 				// when pasting a standalone block from another page
 				initial[id] = Object.assign({}, block);
+				// delete parent of copy so that update will pick it up and relate to it
 				delete initial[id].parent;
 			} else {
 				console.error("Ignoring ungenerated new block", block);
