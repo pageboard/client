@@ -13,20 +13,23 @@ function Share(editor, selector) {
 Share.prototype.update = function(parents) {
 	this.block = parents[0].block;
 	this.disabled = true;
-	this.toggle.checkbox(this.block.standalone ? 'set checked' : 'set unchecked');
+	this.standalone = this.block.standalone;
+	this.toggle.checkbox(this.standalone ? 'set checked' : 'set unchecked');
 	var el = this.editor.element(this.block.type);
-	this.disabled = !this.block.id
+	var disabled = !this.block.id
 	|| el.standalone || el.inplace || el.inline
 	|| parents.slice(1, -1).some(function(parent) { // just avoid complications for now
 		return !!parent.block.standalone;
 	})
 
-	this.toggle.checkbox(this.disabled ? 'set disabled' : 'set enabled');
+	this.toggle.checkbox(disabled ? 'set disabled' : 'set enabled');
+	this.disabled = disabled;
 };
 
 Share.prototype.change = function() {
 	if (!this.block || this.disabled) return;
 	this.block.standalone = this.toggle.checkbox('is checked');
+	if (this.block.standalone == this.standalone) return; // do nothing
 
 	var editor = this.editor;
 	var nodes = editor.blocks.domQuery(this.block.id, {all: true});
