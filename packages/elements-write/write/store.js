@@ -309,13 +309,14 @@ Store.prototype.changes = function() {
 				changes.remove[id] = iblock;
 			}
 		} else {
+			if (block.parent != iblock.parent) {
+				if (iblock.parent) parentList(changes.unrelate, iblock);
+				if (block.parent) parentList(changes.relate, block);
+			}
+			delete block.parent;
+			delete iblock.parent;
 			if (!this.editor.utils.equal(iblock, block)) {
 				changes.update.push(block);
-				if (block.parent != iblock.parent) {
-					if (iblock.parent) parentList(changes.unrelate, iblock);
-					if (block.parent) parentList(changes.relate, block);
-				}
-				delete block.parent;
 			}
 		}
 	}, this);
