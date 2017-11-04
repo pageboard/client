@@ -35,6 +35,10 @@ Share.prototype.change = function() {
 		return;
 	}
 	var tr = editor.state.tr;
+	if (!this.block.standalone) {
+		delete this.block.id;
+		editor.blocks.set(this.block);
+	}
 	nodes.forEach(function(node) {
 		editor.utils.refreshTr(tr, node, this.block);
 	});
