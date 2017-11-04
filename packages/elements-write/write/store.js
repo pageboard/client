@@ -291,6 +291,10 @@ Store.prototype.changes = function() {
 				changes.add.push(block);
 				parentList(changes.relate, block);
 				delete block.parent;
+			} else if (block.standalone) {
+				// when pasting a standalone block from another page
+				initial[id] = Object.assign({}, block);
+				delete initial[id].parent;
 			} else {
 				console.error("Ignoring ungenerated new block", block);
 			}
