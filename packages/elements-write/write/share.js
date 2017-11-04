@@ -15,7 +15,12 @@ Share.prototype.update = function(parents) {
 	this.disabled = true;
 	this.toggle.checkbox(this.block.standalone ? 'set checked' : 'set unchecked');
 	var el = this.editor.element(this.block.type);
-	this.disabled = !this.block.id || el.standalone || el.inplace || el.inline;
+	this.disabled = !this.block.id
+	|| el.standalone || el.inplace || el.inline
+	|| parents.slice(1, -1).some(function(parent) { // just avoid complications for now
+		return !!parent.block.standalone;
+	})
+
 	this.toggle.checkbox(this.disabled ? 'set disabled' : 'set enabled');
 };
 
