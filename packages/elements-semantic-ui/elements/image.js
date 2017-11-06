@@ -13,6 +13,11 @@ Pageboard.elements.image = {
 				}
 			}
 		},
+		alt: {
+			title: 'Alt text',
+			description: 'Short description of the image in its context',
+			type: "string"
+		},
 		display: {
 			title: "Display",
 			type: "object",
@@ -145,7 +150,7 @@ Pageboard.elements.image = {
 			return `${Page.format(obj)} ${w}w`;
 		}
 
-		var node = doc.dom`<element-image><img src="${tUrl}"
+		var node = doc.dom`<element-image><img src="${tUrl}" alt="${d.alt || ''}"
 			srcset="${responsiveUrl(160)},
 			${responsiveUrl(320)},
 			${responsiveUrl(640)},
