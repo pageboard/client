@@ -124,9 +124,12 @@ Pageboard.elements.sitepage = {
 			virtual: true // this drops block.content.children, and all
 		}
 	},
-	unmount: function(block) {
+	unmount: function(block, node) {
 		// added pages NEED to have their type overriden
 		block.type = 'page';
+		var pos = 0;
+		while (node=node.previousElementSibling) pos++;
+		block.data.index = pos;
 	},
 	icon: '<i class="icon file outline"></i>',
 	context: 'sitemap/ | sitepage/',
