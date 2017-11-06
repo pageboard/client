@@ -254,7 +254,7 @@ function parentList(obj, block) {
 		return;
 	}
 	if (!block.parent) {
-		console.warn("Cannot change relation without a parent", block);
+		console.warn("Cannot change relation without a parent", block.id);
 		return;
 	}
 	var list = obj[block.parent];
