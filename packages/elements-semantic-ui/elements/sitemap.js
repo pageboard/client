@@ -33,8 +33,6 @@ Pageboard.elements.sitemap = {
 					// do not overwrite the actual page object, use it for up-to-date render
 					page = storedPage;
 				} else {
-					// problem: this does not update store's initial block list
-					page.orphan = true;
 					blocks[page.id] = page;
 				}
 				var branch = tree;
@@ -127,12 +125,6 @@ Pageboard.elements.sitepage = {
 		}
 	},
 	unmount: function(block) {
-		// TODO a block that is not in any content *should* be orphan
-		// since block.content.children is dropped, sitepages do not belong to any
-		// block on the page, making them orphans. On the contrary all blocks that
-		// are not standalone and that are in the content of a block on the current page
-		// should be related to it.
-		block.orphan = true;
 		// added pages NEED to have their type overriden
 		block.type = 'page';
 	},
