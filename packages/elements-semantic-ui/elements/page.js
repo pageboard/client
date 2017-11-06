@@ -30,6 +30,11 @@ Pageboard.elements.page = {
 					type: ["link", "file", "archive"]
 				}
 			}
+		},
+		index: {
+			type: "integer",
+			default: 0,
+			minimum: 0
 		}
 	},
 	contents: {
