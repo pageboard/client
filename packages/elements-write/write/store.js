@@ -215,7 +215,16 @@ function flattenBlock(root, ancestorId, blocks) {
 	if (ancestorId && ancestorId != root.id && !root.virtual) {
 		shallowCopy.parent = ancestorId;
 	}
-	blocks[root.id] = shallowCopy;
+	if (blocks[root.id]) {
+		if (root.virtual) {
+			// do nothing, that's ok !
+		} else {
+			// that's a cataclysmic event
+			console.error("Cannot overwrite existing block", root);
+		}
+	} else {
+		blocks[root.id] = shallowCopy;
+	}
 	if (root.children) {
 		root.children.forEach(function(child) {
 			flattenBlock(child, root.id, blocks);
@@ -223,7 +232,6 @@ function flattenBlock(root, ancestorId, blocks) {
 		delete shallowCopy.children;
 	}
 	if (root.links) delete shallowCopy.links;
-	delete shallowCopy.virtual;
 	return blocks;
 }
 
@@ -306,7 +314,9 @@ Store.prototype.changes = function() {
 		var block = unsaved[id];
 		var iblock = initial[id];
 		if (!block) {
-			if (!Store.generated[id]) {
+			if (iblock.virtual) {
+				delete iblock.virtual;
+			} else if (!Store.generated[id]) {
 				changes.remove[id] = iblock;
 			}
 		} else {
@@ -314,8 +324,10 @@ Store.prototype.changes = function() {
 				if (iblock.parent) parentList(changes.unrelate, iblock);
 				if (block.parent) parentList(changes.relate, block);
 			}
+			delete block.virtual;
 			delete block.parent;
 			delete iblock.parent;
+			delete iblock.virtual;
 			if (!this.editor.utils.equal(iblock, block)) {
 				changes.update.push(block);
 			}
