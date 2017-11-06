@@ -64,7 +64,18 @@ Pageboard.elements.sitemap = {
 			} else {
 				page = parent;
 			}
-			Object.keys(tree).forEach(function(name) {
+			Object.keys(tree).sort(function(a, b) {
+				var pageA = tree[a]._;
+				var pageB = tree[b]._;
+				if (!pageA || !pageB) return 0;
+				var indexA = pageA.data.index;
+				if (indexA == null) indexA = Infinity;
+				var indexB = pageB.data.index;
+				if (indexB == null) indexB = Infinity;
+				if (indexA == indexB) return 0;
+				else if (indexA < indexB) return -1;
+				else if (indexA > indexB) return 1;
+			}).forEach(function(name) {
 				fillChildren(tree[name], page);
 			});
 		}
