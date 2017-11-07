@@ -14,7 +14,7 @@ function Store(editor, selector) {
 
 	window.addEventListener('beforeunload', this.flushUpdate.bind(this), false);
 
-	this.virtuals = {};
+	this.fakeInitials = {};
 	this.unsaved = this.get();
 
 	if (this.unsaved) {
@@ -43,7 +43,9 @@ Store.genId =  function() {
 
 Store.prototype.importVirtuals = function(blocks) {
 	for (var id in blocks) {
-		this.virtuals[id] = JSON.parse(JSON.stringify(this.editor.blocks.serializeTo(blocks[id])));
+		this.fakeInitials[id] = JSON.parse(JSON.stringify(
+			this.editor.blocks.serializeTo(blocks[id])
+		));
 	}
 };
 
@@ -135,14 +137,34 @@ Store.prototype.realUpdate = function() {
 
 	if (!this.initial) {
 		this.initial = root;
-	} else if (!this.editor.utils.equal(this.initial, root)) {
-		this.unsaved = root;
-		this.set(root);
 	} else {
-		delete this.unsaved;
-		this.clear();
+		this.importStandalones(root);
+		if (!this.editor.utils.equal(this.initial, root)) {
+			this.unsaved = root;
+			this.set(root);
+		} else {
+			delete this.unsaved;
+			this.clear();
+		}
 	}
 	this.uiUpdate();
+};
+
+Store.prototype.importStandalones = function(root, ancestor) {
+	// all standalones that have not been generated in this page must be initial
+	if (!root.id) return console.error("importStandalones should run on a block with id", root);
+	if (root.id != this.pageId && !Store.generated[root.id]) {
+		if (root.standalone || ancestor) {
+			var copy = Object.assign({}, root);
+			delete copy.children;
+			if (!root.standalone) copy.parent = ancestor;
+			ancestor = root.id;
+			if (!this.fakeInitials[root.id]) this.fakeInitials[root.id] = copy;
+		}
+	}
+	if (root.children) root.children.forEach(function(child) {
+		this.importStandalones(child, ancestor);
+	}, this);
 };
 
 Store.prototype.quirkStart = function(invalidatePage) {
@@ -231,6 +253,7 @@ function flattenBlock(root, ancestorId, blocks) {
 		});
 		delete shallowCopy.children;
 	}
+	// just remove page.links
 	if (root.links) delete shallowCopy.links;
 	return blocks;
 }
@@ -250,7 +273,6 @@ function findInTreeBlock(root, fun) {
 
 function parentList(obj, block) {
 	if (block.virtual) {
-		delete block.virtual;
 		return;
 	}
 	if (!block.parent) {
@@ -265,8 +287,8 @@ function parentList(obj, block) {
 Store.prototype.changes = function() {
 	var kids = this.editor.blocks.initial;
 	var initial = flattenBlock(this.initial);
-	Object.keys(this.virtuals).forEach(function(id) {
-		var news = flattenBlock(this.virtuals[id]);
+	Object.keys(this.fakeInitials).forEach(function(id) {
+		var news = flattenBlock(this.fakeInitials[id]);
 		Object.keys(news).forEach(function(id) {
 			if (!initial[id]) {
 				initial[id] = news[id];
@@ -298,12 +320,6 @@ Store.prototype.changes = function() {
 			if (Store.generated[id]) {
 				changes.add.push(block);
 				parentList(changes.relate, block);
-				delete block.parent;
-			} else if (block.standalone) {
-				// when pasting a standalone block from another page
-				initial[id] = Object.assign({}, block);
-				// delete parent of copy so that update will pick it up and relate to it
-				delete initial[id].parent;
 			} else {
 				console.error("Ignoring ungenerated new block", block);
 			}
@@ -315,18 +331,26 @@ Store.prototype.changes = function() {
 		var iblock = initial[id];
 		if (!block) {
 			if (iblock.virtual) {
-				delete iblock.virtual;
+				// do not remove it
 			} else if (!Store.generated[id]) {
-				changes.remove[id] = iblock;
+				if (iblock.parent) {
+					var iparent = initial[iblock.parent];
+					if (iparent && iparent.standalone && !unsaved[iblock.parent]) return;
+				}
+				parentList(changes.unrelate, iblock);
+				if (!iblock.standalone) {
+					changes.remove[id] = true;
+				}
 			}
 		} else {
 			if (block.parent != iblock.parent) {
 				if (iblock.parent) parentList(changes.unrelate, iblock);
 				if (block.parent) parentList(changes.relate, block);
 			}
-			delete block.virtual;
+			// compare content, not parent
 			delete block.parent;
 			delete iblock.parent;
+			delete block.virtual;
 			delete iblock.virtual;
 			if (!this.editor.utils.equal(iblock, block)) {
 				changes.update.push(block);
@@ -335,21 +359,29 @@ Store.prototype.changes = function() {
 	}, this);
 
 	// fail-safe: compare to initial children list
-
 	if (kids) Object.keys(kids).forEach(function(id) {
+		if (changes.remove[id] || initial[id]) return; // already dealt
 		var kblock = kids[id];
-		if (!unsaved[id] && !kblock.standalone && !Store.generated[id]) {
-			changes.remove[id] = {
+		if (!unsaved[id] && !kblock.standalone && !Store.generated[id] && !kblock.virtual) {
+			changes.remove[id] = true;
+			parentList(changes.unrelate, {
 				id: id,
 				parent: kblock.parent || pageId
-			};
+			});
 			console.warn("removing unused block", kblock.type, kblock.id);
 		}
 	}, this);
 
-	changes.remove = Object.keys(changes.remove).map(function(id) {
-		parentList(changes.unrelate, changes.remove[id]);
-		return id;
+	changes.remove = Object.keys(changes.remove);
+
+	changes.add.forEach(function(block) {
+		delete block.virtual;
+		delete block.parent;
+	});
+
+	changes.update.forEach(function(block) {
+		delete block.virtual;
+		delete block.parent;
 	});
 
 	return changes;
