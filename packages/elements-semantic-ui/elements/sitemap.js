@@ -57,7 +57,13 @@ Pageboard.elements.sitemap = {
 					// restore might have already filled children
 					parent.content.children = view.doc.createDocumentFragment();
 				}
-				parent.content.children.appendChild(view.render(page, 'sitepage'));
+				var existing = parent.content.children.querySelector(`[block-id="${page.id}"]`);
+				var newChild = view.render(page, 'sitepage');
+				if (existing) {
+					existing.replaceWith(newChild);
+				} else {
+					parent.content.children.appendChild(newChild);
+				}
 				delete tree._;
 			} else {
 				page = parent;
