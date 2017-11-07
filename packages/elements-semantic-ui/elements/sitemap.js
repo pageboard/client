@@ -57,9 +57,10 @@ Pageboard.elements.sitemap = {
 					// restore might have already filled children
 					parent.content.children = view.doc.createDocumentFragment();
 				}
-				var existing = parent.content.children.querySelector(`[block-id="${page.id}"]`);
 				var newChild = view.render(page, 'sitepage');
+				var existing = parent.content.children.querySelector(`[block-id="${page.id}"]`);
 				if (existing) {
+					// this is a workaround - block.content.children above should be empty...
 					existing.replaceWith(newChild);
 				} else {
 					parent.content.children.appendChild(newChild);
