@@ -150,6 +150,11 @@ body {
 	height:1rem;
 }
 
+.ui.toggle.checkbox.disabled .box:hover::before,
+.ui.toggle.checkbox.disabled label:hover::before {
+	background-color: rgba(0, 0, 0, 0.2);
+}
+
 .ui.toggle.checkbox input ~ .box:after,
 .ui.toggle.checkbox input ~ label:after,
 .ui.toggle.checkbox input:checked ~ .box:after,
@@ -160,6 +165,19 @@ body {
 .ui.toggle.checkbox input:checked ~ .box:after,
 .ui.toggle.checkbox input:checked ~ label:after {
 	left:0.8rem;
+}
+#share > .parent,
+#share > .child {
+	display:none;
+}
+#share.standalone-no,
+#share.standalone-parent > .checkbox,
+#share.standalone-child  > .checkbox {
+	display:none;
+}
+#share.standalone-parent > .parent,
+#share.standalone-child > .child {
+	display:block;
 }
 
 #form input[type="number"] {

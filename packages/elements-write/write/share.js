@@ -4,8 +4,9 @@ Pageboard.Controls.Share = Share;
 
 function Share(editor, selector) {
 	this.editor = editor;
-	this.toggle = $(selector).checkbox(); // 'check' || 'uncheck'
-	this.parentItem = this.toggle.closest('.item');
+	this.$node = $(selector);
+	this.toggle = this.$node.find('> .checkbox').checkbox(); // 'check' || 'uncheck'
+
 	this.changeListener = this.change.bind(this);
 	this.toggle.on('change', this.changeListener);
 	this.disabled = true;
@@ -18,8 +19,20 @@ Share.prototype.update = function(parents) {
 	this.toggle.checkbox(this.standalone ? 'set checked' : 'set unchecked');
 	var el = this.editor.element(this.block.type);
 	var hide = !this.block.id || el.standalone || el.inplace || el.inline;
-	this.parentItem.toggle(!hide);
-	var disabled = false;
+	var standaloneParent = parents.slice(1, -1).some(function(parent) {
+		return parent.block.standalone;
+	});
+	var standaloneChild = false;
+	parents[0].root.node.descendants(function(child) {
+		if (child.attrs.block_standalone == "true") {
+			standaloneChild = true;
+			return false;
+		}
+	});
+	this.$node.toggleClass('standalone-no', !!hide);
+	this.$node.toggleClass('standalone-child', standaloneChild);
+	this.$node.toggleClass('standalone-parent', standaloneParent);
+	var disabled = standaloneParent || standaloneChild || hide;
 	this.toggle.checkbox(disabled ? 'set disabled' : 'set enabled');
 	this.disabled = disabled;
 };
