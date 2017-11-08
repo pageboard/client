@@ -1,6 +1,11 @@
 Pageboard.elements.image = {
 	title: "Image",
 	properties: {
+		alt: {
+			title: 'Alternative text',
+			description: 'Short contextual description. Leave empty when used in links.',
+			type: "string"
+		},
 		url: {
 			title: 'Address',
 			description: 'Local or remote URL',
@@ -12,11 +17,6 @@ Pageboard.elements.image = {
 					type: ["image", "svg"]
 				}
 			}
-		},
-		alt: {
-			title: 'Alt text',
-			description: 'Short description of the image in its context',
-			type: "string"
 		},
 		display: {
 			title: "Display",
