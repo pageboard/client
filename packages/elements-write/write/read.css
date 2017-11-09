@@ -68,3 +68,11 @@ p > br:only-child {
 	width:100%;
 	height:1em;
 }
+
+.ui.buttons .disabled.button,
+.ui.disabled.button,
+.ui.button:disabled,
+.ui.disabled.button:hover,
+.ui.disabled.active.button {
+	pointer-events: auto !important;
+}
