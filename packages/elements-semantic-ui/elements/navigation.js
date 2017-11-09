@@ -27,10 +27,16 @@ Pageboard.elements.nav = {
 		if (rel == "up") {
 			if (obj && obj.length) obj = obj[0];
 		}
-		if (!obj) obj = {};
-		return doc.dom`<a class="ui icon button" href="${obj.url}" title="${obj.title}">
+		var a = doc.dom`<a class="ui icon button">
 			<i class="icon ${rel}"></i>
 		</a>`;
+		if (obj) {
+			a.setAttribute('href', obj.url);
+			a.setAttribute('title', obj.title);
+		} else {
+			a.classList.add('disabled');
+		}
+		return a;
 	}
 };
 
