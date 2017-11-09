@@ -127,13 +127,13 @@ function renderItem(item, view) {
 		}
 	}
 	if (!spec.element.inline) {
-		dom.appendChild(document.createTextNode('\n' + translate(view, spec.element.title)));
+		dom.appendChild(document.createTextNode('\n' + spec.element.title));
 	}
 	if (active) {
 		dom.classList.add("active");
 	}
 	if (spec.element.description) {
-		dom.setAttribute("title", translate(view, translate(spec.element.description)));
+		dom.setAttribute("title", spec.element.description);
 	}
 	if (disabled) {
 		dom.classList.add("disabled");
@@ -157,10 +157,6 @@ Menu.prototype.items = function() {
 	}
 	return list;
 };
-
-function translate(view, text) {
-	return view._props.translate ? view._props.translate(text) : text;
-}
 
 })(window.Pageboard, window.Pagecut);
 
