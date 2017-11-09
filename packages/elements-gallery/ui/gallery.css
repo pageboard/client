@@ -27,8 +27,7 @@ element-gallery[data-mode="carousel"] > [block-content="galleries"] > [block-typ
 	display:block;
 }
 
-element-portfolio-item > a.link,
-element-carousel-item > a.link {
+a.itemlink {
 	display: none;
 	width:100%;
 	height:100%;
@@ -37,7 +36,7 @@ element-carousel-item > a.link {
 	background-repeat: no-repeat;
 }
 
-element-portfolio-item:hover > a.link,
-element-carousel-item:hover > a.link {
+element-portfolio-item:hover a.itemlink,
+element-carousel-item:hover a.itemlink {
 	display:block;
 }
