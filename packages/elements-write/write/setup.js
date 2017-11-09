@@ -130,25 +130,9 @@ function editorUpdate(editor, state, focusParents, focusSelection) {
 
 function editorSetup(win, view) {
 	Pageboard.write.classList.remove('loading');
-	var Editor = win.Pagecut.Editor;
-
-	var keyMap = {doc: 'page'};
-
-	Editor.defaults.marks.forEach(function(key) {
-		var nkey = keyMap[key] || key;
-		var val = view.elementsMap[nkey];
-		if (val) Editor.defaults.marks.update(key, val, nkey);
-	});
-	Editor.defaults.nodes.forEach(function(key) {
-		var nkey = keyMap[key] || key;
-		var val = view.elementsMap[nkey];
-		if (val) Editor.defaults.nodes.update(key, val, nkey);
-	});
-
 	var content = win.document.body.cloneNode(true);
-
 	// and the editor must be running from child
-	var editor = new Editor({
+	var editor = new win.Pagecut.Editor({
 		topNode: 'page',
 		elements: view.elementsMap,
 		place: win.document.body,
