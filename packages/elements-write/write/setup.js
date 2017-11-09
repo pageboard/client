@@ -163,6 +163,7 @@ function editorSetup(win, view) {
 
 	editor.pageUpdate = pageUpdate;
 	editor.blocks.initial = view.blocks.initial;
+	editor.block = view.block;
 
 	Object.keys(view.blocks.store).forEach(function(id) {
 		if (!editor.blocks.store[id]) {
