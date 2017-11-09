@@ -84,7 +84,6 @@ Pageboard.elements.heading = {
 		"text": "inline*"
 	},
 	group: "block",
-//	inplace: true,
 	icon: '<i class="icon header"></i>',
 	tag: 'h1,h2,h3,h4,h5,h6',
 	parse: function(dom) {
