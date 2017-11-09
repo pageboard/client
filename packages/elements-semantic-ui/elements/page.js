@@ -1,6 +1,7 @@
 
 Pageboard.elements.page = {
 	priority: -100,
+	replaces: 'doc',
 	title: 'Page',
 	group: 'page',
 	standalone: true, // besides site, can be child of zero or more parents
