@@ -40,3 +40,25 @@ Pageboard.elements.nav = {
 	}
 };
 
+Pageboard.elements.breadcrumb = {
+	title: "Breadcrumb",
+	menu: "Nav",
+	group: "block",
+	icon: '<b class="icon">&gt;&gt;&gt;</b>',
+	render: function(doc, block, view) {
+		var page = view.block;
+		var list = page.links && page.links.up || [];
+		var node = doc.dom`<div class="ui breadcrumb"></div>`;
+		list.forEach(function(item, i) {
+			if (i > 0) node.insertBefore(doc.dom`<div class="divider"></div>`, node.firstChild);
+			node.insertBefore(doc.dom`<a href="${item.url}" class="section">${item.title}</a>`, node.firstChild);
+		});
+		node.appendChild(doc.dom`<div class="divider"></div>`);
+		node.appendChild(doc.dom`<div class="active section">${page.data.title}</div>`);
+		return node;
+	},
+	stylesheets: [
+		'/.pageboard/semantic-ui/components/breadcrumb.css'
+	]
+};
+
