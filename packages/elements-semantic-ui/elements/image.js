@@ -9,8 +9,13 @@ Pageboard.elements.image = {
 		url: {
 			title: 'Address',
 			description: 'Local or remote URL',
-			type: "string",
-			format: "uri",
+			oneOf: [{
+				type: "string",
+				format: "uri"
+			}, {
+				type: "string",
+				pattern: "(\/[a-zA-Z0-9-.]*)+"
+			}],
 			input: {
 				name: 'href',
 				filter: {
@@ -166,9 +171,9 @@ Pageboard.elements.image = {
 		if (display) {
 			node.dataset.fit = display.fit || "none";
 			var posx = display.horizontal;
-			if (posx == "hcenter") posx = display.horizontal = "center";
+			if (posx == "hcenter") posx = "center";
 			var posy = display.vertical;
-			if (posy == "vcenter") posy = display.vertical = "center";
+			if (posy == "vcenter") posy = "center";
 			node.dataset.position = `${posx || 'center'} ${posy || 'center'}`;
 		}
 		return node;
