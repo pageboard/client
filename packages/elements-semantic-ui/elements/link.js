@@ -37,8 +37,12 @@ Pageboard.elements.link = {
 		},
 		icon: {
 			title: 'Icon',
-			type: "string",
-			format: "uri",
+			oneOf: [{
+				type: "string",
+				format: "uri"
+			}, {
+				type: "null"
+			}],
 			input: {
 				name: 'href',
 				display: 'icon',
