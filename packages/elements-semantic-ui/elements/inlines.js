@@ -52,28 +52,28 @@ Pageboard.elements.color = {
 		color: {
 			default: "",
 			oneOf: [{
-				constant: "white",
+				const: "white",
 				title: "White"
 			}, {
-				constant: "",
+				const: "",
 				title: "Black"
 			}, {
-				constant: "red",
+				const: "red",
 				title: "Red"
 			}, {
-				constant: "orange",
+				const: "orange",
 				title: "Orange"
 			}, {
-				constant: "yellow",
+				const: "yellow",
 				title: "Yellow"
 			}, {
-				constant: "green",
+				const: "green",
 				title: "Green"
 			}, {
-				constant: "blue",
+				const: "blue",
 				title: "Blue"
 			}, {
-				constant: "purple",
+				const: "purple",
 				title: "Purple"
 			}]
 		}
@@ -81,9 +81,9 @@ Pageboard.elements.color = {
 	parse: function(dom) {
 		var prop = Pageboard.elements.color.properties.color;
 		var color = prop.oneOf.find(function(item) {
-			return item.constant && dom.classList.contains(item.constant);
+			return item.const && dom.classList.contains(item.const);
 		});
-		if (color) color = color.constant;
+		if (color) color = color.const;
 		else color = prop.default;
 		return {color: color};
 	},

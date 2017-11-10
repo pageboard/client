@@ -26,13 +26,13 @@ Pageboard.elements.image = {
 				fit: {
 					oneOf: [{
 						title: "natural",
-						constant: "none"
+						const: "none"
 					}, {
 						title: "contain",
-						constant: "contain"
+						const: "contain"
 					}, {
 						title: "cover",
-						constant: "cover"
+						const: "cover"
 					}],
 					title: "fit",
 					default: "contain"
@@ -40,13 +40,13 @@ Pageboard.elements.image = {
 				horizontal: {
 					title: "horizontal",
 					oneOf: [{
-						constant: "left",
+						const: "left",
 						title: "left"
 					}, {
-						constant: "hcenter",
+						const: "hcenter",
 						title: "center"
 					}, {
-						constant: "right",
+						const: "right",
 						title: "right"
 					}],
 					default: "hcenter"
@@ -54,13 +54,13 @@ Pageboard.elements.image = {
 				vertical: {
 					title: "vertical",
 					oneOf: [{
-						constant: "top",
+						const: "top",
 						title: "top"
 					}, {
-						constant: "vcenter",
+						const: "vcenter",
 						title: "center"
 					}, {
-						constant: "bottom",
+						const: "bottom",
 						title: "bottom"
 					}],
 					default: "vcenter"

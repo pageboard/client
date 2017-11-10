@@ -7,13 +7,13 @@ Pageboard.elements.nav = {
 			title: "relation",
 			default: "up",
 			oneOf: [{
-				constant: "up",
+				const: "up",
 				title: "up"
 			}, {
-				constant: "prev",
+				const: "prev",
 				title: "previous"
 			}, {
-				constant: "next",
+				const: "next",
 				title: "next"
 			}]
 		}

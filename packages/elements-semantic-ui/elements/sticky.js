@@ -6,10 +6,10 @@ Pageboard.elements.sticky = {
 			title: "Position",
 			default: "top",
 			oneOf: [{
-				constant: "top",
+				const: "top",
 				title: "top"
 			}, {
-				constant: "bottom",
+				const: "bottom",
 				title: "bottom"
 			}]
 		},

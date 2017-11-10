@@ -11,13 +11,13 @@ Pageboard.elements.menu = {
 			title: 'Direction',
 			default: "",
 			oneOf: [{
-				constant: "",
+				const: "",
 				title: "horizontal"
 			}, {
-				constant: "vertical",
+				const: "vertical",
 				title: "vertical"
 			}, {
-				constant: "compact",
+				const: "compact",
 				title: "compact"
 			}]
 		}

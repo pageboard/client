@@ -6,13 +6,13 @@ Pageboard.elements.layout = {
 			description: 'Position horizontally',
 			default: "left",
 			oneOf: [{
-				constant: "left",
+				const: "left",
 				title: "left"
 			}, {
-				constant: "hcenter",
+				const: "hcenter",
 				title: "center"
 			}, {
-				constant: "right",
+				const: "right",
 				title: "right"
 			}]
 		},
@@ -21,13 +21,13 @@ Pageboard.elements.layout = {
 			description: 'Position vertically',
 			default: "top",
 			oneOf: [{
-				constant: "top",
+				const: "top",
 				title: "top"
 			}, {
-				constant: "vcenter",
+				const: "vcenter",
 				title: "center"
 			}, {
-				constant: "bottom",
+				const: "bottom",
 				title: "bottom"
 			}]
 		},
@@ -35,10 +35,10 @@ Pageboard.elements.layout = {
 			title: 'control width',
 			default: "full",
 			oneOf: [{
-				constant: "full",
+				const: "full",
 				title: "full"
 			}, {
-				constant: "contained",
+				const: "contained",
 				title: "contained"
 			}]
 		},
@@ -55,10 +55,10 @@ Pageboard.elements.layout = {
 			title: 'direction',
 			default: "column",
 			oneOf: [{
-				constant: "column",
+				const: "column",
 				title: "column"
 			}, {
-				constant: "row",
+				const: "row",
 				title: "row"
 			}]
 		},

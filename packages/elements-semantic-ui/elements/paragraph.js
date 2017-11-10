@@ -8,19 +8,19 @@ Pageboard.elements.paragraph = {
 			title: 'Align',
 			default: "left",
 			oneOf: [{
-				constant: "left",
+				const: "left",
 				title: "left",
 				icon: '<i class="icon align left"></i>'
 			}, {
-				constant: "center",
+				const: "center",
 				title: "center",
 				icon: '<i class="icon align center"></i>'
 			}, {
-				constant: "right",
+				const: "right",
 				title: "right",
 				icon: '<i class="icon align right"></i>'
 			}, {
-				constant: "justify",
+				const: "justify",
 				title: "justify",
 				icon: '<i class="icon align justify"></i>'
 			}]
@@ -31,10 +31,10 @@ Pageboard.elements.paragraph = {
 		var prop = Pageboard.elements.paragraph.properties.align;
 		if (dom.classList.contains("aligned")) {
 			align = prop.oneOf.find(function(item) {
-				return dom.classList.contains(item.constant);
+				return dom.classList.contains(item.const);
 			});
 			if (!align) align = prop.default;
-			else align = align.constant;
+			else align = align.const;
 		}
 		return {align: align};
 	},
@@ -62,19 +62,19 @@ Pageboard.elements.heading = {
 			title: 'Align',
 			default: "left",
 			oneOf: [{
-				constant: "left",
+				const: "left",
 				title: "left",
 				icon: '<i class="icon align left"></i>'
 			}, {
-				constant: "center",
+				const: "center",
 				title: "center",
 				icon: '<i class="icon align center"></i>'
 			}, {
-				constant: "right",
+				const: "right",
 				title: "right",
 				icon: '<i class="icon align right"></i>'
 			}, {
-				constant: "justify",
+				const: "justify",
 				title: "justify",
 				icon: '<i class="icon align justify"></i>'
 			}]
