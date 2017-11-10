@@ -190,9 +190,12 @@ types.oneOf = function(key, schema, node, fields) {
 	var alts = schema.oneOf.filter(function(item) {
 		return item.type != "null";
 	});
-	if (alts.length == 1) {
+	if (alts.length == 1 || alts.every(function(item) {
+		return item.type == "string";
+	})) {
 		return process(key, Object.assign({}, schema, alts[0]), node, fields);
 	}
+
 	var icons = alts.every(function(item) { return !!item.icon; });
 	if (icons) {
 		field = node.dom`<div class="inline fields">
