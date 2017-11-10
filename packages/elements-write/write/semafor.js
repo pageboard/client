@@ -135,6 +135,9 @@ function process(key, schema, node, fields) {
 	if (type && types[type]) {
 		if (type == 'object') {
 			types[type](key, schema, node, fields);
+		} else if (!schema.title) {
+			// ignore this value
+			return;
 		} else if (!key) {
 			console.error('Properties of type', type, 'must have a name');
 		} else {
