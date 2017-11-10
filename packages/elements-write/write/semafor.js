@@ -31,7 +31,8 @@ function Semafor(schema, node) {
 }
 
 Semafor.prototype.get = function() {
-	return this.convert(this.retree(this.$node.form('get values')));
+	var formVals = this.retree(this.$node.form('get values'));
+	return this.convert(formVals);
 };
 
 Semafor.prototype.set = function(obj) {
