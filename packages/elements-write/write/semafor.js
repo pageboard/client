@@ -70,7 +70,7 @@ Semafor.prototype.flatten = function(tree, obj) {
 	if (!obj) obj = {};
 	Object.keys(tree).forEach(function(key) {
 		var val = tree[key];
-		if (typeof val == "object") {
+		if (val != null && typeof val == "object") {
 			var sub = this.flatten(val);
 			for (var k in sub) obj[key + '.' + k] = sub[k];
 		} else {
@@ -87,20 +87,43 @@ Semafor.prototype.convert = function(vals, field) {
 	for (var name in vals) {
 		field = schema[name];
 		val = vals[name];
-		if (field) switch(field.type) {
-			case "integer":
-				val = parseInt(val);
-			break;
-			case "number":
-				val = parseFloat(val);
-			break;
-			case "boolean":
-				val = val == "true";
-			break;
-			case "object":
-				val = this.convert(val, field);
-			break;
+		if (field) {
+			var type = field.type;
+			var typeList = Array.isArray(type) && type || Array.isArray(field.oneOf) && field.oneOf || null;
+			var nullable = false;
+			if (typeList) {
+				// we support promotion to null and that's it
+				if (typeList.length == 2) typeList.forEach(function(item) {
+					if (item == "null" || item.type == "null") nullable = true;
+					else type = item.type || item;
+				});
+				else console.error("Unsupported conversion from schema", field);
+			}
+			switch(type) {
+				case "integer":
+					val = parseInt(val);
+					if (isNaN(val) && nullable) val = null;
+				break;
+				case "number":
+					val = parseFloat(val);
+					if (isNaN(val) && nullable) val = null;
+				break;
+				case "boolean":
+					if (val === "" && nullable) val = null; // not really useful
+					val = val == "true";
+				break;
+				case "object":
+					val = this.convert(val, field);
+					if (Object.keys(val).length == 0 && nullable) val = null;
+				break;
+				default:
+					if (nullable && val === "") val = null;
+				break;
+			}
+
+
 		}
+
 		obj[name] = val;
 	}
 	return obj;
@@ -161,7 +184,12 @@ types.string = function(key, schema, node, fields) {
 
 types.oneOf = function(key, schema, node, fields) {
 	var field;
-	var alts = schema.oneOf;
+	var alts = schema.oneOf.filter(function(item) {
+		return item.type != "null";
+	});
+	if (alts.length == 1) {
+		return process(key, Object.assign({}, schema, alts[0]), node, fields);
+	}
 	var icons = alts.every(function(item) { return !!item.icon; });
 	if (icons) {
 		field = node.dom`<div class="inline fields">
