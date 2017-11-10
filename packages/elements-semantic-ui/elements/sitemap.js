@@ -96,34 +96,7 @@ Pageboard.elements.sitemap = {
 
 Pageboard.elements.sitepage = {
 	title: "Site page",
-	properties: {
-		title: {
-			title: 'Title',
-			type: ['string', 'null'],
-			input: {
-				name: 'pageTitle'
-			}
-		},
-		url: {
-			title: 'Address',
-			type: "string",
-			pattern: "(\/[a-zA-Z0-9-.]*)+",
-			input: {
-				name: 'pageUrl'
-			}
-		},
-		redirect: {
-			title: 'Redirect',
-			type: "string",
-			format: "uri",
-			input: {
-				name: 'href',
-				filter: {
-					type: ["link", "file", "archive"]
-				}
-			}
-		}
-	},
+	properties: Pageboard.elements.page.properties,
 	contents: {
 		children: {
 			spec: "sitepage*",
