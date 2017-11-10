@@ -226,21 +226,21 @@ types.oneOf = function(key, schema, node, fields) {
 
 	function getIconOption(item) {
 		return `<div class="ui radio checkbox item" title="${item.title}">
-			<input type="radio" name="${key}" value="${item.constant}" checked="" tabindex="0" class="hidden">
+			<input type="radio" name="${key}" value="${item.const}" checked="" tabindex="0" class="hidden">
 			<label>${item.icon}</label>
 		</div>`;
 	}
 
 	function getRadioOption(item) {
 		return node.dom`<div class="ui radio checkbox">
-				<input type="radio" name="${key}" value="${item.constant}" checked="" tabindex="0" class="hidden">
+				<input type="radio" name="${key}" value="${item.const}" checked="" tabindex="0" class="hidden">
 				<label>${item.title}</label>
 			</div>`;
 	}
 
 	function getSelectOption(item) {
-		if (item.constant == null) console.error("We can't really support non-constant oneOf here");
-		return node.dom`<option value="${item.constant}">${item.title || item.constant}</option>`;
+		if (item.const == null) console.error("We can't really support non-const oneOf here");
+		return node.dom`<option value="${item.const}">${item.title || item.const}</option>`;
 	}
 };
 
