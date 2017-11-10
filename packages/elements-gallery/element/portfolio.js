@@ -6,13 +6,13 @@ Pageboard.elements.portfolio = {
 		shape: {
 			title: 'Shape',
 			oneOf: [{
-				constant: "square",
+				const: "square",
 				title: "Square",
 			}, {
-				constant: "tall",
+				const: "tall",
 				title: "Tall"
 			}, {
-				constant: "wide",
+				const: "wide",
 				title: "Wide"
 			}],
 			default: "square"
@@ -47,10 +47,10 @@ Pageboard.elements.portfolio_item = {
 		scaleWidth: {
 			title: 'Scale width',
 			oneOf: [{
-				constant: "1",
+				const: "1",
 				title: "100%"
 			}, {
-				constant: "2",
+				const: "2",
 				title: "200%"
 			}],
 			default: "1"
@@ -58,10 +58,10 @@ Pageboard.elements.portfolio_item = {
 		scaleHeight: {
 			title: 'Scale height',
 			oneOf: [{
-				constant: "1",
+				const: "1",
 				title: "100%"
 			}, {
-				constant: "2",
+				const: "2",
 				title: "200%"
 			}],
 			default: "1"

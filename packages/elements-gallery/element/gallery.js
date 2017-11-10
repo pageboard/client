@@ -41,13 +41,13 @@ Pageboard.elements.itemlink = {
 			description: 'Choose how to open link',
 			default: "",
 			oneOf: [{
-				constant: "",
+				const: "",
 				title: "auto"
 			}, {
-				constant: "_blank",
+				const: "_blank",
 				title: "new"
 			}, {
-				constant: "_self",
+				const: "_self",
 				title: "same"
 			}]
 		},
