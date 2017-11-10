@@ -97,7 +97,6 @@ Semafor.prototype.convert = function(vals, field) {
 					if (item == "null" || item.type == "null") nullable = true;
 					else type = item.type || item;
 				});
-				else console.error("Unsupported conversion from schema", field);
 			}
 			switch(type) {
 				case "integer":
