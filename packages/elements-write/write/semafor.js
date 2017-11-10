@@ -90,14 +90,32 @@ Semafor.prototype.convert = function(vals, field) {
 		val = vals[name];
 		if (field) {
 			var type = field.type;
-			var typeList = Array.isArray(type) && type || Array.isArray(field.oneOf) && field.oneOf || null;
+			var typeList = Array.isArray(type) && type
+				|| Array.isArray(field.oneOf) && field.oneOf
+				|| null;
 			var nullable = false;
 			if (typeList) {
 				// we support promotion to null and that's it
-				if (typeList.length == 2) typeList.forEach(function(item) {
-					if (item == "null" || item.type == "null") nullable = true;
-					else type = item.type || item;
+				typeList = typeList.filter(function(item) {
+					if (item.type == "null") {
+						nullable = true;
+						return false;
+					} else {
+						return true;
+					}
 				});
+				if (typeList.length == 1) type = typeList[0].type || typeList[0];
+				else if (typeList.every(function(item) {
+					return item.const !== undefined;
+				})) {
+					// do nothing
+				} else if (typeList.every(function(item) {
+					return item == "string" || item.type === undefined || item.type == "string";
+				})) {
+					type = "string";
+				} else {
+					console.warn("Unsupported type in schema", field);
+				}
 			}
 			switch(type) {
 				case "integer":
@@ -190,13 +208,27 @@ types.oneOf = function(key, schema, node, fields) {
 	var alts = schema.oneOf.filter(function(item) {
 		return item.type != "null";
 	});
-	if (alts.length == 1 || alts.every(function(item) {
-		return item.type == "string";
+	var oneOfType;
+	var icons = false;
+	if (alts.length == 1) {
+		oneOfType = alts[0];
+	} else if (alts.every(function(item) {
+		return !!item.icon;
 	})) {
-		return process(key, Object.assign({}, schema, alts[0]), node, fields);
+		icons = true;
+	} else if (alts.every(function(item) {
+		return item.const !== undefined;
+	})) {
+		// do nothing
+	} else if (alts.every(function(item) {
+		return item == "string" || item.type === undefined || item.type == "string";
+	})) {
+		oneOfType = {type: "string"};
+	}
+	if (oneOfType) {
+		return process(key, Object.assign({}, schema, oneOfType), node, fields);
 	}
 
-	var icons = alts.every(function(item) { return !!item.icon; });
 	if (icons) {
 		field = node.dom`<div class="inline fields">
 			<label for="${key}">${schema.title}</label>
