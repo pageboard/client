@@ -25,9 +25,12 @@ Pageboard.elements.page = {
 			title: 'Redirect',
 			oneOf: [{
 				type: "null"
-			},{
+			}, {
 				type: "string",
 				format: "uri"
+			}, {
+				type: "string",
+				pattern: "(\/[a-zA-Z0-9-.]*)+"
 			}],
 			input: {
 				name: 'href',

@@ -26,8 +26,15 @@ Pageboard.elements.link = {
 		url: {
 			title: 'Address',
 			description: 'Local or remote URL',
-			type: "string",
-			format: "uri",
+			oneOf: [{
+				type: "null"
+			}, {
+				type: "string",
+				format: "uri"
+			}, {
+				type: "string",
+				pattern: "(\/[a-zA-Z0-9-.]*)+"
+			}],
 			input: {
 				name: 'href',
 				filter: {
@@ -38,10 +45,13 @@ Pageboard.elements.link = {
 		icon: {
 			title: 'Icon',
 			oneOf: [{
+				type: "null"
+			}, {
 				type: "string",
 				format: "uri"
 			}, {
-				type: "null"
+				type: "string",
+				pattern: "(\/[a-zA-Z0-9-.]*)+"
 			}],
 			input: {
 				name: 'href',

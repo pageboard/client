@@ -10,6 +10,8 @@ Pageboard.elements.image = {
 			title: 'Address',
 			description: 'Local or remote URL',
 			oneOf: [{
+				type: "null"
+			}, {
 				type: "string",
 				format: "uri"
 			}, {
