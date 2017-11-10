@@ -23,8 +23,12 @@ Pageboard.elements.page = {
 		},
 		redirect: {
 			title: 'Redirect',
-			type: "string",
-			format: "uri",
+			oneOf: [{
+				type: "null"
+			},{
+				type: "string",
+				format: "uri"
+			}],
 			input: {
 				name: 'href',
 				filter: {
