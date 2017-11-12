@@ -19,28 +19,28 @@ Share.prototype.update = function(parents) {
 	this.toggle.checkbox(this.standalone ? 'set checked' : 'set unchecked');
 	var el = this.editor.element(this.block.type);
 	var hide = !this.block.id || el.standalone || el.inplace || el.inline;
-	var standaloneParent = parents.slice(1, -1).some(function(parent) {
+	var hasAncestor = parents.slice(1, -1).some(function(parent) {
 		return parent.block.standalone;
 	});
-	var standaloneChild = false;
+	var hasDescendant = false;
 	parents[0].root.node.descendants(function(child) {
 		if (child.attrs.block_standalone == "true") {
-			standaloneChild = true;
+			hasDescendant = true;
 			return false;
 		}
 	});
 	this.$node.toggleClass('standalone-no', !!hide);
-	this.$node.toggleClass('standalone-child', standaloneChild);
-	this.$node.toggleClass('standalone-parent', standaloneParent);
-	var disabled = standaloneParent || standaloneChild || hide;
+	this.$node.toggleClass('standalone-descendant', hasDescendant);
+	this.$node.toggleClass('standalone-ancestor', hasAncestor);
+	var disabled = hasAncestor || hasDescendant || hide;
 	this.toggle.checkbox(disabled ? 'set disabled' : 'set enabled');
 	this.disabled = disabled;
 };
 
 Share.prototype.change = function() {
 	if (!this.block || this.disabled) return;
-	this.block.standalone = this.toggle.checkbox('is checked');
-	if (this.block.standalone == this.standalone) return; // do nothing
+	var newVal = this.toggle.checkbox('is checked');
+	if (newVal == this.standalone) return; // do nothing
 
 	var editor = this.editor;
 	var nodes = editor.blocks.domQuery(this.block.id, {all: true});

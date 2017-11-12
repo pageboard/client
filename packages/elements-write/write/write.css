@@ -166,17 +166,17 @@ body {
 .ui.toggle.checkbox input:checked ~ label:after {
 	left:0.8rem;
 }
-#share > .parent,
-#share > .child {
+#share > .ancestor,
+#share > .descendant {
 	display:none;
 }
 #share.standalone-no,
-#share.standalone-parent > .checkbox,
-#share.standalone-child  > .checkbox {
+#share.standalone-ancestor > .checkbox,
+#share.standalone-descendant  > .checkbox {
 	display:none;
 }
-#share.standalone-parent > .parent,
-#share.standalone-child > .child {
+#share.standalone-ancestor > .ancestor,
+#share.standalone-descendant > .descendant {
 	display:block;
 }
 
