@@ -49,12 +49,16 @@ Share.prototype.change = function() {
 		return;
 	}
 	var tr = editor.state.tr;
-	if (!this.block.standalone) {
-		delete this.block.id;
-		editor.blocks.set(this.block);
+	var block = this.block;
+	if (!newVal) {
+		// will force attribution of new id for this block and its descendants by pagecut id-plugin
+		block = editor.blocks.copy(block);
+		block.focused = this.block.focused; // because copy removes focus status
+		this.block = block;
 	}
+	block.standalone = newVal;
 	nodes.forEach(function(node) {
-		editor.utils.refreshTr(tr, node, this.block);
+		editor.utils.refreshTr(tr, node, block);
 	});
 	editor.dispatch(tr);
 };
