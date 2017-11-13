@@ -43,9 +43,10 @@ Menu.prototype.item = function(el) {
 		run: function(state, dispatch, view) {
 			var tr = state.tr;
 			var sel = self.selection;
-			// need an id for inline blocks
-			var block = editor.blocks.set(editor.blocks.create(el.name));
+			var block = editor.blocks.create(el.name);
 			if (el.inline) {
+				// pagecut id-plugin does not run here (why ?) so we need to give an id
+				if (!el.inplace) editor.blocks.set(block);
 				if (el.atom) {
 					dispatch(tr.replaceSelectionWith(nodeType.create(editor.blocks.toAttrs(block))));
 				} else {
