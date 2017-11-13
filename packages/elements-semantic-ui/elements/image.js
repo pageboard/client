@@ -16,7 +16,7 @@ Pageboard.elements.image = {
 				format: "uri"
 			}, {
 				type: "string",
-				pattern: "^(\/[a-zA-Z0-9-.]*)+$"
+				pattern: "^(\/[a-zA-Z0-9-._]*)+$"
 			}],
 			input: {
 				name: 'href',
