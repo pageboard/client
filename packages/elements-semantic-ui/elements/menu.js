@@ -51,7 +51,7 @@ Pageboard.elements.menu_item_link = {
 				format: "uri"
 			}, {
 				type: "string",
-				pattern: "(\/[a-zA-Z0-9-.]*)+"
+				pattern: "^(\/[a-zA-Z0-9-.]*)+$"
 			}],
 			input: {
 				name: 'href',
