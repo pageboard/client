@@ -54,8 +54,15 @@ Pageboard.elements.itemlink = {
 		url: {
 			title: 'Address',
 			description: 'Local or remote URL',
-			type: "string",
-			format: "uri",
+			oneOf: [{
+				type: "null"
+			}, {
+				type: "string",
+				format: "uri"
+			}, {
+				type: "string",
+				pattern: "^(\/[a-zA-Z0-9-._]*)+$"
+			}],
 			input: {
 				name: 'href',
 				filter: {
@@ -65,8 +72,15 @@ Pageboard.elements.itemlink = {
 		},
 		icon: {
 			title: 'Icon',
-			type: "string",
-			format: "uri",
+			oneOf: [{
+				type: "null"
+			}, {
+				type: "string",
+				format: "uri"
+			}, {
+				type: "string",
+				pattern: "^(\/[a-zA-Z0-9-._]*)+$"
+			}],
 			input: {
 				name: 'href',
 				display: 'icon',
