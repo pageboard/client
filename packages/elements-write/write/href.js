@@ -499,7 +499,7 @@ PageTitle.prototype.checkHandler = function(e) {
 PageTitle.prototype.check = function(only) {
 	var url = this.block.data.url || "";
 	var nameUrl = url.split("/").pop();
-	if (getSlug(this.input.value) == nameUrl) {
+	if (Pageboard.slug(this.input.value) == nameUrl) {
 		this.tracking = true;
 	} else if (!only) {
 		this.tracking = false;
@@ -510,7 +510,7 @@ PageTitle.prototype.change = function() {
 	this.check(true);
 	if (!this.tracking) return;
 	var val = this.input.value;
-	var slug = getSlug(val);
+	var slug = Pageboard.slug(val);
 	var list = (this.block.data.url || '').split('/');
 	list[list.length - 1] = slug;
 	this.inputUrl.value = list.join('/');

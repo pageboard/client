@@ -21,6 +21,13 @@ window.Pageboard = {
 			classList.remove('loading');
 			return res;
 		});
+	},
+	slug: function(str) {
+		return getSlug(str, {
+			custom: {
+				"_": "-"
+			}
+		});
 	}
 };
 
