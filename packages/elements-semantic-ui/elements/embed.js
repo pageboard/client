@@ -15,8 +15,12 @@ Pageboard.elements.embed = {
 		placeholder: {
 			title: 'Placeholder',
 			description: 'The iframe previsualisation image',
-			type: "string",
-			format: "uri"
+			oneOf: [{
+				type: "null"
+			}, {
+				type: "string",
+				format: "uri"
+			}]
 		},
 		autoPlay: {
 			title: 'Auto play',
