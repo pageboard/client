@@ -45,7 +45,7 @@ Pageboard.elements.form = {
 			title: 'form'
 		}
 	},
-	icon: '<i class="icon file outline"></i>',
+	icon: '<i class="write icon"></i>',
 	render: function(doc, block) {
 		var d = block.data;
 		return doc.dom`<form action="${d.action}" method="${d.method}" class="ui form">
@@ -126,11 +126,46 @@ Pageboard.elements.input_text = {
 		var input = doc.dom`<input type="${d.type}" name="${d.name}" />`;
 		if (d.placeholder) input.placeholder = d.placeholder;
 		if (d.required) input.required = true;
-		var node = doc.dom`<div class="field">
+		return doc.dom`<div class="field">
 			<label block-content="label"></label>
 			${input}
 		</div>`;
-		return node;
 	}
 };
 
+Pageboard.elements.input_checkbox = {
+	title: 'Checkbox',
+	required: ["name"],
+	group: 'input',
+	properties: {
+		name: {
+			title: "name",
+			description: "The form object key",
+			type: "string"
+		},
+		required: {
+			title: 'required',
+			type: 'boolean',
+			default: false
+		}
+	},
+	contents: {
+		label: 'inline*'
+	},
+	icon: '<i class="checkmark box icon"></i>',
+	render: function(doc, block) {
+		var d = block.data;
+		var input = doc.dom`<input type="checkbox" name="${d.name}" />`;
+		if (d.placeholder) input.placeholder = d.placeholder;
+		if (d.required) input.required = true;
+		return doc.dom`<div class="field">
+			<div class="ui checkbox">
+				${input}
+				<label block-content="label"></label>
+			</div>
+		</div>`;
+	},
+	stylesheets: [
+		'/.pageboard/semantic-ui/components/checkbox.css'
+	]
+};
