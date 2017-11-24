@@ -7,14 +7,11 @@ Page.setup(function(state) {
 		var form = e.target.closest('form');
 		if (!form) return;
 		form.classList.remove('error', 'success');
-		// 1. get data and submit json to "action"
-		fetch(form.action, {
-			method: form.method,
-			body: new FormData(form)
-		}).then(function(res) {
-			var block = res.json();
-			if (form.dataset.url) return afterHandler(block, Object.assign({}, form.dataset));
-		}).then(function() {
+		var formData = new FormData(form);
+		fetchAction(form.method, form.action, formDataToQuery(formData)).then(function(data) {
+			if (form.dataset.redirect) {
+				document.location = form.dataset.redirect;
+			}
 			form.classList.add('success');
 		}).catch(function(err) {
 			console.error(err);
@@ -22,20 +19,41 @@ Page.setup(function(state) {
 		});
 	}
 
-	function afterHandler(block, params) {
-		// we obviously need some way to build new data, we can't just send block.id
-		// sometimes we need some other data that has been written as form param ?
-		var url = params.url;
-		delete params.url;
-		return fetch(url, {
-			method: 'post',
-			body: {
-				result: block,
-				params: params
+	function fetchAction(method, url, data) {
+		var fetchOpts = {
+			method: method,
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'
 			}
+		};
+		if (/^get$/i.test(method)) {
+			url = Page.format(Object.assign(Page.parse(url), {query: data}));
+		} else {
+			fetchOpts.body = JSON.stringify(data);
+		}
+
+		// 1. get data and submit json to "action"
+		return fetch(url, fetchOpts).then(function(res) {
+			return res.json();
 		});
 	}
 
+	function formDataToQuery(formData) {
+		var query = {};
+		formData.forEach(function(val, key) {
+			var old = query[key];
+			if (old !== undefined) {
+				if (!Array.isArray(old)) {
+					query[key] = [old];
+				}
+				query[key].push(val);
+			} else {
+				query[key] = val;
+			}
+		});
+		return query;
+	}
 	// https://daverupert.com/2017/11/happier-html5-forms/
 	document.body.addEventListener('blur', blurHandler, true);
 	document.body.addEventListener('focus', focusHandler, true);
