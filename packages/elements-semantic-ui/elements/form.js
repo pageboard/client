@@ -184,6 +184,9 @@ Pageboard.elements.input_text = {
 			}, {
 				const: "file",
 				title: "file"
+			}, {
+				const: "hidden",
+				title: "hidden"
 			}]
 		}
 	},
@@ -197,10 +200,12 @@ Pageboard.elements.input_text = {
 		if (d.value) input.value = d.value;
 		if (d.placeholder) input.placeholder = d.placeholder;
 		if (d.required) input.required = true;
-		return doc.dom`<div class="field">
+		var node = doc.dom`<div class="field">
 			<label block-content="label"></label>
 			${input}
 		</div>`;
+		if (d.type == "hidden") node.classList.add('hidden');
+		return node;
 	}
 };
 
