@@ -144,6 +144,13 @@ body {
 #form .table.compact td input {
 	border: 0;
 }
+#form .ui.dropdown {
+	font-size:0.9rem;
+}
+#form .ui.dropdown .menu > .item {
+	font-size:0.9rem;
+}
+
 .ui.toggle.checkbox {
 	vertical-align:middle;
 }
