@@ -127,6 +127,12 @@ body {
 #form .inline.fields {
 	justify-content:space-between;
 }
+#form .table.compact td {
+	padding:0;
+}
+#form .table.compact td input {
+	border: 0;
+}
 .ui.toggle.checkbox {
 	vertical-align:middle;
 }

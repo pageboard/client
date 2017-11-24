@@ -31,12 +31,13 @@ function Semafor(schema, node) {
 }
 
 Semafor.prototype.get = function() {
-	var formVals = this.retree(this.$node.form('get values'));
+	var vals = this.$node.form('get values');
+	var formVals = this.retree(vals);
 	return this.convert(formVals);
 };
 
 Semafor.prototype.set = function(obj) {
-	this.$node.form('set values', this.flatten(obj));
+	this.$node.form('set values', this.flatten(obj, {}, this.schema));
 };
 
 var types = Semafor.types = {
@@ -67,13 +68,19 @@ Semafor.prototype.retree = function(map, obj) {
 	return obj;
 };
 
-Semafor.prototype.flatten = function(tree, obj) {
+Semafor.prototype.flatten = function(tree, obj, schema) {
 	if (!obj) obj = {};
+	var props = schema && schema.properties;
 	Object.keys(tree).forEach(function(key) {
 		var val = tree[key];
+		var subSchema = props && props[key];
 		if (val != null && typeof val == "object") {
-			var sub = this.flatten(val);
-			for (var k in sub) obj[key + '.' + k] = sub[k];
+			if (!subSchema) {
+				obj[key] = JSON.stringify(val);
+			} else {
+				var sub = this.flatten(val);
+				for (var k in sub) obj[key + '.' + k] = sub[k];
+			}
 		} else {
 			obj[key] = val;
 		}
@@ -131,7 +138,15 @@ Semafor.prototype.convert = function(vals, field) {
 					val = val == "true";
 				break;
 				case "object":
-					val = this.convert(val, field);
+					if (!field.properties) {
+						try {
+							val = val ? JSON.parse(val) : val;
+						} catch(ex) {
+							console.error(ex);
+						}
+					} else {
+						val = this.convert(val, field);
+					}
 					if (Object.keys(val).length == 0 && nullable) val = null;
 				break;
 				default:
@@ -310,10 +325,12 @@ types.object = function(key, schema, node, fields) {
 	if (schema.description) {
 		fieldset.appendChild(node.dom`<label>${schema.description}</label>`);
 	}
-	for (var name in schema.properties) {
+	if (schema.properties) for (var name in schema.properties) {
 		var propSchema = schema.properties[name];
 		if (key) name = key + '.' + name;
 		process(name, propSchema, fieldset, fields);
+	} else if (schema.title) {
+		fieldset.appendChild(node.dom`<input-map name="${key}"></input-map>`);
 	}
 };
 
