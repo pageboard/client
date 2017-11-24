@@ -124,6 +124,7 @@ Pageboard.elements.form = {
 //		'../ui/form.css'
 	],
 	scripts: [
+		'../ui/formdata.min.js',
 		'../ui/form.js'
 	]
 };
