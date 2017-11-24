@@ -61,7 +61,7 @@ Pageboard.elements.itemlink = {
 				format: "uri"
 			}, {
 				type: "string",
-				pattern: "^(\/[a-zA-Z0-9-._]*)+$"
+				pattern: "^(/[\\w-.]*)+$"
 			}],
 			input: {
 				name: 'href',
@@ -79,7 +79,7 @@ Pageboard.elements.itemlink = {
 				format: "uri"
 			}, {
 				type: "string",
-				pattern: "^(\/[a-zA-Z0-9-._]*)+$"
+				pattern: "^(/[\\w-.]*)+$"
 			}],
 			input: {
 				name: 'href',
