@@ -148,6 +148,10 @@ Pageboard.elements.input_text = {
 			description: "The form object key",
 			type: "string"
 		},
+		value: {
+			title: "default value",
+			type: ["string", "null"]
+		},
 		placeholder: {
 			title: "placeholder",
 			type: ["string", "null"]
@@ -190,6 +194,7 @@ Pageboard.elements.input_text = {
 	render: function(doc, block) {
 		var d = block.data;
 		var input = doc.dom`<input type="${d.type}" name="${d.name}" />`;
+		if (d.value) input.value = d.value;
 		if (d.placeholder) input.placeholder = d.placeholder;
 		if (d.required) input.required = true;
 		return doc.dom`<div class="field">
