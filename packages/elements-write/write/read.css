@@ -7,26 +7,13 @@
 /* replaced elements cannot have pseudo elements,
  * that is why we must define is for both cases */
 .ProseMirror-selectednode {
-	outline: 2px solid #61A3E4 !important;
-	outline-offset:-2px !important;
+	outline: 1px solid #61A3E4 !important;
+	outline-offset: 0px !important;
+	cursor: pointer !important;
+	box-shadow: 0px 0px 0px 1px #61A3E4 !important;
 	cursor:pointer !important;
-	position:relative;
 }
 .ProseMirror-selectednode:not(img) {
-	min-width:1em;
-	min-height:1em;
-}
-.ProseMirror-selectednode::after {
-	outline: 2px solid #61A3E4 !important;
-	outline-offset:-2px !important;
-	content:' ';
-	display:block;
-	position:absolute;
-	top:0;
-	left:0;
-	right:0;
-	bottom:0;
-	pointer-events:none;
 	min-width:1em;
 	min-height:1em;
 }
@@ -36,27 +23,11 @@
 [block-focused="last"] {
 	outline: 1px dashed #888;
 	outline-offset:-1px;
-	position:relative;
 }
 [block-focused="last"]:not(img) {
 	min-width:1em;
 	min-height:1em;
 }
-[block-focused="last"]::after {
-	outline: 1px dashed #888;
-	outline-offset:-1px;
-	content:'';
-	display:block;
-	position:absolute;
-	top:0;
-	left:0;
-	right:0;
-	bottom:0;
-	pointer-events:none;
-	min-width:1em;
-	min-height:1em;
-}
-
 *::selection {
 	color:inherit;
 }
