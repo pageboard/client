@@ -264,9 +264,9 @@ types.oneOf = function(key, schema, node, fields) {
 		$(field).find('.radio.checkbox').checkbox();
 		if (schema.default !== null) $(field).find(`[name="${key}"][value="${schema.default}"]`).prop('checked', true);
 	} else {
-		field = node.dom`<div class="field" title="${schema.description || ''}">
+		field = node.dom`<div class="flex field" title="${schema.description || ''}">
 			<label>${schema.title}</label>
-			<select name="${key}" class="ui dropdown">
+			<select name="${key}" class="ui compact dropdown">
 				${alts.map(getSelectOption)}
 			</select>
 		</div>`;

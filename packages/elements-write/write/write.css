@@ -127,6 +127,17 @@ body {
 #form .inline.fields {
 	justify-content:space-between;
 }
+#form .flex.field {
+	display:flex;
+	align-items:baseline;
+}
+#form .flex.field > label,
+#form .flex.field > .dropdown {
+	flex: 1 1 auto;
+}
+#form .flex.field > .selection.dropdown {
+	width:auto;
+}
 #form .table.compact td {
 	padding:0;
 }
@@ -172,6 +183,7 @@ body {
 .ui.toggle.checkbox input:checked ~ label:after {
 	left:0.8rem;
 }
+
 #share > .ancestor,
 #share > .descendant {
 	display:none;
