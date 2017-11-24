@@ -3,41 +3,104 @@ Pageboard.elements.form = {
 	title: 'Form',
 	group: 'block',
 	properties: {
-		method: {
-			title: 'Method',
-			oneOf: [{
-				const: "post",
-				title: "Add"
-			}, {
-				const: "put",
-				title: "Modify"
-			}, {
-				const: "delete",
-				title: "Remove"
-			}]
-		},
-		cast: {
-			title: 'Cast to...',
-			oneOf: [{
-				type: 'string',
-				title: 'Custom'
-			}, {
-				const: 'user',
-				title: 'User'
-			}]
-		},
 		schema: {
+			// not editable - deduced from actual form content
 			type: 'object'
 		},
-		bindable: {
-			title: 'Binds block from query',
-			type: 'boolean',
-			default: false
+		action: {
+			title: 'Action',
+			description: 'where and how to submit this form',
+			type: 'object',
+			properties: {
+				method: {
+					title: 'Method',
+					oneOf: [{
+						const: "get",
+						title: "Get"
+					}, {
+						const: "post",
+						title: "Add"
+					}, {
+						const: "put",
+						title: "Save"
+					}, {
+						const: "delete",
+						title: "Remove"
+					}]
+				},
+				url: {
+					title: 'Action url',
+					description: 'url to submit the form to',
+					type: "string",
+					pattern: "^(/[\\w-.]*)+$",
+					/* TODO use type "api" to list available /.api services
+					input: {
+						name: 'href',
+						filter: {
+							type: ["api"]
+						}
+					} */
+				}
+			}
+		},
+		redirect: {
+			title: 'Redirect',
+			oneOf: [{
+				type: "null"
+			}, {
+				type: "string",
+				pattern: "^(/[a-zA-Z0-9-.]*)+$"
+			}],
+			input: {
+				name: 'href',
+				filter: {
+					type: ["link"]
+				}
+			}
+		},
+//		from: {
+//			title: 'Block id from query key',
+//			description: 'Fill form using the block whose id is found is url query',
+//			type: ['string', 'null']
+//		},
+		reaction: {
+			title: 'Reaction',
+			description: 'Additional action after successful form submission',
+			type: 'object',
+			properties: {
+				method: {
+					title: 'Method',
+					oneOf: [{
+						const: "get",
+						title: "Get"
+					}, {
+						const: "post",
+						title: "Add"
+					}, {
+						const: "put",
+						title: "Save"
+					}, {
+						const: "delete",
+						title: "Remove"
+					}]
+				},
+				url: {
+					title: 'Reaction url',
+					description: 'url to submit the form to',
+					oneOf: [{
+						type: "null"
+					}, {
+						type: "string",
+						pattern: "^(/[\\w-.]*)+$"
+					}]
+				},
+				data: {
+					title: 'Data',
+					description: 'Accepts template strings - with data or query variables',
+					type: "object"
+				}
+			}
 		}
-//		url: {
-//			// after action
-//		}
-
 	},
 	contents: {
 		form: {
@@ -48,11 +111,13 @@ Pageboard.elements.form = {
 	icon: '<i class="write icon"></i>',
 	render: function(doc, block) {
 		var d = block.data;
-		return doc.dom`<form action="${d.action}" method="${d.method}" class="ui form">
+		if (!d.action) d.action = {};
+		var node = doc.dom`<form action="${d.action.url}" method="${d.action.method}" class="ui form">
 			<input type="hidden" name="parent" value="${block.id}" />
-			<input type="hidden" name="type" value="${d.cast}" />
 			<div block-content="form"></div>
 		</form>`;
+		if (d.redirect) node.dataset.redirect = d.redirect;
+		return node;
 	},
 	stylesheets: [
 		'/.pageboard/semantic-ui/components/form.css',
