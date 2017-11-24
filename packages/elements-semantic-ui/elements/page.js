@@ -16,7 +16,7 @@ Pageboard.elements.page = {
 		url: {
 			title: 'Address',
 			type: "string",
-			pattern: "^(\/[a-zA-Z0-9-.]*)+$",
+			pattern: "^(/[a-zA-Z0-9-.]*)+$", // notice the absence of underscore
 			input: {
 				name: 'pageUrl'
 			}
@@ -30,7 +30,7 @@ Pageboard.elements.page = {
 				format: "uri"
 			}, {
 				type: "string",
-				pattern: "^(\/[a-zA-Z0-9-.]*)+$"
+				pattern: "^(/[a-zA-Z0-9-.]*)+$" // notice the absence of underscore
 			}],
 			input: {
 				name: 'href',
