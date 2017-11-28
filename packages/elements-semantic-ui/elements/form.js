@@ -110,8 +110,7 @@ Pageboard.elements.form = {
 		</form>`;
 	},
 	stylesheets: [
-		'/.pageboard/semantic-ui/components/form.css',
-//		'../ui/form.css'
+		'/.pageboard/semantic-ui/components/form.css'
 	],
 	scripts: [
 		'../ui/formdata.min.js',
