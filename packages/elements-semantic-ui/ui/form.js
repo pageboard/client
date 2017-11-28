@@ -6,7 +6,9 @@ Page.setup(function(state) {
 		e.preventDefault();
 		var form = e.target.closest('form');
 		if (!form) return;
+		if (form.matches('.loading')) return;
 		form.classList.remove('error', 'success');
+		form.classList.add('loading');
 		var formData = new FormData(form);
 		fetchAction(form.method, form.action, formDataToQuery(formData)).then(function(data) {
 			if (form.dataset.redirect) {
@@ -16,6 +18,8 @@ Page.setup(function(state) {
 		}).catch(function(err) {
 			console.error(err);
 			form.classList.add('error');
+		}).then(function() {
+			form.classList.remove('loading');
 		});
 	}
 
@@ -54,6 +58,7 @@ Page.setup(function(state) {
 		});
 		return query;
 	}
+
 	// https://daverupert.com/2017/11/happier-html5-forms/
 	document.body.addEventListener('blur', blurHandler, true);
 	document.body.addEventListener('focus', focusHandler, true);
