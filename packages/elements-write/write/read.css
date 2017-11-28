@@ -47,3 +47,7 @@ p > br:only-child {
 .ui.disabled.active.button {
 	pointer-events: auto !important;
 }
+
+[block-focused] .ui.message {
+	display:block;
+}
