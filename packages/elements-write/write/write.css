@@ -151,6 +151,18 @@ body {
 	font-size:0.9rem;
 }
 
+#form input-map > table {
+	margin-top:0;
+}
+#form input-map > label {
+	font-style:italic;
+	font-size:0.9em;
+}
+
+#form .field > label {
+	margin-bottom:0;
+}
+
 .ui.toggle.checkbox {
 	vertical-align:middle;
 }

@@ -16,7 +16,9 @@ class HTMLInputMap extends HTMLElement {
 		this._observer.observe(this._proxy, {
 			attributes: true
 		});
-		this._table = this.appendChild(this.dom`<table class="ui very compact celled small striped table"></table>`);
+		this._table = this.appendChild(this.dom`<table class="ui very compact celled small striped table">
+			<tbody></tbody>
+		</table>`);
 		this._table.addEventListener('change', this._parse, false);
 		this._table.addEventListener('focus', this._focus, true);
 		this._render();
@@ -37,10 +39,11 @@ class HTMLInputMap extends HTMLElement {
 		} catch(ex) {
 			console.error(ex);
 		}
-		this._table.textContent = '';
+		var body = this._table.querySelector('tbody');
+		body.textContent = '';
 		var focused = false;
 		Object.keys(obj).concat([""]).forEach(function(key) {
-			var row = this._table.appendChild(this.dom`<tr>
+			var row = body.appendChild(this.dom`<tr>
 				<td><input class="ui input" value="${key}" /></td>
 				<td><input class="ui input" value="${obj[key]}" /></td>
 			</tr>`);
@@ -62,7 +65,7 @@ class HTMLInputMap extends HTMLElement {
 		var obj = {};
 		var removals = [];
 		var focus = e.target;
-		Array.from(this._table.children).forEach(function(tr) {
+		Array.from(this._table.querySelector('tbody').children).forEach(function(tr) {
 			var key = tr.children[0].firstChild.value;
 			if (key) {
 				obj[key] = tr.children[1].firstChild.value;

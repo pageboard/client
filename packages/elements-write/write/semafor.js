@@ -319,18 +319,25 @@ types.number = function(key, schema, node, fields) {
 types.object = function(key, schema, node, fields) {
 	var fieldset = node;
 	if (schema.title) {
-		fieldset = node.dom`<fieldset name="${key}"><legend>${schema.title}</legend></fieldset>`;
-		node.appendChild(fieldset);
-	}
-	if (schema.description) {
-		fieldset.appendChild(node.dom`<label>${schema.description}</label>`);
+		if (schema.properties) {
+			fieldset = node.dom`<fieldset name="${key}"><legend>${schema.title}</legend></fieldset>`;
+			node.appendChild(fieldset);
+			if (schema.description) {
+				fieldset.appendChild(node.dom`<label>${schema.description}</label>`);
+			}
+		} else {
+			fieldset = node.dom`<div class="field"></div>`;
+			node.appendChild(fieldset);
+			fieldset.appendChild(node.dom`
+				<label>${schema.title}</label>
+				<input-map name="${key}"><label>${schema.description}</label></input-map>
+			`);
+		}
 	}
 	if (schema.properties) for (var name in schema.properties) {
 		var propSchema = schema.properties[name];
 		if (key) name = key + '.' + name;
 		process(name, propSchema, fieldset, fields);
-	} else if (schema.title) {
-		fieldset.appendChild(node.dom`<input-map name="${key}"></input-map>`);
 	}
 };
 
