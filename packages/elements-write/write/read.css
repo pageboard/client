@@ -32,7 +32,7 @@
 	color:inherit;
 }
 
-p > br:only-child {
+body.ProseMirror-focused p > br:only-child {
 	content: '.';
 	display:inline-block;
 	background-color:#F0F0F0;
