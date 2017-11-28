@@ -156,6 +156,9 @@ Pageboard.elements.input_text = {
 				const: "text",
 				title: "text"
 			}, {
+				const: "textarea",
+				title: "textarea"
+			}, {
 				const: "email",
 				title: "email"
 			}, {
@@ -185,8 +188,14 @@ Pageboard.elements.input_text = {
 	icon: '<i class="text cursor icon"></i>',
 	render: function(doc, block) {
 		var d = block.data;
-		var input = doc.dom`<input type="${d.type}" name="${d.name}" />`;
-		if (d.value) input.value = d.value;
+		var input;
+		if (d.type == "textarea") {
+			input = doc.dom`<textarea name="${d.name}"></textarea>`;
+			if (d.value) input.innerText = d.value;
+		} else {
+			input = doc.dom`<input type="${d.type}" name="${d.name}" />`;
+			if (d.value) input.value = d.value;
+		}
 		if (d.placeholder) input.placeholder = d.placeholder;
 		if (d.required) input.required = true;
 		var node = doc.dom`<div class="field">
