@@ -10,7 +10,6 @@ Pageboard.setup = function(state) {
 	// setup "read" iframe in develop mode
 	var loc = Page.parse(); // get a copy of state
 	loc.query.develop = null;
-	delete loc.query.write;
 
 	iframe.addEventListener('load', function(e) {
 		iframe.contentWindow.addEventListener('pagebuild', function() {
@@ -33,9 +32,6 @@ function anchorListener(e) {
 	if (node.matches('a')) {
 		// TODO remove this url modification when auth works
 		var href = Page.parse(node.href);
-		if (href.hostname == Page.state.hostname) {
-			href.query.write = null;
-		}
 
 		msg = `<a href="${Page.format(href)}" target="${node.target}" rel="${node.rel}"><i class="icon hand pointer"></i>Follow link: ${node.href}</a>`;
 	} else if (node.matches('button')) {
@@ -76,7 +72,6 @@ function setupListener(win) {
 
 	var state = win.Page.parse();
 	delete state.query.develop;
-	state.query.write = null;
 
 	Page.replace(state).then(function() {
 		editorSetup(win, win.Pageboard.view);
