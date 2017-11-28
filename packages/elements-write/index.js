@@ -10,8 +10,9 @@ module.exports = function(opt) {
 
 function init(All) {
 	return readFile(Path.join(__dirname, 'write', 'write.html')).then(function(buf) {
-		All.app.get('*', function(req, res, next) {
-			if (req.query.write !== undefined) {
+		All.app.get('*', All.query, function(req, res, next) {
+			if (req.query.develop != null) return next('route');
+			if (All.auth.test(req, 'webmaster')) {
 				// doesn't actually load the html
 				All.dom(buf)(req, res, next);
 			} else {
