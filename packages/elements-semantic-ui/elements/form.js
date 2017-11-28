@@ -9,31 +9,23 @@ Pageboard.elements.form = {
 		},
 		action: {
 			title: 'Action',
-			description: 'where and how to submit this form',
 			type: 'object',
 			properties: {
 				method: {
 					title: 'Method',
 					oneOf: [{
 						const: "get",
-						title: "Get"
+						title: "query"
 					}, {
 						const: "post",
-						title: "Add"
-					}, {
-						const: "put",
-						title: "Save"
-					}, {
-						const: "delete",
-						title: "Remove"
+						title: "submit"
 					}]
 				},
-				url: {
-					title: 'Action url',
-					description: 'url to submit the form to',
+				call: {
+					title: 'Call api or url',
 					type: "string",
-					pattern: "^(/[\\w-.]*)+$",
-					/* TODO use type "api" to list available /.api services
+					pattern: "^(\\w+\.\\w+)|((/[\\w-.]*)+)$",
+					/* TODO improve this input with a selector
 					input: {
 						name: 'href',
 						filter: {
@@ -72,31 +64,31 @@ Pageboard.elements.form = {
 					title: 'Method',
 					oneOf: [{
 						const: "get",
-						title: "Get"
+						title: "query"
 					}, {
 						const: "post",
-						title: "Add"
-					}, {
-						const: "put",
-						title: "Save"
-					}, {
-						const: "delete",
-						title: "Remove"
+						title: "submit"
 					}]
 				},
-				url: {
-					title: 'Reaction url',
-					description: 'url to submit the form to',
+				call: {
+					title: 'Call api or url',
 					oneOf: [{
 						type: "null"
 					}, {
 						type: "string",
-						pattern: "^(/[\\w-.]*)+$"
+						pattern: "^(\\w+\.\\w+)|((/[\\w-.]*)+)$"
 					}]
+					/* TODO improve this input with a selector
+					input: {
+						name: 'href',
+						filter: {
+							type: ["api"]
+						}
+					} */
 				},
 				data: {
 					title: 'Data',
-					description: 'Accepts template strings - with data or query variables',
+					description: 'Use req.id or res.id, res.data.url...',
 					type: "object"
 				}
 			}
@@ -112,12 +104,10 @@ Pageboard.elements.form = {
 	render: function(doc, block) {
 		var d = block.data;
 		if (!d.action) d.action = {};
-		var node = doc.dom`<form action="${d.action.url}" method="${d.action.method}" class="ui form">
+		return doc.dom`<form action="/.api/form" method="${d.action.method}" class="ui form">
 			<input type="hidden" name="parent" value="${block.id}" />
 			<div block-content="form"></div>
 		</form>`;
-		if (d.redirect) node.dataset.redirect = d.redirect;
-		return node;
 	},
 	stylesheets: [
 		'/.pageboard/semantic-ui/components/form.css',
