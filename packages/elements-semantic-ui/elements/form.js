@@ -234,3 +234,35 @@ Pageboard.elements.input_checkbox = {
 		'/.pageboard/semantic-ui/components/checkbox.css'
 	]
 };
+
+Pageboard.elements.form_message = {
+	title: 'Message',
+	group: 'input',
+	properties: {
+		type: {
+			title: "type",
+			description: "Message is shown depending on type",
+			default: "success",
+			oneOf: [{
+				const: "success",
+				title: "Success"
+			}, {
+				const: "error",
+				title: "Error"
+			}]
+		}
+	},
+	contents: {
+		message: {
+			title: 'Message',
+			spec: "block+"
+		}
+	},
+	icon: '<i class="announcement icon"></i>',
+	render: function(doc, block) {
+		return doc.dom`<div class="ui message ${block.data.type}" block-content="message"></div>`
+	},
+	stylesheets: [
+		'/.pageboard/semantic-ui/components/message.css'
+	]
+};
