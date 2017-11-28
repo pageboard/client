@@ -48,6 +48,6 @@ p > br:only-child {
 	pointer-events: auto !important;
 }
 
-[block-focused] .ui.message {
+.ui.form[block-focused] .ui.message {
 	display:block;
 }
