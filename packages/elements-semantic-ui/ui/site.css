@@ -28,6 +28,9 @@ body {
 	color: rgba(0, 0, 0, 0.87);
 	font-smoothing: antialiased;
 }
+.hidden,[hidden] {
+	display:none !important;
+}
 
 
 /*******************************
