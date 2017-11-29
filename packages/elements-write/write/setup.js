@@ -32,10 +32,7 @@ function anchorListener(e) {
 	e.preventDefault();
 	var msg;
 	if (node.matches('a')) {
-		// TODO remove this url modification when auth works
-		var href = Page.parse(node.href);
-
-		msg = `<a href="${Page.format(href)}" target="${node.target}" rel="${node.rel}"><i class="icon hand pointer"></i>Follow link: ${node.href}</a>`;
+		msg = `<a href="${node.href}" target="${node.target}" rel="${node.rel}"><i class="icon hand pointer"></i>Follow link: ${node.href}</a>`;
 	} else if (node.matches('button')) {
 		// TODO submit form
 	}
