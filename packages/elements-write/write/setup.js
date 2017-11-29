@@ -20,6 +20,8 @@ Pageboard.setup = function(state) {
 		}
 	});
 	iframe.src = Page.format(loc);
+
+	iframe.addEventListener('dblclick', dblclickListener, false);
 };
 
 var lastClicked;
@@ -42,6 +44,19 @@ function anchorListener(e) {
 		timeout: 3,
 		where: 'read'
 	});
+}
+
+var lastWidth;
+function dblclickListener(e) {
+	var iframe = e.target;
+	if (!iframe.matches('iframe')) return;
+	if (lastWidth) {
+		iframe.style.width = lastWidth;
+		lastWidth = null;
+	} else {
+		lastWidth = window.getComputedStyle(iframe).width;
+		iframe.style.width = '100vw';
+	}
 }
 
 function buildListener(win) {
