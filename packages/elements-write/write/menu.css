@@ -9,6 +9,18 @@
 .ui.menu {
 	flex-wrap:wrap;
 }
+#menu > .ui.tabular.mini.menu {
+	min-height:2.4em;
+}
+#menu > .ui.tabular.mini.menu > .item {
+	padding:0 0.8em;
+}
+#menu > .ui.tab.menu.active {
+	display:flex;
+}
+#menu > .ui.attached.tab.menu {
+	margin:0;
+}
 #menu .item > img:not(.ui) {
 	width:1.5em;
 }

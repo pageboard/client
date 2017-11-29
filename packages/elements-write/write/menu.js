@@ -5,29 +5,64 @@ Pageboard.Controls.Menu = Menu;
 function Menu(editor, selector) {
 	this.editor = editor;
 	this.node = document.querySelector(selector);
-	this.blocks = this.node.dom`<div id="menu" class="ui mini labeled icon menu"></div>`;
-	this.inlines = this.node.dom`<div id="menu" class="ui icon menu"></div>`;
-	this.node.appendChild(this.blocks);
+	this.tabMenu = this.node.dom`<div class="ui top attached tabular mini menu"></div>`;
+	this.node.appendChild(this.tabMenu);
+	this.tabs = {};
+	this.inlines = this.node.dom`<div class="ui icon menu"></div>`;
 	this.node.appendChild(this.inlines);
 	this.menu = new Pagecut.Menubar({
 		items: this.items()
 	});
+	// delegate
+	var me = this;
+	$(this.tabMenu).on('click', '.item', function(e) {
+		me.showTab($(this).data('tab'));
+	});
 }
+
+Menu.prototype.showTab = function(name) {
+	$(this.tabMenu).find('.item').removeClass('active');
+	var tab = $(this.tabs[name].menu);
+	tab.addClass('active');
+	$.tab('change tab', tab.data('tab'));
+};
 
 Menu.prototype.update = function(parents, sel) {
 	if (!sel || !parents) return;
 	// because updates are done by the editor
 	this.selection = sel;
 	this.parents = parents;
-	this.blocks.textContent = "";
+	for (var name in this.tabs) {
+		this.tabs[name].div.textContent = '';
+	}
 	this.inlines.textContent = "";
+	var activeTab;
 	this.menu.items.forEach(function(item) {
 		var dom = renderItem(item, this.editor);
 		if (!dom) return;
-		if (item.spec.element.inline) this.inlines.appendChild(dom);
-		else this.blocks.appendChild(dom);
+		if (item.spec.element.inline) {
+			this.inlines.appendChild(dom);
+		} else {
+			var menu = item.spec.element.menu || 'common';
+			this.tab(menu).appendChild(dom);
+			if (!activeTab && dom.matches('.active')) activeTab = menu;
+		}
 	}, this);
+	if (!activeTab) activeTab = "common";
+	this.showTab(activeTab);
+};
 
+Menu.prototype.tab = function(name) {
+	var tab = this.tabs[name];
+	if (!tab) {
+		this.tabs[name] = tab = {
+			menu: this.node.dom`<a class="item" data-tab="${name}">${name}</a>`,
+			div: this.node.dom`<div class="ui mini labeled icon menu bottom attached tab" data-tab="${name}"></div>`
+		};
+		this.tabMenu.appendChild(tab.menu);
+		this.node.insertBefore(tab.div, this.inlines);
+	}
+	return tab.div;
 };
 
 Menu.prototype.item = function(el) {
