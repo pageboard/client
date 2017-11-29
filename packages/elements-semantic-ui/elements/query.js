@@ -1,5 +1,6 @@
 Pageboard.elements.query = {
 	title: "Query",
+	menu: "form",
 	contents: {
 		results: {
 			spec: "block*",

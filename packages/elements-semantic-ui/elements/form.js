@@ -2,6 +2,7 @@
 Pageboard.elements.form = {
 	title: 'Form',
 	group: 'block',
+	menu: "form",
 	properties: {
 		schema: {
 			// not editable - deduced from actual form content
@@ -119,6 +120,7 @@ Pageboard.elements.form = {
 };
 
 Pageboard.elements.input_submit = {
+	menu: "form",
 	contents: {
 		label: "text*"
 	},
@@ -129,6 +131,7 @@ Pageboard.elements.input_submit = {
 
 Pageboard.elements.input_text = {
 	title: 'Input',
+	menu: "form",
 	required: ["name"],
 	group: 'input',
 	properties: {
@@ -209,6 +212,7 @@ Pageboard.elements.input_text = {
 
 Pageboard.elements.input_checkbox = {
 	title: 'Checkbox',
+	menu: "form",
 	required: ["name"],
 	group: 'input',
 	properties: {
@@ -246,6 +250,7 @@ Pageboard.elements.input_checkbox = {
 
 Pageboard.elements.form_message = {
 	title: 'Message',
+	menu: "form",
 	group: 'input',
 	properties: {
 		type: {

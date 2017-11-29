@@ -1,6 +1,6 @@
 Pageboard.elements.nav = {
 	title: "Nav",
-	menu: "Nav",
+	menu: "site",
 	description: "Navigation links",
 	properties: {
 		relation: {
@@ -42,7 +42,7 @@ Pageboard.elements.nav = {
 
 Pageboard.elements.breadcrumb = {
 	title: "Breadcrumb",
-	menu: "Nav",
+	menu: "site",
 	group: "block",
 	icon: '<b class="icon">&gt;&gt;&gt;</b>',
 	render: function(doc, block, view) {

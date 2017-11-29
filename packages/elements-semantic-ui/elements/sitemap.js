@@ -8,6 +8,7 @@ sitedir is inplace to avoid having unnecessary structure hanging in the blocks t
 */
 Pageboard.elements.sitemap = {
 	title: "Site map",
+	menu: 'site',
 	contents: {
 		children: {
 			spec: "sitepage+",
@@ -96,6 +97,7 @@ Pageboard.elements.sitemap = {
 
 Pageboard.elements.sitepage = {
 	title: "Site page",
+	menu: 'site',
 	properties: Pageboard.elements.page.properties,
 	contents: {
 		children: {

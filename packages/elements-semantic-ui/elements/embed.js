@@ -1,5 +1,6 @@
 Pageboard.elements.embed = {
 	title: "Embed",
+	menu: "widget",
 	properties: {
 		url: {
 			title: 'Address',

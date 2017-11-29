@@ -4,6 +4,7 @@ Pageboard.elements.page = {
 	replaces: 'doc',
 	title: 'Page',
 	group: 'page',
+	menu: "site",
 	standalone: true, // besides site, can be child of zero or more parents
 	properties: {
 		title: {

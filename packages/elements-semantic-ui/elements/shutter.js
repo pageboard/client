@@ -1,5 +1,6 @@
 Pageboard.elements.shutter = {
 	title: "Shutter",
+	menu: "widget",
 	group: "block",
 	contents: {
 		tabs: {
@@ -23,6 +24,7 @@ Pageboard.elements.shutter = {
 
 Pageboard.elements.shutter_item = {
 	title: "Shutter Tab",
+	menu: "widget",
 	properties: {
 		invert: {
 			title: 'Invert',
