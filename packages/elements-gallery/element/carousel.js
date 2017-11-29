@@ -1,5 +1,6 @@
 Pageboard.elements.carousel = {
 	title: "Carousel",
+	menu: "widget",
 	priority: 21,
 	group: 'block',
 	properties: {
@@ -70,6 +71,7 @@ Pageboard.elements.carousel = {
 
 Pageboard.elements.carousel_item = {
 	title: "Cell",
+	menu: "widget",
 	contents: {
 		media: {
 			spec: "image",

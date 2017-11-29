@@ -1,6 +1,7 @@
 Pageboard.elements.medialist = {
 	priority: 20,
 	title: "List",
+	menu: "widget",
 	properties: {
 	},
 	contents: {
@@ -21,6 +22,7 @@ Pageboard.elements.medialist = {
 
 Pageboard.elements.medialist_item = {
 	title: "Item",
+	menu: "widget",
 	context: "medialist/",
 	properties: {},
 	contents: {

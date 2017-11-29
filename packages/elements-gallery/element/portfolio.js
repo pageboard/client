@@ -1,5 +1,6 @@
 Pageboard.elements.portfolio = {
 	title: "Portfolio",
+	menu: "widget",
 	priority: 21,
 	group: 'block',
 	properties: {
@@ -42,6 +43,7 @@ Pageboard.elements.portfolio = {
 
 Pageboard.elements.portfolio_item = {
 	title: "Item",
+	menu: "widget",
 	context: "portfolio/",
 	properties: {
 		scaleWidth: {

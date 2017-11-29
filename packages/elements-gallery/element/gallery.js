@@ -1,5 +1,6 @@
 Pageboard.elements.gallery = {
 	title: "Gallery",
+	menu: "widget",
 	priority: 20,
 	properties: {
 		showMenu: {
@@ -35,6 +36,7 @@ Pageboard.elements.gallery = {
 
 Pageboard.elements.itemlink = {
 	title: "Item Link",
+	menu: "widget",
 	properties: {
 		target: {
 			title: 'Target window',
