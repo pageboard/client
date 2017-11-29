@@ -2,6 +2,8 @@
 
 Pageboard.Controls.Menu = Menu;
 
+Menu.tabs = ["common", "widget", "site", "form", "user"];
+
 function Menu(editor, selector) {
 	this.editor = editor;
 	this.node = document.querySelector(selector);
@@ -10,6 +12,9 @@ function Menu(editor, selector) {
 	this.tabs = {};
 	this.inlines = this.node.dom`<div class="ui icon menu"></div>`;
 	this.node.appendChild(this.inlines);
+	Menu.tabs.forEach(function(name) {
+		this.tab(name);
+	}, this);
 	this.menu = new Pagecut.Menubar({
 		items: this.items()
 	});
