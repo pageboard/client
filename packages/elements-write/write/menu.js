@@ -69,7 +69,7 @@ Menu.prototype.item = function(el) {
 	var editor = this.editor;
 	var schema = editor.state.schema;
 	var nodeType = schema.nodes[el.name] || schema.marks[el.name];
-	if (!nodeType || (!el.menu && !el.icon)) return;
+	if (!nodeType || !el.icon) return;
 
 	var self = this;
 
