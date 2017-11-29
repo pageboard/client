@@ -34,7 +34,7 @@ function anchorListener(e) {
 	if (node.matches('a')) {
 		msg = `<a href="${node.href}" target="${node.target}" rel="${node.rel}"><i class="icon hand pointer"></i>Follow link: ${node.href}</a>`;
 	} else if (node.matches('button')) {
-		// TODO submit form
+		msg = `Forms cannot be submitted when editing pages`;
 	}
 	Pageboard.notify(msg, {
 		label: 'link',
