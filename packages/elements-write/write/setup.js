@@ -47,12 +47,17 @@ var lastWidth;
 function dblclickListener(e) {
 	var iframe = e.target;
 	if (!iframe.matches('iframe')) return;
+	var body = iframe.contentDocument.body;
 	if (lastWidth) {
 		iframe.style.width = lastWidth;
 		lastWidth = null;
+		body.classList.add('ProseMirror');
+		body.setAttribute('contenteditable', 'true');
 	} else {
 		lastWidth = window.getComputedStyle(iframe).width;
 		iframe.style.width = '100vw';
+		body.classList.remove('ProseMirror');
+		body.removeAttribute('contenteditable');
 	}
 }
 
