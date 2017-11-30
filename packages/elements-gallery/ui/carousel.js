@@ -37,8 +37,8 @@ class HTMLElementCarousel extends HTMLElement {
 			this
 		);
 		opts = Object.assign({}, this._options, opts);
-		if (opts.fullpage) {
-			this.ownerDocument.body.classList.add('fullpage');
+		if (opts.fullview) {
+			this.ownerDocument.body.classList.add('fullview');
 		}
 		this.carousel = new Flickity(this, opts);
 		this.carousel.on('select', this._saveIndex);
@@ -48,7 +48,7 @@ class HTMLElementCarousel extends HTMLElement {
 				this._fullviewButton = this.dom`<a class="ui icon button fullview"><i class="zoom icon"></i></a>`;
 				this.appendChild(this._fullviewButton);
 				this._fullviewButton.addEventListener('click', function(e) {
-					document.body.classList.toggle('fullview');
+					this.ownerDocument.body.classList.toggle('fullview');
 					this.carousel.resize();
 				}.bind(this), false);
 			}
@@ -64,7 +64,7 @@ class HTMLElementCarousel extends HTMLElement {
 			this.carousel.destroy();
 			delete this.carousel;
 		}
-		this.ownerDocument.body.classList.remove('fullpage');
+		this.ownerDocument.body.classList.remove('fullview');
 	}
 
 	_saveIndex(e) {

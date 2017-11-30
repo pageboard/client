@@ -77,7 +77,7 @@ class HTMLElementGallery extends HTMLElement {
 		while (item=item.previousSibling) position++;
 		this._initGalleries({
 			initialIndex: position,
-			fullpage: true
+			fullview: true
 		});
 	}
 
