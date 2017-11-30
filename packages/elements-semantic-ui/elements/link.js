@@ -71,6 +71,7 @@ Pageboard.elements.link = {
 	context: "paragraph/",
 	inline: true,
 	group: "inline",
+	tag: 'a:not(.itemlink)',
 	icon: '<i class="icon linkify"></i>',
 	render: function(doc, block) {
 		var a = doc.dom`<a href="${block.data.url}"></a>`;
