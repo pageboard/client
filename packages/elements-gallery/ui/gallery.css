@@ -28,7 +28,7 @@ element-gallery[data-mode="carousel"] > [block-content="galleries"] > [block-typ
 }
 
 a.itemlink {
-	display: none;
+	display: block;
 	width:100%;
 	height:100%;
 	text-align: center;

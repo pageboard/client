@@ -78,7 +78,7 @@ Pageboard.elements.carousel_item = {
 			title: "media"
 		},
 		content: {
-			spec: "block+",
+			spec: "(block|itemlink)+",
 			title: "content"
 		}
 	},

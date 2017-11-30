@@ -97,7 +97,7 @@ Pageboard.elements.itemlink = {
 	},
 	contents: {
 		text: {
-			spec: "text*"
+			spec: "(paragraph|heading|image)+"
 		}
 	},
 	icon: '<i class="icon linkify"></i>',
