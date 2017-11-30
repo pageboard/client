@@ -42,6 +42,20 @@ class HTMLElementCarousel extends HTMLElement {
 		}
 		this.carousel = new Flickity(this, opts);
 		this.carousel.on('select', this._saveIndex);
+
+		if (this.dataset.fullviewButton == "true") {
+			if (!this._fullviewButton) {
+				this._fullviewButton = this.dom`<a class="ui icon button fullview"><i class="zoom icon"></i></a>`;
+				this.appendChild(this._fullviewButton);
+				this._fullviewButton.addEventListener('click', function(e) {
+					document.body.classList.toggle('fullview');
+					this.carousel.resize();
+				}.bind(this), false);
+			}
+		} else if (this._fullviewButton) {
+			this._fullviewButton.remove();
+			delete this._fullviewButton;
+		}
 	}
 
 	_teardown() {

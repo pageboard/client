@@ -46,15 +46,34 @@ element-carousel-cell > .content {
 	pointer-events:auto;
 }
 
-body.fullpage {
+body.fullview {
 	overflow:hidden;
 }
 
-body.fullpage element-gallery > [block-content="galleries"] > :not(element-carousel) {
+body.fullview element-gallery > [block-content="galleries"] > :not(element-carousel) {
 	display:none;
 }
-body.fullpage element-carousel {
+body.fullview element-carousel {
 	display:block;
 	position:fixed;
 	top:0;
+	left:0;
+	bottom:0;
+	right:0;
+	height:100%;
+	background-color:black;
+	z-index:1000;
+}
+body.fullview element-carousel element-carousel-cell {
+	height:100vh !important;
+}
+
+element-carousel > .ui.icon.button.fullview {
+	display:block;
+	position:absolute;
+	bottom:0;
+	right:0;
+}
+i.zoom.icon:before {
+	content:'Z';
 }
