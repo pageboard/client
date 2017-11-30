@@ -90,7 +90,11 @@ Pageboard.elements.form = {
 				data: {
 					title: 'Data',
 					description: 'Use req.id or res.id, res.data.url...',
-					type: "object"
+					oneOf: [{
+						type: "object"
+					}, {
+						type: "null"
+					}]
 				}
 			}
 		}
