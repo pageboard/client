@@ -44,3 +44,4 @@ ui/stickybits*
 ui/custom-elements.min.js
 ui/object-fit-images.js
 ui/formdata.min.js
+ui/slim-select*

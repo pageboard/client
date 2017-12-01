@@ -22,13 +22,16 @@
     "document-register-element": "^1.7.0",
     "formdata-polyfill": "^3.0.1",
     "object-fit-images": "^3.2.3",
-    "postinstall-links": "^0.3.1"
+    "postinstall-links": "^0.3.1",
+    "slim-select": "^1.4.3"
   },
   "links": {
     "document-register-element/build/document-register-element.js": "ui/custom-elements.min.js",
     "@pageboard/stickybits/dist/stickybits.min.js": "ui/",
     "object-fit-images/dist/ofi.min.js": "ui/object-fit-images.js",
-    "formdata-polyfill/formdata.min.js": "ui/"
+    "formdata-polyfill/formdata.min.js": "ui/",
+    "slim-select/dist/index.css": "ui/slim-select.css",
+    "slim-select/dist/index.js": "ui/slim-select.js"
   },
   "pageboard": {
     "directories": [
