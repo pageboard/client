@@ -206,7 +206,7 @@ Pageboard.elements.input_text = {
 		if (d.placeholder) input.placeholder = d.placeholder;
 		if (d.required) input.required = true;
 		var node = doc.dom`<div class="field">
-			<label block-content="label"></label>
+			<label block-content="label">Label</label>
 			${input}
 		</div>`;
 		if (d.type == "hidden") node.classList.add('hidden');
@@ -243,7 +243,7 @@ Pageboard.elements.input_checkbox = {
 		return doc.dom`<div class="field">
 			<div class="ui checkbox">
 				${input}
-				<label block-content="label"></label>
+				<label block-content="label">Label</label>
 			</div>
 		</div>`;
 	},
@@ -278,7 +278,7 @@ Pageboard.elements.form_message = {
 	},
 	icon: '<i class="announcement icon"></i>',
 	render: function(doc, block) {
-		return doc.dom`<div class="ui message ${block.data.type}" block-content="message"></div>`
+		return doc.dom`<div class="ui message ${block.data.type}" block-content="message">Message</div>`
 	},
 	stylesheets: [
 		'/.pageboard/semantic-ui/components/message.css'
