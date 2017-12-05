@@ -324,6 +324,7 @@ Pageboard.elements.input_select = {
 Pageboard.elements.input_select_option = {
 	title: 'Option',
 	menu: "form",
+	icon: '<b class="icon">Opt</b>',
 	properties: {
 		value: {
 			title: "value",
