@@ -115,6 +115,13 @@ class HTMLElementSelect extends HTMLElement {
 			select.name = newValue;
 		} else if (attributeName == "data-multiple") {
 			select.multiple = !!newValue;
+			if (oldValue != newValue) {
+				select.value = "";
+				Array.from(this.querySelectorAll('.ui.label')).forEach(function(node) {
+					node.remove();
+				});
+				this._setPlaceholder();
+			}
 		}
 	}
 }
