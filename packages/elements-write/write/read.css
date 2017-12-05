@@ -51,3 +51,15 @@ body.ProseMirror-focused p > br:only-child {
 .ProseMirror .ui.form[block-focused] .ui.message {
 	display:block;
 }
+
+.ProseMirror .ui.dropdown[block-focused] > .menu {
+	overflow: visible;
+	width: auto;
+	height: auto;
+	top: 100% !important;
+	opacity: 1;
+}
+
+.ProseMirror .field[block-focused] .dropdown > .menu {
+	display: block !important;
+}
