@@ -24,7 +24,7 @@ Share.prototype.update = function(parents) {
 	});
 	var hasDescendant = false;
 	parents[0].root.node.descendants(function(child) {
-		if (child.attrs.block_standalone == "true") {
+		if (child.attrs.standalone == "true") {
 			hasDescendant = true;
 			return false;
 		}

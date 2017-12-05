@@ -5,7 +5,7 @@ function Store(editor, selector) {
 	this.debounceUpdate = Pageboard.Debounce(this.realUpdate.bind(this), 500);
 	this.menu = document.querySelector(selector);
 	this.editor = editor;
-	this.pageId = editor.state.doc.attrs.block_id;
+	this.pageId = editor.state.doc.attrs.id;
 
 	this.uiSave = this.menu.querySelector('[data-command="save"]');
 	this.uiSave.addEventListener('click', this.save.bind(this));

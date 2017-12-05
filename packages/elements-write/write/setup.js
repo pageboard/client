@@ -122,13 +122,13 @@ function editorUpdate(editor, state, focusParents, focusSelection) {
 
 	focusParents.forEach(function(item) {
 		var node = item.root.mark || item.root.node;
-		var block = editor.blocks.get(node.attrs.block_id);
+		var block = editor.blocks.get(node.attrs.id);
 		if (!block) {
 			block = editor.blocks.fromAttrs(node.attrs);
-			delete node.attrs.block_id;
+			delete node.attrs.id;
 		}
 		item.block = block;
-		item.type = node.attrs.block_type || block.type;
+		item.type = node.attrs.type || block.type;
 		parents.push(item);
 	});
 
