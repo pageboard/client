@@ -25,7 +25,7 @@ class HTMLElementSelect extends HTMLElement {
 		else menu.style.display = 'none';
 	}
 	_selectItem(item) {
-		var val = item.dataset.value || item.innerText;
+		var val = item.dataset.value || item.innerText.trim();
 		var str = item.innerHTML;
 		var wasSelected = false;
 		var option = this.querySelector(`select > option[value="${val}"]`);
@@ -76,7 +76,7 @@ class HTMLElementSelect extends HTMLElement {
 		}, this);
 	}
 	_optionItem(item) {
-		return item.dom`<option value="${item.dataset.value || item.innerText}">${item.innerHTML}</option>`;
+		return item.dom`<option value="${item.dataset.value || item.innerText.trim()}">${item.innerHTML}</option>`;
 	}
 	connectedCallback() {
 		if (!this.querySelector('.icon')) {
