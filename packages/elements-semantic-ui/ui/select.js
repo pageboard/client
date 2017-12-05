@@ -85,10 +85,8 @@ class HTMLElementSelect extends HTMLElement {
 		var menu = this.querySelector('.menu');
 		var select = this.querySelector('select');
 		if (!select) {
-			select = this.insertBefore(this.dom`<select name="${this.dataset.name}">
-				<option selected value="">-</option>
-				${Array.prototype.map.call(menu.children, this._optionItem)}
-			</select>`, menu);
+			select = this.insertBefore(this.dom`<select name="${this.dataset.name}"></select>`, menu);
+			this._update();
 		}
 		if (this.dataset.required) select.required = true;
 		if (this.dataset.multiple) select.multiple = true;
@@ -99,11 +97,33 @@ class HTMLElementSelect extends HTMLElement {
 
 		this.ownerDocument.addEventListener('click', this._click, false);
 		select.addEventListener('change', this._change, false);
+		this._observer = new MutationObserver(function(mutations) {
+			this._update();
+		}.bind(this));
+		this._observer.observe(menu, {
+			childList: true
+		});
+	}
+	_update() {
+		var select = this.querySelector('select');
+		var menu = this.querySelector('.menu');
+		select.textContent = "";
+		select.appendChild(this.dom`<option selected value="">-</option>
+			${Array.prototype.map.call(menu.children, this._optionItem)}`);
+	}
+	_reset() {
+		var select = this.querySelector('select');
+		select.value = "";
+		Array.from(this.querySelectorAll('.ui.label')).forEach(function(node) {
+			node.remove();
+		});
+		this._setPlaceholder();
 	}
 	disconnectedCallback() {
 		this.ownerDocument.removeEventListener('click', this._click, false);
 		var select = this.querySelector('select');
 		if (select) select.removeEventListener('change', this._change, false);
+		this._observer.disconnect();
 	}
 	attributeChangedCallback(attributeName, oldValue, newValue, namespace) {
 		var select = this.querySelector('select');
@@ -116,11 +136,7 @@ class HTMLElementSelect extends HTMLElement {
 		} else if (attributeName == "data-multiple") {
 			select.multiple = !!newValue;
 			if (oldValue != newValue) {
-				select.value = "";
-				Array.from(this.querySelectorAll('.ui.label')).forEach(function(node) {
-					node.remove();
-				});
-				this._setPlaceholder();
+				this._reset();
 			}
 		}
 	}

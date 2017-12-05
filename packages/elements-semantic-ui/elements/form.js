@@ -340,11 +340,14 @@ Pageboard.elements.input_select_option = {
 	},
 	render: function(doc, block) {
 		// add selected class if selected ?
-		var node = doc.dom`<div class="item" block-content="label"></div>`;
+		var node = doc.dom`<element-select-option class="item" block-content="label"></element-select-option>`;
 		var val = block.data.value;
 		if (val != null) node.dataset.value = val;
 		return node;
-	}
+	},
+	helpers: [
+		'../ui/select-helper.js'
+	]
 };
 
 Pageboard.elements.form_message = {
