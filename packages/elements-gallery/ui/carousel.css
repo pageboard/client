@@ -77,3 +77,8 @@ element-carousel > .ui.icon.button.fullview {
 i.zoom.icon:before {
 	content:'Z';
 }
+@media screen and (max-width: 768px) {
+	element-carousel-cell {
+		width: 100% !important;
+	}
+}
