@@ -18,7 +18,6 @@ Pageboard.elements.carousel = {
 			type: 'number',
 			minimum: 0,
 			maximum: 100,
-			multipleOf: 5,
 			default: 100
 		},
 		height: {
@@ -27,7 +26,6 @@ Pageboard.elements.carousel = {
 			type: 'number',
 			minimum: 0,
 			maximum: 999,
-			multipleOf: 10,
 			default: 0
 		},
 		pageDots: {
