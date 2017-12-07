@@ -48,7 +48,6 @@ Pageboard.elements.layout = {
 			type: 'number',
 			minimum: 0,
 			maximum: 999,
-			multipleOf: 10,
 			default: 0
 		},
 		direction: {
