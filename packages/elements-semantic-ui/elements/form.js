@@ -109,10 +109,18 @@ Pageboard.elements.form = {
 	render: function(doc, block) {
 		var d = block.data;
 		if (!d.action) d.action = {};
-		return doc.dom`<form action="/.api/form" method="${d.action.method}" class="ui form">
-			<input type="hidden" name="parent" value="${block.id}" />
+		var url = "/.api/form";
+		var input = "";
+		if (d.action.method == "get") {
+			url = d.action.call;
+		} else {
+			input = doc.dom`<input type="hidden" name="parent" value="${block.id}" />`;
+		}
+		var form = doc.dom`<form action="${url}" method="${d.action.method}" class="ui form">
+			${input}
 			<div block-content="form"></div>
 		</form>`;
+		return form;
 	},
 	stylesheets: [
 		'/.pageboard/semantic-ui/components/form.css'

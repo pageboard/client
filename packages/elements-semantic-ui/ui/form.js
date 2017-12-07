@@ -3,19 +3,26 @@ Page.setup(function(state) {
 
 	// https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Using_XMLHttpRequest
 	function formHandler(e) {
-		e.preventDefault();
 		var form = e.target.closest('form');
 		if (!form) return;
+		e.preventDefault();
 		if (form.matches('.loading')) return;
 		form.classList.remove('error', 'success');
 		form.classList.add('loading');
 		var formData = new FormData(form);
-		fetchAction(form.method, form.action, formDataToQuery(formData)).then(function(data) {
+		var query = formDataToQuery(formData);
+		var p;
+		if (form.method.toLowerCase() == "get") {
+			p = Page.push({pathname: form.action, query: query}).then(function() {
+				// et là je fais quoi ?
+			});
+		} else p = fetchAction(form.method, form.action, query).then(function(data) {
 			if (form.dataset.redirect) {
 				document.location = form.dataset.redirect;
 			}
 			form.classList.add('success');
-		}).catch(function(err) {
+		});
+		p.catch(function(err) {
 			console.error(err);
 			form.classList.add('error');
 		}).then(function() {
