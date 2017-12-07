@@ -142,6 +142,6 @@ class HTMLElementSelect extends HTMLElement {
 	}
 }
 
-Page.build(function() {
+Page.setup(function() {
 	window.customElements.define('element-select', HTMLElementSelect);
 });
