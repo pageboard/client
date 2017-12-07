@@ -97,3 +97,12 @@ Pageboard.elements.heading = {
 		return node;
 	}
 };
+
+Pageboard.elements.divider = {
+	title: "Divider",
+	group: "block",
+	icon: '<b class="icon">hr</b>',
+	render: function(doc, block) {
+		return doc.dom`<hr />`;
+	}
+};
