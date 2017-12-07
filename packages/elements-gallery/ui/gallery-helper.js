@@ -100,13 +100,13 @@ HTMLElementGallery.prototype._sync = function() {
 				srcParent.insertBefore(destItem, srcParent.children[pos] || null);
 				break;
 			case Dift.UPDATE: // 1, dest = oldItem, src = newItem, pos is null
-					if (cache[srcBlock.id] != cache[destBlock.id]) {
-						if (srcBlock.data.url != destBlock.data.url) {
-							destBlock.data.url = srcBlock.data.url
-							editor.utils.refresh(dest, destBlock);
-							cache[destBlock.id] = destBlock.data.url;
-						}
+				if (cache[srcBlock.id] != cache[destBlock.id]) {
+					if (srcBlock.data.url != destBlock.data.url) {
+						destBlock.data.url = srcBlock.data.url
+						editor.utils.refresh(dest, destBlock);
+						cache[destBlock.id] = destBlock.data.url;
 					}
+				}
 				break;
 			case Dift.MOVE: // 2, dest = oldItem, src = newItem, pos = newPosition
 				srcParent.insertBefore(
