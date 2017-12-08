@@ -21,7 +21,7 @@
   "dependencies": {
     "@pageboard/flickity": "^2.0.9-1",
     "@pageboard/isotope-layout": "^3.0.4-1",
-    "postinstall-links": "^0.2.0"
+    "postinstall-links": "^0.3.1"
   },
   "links": {
     "@pageboard/isotope-layout/dist/isotope.pkgd.min.js": "ui/isotope.js",
