@@ -2,46 +2,54 @@ Pageboard.elements.query = {
 	title: "Query",
 	menu: "form",
 	contents: {
-		results: {
+		blocks: {
+			title: 'Results',
 			spec: "block*",
 			virtual: true
 		},
 		empty: {
+			title: 'Empty',
+			spec: "block+"
+		},
+		error: {
+			title: 'Error',
 			spec: "block+"
 		}
 	},
 	group: "block",
-	icon: '<b class="icon">?</b>',
+	icon: '<i class="search icon"></i>',
 	render: function(doc, block) {
-		var node = doc.dom`<element-query class="ui segment" block-content="results"></element-query>`;
-		Object.assign(node.dataset, block.data);
+		var node = doc.dom`<element-query>
+			<div block-content="empty" class="ui message hidden"></div>
+			<div block-content="error" class="ui error message hidden"></div>
+			<div block-content="blocks"></div>
+		</element-query>`;
+		var d = block.data;
+		Object.assign(node.dataset, d.vars);
+		if (d.type) {
+			node.dataset.type = d.type;
+		}
 		return node;
 	},
-	required: ['type'],
 	properties: {
-		prefix: {
-			title: 'Keys prefix',
-			description: 'Select only query keys starting with this prefix',
-			type: ['string', 'null']
+		consts: {
+			title: 'Constants',
+			type: "object"
 		},
-		keys: {
-			title: 'Query keys',
-			description: 'Space-separated list of query keys (without prefix)',
-			type: ['string', 'null']
+		vars: {
+			title: 'Variables',
+			description: "Parameters that can be changed by UI",
+			type: "object"
 		},
 		type: {
-			title: 'Blocks type',
-			description: 'Allow only this type of blocks to be returned',
-			type: 'string'
-		},
-		override: {
-			title: 'Render blocks as another type',
-			type: ['string', 'null']
-		},
-		limit: {
-			title: 'Limit number of results',
-			type: 'integer',
-			minimum: 1
+			title: 'Render type',
+			description: 'Force rendering of blocks to this type',
+			oneOf: [{
+				type: 'null'
+			}, {
+				type: 'string',
+				pattern: "^\\w+$"
+			}]
 		}
 	},
 	stylesheets: [
