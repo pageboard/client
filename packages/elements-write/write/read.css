@@ -52,6 +52,14 @@ body.ProseMirror-focused p > br:only-child {
 	display:block;
 }
 
+.ProseMirror [block-type="query"][block-focused] .ui.message {
+	display:block !important;
+}
+
+.ProseMirror .ui.form[block-focused] input[type="hidden"] {
+	display:block;
+}
+
 .ProseMirror .ui.dropdown[block-focused] > .menu {
 	overflow: visible;
 	width: auto;
