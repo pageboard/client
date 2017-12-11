@@ -6,7 +6,7 @@ class HTMLElementSelect extends HTMLElement {
 		this._change = this._change.bind(this);
 	}
 	_click(e) {
-		var item = e.target.closest('.item');
+		var item = e.target.closest('element-select .item');
 		if (item) {
 			this._selectItem(item);
 			this._selectSelf(true);
