@@ -31,7 +31,7 @@ Pageboard.elements.grid_column = {
 	},
 	contents: {
 		content: {
-			spec: "block+",
+			spec: "block+|card",
 			title: 'content'
 		}
 	},
