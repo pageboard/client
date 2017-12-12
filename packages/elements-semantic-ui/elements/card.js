@@ -60,9 +60,14 @@ Pageboard.elements.card = {
 			title: 'Centered',
 			type: 'boolean',
 			default: false
-		}
+		},
+		image: {
+			title: 'With image',
+			type: 'boolean',
+			default: true
+		},
 		url: {
-			title: 'link',
+			title: 'Link',
 			description: 'link the entire content to another page',
 			oneOf: [{
 				type: "null"
@@ -83,15 +88,15 @@ Pageboard.elements.card = {
 	},
 	contents: {
 		image: {
-			spec: "image?",
+			spec: "image",
 			title: 'image'
 		},
 		content: {
-			spec: '(card_header|card_meta|card_description)*',
+			spec: '(card_header|card_meta|card_description)+',
 			title: 'content'
 		},
 		extra: {
-			spec: 'inline*',
+			spec: 'paragraph+',
 			title: 'extra'
 		}
 	},
@@ -104,7 +109,7 @@ Pageboard.elements.card = {
 		if (d.centered) node.classList.add('centered');
 		node.classList.add('card');
 		node.appendChild(doc.dom`
-			<div class="image" block-content="image"></div>
+			<div class="image ${d.image ? '' : 'hidden'}" block-content="image"></div>
 			<div class="content" block-content="content"></div>
 			<div class="extra content" block-content="extra"></div>
 		`);
