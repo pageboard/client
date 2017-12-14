@@ -229,6 +229,69 @@ Pageboard.elements.input_text = {
 	}
 };
 
+Pageboard.elements.input_range = {
+	title: 'Range',
+	menu: "form",
+	required: ["name"],
+	group: 'input',
+	properties: {
+		name: {
+			title: "name",
+			description: "The form object key",
+			type: "string"
+		},
+		required: {
+			title: 'required',
+			type: 'boolean',
+			default: false
+		},
+		value: {
+			title: "default value",
+			type: "number",
+			default: 50
+		},
+		min: {
+			title: 'minimum value',
+			type: "number",
+			default: 0
+		},
+		max: {
+			title: 'maximum value',
+			type: "number",
+			default: 100
+		},
+		step: {
+			title: 'step',
+			type: "number",
+			default: 1
+		}
+	},
+	contents: {
+		label: 'inline*'
+	},
+	icon: '<i class="text cursor icon"></i>',
+	render: function(doc, block) {
+		var d = block.data;
+		var input = doc.dom`<input type="range" name="${d.name}" min="${d.min}" max="${d.max}" step="${d.step}" />`;
+		if (d.value != null) input.value = d.value;
+		if (d.required) input.required = true;
+		return doc.dom`<div class="field">
+			<label block-content="label">Label</label>
+			<element-input-range>
+				${input}
+			</element-input-range>
+		</div>`;
+	},
+	stylesheets: [
+		'../ui/lib/range-slider.css',
+		'../ui/input-range.css'
+	],
+	scripts: [
+		'../ui/lib/range-slider.min.js',
+		'../ui/input-range.js'
+	]
+};
+
 Pageboard.elements.input_checkbox = {
 	title: 'Checkbox',
 	menu: "form",

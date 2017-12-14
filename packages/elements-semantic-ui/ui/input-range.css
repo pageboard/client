@@ -1,0 +1,17 @@
+.rangeSlider__fill {
+	background: black;
+}
+.rangeSlider__handle {
+	width:20px;
+	height:20px;
+}
+.rangeSlider__handle:after {
+	width:16px;
+	height:16px;
+}
+.rangeSlider__horizontal {
+	height:4px;
+}
+.rangeSlider__handle__horizontal {
+	top:-8px;
+}
