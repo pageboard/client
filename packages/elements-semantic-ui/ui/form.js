@@ -1,9 +1,22 @@
 Page.setup(function(state) {
 	document.body.addEventListener('submit', formHandler, false);
+	document.body.addEventListener('input', inputHandler, false);
+
+	var toInput;
+	function inputHandler(e) {
+		var form = e.target.form;
+		if (!form) return;
+		if (form.dataset.auto != "true") return;
+		if (toInput) clearTimeout(toInput);
+		toInput = setTimeout(function() {
+			toInput = null;
+			formHandler(e);
+		}, 300);
+	}
 
 	// https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Using_XMLHttpRequest
 	function formHandler(e) {
-		var form = e.target.closest('form');
+		var form = e.target.form;
 		if (!form) return;
 		e.preventDefault();
 		if (form.matches('.loading')) return;
@@ -13,9 +26,7 @@ Page.setup(function(state) {
 		var query = formDataToQuery(formData);
 		var p;
 		if (form.method.toLowerCase() == "get") {
-			p = Page.push({pathname: form.action, query: query}).then(function() {
-				// et là je fais quoi ?
-			});
+			p = Page.push({pathname: form.action, query: query});
 		} else p = fetchAction(form.method, form.action, query).then(function(data) {
 			if (form.dataset.redirect) {
 				document.location = form.dataset.redirect;

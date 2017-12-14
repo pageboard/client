@@ -33,6 +33,11 @@ Pageboard.elements.form = {
 							type: ["api"]
 						}
 					} */
+				},
+				auto: {
+					title: 'Automatic',
+					type: "boolean",
+					default: false
 				}
 			}
 		},
@@ -120,6 +125,7 @@ Pageboard.elements.form = {
 			${input}
 			<div block-content="form"></div>
 		</form>`;
+		if (d.action.auto) form.dataset.auto = "true";
 		return form;
 	},
 	stylesheets: [
