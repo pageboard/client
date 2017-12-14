@@ -31,19 +31,33 @@ Pageboard.elements.query = {
 		}
 		return node;
 	},
+	required: ["call"],
 	properties: {
+		call: {
+			title: 'Call api or url#accessor',
+			type: "string",
+			pattern: "^(\\w+\.\\w+)|((/[\\w-.]*)+)$"
+		},
 		consts: {
 			title: 'Constants',
-			type: "object"
+			oneOf: [{
+				type: "object"
+			}, {
+				type: "null"
+			}]
 		},
 		vars: {
 			title: 'Variables',
 			description: "Parameters that can be changed by UI",
-			type: "object"
+			oneOf: [{
+				type: "object"
+			}, {
+				type: "null"
+			}]
 		},
 		type: {
-			title: 'Render type',
-			description: 'Force rendering of blocks to this type',
+			title: 'Render to type',
+			description: 'Use this element type to render data',
 			oneOf: [{
 				type: 'null'
 			}, {
@@ -56,6 +70,7 @@ Pageboard.elements.query = {
 		'../ui/query.css'
 	],
 	scripts: [
+		'/.api/elements.js',
 		'../ui/query.js'
 	]
 };

@@ -9,7 +9,7 @@ class HTMLElementQuery extends HTMLElement {
 		super();
 	}
 	connectedCallback() {
-		this.refresh();
+		if (this.children.length) this.refresh();
 	}
 	attributeChangedCallback(attributeName, oldValue, newValue, namespace) {
 		if (attributeName.startsWith('data-')) this.refresh();
@@ -48,14 +48,22 @@ class HTMLElementQuery extends HTMLElement {
 		emptyContent.classList.add('hidden');
 		errorContent.classList.add('hidden');
 		content.textContent = "";
-		return GET('/.api/query', query).then(function(blocks) {
+		return fetch(Page.format({
+			pathname: '/.api/query',
+			query: query
+		})).then(function(response) {
+			if (response.status >= 400) return [];
+			return response.json();
+		}).then(function(blocks) {
+			if (blocks && Array.isArray(blocks) == false) blocks = [blocks];
 			if (blocks.length == 0) emptyContent.classList.remove('hidden');
 			return Promise.all(blocks.map(function(cur) {
-				return Pageboard.view.blocks.parseFrom(cur, {}, Pageboard.view.store, type);
+				var el = Pageboard.elements[type];
+				if (!el) throw new Error("Cannot render unknown type " + type);
+				return el.render(content.ownerDocument, cur);
 			})).then(function(nodes) {
 				nodes.forEach(function(node) {
-					var existing = content.querySelector(`[block-id="${node.getAttribute('block-id')}"]`);
-					if (!existing) content.appendChild(node);
+					content.appendChild(node);
 				});
 			});
 		}).catch(function(err) {
