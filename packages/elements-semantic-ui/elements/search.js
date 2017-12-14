@@ -14,7 +14,7 @@ Pageboard.elements.search = {
 					<div class="description">
 						${item.headlines.map(renderHeadline)}
 					</div>
-					<div class="extra">Last update: ${item.updated_at}</div>
+					<div class="extra">Last update: ${(new Date(item.updated_at)).toLocaleString()}</div>
 				</div>
 			</a>`;
 		}
