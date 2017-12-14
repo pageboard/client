@@ -129,7 +129,8 @@ Pageboard.elements.form = {
 		return form;
 	},
 	stylesheets: [
-		'/.pageboard/semantic-ui/components/form.css'
+		'/.pageboard/semantic-ui/components/form.css',
+		'../ui/form.css'
 	],
 	scripts: [
 		'../ui/formdata.min.js',
