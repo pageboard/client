@@ -269,7 +269,7 @@ Pageboard.elements.input_range = {
 	contents: {
 		label: 'inline*'
 	},
-	icon: '<i class="text cursor icon"></i>',
+	icon: '<i class="options icon"></i>',
 	render: function(doc, block) {
 		var d = block.data;
 		var input = doc.dom`<input type="range" name="${d.name}" min="${d.min}" max="${d.max}" step="${d.step}" />`;
