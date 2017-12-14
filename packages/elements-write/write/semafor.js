@@ -75,7 +75,7 @@ Semafor.prototype.flatten = function(tree, obj, schema) {
 		var val = tree[key];
 		var subSchema = props && props[key];
 		if (val != null && typeof val == "object") {
-			if (!subSchema) {
+			if (!subSchema || !subSchema.properties) {
 				obj[key] = JSON.stringify(val);
 			} else {
 				var sub = this.flatten(val);
