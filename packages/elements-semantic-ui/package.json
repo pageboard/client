@@ -25,10 +25,10 @@
     "postinstall-links": "^0.3.1"
   },
   "links": {
-    "document-register-element/build/document-register-element.js": "ui/custom-elements.min.js",
-    "@pageboard/stickybits/dist/stickybits.min.js": "ui/",
-    "object-fit-images/dist/ofi.min.js": "ui/object-fit-images.js",
-    "formdata-polyfill/formdata.min.js": "ui/"
+    "document-register-element/build/document-register-element.js": "ui/lib/custom-elements.min.js",
+    "@pageboard/stickybits/dist/stickybits.min.js": "ui/lib/",
+    "object-fit-images/dist/ofi.min.js": "ui/lib/object-fit-images.js",
+    "formdata-polyfill/formdata.min.js": "ui/lib/",
   },
   "pageboard": {
     "directories": [

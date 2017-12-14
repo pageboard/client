@@ -39,8 +39,4 @@ jspm_packages
 # Update this using
 # find . -type l -not -path "./node_modules/*"
 
-ui/custom-elements.min.js.map
-ui/stickybits*
-ui/custom-elements.min.js
-ui/object-fit-images.js
-ui/formdata.min.js
+ui/lib/

@@ -74,7 +74,7 @@ Pageboard.elements.page = {
 	scripts: [
 		'/.pageboard/read/window-page.js',
 		'/.pageboard/read/dom-template-strings.js',
-		'../ui/custom-elements.min.js'
+		'../ui/lib/custom-elements.min.js'
 	]
 };
 
@@ -92,5 +92,4 @@ Pageboard.elements.notfound = Object.assign({}, Pageboard.elements.page, {
 		return Pageboard.elements.page.render(doc, block);
 	}
 });
-
 

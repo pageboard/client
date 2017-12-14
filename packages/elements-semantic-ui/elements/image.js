@@ -184,7 +184,7 @@ Pageboard.elements.image = {
 		'../ui/image.css'
 	],
 	scripts: [
-		'../ui/object-fit-images.js',
+		'../ui/lib/object-fit-images.js',
 		'../ui/image.js'
 	]
 };
