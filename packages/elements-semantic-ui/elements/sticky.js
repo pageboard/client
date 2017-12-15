@@ -1,5 +1,6 @@
 Pageboard.elements.sticky = {
 	title: "Sticky",
+	menu: "widget",
 	group: "block",
 	properties: {
 		position: {

@@ -1,6 +1,6 @@
 Pageboard.elements.menu = {
 	title: "Menu",
-	menu: "site",
+	menu: "link",
 	contents: {
 		items: {
 			spec: "menu_item+",
@@ -39,7 +39,7 @@ Pageboard.elements.menu = {
 
 Pageboard.elements.menu_item_link = {
 	title: "Link Item",
-	menu: "site",
+	menu: "link",
 	priority: 10,
 	context: "menu//",
 	properties: {
@@ -79,6 +79,7 @@ Pageboard.elements.menu_item_link = {
 
 Pageboard.elements.menu_item_dropdown = {
 	title: "Dropdown",
+	menu: "link",
 	priority: 11,
 	context: "menu//",
 	contents: {
