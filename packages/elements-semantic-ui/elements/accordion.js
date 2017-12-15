@@ -15,7 +15,8 @@ Pageboard.elements.accordion = {
 		return doc.dom`<element-accordion class="ui accordion" block-content="folds"></element-accordion>`;
 	},
 	stylesheets: [
-		'/.pageboard/semantic-ui/components/accordion.css'
+		'/.pageboard/semantic-ui/components/accordion.css',
+		'../ui/accordion.css'
 	],
 	scripts: [
 		'../ui/accordion.js'
