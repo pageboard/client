@@ -4,7 +4,7 @@ Page.setup(function(state) {
 
 	var toInput;
 	function inputHandler(e) {
-		var form = e.target.form;
+		var form = e.target.matches('form') ? e.target : e.target.form;
 		if (!form) return;
 		if (form.dataset.auto != "true") return;
 		if (toInput) clearTimeout(toInput);
@@ -16,7 +16,7 @@ Page.setup(function(state) {
 
 	// https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Using_XMLHttpRequest
 	function formHandler(e) {
-		var form = e.target.form;
+		var form = e.target.matches('form') ? e.target : e.target.form;
 		if (!form) return;
 		e.preventDefault();
 		if (form.matches('.loading')) return;
