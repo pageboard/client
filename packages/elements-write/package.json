@@ -31,6 +31,7 @@
     "perfect-scrollbar": "^1.1.0",
     "postinstall-links": "^0.3.1",
     "pretty-bytes": "^4.0.2",
+    "prosemirror-dev-tools": "^2.0.1",
     "semantic-ui-css": "2.2.10",
     "speakingurl": "^14.0.1",
     "throttleit": "^1.0.0"
@@ -49,7 +50,8 @@
     "dom4/build/dom4.js": "write/lib/dom4.js",
     "infinite-scroll/dist/infinite-scroll.pkgd.min.js": "write/lib/infinite-scroll.min.js",
     "speakingurl/speakingurl.min.js": "write/lib/",
-    "document-register-element/build/document-register-element.js": "write/lib/custom-elements.min.js"
+    "document-register-element/build/document-register-element.js": "write/lib/custom-elements.min.js",
+    "prosemirror-dev-tools/dist/umd/prosemirror-dev-tools.min.js": "write/lib/"
   },
   "pageboard": {
     "directories": [

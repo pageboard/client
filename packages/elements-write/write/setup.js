@@ -145,6 +145,7 @@ function editorUpdate(editor, state, focusParents, focusSelection) {
 }
 
 function editorSetup(win, view) {
+	console.log("Use Pageboard.dev() to debug prosemirror");
 	Pageboard.write.classList.remove('loading');
 	var content = win.document.body.cloneNode(true);
 	// and the editor must be running from child
@@ -176,6 +177,22 @@ function editorSetup(win, view) {
 			}
 		}]
 	});
+
+	Pageboard.dev = function() {
+		if (window.ProseMirrorDevTools) {
+			window.ProseMirrorDevTools.applyDevTools(editor, {
+				EditorState: win.Pagecut.View.EditorState
+			});
+		} else {
+			var script = window.document.createElement('script');
+			script.onload = function() {
+				script.remove();
+				Pageboard.dev();
+			};
+			script.src = "/.pageboard/write/lib/prosemirror-dev-tools.min.js";
+			window.document.head.appendChild(script);
+		}
+	};
 
 	editor.pageUpdate = pageUpdate;
 	editor.blocks.initial = view.blocks.initial;
