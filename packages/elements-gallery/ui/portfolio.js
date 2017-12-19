@@ -24,6 +24,10 @@ class HTMLElementPortfolio extends HTMLElement {
 			var scrollY = window.scrollY;
 			this._portfolio = new Isotope(this._items, this._options);
 			window.scrollTo(scrollX, scrollY);
+			var notAllLoaded = Array.from(this.querySelectorAll('img')).some(function(img) {
+				return !img.complete || !img.naturalWidth;
+			});
+			if (!notAllLoaded) this._loading = false;
 			this.addEventListener('load', this._loadListener, true);
 		}
 	}
