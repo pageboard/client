@@ -28,10 +28,10 @@ Pageboard.elements.gallery = {
 	scripts: [
 		'../ui/gallery.js'
 	],
-	helpers: [
-		'../ui/dift.js',
-		'../ui/gallery-helper.js'
-	]
+//	helpers: [
+//		'../ui/dift.js',
+//		'../ui/gallery-helper.js'
+//	]
 };
 
 Pageboard.elements.itemlink = {
