@@ -98,13 +98,14 @@ Pageboard.elements.menu_item_dropdown = {
 		// the empty div is only here to wrap
 		return doc.dom`<div class="ui simple dropdown item ${block.focused ? 'active' : ''}">
 			<div class="title">
-				<span block-content="title"></span>
+				<span block-content="title">Title</span>
 				<i class="dropdown icon"></i>
 			</div>
 			<div class="menu" block-content="items"></div>
 		</div>`;
 	},
 	stylesheets: [
-		'/.pageboard/semantic-ui/components/dropdown.css'
+		'/.pageboard/semantic-ui/components/dropdown.css',
+		'../ui/dropdown.css'
 	]
 };

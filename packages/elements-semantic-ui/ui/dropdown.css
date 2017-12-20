@@ -1,0 +1,10 @@
+.ui.dropdown .dropdown.icon:before {
+	content: '\f0da';
+}
+
+.ui.dropdown .dropdown.icon {
+	transform: rotate(90deg);
+	font-family: Accordion;
+	font-style:normal;
+	vertical-align:top;
+}
