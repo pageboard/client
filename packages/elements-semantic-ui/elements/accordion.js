@@ -41,12 +41,12 @@ Pageboard.elements.fold = {
 	},
 	icon: '<i class="caret right icon"></i>',
 	render: function(doc, block) {
-		return doc.dom`<div class="fold" contenteditable="false">
+		return doc.dom`<div class="fold">
 			<div class="title">
 				<i class="dropdown icon"></i>
-				<span block-content="title" contenteditable="true">Title</span>
+				<span block-content="title">Title</span>
 			</div>
-			<div class="content" block-content="content" contenteditable="true"></div>
+			<div class="content" block-content="content"></div>
 		</div>`;
 	}
 };
