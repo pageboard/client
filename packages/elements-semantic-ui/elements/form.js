@@ -1,100 +1,98 @@
-
+// Nota Bene
+// query forms initialize their inputs from document.location's query
 Pageboard.elements.form = {
 	title: 'Form',
 	group: 'block',
 	menu: "form",
 	properties: {
-		schema: {
-			// not editable - deduced from actual form content
-			type: 'object'
-		},
+		required: ["action"],
 		action: {
 			title: 'Action',
 			type: 'object',
+			required: ["call"],
 			properties: {
 				method: {
 					title: 'Method',
 					oneOf: [{
 						const: "get",
-						title: "query"
+						title: "query url"
 					}, {
 						const: "post",
-						title: "submit"
-					}]
+						title: "submit data"
+					}],
+					default: "get"
+				},
+				trigger: {
+					title: 'Submit with',
+					oneOf: [{
+						const: "",
+						title: "button"
+					}, {
+						const: "input",
+						title: "live input"
+					} /*, {
+						const: "valid",
+						title: "valid form"
+					} */],
+					default: ""
 				},
 				call: {
 					title: 'Call api or url',
 					type: "string",
-					pattern: "^(\\w+\.\\w+)|((/[\\w-.]*)+)$",
-					/* TODO improve this input with a selector
-					input: {
-						name: 'href',
-						filter: {
-							type: ["api"]
-						}
-					} */
+					pattern: "^(\\w+\.\\w+)|((/[\\w-.]*)+)$"
 				},
-				auto: {
-					title: 'Automatic',
-					type: "boolean",
-					default: false
-				}
-			}
-		},
-		redirect: {
-			title: 'Redirect',
-			oneOf: [{
-				type: "null"
-			}, {
-				type: "string",
-				pattern: "^(/[a-zA-Z0-9-.]*)+$"
-			}],
-			input: {
-				name: 'href',
-				filter: {
-					type: ["link"]
-				}
-			}
-		},
-//		from: {
-//			title: 'Block id from query key',
-//			description: 'Fill form using the block whose id is found is url query',
-//			type: ['string', 'null']
-//		},
-		reaction: {
-			title: 'Reaction',
-			description: 'Additional action after successful form submission',
-			type: 'object',
-			properties: {
-				method: {
-					title: 'Method',
+				consts: {
+					title: 'Constants',
+					description: 'Server input',
 					oneOf: [{
-						const: "get",
-						title: "query"
+						type: "object"
 					}, {
-						const: "post",
-						title: "submit"
+						type: "null"
 					}]
 				},
-				call: {
-					title: 'Call api or url',
+				vars: {
+					title: 'Variables',
+					description: "Client input",
+					oneOf: [{
+						type: "object"
+					}, {
+						type: "null"
+					}]
+				}
+			}
+		},
+		redirection: {
+			title: 'Redirection',
+			description: 'Optional after successful submission',
+			type: 'object',
+			properties: {
+				url: {
+					title: 'Address',
 					oneOf: [{
 						type: "null"
 					}, {
 						type: "string",
-						pattern: "^(\\w+\.\\w+)|((/[\\w-.]*)+)$"
-					}]
-					/* TODO improve this input with a selector
+						pattern: "^(/[a-zA-Z0-9-.]*)+$"
+					}],
 					input: {
 						name: 'href',
 						filter: {
-							type: ["api"]
+							type: ["link"]
 						}
-					} */
+					}
 				},
-				data: {
-					title: 'Data',
-					description: 'Use req.id or res.id, res.data.url...',
+				consts: {
+					title: 'Constants',
+					description: 'Server input',
+					oneOf: [{
+						type: "object"
+					}, {
+						type: "null"
+					}]
+				},
+				vars: {
+					title: 'Variables',
+					description: "Client input",
 					oneOf: [{
 						type: "object"
 					}, {
@@ -106,33 +104,33 @@ Pageboard.elements.form = {
 	},
 	contents: {
 		form: {
-			spec: '(block|input)+ input_submit',
-			title: 'form'
+			spec: '(block|input)+ input_submit'
 		}
 	},
 	icon: '<i class="write icon"></i>',
 	render: function(doc, block) {
-		var d = block.data;
-		if (!d.action) d.action = {};
-		var url = "/.api/form";
-		var input = "";
-		if (d.action.method == "get") {
-			url = d.action.call;
-		} else {
+		var action = block.data.action;
+		var input, url;
+		if (action.method == "get") {
+			url = action.call;
+			input = '';
+		} else if (action.method == "post") {
+			url = "/.api/form";
 			input = doc.dom`<input type="hidden" name="parent" value="${block.id}" />`;
 		}
-		var form = doc.dom`<form action="${url}" method="${d.action.method}" class="ui form">
+
+		var form = doc.dom`<form action="${url}" method="${action.method}" class="ui form">
 			${input}
 			<div block-content="form"></div>
 		</form>`;
-		if (d.action.auto) form.dataset.auto = "true";
+		if (action.trigger) form.dataset.trigger = action.trigger;
 		return form;
 	},
 	stylesheets: [
 		'/.pageboard/semantic-ui/components/form.css',
 		'../ui/form.css'
 	],
-	scripts: [
+	scripts: [ // for asynchronous submits and automatic triggers
 		'../ui/lib/formdata.min.js',
 		'../ui/form.js'
 	]

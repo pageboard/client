@@ -6,7 +6,7 @@ Page.setup(function(state) {
 	function inputHandler(e) {
 		var form = e.target.matches('form') ? e.target : e.target.form;
 		if (!form) return;
-		if (form.dataset.auto != "true") return;
+		if (form.dataset.trigger != "input") return;
 		if (toInput) clearTimeout(toInput);
 		toInput = setTimeout(function() {
 			toInput = null;
@@ -28,10 +28,8 @@ Page.setup(function(state) {
 		if (form.method.toLowerCase() == "get") {
 			p = Page.push({pathname: form.action, query: query});
 		} else p = fetchAction(form.method, form.action, query).then(function(data) {
-			if (form.dataset.redirect) {
-				document.location = form.dataset.redirect;
-			}
 			form.classList.add('success');
+			if (data.redirect) return Page.push(redirect);
 		});
 		p.catch(function(err) {
 			console.error(err);
@@ -57,6 +55,7 @@ Page.setup(function(state) {
 
 		// 1. get data and submit json to "action"
 		return fetch(url, fetchOpts).then(function(res) {
+			if (res.status >= 400) throw new Error(res.statusText);
 			return res.json();
 		});
 	}
