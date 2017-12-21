@@ -109,7 +109,7 @@ Pageboard.elements.form = {
 	},
 	icon: '<i class="write icon"></i>',
 	render: function(doc, block) {
-		var action = block.data.action;
+		var action = block.data.action || {};
 		var input, url;
 		if (action.method == "get") {
 			url = action.call;

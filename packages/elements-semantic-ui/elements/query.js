@@ -19,7 +19,7 @@ Pageboard.elements.query = {
 			<div block-content="results"></div>
 		</element-query>`;
 		var d = block.data;
-		Object.assign(node.dataset, d.query.vars);
+		if (d.query) Object.assign(node.dataset, d.query.vars);
 		if (d.type) {
 			node.dataset.type = d.type;
 		}
