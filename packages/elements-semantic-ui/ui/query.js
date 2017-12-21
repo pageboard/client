@@ -42,33 +42,35 @@ class HTMLElementQuery extends HTMLElement {
 		this._savedQuery = savedQuery;
 
 		var type = this.dataset.type;
-		var content = this.querySelector('[block-content="blocks"]');
-		var emptyContent = this.querySelector('[block-content="empty"]');
-		var errorContent = this.querySelector('[block-content="error"]');
-		emptyContent.classList.add('hidden');
-		errorContent.classList.add('hidden');
-		content.textContent = "";
+		var results = this.querySelector('[block-content="results"]');
+		var form = this;
+		form.classList.remove('success', 'error', 'warning', 'loading');
+		form.classList.add('loading');
+		results.textContent = "";
 		return fetch(Page.format({
 			pathname: '/.api/query',
 			query: query
 		})).then(function(response) {
-			if (response.status >= 400) return [];
+			if (response.status >= 400) throw new Error(response.statusText);
 			return response.json();
 		}).then(function(blocks) {
 			if (blocks && Array.isArray(blocks) == false) blocks = [blocks];
-			if (blocks.length == 0) emptyContent.classList.remove('hidden');
+			if (blocks.length == 0) form.classList.add('info');
 			return Promise.all(blocks.map(function(cur) {
 				var el = Pageboard.elements[type];
 				if (!el) throw new Error("Cannot render unknown type " + type);
-				return el.render(content.ownerDocument, cur);
+				return el.render(results.ownerDocument, cur);
 			})).then(function(nodes) {
 				nodes.forEach(function(node) {
-					content.appendChild(node);
+					results.appendChild(node);
 				});
+				form.classList.add('success');
 			});
 		}).catch(function(err) {
 			console.error(err);
-			errorContent.classList.remove('hidden');
+			form.classList.add('error');
+		}).then(function() {
+			form.classList.remove('loading');
 		});
 	}
 }

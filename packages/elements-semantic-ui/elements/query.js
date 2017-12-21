@@ -2,62 +2,64 @@ Pageboard.elements.query = {
 	title: "Query",
 	menu: "form",
 	contents: {
-		blocks: {
+		messages: {
+			spec: '(paragraph|form_message)+'
+		},
+		results: {
 			title: 'Results',
 			spec: "block*",
 			virtual: true
-		},
-		empty: {
-			title: 'Empty',
-			spec: "block+"
-		},
-		error: {
-			title: 'Error',
-			spec: "block+"
 		}
 	},
 	group: "block",
 	icon: '<i class="search icon"></i>',
 	render: function(doc, block) {
-		var node = doc.dom`<element-query>
-			<div block-content="empty" class="ui message hidden"></div>
-			<div block-content="error" class="ui error message hidden"></div>
-			<div block-content="blocks"></div>
+		var node = doc.dom`<element-query class="ui form">
+			<div block-content="messages"></div>
+			<div block-content="results"></div>
 		</element-query>`;
 		var d = block.data;
-		Object.assign(node.dataset, d.vars);
+		Object.assign(node.dataset, d.query.vars);
 		if (d.type) {
 			node.dataset.type = d.type;
 		}
 		return node;
 	},
-	required: ["call"],
+	required: ["action"],
 	properties: {
-		call: {
-			title: 'Call api or url#accessor',
-			type: "string",
-			pattern: "^(\\w+\.\\w+)|((/[\\w-.]*)+)$"
-		},
-		consts: {
-			title: 'Constants',
-			oneOf: [{
-				type: "object"
-			}, {
-				type: "null"
-			}]
-		},
-		vars: {
-			title: 'Variables',
-			description: "Parameters that can be changed by UI",
-			oneOf: [{
-				type: "object"
-			}, {
-				type: "null"
-			}]
+		query: {
+			title: 'Query',
+			type: 'object',
+			required: ["call"],
+			properties: {
+				call: {
+					title: 'Call api or url',
+					type: "string",
+					pattern: "^(\\w+\.\\w+)|((/[\\w-.]*)+)$"
+				},
+				consts: {
+					title: 'Constants',
+					description: 'Server input',
+					oneOf: [{
+						type: "object"
+					}, {
+						type: "null"
+					}]
+				},
+				vars: {
+					title: 'Variables',
+					description: "Client input",
+					oneOf: [{
+						type: "object"
+					}, {
+						type: "null"
+					}]
+				}
+			}
 		},
 		type: {
 			title: 'Render to type',
-			description: 'Use this element type to render data',
+			description: 'Use this element type to render response',
 			oneOf: [{
 				type: 'null'
 			}, {
