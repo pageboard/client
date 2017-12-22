@@ -25,6 +25,7 @@ class HTMLElementSticky extends HTMLElement {
 Page.setup(function() {
 	HTMLElementSticky.manager = stickybits({
 		stickyClass: 'is-sticky',
+		activeClass: 'is-sticky',
 		parentClass: null,
 		useStickyClasses: true
 	});
