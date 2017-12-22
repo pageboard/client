@@ -38,6 +38,7 @@ function Crop(input, opts, props, block) {
 		toggleDragModeOnDblclick: false,
 		ready: this.ready.bind(this),
 		crop: function(e) {
+			if (!e.detail) return;
 			this.updateCrop(e.detail);
 			this.debouncedChange(e.detail);
 		}.bind(this)
@@ -187,7 +188,7 @@ Crop.prototype.to = function(obj) {
 };
 
 Crop.prototype.change = function(obj) {
-	if (!this.cropper) return;
+	if (!this.cropper || !obj) return;
 	var crop = this.to(obj);
 	Object.keys(crop).forEach(function(key) {
 		this[key].value = crop[key];
