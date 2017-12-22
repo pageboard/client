@@ -52,3 +52,11 @@ element-image[data-position="right center"] > img {
 element-image[data-position="right bottom"] > img {
 	object-position:right bottom;
 }
+
+element-image > [block-content="overlay"] {
+	position:absolute;
+	top:0;
+	left:0;
+	right:0;
+	bottom:0;
+}

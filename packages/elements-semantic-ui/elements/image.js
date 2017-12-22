@@ -119,11 +119,11 @@ Pageboard.elements.image = {
 			}
 		}
 	},
-//	contents: {
-//		legend: {
-//			spec: "inline*"
-//		}
-//	},
+	contents: {
+		overlay: {
+			spec: 'layout+'
+		}
+	},
 	group: "block",
 	icon: '<i class="icon image"></i>',
 	tag: 'element-image',
@@ -151,7 +151,10 @@ Pageboard.elements.image = {
 		}
 
 		var img = doc.dom`<img src="${Page.format(loc)}" alt="${d.alt || ''}" />`;
-		var node = doc.dom`<element-image>${img}</element-image>`;
+		var node = doc.dom`<element-image>
+			${img}
+			<div block-content="overlay"></div>
+		</element-image>`;
 
 		if (d.roi) {
 			// legacy property
