@@ -129,9 +129,9 @@ Pageboard.elements.image = {
 	tag: 'element-image',
 	render: function(doc, block) {
 		var d = block.data;
-		var obj = Page.parse(d.url || '/.files/@pageboard/elements/ui/placeholder.png');
-		if (obj.hostname && obj.hostname != document.location.hostname) {
-			obj = {
+		var loc = Page.parse(d.url || '/.files/@pageboard/elements/ui/placeholder.png');
+		if (loc.hostname && loc.hostname != document.location.hostname) {
+			loc = {
 				pathname: "/.api/image",
 				query: {
 					url: d.url
@@ -147,22 +147,11 @@ Pageboard.elements.image = {
 			if (r.y - r.height / 2 < 0 || r.y + r.height / 2 > 100) {
 				r.height = 2 * Math.min(r.y, 100 - r.y);
 			}
-			obj.query.ex = `x:${r.x},y:${r.y},w:${r.width},h:${r.height}`;
-		}
-		var tUrl = Page.format(obj);
-
-		function responsiveUrl(w) {
-			var obj = Page.parse(tUrl);
-			obj.query.rs = `w:${Math.round(w * zoom / 100)}`;
-			return `${Page.format(obj)} ${w}w`;
+			loc.query.ex = `x:${r.x},y:${r.y},w:${r.width},h:${r.height}`;
 		}
 
-		var node = doc.dom`<element-image><img src="${tUrl}" alt="${d.alt || ''}"
-			srcset="${responsiveUrl(160)},
-			${responsiveUrl(320)},
-			${responsiveUrl(640)},
-			${responsiveUrl(1280)}" />
-		</element-image>`;
+		var img = doc.dom`<img src="${Page.format(loc)}" alt="${d.alt || ''}" />`;
+		var node = doc.dom`<element-image>${img}</element-image>`;
 
 		if (d.roi) {
 			// legacy property
@@ -177,6 +166,12 @@ Pageboard.elements.image = {
 			var posy = display.vertical;
 			if (posy == "vcenter") posy = "center";
 			node.dataset.position = `${posx || 'center'} ${posy || 'center'}`;
+		}
+		if (node.dataset.fit != "none") {
+			img.setAttribute('srcset', [160, 320, 640, 1280].map(function(w) {
+				loc.query.rs = `w:${Math.round(w * zoom / 100)}`;
+				return `${Page.format(loc)} ${w}w`;
+			}).join(", "));
 		}
 		return node;
 	},
