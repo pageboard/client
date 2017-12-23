@@ -84,7 +84,7 @@ Menu.prototype.item = function(el) {
 			var tr = state.tr;
 			var sel = self.selection;
 			var block = editor.blocks.create(el.name);
-			if (el.inline) {
+			if (el.inline && el.contents) {
 				// pagecut id-plugin does not run here (why ?) so we need to give an id
 				if (!el.inplace) editor.blocks.set(block);
 				if (el.atom) {
@@ -116,7 +116,7 @@ Menu.prototype.item = function(el) {
 			}
 		},
 		select: function(state) {
-			if (el.inline) {
+			if (el.inline && el.contents) {
 				var parent = self.parents.length && self.parents[0];
 				if (parent.root && (parent.root.node && parent.root.node.isTextblock) || parent.root.mark) {
 					return !state.tr.selection.node && editor.utils.canMark(self.selection, nodeType);
@@ -134,9 +134,11 @@ Menu.prototype.item = function(el) {
 			}
 		},
 		active: function(state) {
-			if (!el.inline && self.parents.length) {
-				var parent = self.parents[0];
-				return parent.root && parent.root.node && parent.root.node.type.name == el.name;
+			if (!el.inline || !el.contents) {
+				if (self.parents.length) {
+					var parent = self.parents[0];
+					return parent.root && parent.root.node && parent.root.node.type.name == el.name;
+				}
 			} else {
 				return editor.utils.markActive(state.tr.selection, nodeType);
 			}
