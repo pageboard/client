@@ -245,8 +245,30 @@ Pageboard.elements.inlineImage = {
 				},
 				floated: {
 					title: 'floated',
-					type: 'boolean',
-					default: false
+					oneOf: [{
+						const: "",
+						title: "no"
+					}, {
+						const: "left",
+						title: "left"
+					}, {
+						const: "right",
+						title: "right"
+					}]
+				},
+				align: {
+					title: 'align',
+					oneOf: [{
+						const: "",
+						title: "middle"
+					}, {
+						const: "top",
+						title: "top"
+					}, {
+						const: "bottom",
+						title: "bottom"
+					}],
+					default: ""
 				}
 			}
 		},
@@ -310,7 +332,12 @@ Pageboard.elements.inlineImage = {
 		if (display.rounded) node.classList.add('rounded');
 		if (display.circular) node.classList.add('circular');
 		if (display.spaced) node.classList.add('spaced');
-		if (display.floated) node.classList.add('floated');
+		if (display.floated) {
+			node.classList.add('floated', display.floated);
+		}
+		if (display.align) {
+			node.classList.add(display.align, 'aligned');
+		}
 		return node;
 	},
 	stylesheets: ['/.pageboard/semantic-ui/components/image.css']
