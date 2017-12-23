@@ -127,9 +127,8 @@ Pageboard.elements.image = {
 	group: "block",
 	icon: '<i class="icon image"></i>',
 	tag: 'element-image',
-	render: function(doc, block) {
-		var d = block.data;
-		var loc = Page.parse(d.url || '/.files/@pageboard/elements/ui/placeholder.png');
+	buildUrl: function(url, d) {
+		var loc = Page.parse(url);
 		if (loc.hostname && loc.hostname != document.location.hostname) {
 			loc = {
 				pathname: "/.api/image",
@@ -149,8 +148,13 @@ Pageboard.elements.image = {
 			}
 			loc.query.ex = `x:${r.x},y:${r.y},w:${r.width},h:${r.height}`;
 		}
+		return Page.format(loc);
+	},
+	render: function(doc, block) {
+		var d = block.data;
+		var url = this.buildUrl(d.url || '/.files/@pageboard/elements/ui/placeholder.png', d);
 
-		var img = doc.dom`<img src="${Page.format(loc)}" alt="${d.alt || ''}" />`;
+		var img = doc.dom`<img src="${url}" alt="${d.alt || ''}" />`;
 		var node = doc.dom`<element-image>
 			${img}
 			<div block-content="overlay"></div>
@@ -171,6 +175,8 @@ Pageboard.elements.image = {
 			node.dataset.position = `${posx || 'center'} ${posy || 'center'}`;
 		}
 		if (node.dataset.fit != "none") {
+			var loc = Page.parse(url);
+			var zoom = (d.crop || {}).zoom || 100;
 			img.setAttribute('srcset', [160, 320, 640, 1280].map(function(w) {
 				loc.query.rs = `w:${Math.round(w * zoom / 100)}`;
 				return `${Page.format(loc)} ${w}w`;
@@ -187,15 +193,126 @@ Pageboard.elements.image = {
 	]
 };
 
-//Pageboard.elements.inline_image = {
-//	title: "Image",
-//	properties: Pageboard.elements.image.properties,
-//	inline: true,
-//	group: "inline",
-//	icon: '<i class="icon image"></i>',
-//	render: function(doc, block) {
-//		var img = Pageboard.elements.image.render(doc, block);
-//		img.className = "ui avatar image";
-//		return img;
-//	}
-//};
+Pageboard.elements.inlineImage = {
+	title: "Icon",
+	properties: {
+		url: {
+			title: 'Address',
+			description: 'Local or remote URL',
+			oneOf: [{
+				type: "null"
+			}, {
+				type: "string",
+				format: "uri"
+			}, {
+				type: "string",
+				pattern: "^(/[\\w-.]*)+$"
+			}],
+			input: {
+				name: 'href',
+				display: 'icon',
+				filter: {
+					type: ["image", "svg"],
+					maxSize: 20000,
+					maxWidth: 320,
+					maxHeight: 320
+				}
+			}
+		},
+		display: {
+			title: 'Display options',
+			type: 'object',
+			properties: {
+				avatar: {
+					title: 'avatar',
+					type: 'boolean',
+					default: false
+				},
+				rounded: {
+					title: 'rounded',
+					type: 'boolean',
+					default: false
+				},
+				circular: {
+					title: 'circular',
+					type: 'boolean',
+					default: false
+				},
+				spaced: {
+					title: 'spaced',
+					type: 'boolean',
+					default: false
+				},
+				floated: {
+					title: 'floated',
+					type: 'boolean',
+					default: false
+				}
+			}
+		},
+		crop: {
+			title: 'Crop and scale',
+			type: "object",
+			properties: {
+				x: {
+					type: "number",
+					minimum: 0,
+					maximum: 100,
+					default: 50,
+					title: "Horizontal center"
+				},
+				y: {
+					type: "number",
+					minimum: 0,
+					maximum: 100,
+					default: 50,
+					title: "Vertical center"
+				},
+				width: {
+					type: "number",
+					minimum: 0,
+					maximum: 100,
+					default: 100,
+					title: "Width"
+				},
+				height: {
+					type: "number",
+					minimum: 0,
+					maximum: 100,
+					default: 100,
+					title: "Height"
+				},
+				zoom: {
+					type: "number",
+					minimum: 1,
+					maximum: 100,
+					default: 100,
+					title: "Zoom"
+				}
+			},
+			input: {
+				name: 'crop'
+			}
+		}
+	},
+	inline: true,
+	group: "inline",
+	tag: "img",
+	icon: '<i class="icon image"></i>',
+	render: function(doc, block) {
+		var d = block.data;
+		var url = Pageboard.elements.image.buildUrl(
+			d.url || '/.files/@pageboard/elements/ui/placeholder.png', d
+		);
+		var node = doc.dom`<img src="${url}" alt="" class="ui image" />`;
+		var display = d.display || {};
+		if (display.avatar) node.classList.add('avatar');
+		if (display.rounded) node.classList.add('rounded');
+		if (display.circular) node.classList.add('circular');
+		if (display.spaced) node.classList.add('spaced');
+		if (display.floated) node.classList.add('floated');
+		return node;
+	},
+	stylesheets: ['/.pageboard/semantic-ui/components/image.css']
+};
+
