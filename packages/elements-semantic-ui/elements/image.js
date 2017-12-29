@@ -119,11 +119,6 @@ Pageboard.elements.image = {
 			}
 		}
 	},
-	contents: {
-		overlay: {
-			spec: 'layout+'
-		}
-	},
 	group: "block",
 	icon: '<i class="icon image"></i>',
 	tag: 'element-image',
@@ -157,7 +152,6 @@ Pageboard.elements.image = {
 		var img = doc.dom`<img src="${url}" alt="${d.alt || ''}" />`;
 		var node = doc.dom`<element-image>
 			${img}
-			<div block-content="overlay"></div>
 		</element-image>`;
 
 		if (d.roi) {
