@@ -1,6 +1,6 @@
-Page.patch(function() {
+Page.patch(function(state) {
 	Array.from(document.querySelectorAll('element-query')).forEach(function(node) {
-		node.refresh();
+		node.refresh(state);
 	});
 });
 
@@ -17,10 +17,10 @@ class HTMLElementQuery extends HTMLElement {
 	update() {
 		return this.refresh();
 	}
-	refresh() {
+	refresh(state) {
 		var me = this;
 		var query = {};
-		var state = Page.parse();
+		if (!state) state = Page.parse();
 		Object.keys(this.dataset).forEach(function(key) {
 			if (key == "type") return;
 			var val = this[key];
