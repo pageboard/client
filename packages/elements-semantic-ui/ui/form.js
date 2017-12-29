@@ -1,3 +1,16 @@
+Page.patch(function(state) {
+	Object.keys(state.query).forEach(function(key) {
+		Array.from(document.querySelectorAll(`form [name="${key}"]`)).forEach(function(node) {
+			if (!node.form || node.form.method.toLowerCase() != "get") return;
+			var val = state.query[key];
+			if (node.type != "text") {
+				console.warn("TODO support all types of form controls");
+			}
+			if (node.value != val) node.setAttribute('value', val);
+		});
+	});
+});
+
 Page.setup(function(state) {
 	document.body.addEventListener('submit', formHandler, false);
 	document.body.addEventListener('input', inputHandler, false);
