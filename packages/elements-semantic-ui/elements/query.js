@@ -25,7 +25,7 @@ Pageboard.elements.query = {
 		}
 		return node;
 	},
-	required: ["action"],
+	required: ["query"],
 	properties: {
 		query: {
 			title: 'Query',

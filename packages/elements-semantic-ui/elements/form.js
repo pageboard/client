@@ -4,8 +4,8 @@ Pageboard.elements.form = {
 	title: 'Form',
 	group: 'block',
 	menu: "form",
+	required: ["action"],
 	properties: {
-		required: ["action"],
 		action: {
 			title: 'Action',
 			type: 'object',
