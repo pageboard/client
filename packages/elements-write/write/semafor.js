@@ -37,7 +37,8 @@ Semafor.prototype.get = function() {
 };
 
 Semafor.prototype.set = function(obj) {
-	this.$node.form('set values', this.flatten(obj, {}, this.schema));
+	var vals = this.flatten(obj, {}, this.schema);
+	this.$node.form('set values', vals);
 };
 
 var types = Semafor.types = {
