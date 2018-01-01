@@ -277,14 +277,14 @@ types.oneOf = function(key, schema, node, fields) {
 
 	function getIconOption(item) {
 		return `<div class="ui radio checkbox item" title="${item.title}">
-			<input type="radio" name="${key}" value="${item.const}" checked="" tabindex="0" class="hidden">
+			<input type="radio" name="${key}" value="${item.const}" tabindex="0" class="hidden">
 			<label>${item.icon}</label>
 		</div>`;
 	}
 
 	function getRadioOption(item) {
 		return node.dom`<div class="ui radio checkbox">
-				<input type="radio" name="${key}" value="${item.const}" checked="" tabindex="0" class="hidden">
+				<input type="radio" name="${key}" value="${item.const}" tabindex="0" class="hidden">
 				<label>${item.title}</label>
 			</div>`;
 	}
