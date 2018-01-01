@@ -20,7 +20,7 @@
   "homepage": "https://github.com/pageboard/elements-gallery#readme",
   "dependencies": {
     "@pageboard/flickity": "^2.0.9-1",
-    "@pageboard/isotope-layout": "^3.0.4-1",
+    "@pageboard/isotope-layout": "^3.0.5-1",
     "postinstall-links": "^0.3.1"
   },
   "links": {
