@@ -7,12 +7,16 @@ function Store(editor, selector) {
 	this.editor = editor;
 	this.pageId = editor.state.doc.attrs.id;
 
-	this.uiSave = this.menu.querySelector('[data-command="save"]');
-	this.uiSave.addEventListener('click', this.save.bind(this));
-	this.uiDiscard = this.menu.querySelector('[data-command="discard"]');
-	this.uiDiscard.addEventListener('click', this.discard.bind(this));
+	this.save = this.save.bind(this);
+	this.discard = this.discard.bind(this);
+	this.flush = this.flush.bind(this);
 
-	window.addEventListener('beforeunload', this.flushUpdate.bind(this), false);
+	this.uiSave = this.menu.querySelector('[data-command="save"]');
+	this.uiSave.addEventListener('click', this.save);
+	this.uiDiscard = this.menu.querySelector('[data-command="discard"]');
+	this.uiDiscard.addEventListener('click', this.discard);
+
+	window.addEventListener('beforeunload', this.flush, false);
 
 	this.fakeInitials = {};
 	this.unsaved = this.get();
@@ -24,6 +28,12 @@ function Store(editor, selector) {
 		}.bind(this));
 	}
 }
+
+Store.prototype.destroy = function() {
+	this.uiSave.removeEventListener('click', this.save);
+	this.uiDiscard.removeEventListener('click', this.discard);
+	window.removeEventListener('beforeunload', this.flush, false);
+};
 
 Store.generatedBefore = {};
 Store.generated = {};
@@ -111,7 +121,7 @@ Store.prototype.update = function() {
 	this.debounceUpdate();
 };
 
-Store.prototype.flushUpdate = function() {
+Store.prototype.flush = function() {
 	if (this.debounceWaiting) {
 		this.debounceWaiting = false;
 		this.debounceUpdate.clear();
@@ -183,7 +193,7 @@ Store.prototype.quirkStart = function(invalidatePage) {
 };
 
 Store.prototype.save = function(e) {
-	this.flushUpdate();
+	this.flush();
 	if (this.unsaved == null) return;
 	var changes = this.changes();
 	if (e && e.shiftKey) {

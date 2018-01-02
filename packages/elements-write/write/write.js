@@ -31,7 +31,9 @@ window.Pageboard = {
 	}
 };
 
-Page.setup(function(state) {
-	Pageboard.setup();
+Page.patch(function(state) {
+	Pageboard.patch(state);
 });
-
+Page.setup(function(state) {
+	Pageboard.setup(state);
+});

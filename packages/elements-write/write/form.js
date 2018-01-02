@@ -9,6 +9,10 @@ function Form(editor, selector) {
 	this.changeListener = this.change.bind(this);
 }
 
+Form.prototype.destroy = function() {
+	this.$node.off('change input', this.changeListener);
+};
+
 Form.prototype.clear = function() {
 	if (this.inputs) for (var name in this.inputs) {
 		if (this.inputs[name].destroy) this.inputs[name].destroy();

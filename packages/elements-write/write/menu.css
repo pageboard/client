@@ -65,3 +65,10 @@
 	padding: 0 1em;
 }
 
+#store .item[data-command="view"] > .hide.icon,
+#store .item.active[data-command="view"] > .unhide.icon {
+	display:none;
+}
+#store .item.active[data-command="view"] > .hide.icon {
+	display:block;
+}

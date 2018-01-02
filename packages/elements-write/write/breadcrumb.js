@@ -1,10 +1,13 @@
 (function(Pageboard) {
 Pageboard.Controls.Breadcrumb = Breadcrumb;
 
+var template;
+
 function Breadcrumb(editor, selector) {
 	this.$node = $(selector);
 	this.editor = editor;
-	this.template = this.$node[0].cloneNode(true);
+
+	template = this.template = template || this.$node[0].cloneNode(true);
 	this.clear();
 	this.$node.on('click', '.section', this.click.bind(this));
 	this.selectMenu = $('#select-menu').on('click', this.selectMenuClick.bind(this))[0];
@@ -15,6 +18,11 @@ function contentOption(contents, name) {
 		${contents[name].title}
 	</div>`;
 }
+
+Breadcrumb.prototype.destroy = function() {
+	this.$node.off('click');
+	$(this.selectMenu).off('click');
+};
 
 Breadcrumb.prototype.selectMenuClick = function(e) {
 	var item = e.target.closest('[data-command]');

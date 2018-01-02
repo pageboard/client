@@ -25,6 +25,11 @@ function Menu(editor, selector) {
 	});
 }
 
+Menu.prototype.destroy = function() {
+	$(this.tabMenu).off('click');
+	this.node.textContent = "";
+};
+
 Menu.prototype.showTab = function(name) {
 	$(this.tabMenu).find('.item').removeClass('active');
 	var tab = $(this.tabs[name].menu);
