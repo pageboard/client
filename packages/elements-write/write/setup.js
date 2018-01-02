@@ -45,9 +45,6 @@ Page.patch(function() {
 	document.title = (Pageboard.window.document.title || "") + (unsaved ? '*' : '');
 });
 
-var lastClicked;
-var lastClickedOnce;
-
 function anchorListener(e) {
 	var node = e.target.closest('a[href],button[type="submit"]');
 	if (!node) return;
@@ -56,16 +53,15 @@ function anchorListener(e) {
 	if (node.matches('a')) {
 		if (!node.ownerDocument.body.matches('.ProseMirror')) {
 			Page.push(node.href);
-			return;
+		} else {
+			msg = "Use view mode to follow links";
 		}
-		msg = `<a href="${node.href}" target="${node.target}" rel="${node.rel}"><i class="icon hand pointer"></i>Follow link: ${node.href}</a>`;
 	} else if (node.matches('button')) {
 		msg = `Forms cannot be submitted when editing pages`;
 	}
 	Pageboard.notify(msg, {
-		label: 'link',
 		timeout: 3,
-		where: 'read'
+		where: 'write'
 	});
 }
 
@@ -180,6 +176,7 @@ function editorUpdate(editor, state, focusParents, focusSelection) {
 function editorSetup(win, view) {
 	console.log("Use Pageboard.dev() to debug prosemirror");
 	Pageboard.write.classList.remove('loading');
+	Pageboard.notify.destroy();
 	if (Pageboard.editor) {
 		Pageboard.editor.destroy();
 		Object.keys(Pageboard.editor.controls).forEach(function(name) {

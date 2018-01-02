@@ -91,4 +91,8 @@ Pageboard.notify.dom = function(where) {
 	return root;
 };
 
+Pageboard.notify.destroy = function() {
+	// TODO
+};
+
 })(window.Pageboard);
