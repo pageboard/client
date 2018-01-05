@@ -101,8 +101,40 @@ Pageboard.elements.heading = {
 Pageboard.elements.divider = {
 	title: "Divider",
 	group: "block",
-	icon: '<b class="icon">hr</b>',
+	icon: '<b class="icon">--</b>',
+	tag: 'hr,.divider',
+	properties: {
+		ruler: {
+			title: 'Ruler',
+			type: 'boolean',
+			default: false
+		},
+		large: {
+			title: 'Large',
+			type: 'boolean',
+			default: false
+		},
+		fitted: {
+			title: 'Fitted',
+			type: 'boolean',
+			default: false
+		},
+		clearing: {
+			title: 'Clearing',
+			type: 'boolean',
+			default: false
+		}
+	},
 	render: function(doc, block) {
-		return doc.dom`<hr />`;
-	}
+		var d = block.data;
+		var node = doc.dom`<div class="ui divider"></div>`;
+		if (d.ruler == false) node.classList.add('hidden');
+		if (d.large) node.classList.add('section');
+		if (d.clearing) node.classList.add('clearing');
+		if (d.fitted) node.classList.add('fitted');
+		return node;
+	},
+	stylesheets: [
+		'/.pageboard/semantic-ui/components/divider.css'
+	]
 };
