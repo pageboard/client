@@ -20,7 +20,7 @@ Pageboard.elements.search = {
 		}
 	},
 	stylesheets: [
-		'/.pageboard/semantic-ui/components/item.css'
+		'../semantic-ui/item.css'
 	]
 };
 

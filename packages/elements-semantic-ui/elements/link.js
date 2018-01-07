@@ -86,7 +86,7 @@ Pageboard.elements.link = {
 		return a;
 	},
 	stylesheets: [
-		'/.pageboard/semantic-ui/components/button.css'
+		'../semantic-ui/button.css'
 	]
 };
 

@@ -41,7 +41,7 @@ Pageboard.elements.cards = {
 		return doc.dom`<div class="ui ${count} doubling stackable cards" block-content="cards"></div>`;
 	},
 	stylesheets: [
-		'/.pageboard/semantic-ui/components/card.css'
+		'../semantic-ui/card.css'
 	]
 };
 

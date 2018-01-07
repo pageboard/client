@@ -58,7 +58,7 @@ Pageboard.elements.breadcrumb = {
 		return node;
 	},
 	stylesheets: [
-		'/.pageboard/semantic-ui/components/breadcrumb.css'
+		'../semantic-ui/breadcrumb.css'
 	]
 };
 

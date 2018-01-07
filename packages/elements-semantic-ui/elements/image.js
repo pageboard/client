@@ -334,6 +334,8 @@ Pageboard.elements.inlineImage = {
 		}
 		return node;
 	},
-	stylesheets: ['/.pageboard/semantic-ui/components/image.css']
+	stylesheets: [
+		'../semantic-ui/image.css'
+	]
 };
 

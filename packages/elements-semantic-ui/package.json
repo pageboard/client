@@ -23,9 +23,11 @@
     "formdata-polyfill": "^3.0.9",
     "object-fit-images": "^3.2.3",
     "postinstall-links": "^0.3.1",
-    "rangeslider-pure": "^0.4.4"
+    "rangeslider-pure": "^0.4.4",
+    "semantic-ui-css": "^2.2.12"
   },
   "links": {
+    "semantic-ui-css/components": "semantic-ui",
     "document-register-element/build/document-register-element.js": "ui/lib/custom-elements.min.js",
     "@pageboard/stickybits/dist/stickybits.min.js": "ui/lib/",
     "object-fit-images/dist/ofi.min.js": "ui/lib/object-fit-images.js",
@@ -35,7 +37,8 @@
   "pageboard": {
     "directories": [
       "elements",
-      "ui"
+      "ui",
+      "semantic-ui"
     ],
     "elements": [
       "elements/"

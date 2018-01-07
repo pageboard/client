@@ -127,7 +127,7 @@ Pageboard.elements.form = {
 		return form;
 	},
 	stylesheets: [
-		'/.pageboard/semantic-ui/components/form.css',
+		'../semantic-ui/form.css',
 		'../ui/form.css'
 	],
 	scripts: [ // for asynchronous submits and automatic triggers
@@ -324,7 +324,7 @@ Pageboard.elements.input_checkbox = {
 		</div>`;
 	},
 	stylesheets: [
-		'/.pageboard/semantic-ui/components/checkbox.css'
+		'../semantic-ui/checkbox.css'
 	]
 };
 
@@ -389,8 +389,8 @@ Pageboard.elements.input_select = {
 		</div>`;
 	},
 	stylesheets: [
-		'/.pageboard/semantic-ui/components/dropdown.css',
-		'/.pageboard/semantic-ui/components/label.css'
+		'../semantic-ui/dropdown.css',
+		'../semantic-ui/label.css'
 	],
 	scripts: [
 		'../ui/select.js'
@@ -455,6 +455,6 @@ Pageboard.elements.form_message = {
 		return doc.dom`<div class="ui message ${block.data.type}" block-content="message">Message</div>`
 	},
 	stylesheets: [
-		'/.pageboard/semantic-ui/components/message.css'
+		'../semantic-ui/message.css'
 	]
 };

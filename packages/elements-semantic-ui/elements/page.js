@@ -7,7 +7,7 @@ Pageboard.elements.page = Object.assign(Pageboard.elements.page, {
 		}
 	},
 	stylesheets: [
-		'/.pageboard/semantic-ui/components/reset.css',
+		'../semantic-ui/reset.css',
 		'../ui/site.css'
 	],
 	scripts: [

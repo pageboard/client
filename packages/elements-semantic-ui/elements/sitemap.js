@@ -87,7 +87,7 @@ Pageboard.elements.sitemap = {
 		}
 	},
 	stylesheets: [
-		'/.pageboard/semantic-ui/components/list.css',
+		'../semantic-ui/list.css',
 		'../ui/sitemap.css'
 	],
 	helpers: [

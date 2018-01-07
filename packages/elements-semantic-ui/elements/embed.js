@@ -45,7 +45,7 @@ Pageboard.elements.embed = {
 	},
 	scripts: ['../ui/embed.js'],
 	stylesheets: [
-		'/.pageboard/semantic-ui/components/embed.css',
+		'../semantic-ui/embed.css',
 		'../ui/embed.css'
 	]
 };

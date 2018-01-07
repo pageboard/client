@@ -12,7 +12,7 @@ Pageboard.elements.grid = {
 		return doc.dom`<div class="ui doubling stackable equal width grid" block-content="columns"></div>`;
 	},
 	stylesheets: [
-		'/.pageboard/semantic-ui/components/grid.css'
+		'../semantic-ui/grid.css'
 	],
 	prefixes: {
 		0: '',

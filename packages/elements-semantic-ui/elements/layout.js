@@ -93,7 +93,7 @@ Pageboard.elements.layout = {
 		return node;
 	},
 	stylesheets: [
-		'/.pageboard/semantic-ui/components/container.css',
+		'../semantic-ui/container.css',
 		'../ui/layout.css'
 	]
 };

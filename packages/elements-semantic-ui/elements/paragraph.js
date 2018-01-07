@@ -135,6 +135,6 @@ Pageboard.elements.divider = {
 		return node;
 	},
 	stylesheets: [
-		'/.pageboard/semantic-ui/components/divider.css'
+		'../semantic-ui/divider.css'
 	]
 };
