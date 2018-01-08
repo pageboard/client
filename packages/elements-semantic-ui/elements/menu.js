@@ -30,7 +30,7 @@ Pageboard.elements.menu = {
 		return it;
 	},
 	stylesheets: [
-		'../ui/components/menu.css'
+		'../semantic-ui/menu.css'
 	],
 	scripts: [
 		'../ui/menu.js'
