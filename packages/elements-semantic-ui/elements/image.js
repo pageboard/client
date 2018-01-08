@@ -134,8 +134,8 @@ Pageboard.elements.image = {
 			};
 		}
 		var r = d.crop || {};
-		var zoom = r.zoom || 100;
-		if (r.x != 50 || r.y != 50 || r.width != 100 || r.height != 100 || r.zoom != 100) {
+		if (r.x != null && r.y != null && r.width != null && r.height != null &&
+			(r.x != 50 || r.y != 50 || r.width != 100 || r.height != 100)) {
 			if (r.x - r.width / 2 < 0 || r.x + r.width / 2 > 100) {
 				r.width = 2 * Math.min(r.x, 100 - r.x);
 			}
