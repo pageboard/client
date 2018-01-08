@@ -148,7 +148,7 @@ Pageboard.elements.image = {
 	},
 	render: function(doc, block) {
 		var d = block.data;
-		var url = this.buildUrl(d.url, d);
+		var url = this.buildUrl(d.url || '/.pageboard/read/empty.png', d);
 
 		var img = doc.dom`<img src="${url}" alt="${d.alt || ''}" />`;
 		var node = doc.dom`<element-image>
@@ -318,7 +318,7 @@ Pageboard.elements.inlineImage = {
 	icon: '<i class="icon image"></i>',
 	render: function(doc, block) {
 		var d = block.data;
-		var url = Pageboard.elements.image.buildUrl(d.url, d);
+		var url = Pageboard.elements.image.buildUrl(d.url || '/.pageboard/read/empty.png', d);
 		var node = doc.dom`<img src="${url}" alt="" class="ui image" />`;
 		var display = d.display || {};
 		if (display.avatar) node.classList.add('avatar');
