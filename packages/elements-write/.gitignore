@@ -36,5 +36,5 @@ jspm_packages
 # Optional REPL history
 .node_repl_history
 
-write/lib/*
-semantic-ui/*
+/write/lib/*
+/write/semantic-ui/*
