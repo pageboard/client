@@ -46,6 +46,18 @@ Pageboard.elements.sup = {
 	}
 };
 
+Pageboard.elements.caps = {
+	title: "Capitalize",
+	contents: "text*",
+	inline: true,
+	inplace: true,
+	group: "inline",
+	icon: '<span class="icon" style="text-transform:capitalize">Caps</span>',
+	render: function(doc, block) {
+		return doc.dom`<span class="caps"></span>`;
+	}
+};
+
 Pageboard.elements.color = {
 	title: "Color",
 	properties: {
