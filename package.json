@@ -1,0 +1,23 @@
+{
+  "name": "site-semantic-ui",
+  "version": "0.1.0",
+  "description": "Default pageboard site using semantic-ui elements",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pageboard/site-semantic-ui.git"
+  },
+  "author": "Jérémy Lal <kapouer@melix.org>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pageboard/site-semantic-ui/issues"
+  },
+  "homepage": "https://github.com/pageboard/site-semantic-ui#readme",
+  "dependencies": {
+    "@pageboard/elements-gallery": "github:pageboard/elements-gallery",
+    "@pageboard/elements-semantic-ui": "github:pageboard/elements-semantic-ui"
+  }
+}
