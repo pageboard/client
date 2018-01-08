@@ -123,6 +123,7 @@ Pageboard.elements.image = {
 	icon: '<i class="icon image"></i>',
 	tag: 'element-image',
 	buildUrl: function(url, d) {
+		if (!url) return "";
 		var loc = Page.parse(url);
 		if (loc.hostname && loc.hostname != document.location.hostname) {
 			loc = {
@@ -147,7 +148,7 @@ Pageboard.elements.image = {
 	},
 	render: function(doc, block) {
 		var d = block.data;
-		var url = this.buildUrl(d.url || '/.files/@pageboard/elements/ui/placeholder.png', d);
+		var url = this.buildUrl(d.url, d);
 
 		var img = doc.dom`<img src="${url}" alt="${d.alt || ''}" />`;
 		var node = doc.dom`<element-image>
@@ -317,9 +318,7 @@ Pageboard.elements.inlineImage = {
 	icon: '<i class="icon image"></i>',
 	render: function(doc, block) {
 		var d = block.data;
-		var url = Pageboard.elements.image.buildUrl(
-			d.url || '/.files/@pageboard/elements/ui/placeholder.png', d
-		);
+		var url = Pageboard.elements.image.buildUrl(d.url, d);
 		var node = doc.dom`<img src="${url}" alt="" class="ui image" />`;
 		var display = d.display || {};
 		if (display.avatar) node.classList.add('avatar');
