@@ -208,7 +208,7 @@ Crop.prototype.load = function() {
 
 Crop.prototype.thumbnail = function(url) {
 	if (url) url += '?rs=w:512&q=65';
-	else url = '/.files/@pageboard/elements/ui/placeholder.png';
+	else url = '/.pageboard/write/placeholder.png';
 	return url;
 };
 
