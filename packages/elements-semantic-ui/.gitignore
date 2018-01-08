@@ -40,4 +40,4 @@ jspm_packages
 # find . -type l -not -path "./node_modules/*"
 
 /ui/lib/
-/semantic-ui/
+/semantic-ui
