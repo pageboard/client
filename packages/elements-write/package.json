@@ -37,7 +37,8 @@
     "throttleit": "^1.0.0"
   },
   "links": {
-    "semantic-ui-css/components": "write/semantic-ui",
+    "semantic-ui-css/components": "write/lib/components",
+    "semantic-ui-css/themes": "write/lib/themes",
     "perfect-scrollbar/css/perfect-scrollbar.css": "write/lib/",
     "perfect-scrollbar/dist/perfect-scrollbar.min.js": "write/lib/perfect-scrollbar.js",
     "moment/moment.js": "write/lib/",
