@@ -1,6 +1,5 @@
-class HTMLInputMap extends HTMLElement {
-	constructor() {
-		super();
+class HTMLInputMap extends HTMLCustomElement {
+	init() {
 		this.style.display = "block";
 		this._parse = this._parse.bind(this);
 		this._focus = this._focus.bind(this);
