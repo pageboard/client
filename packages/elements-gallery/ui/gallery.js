@@ -88,7 +88,8 @@ class HTMLElementGallery extends HTMLElement {
 		this._galleryMenu = this.firstElementChild.matches('.menu') ? this.firstElementChild : null;
 		if (this.showMenu) {
 			if (!this._galleryMenu) {
-				this._galleryMenu = this.dom`<div class="ui tiny compact icon menu"></div>`;
+				this._galleryMenu = this.ownerDocument.createElement("div");
+				this._galleryMenu.className = "ui tiny compact icon menu";
 				this.insertBefore(this._galleryMenu, this.firstElementChild);
 				this._galleryMenu.addEventListener('click', this._switchListener, false);
 			}
@@ -96,7 +97,7 @@ class HTMLElementGallery extends HTMLElement {
 			var mode = this.dataset.mode;
 			this._galleries.forEach(function(node) {
 				var type = node.getAttribute('block-type');
-				this._galleryMenu.appendChild(node.dom`<a class="icon item ${mode == type ? 'active' : ''}" data-mode="${type}"><i class="${type} icon"></i></a>`);
+				this._galleryMenu.insertAdjacentHTML("beforeEnd", `<a class="icon item ${mode == type ? 'active' : ''}" data-mode="${type}"><i class="${type} icon"></i></a>`);
 			}, this);
 		} else {
 			this._teardown();
