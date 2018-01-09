@@ -1,5 +1,6 @@
 class HTMLElementSticky extends HTMLCustomElement {
 	setup() {
+		if (!this.parentNode) return;
 		HTMLElementSticky.manager.add(this, {
 			verticalPosition: this.dataset.position
 		});
