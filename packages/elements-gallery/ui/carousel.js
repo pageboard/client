@@ -1,6 +1,5 @@
-class HTMLElementCarousel extends HTMLElement {
-	constructor() {
-		super();
+class HTMLElementCarousel extends HTMLCustomElement {
+	init() {
 		this._options = {
 			noDomMod: true,
 			wrapAround: false,
@@ -107,10 +106,7 @@ class HTMLElementCarousel extends HTMLElement {
 	}
 }
 
-class HTMLElementCarouselCell extends HTMLElement {
-	constructor() {
-		super();
-	}
+class HTMLElementCarouselCell extends HTMLCustomElement {
 	connectedCallback() {
 		this.carousel = this.closest('element-carousel');
 		this.update();

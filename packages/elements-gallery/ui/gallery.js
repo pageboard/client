@@ -1,12 +1,6 @@
-class HTMLElementGallery extends HTMLElement {
-	constructor() {
-		super();
-		// so that helper can override init easily
-		this._init();
+class HTMLElementGallery extends HTMLCustomElement {
+	init() {
 		this._itemClick = this._itemClick.bind(this);
-	}
-
-	_init() {
 		this._switchListener = this._switchListener.bind(this);
 	}
 

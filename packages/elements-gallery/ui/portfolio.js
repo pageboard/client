@@ -1,6 +1,5 @@
-class HTMLElementPortfolio extends HTMLElement {
-	constructor() {
-		super();
+class HTMLElementPortfolio extends HTMLCustomElement {
+	init() {
 		this._options = {
 			masonry: {
 				columnWidth: 'element-portfolio-item'
@@ -61,10 +60,7 @@ class HTMLElementPortfolio extends HTMLElement {
 	}
 }
 
-class HTMLElementPortfolioItem extends HTMLElement {
-	constructor() {
-		super();
-	}
+class HTMLElementPortfolioItem extends HTMLCustomElement {
 	connectedCallback() {
 		this.update();
 	}

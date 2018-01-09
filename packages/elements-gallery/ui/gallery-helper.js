@@ -1,5 +1,7 @@
-HTMLElementGallery.prototype._init = function() {
-	var listener = this._switchListener.bind(this);
+HTMLElementGallery.prototype._init = HTMLElementGallery.prototype.init;
+HTMLElementGallery.prototype.init = function() {
+	this._init();
+	var listener = this._switchListener;
 	this._switchListener = function(e) {
 		listener(e);
 		this._syncGallery();
