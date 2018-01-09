@@ -1,6 +1,5 @@
-class HTMLElementAccordion extends HTMLElement {
-	constructor() {
-		super();
+class HTMLElementAccordion extends HTMLCustomElement {
+	init() {
 		this.click = this.click.bind(this);
 	}
 	connectedCallback() {

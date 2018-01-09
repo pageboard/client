@@ -1,7 +1,4 @@
-class HTMLElementSelectOption extends HTMLElement {
-	constructor() {
-		super();
-	}
+class HTMLElementSelectOption extends HTMLCustomElement {
 	update() {
 		var el = this.closest('element-select');
 		if (el) {

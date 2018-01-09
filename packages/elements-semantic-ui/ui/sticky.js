@@ -1,7 +1,4 @@
-class HTMLElementSticky extends HTMLElement {
-	constructor() {
-		super();
-	}
+class HTMLElementSticky extends HTMLCustomElement {
 	setup() {
 		HTMLElementSticky.manager.add(this, {
 			verticalPosition: this.dataset.position

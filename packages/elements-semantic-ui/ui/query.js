@@ -4,10 +4,7 @@ Page.patch(function(state) {
 	});
 });
 
-class HTMLElementQuery extends HTMLElement {
-	constructor() {
-		super();
-	}
+class HTMLElementQuery extends HTMLCustomElement {
 	connectedCallback() {
 		if (this.children.length) this.refresh();
 	}

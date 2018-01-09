@@ -1,7 +1,6 @@
-class HTMLElementSelect extends HTMLElement {
+class HTMLElementSelect extends HTMLCustomElement {
 	static get observedAttributes() {return ['data-placeholder', 'data-name', 'data-multiple']; }
-	constructor() {
-		super();
+	init() {
 		this._click = this._click.bind(this);
 		this._change = this._change.bind(this);
 	}

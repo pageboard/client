@@ -1,8 +1,4 @@
-class HTMLElementSitepage extends HTMLElement {
-	constructor() {
-		super();
-	}
-
+class HTMLElementSitepage extends HTMLCustomElement {
 	connectedCallback() {
 		var url = this.dataset.url;
 		this.update(true);

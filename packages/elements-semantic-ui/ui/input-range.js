@@ -1,7 +1,4 @@
-class HTMLElementInputRange extends HTMLElement {
-	constructor() {
-		super();
-	}
+class HTMLElementInputRange extends HTMLCustomElement {
 	connectedCallback() {
 		var input = this.querySelector('input');
 		if (!input) return;

@@ -1,7 +1,4 @@
-class HTMLElementImage extends HTMLElement {
-	constructor() {
-		super();
-	}
+class HTMLElementImage extends HTMLCustomElement {
 	connectedCallback() {
 		if (objectFitImages.supportsObjectFit) return;
 		var style = "";

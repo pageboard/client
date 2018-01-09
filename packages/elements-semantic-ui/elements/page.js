@@ -11,7 +11,8 @@ Pageboard.elements.page = Object.assign(Pageboard.elements.page, {
 		'../ui/site.css'
 	],
 	scripts: [
-		'../ui/lib/custom-elements.min.js',
+		'/.pageboard/read/custom-elements.min.js',
+		'/.pageboard/read/html-custom-elements.js',
 		'/.pageboard/read/window-page.js',
 		'/.pageboard/read/dom-template-strings.js'
 	]
