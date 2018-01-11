@@ -313,7 +313,6 @@ Pageboard.elements.input_range = {
 Pageboard.elements.input_checkbox = {
 	title: 'Checkbox',
 	menu: "form",
-	required: ["name"],
 	group: 'input',
 	required: ["name"],
 	properties: {
@@ -337,12 +336,12 @@ Pageboard.elements.input_checkbox = {
 	icon: '<i class="checkmark box icon"></i>',
 	render: function(doc, block) {
 		var d = block.data;
-		var input = doc.dom`<input type="checkbox" name="${d.name}" value="${d.value}" />`;
+		var input = doc.dom`<input type="checkbox" name="${d.name}" value="${d.value}" id="${block.id}" />`;
 		if (d.required) input.required = true;
 		return doc.dom`<div class="field">
 			<div class="ui checkbox">
 				${input}
-				<label block-content="label">Label</label>
+				<label block-content="label" for="${block.id}">Label</label>
 			</div>
 		</div>`;
 	},
@@ -351,6 +350,39 @@ Pageboard.elements.input_checkbox = {
 	]
 };
 
+Pageboard.elements.input_radio = {
+	title: 'Radio',
+	menu: "form",
+	group: 'input',
+	required: ["name"],
+	properties: {
+		name: {
+			title: "name",
+			type: "string"
+		},
+		value: {
+			title: "value",
+			type: "string"
+		}
+	},
+	contents: {
+		label: 'inline*'
+	},
+	icon: '<i class="selected radio icon"></i>',
+	render: function(doc, block) {
+		var d = block.data;
+		var input = doc.dom`<input type="radio" name="${d.name}" value="${d.value}" id="${block.id}" />`;
+		return doc.dom`<div class="field">
+			<div class="ui radio checkbox">
+				${input}
+				<label block-content="label" for="${block.id}">Label</label>
+			</div>
+		</div>`;
+	},
+	stylesheets: [
+		'../semantic-ui/checkbox.css'
+	]
+};
 
 Pageboard.elements.input_select = {
 	title: 'Select',
