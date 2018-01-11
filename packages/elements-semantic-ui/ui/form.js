@@ -1,4 +1,4 @@
-HTMLFormElement.prototype.update = function(values) {
+HTMLFormElement.prototype.fill = function(values) {
 	var elem = null, val;
 	for (var i = 0; i < this.elements.length; i++) {
 		elem = this.elements[i];
@@ -16,7 +16,7 @@ HTMLFormElement.prototype.update = function(values) {
 				});
 			break;
 			case 'select-multiple':
-				if (val) elem.update(val);
+				if (val) elem.fill(val);
 			break;
 			default:
 				if (val) elem.value = val;
@@ -24,7 +24,7 @@ HTMLFormElement.prototype.update = function(values) {
 	}
 };
 
-HTMLSelectElement.prototype.update = function(values) {
+HTMLSelectElement.prototype.fill = function(values) {
 	var opt;
 	for (var i = 0; i < this.options.length; i++) {
 		opt = this.options[i];
@@ -38,7 +38,7 @@ Page.patch(function(state) {
 	Array.from(document.forms).forEach(function(form) {
 		var method = form.method && form.method.toLowerCase() || null;
 		if (method == "get") {
-			form.update(state.query);
+			form.fill(state.query);
 		} else if (method == "post") {
 			var name = "id";
 			// TODO
@@ -60,7 +60,7 @@ Page.patch(function(state) {
 				_parent: parent,
 				id: id
 			}).then(function(block) {
-				form.update(block.data);
+				form.fill(block.data);
 			}).catch(function(err) {
 				console.error(err);
 			}));
