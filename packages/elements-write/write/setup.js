@@ -49,9 +49,11 @@ function anchorListener(e) {
 	var node = e.target.closest('a[href],button[type="submit"]');
 	if (!node) return;
 	e.preventDefault();
+	if (Pageboard.editor.destroying) return;
 	var msg;
 	if (node.matches('a')) {
 		if (!node.ownerDocument.body.matches('.ProseMirror')) {
+			Pageboard.editor.destroying = true;
 			Page.push(node.href);
 		} else {
 			msg = "Use view mode to follow links";
@@ -123,7 +125,8 @@ function buildListener(win) {
 }
 
 function setupListener(win) {
-	win.addEventListener('click', anchorListener);
+	win.addEventListener('click', anchorListener, true);
+	win.addEventListener('mouseup', anchorListener, true);
 
 	editorSetup(win, win.Pageboard.view);
 }
@@ -143,7 +146,7 @@ var lastFocusParents;
 var lastFocusSelection;
 
 function editorUpdate(editor, state, focusParents, focusSelection) {
-	if (!focusParents || !focusSelection) {
+	if (!focusParents || !focusSelection || editor.destroying) {
 		// editor is updated only from focus changes
 		return;
 	}
