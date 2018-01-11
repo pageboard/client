@@ -45,26 +45,35 @@ Page.patch(function() {
 	document.title = (Pageboard.window.document.title || "") + (unsaved ? '*' : '');
 });
 
+function submitListener(e) {
+	e.preventDefault();
+	if (Pageboard.editor.destroying) return;
+	Pageboard.notify(`Forms cannot be submitted when editing pages`, {
+		timeout: 1,
+		where: 'write'
+	});
+}
+
+function labelListener(e) {
+	var node = e.target.closest('label[for]');
+	if (!node) return;
+	e.preventDefault();
+}
+
 function anchorListener(e) {
-	var node = e.target.closest('a[href],button[type="submit"]');
+	var node = e.target.closest('a[href]');
 	if (!node) return;
 	e.preventDefault();
 	if (Pageboard.editor.destroying) return;
-	var msg;
-	if (node.matches('a')) {
-		if (!node.ownerDocument.body.matches('.ProseMirror')) {
-			Pageboard.editor.destroying = true;
-			Page.push(node.href);
-		} else {
-			msg = "Use view mode to follow links";
-		}
-	} else if (node.matches('button')) {
-		msg = `Forms cannot be submitted when editing pages`;
+	if (!node.ownerDocument.body.matches('.ProseMirror')) {
+		Pageboard.editor.destroying = true;
+		Page.push(node.href);
+	} else {
+		Pageboard.notify("Use view mode to follow links", {
+			timeout: 3,
+			where: 'write'
+		});
 	}
-	Pageboard.notify(msg, {
-		timeout: 3,
-		where: 'write'
-	});
 }
 
 var lastWidth, lastMinWidth;
@@ -127,6 +136,8 @@ function buildListener(win) {
 function setupListener(win) {
 	win.addEventListener('click', anchorListener, true);
 	win.addEventListener('mouseup', anchorListener, true);
+	win.addEventListener('click', labelListener, true);
+	win.addEventListener('submit', submitListener, true);
 
 	editorSetup(win, win.Pageboard.view);
 }
