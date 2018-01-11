@@ -19,7 +19,6 @@ Pageboard.elements.query = {
 			<div block-content="results"></div>
 		</element-query>`;
 		var d = block.data;
-		if (d.query) Object.assign(node.dataset, d.query.vars);
 		if (d.type) {
 			node.dataset.type = d.type;
 		}
@@ -39,7 +38,7 @@ Pageboard.elements.query = {
 				},
 				consts: {
 					title: 'Constants',
-					description: 'Server input',
+					description: 'list of path.to.key -> value',
 					oneOf: [{
 						type: "object"
 					}, {
@@ -48,7 +47,7 @@ Pageboard.elements.query = {
 				},
 				vars: {
 					title: 'Variables',
-					description: "Client input",
+					description: "list of path.to.key -> query.key",
 					oneOf: [{
 						type: "object"
 					}, {
