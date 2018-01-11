@@ -9,7 +9,6 @@ Pageboard.elements.form = {
 		action: {
 			title: 'Action',
 			type: 'object',
-			required: ["call"],
 			properties: {
 				method: {
 					title: 'Method',
@@ -22,28 +21,20 @@ Pageboard.elements.form = {
 					}],
 					default: "get"
 				},
-				trigger: {
-					title: 'Submit with',
-					oneOf: [{
-						const: "",
-						title: "button"
-					}, {
-						const: "input",
-						title: "live input"
-					} /*, {
-						const: "valid",
-						title: "valid form"
-					} */],
-					default: ""
+				live: {
+					title: 'Submit on input',
+					type: 'boolean',
+					default: false
 				},
 				call: {
 					title: 'Call api or url',
-					type: "string",
-					pattern: "^(\\w+\.\\w+)|((/[\\w-.]*)+)$"
+					description: 'Leave empty for current url',
+					type: ["null", "string"],
+					pattern: "^((\\w+\.\\w+)|((/[\\w-.]*)+)|)$"
 				},
 				consts: {
 					title: 'Constants',
-					description: 'Server input',
+					description: 'list of path.to.key -> value',
 					oneOf: [{
 						type: "object"
 					}, {
@@ -52,7 +43,7 @@ Pageboard.elements.form = {
 				},
 				vars: {
 					title: 'Variables',
-					description: "Client input",
+					description: "list of path.to.key -> form.key",
 					oneOf: [{
 						type: "object"
 					}, {
@@ -116,14 +107,14 @@ Pageboard.elements.form = {
 			input = '';
 		} else if (action.method == "post") {
 			url = "/.api/form";
-			input = doc.dom`<input type="hidden" name="parent" value="${block.id}" />`;
+			input = doc.dom`<input type="hidden" name="_parent" value="${block.id}" />`;
 		}
 
 		var form = doc.dom`<form action="${url}" method="${action.method}" class="ui form">
 			${input}
 			<div block-content="form"></div>
 		</form>`;
-		if (action.trigger) form.dataset.trigger = action.trigger;
+		if (action.live) form.dataset.live = true;
 		return form;
 	},
 	stylesheets: [
@@ -324,10 +315,14 @@ Pageboard.elements.input_checkbox = {
 	menu: "form",
 	required: ["name"],
 	group: 'input',
+	required: ["name"],
 	properties: {
 		name: {
 			title: "name",
-			description: "The form object key",
+			type: "string"
+		},
+		value: {
+			title: "value",
 			type: "string"
 		},
 		required: {
@@ -342,8 +337,7 @@ Pageboard.elements.input_checkbox = {
 	icon: '<i class="checkmark box icon"></i>',
 	render: function(doc, block) {
 		var d = block.data;
-		var input = doc.dom`<input type="checkbox" name="${d.name}" />`;
-		if (d.placeholder) input.placeholder = d.placeholder;
+		var input = doc.dom`<input type="checkbox" name="${d.name}" value="${d.value}" />`;
 		if (d.required) input.required = true;
 		return doc.dom`<div class="field">
 			<div class="ui checkbox">

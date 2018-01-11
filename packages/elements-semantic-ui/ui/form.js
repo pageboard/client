@@ -32,28 +32,53 @@ HTMLSelectElement.prototype.update = function(values) {
 	}
 };
 
+
 Page.patch(function(state) {
-	Object.keys(state.query).forEach(function(key) {
-		Array.from(document.querySelectorAll(`form [name="${key}"]`)).forEach(function(node) {
-			if (!node.form || node.form.method.toLowerCase() != "get") return;
-			var val = state.query[key];
-			if (node.type != "text") {
-				console.warn("TODO support all types of form controls");
+	var proms = [];
+	Array.from(document.forms).forEach(function(form) {
+		var method = form.method && form.method.toLowerCase() || null;
+		if (method == "get") {
+			form.update(state.query);
+		} else if (method == "post") {
+			var name = "id";
+			// TODO
+			// var formName = form.getAttribute('name');
+			// if (formName) name = `${formName}.${name}`;
+			var id = state.query[name];
+			if (!id) return;
+			var input = form.querySelector('input[type="hidden"][name="id"]');
+			if (!input) {
+				return;
 			}
-			if (node.value != val) node.setAttribute('value', val);
-		});
+			var parent = form.querySelector('input[type="hidden"][name="_parent"]');
+			if (!parent || !parent.value) {
+				console.warn("form has no parent id");
+				return;
+			}
+			parent = parent.value;
+			proms.push(fetchAction('get', '/.api/form', {
+				_parent: parent,
+				id: id
+			}).then(function(block) {
+				form.update(block.data);
+			}).catch(function(err) {
+				console.error(err);
+			}));
+		}
 	});
+	return Promise.all(proms);
 });
 
 Page.setup(function(state) {
 	document.body.addEventListener('submit', formHandler, false);
 	document.body.addEventListener('input', inputHandler, false);
+	document.body.addEventListener('change', inputHandler, false);
 
 	var toInput;
 	function inputHandler(e) {
 		var form = e.target.matches('form') ? e.target : e.target.form;
 		if (!form) return;
-		if (form.dataset.trigger != "input") return;
+		if (form.dataset.live != "true") return;
 		if (toInput) clearTimeout(toInput);
 		toInput = setTimeout(function() {
 			toInput = null;
