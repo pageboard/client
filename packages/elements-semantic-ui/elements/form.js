@@ -104,7 +104,7 @@ Pageboard.elements.form = {
 	},
 	contents: {
 		form: {
-			spec: '(block|input)+ input_submit'
+			spec: '(block|input)+'
 		}
 	},
 	icon: '<i class="write icon"></i>',
@@ -136,14 +136,43 @@ Pageboard.elements.form = {
 	]
 };
 
-Pageboard.elements.input_submit = {
+Pageboard.elements.input_button = {
+	title: 'Button',
 	menu: "form",
+	group: 'input',
+	icon: '<i class="hand pointer icon"></i>',
 	contents: {
 		label: "text*"
 	},
+	properties: {
+		type: {
+			title: 'type',
+			default: 'submit',
+			oneOf: [{
+				title: 'Submit',
+				const: 'submit'
+			}, {
+				title: 'Reset',
+				const: 'reset'
+			}, {
+				title: 'Cancel',
+				const: 'cancel'
+			}]
+		}
+	},
 	render: function(doc, block) {
-		return doc.dom`<button type="submit" class="ui button" block-content="label">Submit</button>`;
-	}
+		var type = block.data.type || 'submit';
+		var alt = type && this.properties.type.oneOf.find(function(obj) {
+			return obj.const == type;
+		});
+		var title = alt && alt.title || 'Submit';
+		var node =  doc.dom`<button class="ui button" block-content="label">${title}</button>`;
+		node.type = type;
+		return node;
+	},
+	stylesheets: [
+		'../semantic-ui/button.css',
+	]
 };
 
 Pageboard.elements.input_text = {
