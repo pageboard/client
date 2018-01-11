@@ -126,6 +126,38 @@ Pageboard.elements.form = {
 	]
 };
 
+Pageboard.elements.fieldset = {
+	title: 'Fieldset',
+	menu: 'form',
+	group: 'input',
+	icon: '<i class="folder outline icon"></i>',
+	properties: {
+		plain: {
+			title: 'Without borders',
+			type: 'boolean',
+			default: false
+		}
+	},
+	contents: {
+		content: "fieldset_legend (block|input)+"
+	},
+	render: function(doc, block) {
+		var node = doc.dom`<fieldset block-content="content"></fieldset>`;
+		if (block.data.plain) node.classList.add('plain');
+		return node;
+	}
+};
+
+Pageboard.elements.fieldset_legend = {
+	inplace: "true",
+	contents: {
+		legend: "inline*"
+	},
+	render: function(doc, block) {
+		return doc.dom`<legend block-content="legend">Title</legend>`;
+	}
+};
+
 Pageboard.elements.input_button = {
 	title: 'Button',
 	menu: "form",

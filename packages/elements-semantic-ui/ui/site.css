@@ -221,6 +221,9 @@ i.icon.up:before {
 }
 
 /* Form */
+fieldset.plain {
+	border-width:0;
+}
 textarea::-webkit-selection,
 input::-webkit-selection {
 	background-color: rgba(100, 100, 100, 0.4);
