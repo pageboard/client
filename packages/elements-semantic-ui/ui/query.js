@@ -1,6 +1,6 @@
 Page.patch(function(state) {
 	Array.from(document.querySelectorAll('element-query')).forEach(function(node) {
-		node.refresh(state);
+		node.refresh(state.query);
 	});
 });
 
@@ -14,30 +14,15 @@ class HTMLElementQuery extends HTMLCustomElement {
 	update() {
 		return this.refresh();
 	}
-	refresh(state) {
-		var me = this;
-		var query = {};
-		if (!state) state = Page.parse();
-		Object.keys(this.dataset).forEach(function(key) {
-			if (key == "type") return;
-			var val = this[key];
-			if (val.startsWith('query.')) {
-				var qkey = val.substring(6);
-				val = state.query[qkey];
-			}
-			query[key] = val;
-		}, this.dataset);
-
-		query.parent = this.getAttribute('block-id');
-
-		var savedQuery = JSON.stringify(Object.keys(query).sort().map(function(key) {
-			return [key, query[key]];
-		}));
-		if (savedQuery == this._savedQuery) {
-			return;
+	refresh(query) {
+		if (!query) {
+			if (!Page.state) return;
+			query = Page.state.query;
 		}
-		this._savedQuery = savedQuery;
-
+		query = Object.assign({}, query);
+		if (query._parent) console.warn("query._parent is reserved");
+		query._parent = this.getAttribute('block-id');
+		var me = this;
 		var type = this.dataset.type;
 		var results = this.querySelector('[block-content="results"]');
 		var form = this;
