@@ -1,3 +1,37 @@
+HTMLFormElement.prototype.update = function(values) {
+	var elem = null, val;
+	for (var i = 0; i < this.elements.length; i++) {
+		elem = this.elements[i];
+		if (!elem.name) continue;
+		val = values[elem.name];
+		switch (elem.type) {
+			case 'submit':
+			break;
+			case 'radio':
+				elem.checked = val === elem.value;
+			break;
+			case 'checkbox':
+				elem.checked = (Array.isArray(val) ? val : [val]).some(function(val) {
+					return val === elem.value;
+				});
+			break;
+			case 'select-multiple':
+				if (val) elem.update(val);
+			break;
+			default:
+				if (val) elem.value = val;
+		}
+	}
+};
+
+HTMLSelectElement.prototype.update = function(values) {
+	var opt;
+	for (var i = 0; i < this.options.length; i++) {
+		opt = this.options[i];
+		opt.selected = values.indexOf(opt.value) > -1;
+	}
+};
+
 Page.patch(function(state) {
 	Object.keys(state.query).forEach(function(key) {
 		Array.from(document.querySelectorAll(`form [name="${key}"]`)).forEach(function(node) {
