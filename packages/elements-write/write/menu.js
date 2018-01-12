@@ -10,6 +10,7 @@ function Menu(editor, selector) {
 	this.tabMenu = this.node.dom`<div class="ui top attached tabular mini menu"></div>`;
 	this.node.appendChild(this.tabMenu);
 	this.tabs = {};
+	this.lastTab;
 	this.inlines = this.node.dom`<div class="ui icon menu"></div>`;
 	this.node.appendChild(this.inlines);
 	Menu.tabs.forEach(function(name) {
@@ -31,6 +32,7 @@ Menu.prototype.destroy = function() {
 };
 
 Menu.prototype.showTab = function(name) {
+	this.lastTab = name;
 	$(this.tabMenu).find('.item').removeClass('active');
 	var tab = $(this.tabs[name].menu);
 	tab.addClass('active');
@@ -58,7 +60,10 @@ Menu.prototype.update = function(parents, sel) {
 			if (!activeTab && dom.matches('.active')) activeTab = menu;
 		}
 	}, this);
-	if (!activeTab) activeTab = "common";
+	if (!activeTab) {
+		if (this.tab(this.lastTab).children.length) activeTab = this.lastTab;
+		else activeTab = "common";
+	}
 	this.showTab(activeTab);
 };
 
