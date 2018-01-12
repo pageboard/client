@@ -95,7 +95,7 @@ Pageboard.elements.form = {
 	},
 	contents: {
 		form: {
-			spec: '(block|input)+'
+			spec: 'block+'
 		}
 	},
 	icon: '<i class="write icon"></i>',
@@ -129,7 +129,8 @@ Pageboard.elements.form = {
 Pageboard.elements.fieldset = {
 	title: 'Fieldset',
 	menu: 'form',
-	group: 'input',
+	group: 'block',
+	context: 'form//',
 	icon: '<i class="folder outline icon"></i>',
 	properties: {
 		plain: {
@@ -139,7 +140,7 @@ Pageboard.elements.fieldset = {
 		}
 	},
 	contents: {
-		content: "fieldset_legend (block|input)+"
+		content: "fieldset_legend block+"
 	},
 	render: function(doc, block) {
 		var node = doc.dom`<fieldset block-content="content"></fieldset>`;
@@ -161,7 +162,8 @@ Pageboard.elements.fieldset_legend = {
 Pageboard.elements.input_button = {
 	title: 'Button',
 	menu: "form",
-	group: 'input',
+	group: "block",
+	context: 'form//',
 	icon: '<i class="hand pointer icon"></i>',
 	contents: {
 		label: "text*"
@@ -201,7 +203,8 @@ Pageboard.elements.input_text = {
 	title: 'Input',
 	menu: "form",
 	required: ["name"],
-	group: 'input',
+	group: "block",
+	context: 'form//',
 	properties: {
 		name: {
 			title: "name",
@@ -282,7 +285,8 @@ Pageboard.elements.input_range = {
 	title: 'Range',
 	menu: "form",
 	required: ["name"],
-	group: 'input',
+	group: "block",
+	context: 'form//',
 	properties: {
 		name: {
 			title: "name",
@@ -344,7 +348,8 @@ Pageboard.elements.input_range = {
 Pageboard.elements.input_checkbox = {
 	title: 'Checkbox',
 	menu: "form",
-	group: 'input',
+	group: "block",
+	context: 'form//',
 	required: ["name"],
 	properties: {
 		name: {
@@ -384,7 +389,8 @@ Pageboard.elements.input_checkbox = {
 Pageboard.elements.input_radio = {
 	title: 'Radio',
 	menu: "form",
-	group: 'input',
+	group: "block",
+	context: 'form//',
 	required: ["name"],
 	properties: {
 		name: {
@@ -419,7 +425,8 @@ Pageboard.elements.input_select = {
 	title: 'Select',
 	menu: "form",
 	required: ["name"],
-	group: 'input',
+	group: "block",
+	context: 'form//',
 	properties: {
 		name: {
 			title: "name",
@@ -515,7 +522,8 @@ Pageboard.elements.input_select_option = {
 Pageboard.elements.form_message = {
 	title: 'Message',
 	menu: "form",
-	group: 'input',
+	group: "block",
+	context: 'form//',
 	properties: {
 		type: {
 			title: "type",
