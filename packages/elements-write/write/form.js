@@ -66,22 +66,33 @@ Form.prototype.update = function(parents) {
 	this.element = el;
 	this.form.set(block.data);
 
-	if (el.properties) Object.keys(el.properties).forEach(function(key) {
-		var props = el.properties[key];
-		var opts = props.input;
-		if (!opts || !opts.name) return;
-		var CurInput = Pageboard.inputs[opts.name];
-		if (!CurInput) {
-			console.error("Unknown input name", Pageboard.inputs, opts, el);
+	if (el.properties) this.propInputs(el.properties);
+	this.$node.on('change input', this.changeListener);
+};
+
+Form.prototype.propInputs = function(props, parentKey) {
+	var node = this.$node[0];
+	var block = this.block;
+	Object.keys(props).forEach(function(key) {
+		var prop = props[key];
+		var opts = prop.input;
+		if (!opts || !opts.name) {
+			if (prop.properties) this.propInputs(prop.properties, key);
 			return;
 		}
-		if (!this.inputs[key]) {
-			this.inputs[key] = new CurInput(node.querySelector(`[name="${key}"]`), opts, props, block);
+		var CurInput = Pageboard.inputs[opts.name];
+		if (!CurInput) {
+			console.error("Unknown input name", Pageboard.inputs, prop);
+			return;
+		}
+		var ikey = key;
+		if (parentKey) ikey = `${parentKey}.${key}`;
+		if (!this.inputs[ikey]) {
+			this.inputs[ikey] = new CurInput(node.querySelector(`[name="${ikey}"]`), opts, prop, block);
 		} else {
-			this.inputs[key].update(block);
+			this.inputs[ikey].update(block);
 		}
 	}, this);
-	this.$node.on('change input', this.changeListener);
 };
 
 Form.prototype.change = function() {
