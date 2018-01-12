@@ -8,8 +8,23 @@ Pageboard.elements.grid = {
 		}
 	},
 	icon: '<i class="icon grid layout"></i>',
+	properties: {
+		width: {
+			title: 'control width',
+			default: "full",
+			oneOf: [{
+				const: "full",
+				title: "full"
+			}, {
+				const: "contained",
+				title: "contained"
+			}]
+		}
+	},
 	render: function(doc, block) {
-		return doc.dom`<div class="ui doubling stackable equal width grid" block-content="columns"></div>`;
+		var node = doc.dom`<div class="ui doubling stackable equal width grid" block-content="columns"></div>`;
+		if (block.data.width == "contained") node.classList.add('container');
+		return node;
 	},
 	stylesheets: [
 		'../semantic-ui/grid.css'
