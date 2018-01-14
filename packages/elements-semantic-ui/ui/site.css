@@ -223,6 +223,8 @@ i.icon.up:before {
 /* Form */
 fieldset.plain {
 	border-width:0;
+	padding-right:0;
+	padding-left:0;
 }
 textarea::-webkit-selection,
 input::-webkit-selection {
