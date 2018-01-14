@@ -174,13 +174,14 @@ Pageboard.elements.input_property = {
 			return node;
 		}
 		var list = name.split('.');
-		var el = view.element(list[0]);
+		var el = view.element(list.shift());
 		if (!el) {
 			return node;
 		}
+		name = list.join('.');
 		var prop = el;
 		var propKey;
-		for (var i=1; i < list.length; i++) {
+		for (var i=0; i < list.length; i++) {
 			propKey = list[i];
 			prop = prop.properties && prop.properties[propKey] || null;
 			if (prop == null) break;
@@ -195,7 +196,7 @@ Pageboard.elements.input_property = {
 					node.appendChild(view.render({
 						type: 'input_radio',
 						data: {
-							name: propKey,
+							name: name,
 							value: item.const
 						},
 						content: {
@@ -220,7 +221,7 @@ Pageboard.elements.input_property = {
 				var select = view.render({
 					type: 'input_select',
 					data: {
-						name: propKey,
+						name: name,
 						placeholder: prop.description
 					},
 					content: {
