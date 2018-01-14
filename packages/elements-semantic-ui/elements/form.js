@@ -32,6 +32,14 @@ Pageboard.elements.form = {
 					type: ["null", "string"],
 					pattern: "^((\\w+\.\\w+)|((/[\\w-.]*)+)|)$"
 				},
+				type: {
+					title: 'Bind to element',
+					description: 'Checks schema and helps adding form controls',
+					type: ['null', 'string'],
+					input: {
+						name: 'element'
+					}
+				},
 				consts: {
 					title: 'Constants',
 					description: 'list of path.to.key -> value',
@@ -49,7 +57,14 @@ Pageboard.elements.form = {
 					}, {
 						type: "null"
 					}]
-				}
+				},
+				/* TODO schema could be built out of form controls
+				in which case action.type cannot be set
+				schema: {
+					description: "The schema defined by the form controls - private",
+					type: ["null", "object"]
+				},
+				*/
 			}
 		},
 		redirection: {
@@ -124,6 +139,141 @@ Pageboard.elements.form = {
 		'../ui/lib/formdata.min.js',
 		'../ui/form.js'
 	]
+};
+
+Pageboard.elements.input_property = {
+	title: 'Property',
+	menu: 'form',
+	group: 'block',
+	context: 'form//',
+	icon: '<i class="icon">X</i>',
+	properties: {
+		name: {
+			title: 'name',
+			type: 'string',
+			input: {
+				name: 'element-property'
+			}
+		},
+		radios: {
+			title: 'Show radios if less than',
+			description: 'If number of options is over this number, show a <select>',
+			type: 'integer',
+			default: 5
+		},
+		range: {
+			title: 'Show range if interval less than',
+			type: 'integer',
+			default: 10
+		}
+	},
+	render: function(doc, block, view) {
+		var name = block.data.name;
+		var node = doc.dom`<div><code>select property name</code></div>`;
+		if (!name) {
+			return node;
+		}
+		var list = name.split('.');
+		var el = view.element(list[0]);
+		if (!el) {
+			return node;
+		}
+		var prop = el;
+		var propKey;
+		for (var i=1; i < list.length; i++) {
+			propKey = list[i];
+			prop = prop.properties && prop.properties[propKey] || null;
+			if (prop == null) break;
+		}
+		if (!prop) {
+			return node;
+		}
+		node.textContent = "";
+		if (prop.oneOf) {
+			if (prop.oneOf.length <= block.data.radios) {
+				prop.oneOf.forEach(function(item) {
+					node.appendChild(view.render({
+						type: 'input_radio',
+						data: {
+							name: propKey,
+							value: item.const
+						},
+						content: {
+							label: item.title
+						}
+					}));
+				});
+			} else {
+				var frag = doc.createDocumentFragment();
+				prop.oneOf.forEach(function(item) {
+					var option = view.render({
+						type: 'input_select_option',
+						data: {
+							value: item.const
+						},
+						content: {
+							label: item.title
+						}
+					});
+					frag.appendChild(option);
+				});
+				var select = view.render({
+					type: 'input_select',
+					data: {
+						name: propKey,
+						placeholder: prop.description
+					},
+					content: {
+						label: prop.title,
+						options: frag
+					}
+				});
+				node.appendChild(select);
+			}
+		} else if (prop.type == "integer") {
+			if (prop.minimum != null && prop.maximum != null) {
+				if (prop.maximum - prop.minimum <= block.data.range) {
+					return node.appendChild(view.render({
+						type: 'input_range',
+						data: {
+							name: name,
+							min: prop.minimum,
+							max: prop.maximum,
+							default: prop.default
+						},
+						content: {
+							label: prop.title
+						}
+					}));
+				}
+			}
+			node.appendChild(view.render({
+				type: 'input_text',
+				data: {
+					name: name,
+					type: 'text',
+					format: 'number',
+					default: prop.default
+				},
+				content: {
+					label: prop.title
+				}
+			}));
+		} else {
+			var input = view.render({
+				type: 'input_text',
+				data: {
+					name: name,
+					type: 'text'
+				},
+				content: {
+					label: prop.title
+				}
+			});
+			node.appendChild(input);
+		}
+		return node;
+	}
 };
 
 Pageboard.elements.fieldset = {
@@ -370,14 +520,15 @@ Pageboard.elements.input_checkbox = {
 		label: 'inline*'
 	},
 	icon: '<i class="checkmark box icon"></i>',
-	render: function(doc, block) {
+	render: function(doc, block, view) {
 		var d = block.data;
-		var input = doc.dom`<input type="checkbox" name="${d.name}" value="${d.value}" id="${block.id}" />`;
+		var id = (block.id || view.blocks.genId(4)).substring(0, 4);
+		var input = doc.dom`<input type="checkbox" name="${d.name}" value="${d.value}" id="for${id}" />`;
 		if (d.required) input.required = true;
 		return doc.dom`<div class="field">
 			<div class="ui checkbox">
 				${input}
-				<label block-content="label" for="${block.id}">Label</label>
+				<label block-content="label" for="for${id}">Label</label>
 			</div>
 		</div>`;
 	},
@@ -406,13 +557,14 @@ Pageboard.elements.input_radio = {
 		label: 'inline*'
 	},
 	icon: '<i class="selected radio icon"></i>',
-	render: function(doc, block) {
+	render: function(doc, block, view) {
 		var d = block.data;
-		var input = doc.dom`<input type="radio" name="${d.name}" value="${d.value}" id="${block.id}" />`;
+		var id = (block.id || view.blocks.genId(4)).substring(0, 4);
+		var input = doc.dom`<input type="radio" name="${d.name}" value="${d.value}" id="for${id}" />`;
 		return doc.dom`<div class="field">
 			<div class="ui radio checkbox">
 				${input}
-				<label block-content="label" for="${block.id}">Label</label>
+				<label block-content="label" for="for${id}">Label</label>
 			</div>
 		</div>`;
 	},
