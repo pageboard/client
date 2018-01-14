@@ -39,8 +39,9 @@ Store.prototype.destroy = function() {
 Store.generatedBefore = {};
 Store.generated = {};
 
-Store.genId =  function() {
-	var arr = new Uint8Array(8);
+Store.genId =  function(len) {
+	if (!len) len = 8;
+	var arr = new Uint8Array(len);
 	window.crypto.getRandomValues(arr);
 	var str = "", byte;
 	for (var i=0; i < arr.length; i++) {
@@ -61,6 +62,7 @@ Store.prototype.importVirtuals = function(blocks) {
 };
 
 Store.prototype.checkUrl = function(pageId, pageUrl) {
+	// TODO use similar approach to update links when a pageUrl changes ?
 	return findInTreeBlock(this.initial, function(block) {
 		return block.type == "page" && block.id != pageId && block.data.url == pageUrl;
 	});
