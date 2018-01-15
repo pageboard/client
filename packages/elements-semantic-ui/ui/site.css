@@ -226,6 +226,22 @@ fieldset.plain {
 	padding-right:0;
 	padding-left:0;
 }
+input[type="file"] {
+	position:absolute !important;
+	left:0 !important;
+	top:0 !important;
+	width:100% !important;
+	height:100% !important;
+	opacity:0 !important;
+	padding:0 !important;
+	margin:0 !important;
+}
+[block-type="input_file"] > .ui.action.input {
+	position:relative;
+}
+i.icon.upload:before {
+	content:'↑';
+}
 textarea::-webkit-selection,
 input::-webkit-selection {
 	background-color: rgba(100, 100, 100, 0.4);

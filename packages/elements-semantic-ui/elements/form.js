@@ -416,9 +416,6 @@ Pageboard.elements.input_text = {
 				const: "number",
 				title: "number"
 			}, {
-				const: "file",
-				title: "file"
-			}, {
 				const: "hidden",
 				title: "hidden"
 			}]
@@ -447,6 +444,55 @@ Pageboard.elements.input_text = {
 		if (d.type == "hidden") node.classList.add('hidden');
 		return node;
 	}
+};
+
+
+Pageboard.elements.input_file = {
+	title: 'Upload',
+	menu: "form",
+	required: ["name"],
+	group: "block",
+	context: 'form//',
+	properties: {
+		name: {
+			title: "name",
+			description: "The form object key",
+			type: "string"
+		},
+		placeholder: {
+			title: "placeholder",
+			type: ["string", "null"]
+		},
+		required: {
+			title: 'required',
+			type: 'boolean',
+			default: false
+		}
+	},
+	contents: {
+		label: 'inline*'
+	},
+	icon: '<i class="upload icon"></i>',
+	render: function(doc, block) {
+		var d = block.data;
+		var fileInput = doc.dom`<input type="file" name="${d.name}" />`;
+		var input = doc.dom`<input type="text" disabled />`;
+		if (d.placeholder) input.placeholder = d.placeholder;
+		if (d.required) fileInput.required = true;
+		return doc.dom`<div class="field">
+			<label block-content="label">Label</label>
+			<div class="ui action input">
+				${input}
+				<button class="ui icon button">
+					<i class="upload icon"></i>
+				</button>
+				${fileInput}
+			</div>
+		</div>`;
+	},
+	stylesheets: [
+		'../semantic-ui/input.css'
+	]
 };
 
 Pageboard.elements.input_range = {
