@@ -19,8 +19,8 @@ Pageboard.elements.query = {
 			<div block-content="results"></div>
 		</element-query>`;
 		var d = block.data;
-		if (d.type) {
-			node.dataset.type = d.type;
+		if (d.query && d.query.type) {
+			node.dataset.type = d.query.type;
 		}
 		return node;
 	},
