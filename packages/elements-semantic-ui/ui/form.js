@@ -98,11 +98,16 @@ Page.setup(function(state) {
 		var query = formDataToQuery(formData);
 		var p;
 		if (form.method.toLowerCase() == "get") {
-			p = Page.push({pathname: form.action, query: query});
-		} else p = fetchAction(form.method, form.action, query).then(function(data) {
-			form.classList.add('success');
-			if (data.redirect) return Page.push(redirect);
-		});
+			var urlObj = Page.parse(form.action);
+			Object.assign(urlObj.query, query);
+			p = Page.push(urlObj);
+		} else {
+			p = fetchAction(form.method, form.action, query)
+			.then(function(data) {
+				form.classList.add('success');
+				if (data.redirect) return Page.push(redirect);
+			});
+		}
 		p.catch(function(err) {
 			console.error(err);
 			form.classList.add('error');
