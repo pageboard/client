@@ -98,9 +98,9 @@ Page.setup(function(state) {
 		var query = formDataToQuery(formData);
 		var p;
 		if (form.method.toLowerCase() == "get") {
-			var urlObj = Page.parse(form.action);
-			Object.assign(urlObj.query, query);
-			p = Page.push(urlObj);
+			p = Page.push(Object.assign(Page.parse(form.action), {
+				query: query
+			}));
 		} else {
 			p = fetchAction(form.method, form.action, query)
 			.then(function(data) {
