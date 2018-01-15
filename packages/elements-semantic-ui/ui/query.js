@@ -26,7 +26,7 @@ class HTMLElementQuery extends HTMLCustomElement {
 		var type = this.dataset.type;
 		var results = this.querySelector('[block-content="results"]');
 		var form = this;
-		form.classList.remove('success', 'error', 'warning', 'loading');
+		form.classList.remove('success', 'error', 'info', 'loading');
 		form.classList.add('loading');
 		results.textContent = "";
 		return fetch(Page.format({
