@@ -44,9 +44,8 @@ ElementProperty.prototype.init = function() {
 			node = doc.dom`<optgroup label="${prop.title}"></optgroup>`;
 		} else {
 			node = doc.dom`<option value="${key}">${prop.title}</option>`;
-			var pkey = key.split('.');
-			pkey[0] = 'data';
-			node.disabled = !!content.querySelector(`[name="${pkey.join('.')}"]`);
+			var pkey = key.split('.').slice(1).join('.');
+			node.disabled = !!content.querySelector(`[name="${pkey}"]`);
 		}
 		return node;
 	}
