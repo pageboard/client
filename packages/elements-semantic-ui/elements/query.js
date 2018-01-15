@@ -36,6 +36,14 @@ Pageboard.elements.query = {
 					type: "string",
 					pattern: "^(\\w+\.\\w+)|((/[\\w-.]*)+)$"
 				},
+				type: {
+					title: 'Bind to element',
+					description: 'Checks schema and renders it',
+					type: ['null', 'string'],
+					input: {
+						name: 'element'
+					}
+				},
 				consts: {
 					title: 'Constants',
 					description: 'list of path.to.key -> value',
@@ -55,16 +63,6 @@ Pageboard.elements.query = {
 					}]
 				}
 			}
-		},
-		type: {
-			title: 'Render to type',
-			description: 'Use this element type to render response',
-			oneOf: [{
-				type: 'null'
-			}, {
-				type: 'string',
-				pattern: "^\\w+$"
-			}]
 		}
 	},
 	stylesheets: [
