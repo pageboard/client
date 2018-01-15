@@ -393,6 +393,7 @@ Pageboard.elements.input_text = {
 		},
 		type: {
 			title: 'format',
+			default: "text",
 			oneOf: [{
 				const: "text",
 				title: "text"
