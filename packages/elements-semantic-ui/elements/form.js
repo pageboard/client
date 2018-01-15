@@ -174,14 +174,15 @@ Pageboard.elements.input_property = {
 			return node;
 		}
 		var list = name.split('.');
-		var el = view.element(list.shift());
+		var el = view.element(list[0]);
 		if (!el) {
 			return node;
 		}
+		list[0] = "data";
 		name = list.join('.');
 		var prop = el;
 		var propKey;
-		for (var i=0; i < list.length; i++) {
+		for (var i=1; i < list.length; i++) {
 			propKey = list[i];
 			prop = prop.properties && prop.properties[propKey] || null;
 			if (prop == null) break;
