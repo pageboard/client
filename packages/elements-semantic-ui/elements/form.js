@@ -178,11 +178,13 @@ Pageboard.elements.input_property = {
 		if (!el) {
 			return node;
 		}
-		list[0] = "data";
+		// list[0] = "data";
+		// /.api/form wraps it into block.data
+		list.shift();
 		name = list.join('.');
 		var prop = el;
 		var propKey;
-		for (var i=1; i < list.length; i++) {
+		for (var i=0; i < list.length; i++) {
 			propKey = list[i];
 			prop = prop.properties && prop.properties[propKey] || null;
 			if (prop == null) break;
