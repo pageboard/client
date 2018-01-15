@@ -165,6 +165,11 @@ Pageboard.elements.input_property = {
 			title: 'Show range if interval less than',
 			type: 'integer',
 			default: 10
+		},
+		multiple: {
+			title: 'Allow multiple choices',
+			type: 'boolean',
+			default: false
 		}
 	},
 	render: function(doc, block, view) {
@@ -192,6 +197,7 @@ Pageboard.elements.input_property = {
 		if (!prop) {
 			return node;
 		}
+		var multiple = block.data.multiple;
 		node.textContent = "";
 		if (prop.oneOf) {
 			if (prop.oneOf.length <= block.data.radios) {
@@ -200,8 +206,9 @@ Pageboard.elements.input_property = {
 				</div>`;
 				node.appendChild(field);
 				prop.oneOf.forEach(function(item) {
+					if (item.type == "null" && multiple) return;
 					field.appendChild(view.render({
-						type: 'input_radio',
+						type: multiple ? 'input_checkbox' : 'input_radio',
 						data: {
 							name: name,
 							value: item.const
@@ -214,6 +221,7 @@ Pageboard.elements.input_property = {
 			} else {
 				var frag = doc.createDocumentFragment();
 				prop.oneOf.forEach(function(item) {
+					if (item.type == "null" && multiple) return;
 					var option = view.render({
 						type: 'input_select_option',
 						data: {
@@ -229,6 +237,7 @@ Pageboard.elements.input_property = {
 					type: 'input_select',
 					data: {
 						name: name,
+						multiple: multiple,
 						placeholder: prop.description
 					},
 					content: {
