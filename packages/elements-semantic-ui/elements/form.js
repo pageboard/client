@@ -193,8 +193,12 @@ Pageboard.elements.input_property = {
 		node.textContent = "";
 		if (prop.oneOf) {
 			if (prop.oneOf.length <= block.data.radios) {
+				var field = doc.dom`<div class="grouped fields">
+					<label for="${name}">${prop.title}</label>
+				</div>`;
+				node.appendChild(field);
 				prop.oneOf.forEach(function(item) {
-					node.appendChild(view.render({
+					field.appendChild(view.render({
 						type: 'input_radio',
 						data: {
 							name: name,
