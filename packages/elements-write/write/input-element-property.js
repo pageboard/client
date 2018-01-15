@@ -38,13 +38,17 @@ ElementProperty.prototype.init = function() {
 	var paths = asPaths(this.el, {}, this.el.name + '.');
 	var content = this.formBlock.content.form;
 	function getSelectOption(key) {
-		if (paths[key].title) {
-			var pkey = key.split('.').slice(1).join('.');
-			var disabled = !!content.querySelector(`[name="${pkey}"]`);
-			var opt = doc.dom`<option value="${key}">${paths[key].title}</option>`;
-			if (disabled) opt.disabled = true;
-			return opt;
+		var prop = paths[key];
+		if (!prop.title) return;
+		if (prop.type == "object") {
+			node = doc.dom`<optgroup label="${prop.title}"></optgroup>`;
+		} else {
+			node = doc.dom`<option value="${key}">${prop.title}</option>`;
+			var pkey = key.split('.');
+			pkey[0] = 'data';
+			node.disabled = !!content.querySelector(`[name="${pkey.join('.')}"]`);
 		}
+		return node;
 	}
 	this.select = doc.dom`<select class="ui compact dropdown">
 		<option value="">--</option>
