@@ -3,7 +3,7 @@ Pageboard.elements.query = {
 	menu: "form",
 	contents: {
 		messages: {
-			spec: '(paragraph|form_message)+'
+			spec: '(paragraph|query_message)+'
 		},
 		results: {
 			title: 'Results',
@@ -71,6 +71,40 @@ Pageboard.elements.query = {
 	scripts: [
 		'/.api/elements.js',
 		'../ui/query.js'
+	]
+};
+
+Pageboard.elements.query_message = {
+	title: 'Message',
+	menu: "form",
+	group: "block",
+	context: 'query//',
+	properties: {
+		type: {
+			title: "type",
+			description: "Message is shown depending on type",
+			default: "success",
+			oneOf: [{
+				const: "success",
+				title: "Success"
+			}, {
+				const: "error",
+				title: "Error"
+			}]
+		}
+	},
+	contents: {
+		message: {
+			title: 'Message',
+			spec: "block+"
+		}
+	},
+	icon: '<i class="announcement icon"></i>',
+	render: function(doc, block) {
+		return doc.dom`<div class="ui message ${block.data.type}" block-content="message">Message</div>`
+	},
+	stylesheets: [
+		'../semantic-ui/message.css'
 	]
 };
 
