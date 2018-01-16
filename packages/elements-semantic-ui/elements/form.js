@@ -482,9 +482,9 @@ Pageboard.elements.input_file = {
 			<label block-content="label">Label</label>
 			<element-input-file class="ui action input">
 				${input}
-				<button class="ui icon button">
+				<div class="ui icon button">
 					<i class="upload icon"></i>
-				</button>
+				</div>
 			</element-input-file>
 		</div>`;
 	},
