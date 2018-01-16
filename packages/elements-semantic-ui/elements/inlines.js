@@ -52,9 +52,28 @@ Pageboard.elements.caps = {
 	inline: true,
 	inplace: true,
 	group: "inline",
-	icon: '<span class="icon" style="text-transform:capitalize">Caps</span>',
+	properties: {
+		transform: {
+			title: 'Transform',
+			default: "uppercase",
+			oneOf: [{
+				const: "uppercase",
+				title: "upper",
+				icon: '<span class="icon">A</span>'
+			}, {
+				const: "lowercase",
+				title: "lower",
+				icon: '<span class="icon">a</span>'
+			}, {
+				const: "capitalize",
+				title: "all caps",
+				icon: '<span class="icon" style="text-transform:capitalize">Aa</span>'
+			}]
+		}
+	},
+	icon: '<span class="icon">Aa</span>',
 	render: function(doc, block) {
-		return doc.dom`<span class="caps"></span>`;
+		return doc.dom`<span class="${block.data.transform}"></span>`;
 	}
 };
 

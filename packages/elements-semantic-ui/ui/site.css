@@ -110,8 +110,14 @@ p:last-child {
 span.lighter {
 	font-weight:lighter;
 }
-span.caps {
+span.capitalize {
 	text-transform:capitalize;
+}
+span.lowercase {
+	text-transform:lowercase;
+}
+span.uppercase {
+	text-transform:uppercase;
 }
 span.black {
 	color: black;
