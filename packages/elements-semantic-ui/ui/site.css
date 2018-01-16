@@ -119,6 +119,9 @@ span.lowercase {
 span.uppercase {
 	text-transform:uppercase;
 }
+span.smallcaps {
+	font-variant:small-caps;
+}
 span.black {
 	color: black;
 }

@@ -47,11 +47,12 @@ Pageboard.elements.sup = {
 };
 
 Pageboard.elements.caps = {
-	title: "Capitalize",
+	title: "Capitalization",
 	contents: "text*",
 	inline: true,
 	inplace: true,
 	group: "inline",
+	tag: 'span[block-type="caps"]',
 	properties: {
 		transform: {
 			title: 'Transform',
@@ -68,6 +69,10 @@ Pageboard.elements.caps = {
 				const: "capitalize",
 				title: "all caps",
 				icon: '<span class="icon" style="text-transform:capitalize">Aa</span>'
+			}, {
+				const: "smallcaps",
+				title: "small caps",
+				icon: '<span class="icon" style="font-variant:small-caps">Aa</span>'
 			}]
 		}
 	},
