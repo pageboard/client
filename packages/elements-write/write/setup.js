@@ -47,6 +47,7 @@ Page.patch(function() {
 
 function submitListener(e) {
 	e.preventDefault();
+	e.stopImmediatePropagation();
 	if (Pageboard.editor.destroying) return;
 	Pageboard.notify(`Forms cannot be submitted when editing pages`, {
 		timeout: 1,
