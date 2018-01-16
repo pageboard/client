@@ -10,7 +10,6 @@ class HTMLElementInputFile extends HTMLCustomElement {
 		fake = this.ownerDocument.createElement('input');
 		fake.required = input.required;
 		fake.type = "text";
-		fake.name = input.name;
 		fake.value = input.value;
 		fake.placeholder = input.placeholder;
 		this.insertBefore(fake, input);
