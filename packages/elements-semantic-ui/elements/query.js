@@ -111,3 +111,25 @@ Pageboard.elements.query_message = {
 	]
 };
 
+Pageboard.elements.query_tags = {
+	title: 'Tags',
+	menu: "form",
+	group: "block",
+	contents: {
+		title: 'inline*'
+	},
+	icon: '<i class="tags icon"></i>',
+	render: function(doc, block) {
+		return doc.dom`<element-query-tags>
+			<div block-content="title">Filters:</div>
+			<div class="ui labels"></div>
+		</element-query-tags>`
+	},
+	stylesheets: [
+		'../semantic-ui/label.css'
+	],
+	scripts: [
+		'../ui/query.js'
+	]
+};
+

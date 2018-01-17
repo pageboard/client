@@ -59,3 +59,68 @@ class HTMLElementQuery extends HTMLCustomElement {
 
 window.customElements.define('element-query', HTMLElementQuery);
 
+class HTMLElementQueryTags extends HTMLCustomElement {
+	init() {
+		this.close = this.close.bind(this);
+	}
+	connectedCallback() {
+		this.addEventListener('click', this.close);
+		if (this.children.length) this.refresh();
+	}
+	disconnectedCallback() {
+		this.removeEventListener('click', this.close);
+	}
+	find(name, value) {
+		var nodes = document.querySelectorAll(`form [name="${name}"]`);
+		return Array.prototype.filter.call(nodes, function(control) {
+			if (Array.isArray(value)) {
+				if (value.indexOf(control.value) < 0) return;
+			} else {
+				if (value != control.value) return;
+			}
+			return true;
+		});
+	}
+	refresh(query) {
+		if (!query) {
+			if (!Page.state) return;
+			query = Page.state.query;
+		}
+		var labels = this.querySelector('.labels');
+		if (!labels) return;
+		labels.textContent = '';
+		var control, field, label;
+		for (var name in query) {
+			this.find(name, query[name]).forEach(function(control) {
+				field = control.closest('.field');
+				if (!field) return;
+				label = field.querySelector('label');
+				if (!label) return;
+				labels.insertAdjacentHTML('beforeEnd', `<a class="ui label" data-name="${name}" data-value="${control.value}">
+					${label.innerText}
+					<i class="delete icon"></i>
+				</a>`);
+			}, this);
+		}
+	}
+	close(e) {
+		var label = e.target.closest('.label');
+		if (!label) return;
+		this.find(label.dataset.name, label.dataset.value).forEach(function(control) {
+			if (control.checked) control.checked = false;
+			var e = document.createEvent('HTMLEvents');
+			e.initEvent('submit', true, true);
+			control.form.dispatchEvent(e);
+		}, this);
+		label.remove();
+	}
+}
+
+window.customElements.define('element-query-tags', HTMLElementQueryTags);
+
+Page.patch(function(state) {
+	Array.from(document.querySelectorAll('element-query-tags')).forEach(function(node) {
+		node.refresh(state.query);
+	});
+});
+
