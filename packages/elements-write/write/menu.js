@@ -135,12 +135,12 @@ Menu.prototype.item = function(el) {
 				var can = false;
 				var sel = self.selection;
 				if (sel.from == sel.$from.start()) {
-					can = editor.utils.canInsert(sel.$from, nodeType);
+					can = editor.utils.canInsert(sel.$from, nodeType).node;
 				}
 				if (!can) {
-					can = editor.utils.canInsert(sel.$to, nodeType);
+					can = editor.utils.canInsert(sel.$to, nodeType).node;
 				}
-				return can;
+				return !!can;
 			}
 		},
 		active: function(state) {
