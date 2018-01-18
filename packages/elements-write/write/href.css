@@ -81,12 +81,16 @@
 	padding-right:1.7em; /* leave space for pinned right button */
 }
 
-.field.href .items > .item > .content .right.floated.image {
-	margin-bottom:0;
+.field.href .items > .item > .content > .thumbnail {
+	display:flex;
+	align-items: center;
+	justify-content: center;
 	position:absolute;
 	right:0;
+	width:80px;
+	height:3.33em;
+	overflow:hidden;
 }
-
 
 .field.href .items > .item.selected > .content > .header {
 	background-color: #4165A0;

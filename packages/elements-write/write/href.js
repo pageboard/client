@@ -466,7 +466,9 @@ function tplDims(obj) {
 }
 
 function tplThumbnail(src) {
-	if (src) return document.dom`<img src="${src}" class="ui tiny right floated image" />`;
+	if (src) return document.dom`<div class="thumbnail">
+		<img src="${src}" class="ui tiny image" />
+	</div>`;
 	else return '';
 }
 
