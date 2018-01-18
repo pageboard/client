@@ -1,6 +1,8 @@
 .field.href .ui.avatar.icon.image {
 	width:1.2em;
 	height:1.2em;
+	right:80px;
+	position:absolute;
 }
 
 .field.href .items .button.circular {
@@ -50,17 +52,26 @@
 	text-overflow: ellipsis;
 	color: #777;
 	display:block;
-	padding: 0.2em 0.3em;
+	padding: 0.2em 0.5em;
+	padding-top:0.32em;
 	margin:0;
 }
 
 .field.href .items > .item > .content > .meta {
 	margin-top:0.15em;
 	margin-bottom:0.15em;
-	padding-left:2em;
+	padding-left:0.5em;
 	/* let div.meta grow with its content */
 	position:relative;
 	overflow:hidden;
+	padding-right:75px;
+}
+.field.href .items > .item > .content > .meta > .line {
+	display:inline-block;
+	font-family:sans-serif;
+	font-size:0.7em;
+	line-height:1em;
+	margin-top:0.15em;
 }
 
 .field.href .items > a.item > .content > .header {

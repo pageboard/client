@@ -416,7 +416,6 @@ Href.prototype.renderItem = function(obj) {
 	var item = document.dom`<a href="${normUrl(obj.url)}" class="item" title="${obj.meta.description || ""}">
 		<div class="content">
 			<div class="ui tiny header">
-				<img src="${obj.icon || ''}" class="ui avatar icon image" />
 				${obj.title}
 				<div class="ui pinned right compact circular icon button" data-action="remove">
 					<i class="icon ban"></i>
@@ -427,23 +426,20 @@ Href.prototype.renderItem = function(obj) {
 	var content = item.firstElementChild;
 	if (display != "icon") {
 		content.appendChild(item.dom`<div class="left floated meta">
-			${obj.type == 'link' ? (obj.pathname + '<br>') : ''}
 			${obj.mime.split(';').shift()}<em>${tplSize(obj.meta.size)}</em><br>
 			${dims ? dims + '<br>' : ''}
 			${moment(obj.updated_at).fromNow()}
+			${obj.type == 'link' ? ('<br><span class="line">' + obj.pathname + '</span>') : ''}
 		</div>
 		${tplThumbnail(obj.meta.thumbnail)}`);
+		if (obj.icon) {
+			content.appendChild(item.dom`<img src="${obj.icon}" class="ui avatar icon image" />`);
+		}
 	} else {
 		content.appendChild(item.dom`<img class="ui tiny centered image" src="${obj.url}" />`);
 	}
 	if (!obj.visible) {
 		item.querySelector('[data-action="remove"]').remove();
-	}
-	if (!obj.icon) {
-		// TODO do not put "external" when it's actually a local svg
-		item.querySelector('.icon.image').replaceWith(
-			document.dom`<i class="ui avatar external icon"></i>`
-		);
 	}
 	return item;
 };
