@@ -62,18 +62,28 @@ function labelListener(e) {
 }
 
 function anchorListener(e) {
-	var node = e.target.closest('a[href]');
+	var node = e.target.closest('a[href],input[type="file"]');
 	if (!node) return;
-	e.preventDefault();
-	if (Pageboard.editor.destroying) return;
-	if (!node.ownerDocument.body.matches('.ProseMirror')) {
-		Pageboard.editor.destroying = true;
-		Page.push(node.href);
-	} else {
-		Pageboard.notify("Use view mode to follow links", {
-			timeout: 3,
-			where: 'write'
-		});
+	if (node.href) {
+		e.preventDefault();
+		if (Pageboard.editor.destroying) return;
+		if (!node.ownerDocument.body.matches('.ProseMirror')) {
+			Pageboard.editor.destroying = true;
+			Page.push(node.href);
+		} else {
+			Pageboard.notify("Use view mode to follow links", {
+				timeout: 3,
+				where: 'write'
+			});
+		}
+	} else if (node.matches('input')) {
+		if (node.ownerDocument.body.matches('.ProseMirror')) {
+			e.preventDefault();
+			Pageboard.notify("Use view mode to fill forms", {
+				timeout: 3,
+				where: 'write'
+			});
+		}
 	}
 }
 
