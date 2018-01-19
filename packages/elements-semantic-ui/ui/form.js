@@ -94,18 +94,22 @@ Page.setup(function(state) {
 		if (form.matches('.loading')) return;
 		form.classList.remove('error', 'success');
 		form.classList.add('loading');
-		var formData = new FormData(form);
-		var query = formDataToQuery(formData);
 		var p;
 		if (form.method.toLowerCase() == "get") {
 			p = Page.push(Object.assign(Page.parse(form.action), {
-				query: query
+				query: formToQuery(form)
 			}));
 		} else {
-			p = fetchAction(form.method, form.action, query)
-			.then(function(data) {
-				form.classList.add('success');
-				if (data.redirect) return Page.push(redirect);
+			return Promise.all(Array.prototype.filter.call(form.elements, function(node) {
+				return node.type == "file";
+			}).map(function(input) {
+				return input.closest('element-input-file').upload();
+			})).then(function() {
+				p = fetchAction(form.method, form.action, formToQuery(form))
+				.then(function(data) {
+					form.classList.add('success');
+					if (data.redirect) return Page.push(redirect);
+				});
 			});
 		}
 		p.catch(function(err) {
@@ -137,9 +141,10 @@ Page.setup(function(state) {
 		});
 	}
 
-	function formDataToQuery(formData) {
+	function formToQuery(form) {
+		var fd = new FormData(form);
 		var query = {};
-		formData.forEach(function(val, key) {
+		fd.forEach(function(val, key) {
 			var old = query[key];
 			if (old !== undefined) {
 				if (!Array.isArray(old)) {
