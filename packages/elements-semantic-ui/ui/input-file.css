@@ -33,4 +33,9 @@ element-input-file .button > .delete,
 .success.field element-input-file .button > .delete {
 	display:inline-block;
 }
-
+element-input-file > .ui.label {
+	display:none;
+}
+.loading.field element-input-file > .ui.label {
+	display:block;
+}

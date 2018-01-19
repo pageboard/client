@@ -490,11 +490,13 @@ Pageboard.elements.input_file = {
 					<i class="upload icon"></i>
 					<i class="delete icon"></i>
 				</div>
+				<div class="mini floating ui basic label"></div>
 			</element-input-file>
 		</div>`;
 	},
 	stylesheets: [
 		'../semantic-ui/input.css',
+		'../semantic-ui/label.css',
 		'../ui/input-file.css'
 	],
 	scripts: [

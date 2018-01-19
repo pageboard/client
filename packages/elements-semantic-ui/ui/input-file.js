@@ -61,9 +61,10 @@ class HTMLElementInputFile extends HTMLCustomElement {
 		var field = this.closest('.field');
 		field.classList.remove('success', 'error');
 		field.classList.add('loading');
+		var label = this.querySelector('.label');
 		var p = new Promise(function(resolve, reject) {
 			function track(num) {
-				console.log(num);
+				label.innerText = num;
 			}
 			function fail(err) {
 				track(-1);
