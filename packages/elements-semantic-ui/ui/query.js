@@ -5,6 +5,32 @@ Page.patch(function(state) {
 });
 
 class HTMLElementQuery extends HTMLCustomElement {
+	static find(name, value) {
+		// convert query into a query that contains only
+		var nodes = document.querySelectorAll(`form [name="${name}"]`);
+		return Array.prototype.filter.call(nodes, function(control) {
+			if (Array.isArray(value)) {
+				if (value.indexOf(control.value) < 0) return;
+			} else {
+				if (value != control.value) return;
+			}
+			return true;
+		});
+	}
+	static filterQuery(query) {
+		var obj = {};
+		for (var name in query) {
+			var vals = HTMLElementQuery.find(name, query[name]).map(function(node) {
+				return node.value;
+			});
+			if (vals.length == 1) {
+				obj[name] = vals[0];
+			} else if (vals.length > 1) {
+				obj[name] = vals;
+			}
+		}
+		return obj;
+	}
 	connectedCallback() {
 		if (this.children.length) this.refresh();
 	}
@@ -19,8 +45,8 @@ class HTMLElementQuery extends HTMLCustomElement {
 			if (!Page.state) return;
 			query = Page.state.query;
 		}
-		query = Object.assign({}, query);
 		if (query._parent) console.warn("query._parent is reserved");
+		query = HTMLElementQuery.filterQuery(query);
 		query._parent = this.getAttribute('block-id');
 		var me = this;
 		var type = this.dataset.type;
@@ -70,17 +96,6 @@ class HTMLElementQueryTags extends HTMLCustomElement {
 	disconnectedCallback() {
 		this.removeEventListener('click', this.close);
 	}
-	find(name, value) {
-		var nodes = document.querySelectorAll(`form [name="${name}"]`);
-		return Array.prototype.filter.call(nodes, function(control) {
-			if (Array.isArray(value)) {
-				if (value.indexOf(control.value) < 0) return;
-			} else {
-				if (value != control.value) return;
-			}
-			return true;
-		});
-	}
 	refresh(query) {
 		if (!query) {
 			if (!Page.state) return;
@@ -91,7 +106,7 @@ class HTMLElementQueryTags extends HTMLCustomElement {
 		labels.textContent = '';
 		var control, field, label;
 		for (var name in query) {
-			this.find(name, query[name]).forEach(function(control) {
+			HTMLElementQuery.find(name, query[name]).forEach(function(control) {
 				field = control.closest('.field');
 				if (!field) return;
 				label = field.querySelector('label');
@@ -106,7 +121,7 @@ class HTMLElementQueryTags extends HTMLCustomElement {
 	close(e) {
 		var label = e.target.closest('.label');
 		if (!label) return;
-		this.find(label.dataset.name, label.dataset.value).forEach(function(control) {
+		HTMLElementQuery.find(label.dataset.name, label.dataset.value).forEach(function(control) {
 			if (control.checked) control.checked = false;
 			var e = document.createEvent('HTMLEvents');
 			e.initEvent('submit', true, true);
