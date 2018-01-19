@@ -488,6 +488,7 @@ Pageboard.elements.input_file = {
 				${input}
 				<div class="ui icon button">
 					<i class="upload icon"></i>
+					<i class="delete icon"></i>
 				</div>
 			</element-input-file>
 		</div>`;
