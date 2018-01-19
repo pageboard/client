@@ -183,6 +183,9 @@ i.icon:before {
 	background-size:cover;
 	font-style:normal;
 }
+.ui.icon.button > i.icon {
+	vertical-align: middle;
+}
 
 /*******************************
 				 Navigation
