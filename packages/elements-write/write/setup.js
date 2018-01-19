@@ -149,6 +149,12 @@ function setupListener(win) {
 	win.addEventListener('mouseup', anchorListener, true);
 	win.addEventListener('click', labelListener, true);
 	win.addEventListener('submit', submitListener, true);
+	win.addEventListener('keydown', function(e) {
+		if (e.altKey) win.document.body.classList.add('ProseMirror-alt');
+	});
+	win.addEventListener('keyup', function(e) {
+		win.document.body.classList.remove('ProseMirror-alt');
+	});
 
 	editorSetup(win, win.Pageboard.view);
 }
