@@ -446,7 +446,6 @@ Pageboard.elements.input_text = {
 	}
 };
 
-
 Pageboard.elements.input_file = {
 	title: 'Upload',
 	menu: "form",
@@ -467,6 +466,11 @@ Pageboard.elements.input_file = {
 			title: 'required',
 			type: 'boolean',
 			default: false
+		},
+		now: {
+			title: 'upload on change',
+			type: 'boolean',
+			default: false
 		}
 	},
 	contents: {
@@ -480,7 +484,7 @@ Pageboard.elements.input_file = {
 		if (d.required) input.required = true;
 		return doc.dom`<div class="field">
 			<label block-content="label">Label</label>
-			<element-input-file class="ui action input">
+			<element-input-file class="ui action input" ${d.now ? 'data-now' : ''}>
 				${input}
 				<div class="ui icon button">
 					<i class="upload icon"></i>
