@@ -311,3 +311,36 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 .ui.grid.container {
 	display:flex;
 }
+
+/* for editor only, but semantic-ui dependent */
+.ProseMirror .ui.buttons .disabled.button,
+.ProseMirror .ui.disabled.button,
+.ProseMirror .ui.button:disabled,
+.ProseMirror .ui.disabled.button:hover,
+.ProseMirror .ui.disabled.active.button {
+	pointer-events: auto !important;
+}
+
+.ProseMirror .ui.form[block-focused] .ui.message {
+	display:block;
+}
+
+.ProseMirror [block-type="query"][block-focused] .ui.message {
+	display:block !important;
+}
+
+.ProseMirror .ui.form[block-focused] input[type="hidden"] {
+	display:block;
+}
+
+.ProseMirror .ui.dropdown[block-focused] > .menu {
+	overflow: visible;
+	width: auto;
+	height: auto;
+	top: 100% !important;
+	opacity: 1;
+}
+
+.ProseMirror .field[block-focused] .dropdown > .menu {
+	display: block !important;
+}
