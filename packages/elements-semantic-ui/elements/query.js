@@ -19,8 +19,9 @@ Pageboard.elements.query = {
 			<div block-content="results"></div>
 		</element-query>`;
 		var d = block.data;
-		if (d.query && d.query.type) {
-			node.dataset.type = d.query.type;
+		var type = d.render && d.render.type || d.query && d.query.type;
+		if (type) {
+			node.dataset.type = type;
 		}
 		return node;
 	},
@@ -38,7 +39,7 @@ Pageboard.elements.query = {
 				},
 				type: {
 					title: 'Bind to element',
-					description: 'Checks schema and renders it',
+					description: 'Checks schema and defaults rendering',
 					type: ['null', 'string'],
 					input: {
 						name: 'element'
@@ -61,6 +62,19 @@ Pageboard.elements.query = {
 					}, {
 						type: "null"
 					}]
+				}
+			}
+		},
+		render: {
+			title: 'Render',
+			type: 'object',
+			properties: {
+				type: {
+					title: 'As element',
+					type: ['null', 'string'],
+					input: {
+						name: 'element'
+					}
 				}
 			}
 		}
