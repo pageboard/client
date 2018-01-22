@@ -93,9 +93,8 @@ Pageboard.elements.menu_item_dropdown = {
 		}
 	},
 	group: "menu_item",
-	icon: '<b class="icon">Pop</b>',
+	icon: '<b class="icon">Drop</b>',
 	render: function(doc, block, view) {
-		// the empty div is only here to wrap
 		return doc.dom`<div class="ui simple dropdown item ${block.focused ? 'active' : ''}">
 			<div class="title">
 				<span block-content="title">Title</span>
@@ -109,3 +108,39 @@ Pageboard.elements.menu_item_dropdown = {
 		'../ui/dropdown.css'
 	]
 };
+
+Pageboard.elements.menu_item_popup = {
+	title: "Popup",
+	menu: "link",
+	priority: 11,
+	context: "menu//",
+	contents: {
+		title: {
+			spec: "text*",
+			title: "Title"
+		},
+		content: {
+			spec: "block+",
+			title: 'Content'
+		}
+	},
+	properties: {
+
+	},
+	group: "menu_item",
+	icon: '<b class="icon">Pop</b>',
+	render: function(doc, block, view) {
+		return doc.dom`<div class="ui simple dropdown item ${block.focused ? 'active' : ''}">
+			<div class="title">
+				<span block-content="title">Title</span>
+				<i class="dropdown icon"></i>
+			</div>
+			<div class="ui fluid popup" block-content="content"></div>
+		</div>`;
+	},
+	stylesheets: [
+		'../semantic-ui/popup.css',
+		'../ui/popup.css'
+	]
+};
+

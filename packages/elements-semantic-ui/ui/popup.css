@@ -1,0 +1,22 @@
+.ui.menu > [block-type="menu_item_popup"] {
+	position: static;
+	display: inline-block !important;
+}
+.dropdown.item:hover > .ui.popup,
+.dropdown.item[block-focused] > .ui.popup {
+	display:block;
+}
+.dropdown.item > .ui.popup {
+	top: auto;
+	margin-top: 0.928571em;
+	width:90%;
+	left:5%;
+	max-width:none;
+	position: absolute;
+}
+.dropdown.item > .ui.popup:before {
+	content:none;
+}
+.dropdown.item > .ui.popup:hover {
+	display:block;
+}
