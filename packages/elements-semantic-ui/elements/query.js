@@ -42,7 +42,8 @@ Pageboard.elements.query = {
 					description: 'Checks schema and defaults rendering',
 					type: ['null', 'string'],
 					input: {
-						name: 'element'
+						name: 'element',
+						properties: true
 					}
 				},
 				consts: {
