@@ -14,6 +14,9 @@ function init(All) {
 			if (req.query.develop != null) return next('route');
 			if (All.auth.test(req, 'webmaster')) {
 				// doesn't actually load the html
+				if (All.opt.env != "development") {
+					res.setHeader('Content-Security-Policy', "script-src 'self'");
+				}
 				All.dom(buf)(req, res, next);
 			} else {
 				next('route');
