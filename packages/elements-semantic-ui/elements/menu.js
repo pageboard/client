@@ -95,7 +95,7 @@ Pageboard.elements.menu_item_dropdown = {
 	group: "menu_item",
 	icon: '<b class="icon">Drop</b>',
 	render: function(doc, block, view) {
-		return doc.dom`<div class="ui simple dropdown item ${block.focused ? 'active' : ''}">
+		return doc.dom`<div tabindex="0" class="ui simple dropdown item ${block.focused ? 'active' : ''}">
 			<div class="title">
 				<span block-content="title">Title</span>
 				<i class="dropdown icon"></i>
@@ -130,7 +130,7 @@ Pageboard.elements.menu_item_popup = {
 	group: "menu_item",
 	icon: '<b class="icon">Pop</b>',
 	render: function(doc, block, view) {
-		return doc.dom`<div class="ui simple dropdown item ${block.focused ? 'active' : ''}">
+		return doc.dom`<div tabindex="0" class="ui simple dropdown item ${block.focused ? 'active' : ''}">
 			<div class="title">
 				<span block-content="title">Title</span>
 				<i class="dropdown icon"></i>

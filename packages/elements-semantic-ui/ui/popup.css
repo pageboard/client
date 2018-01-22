@@ -2,6 +2,7 @@
 	position: static;
 	display: inline-block !important;
 }
+.dropdown.item:focus > .ui.popup,
 .dropdown.item:hover > .ui.popup,
 .dropdown.item[block-focused] > .ui.popup {
 	display:block;
@@ -17,6 +18,7 @@
 .dropdown.item > .ui.popup:before {
 	content:none;
 }
-.dropdown.item > .ui.popup:hover {
+.dropdown.item > .ui.popup:hover,
+.dropdown.item > .ui.popup:focus {
 	display:block;
 }
