@@ -35,12 +35,12 @@
 	content: attr(block-type);
 	position: absolute;
 	font-size: 0.7rem;
-	color: #4183c4;
+	color: #000;
 	font-family: monospace;
 	font-variant: none;
 	font-style: normal;
 	text-transform: none;
-	text-shadow: 0 0 6px #4183c4;
+	text-shadow: 0 0 5px #FFF;
 	overflow: visible;
 	height: 0;
 	width: 0;
@@ -48,7 +48,7 @@
 }
 .ProseMirror.ProseMirror-alt [block-type] {
 	outline: 1px dashed #4183c4;
-	outline-offset:-1px;
+	outline-offset: -3px;
 }
 .ProseMirror.ProseMirror-alt [block-type]:hover {
 	outline: 2px solid #4183f4;
