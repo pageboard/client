@@ -132,15 +132,12 @@ Menu.prototype.item = function(el) {
 					return !state.tr.selection.node && editor.utils.canMark(self.selection, nodeType);
 				} else return false;
 			} else {
-				var can = false;
 				var sel = self.selection;
-				if (sel.from == sel.$from.start()) {
-					can = editor.utils.canInsert(sel.$from, nodeType).node;
+				var can = !!editor.utils.canInsert(sel.$to, nodeType, false, false).node;
+				if (!can && sel.node) {
+					can = !!editor.utils.canInsert(sel.$from, nodeType, false, true).node;
 				}
-				if (!can) {
-					can = editor.utils.canInsert(sel.$to, nodeType).node;
-				}
-				return !!can;
+				return can;
 			}
 		},
 		active: function(state) {
