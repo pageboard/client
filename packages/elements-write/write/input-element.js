@@ -1,13 +1,11 @@
 (function(Pageboard) {
 Pageboard.inputs.element = Element;
 
-var customElts;
-
 function Element(input, opts, props, block) {
 	this.field = input.closest('.field');
 	this.input = input;
-	if (!customElts) customElts = Pageboard.editor.elements.filter(function(el) {
-		return el.menu && Pageboard.Controls.Menu.tabs.indexOf(el.menu) < 0;
+	this.elements = Pageboard.editor.elements.filter(function(el) {
+		return (opts.properties ? el.properties : true) && el.menu && Pageboard.Controls.Menu.tabs.indexOf(el.menu) < 0;
 	});
 	this.init();
 	this.update(block);
@@ -21,7 +19,7 @@ Element.prototype.init = function() {
 	}
 	this.select = doc.dom`<select class="ui compact dropdown">
 		<option value="">--</option>
-		${customElts.map(getSelectOption)}
+		${this.elements.map(getSelectOption)}
 	</select>`;
 	this.field.appendChild(this.select);
 	this.select.addEventListener('change', this.toInput.bind(this));
