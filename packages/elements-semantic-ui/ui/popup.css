@@ -1,10 +1,9 @@
 [block-type="menu_item_popup"] {
-	position: static !important;
-	display: inline-block !important;
+	display:block !important;
 }
 [block-type="menu_item_popup"] > .popup {
 	display:none;
-	position: absolute;
+	position: fixed;
 	z-index: 1900;
 	margin-top: 0.928571em;
 	width:90%;
