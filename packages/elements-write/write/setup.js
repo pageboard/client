@@ -16,8 +16,8 @@ Pageboard.setup = function(state) {
 	modeControl.addEventListener('click', modeControlListener, false);
 };
 
-Pageboard.hook = function(state) {
-	buildListener(Pageboard.read.contentWindow);
+Pageboard.hook = function(doc) {
+	buildListener(Pageboard.read.contentWindow, doc);
 };
 
 Pageboard.patch = init;
@@ -103,8 +103,8 @@ function dblclickListener(e) {
 	}
 }
 
-function editMode() {
-	var doc = Pageboard.window.document;
+function editMode(doc) {
+	if (!doc) doc = Pageboard.window.document;
 	doc.body.classList.add('ProseMirror');
 	doc.body.setAttribute('contenteditable', 'true');
 	var sheet = doc.head.querySelector(`[href="${editStylePath}"]`);
@@ -126,7 +126,7 @@ function modeControlListener() {
 	else viewMode();
 }
 
-function buildListener(win) {
+function buildListener(win, doc) {
 	Pageboard.window = win;
 	win.addEventListener('click', anchorListener, true);
 	win.addEventListener('mouseup', anchorListener, true);
@@ -139,7 +139,7 @@ function buildListener(win) {
 		win.document.body.classList.remove('ProseMirror-alt');
 	});
 	win.Pageboard.elements.page.stylesheets.push(editStylePath);
-	editMode();
+	editMode(doc);
 	var resolver = function() {
 		win.removeEventListener('pagebuild', resolver);
 		setupListener(win);
