@@ -126,21 +126,23 @@ function modeControlListener() {
 	else viewMode();
 }
 
-function buildListener(win) {
-	Pageboard.window = win;
-	Pageboard.view = win.Pageboard.view;
-
-	var node = win.document.createElement('script');
-	node.onload = function() {
-		node.remove();
-		setupListener(win);
-	};
-	node.src = '/.pageboard/pagecut/editor.js';
-	win.document.head.appendChild(node);
-	editMode();
+function addResource(parent, href) {
+	return new Promise(function(resolve, reject) {
+		var node = parent.ownerDocument.createElement('script');
+		node.onload = function() {
+			node.remove();
+			resolve();
+		};
+		node.onerror = function(e) {
+			reject(e);
+		};
+		node.src = href;
+		parent.appendChild(node);
+	});
 }
 
-function setupListener(win) {
+function buildListener(win) {
+	Pageboard.window = win;
 	win.addEventListener('click', anchorListener, true);
 	win.addEventListener('mouseup', anchorListener, true);
 	win.addEventListener('click', labelListener, true);
@@ -151,7 +153,27 @@ function setupListener(win) {
 	win.addEventListener('keyup', function(e) {
 		win.document.body.classList.remove('ProseMirror-alt');
 	});
+	// early editMode - this will loose read.css
+	editMode();
 
+	Promise.all([
+		addResource(win.document.head, '/.pageboard/pagecut/editor.js'),
+		new Promise(function(resolve) {
+			var resolver = function() {
+				win.removeEventListener('pagebuild', resolver);
+				resolve();
+			};
+			if (win.Page.stage() >= 2) resolve();
+			else win.addEventListener('pagebuild', resolver);
+		})
+	]).then(function() {
+		editMode();
+		setupListener(win);
+	});
+}
+
+function setupListener(win) {
+	Pageboard.view = win.Pageboard.view;
 	editorSetup(win, win.Pageboard.view);
 }
 
@@ -210,6 +232,7 @@ function editorSetup(win, view) {
 			var control = Pageboard.editor.controls[name];
 			if (control.destroy) control.destroy();
 		});
+		delete Pageboard.editor;
 	}
 	var content = win.document.body.cloneNode(true);
 	// and the editor must be running from child
