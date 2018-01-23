@@ -130,16 +130,17 @@ Pageboard.elements.menu_item_popup = {
 	group: "menu_item",
 	icon: '<b class="icon">Pop</b>',
 	render: function(doc, block, view) {
-		return doc.dom`<div tabindex="0" class="ui simple dropdown item ${block.focused ? 'active' : ''}">
+		return doc.dom`<div tabindex="0" class="ui simple dropdown item">
 			<div class="title">
 				<span block-content="title">Title</span>
 				<i class="dropdown icon"></i>
 			</div>
-			<div class="ui fluid popup" block-content="content"></div>
+			<div class="popup">
+				<div block-content="content"></div>
+			</div>
 		</div>`;
 	},
 	stylesheets: [
-		'../semantic-ui/popup.css',
 		'../ui/popup.css'
 	]
 };
