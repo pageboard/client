@@ -1,6 +1,7 @@
 (function(Pageboard) {
 
 var modeControl;
+var editStylePath = "/.pageboard/write/read.css";
 
 Pageboard.setup = function(state) {
 	var parentRead = document.getElementById('pageboard-read');
@@ -106,16 +107,15 @@ function editMode() {
 	var doc = Pageboard.window.document;
 	doc.body.classList.add('ProseMirror');
 	doc.body.setAttribute('contenteditable', 'true');
-	doc.head.insertAdjacentHTML('beforeEnd', `
-	<link rel="stylesheet" href="/.pageboard/write/read.css" />
-	`);
+	var sheet = doc.head.querySelector(`[href="${editStylePath}"]`);
+	if (sheet) sheet.disabled = false;
 	modeControl.classList.remove('active');
 }
 
 function viewMode() {
 	var doc = Pageboard.window.document;
-	var node = doc.head.querySelector('[href="/.pageboard/write/read.css"]');
-	if (node) node.remove();
+	var sheet = doc.head.querySelector(`[href="${editStylePath}"]`);
+	if (sheet) sheet.disabled = true;
 	doc.body.classList.remove('ProseMirror');
 	doc.body.removeAttribute('contenteditable');
 	modeControl.classList.add('active');
@@ -124,21 +124,6 @@ function viewMode() {
 function modeControlListener() {
 	if (modeControl.matches('.active')) editMode();
 	else viewMode();
-}
-
-function addResource(parent, href) {
-	return new Promise(function(resolve, reject) {
-		var node = parent.ownerDocument.createElement('script');
-		node.onload = function() {
-			node.remove();
-			resolve();
-		};
-		node.onerror = function(e) {
-			reject(e);
-		};
-		node.src = href;
-		parent.appendChild(node);
-	});
 }
 
 function buildListener(win) {
@@ -153,23 +138,14 @@ function buildListener(win) {
 	win.addEventListener('keyup', function(e) {
 		win.document.body.classList.remove('ProseMirror-alt');
 	});
-	// early editMode - this will loose read.css
+	win.Pageboard.elements.page.stylesheets.push(editStylePath);
 	editMode();
-
-	Promise.all([
-		addResource(win.document.head, '/.pageboard/pagecut/editor.js'),
-		new Promise(function(resolve) {
-			var resolver = function() {
-				win.removeEventListener('pagebuild', resolver);
-				resolve();
-			};
-			if (win.Page.stage() >= 2) resolve();
-			else win.addEventListener('pagebuild', resolver);
-		})
-	]).then(function() {
-		editMode();
+	var resolver = function() {
+		win.removeEventListener('pagebuild', resolver);
 		setupListener(win);
-	});
+	};
+	if (win.Page.stage() >= 2) resolve();
+	else win.addEventListener('pagebuild', resolver);
 }
 
 function setupListener(win) {
