@@ -33,10 +33,13 @@ Menu.prototype.destroy = function() {
 
 Menu.prototype.showTab = function(name) {
 	this.lastTab = name;
-	$(this.tabMenu).find('.item').removeClass('active');
-	var tab = $(this.tabs[name].menu);
-	tab.addClass('active');
-	$.tab('change tab', tab.data('tab'));
+	for (var k in this.tabs) {
+		this.tabs[k].menu.classList.remove('active');
+		this.tabs[k].div.classList.remove('active');
+	}
+	var tab = this.tabs[name];
+	tab.menu.classList.add('active');
+	tab.div.classList.add('active');
 };
 
 Menu.prototype.update = function(parents, sel) {
