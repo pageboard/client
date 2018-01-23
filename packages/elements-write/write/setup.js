@@ -6,14 +6,6 @@ Pageboard.setup = function(state) {
 	var parentRead = document.getElementById('pageboard-read');
 	var iframe = Pageboard.read = document.createElement('iframe');
 	parentRead.insertBefore(iframe, parentRead.lastElementChild);
-	iframe.addEventListener('load', function(e) {
-		iframe.contentWindow.addEventListener('pagebuild', function() {
-			buildListener(iframe.contentWindow);
-		});
-		if (iframe.contentWindow.Page.stage() >= 2) {
-			buildListener(iframe.contentWindow);
-		}
-	});
 	iframe.addEventListener('dblclick', dblclickListener, false);
 	init(state);
 	Pageboard.write = document.getElementById('pageboard-write');
@@ -21,6 +13,10 @@ Pageboard.setup = function(state) {
 	modeControl = document.querySelector('#store > [data-command="view"]');
 	modeControl.removeEventListener('click', modeControlListener, false);
 	modeControl.addEventListener('click', modeControlListener, false);
+};
+
+Pageboard.hook = function(state) {
+	buildListener(Pageboard.read.contentWindow);
 };
 
 Pageboard.patch = init;
