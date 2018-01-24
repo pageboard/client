@@ -1,5 +1,6 @@
 [block-type="menu_item_popup"] {
 	display:block !important;
+	position:static !important;
 }
 [block-type="menu_item_popup"] > .popup {
 	display:none;
