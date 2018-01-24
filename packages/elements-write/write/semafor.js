@@ -226,7 +226,7 @@ types.oneOf = function(key, schema, node, fields) {
 	});
 	var oneOfType;
 	var icons = false;
-	if (alts.length == 1) {
+	if (alts.length == 1 && alts[0].const === undefined) {
 		oneOfType = alts[0];
 	} else if (alts.every(function(item) {
 		return !!item.icon;
