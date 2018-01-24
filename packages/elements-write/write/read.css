@@ -40,19 +40,24 @@
 	font-variant: none;
 	font-style: normal;
 	text-transform: none;
-	text-shadow: 0 0 5px #FFF;
+	text-shadow: 0 0 2px #FFF;
 	overflow: visible;
 	height: 0;
 	width: 0;
 	white-space: nowrap;
+	opacity:0;
+	transition:opacity 0.3s;
+	transform: translateX(3px) translateY(2px);
 }
 .ProseMirror.ProseMirror-alt [block-type] {
 	outline: 1px dashed #4183c4;
 	outline-offset: -3px;
 }
+
 .ProseMirror.ProseMirror-alt [block-type]:hover {
-	outline: 2px solid #4183f4;
+	outline: 1px solid #4183f4;
 }
 .ProseMirror.ProseMirror-alt [block-type]:hover:after {
-	color: black;
+	opacity:1;
 }
+
