@@ -47,7 +47,7 @@
 	white-space: nowrap;
 	opacity:0;
 	transition:opacity 0.3s;
-	transform: translateX(3px) translateY(2px);
+	transform:translateY(-2px);
 }
 .ProseMirror.ProseMirror-alt [block-type] {
 	outline: 1px dashed #4183c4;
