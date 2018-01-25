@@ -187,12 +187,19 @@ Pageboard.elements.table_cell = {
 			default: false
 		}
 	},
-	contents: {
-		content: 'text*'
-	},
+	inplace: true,
+	contents: "inline*",
 	icon: '<b class="icon">cell</b>',
+	tag: 'td',
+	parse: function(dom) {
+		var d = {};
+		if (dom.matches('.center')) d.align = 'center';
+		else if (dom.matches('.right')) d.align = 'right';
+		if (dom.matches('.selectable')) d.selectable = true;
+		return d;
+	},
 	render: function(doc, block) {
-		var node = doc.dom`<td block-content="content"></td>`;
+		var node = doc.dom`<td></td>`;
 		if (block.data.align) node.classList.add(block.data.align, 'aligned');
 		if (block.data.selectable) node.classList.add('selectable');
 		return node;
@@ -212,13 +219,23 @@ Pageboard.elements.table_head_cell = {
 			maximum: 16
 		}
 	},
-	contents: {
-		content: "text*"
-	},
+	contents: "inline*",
 	icon: '<b class="icon">head</b>',
+	tag: 'th',
+	inplace: true,
+	parse: function(dom) {
+		var d = {};
+		var pre = Pageboard.elements.grid.prefixes;
+		Object.keys(pre).forEach(function(w) {
+			var sel = pre[w];
+			if (sel && dom.matches(`.${sel}.wide`)) d.width = w;
+		});
+		return d;
+	},
 	render: function(doc, block) {
-		var node = doc.dom`<th block-content="content"></th>`;
-		if (block.data.width) node.classList.add(Pageboard.elements.grid.prefixes[block.data.width], 'wide');
+		var node = doc.dom`<th></th>`;
+		var pre = Pageboard.elements.grid.prefixes;
+		if (block.data.width) node.classList.add(pre[block.data.width], 'wide');
 		return node;
 	}
 };
