@@ -16,8 +16,11 @@ Pageboard.elements.query = {
 	icon: '<i class="search icon"></i>',
 	render: function(doc, block) {
 		var node = doc.dom`<element-query class="ui form">
-			<div block-content="messages"></div>
-			<div block-content="template"></div>
+			<div>
+				<div block-content="messages"></div>
+				<div block-content="template"></div>
+			</div>
+			<div class="results"></div>
 		</element-query>`;
 		var d = block.data;
 		var type = d.query && d.query.type;

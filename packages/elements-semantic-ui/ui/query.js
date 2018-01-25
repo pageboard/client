@@ -35,10 +35,6 @@ class HTMLElementQuery extends HTMLCustomElement {
 		return obj;
 	}
 	connectedCallback() {
-		if (!this.children.length) return;
-		if (!this.querySelector('.results')) {
-			this.insertAdjacentHTML('beforeEnd', '<div class="results"></div>');
-		}
 		this.refresh();
 	}
 	attributeChangedCallback(attributeName, oldValue, newValue, namespace) {
@@ -48,16 +44,26 @@ class HTMLElementQuery extends HTMLCustomElement {
 		return this.refresh();
 	}
 	refresh(query) {
+		if (!this.children.length) return;
 		if (!query) {
 			if (!Page.state) return;
 			query = Page.state.query;
 		}
+		if (this._refreshing) return;
+		this._refreshing = true;
+
+		var results = this.querySelector('.results');
+
 		if (query._parent) console.warn("query._parent is reserved");
 		query = HTMLElementQuery.filterQuery(query);
 		query._parent = this.getAttribute('block-id');
-		var me = this;
-		var results = this.querySelector('.results');
+
 		results.textContent = "";
+		var template = this.querySelector('[block-content="template"]').cloneNode(true);
+		template.removeAttribute('block-content');
+		Array.from(template.querySelectorAll('[block-id]')).forEach(function(node) {
+			node.removeAttribute('block-id');
+		});
 		var form = this;
 		form.classList.remove('success', 'error', 'warning', 'loading');
 		form.classList.add('loading');
@@ -72,10 +78,6 @@ class HTMLElementQuery extends HTMLCustomElement {
 			var binding = Pageboard.bindings[bindName];
 			if (!binding) throw new Error("Cannot find data binder " + bindName);
 			if (!binding.merge) throw new Error("Data binder need merge function " + bindName);
-			var template = this.querySelector('[block-content="template"]').cloneNode(true);
-			Array.from(template.querySelectorAll('[block-id]')).forEach(function(node) {
-				node.removeAttribute('block-id');
-			});
 			if (binding.merge(template, results, data) === false) {
 				form.classList.add('warning');
 			} else {
@@ -86,7 +88,8 @@ class HTMLElementQuery extends HTMLCustomElement {
 			form.classList.add('error');
 		}).then(function() {
 			form.classList.remove('loading');
-		});
+			this._refreshing = false;
+		}.bind(this));
 	}
 }
 

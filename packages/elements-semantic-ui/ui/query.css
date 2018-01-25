@@ -3,11 +3,11 @@ element-query {
 	position:relative;
 }
 
-element-query > [block-content="template"] {
+element-query > div > [block-content="template"] {
 	display:none;
 }
 
-element-query[block-focused] > [block-content="template"] {
+element-query[block-focused] > div > [block-content="template"] {
 	display:block;
 }
 
