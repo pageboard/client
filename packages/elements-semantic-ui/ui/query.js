@@ -58,7 +58,7 @@ class HTMLElementQuery extends HTMLCustomElement {
 		var results = this.querySelector('.results');
 		results.textContent = "";
 		var form = this;
-		form.classList.remove('success', 'error', 'info', 'loading');
+		form.classList.remove('success', 'error', 'warning', 'loading');
 		form.classList.add('loading');
 		return fetch(Page.format({
 			pathname: '/.api/query',

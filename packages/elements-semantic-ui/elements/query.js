@@ -100,9 +100,6 @@ Pageboard.elements.query_message = {
 				const: "success",
 				title: "Success"
 			}, {
-				const: "info",
-				title: "Info"
-			}, {
 				const: "warning",
 				title: "Warning"
 			}, {
