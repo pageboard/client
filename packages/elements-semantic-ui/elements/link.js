@@ -68,7 +68,6 @@ Pageboard.elements.link = {
 	contents: {
 		text: "text*"
 	},
-	context: "paragraph/",
 	inline: true,
 	group: "inline",
 	tag: 'a:not(.itemlink)',
