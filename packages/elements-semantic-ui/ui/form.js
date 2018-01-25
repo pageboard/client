@@ -40,22 +40,18 @@ Page.patch(function(state) {
 		if (method == "get") {
 			form.fill(state.query);
 		} else if (method == "post") {
-			var name = "id";
-			// TODO
-			// var formName = form.getAttribute('name');
-			// if (formName) name = `${formName}.${name}`;
+			var name = form.dataset.fill;
+			if (!name) return;
 			var id = state.query[name];
 			if (!id) return;
-			var input = form.querySelector('input[type="hidden"][name="id"]');
-			if (!input) {
-				return;
-			}
+			var input = form.querySelector('input[type="hidden"][name="_id"]');
 			var parent = form.querySelector('input[type="hidden"][name="_parent"]');
-			if (!parent || !parent.value) {
-				console.warn("form has no parent id");
+			if (!id || !parent || !parent.value) {
+				console.warn("form has missing inputs");
 				return;
 			}
 			parent = parent.value;
+			input.value = id;
 			proms.push(fetchAction('get', '/.api/form', {
 				_parent: parent,
 				id: id

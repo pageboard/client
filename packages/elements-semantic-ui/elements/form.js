@@ -26,6 +26,11 @@ Pageboard.elements.form = {
 					type: 'boolean',
 					default: false
 				},
+				fill: {
+					title: 'Fill using id from query',
+					description: 'the name of the id parameter - leave empty to not fill',
+					type: 'string'
+				},
 				call: {
 					title: 'Call api or url',
 					description: 'Leave empty for current url',
@@ -116,20 +121,22 @@ Pageboard.elements.form = {
 	icon: '<i class="write icon"></i>',
 	render: function(doc, block) {
 		var action = block.data.action || {};
-		var input, url;
+		var parent = '', fill = '', url;
 		if (action.method == "get") {
 			url = action.call;
-			input = '';
 		} else if (action.method == "post") {
 			url = "/.api/form";
-			input = doc.dom`<input type="hidden" name="_parent" value="${block.id}" />`;
+			parent = doc.dom`<input type="hidden" name="_parent" value="${block.id}" />`;
+			if (action.fill) fill = doc.dom`<input type="hidden" name="_id" />`;
 		}
 
 		var form = doc.dom`<form action="${url}" method="${action.method}" class="ui form">
-			${input}
+			${parent}
+			${fill}
 			<div block-content="form"></div>
 		</form>`;
 		if (action.live) form.dataset.live = true;
+		if (action.fill) form.dataset.fill = action.fill;
 		return form;
 	},
 	stylesheets: [
