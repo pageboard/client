@@ -78,84 +78,48 @@ Pageboard.elements.table = {
 Pageboard.elements.table_head = {
 	title: "Head",
 	menu: 'widget',
-	properties: {
-		fullWidth: {
-			title: 'Full width',
-			description: 'fills gap in first column of definition table',
-			type: 'boolean',
-			default: false
-		}
-	},
 	contents: {
-		cells: {
-			spec: 'table_head_cell+',
-			title: 'Cells'
-		}
+		cells: 'table_head_cell+'
 	},
 	icon: '<b class="icon">head</b>',
+	inplace: true,
 	render: function(doc, block) {
-		var node = doc.dom`<thead><tr block-content="cells"></tr></thead>`;
-		if (block.data.fullWidth) node.classList.add('full-width');
-		return node;
+		return doc.dom`<thead><tr block-content="cells"></tr></thead>`;
 	}
 };
 
 Pageboard.elements.table_foot = {
 	title: "Foot",
 	menu: 'widget',
-	properties: {
-		fullWidth: {
-			title: 'Full width',
-			description: 'fills gap in first column of definition table',
-			type: 'boolean',
-			default: false
-		}
-	},
 	contents: {
-		cells: {
-			spec: 'table_head_cell+',
-			title: 'Cells'
-		}
+		cells: 'table_head_cell+'
 	},
+	inplace: true,
 	icon: '<b class="icon">foot</b>',
 	render: function(doc, block) {
-		var node = doc.dom`<tfoot><tr block-content="cells"></tr></tfoot>`;
-		if (block.data.fullWidth) node.classList.add('full-width');
-		return node;
+		return doc.dom`<tfoot><tr block-content="cells"></tr></tfoot>`;
 	}
 };
 
 Pageboard.elements.table_body = {
 	title: "Body",
 	menu: 'widget',
-	properties: {
-	},
-	contents: {
-		rows: {
-			spec: 'table_row+',
-			title: 'Rows'
-		}
-	},
+	contents: 'table_row+',
+	inplace: true,
 	icon: '<b class="icon">body</b>',
 	render: function(doc, block) {
-		return doc.dom`<tbody block-content="rows"></tbody>`;
+		return doc.dom`<tbody></tbody>`;
 	}
 };
 
 Pageboard.elements.table_row = {
 	title: "Row",
 	menu: 'widget',
-	properties: {
-	},
-	contents: {
-		cells: {
-			spec: 'table_cell+',
-			title: 'Cells'
-		}
-	},
+	contents: 'table_cell+',
+	inplace: true,
 	icon: '<b class="icon">row</b>',
 	render: function(doc, block) {
-		return doc.dom`<tr block-content="cells"></tr>`;
+		return doc.dom`<tr></tr>`;
 	}
 };
 
