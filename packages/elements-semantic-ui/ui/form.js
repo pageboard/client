@@ -32,6 +32,27 @@ HTMLSelectElement.prototype.fill = function(values) {
 	}
 };
 
+HTMLFormElement.fetch = function(method, url, data) {
+	var fetchOpts = {
+		method: method,
+		headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json'
+		}
+	};
+	if (/^get$/i.test(method)) {
+		url = Page.format(Object.assign(Page.parse(url), {query: data}));
+	} else {
+		fetchOpts.body = JSON.stringify(data);
+	}
+
+	// 1. get data and submit json to "action"
+	return fetch(url, fetchOpts).then(function(res) {
+		if (res.status >= 400) throw new Error(res.statusText);
+		return res.json();
+	});
+};
+
 
 Page.patch(function(state) {
 	var proms = [];
@@ -52,7 +73,7 @@ Page.patch(function(state) {
 			}
 			parent = parent.value;
 			input.value = id;
-			proms.push(fetchAction('get', '/.api/form', {
+			proms.push(HTMLFormElement.fetch('get', '/.api/form', {
 				_parent: parent,
 				id: id
 			}).then(function(block) {
@@ -101,7 +122,7 @@ Page.setup(function(state) {
 			}).map(function(input) {
 				return input.closest('element-input-file').upload();
 			})).then(function() {
-				p = fetchAction(form.method, form.action, formToQuery(form))
+				p = HTMLFormElement.fetch(form.method, form.action, formToQuery(form))
 				.then(function(data) {
 					form.classList.add('success');
 					if (data.redirect) return Page.push(redirect);
@@ -113,27 +134,6 @@ Page.setup(function(state) {
 			form.classList.add('error');
 		}).then(function() {
 			form.classList.remove('loading');
-		});
-	}
-
-	function fetchAction(method, url, data) {
-		var fetchOpts = {
-			method: method,
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json'
-			}
-		};
-		if (/^get$/i.test(method)) {
-			url = Page.format(Object.assign(Page.parse(url), {query: data}));
-		} else {
-			fetchOpts.body = JSON.stringify(data);
-		}
-
-		// 1. get data and submit json to "action"
-		return fetch(url, fetchOpts).then(function(res) {
-			if (res.status >= 400) throw new Error(res.statusText);
-			return res.json();
 		});
 	}
 
