@@ -88,7 +88,7 @@ Pageboard.elements.table_head = {
 	},
 	contents: {
 		cells: {
-			spec: 'table_th+',
+			spec: 'table_head_cell+',
 			title: 'Cells'
 		}
 	},
@@ -113,7 +113,7 @@ Pageboard.elements.table_foot = {
 	},
 	contents: {
 		cells: {
-			spec: 'table_th+',
+			spec: 'table_head_cell+',
 			title: 'Cells'
 		}
 	},
@@ -199,7 +199,7 @@ Pageboard.elements.table_cell = {
 	}
 };
 
-Pageboard.elements.table_th = {
+Pageboard.elements.table_head_cell = {
 	title: "Cell",
 	menu: 'widget',
 	properties: {
