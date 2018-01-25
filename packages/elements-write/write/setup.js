@@ -43,6 +43,8 @@ Page.patch(function() {
 });
 
 function submitListener(e) {
+	var form = e.target.form || e.target.closest('form');
+	if (form && /^get$/i.test(form.method)) return;
 	e.preventDefault();
 	e.stopImmediatePropagation();
 	if (Pageboard.editor.destroying) return;
