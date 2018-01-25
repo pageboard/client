@@ -150,6 +150,7 @@ function buildListener(win, doc) {
 
 function setupListener(win) {
 	Pageboard.view = win.Pageboard.view;
+	Pageboard.bindings = win.Pageboard.bindings;
 	editorSetup(win, win.Pageboard.view);
 }
 
