@@ -103,6 +103,9 @@ Pageboard.elements.query_message = {
 				const: "info",
 				title: "Info"
 			}, {
+				const: "warning",
+				title: "Warning"
+			}, {
 				const: "error",
 				title: "Error"
 			}]

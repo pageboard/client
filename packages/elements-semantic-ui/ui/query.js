@@ -76,7 +76,7 @@ class HTMLElementQuery extends HTMLCustomElement {
 				node.removeAttribute('block-id');
 			});
 			if (binding.merge(template, results, data) === false) {
-				form.classList.add('info');
+				form.classList.add('warning');
 			} else {
 				form.classList.add('success');
 			}
