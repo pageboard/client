@@ -2,3 +2,12 @@ element-query {
 	display:block;
 	position:relative;
 }
+
+element-query > [block-content="template"] {
+	display:none;
+}
+
+element-query[block-focused] > [block-content="template"] {
+	display:block;
+}
+

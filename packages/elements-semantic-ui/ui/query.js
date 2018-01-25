@@ -4,6 +4,9 @@ Page.patch(function(state) {
 	});
 });
 
+if (!window.Pageboard) window.Pageboard = {};
+window.Pageboard.bindings = {};
+
 class HTMLElementQuery extends HTMLCustomElement {
 	static find(name, value) {
 		// convert query into a query that contains only
@@ -32,7 +35,10 @@ class HTMLElementQuery extends HTMLCustomElement {
 		return obj;
 	}
 	connectedCallback() {
-		if (this.children.length) this.refresh();
+		if (!this.querySelector('.results')) {
+			this.insertAdjacentHTML('beforeEnd', '<div class="results"></div>');
+		}
+		this.refresh();
 	}
 	attributeChangedCallback(attributeName, oldValue, newValue, namespace) {
 		if (attributeName.startsWith('data-')) this.refresh();
@@ -49,32 +55,32 @@ class HTMLElementQuery extends HTMLCustomElement {
 		query = HTMLElementQuery.filterQuery(query);
 		query._parent = this.getAttribute('block-id');
 		var me = this;
-		var type = this.dataset.type;
-		var results = this.querySelector('[block-content="results"]');
+		var results = this.querySelector('.results');
+		results.textContent = "";
 		var form = this;
 		form.classList.remove('success', 'error', 'info', 'loading');
 		form.classList.add('loading');
-		results.textContent = "";
 		return fetch(Page.format({
 			pathname: '/.api/query',
 			query: query
 		})).then(function(response) {
 			if (response.status >= 400) throw new Error(response.statusText);
 			return response.json();
-		}).then(function(blocks) {
-			if (blocks && Array.isArray(blocks) == false) blocks = [blocks];
-			if (blocks.length == 0) form.classList.add('info');
-			return Promise.all(blocks.map(function(cur) {
-				var el = Pageboard.elements[type];
-				if (!el) throw new Error("Cannot render unknown type " + type);
-				return el.render(results.ownerDocument, cur);
-			})).then(function(nodes) {
-				nodes.forEach(function(node) {
-					results.appendChild(node);
-				});
-				form.classList.add('success');
+		}).then(function(data) {
+			var bindName = this.dataset.binding;
+			var binding = Pageboard.bindings[bindName];
+			if (!binding) throw new Error("Cannot find data binder " + bindName);
+			if (!binding.merge) throw new Error("Data binder need merge function " + bindName);
+			var template = this.querySelector('[block-content="template"]').cloneNode(true);
+			Array.from(template.querySelectorAll('[block-id]')).forEach(function(node) {
+				node.removeAttribute('block-id');
 			});
-		}).catch(function(err) {
+			if (binding.merge(template, results, data) === false) {
+				form.classList.add('info');
+			} else {
+				form.classList.add('success');
+			}
+		}.bind(this)).catch(function(err) {
 			console.error(err);
 			form.classList.add('error');
 		}).then(function() {

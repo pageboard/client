@@ -1,14 +1,15 @@
 Pageboard.elements.query = {
 	title: "Query",
 	menu: "form",
+	priority: -1,
 	contents: {
 		messages: {
+			title: 'Messages',
 			spec: '(paragraph|query_message)+'
 		},
-		results: {
-			title: 'Results',
-			spec: "block*",
-			virtual: true
+		template: {
+			title: 'Template',
+			spec: 'block+'
 		}
 	},
 	group: "block",
@@ -16,12 +17,15 @@ Pageboard.elements.query = {
 	render: function(doc, block) {
 		var node = doc.dom`<element-query class="ui form">
 			<div block-content="messages"></div>
-			<div block-content="results"></div>
+			<div block-content="template"></div>
 		</element-query>`;
 		var d = block.data;
-		var type = d.render && d.render.type || d.query && d.query.type;
+		var type = d.query && d.query.type;
 		if (type) {
 			node.dataset.type = type;
+		}
+		if (d.binding) {
+			node.dataset.binding = d.binding;
 		}
 		return node;
 	},
@@ -38,8 +42,8 @@ Pageboard.elements.query = {
 					pattern: "^(\\w+\.\\w+)|((/[\\w-.]*)+)$"
 				},
 				type: {
-					title: 'Bind to element',
-					description: 'Checks schema and defaults rendering',
+					title: 'Which element',
+					description: 'Checks query against schema',
 					type: ['null', 'string'],
 					input: {
 						name: 'element',
@@ -66,17 +70,11 @@ Pageboard.elements.query = {
 				}
 			}
 		},
-		render: {
-			title: 'Render',
-			type: 'object',
-			properties: {
-				type: {
-					title: 'As element',
-					type: ['null', 'string'],
-					input: {
-						name: 'element'
-					}
-				}
+		binding: {
+			title: 'Binding',
+			type: ['null', 'string'],
+			input: {
+				name: 'binding'
 			}
 		}
 	},
@@ -84,7 +82,6 @@ Pageboard.elements.query = {
 		'../ui/query.css'
 	],
 	scripts: [
-		'/.api/elements.js',
 		'../ui/query.js'
 	]
 };
