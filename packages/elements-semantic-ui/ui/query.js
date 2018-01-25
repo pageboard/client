@@ -35,6 +35,7 @@ class HTMLElementQuery extends HTMLCustomElement {
 		return obj;
 	}
 	connectedCallback() {
+		if (!this.children.length) return;
 		if (!this.querySelector('.results')) {
 			this.insertAdjacentHTML('beforeEnd', '<div class="results"></div>');
 		}
