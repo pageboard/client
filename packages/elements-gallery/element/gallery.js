@@ -37,6 +37,7 @@ Pageboard.elements.gallery = {
 Pageboard.elements.itemlink = {
 	title: "Item Link",
 	menu: "widget",
+	priority: 10,
 	properties: {
 		target: {
 			title: 'Target window',
