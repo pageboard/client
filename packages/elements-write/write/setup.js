@@ -140,6 +140,7 @@ function buildListener(win, doc) {
 	win.addEventListener('keyup', function(e) {
 		win.document.body.classList.remove('ProseMirror-alt');
 	});
+	if (!win.Pageboard.elements.page.stylesheets) win.Pageboard.elements.page.stylesheets = [];
 	win.Pageboard.elements.page.stylesheets.push(editStylePath);
 	editMode(doc);
 	var resolver = function() {
