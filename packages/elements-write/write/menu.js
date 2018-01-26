@@ -130,8 +130,7 @@ Menu.prototype.item = function(el) {
 		},
 		select: function(state) {
 			if (el.inline && el.contents) {
-				var parent = self.parents.length && self.parents[0];
-				if (parent.root && (parent.root.node && parent.root.node.isTextblock) || parent.root.mark) {
+				if (self.parents.marks) {
 					return !state.tr.selection.node && editor.utils.canMark(self.selection, nodeType);
 				} else return false;
 			} else {
@@ -145,10 +144,8 @@ Menu.prototype.item = function(el) {
 		},
 		active: function(state) {
 			if (!el.inline || !el.contents) {
-				if (self.parents.length) {
-					var parent = self.parents[0];
-					return parent.root && parent.root.node && parent.root.node.type.name == el.name;
-				}
+				var parent = self.parents.length && self.parents[0];
+				return parent && parent.node.type.name == el.name;
 			} else {
 				return editor.utils.markActive(state.tr.selection, nodeType);
 			}

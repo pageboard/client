@@ -48,7 +48,7 @@ Breadcrumb.prototype.update = function(parents) {
 		parent = parents[i];
 		this.$node.append(this.item(parent));
 	}
-	var contentName = parent.container && parent.container.node.type.spec.contentName;
+	var contentName = parent.contentName;
 	var contents = this.editor.element(parent.type).contents;
 	if (contentName) {
 		this.$node.append(contents[contentName].title);

@@ -23,7 +23,7 @@ Share.prototype.update = function(parents) {
 		return parent.block.standalone;
 	});
 	var hasDescendant = false;
-	parents[0].root.node.descendants(function(child) {
+	parents[0].node.descendants(function(child) {
 		if (child.attrs.standalone == "true") {
 			hasDescendant = true;
 			return false;

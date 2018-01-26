@@ -178,15 +178,19 @@ function editorUpdate(editor, state, focusParents, focusSelection) {
 	var parents = [];
 
 	focusParents.forEach(function(item) {
-		var node = item.root.mark || item.root.node;
-		var block = editor.blocks.get(node.attrs.id);
-		if (!block) {
-			block = editor.blocks.fromAttrs(node.attrs);
-			delete node.attrs.id;
+		if (item.marks) {
+			parents.marks = item.marks.map(function(mark) {
+				return editor.blocks.get(mark.attrs.id) || editor.blocks.fromAttrs(mark.attrs);
+			});
 		}
-		item.block = block;
-		item.type = node.attrs.type || block.type;
-		parents.push(item);
+		var node = item.root.node;
+		var obj = {
+			node: node,
+			block: editor.blocks.get(node.attrs.id) || editor.blocks.fromAttrs(node.attrs),
+		};
+		obj.type = node.attrs.type || obj.block.type;
+		if (item.container) obj.contentName = item.container.node.type.spec.contentName;
+		parents.push(obj);
 	});
 
 	if (editor.controls) Object.keys(editor.controls).forEach(function(key) {
