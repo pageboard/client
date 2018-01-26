@@ -30,7 +30,8 @@ Pageboard.elements.menu = {
 		return it;
 	},
 	stylesheets: [
-		'../semantic-ui/menu.css'
+		'../semantic-ui/menu.css',
+		'../ui/menu.css'
 	],
 	scripts: [
 		'../ui/menu.js'
@@ -104,8 +105,7 @@ Pageboard.elements.menu_item_dropdown = {
 		</div>`;
 	},
 	stylesheets: [
-		'../semantic-ui/dropdown.css',
-		'../ui/dropdown.css'
+		'../semantic-ui/dropdown.css'
 	]
 };
 
@@ -139,9 +139,6 @@ Pageboard.elements.menu_item_popup = {
 				<div block-content="content"></div>
 			</div>
 		</div>`;
-	},
-	stylesheets: [
-		'../ui/popup.css'
-	]
+	}
 };
 
