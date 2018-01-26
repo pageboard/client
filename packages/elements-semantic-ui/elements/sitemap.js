@@ -18,7 +18,7 @@ Pageboard.elements.sitemap = {
 	group: "block",
 	icon: '<i class="icon sitemap"></i>',
 	render: function(doc, block, view) {
-		return doc.dom`<div class="ui list" block-content="children"></div>`;
+		return doc.dom`<element-accordion class="ui accordion" block-content="children"></element-accordion>`;
 	},
 	mount: function(block, blocks, view) {
 		if (!block.content) block.content = {};
@@ -89,7 +89,7 @@ Pageboard.elements.sitemap = {
 		}
 	},
 	stylesheets: [
-		'../semantic-ui/list.css',
+		'../semantic-ui/accordion.css',
 		'../ui/sitemap.css'
 	],
 	helpers: [
@@ -118,12 +118,13 @@ Pageboard.elements.sitepage = {
 	icon: '<i class="icon file outline"></i>',
 	context: 'sitemap/ | sitepage/',
 	render: function(doc, block) {
-		return doc.dom`<element-sitepage class="item" data-url="${block.data.url}">
-			<div class="content">
-				<div class="header">${block.data.title || 'Untitled'}</div>
+		return doc.dom`<element-sitepage class="item fold" data-url="${block.data.url}">
+			<div class="title">
+				<i class="dropdown icon"></i>
+				<span class="header">${block.data.title || 'Untitled'}</span><br />
 				<a href="${block.data.url}" class="description">${block.data.url || '-'}</a>
-				<div class="list" block-content="children"></div>
 			</div>
+			<div class="list content ui accordion" block-content="children"></div>
 		</element-sitepage>`;
 	}
 };

@@ -13,16 +13,24 @@ class HTMLElementAccordion extends HTMLCustomElement {
 		if (!title) return;
 		var fold = title.parentNode;
 		if (!fold || !fold.matches('.fold')) return;
-		var owner = fold.closest('element-accordion');
-		if (owner != this) return;
+		var owner = fold.closest('.ui.accordion');
+		if (owner.nodeName == this.nodeName && owner != this) return;
 		e.preventDefault();
 		if (title.matches('.active')) {
 			title.classList.remove('active');
 			var content = title.nextElementSibling;
 			if (content) content.classList.remove('active');
 		} else {
+			var ancestors = [];
+			var anc = fold;
+			while (anc = anc.closest('.fold')) {
+				ancestors.push(anc);
+				anc = anc.parentNode;
+			}
 			var all = Array.prototype.forEach.call(this.querySelectorAll('.fold > .active'), function(node) {
-				node.classList.remove('active');
+				if (ancestors.indexOf(node.parentNode) < 0) {
+					node.classList.remove('active');
+				}
 			});
 			title.classList.add('active');
 			var content = title.nextElementSibling;
