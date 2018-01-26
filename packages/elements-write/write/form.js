@@ -4,13 +4,14 @@ Pageboard.Controls.Form = Form;
 
 function Form(editor, selector) {
 	this.editor = editor;
-	this.$node = $(selector);
+	this.node = document.querySelector(selector);
 	this.clear();
 	this.changeListener = this.change.bind(this);
 }
 
 Form.prototype.destroy = function() {
-	this.$node.off('change input', this.changeListener);
+	this.node.removeEventListener('change', this.changeListener);
+	this.node.removeEventListener('input', this.changeListener);
 };
 
 Form.prototype.clear = function() {
@@ -18,7 +19,7 @@ Form.prototype.clear = function() {
 		if (this.inputs[name].destroy) this.inputs[name].destroy();
 	}
 	this.inputs = {};
-	this.$node.empty();
+	this.node.textContent = "";
 	delete this.block;
 	delete this.form;
 };
@@ -46,20 +47,19 @@ Form.prototype.update = function(parents) {
 		return;
 	}
 
-	this.$node.off('change input', this.changeListener);
+	this.node.removeEventListener('change', this.changeListener);
+	this.node.removeEventListener('input', this.changeListener);
 
 	if (block != this.block) this.clear();
 
 	this.type = info.type;
-
-	var node = this.$node[0];
 
 	if (!this.form) {
 		this.form = new Semafor({
 			type: 'object',
 			properties: el.properties,
 			required: el.required
-		}, node);
+		}, this.node);
 	}
 
 	this.block = block;
@@ -67,11 +67,12 @@ Form.prototype.update = function(parents) {
 	this.form.set(block.data);
 
 	if (el.properties) this.propInputs(el.properties);
-	this.$node.on('change input', this.changeListener);
+	this.node.addEventListener('change', this.changeListener);
+	this.node.addEventListener('input', this.changeListener);
 };
 
 Form.prototype.propInputs = function(props, parentKey) {
-	var node = this.$node[0];
+	var node = this.node;
 	var block = this.block;
 	Object.keys(props).forEach(function(key) {
 		var prop = props[key];
