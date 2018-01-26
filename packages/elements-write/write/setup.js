@@ -281,7 +281,7 @@ function editorSetup(win, view) {
 
 Pageboard.dev = function() {
 	if (window.ProseMirrorDevTools) {
-		window.ProseMirrorDevTools.applyDevTools(editor, {
+		window.ProseMirrorDevTools.applyDevTools(Pageboard.editor, {
 			EditorState: Pageboard.window.Pagecut.View.EditorState
 		});
 	} else {
