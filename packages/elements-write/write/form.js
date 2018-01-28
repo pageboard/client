@@ -2,30 +2,26 @@
 
 Pageboard.Controls.Form = Form;
 
-function Form(editor, selector) {
+
+function Form(editor, node) {
 	this.editor = editor;
-	this.node = document.querySelector(selector);
-	this.clear();
-	this.changeListener = this.change.bind(this);
+	this.node = node;
 }
 
 Form.prototype.destroy = function() {
-	this.node.removeEventListener('change', this.changeListener);
-	this.node.removeEventListener('input', this.changeListener);
-};
-
-Form.prototype.clear = function() {
-	if (this.inputs) for (var name in this.inputs) {
-		if (this.inputs[name].destroy) this.inputs[name].destroy();
+	if (this.main) {
+		this.main.destroy();
+		this.main = null;
 	}
-	this.inputs = {};
-	this.node.textContent = "";
-	delete this.block;
-	delete this.form;
+	if (this.markForms) {
+		this.markForms.forEach(function(markForm) {
+			markForm.destroy();
+		});
+		this.markForms = null;
+	}
 };
 
 Form.prototype.update = function(parents) {
-	if (this.ignore) return;
 	if (this.ignoreNext) {
 		this.ignoreNext = false;
 		return;
@@ -34,44 +30,69 @@ Form.prototype.update = function(parents) {
 		this.clear();
 		return;
 	}
-	var info = parents[0];
-	var block = info.block;
+	var parent = parents[0];
+
+	var block = parent.block;
 	if (!block) {
-		this.clear();
+		this.destroy();
 		return;
 	}
 
-	var el = this.editor.element(info.type);
-	if (!el) {
-		throw new Error(`Unknown element type ${block.type}`);
-		return;
+	if (this.main && block != this.main.block) {
+		this.destroy();
 	}
 
-	this.node.removeEventListener('change', this.changeListener);
-	this.node.removeEventListener('input', this.changeListener);
+	if (!this.main) this.main = new FormBlock(this.editor, this.node, block);
+	this.main.update();
 
-	if (block != this.block) this.clear();
-
-	this.type = info.type;
-
-	if (!this.form) {
-		this.form = new Semafor({
-			type: 'object',
-			properties: el.properties,
-			required: el.required
-		}, this.node);
-	}
-
-	this.block = block;
-	this.element = el;
-	this.form.set(block.data);
-
-	if (el.properties) this.propInputs(el.properties);
-	this.node.addEventListener('change', this.changeListener);
-	this.node.addEventListener('input', this.changeListener);
+	var marks = parent.marks;
+	if (this.markForms) this.markForms.forEach(function(form) {
+		form.destroy();
+	});
+	this.markForms = (parent.marks || []).map(function(block) {
+		var form = new FormBlock(this.editor, this.node, block);
+		form.update();
+		return form;
+	}, this);
 };
 
-Form.prototype.propInputs = function(props, parentKey) {
+function FormBlock(editor, parent, block) {
+	this.node = parent.appendChild(document.createElement('div'));
+	this.block = block;
+	this.editor = editor;
+	this.el = editor.element(block.type);
+	if (!this.el) {
+		throw new Error(`Unknown element type ${block.type}`);
+	}
+	this.changeListener = this.change.bind(this);
+	this.node.addEventListener('change', this.changeListener);
+	this.node.addEventListener('input', this.changeListener);
+	this.form = new Semafor({
+		type: 'object',
+		properties: this.el.properties,
+		required: this.el.required
+	}, this.node);
+	this.inputs = {};
+	if (this.el.properties) this.propInputs(this.el.properties);
+}
+
+FormBlock.prototype.destroy = function() {
+	if (this.inputs) for (var name in this.inputs) {
+		if (this.inputs[name].destroy) this.inputs[name].destroy();
+	}
+	this.inputs = {};
+	this.node.removeEventListener('change', this.changeListener);
+	this.node.removeEventListener('input', this.changeListener);
+	this.node.remove();
+};
+
+FormBlock.prototype.update = function() {
+	this.ignoreEvents = true;
+	this.form.set(this.block.data);
+	this.ignoreEvents = false;
+};
+
+FormBlock.prototype.propInputs = function(props, parentKey) {
 	var node = this.node;
 	var block = this.block;
 	Object.keys(props).forEach(function(key) {
@@ -96,8 +117,8 @@ Form.prototype.propInputs = function(props, parentKey) {
 	}, this);
 };
 
-Form.prototype.change = function() {
-	if (!this.block) return;
+FormBlock.prototype.change = function() {
+	if (!this.block || this.ignoreEvents) return;
 	var editor = this.editor;
 	var data = this.form.get();
 
@@ -112,8 +133,7 @@ Form.prototype.change = function() {
 		editor.pageUpdate(this.block);
 	}
 
-	var el = editor.element(this.type);
-	if (el.inplace) {
+	if (this.el.inplace) {
 		// simply select focused node
 		var node = editor.root.querySelector('[block-focused="last"]');
 		if (node) {

@@ -2,10 +2,10 @@
 
 Pageboard.Controls.Share = Share;
 
-function Share(editor, selector) {
+function Share(editor, node) {
 	this.editor = editor;
-	this.$node = $(selector);
-	this.toggle = this.$node.find('> .checkbox').checkbox(); // 'check' || 'uncheck'
+	this.node = node;
+	this.toggle = $(node).find('> .checkbox').checkbox(); // 'check' || 'uncheck'
 
 	this.changeListener = this.change.bind(this);
 	this.toggle.on('change', this.changeListener);
@@ -29,9 +29,9 @@ Share.prototype.update = function(parents) {
 			return false;
 		}
 	});
-	this.$node.toggleClass('standalone-no', !!hide);
-	this.$node.toggleClass('standalone-descendant', hasDescendant);
-	this.$node.toggleClass('standalone-ancestor', hasAncestor);
+	this.node.classList.toggle('standalone-no', !!hide);
+	this.node.classList.toggle('standalone-descendant', hasDescendant);
+	this.node.classList.toggle('standalone-ancestor', hasAncestor);
 	var disabled = hasAncestor || hasDescendant || hide;
 	this.toggle.checkbox(disabled ? 'set disabled' : 'set enabled');
 	this.disabled = disabled;

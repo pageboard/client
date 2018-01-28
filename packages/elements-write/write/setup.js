@@ -179,11 +179,6 @@ function editorUpdate(editor, state, focusParents, focusSelection) {
 	var parents = [];
 
 	focusParents.forEach(function(item) {
-		if (item.marks) {
-			parents.marks = item.marks.map(function(mark) {
-				return editor.blocks.get(mark.attrs.id) || editor.blocks.fromAttrs(mark.attrs);
-			});
-		}
 		var node = item.root.node;
 		var obj = {
 			node: node,
@@ -191,6 +186,11 @@ function editorUpdate(editor, state, focusParents, focusSelection) {
 		};
 		obj.type = node.attrs.type || obj.block.type;
 		if (item.container) obj.contentName = item.container.node.type.spec.contentName;
+		if (item.marks) {
+			obj.marks = item.marks.map(function(mark) {
+				return editor.blocks.get(mark.attrs.id) || editor.blocks.fromAttrs(mark.attrs);
+			});
+		}
 		parents.push(obj);
 	});
 
@@ -264,7 +264,7 @@ function editorSetup(win, view) {
 	var controls = {};
 	Object.keys(Pageboard.Controls).forEach(function(key) {
 		var lKey = key.toLowerCase();
-		controls[lKey] = new Pageboard.Controls[key](editor, '#' + lKey);
+		controls[lKey] = new Pageboard.Controls[key](editor, document.getElementById(lKey));
 	});
 	editor.controls = controls;
 

@@ -1,9 +1,9 @@
 (function(Pageboard) {
 Pageboard.Controls.Store = Store;
 
-function Store(editor, selector) {
+function Store(editor, node) {
 	this.debounceUpdate = Pageboard.Debounce(this.realUpdate.bind(this), 500);
-	this.menu = document.querySelector(selector);
+	this.node = node;
 	this.editor = editor;
 	this.pageId = editor.state.doc.attrs.id;
 
@@ -11,9 +11,9 @@ function Store(editor, selector) {
 	this.discard = this.discard.bind(this);
 	this.flush = this.flush.bind(this);
 
-	this.uiSave = this.menu.querySelector('[data-command="save"]');
+	this.uiSave = this.node.querySelector('[data-command="save"]');
 	this.uiSave.addEventListener('click', this.save);
-	this.uiDiscard = this.menu.querySelector('[data-command="discard"]');
+	this.uiDiscard = this.node.querySelector('[data-command="discard"]');
 	this.uiDiscard.addEventListener('click', this.discard);
 
 	window.addEventListener('beforeunload', this.flush, false);

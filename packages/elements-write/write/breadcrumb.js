@@ -3,14 +3,14 @@ Pageboard.Controls.Breadcrumb = Breadcrumb;
 
 var template;
 
-function Breadcrumb(editor, selector) {
-	this.$node = $(selector);
+function Breadcrumb(editor, node) {
+	this.node = node;
 	this.editor = editor;
 
-	template = this.template = template || this.$node[0].cloneNode(true);
+	template = this.template = template || this.node.cloneNode(true);
 	this.clear();
-	this.$node.on('click', '.section', this.click.bind(this));
-	this.selectMenu = $('#select-menu').on('click', this.selectMenuClick.bind(this))[0];
+	this.click = this.click.bind(this);
+	this.node.addEventListener('click', this.click);
 }
 
 function contentOption(contents, name) {
@@ -20,25 +20,7 @@ function contentOption(contents, name) {
 }
 
 Breadcrumb.prototype.destroy = function() {
-	this.$node.off('click');
-	$(this.selectMenu).off('click');
-};
-
-Breadcrumb.prototype.selectMenuClick = function(e) {
-	var item = e.target.closest('[data-command]');
-	if (!item || item.matches('.disabled')) return;
-	var command = item.dataset.command;
-	var tr = this.editor.state.tr;
-	if (command == "left") {
-		if (!this.editor.utils.move(tr, -1)) return;
-	} else if (command == "right") {
-		if (!this.editor.utils.move(tr, 1)) return;
-	} else if (command == "delete") {
-		if (!this.editor.utils.deleteTr(tr)) return;
-	}
-	tr.setMeta('editor', true);
-	this.editor.dispatch(tr);
-	this.editor.focus();
+	this.node.removeEventListener('click', this.click);
 };
 
 Breadcrumb.prototype.update = function(parents) {
@@ -46,25 +28,22 @@ Breadcrumb.prototype.update = function(parents) {
 	var parent;
 	for (var i = parents.length - 1; i >= 0; i--) {
 		parent = parents[i];
-		this.$node.append(this.item(parent));
+		this.node.insertAdjacentHTML('beforeEnd', this.item(parent));
 	}
 	var contentName = parent.contentName;
 	var contents = this.editor.element(parent.type).contents;
 	if (contentName) {
-		this.$node.append(contents[contentName].title);
+		this.node.appendChild(this.node.ownerDocument.createTextNode(contents[contentName].title));
 	} else {
-		this.$node.find('.section').last().addClass('active').next('.divider').remove();
+		if (this.node.lastElementChild) {
+			this.node.lastElementChild.remove();
+			this.node.lastElementChild.classList.add('active');
+		}
 	}
-	this.selectMenu.querySelector('[data-command="left"]')
-		.classList.toggle('disabled', !this.editor.utils.move(this.editor.state.tr, -1));
-	this.selectMenu.querySelector('[data-command="right"]')
-		.classList.toggle('disabled', !this.editor.utils.move(this.editor.state.tr, 1));
-	this.selectMenu.querySelector('[data-command="delete"]')
-		.classList.toggle('disabled', !this.editor.utils.deleteTr(this.editor.state.tr));
 };
 
 Breadcrumb.prototype.clear = function() {
-	this.$node.empty();
+	this.node.textContent = '';
 };
 
 Breadcrumb.prototype.item = function(parent) {

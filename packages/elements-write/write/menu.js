@@ -4,9 +4,9 @@ Pageboard.Controls.Menu = Menu;
 
 Menu.tabs = ["common", "widget", "link", "form", "user"];
 
-function Menu(editor, selector) {
+function Menu(editor, node) {
 	this.editor = editor;
-	this.node = document.querySelector(selector);
+	this.node = node;
 	this.tabMenu = this.node.dom`<div class="ui top attached tabular mini menu"></div>`;
 	this.node.appendChild(this.tabMenu);
 	this.tabs = {};
@@ -130,9 +130,7 @@ Menu.prototype.item = function(el) {
 		},
 		select: function(state) {
 			if (el.inline && el.contents) {
-				if (self.parents.marks) {
-					return !state.tr.selection.node && editor.utils.canMark(self.selection, nodeType);
-				} else return false;
+				return !state.tr.selection.node && editor.utils.canMark(self.selection, nodeType);
 			} else {
 				var sel = self.selection;
 				var can = !!editor.utils.canInsert(sel.$to, nodeType, false, false).node;
