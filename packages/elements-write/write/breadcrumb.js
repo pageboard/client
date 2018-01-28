@@ -57,9 +57,9 @@ Breadcrumb.prototype.item = function(parent) {
 Breadcrumb.prototype.click = function(e) {
 	var editor = this.editor;
 	var selectors = [];
-	var items = this.$node.find('.section');
-	var target = e && e.target || items.filter('.active').get(0);
-	items.each(function(i, item) {
+	var items = Array.from(this.node.querySelectorAll('.section'));
+	var target = e && e.target || this.node.querySelector('.section.active');
+	items.some(function(item, i) {
 		var position;
 		if (i == items.length - 1) position = "last";
 		else if (i == 0) position = "first";
@@ -68,7 +68,7 @@ Breadcrumb.prototype.click = function(e) {
 		var id = item.getAttribute('block-id');
 		if (id) sel += `[block-id="${id}"]`;
 		selectors.push(sel);
-		if (item == target) return false;
+		if (item == target) return true;
 	});
 	var selector = selectors.join(' ');
 	var node = editor.root.querySelector(selector);
