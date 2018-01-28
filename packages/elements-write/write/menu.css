@@ -48,7 +48,7 @@
 	background:#EEE;
 }
 
-#select-menu .item.disabled {
+#move .item.disabled {
 	opacity:0.45;
 }
 .ui.menu > .item.disabled,
@@ -61,7 +61,7 @@
 	padding: 0.7em;
 }
 
-#select-menu > .right.menu > .item {
+#move > .right.menu > .item {
 	padding: 0 1em;
 }
 
