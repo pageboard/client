@@ -321,7 +321,7 @@ Pageboard.elements.inlineImage = {
 	render: function(doc, block) {
 		var d = block.data;
 		var url = Pageboard.elements.image.buildUrl(d.url || '/.pageboard/read/empty.png', d);
-		var node = doc.dom`<img src="${url}" alt="" class="ui image" />`;
+		var node = doc.dom`<img src="${url}" alt="" class="ui inline image" />`;
 		var display = d.display || {};
 		if (display.avatar) node.classList.add('avatar');
 		if (display.rounded) node.classList.add('rounded');
