@@ -21,17 +21,17 @@ class HTMLElementAccordion extends HTMLCustomElement {
 			var content = title.nextElementSibling;
 			if (content) content.classList.remove('active');
 		} else {
-			var ancestors = [];
-			var anc = fold;
-			while (anc = anc.closest('.fold')) {
-				ancestors.push(anc);
-				anc = anc.parentNode;
-			}
-			var all = Array.prototype.forEach.call(this.querySelectorAll('.fold > .active'), function(node) {
-				if (ancestors.indexOf(node.parentNode) < 0) {
-					node.classList.remove('active');
-				}
-			});
+//			var ancestors = [];
+//			var anc = fold;
+//			while (anc = anc.closest('.fold')) {
+//				ancestors.push(anc);
+//				anc = anc.parentNode;
+//			}
+//			var all = Array.prototype.forEach.call(this.querySelectorAll('.fold > .active'), function(node) {
+//				if (ancestors.indexOf(node.parentNode) < 0) {
+//					node.classList.remove('active');
+//				}
+//			});
 			title.classList.add('active');
 			var content = title.nextElementSibling;
 			if (content) content.classList.add('active');
