@@ -1,6 +1,8 @@
 (function(Pageboard) {
 Pageboard.Controls.Store = Store;
 
+var IsMac = /Mac/.test(navigator.platform);
+
 function Store(editor, node) {
 	this.debounceUpdate = Pageboard.Debounce(this.realUpdate.bind(this), 500);
 	this.node = node;
@@ -10,6 +12,7 @@ function Store(editor, node) {
 	this.save = this.save.bind(this);
 	this.discard = this.discard.bind(this);
 	this.flush = this.flush.bind(this);
+	this.keydown = this.keydown.bind(this);
 
 	this.uiSave = this.node.querySelector('[data-command="save"]');
 	this.uiSave.addEventListener('click', this.save);
@@ -17,6 +20,8 @@ function Store(editor, node) {
 	this.uiDiscard.addEventListener('click', this.discard);
 
 	window.addEventListener('beforeunload', this.flush, false);
+	window.addEventListener('keydown', this.keydown, false);
+	Pageboard.window.addEventListener('keydown', this.keydown, false);
 
 	this.fakeInitials = {};
 	this.unsaved = this.get();
@@ -34,6 +39,8 @@ Store.prototype.destroy = function() {
 	this.uiSave.removeEventListener('click', this.save);
 	this.uiDiscard.removeEventListener('click', this.discard);
 	window.removeEventListener('beforeunload', this.flush, false);
+	window.removeEventListener('keydown', this.keydown, false);
+	Pageboard.window.removeEventListener('keydown', this.keydown, false);
 };
 
 Store.generatedBefore = {};
@@ -66,6 +73,13 @@ Store.prototype.checkUrl = function(pageId, pageUrl) {
 	return findInTreeBlock(this.initial, function(block) {
 		return block.type == "page" && block.id != pageId && block.data.url == pageUrl;
 	});
+};
+
+Store.prototype.keydown = function(e) {
+	if ((e.ctrlKey && !e.altKey || IsMac && e.metaKey) && e.key == "s") {
+		e.preventDefault();
+		this.save();
+	}
 };
 
 Store.prototype.uiUpdate = function() {
