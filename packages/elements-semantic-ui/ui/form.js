@@ -117,16 +117,15 @@ Page.setup(function(state) {
 				query: formToQuery(form)
 			}));
 		} else {
-			return Promise.all(Array.prototype.filter.call(form.elements, function(node) {
+			p = Promise.all(Array.prototype.filter.call(form.elements, function(node) {
 				return node.type == "file";
 			}).map(function(input) {
 				return input.closest('element-input-file').upload();
 			})).then(function() {
-				p = HTMLFormElement.fetch(form.method, form.action, formToQuery(form))
-				.then(function(data) {
-					form.classList.add('success');
-					if (data.redirect) return Page.push(redirect);
-				});
+				return HTMLFormElement.fetch(form.method, form.action, formToQuery(form));
+			}).then(function(data) {
+				form.classList.add('success');
+				if (data.redirect) return Page.push(redirect);
 			});
 		}
 		p.catch(function(err) {
