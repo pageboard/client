@@ -186,10 +186,14 @@ function editorUpdate(editor, state, focusParents, focusSelection) {
 		};
 		obj.type = node.attrs.type || obj.block.type;
 		if (item.container) obj.contentName = item.container.node.type.spec.contentName;
-		if (item.marks) {
-			obj.marks = item.marks.map(function(mark) {
-				return editor.blocks.get(mark.attrs.id) || editor.blocks.fromAttrs(mark.attrs);
-			});
+		if (item.inline) {
+			obj.inline = {
+				node: item.inline.node,
+				blocks: item.inline.node.marks.map(function(mark) {
+					return editor.blocks.get(mark.attrs.id) || editor.blocks.fromAttrs(mark.attrs);
+				}),
+				rpos: item.inline.rpos
+			};
 		}
 		parents.push(obj);
 	});

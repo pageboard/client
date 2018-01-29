@@ -6,24 +6,23 @@ Pageboard.Controls.Form = Form;
 function Form(editor, node) {
 	this.editor = editor;
 	this.node = node;
+	this.inlines = [];
 }
 
 Form.prototype.destroy = function() {
 	if (this.main) {
 		this.main.destroy();
-		this.main = null;
+		delete this.main;
 	}
-	if (this.markForms) {
-		this.markForms.forEach(function(markForm) {
-			markForm.destroy();
-		});
-		this.markForms = null;
-	}
+	this.inlines.forEach(function(form) {
+		form.destroy();
+	});
+	this.inlines = [];
 };
 
-Form.prototype.update = function(parents) {
-	if (this.ignoreNext) {
-		this.ignoreNext = false;
+Form.prototype.update = function(parents, sel) {
+	if (this.main && this.main.ignoreNext) {
+		this.main.ignoreNext = false;
 		return;
 	}
 	if (!parents.length) {
@@ -39,21 +38,34 @@ Form.prototype.update = function(parents) {
 	}
 
 	if (this.main && block != this.main.block) {
-		this.destroy();
+		this.main.destroy();
+		delete this.main;
 	}
 
 	if (!this.main) this.main = new FormBlock(this.editor, this.node, block);
 	this.main.update();
 
-	var marks = parent.marks;
-	if (this.markForms) this.markForms.forEach(function(form) {
+	var curInlines = this.inlines;
+	var inlines = (parent.inline && parent.inline.blocks || []).map(function(block) {
+		var type = block.type;
+		var curForm;
+		curInlines = curInlines.filter(function(form) {
+			if (form.block.type == block.type) {
+				curForm = form;
+				return false;
+			} else {
+				return true;
+			}
+		});
+		if (!curForm) curForm = new FormBlock(this.editor, this.node, block);
+		else curForm.node.parentNode.appendChild(curForm.node);
+		curForm.update(parent);
+		return curForm;
+	}, this);
+	curInlines.forEach(function(form) {
 		form.destroy();
 	});
-	this.markForms = (parent.marks || []).map(function(block) {
-		var form = new FormBlock(this.editor, this.node, block);
-		form.update();
-		return form;
-	}, this);
+	this.inlines = inlines;
 };
 
 function FormBlock(editor, parent, block) {
@@ -73,7 +85,6 @@ function FormBlock(editor, parent, block) {
 		required: this.el.required
 	}, this.node);
 	this.inputs = {};
-	if (this.el.properties) this.propInputs(this.el.properties);
 }
 
 FormBlock.prototype.destroy = function() {
@@ -86,10 +97,16 @@ FormBlock.prototype.destroy = function() {
 	this.node.remove();
 };
 
-FormBlock.prototype.update = function() {
+FormBlock.prototype.update = function(parent) {
+	if (parent) this.parent = parent;
+	if (this.ignoreNext) {
+		this.ignoreNext = false;
+		return;
+	}
 	this.ignoreEvents = true;
 	this.form.set(this.block.data);
 	this.ignoreEvents = false;
+	if (this.el.properties) this.propInputs(this.el.properties);
 };
 
 FormBlock.prototype.propInputs = function(props, parentKey) {
@@ -135,7 +152,7 @@ FormBlock.prototype.change = function() {
 
 	if (this.el.inplace) {
 		// simply select focused node
-		var node = editor.root.querySelector('[block-focused="last"]');
+		var node = this.el.inline ? this.parent.inline.rpos : editor.root.querySelector('[block-focused="last"]');
 		if (node) {
 			this.ignoreNext = true;
 			editor.utils.refresh(node, this.block);
