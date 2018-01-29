@@ -56,6 +56,7 @@ class HTMLElementInputFile extends HTMLCustomElement {
 		var file = this.querySelector('input[type="file"]');
 		var input = this.querySelector('input[type="text"]');
 		if (!input || !file) throw new Error("Unitialized input-file");
+		if (!file.files.length) return Promise.resolve();
 		input.value = "";
 		var self = this;
 		var field = this.closest('.field');
