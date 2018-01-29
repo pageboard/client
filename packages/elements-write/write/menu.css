@@ -5,7 +5,21 @@
 #menu {
 	margin:1em 0;
 }
-
+.ui.menu .active.item {
+	background-color: rgba(129, 165, 255, 0.2);
+}
+.ui.link.menu .item:hover,
+.ui.menu .dropdown.item:hover,
+.ui.menu .link.item:hover,
+.ui.menu a.item:hover {
+	background-color:rgba(129, 165, 255, 0.1);
+}
+.ui.menu .active.item:hover, .ui.vertical.menu .active.item:hover {
+	background-color:rgba(129, 165, 255, 0.3);
+}
+.ui.icon.menu > .item.radio.checkbox.checked {
+	background-color:rgba(129, 165, 255, 0.2);
+}
 .ui.menu {
 	flex-wrap:wrap;
 }
@@ -43,9 +57,6 @@
 }
 .ui.icon.menu > .item.radio.checkbox > label {
 	padding-left:0;
-}
-.ui.icon.menu > .item.radio.checkbox.checked {
-	background:#EEE;
 }
 
 #move .item.disabled {
