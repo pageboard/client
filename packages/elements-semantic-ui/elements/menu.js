@@ -85,7 +85,7 @@ Pageboard.elements.menu_item_dropdown = {
 	context: "menu//",
 	contents: {
 		title: {
-			spec: "text*",
+			spec: "inline*",
 			title: "Title"
 		},
 		items: {
@@ -116,7 +116,7 @@ Pageboard.elements.menu_item_popup = {
 	context: "menu//",
 	contents: {
 		title: {
-			spec: "text*",
+			spec: "inline*",
 			title: "Title"
 		},
 		content: {
