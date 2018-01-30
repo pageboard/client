@@ -218,14 +218,18 @@ Store.prototype.save = function(e) {
 		console.log(changes);
 		return;
 	}
-	Pageboard.uiLoad(this.uiSave, PUT('/.api/page', changes))
-	.then(function(result) {
-		var unsaved = this.unsaved;
-		this.reset();
-		this.initial = unsaved;
-		this.uiUpdate();
-		this.pageUpdate();
-	}.bind(this));
+	// this will queue requests and fail them all if the first one fails
+	if (!this.saving) this.saving = Promise.resolve();
+	var me = this;
+	this.saving.then(function() {
+		return Pageboard.uiLoad(me.uiSave, PUT('/.api/page', changes));
+	}).then(function(result) {
+		var unsaved = me.unsaved;
+		me.reset();
+		me.initial = unsaved;
+		me.uiUpdate();
+		me.pageUpdate();
+	});
 };
 
 Store.prototype.reset = function() {
