@@ -104,7 +104,7 @@ Pageboard.elements.query_message = {
 				title: "Success"
 			}, {
 				const: "warning",
-				title: "Warning"
+				title: "Not found"
 			}, {
 				const: "error",
 				title: "Error"

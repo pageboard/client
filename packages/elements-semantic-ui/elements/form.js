@@ -766,6 +766,9 @@ Pageboard.elements.form_message = {
 				const: "success",
 				title: "Success"
 			}, {
+				const: "warning",
+				title: "Not found"
+			}, {
 				const: "error",
 				title: "Error"
 			}]

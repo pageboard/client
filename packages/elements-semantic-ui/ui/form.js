@@ -64,9 +64,12 @@ Page.patch(function(state) {
 		if (method == "get") {
 			form.fill(state.query);
 		} else if (method == "post") {
-			var name = form.dataset.fill;
-			if (!name) return;
-			var id = state.query[name];
+			if (form.matches('.warning')) {
+				form.classList.remove('warning');
+			}
+			var fillName = form.dataset.fill;
+			if (!fillName) return;
+			var id = state.query[fillName];
 			if (!id) return;
 			var input = form.querySelector('input[type="hidden"][name="_id"]');
 			var parent = form.querySelector('input[type="hidden"][name="_parent"]');
@@ -83,6 +86,7 @@ Page.patch(function(state) {
 				form.fill(block.data);
 			}).catch(function(err) {
 				console.error(err);
+				form.classList.add('warning');
 			}));
 		}
 	});
