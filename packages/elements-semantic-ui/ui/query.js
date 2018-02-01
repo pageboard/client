@@ -16,12 +16,37 @@ Pageboard.bindings = {
 			list.forEach(function(item) {
 				var parent = dom.cloneNode(false);
 				parent.innerHTML = ms.merge(item, function(fun, data) {
-					// TODO use answer.schema to get title of accessed data
+					if (fun.mod) {
+						var mod = Pageboard.bindings.default.filters[fun.mod]
+						if (mod) {
+							return mod(fun, data, answer.schema);
+						}
+					}
 				});
 				if (filter) filter(item, parent);
 				while (parent.firstChild) dom.appendChild(parent.firstChild);
 			});
 			if (list.length == 0) return false; // display warning message
+		},
+		filters: {
+			title: function(fun, data, schema) {
+				var pathProp = 'properties.' + fun.path.split('.').join('.properties.');
+				var prop = MergeString.get(pathProp, schema);
+				if (!prop) {
+					console.warn("No matching schema for title of", fun.path);
+					return;
+				}
+				var cval = MergeString.get(fun.path, data);
+				var val = prop.oneOf.find(function(item) {
+					return item.const == cval;
+				});
+				if (val != null) return val.title;
+				else return cval;
+			},
+			text: function(fun, data, schema) {
+				var str = MergeString.get(fun.path, data);
+				return str.split("\n").join('<br>');
+			}
 		}
 	}
 };
@@ -30,16 +55,15 @@ Pageboard.MergeString = MergeString;
 function MergeString(str) {
 	var funs = this.funs = [];
 	var re = /\[([^\[\]<>]+)\]/g;
-	var hit, obj, index = 0, fun;
+	var hit, obj, index = 0, fun, expr;
 	while ((hit = re.exec(str)) != null) {
 		funs.push({str: str.substring(index, hit.index)});
 		index = hit.index + hit[0].length;
+		expr = hit[1].split('|');
 		fun = {
-			path: hit[1].split('.')
+			path: expr[0],
+			mod: expr[1]
 		};
-		fun.get = function(data) {
-			return MergeString.get(this.path, data);
-		}.bind(fun);
 		funs.push(fun);
 		re.lastIndex = index;
 	}
@@ -53,15 +77,17 @@ MergeString.prototype.merge = function(data, filter) {
 		if (filter) {
 			str = filter(fun, data);
 		}
-		if (str === undefined) str = fun.get(data);
+		if (str === undefined) str = MergeString.get(fun.path, data);
 		if (!str) str = "";
 		return str;
 	}).join('');
 };
+
 MergeString.get = function(path, data) {
+	var list = path.split('.');
 	var val = data;
-	for (var i=0; i < path.length; i++) {
-		val = val[path[i]];
+	for (var i=0; i < list.length; i++) {
+		val = val[list[i]];
 		if (val == null) break;
 	}
 	return val;
