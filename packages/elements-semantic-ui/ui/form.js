@@ -18,6 +18,9 @@ HTMLFormElement.prototype.fill = function(values) {
 			case 'select-multiple':
 				if (val) elem.fill(val);
 			break;
+			case 'file':
+				if (val) elem.setAttribute("value", val);
+			break;
 			default:
 				if (val) elem.value = val;
 		}
