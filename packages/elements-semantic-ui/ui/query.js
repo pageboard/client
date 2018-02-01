@@ -5,7 +5,68 @@ Page.patch(function(state) {
 });
 
 if (!window.Pageboard) window.Pageboard = {};
-window.Pageboard.bindings = {};
+(function(Pageboard) {
+Pageboard.bindings = {
+	default: {
+		title: 'default',
+		merge: function(template, dom, answer, filter) {
+			var list = answer.data || [];
+			if (!Array.isArray(list)) list = [list];
+			var ms = new MergeString(template.innerHTML);
+			list.forEach(function(item) {
+				var parent = dom.cloneNode(false);
+				parent.innerHTML = ms.merge(item, function(fun, data) {
+					// TODO use answer.schema to get title of accessed data
+				});
+				if (filter) filter(item, parent);
+				while (parent.firstChild) dom.appendChild(parent.firstChild);
+			});
+			if (list.length == 0) return false; // display warning message
+		}
+	}
+};
+Pageboard.MergeString = MergeString;
+
+function MergeString(str) {
+	var funs = this.funs = [];
+	var re = /\[([^\[\]<>]+)\]/g;
+	var hit, obj, index = 0, fun;
+	while ((hit = re.exec(str)) != null) {
+		funs.push({str: str.substring(index, hit.index)});
+		index = hit.index + hit[0].length;
+		fun = {
+			path: hit[1].split('.')
+		};
+		fun.get = function(data) {
+			return MergeString.get(this.path, data);
+		}.bind(fun);
+		funs.push(fun);
+		re.lastIndex = index;
+	}
+	funs.push({str: str.substring(index)});
+}
+
+MergeString.prototype.merge = function(data, filter) {
+	return this.funs.map(function(fun) {
+		if (fun.str) return fun.str;
+		var str;
+		if (filter) {
+			str = filter(fun, data);
+		}
+		if (str === undefined) str = fun.get(data);
+		if (!str) str = "";
+		return str;
+	}).join('');
+};
+MergeString.get = function(path, data) {
+	var val = data;
+	for (var i=0; i < path.length; i++) {
+		val = val[path[i]];
+		if (val == null) break;
+	}
+	return val;
+};
+})(window.Pageboard);
 
 class HTMLElementQuery extends HTMLCustomElement {
 	static find(name, value) {
@@ -73,12 +134,12 @@ class HTMLElementQuery extends HTMLCustomElement {
 		})).then(function(response) {
 			if (response.status >= 400) throw new Error(response.statusText);
 			return response.json();
-		}).then(function(data) {
-			var bindName = this.dataset.binding;
+		}).then(function(answer) {
+			var bindName = this.dataset.binding || "default";
 			var binding = Pageboard.bindings[bindName];
 			if (!binding) throw new Error("Cannot find data binder " + bindName);
 			if (!binding.merge) throw new Error("Data binder need merge function " + bindName);
-			if (binding.merge(template, results, data) === false) {
+			if (binding.merge(template, results, answer) === false) {
 				form.classList.add('warning');
 			} else {
 				form.classList.add('success');
