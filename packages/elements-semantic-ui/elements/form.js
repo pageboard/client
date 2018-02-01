@@ -6,6 +6,11 @@ Pageboard.elements.form = {
 	menu: "form",
 	required: ["action"],
 	properties: {
+		fill: {
+			title: 'Fill using id from query',
+			description: 'leave empty to disable - usually just "id"',
+			type: 'string'
+		},
 		action: {
 			title: 'Action',
 			type: 'object',
@@ -25,11 +30,6 @@ Pageboard.elements.form = {
 					title: 'Submit on input',
 					type: 'boolean',
 					default: false
-				},
-				fill: {
-					title: 'Fill using id from query',
-					description: 'the name of the id parameter - leave empty to not fill',
-					type: 'string'
 				},
 				call: {
 					title: 'Call api or url',
@@ -120,14 +120,15 @@ Pageboard.elements.form = {
 	},
 	icon: '<i class="write icon"></i>',
 	render: function(doc, block) {
-		var action = block.data.action || {};
+		var d = block.data;
+		var action = d.action || {};
 		var parent = '', fill = '', url;
 		if (action.method == "get") {
 			url = action.call;
 		} else if (action.method == "post") {
 			url = "/.api/form";
 			parent = doc.dom`<input type="hidden" name="_parent" value="${block.id}" />`;
-			if (action.fill) fill = doc.dom`<input type="hidden" name="_id" />`;
+			if (d.fill) fill = doc.dom`<input type="hidden" name="_id" />`;
 		}
 
 		var form = doc.dom`<form action="${url}" method="${action.method}" class="ui form">
@@ -136,7 +137,7 @@ Pageboard.elements.form = {
 			<div block-content="form"></div>
 		</form>`;
 		if (action.live) form.dataset.live = true;
-		if (action.fill) form.dataset.fill = action.fill;
+		if (d.fill) form.dataset.fill = d.fill;
 		return form;
 	},
 	stylesheets: [
