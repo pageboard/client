@@ -13,6 +13,7 @@ class HTMLElementInputFile extends HTMLCustomElement {
 		input.required = file.required;
 		input.type = "text";
 		input.name = file.name;
+		input.value = file.getAttribute("value");
 		// from now on submission will be done through form.js
 		file.removeAttribute('name');
 		input.placeholder = file.placeholder;
@@ -33,11 +34,15 @@ class HTMLElementInputFile extends HTMLCustomElement {
 		}
 	}
 
+	uploadName(str) {
+		return (str || "").split(/\/|\\/).pop();
+	}
+
 	change(e) {
 		var input = this.querySelector('input[type="text"]');
 		if (!input) return;
 		if (e.target.value) {
-			input.value = e.target.value.split(/\/|\\/).pop();
+			input.value = this.uploadName(e.target.value);
 		}
 		if (this.dataset.now != null) this.upload();
 	}
