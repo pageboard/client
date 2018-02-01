@@ -27,6 +27,23 @@ HTMLFormElement.prototype.fill = function(values) {
 	}
 };
 
+HTMLFormElement.prototype.disable = function() {
+	var elem = null;
+	for (var i = 0; i < this.elements.length; i++) {
+		elem = this.elements[i];
+		elem.disabled = true;
+	}
+};
+
+HTMLFormElement.prototype.enable = function() {
+	var elem = null;
+	for (var i = 0; i < this.elements.length; i++) {
+		elem = this.elements[i];
+		elem.disabled = false;
+		if (elem.hasAttribute('disabled')) elem.removeAttribute('disabled');
+	}
+};
+
 HTMLSelectElement.prototype.fill = function(values) {
 	var opt;
 	for (var i = 0; i < this.options.length; i++) {
@@ -66,6 +83,7 @@ Page.patch(function(state) {
 		} else if (method == "post") {
 			if (form.matches('.warning')) {
 				form.classList.remove('warning');
+				form.enable();
 			}
 			var fillName = form.dataset.fill;
 			if (!fillName) return;
@@ -87,6 +105,7 @@ Page.patch(function(state) {
 			}).catch(function(err) {
 				console.error(err);
 				form.classList.add('warning');
+				form.disable();
 			}));
 		}
 	});
