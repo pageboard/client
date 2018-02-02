@@ -104,6 +104,7 @@ FormBlock.prototype.update = function(parent) {
 		return;
 	}
 	this.ignoreEvents = true;
+	this.form.clear();
 	this.form.set(this.block.data);
 	this.ignoreEvents = false;
 	if (this.el.properties) this.propInputs(this.el.properties);

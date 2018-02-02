@@ -41,6 +41,10 @@ Semafor.prototype.set = function(obj) {
 	this.$node.form('set values', vals);
 };
 
+Semafor.prototype.clear = function() {
+	this.$node.form('clear');
+};
+
 var types = Semafor.types = {
 	// json schema does not allow custom types - do not modify
 };
