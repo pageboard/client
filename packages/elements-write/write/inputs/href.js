@@ -97,17 +97,11 @@ Href.prototype.update = function() {
 	var me = this;
 	var val = this.input.value;
 	if (val) {
-		// restore baseUrl on input value
-		var urlObj = Page.parse(val);
-		if (!urlObj.hostname) {
-			urlObj.hostname = document.location.hostname;
-			urlObj.protocol = document.location.protocol;
-			urlObj.port = document.location.port;
-			val = Page.format(urlObj);
-		}
 		this.get(val).then(this.cache).then(function() {
 			me.set(val);
 		});
+	} else {
+		this.renderList();
 	}
 };
 
