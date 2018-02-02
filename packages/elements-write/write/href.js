@@ -6,29 +6,8 @@ function Href(input, opts) {
 	this.cache = this.cache.bind(this);
 	this.set = this.set.bind(this);
 	this.opts = opts;
-	this.action = null;
 	this.input = input;
-	this.list = [];
-	this.map = {};
 	this.init();
-	this.renderField();
-	// initialize
-	var me = this;
-
-	var val = input.value;
-	if (val) {
-		// restore baseUrl on input value
-		var urlObj = Page.parse(val);
-		if (!urlObj.hostname) {
-			urlObj.hostname = document.location.hostname;
-			urlObj.protocol = document.location.protocol;
-			urlObj.port = document.location.port;
-			val = Page.format(urlObj);
-		}
-		this.get(val).then(this.cache).then(function() {
-			me.set(val);
-		});
-	}
 }
 
 Href.prototype.init = function() {
@@ -109,7 +88,26 @@ Href.prototype.destroy = function() {
 };
 
 Href.prototype.update = function() {
-	this.renderList();
+	if (this.action) this[this.action + "Stop"]();
+	this.action = null;
+	this.list = [];
+	this.map = {};
+	this.renderField();
+	var me = this;
+	var val = this.input.value;
+	if (val) {
+		// restore baseUrl on input value
+		var urlObj = Page.parse(val);
+		if (!urlObj.hostname) {
+			urlObj.hostname = document.location.hostname;
+			urlObj.protocol = document.location.protocol;
+			urlObj.port = document.location.port;
+			val = Page.format(urlObj);
+		}
+		this.get(val).then(this.cache).then(function() {
+			me.set(val);
+		});
+	}
 };
 
 Href.prototype.act = function(action) {
