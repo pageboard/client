@@ -232,10 +232,6 @@ function editorSetup(win, view) {
 		genId: Pageboard.Controls.Store.genId,
 		plugins: [{
 			filterTransaction: function(tr) {
-				if (tr.getMeta('pageboard')) {
-					lastIgnore = true;
-					return true;
-				}
 				// filters all transactions
 				var focusParents = tr.getMeta('focus-plugin');
 				if (focusParents) {
@@ -251,10 +247,6 @@ function editorSetup(win, view) {
 				return {
 					update: function(editor, state) {
 						// called after all current transactions have been applied
-						if (lastIgnore) {
-							lastIgnore = false;
-							return;
-						}
 						editorUpdate(editor, state, lastFocusParents, lastFocusSelection);
 					}
 				}

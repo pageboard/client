@@ -94,15 +94,18 @@ FormBlock.prototype.destroy = function() {
 };
 
 FormBlock.prototype.update = function(block) {
-	if (parent) this.parent = parent;
+	if (this.ignoreNext) {
+		this.ignoreNext = false;
+		return;
+	}
 	this.ignoreEvents = true;
 	if (block) {
 		this.block = block;
 	}
 	this.form.clear();
 	this.form.set(this.block.data);
-	this.ignoreEvents = false;
 	if (this.el.properties) this.propInputs(this.el.properties);
+	this.ignoreEvents = false;
 };
 
 FormBlock.prototype.propInputs = function(props, parentKey) {
@@ -147,13 +150,14 @@ FormBlock.prototype.change = function() {
 	}
 
 	var tr = editor.state.tr;
-	tr.setMeta('pageboard', true);
+	var dispatch = false;
 
 	if (this.el.inplace) {
 		// simply select focused node
 		var node = this.el.inline ? this.parent.inline.rpos : editor.root.querySelector('[block-focused="last"]');
 		if (node) {
 			editor.utils.refreshTr(tr, node, this.block);
+			dispatch = true;
 		}
 	} else {
 		var nodes = editor.blocks.domQuery(id, {all: true});
@@ -164,9 +168,13 @@ FormBlock.prototype.change = function() {
 			nodes.forEach(function(node) {
 				editor.utils.refreshTr(tr, node, this.block);
 			}, this);
+			dispatch = true;
 		}
 	}
-	editor.dispatch(tr);
+	if (dispatch) {
+		this.ignoreNext = true;
+		editor.dispatch(tr);
+	}
 };
 
 })(window.Pageboard, window.Pagecut);
