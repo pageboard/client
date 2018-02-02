@@ -20,6 +20,10 @@
 .ui.icon.menu > .item.radio.checkbox.checked {
 	background-color:rgba(129, 165, 255, 0.2);
 }
+#menu .ui.labeled.icon.menu .item {
+	min-width:5em;
+	padding:0.7em 0;
+}
 .ui.menu {
 	flex-wrap:wrap;
 }
