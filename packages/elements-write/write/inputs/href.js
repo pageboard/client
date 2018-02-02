@@ -7,7 +7,9 @@ function Href(input, opts) {
 	this.set = this.set.bind(this);
 	this.opts = opts;
 	this.input = input;
+	this.map = {};
 	this.init();
+	this.update();
 }
 
 Href.prototype.init = function() {
@@ -91,7 +93,6 @@ Href.prototype.update = function() {
 	if (this.action) this[this.action + "Stop"]();
 	this.action = null;
 	this.list = [];
-	this.map = {};
 	this.renderField();
 	var me = this;
 	var val = this.input.value;
