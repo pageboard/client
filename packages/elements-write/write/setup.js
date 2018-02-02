@@ -234,7 +234,7 @@ function editorSetup(win, view) {
 			filterTransaction: function(tr) {
 				if (tr.getMeta('pageboard')) {
 					lastIgnore = true;
-					return;
+					return true;
 				}
 				// filters all transactions
 				var focusParents = tr.getMeta('focus-plugin');
