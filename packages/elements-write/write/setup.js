@@ -170,6 +170,7 @@ function pageUpdate(page) {
 
 var lastFocusParents;
 var lastFocusSelection;
+var lastIgnore;
 
 function editorUpdate(editor, state, focusParents, focusSelection) {
 	if (!focusParents || !focusSelection || editor.destroying) {
@@ -231,6 +232,10 @@ function editorSetup(win, view) {
 		genId: Pageboard.Controls.Store.genId,
 		plugins: [{
 			filterTransaction: function(tr) {
+				if (tr.getMeta('pageboard')) {
+					lastIgnore = true;
+					return;
+				}
 				// filters all transactions
 				var focusParents = tr.getMeta('focus-plugin');
 				if (focusParents) {
@@ -246,6 +251,10 @@ function editorSetup(win, view) {
 				return {
 					update: function(editor, state) {
 						// called after all current transactions have been applied
+						if (lastIgnore) {
+							lastIgnore = false;
+							return;
+						}
 						editorUpdate(editor, state, lastFocusParents, lastFocusSelection);
 					}
 				}

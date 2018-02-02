@@ -21,10 +21,6 @@ Form.prototype.destroy = function() {
 };
 
 Form.prototype.update = function(parents, sel) {
-	if (this.main && this.main.ignoreNext) {
-		this.main.ignoreNext = false;
-		return;
-	}
 	if (!parents.length) {
 		this.clear();
 		return;
@@ -59,7 +55,7 @@ Form.prototype.update = function(parents, sel) {
 		});
 		if (!curForm) curForm = new FormBlock(this.editor, this.node, block);
 		else curForm.node.parentNode.appendChild(curForm.node);
-		curForm.update(parent);
+		curForm.update(block);
 		return curForm;
 	}, this);
 	curInlines.forEach(function(form) {
@@ -97,13 +93,13 @@ FormBlock.prototype.destroy = function() {
 	this.node.remove();
 };
 
-FormBlock.prototype.update = function(parent) {
+FormBlock.prototype.update = function(block) {
 	if (parent) this.parent = parent;
-	if (this.ignoreNext) {
-		this.ignoreNext = false;
-		return;
-	}
 	this.ignoreEvents = true;
+	if (block) {
+		console.log(block);
+		this.block = block;
+	}
 	this.form.clear();
 	this.form.set(this.block.data);
 	this.ignoreEvents = false;
@@ -151,26 +147,26 @@ FormBlock.prototype.change = function() {
 		editor.pageUpdate(this.block);
 	}
 
+	var tr = editor.state.tr;
+	tr.setMeta('pageboard', true);
+
 	if (this.el.inplace) {
 		// simply select focused node
 		var node = this.el.inline ? this.parent.inline.rpos : editor.root.querySelector('[block-focused="last"]');
 		if (node) {
-			this.ignoreNext = true;
-			editor.utils.refresh(node, this.block);
+			editor.utils.refreshTr(tr, node, this.block);
 		}
-		return;
-	}
-	var nodes = editor.blocks.domQuery(id, {all: true});
+	} else {
+		var nodes = editor.blocks.domQuery(id, {all: true});
 
-	if (nodes.length == 0) {
-		if (!found) console.warn("No dom nodes found for this block", this.block);
-		return;
+		if (nodes.length == 0) {
+			if (!found) console.warn("No dom nodes found for this block", this.block);
+		} else {
+			nodes.forEach(function(node) {
+				editor.utils.refreshTr(tr, node, this.block);
+			});
+		}
 	}
-	this.ignoreNext = true;
-	var tr = editor.state.tr;
-	nodes.forEach(function(node) {
-		editor.utils.refreshTr(tr, node, this.block);
-	});
 	editor.dispatch(tr);
 };
 
