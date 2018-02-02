@@ -163,7 +163,7 @@ FormBlock.prototype.change = function() {
 		} else {
 			nodes.forEach(function(node) {
 				editor.utils.refreshTr(tr, node, this.block);
-			});
+			}, this);
 		}
 	}
 	editor.dispatch(tr);
