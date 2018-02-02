@@ -97,7 +97,6 @@ FormBlock.prototype.update = function(block) {
 	if (parent) this.parent = parent;
 	this.ignoreEvents = true;
 	if (block) {
-		console.log(block);
 		this.block = block;
 	}
 	this.form.clear();
