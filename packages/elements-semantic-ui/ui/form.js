@@ -1,9 +1,24 @@
 HTMLFormElement.prototype.fill = function(values) {
+	function asPaths(obj, ret, pre) {
+		if (!ret) ret = {};
+		Object.keys(obj).forEach(function(key) {
+			var val = obj[key];
+			var cur = `${pre || ""}${key}`;
+			if (Array.isArray(val) || typeof val != "object") {
+				ret[cur] = val;
+			} else if (typeof val == "object") {
+				asPaths(val, ret, cur + '.');
+			}
+		});
+		return ret;
+	}
 	var elem = null, val;
+	var flats = asPaths(values, {});
+
 	for (var i = 0; i < this.elements.length; i++) {
 		elem = this.elements[i];
 		if (!elem.name) continue;
-		val = values[elem.name];
+		val = flats[elem.name];
 		switch (elem.type) {
 			case 'submit':
 			break;
