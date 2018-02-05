@@ -64,8 +64,8 @@ Form.prototype.update = function(parents, sel) {
 	this.inlines = inlines;
 };
 
-function FormBlock(editor, parent, block) {
-	this.node = parent.appendChild(document.createElement('div'));
+function FormBlock(editor, node, block) {
+	this.node = node.appendChild(document.createElement('div'));
 	this.block = block;
 	this.editor = editor;
 	this.el = editor.element(block.type);
