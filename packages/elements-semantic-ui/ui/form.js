@@ -4,7 +4,7 @@ HTMLFormElement.prototype.fill = function(values) {
 		Object.keys(obj).forEach(function(key) {
 			var val = obj[key];
 			var cur = `${pre || ""}${key}`;
-			if (Array.isArray(val) || typeof val != "object") {
+			if (val == null || Array.isArray(val) || typeof val != "object") {
 				ret[cur] = val;
 			} else if (typeof val == "object") {
 				asPaths(val, ret, cur + '.');
