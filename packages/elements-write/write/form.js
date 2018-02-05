@@ -39,7 +39,7 @@ Form.prototype.update = function(parents, sel) {
 	}
 
 	if (!this.main) this.main = new FormBlock(this.editor, this.node, block);
-	this.main.update();
+	this.main.update(parent);
 
 	var curInlines = this.inlines;
 	var inlines = (parent.inline && parent.inline.blocks || []).map(function(block) {
@@ -55,7 +55,7 @@ Form.prototype.update = function(parents, sel) {
 		});
 		if (!curForm) curForm = new FormBlock(this.editor, this.node, block);
 		else curForm.node.parentNode.appendChild(curForm.node);
-		curForm.update(block);
+		curForm.update(parent, block);
 		return curForm;
 	}, this);
 	curInlines.forEach(function(form) {
@@ -93,7 +93,7 @@ FormBlock.prototype.destroy = function() {
 	this.node.remove();
 };
 
-FormBlock.prototype.update = function(block) {
+FormBlock.prototype.update = function(parent, block) {
 	if (this.ignoreNext) {
 		this.ignoreNext = false;
 		return;
@@ -101,6 +101,9 @@ FormBlock.prototype.update = function(block) {
 	this.ignoreEvents = true;
 	if (block) {
 		this.block = block;
+	}
+	if (parent) {
+		this.parent = parent;
 	}
 	this.form.clear();
 	this.form.set(this.block.data);
