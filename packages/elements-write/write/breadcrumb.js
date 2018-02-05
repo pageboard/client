@@ -13,12 +13,6 @@ function Breadcrumb(editor, node) {
 	this.node.addEventListener('click', this.click);
 }
 
-function contentOption(contents, name) {
-	return document.dom`<div class="item" data-value="${name}">
-		${contents[name].title}
-	</div>`;
-}
-
 Breadcrumb.prototype.destroy = function() {
 	this.node.removeEventListener('click', this.click);
 };
@@ -30,15 +24,8 @@ Breadcrumb.prototype.update = function(parents) {
 		parent = parents[i];
 		this.node.insertAdjacentHTML('beforeEnd', this.item(parent));
 	}
-	var contentName = parent.contentName;
-	var contents = this.editor.element(parent.type).contents;
-	if (contentName) {
-		this.node.appendChild(this.node.ownerDocument.createTextNode(contents[contentName].title));
-	} else {
-		if (this.node.lastElementChild) {
-			this.node.lastElementChild.remove();
-			this.node.lastElementChild.classList.add('active');
-		}
+	if (this.node.lastElementChild) {
+		this.node.lastElementChild.remove();
 	}
 };
 
@@ -51,6 +38,12 @@ Breadcrumb.prototype.item = function(parent) {
 	var item = node.querySelector('.section');
 	item.textContent = this.editor.element(parent.type).title;
 	if (parent.block.id) item.setAttribute('block-id', parent.block.id);
+	if (parent.contentName) {
+		var contents = this.editor.element(parent.type).contents;
+		if (Object.keys(contents).length > 1) {
+			node.insertBefore(node.ownerDocument.createTextNode(contents[parent.contentName].title), node.lastElementChild);
+		}
+	}
 	return node.innerHTML;
 }
 
