@@ -21,6 +21,10 @@ Form.prototype.destroy = function() {
 };
 
 Form.prototype.update = function(parents, sel) {
+	if (this.ignoreNext) {
+		this.ignoreNext = false;
+		return;
+	}
 	if (!parents.length) {
 		this.clear();
 		return;
@@ -94,10 +98,6 @@ FormBlock.prototype.destroy = function() {
 };
 
 FormBlock.prototype.update = function(parent, block) {
-	if (this.ignoreNext) {
-		this.ignoreNext = false;
-		return;
-	}
 	this.ignoreEvents = true;
 	if (block) {
 		this.block = block;
@@ -175,7 +175,7 @@ FormBlock.prototype.change = function() {
 		}
 	}
 	if (dispatch) {
-		this.ignoreNext = true;
+		editor.controls.form.ignoreNext = true;
 		editor.dispatch(tr);
 	}
 };
