@@ -2,7 +2,6 @@
 
 Pageboard.Controls.Form = Form;
 
-
 function Form(editor, node) {
 	this.editor = editor;
 	this.node = node;
@@ -47,7 +46,6 @@ Form.prototype.update = function(parents, sel) {
 
 	var curInlines = this.inlines;
 	var inlines = (parent.inline && parent.inline.blocks || []).map(function(block) {
-		var type = block.type;
 		var curForm;
 		curInlines = curInlines.filter(function(form) {
 			if (form.block.type == block.type) {
@@ -57,8 +55,11 @@ Form.prototype.update = function(parents, sel) {
 				return true;
 			}
 		});
-		if (!curForm) curForm = new FormBlock(this.editor, this.node, block);
-		else curForm.node.parentNode.appendChild(curForm.node);
+		if (!curForm) {
+			curForm = new FormBlock(this.editor, this.node, block);
+		} else {
+			curForm.node.parentNode.appendChild(curForm.node);
+		}
 		curForm.update(parent, block);
 		return curForm;
 	}, this);
