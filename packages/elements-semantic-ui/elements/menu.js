@@ -124,9 +124,6 @@ Pageboard.elements.menu_item_popup = {
 			title: 'Content'
 		}
 	},
-	properties: {
-
-	},
 	group: "menu_item",
 	icon: '<b class="icon">Pop</b>',
 	render: function(doc, block, view) {
