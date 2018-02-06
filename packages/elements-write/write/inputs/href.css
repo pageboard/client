@@ -106,6 +106,8 @@
 .field.href .items > .item {
 	margin:0;
 	box-shadow:2px 2px 1px #CCC;
+	background: white;
+	margin-bottom: 0.5em;
 }
 
 .field.href .items:empty {
