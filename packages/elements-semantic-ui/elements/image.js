@@ -28,7 +28,6 @@ Pageboard.elements.image = {
 		display: {
 			title: "Display",
 			type: "object",
-			description: "A natural fit cannot be positioned",
 			properties: {
 				fit: {
 					oneOf: [{
@@ -42,7 +41,7 @@ Pageboard.elements.image = {
 						const: "cover"
 					}],
 					title: "fit",
-					default: "contain"
+					default: "natural"
 				},
 				horizontal: {
 					title: "horizontal",
@@ -70,7 +69,7 @@ Pageboard.elements.image = {
 						const: "bottom",
 						title: "bottom"
 					}],
-					default: "vcenter"
+					default: "top"
 				}
 			}
 		},
