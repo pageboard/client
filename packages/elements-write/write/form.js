@@ -138,7 +138,7 @@ FormBlock.prototype.propInputs = function(props, parentKey) {
 };
 
 FormBlock.prototype.change = function() {
-	if (!this.block || this.ignoreEvents) return;
+	if (!this.block || this.ignoreEvents || !this.form) return;
 	var editor = this.editor;
 	var data = this.form.get();
 
