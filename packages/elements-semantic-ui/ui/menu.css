@@ -1,16 +1,24 @@
 .dropdown > .menu > .item .ui.image {
 	max-width:none; /* workaround image width not being accounted for */
 }
-.ui.dropdown .dropdown.icon:before {
-	content: '\f0da';
+.ui.dropdown .title.icon {
+	padding-right:0.5em;
 }
-
-.ui.dropdown .dropdown.icon {
-	transform: rotate(90deg);
+.ui.dropdown .title.icon:before {
+	content: '\f0da';
+	transform: rotate(0deg);
 	font-family: Accordion;
 	font-style:normal;
 	vertical-align:top;
+	display: block;
+	position: absolute;
+	right: 0.6em;
+	transition: transform 0.2s linear;
 }
+.ui.dropdown:hover .title.icon:before {
+	transform:rotate(90deg);
+}
+
 [block-type="menu_item_popup"] {
 	display:block !important;
 	position:static !important;
