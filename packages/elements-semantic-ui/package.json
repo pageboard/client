@@ -23,7 +23,7 @@
     "object-fit-images": "^3.2.3",
     "postinstall-links": "^0.3.1",
     "rangeslider-pure": "^0.4.4",
-    "semantic-ui-css": "^2.2.12"
+    "semantic-ui-css": "^2.2.14"
   },
   "links": {
     "semantic-ui-css/components": "semantic-ui",
