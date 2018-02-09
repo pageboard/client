@@ -143,7 +143,8 @@ Pageboard.elements.image = {
 				r.height = 2 * Math.min(r.y, 100 - r.y);
 			}
 			loc.query.ex = `x:${r.x},y:${r.y},w:${r.width},h:${r.height}`;
-		} else if (r.zoom != null && r.zoom != 100) {
+		}
+		if (r.zoom != null && r.zoom != 100) {
 			loc.query.rs = `z:${r.zoom}`;
 		}
 		return Page.format(loc);
