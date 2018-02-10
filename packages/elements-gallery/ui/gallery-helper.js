@@ -38,8 +38,8 @@ HTMLElementGallery.prototype._syncGallery = function() {
 };
 
 HTMLElementGallery.prototype._initHelper = function() {
+	if (this._syncAfter) return;
 	this._syncAfter = window.parent.Pageboard.Debounce(this._sync, 200);
-
 	this.menuObserver = new MutationObserver(function(mutations) {
 		this._setup();
 		this._syncAfter();
@@ -47,11 +47,14 @@ HTMLElementGallery.prototype._initHelper = function() {
 
 	this.itemsObserver = new MutationObserver(function(mutations) {
 		// we NEED to use href as key
-		var doSync = false;
+		var blockType = this._gallery.getAttribute('block-type');
+
 		var sel = '[block-content="items"],[block-type="image"]';
 		if (mutations.some(function(rec) {
-			return rec.type == "childList" && rec.target.matches(sel);
-		})) this._syncAfter();
+			return rec.type == "childList" && rec.target.matches(sel) && rec.target.closest(`[block-type="${blockType}"]`)
+		})) {
+			this._syncAfter();
+		}
 	}.bind(this));
 };
 
@@ -104,7 +107,7 @@ HTMLElementGallery.prototype._sync = function() {
 			case Dift.UPDATE: // 1, dest = oldItem, src = newItem, pos is null
 				if (cache[srcBlock.id] != cache[destBlock.id]) {
 					if (srcBlock.data.url != destBlock.data.url) {
-						destBlock.data.url = srcBlock.data.url
+						destBlock.data.url = srcBlock.data.url;
 						editor.utils.refresh(dest, destBlock);
 						cache[destBlock.id] = destBlock.data.url;
 					}

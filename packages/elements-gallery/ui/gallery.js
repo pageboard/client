@@ -45,7 +45,8 @@ class HTMLElementGallery extends HTMLCustomElement {
 			Array.prototype.forEach.call(this._galleryMenu.children, function(node) {
 				node.classList.remove('active');
 			});
-			this._galleryMenu.querySelector(`[data-mode="${mode}"]`).classList.add('active');
+			var item = this._galleryMenu.querySelector(`[data-mode="${mode}"]`);
+			if (item) item.classList.add('active');
 		}
 		if (mode != "carousel") {
 			this._gallery.addEventListener('click', this._itemClick, false);
