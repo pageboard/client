@@ -28,13 +28,6 @@ HTMLElementGallery.prototype._syncGallery = function() {
 		childList: true,
 		subtree: true
 	});
-	var cache = {};
-	var bmg = this._editor.blocks;
-	Array.prototype.forEach.call(this._selectMedias(node), function(image) {
-		var block = bmg.get(image.getAttribute('block-id'));
-		cache[block.id] = block.data.url;
-	});
-	this._cache = cache;
 };
 
 HTMLElementGallery.prototype._initHelper = function() {
@@ -59,7 +52,16 @@ HTMLElementGallery.prototype._initHelper = function() {
 };
 
 HTMLElementGallery.prototype._selectMedias = function(gal) {
-	return gal.querySelectorAll('[block-content="media"] > [block-type="image"]');
+	var editor = this._editor;
+	return Array.from(gal.querySelectorAll('[block-content="media"] > [block-type="image"]'))
+	.map(function(node, i) {
+		var block = editor.blocks.get(node.getAttribute('block-id'));
+		return {
+			pos: i,
+			block: block,
+			url: block.data.url || ""
+		};
+	});
 };
 
 HTMLElementGallery.prototype._setupHelper = function() {
@@ -73,14 +75,18 @@ HTMLElementGallery.prototype._teardownHelper = function() {
 	this.itemsObserver.disconnect();
 };
 
+function getPosDest(parent, blockType, pos) {
+	var list = parent.querySelectorAll(`[block-type="${blockType}_item"]`);
+	if (list.length > pos) return list.item(pos);
+}
+
 HTMLElementGallery.prototype._sync = function() {
 	if (this._syncing || !this._gallery || !this._editor) return;
 	this._syncing = true;
 	var selItems = '[block-content="items"]';
 	var map = Array.prototype.map;
 	var gallery = this._gallery;
-	var dstList = this._selectMedias(gallery)
-	var cache = this._cache;
+	var dstList = this._selectMedias(gallery);
 	var editor = this._editor;
 
 	this._galleries.forEach(function(gal) {
@@ -89,45 +95,49 @@ HTMLElementGallery.prototype._sync = function() {
 		var srcList = this._selectMedias(gal)
 		var srcParent = gal.matches(selItems) ? gal : gal.querySelector(selItems);
 		if (!srcParent) return;
-		Dift.default(srcList, dstList, function(type, dest, src, pos) {
-			var destBlock = dest && editor.blocks.get(dest.getAttribute('block-id'));
-			var srcBlock = src && editor.blocks.get(src.getAttribute('block-id'));
-			switch (type) {
-			case Dift.CREATE: // 0, dest = null, src = newItem, pos = positionToCreate
-				var destItemBlock = editor.blocks.create(`${blockType}_item`);
-				var destItem = editor.render(destItemBlock);
-				destBlock = editor.blocks.copy(srcBlock);
-				delete destBlock.id;
-				editor.blocks.set(destBlock);
-
-				destItem.querySelector('[block-content="media"]')
-					.appendChild(editor.render(destBlock));
-				srcParent.insertBefore(destItem, srcParent.children[pos] || null);
+		// a move is: remove + create of the same url
+		var removedItem;
+		listDiff(srcList, dstList, "url").forEach(function(patch) {
+			var src = srcList[patch.index];
+			var dest = patch.item;
+			var destBlock = dest && dest.block;
+			var srcBlock = src && src.block;
+			switch (patch.type) {
+			case listDiff.INSERTION:
+				// move selection to position
+				var toNode = getPosDest(srcParent, blockType, patch.index);
+				var tr = editor.state.tr;
+				var sel;
+				if (removedItem && patch.item.url == removedItem.url) {
+					sel = editor.utils.selectTr(tr, toNode, true);
+					tr.insert(sel.from - 1, removedItem.node);
+				} else {
+					toNode = srcParent.insertBefore(document.createTextNode(""), toNode);
+					sel = editor.utils.selectTr(tr, toNode, true);
+					var rootBlock = editor.blocks.create(`${blockType}_item`);
+					editor.blocks.set(rootBlock);
+					editor.utils.insertTr(tr, rootBlock, sel);
+				}
+				editor.dispatch(tr);
+				removedItem = null;
 				break;
-			case Dift.UPDATE: // 1, dest = oldItem, src = newItem, pos is null
-				if (cache[srcBlock.id] != cache[destBlock.id]) {
-					if (srcBlock.data.url != destBlock.data.url) {
-						destBlock.data.url = srcBlock.data.url;
-						editor.utils.refresh(dest, destBlock);
-						cache[destBlock.id] = destBlock.data.url;
-					}
+			case listDiff.SUBSTITUTION:
+				if (srcBlock.data.url != destBlock.data.url) {
+					srcBlock.data.url = destBlock.data.url;
+					var toNode = getPosDest(srcParent, blockType, patch.index).querySelector('[block-type="image"]');
+					editor.utils.refresh(toNode, destBlock);
 				}
 				break;
-			case Dift.MOVE: // 2, dest = oldItem, src = newItem, pos = newPosition
-				srcParent.insertBefore(
-					dest.parentNode.closest('[block-type]'),
-					srcParent.children[pos] || null
-				);
-				break;
-			case Dift.REMOVE: // 3, dest = oldItem
-				dest.parentNode.closest('[block-type]').remove();
+			case listDiff.DELETION:
+				var destRoot = getPosDest(srcParent, blockType, patch.index);
+				var sel = editor.utils.select(destRoot);
+				removedItem = {
+					node: sel.node,
+					url: src.url
+				}
+				editor.utils.delete(sel);
 				break;
 			}
-		}, function(node) {
-			var id = node.getAttribute('block-id');
-			if (cache[id]) return cache[id];
-			var block = editor.blocks.get(id);
-			return block.data.url;
 		});
 	}, this);
 

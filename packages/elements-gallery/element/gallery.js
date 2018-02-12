@@ -29,7 +29,7 @@ Pageboard.elements.gallery = {
 		'../ui/gallery.js'
 	],
 	helpers: [
-		'../ui/dift.js',
+		'../ui/list-diff.js',
 		'../ui/gallery-helper.js'
 	]
 };

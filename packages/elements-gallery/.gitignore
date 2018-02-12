@@ -59,3 +59,4 @@ typings/
 
 /ui/isotope*
 /ui/flickity*
+/ui/list-diff.js
