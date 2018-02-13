@@ -122,9 +122,8 @@ HTMLElementGallery.prototype._sync = function() {
 						delete oldBlock.id;
 						editor.blocks.set(oldBlock);
 						dom.querySelector('[block-content="media"]').appendChild(editor.render(oldBlock));
-						dom.querySelector('[block-content="content"]').appendChild(dom.ownerDocument.createElement('p'));
 					}
-					node = editor.utils.parseTr(tr, dom, $pos).content.firstChild;
+					node = editor.utils.fill(editor.utils.parseTr(tr, dom, $pos).content.firstChild);
 				}
 				tr.insert(pos, node);
 				removedItem = null;
