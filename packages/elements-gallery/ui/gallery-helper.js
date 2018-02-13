@@ -81,6 +81,7 @@ function getPosDest(parent, blockType, pos) {
 }
 
 HTMLElementGallery.prototype._sync = function() {
+	if (HTMLElementGallery.disabled) return;
 	if (this._syncing || !this._gallery || !this._editor) return;
 	this._syncing = true;
 	var selItems = '[block-content="items"]';
