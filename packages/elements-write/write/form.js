@@ -150,7 +150,10 @@ FormBlock.prototype.change = function() {
 
 	if (id == editor.state.doc.attrs.id) {
 		found = true;
-		editor.pageUpdate(this.block);
+		editor.blocks.set(this.block);
+		editor.controls.store.update();
+		return;
+//		editor.pageUpdate(this.block);
 	}
 
 	var tr = editor.state.tr;
