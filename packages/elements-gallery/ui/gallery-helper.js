@@ -87,59 +87,71 @@ HTMLElementGallery.prototype._sync = function() {
 	var selItems = '[block-content="items"]';
 	var map = Array.prototype.map;
 	var gallery = this._gallery;
-	var dstList = this._selectMedias(gallery);
+	var curList = this._selectMedias(gallery);
 	var editor = this._editor;
 
 	this._galleries.forEach(function(gal) {
 		if (gal == gallery) return;
-		var blockType = gal.getAttribute('block-type');
-		var srcList = this._selectMedias(gal)
-		var srcParent = gal.matches(selItems) ? gal : gal.querySelector(selItems);
-		if (!srcParent) return;
+		var oldType = gal.getAttribute('block-type');
+		var oldList = this._selectMedias(gal)
+		var oldParent = gal.matches(selItems) ? gal : gal.querySelector(selItems);
+		if (!oldParent) return;
 		// a move is: remove + create of the same url
 		var removedItem;
-		listDiff(srcList, dstList, "url").forEach(function(patch) {
-			var src = srcList[patch.index];
-			var dest = patch.item;
-			var destBlock = dest && dest.block;
-			var srcBlock = src && src.block;
+		var tr = editor.state.tr;
+		var patches = listDiff(oldList, curList, "url");
+		patches.forEach(function(patch) {
 			switch (patch.type) {
 			case listDiff.INSERTION:
 				// move selection to position
-				var toNode = getPosDest(srcParent, blockType, patch.index);
-				var tr = editor.state.tr;
-				var sel;
+				var atEnd = patch.index == oldList.length;
+				var toNode = getPosDest(oldParent, oldType, atEnd ? patch.index - 1 : patch.index);
+				var sel = editor.utils.selectTr(tr, toNode, true);
+				var pos = atEnd ? sel.to + 1 : sel.from - 1;
+				var $pos = tr.doc.resolve(pos);
+				var node;
 				if (removedItem && patch.item.url == removedItem.url) {
-					sel = editor.utils.selectTr(tr, toNode, true);
-					tr.insert(sel.from - 1, removedItem.node);
+					node = removedItem.node;
 				} else {
-					toNode = srcParent.insertBefore(document.createTextNode(""), toNode);
-					sel = editor.utils.selectTr(tr, toNode, true);
-					var rootBlock = editor.blocks.create(`${blockType}_item`);
-					editor.blocks.set(rootBlock);
-					editor.utils.insertTr(tr, rootBlock, sel);
+					var block = editor.blocks.create(`${oldType}_item`);
+					editor.blocks.set(block);
+					var dom = editor.render(block);
+					var curBlock = patch.item && patch.item.block;
+					if (curBlock) {
+						var oldBlock = editor.blocks.copy(curBlock);
+						delete oldBlock.id;
+						editor.blocks.set(oldBlock);
+						dom.querySelector('[block-content="media"]').appendChild(editor.render(oldBlock));
+					}
+					node = editor.utils.parseTr(tr, dom, $pos).content.firstChild;
 				}
-				editor.dispatch(tr);
+				tr.insert(pos, node);
 				removedItem = null;
 				break;
 			case listDiff.SUBSTITUTION:
-				if (srcBlock.data.url != destBlock.data.url) {
-					srcBlock.data.url = destBlock.data.url;
-					var toNode = getPosDest(srcParent, blockType, patch.index).querySelector('[block-type="image"]');
-					editor.utils.refresh(toNode, destBlock);
+				var oldBlock = oldList[patch.index].block;
+				var curBlock = curList[patch.item.pos].block;
+				if (curBlock.data.url != oldBlock.data.url) {
+					oldBlock.data.url = curBlock.data.url;
+					var oldNode = getPosDest(oldParent, oldType, patch.index).querySelector('[block-type="image"]');
+					editor.utils.refreshTr(tr, oldNode, oldBlock);
 				}
 				break;
 			case listDiff.DELETION:
-				var destRoot = getPosDest(srcParent, blockType, patch.index);
-				var sel = editor.utils.select(destRoot);
+				var oldNode = getPosDest(oldParent, oldType, patch.index);
+				var sel = editor.utils.selectTr(tr, oldNode);
 				removedItem = {
 					node: sel.node,
-					url: src.url
+					url: oldList[patch.index].url
 				}
-				editor.utils.delete(sel);
+				editor.utils.deleteTr(tr, sel);
 				break;
 			}
+
 		});
+		if (patches.length) {
+			editor.dispatch(tr);
+		}
 	}, this);
 
 	this._syncing = false;
