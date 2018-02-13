@@ -122,6 +122,7 @@ HTMLElementGallery.prototype._sync = function() {
 						delete oldBlock.id;
 						editor.blocks.set(oldBlock);
 						dom.querySelector('[block-content="media"]').appendChild(editor.render(oldBlock));
+						dom.querySelector('[block-content="content"]').appendChild(dom.ownerDocument.createElement('p'));
 					}
 					node = editor.utils.parseTr(tr, dom, $pos).content.firstChild;
 				}
