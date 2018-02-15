@@ -8,6 +8,16 @@ element-image {
 	min-height: auto;
 }
 
+element-image > [block-content="legend"] {
+	position:absolute;
+	font-size:0.8rem;
+	line-height:1rem;
+	bottom:0;
+	left:0;
+	right:0;
+	text-align:center;
+}
+
 element-image > img.lqip {
 	filter: blur(8px);
 	filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='8'); /* old ie support */

@@ -151,6 +151,12 @@ Pageboard.elements.image = {
 		}
 		return loc;
 	},
+	contents: {
+		legend: {
+			title: 'legend',
+			spec: "inline*"
+		}
+	},
 	render: function(doc, block) {
 		var d = block.data;
 		var loc = this.buildLoc(d.url || '/.pageboard/read/empty.png', d);
@@ -158,6 +164,7 @@ Pageboard.elements.image = {
 		var img = doc.dom`<img class="lqip" alt="${d.alt || ''}" />`;
 		var node = doc.dom`<element-image>
 			${img}
+			<div block-content="legend"></div>
 		</element-image>`;
 
 		if (d.roi) {
