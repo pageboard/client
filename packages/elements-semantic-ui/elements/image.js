@@ -121,8 +121,11 @@ Pageboard.elements.image = {
 	group: "block",
 	icon: '<i class="icon image"></i>',
 	tag: 'element-image',
-	buildUrl: function(url, d) {
-		if (!url) return "";
+	buildLoc: function(url, d) {
+		if (!url) return {
+			pathname: "",
+			query: {}
+		};
 		var loc = Page.parse(url);
 		if (loc.hostname && loc.hostname != document.location.hostname) {
 			loc = {
@@ -146,13 +149,13 @@ Pageboard.elements.image = {
 		if (r.zoom != null && r.zoom != 100) {
 			loc.query.rs = `z:${r.zoom}`;
 		}
-		return Page.format(loc);
+		return loc;
 	},
 	render: function(doc, block) {
 		var d = block.data;
-		var url = this.buildUrl(d.url || '/.pageboard/read/empty.png', d);
+		var loc = this.buildLoc(d.url || '/.pageboard/read/empty.png', d);
 
-		var img = doc.dom`<img src="${url}" alt="${d.alt || ''}" />`;
+		var img = doc.dom`<img class="lqip" alt="${d.alt || ''}" />`;
 		var node = doc.dom`<element-image>
 			${img}
 		</element-image>`;
@@ -172,13 +175,18 @@ Pageboard.elements.image = {
 			node.dataset.position = `${posx || 'center'} ${posy || 'center'}`;
 		}
 		if (node.dataset.fit != "none") {
-			var loc = Page.parse(url);
 			var zoom = (d.crop || {}).zoom || 100;
-			img.setAttribute('srcset', [160, 320, 640, 1280].map(function(w) {
-				loc.query.rs = `w:${Math.round(w * zoom / 100)}`;
-				return `${Page.format(loc)} ${w}w`;
-			}).join(", "));
+			img.dataset.srcset = [160, 320, 640, 1280].map(function(w) {
+				var copy = Object.assign({}, loc);
+				copy.query = Object.assign({}, loc.query);
+				copy.query.rs = `w:${Math.round(w * zoom / 100)}`;
+				return `${Page.format(copy)} ${w}w`;
+			}).join(", ");
+		} else {
+			img.dataset.src = Page.format(loc);
 		}
+		loc.query.lqip = 1;
+		img.setAttribute('src', Page.format(loc));
 		return node;
 	},
 	stylesheets: [
@@ -320,8 +328,8 @@ Pageboard.elements.inlineImage = {
 	icon: '<i class="icon image"></i>',
 	render: function(doc, block) {
 		var d = block.data;
-		var url = Pageboard.elements.image.buildUrl(d.url || '/.pageboard/read/empty.png', d);
-		var node = doc.dom`<img src="${url}" alt="" class="ui inline image" />`;
+		var loc = Pageboard.elements.image.buildLoc(d.url || '/.pageboard/read/empty.png', d);
+		var node = doc.dom`<img src="${Page.format(loc)}" alt="" class="ui inline image" />`;
 		var display = d.display || {};
 		if (display.avatar) node.classList.add('avatar');
 		if (display.rounded) node.classList.add('rounded');

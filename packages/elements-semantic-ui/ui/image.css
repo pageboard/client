@@ -8,6 +8,11 @@ element-image {
 	min-height: auto;
 }
 
+element-image > img.lqip {
+	filter: blur(8px);
+	filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='8'); /* old ie support */
+}
+
 element-image[data-fit="contain"],
 element-image[data-fit="contain"] > img {
 	width:100%;
@@ -28,6 +33,7 @@ element-image > img {
 	display:block;
 	flex:0 0 auto;
 	align-self:center; /* not stretch */
+	transition: 0.3s filter linear;
 }
 
 element-image[data-position="left top"] {
