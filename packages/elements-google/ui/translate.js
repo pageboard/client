@@ -34,26 +34,29 @@ class HTMLElementGoogleTranslate extends HTMLCustomElement {
 		}, this.id);
 	}
 	disconnectedCallback() {
-		this.removeElementListener('mouseover', this.overHandler, false);
-		this.removeElementListener('focus', this.focusHandler, false);
-		this.removeElementListener('blur', this.blurHandler, false);
+		this.removeEventListener('mouseover', this.overHandler, false);
+		this.removeEventListener('focus', this.focusHandler, false);
+		this.removeEventListener('blur', this.blurHandler, false);
 	}
 	overHandler(e) {
 		this.focusHandler(e);
 	}
 	focusHandler(e) {
 		this.classList.add('active');
-		this.querySelector('.goog-te-gadget-simple').click();
+		var it = this.querySelector('.goog-te-gadget-simple');
+		if (it) it.click();
 		var frame = document.querySelector('.goog-te-menu-frame');
-		frame.addEventListener('mouseout', this.blurFrame, false);
+		if (frame) frame.addEventListener('mouseout', this.blurFrame, false);
 	}
 	blurHandler(e) {
 		this.blurFrame();
 	}
 	blurFrame() {
 		var frame = document.querySelector('.goog-te-menu-frame');
-		frame.blur();
-		frame.removeEventListener('mouseout', this.blurFrame, false);
+		if (frame) {
+			frame.blur();
+			frame.removeEventListener('mouseout', this.blurFrame, false);
+		}
 		this.classList.remove('active');
 	}
 }
