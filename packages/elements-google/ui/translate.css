@@ -2,7 +2,7 @@ element-google-translate {
 	display:block;
 	min-width:auto !important;
 }
-element-google-translate .goog-te-menu-frame {
+iframe.goog-te-menu-frame {
 	margin-top:0.5em;
 }
 element-google-translate .goog-te-menu-value {
