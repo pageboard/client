@@ -161,7 +161,7 @@ Pageboard.elements.image = {
 		var d = block.data;
 		var loc = this.buildLoc(d.url || '/.pageboard/read/empty.png', d);
 
-		var img = doc.dom`<img class="lqip" alt="${d.alt || ''}" />`;
+		var img = doc.dom`<img alt="${d.alt || ''}" />`;
 		var node = doc.dom`<element-image>
 			${img}
 			<div block-content="legend"></div>
@@ -181,19 +181,28 @@ Pageboard.elements.image = {
 			if (posy == "vcenter") posy = "center";
 			node.dataset.position = `${posx || 'center'} ${posy || 'center'}`;
 		}
+		var srcset, src;
 		if (node.dataset.fit != "none") {
 			var zoom = (d.crop || {}).zoom || 100;
-			img.dataset.srcset = [160, 320, 640, 1280].map(function(w) {
+			srcset = [160, 320, 640, 1280].map(function(w) {
 				var copy = Object.assign({}, loc);
 				copy.query = Object.assign({}, loc.query);
 				copy.query.rs = `w:${Math.round(w * zoom / 100)}`;
 				return `${Page.format(copy)} ${w}w`;
 			}).join(", ");
 		} else {
-			img.dataset.src = Page.format(loc);
+			src = Page.format(loc);
 		}
-		loc.query.lqip = 1;
-		img.setAttribute('src', Page.format(loc));
+		if (loc.pathname.endsWith('.svg')) {
+			if (srcset) img.setAttribute('srcset', srcset);
+			if (src) img.setAttribute('src', src);
+		} else {
+			loc.query.lqip = 1;
+			img.classList.add('lqip');
+			img.setAttribute('src', Page.format(loc));
+			if (srcset) img.dataset.srcset = srcset;
+			if (src) img.dataset.src = src;
+		}
 		return node;
 	},
 	stylesheets: [

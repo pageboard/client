@@ -5,8 +5,7 @@ class HTMLElementImage extends HTMLCustomElement {
 	connectedCallback() {
 		this._observer = new IntersectionObserver(function(entries, observer) {
 			entries.forEach(function(entry) {
-				if (!entry.isIntersecting) return;
-				entry.target.reveal();
+				if (entry.isIntersecting) entry.target.reveal();
 			});
 		}, {
 			threshold: 0.006
@@ -30,17 +29,22 @@ class HTMLElementImage extends HTMLCustomElement {
 	reveal() {
 		var img = this.querySelector('img');
 		if (!img) return;
+		this.disconnectedCallback();
+		var srcset = img.dataset.srcset;
+		var src = img.dataset.src;
+		if (!src && !srcset) {
+			return;
+		}
 		img.addEventListener('load', this.load, false);
 		img.addEventListener('error', this.load, false);
-		if (img.dataset.srcset) {
-			img.srcset = img.dataset.srcset;
+		if (srcset) {
+			img.srcset = srcset;
 			delete img.dataset.srcset;
 		}
-		if (img.dataset.src) {
-			img.src = img.dataset.src;
+		if (src) {
+			img.src = src;
 			delete img.dataset.src;
 		}
-		this.disconnectedCallback();
 	}
 	update() {
 		this.reveal();
