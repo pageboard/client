@@ -1,0 +1,25 @@
+element-google-translate {
+	display:block;
+	min-width:auto !important;
+}
+
+element-google-translate .goog-te-menu-value {
+	display: none;
+}
+element-google-translate .goog-te-gadget {
+	display:none;
+	overflow:visible;
+	width:0;
+	position: absolute;
+	left: 1em;
+}
+element-google-translate.active [block-content="title"] {
+	visibility:hidden;
+}
+[contenteditable] element-google-translate.active [block-content="title"] {
+	visibility:visible;
+}
+element-google-translate.active .goog-te-gadget {
+	display:block;
+}
+
