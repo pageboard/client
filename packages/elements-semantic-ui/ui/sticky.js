@@ -1,12 +1,15 @@
 class HTMLElementSticky extends HTMLCustomElement {
 	setup() {
 		if (!this.parentNode) return;
-		HTMLElementSticky.manager.add(this, {
+		if (this._sticky) this.destroy();
+		this._sticky = HTMLElementSticky.manager.addInstance(this, {
 			verticalPosition: this.dataset.position
 		});
 	}
 	destroy() {
-		HTMLElementSticky.manager.remove(this);
+		if (!this._sticky) return;
+		HTMLElementSticky.manager.removeInstance(this._sticky);
+		delete this._sticky;
 	}
 	connectedCallback() {
 		this.setup();
