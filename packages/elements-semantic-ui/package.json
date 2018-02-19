@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/pageboard/elements-semantic-ui#readme",
   "dependencies": {
-    "@pageboard/stickybits": "^3.0.5",
+    "@pageboard/stickybits": "^3.0.6",
     "formdata-polyfill": "^3.0.9",
     "object-fit-images": "^3.2.3",
     "postinstall-links": "^0.3.1",
