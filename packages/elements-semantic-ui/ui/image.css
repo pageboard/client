@@ -19,8 +19,8 @@ element-image > [block-content="legend"] {
 }
 
 element-image > img.lqip {
-	filter: blur(8px);
-	filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='8'); /* old ie support */
+	filter: blur(6px);
+	filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='6'); /* old ie support */
 }
 
 element-image[data-fit="contain"],
