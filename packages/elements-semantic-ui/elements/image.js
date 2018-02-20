@@ -162,10 +162,10 @@ Pageboard.elements.image = {
 			if (r.y - r.height / 2 < 0 || r.y + r.height / 2 > 100) {
 				r.height = 2 * Math.min(r.y, 100 - r.y);
 			}
-			loc.query.ex = `x:${r.x},y:${r.y},w:${r.width},h:${r.height}`;
+			loc.query.ex = `x-${r.x}_y-${r.y}_w-${r.width}_h-${r.height}`;
 		}
 		if (r.zoom != null && r.zoom != 100) {
-			loc.query.rs = `z:${r.zoom}`;
+			loc.query.rs = `z-${r.zoom}`;
 		}
 		return loc;
 	},
@@ -210,7 +210,7 @@ Pageboard.elements.image = {
 			var srcset = [160, 320, 640, 1280].map(function(w) {
 				var copy = Object.assign({}, loc);
 				copy.query = Object.assign({}, loc.query);
-				copy.query.rs = `w:${Math.round(w * zoom / 100)}`;
+				copy.query.rs = `w-${Math.round(w * zoom / 100)}`;
 				return `${Page.format(copy)} ${w}w`;
 			}).join(", ");
 			img.setAttribute('srcset', srcset);
