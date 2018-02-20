@@ -155,7 +155,7 @@ Page.setup(function(state) {
 		var p;
 		if (form.method.toLowerCase() == "get") {
 			p = Page.push(Object.assign(Page.parse(form.action), {
-				query: formToQuery(form)
+				query: formToQuery(form, true)
 			}));
 		} else {
 			p = Promise.all(Array.prototype.filter.call(form.elements, function(node) {
@@ -177,10 +177,11 @@ Page.setup(function(state) {
 		});
 	}
 
-	function formToQuery(form) {
+	function formToQuery(form, noUnderscore) {
 		var fd = new FormData(form);
 		var query = {};
 		fd.forEach(function(val, key) {
+			if (key[0] == "_") return;
 			var old = query[key];
 			if (old !== undefined) {
 				if (!Array.isArray(old)) {
