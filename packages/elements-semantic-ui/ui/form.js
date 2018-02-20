@@ -92,17 +92,16 @@ HTMLFormElement.fetch = function(method, url, data) {
 Page.patch(function(state) {
 	var proms = [];
 	Array.from(document.forms).forEach(function(form) {
-		var method = form.method && form.method.toLowerCase() || null;
-		if (method == "get") {
+		var fill = form.dataset.fill;
+		if (!fill) return;
+		if (form.matches('.warning')) {
+			form.classList.remove('warning');
+			form.enable();
+		}
+		if (fill == "all") {
 			form.fill(state.query);
-		} else if (method == "post") {
-			if (form.matches('.warning')) {
-				form.classList.remove('warning');
-				form.enable();
-			}
-			var fillName = form.dataset.fill;
-			if (!fillName) return;
-			var id = state.query[fillName];
+		} else if (fill == "id") {
+			var id = state.query.id;
 			if (!id) return;
 			var input = form.querySelector('input[type="hidden"][name="_id"]');
 			var parent = form.querySelector('input[type="hidden"][name="_parent"]');

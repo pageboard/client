@@ -7,9 +7,18 @@ Pageboard.elements.form = {
 	required: ["action"],
 	properties: {
 		fill: {
-			title: 'Fill using id from query',
-			description: 'leave empty to disable - usually just "id"',
-			type: 'string'
+			title: 'Fill form',
+			oneOf: [{
+				const: "",
+				title: "no"
+			}, {
+				const: "id",
+				title: "using query id"
+			}, {
+				const: "all",
+				title: "using query variables"
+			}],
+			default: ""
 		},
 		action: {
 			title: 'Action',
@@ -122,18 +131,10 @@ Pageboard.elements.form = {
 	render: function(doc, block) {
 		var d = block.data;
 		var action = d.action || {};
-		var parent = '', fill = '', url;
-		if (action.method == "get") {
-			url = action.call;
-		} else if (action.method == "post") {
-			url = "/.api/form";
-			parent = doc.dom`<input type="hidden" name="_parent" value="${block.id}" />`;
-			if (d.fill) fill = doc.dom`<input type="hidden" name="_id" />`;
-		}
-
+		var url = action.method == "get" ? action.call : "/.api/form";
 		var form = doc.dom`<form action="${url}" method="${action.method}" class="ui form">
-			${parent}
-			${fill}
+			<input type="hidden" name="_parent" value="${block.id}" />
+			<input type="hidden" name="_id" />
 			<div block-content="form"></div>
 		</form>`;
 		if (action.live) form.dataset.live = true;
