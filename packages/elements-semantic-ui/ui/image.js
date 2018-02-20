@@ -3,14 +3,18 @@ class HTMLElementImage extends HTMLCustomElement {
 		this.load = this.load.bind(this);
 	}
 	connectedCallback() {
-		this._observer = new IntersectionObserver(function(entries, observer) {
-			entries.forEach(function(entry) {
-				if (entry.isIntersecting) entry.target.reveal();
+		if ("IntersectionObserver" in window) {
+			this._observer = new IntersectionObserver(function(entries, observer) {
+				entries.forEach(function(entry) {
+					if (entry.isIntersecting || entry.intersectionRatio > 0) entry.target.reveal();
+				});
+			}, {
+				threshold: 0.006
 			});
-		}, {
-			threshold: 0.006
-		});
-		this._observer.observe(this);
+			this._observer.observe(this);
+		} else {
+			this.reveal();
+		}
 
 		if (!objectFitImages.supportsObjectFit) {
 			var style = "";
@@ -30,20 +34,17 @@ class HTMLElementImage extends HTMLCustomElement {
 		var img = this.querySelector('img');
 		if (!img) return;
 		this.disconnectedCallback();
-		var srcset = img.dataset.srcset;
-		var src = img.dataset.src;
-		if (!src && !srcset) {
-			return;
-		}
+		if (!img.classList.contains('lqip')) return;
 		img.addEventListener('load', this.load, false);
 		img.addEventListener('error', this.load, false);
+		var reg = /q=\d+&?|&q=\d+/g;
+		var srcset = img.getAttribute('srcset');
 		if (srcset) {
-			img.srcset = srcset;
-			delete img.dataset.srcset;
+			img.setAttribute('srcset', srcset.replace(reg, ''));
 		}
+		var src = img.getAttribute('src');
 		if (src) {
-			img.src = src;
-			delete img.dataset.src;
+			img.setAttribute('src', src.replace(reg, ''));
 		}
 	}
 	update() {
