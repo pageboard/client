@@ -21,7 +21,7 @@
     "@pageboard/stickybits": "^3.0.6",
     "formdata-polyfill": "^3.0.9",
     "object-fit-images": "^3.2.3",
-    "postinstall-links": "^0.3.1",
+    "postinstall-links": "^0.3.99",
     "rangeslider-pure": "^0.4.4",
     "semantic-ui-css": "^2.2.14"
   },
