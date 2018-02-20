@@ -1,12 +1,13 @@
 (function(Pageboard) {
 Pageboard.inputs.href = Href;
 
-function Href(input, opts) {
+function Href(input, opts, props, block) {
 	this.renderList = this.renderList.bind(this);
 	this.cache = this.cache.bind(this);
 	this.set = this.set.bind(this);
 	this.opts = opts;
 	this.input = input;
+	this.block = block;
 	this.map = {};
 	this.init();
 	this.update();
@@ -78,6 +79,12 @@ Href.prototype.init = function() {
 				}
 			} else {
 				input.value = href;
+				var data = this.map[href];
+				this.block.data.meta = {
+					mime: (data.mime || '').split(';').shift()
+				};
+				Object.assign(this.block.data.meta, data.meta);
+				delete this.block.data.meta.thumbnail;
 				this.renderList();
 				Pageboard.trigger(input, 'change');
 			}
