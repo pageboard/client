@@ -180,7 +180,7 @@ Page.setup(function(state) {
 		var fd = new FormData(form);
 		var query = {};
 		fd.forEach(function(val, key) {
-			if (key[0] == "_") return;
+			if (noUnderscore && key[0] == "_") return;
 			var old = query[key];
 			if (old !== undefined) {
 				if (!Array.isArray(old)) {
