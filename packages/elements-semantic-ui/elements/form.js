@@ -9,7 +9,7 @@ Pageboard.elements.form = {
 		fill: {
 			title: 'Fill form',
 			oneOf: [{
-				const: "",
+				const: "no",
 				title: "no"
 			}, {
 				const: "id",
@@ -18,7 +18,7 @@ Pageboard.elements.form = {
 				const: "all",
 				title: "using query variables"
 			}],
-			default: ""
+			default: "no"
 		},
 		action: {
 			title: 'Action',
@@ -138,7 +138,7 @@ Pageboard.elements.form = {
 			<div block-content="form"></div>
 		</form>`;
 		if (action.live) form.dataset.live = true;
-		if (d.fill) form.dataset.fill = d.fill;
+		if (d.fill && d.fill != "no") form.dataset.fill = d.fill;
 		return form;
 	},
 	stylesheets: [
