@@ -199,21 +199,21 @@ Pageboard.elements.image = {
 			if (posy == "vcenter") posy = "center";
 			node.dataset.position = `${posx || 'center'} ${posy || 'center'}`;
 		}
+		var zoom = (d.crop || {}).zoom || 100;
 		var meta = block.data.meta;
 		if (meta && meta.mime == "image/jpeg" && meta.size >= 100000) {
 			loc.query.q = 5;
 			img.classList.add('lqip');
-		}
-
-		if (node.dataset.fit != "none") {
-			var zoom = (d.crop || {}).zoom || 100;
-			var srcset = [160, 320, 640, 1280].map(function(w) {
+			img.dataset.width = meta.width;
+			img.dataset.height = meta.height;
+			if (zoom != 100) img.dataset.zoom = zoom;
+		} else if (node.dataset.fit != "none") {
+			img.setAttribute('srcset', [320, 640, 1280].map(function(w) {
 				var copy = Object.assign({}, loc);
 				copy.query = Object.assign({}, loc.query);
 				copy.query.rs = `w-${Math.round(w * zoom / 100)}`;
 				return `${Page.format(copy)} ${w}w`;
-			}).join(", ");
-			img.setAttribute('srcset', srcset);
+			}).join(", "));
 		}
 		img.setAttribute('src', Page.format(loc));
 

@@ -9,7 +9,7 @@ class HTMLElementImage extends HTMLCustomElement {
 					if (entry.isIntersecting || entry.intersectionRatio > 0) entry.target.reveal();
 				});
 			}, {
-				threshold: 0.006
+				threshold: 0
 			});
 			this._observer.observe(this);
 		} else {
@@ -34,18 +34,29 @@ class HTMLElementImage extends HTMLCustomElement {
 		var img = this.querySelector('img');
 		if (!img) return;
 		this.disconnectedCallback();
-		if (!img.classList.contains('lqip')) return;
+		var src = img.getAttribute('src');
+		if (!src || !img.classList.contains('lqip')) return;
+		var z = parseFloat(img.dataset.zoom);
+		if (isNaN(z)) z = 100;
+		var w = parseInt(img.dataset.width);
+		var h = parseInt(img.dataset.height);
+		var zoom;
+		if (!isNaN(w) && !isNaN(h)) {
+			var rect = this.parentNode.getBoundingClientRect();
+			if (rect.width && rect.height) {
+				zoom = Math.round(Math.max(rect.width / w, rect.height / h) * 100);
+				// what's the point
+				if (Math.abs(zoom - z) < 20 || zoom > 100) zoom = null;
+			}
+		}
 		img.addEventListener('load', this.load, false);
 		img.addEventListener('error', this.load, false);
-		var reg = /q=\d+&?|&q=\d+/g;
-		var srcset = img.getAttribute('srcset');
-		if (srcset) {
-			img.setAttribute('srcset', srcset.replace(reg, ''));
-		}
-		var src = img.getAttribute('src');
-		if (src) {
-			img.setAttribute('src', src.replace(reg, ''));
-		}
+		var loc = Page.parse(src);
+		delete loc.query.q;
+		if (!zoom) delete loc.query.rs;
+		else loc.query.rs = "z-" + zoom;
+		src = Page.format(loc);
+		img.setAttribute('src', src);
 	}
 	update() {
 		this.reveal();
