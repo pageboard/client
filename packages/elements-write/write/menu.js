@@ -2,7 +2,7 @@
 
 Pageboard.Controls.Menu = Menu;
 
-Menu.tabs = ["common", "widget", "link", "form", "user"];
+Menu.tabs = ["common", "widget", "link", "form"];
 
 function Menu(editor, node) {
 	this.editor = editor;
