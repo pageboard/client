@@ -205,7 +205,7 @@ Page.setup(function(state) {
 			var has = validity[key];
 			field.classList.toggle(key, !remove && has);
 		}
-		field.classList.toggle('error', !validity.valid);
+		field.classList.toggle('error', !remove && !validity.valid);
 	}
 	function invalidHandler(e) {
 		// e.preventDefault(); // disable when we have proper messages
