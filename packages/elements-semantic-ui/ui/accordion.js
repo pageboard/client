@@ -12,9 +12,9 @@ class HTMLElementAccordion extends HTMLCustomElement {
 		var title = e.target.closest('.title');
 		if (!title) return;
 		var fold = title.parentNode;
-		if (!fold || !fold.matches('.fold')) return;
-		var owner = fold.closest('.accordion');
-		if (owner && owner.nodeName == this.nodeName && owner != this) return;
+		if (!fold || !fold.matches('.fold,element-accordion')) return;
+		var owner = fold.closest('element-accordion');
+		if (owner != this) return;
 		e.preventDefault();
 		if (title.matches('.active')) {
 			title.classList.remove('active');

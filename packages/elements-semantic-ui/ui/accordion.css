@@ -1,3 +1,18 @@
-element-accordion {
+element-accordion, element-accordion .fold {
 	display:block;
+	overflow: hidden;
+}
+
+element-accordion > .content,
+element-accordion .fold > .content {
+	position:relative;
+	transform: translate(0, -100%);
+	transition: transform 0.1s;
+	height: 0;
+}
+
+element-accordion > .active.title + .content,
+element-accordion .fold > .active.title + .content {
+	transform: translate(0, 0%);
+	height: auto;
 }

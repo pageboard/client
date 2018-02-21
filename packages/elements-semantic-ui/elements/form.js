@@ -179,10 +179,16 @@ Pageboard.elements.input_property = {
 			title: 'Allow multiple choices',
 			type: 'boolean',
 			default: false
+		},
+		foldable: {
+			title: 'Foldable',
+			type: 'boolean',
+			default: false
 		}
 	},
 	render: function(doc, block, view) {
-		var name = block.data.name;
+		var d = block.data;
+		var name = d.name;
 		var node = doc.dom`<div><code>select property name</code></div>`;
 		if (!name) {
 			return node;
@@ -206,18 +212,25 @@ Pageboard.elements.input_property = {
 		if (!prop) {
 			return node;
 		}
-		var multiple = block.data.multiple;
 		node.textContent = "";
 		if (prop.oneOf) {
-			if (prop.oneOf.length <= block.data.radios) {
-				var field = doc.dom`<div class="grouped fields">
-					<label for="${name}">${prop.title}</label>
-				</div>`;
-				node.appendChild(field);
+			if (prop.oneOf.length <= d.radios) {
+				var content = doc.dom`<div class="content"></div>`;
+				if (d.foldable) {
+					node.appendChild(doc.dom`<element-accordion class="grouped fields">
+						<label for="${name}" class="title active caret-icon">${prop.title}</label>
+						${content}
+					</element-accordion>`);
+				} else {
+					node.appendChild(doc.dom`<div class="grouped fields">
+						<label for="${name}" class="title">${prop.title}</label>
+						${content}
+					</div>`);
+				}
 				prop.oneOf.forEach(function(item) {
-					if (item.type == "null" && multiple) return;
-					field.appendChild(view.render({
-						type: multiple ? 'input_checkbox' : 'input_radio',
+					if (item.type == "null" && d.multiple) return;
+					content.appendChild(view.render({
+						type: d.multiple ? 'input_checkbox' : 'input_radio',
 						data: {
 							name: name,
 							value: item.const
@@ -230,7 +243,7 @@ Pageboard.elements.input_property = {
 			} else {
 				var frag = doc.createDocumentFragment();
 				prop.oneOf.forEach(function(item) {
-					if (item.type == "null" && multiple) return;
+					if (item.type == "null" && d.multiple) return;
 					var option = view.render({
 						type: 'input_select_option',
 						data: {
@@ -246,7 +259,7 @@ Pageboard.elements.input_property = {
 					type: 'input_select',
 					data: {
 						name: name,
-						multiple: multiple,
+						multiple: d.multiple,
 						placeholder: prop.description
 					},
 					content: {
@@ -258,7 +271,7 @@ Pageboard.elements.input_property = {
 			}
 		} else if (prop.type == "integer") {
 			if (prop.minimum != null && prop.maximum != null) {
-				if (prop.maximum - prop.minimum <= block.data.range) {
+				if (prop.maximum - prop.minimum <= d.range) {
 					return node.appendChild(view.render({
 						type: 'input_range',
 						data: {
@@ -299,7 +312,14 @@ Pageboard.elements.input_property = {
 			node.appendChild(input);
 		}
 		return node;
-	}
+	},
+	stylesheets: [
+		'../semantic-ui/accordion.css',
+		'../ui/accordion.css'
+	],
+	scripts: [
+		'../ui/accordion.js'
+	]
 };
 
 Pageboard.elements.fieldset = {
