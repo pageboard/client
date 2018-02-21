@@ -205,6 +205,8 @@ Href.prototype.pasteStop = function() {
 
 Href.prototype.searchStart = function() {
 	var me = this;
+	var input = this.node.querySelector('input');
+	input.focus();
 	this.infinite = new InfiniteScroll(this.container, {
 		path: function() {
 			var filter = Object.assign({
