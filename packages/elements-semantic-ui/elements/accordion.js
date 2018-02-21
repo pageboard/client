@@ -7,9 +7,6 @@ Pageboard.elements.accordion = {
 			spec: "fold+"
 		}
 	},
-	properties: {
-
-	},
 	icon: '<i class="caret right icon"></i>',
 	render: function(doc, block) {
 		return doc.dom`<element-accordion class="ui accordion" block-content="folds"></element-accordion>`;
@@ -27,8 +24,6 @@ Pageboard.elements.accordion = {
 Pageboard.elements.fold = {
 	title: "Fold",
 	menu: 'widget',
-	properties: {
-	},
 	contents: {
 		title: {
 			spec: "inline*",
