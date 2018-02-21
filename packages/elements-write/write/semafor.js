@@ -30,19 +30,80 @@ function Semafor(schema, node) {
 	});
 }
 
+function formToQuery(form) {
+	var fd = new FormData(form);
+	var query = {};
+	fd.forEach(function(val, key) {
+		var old = query[key];
+		if (old !== undefined) {
+			if (!Array.isArray(old)) {
+				query[key] = [old];
+			}
+			query[key].push(val);
+		} else {
+			query[key] = val;
+		}
+	});
+	return query;
+}
+
+HTMLFormElement.prototype.fill = function(values) {
+	function asPaths(obj, ret, pre) {
+		if (!ret) ret = {};
+		Object.keys(obj).forEach(function(key) {
+			var val = obj[key];
+			var cur = `${pre || ""}${key}`;
+			if (val == null || Array.isArray(val) || typeof val != "object") {
+				ret[cur] = val;
+			} else if (typeof val == "object") {
+				asPaths(val, ret, cur + '.');
+			}
+		});
+		return ret;
+	}
+	var elem = null, val;
+	var flats = asPaths(values, {});
+
+	for (var i = 0; i < this.elements.length; i++) {
+		elem = this.elements[i];
+		if (!elem.name) continue;
+		val = flats[elem.name];
+		switch (elem.type) {
+			case 'submit':
+			break;
+			case 'radio':
+			case 'checkbox':
+				if (val) elem.checked = (Array.isArray(val) ? val : [val]).some(function(val) {
+					return val.toString() == elem.value;
+				});
+				// TODO it's preferable if this line is not needed
+				elem.parentNode.classList.toggle('checked', elem.checked);
+			break;
+			case 'select-multiple':
+				if (val) elem.fill(val);
+			break;
+			case 'file':
+				if (val) elem.setAttribute("value", val);
+			break;
+			default:
+				if (val) elem.value = val;
+		}
+	}
+};
+
 Semafor.prototype.get = function() {
-	var vals = this.$node.form('get values');
+	var vals = formToQuery(this.$node[0]);
 	var formVals = this.retree(vals);
 	return this.convert(formVals);
 };
 
 Semafor.prototype.set = function(obj) {
 	var vals = this.flatten(obj, {}, this.schema);
-	this.$node.form('set values', vals);
+	this.$node[0].fill(vals);
 };
 
 Semafor.prototype.clear = function() {
-	this.$node.form('clear');
+	this.$node[0].reset();
 };
 
 var types = Semafor.types = {
