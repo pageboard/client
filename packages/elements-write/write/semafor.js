@@ -47,7 +47,7 @@ function formToQuery(form) {
 	return query;
 }
 
-HTMLFormElement.prototype.fill = function(values) {
+function formFill(form, values) {
 	function asPaths(obj, ret, pre) {
 		if (!ret) ret = {};
 		Object.keys(obj).forEach(function(key) {
@@ -64,8 +64,8 @@ HTMLFormElement.prototype.fill = function(values) {
 	var elem = null, val;
 	var flats = asPaths(values, {});
 
-	for (var i = 0; i < this.elements.length; i++) {
-		elem = this.elements[i];
+	for (var i = 0; i < form.elements.length; i++) {
+		elem = form.elements[i];
 		if (!elem.name) continue;
 		val = flats[elem.name];
 		switch (elem.type) {
@@ -99,7 +99,7 @@ Semafor.prototype.get = function() {
 
 Semafor.prototype.set = function(obj) {
 	var vals = this.flatten(obj, {}, this.schema);
-	this.$node[0].fill(vals);
+	formFill(this.$node[0], vals);
 };
 
 Semafor.prototype.clear = function() {
