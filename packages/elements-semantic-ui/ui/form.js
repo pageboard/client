@@ -23,11 +23,9 @@ HTMLFormElement.prototype.fill = function(values) {
 			case 'submit':
 			break;
 			case 'radio':
-				elem.checked = val === elem.value;
-			break;
 			case 'checkbox':
-				elem.checked = (Array.isArray(val) ? val : [val]).some(function(val) {
-					return val === elem.value;
+				if (val) elem.checked = (Array.isArray(val) ? val : [val]).some(function(val) {
+					return val.toString() == elem.value;
 				});
 			break;
 			case 'select-multiple':
