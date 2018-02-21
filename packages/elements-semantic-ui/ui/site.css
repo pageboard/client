@@ -316,27 +316,27 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 }
 
 /* for editor only, but semantic-ui dependent */
-.ProseMirror .ui.buttons .disabled.button,
-.ProseMirror .ui.disabled.button,
-.ProseMirror .ui.button:disabled,
-.ProseMirror .ui.disabled.button:hover,
-.ProseMirror .ui.disabled.active.button {
+[contenteditable] .ui.buttons .disabled.button,
+[contenteditable] .ui.disabled.button,
+[contenteditable] .ui.button:disabled,
+[contenteditable] .ui.disabled.button:hover,
+[contenteditable] .ui.disabled.active.button {
 	pointer-events: auto !important;
 }
 
-.ProseMirror .ui.form[block-focused] .ui.message {
+[contenteditable] .ui.form[block-focused] .ui.message {
 	display:block;
 }
 
-.ProseMirror [block-type="query"][block-focused] .ui.message {
+[contenteditable] [block-type="query"][block-focused] .ui.message {
 	display:block !important;
 }
 
-.ProseMirror .ui.form[block-focused] input[type="hidden"] {
+[contenteditable] .ui.form[block-focused] input[type="hidden"] {
 	display:block;
 }
 
-.ProseMirror .ui.dropdown[block-focused] > .menu {
+[contenteditable] .ui.dropdown[block-focused] > .menu {
 	overflow: visible;
 	width: auto;
 	height: auto;
@@ -344,6 +344,6 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 	opacity: 1;
 }
 
-.ProseMirror .field[block-focused] .dropdown > .menu {
+[contenteditable] .field[block-focused] .dropdown > .menu {
 	display: block !important;
 }
