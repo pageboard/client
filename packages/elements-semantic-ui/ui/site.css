@@ -187,6 +187,24 @@ i.icon:before {
 	vertical-align: middle;
 }
 
+.caret-icon {
+	position:relative;
+	padding-right: 1.2em;
+}
+.caret-icon:before {
+	content: '\f0da';
+	transform: rotate(0deg);
+	font-family: Accordion;
+	font-style:normal;
+	vertical-align: top;
+	position: absolute;
+	right: 0.5em;
+	transition: transform 0.2s linear;
+}
+.active.caret-icon:before {
+	transform:rotate(90deg);
+}
+
 /*******************************
 				 Navigation
 *******************************/

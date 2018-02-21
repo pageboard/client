@@ -26,10 +26,6 @@
 	margin-bottom:1em;
 	margin-left: 1em;
 }
-.ui.accordion[block-type="sitemap"] .title .dropdown.icon,
-.ui.accordion[block-type="sitemap"] .accordion .title .dropdown.icon {
-	margin-right:0;
-}
 .ui.accordion[block-type="sitemap"] .title > a,
 .ui.accordion[block-type="sitemap"] .accordion .title > a {
 	padding-left:1.25em;

@@ -104,7 +104,7 @@ Pageboard.elements.menu_item_dropdown = {
 	icon: '<b class="icon">Drop</b>',
 	render: function(doc, block, view) {
 		return doc.dom`<div tabindex="0" class="ui simple dropdown item ${block.focused ? 'active' : ''}">
-			<div class="title ${block.data.icon ? 'icon' : ''}" block-content="title"></div>
+			<div class="title ${block.data.icon ? 'caret-icon' : ''}" block-content="title"></div>
 			<div class="menu" block-content="items"></div>
 		</div>`;
 	},
@@ -139,7 +139,7 @@ Pageboard.elements.menu_item_popup = {
 	icon: '<b class="icon">Pop</b>',
 	render: function(doc, block, view) {
 		return doc.dom`<div tabindex="0" class="ui simple dropdown item">
-			<div class="title ${block.data.icon ? 'icon' : ''}" block-content="title"></div>
+			<div class="title ${block.data.icon ? 'caret-icon' : ''}" block-content="title"></div>
 			<div class="popup">
 				<div block-content="content"></div>
 			</div>

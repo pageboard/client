@@ -119,8 +119,7 @@ Pageboard.elements.sitepage = {
 	context: 'sitemap/ | sitepage/',
 	render: function(doc, block) {
 		return doc.dom`<element-sitepage class="item fold" data-url="${block.data.url}">
-			<div class="title">
-				<i class="dropdown icon"></i>
+			<div class="title caret-icon">
 				<span class="header">${block.data.title || 'Untitled'}</span><br />
 				<a href="${block.data.url}" class="description">${block.data.url || '-'}</a>
 			</div>
