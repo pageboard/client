@@ -30,11 +30,41 @@ function Semafor(schema, node) {
 	});
 }
 
-function formToQuery(form) {
-	var fd = new FormData(form);
+function formGet(form) {
 	var query = {};
-	fd.forEach(function(val, key) {
-		var old = query[key];
+	var old, key, val, elem;
+	for (var i = 0; i < form.elements.length; i++) {
+		elem = form.elements[i];
+		key = elem.name;
+		if (!key) continue;
+		old = query[key];
+		switch (elem.type) {
+			case 'submit':
+			break;
+			case 'checkbox':
+				val = elem.checked ? elem.value : "";
+			break;
+			case 'radio':
+				if (elem.checked) {
+					old = undefined;
+					val = elem.value;
+				} else if (old === undefined) {
+					val = "";
+				} else {
+					val = null;
+				}
+			break;
+			case 'file':
+				// skip
+			break;
+			case 'select-multiple':
+				// TODO
+				console.warn("not supported yet");
+			break;
+			default:
+				val = elem.value;
+		}
+		if (val == null) continue;
 		if (old !== undefined) {
 			if (!Array.isArray(old)) {
 				query[key] = [old];
@@ -43,11 +73,11 @@ function formToQuery(form) {
 		} else {
 			query[key] = val;
 		}
-	});
+	}
 	return query;
 }
 
-function formFill(form, values) {
+function formSet(form, values) {
 	function asPaths(obj, ret, pre) {
 		if (!ret) ret = {};
 		Object.keys(obj).forEach(function(key) {
@@ -92,14 +122,14 @@ function formFill(form, values) {
 };
 
 Semafor.prototype.get = function() {
-	var vals = formToQuery(this.$node[0]);
+	var vals = formGet(this.$node[0]);
 	var formVals = this.retree(vals);
 	return this.convert(formVals);
 };
 
 Semafor.prototype.set = function(obj) {
 	var vals = this.flatten(obj, {}, this.schema);
-	formFill(this.$node[0], vals);
+	formSet(this.$node[0], vals);
 };
 
 Semafor.prototype.clear = function() {
