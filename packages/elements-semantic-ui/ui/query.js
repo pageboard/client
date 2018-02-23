@@ -17,7 +17,8 @@ Pageboard.bindings.default = {
 				if (fun.mod) {
 					var mod = Pageboard.bindings.default.filters[fun.mod]
 					if (mod) {
-						return mod(fun, data, answer.schema);
+						var schema = (answer.schemas || {})[data.type];
+						return mod(fun, data, schema);
 					}
 				}
 			});
