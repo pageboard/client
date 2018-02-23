@@ -59,7 +59,7 @@ Pageboard.elements.image = {
 						const: "cover"
 					}],
 					title: "fit",
-					default: "natural"
+					default: "none"
 				},
 				horizontal: {
 					title: "horizontal",
