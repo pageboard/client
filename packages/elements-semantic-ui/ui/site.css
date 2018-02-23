@@ -190,6 +190,7 @@ i.icon:before {
 .caret-icon {
 	position:relative;
 	padding-right: 1.2em;
+	cursor: pointer;
 }
 .caret-icon:before {
 	content: '\f0da';
