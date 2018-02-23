@@ -73,9 +73,9 @@ Pageboard.elements.link = {
 	tag: 'a:not(.itemlink)',
 	icon: '<i class="icon linkify"></i>',
 	render: function(doc, block) {
-		var a = doc.dom`<a href="${block.data.url}"></a>`;
-		if (a.hostname != document.location.hostname) a.rel = "noopener";
 		var d = block.data;
+		var a = doc.dom`<a href="${d.url}"></a>`;
+		if (a.hostname != document.location.hostname) a.rel = "noopener";
 		if (d.target) a.target = d.target;
 		if (d.button) a.className = "ui button";
 		if (d.icon) {
