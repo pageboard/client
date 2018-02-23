@@ -143,6 +143,7 @@ class HTMLElementQuery extends HTMLCustomElement {
 
 		if (query._parent) console.warn("query._parent is reserved");
 		query = HTMLElementQuery.filterQuery(query);
+		if (Object.keys(query).length == 0) return; // nothing to query
 		query._parent = this.getAttribute('block-id');
 
 		results.textContent = "";
