@@ -129,11 +129,16 @@ Page.setup(function(state) {
 	document.body.addEventListener('input', inputHandler, false);
 	document.body.addEventListener('change', inputHandler, false);
 
-	var toInput;
+	var toInput, ignoreInputChange = false;
 	function inputHandler(e) {
 		var form = e.target.matches('form') ? e.target : e.target.form;
 		if (!form) return;
 		if (form.dataset.live != "true") return;
+		if (e.type == "input") {
+			ignoreInputChange = true;
+		} else if (e.target.matches('input') && ignoreInputChange) {
+			return;
+		}
 		if (toInput) clearTimeout(toInput);
 		toInput = setTimeout(function() {
 			toInput = null;
