@@ -212,9 +212,10 @@ Href.prototype.searchStart = function() {
 			var filter = Object.assign({
 				text: me.node.querySelector('input').value
 			}, me.opts.filter);
-			filter.paginate = this.pageIndex;
+			filter.limit = 10;
+			filter.offset = (this.pageIndex - 1) * filter.limit;
 			return Page.format({
-				pathname: '/.api/href',
+				pathname: '/.api/hrefs',
 				query: filter
 			});
 		},
@@ -227,9 +228,10 @@ Href.prototype.searchStart = function() {
 	});
 	this.infinite.on('load', function(response) {
 		response = JSON.parse(response);
+		var data = response.data;
 		var node = me.container.ownerDocument.createElement('div');
-		me.cache(response);
-		me.renderList(response, node);
+		me.cache(data);
+		me.renderList(data, node);
 		this.appendItems(Array.from(node.children));
 	});
 	Pageboard.write.classList.add('href');
@@ -368,7 +370,9 @@ Href.prototype.remove = function(href) {
 };
 
 Href.prototype.get = function(href) {
-	return Pageboard.uiLoad(this.node, GET('/.api/href', {url: href}));
+	return Pageboard.uiLoad(this.node, GET('/.api/hrefs', {url: href})).then(function(obj) {
+		return obj.data;
+	});
 };
 
 Href.prototype.insert = function(url) {
