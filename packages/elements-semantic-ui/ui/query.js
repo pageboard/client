@@ -4,49 +4,55 @@ Page.patch(function(state) {
 	});
 });
 
-if (!window.Pageboard) window.Pageboard = {};
 (function(Pageboard) {
-Pageboard.bindings = {
-	default: {
-		title: 'default',
-		merge: function(template, dom, answer, filter) {
-			var list = answer.data || [];
-			if (!Array.isArray(list)) list = [list];
-			var ms = new MergeString(template.innerHTML);
-			list.forEach(function(item) {
-				var parent = dom.cloneNode(false);
-				parent.innerHTML = ms.merge(item, function(fun, data) {
-					if (fun.mod) {
-						var mod = Pageboard.bindings.default.filters[fun.mod]
-						if (mod) {
-							return mod(fun, data, answer.schema);
-						}
+Pageboard.bindings.default = {
+	title: 'default',
+	merge: function(template, dom, answer, filter) {
+		var list = answer.data || [];
+		if (!Array.isArray(list)) list = [list];
+		var ms = new MergeString(template.innerHTML);
+		list.forEach(function(item) {
+			var parent = dom.cloneNode(false);
+			parent.innerHTML = ms.merge(item, function(fun, data) {
+				if (fun.mod) {
+					var mod = Pageboard.bindings.default.filters[fun.mod]
+					if (mod) {
+						return mod(fun, data, answer.schema);
 					}
-				});
-				if (filter) filter(item, parent);
-				while (parent.firstChild) dom.appendChild(parent.firstChild);
-			});
-			if (list.length == 0) return false; // display warning message
-		},
-		filters: {
-			title: function(fun, data, schema) {
-				var pathProp = 'properties.' + fun.path.split('.').join('.properties.');
-				var prop = MergeString.get(pathProp, schema);
-				if (!prop) {
-					console.warn("No matching schema for title of", fun.path);
-					return;
 				}
-				var cval = MergeString.get(fun.path, data);
-				var val = prop.oneOf.find(function(item) {
-					return item.const == cval;
-				});
-				if (val != null) return val.title;
-				else return cval;
-			},
-			text: function(fun, data, schema) {
-				var str = MergeString.get(fun.path, data);
-				return str.split("\n").join('<br>');
+			});
+			if (filter) filter(item, parent);
+			while (parent.firstChild) dom.appendChild(parent.firstChild);
+		});
+		if (list.length == 0) return false; // display warning message
+	},
+	filters: {
+		title: function(fun, data, schema) {
+			var pathProp = 'properties.' + fun.path.split('.').join('.properties.');
+			var prop = MergeString.get(pathProp, schema);
+			if (!prop) {
+				console.warn("No matching schema for title of", fun.path);
+				return;
 			}
+			var cval = MergeString.get(fun.path, data);
+			var val = prop.oneOf.find(function(item) {
+				return item.const == cval;
+			});
+			if (val != null) return val.title;
+			else return cval;
+		},
+		text: function(fun, data, schema) {
+			var str = MergeString.get(fun.path, data);
+			return str.split("\n").join('<br>');
+		},
+		join: function(fun, data, schema) {
+			var val = MergeString.get(fun.path, data);
+			if (Array.isArray(val)) return val.join('<br>');
+			else return val;
+		},
+		date: function(fun, data, schema) {
+			var val = MergeString.get(fun.path, data);
+			return new Date(val).toLocaleString();
 		}
 	}
 };
