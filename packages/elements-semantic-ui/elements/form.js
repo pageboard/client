@@ -4,6 +4,7 @@ Pageboard.elements.form = {
 	title: 'Form',
 	group: 'block',
 	menu: "form",
+	priority: 0, // scripts must run before 'query' scripts
 	required: ["action"],
 	properties: {
 		fill: {

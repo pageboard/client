@@ -1,7 +1,7 @@
 Pageboard.elements.query = {
 	title: "Query",
 	menu: "form",
-	priority: -1,
+	priority: 1, // scripts must run after 'form' scripts
 	contents: {
 		messages: {
 			title: 'Messages',
