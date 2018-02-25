@@ -31,10 +31,12 @@ Href.prototype.init = function() {
 	this.node.addEventListener('input', function(e) {
 		if (me.action == "search") {
 			me.searchUpdate();
+		} else if (me.action == "manual") {
+			// do nothing
 		} else if (!me.action) {
 			input.value = "";
 			Pageboard.trigger(input, 'change');
-			me.act("search");
+			me.start("search");
 		}
 	});
 
@@ -44,15 +46,20 @@ Href.prototype.init = function() {
 			if (me.input.value) {
 				me.node.querySelector('input').select();
 			} else {
-				me.act('search');
+				me.start('search');
 			}
 		}
 	});
 
 	this.node.addEventListener('click', function(e) {
 		var actioner = e.target.closest('[data-action]');
-		if (!actioner) return;
-		this.act(actioner.dataset.action);
+		if (!actioner) {
+			if (e.altKey) {
+				this.start('manual');
+			}
+			return;
+		}
+		this.start(actioner.dataset.action);
 	}.bind(this));
 
 	this.container.addEventListener('click', function(e) {
@@ -73,7 +80,7 @@ Href.prototype.init = function() {
 		} else {
 			if (href == input.value) {
 				if (this.action == 'search') {
-					this.act(this.action);
+					this.start(this.action);
 				} else {
 //					this.set(input.value);
 				}
@@ -112,26 +119,38 @@ Href.prototype.update = function() {
 	}
 };
 
-Href.prototype.act = function(action) {
-	var prev = this.action;
-	var same = prev == action;
-
-	if (prev) {
-		this.action = null;
-		this[prev + 'Stop']();
-		if (same) {
-			this.renderField();
-			return;
-		}
-	}
+Href.prototype.start = function(action) {
+	if (this.stop(action)) return;
 	this.action = action;
 	this.renderField();
 	this[action + 'Start']();
 };
 
+Href.prototype.stop = function(action) {
+	var prev = this.action;
+	var same = prev == action;
+
+	if (this.action) {
+		this.action = null;
+		this[prev + 'Stop']();
+		if (same) {
+			this.renderField();
+			return true;
+		}
+	}
+};
+
 Href.prototype.renderField = function() {
 	var content;
 	switch (this.action) {
+	case "manual":
+		content = document.dom`<input class="search" type="text" placeholder="Type url..." />
+		<div class="ui blue icon buttons">
+			<div class="ui button" data-action="manual" title="Stop">
+				<i class="close icon"></i>
+			</div>
+		</div>`;
+	break;
 	case "paste":
 		content = document.dom`<input class="search" type="text" placeholder="Paste url..." />
 		<div class="ui blue icon buttons">
@@ -184,6 +203,19 @@ Href.prototype.cache = function(list) {
 		map[normUrl(list[i].url)] = list[i];
 	}
 	return list;
+};
+
+Href.prototype.manualStart = function() {
+	var input = this.node.querySelector('input');
+	input.value = this.input.value;
+	input.focus();
+};
+
+Href.prototype.manualStop = function() {
+	var input = this.node.querySelector('input');
+	if (input.value != this.input.value) {
+		Pageboard.trigger(this.input, 'change');
+	}
 };
 
 Href.prototype.pasteStart = function() {
