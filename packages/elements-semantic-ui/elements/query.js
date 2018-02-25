@@ -23,9 +23,15 @@ Pageboard.elements.query = {
 			<div class="results"></div>
 		</element-query>`;
 		var d = block.data;
-		var type = d.query && d.query.type;
-		if (type) {
-			node.dataset.type = type;
+		if (d.query) {
+			if (d.query.type) {
+				node.dataset.type = d.query.type;
+			}
+			if (d.query.vars) {
+				node.dataset.vars = Object.keys(d.query.vars).map(function(key) {
+					return d.query.vars[key];
+				}).join(',');
+			}
 		}
 		if (d.binding) {
 			node.dataset.binding = d.binding;

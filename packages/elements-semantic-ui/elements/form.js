@@ -139,6 +139,7 @@ Pageboard.elements.form = {
 			<div block-content="form"></div>
 		</form>`;
 		if (action.live) form.dataset.live = true;
+		if (action.type) form.dataset.type = action.type;
 		if (d.fill && d.fill != "no") form.dataset.fill = d.fill;
 		return form;
 	},

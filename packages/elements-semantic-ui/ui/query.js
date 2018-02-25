@@ -105,11 +105,11 @@ class HTMLElementQuery extends HTMLCustomElement {
 	static find(name, value) {
 		// convert query into a query that contains only
 		var nodes = document.querySelectorAll(`form [name="${name}"]`);
-		return Array.prototype.filter.call(nodes, function(control) {
+		return Array.prototype.filter.call(nodes, function(node) {
 			if (Array.isArray(value)) {
-				if (value.indexOf(control.value) < 0) return;
+				if (value.indexOf(node.value) < 0) return;
 			} else {
-				if (value != control.value) return;
+				if (value != node.value) return;
 			}
 			return true;
 		});
@@ -149,9 +149,31 @@ class HTMLElementQuery extends HTMLCustomElement {
 		var results = this.querySelector('.results');
 
 		if (query._parent) console.warn("query._parent is reserved");
-		query = HTMLElementQuery.filterQuery(query);
-		if (Object.keys(query).length == 0) return; // nothing to query
-		query._parent = this.getAttribute('block-id');
+		var vars = {};
+		var missing = 0;
+		if (this.dataset.type) {
+			var form = document.querySelector(`form[data-type="${this.dataset.type}"]`);
+			Array.prototype.forEach.call(form.elements, function(node) {
+				var key = node.name;
+				if (!key) return;
+				if (query[key] !== undefined) {
+					vars[key] = query[key];
+				} else if (node.required) {
+					missing++;
+				}
+			});
+		} else if (this.dataset.vars) {
+			this.dataset.vars.split(',').forEach(function(key) {
+				if (query[key] !== undefined) {
+					vars[key] = query[key];
+				} else {
+					var node = document.querySelector(`form [name="${key}"]`);
+					if (node && node.required) missing++;
+				}
+			});
+		}
+		if (missing > 0) return;
+		vars._parent = this.getAttribute('block-id');
 
 		results.textContent = "";
 		var template = this.querySelector('[block-content="template"]').cloneNode(true);
@@ -164,7 +186,7 @@ class HTMLElementQuery extends HTMLCustomElement {
 		form.classList.add('loading');
 		return fetch(Page.format({
 			pathname: '/.api/query',
-			query: query
+			query: vars
 		})).then(function(response) {
 			if (response.status >= 400) throw new Error(response.statusText);
 			return response.json();
