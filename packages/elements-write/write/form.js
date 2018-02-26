@@ -42,7 +42,7 @@ Form.prototype.update = function(parents, sel) {
 	}
 
 	if (!this.main) this.main = new FormBlock(this.editor, this.node, block);
-	this.main.update(parent);
+	this.main.update(parents);
 
 	var curInlines = this.inlines;
 	var inlines = (parent.inline && parent.inline.blocks || []).map(function(block) {
@@ -60,7 +60,7 @@ Form.prototype.update = function(parents, sel) {
 		} else {
 			curForm.node.parentNode.appendChild(curForm.node);
 		}
-		curForm.update(parent, block);
+		curForm.update(parents, block);
 		return curForm;
 	}, this);
 	curInlines.forEach(function(form) {
@@ -98,13 +98,13 @@ FormBlock.prototype.destroy = function() {
 	this.node.remove();
 };
 
-FormBlock.prototype.update = function(parent, block) {
+FormBlock.prototype.update = function(parents, block) {
 	this.ignoreEvents = true;
 	if (block) {
 		this.block = block;
 	}
-	if (parent) {
-		this.parent = parent;
+	if (parents) {
+		this.parents = parents;
 	}
 	this.form.clear();
 	this.form.set(this.block.data);
@@ -117,6 +117,15 @@ FormBlock.prototype.propInputs = function(props, parentKey) {
 	var block = this.block;
 	Object.keys(props).forEach(function(key) {
 		var prop = props[key];
+		var ikey = key;
+		if (parentKey) ikey = `${parentKey}.${key}`;
+		if (prop.context && !this.parents.some(function(parent) {
+			return parent.block.type == prop.context;
+		})) {
+			var input = node.querySelector(`[name="${key}"]`);
+			if (input) input.closest('.field').remove();
+			return;
+		}
 		var opts = prop.input;
 		if (!opts || !opts.name) {
 			if (prop.properties) this.propInputs(prop.properties, key);
@@ -127,8 +136,6 @@ FormBlock.prototype.propInputs = function(props, parentKey) {
 			console.error("Unknown input name", Pageboard.inputs, prop);
 			return;
 		}
-		var ikey = key;
-		if (parentKey) ikey = `${parentKey}.${key}`;
 		if (!this.inputs[ikey]) {
 			this.inputs[ikey] = new CurInput(node.querySelector(`[name="${ikey}"]`), opts, prop, block);
 		} else {
@@ -161,7 +168,7 @@ FormBlock.prototype.change = function() {
 
 	if (this.el.inplace) {
 		// simply select focused node
-		var node = this.el.inline ? this.parent.inline.rpos : editor.root.querySelector('[block-focused="last"]');
+		var node = this.el.inline ? this.parents[0].inline.rpos : editor.root.querySelector('[block-focused="last"]');
 		if (node) {
 			editor.utils.refreshTr(tr, node, this.block);
 			dispatch = true;
