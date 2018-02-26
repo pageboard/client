@@ -79,7 +79,7 @@ function MergeString(str) {
 
 MergeString.prototype.merge = function(data, filter) {
 	return this.funs.map(function(fun) {
-		if (fun.str) return fun.str;
+		if (fun.str != null) return fun.str;
 		var str;
 		if (filter) {
 			str = filter(fun, data);
