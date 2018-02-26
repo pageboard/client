@@ -204,8 +204,10 @@ Pageboard.elements.image = {
 		if (meta && meta.mime == "image/jpeg" && meta.size >= 100000) {
 			loc.query.q = 5;
 			img.classList.add('lqip');
-			img.dataset.width = meta.width;
-			img.dataset.height = meta.height;
+			var wf = (d.crop || {}).width || 100;
+			var wh = (d.crop || {}).height || 100;
+			img.dataset.width = Math.round(meta.width * wf / 100);
+			img.dataset.height = Math.round(meta.height * wh / 100);
 			if (zoom != 100) img.dataset.zoom = zoom;
 		} else if (node.dataset.fit != "none") {
 			img.setAttribute('srcset', [320, 640, 1280].map(function(w) {
