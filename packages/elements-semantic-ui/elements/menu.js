@@ -62,6 +62,12 @@ Pageboard.elements.menu_item_link = {
 					type: "link"
 				}
 			}
+		},
+		template: {
+			title: 'Template',
+			description: 'Query template',
+			type: 'string',
+			context: 'query|form'
 		}
 	},
 	contents: {
@@ -72,8 +78,10 @@ Pageboard.elements.menu_item_link = {
 	group: 'menu_item',
 	icon: '<b class="icon">Item</b>',
 	render: function(doc, block) {
-		var a = doc.dom`<a class="item" href="${block.data.url}" block-content="content"></a>`;
+		var d = block.data;
+		var a = doc.dom`<a class="item" href="${d.url}" block-content="content"></a>`;
 		if (a.hostname != document.location.hostname) a.rel = "noopener";
+		if (d.template) a.setAttribute('attr-href', d.template);
 		return a;
 	}
 };

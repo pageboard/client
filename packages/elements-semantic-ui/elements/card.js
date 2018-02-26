@@ -89,7 +89,7 @@ Pageboard.elements.card = {
 			title: 'Template',
 			description: 'Query template',
 			type: 'string',
-			context: 'query'
+			context: 'query|form'
 		}
 	},
 	contents: {
