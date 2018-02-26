@@ -42,7 +42,13 @@ Pageboard.elements.link = {
 				}
 			}
 		},
-		icon: {
+		template: {
+			title: 'Template',
+			description: 'Query template',
+			type: 'string',
+			context: 'query'
+		},
+		icon: { // TODO remove me in favor of inline images
 			title: 'Icon',
 			oneOf: [{
 				type: "null"
@@ -82,6 +88,7 @@ Pageboard.elements.link = {
 			a.classList.add('icon');
 			a.style.backgroundImage = `url(${d.icon})`;
 		}
+		if (d.template) a.setAttribute('attr-href', d.template);
 		return a;
 	},
 	stylesheets: [

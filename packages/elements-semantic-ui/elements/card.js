@@ -84,6 +84,12 @@ Pageboard.elements.card = {
 					type: ["link"]
 				}
 			}
+		},
+		template: {
+			title: 'Template',
+			description: 'Query template',
+			type: 'string',
+			context: 'query'
 		}
 	},
 	contents: {
@@ -113,6 +119,7 @@ Pageboard.elements.card = {
 			<div class="content" block-content="content"></div>
 			<div class="extra content" block-content="extra"></div>
 		`);
+		if (d.template) node.setAttribute('attr-href', d.template);
 		return node;
 	}
 };

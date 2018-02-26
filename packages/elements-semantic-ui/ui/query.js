@@ -23,6 +23,15 @@ Pageboard.bindings.default = {
 				}
 			});
 			if (filter) filter(item, parent);
+			var child, val;
+			while (child = parent.querySelector('[attr-href]')) {
+				val = child.getAttribute('attr-href');
+				if (val.startsWith('?')) {
+					val = child.getAttribute('href') + val;
+				}
+				child.setAttribute('href', val);
+				child.removeAttribute('attr-href');
+			}
 			while (parent.firstChild) dom.appendChild(parent.firstChild);
 		});
 		if (list.length == 0) return false; // display warning message
