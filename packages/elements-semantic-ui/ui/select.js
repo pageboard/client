@@ -87,6 +87,7 @@ class HTMLElementSelect extends HTMLCustomElement {
 			select = this.insertBefore(this.dom`<select name="${this.dataset.name}"></select>`, menu);
 			this._update();
 		}
+		if (this.dataset.disabled) select.disabled = true;
 		if (this.dataset.required) select.required = true;
 		if (this.dataset.multiple) select.multiple = true;
 

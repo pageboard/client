@@ -156,6 +156,11 @@ Pageboard.elements.input_property = {
 				name: 'element-property'
 			}
 		},
+		disabled: {
+			title: 'disabled',
+			type: 'boolean',
+			default: false
+		},
 		radios: {
 			title: 'Show radios if less than',
 			description: 'If number of options is over this number, show a <select>',
@@ -225,7 +230,8 @@ Pageboard.elements.input_property = {
 						type: d.multiple ? 'input_checkbox' : 'input_radio',
 						data: {
 							name: name,
-							value: item.const
+							value: item.const,
+							disabled: d.disabled
 						},
 						content: {
 							label: item.title
@@ -252,7 +258,8 @@ Pageboard.elements.input_property = {
 					data: {
 						name: name,
 						multiple: d.multiple,
-						placeholder: prop.description
+						placeholder: prop.description,
+						disabled: d.disabled
 					},
 					content: {
 						label: prop.title,
@@ -270,7 +277,8 @@ Pageboard.elements.input_property = {
 							name: name,
 							min: prop.minimum,
 							max: prop.maximum,
-							default: prop.default
+							default: prop.default,
+							disabled: d.disabled
 						},
 						content: {
 							label: prop.title
@@ -284,7 +292,8 @@ Pageboard.elements.input_property = {
 					name: name,
 					type: 'text',
 					format: 'number',
-					default: prop.default
+					default: prop.default,
+					disabled: d.disabled
 				},
 				content: {
 					label: prop.title
@@ -295,7 +304,8 @@ Pageboard.elements.input_property = {
 				type: 'input_text',
 				data: {
 					name: name,
-					type: 'text'
+					type: 'text',
+					disabled: d.disabled
 				},
 				content: {
 					label: prop.title
@@ -412,6 +422,11 @@ Pageboard.elements.input_text = {
 			type: 'boolean',
 			default: false
 		},
+		disabled: {
+			title: 'disabled',
+			type: 'boolean',
+			default: false
+		},
 		type: {
 			title: 'format',
 			default: "text",
@@ -456,6 +471,7 @@ Pageboard.elements.input_text = {
 			input = doc.dom`<input type="${d.type}" name="${d.name}" />`;
 			if (d.value) input.value = d.value;
 		}
+		if (d.disabled) input.disabled = true;
 		if (d.placeholder) input.placeholder = d.placeholder;
 		if (d.required) input.required = true;
 		var node = doc.dom`<div class="field">
@@ -488,6 +504,11 @@ Pageboard.elements.input_file = {
 			type: 'boolean',
 			default: false
 		},
+		disabled: {
+			title: 'disabled',
+			type: 'boolean',
+			default: false
+		},
 		now: {
 			title: 'upload on change',
 			type: 'boolean',
@@ -503,6 +524,7 @@ Pageboard.elements.input_file = {
 		var input = doc.dom`<input type="file" name="${d.name}" />`;
 		if (d.placeholder) input.placeholder = d.placeholder;
 		if (d.required) input.required = true;
+		if (d.disabled) input.disabled = true;
 		return doc.dom`<div class="field">
 			<label block-content="label">Label</label>
 			<element-input-file class="ui action input" ${d.now ? 'data-now' : ''}>
@@ -536,6 +558,11 @@ Pageboard.elements.input_range = {
 			title: "name",
 			description: "The form object key",
 			type: "string"
+		},
+		disabled: {
+			title: 'disabled',
+			type: 'boolean',
+			default: false
 		},
 		required: {
 			title: 'required',
@@ -572,6 +599,7 @@ Pageboard.elements.input_range = {
 		var input = doc.dom`<input type="range" name="${d.name}" min="${d.min}" max="${d.max}" step="${d.step}" />`;
 		if (d.value != null) input.value = d.value;
 		if (d.required) input.required = true;
+		if (d.disabled) input.disabled = true;
 		return doc.dom`<div class="field">
 			<label block-content="label">Label</label>
 			<element-input-range>
@@ -604,6 +632,11 @@ Pageboard.elements.input_checkbox = {
 			title: "value",
 			type: "string"
 		},
+		disabled: {
+			title: 'disabled',
+			type: 'boolean',
+			default: false
+		},
 		required: {
 			title: 'required',
 			type: 'boolean',
@@ -619,6 +652,7 @@ Pageboard.elements.input_checkbox = {
 		var id = (block.id || view.blocks.genId(4)).substring(0, 4);
 		var input = doc.dom`<input type="checkbox" name="${d.name}" value="${d.value}" id="for${id}" />`;
 		if (d.required) input.required = true;
+		if (d.disabled) input.disabled = true;
 		return doc.dom`<div class="field">
 			<div class="ui checkbox">
 				${input}
@@ -645,6 +679,11 @@ Pageboard.elements.input_radio = {
 		value: {
 			title: "value",
 			type: "string"
+		},
+		disabled: {
+			title: 'disabled',
+			type: 'boolean',
+			default: false
 		}
 	},
 	contents: {
@@ -655,6 +694,7 @@ Pageboard.elements.input_radio = {
 		var d = block.data;
 		var id = (block.id || view.blocks.genId(4)).substring(0, 4);
 		var input = doc.dom`<input type="radio" name="${d.name}" value="${d.value}" id="for${id}" />`;
+		if (d.disabled) input.disabled = true;
 		return doc.dom`<div class="field">
 			<div class="ui radio checkbox">
 				${input}
@@ -682,6 +722,11 @@ Pageboard.elements.input_select = {
 		placeholder: {
 			title: "placeholder",
 			type: ["string", "null"]
+		},
+		disabled: {
+			title: 'disabled',
+			type: 'boolean',
+			default: false
 		},
 		required: {
 			title: 'required',
@@ -712,6 +757,9 @@ Pageboard.elements.input_select = {
 		</element-select>`;
 
 		if (d.name) select.dataset.name = d.name;
+		if (d.disabled) {
+			select.dataset.disabled = true;
+		}
 		if (d.required) {
 			select.dataset.required = true;
 		}

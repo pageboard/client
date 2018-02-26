@@ -11,6 +11,7 @@ class HTMLElementInputFile extends HTMLCustomElement {
 
 		input = this.ownerDocument.createElement('input');
 		input.required = file.required;
+		input.disabled = file.disabled;
 		input.type = "text";
 		input.name = file.name;
 		input.value = file.getAttribute("value");
