@@ -11,3 +11,7 @@ element-query[block-focused] > div > [block-content="template"] {
 	display:block;
 }
 
+element-query[block-focused] > .results {
+	display:none;
+}
+
