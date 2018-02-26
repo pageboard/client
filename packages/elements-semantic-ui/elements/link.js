@@ -25,7 +25,7 @@ Pageboard.elements.link = {
 		},
 		url: {
 			title: 'Address',
-			description: 'Local or remote URL',
+			description: 'Path without query or full url',
 			oneOf: [{
 				type: "null"
 			}, {
