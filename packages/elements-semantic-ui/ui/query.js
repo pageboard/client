@@ -5,8 +5,9 @@ Page.patch(function(state) {
 });
 
 (function(Pageboard) {
-Pageboard.bindings.default = {
-	title: 'default',
+var Pb = Pageboard.bindings;
+Pb.default = {
+	title: 'Default',
 	merge: function(template, dom, answer, filter) {
 		var list = answer.data || [];
 		if (!Array.isArray(list)) list = [list];
@@ -15,7 +16,7 @@ Pageboard.bindings.default = {
 			var parent = dom.cloneNode(false);
 			parent.innerHTML = ms.merge(item, function(fun, data) {
 				if (fun.mod) {
-					var mod = Pageboard.bindings.default.filters[fun.mod]
+					var mod = Pb.default.filters[fun.mod]
 					if (mod) {
 						var schema = (answer.schemas || {})[data.type];
 						return mod(fun, data, schema);
@@ -67,6 +68,18 @@ Pageboard.bindings.default = {
 	}
 };
 Pageboard.MergeString = MergeString;
+
+Pb.defaultTable = {
+	title: 'Default table',
+	merge: function(template, dom, answer) {
+		var table = template.querySelector('table').cloneNode(true);
+		var body = table.querySelector('tbody');
+		var template = body.cloneNode(true);
+		body.textContent = "";
+		if (Pb.default.merge(template, body, answer) === false) return false;
+		else dom.appendChild(table);
+	}
+};
 
 function MergeString(str) {
 	var funs = this.funs = [];
