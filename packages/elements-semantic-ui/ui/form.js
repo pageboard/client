@@ -91,35 +91,35 @@ Page.patch(function(state) {
 	var proms = [];
 	Array.from(document.forms).forEach(function(form) {
 		var fill = form.dataset.fill;
-		if (!fill) return;
+		if (fill != "true") return;
 		if (form.matches('.warning')) {
 			form.classList.remove('warning');
 			form.enable();
 		}
-		if (fill == "all") {
-			form.fill(state.query);
-		} else if (fill == "id") {
-			var id = state.query.id;
-			if (!id) return;
-			var input = form.querySelector('input[type="hidden"][name="_id"]');
-			var parent = form.querySelector('input[type="hidden"][name="_parent"]');
-			if (!id || !parent || !parent.value) {
-				console.warn("form has missing inputs");
-				return;
+		form.fill(state.query);
+		
+		var fillWith = Array.prototype.find.call(form.querySelectorAll('[type="hidden"]'), function(node) {
+			if (node.type == "hidden" && node.name && state.query[node.name] && node.value) {
+				return node;
 			}
-			parent = parent.value;
-			input.value = id;
-			proms.push(HTMLFormElement.fetch('get', '/.api/form', {
-				_parent: parent,
-				id: id
-			}).then(function(block) {
-				form.fill(block.data);
-			}).catch(function(err) {
-				console.error(err);
-				form.classList.add('warning');
-				form.disable();
-			}));
+		});
+		if (!fillWith) return;
+		var _id = form.querySelector('input[name="_id"]');
+		if (!_id || !_id.value) {
+			console.warn("missing input _id");
+			return;
 		}
+		var obj = {
+			_id: _id.value
+		};
+		obj[fillWith.name] = fillWith.value;
+		proms.push(HTMLFormElement.fetch('get', '/.api/form', obj).then(function(block) {
+			form.fill(block.data);
+		}).catch(function(err) {
+			console.error(err);
+			form.classList.add('warning');
+			form.disable();
+		}));
 	});
 	return Promise.all(proms);
 });

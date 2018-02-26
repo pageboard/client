@@ -351,8 +351,8 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 	display:block !important;
 }
 
-[contenteditable] .ui.form[block-focused] input[type="hidden"] {
-	display:block;
+[contenteditable] .ui.form[block-focused] .field.hidden {
+	display: block !important;
 }
 
 [contenteditable] .ui.dropdown[block-focused] > .menu {

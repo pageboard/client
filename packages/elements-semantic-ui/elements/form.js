@@ -8,18 +8,9 @@ Pageboard.elements.form = {
 	required: ["action"],
 	properties: {
 		fill: {
-			title: 'Fill form',
-			oneOf: [{
-				const: "no",
-				title: "no"
-			}, {
-				const: "id",
-				title: "using query id"
-			}, {
-				const: "all",
-				title: "using query variables"
-			}],
-			default: "no"
+			title: 'Fill using query',
+			type: 'boolean',
+			default: false
 		},
 		action: {
 			title: 'Action',
@@ -134,13 +125,12 @@ Pageboard.elements.form = {
 		var action = d.action || {};
 		var url = action.method == "get" ? action.call : "/.api/form";
 		var form = doc.dom`<form action="${url}" method="${action.method}" class="ui form">
-			<input type="hidden" name="_parent" value="${block.id}" />
-			<input type="hidden" name="_id" />
+			<input type="hidden" name="_id" value="${block.id}" />
 			<div block-content="form"></div>
 		</form>`;
 		if (action.live) form.dataset.live = true;
 		if (action.type) form.dataset.type = action.type;
-		if (d.fill && d.fill != "no") form.dataset.fill = d.fill;
+		if (d.fill) form.dataset.fill = true;
 		return form;
 	},
 	stylesheets: [

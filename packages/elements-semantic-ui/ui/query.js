@@ -170,12 +170,12 @@ class HTMLElementQuery extends HTMLCustomElement {
 
 		var results = this.querySelector('.results');
 
-		if (query._parent) console.warn("query._parent is reserved");
+		if (query._id) console.warn("query._id is reserved");
 		var vars = {};
 		var missing = 0;
 		if (this.dataset.type) {
 			var form = document.querySelector(`form[data-type="${this.dataset.type}"]`);
-			Array.prototype.forEach.call(form.elements, function(node) {
+			if (form) Array.prototype.forEach.call(form.elements, function(node) {
 				var key = node.name;
 				if (!key) return;
 				if (query[key] !== undefined) {
@@ -184,7 +184,8 @@ class HTMLElementQuery extends HTMLCustomElement {
 					missing++;
 				}
 			});
-		} else if (this.dataset.vars) {
+		}
+		if (this.dataset.vars) {
 			this.dataset.vars.split(',').forEach(function(key) {
 				if (query[key] !== undefined) {
 					vars[key] = query[key];
@@ -195,7 +196,7 @@ class HTMLElementQuery extends HTMLCustomElement {
 			});
 		}
 		if (missing > 0) return;
-		vars._parent = this.getAttribute('block-id');
+		vars._id = this.getAttribute('block-id');
 
 		results.textContent = "";
 		var template = this.querySelector('[block-content="template"]').cloneNode(true);
