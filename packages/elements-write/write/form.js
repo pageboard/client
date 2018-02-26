@@ -120,7 +120,9 @@ FormBlock.prototype.propInputs = function(props, parentKey) {
 		var ikey = key;
 		if (parentKey) ikey = `${parentKey}.${key}`;
 		if (prop.context && !this.parents.some(function(parent) {
-			return parent.block.type == prop.context;
+			return prop.context.split('|').some(function(tok) {
+				return parent.block.type == tok;
+			});
 		})) {
 			var input = node.querySelector(`[name="${key}"]`);
 			if (input) input.closest('.field').remove();
