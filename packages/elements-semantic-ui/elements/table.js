@@ -174,6 +174,7 @@ Pageboard.elements.table_head_cell = {
 	title: "Cell",
 	menu: 'widget',
 	properties: {
+		align: Pageboard.elements.table_cell.properties.align,
 		width: {
 			title: 'Column width',
 			description: 'Between 1 and 16, set to 0 for none',
@@ -199,6 +200,7 @@ Pageboard.elements.table_head_cell = {
 	render: function(doc, block) {
 		var node = doc.dom`<th></th>`;
 		var pre = Pageboard.elements.grid.prefixes;
+		if (block.data.align) node.classList.add(block.data.align, 'aligned');
 		if (block.data.width) node.classList.add(pre[block.data.width], 'wide');
 		return node;
 	}
