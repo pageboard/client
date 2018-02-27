@@ -43,12 +43,12 @@ Page.patch(function() {
 });
 
 function submitListener(e) {
+	if (!e.target.ownerDocument.body.matches('.ProseMirror')) return;
 	var form = e.target.form || e.target.closest('form');
-	if (form && /^get$/i.test(form.method)) return;
 	e.preventDefault();
 	e.stopImmediatePropagation();
 	if (Pageboard.editor.destroying) return;
-	Pageboard.notify(`Forms cannot be submitted when editing pages`, {
+	Pageboard.notify(`Use view mode to submit forms`, {
 		timeout: 1,
 		where: 'write'
 	});
