@@ -15,9 +15,12 @@ HTMLFormElement.prototype.fill = function(values) {
 	var elem = null, val;
 	var flats = asPaths(values, {});
 
+	var count = 0;
+
 	for (var i = 0; i < this.elements.length; i++) {
 		elem = this.elements[i];
 		if (!elem.name) continue;
+		count++;
 		val = flats[elem.name];
 		switch (elem.type) {
 			case 'submit':
@@ -38,6 +41,7 @@ HTMLFormElement.prototype.fill = function(values) {
 				if (val) elem.value = val;
 		}
 	}
+	return count;
 };
 
 HTMLFormElement.prototype.disable = function() {
@@ -97,13 +101,13 @@ Page.patch(function(state) {
 			form.enable();
 		}
 		form.fill(state.query);
-		
+
 		var fillWith = Array.prototype.find.call(form.querySelectorAll('[type="hidden"]'), function(node) {
 			if (node.type == "hidden" && node.name && state.query[node.name] && node.value) {
 				return node;
 			}
 		});
-		if (!fillWith) return;
+		if (!fillWith || count <= 1) return;
 		var _id = form.querySelector('input[name="_id"]');
 		if (!_id || !_id.value) {
 			console.warn("missing input _id");
