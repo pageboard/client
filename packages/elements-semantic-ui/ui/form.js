@@ -100,14 +100,14 @@ Page.patch(function(state) {
 			form.classList.remove('warning');
 			form.enable();
 		}
-		form.fill(state.query);
+		var fillCount = form.fill(state.query);
 
 		var fillWith = Array.prototype.find.call(form.querySelectorAll('[type="hidden"]'), function(node) {
 			if (node.type == "hidden" && node.name && state.query[node.name] && node.value) {
 				return node;
 			}
 		});
-		if (!fillWith || count <= 1) return;
+		if (!fillWith || fillCount <= 1) return;
 		var _id = form.querySelector('input[name="_id"]');
 		if (!_id || !_id.value) {
 			console.warn("missing input _id");
