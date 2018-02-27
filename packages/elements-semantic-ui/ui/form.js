@@ -160,9 +160,14 @@ Page.setup(function(state) {
 		form.classList.add('loading');
 		var p;
 		if (form.method.toLowerCase() == "get") {
-			p = Page.push(Object.assign(Page.parse(form.action), {
+			var loc = Object.assign(Page.parse(form.action), {
 				query: formToQuery(form, true)
-			}));
+			});
+			if (Page.sameDomain(loc, state) && loc.pathname == state.pathname) {
+				p = Page.push(loc);
+			} else {
+				document.location = Page.format(loc);
+			}
 		} else {
 			p = Promise.all(Array.prototype.filter.call(form.elements, function(node) {
 				return node.type == "file";
