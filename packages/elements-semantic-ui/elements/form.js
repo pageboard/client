@@ -9,6 +9,7 @@ Pageboard.elements.form = {
 	properties: {
 		fill: {
 			title: 'Fill using query',
+			description: 'Use vars id: `query name` to fetch block',
 			type: 'boolean',
 			default: false
 		},
@@ -124,8 +125,13 @@ Pageboard.elements.form = {
 		var d = block.data;
 		var action = d.action || {};
 		var url = action.method == "get" ? action.call : "/.api/form";
+		var fetch = '';
+		if (action.vars && Object.keys(action.vars).indexOf('id') >= 0) {
+			fetch = doc.dom`<input type="hidden" name="${action.vars.id}" data-fetch />`;
+		}
 		var form = doc.dom`<form action="${url}" method="${action.method}" class="ui form">
 			<input type="hidden" name="_id" value="${block.id}" />
+			${fetch}
 			<div block-content="form"></div>
 		</form>`;
 		if (action.live) form.dataset.live = true;

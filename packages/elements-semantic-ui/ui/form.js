@@ -94,20 +94,14 @@ HTMLFormElement.fetch = function(method, url, data) {
 Page.patch(function(state) {
 	var proms = [];
 	Array.from(document.forms).forEach(function(form) {
-		var fill = form.dataset.fill;
-		if (fill != "true") return;
+		if (form.dataset.fill != "true") return;
 		if (form.matches('.warning')) {
 			form.classList.remove('warning');
 			form.enable();
 		}
 		var fillCount = form.fill(state.query);
-
-		var fillWith = Array.prototype.find.call(form.querySelectorAll('[type="hidden"]'), function(node) {
-			if (node.type == "hidden" && node.name && state.query[node.name] && node.value) {
-				return node;
-			}
-		});
-		if (!fillWith || fillCount <= 1) return;
+		var fetch = form.querySelector('[data-fetch]');
+		if (!fetch || fillCount <= 1 || !fetch.name || !fetch.value) return;
 		var _id = form.querySelector('input[name="_id"]');
 		if (!_id || !_id.value) {
 			console.warn("missing input _id");
@@ -116,7 +110,7 @@ Page.patch(function(state) {
 		var obj = {
 			_id: _id.value
 		};
-		obj[fillWith.name] = fillWith.value;
+		obj[fetch.name] = fetch.value;
 		proms.push(HTMLFormElement.fetch('get', '/.api/form', obj).then(function(block) {
 			form.fill(block.data);
 		}).catch(function(err) {
@@ -163,11 +157,7 @@ Page.setup(function(state) {
 			var loc = Object.assign(Page.parse(form.action), {
 				query: formToQuery(form, true)
 			});
-			if (Page.sameDomain(loc, state) && loc.pathname == state.pathname) {
-				p = Page.push(loc);
-			} else {
-				document.location = Page.format(loc);
-			}
+			p = Page.push(loc);
 		} else {
 			p = Promise.all(Array.prototype.filter.call(form.elements, function(node) {
 				return node.type == "file";
@@ -177,7 +167,7 @@ Page.setup(function(state) {
 				return HTMLFormElement.fetch(form.method, form.action, formToQuery(form));
 			}).then(function(data) {
 				form.classList.add('success');
-				if (data.redirect) return Page.push(redirect);
+				if (data.redirect) return Page.push(data.redirect);
 			});
 		}
 		p.catch(function(err) {
