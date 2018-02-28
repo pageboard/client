@@ -274,6 +274,10 @@ input::selection {
 	color: rgba(0, 0, 0, 0.87);
 }
 
+.ui.checkbox input + label[for] {
+	cursor:pointer;
+}
+
 element-select {
 	z-index:1; /* or else dropdown menu goes under what's next */
 }
