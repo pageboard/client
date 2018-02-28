@@ -42,13 +42,11 @@ Page.patch(function() {
 	document.title = (Pageboard.window.document.title || "") + (unsaved ? '*' : '');
 });
 
-function submitListener(e) {
-	if (!e.target.ownerDocument.body.matches('.ProseMirror')) return;
-	var form = e.target.form || e.target.closest('form');
+function submitListenerCapture(e) {
 	e.preventDefault();
 	e.stopImmediatePropagation();
 	if (Pageboard.editor.destroying) return;
-	Pageboard.notify(`Use view mode to submit forms`, {
+	Pageboard.notify(`Cannot edit and submit forms`, {
 		timeout: 1,
 		where: 'write'
 	});
@@ -133,7 +131,7 @@ function buildListener(win, doc) {
 	win.addEventListener('click', anchorListener, true);
 	win.addEventListener('mouseup', anchorListener, true);
 	win.addEventListener('click', labelListener, true);
-	win.addEventListener('submit', submitListener, true);
+	win.addEventListener('submit', submitListenerCapture, true);
 	win.addEventListener('keydown', function(e) {
 		if (e.altKey) win.document.body.classList.add('ProseMirror-alt');
 	});
