@@ -14,6 +14,7 @@ Pb.default = {
 		var ms = new MergeString(template.innerHTML);
 		list.forEach(function(item) {
 			var parent = dom.cloneNode(false);
+			item.$query = answer.$query;
 			parent.innerHTML = ms.merge(item, function(fun, data) {
 				if (fun.mod) {
 					var mod = Pb.default.filters[fun.mod]
@@ -221,6 +222,7 @@ class HTMLElementQuery extends HTMLCustomElement {
 			var binding = Pageboard.bindings[bindName];
 			if (!binding) throw new Error("Cannot find data binder " + bindName);
 			if (!binding.merge) throw new Error("Data binder need merge function " + bindName);
+			answer.$query = vars;
 			if (binding.merge(template, results, answer) === false) {
 				form.classList.add('warning');
 			} else {
