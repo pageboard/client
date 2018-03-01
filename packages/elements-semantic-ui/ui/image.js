@@ -75,5 +75,5 @@ class HTMLElementImage extends HTMLCustomElement {
 }
 
 Page.setup(function() {
-	window.customElements.define('element-image', HTMLElementImage);
+	HTMLCustomElement.define('element-image', HTMLElementImage);
 });

@@ -14,5 +14,5 @@ class HTMLElementEmbed extends HTMLCustomElement {
 }
 
 Page.setup(function() {
-	window.customElements.define('element-embed', HTMLElementEmbed);
+	HTMLCustomElement.define('element-embed', HTMLElementEmbed);
 });

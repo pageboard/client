@@ -13,5 +13,5 @@ class HTMLElementInputRange extends HTMLCustomElement {
 }
 
 Page.setup(function() {
-	window.customElements.define('element-input-range', HTMLElementInputRange);
+	HTMLCustomElement.define('element-input-range', HTMLElementInputRange);
 });

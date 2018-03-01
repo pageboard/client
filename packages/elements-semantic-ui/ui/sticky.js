@@ -30,5 +30,5 @@ Page.setup(function() {
 		parentClass: null,
 		useStickyClasses: true
 	});
-	window.customElements.define('element-sticky', HTMLElementSticky);
+	HTMLCustomElement.define('element-sticky', HTMLElementSticky);
 });

@@ -149,5 +149,5 @@ class HTMLElementInputFile extends HTMLCustomElement {
 }
 
 Page.setup(function() {
-	window.customElements.define('element-input-file', HTMLElementInputFile);
+	HTMLCustomElement.define('element-input-file', HTMLElementInputFile);
 });

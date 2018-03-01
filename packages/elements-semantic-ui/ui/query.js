@@ -233,7 +233,7 @@ class HTMLElementQuery extends HTMLCustomElement {
 	}
 }
 
-window.customElements.define('element-query', HTMLElementQuery);
+HTMLCustomElement.define('element-query', HTMLElementQuery);
 
 class HTMLElementQueryTags extends HTMLCustomElement {
 	init() {
@@ -281,7 +281,7 @@ class HTMLElementQueryTags extends HTMLCustomElement {
 	}
 }
 
-window.customElements.define('element-query-tags', HTMLElementQueryTags);
+HTMLCustomElement.define('element-query-tags', HTMLElementQueryTags);
 
 Page.patch(function(state) {
 	Array.from(document.querySelectorAll('element-query-tags')).forEach(function(node) {

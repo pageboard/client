@@ -40,5 +40,5 @@ class HTMLElementAccordion extends HTMLCustomElement {
 }
 
 Page.setup(function() {
-	window.customElements.define('element-accordion', HTMLElementAccordion);
+	HTMLCustomElement.define('element-accordion', HTMLElementAccordion);
 });
