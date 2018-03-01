@@ -133,7 +133,7 @@ class HTMLElementCarouselCell extends HTMLCustomElement {
 }
 
 Page.setup(function() {
-	window.customElements.define('element-carousel', HTMLElementCarousel);
-	window.customElements.define('element-carousel-cell', HTMLElementCarouselCell);
+	HTMLCustomElement.define('element-carousel', HTMLElementCarousel);
+	HTMLCustomElement.define('element-carousel-cell', HTMLElementCarouselCell);
 });
 

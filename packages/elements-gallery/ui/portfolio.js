@@ -74,7 +74,7 @@ class HTMLElementPortfolioItem extends HTMLCustomElement {
 }
 
 Page.setup(function() {
-	window.customElements.define('element-portfolio', HTMLElementPortfolio);
-	window.customElements.define('element-portfolio-item', HTMLElementPortfolioItem);
+	HTMLCustomElement.define('element-portfolio', HTMLElementPortfolio);
+	HTMLCustomElement.define('element-portfolio-item', HTMLElementPortfolioItem);
 });
 

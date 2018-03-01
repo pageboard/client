@@ -113,6 +113,6 @@ class HTMLElementGallery extends HTMLCustomElement {
 }
 
 Page.setup(function() {
-	window.customElements.define('element-gallery', HTMLElementGallery);
+	HTMLCustomElement.define('element-gallery', HTMLElementGallery);
 });
 
