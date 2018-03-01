@@ -15,7 +15,7 @@ Page.setup(function(state) {
 		var href = a && a.getAttribute('href');
 		if (href) {
 			e.preventDefault();
-			if (!document.body.contentEditable) Page.push(href);
+			if (!document.body.isContentEditable) Page.push(href);
 		}
 	}, false);
 });
