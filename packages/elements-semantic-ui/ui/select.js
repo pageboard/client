@@ -95,7 +95,7 @@ class HTMLElementSelect extends HTMLCustomElement {
 		this.insertBefore(this.dom`<div class="text"></div>`, select);
 		this._setPlaceholder();
 
-		this.ownerDocument.addEventListener('click', this._click, false);
+		this.ownerDocument.body.addEventListener('click', this._click, false);
 		select.addEventListener('change', this._change, false);
 		this._observer = new MutationObserver(function(mutations) {
 			this._update();
@@ -120,7 +120,7 @@ class HTMLElementSelect extends HTMLCustomElement {
 		this._setPlaceholder();
 	}
 	disconnectedCallback() {
-		this.ownerDocument.removeEventListener('click', this._click, false);
+		this.ownerDocument.body.removeEventListener('click', this._click, false);
 		var select = this.querySelector('select');
 		if (select) select.removeEventListener('change', this._change, false);
 		this._observer.disconnect();
