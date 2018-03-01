@@ -60,5 +60,7 @@ class HTMLElementGoogleTranslate extends HTMLCustomElement {
 		this.classList.remove('active');
 	}
 }
-window.customElements.define('element-google-translate', HTMLElementGoogleTranslate);
+Page.setup(function() {
+	HTMLCustomElement.define('element-google-translate', HTMLElementGoogleTranslate);
+});
 
