@@ -35,7 +35,8 @@ class HTMLElementImage extends HTMLCustomElement {
 		if (!img) return;
 		this.disconnectedCallback();
 		var src = img.getAttribute('src');
-		if (!src || !img.classList.contains('lqip')) return;
+		if (!src || this._revealAt || !img.classList.contains('lqip')) return;
+		this._revealAt = Date.now();
 		var z = parseFloat(img.dataset.zoom);
 		if (isNaN(z)) z = 100;
 		var w = parseInt(img.dataset.width);
@@ -64,6 +65,7 @@ class HTMLElementImage extends HTMLCustomElement {
 	load(e) {
 		e.target.removeEventListener('load', this.load, false);
 		e.target.removeEventListener('error', this.load, false);
+		if (Date.now() - this._revealAt > 1000) e.target.classList.add('lqip-reveal');
 		e.target.classList.remove('lqip');
 	}
 	disconnectedCallback() {

@@ -17,7 +17,9 @@ element-image > [block-content="legend"] {
 	right:0;
 	text-align:center;
 }
-
+element-image > img.lqip-reveal {
+	transition: 0.3s filter linear;
+}
 element-image > img.lqip {
 	filter: blur(6px);
 	filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='6'); /* old ie support */
@@ -43,7 +45,6 @@ element-image > img {
 	display:block;
 	flex:0 0 auto;
 	align-self:center; /* not stretch */
-	transition: 0.3s filter linear;
 }
 
 element-image[data-position="left top"] {
