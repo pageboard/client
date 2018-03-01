@@ -76,8 +76,11 @@ Pb.defaultTable = {
 		var body = table.querySelector('tbody');
 		var template = body.cloneNode(true);
 		body.textContent = "";
-		if (Pb.default.merge(template, body, answer) === false) return false;
-		else dom.appendChild(table);
+		if (Pb.default.merge(template, body, answer) === false) {
+			return false;
+		} else {
+			dom.appendChild(table);
+		}
 	}
 };
 
