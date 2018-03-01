@@ -1,4 +1,4 @@
-Page.build(function(state) {
+Page.patch(function(state) {
 	Array.prototype.forEach.call(
 		document.querySelectorAll('.ui.menu [href]'),
 		function(item) {
@@ -7,4 +7,15 @@ Page.build(function(state) {
 			}
 		}
 	);
+});
+
+Page.setup(function(state) {
+	document.addEventListener('click', function(e) {
+		var a = e.target.closest('a');
+		var href = a && a.getAttribute('href');
+		if (href) {
+			e.preventDefault();
+			if (!document.body.contentEditable) Page.push(href);
+		}
+	}, false);
 });
