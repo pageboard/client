@@ -814,9 +814,12 @@ Pageboard.elements.input_select_option = {
 		if (val != null) node.dataset.value = val;
 		return node;
 	},
-	helpers: [
+	resources: [
 		'../ui/select-helper.js'
-	]
+	],
+	install: function(doc, Pb) {
+		if (Pb.write) this.scripts = this.resources;
+	}
 };
 
 Pageboard.elements.form_message = {

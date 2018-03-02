@@ -92,9 +92,12 @@ Pageboard.elements.sitemap = {
 		'../semantic-ui/accordion.css',
 		'../ui/sitemap.css'
 	],
-	helpers: [
+	resources: [
 		'../ui/sitemap-helper.js'
-	]
+	],
+	install: function(doc, Pb) {
+		if (Pb.write) this.scripts = this.resources;
+	}
 };
 
 Pageboard.elements.sitepage = {
