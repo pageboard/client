@@ -10,7 +10,7 @@ Page.patch(function(state) {
 });
 
 Page.setup(function(state) {
-	document.body.addEventListener('click', function(e) {
+	if (Page.async) document.body.addEventListener('click', function(e) {
 		var a = e.target.closest('a');
 		var href = a && a.getAttribute('href');
 		if (href) {
