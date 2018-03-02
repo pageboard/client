@@ -170,7 +170,6 @@ class HTMLElementQuery extends HTMLCustomElement {
 			query = Page.state.query;
 		}
 		if (this._refreshing) return;
-		this._refreshing = true;
 
 		var results = this.querySelector('.results');
 
@@ -200,6 +199,7 @@ class HTMLElementQuery extends HTMLCustomElement {
 			});
 		}
 		if (missing > 0) return;
+		this._refreshing = true;
 		vars._id = this.getAttribute('block-id');
 
 		results.textContent = "";
