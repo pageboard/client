@@ -22,16 +22,19 @@ Pageboard.elements.gallery = {
 			<div block-content="galleries"></div>
 		</element-gallery>`;
 	},
+	resources: [
+		'../ui/list-diff.js',
+		'../ui/gallery-helper.js'
+	],
 	stylesheets: [
 		'../ui/gallery.css'
 	],
 	scripts: [
 		'../ui/gallery.js'
 	],
-	helpers: [
-		'../ui/list-diff.js',
-		'../ui/gallery-helper.js'
-	]
+	install: function(doc, Pb) {
+		if (Pb.write) this.scripts = this.resources.concat(this.scripts);
+	}
 };
 
 Pageboard.elements.itemlink = {
