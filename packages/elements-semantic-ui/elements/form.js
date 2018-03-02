@@ -145,7 +145,8 @@ Pageboard.elements.form = {
 	scripts: [ // for asynchronous submits and automatic triggers
 		'../ui/lib/formdata.min.js',
 		'../ui/form.js'
-	]
+	],
+	polyfills: ['fetch'] // unfortunately there is no formdata polyfill available right now
 };
 
 Pageboard.elements.input_property = {

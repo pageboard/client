@@ -92,6 +92,9 @@ Pageboard.elements.query = {
 	],
 	scripts: [
 		'../ui/query.js'
+	],
+	polyfills: [
+		'fetch'
 	]
 };
 
