@@ -26,7 +26,9 @@ Pageboard.elements.sitemap = {
 			// restore might have already filled children
 			block.content.children = view.doc.createDocumentFragment();
 		}
-		return GET('/.api/pages').then(function(pages) {
+		return fetch('/.api/pages').then(function(res) {
+			return res.json();
+		}).then(function(pages) {
 			var tree = {};
 			pages.forEach(function(page) {
 				var storedPage = blocks[page.id];
