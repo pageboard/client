@@ -67,7 +67,7 @@ class HTMLElementCarousel extends HTMLCustomElement {
 	}
 
 	_saveIndex(e) {
-		this._options.initialIndex = this.carousel.selectedIndex;
+		if (this.carousel) this._options.initialIndex = this.carousel.selectedIndex;
 	}
 
 	connectedCallback() {
