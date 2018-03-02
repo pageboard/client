@@ -33,7 +33,7 @@ Pageboard.elements.gallery = {
 		'../ui/gallery.js'
 	],
 	install: function(doc, Pb) {
-		if (Pb.write) this.scripts = this.resources.concat(this.scripts);
+		if (Pb.write) this.scripts = this.scripts.concat(this.resources);
 	}
 };
 
