@@ -1,6 +1,6 @@
 window.Pagecut = {modules:{}};
 window.Pageboard = {
-	helpers: true,
+	write: true,
 	Controls: {},
 	inputs: {},
 	trigger: function trigger(node, event) {

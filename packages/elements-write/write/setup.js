@@ -2,6 +2,7 @@
 
 var modeControl;
 var editStylePath = "/.pageboard/write/read.css";
+var editScriptPath = "/.pageboard/pagecut/editor.js";
 
 Pageboard.setup = function(state) {
 	var parentRead = document.getElementById('pageboard-read');
@@ -16,7 +17,7 @@ Pageboard.setup = function(state) {
 	modeControl.addEventListener('click', modeControlListener, false);
 };
 
-Pageboard.hook = function(doc) {
+Pageboard.install = function(doc) {
 	buildListener(Pageboard.read.contentWindow, doc);
 };
 
@@ -138,8 +139,11 @@ function buildListener(win, doc) {
 	win.addEventListener('keyup', function(e) {
 		win.document.body.classList.remove('ProseMirror-alt');
 	});
-	if (!win.Pageboard.elements.page.stylesheets) win.Pageboard.elements.page.stylesheets = [];
-	win.Pageboard.elements.page.stylesheets.push(editStylePath);
+	var page = win.Pageboard.elements.page;
+	if (!page.stylesheets) page.stylesheets = [];
+	if (!page.scripts) page.scripts = [];
+	page.stylesheets.push(editStylePath);
+	page.scripts.unshift(editScriptPath);
 	editMode(doc);
 	var resolver = function() {
 		win.removeEventListener('pagebuild', resolver);
