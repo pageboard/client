@@ -75,7 +75,8 @@ HTMLFormElement.fetch = function(method, url, data) {
 		headers: {
 			'Accept': 'application/json',
 			'Content-Type': 'application/json'
-		}
+		},
+		credentials: "same-origin"
 	};
 	if (/^get$/i.test(method)) {
 		url = Page.format(Object.assign(Page.parse(url), {query: data}));

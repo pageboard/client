@@ -211,13 +211,7 @@ class HTMLElementQuery extends HTMLCustomElement {
 		var form = this;
 		form.classList.remove('success', 'error', 'warning', 'loading');
 		form.classList.add('loading');
-		return fetch(Page.format({
-			pathname: '/.api/query',
-			query: vars
-		})).then(function(response) {
-			if (response.status >= 400) throw new Error(response.statusText);
-			return response.json();
-		}).then(function(answer) {
+		return HTMLFormElement.fetch('get', '/.api/query', vars).then(function(answer) {
 			var bindName = this.dataset.binding || "default";
 			var binding = Pageboard.bindings[bindName];
 			if (!binding) throw new Error("Cannot find data binder " + bindName);
