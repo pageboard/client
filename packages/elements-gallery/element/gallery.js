@@ -32,8 +32,8 @@ Pageboard.elements.gallery = {
 	scripts: [
 		'../ui/gallery.js'
 	],
-	install: function(doc, Pb) {
-		if (Pb.write) this.scripts = this.scripts.concat(this.resources);
+	install: function(doc, page, view) {
+		if (Pageboard.write) this.scripts = this.resources;
 	}
 };
 
