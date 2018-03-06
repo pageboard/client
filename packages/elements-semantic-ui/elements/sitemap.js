@@ -97,8 +97,8 @@ Pageboard.elements.sitemap = {
 	resources: [
 		'../ui/sitemap-helper.js'
 	],
-	install: function(doc, Pb) {
-		if (Pb.write) this.scripts = this.resources;
+	install: function(doc, page, view) {
+		if (Pageboard.write) this.scripts = this.resources;
 	}
 };
 
