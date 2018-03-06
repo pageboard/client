@@ -203,6 +203,10 @@ Pageboard.elements.image = {
 		var meta = block.data.meta;
 		if (meta && meta.mime == "image/jpeg" && meta.size >= 100000) {
 			loc.query.q = 5;
+			if (node.dataset.fit != "none") {
+				// images must not be too big for q to work
+				loc.query.rs = "w-320_h-320_max";
+			}
 			img.classList.add('lqip');
 			var wf = (d.crop || {}).width || 100;
 			var wh = (d.crop || {}).height || 100;
