@@ -20,6 +20,7 @@
   "dependencies": {
     "@pageboard/stickybits": "^3.1.0",
     "formdata-polyfill": "^3.0.9",
+    "matchdom": "^0.1.0",
     "object-fit-images": "^3.2.3",
     "postinstall-links": "^0.3.99",
     "rangeslider-pure": "^0.4.4",
@@ -30,7 +31,8 @@
     "@pageboard/stickybits/dist/stickybits.min.js": "ui/lib/",
     "object-fit-images/dist/ofi.min.js": "ui/lib/object-fit-images.js",
     "formdata-polyfill/formdata.min.js": "ui/lib/",
-    "rangeslider-pure/dist/*": "ui/lib/"
+    "rangeslider-pure/dist/*": "ui/lib/",
+    "matchdom/matchdom.js": "ui/lib/"
   },
   "pageboard": {
     "directories": [

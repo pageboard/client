@@ -91,6 +91,7 @@ Pageboard.elements.query = {
 		'../ui/query.css'
 	],
 	scripts: [
+		'../ui/matchdom.js',
 		'../ui/query.js'
 	],
 	polyfills: [
