@@ -119,7 +119,7 @@ Pageboard.elements.card = {
 			<div class="content" block-content="content"></div>
 			<div class="extra content" block-content="extra"></div>
 		`);
-		if (d.template) node.setAttribute('attr-href', d.template);
+		if (d.template) node.dataset.href = d.template;
 		return node;
 	}
 };

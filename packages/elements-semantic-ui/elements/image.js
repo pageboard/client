@@ -43,6 +43,12 @@ Pageboard.elements.image = {
 				}
 			}
 		},
+		template: {
+			title: 'Template',
+			description: 'Query template',
+			type: 'string',
+			context: 'query|form'
+		},
 		display: {
 			title: "Display",
 			type: "object",
@@ -222,6 +228,7 @@ Pageboard.elements.image = {
 			}).join(", "));
 		}
 		img.setAttribute('src', Page.format(loc));
+		if (d.template) img.dataset.src = d.template;
 
 		return node;
 	},
@@ -259,6 +266,12 @@ Pageboard.elements.inlineImage = {
 					maxHeight: 320
 				}
 			}
+		},
+		template: {
+			title: 'Template',
+			description: 'Query template',
+			type: 'string',
+			context: 'query|form'
 		},
 		display: {
 			title: 'Display options',
@@ -377,6 +390,7 @@ Pageboard.elements.inlineImage = {
 		if (display.align) {
 			node.classList.add(display.align, 'aligned');
 		}
+		if (d.template) img.dataset.src = d.template;
 		return node;
 	},
 	stylesheets: [

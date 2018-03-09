@@ -78,20 +78,13 @@ Pageboard.elements.query = {
 					}]
 				}
 			}
-		},
-		binding: {
-			title: 'Binding',
-			type: ['null', 'string'],
-			input: {
-				name: 'binding'
-			}
 		}
 	},
 	stylesheets: [
 		'../ui/query.css'
 	],
 	scripts: [
-		'../ui/matchdom.js',
+		'../ui/lib/matchdom.js',
 		'../ui/query.js'
 	],
 	polyfills: [

@@ -88,7 +88,7 @@ Pageboard.elements.link = {
 			a.classList.add('icon');
 			a.style.backgroundImage = `url(${d.icon})`;
 		}
-		if (d.template) a.setAttribute('attr-href', d.template);
+		if (d.template) a.dataset.href = d.template;
 		return a;
 	},
 	stylesheets: [
