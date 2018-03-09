@@ -15,7 +15,7 @@ class HTMLElementAccordion extends HTMLCustomElement {
 		if (!fold || !fold.matches('.fold,element-accordion')) return;
 		var owner = fold.closest('element-accordion');
 		if (owner != this) return;
-		e.preventDefault();
+		if (e.target.closest("a[href]") == null) e.preventDefault();
 		if (title.matches('.active')) {
 			title.classList.remove('active');
 			var content = title.nextElementSibling;
