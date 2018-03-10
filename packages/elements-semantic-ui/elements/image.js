@@ -390,7 +390,7 @@ Pageboard.elements.inlineImage = {
 		if (display.align) {
 			node.classList.add(display.align, 'aligned');
 		}
-		if (d.template) img.dataset.src = d.template;
+		if (d.template) node.dataset.src = d.template;
 		return node;
 	},
 	stylesheets: [
