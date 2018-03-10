@@ -112,7 +112,7 @@ HTMLElementQuery.filters.date = function(val, what) {
 	return new Date(val).toLocaleString();
 };
 HTMLElementQuery.filters.title = function(val, what) {
-	var schemaPath = 'schema.properties.' + what.expr.path.join('.properties.');
+	var schemaPath = 'schemas.' + what.scope.type + '.properties.' + what.expr.path.join('.properties.');
 	var schema = what.expr.get(what.data, schemaPath);
 	if (!schema) {
 		console.warn("No matching schema for title of", what.expr.path);
