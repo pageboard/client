@@ -12,8 +12,11 @@ element-input-file {
 	display:block;
 	position:relative;
 }
+element-input-file > .ui.icon.button {
+	z-index: 1;
+}
 element-input-file i.icon.upload:before {
-	content:'↑';
+	content:'⬆';
 }
 element-input-file > input[type="file"] + .ui.icon.button {
 	display:none;
