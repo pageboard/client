@@ -219,7 +219,7 @@ Pageboard.elements.image = {
 			img.dataset.width = Math.round(meta.width * wf / 100);
 			img.dataset.height = Math.round(meta.height * wh / 100);
 			if (zoom != 100) img.dataset.zoom = zoom;
-		} else if (node.dataset.fit != "none") {1
+		} else if (node.dataset.fit != "none") {
 			if (d.template) {
 				img.dataset.srcset = [320, 640, 1280].map(function(w) {
 					var copy = {query: {
