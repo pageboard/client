@@ -217,8 +217,9 @@ Pageboard.elements.input_property = {
 			return node;
 		}
 		node.textContent = "";
-		if (prop.anyOf) {
-			if (prop.anyOf.length <= d.radios) {
+		var listOf = prop.anyOf || prop.oneOf;
+		if (listOf) {
+			if (listOf.length <= d.radios) {
 				var content = doc.dom`<div class="content"></div>`;
 				if (d.foldable) {
 					node.appendChild(doc.dom`<element-accordion class="grouped fields">
@@ -231,7 +232,7 @@ Pageboard.elements.input_property = {
 						${content}
 					</div>`);
 				}
-				prop.anyOf.forEach(function(item) {
+				listOf.forEach(function(item) {
 					if (item.type == "null" && d.multiple) return;
 					content.appendChild(view.render({
 						type: d.multiple ? 'input_checkbox' : 'input_radio',
@@ -247,7 +248,7 @@ Pageboard.elements.input_property = {
 				});
 			} else {
 				var frag = doc.createDocumentFragment();
-				prop.anyOf.forEach(function(item) {
+				listOf.forEach(function(item) {
 					if (item.type == "null" && d.multiple) return;
 					var option = view.render({
 						type: 'input_select_option',
