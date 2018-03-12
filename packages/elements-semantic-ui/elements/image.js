@@ -220,8 +220,9 @@ Pageboard.elements.image = {
 			img.dataset.height = Math.round(meta.height * wh / 100);
 			if (zoom != 100) img.dataset.zoom = zoom;
 		} else if (node.dataset.fit != "none") {
-			if (d.template) {
-				img.dataset.srcset = [320, 640, 1280].map(function(w) {
+			if (!d.template) {
+				/*
+				img.dataset.srcset = [320, 640, 1280].map(function(w, i) {
 					var copy = {query: {
 						rs: `w-${Math.round(w * zoom / 100)}`
 					}};
@@ -229,6 +230,7 @@ Pageboard.elements.image = {
 					return `${d.template}?${qs} ${w}w`;
 				}).join(", ");
 			} else {
+			*/
 				img.setAttribute('srcset', [320, 640, 1280].map(function(w) {
 					var copy = Object.assign({}, loc);
 					copy.query = Object.assign({}, loc.query);
