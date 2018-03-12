@@ -6,7 +6,7 @@ Pageboard.elements.portfolio = {
 	properties: {
 		shape: {
 			title: 'Shape',
-			oneOf: [{
+			anyOf: [{
 				const: "square",
 				title: "Square",
 			}, {
@@ -48,7 +48,7 @@ Pageboard.elements.portfolio_item = {
 	properties: {
 		scaleWidth: {
 			title: 'Scale width',
-			oneOf: [{
+			anyOf: [{
 				const: "1",
 				title: "100%"
 			}, {
@@ -59,7 +59,7 @@ Pageboard.elements.portfolio_item = {
 		},
 		scaleHeight: {
 			title: 'Scale height',
-			oneOf: [{
+			anyOf: [{
 				const: "1",
 				title: "100%"
 			}, {

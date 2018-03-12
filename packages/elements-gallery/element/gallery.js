@@ -46,7 +46,7 @@ Pageboard.elements.itemlink = {
 			title: 'Target window',
 			description: 'Choose how to open link',
 			default: "",
-			oneOf: [{
+			anyOf: [{
 				const: "",
 				title: "auto"
 			}, {
@@ -60,7 +60,7 @@ Pageboard.elements.itemlink = {
 		url: {
 			title: 'Address',
 			description: 'Local or remote URL',
-			oneOf: [{
+			anyOf: [{
 				type: "null"
 			}, {
 				type: "string",
@@ -78,7 +78,7 @@ Pageboard.elements.itemlink = {
 		},
 		icon: {
 			title: 'Icon',
-			oneOf: [{
+			anyOf: [{
 				type: "null"
 			}, {
 				type: "string",
