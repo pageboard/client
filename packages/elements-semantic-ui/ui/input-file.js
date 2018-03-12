@@ -6,19 +6,6 @@ class HTMLElementInputFile extends HTMLCustomElement {
 	connectedCallback() {
 		var file = this.querySelector('input[type="file"]');
 		if (!file) return;
-		var input = this.querySelector('input[type="text"]');
-		if (input) return;
-
-		input = this.ownerDocument.createElement('input');
-		input.required = file.required;
-		input.disabled = file.disabled;
-		input.type = "text";
-		input.name = file.name;
-		input.value = file.getAttribute("value");
-		// from now on submission will be done through form.js
-		file.removeAttribute('name');
-		input.placeholder = file.placeholder;
-		this.insertBefore(input, file);
 		file.addEventListener('change', this.change);
 		this.addEventListener('click', this.click);
 	}

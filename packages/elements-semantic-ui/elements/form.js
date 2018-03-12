@@ -528,14 +528,23 @@ Pageboard.elements.input_file = {
 	icon: '<i class="upload icon"></i>',
 	render: function(doc, block) {
 		var d = block.data;
-		var input = doc.dom`<input type="file" name="${d.name}" />`;
-		if (d.placeholder) input.placeholder = d.placeholder;
-		if (d.required) input.required = true;
-		if (d.disabled) input.disabled = true;
+		var inputFile = doc.dom`<input type="file" />`;
+		var inputText = doc.dom`<input type="text" name="${d.name}" />`;
+		if (d.placeholder) {
+			inputText.placeholder = inputFile.placeholder = d.placeholder;
+		}
+		if (d.required) {
+			inputText.required = inputFile.required = true;
+		}
+		if (d.disabled) {
+			inputText.disabled = inputFile.disabled = true;
+		}
+
 		return doc.dom`<div class="field">
 			<label block-content="label">Label</label>
 			<element-input-file class="ui action input" ${d.now ? 'data-now' : ''}>
-				${input}
+				${inputText}
+				${inputFile}
 				<div class="ui icon button">
 					<i class="upload icon"></i>
 					<i class="delete icon"></i>
