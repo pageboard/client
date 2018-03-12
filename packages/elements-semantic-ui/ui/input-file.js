@@ -17,8 +17,8 @@ class HTMLElementInputFile extends HTMLCustomElement {
 				delete this._xhr;
 			}
 			var input = this.querySelector('input[type="text"]');
-			input.value = "";
-			this.closest('.field').classList.remove('loading', 'error', 'success');
+			input.removeAttribute('value');
+			this.closest('.field').classList.remove('filled', 'loading', 'error', 'success');
 		}
 	}
 
@@ -30,7 +30,7 @@ class HTMLElementInputFile extends HTMLCustomElement {
 		var input = this.querySelector('input[type="text"]');
 		if (!input) return;
 		if (e.target.value) {
-			input.value = this.uploadName(e.target.value);
+			input.setAttribute("value", this.uploadName(e.target.value));
 		}
 		if (this.dataset.now != null) this.upload();
 	}

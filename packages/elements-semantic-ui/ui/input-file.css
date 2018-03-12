@@ -27,11 +27,13 @@ element-input-file > input[type="text"] + input[type="file"] + .ui.icon.button {
 element-input-file .button > .upload {
 	pointer-events:none;
 }
-element-input-file .button > .delete,
+element-input-file input[type="text"]:not([value]) ~ .button > .delete,
+element-input-file input[type="text"][value]:not([value=""]) ~ .button > .upload,
 .loading.field element-input-file .button > .upload,
 .success.field element-input-file .button > .upload {
 	display:none;
 }
+element-input-file input[type="text"][value=""] ~ .button > .delete,
 .loading.field element-input-file .button > .delete,
 .success.field element-input-file .button > .delete {
 	display:inline-block;
