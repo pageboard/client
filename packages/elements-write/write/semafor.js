@@ -195,6 +195,7 @@ Semafor.prototype.convert = function(vals, field) {
 			var type = field.type;
 			var typeList = Array.isArray(type) && type
 				|| Array.isArray(field.oneOf) && field.oneOf
+				|| Array.isArray(field.anyOf) && field.anyOf
 				|| null;
 			var nullable = false;
 			if (typeList) {
@@ -293,7 +294,7 @@ function process(key, schema, node, fields) {
 			}
 			types[type](key, schema, node, fields);
 		}
-	} else if (!type && schema.oneOf) {
+	} else if (!type && (schema.oneOf || schema.anyOf)) {
 		types.oneOf(key, schema, node, fields);
 	} else if (Array.isArray(type)) {
 		type.forEach(function(type) {
@@ -316,7 +317,7 @@ types.string = function(key, schema, node, fields) {
 
 types.oneOf = function(key, schema, node, fields) {
 	var field;
-	var alts = schema.oneOf.filter(function(item) {
+	var alts = (schema.oneOf || schema.anyOf).filter(function(item) {
 		return item.type != "null";
 	});
 	var oneOfType;
