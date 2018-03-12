@@ -115,10 +115,14 @@ HTMLElementQuery.filters.title = function(val, what) {
 	var schemaPath = 'schemas.' + what.scope.type + '.properties.' + what.expr.path.join('.properties.');
 	var schema = what.expr.get(what.data, schemaPath);
 	if (!schema) {
-		console.warn("No matching schema for title of", what.expr.path);
+		console.warn("No matching schema for title of", schemaPath);
 		return;
 	}
-	var prop = schema.anyOf.find(function(item) {
+	var listOf = schema.oneOf || schema.anyOf;
+	if (!listOf) {
+		console.warn("No oneOf/anyOf schema for property of", schemaPath);
+	}
+	var prop = listOf.find(function(item) {
 		return item.const == val;
 	});
 	if (prop != null) return prop.title;
