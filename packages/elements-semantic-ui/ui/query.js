@@ -118,7 +118,7 @@ HTMLElementQuery.filters.title = function(val, what) {
 		console.warn("No matching schema for title of", what.expr.path);
 		return;
 	}
-	var prop = schema.oneOf.find(function(item) {
+	var prop = schema.anyOf.find(function(item) {
 		return item.const == val;
 	});
 	if (prop != null) return prop.title;

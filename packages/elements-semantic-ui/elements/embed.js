@@ -5,7 +5,7 @@ Pageboard.elements.embed = {
 		url: {
 			title: 'Address',
 			description: 'The iframe src URL',
-			oneOf: [{
+			anyOf: [{
 				type: "null"
 			}, {
 				type: "string",
@@ -16,7 +16,7 @@ Pageboard.elements.embed = {
 		placeholder: {
 			title: 'Placeholder',
 			description: 'The iframe previsualisation image',
-			oneOf: [{
+			anyOf: [{
 				type: "null"
 			}, {
 				type: "string",

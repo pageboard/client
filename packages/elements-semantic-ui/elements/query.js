@@ -62,7 +62,7 @@ Pageboard.elements.query = {
 				consts: {
 					title: 'Constants',
 					description: 'list of path.to.key -> value',
-					oneOf: [{
+					anyOf: [{
 						type: "object"
 					}, {
 						type: "null"
@@ -71,7 +71,7 @@ Pageboard.elements.query = {
 				vars: {
 					title: 'Variables',
 					description: "list of path.to.key -> query.key",
-					oneOf: [{
+					anyOf: [{
 						type: "object"
 					}, {
 						type: "null"
@@ -102,7 +102,7 @@ Pageboard.elements.query_message = {
 			title: "type",
 			description: "Message is shown depending on type",
 			default: "success",
-			oneOf: [{
+			anyOf: [{
 				const: "success",
 				title: "Success"
 			}, {

@@ -30,7 +30,7 @@ Pageboard.elements.shutter_item = {
 			title: 'Invert',
 			description: 'Invert color',
 			default: "normal",
-			oneOf: [{
+			anyOf: [{
 				const: "normal",
 				title: "Normal"
 			}, {

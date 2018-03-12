@@ -27,7 +27,7 @@ Pageboard.elements.image = {
 		url: {
 			title: 'Address',
 			description: 'Local or remote URL',
-			oneOf: [{
+			anyOf: [{
 				type: "null"
 			}, {
 				type: "string",
@@ -54,7 +54,7 @@ Pageboard.elements.image = {
 			type: "object",
 			properties: {
 				fit: {
-					oneOf: [{
+					anyOf: [{
 						title: "natural",
 						const: "none"
 					}, {
@@ -69,7 +69,7 @@ Pageboard.elements.image = {
 				},
 				horizontal: {
 					title: "horizontal",
-					oneOf: [{
+					anyOf: [{
 						const: "left",
 						title: "left"
 					}, {
@@ -83,7 +83,7 @@ Pageboard.elements.image = {
 				},
 				vertical: {
 					title: "vertical",
-					oneOf: [{
+					anyOf: [{
 						const: "top",
 						title: "top"
 					}, {
@@ -259,7 +259,7 @@ Pageboard.elements.inlineImage = {
 		url: {
 			title: 'Address',
 			description: 'Local or remote URL',
-			oneOf: [{
+			anyOf: [{
 				type: "null"
 			}, {
 				type: "string",
@@ -311,7 +311,7 @@ Pageboard.elements.inlineImage = {
 				},
 				floated: {
 					title: 'floated',
-					oneOf: [{
+					anyOf: [{
 						const: "",
 						title: "no"
 					}, {
@@ -324,7 +324,7 @@ Pageboard.elements.inlineImage = {
 				},
 				align: {
 					title: 'align',
-					oneOf: [{
+					anyOf: [{
 						const: "",
 						title: "middle"
 					}, {

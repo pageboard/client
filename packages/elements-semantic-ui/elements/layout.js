@@ -5,7 +5,7 @@ Pageboard.elements.layout = {
 			title: 'horizontal',
 			description: 'Position horizontally',
 			default: "left",
-			oneOf: [{
+			anyOf: [{
 				const: "left",
 				title: "left"
 			}, {
@@ -20,7 +20,7 @@ Pageboard.elements.layout = {
 			title: 'vertical',
 			description: 'Position vertically',
 			default: "top",
-			oneOf: [{
+			anyOf: [{
 				const: "top",
 				title: "top"
 			}, {
@@ -34,7 +34,7 @@ Pageboard.elements.layout = {
 		width: {
 			title: 'control width',
 			default: "full",
-			oneOf: [{
+			anyOf: [{
 				const: "full",
 				title: "full"
 			}, {
@@ -53,7 +53,7 @@ Pageboard.elements.layout = {
 		direction: {
 			title: 'direction',
 			default: "column",
-			oneOf: [{
+			anyOf: [{
 				const: "column",
 				title: "column"
 			}, {

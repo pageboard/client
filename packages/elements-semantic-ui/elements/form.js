@@ -19,7 +19,7 @@ Pageboard.elements.form = {
 			properties: {
 				method: {
 					title: 'Method',
-					oneOf: [{
+					anyOf: [{
 						const: "get",
 						title: "query url"
 					}, {
@@ -50,7 +50,7 @@ Pageboard.elements.form = {
 				consts: {
 					title: 'Constants',
 					description: 'list of path.to.key -> value',
-					oneOf: [{
+					anyOf: [{
 						type: "object"
 					}, {
 						type: "null"
@@ -59,7 +59,7 @@ Pageboard.elements.form = {
 				vars: {
 					title: 'Variables',
 					description: "list of path.to.key -> form.key",
-					oneOf: [{
+					anyOf: [{
 						type: "object"
 					}, {
 						type: "null"
@@ -81,7 +81,7 @@ Pageboard.elements.form = {
 			properties: {
 				url: {
 					title: 'Address',
-					oneOf: [{
+					anyOf: [{
 						type: "null"
 					}, {
 						type: "string",
@@ -97,7 +97,7 @@ Pageboard.elements.form = {
 				consts: {
 					title: 'Constants',
 					description: 'Server input',
-					oneOf: [{
+					anyOf: [{
 						type: "object"
 					}, {
 						type: "null"
@@ -106,7 +106,7 @@ Pageboard.elements.form = {
 				vars: {
 					title: 'Variables',
 					description: "Client input",
-					oneOf: [{
+					anyOf: [{
 						type: "object"
 					}, {
 						type: "null"
@@ -217,8 +217,8 @@ Pageboard.elements.input_property = {
 			return node;
 		}
 		node.textContent = "";
-		if (prop.oneOf) {
-			if (prop.oneOf.length <= d.radios) {
+		if (prop.anyOf) {
+			if (prop.anyOf.length <= d.radios) {
 				var content = doc.dom`<div class="content"></div>`;
 				if (d.foldable) {
 					node.appendChild(doc.dom`<element-accordion class="grouped fields">
@@ -231,7 +231,7 @@ Pageboard.elements.input_property = {
 						${content}
 					</div>`);
 				}
-				prop.oneOf.forEach(function(item) {
+				prop.anyOf.forEach(function(item) {
 					if (item.type == "null" && d.multiple) return;
 					content.appendChild(view.render({
 						type: d.multiple ? 'input_checkbox' : 'input_radio',
@@ -247,7 +247,7 @@ Pageboard.elements.input_property = {
 				});
 			} else {
 				var frag = doc.createDocumentFragment();
-				prop.oneOf.forEach(function(item) {
+				prop.anyOf.forEach(function(item) {
 					if (item.type == "null" && d.multiple) return;
 					var option = view.render({
 						type: 'input_select_option',
@@ -377,7 +377,7 @@ Pageboard.elements.input_button = {
 		type: {
 			title: 'type',
 			default: 'submit',
-			oneOf: [{
+			anyOf: [{
 				title: 'Submit',
 				const: 'submit'
 			}, {
@@ -391,7 +391,7 @@ Pageboard.elements.input_button = {
 	},
 	render: function(doc, block) {
 		var type = block.data.type || 'submit';
-		var alt = type && this.properties.type.oneOf.find(function(obj) {
+		var alt = type && this.properties.type.anyOf.find(function(obj) {
 			return obj.const == type;
 		});
 		var title = alt && alt.title || 'Submit';
@@ -437,7 +437,7 @@ Pageboard.elements.input_text = {
 		type: {
 			title: 'format',
 			default: "text",
-			oneOf: [{
+			anyOf: [{
 				const: "text",
 				title: "text"
 			}, {
@@ -842,7 +842,7 @@ Pageboard.elements.form_message = {
 			title: "type",
 			description: "Message is shown depending on type",
 			default: "success",
-			oneOf: [{
+			anyOf: [{
 				const: "success",
 				title: "Success"
 			}, {

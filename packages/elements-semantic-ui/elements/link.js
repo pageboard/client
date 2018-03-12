@@ -6,7 +6,7 @@ Pageboard.elements.link = {
 			title: 'Target window',
 			description: 'Choose how to open link',
 			default: "",
-			oneOf: [{
+			anyOf: [{
 				const: "",
 				title: "auto"
 			}, {
@@ -26,7 +26,7 @@ Pageboard.elements.link = {
 		url: {
 			title: 'Address',
 			description: 'Path without query or full url',
-			oneOf: [{
+			anyOf: [{
 				type: "null"
 			}, {
 				type: "string",
@@ -50,7 +50,7 @@ Pageboard.elements.link = {
 		},
 		icon: { // TODO remove me in favor of inline images
 			title: 'Icon',
-			oneOf: [{
+			anyOf: [{
 				type: "null"
 			}, {
 				type: "string",

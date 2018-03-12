@@ -57,7 +57,7 @@ Pageboard.elements.caps = {
 		transform: {
 			title: 'Transform',
 			default: "uppercase",
-			oneOf: [{
+			anyOf: [{
 				const: "uppercase",
 				title: "upper",
 				icon: '<span class="icon">A</span>'
@@ -87,7 +87,7 @@ Pageboard.elements.color = {
 	properties: {
 		color: {
 			default: "",
-			oneOf: [{
+			anyOf: [{
 				const: "white",
 				title: "White"
 			}, {
@@ -116,7 +116,7 @@ Pageboard.elements.color = {
 	},
 	parse: function(dom) {
 		var prop = Pageboard.elements.color.properties.color;
-		var color = prop.oneOf.find(function(item) {
+		var color = prop.anyOf.find(function(item) {
 			return item.const && dom.classList.contains(item.const);
 		});
 		if (color) color = color.const;

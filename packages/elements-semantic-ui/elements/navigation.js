@@ -6,7 +6,7 @@ Pageboard.elements.nav = {
 		relation: {
 			title: "relation",
 			default: "up",
-			oneOf: [{
+			anyOf: [{
 				const: "up",
 				title: "up"
 			}, {

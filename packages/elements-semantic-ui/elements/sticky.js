@@ -6,7 +6,7 @@ Pageboard.elements.sticky = {
 		position: {
 			title: "Position",
 			default: "top",
-			oneOf: [{
+			anyOf: [{
 				const: "top",
 				title: "top"
 			}, {

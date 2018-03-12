@@ -69,7 +69,7 @@ Pageboard.elements.card = {
 		url: {
 			title: 'Link',
 			description: 'link the entire content to another page',
-			oneOf: [{
+			anyOf: [{
 				type: "null"
 			}, {
 				type: "string",

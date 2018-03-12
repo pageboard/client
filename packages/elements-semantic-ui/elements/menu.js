@@ -11,7 +11,7 @@ Pageboard.elements.menu = {
 		direction: {
 			title: 'Direction',
 			default: "",
-			oneOf: [{
+			anyOf: [{
 				const: "",
 				title: "horizontal"
 			}, {
@@ -47,7 +47,7 @@ Pageboard.elements.menu_item_link = {
 		url: {
 			title: 'Address',
 			description: 'Local or remote URL',
-			oneOf: [{
+			anyOf: [{
 				type: "null"
 			}, {
 				type: "string",

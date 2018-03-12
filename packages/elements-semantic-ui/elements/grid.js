@@ -12,7 +12,7 @@ Pageboard.elements.grid = {
 		width: {
 			title: 'control width',
 			default: "full",
-			oneOf: [{
+			anyOf: [{
 				const: "full",
 				title: "full"
 			}, {

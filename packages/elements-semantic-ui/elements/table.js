@@ -130,7 +130,7 @@ Pageboard.elements.table_cell = {
 		align: {
 			title: 'Align',
 			default: "",
-			oneOf: [{
+			anyOf: [{
 				const: "",
 				title: "left",
 				icon: '<i class="icon align left"></i>'
