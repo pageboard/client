@@ -219,13 +219,23 @@ Pageboard.elements.image = {
 			img.dataset.width = Math.round(meta.width * wf / 100);
 			img.dataset.height = Math.round(meta.height * wh / 100);
 			if (zoom != 100) img.dataset.zoom = zoom;
-		} else if (node.dataset.fit != "none") {
-			img.setAttribute('srcset', [320, 640, 1280].map(function(w) {
-				var copy = Object.assign({}, loc);
-				copy.query = Object.assign({}, loc.query);
-				copy.query.rs = `w-${Math.round(w * zoom / 100)}`;
-				return `${Page.format(copy)} ${w}w`;
-			}).join(", "));
+		} else if (node.dataset.fit != "none") {1
+			if (d.template) {
+				img.dataset.srcset = [320, 640, 1280].map(function(w) {
+					var copy = {query: {
+						rs: `w-${Math.round(w * zoom / 100)}`
+					}};
+					var qs = Page.format(copy).split('?').pop();
+					return `${d.template}?${qs} ${w}w`;
+				}).join(", ");
+			} else {
+				img.setAttribute('srcset', [320, 640, 1280].map(function(w) {
+					var copy = Object.assign({}, loc);
+					copy.query = Object.assign({}, loc.query);
+					copy.query.rs = `w-${Math.round(w * zoom / 100)}`;
+					return `${Page.format(copy)} ${w}w`;
+				}).join(", "));
+			}
 		}
 		img.setAttribute('src', Page.format(loc));
 		if (d.template) img.dataset.src = d.template;

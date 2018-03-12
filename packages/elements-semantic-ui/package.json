@@ -20,7 +20,7 @@
   "dependencies": {
     "@pageboard/stickybits": "^3.1.0",
     "formdata-polyfill": "^3.0.9",
-    "matchdom": "^0.2.0",
+    "matchdom": "^0.2.1",
     "object-fit-images": "^3.2.3",
     "postinstall-links": "^0.3.99",
     "rangeslider-pure": "^0.4.4",
