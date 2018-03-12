@@ -34,6 +34,8 @@ HTMLFormElement.prototype.fill = function(values) {
 			case 'select-multiple':
 				if (val) elem.fill(val);
 			break;
+			case 'textarea':
+				if (val) elem.innerText = val;
 			default:
 				if (val) elem.setAttribute("value", val);
 			break;
