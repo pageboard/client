@@ -18,12 +18,16 @@ Page.setup(function(state) {
 			if (!document.body.isContentEditable) Page.push(href);
 		}
 	}, false);
+
 	var ref = document.referrer;
 	if (ref) {
 		ref = Page.parse(ref);
 		if (ref.pathname != state.pathname) {
 			var anc = document.querySelector(`a[href="${ref.pathname}"]:not(.item):not([block-type="nav"])`);
-			if (anc && anc.scrollIntoView) anc.scrollIntoView();
+			if (anc) {
+				var parent = anc.parentNode.closest('[block-id]');
+				if (parent && parent.scrollIntoView) parent.scrollIntoView();
+			}
 		}
 	}
 });
