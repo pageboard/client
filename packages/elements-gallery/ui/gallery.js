@@ -18,7 +18,7 @@ class HTMLElementGallery extends HTMLCustomElement {
 		Page.push({query: {gallery: target.dataset.mode}});
 	}
 
-	_setMode(mode) {
+	setMode(mode) {
 		var item = this._galleryMenu.querySelector(`.item[data-mode="${mode}"]`);
 		if (!item) return;
 		this._initGalleries({mode: mode});
@@ -133,6 +133,6 @@ Page.patch(function(state) {
 	var mode = state.query.gallery;
 	if (!mode) return;
 	var gallery = document.querySelector('element-gallery');
-	if (gallery) gallery._setMode(mode);
+	if (gallery && gallery.setMode) gallery.setMode(mode);
 });
 
