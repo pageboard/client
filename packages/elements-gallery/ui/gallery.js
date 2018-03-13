@@ -15,8 +15,13 @@ class HTMLElementGallery extends HTMLCustomElement {
 	_switchListener(e) {
 		var target = e.target.closest('.item');
 		if (!target || target.matches('.active')) return;
-		this.dataset.mode = target.dataset.mode;
-		this._initGalleries();
+		Page.push({query: {gallery: target.dataset.mode}});
+	}
+
+	_setMode(mode) {
+		var item = this._galleryMenu.querySelector(`.item[data-mode="${mode}"]`);
+		if (!item) return;
+		this._initGalleries({mode: mode});
 	}
 
 	connectedCallback() {
@@ -28,7 +33,13 @@ class HTMLElementGallery extends HTMLCustomElement {
 	}
 
 	_initGalleries(opts) {
+		if (!opts) opts = {};
 		var mode = this.dataset.mode;
+		if (opts.mode) {
+			if (opts.mode == mode) return;
+			this.dataset.mode = mode = opts.mode;
+		}
+
 		this._galleries.forEach(function(gal) {
 			if (gal.getAttribute('block-type') == mode) {
 				this._gallery = gal;
@@ -79,7 +90,7 @@ class HTMLElementGallery extends HTMLCustomElement {
 	_setup() {
 		this._galleries = Array.prototype.slice.call(this.lastElementChild.children);
 		if (!this._galleries.length) return;
-		this._initGalleries();
+		this._initGalleries({mode: HTMLElementGallery.defaultMode});
 		this._galleryMenu = this.firstElementChild.matches('.menu') ? this.firstElementChild : null;
 		if (this.showMenu) {
 			if (!this._galleryMenu) {
@@ -112,7 +123,16 @@ class HTMLElementGallery extends HTMLCustomElement {
 	}
 }
 
-Page.setup(function() {
+Page.setup(function(state) {
+	HTMLElementGallery.defaultMode = state.query.gallery;
 	HTMLCustomElement.define('element-gallery', HTMLElementGallery);
+});
+
+Page.patch(function(state) {
+	// TODO support multiple galleries
+	var mode = state.query.gallery;
+	if (!mode) return;
+	var gallery = document.querySelector('element-gallery');
+	if (gallery) gallery._setMode(mode);
 });
 
