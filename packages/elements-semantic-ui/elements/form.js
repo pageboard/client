@@ -285,7 +285,7 @@ Pageboard.elements.input_property = {
 							name: name,
 							min: prop.minimum,
 							max: prop.maximum,
-							default: prop.default,
+							value: prop.default,
 							disabled: d.disabled
 						},
 						content: {
