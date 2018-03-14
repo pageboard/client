@@ -88,6 +88,7 @@ HTMLInputElement.prototype.reset = function() {
 
 HTMLFormElement.fetch = function(method, url, data) {
 	method = method.toLowerCase();
+	var doCache = document.body.isContentEditable == false && method == "get";
 	var fetchOpts = {
 		method: method,
 		headers: {
@@ -98,19 +99,21 @@ HTMLFormElement.fetch = function(method, url, data) {
 	};
 	if (method == "get") {
 		url = Page.format(Object.assign(Page.parse(url), {query: data}));
+	} else {
+		fetchOpts.body = JSON.stringify(data);
+	}
+	if (doCache) {
 		var cached = HTMLFormElement.fetch.cache[url];
 		if (cached) {
 			return cached;
 		}
-	} else {
-		fetchOpts.body = JSON.stringify(data);
 	}
 
 	var p = fetch(url, fetchOpts).then(function(res) {
 		if (res.status >= 400) throw new Error(res.statusText);
 		return res.json();
 	});
-	if (method == "get") HTMLFormElement.fetch.cache[url] = p;
+	if (doCache) HTMLFormElement.fetch.cache[url] = p;
 	return p;
 };
 HTMLFormElement.fetch.cache = {};
