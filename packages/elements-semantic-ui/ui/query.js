@@ -108,9 +108,6 @@ class HTMLElementQuery extends HTMLCustomElement {
 }
 
 HTMLElementQuery.filters = {};
-HTMLElementQuery.filters.date = function(val, what) {
-	return new Date(val).toLocaleString();
-};
 HTMLElementQuery.filters.title = function(val, what) {
 	var schemaPath = 'schemas.' + what.scope.type + '.properties.' + what.expr.path.join('.properties.');
 	var schema = what.expr.get(what.data, schemaPath);
