@@ -208,8 +208,10 @@ Pageboard.elements.input_property = {
 		name = list.join('.');
 		var prop = el;
 		var propKey;
+		var required = false;
 		for (var i=0; i < list.length; i++) {
 			propKey = list[i];
+			required = prop.required && prop.required.indexOf(propKey) >= 0;
 			prop = prop.properties && prop.properties[propKey] || null;
 			if (prop == null) break;
 		}
@@ -218,6 +220,37 @@ Pageboard.elements.input_property = {
 		}
 		node.textContent = "";
 		var listOf = prop.anyOf || prop.oneOf;
+		var propType;
+		if (listOf) {
+			listOf = listOf.filter(function(item) {
+				if (item.type == "null") {
+					required = false;
+					return false;
+				} else {
+					return true;
+				}
+			});
+			if (listOf.length == 1 && listOf[0].const === undefined) {
+				propType = listOf[0];
+				listOf = null;
+			}
+		} else if (Array.isArray(prop.type)) {
+			listOf = prop.type.filter(function(type) {
+				if (type == "null") {
+					required = false;
+					return false;
+				} else {
+					return true;
+				}
+			});
+			if (listOf.length == 1) {
+				propType = listOf[0];
+			} else {
+				listOf = null; // cannot deal with this for now
+			}
+		}
+		if (!propType) propType = prop;
+
 		if (listOf) {
 			if (listOf.length <= d.radios) {
 				var content = doc.dom`<div class="content"></div>`;
@@ -233,7 +266,6 @@ Pageboard.elements.input_property = {
 					</div>`);
 				}
 				listOf.forEach(function(item) {
-					if (item.type == "null" && d.multiple) return;
 					content.appendChild(view.render({
 						type: d.multiple ? 'input_checkbox' : 'input_radio',
 						data: {
@@ -249,7 +281,6 @@ Pageboard.elements.input_property = {
 			} else {
 				var frag = doc.createDocumentFragment();
 				listOf.forEach(function(item) {
-					if (item.type == "null" && d.multiple) return;
 					var option = view.render({
 						type: 'input_select_option',
 						data: {
@@ -267,7 +298,8 @@ Pageboard.elements.input_property = {
 						name: name,
 						multiple: d.multiple,
 						placeholder: prop.description,
-						disabled: d.disabled
+						disabled: d.disabled,
+						required: required
 					},
 					content: {
 						label: prop.title,
@@ -276,17 +308,19 @@ Pageboard.elements.input_property = {
 				});
 				node.appendChild(select);
 			}
-		} else if (prop.type == "integer") {
-			if (prop.minimum != null && prop.maximum != null) {
-				if (prop.maximum - prop.minimum <= d.range) {
+		} else if (propType.type == "integer") {
+			if (propType.minimum != null && propType.maximum != null) {
+				if (propType.maximum - propType.minimum <= d.range) {
 					return node.appendChild(view.render({
 						type: 'input_range',
 						data: {
 							name: name,
-							min: prop.minimum,
-							max: prop.maximum,
-							value: prop.default,
-							disabled: d.disabled
+							min: propType.minimum,
+							max: propType.maximum,
+							value: propType.default,
+							disabled: d.disabled,
+							required: required,
+							step: 1
 						},
 						content: {
 							label: prop.title
@@ -300,8 +334,22 @@ Pageboard.elements.input_property = {
 					name: name,
 					type: 'text',
 					format: 'number',
-					default: prop.default,
-					disabled: d.disabled
+					default: propType.default,
+					disabled: d.disabled,
+					required: required
+				},
+				content: {
+					label: prop.title
+				}
+			}));
+		} else if (propType.type == "boolean") {
+			node.appendChild(view.render({
+				type: 'input_checkbox',
+				data: {
+					name: name,
+					value: "1",
+					disabled: d.disabled,
+					required: required
 				},
 				content: {
 					label: prop.title
@@ -313,7 +361,9 @@ Pageboard.elements.input_property = {
 				data: {
 					name: name,
 					type: 'text',
-					disabled: d.disabled
+					disabled: d.disabled,
+					default: propType.default,
+					required: required
 				},
 				content: {
 					label: prop.title
