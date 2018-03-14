@@ -12,16 +12,15 @@ HTMLFormElement.prototype.fill = function(values) {
 		});
 		return ret;
 	}
-	var elem = null, val;
 	var flats = asPaths(values, {});
-
 	var count = 0;
-
+	var elem = null, name, val;
 	for (var i = 0; i < this.elements.length; i++) {
 		elem = this.elements[i];
-		if (!elem.name) continue;
+		name = elem.name;
+		if (!name) continue;
 		count++;
-		val = flats[elem.name];
+		val = flats[name];
 		switch (elem.type) {
 			case 'submit':
 			break;
