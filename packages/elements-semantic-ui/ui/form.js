@@ -36,7 +36,13 @@ HTMLFormElement.prototype.fill = function(values) {
 			case 'textarea':
 				if (val) elem.innerText = val;
 			default:
-				if (val) elem.setAttribute("value", val);
+				if (val) {
+					if (elem.fill) {
+						elem.fill(val);
+					} else {
+						elem.value = val;
+					}
+				}
 			break;
 		}
 	}
