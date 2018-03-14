@@ -165,6 +165,7 @@ class HTMLElementQueryTags extends HTMLCustomElement {
 		if (!label) return;
 		HTMLElementQuery.find(label.dataset.name, label.dataset.value).forEach(function(control) {
 			if (control.checked) control.checked = false;
+			if (control.reset) control.reset();
 			var e = document.createEvent('HTMLEvents');
 			e.initEvent('submit', true, true);
 			control.form.dispatchEvent(e);
