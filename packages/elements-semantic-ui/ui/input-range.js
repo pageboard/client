@@ -11,6 +11,7 @@ class HTMLElementInputRange extends HTMLCustomElement {
 				me._input.dispatchEvent(e);
 			}
 		});
+		this._input.rangeFill(this._input.value);
 	}
 
 	disconnectedCallback() {
