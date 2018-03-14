@@ -614,7 +614,10 @@ Pageboard.elements.input_range = {
 	render: function(doc, block) {
 		var d = block.data;
 		var input = doc.dom`<input type="range" name="${d.name}" min="${d.min}" max="${d.max}" step="${d.step}" />`;
-		if (d.value != null) input.value = d.value;
+		if (d.value != null) {
+			input.value = d.value;
+			input.dataset.default = d.value; // we need to keep track of initial value for disabling trick
+		}
 		if (d.required) input.required = true;
 		if (d.disabled) input.disabled = true;
 		return doc.dom`<div class="field">
