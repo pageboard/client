@@ -74,6 +74,18 @@ HTMLSelectElement.prototype.fill = function(values) {
 	}
 };
 
+HTMLInputElement.prototype.fill = function(val) {
+	var subFill = this[this.type + 'Fill'];
+	if (subFill) return subFill.call(this, val);
+	else this.value = val;
+};
+
+HTMLInputElement.prototype.reset = function() {
+	var subReset = this[this.type + 'Reset'];
+	if (subReset) return subReset.call(this);
+	else this.value = this.defaultValue;
+};
+
 HTMLFormElement.fetch = function(method, url, data) {
 	var fetchOpts = {
 		method: method,
