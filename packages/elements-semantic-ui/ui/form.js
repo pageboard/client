@@ -83,7 +83,7 @@ HTMLInputElement.prototype.fill = function(val) {
 HTMLInputElement.prototype.reset = function() {
 	var subReset = this[this.type + 'Reset'];
 	if (subReset) return subReset.call(this);
-	else this.value = this.defaultValue;
+	else this.value = "";
 };
 
 HTMLFormElement.fetch = function(method, url, data) {

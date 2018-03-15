@@ -166,6 +166,7 @@ class HTMLElementQueryTags extends HTMLCustomElement {
 				if (!field) return;
 				label = field.querySelector('label');
 				if (!label) return;
+				if (control.value == "") return;
 				labels.insertAdjacentHTML('beforeEnd', `<a class="ui label" data-name="${name}" data-value="${control.value}">
 					${label.innerText}
 					<i class="delete icon"></i>
@@ -179,6 +180,7 @@ class HTMLElementQueryTags extends HTMLCustomElement {
 		HTMLElementQuery.find(label.dataset.name, label.dataset.value).forEach(function(control) {
 			if (control.checked) control.checked = false;
 			if (control.reset) control.reset();
+			else if (control.value) control.value = "";
 			var e = document.createEvent('HTMLEvents');
 			e.initEvent('submit', true, true);
 			control.form.dispatchEvent(e);
