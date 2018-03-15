@@ -109,10 +109,17 @@ class HTMLElementQuery extends HTMLCustomElement {
 
 HTMLElementQuery.filters = {};
 HTMLElementQuery.filters.title = function(val, what) {
-	var schemaPath = 'schemas.' + what.scope.type + '.properties.' + what.expr.path.join('.properties.');
+	var path = what.expr.path;
+	var rootPath = path.slice(0, -2);
+	var block = what.expr.get(what.scope, rootPath);
+	if (!block || !block.type) {
+		console.warn("No block found matching", rootPath, what);
+		return;
+	}
+	var schemaPath = 'schemas.' + block.type + '.properties.' + path.slice(rootPath.length).join('.properties.');
 	var schema = what.expr.get(what.data, schemaPath);
 	if (!schema) {
-		console.warn("No matching schema for title of", schemaPath);
+		console.warn("No matching schema for title of", schemaPath, what);
 		return;
 	}
 	var listOf = schema.oneOf || schema.anyOf;
