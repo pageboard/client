@@ -53,6 +53,7 @@ class HTMLElementQuery extends HTMLCustomElement {
 		if (query._id) console.warn("query._id is reserved");
 		var vars = {};
 		var missing = 0;
+		var candidate = 0;
 		if (this.dataset.type) {
 			var form = document.querySelector(`form[data-type="${this.dataset.type}"]`);
 			if (form) Array.prototype.forEach.call(form.elements, function(node) {
@@ -60,6 +61,7 @@ class HTMLElementQuery extends HTMLCustomElement {
 				if (!key) return;
 				if (query[key] !== undefined) {
 					vars[key] = query[key];
+					candidate++;
 				} else if (node.required) {
 					missing++;
 				}
@@ -68,14 +70,19 @@ class HTMLElementQuery extends HTMLCustomElement {
 		if (this.dataset.vars) {
 			this.dataset.vars.split(',').forEach(function(key) {
 				if (query[key] !== undefined) {
+					candidate++;
 					vars[key] = query[key];
 				} else {
 					var node = document.querySelector(`form [name="${key}"]`);
-					if (node && node.required) missing++;
+					if (!node || node.required) missing++;
 				}
 			});
 		}
-		if (missing > 0) return;
+		var form = this;
+		if (missing > 0) {
+			form.classList.add('error');
+			return;
+		}
 		this._refreshing = true;
 		vars._id = this.getAttribute('block-id');
 
@@ -85,7 +92,6 @@ class HTMLElementQuery extends HTMLCustomElement {
 		Array.from(template.querySelectorAll('[block-id]')).forEach(function(node) {
 			node.removeAttribute('block-id');
 		});
-		var form = this;
 		form.classList.remove('success', 'error', 'warning', 'loading');
 		form.classList.add('loading');
 		return HTMLFormElement.fetch('get', '/.api/query', vars).then(function(answer) {
