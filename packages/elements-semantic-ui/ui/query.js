@@ -133,7 +133,7 @@ HTMLElementQuery.filters.title = function(val, what) {
 		console.warn("No oneOf/anyOf schema for property of", schemaPath);
 	}
 	var prop = listOf.find(function(item) {
-		return item.const == val;
+		return item.const === val; // null !== undefined
 	});
 	if (prop != null) return prop.title;
 };
