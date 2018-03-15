@@ -78,7 +78,7 @@ Pageboard.elements.tab_item = {
 		if (dom.matches('.active')) d.active = true;
 		return d;
 	},
-	icon: '<b class="icon">Item</b>',
+	icon: '<b class="icon">Tab</b>',
 	render: function(doc, block) {
 		var d = block.data;
 		return doc.dom`<a class="item ${d.active ? 'active' : ''}" block-content="content">tab</a>`;
@@ -87,7 +87,6 @@ Pageboard.elements.tab_item = {
 
 Pageboard.elements.tab = {
 	title: 'Tab',
-	menu: 'widget',
 	inplace: true,
 	context: 'tabs/tabs_container_tabs/',
 	contents: {
@@ -104,7 +103,6 @@ Pageboard.elements.tab = {
 		if (dom.matches('.active')) d.active = true;
 		return d;
 	},
-	icon: '<b class="icon">Tab</b>',
 	render: function(doc, block) {
 		var d = block.data;
 		return doc.dom`<div class="ui tab ${d.active ? 'active' : ''} segment" block-content="content">tab</div>`;
