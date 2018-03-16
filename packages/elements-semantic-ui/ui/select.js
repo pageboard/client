@@ -33,7 +33,9 @@ class HTMLElementSelect extends HTMLCustomElement {
 			option.selected = true;
 		}
 		if (this.dataset.multiple) {
-			if (!wasSelected) this.insertBefore(this.dom`<a class="ui label" data-value="${val}">${str}<i class="delete icon"></i></a>`, this._setText(""));
+			if (!wasSelected) {
+				this._setText("").insertAdjacentHTML('beforeBegin', `<a class="ui label" data-value="${val}">${str}<i class="delete icon"></i></a>`);
+			}
 		} else {
 			this._setText(str);
 		}
@@ -75,16 +77,20 @@ class HTMLElementSelect extends HTMLCustomElement {
 		}, this);
 	}
 	_optionItem(item) {
-		return item.dom`<option value="${item.dataset.value || item.innerText.trim()}">${item.innerHTML}</option>`;
+		var node = item.ownerDocument.createElement('option');
+		node.value = item.dataset.value || item.innerText.trim();
+		node.innerHTML = item.innerHTML;
+		return node;
 	}
 	connectedCallback() {
 		if (!this.querySelector('.icon')) {
-			this.insertBefore(this.dom`<i class="dropdown icon"></i>`, this.firstChild);
+			this.insertAdjacentHTML('afterBegin', '<i class="dropdown icon"></i>');
 		}
 		var menu = this.querySelector('.menu');
 		var select = this.querySelector('select');
 		if (!select) {
-			select = this.insertBefore(this.dom`<select name="${this.dataset.name}"></select>`, menu);
+			select = this.insertBefore(this.ownerDocument.createElement('select'), menu);
+			select.name = this.dataset.name;
 			this._update();
 		}
 		if (this.dataset.disabled) select.disabled = true;
@@ -92,7 +98,7 @@ class HTMLElementSelect extends HTMLCustomElement {
 		if (this.dataset.multiple) select.multiple = true;
 
 		var text = this.querySelector('.text');
-		this.insertBefore(this.dom`<div class="text"></div>`, select);
+		select.insertAdjacentHTML('beforeBegin', `<div class="text"></div>`);
 		this._setPlaceholder();
 
 		this.ownerDocument.body.addEventListener('click', this._click, false);
@@ -108,8 +114,10 @@ class HTMLElementSelect extends HTMLCustomElement {
 		var select = this.querySelector('select');
 		var menu = this.querySelector('.menu');
 		select.textContent = "";
-		select.appendChild(this.dom`<option selected value="">-</option>
-			${Array.prototype.map.call(menu.children, this._optionItem)}`);
+		select.insertAdjacentHTML('afterBegin', '<option selected value="">-</option>');
+		Array.prototype.forEach.call(menu.children, function(item) {
+			select.appendChild(this._optionItem(item));
+		}, this);
 	}
 	_reset() {
 		var select = this.querySelector('select');
