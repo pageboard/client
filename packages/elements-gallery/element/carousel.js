@@ -43,6 +43,11 @@ Pageboard.elements.carousel = {
 			title: 'Full view button',
 			type: 'boolean',
 			default: false
+		},
+		groupCells: {
+			title: 'Group cells',
+			type: 'boolean',
+			default: false
 		}
 	},
 	contents: {
@@ -55,11 +60,19 @@ Pageboard.elements.carousel = {
 	tag: 'element-carousel',
 	render: function(doc, block, view) {
 		var d = block.data;
-		var node = doc.dom`<element-carousel data-page-dots="${d.pageDots}" data-auto-play="${view.editable ? 0 : d.autoPlay}" data-draggable="${!view.editable}" data-prev-next-buttons="${d.prevNextButtons}" data-width="${d.width || 'auto'}" data-height="${d.height || 'auto'}" data-fullview-button="${d.fullviewButton}">
+		var node = doc.dom`<element-carousel>
 			<div class="flickity-viewport">
 				<div class="flickity-slider" block-content="items"></div>
 			</div>
 		</element-carousel>`;
+		var opts = Object.assign({}, d);
+		if (view.editable) {
+			opts.autoPlay = 0;
+			opts.draggable = false;
+		}
+		if (!opts.width) opts.width = 'auto';
+		if (!opts.height) opts.height = 'auto';
+		Object.assign(node.dataset, opts);
 		return node;
 	},
 	stylesheets: [
