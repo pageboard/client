@@ -48,6 +48,11 @@ Pageboard.elements.carousel = {
 			title: 'Group cells',
 			type: 'boolean',
 			default: false
+		},
+		wrapAround: {
+			title: 'Wrap around',
+			type: 'boolean',
+			default: true
 		}
 	},
 	contents: {
@@ -69,6 +74,7 @@ Pageboard.elements.carousel = {
 		if (view.editable) {
 			opts.autoPlay = 0;
 			opts.draggable = false;
+			opts.wrapAround = false;
 		}
 		if (!opts.width) opts.width = 'auto';
 		if (!opts.height) opts.height = 'auto';

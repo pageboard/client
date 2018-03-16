@@ -83,6 +83,7 @@ class HTMLElementCarousel extends HTMLCustomElement {
 		// TODO this ain't right buddy
 		// we have the schema that could convert data props for us
 		var opts = {
+			wrapAround: this.dataset.wrapAround == "true",
 			groupCells: this.dataset.groupCells == "true",
 			pageDots: this.dataset.pageDots == "true",
 			autoPlay: parseFloat(this.dataset.autoPlay) * 1000 || false,
