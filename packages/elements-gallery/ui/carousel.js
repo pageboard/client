@@ -44,7 +44,9 @@ class HTMLElementCarousel extends HTMLCustomElement {
 
 		if (this.dataset.fullviewButton == "true") {
 			if (!this._fullviewButton) {
-				this._fullviewButton = this.dom`<a class="ui icon button fullview"><i class="zoom icon"></i></a>`;
+				this._fullviewButton = this.ownerDocument.createElement('a');
+				this._fullviewButton.innerHTML = '<i class="zoom icon"></i>';
+				this._fullviewButton.className = 'ui icon button fullview';
 				this.appendChild(this._fullviewButton);
 				this._fullviewButton.addEventListener('click', function(e) {
 					this.ownerDocument.body.classList.toggle('fullview');
