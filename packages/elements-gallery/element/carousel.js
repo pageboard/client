@@ -52,7 +52,7 @@ Pageboard.elements.carousel = {
 		wrapAround: {
 			title: 'Wrap around',
 			type: 'boolean',
-			default: true
+			default: false
 		}
 	},
 	contents: {
