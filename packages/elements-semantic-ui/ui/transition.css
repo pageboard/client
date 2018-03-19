@@ -1,0 +1,56 @@
+.transition {
+	overflow:hidden;
+}
+.transition > .transition-from[block-type="main"] {
+	position:absolute;
+	height:100%;
+	width:100%;
+}
+.transition.up > .transition-from[block-type="main"],
+.transition.down > .transition-from[block-type="main"],
+.transition.right > .transition-from[block-type="main"],
+.transition.left > .transition-from[block-type="main"] {
+	transition: transform 1.5s ease-in;
+	transform: translate(0, 0);
+	z-index:1;
+}
+.transition.up > .transition-to[block-type="main"],
+.transition.down > .transition-to[block-type="main"],
+.transition.right > .transition-to[block-type="main"],
+.transition.left > .transition-to[block-type="main"] {
+	z-index:0;
+}
+
+
+.transition-from:not([block-type="main"]) {
+	display:none;
+}
+
+.transition.start.up > .transition-from[block-type="main"] {
+	transform: translate(0, -100%);
+}
+.transition.start.down > .transition-from[block-type="main"] {
+	transform: translate(0, 100%);
+}
+.transition.start.left > .transition-from[block-type="main"] {
+	transform: translate(-100%, 0);
+}
+.transition.start.right > .transition-from[block-type="main"] {
+	transform: translate(100%, 0);
+}
+
+
+.transition.fadein > .transition-from {
+	z-index:0 !important;
+}
+.transition.fadein > .transition-to:not([block-type="main"]) {
+	visibility:hidden;
+}
+.transition.fadein > .transition-to[block-type="main"] {
+	z-index:1 !important;
+	opacity:0;
+	transition: opacity 1.5s ease-in;
+}
+.transition.start.fadein > .transition-to {
+	opacity:1;
+}

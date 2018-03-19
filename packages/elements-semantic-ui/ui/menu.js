@@ -10,15 +10,6 @@ Page.patch(function(state) {
 });
 
 Page.setup(function(state) {
-	if (Page.async) document.body.addEventListener('click', function(e) {
-		var a = e.target.closest('a');
-		var href = a && a.getAttribute('href');
-		if (href) {
-			e.preventDefault();
-			if (!document.body.isContentEditable) Page.push(href);
-		}
-	}, false);
-
 	var ref = document.referrer;
 	if (ref) {
 		ref = Page.parse(ref);
@@ -31,3 +22,4 @@ Page.setup(function(state) {
 		}
 	}
 });
+
