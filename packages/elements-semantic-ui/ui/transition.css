@@ -1,6 +1,3 @@
-.transition {
-	overflow:hidden;
-}
 .transition > .transition-from[block-type="main"] {
 	position:absolute;
 	height:100%;

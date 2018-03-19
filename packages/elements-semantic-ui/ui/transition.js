@@ -1,5 +1,21 @@
 Page.setup(function(state) {
-	if (document.body.dataset.transition) {
+	var tEndC;
+	var tEnd = "transitionend";
+
+	var transitions = {
+		transition: tEnd,
+		OTransition: 'oTransitionEnd',
+		MozTransition: tEnd,
+		msTransition: 'MSTransitionEnd',
+		WebkitTransition: 'webkitTransitionEnd'
+	};
+
+	var st = document.body.style;
+	for (var t in transitions) {
+		if (st[t] !== undefined) tEndC = transitions[t];
+	}
+
+	if (tEndC && document.body.dataset.transition) {
 		document.body.addEventListener('click', function(e) {
 			var a = e.target.closest('a');
 			var href = a && a.getAttribute('href');
@@ -10,20 +26,9 @@ Page.setup(function(state) {
 				}
 			}
 		}, false);
+	} else {
+		return;
 	}
-
-	var transitionEnd = (function() {
-		var transitions = {
-			transition: 'transitionend',
-			OTransition: 'oTransitionEnd',
-			MozTransition: 'transitionend',
-			msTransition: 'MSTransitionEnd',
-			WebkitTransition: 'webkitTransitionEnd'
-		};
-		var st = document.body.style;
-		for (var t in transitions) if (st[t] !== undefined) return transitions[t];
-	})();
-
 
 	Page.updateBody = function(body) {
 		var transition = document.body.dataset.transition;
@@ -43,13 +48,15 @@ Page.setup(function(state) {
 		toList.forEach(function(node) {
 			document.body.appendChild(node);
 		});
-		document.body.addEventListener(transitionEnd, trDone);
- 		document.body.classList.add('start');
+		setTimeout(function() {
+			document.body.classList.add('start');
+		});
+		document.body.addEventListener(tEnd, trDone);
 
 		function trDone(e) {
-			// assume first transition of body child
+			// only transitions of body children are considered
 			if (e.target.parentNode != document.body) return;
-			document.body.removeEventListener(transitionEnd, trDone);
+			document.body.removeEventListener(tEnd, trDone);
 			fromList.forEach(function(node) {
 				node.remove();
 			});
