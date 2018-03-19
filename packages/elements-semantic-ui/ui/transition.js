@@ -11,7 +11,20 @@ Page.setup(function(state) {
 			}
 		}, false);
 	}
-	
+
+	var transitionEnd = (function() {
+		var transitions = {
+			transition: 'transitionend',
+			OTransition: 'oTransitionEnd',
+			MozTransition: 'transitionend',
+			msTransition: 'MSTransitionEnd',
+			WebkitTransition: 'webkitTransitionEnd'
+		};
+		var st = document.body.style;
+		for (var t in transitions) if (st[t] !== undefined) return transitions[t];
+	})();
+
+
 	Page.updateBody = function(body) {
 		var transition = document.body.dataset.transition;
 		if (!transition) {
@@ -30,13 +43,13 @@ Page.setup(function(state) {
 		toList.forEach(function(node) {
 			document.body.appendChild(node);
 		});
-		document.body.addEventListener('transitionend', trDone);
+		document.body.addEventListener(transitionEnd, trDone);
  		document.body.classList.add('start');
 
 		function trDone(e) {
 			// assume first transition of body child
 			if (e.target.parentNode != document.body) return;
-			document.body.removeEventListener('transitionend', trDone);
+			document.body.removeEventListener(transitionEnd, trDone);
 			fromList.forEach(function(node) {
 				node.remove();
 			});
@@ -47,3 +60,4 @@ Page.setup(function(state) {
 		}
 	};
 });
+
