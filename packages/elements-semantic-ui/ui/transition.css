@@ -39,18 +39,14 @@
 	transform: translate(100%, 0);
 }
 
-
-.transition.fadein > .transition-from {
-	z-index:0 !important;
+.transition.fadeout > .transition-to {
+	z-index:0;
 }
-.transition.fadein > .transition-to:not([block-type="main"]) {
-	visibility:hidden;
-}
-.transition.fadein > .transition-to[block-type="main"] {
-	z-index:1 !important;
-	opacity:0;
+.transition.fadeout > .transition-from {
+	z-index:1;
+	opacity:1;
 	transition: opacity 1.5s ease-in;
 }
-.transition.start.fadein > .transition-to {
-	opacity:1;
+.transition.start.fadeout > .transition-from {
+	opacity:0;
 }

@@ -37,8 +37,8 @@ Pageboard.elements.page.properties.transition = {
 		const: 'right',
 		title: 'Slide right'
 	}, {
-		const: 'fadein',
-		title: 'Fade in'
+		const: 'fadeout',
+		title: 'Fade out'
 	}]
 };
 
