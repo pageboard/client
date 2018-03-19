@@ -181,6 +181,7 @@ Pageboard.elements.image = {
 			spec: "inline*"
 		}
 	},
+	counter: 0,
 	render: function(doc, block) {
 		var d = block.data;
 		var loc = this.buildLoc(d.url || '/.pageboard/read/empty.png', d);
@@ -197,8 +198,9 @@ Pageboard.elements.image = {
 			delete d.roi;
 		}
 		var display = d.display;
+		var fit = display && display.fit || "none";
 		if (display) {
-			node.dataset.fit = display.fit || "none";
+			node.dataset.fit = fit;
 			var posx = display.horizontal;
 			if (posx == "hcenter") posx = "center";
 			var posy = display.vertical;
@@ -208,18 +210,25 @@ Pageboard.elements.image = {
 		var zoom = (d.crop || {}).zoom || 100;
 		var meta = block.data.meta;
 		if (meta && meta.mime == "image/jpeg" && meta.size >= 100000) {
-			loc.query.q = 5;
-			if (node.dataset.fit != "none") {
-				// images must not be too big for q to work
-				loc.query.rs = "w-320_h-320_max";
-			}
 			img.classList.add('lqip');
 			var wf = (d.crop || {}).width || 100;
 			var wh = (d.crop || {}).height || 100;
 			img.dataset.width = Math.round(meta.width * wf / 100);
 			img.dataset.height = Math.round(meta.height * wh / 100);
 			if (zoom != 100) img.dataset.zoom = zoom;
-		} else if (node.dataset.fit != "none") {
+			if (fit != "none") {
+				if (!doc.imagesCounter) doc.imagesCounter = 0;
+				if (doc.imagesCounter++ <= 10 || d.template) {
+					loc.query.q = 5;
+					loc.query.rs = "w-320_h-320_max";
+				} else {
+					img.dataset.src = Page.format(loc);
+					return node;
+				}
+			} else {
+				loc.query.q = 5;
+			}
+		} else if (fit != "none") {
 			if (!d.template) {
 				/*
 				img.dataset.srcset = [320, 640, 1280].map(function(w, i) {
