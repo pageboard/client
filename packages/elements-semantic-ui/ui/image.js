@@ -30,13 +30,14 @@ class HTMLElementImage extends HTMLCustomElement {
 			}
 		}
 	}
-	reveal() {
+	reveal(force) {
 		var img = this.querySelector('img');
 		if (!img) return;
 		this.disconnectedCallback();
 		var src = img.getAttribute('src');
 		if (!src) src = img.dataset.src;
-		if (!src || this._revealAt || !img.classList.contains('lqip')) return;
+		if (!src|| !img.classList.contains('lqip')) return;
+		if (!force && this._revealAt) return;
 		this._revealAt = Date.now();
 		if (img.dataset.src) this._revealAt = true;
 		var z = parseFloat(img.dataset.zoom);
@@ -62,7 +63,7 @@ class HTMLElementImage extends HTMLCustomElement {
 		img.setAttribute('src', src);
 	}
 	update() {
-		this.reveal();
+		this.reveal(true);
 	}
 	load(e) {
 		e.target.removeEventListener('load', this.load, false);
