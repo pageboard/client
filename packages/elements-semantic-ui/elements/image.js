@@ -222,7 +222,8 @@ Pageboard.elements.image = {
 					loc.query.q = 5;
 					loc.query.rs = "w-320_h-320_max";
 				} else {
-					img.dataset.src = Page.format(loc);
+					// .url on node or else pagecut won't call update on that element
+					node.dataset.url = Page.format(loc);
 					return node;
 				}
 			} else {

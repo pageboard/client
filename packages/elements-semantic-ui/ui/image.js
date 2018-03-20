@@ -35,11 +35,11 @@ class HTMLElementImage extends HTMLCustomElement {
 		if (!img) return;
 		this.disconnectedCallback();
 		var src = img.getAttribute('src');
-		if (!src) src = img.dataset.src;
+		if (!src) src = this.dataset.url;
 		if (!src|| !img.classList.contains('lqip')) return;
 		if (!force && this._revealAt) return;
 		this._revealAt = Date.now();
-		if (img.dataset.src) this._revealAt = true;
+		if (this.dataset.url) this._revealAt = true;
 		var z = parseFloat(img.dataset.zoom);
 		if (isNaN(z)) z = 100;
 		var w = parseInt(img.dataset.width);
