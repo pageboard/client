@@ -1,9 +1,9 @@
 HTMLElementGallery.prototype._init = HTMLElementGallery.prototype.init;
 HTMLElementGallery.prototype.init = function() {
 	this._init();
-	var listener = this._switchListener;
-	this._switchListener = function(e) {
-		listener(e);
+	var setMode = this.setMode;
+	this.setMode = function(mode) {
+		setMode.call(this, mode);
 		this._syncGallery();
 	}.bind(this);
 	this._initHelper();
