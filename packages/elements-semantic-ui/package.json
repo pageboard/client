@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "postinstall-links"
+    "postinstall": "postinstall"
   },
   "repository": {
     "type": "git",
@@ -22,17 +22,17 @@
     "formdata-polyfill": "^3.0.9",
     "matchdom": "^1.0.0",
     "object-fit-images": "^3.2.3",
-    "postinstall-links": "^0.3.99",
+    "postinstall": "^0.1.0",
     "rangeslider-pure": "^0.4.4",
     "semantic-ui-css": "^2.2.14"
   },
-  "links": {
-    "semantic-ui-css/components": "semantic-ui",
-    "@pageboard/stickybits/dist/stickybits.min.js": "ui/lib/",
-    "object-fit-images/dist/ofi.min.js": "ui/lib/object-fit-images.js",
-    "formdata-polyfill/formdata.min.js": "ui/lib/",
-    "rangeslider-pure/dist/*": "ui/lib/",
-    "matchdom/matchdom.js": "ui/lib/"
+  "postinstall": {
+    "semantic-ui-css/components": "link semantic-ui",
+    "@pageboard/stickybits/dist/stickybits.min.js": "link ui/lib/",
+    "object-fit-images/dist/ofi.min.js": "link ui/lib/object-fit-images.js",
+    "formdata-polyfill/formdata.min.js": "link ui/lib/",
+    "rangeslider-pure/dist/*": "link ui/lib/",
+    "matchdom/matchdom.js": "link ui/lib/"
   },
   "pageboard": {
     "directories": [
