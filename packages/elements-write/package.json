@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "make build",
-    "postinstall": "postinstall-links && make build"
+    "postinstall": "postinstall && make build"
   },
   "repository": {
     "type": "git",
@@ -28,7 +28,7 @@
     "moment": "^2.20.1",
     "morphdom": "^2.3.3",
     "perfect-scrollbar": "^1.3.0",
-    "postinstall-links": "^0.3.99",
+    "postinstall": "^0.1.0",
     "pretty-bytes": "^4.0.2",
     "prosemirror-dev-tools": "^2.0.1",
     "semantic-ui-css": "2.3.0",
@@ -36,22 +36,22 @@
     "throttleit": "^1.0.0",
     "window-agent": "^1.2.0"
   },
-  "links": {
-    "semantic-ui-css/components": "write/lib/components",
-    "semantic-ui-css/themes": "write/lib/themes",
-    "perfect-scrollbar/css/perfect-scrollbar.css": "write/lib/",
-    "perfect-scrollbar/dist/perfect-scrollbar.min.js": "write/lib/perfect-scrollbar.js",
-    "moment/moment.js": "write/lib/",
-    "moment/locale": "write/lib/moment-locales",
-    "cropperjs/dist/cropper.min.css": "write/lib/cropper.min.css",
-    "cropperjs/dist/cropper.min.js": "write/lib/cropper.min.js",
-    "jquery/dist/jquery.slim.min.js": "write/lib/jquery.min.js",
-    "jquery/dist/jquery.slim.min.map": "write/lib/jquery.min.js.map",
-    "dom4/build/dom4.js": "write/lib/dom4.js",
-    "infinite-scroll/dist/infinite-scroll.pkgd.min.js": "write/lib/infinite-scroll.min.js",
-    "speakingurl/speakingurl.min.js": "write/lib/",
-    "prosemirror-dev-tools/dist/umd/prosemirror-dev-tools.min.js": "write/lib/",
-    "window-agent/agent.js": "write/lib/"
+  "postinstall": {
+    "semantic-ui-css/components": "link write/lib/components",
+    "semantic-ui-css/themes": "link write/lib/themes",
+    "perfect-scrollbar/css/perfect-scrollbar.css": "link write/lib/",
+    "perfect-scrollbar/dist/perfect-scrollbar.min.js": "link write/lib/perfect-scrollbar.js",
+    "moment/moment.js": "link write/lib/",
+    "moment/locale": "link write/lib/moment-locales",
+    "cropperjs/dist/cropper.min.css": "link write/lib/cropper.min.css",
+    "cropperjs/dist/cropper.min.js": "link write/lib/cropper.min.js",
+    "jquery/dist/jquery.slim.min.js": "link write/lib/jquery.min.js",
+    "jquery/dist/jquery.slim.min.map": "link write/lib/jquery.min.js.map",
+    "dom4/build/dom4.js": "link write/lib/dom4.js",
+    "infinite-scroll/dist/infinite-scroll.pkgd.min.js": "link write/lib/infinite-scroll.min.js",
+    "speakingurl/speakingurl.min.js": "link write/lib/",
+    "prosemirror-dev-tools/dist/umd/prosemirror-dev-tools.min.js": "link write/lib/",
+    "window-agent/agent.js": "link write/lib/"
   },
   "pageboard": {
     "directories": [
