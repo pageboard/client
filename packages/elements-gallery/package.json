@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "postinstall-links"
+    "postinstall": "postinstall"
   },
   "repository": {
     "type": "git",
@@ -21,13 +21,13 @@
     "@pageboard/flickity": "^2.0.9-1",
     "@pageboard/isotope-layout": "^3.0.4-1",
     "list-diff.js": "^0.1.0",
-    "postinstall-links": "^0.3.1"
+    "postinstall": "^0.1.0"
   },
-  "links": {
-    "list-diff.js/list-diff.js": "ui/list-diff.js",
-    "@pageboard/isotope-layout/dist/isotope.pkgd.min.js": "ui/isotope.js",
-    "@pageboard/flickity/dist/flickity.pkgd.min.js": "ui/flickity.js",
-    "@pageboard/flickity/dist/flickity.css": "ui/flickity.css"
+  "postinstall": {
+    "list-diff.js/list-diff.js": "link ui/list-diff.js",
+    "@pageboard/isotope-layout/dist/isotope.pkgd.min.js": "link ui/isotope.js",
+    "@pageboard/flickity/dist/flickity.pkgd.min.js": "link ui/flickity.js",
+    "@pageboard/flickity/dist/flickity.css": "link ui/flickity.css"
   },
   "pageboard": {
     "directories": [
