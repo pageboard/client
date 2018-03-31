@@ -51,12 +51,12 @@ Page.setup(function(state) {
 		setTimeout(function() {
 			document.body.classList.add('start');
 		});
-		document.body.addEventListener(tEnd, trDone);
+		document.documentElement.addEventListener(tEnd, trDone);
 
 		function trDone(e) {
 			// only transitions of body children are considered
 			if (e.target.parentNode != document.body) return;
-			document.body.removeEventListener(tEnd, trDone);
+			document.documentElement.removeEventListener(tEnd, trDone);
 			fromList.forEach(function(node) {
 				node.remove();
 			});
