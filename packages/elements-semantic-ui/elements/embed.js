@@ -40,7 +40,7 @@ Pageboard.elements.embed = {
 	render: function(doc, block, view) {
 		var d = block.data;
 		var node = doc.dom`<element-embed class="ui embed" data-url="${d.url}" data-auto-play="${!view.editable && d.autoPlay}"></element-embed>`;
-		if (d.placeholder) node.setAttribute('data-placeholder', d.thumbnail);
+		if (d.placeholder) node.setAttribute('data-placeholder', d.placeholder);
 		return node;
 	},
 	scripts: ['../ui/embed.js'],
