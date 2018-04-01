@@ -5,10 +5,6 @@ Pageboard.elements.google_translate = {
 	menu: 'link',
 	icon: '<i class="google icon"></i>',
 	properties: {
-		lang: {
-			title: 'Page language',
-			type: 'string'
-		},
 		banner: {
 			title: 'Automatic banner',
 			type: 'boolean',

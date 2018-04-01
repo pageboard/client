@@ -28,7 +28,7 @@ class HTMLElementGoogleTranslate extends HTMLCustomElement {
 		}
 		var TE = google.translate.TranslateElement;
 		this._translateElement = new TE({
-			pageLanguage: this.dataset.lang || this.ownerDocument.documentElement.lang,
+			pageLanguage: this.ownerDocument.documentElement.lang,
 			layout: TE.InlineLayout.SIMPLE,
 			autoDisplay: this.dataset.banner == "true"
 		}, this.id);
