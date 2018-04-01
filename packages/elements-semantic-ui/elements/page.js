@@ -46,6 +46,8 @@ Pageboard.elements.page.apiRender = Pageboard.elements.page.render;
 
 Pageboard.elements.page.render = function(doc, block) {
 	var ret = this.apiRender(doc, block);
+	doc.head.insertAdjacentHTML('afterBegin', `
+	<meta name="viewport" content="width=device-width, initial-scale=1">`);
 	if (block.data.transition) {
 		doc.body.dataset.transition = block.data.transition;
 	}
