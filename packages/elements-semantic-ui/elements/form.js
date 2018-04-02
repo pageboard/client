@@ -143,7 +143,7 @@ Pageboard.elements.form = {
 		'../semantic-ui/form.css'
 	],
 	scripts: [ // for asynchronous submits and automatic triggers
-		'../ui/lib/formdata.min.js',
+		'../ui/lib/formdata.js',
 		'../ui/form.js'
 	],
 	polyfills: ['fetch'] // unfortunately there is no formdata polyfill available right now
