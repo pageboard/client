@@ -23,7 +23,7 @@ Pageboard.elements.gallery = {
 		</element-gallery>`;
 	},
 	resources: [
-		'../ui/list-diff.js',
+		'../ui/lib/list-diff.js',
 		'../ui/gallery-helper.js'
 	],
 	stylesheets: [

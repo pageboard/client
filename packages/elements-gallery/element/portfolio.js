@@ -36,7 +36,7 @@ Pageboard.elements.portfolio = {
 		'../ui/portfolio.css'
 	],
 	scripts: [
-		'../ui/isotope.js',
+		'../ui/lib/isotope.js',
 		'../ui/portfolio.js'
 	]
 };

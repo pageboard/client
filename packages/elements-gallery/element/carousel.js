@@ -82,11 +82,11 @@ Pageboard.elements.carousel = {
 		return node;
 	},
 	stylesheets: [
-		'../ui/flickity.css',
+		'../ui/lib/flickity.css',
 		'../ui/carousel.css'
 	],
 	scripts: [
-		'../ui/flickity.js',
+		'../ui/lib/flickity.js',
 		'../ui/carousel.js'
 	]
 };

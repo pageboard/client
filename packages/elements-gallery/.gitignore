@@ -57,6 +57,4 @@ typings/
 # dotenv environment variables file
 .env
 
-/ui/isotope*
-/ui/flickity*
-/ui/list-diff.js
+/ui/lib/
