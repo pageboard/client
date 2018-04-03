@@ -49,7 +49,7 @@ Pageboard.elements.shutter_item = {
 			title: "content"
 		}
 	},
-	icon: '<b class="icon">Tab</b>',
+	icon: '<i class="icons"><b class="icon">Shu</b><i class="corner add icon"></i></i>',
 	render: function(doc, block) {
 		var invert = block.data.invert == "normal" ? "" : "invert";
 		return doc.dom`<div class="column ${invert}">

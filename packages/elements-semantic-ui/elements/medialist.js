@@ -35,7 +35,7 @@ Pageboard.elements.medialist_item = {
 			title: "content"
 		}
 	},
-	icon: '<i class="add icon"></i>',
+	icon: '<i class="icons"><i class="list icon"></i><i class="corner add icon"></i></i>',
 	render: function(doc, block) {
 		return doc.dom`<div class="item">
 			<div class="image" block-content="media"></div>

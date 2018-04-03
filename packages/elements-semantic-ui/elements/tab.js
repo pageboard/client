@@ -78,7 +78,7 @@ Pageboard.elements.tab_item = {
 		if (dom.matches('.active')) d.active = true;
 		return d;
 	},
-	icon: '<b class="icon">Tab</b>',
+	icon: '<i class="icons"><b class="icon">Tab</b><i class="corner add icon"></i></i>',
 	render: function(doc, block) {
 		var d = block.data;
 		return doc.dom`<a class="item ${d.active ? 'active' : ''}" block-content="content">tab</a>`;

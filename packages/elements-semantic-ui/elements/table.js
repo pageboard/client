@@ -153,7 +153,7 @@ Pageboard.elements.table_cell = {
 	},
 	inplace: true,
 	contents: "inline*",
-	icon: '<b class="icon">cell</b>',
+	icon: '<i class="icons"><b class="icon">cell</b><i class="corner add icon"></i></i>',
 	tag: 'td',
 	parse: function(dom) {
 		var d = {};
@@ -185,7 +185,7 @@ Pageboard.elements.table_head_cell = {
 		}
 	},
 	contents: "inline*",
-	icon: '<b class="icon">head</b>',
+	icon: '<i class="icons"><b class="icon">head</b><i class="corner add icon"></i></i>',
 	tag: 'th',
 	inplace: true,
 	parse: function(dom) {

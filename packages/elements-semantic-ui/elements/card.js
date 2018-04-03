@@ -106,7 +106,7 @@ Pageboard.elements.card = {
 			title: 'extra'
 		}
 	},
-	icon: '<i class="icon address card outline"></i>',
+	icon: '<i class="icons"><i class="address card outline icon"></i><i class="corner add icon"></i></i>',
 	render: function(doc, block) {
 		var d = block.data;
 		var node = d.url ? doc.dom`<a href="${d.url}"></a>` : doc.dom`<div></div>`;

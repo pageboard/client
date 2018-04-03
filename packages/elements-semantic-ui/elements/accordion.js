@@ -34,7 +34,7 @@ Pageboard.elements.fold = {
 			title: 'content'
 		}
 	},
-	icon: '<i class="caret right icon"></i>',
+	icon: '<i class="icons"><i class="caret right icon"></i><i class="corner add icon"></i></i>',
 	render: function(doc, block) {
 		return doc.dom`<div class="fold">
 			<div class="title caret-icon" block-content="title">Title</div>
