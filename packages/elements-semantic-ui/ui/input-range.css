@@ -1,17 +1,36 @@
-.rangeSlider__fill {
-	background: black;
+element-input-range {
+	width:100%;
 }
-.rangeSlider__handle {
+element-input-range.noUi-target > input {
+	display:none;
+}
+element-input-range.noUi-target .noUi-handle {
 	width:20px;
 	height:20px;
+	border-radius:100px;
+	right:-10px !important;
+	top:0;
 }
-.rangeSlider__handle:after {
-	width:16px;
-	height:16px;
+element-input-range.noUi-target .noUi-handle:before,
+element-input-range.noUi-target .noUi-handle:after {
+	content:none;
 }
-.rangeSlider__horizontal {
-	height:4px;
+element-input-range.noUi-target.noUi-horizontal {
+	height:20px;
+	border:none;
+	box-shadow:none;
+	background:none;
 }
-.rangeSlider__handle__horizontal {
-	top:-8px;
+element-input-range.noUi-target.noUi-horizontal .noUi-base {
+	background: none;
+	border:none;
+	box-shadow: none;
+	padding:8px 0;
+}
+element-input-range.noUi-target.noUi-horizontal .noUi-connects {
+	border:1px solid #AAA;
+	border-radius:2px;
+}
+element-input-range.noUi-target .noUi-handle-lower {
+	display:none;
 }

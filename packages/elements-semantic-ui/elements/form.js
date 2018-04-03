@@ -678,11 +678,11 @@ Pageboard.elements.input_range = {
 		</div>`;
 	},
 	stylesheets: [
-		'../ui/lib/range-slider.css',
+		'../ui/lib/nouislider.css',
 		'../ui/input-range.css'
 	],
 	scripts: [
-		'../ui/lib/range-slider.min.js',
+		'../ui/lib/nouislider.js',
 		'../ui/input-range.js'
 	]
 };
