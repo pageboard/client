@@ -30,7 +30,7 @@
     "semantic-ui-css/components": "link semantic-ui",
     "@pageboard/stickybits/dist/stickybits.js": "link ui/lib/",
     "object-fit-images/dist/ofi.js": "link ui/lib/object-fit-images.js",
-    "formdata-polyfill/FormData.js": "link ui/lib/formdata.js",
+    "formdata-polyfill/formdata.min.js": "link ui/lib/formdata.js",
     "nouislider/distribute/nouislider.js": "link ui/lib/",
     "nouislider/distribute/nouislider.css": "link ui/lib/",
     "matchdom/matchdom.js": "link ui/lib/"
