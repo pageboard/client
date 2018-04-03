@@ -90,3 +90,13 @@
 #store .item.active[data-command="view"] > .hide.icon {
 	display:block;
 }
+
+.ui.labeled.icon.menu .item > i.icons {
+	height: 1em;
+	display: block;
+	font-size: 1.71428571em !important;
+	margin: 0em auto 0.5rem !important;
+}
+.ui.labeled.icon.menu .item > i.icons > .corner.icon {
+	font-size:0.55em;
+}
