@@ -6,7 +6,10 @@ class HTMLElementImage extends HTMLCustomElement {
 		if ("IntersectionObserver" in window) {
 			this._observer = new IntersectionObserver(function(entries, observer) {
 				entries.forEach(function(entry) {
-					if (entry.isIntersecting || entry.intersectionRatio > 0) entry.target.reveal();
+					if (entry.isIntersecting || entry.intersectionRatio > 0) {
+						entry.target.reveal();
+						entry.target.ofi();
+					}
 				});
 			}, {
 				threshold: 0
@@ -14,8 +17,10 @@ class HTMLElementImage extends HTMLCustomElement {
 			this._observer.observe(this);
 		} else {
 			this.reveal();
+			this.ofi();
 		}
-
+	}
+	ofi() {
 		if (!objectFitImages.supportsObjectFit) {
 			var style = "";
 			if (this.dataset.fit) {
