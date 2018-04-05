@@ -218,7 +218,7 @@ Pageboard.elements.image = {
 			if (zoom != 100) img.dataset.zoom = zoom;
 			if (fit != "none") {
 				if (!doc.imagesCounter) doc.imagesCounter = 0;
-				if (doc.imagesCounter++ <= 10 || d.template) {
+				if (doc.imagesCounter++ <= 5 || d.template) {
 					loc.query.q = 5;
 					loc.query.rs = "w-320_h-320_max";
 				} else {
