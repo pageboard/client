@@ -8,7 +8,6 @@ class HTMLElementImage extends HTMLCustomElement {
 				entries.forEach(function(entry) {
 					if (entry.isIntersecting || entry.intersectionRatio > 0) {
 						entry.target.reveal();
-						entry.target.ofi();
 					}
 				});
 			}, {
@@ -17,10 +16,9 @@ class HTMLElementImage extends HTMLCustomElement {
 			this._observer.observe(this);
 		} else {
 			this.reveal();
-			this.ofi();
 		}
 	}
-	ofi() {
+	fix(img) {
 		if (!objectFitImages.supportsObjectFit) {
 			var style = "";
 			if (this.dataset.fit) {
@@ -30,8 +28,8 @@ class HTMLElementImage extends HTMLCustomElement {
 				style += `object-position: ${this.dataset.position};`;
 			}
 			if (style.length) {
-				this.style.fontFamily = `'${style}'`;
-				objectFitImages(this);
+				img.style.fontFamily = `'${style}'`;
+				objectFitImages(img);
 			}
 		}
 	}
@@ -75,6 +73,7 @@ class HTMLElementImage extends HTMLCustomElement {
 		e.target.removeEventListener('error', this.load, false);
 		if (this._revealAt !== true && Date.now() - this._revealAt > 1000) e.target.classList.add('lqip-reveal');
 		e.target.classList.remove('lqip');
+		this.fix(img);
 	}
 	disconnectedCallback() {
 		if (this._observer) {
