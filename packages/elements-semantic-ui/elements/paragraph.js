@@ -43,7 +43,7 @@ Pageboard.elements.paragraph = {
 	inplace: true,
 	icon: '<i class="icon paragraph"></i>',
 	render: function(doc, block) {
-		return doc.dom`<p class="${block.data.align || 'left'} aligned"></p>`;
+		return doc.dom`<p class="${block.data.align || 'left'} aligned">Text</p>`;
 	}
 };
 
@@ -94,6 +94,7 @@ Pageboard.elements.heading = {
 		var node = doc.createElement('h' + block.data.level);
 		node.setAttribute('block-content', 'text');
 		node.className = `${block.data.align || 'left'} aligned`;
+		node.innerText = 'Heading';
 		return node;
 	}
 };

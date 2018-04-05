@@ -79,7 +79,7 @@ Pageboard.elements.menu_item_link = {
 	icon: '<b class="icon">Item</b>',
 	render: function(doc, block) {
 		var d = block.data;
-		var a = doc.dom`<a class="item" href="${d.url}" block-content="content"></a>`;
+		var a = doc.dom`<a class="item" href="${d.url}" block-content="content">Item</a>`;
 		if (a.hostname != document.location.hostname) a.rel = "noopener";
 		if (d.template) a.setAttribute('attr-href', d.template);
 		return a;
@@ -112,7 +112,7 @@ Pageboard.elements.menu_item_dropdown = {
 	icon: '<b class="icon">Drop</b>',
 	render: function(doc, block, view) {
 		return doc.dom`<div tabindex="0" class="ui simple dropdown item ${block.focused ? 'active' : ''}">
-			<div class="title ${block.data.icon ? 'caret-icon' : ''}" block-content="title"></div>
+			<div class="title ${block.data.icon ? 'caret-icon' : ''}" block-content="title">Dropdown</div>
 			<div class="menu" block-content="items"></div>
 		</div>`;
 	},
@@ -147,7 +147,7 @@ Pageboard.elements.menu_item_popup = {
 	icon: '<b class="icon">Pop</b>',
 	render: function(doc, block, view) {
 		return doc.dom`<div tabindex="0" class="ui simple dropdown item">
-			<div class="title ${block.data.icon ? 'caret-icon' : ''}" block-content="title"></div>
+			<div class="title ${block.data.icon ? 'caret-icon' : ''}" block-content="title">Popup</div>
 			<div class="popup">
 				<div block-content="content"></div>
 			</div>
