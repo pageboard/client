@@ -130,7 +130,8 @@ function modeControlListener() {
 function buildListener(win, doc) {
 	Pageboard.window = win;
 	win.addEventListener('click', anchorListener, true);
-	win.addEventListener('mouseup', anchorListener, true);
+	// FIXME this prevents setting selection inside a selected link...
+	//win.addEventListener('mouseup', anchorListener, true);
 	win.addEventListener('click', labelListener, true);
 	win.addEventListener('submit', submitListenerCapture, true);
 	win.addEventListener('keydown', function(e) {
