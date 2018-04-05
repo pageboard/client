@@ -39,7 +39,7 @@ Pageboard.elements.image = {
 			input: {
 				name: 'href',
 				filter: {
-					type: ["image", "svg"]
+					type: ["image"]
 				}
 			}
 		},
@@ -282,7 +282,7 @@ Pageboard.elements.inlineImage = {
 				name: 'href',
 				display: 'icon',
 				filter: {
-					type: ["image", "svg"],
+					type: ["image"],
 					maxSize: 20000,
 					maxWidth: 320,
 					maxHeight: 320
