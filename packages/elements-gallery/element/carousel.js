@@ -104,7 +104,7 @@ Pageboard.elements.carousel_item = {
 			title: "content"
 		}
 	},
-	icon: '<i class="add icon"></i>',
+	icon: '<i class="icons"><i class="image icon"></i><i class="corner add icon"></i></i>',
 	context: 'carousel/',
 	tag: 'element-carousel-cell',
 	render: function(doc, block) {

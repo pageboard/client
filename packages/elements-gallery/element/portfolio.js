@@ -79,7 +79,7 @@ Pageboard.elements.portfolio_item = {
 			title: "content"
 		}
 	},
-	icon: '<i class="add icon"></i>',
+	icon: '<i class="icons"><i class="grid layout icon"></i><i class="corner add icon"></i></i>',
 	tag: 'element-portfolio-item',
 	render: function(doc, block) {
 		return doc.dom`<element-portfolio-item data-scale-width="${block.data.scaleWidth}" data-scale-height="${block.data.scaleHeight}">
