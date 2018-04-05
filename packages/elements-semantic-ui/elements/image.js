@@ -209,7 +209,7 @@ Pageboard.elements.image = {
 		}
 		var zoom = (d.crop || {}).zoom || 100;
 		var meta = block.data.meta;
-		if (meta && meta.mime == "image/jpeg" && meta.size >= 100000) {
+		if (meta && meta.size >= 50000 && meta.mime != "image/svg+xml") {
 			img.classList.add('lqip');
 			var wf = (d.crop || {}).width || 100;
 			var wh = (d.crop || {}).height || 100;
