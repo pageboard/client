@@ -50,8 +50,12 @@ class HTMLElementImage extends HTMLCustomElement {
 		var zoom;
 		if (!isNaN(w) && !isNaN(h)) {
 			var rect = this.parentNode.getBoundingClientRect();
-			if (rect.width && rect.height) {
-				zoom = Math.round(Math.max(rect.width / w, rect.height / h) * 100);
+			var rw = rect.width;
+			var rh = rect.height;
+			if (rw || rh) {
+				if (!rw) rw = rh * w / h;
+				if (!rh) rh = rw * h / w;
+				zoom = Math.round(Math.max(rw / w, rh / h) * 100);
 				// what's the point
 				if (Math.abs(zoom - z) < 20 || zoom > 100) zoom = null;
 			}
