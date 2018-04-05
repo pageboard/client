@@ -241,11 +241,11 @@ Pageboard.elements.image = {
 				}).join(", ");
 			} else {
 			*/
-				img.setAttribute('srcset', [320, 640, 1280].map(function(w) {
+				img.setAttribute('srcset', [320, 640, 1280].map(function(w, i) {
 					var copy = Object.assign({}, loc);
 					copy.query = Object.assign({}, loc.query);
 					copy.query.rs = `w-${Math.round(w * zoom / 100)}`;
-					return `${Page.format(copy)} ${w}w`;
+					return `${Page.format(copy)} ${Math.pow(2, i)}x`;
 				}).join(", "));
 			}
 		}
