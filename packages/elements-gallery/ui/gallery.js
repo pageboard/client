@@ -91,7 +91,7 @@ class HTMLElementGallery extends HTMLCustomElement {
 		this._galleries = Array.prototype.slice.call(this.lastElementChild.children);
 		if (!this._galleries.length) return;
 		if (!HTMLElementGallery.defaultMode) HTMLElementGallery.defaultMode = this._galleries[0].getAttribute('block-type');
-		this._initGalleries({mode: HTMLElementGallery.defaultMode});
+		this._initGalleries({mode: this.dataset.mode || HTMLElementGallery.defaultMode});
 		this._galleryMenu = this.firstElementChild.matches('.menu') ? this.firstElementChild : null;
 		if (this.showMenu) {
 			if (!this._galleryMenu) {
