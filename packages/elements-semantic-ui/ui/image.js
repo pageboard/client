@@ -39,7 +39,9 @@ class HTMLElementImage extends HTMLCustomElement {
 		this.disconnectedCallback();
 		var src = img.getAttribute('src');
 		if (!src) src = this.dataset.url;
-		if (!src|| !img.classList.contains('lqip')) return;
+		img.addEventListener('load', this.load, false);
+		img.addEventListener('error', this.load, false);
+		if (!src || !img.classList.contains('lqip')) return;
 		if (!force && this._revealAt) return;
 		this._revealAt = Date.now();
 		if (this.dataset.url) this._revealAt = true;
@@ -60,8 +62,7 @@ class HTMLElementImage extends HTMLCustomElement {
 				if (Math.abs(zoom - z) < 20 || zoom > 100) zoom = null;
 			}
 		}
-		img.addEventListener('load', this.load, false);
-		img.addEventListener('error', this.load, false);
+
 		var loc = Page.parse(src);
 		delete loc.query.q;
 		if (!zoom) delete loc.query.rs;
@@ -73,10 +74,14 @@ class HTMLElementImage extends HTMLCustomElement {
 		this.reveal(true);
 	}
 	load(e) {
-		e.target.removeEventListener('load', this.load, false);
-		e.target.removeEventListener('error', this.load, false);
-		if (this._revealAt !== true && Date.now() - this._revealAt > 1000) e.target.classList.add('lqip-reveal');
-		e.target.classList.remove('lqip');
+		var img = e.target;
+		img.removeEventListener('load', this.load, false);
+		img.removeEventListener('error', this.load, false);
+		var rev = this._revealAt;
+		if (rev && rev !== true && Date.now() - rev > 1000) {
+			img.classList.add('lqip-reveal');
+		}
+		img.classList.remove('lqip');
 		this.fix(img);
 	}
 	disconnectedCallback() {
