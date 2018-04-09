@@ -246,7 +246,9 @@ Store.prototype.discard = function(e) {
 	this.clear();
 	if (this.unsaved == null) return;
 	delete this.unsaved;
-	return this.restore(this.initial).catch(function(err) {
+	return this.restore(this.initial).then(function() {
+		Pageboard.notify.clear();
+	}).catch(function(err) {
 		Pageboard.notify("Impossible to restore<br><a href=''>please reload</a>", err);
 	}).then(function() {
 		this.uiUpdate();

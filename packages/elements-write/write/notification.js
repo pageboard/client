@@ -91,6 +91,11 @@ Pageboard.notify.dom = function(where) {
 	return root;
 };
 
+Pageboard.notify.clear = function(where) {
+	var parent = Pageboard.notify.dom(where);
+	if (parent) parent.textContent = "";
+};
+
 Pageboard.notify.destroy = function() {
 	// TODO
 };
