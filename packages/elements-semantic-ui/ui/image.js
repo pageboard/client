@@ -38,10 +38,13 @@ class HTMLElementImage extends HTMLCustomElement {
 		if (!img) return;
 		this.disconnectedCallback();
 		var src = img.getAttribute('src');
-		if (!src) src = this.dataset.url;
+		var lazy = !src && this.dataset.url || img.classList.contains('lqip');
+		if (!src) {
+			src = this.dataset.url;
+		}
 		img.addEventListener('load', this.load, false);
 		img.addEventListener('error', this.load, false);
-		if (!src || !img.classList.contains('lqip')) return;
+		if (!lazy) return;
 		if (!force && this._revealAt) return;
 		this._revealAt = Date.now();
 		if (this.dataset.url) this._revealAt = true;
