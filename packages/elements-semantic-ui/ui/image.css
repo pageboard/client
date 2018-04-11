@@ -25,6 +25,14 @@ element-image > img.lqip {
 	filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='6'); /* old ie support */
 }
 
+element-image > img.lazy-reveal {
+	transition: 0.3s opacity linear;
+	opacity:1;
+}
+element-image > img.lazy {
+	opacity:0;
+}
+
 element-image[data-fit="contain"],
 element-image[data-fit="contain"] > img {
 	width:100%;

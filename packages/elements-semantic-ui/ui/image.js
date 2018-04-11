@@ -37,17 +37,22 @@ class HTMLElementImage extends HTMLCustomElement {
 		var img = this.querySelector('img');
 		if (!img) return;
 		this.disconnectedCallback();
-		var src = img.getAttribute('src');
-		var lazy = !src && this.dataset.url || img.classList.contains('lqip');
-		if (!src) {
-			src = this.dataset.url;
-		}
 		img.addEventListener('load', this.load, false);
 		img.addEventListener('error', this.load, false);
-		if (!lazy) return;
+
+		var src = img.getAttribute('src');
+		var lazy = !src && this.dataset.url;
+		var lqip = img.classList.contains('lqip');
+		if (!lazy && !lqip) return;
+
 		if (!force && this._revealAt) return;
 		this._revealAt = Date.now();
-		if (this.dataset.url) this._revealAt = true;
+
+		if (lazy) {
+			img.classList.add('lazy');
+			src = this.dataset.url;
+		}
+
 		var z = parseFloat(img.dataset.zoom);
 		if (isNaN(z)) z = 100;
 		var w = parseInt(img.dataset.width);
@@ -70,8 +75,11 @@ class HTMLElementImage extends HTMLCustomElement {
 
 		var loc = Page.parse(src);
 		delete loc.query.q;
-		if (!zoom) delete loc.query.rs;
-		else loc.query.rs = "z-" + zoom;
+		if (!zoom) {
+			delete loc.query.rs;
+		} else {
+			loc.query.rs = "z-" + zoom;
+		}
 		src = Page.format(loc);
 		img.setAttribute('src', src);
 	}
@@ -83,10 +91,15 @@ class HTMLElementImage extends HTMLCustomElement {
 		img.removeEventListener('load', this.load, false);
 		img.removeEventListener('error', this.load, false);
 		var rev = this._revealAt;
-		if (rev && rev !== true && Date.now() - rev > 1000) {
-			img.classList.add('lqip-reveal');
+		if (rev && Date.now() - rev > 500) {
+			if (img.classList.contains('lqip')) {
+				img.classList.add('lqip-reveal');
+			}
+			if (img.classList.contains('lazy')) {
+				img.classList.add('lazy-reveal');
+			}
 		}
-		img.classList.remove('lqip');
+		img.classList.remove('lqip', 'lazy');
 		this.fix(img);
 	}
 	disconnectedCallback() {
