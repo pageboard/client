@@ -181,7 +181,6 @@ Pageboard.elements.image = {
 			spec: "inline*"
 		}
 	},
-	counter: 0,
 	render: function(doc, block) {
 		var d = block.data;
 		var loc = this.buildLoc(d.url || '/.pageboard/read/empty.png', d);
@@ -209,49 +208,24 @@ Pageboard.elements.image = {
 		}
 		var zoom = (d.crop || {}).zoom || 100;
 		var meta = block.data.meta;
-		if (meta && meta.size >= 50000 && meta.mime != "image/svg+xml") {
-			img.classList.add('lqip');
+		if (meta && meta.width && meta.height) {
 			var wf = (d.crop || {}).width || 100;
 			var wh = (d.crop || {}).height || 100;
 			img.dataset.width = Math.round(meta.width * wf / 100);
 			img.dataset.height = Math.round(meta.height * wh / 100);
 			if (zoom != 100) img.dataset.zoom = zoom;
-			if (fit != "none") {
-				if (!doc.imagesCounter) doc.imagesCounter = 0;
-				if (doc.imagesCounter++ <= 5 || d.template) {
-					loc.query.q = 5;
-					loc.query.rs = "w-320_h-320_max";
-				} else {
-					// .url on node or else pagecut won't call update on that element
-					node.dataset.url = Page.format(loc);
-					return node;
-				}
-			} else {
+			var isSvg = meta.mime == "image/svg+xml";
+			var isFit = fit != "none";
+			if (!isSvg && (!isFit || d.template)) {
+				img.classList.add('lqip');
 				loc.query.q = 5;
-			}
-		} else if (fit != "none") {
-			if (!d.template) {
-				/*
-				img.dataset.srcset = [320, 640, 1280].map(function(w, i) {
-					var copy = {query: {
-						rs: `w-${Math.round(w * zoom / 100)}`
-					}};
-					var qs = Page.format(copy).split('?').pop();
-					return `${d.template}?${qs} ${w}w`;
-				}).join(", ");
-			} else {
-			*/
-				img.setAttribute('srcset', [320, 640, 1280].map(function(w, i) {
-					var copy = Object.assign({}, loc);
-					copy.query = Object.assign({}, loc.query);
-					copy.query.rs = `w-${Math.round(w * zoom / 100)}`;
-					return `${Page.format(copy)} ${Math.pow(2, i)}x`;
-				}).join(", "));
+				if (isFit) loc.query.rs = "w-320_h-320_max";
+			} else if (isFit || !isSvg) {
+				node.dataset.url = Page.format(loc);
 			}
 		}
 		img.setAttribute('src', Page.format(loc));
 		if (d.template) img.dataset.src = d.template;
-
 		return node;
 	},
 	stylesheets: [
