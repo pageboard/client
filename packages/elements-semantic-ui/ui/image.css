@@ -26,7 +26,7 @@ element-image > img.lqip {
 }
 
 element-image > img.lazy-reveal {
-	transition: 0.3s opacity linear;
+	transition: 0.1s opacity linear;
 	opacity:1;
 }
 element-image > img.lazy {
