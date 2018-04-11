@@ -222,9 +222,10 @@ Pageboard.elements.image = {
 				if (isFit) loc.query.rs = "w-320_h-320_max";
 			} else if (isFit || !isSvg) {
 				node.dataset.url = Page.format(loc);
+				loc = null;
 			}
 		}
-		img.setAttribute('src', Page.format(loc));
+		if (loc) img.setAttribute('src', Page.format(loc));
 		if (d.template) img.dataset.src = d.template;
 		return node;
 	},
