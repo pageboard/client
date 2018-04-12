@@ -7,6 +7,9 @@ Pageboard.elements.portfolio = {
 		shape: {
 			title: 'Shape',
 			anyOf: [{
+				const: "small",
+				title: "Small",
+			}, {
 				const: "square",
 				title: "Square",
 			}, {

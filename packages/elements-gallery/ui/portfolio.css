@@ -89,6 +89,23 @@ element-portfolio[data-shape="wide"] element-portfolio-item[data-scale-height="2
 	padding-bottom:41.6666%;
 }
 
+element-portfolio[data-shape="small"] {
+	margin-right:-0.375%;
+	margin-bottom:-0.375%;
+}
+element-portfolio[data-shape="small"] element-portfolio-item {
+	width:12.125%;
+	padding-bottom:12.125%;
+	margin-right:0.375%;
+	margin-bottom:0.375%;
+}
+element-portfolio[data-shape="small"] element-portfolio-item[data-scale-width="2"] {
+	width:24.625%;
+}
+element-portfolio[data-shape="small"] element-portfolio-item[data-scale-height="2"] {
+	padding-bottom:24.625%;
+}
+
 
 @media screen and (max-width: 768px) {
 	element-portfolio {
@@ -112,6 +129,22 @@ element-portfolio[data-shape="wide"] element-portfolio-item[data-scale-height="2
 	}
 	element-portfolio[data-shape="tall"] element-portfolio-item[data-scale-height="2"] {
 		padding-bottom:85.00%;
+	}
+	element-portfolio[data-shape="small"] {
+		margin-right:-0.75%;
+		margin-bottom:-0.75%;
+	}
+	element-portfolio[data-shape="small"] element-portfolio-item {
+		width:24.25%;
+		padding-bottom:24.25%;
+		margin-right:0.75%;
+		margin-bottom:0.75%;
+	}
+	element-portfolio[data-shape="small"] element-portfolio-item[data-scale-width="2"] {
+		width:49.25%;
+	}
+	element-portfolio[data-shape="small"] element-portfolio-item[data-scale-height="2"] {
+		padding-bottom:49.25%;
 	}
 }
 
