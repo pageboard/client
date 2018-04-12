@@ -1,8 +1,12 @@
 .field.href .ui.avatar.icon.image {
-	width:1.2em;
-	height:1.2em;
-	right:80px;
-	position:absolute;
+	width: 16px;
+	height: 16px;
+	right: 0;
+	position: absolute;
+	border-radius: 0;
+	bottom: 0;
+	opacity: 0.7;
+	margin: 0;
 }
 
 .field.href .items .button.circular {
