@@ -159,6 +159,17 @@ element-portfolio[data-shape="small"] element-portfolio-item[data-scale-height="
 	}
 }
 
+@media screen and (max-width: 320px) {
+	element-portfolio[data-shape="tall"] element-portfolio-item,
+	element-portfolio[data-shape="small"] element-portfolio-item {
+		width:100%;
+	}
+	element-portfolio[data-shape="small"] element-portfolio-item[data-scale-width="2"],
+	element-portfolio[data-shape="tall"] element-portfolio-item[data-scale-width="2"] {
+		width:100%;
+	}
+}
+
 element-portfolio-item > .media,
 element-portfolio-item > .content {
 	position:absolute;
