@@ -109,8 +109,15 @@ function formSet(form, values) {
 				// TODO it's preferable if this line is not needed
 				elem.parentNode.classList.toggle('checked', elem.checked);
 			break;
+			case 'select-one':
+				if (val) {
+					elem.value = val;
+					var dropdown = elem.closest('.dropdown');
+					if (dropdown) $(dropdown).dropdown();
+				}
+			break;
 			case 'select-multiple':
-				if (val) elem.fill(val);
+				console.warn("not supported yet");
 			break;
 			case 'file':
 				if (val) elem.setAttribute("value", val);
@@ -368,6 +375,7 @@ types.oneOf = function(key, schema, node, fields) {
 			</select>
 		</div>`;
 		node.appendChild(field);
+		if (schema.default !== null) $(field).find(`[value="${schema.default}"]`).prop('selected', true);
 		$(field).find('.dropdown').dropdown();
 	}
 
