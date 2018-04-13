@@ -159,7 +159,7 @@ a:hover {
 	color: #1e70bf;
 	text-decoration: none;
 }
-a.ui.button.icon[block-type="link"] {
+a.ui.icon[block-type="link"] {
 	background-repeat:no-repeat;
 	background-position:left center;
 	background-size:contain;
