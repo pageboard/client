@@ -16,6 +16,9 @@ class HTMLElementImage extends HTMLCustomElement {
 			this._observer.observe(this);
 		} else {
 			this.reveal();
+			Page.patch(function() {
+				this.reveal();
+			}.bind(this));
 		}
 	}
 	fix(img) {
@@ -46,7 +49,6 @@ class HTMLElementImage extends HTMLCustomElement {
 		if (!lazy && !lqip) return;
 
 		if (!force && this._revealAt) return;
-		this._revealAt = Date.now();
 
 		if (lazy) {
 			img.classList.add('lazy');
@@ -62,6 +64,9 @@ class HTMLElementImage extends HTMLCustomElement {
 			var rect = this.parentNode.getBoundingClientRect();
 			var rw = rect.width;
 			var rh = rect.height;
+			if (rw == 0 || rh == 0) {
+				return;
+			}
 
 			if (rw || rh) {
 				if (!rw) rw = rh * w / h;
@@ -72,7 +77,7 @@ class HTMLElementImage extends HTMLCustomElement {
 				else if (!isNaN(z) && Math.abs(zoom - z) < 20) zoom = z;
 			}
 		}
-
+		this._revealAt = Date.now();
 		var loc = Page.parse(src);
 		delete loc.query.q;
 		if (!zoom) {
