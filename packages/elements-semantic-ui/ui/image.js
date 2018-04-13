@@ -19,6 +19,9 @@ class HTMLElementImage extends HTMLCustomElement {
 			Page.patch(function() {
 				this.reveal();
 			}.bind(this));
+			Page.setup(function() {
+				this.reveal();
+			}.bind(this));
 		}
 	}
 	fix(img) {
