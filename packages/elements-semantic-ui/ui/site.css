@@ -159,11 +159,11 @@ a:hover {
 	color: #1e70bf;
 	text-decoration: none;
 }
-a.ui.icon[block-type="link"] {
+a.icon[block-type="link"] {
 	background-repeat:no-repeat;
 	background-position:left center;
 	background-size:contain;
-	padding-left:2.7em;
+	padding-left:1.7em;
 }
 
 i.icon {
