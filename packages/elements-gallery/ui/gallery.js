@@ -36,7 +36,7 @@ class HTMLElementGallery extends HTMLCustomElement {
 		if (!opts) opts = {};
 		var mode = this.dataset.mode;
 		if (opts.mode) {
-			if (opts.mode == mode) return;
+			if (opts.mode == mode && this._gallery) return;
 			this.dataset.mode = mode = opts.mode;
 		}
 
@@ -129,7 +129,7 @@ HTMLElementGallery.defaultMode = function(node) {
 	if (!last) return;
 	var first = last.firstElementChild;
 	if (!first) return;
-	var mode = node.getAttribute('block-type');
+	var mode = first.getAttribute('block-type');
 	node._defaultMode = mode;
 	return mode;
 };
