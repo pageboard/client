@@ -90,8 +90,7 @@ class HTMLElementGallery extends HTMLCustomElement {
 	_setup() {
 		this._galleries = Array.prototype.slice.call(this.lastElementChild.children);
 		if (!this._galleries.length) return;
-		if (!HTMLElementGallery.defaultMode) HTMLElementGallery.defaultMode = this._galleries[0].getAttribute('block-type');
-		this._initGalleries({mode: this.dataset.mode || HTMLElementGallery.defaultMode});
+		this._initGalleries({mode: this.dataset.mode || HTMLElementGallery.defaultMode(this)});
 		this._galleryMenu = this.firstElementChild.matches('.menu') ? this.firstElementChild : null;
 		if (this.showMenu) {
 			if (!this._galleryMenu) {
@@ -124,14 +123,27 @@ class HTMLElementGallery extends HTMLCustomElement {
 	}
 }
 
+HTMLElementGallery.defaultMode = function(node) {
+	if (node._defaultMode) return node._defaultMode;
+	var last = node.lastElementChild;
+	if (!last) return;
+	var first = last.firstElementChild;
+	if (!first) return;
+	var mode = node.getAttribute('block-type');
+	node._defaultMode = mode;
+	return mode;
+};
+
 Page.setup(function(state) {
 	HTMLCustomElement.define('element-gallery', HTMLElementGallery);
 });
 
 Page.patch(function(state) {
 	// TODO support multiple galleries
-	var mode = state.query.gallery;
 	var gallery = document.querySelector('element-gallery');
-	if (gallery && gallery.setMode) gallery.setMode(mode || HTMLElementGallery.defaultMode);
+	if (!gallery) return;
+	var mode = state.query.gallery || HTMLElementGallery.defaultMode(gallery);
+	if (gallery.setMode) gallery.setMode(mode);
+	else gallery.dataset.mode = mode;
 });
 
