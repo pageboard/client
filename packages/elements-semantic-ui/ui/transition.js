@@ -27,6 +27,7 @@ Page.setup(function(state) {
 				if (a.target == "_blank") {
 					return;
 				} else {
+					e.preventDefault();
 					Page.push(href);
 				}
 			}
