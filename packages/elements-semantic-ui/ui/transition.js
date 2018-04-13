@@ -20,8 +20,13 @@ Page.setup(function(state) {
 			var a = e.target.closest('a');
 			var href = a && a.getAttribute('href');
 			if (href) {
-				e.preventDefault();
-				if (!document.body.isContentEditable) {
+				if (document.body.isContentEditable) {
+					e.preventDefault();
+					return;
+				}
+				if (a.target == "_blank") {
+					return;
+				} else {
 					Page.push(href);
 				}
 			}
