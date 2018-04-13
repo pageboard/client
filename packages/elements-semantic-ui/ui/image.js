@@ -77,7 +77,7 @@ class HTMLElementImage extends HTMLCustomElement {
 				zoom = Math.round(Math.max(rw / w, rh / h) * 100);
 				// what's the point
 				if (zoom > 100) zoom = null;
-				else if (!isNaN(z) && Math.abs(zoom - z) < 20) zoom = z;
+				else if (!isNaN(z) && z < zoom && zoom < z + 10) zoom = z;
 			}
 		}
 		this._revealAt = Date.now();
