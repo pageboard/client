@@ -94,7 +94,7 @@ class HTMLElementQuery extends HTMLCustomElement {
 		});
 		form.classList.remove('success', 'error', 'warning', 'loading');
 		form.classList.add('loading');
-		return HTMLFormElement.fetch('get', '/.api/query', vars).then(function(answer) {
+		return Pageboard.fetch('get', '/.api/query', vars).then(function(answer) {
 			answer.$query = vars;
 			matchdom(template, answer, HTMLElementQuery.filters, answer.data);
 			while (template.firstChild) results.appendChild(template.firstChild);

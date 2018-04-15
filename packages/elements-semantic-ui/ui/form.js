@@ -86,39 +86,6 @@ HTMLInputElement.prototype.reset = function() {
 	else this.value = "";
 };
 
-HTMLFormElement.fetch = function(method, url, data) {
-	method = method.toLowerCase();
-	var doCache = document.body.isContentEditable == false && method == "get";
-	var fetchOpts = {
-		method: method,
-		headers: {
-			'Accept': 'application/json',
-			'Content-Type': 'application/json'
-		},
-		credentials: "same-origin"
-	};
-	if (method == "get") {
-		url = Page.format(Object.assign(Page.parse(url), {query: data}));
-	} else {
-		fetchOpts.body = JSON.stringify(data);
-	}
-	if (doCache) {
-		var cached = HTMLFormElement.fetch.cache[url];
-		if (cached) {
-			return cached;
-		}
-	}
-
-	var p = fetch(url, fetchOpts).then(function(res) {
-		if (res.status >= 400) throw new Error(res.statusText);
-		return res.json();
-	});
-	if (doCache) HTMLFormElement.fetch.cache[url] = p;
-	return p;
-};
-HTMLFormElement.fetch.cache = {};
-
-
 Page.patch(function(state) {
 	var proms = [];
 	Array.from(document.forms).forEach(function(form) {
@@ -139,7 +106,7 @@ Page.patch(function(state) {
 			_id: _id.value
 		};
 		obj[fetch.name] = fetch.value;
-		proms.push(HTMLFormElement.fetch('get', '/.api/form', obj).then(function(block) {
+		proms.push(Pageboard.fetch('get', '/.api/form', obj).then(function(block) {
 			form.fill(block.data);
 		}).catch(function(err) {
 			console.error(err);
@@ -192,7 +159,7 @@ Page.setup(function(state) {
 			}).map(function(input) {
 				return input.closest('element-input-file').upload();
 			})).then(function() {
-				return HTMLFormElement.fetch(form.method, form.action, formToQuery(form));
+				return Pageboard.fetch(form.method, form.action, formToQuery(form));
 			}).then(function(data) {
 				form.classList.add('success');
 				if (data.redirect) return Page.push(data.redirect);
