@@ -33,8 +33,7 @@
     "prosemirror-dev-tools": "^2.0.1",
     "semantic-ui-css": "2.3.0",
     "speakingurl": "^14.0.1",
-    "throttleit": "^1.0.0",
-    "window-agent": "^1.2.0"
+    "throttleit": "^1.0.0"
   },
   "postinstall": {
     "semantic-ui-css/components": "link write/lib/components",
@@ -50,8 +49,7 @@
     "dom4/build/dom4.js": "link write/lib/dom4.js",
     "infinite-scroll/dist/infinite-scroll.pkgd.min.js": "link write/lib/infinite-scroll.min.js",
     "speakingurl/speakingurl.min.js": "link write/lib/",
-    "prosemirror-dev-tools/dist/umd/prosemirror-dev-tools.min.js": "link write/lib/",
-    "window-agent/agent.js": "link write/lib/"
+    "prosemirror-dev-tools/dist/umd/prosemirror-dev-tools.min.js": "link write/lib/"
   },
   "pageboard": {
     "directories": [

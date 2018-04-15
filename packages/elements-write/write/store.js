@@ -222,7 +222,7 @@ Store.prototype.save = function(e) {
 	if (!this.saving) this.saving = Promise.resolve();
 	var me = this;
 	this.saving.then(function() {
-		return Pageboard.uiLoad(me.uiSave, PUT('/.api/page', changes));
+		return Pageboard.uiLoad(me.uiSave, Pageboard.fetch('put', '/.api/page', changes));
 	}).then(function(result) {
 		var unsaved = me.unsaved;
 		me.reset();

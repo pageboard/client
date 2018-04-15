@@ -402,14 +402,18 @@ Href.prototype.remove = function(href) {
 };
 
 Href.prototype.get = function(href) {
-	return Pageboard.uiLoad(this.node, GET('/.api/hrefs', {url: href})).then(function(obj) {
+	return Pageboard.uiLoad(this.node, Pageboard.fetch('get', '/.api/hrefs', {
+		url: href
+	})).then(function(obj) {
 		return obj.data;
 	});
 };
 
 Href.prototype.insert = function(url) {
 	var me = this;
-	return Pageboard.uiLoad(this.node, POST('/.api/href', {url: url})).then(function(result) {
+	return Pageboard.uiLoad(this.node, Pageboard.fetch('post', '/.api/href', {
+		url: url
+	})).then(function(result) {
 		me.cache([result]);
 		me.renderList(me.list.concat(result));
 	});
