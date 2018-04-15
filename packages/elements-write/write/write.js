@@ -1,5 +1,5 @@
 window.Pagecut = {modules:{}};
-window.Pageboard = {
+Object.assign(window.Pageboard, {
 	write: true,
 	Controls: {},
 	inputs: {},
@@ -29,7 +29,7 @@ window.Pageboard = {
 			}
 		});
 	}
-};
+});
 
 Page.patch(function(state) {
 	Pageboard.patch(state);
