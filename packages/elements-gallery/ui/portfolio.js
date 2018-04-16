@@ -5,7 +5,8 @@ class HTMLElementPortfolio extends HTMLCustomElement {
 				columnWidth: 'element-portfolio-item'
 			},
 			itemSelector: 'element-portfolio-item',
-			percentPosition: true
+			percentPosition: true,
+			transitionDuration: 0
 		};
 	}
 
