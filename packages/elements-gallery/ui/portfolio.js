@@ -34,8 +34,15 @@ class HTMLElementPortfolio extends HTMLCustomElement {
 
 	_loadListener() {
 		delete this._loading;
-		if (this._portfolio) {
-			this._portfolio.layout();
+		var pf = this._portfolio;
+		if (pf) {
+			if (this._willLayout) {
+				clearTimeout(this._willLayout);
+			}
+			this._willLayout = setTimeout(function() {
+				delete this._willLayout;
+				pf.layout();
+			}.bind(this), 250);
 		}
 	}
 
