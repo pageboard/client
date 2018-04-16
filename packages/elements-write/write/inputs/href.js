@@ -1,6 +1,8 @@
 (function(Pageboard) {
 Pageboard.inputs.href = Href;
 
+Href.cache = {};
+
 function Href(input, opts, props, block) {
 	this.renderList = this.renderList.bind(this);
 	this.cache = this.cache.bind(this);
@@ -8,7 +10,6 @@ function Href(input, opts, props, block) {
 	this.opts = opts;
 	this.input = input;
 	this.block = block;
-	this.map = {};
 	this.init();
 	this.update();
 }
@@ -73,7 +74,7 @@ Href.prototype.init = function() {
 		var remove = e.target.closest('[data-action="remove"]');
 		if (remove) {
 			e.stopPropagation();
-			return Pageboard.uiLoad(remove, this.remove(this.map[href].url)).then(function() {
+			return Pageboard.uiLoad(remove, this.remove(Href.cache[href].url)).then(function() {
 				me.renderList();
 				Pageboard.scrollbar.update();
 			});
@@ -86,7 +87,7 @@ Href.prototype.init = function() {
 				}
 			} else {
 				input.value = href;
-				var data = this.map[href];
+				var data = Href.cache[href];
 				this.block.data.meta = {
 					mime: (data.mime || '').split(';').shift()
 				};
@@ -198,7 +199,7 @@ Href.prototype.renderField = function() {
 };
 
 Href.prototype.cache = function(list) {
-	var map = this.map;
+	var map = Href.cache;
 	for (var i=0; i < list.length; i++) {
 		map[normUrl(list[i].url)] = list[i];
 	}
@@ -292,7 +293,7 @@ Href.prototype.set = function(str) {
 		this.list = [];
 	} else {
 		str = normUrl(str);
-		if (this.map[str]) this.list = [this.map[str]];
+		if (Href.cache[str]) this.list = [Href.cache[str]];
 	}
 	this.renderList(this.list);
 };
@@ -402,6 +403,8 @@ Href.prototype.remove = function(href) {
 };
 
 Href.prototype.get = function(href) {
+	var obj = Href.cache[normUrl(href)];
+	if (obj) return Promise.resolve(obj);
 	return Pageboard.uiLoad(this.node, Pageboard.fetch('get', '/.api/hrefs', {
 		url: href
 	})).then(function(obj) {
