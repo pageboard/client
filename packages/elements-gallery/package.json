@@ -19,15 +19,15 @@
   "homepage": "https://github.com/pageboard/elements-gallery#readme",
   "dependencies": {
     "@pageboard/flickity": "^2.0.9-1",
-    "@pageboard/isotope-layout": "3.0.4-1",
+    "isotope-layout": "^3.0.6",
     "list-diff.js": "^0.1.0",
     "postinstall": "^0.1.0"
   },
   "postinstall": {
     "list-diff.js/list-diff.js": "link ui/lib/list-diff.js",
-    "@pageboard/isotope-layout/dist/isotope.pkgd.js": "link ui/lib/isotope.js",
     "@pageboard/flickity/dist/flickity.pkgd.js": "link ui/lib/flickity.js",
-    "@pageboard/flickity/dist/flickity.css": "link ui/lib/flickity.css"
+    "@pageboard/flickity/dist/flickity.css": "link ui/lib/flickity.css",
+    "isotope-layout/dist/isotope.pkgd.js": "link ui/lib/isotope.js"
   },
   "pageboard": {
     "directories": [
