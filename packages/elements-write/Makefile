@@ -1,13 +1,9 @@
 BROWSERIFY = $(shell node -p 'require.resolve("browserify/bin/cmd.js")')
 
 debounce := $(shell node -p "require('path').dirname(require.resolve('debounce'))")
-throttleit := $(shell node -p "require('path').dirname(require.resolve('throttleit'))")
 prettybytes := $(shell node -p "require('path').dirname(require.resolve('pretty-bytes'))")
 
-build: write/lib write/lib/pretty-bytes.js write/lib/throttle.js write/lib/debounce.js
-
-write/lib/throttle.js: ${throttleit}/index.js
-	$(BROWSERIFY) --standalone Pageboard.Throttle --outfile $@ $<
+build: write/lib write/lib/pretty-bytes.js write/lib/debounce.js
 
 write/lib/debounce.js: ${debounce}/index.js
 	$(BROWSERIFY) --standalone Pageboard.Debounce --outfile $@ $<

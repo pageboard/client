@@ -32,8 +32,7 @@
     "pretty-bytes": "^4.0.2",
     "prosemirror-dev-tools": "^2.0.1",
     "semantic-ui-css": "2.3.0",
-    "speakingurl": "^14.0.1",
-    "throttleit": "^1.0.0"
+    "speakingurl": "^14.0.1"
   },
   "postinstall": {
     "semantic-ui-css/components": "link write/lib/components",
