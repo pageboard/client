@@ -8,6 +8,8 @@ class HTMLElementPortfolio extends HTMLCustomElement {
 			percentPosition: true,
 			transitionDuration: 0
 		};
+		this.refresh = Pageboard.throttle(250, this.refresh);
+		this.reload = Pageboard.throttle(100, this.reload);
 	}
 
 	_setup() {
@@ -36,19 +38,7 @@ class HTMLElementPortfolio extends HTMLCustomElement {
 
 	_loadListener() {
 		delete this._loading;
-		var pf = this._portfolio;
-		if (pf) {
-			if (this._willLayout) {
-				clearTimeout(this._willLayout);
-			}
-			if (this._willLayout === undefined) {
-				pf.layout();
-			}
-			this._willLayout = setTimeout(function() {
-				this._willLayout = false;
-				pf.layout();
-			}.bind(this), 250);
-		}
+		this.refresh();
 	}
 
 	_teardown() {
@@ -68,6 +58,20 @@ class HTMLElementPortfolio extends HTMLCustomElement {
 		this._teardown();
 	}
 
+	refresh() {
+		var pf = this._portfolio;
+		if (!pf) return;
+		pf.layout();
+	}
+
+	reload() {
+		var pf = this._portfolio;
+		if (!pf) return;
+		pf.reloadItems();
+		pf.arrange();
+		pf.layout();
+	}
+
 	update() {
 		this._setup();
 	}
@@ -75,14 +79,18 @@ class HTMLElementPortfolio extends HTMLCustomElement {
 
 class HTMLElementPortfolioItem extends HTMLCustomElement {
 	connectedCallback() {
-		this.update();
+		this.reload();
 	}
 	disconnectedCallback() {
-		this.update();
+		this.reload();
 	}
 	update() {
 		var pf = this.closest('element-portfolio');
-		if (pf) pf.update();
+		if (pf) pf.refresh();
+	}
+	reload() {
+		var pf = this.closest('element-portfolio');
+		if (pf) pf.reload();
 	}
 }
 
