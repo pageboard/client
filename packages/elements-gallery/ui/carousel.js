@@ -12,6 +12,8 @@ class HTMLElementCarousel extends HTMLCustomElement {
 			contain: true
 		};
 		this._saveIndex = this._saveIndex.bind(this);
+		this.refresh = Pageboard.debounce(this.refresh, 100);
+		this.reload = Pageboard.debounce(this.reload, 100);
 	}
 
 	_setup(opts) {
@@ -121,29 +123,42 @@ class HTMLElementCarousel extends HTMLCustomElement {
 		);
 	}
 	refresh() {
+		if (this.carousel) {
+			this.carousel.resize();
+		}
+	}
+	reload() {
 		this.updateCells();
 		if (this.carousel) {
 			this.carousel.reloadCells();
 			this.carousel.resize();
-			this.carousel.positionCells();
 		}
 	}
 }
 
 class HTMLElementCarouselCell extends HTMLCustomElement {
+	init() {
+		this.loadListener = this.loadListener.bind(this);
+	}
 	connectedCallback() {
 		this.carousel = this.closest('element-carousel');
 		this.update();
 		if (this.carousel) {
-			this.carousel.refresh();
+			this.carousel.reload();
 		}
+		this.addEventListener('load', this.loadListener, true);
 	}
 
 	disconnectedCallback() {
 		if (this.carousel) {
-			this.carousel.refresh();
+			this.carousel.reload();
 			delete this.carousel;
 		}
+		this.removeEventListener('load', this.loadListener);
+	}
+
+	loadListener() {
+		if (this.carousel) this.carousel.refresh();
 	}
 
 	update() {
