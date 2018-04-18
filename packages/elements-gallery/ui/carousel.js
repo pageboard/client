@@ -99,6 +99,7 @@ class HTMLElementCarousel extends HTMLCustomElement {
 			opts.autoPlay = 0;
 			opts.draggable = false;
 			opts.wrapAround = false;
+			opts.accessibility = false;
 		}
 
 		for (var k in opts) {
