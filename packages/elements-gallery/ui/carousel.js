@@ -88,8 +88,7 @@ class HTMLElementCarousel extends HTMLCustomElement {
 			initialIndex: parseInt(this.dataset.initialIndex) || 0,
 			width: this.dataset.width,
 			height: this.dataset.height,
-			imagesLoaded: this.dataset.width != "auto",
-			adaptativeHeight: this.dataset.height != "auto"
+			imagesLoaded: this.dataset.width == "auto"
 		};
 		if (document.body.isContentEditable) {
 			opts.autoPlay = 0;
