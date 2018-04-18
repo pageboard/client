@@ -44,14 +44,14 @@ element-image.lazy:after {
 	position: absolute;
 	top: 50%;
 	left: 50%;
-	width: 20%;
-	height: 20%;
-	margin-top: -10%;
-	margin-left: -10%;
+	width: 30px;
+	height: 30px;
+	margin-top: -15px;
+	margin-left: -15px;
 	border-radius: 50%;
 	border: 1px solid #ddd;
 	border-top-color: #aaa;
-	animation: element-image-spinner 4s linear infinite;
+	animation: element-image-spinner 3s ease infinite;
 	opacity: 0.75;
 }
 
