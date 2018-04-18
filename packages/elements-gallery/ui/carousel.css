@@ -9,23 +9,18 @@ element-carousel .flickity-page-dots li.dot {
 element-carousel .flickity-page-dots .dot {
 	box-shadow: 0 0 3px white;
 }
-.inverted element-carousel-cell {
-	background:transparent;
-}
 .inverted element-carousel .flickity-page-dots .dot {
 	background:#CCC;
 }
 
 element-carousel-cell {
 	display:block;
-	background: #F3F3F3;
-/*	overflow:hidden;*/
+	background: transparent;
 	min-height:2em;
 	display:flex;
 	align-items:center;
 	flex-direction:column;
 	justify-content:center;
-/*	height:100%;*/
 }
 
 element-carousel-cell > .media {
