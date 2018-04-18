@@ -9,7 +9,8 @@ class HTMLElementCarousel extends HTMLCustomElement {
 			initialIndex: 0,
 			imagesLoaded: false,
 			cellAlign: 'left',
-			contain: true
+			contain: true,
+			fade: false
 		};
 		this._saveIndex = this._saveIndex.bind(this);
 		this.refresh = Pageboard.debounce(this.refresh, 100);
@@ -35,6 +36,7 @@ class HTMLElementCarousel extends HTMLCustomElement {
 		if (opts.fullview) {
 			this.ownerDocument.body.classList.add('fullview');
 		}
+		this.classList.toggle('fade', opts.fade);
 		this.carousel = new Flickity(this, opts);
 		this.carousel.on('select', this._saveIndex);
 
@@ -90,7 +92,8 @@ class HTMLElementCarousel extends HTMLCustomElement {
 			initialIndex: parseInt(this.dataset.initialIndex) || 0,
 			width: this.dataset.width,
 			height: this.dataset.height,
-			imagesLoaded: this.dataset.width == "auto"
+			imagesLoaded: this.dataset.width == "auto",
+			fade: this.dataset.fade == "true"
 		};
 		if (document.body.isContentEditable) {
 			opts.autoPlay = 0;

@@ -53,6 +53,11 @@ Pageboard.elements.carousel = {
 			title: 'Wrap around',
 			type: 'boolean',
 			default: false
+		},
+		fade: {
+			title: 'Fade transition',
+			type: 'boolean',
+			default: false
 		}
 	},
 	contents: {
