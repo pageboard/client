@@ -5,9 +5,9 @@ class HTMLElementCarousel extends HTMLCustomElement {
 			wrapAround: false,
 			lazyLoad: true,
 			cellSelector: 'element-carousel-cell',
-			adaptativeHeight: true,
+			adaptativeHeight: false,
 			initialIndex: 0,
-			imagesLoaded: true,
+			imagesLoaded: false,
 			cellAlign: 'left',
 			contain: true
 		};
@@ -93,7 +93,9 @@ class HTMLElementCarousel extends HTMLCustomElement {
 			prevNextButtons: this.dataset.prevNextButtons == "true",
 			initialIndex: parseInt(this.dataset.initialIndex) || 0,
 			width: this.dataset.width,
-			height: this.dataset.height
+			height: this.dataset.height,
+			imagesLoaded: this.dataset.width != "auto",
+			adaptativeHeight: this.dataset.height != "auto"
 		};
 		if (document.body.isContentEditable) {
 			opts.autoPlay = 0;
