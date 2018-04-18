@@ -126,6 +126,7 @@ class HTMLElementCarousel extends HTMLCustomElement {
 		if (this.carousel) {
 			this.carousel.reloadCells();
 			this.carousel.resize();
+			this.carousel.positionCells();
 		}
 	}
 }
