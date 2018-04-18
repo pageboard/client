@@ -48,13 +48,13 @@ class HTMLElementImage extends HTMLCustomElement {
 
 		var src = img.getAttribute('src');
 		var lazy = !src && this.dataset.url;
-		var lqip = img.classList.contains('lqip');
+		var lqip = this.classList.contains('lqip');
 		if (!lazy && !lqip) return;
 
 		if (!force && this._revealAt) return;
 
 		if (lazy) {
-			img.classList.add('lazy');
+			this.classList.add('lazy');
 			src = this.dataset.url;
 		}
 
@@ -101,14 +101,14 @@ class HTMLElementImage extends HTMLCustomElement {
 		img.removeEventListener('error', this.load, false);
 		var rev = this._revealAt;
 		if (rev && Date.now() - rev > 500) {
-			if (img.classList.contains('lqip')) {
-				img.classList.add('lqip-reveal');
+			if (this.classList.contains('lqip')) {
+				this.classList.add('lqip-reveal');
 			}
-			if (img.classList.contains('lazy')) {
-				img.classList.add('lazy-reveal');
+			if (this.classList.contains('lazy')) {
+				this.classList.add('lazy-reveal');
 			}
 		}
-		img.classList.remove('lqip', 'lazy');
+		this.classList.remove('lqip', 'lazy');
 		this.fix(img);
 	}
 	disconnectedCallback() {

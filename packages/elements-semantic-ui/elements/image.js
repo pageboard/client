@@ -217,7 +217,7 @@ Pageboard.elements.image = {
 			var isSvg = meta.mime == "image/svg+xml";
 			var isFit = fit != "none";
 			if (!isSvg && (!isFit || d.template)) {
-				img.classList.add('lqip');
+				node.classList.add('lqip');
 				loc.query.q = 5;
 				if (isFit) loc.query.rs = "w-320_h-320_max";
 			} else if (isFit || !isSvg) {
