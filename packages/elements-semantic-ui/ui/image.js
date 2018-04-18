@@ -67,7 +67,7 @@ class HTMLElementImage extends HTMLCustomElement {
 			var rect = this.parentNode.getBoundingClientRect();
 			var rw = rect.width;
 			var rh = rect.height;
-			if (rw == 0 || rh == 0) {
+			if (rw == 0 && rh == 0) {
 				return;
 			}
 
