@@ -95,6 +95,11 @@ class HTMLElementCarousel extends HTMLCustomElement {
 			width: this.dataset.width,
 			height: this.dataset.height
 		};
+		if (document.body.isContentEditable) {
+			opts.autoPlay = 0;
+			opts.draggable = false;
+			opts.wrapAround = false;
+		}
 
 		for (var k in opts) {
 			if (opts[k] !== this._options[k]) {

@@ -71,11 +71,6 @@ Pageboard.elements.carousel = {
 			</div>
 		</element-carousel>`;
 		var opts = Object.assign({}, d);
-		if (view.editable) {
-			opts.autoPlay = 0;
-			opts.draggable = false;
-			opts.wrapAround = false;
-		}
 		if (!opts.width) opts.width = 'auto';
 		if (!opts.height) opts.height = 'auto';
 		Object.assign(node.dataset, opts);
