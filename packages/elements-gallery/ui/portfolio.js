@@ -8,8 +8,8 @@ class HTMLElementPortfolio extends HTMLCustomElement {
 			percentPosition: true,
 			transitionDuration: 0
 		};
-		this.refresh = Pageboard.throttle(250, this.refresh);
-		this.reload = Pageboard.throttle(100, this.reload);
+		this.refresh = Pageboard.debounce(this.refresh, 250);
+		this.reload = Pageboard.debounce(this.reload, 100);
 	}
 
 	_setup() {

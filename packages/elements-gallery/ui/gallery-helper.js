@@ -32,7 +32,7 @@ HTMLElementGallery.prototype._syncGallery = function() {
 
 HTMLElementGallery.prototype._initHelper = function() {
 	if (this._syncAfter) return;
-	this._syncAfter = window.parent.Pageboard.Debounce(this._sync, 200);
+	this._syncAfter = window.parent.Pageboard.debounce(this._sync, 200);
 	this.menuObserver = new MutationObserver(function(mutations) {
 		this._setup();
 		this._syncAfter();
