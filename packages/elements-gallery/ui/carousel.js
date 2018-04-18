@@ -15,6 +15,8 @@ class HTMLElementCarousel extends HTMLCustomElement {
 	}
 
 	_setup(opts) {
+		var gallery = this.closest('element-gallery');
+		if (gallery && gallery.dataset.mode != "carousel") return;
 		if (this.carousel) {
 			this._teardown();
 		} else {

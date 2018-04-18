@@ -12,6 +12,8 @@ class HTMLElementPortfolio extends HTMLCustomElement {
 
 	_setup() {
 		if (this._loading) return;
+		var gallery = this.closest('element-gallery');
+		if (gallery && gallery.dataset.mode != "portfolio") return;
 		if (this._portfolio) {
 			this._teardown();
 		}
