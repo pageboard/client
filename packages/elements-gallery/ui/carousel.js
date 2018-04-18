@@ -3,7 +3,7 @@ class HTMLElementCarousel extends HTMLCustomElement {
 		this._options = {
 			noDomMod: true,
 			wrapAround: false,
-			lazyLoad: true,
+			lazyLoad: false, // unless element-image populates the right attribute for carousel
 			cellSelector: 'element-carousel-cell',
 			adaptativeHeight: false,
 			initialIndex: 0,
