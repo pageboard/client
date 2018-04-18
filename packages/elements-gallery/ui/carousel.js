@@ -28,15 +28,7 @@ class HTMLElementCarousel extends HTMLCustomElement {
 			});
 		}
 		this.configure();
-		Array.prototype.forEach.call(
-			this.querySelectorAll('element-carousel-cell'),
-			function(cell) {
-				cell.dataset.width = this._options.width;
-				cell.dataset.height = this._options.height;
-				if (cell.update) cell.update();
-			},
-			this
-		);
+		this.updateCells();
 		opts = Object.assign({}, this._options, opts);
 		if (opts.fullview) {
 			this.ownerDocument.body.classList.add('fullview');
@@ -118,6 +110,24 @@ class HTMLElementCarousel extends HTMLCustomElement {
 	update() {
 		this._setup();
 	}
+	updateCells() {
+		Array.prototype.forEach.call(
+			this.querySelectorAll('element-carousel-cell'),
+			function(cell) {
+				cell.dataset.width = this._options.width;
+				cell.dataset.height = this._options.height;
+				if (cell.update) cell.update();
+			},
+			this
+		);
+	}
+	refresh() {
+		this.updateCells();
+		if (this.carousel) {
+			this.carousel.reloadCells();
+			this.carousel.resize();
+		}
+	}
 }
 
 class HTMLElementCarouselCell extends HTMLCustomElement {
@@ -125,13 +135,13 @@ class HTMLElementCarouselCell extends HTMLCustomElement {
 		this.carousel = this.closest('element-carousel');
 		this.update();
 		if (this.carousel) {
-			this.carousel.update();
+			this.carousel.refresh();
 		}
 	}
 
 	disconnectedCallback() {
 		if (this.carousel) {
-			this.carousel.update();
+			this.carousel.refresh();
 			delete this.carousel;
 		}
 	}
