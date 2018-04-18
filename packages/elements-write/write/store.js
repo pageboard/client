@@ -4,7 +4,7 @@ Pageboard.Controls.Store = Store;
 var IsMac = /Mac/.test(navigator.platform);
 
 function Store(editor, node) {
-	this.debounceUpdate = Pageboard.Debounce(this.realUpdate.bind(this), 500);
+	this.debounceUpdate = Pageboard.debounce(this.realUpdate, 500);
 	this.node = node;
 	this.editor = editor;
 	this.pageId = editor.state.doc.attrs.id;

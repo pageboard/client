@@ -22,7 +22,7 @@ function Crop(input, opts, props, block) {
 	this.valueChange = this.valueChange.bind(this);
 	this.valueFocus = this.valueFocus.bind(this);
 
-	this.debouncedChange = Pageboard.Debounce(this.change.bind(this), 500);
+	this.debouncedChange = Pageboard.debounce(this.change, 500);
 
 	this.container = input.appendChild(input.dom`<div class="crop">
 		<img src="${this.thumbnail(this.block.data.url)}" />
