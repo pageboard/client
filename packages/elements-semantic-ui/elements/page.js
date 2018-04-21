@@ -1,5 +1,5 @@
 
-Pageboard.elements.page = Object.assign(Pageboard.elements.page, {
+Object.assign(Pageboard.elements.page, {
 	contents: {
 		body: {
 			spec: 'header? main+ footer?',
