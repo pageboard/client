@@ -55,6 +55,21 @@ element-image.lazy:after {
 	opacity: 0.75;
 }
 
+element-image.error:after {
+	content: '';
+	box-sizing: border-box;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 6px;
+	height: 6px;
+	margin-top: -3px;
+	margin-left: -3px;
+	border-radius: 50%;
+	border: 1px solid #fdd;
+	opacity: 0.75;
+}
+
 element-image[data-fit="contain"],
 element-image[data-fit="contain"] > img {
 	width:100%;

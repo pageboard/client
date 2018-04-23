@@ -1,28 +1,43 @@
 class HTMLElementImage extends HTMLCustomElement {
-	init() {
-		this.load = this.load.bind(this);
-	}
-	connectedCallback() {
+	static init() {
 		if ("IntersectionObserver" in window) {
-			this._observer = new IntersectionObserver(function(entries, observer) {
+			HTMLElementImage.observer = new IntersectionObserver(function(entries, observer) {
 				entries.forEach(function(entry) {
+					var target = entry.target;
 					if (entry.isIntersecting || entry.intersectionRatio > 0) {
-						entry.target.reveal();
+						HTMLElementImage.unobserve(target);
+						target.reveal();
 					}
 				});
 			}, {
 				threshold: 0
 			});
-			this._observer.observe(this);
-		} else {
-			this.reveal();
-			Page.patch(function() {
-				this.reveal();
-			}.bind(this));
-			Page.setup(function() {
-				this.reveal();
-			}.bind(this));
 		}
+	}
+	static observe(el) {
+		if (HTMLElementImage.observer) {
+			HTMLElementImage.observer.observe(el);
+		} else {
+			el.reveal();
+			Page.patch(function() {
+				el.reveal();
+			});
+			Page.setup(function() {
+				el.reveal();
+			});
+		}
+	}
+	static unobserve(el) {
+		if (HTMLElementImage.observer) {
+			HTMLElementImage.observer.unobserve(el);
+		} else {
+			// TODO
+		}
+	}
+	connectedCallback() {
+		this.addEventListener('load', this.load, true);
+		this.addEventListener('error', this.error, true);
+		HTMLElementImage.observe(this);
 	}
 	fix(img) {
 		if (!objectFitImages.supportsObjectFit) {
@@ -42,16 +57,15 @@ class HTMLElementImage extends HTMLCustomElement {
 	reveal(force) {
 		var img = this.querySelector('img');
 		if (!img) return;
-		this.disconnectedCallback();
 
 		var src = img.getAttribute('src');
 		var lazy = !src && this.dataset.url;
 		var lqip = this.classList.contains('lqip');
 		if (!lazy && !lqip) return;
 
-		if (!force && this._revealAt) return;
-		img.addEventListener('load', this.load, false);
-		img.addEventListener('error', this.load, false);
+		if (!force && this._revealAt) {
+			return;
+		}
 
 		if (lazy) {
 			this.classList.add('lazy');
@@ -95,10 +109,9 @@ class HTMLElementImage extends HTMLCustomElement {
 	update() {
 		this.reveal(true);
 	}
-	load(e) {
-		var img = e.target;
-		img.removeEventListener('load', this.load, false);
-		img.removeEventListener('error', this.load, false);
+	load() {
+		if (!this.matches('.lqip,.lazy')) return;
+		var img = this.querySelector('img');
 		var rev = this._revealAt;
 		if (rev && Date.now() - rev > 500) {
 			if (this.classList.contains('lqip')) {
@@ -111,11 +124,14 @@ class HTMLElementImage extends HTMLCustomElement {
 		this.classList.remove('lqip', 'lazy');
 		this.fix(img);
 	}
+	error() {
+		this.classList.remove('lqip', 'lazy');
+		this.classList.add('error');
+	}
 	disconnectedCallback() {
-		if (this._observer) {
-			this._observer.unobserve(this);
-			delete this._observer;
-		}
+		HTMLElementImage.unobserve(this);
+		this.removeEventListener('load', this.load, true);
+		this.removeEventListener('error', this.error, true);
 	}
 }
 
