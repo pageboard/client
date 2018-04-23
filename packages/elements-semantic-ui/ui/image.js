@@ -43,8 +43,6 @@ class HTMLElementImage extends HTMLCustomElement {
 		var img = this.querySelector('img');
 		if (!img) return;
 		this.disconnectedCallback();
-		img.addEventListener('load', this.load, false);
-		img.addEventListener('error', this.load, false);
 
 		var src = img.getAttribute('src');
 		var lazy = !src && this.dataset.url;
@@ -52,6 +50,8 @@ class HTMLElementImage extends HTMLCustomElement {
 		if (!lazy && !lqip) return;
 
 		if (!force && this._revealAt) return;
+		img.addEventListener('load', this.load, false);
+		img.addEventListener('error', this.load, false);
 
 		if (lazy) {
 			this.classList.add('lazy');
