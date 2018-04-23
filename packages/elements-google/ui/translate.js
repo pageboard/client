@@ -1,10 +1,4 @@
 class HTMLElementGoogleTranslate extends HTMLCustomElement {
-	init() {
-		this.overHandler = this.overHandler.bind(this);
-		this.focusHandler = this.focusHandler.bind(this);
-		this.blurHandler = this.blurHandler.bind(this);
-		this.blurFrame = this.blurFrame.bind(this);
-	}
 	connectedCallback() {
 		var id = this.id || ("id" + Date.now());
 		var cbName = `HTMLElementGoogleTranslate_${id}`;
