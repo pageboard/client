@@ -1,11 +1,12 @@
 class HTMLElementImage extends HTMLCustomElement {
 	static init() {
+		var me = this;
 		if ("IntersectionObserver" in window) {
-			HTMLElementImage.observer = new IntersectionObserver(function(entries, observer) {
+			me.observer = new IntersectionObserver(function(entries, observer) {
 				entries.forEach(function(entry) {
 					var target = entry.target;
 					if (entry.isIntersecting || entry.intersectionRatio > 0) {
-						HTMLElementImage.unobserve(target);
+						me.unobserve(target);
 						target.reveal();
 					}
 				});
@@ -15,8 +16,8 @@ class HTMLElementImage extends HTMLCustomElement {
 		}
 	}
 	static observe(el) {
-		if (HTMLElementImage.observer) {
-			HTMLElementImage.observer.observe(el);
+		if (this.observer) {
+			this.observer.observe(el);
 		} else {
 			el.reveal();
 			Page.patch(function() {
@@ -28,8 +29,8 @@ class HTMLElementImage extends HTMLCustomElement {
 		}
 	}
 	static unobserve(el) {
-		if (HTMLElementImage.observer) {
-			HTMLElementImage.observer.unobserve(el);
+		if (this.observer) {
+			this.observer.unobserve(el);
 		} else {
 			// TODO
 		}
@@ -37,7 +38,7 @@ class HTMLElementImage extends HTMLCustomElement {
 	connectedCallback() {
 		this.addEventListener('load', this.load, true);
 		this.addEventListener('error', this.error, true);
-		HTMLElementImage.observe(this);
+		this.constructor.observe(this);
 	}
 	fix(img) {
 		if (!objectFitImages.supportsObjectFit) {
@@ -129,7 +130,7 @@ class HTMLElementImage extends HTMLCustomElement {
 		this.classList.add('error');
 	}
 	disconnectedCallback() {
-		HTMLElementImage.unobserve(this);
+		this.constructor.unobserve(this);
 		this.removeEventListener('load', this.load, true);
 		this.removeEventListener('error', this.error, true);
 	}
