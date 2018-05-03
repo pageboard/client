@@ -92,6 +92,14 @@ class HTMLElementQuery extends HTMLCustomElement {
 		Array.from(template.querySelectorAll('[block-id]')).forEach(function(node) {
 			node.removeAttribute('block-id');
 		});
+		if (this.dataset.nocall == "true") {
+			matchdom(template, {
+				$query: vars
+			}, HTMLElementQuery.filters, {});
+			while (template.firstChild) results.appendChild(template.firstChild);
+			this._refreshing = false;
+			return;
+		}
 		form.classList.remove('success', 'error', 'warning', 'loading');
 		form.classList.add('loading');
 		return Pageboard.fetch('get', '/.api/query', vars).then(function(answer) {

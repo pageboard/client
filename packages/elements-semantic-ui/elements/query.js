@@ -24,6 +24,7 @@ Pageboard.elements.query = {
 		</element-query>`;
 		var d = block.data;
 		if (d.query) {
+			if (!d.query.call) node.dataset.nocall = "true";
 			if (d.query.type) {
 				node.dataset.type = d.query.type;
 			}
@@ -43,12 +44,18 @@ Pageboard.elements.query = {
 		query: {
 			title: 'Query',
 			type: 'object',
-			required: ["call"],
 			properties: {
 				call: {
-					title: 'Call api or url',
-					type: "string",
-					pattern: "^(\\w+\.\\w+)|((/[\\w-.]*)+)$"
+					title: 'Call service',
+					description: 'Can be empty to merge only url query',
+					anyOf: [{
+						type: 'null'
+					}, {
+						type: "string",
+						pattern: "^\\w+\.\\w+$"
+					}],
+					input: {
+					}
 				},
 				type: {
 					title: 'Which element',
