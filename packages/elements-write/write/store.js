@@ -415,6 +415,9 @@ Store.prototype.changes = function() {
 	changes.update.forEach(function(block) {
 		delete block.virtual;
 		delete block.parent;
+		// somewhat work around page additions
+		if (block.site) delete block.site;
+		if (block.hrefs) delete block.hrefs;
 	});
 
 	return changes;
