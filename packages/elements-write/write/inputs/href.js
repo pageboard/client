@@ -88,11 +88,11 @@ Href.prototype.init = function() {
 			} else {
 				input.value = href;
 				var data = Href.cache[href];
-				this.block.data.meta = {
-					mime: (data.mime || '').split(';').shift()
-				};
-				Object.assign(this.block.data.meta, data.meta);
-				delete this.block.data.meta.thumbnail;
+				if (!Pageboard.hrefs[href]) {
+					Pageboard.hrefs[href] = Object.assign({
+						mime: data.mime
+					}, data.meta);
+				}
 				this.renderList();
 				Pageboard.trigger(input, 'change');
 			}
@@ -458,7 +458,7 @@ Href.prototype.renderItem = function(obj) {
 	var dims = tplDims(obj);
 	var display = this.opts.display;
 
-	var item = document.dom`<a href="${normUrl(obj.url)}" class="item" title="${obj.meta.description || ""}">
+	var item = document.dom`<a href="${normUrl(obj.url)}" class="item">
 		<div class="content">
 			<div class="ui tiny header">
 				${obj.title}
@@ -476,7 +476,7 @@ Href.prototype.renderItem = function(obj) {
 			${moment(obj.updated_at).fromNow()}
 			${obj.type == 'link' ? ('<br><span class="line">' + obj.pathname + '</span>') : ''}
 		</div>
-		${tplThumbnail(obj.meta.thumbnail)}`);
+		${tplPreview(obj.preview)}`);
 		if (obj.icon) {
 			content.appendChild(item.dom`<img src="${obj.icon}" class="ui avatar icon image" />`);
 		}
@@ -510,11 +510,16 @@ function tplDims(obj) {
 	return str;
 }
 
-function tplThumbnail(src) {
-	if (src) return document.dom`<div class="thumbnail">
-		<img src="${src}" class="ui tiny image" />
-	</div>`;
-	else return '';
+function tplPreview(preview) {
+	if (!preview) return '';
+	preview = document.dom`${preview}`;
+	if (preview.nodeType != Node.ELEMENT_NODE) return preview;
+	if (preview.matches('img')) {
+		preview.className = "ui tiny image";
+		return document.dom`<div class="thumbnail">${preview}</div>`;
+	} else {
+		console.warn("fixme, render preview", preview);
+	}
 }
 
 function normUrl(url) {
