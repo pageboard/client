@@ -6,24 +6,6 @@ Pageboard.elements.image = {
 			description: 'Short contextual description. Leave empty when used in links.',
 			type: "string"
 		},
-		meta: {
-			// hidden metadata about image, used internally
-			type: 'object',
-			properties: {
-				mime: {
-					type: 'string'
-				},
-				width: {
-					type: 'integer'
-				},
-				height: {
-					type: 'integer'
-				},
-				size: {
-					type: 'integer'
-				}
-			}
-		},
 		url: {
 			title: 'Address',
 			description: 'Local or remote URL',
@@ -207,7 +189,7 @@ Pageboard.elements.image = {
 			node.dataset.position = `${posx || 'center'} ${posy || 'center'}`;
 		}
 		var zoom = (d.crop || {}).zoom || 100;
-		var meta = block.data.meta;
+		var meta = Pageboard.hrefs[d.url];
 		if (meta && meta.width && meta.height) {
 			var wf = (d.crop || {}).width || 100;
 			var wh = (d.crop || {}).height || 100;
