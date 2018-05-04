@@ -200,6 +200,7 @@ Pageboard.elements.image = {
 			var isFit = fit != "none";
 			if (!isSvg && (!isFit || d.template)) {
 				node.dataset.lqip = loc.query.q = 5;
+				node.classList.add('lqip');
 				if (isFit) loc.query.rs = "w-320_h-320_max";
 			} else if (isFit || !isSvg) {
 				node.dataset.url = Page.format(loc);
