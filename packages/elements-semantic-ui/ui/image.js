@@ -61,7 +61,7 @@ class HTMLElementImage extends HTMLCustomElement {
 
 		var src = img.getAttribute('src');
 		var lazy = !src && this.dataset.url;
-		var lqip = this.classList.contains('lqip');
+		var lqip = this.dataset.lqip != null;
 		if (!lazy && !lqip) return;
 
 		if (!force && this._revealAt) {
@@ -71,6 +71,8 @@ class HTMLElementImage extends HTMLCustomElement {
 		if (lazy) {
 			this.classList.add('lazy');
 			src = this.dataset.url;
+		} else if (lqip) {
+			this.classList.add('lqip');
 		}
 
 		var z = parseFloat(img.dataset.zoom);
@@ -115,7 +117,7 @@ class HTMLElementImage extends HTMLCustomElement {
 		var img = this.querySelector('img');
 		var rev = this._revealAt;
 		if (rev && Date.now() - rev > 500) {
-			if (this.classList.contains('lqip')) {
+			if (this.dataset.lqip != null) {
 				this.classList.add('lqip-reveal');
 			}
 			if (this.classList.contains('lazy')) {
