@@ -1,3 +1,24 @@
+(function() {
+	var list = ['init', 'route', 'build', 'patch', 'setup', 'close', 'error'];
+	var tokens = document.documentElement.classList;
+	function pageListener(e) {
+		if (!Page.state) return;
+		var cur = e.type.substring(4);
+		tokens.add(cur);
+		list.forEach(function(name) {
+			if (name != cur) tokens.remove(name);
+		});
+		if (cur == "setup") {
+			setTimeout(function() {
+				tokens.remove('setup');
+			}, 400);
+		}
+	}
+	list.forEach(function(name) {
+		window.addEventListener(`page${name}`, pageListener);
+	});
+})();
+
 Page.setup(function(state) {
 	var tEndC;
 	var tEnd = "transitionend";

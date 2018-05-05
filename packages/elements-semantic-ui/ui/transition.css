@@ -1,3 +1,50 @@
+body:after {
+	content: '';
+	position:fixed;
+	display:block;
+	left:0;
+	top:1px;
+	width:0%;
+	height:0px;
+	transition-property:width;
+	transition-duration:0.5s;
+	background: #5596dd;
+	box-shadow: 0 0 5px rgba(99,162,235,0.7);
+	z-index:1000;
+}
+html.close > body:after,
+html.init > body:after,
+html.route > body:after,
+html.build > body:after,
+html.patch > body:after,
+html.setup > body:after,
+html.error > body:after {
+	height:2px;
+}
+
+html.close > body:after {
+	width:10%;
+}
+html.init > body:after {
+	width:35%;
+}
+html.route > body:after {
+	width:60%;
+}
+html.build > body:after {
+	width:80%;
+}
+html.patch > body:after {
+	width:95%;
+}
+html.setup > body:after {
+	width:100%;
+}
+html.error > body:after {
+	display:block;
+	width:100%;
+	background:#cc3333;
+}
 .transition > .transition-from[block-type="main"] {
 	position:absolute;
 	height:100%;
