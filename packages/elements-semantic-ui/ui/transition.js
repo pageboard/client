@@ -36,7 +36,7 @@ Page.setup(function(state) {
 		if (st[t] !== undefined) tEndC = transitions[t];
 	}
 
-	if (tEndC && document.body.dataset.transition) {
+	if (tEndC) {
 		document.body.addEventListener('click', function(e) {
 			var a = e.target.closest('a');
 			var href = a && a.getAttribute('href');
@@ -58,12 +58,22 @@ Page.setup(function(state) {
 	}
 
 	Page.updateBody = function(body) {
-		var transition = document.body.dataset.transition;
-		if (!transition) {
+		var from = document.body.dataset.transitionFrom;
+		var to = body.dataset.transitionTo;
+		if (!from && !to) {
 			return body;
 		}
 		Page.updateAttributes(document.body, body);
-		document.body.classList.add('transition', transition);
+		var clist = document.body.classList;
+		clist.add('transition');
+		if (to) {
+			to = to + "-to";
+			clist.add(to);
+		}
+		if (from) {
+			from = from + "-from";
+			clist.add(from);
+		}
 		var fromList = Array.prototype.map.call(document.body.children, function(node) {
 			node.classList.add('transition-from');
 			return node;
@@ -76,7 +86,7 @@ Page.setup(function(state) {
 			document.body.appendChild(node);
 		});
 		setTimeout(function() {
-			document.body.classList.add('start');
+			clist.add('transitioning');
 		});
 		document.documentElement.addEventListener(tEnd, trDone);
 
@@ -90,7 +100,9 @@ Page.setup(function(state) {
 			toList.forEach(function(node) {
 				node.classList.remove('transition-to');
 			});
-			document.body.classList.remove('transition', 'start', transition);
+			clist.remove('transition', 'transitioning');
+			if (from) clist.remove(from);
+			if (to) clist.remove(to);
 		}
 	};
 });
