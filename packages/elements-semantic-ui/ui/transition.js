@@ -115,7 +115,7 @@ Page.setup(function(state) {
 			}
 		}
 	}
-	if (document.body.dataset.redirect) {
+	if (!document.body.isContentEditable && document.body.dataset.redirect) {
 		setTimeout(function() {
 			Page.replace(document.body.dataset.redirect);
 		}, 10);
