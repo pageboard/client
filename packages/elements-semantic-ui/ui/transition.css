@@ -7,7 +7,8 @@ body:after {
 	top:1px;
 	width:0%;
 	height:0px;
-	transition-property:width;
+	opacity:0;
+	transition-property:width opacity;
 	transition-duration:0.5s;
 	background: #5596dd;
 	box-shadow: 0 0 5px rgba(99,162,235,0.7);
@@ -21,6 +22,11 @@ html.patch > body:after,
 html.setup > body:after,
 html.error > body:after {
 	height:2px;
+	opacity:1;
+}
+html.transition:not(.error) > body:after {
+	height:0px !important;
+	opacity:0;
 }
 
 html.close > body:after {
