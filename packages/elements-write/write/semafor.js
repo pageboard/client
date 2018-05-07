@@ -113,7 +113,7 @@ function formSet(form, values) {
 				if (val) {
 					elem.value = val;
 					var dropdown = elem.closest('.dropdown');
-					if (dropdown) $(dropdown).dropdown();
+					if (dropdown) $(dropdown).dropdown({placeholder: false});
 				}
 			break;
 			case 'select-multiple':
@@ -376,7 +376,7 @@ types.oneOf = function(key, schema, node, fields) {
 		</div>`;
 		node.appendChild(field);
 		if (schema.default !== null) $(field).find(`[value="${schema.default}"]`).prop('selected', true);
-		$(field).find('.dropdown').dropdown();
+		$(field).find('.dropdown').dropdown({placeholder: false});
 	}
 
 	function getIconOption(item) {
@@ -394,7 +394,7 @@ types.oneOf = function(key, schema, node, fields) {
 	}
 
 	function getSelectOption(item) {
-		if (item.const == null) console.error("We can't really support non-const oneOf here");
+		if (item.const === undefined) console.error("We can't really support non-const oneOf here");
 		return node.dom`<option value="${item.const}">${item.title || item.const}</option>`;
 	}
 };
