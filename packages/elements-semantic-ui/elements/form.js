@@ -354,6 +354,34 @@ Pageboard.elements.input_property = {
 					label: prop.title
 				}
 			}));
+		} else if (propType.type == "string" && propType.format == "date") {
+			node.appendChild(view.render({
+				type: 'input_text',
+				data: {
+					name: name,
+					type: propType.format,
+					default: propType.default,
+					disabled: d.disabled,
+					required: required
+				},
+				content: {
+					label: prop.title
+				}
+			}));
+		} else if (propType.type == "string" && propType.format == "time") {
+			node.appendChild(view.render({
+				type: 'input_text',
+				data: {
+					name: name,
+					type: propType.format,
+					default: propType.default,
+					disabled: d.disabled,
+					required: required
+				},
+				content: {
+					label: prop.title
+				}
+			}));
 		} else {
 			var input = view.render({
 				type: 'input_text',
