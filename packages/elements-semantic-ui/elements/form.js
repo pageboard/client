@@ -332,8 +332,7 @@ Pageboard.elements.input_property = {
 				type: 'input_text',
 				data: {
 					name: name,
-					type: 'text',
-					format: 'number',
+					type: 'number',
 					default: propType.default,
 					disabled: d.disabled,
 					required: required
