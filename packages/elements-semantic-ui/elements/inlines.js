@@ -1,4 +1,5 @@
 Pageboard.elements.strong = {
+	priority: 12,
 	title: "Strong",
 	contents: "text*",
 	inplace: true,
@@ -11,6 +12,7 @@ Pageboard.elements.strong = {
 };
 
 Pageboard.elements.em = {
+	priority: 12,
 	title: "Emphasize",
 	contents: "text*",
 	inline: true,
@@ -23,6 +25,7 @@ Pageboard.elements.em = {
 };
 
 Pageboard.elements.light = {
+	priority: 12,
 	title: "Light",
 	contents: "text*",
 	inline: true,
@@ -35,6 +38,7 @@ Pageboard.elements.light = {
 };
 
 Pageboard.elements.sup = {
+	priority: 12,
 	title: "Sup",
 	contents: "text*",
 	inline: true,
@@ -47,6 +51,7 @@ Pageboard.elements.sup = {
 };
 
 Pageboard.elements.caps = {
+	priority: 12,
 	title: "Capitalization",
 	contents: "text*",
 	inline: true,
@@ -83,6 +88,7 @@ Pageboard.elements.caps = {
 };
 
 Pageboard.elements.color = {
+	priority: 12,
 	title: "Color",
 	properties: {
 		color: {

@@ -221,6 +221,7 @@ Pageboard.elements.image = {
 };
 
 Pageboard.elements.inlineImage = {
+	priority: 12,
 	title: "Icon",
 	properties: {
 		url: {
