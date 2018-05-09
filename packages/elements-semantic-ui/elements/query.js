@@ -24,7 +24,7 @@ Pageboard.elements.query = {
 		</element-query>`;
 		var d = block.data;
 		if (d.query) {
-			if (!d.query.call) node.dataset.nocall = "true";
+			node.dataset.nocall = !d.query.call;
 			if (d.query.type) {
 				node.dataset.type = d.query.type;
 			}
