@@ -97,10 +97,10 @@ Menu.prototype.item = function(el) {
 			var tr = state.tr;
 			var sel = self.selection;
 			var block = editor.blocks.create(el.name);
-			if (el.inline && el.contents) {
-				// pagecut id-plugin does not run here (why ?) so we need to give an id
-				if (!el.inplace) editor.blocks.set(block);
-				if (el.atom) {
+			if (el.inline) {
+				// pagecut id-plugin does not run here (why ?) so we need to give an id - it should work now
+//				if (!el.inplace) editor.blocks.set(block);
+				if (nodeType.isAtom) {
 					dispatch(tr.replaceSelectionWith(nodeType.create(editor.blocks.toAttrs(block))));
 				} else {
 					editor.utils.toggleMark(nodeType, editor.blocks.toAttrs(block))
@@ -129,8 +129,8 @@ Menu.prototype.item = function(el) {
 			}
 		},
 		select: function(state) {
-			if (el.inline && el.contents) {
-				return !state.tr.selection.node && editor.utils.canMark(self.selection, nodeType);
+			if (el.inline && !nodeType.isAtom) {
+				return editor.utils.canMark(self.selection, nodeType);
 			} else {
 				var sel = self.selection;
 				var can = !!editor.utils.canInsert(sel.$to, nodeType, false, false).node;
