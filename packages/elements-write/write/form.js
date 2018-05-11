@@ -71,6 +71,7 @@ Form.prototype.update = function(parents, sel) {
 
 function FormBlock(editor, node, block) {
 	this.node = node.appendChild(document.createElement('form'));
+	this.node.setAttribute('autocomplete', 'off');
 	this.block = block;
 	this.editor = editor;
 	this.el = editor.element(block.type);
