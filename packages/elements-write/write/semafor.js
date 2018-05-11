@@ -313,13 +313,20 @@ function process(key, schema, node, fields) {
 }
 
 types.string = function(key, schema, node, fields) {
-	node.appendChild(node.dom`<div class="field">
-		<label>${schema.title}</label>
-		<input type="text" name="${key}"
-			value="${schema.default || ''}"
-			title="${schema.description || ''}"
-		/>
-	</div>`);
+	if (schema.input && schema.input.multiline) {
+		node.appendChild(node.dom`<div class="field">
+			<label>${schema.title}</label>
+			<textarea name="${key}"	title="${schema.description || ''}">${schema.default || ''}</textarea>
+		</div>`);
+	} else {
+		node.appendChild(node.dom`<div class="field">
+			<label>${schema.title}</label>
+			<input type="text" name="${key}"
+				value="${schema.default || ''}"
+				title="${schema.description || ''}"
+			/>
+		</div>`);
+	}
 };
 
 types.oneOf = function(key, schema, node, fields) {
