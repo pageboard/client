@@ -97,36 +97,39 @@ Menu.prototype.item = function(el) {
 			var tr = state.tr;
 			var sel = self.selection;
 			var block = editor.blocks.create(el.name);
-			if (el.inline) {
-				// pagecut id-plugin does not run here (why ?) so we need to give an id - it should work now
-//				if (!el.inplace) editor.blocks.set(block);
-				if (nodeType.isAtom) {
-					dispatch(tr.replaceSelectionWith(nodeType.create(editor.blocks.toAttrs(block))));
+			Promise.resolve().then(function() {
+				if (el.inline) {
+					if (nodeType.isAtom) {
+						tr.replaceSelectionWith(nodeType.create(editor.blocks.toAttrs(block)));
+						var resel = sel ? editor.utils.selectTr(tr, sel) : null;
+						if (resel) tr.setSelection(resel);
+						return tr;
+					} else {
+						editor.utils.toggleMark(nodeType, editor.blocks.toAttrs(block))
+						(state, function(atr) {
+							tr = atr;
+						});
+						return tr;
+					}
 				} else {
-					editor.utils.toggleMark(nodeType, editor.blocks.toAttrs(block))
-					(state, function(tr) {
-						tr.setMeta('editor', true);
-						dispatch(tr);
+					var blocks = {};
+					return editor.blocks.parseFrom(block, blocks).then(function(fragment) {
+						editor.controls.store.importVirtuals(blocks);
+						var pos = editor.utils.insertTr(tr, fragment, sel);
+						if (pos != null) {
+							sel = editor.utils.selectTr(tr, pos);
+							if (sel) tr.setSelection(sel);
+						}
+						return tr;
 					});
 				}
-			} else {
-				var blocks = {};
-				editor.blocks.parseFrom(block, blocks).then(function(fragment) {
-					editor.controls.store.importVirtuals(blocks);
-					var pos = editor.utils.insertTr(tr, fragment, sel);
-					if (pos != null) {
-						sel = editor.utils.selectTr(tr, pos);
-						if (sel) {
-							tr.setSelection(sel);
-						}
-						tr.setMeta('editor', true); // ensures new nodes is focused
-						tr.scrollIntoView();
-						dispatch(tr);
-					}
-				}).catch(function(err) {
-					Pageboard.notify("Error while inserting " + el.title, err);
-				});
-			}
+			}).then(function(tr) {
+				tr.setMeta('editor', true);
+				tr.scrollIntoView();
+				dispatch(tr);
+			}).catch(function(err) {
+				Pageboard.notify("Error while inserting " + el.title, err);
+			});
 		},
 		select: function(state) {
 			if (el.inline && !nodeType.isAtom) {
