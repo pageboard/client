@@ -14,4 +14,9 @@ element-query[block-focused] > div > [block-content="template"] {
 element-query[block-focused] > .results {
 	display:none;
 }
-
+[block-type="query_template"]:before {
+	content:'[';
+}
+[block-type="query_template"]:after {
+	content:']';
+}

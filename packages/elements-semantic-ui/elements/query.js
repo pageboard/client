@@ -158,3 +158,30 @@ Pageboard.elements.query_tags = {
 	]
 };
 
+Pageboard.elements.query_template = {
+	title: "Template",
+	properties: {
+		expr: {
+			title: 'Template',
+			description: 'matchdom expression with filters on lines',
+			type: 'string',
+			input: {
+				multiline: true
+			}
+		},
+		mock: {
+			title: 'Mock',
+			type: 'string'
+		}
+	},
+	context: 'query//',
+	inline: true,
+	group: "inline",
+	icon: '<b class="icon">var</b>',
+	render: function(doc, block) {
+		var d = block.data;
+		var expr = (d.expr || '').trim().split('\n').join('|');
+		var mock = d.mock || expr.split('|', 1)[0].split('.').pop();
+		return doc.dom`<span data-expr="[${expr.split('\n').join('|')}|fill]">${mock || '-'}</span>`;
+	}
+};
