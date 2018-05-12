@@ -182,6 +182,6 @@ Pageboard.elements.query_template = {
 		var d = block.data;
 		var expr = (d.expr || '').trim().split('\n').join('|');
 		var mock = d.mock || expr.split('|', 1)[0].split('.').pop();
-		return doc.dom`<span data-expr="[${expr.split('\n').join('|')}|fill]">${mock || '-'}</span>`;
+		return doc.dom`<span data-expr="[${expr}|fill]">${mock || '-'}</span>`;
 	}
 };
