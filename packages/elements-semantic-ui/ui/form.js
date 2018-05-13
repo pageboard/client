@@ -162,7 +162,11 @@ Page.setup(function(state) {
 				return Pageboard.fetch(form.method, form.action, formToQuery(form));
 			}).then(function(data) {
 				form.classList.add('success');
-				if (data.redirect) return Page.push(data.redirect);
+				if (data.redirect) {
+					return Page.push(data.redirect);
+				} else if (form.closest('[block-type="query"]')) {
+					return Page.push(Page.state);
+				}
 			});
 		}
 		p.catch(function(err) {
