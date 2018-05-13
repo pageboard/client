@@ -1,5 +1,89 @@
+Pageboard.elements.IntlPolyfill = {
+	priority: -102, // before polyfill element
+	install: function(doc, page) {
+		var lang = (page.site.lang || window.navigator.language || 'en').substring(0, 2);
+		this.polyfills = [`Intl.~locale.${lang}`];
+	}
+};
+Pageboard.elements.input_date_time = {
+	title: 'DateTime',
+	menu: "form",
+	required: ["name"],
+	group: "block",
+	context: 'form//',
+	properties: {
+		name: {
+			title: "name",
+			description: "The form object key",
+			type: "string"
+		},
+		value: {
+			title: "default value",
+			type: ["string", "null"]
+		},
+		template: {
+			title: 'Template',
+			description: 'Query value template',
+			type: 'string',
+			context: 'query'
+		},
+		placeholder: {
+			title: "placeholder",
+			type: ["string", "null"]
+		},
+		required: {
+			title: 'required',
+			type: 'boolean',
+			default: false
+		},
+		disabled: {
+			title: 'disabled',
+			type: 'boolean',
+			default: false
+		},
+		format: {
+			title: 'format',
+			default: "datetime",
+			anyOf: [{
+				const: "datetime",
+				title: "Date-Time"
+			}, {
+				const: "date",
+				title: "Date"
+			}, {
+				const: "time",
+				title: "Time"
+			}]
+		}
+	},
+	contents: {
+		label: 'inline*'
+	},
+	icon: '<i class="calendar outline icon"></i>',
+	render: function(doc, block) {
+		var d = block.data;
+		var input = doc.dom`<input data-format="${d.format}" type="text" name="${d.name}" />`;
+		if (d.value) input.value = d.value;
+		if (d.disabled) input.disabled = true;
+		if (d.placeholder) input.placeholder = d.placeholder;
+		if (d.required) input.required = true;
+		if (d.template) input.dataset.value = d.template;
+		if (d.step) input.step = step;
+		var node = doc.dom`<div class="field">
+			<label block-content="label">Label</label>
+			<element-input-date-time>${input}</element-input-date-time>
+		</div>`;
+		return node;
+	},
+	scripts: [
+		'../ui/lib/datetime.js',
+		'../ui/input-date-time.js'
+	]
+};
+
 Pageboard.elements.event = {
 	title: 'Event',
+	priority: 2, // must install scripts after query element scripts
 	menu: "Agenda",
 	required: ['title'],
 	properties: {
@@ -64,26 +148,22 @@ Pageboard.elements.event_date = {
 				{type: 'integer', minimum: 0}
 			]
 		},
-		slot: {
-			title: 'Time slot',
-			type: 'object',
-			properties: {
-				date: {
-					title: 'Date',
-					format: 'date',
-					type: 'string'
-				},
-				start: {
-					title: 'Start',
-					format: 'time', // FIXME inputTime ?
-					type: 'string'
-				},
-				end: {
-					title: 'End',
-					format: 'time',
-					type: 'string'
-				}
-			}
+		date: {
+			title: 'Date',
+			type: 'string',
+			format: 'date-time'
+		},
+		duration: {
+			title: 'Duration',
+			type: 'string',
+			format: 'time'
+//			input: {
+//				type: 'input_date_time',
+//				data: {
+//					format: 'time',
+//					value: '1:00:00'
+//				}
+//			}
 		}
 	}
 };
