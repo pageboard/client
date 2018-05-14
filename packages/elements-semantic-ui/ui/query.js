@@ -56,16 +56,18 @@ class HTMLElementQuery extends HTMLCustomElement {
 		var candidate = 0;
 		if (this.dataset.type) {
 			var form = document.querySelector(`form[data-type="${this.dataset.type}"]`);
-			if (form) Array.prototype.forEach.call(form.elements, function(node) {
-				var key = node.name;
-				if (!key) return;
-				if (query[key] !== undefined) {
-					vars[key] = query[key];
-					candidate++;
-				} else if (node.required) {
-					missing++;
-				}
-			});
+			if (form && form.closest('[block-type="query"]') != this) {
+				Array.prototype.forEach.call(form.elements, function(node) {
+					var key = node.name;
+					if (!key) return;
+					if (query[key] !== undefined) {
+						vars[key] = query[key];
+						candidate++;
+					} else if (node.required) {
+						missing++;
+					}
+				});
+			}
 		}
 		if (this.dataset.vars) {
 			this.dataset.vars.split(',').forEach(function(key) {
