@@ -1,10 +1,14 @@
 class HTMLElementSelect extends HTMLCustomElement {
-	static get observedAttributes() {return ['data-placeholder', 'data-name', 'data-multiple']; }
+	static get observedAttributes() {
+		return ['data-placeholder', 'data-name', 'data-multiple', 'value'];
+	}
 	init() {
 		this._click = this._click.bind(this);
 		this._change = this._change.bind(this);
 	}
 	_click(e) {
+		var me = e.target.closest('element-select');
+		if (me != this) return; // not for us
 		var item = e.target.closest('element-select .item');
 		if (item) {
 			this._selectItem(item);
@@ -109,6 +113,8 @@ class HTMLElementSelect extends HTMLCustomElement {
 		this._observer.observe(menu, {
 			childList: true
 		});
+		var initialValue = this.getAttribute('value');
+		if (initialValue != null) this.attributeChangedCallback("value", null, initialValue);
 	}
 	_update() {
 		var select = this.querySelector('select');
@@ -146,6 +152,8 @@ class HTMLElementSelect extends HTMLCustomElement {
 			if (oldValue != newValue) {
 				this._reset();
 			}
+		} else if (attributeName == "value") {
+			this._selectItem(this.querySelector(`[data-value="${newValue}"]`));
 		}
 	}
 }
