@@ -147,6 +147,11 @@ HTMLElementQuery.filters.title = function(val, what) {
 	});
 	if (prop != null) return prop.title;
 };
+HTMLElementQuery.filters.checked = function(val, what, selector) {
+	var ret = what.filters.attr(val === true ? 'checked' : null, what, 'checked', selector);
+	if (val !== true) delete what.attr;
+	return ret;
+};
 
 HTMLCustomElement.define('element-query', HTMLElementQuery);
 
