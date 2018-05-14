@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/pageboard/elements-calendar#readme",
   "dependencies": {
-    "@pageboard/datetime-entry": "^3.1.0",
+    "@pageboard/datetime-entry": "^3.1.1",
     "postinstall": "^0.1.0"
   },
   "postinstall": {
