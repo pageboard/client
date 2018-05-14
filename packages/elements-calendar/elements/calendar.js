@@ -63,15 +63,16 @@ Pageboard.elements.input_date_time = {
 	render: function(doc, block) {
 		var d = block.data;
 		var input = doc.dom`<input data-format="${d.format}" type="text" name="${d.name}" />`;
+		var ce = doc.dom`<element-input-date-time>${input}</element-input-date-time>`;
 		if (d.value) input.value = d.value;
 		if (d.disabled) input.disabled = true;
 		if (d.placeholder) input.placeholder = d.placeholder;
 		if (d.required) input.required = true;
-		if (d.template) input.dataset.value = d.template;
+		if (d.template) ce.dataset.value = d.template;
 		if (d.step) input.step = step;
 		var node = doc.dom`<div class="field">
 			<label block-content="label">Label</label>
-			<element-input-date-time>${input}</element-input-date-time>
+			${ce}
 		</div>`;
 		return node;
 	},
@@ -148,23 +149,23 @@ Pageboard.elements.event_date = {
 				{type: 'integer', minimum: 0}
 			]
 		},
-		date: {
-			title: 'Date',
-			type: 'string',
-			format: 'date-time'
-		},
-		duration: {
-			title: 'Duration',
-			type: 'string',
-			format: 'time'
-//			input: {
-//				type: 'input_date_time',
-//				data: {
-//					format: 'time',
-//					value: '1:00:00'
-//				}
-//			}
+		slot: {
+			type: 'object',
+			title: 'Time slot',
+			properties: {
+				start: {
+					title: 'Start',
+					type: 'string',
+					format: 'date-time'
+				},
+				end: {
+					title: 'End',
+					type: 'string',
+					format: 'date-time'
+				}
+			}
 		}
+
 	}
 };
 

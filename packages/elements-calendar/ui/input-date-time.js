@@ -1,8 +1,26 @@
 class HTMLElementInputDateTime extends HTMLCustomElement {
+	static get observedAttributes() {
+		return ['value'];
+	}
 	connectedCallback() {
-		this._input = this.querySelector('input');
-		if (!this._input) return;
-		var format = this._input.dataset.format;
+		var inputs = this.querySelectorAll('input');
+		if (inputs.length == 0) return;
+		var input = inputs[0];
+		var hidden;
+		if (inputs.length == 2) {
+			hidden = inputs[1];
+		} else {
+			hidden = input.ownerDocument.createElement('input');
+			hidden.type = 'hidden';
+			hidden.name = input.name;
+			input.removeAttribute('name');
+			input.parentNode.appendChild(hidden);
+		}
+		var val = this.getAttribute("value");
+		if (val == null) val = input.value;
+		else input.value = val;
+		hidden.value = val;
+		var format = input.dataset.format;
 		var l = 'long';
 		var n = 'numeric';
 		var d = '2-digit';
@@ -19,19 +37,27 @@ class HTMLElementInputDateTime extends HTMLCustomElement {
 			second: d
 		});
 		var lang = document.documentElement.lang || window.navigator.language;
-		this._datetime = window.DateTimeEntry(this._input, {
+		if (this._datetime) this._datetime.destroy();
+		this._datetime = window.DateTimeEntry(input, {
 			locale: lang,
 			format: fmt,
-			useUTC: true
+			useUTC: false,
+			onChange: function(val) {
+				var str = val.toISOString();
+				if (format == "time") {
+					str = str.split('T').pop();
+				} else if (format == "date") {
+					str = str.split('T').shift();
+				}
+				hidden.value = str;
+			}
 		});
-//		this.addEventListener('change', this._change, false);
 	}
 
-	_change(e) {
-		var input = e.target;
-		if (input.getAttribute('type') == "time") {
-			var val = input.value;
-			if (/^\d{1,2}\:\d{1,2}$/.test(val)) input.value = val + ':00';
+	attributeChangedCallback(attributeName, oldValue, newValue) {
+		if (attributeName != "value") return;
+		if (this._datetime) {
+			this._datetime.setTime(newValue);
 		}
 	}
 
@@ -40,7 +66,6 @@ class HTMLElementInputDateTime extends HTMLCustomElement {
 			this._datetime.destroy();
 			delete this._datetime;
 		}
-//		this.removeEventListener('change', this._change, false);
 	}
 }
 

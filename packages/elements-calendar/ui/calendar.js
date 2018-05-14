@@ -1,6 +1,6 @@
 HTMLElementQuery.filters.parseDate = function(val, expr, amount, unit) {
-	if (val && /^\d\d:\d\d(:\d\d)?$/.test(val)) {
-		val = '1970-01-01T' + val + 'Z';
+	if (val && /^\d\d:\d\d/.test(val)) {
+		val = '0 ' + val;
 	}
 	var d = new Date(val);
 	amount = parseInt(amount);
