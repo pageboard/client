@@ -125,6 +125,7 @@ class HTMLElementQuery extends HTMLCustomElement {
 
 HTMLElementQuery.filters = {};
 HTMLElementQuery.filters.title = function(val, what) {
+	if (val === undefined) return;
 	var path = what.expr.path;
 	var rootPath = path.slice(0, -2);
 	var block = what.expr.get(what.scope, rootPath);
