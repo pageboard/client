@@ -54,6 +54,12 @@ Pageboard.elements.input_date_time = {
 				const: "time",
 				title: "Time"
 			}]
+		},
+		step: {
+			title: 'step',
+			description: 'increments in seconds',
+			type: 'integer',
+			default: 0
 		}
 	},
 	contents: {
@@ -69,7 +75,7 @@ Pageboard.elements.input_date_time = {
 		if (d.placeholder) input.placeholder = d.placeholder;
 		if (d.required) input.required = true;
 		if (d.template) ce.dataset.value = d.template;
-		if (d.step) input.step = step;
+		if (d.step) input.step = d.step;
 		var node = doc.dom`<div class="field">
 			<label block-content="label">Label</label>
 			${ce}
