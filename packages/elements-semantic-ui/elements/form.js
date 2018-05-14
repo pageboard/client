@@ -188,6 +188,12 @@ Pageboard.elements.input_property = {
 			title: 'Foldable',
 			type: 'boolean',
 			default: false
+		},
+		template: {
+			title: 'Template',
+			description: 'Query value template',
+			type: 'string',
+			context: 'query'
 		}
 	},
 	render: function(doc, block, view) {
@@ -299,7 +305,8 @@ Pageboard.elements.input_property = {
 						multiple: d.multiple,
 						placeholder: prop.description,
 						disabled: d.disabled,
-						required: required
+						required: required,
+						template: d.template
 					},
 					content: {
 						label: prop.title,
@@ -320,6 +327,7 @@ Pageboard.elements.input_property = {
 							value: propType.default,
 							disabled: d.disabled,
 							required: required,
+							template: d.template,
 							step: 1
 						},
 						content: {
@@ -335,7 +343,8 @@ Pageboard.elements.input_property = {
 					type: 'number',
 					default: propType.default,
 					disabled: d.disabled,
-					required: required
+					required: required,
+					template: d.template
 				},
 				content: {
 					label: prop.title
@@ -348,7 +357,8 @@ Pageboard.elements.input_property = {
 					name: name,
 					value: "true",
 					disabled: d.disabled,
-					required: required
+					required: required,
+					template: d.template
 				},
 				content: {
 					label: prop.title
@@ -363,7 +373,8 @@ Pageboard.elements.input_property = {
 					default: propType.default,
 					disabled: d.disabled,
 					required: required,
-					step: propType.step
+					step: propType.step,
+					template: d.template
 				},
 				content: {
 					label: prop.title
@@ -378,7 +389,8 @@ Pageboard.elements.input_property = {
 					default: propType.default,
 					disabled: d.disabled,
 					required: required,
-					step: propType.step
+					step: propType.step,
+					template: d.template
 				},
 				content: {
 					label: prop.title
@@ -392,7 +404,8 @@ Pageboard.elements.input_property = {
 					type: 'text',
 					disabled: d.disabled,
 					default: propType.default,
-					required: required
+					required: required,
+					template: d.template
 				},
 				content: {
 					label: prop.title
@@ -741,6 +754,12 @@ Pageboard.elements.input_checkbox = {
 			title: 'required',
 			type: 'boolean',
 			default: false
+		},
+		template: {
+			title: 'Template',
+			description: 'Query value template',
+			type: 'string',
+			context: 'query'
 		}
 	},
 	contents: {
@@ -753,6 +772,7 @@ Pageboard.elements.input_checkbox = {
 		var input = doc.dom`<input type="checkbox" name="${d.name}" value="${d.value}" id="for${id}" />`;
 		if (d.required) input.required = true;
 		if (d.disabled) input.disabled = true;
+		if (d.template) input.dataset.checked = d.template;
 		return doc.dom`<div class="field">
 			<div class="ui checkbox">
 				${input}
@@ -837,6 +857,16 @@ Pageboard.elements.input_select = {
 			title: 'multiple',
 			type: 'boolean',
 			default: false
+		},
+		template: {
+			title: 'Template',
+			description: 'Query value template',
+			type: 'string',
+			context: 'query'
+		},
+		value: {
+			title: "default value",
+			type: ["string", "null"]
 		}
 	},
 	contents: {
@@ -869,6 +899,12 @@ Pageboard.elements.input_select = {
 		}
 		if (d.placeholder) {
 			select.dataset.placeholder = d.placeholder;
+		}
+		if (d.value) {
+			select.setAttribute('value', d.value);
+		}
+		if (d.template) {
+			select.dataset.value = d.template;
 		}
 		return doc.dom`<div class="field">
 			<label block-content="label">Label</label>
