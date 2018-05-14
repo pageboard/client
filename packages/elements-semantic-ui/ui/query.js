@@ -1,7 +1,7 @@
 Page.patch(function(state) {
-	Array.from(document.querySelectorAll('element-query')).forEach(function(node) {
-		node.refresh(state.query);
-	});
+	return Promise.all(Array.from(document.querySelectorAll('element-query')).map(function(node) {
+		return node.refresh(state.query);
+	}));
 });
 
 class HTMLElementQuery extends HTMLCustomElement {
