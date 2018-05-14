@@ -356,13 +356,14 @@ Pageboard.elements.input_property = {
 			}));
 		} else if (propType.type == "string" && propType.format == "date") {
 			node.appendChild(view.render({
-				type: 'input_text',
+				type: 'input_date_time',
 				data: {
 					name: name,
 					type: propType.format,
 					default: propType.default,
 					disabled: d.disabled,
-					required: required
+					required: required,
+					step: propType.step
 				},
 				content: {
 					label: prop.title
@@ -370,13 +371,14 @@ Pageboard.elements.input_property = {
 			}));
 		} else if (propType.type == "string" && propType.format == "time") {
 			node.appendChild(view.render({
-				type: 'input_text',
+				type: 'input_date_time',
 				data: {
 					name: name,
 					type: propType.format,
 					default: propType.default,
 					disabled: d.disabled,
-					required: required
+					required: required,
+					step: propType.step
 				},
 				content: {
 					label: prop.title
@@ -533,12 +535,6 @@ Pageboard.elements.input_text = {
 			}, {
 				const: "tel",
 				title: "tel"
-			}, {
-				const: "date",
-				title: "date"
-			}, {
-				const: "time",
-				title: "time"
 			}, {
 				const: "number",
 				title: "number"
