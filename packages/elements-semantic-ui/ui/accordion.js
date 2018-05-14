@@ -16,29 +16,38 @@ class HTMLElementAccordion extends HTMLCustomElement {
 		var owner = fold.closest('element-accordion');
 		if (owner != this) return;
 		if (e.target.closest("a[href]") == null) e.preventDefault();
+		HTMLElementAccordion.toggle(title);
+	}
+	static toggle(title) {
+		var id = title.parentNode.id;
+		var content = title.nextElementSibling;
 		if (title.matches('.active')) {
+			if (id) delete HTMLElementAccordion.folds[id];
 			title.classList.remove('active');
-			var content = title.nextElementSibling;
 			if (content) content.classList.remove('active');
 		} else {
-//			var ancestors = [];
-//			var anc = fold;
-//			while (anc = anc.closest('.fold')) {
-//				ancestors.push(anc);
-//				anc = anc.parentNode;
-//			}
-//			var all = Array.prototype.forEach.call(this.querySelectorAll('.fold > .active'), function(node) {
-//				if (ancestors.indexOf(node.parentNode) < 0) {
-//					node.classList.remove('active');
-//				}
-//			});
+			if (id) HTMLElementAccordion.folds[id] = true;
 			title.classList.add('active');
-			var content = title.nextElementSibling;
 			if (content) content.classList.add('active');
 		}
 	}
+	static refreshAll() {
+		Object.keys(HTMLElementAccordion.folds).forEach(function(id) {
+			var node = document.getElementById(id);
+			if (!node) delete HTMLElementAccordion.folds[id];
+			var title = node.querySelector('.title');
+			HTMLElementAccordion.toggle(title);
+		});
+	}
 }
 
-Page.setup(function() {
+HTMLElementAccordion.folds = {};
+
+Page.setup(function(state) {
 	HTMLCustomElement.define('element-accordion', HTMLElementAccordion);
+	HTMLElementAccordion.refreshAll();
+});
+
+Page.patch(function(state) {
+	HTMLElementAccordion.refreshAll();
 });
