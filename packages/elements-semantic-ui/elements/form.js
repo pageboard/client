@@ -498,6 +498,12 @@ Pageboard.elements.input_text = {
 			title: "default value",
 			type: ["string", "null"]
 		},
+		template: {
+			title: 'Template',
+			description: 'Query value template',
+			type: 'string',
+			context: 'query'
+		},
 		placeholder: {
 			title: "placeholder",
 			type: ["string", "null"]
@@ -559,6 +565,7 @@ Pageboard.elements.input_text = {
 		if (d.disabled) input.disabled = true;
 		if (d.placeholder) input.placeholder = d.placeholder;
 		if (d.required) input.required = true;
+		if (d.template) input.dataset.value = d.template;
 		var node = doc.dom`<div class="field">
 			<label block-content="label">Label</label>
 			${input}
