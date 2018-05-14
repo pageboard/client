@@ -1,5 +1,6 @@
 Pageboard.elements.accordion = {
 	title: "Accordion",
+	priority: 2, // scripts must run after 'query' scripts
 	menu: 'widget',
 	group: "block",
 	contents: {
@@ -34,12 +35,22 @@ Pageboard.elements.fold = {
 			title: 'content'
 		}
 	},
+	properties: {
+		template: {
+			title: 'Template',
+			description: 'Query value template',
+			type: 'string',
+			context: 'query'
+		}
+	},
 	icon: '<i class="icons"><i class="caret right icon"></i><i class="corner add icon"></i></i>',
 	render: function(doc, block) {
-		return doc.dom`<div class="fold">
+		var node = doc.dom`<div class="fold">
 			<div class="title caret-icon" block-content="title">Title</div>
 			<div class="content" block-content="content"></div>
 		</div>`;
+		if (block.data.template) node.dataset.template = block.data.template;
+		return node;
 	}
 };
 
