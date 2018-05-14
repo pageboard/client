@@ -53,6 +53,11 @@ function submitListenerCapture(e) {
 	});
 }
 
+function invalidListenerCapture(e) {
+	e.preventDefault();
+	e.stopImmediatePropagation();
+}
+
 function labelListener(e) {
 	var node = e.target.closest('label[for]');
 	if (!node) return;
@@ -134,6 +139,7 @@ function buildListener(win, doc) {
 	//win.addEventListener('mouseup', anchorListener, true);
 	win.addEventListener('click', labelListener, true);
 	win.addEventListener('submit', submitListenerCapture, true);
+	win.addEventListener('invalid', invalidListenerCapture, true);
 	win.addEventListener('keydown', function(e) {
 		if (e.altKey) win.document.body.classList.add('ProseMirror-alt');
 	});
