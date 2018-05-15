@@ -22,14 +22,24 @@ HTMLElementQuery.filters.parseDate = function(val, expr, amount, unit) {
 	return d;
 };
 
+HTMLElementQuery.filters.now = function(val) {
+	return val == null ? new Date().toISOString() : val;
+};
+
 HTMLElementQuery.filters.toTime = function(val) {
 	if (!val) return val;
 	return HTMLElementQuery.filters.parseDate(val).toISOString().split('T').pop().split('.').shift();
 };
 
-HTMLElementQuery.filters.toDate = function(val) {
+HTMLElementQuery.filters.toDate = function(val, expr, unit) {
 	if (!val) return val;
-	return HTMLElementQuery.filters.parseDate(val).toISOString().split('T').shift();
+
+	var date = HTMLElementQuery.filters.parseDate(val).toISOString().split('T').shift();
+	if (!unit) return date;
+	var parts = date.split('-');
+	if (unit == "year") date = parts[0];
+	else if (unit == "month") date = parts[0] + "-" + parts[1];
+	return date;
 };
 
 HTMLElementQuery.filters.formatDate = function(val, expr, ...list) {
