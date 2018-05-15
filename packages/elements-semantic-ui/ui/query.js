@@ -71,11 +71,18 @@ class HTMLElementQuery extends HTMLCustomElement {
 		}
 		if (this.dataset.vars) {
 			this.dataset.vars.split(',').forEach(function(key) {
-				if (query[key] !== undefined) {
+				var wasUndefined = false;
+				var val = matchdom(`[$query.${key}|isUndefined]`, {$query: query}, Object.assign({
+					isUndefined: function(val) {
+						if (val === undefined) wasUndefined = true;
+					}
+				}, HTMLElementQuery.filters));
+				var name = key.split('|').shift();
+				if (!wasUndefined) {
 					candidate++;
-					vars[key] = query[key];
+					vars[name] = val;
 				} else {
-					var node = document.querySelector(`form [name="${key}"]`);
+					var node = document.querySelector(`form [name="${name}"]`);
 					if (!node || node.required) missing++;
 				}
 			});
