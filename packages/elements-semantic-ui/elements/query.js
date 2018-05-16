@@ -161,16 +161,24 @@ Pageboard.elements.query_tags = {
 Pageboard.elements.query_template = {
 	title: "Template",
 	properties: {
-		expr: {
-			title: 'Template',
-			description: 'matchdom expression with filters on lines',
+		fill: {
+			title: 'Fill',
+			description: 'fill content with matchdom expression, filters on new lines',
 			type: 'string',
 			input: {
 				multiline: true
 			}
 		},
-		mock: {
-			title: 'Mock',
+		attr: {
+			title: 'Attribute',
+			description: 'set attributes with matchdom expression, filters on new lines',
+			type: 'string',
+			input: {
+				multiline: true
+			}
+		},
+		placeholder: {
+			title: 'Placeholder',
 			type: 'string'
 		}
 	},
@@ -180,8 +188,11 @@ Pageboard.elements.query_template = {
 	icon: '<b class="icon">var</b>',
 	render: function(doc, block) {
 		var d = block.data;
-		var expr = (d.expr || '').trim().split('\n').join('|');
-		var mock = d.mock || expr.split('|', 1)[0].split('.').pop();
-		return doc.dom`<span data-expr="[${expr}|fill]">${mock || '-'}</span>`;
+		var fill = (d.fill || '').trim().split('\n').join('|');
+		var ph = d.placeholder || fill.split('|', 1)[0].split('.').pop();
+		var node = doc.dom`<span>${ph || '-'}</span>`;
+		if (d.attr) node.dataset.attr = `[${d.attr}]`;
+		if (fill) node.dataset.fill = `[${fill}|fill]`;
+		return node;
 	}
 };
