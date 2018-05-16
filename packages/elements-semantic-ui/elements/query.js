@@ -191,7 +191,7 @@ Pageboard.elements.query_template = {
 		var fill = (d.fill || '').trim().split('\n').join('|');
 		var ph = d.placeholder || fill.split('|', 1)[0].split('.').pop();
 		var node = doc.dom`<span>${ph || '-'}</span>`;
-		if (d.attr) node.dataset.attr = `[${d.attr}]`;
+		if (d.attr) node.dataset.attr = `[${d.attr.trim().split('\n').join('|')}]`;
 		if (fill) node.dataset.fill = `[${fill}|fill]`;
 		return node;
 	}
