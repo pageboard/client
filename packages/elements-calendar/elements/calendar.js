@@ -155,6 +155,15 @@ Pageboard.elements.event_date = {
 				{type: 'integer', minimum: 0}
 			]
 		},
+		reservations: {
+			description: 'Use event.subscribe to manage this field',
+			type: 'integer',
+			default: 0,
+			minimum: 0,
+			maximum: {
+				$data: "1/seats"
+			}
+		},
 		slot: {
 			type: 'object',
 			title: 'Time slot',
@@ -177,16 +186,8 @@ Pageboard.elements.event_date = {
 
 Pageboard.elements.event_reservation = {
 	title: 'Reservation',
-	required: ['event_date_id', 'user_settings_id'],
+	required: ['seats', 'name'],
 	properties: {
-		event_date_id: {
-			type: 'string',
-			pattern: '^[\\w-]+$'
-		},
-		user_settings_id: {
-			type: 'string',
-			pattern: '^[\\w-]+$'
-		},
 		seats: {
 			title: 'Number of reserved seats',
 			type: 'integer',
@@ -197,19 +198,6 @@ Pageboard.elements.event_reservation = {
 			title: 'Comment',
 			type: 'string'
 		},
-		timestamp: {
-			format: 'date-time',
-			type: 'string'
-			// default: '' // FIXME use dynamic defaults
-		}
-	}
-};
-
-Pageboard.elements.settings.properties.event = {
-	title: 'Event settings',
-	type: 'object',
-	required: ['name'],
-	properties: {
 		name: {
 			title: 'Name',
 			type: 'string'
@@ -217,8 +205,15 @@ Pageboard.elements.settings.properties.event = {
 		phone: {
 			title: 'Phone',
 			type: 'string',
-			pattern: '^\d+(\s*\.*-*\d+)*$'
-		},
+			pattern: '^\\d+(\\s*\\.*-*\\d+)*$'
+		}
+	}
+};
+
+Pageboard.elements.settings.properties.event = {
+	title: 'Event settings',
+	type: 'object',
+	properties: {
 		allowNews: {
 			title: 'Allow sending news',
 			type: 'boolean',
