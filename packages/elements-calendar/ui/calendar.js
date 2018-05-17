@@ -1,4 +1,4 @@
-HTMLElementQuery.filters.parseDate = function(val, expr, amount, unit) {
+HTMLElementQuery.filters.parseDate = function(val, what, amount, unit) {
 	if (val && /^\d\d:\d\d/.test(val)) {
 		val = '0 ' + val;
 	}
@@ -31,7 +31,7 @@ HTMLElementQuery.filters.toTime = function(val) {
 	return HTMLElementQuery.filters.parseDate(val).toISOString().split('T').pop().split('.').shift();
 };
 
-HTMLElementQuery.filters.toDate = function(val, expr, unit) {
+HTMLElementQuery.filters.toDate = function(val, what, unit) {
 	if (!val) return val;
 
 	var date = HTMLElementQuery.filters.parseDate(val).toISOString().split('T').shift();
@@ -42,7 +42,7 @@ HTMLElementQuery.filters.toDate = function(val, expr, unit) {
 	return date;
 };
 
-HTMLElementQuery.filters.formatDate = function(val, expr, ...list) {
+HTMLElementQuery.filters.formatDate = function(val, what, ...list) {
 	if (/^\d\d:\d\d(:\d\d)?$/.test(val)) {
 		val = '1970-01-01T' + val + 'Z';
 	}
