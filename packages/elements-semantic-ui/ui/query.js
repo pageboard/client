@@ -160,6 +160,19 @@ HTMLElementQuery.filters.checked = function(val, what, selector) {
 	if (val !== true) delete what.attr;
 	return ret;
 };
+HTMLElementQuery.filters.sum = function(obj, what, ...list) {
+	var sum = 0;
+	list.forEach(function(str) {
+		var sign = 1;
+		if (str.startsWith('-')) {
+			sign = -1;
+			str = str.substring(1);
+		}
+		var curVal = what.expr.get(obj, str);
+		if (curVal != null && typeof curVal == "number") sum += sign * curVal;
+	});
+	return sum;
+};
 
 HTMLCustomElement.define('element-query', HTMLElementQuery);
 
