@@ -54,6 +54,16 @@ Page.setup(function(state) {
 			return body;
 		}
 		var doc = document.documentElement;
+
+		var fromCoords = Array.prototype.map.call(document.body.children, function(node) {
+			if (node.matches('[block-type="main"]')) return {
+				top: `${node.offsetTop}px`,
+				left: `${node.offsetLeft}px`,
+				width: `${node.offsetWidth}px`,
+				height: `${node.offsetHeight}px`
+			};
+		});
+
 		Page.updateAttributes(document.body, body);
 		var clist = document.body.classList;
 		clist.add('transition');
@@ -66,7 +76,10 @@ Page.setup(function(state) {
 			from = from + "-from";
 			clist.add(from);
 		}
-		var fromList = Array.prototype.map.call(document.body.children, function(node) {
+		var fromList = Array.prototype.map.call(document.body.children, function(node, i) {
+			if (fromCoords[i]) {
+				Object.assign(node.style, fromCoords[i]);
+			}
 			node.classList.add('transition-from');
 			return node;
 		});
