@@ -1,0 +1,29 @@
+element-input-date-time .controls {
+	display:inline;
+	line-height:100%;
+	position:relative;
+	top:-0.2em;
+}
+element-input-date-time .controls > * {
+	display:inline-block;
+	width:1.4em;
+	height:1.4em;
+	border:1px solid black;
+	border-radius:2px;
+	text-align:center;
+}
+element-input-date-time .controls > *:hover {
+	background:black;
+	color:white;
+}
+element-input-date-time .controls > .incr:after {
+	content: '+';
+}
+element-input-date-time .controls > .decr:after {
+	content: '-';
+}
+
+.ui.form element-input-date-time > input:not([type]),
+.ui.form element-input-date-time > input[type="text"] {
+	width: calc(100% - 2.8em);
+}

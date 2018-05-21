@@ -1,26 +1,88 @@
 class HTMLElementInputDateTime extends HTMLCustomElement {
-	static get observedAttributes() {
-		return ['value'];
+	init() {
+		this.controlListener = this.controlListener.bind(this);
 	}
-	connectedCallback() {
-		var inputs = this.querySelectorAll('input');
-		if (inputs.length == 0) return;
-		var input = inputs[0];
-		var hidden;
-		if (inputs.length == 2) {
-			hidden = inputs[1];
-		} else {
-			hidden = input.ownerDocument.createElement('input');
-			hidden.type = 'hidden';
-			hidden.name = input.name;
-			input.removeAttribute('name');
-			input.parentNode.appendChild(hidden);
+	static get observedAttributes() {
+		return ['value', 'format'];
+	}
+	get format() {
+		return this.getAttribute('format') || 'datetime';
+	}
+	set format(f) {
+		this.setAttribute('format', f);
+	}
+	get value() {
+		return this._input ? this._input.value : null;
+	}
+	set value(v) {
+		this._input.value = v;
+		this._dt.setTime(v);
+	}
+
+	controlListener(e) {
+		if (e.target.classList.contains('incr')) {
+			this._dt.step(1);
+		} else if (e.target.classList.contains('decr')) {
+			this._dt.step(-1);
+		} else return;
+	}
+
+	controlDownListener(e) {
+		if (e.target.closest('.controls')) {
+			e.preventDefault();
 		}
-		var val = this.getAttribute("value");
-		if (val == null) val = input.value;
-		else input.value = val;
-		hidden.value = val;
-		var format = input.dataset.format;
+	}
+
+	connectedCallback() {
+		this.addEventListener('click', this.controlListener);
+		this.addEventListener('mousedown', this.controlDownListener);
+
+		var input = this.querySelector('input[type="hidden"]');
+		var view = this.querySelector('input:not([type="hidden"])');
+		if (!view && !input) {
+			input = this.ownerDocument.createElement('input');
+			input.setAttribute('type', 'hidden');
+			this.appendChild(input);
+		}
+		if (view && !input) {
+			input = view;
+			input.setAttribute('type', 'hidden');
+			view = null;
+		}
+		if (!view) {
+			view = this.ownerDocument.createElement('input');
+			this.insertBefore(view, input);
+		}
+		this._input = input;
+		if (!this.querySelector('.controls')) {
+			this.insertAdjacentHTML('beforeEnd', '<div class="controls"><span class="incr"></span><span class="decr"></span></div>');
+		}
+
+		var lang = document.documentElement.lang || window.navigator.language;
+		view.value = this.getAttribute('value') || input.value;
+
+		this._dt = window.DateTimeEntry(view, {
+			locale: lang,
+			format: this._formatOptions(this.format),
+			useUTC: false,
+			onChange: function(val) {
+				input.value = val.toISOString();
+			}
+		});
+	}
+
+	attributeChangedCallback(name, old, val) {
+		if (!this._dt) return;
+		if (name == "value") {
+			this._dt.setTime(val);
+		} else if (name == "format") {
+			var props = this._dt.props;
+			props.format = this._formatOptions(val || 'datetime');
+			this._dt.setOptions(props);
+		}
+	}
+
+	_formatOptions(format) {
 		var l = 'long';
 		var n = 'numeric';
 		var d = '2-digit';
@@ -33,38 +95,17 @@ class HTMLElementInputDateTime extends HTMLCustomElement {
 		if (format.endsWith("time")) Object.assign(fmt, {
 			hour12: false,
 			hour: d,
-			minute: d,
-			second: d
+			minute: d
 		});
-		var lang = document.documentElement.lang || window.navigator.language;
-		if (this._datetime) this._datetime.destroy();
-		this._datetime = window.DateTimeEntry(input, {
-			locale: lang,
-			format: fmt,
-			useUTC: false,
-			onChange: function(val) {
-				var str = val.toISOString();
-				if (format == "time") {
-					str = str.split('T').pop();
-				} else if (format == "date") {
-					str = str.split('T').shift();
-				}
-				hidden.value = str;
-			}
-		});
-	}
-
-	attributeChangedCallback(attributeName, oldValue, newValue) {
-		if (attributeName != "value") return;
-		if (this._datetime) {
-			this._datetime.setTime(newValue);
-		}
+		return fmt;
 	}
 
 	disconnectedCallback() {
-		if (this._datetime) {
-			this._datetime.destroy();
-			delete this._datetime;
+		this.removeEventListener('click', this.controlListener);
+		this.removeEventListener('mousedown', this.controlDownListener);
+		if (this._dt) {
+			this._dt.destroy();
+			delete this._dt;
 		}
 	}
 }

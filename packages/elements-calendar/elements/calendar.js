@@ -21,12 +21,6 @@ Pageboard.elements.input_date_time = {
 			title: "default value",
 			type: ["string", "null"]
 		},
-		template: {
-			title: 'Template',
-			description: 'Query value template',
-			type: 'string',
-			context: 'query'
-		},
 		placeholder: {
 			title: "placeholder",
 			type: ["string", "null"]
@@ -68,13 +62,11 @@ Pageboard.elements.input_date_time = {
 	icon: '<i class="calendar outline icon"></i>',
 	render: function(doc, block) {
 		var d = block.data;
-		var input = doc.dom`<input data-format="${d.format}" type="text" name="${d.name}" />`;
-		var ce = doc.dom`<element-input-date-time>${input}</element-input-date-time>`;
-		if (d.value) input.value = d.value;
+		var input = doc.dom`<input name="${d.name}" />`;
+		var ce = doc.dom`<element-input-date-time format="${d.format}" data-value="${d.value || ''}">${input}</element-input-date-time>`;
 		if (d.disabled) input.disabled = true;
 		if (d.placeholder) input.placeholder = d.placeholder;
 		if (d.required) input.required = true;
-		if (d.template) ce.dataset.value = d.template;
 		if (d.step) input.step = d.step;
 		var node = doc.dom`<div class="field">
 			<label block-content="label">Label</label>
@@ -82,9 +74,74 @@ Pageboard.elements.input_date_time = {
 		</div>`;
 		return node;
 	},
+	stylesheets: [
+		'../ui/input-date-time.css'
+	],
 	scripts: [
 		'../ui/lib/datetime.js',
 		'../ui/input-date-time.js'
+	]
+};
+
+Pageboard.elements.input_date_slot = {
+	title: 'DateSlot',
+	menu: "form",
+	required: ["nameStart", "nameEnd"],
+	group: "block",
+	context: 'form//',
+	properties: {
+		nameStart: {
+			title: "name for start date",
+			description: "The form object key",
+			type: "string"
+		},
+		nameEnd: {
+			title: "name for end date",
+			description: "The form object key",
+			type: "string"
+		},
+		valueStart: {
+			title: 'Start time',
+			type: ["string", "null"]
+		},
+		valueEnd: {
+			title: 'End time',
+			type: ["string", "null"]
+		},
+		required: {
+			title: 'required',
+			type: 'boolean',
+			default: false
+		},
+		disabled: {
+			title: 'disabled',
+			type: 'boolean',
+			default: false
+		},
+		step: {
+			title: 'step',
+			description: 'increments in seconds for start/end times',
+			type: 'integer',
+			default: 0
+		}
+	},
+	contents: {
+		label: 'inline*'
+	},
+	icon: '<i class="calendar outline icon"></i>',
+	render: function(doc, block) {
+		var d = block.data;
+		return doc.dom`<div class="field">
+			<label block-content="label">Label</label>
+			<element-input-date-slot data-start="${d.valueStart}" data-end="${d.valueEnd}">
+				<element-input-date-time><input type="text" name="${d.nameStart}" /></element-input-date-time>
+				<element-input-date-time><input type="text" name="${d.nameEnd}" /></element-input-date-time>
+			</element-input-date-slot>
+		</div>`;
+	},
+	scripts: [
+		'../ui/lib/datetime.js',
+		'../ui/input-date-slot.js'
 	]
 };
 
@@ -176,11 +233,13 @@ Pageboard.elements.event_date = {
 				end: {
 					title: 'End',
 					type: 'string',
-					format: 'date-time'
+					format: 'date-time',
+					formatMinimum: {
+						$data: "1/start"
+					}
 				}
 			}
 		}
-
 	}
 };
 
