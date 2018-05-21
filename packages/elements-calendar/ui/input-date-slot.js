@@ -4,6 +4,7 @@ class HTMLElementInputDateSlot extends HTMLCustomElement {
 	}
 	init() {
 		this.dateChange = this.dateChange.bind(this);
+		this.timeChange = this.timeChange.bind(this);
 	}
 	connectedCallback() {
 		var els = Array.from(this.querySelectorAll('element-input-date-time'));
@@ -22,14 +23,25 @@ class HTMLElementInputDateSlot extends HTMLCustomElement {
 		els[0].value = els[1].value = this.getAttribute('start');
 		els[2].value = this.getAttribute('end');
 		els[0].addEventListener('change', this.dateChange);
+		els[1].addEventListener('change', this.timeChange);
+		els[2].addEventListener('change', this.timeChange);
 	}
 
 	dateChange(e) {
-		var date = e.target.parentNode.value;
+		var date = e.target.parentNode.value || (new Date()).toISOString();
 		var startEl = this._els[1];
-		var time = (startEl.value || '0T0:0:0Z').split('T').pop();
+		var time = (startEl.value || date).split('T').pop();
 		if (!date) return;
-		startEl.value = date.split('T').shift() + 'T' + time;
+		var startVal = date.split('T').shift() + 'T' + time;
+		startEl.value = startVal;
+	}
+
+	timeChange(e) {
+		var startVal = new Date(this._els[1].value).getTime();
+		var endVal = new Date(this._els[2].value).getTime();
+		if (isNaN(endVal) || !isNaN(startVal) && endVal < startVal) {
+			this._els[2].value = this._els[1].value;
+		}
 	}
 
 	attributeChangedCallback(name, old, val) {
@@ -45,6 +57,8 @@ class HTMLElementInputDateSlot extends HTMLCustomElement {
 	disconnectedCallback() {
 		if (this._els) {
 			this._els[0].removeEventListener('change', this.dateChange);
+			this._els[1].removeEventListener('change', this.timeChange);
+			this._els[2].removeEventListener('change', this.timeChange);
 			delete this._els;
 		}
 	}
