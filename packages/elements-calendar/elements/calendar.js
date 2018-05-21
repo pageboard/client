@@ -148,7 +148,7 @@ Pageboard.elements.input_date_slot = {
 Pageboard.elements.event = {
 	title: 'Event',
 	priority: 2, // must install scripts after query element scripts
-	menu: "Agenda",
+	menu: "Calendar",
 	required: ['title'],
 	properties: {
 		title: {
@@ -185,7 +185,7 @@ Pageboard.elements.event = {
 
 Pageboard.elements.event_date = {
 	title: 'Date',
-	menu: "Agenda",
+	menu: "Calendar",
 	properties: {
 		groupsOnly: {
 			title: 'For groups only',
@@ -245,6 +245,7 @@ Pageboard.elements.event_date = {
 
 Pageboard.elements.event_reservation = {
 	title: 'Reservation',
+	menu: "Calendar",
 	required: ['seats', 'name'],
 	properties: {
 		seats: {
