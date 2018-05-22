@@ -1,15 +1,15 @@
 element-input-date-time .controls {
-	display:inline;
-	line-height:100%;
-	position:relative;
-	top:-0.2em;
+	display: inline;
+	position: relative;
+	top: -2px;
+	font-family: monospace;
 }
 element-input-date-time .controls > * {
 	display:inline-block;
 	width:1.4em;
 	height:1.4em;
-	border:1px solid black;
-	border-radius:2px;
+	border:1px solid #777;
+	background:#333;
 	text-align:center;
 }
 element-input-date-time .controls > *:hover {
