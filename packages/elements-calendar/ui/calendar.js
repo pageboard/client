@@ -1,8 +1,13 @@
 HTMLElementQuery.filters.parseDate = function(val, what, amount, unit) {
-	if (val && /^\d\d:\d\d/.test(val)) {
-		val = '0 ' + val;
+	var d;
+	if (val instanceof Date) {
+		d = val;
+	} else {
+		if (val && /^\d\d:\d\d/.test(val)) {
+			val = '0 ' + val;
+		}
+		d = new Date(val);
 	}
-	var d = new Date(val);
 	amount = parseInt(amount);
 	if (!isNaN(amount)) {
 		if (!unit) unit = 'day';
@@ -17,13 +22,23 @@ HTMLElementQuery.filters.parseDate = function(val, what, amount, unit) {
 			second: 'Seconds'
 		}[unit];
 		if (!name) throw new Error("Unknown modDate unit " + unit);
-		d[`set${name}`](d[`get${name}`]() + amount);
+		d[`setUTC${name}`](d[`getUTC${name}`]() + amount);
 	}
 	return d;
 };
 
-HTMLElementQuery.filters.now = function(val) {
-	return val == null ? new Date().toISOString() : val;
+HTMLElementQuery.filters.thatday = function(val, what, hours, minutes) {
+	if (val != null) return val;
+	var queryDate = what.data.$query && what.data.$query.date;
+	var d = new Date(queryDate);
+	if (isNaN(d.getTime())) {
+		d = new Date(new Date().toISOString().split('T')[0]);
+	}
+	hours = parseInt(hours);
+	minutes = parseInt(minutes);
+	if (!isNaN(hours)) d.setHours(hours);
+	if (!isNaN(minutes)) d.setMinutes(minutes);
+	return d.toISOString();
 };
 
 HTMLElementQuery.filters.toTime = function(val) {
