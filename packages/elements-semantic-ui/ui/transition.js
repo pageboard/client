@@ -92,8 +92,15 @@ Page.setup(function(state) {
 			clist.add('transitioning');
 		});
 		document.documentElement.addEventListener(transitionEnd, trDone);
+		var safeTo = setTimeout(function() {
+			trDone({target: {parentNode: document.body}});
+		}, 3000);
 
 		function trDone(e) {
+			if (safeTo) {
+				clearTimeout(safeTo);
+				safeTo = null;
+			}
 			// only transitions of body children are considered
 			if (e.target.parentNode != document.body) return;
 			document.documentElement.removeEventListener(transitionEnd, trDone);
