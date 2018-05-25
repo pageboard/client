@@ -66,24 +66,6 @@ Pageboard.elements.page.properties.transition = {
 				const: 'fade-to',
 				title: 'Fade'
 			}]
-		},
-		redirect: {
-			title: 'Redirect',
-			anyOf: [{
-				type: "null"
-			}, {
-				type: "string",
-				format: "uri"
-			}, {
-				type: "string",
-				pattern: "^(/[a-zA-Z0-9-.]*)+$" // notice the absence of underscore
-			}],
-			input: {
-				name: 'href',
-				filter: {
-					type: ["link"]
-				}
-			}
 		}
 	}
 };
@@ -97,7 +79,7 @@ Pageboard.elements.page.render = function(doc, block) {
 	var tr = block.data.transition;
 	if (tr && tr.from) doc.body.dataset.transitionFrom = tr.from;
 	if (tr && tr.to) doc.body.dataset.transitionTo = tr.to;
-	if (tr && tr.redirect) doc.body.dataset.redirect = tr.redirect;
+	if (block.data.redirect) doc.body.dataset.redirect = block.data.redirect;
 	return ret;
 };
 
