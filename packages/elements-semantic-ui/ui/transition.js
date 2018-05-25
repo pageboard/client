@@ -69,11 +69,9 @@ Page.setup(function(state) {
 		clist.add('transition');
 		doc.classList.add('transition');
 		if (to) {
-			to = to + "-to";
 			clist.add(to);
 		}
 		if (from) {
-			from = from + "-from";
 			clist.add(from);
 		}
 		var fromList = Array.prototype.map.call(document.body.children, function(node, i) {

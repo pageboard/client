@@ -22,31 +22,50 @@ Object.assign(Pageboard.elements.page, {
 Pageboard.elements.page.properties.transition = {
 	title: 'Transition',
 	type: 'object',
-	list: [{
-		const: '',
-		title: 'none'
-	}, {
-		const: 'up',
-		title: 'Slide up'
-	}, {
-		const: 'down',
-		title: 'Slide down'
-	}, {
-		const: 'left',
-		title: 'Slide left'
-	}, {
-		const: 'right',
-		title: 'Slide right'
-	}, {
-		const: 'fade',
-		title: 'Fade'
-	}],
 	properties: {
 		from: {
-			title: 'Closing'
+			title: 'Closing',
+			anyOf: [{
+				const: '',
+				title: 'none'
+			}, {
+				const: 'up-from',
+				title: 'Slide up'
+			}, {
+				const: 'down-from',
+				title: 'Slide down'
+			}, {
+				const: 'left-from',
+				title: 'Slide left'
+			}, {
+				const: 'right-from',
+				title: 'Slide right'
+			}, {
+				const: 'fade-from',
+				title: 'Fade'
+			}]
 		},
 		to: {
-			title: 'Opening'
+			title: 'Opening',
+			anyOf: [{
+				const: '',
+				title: 'none'
+			}, {
+				const: 'up-to',
+				title: 'Slide up'
+			}, {
+				const: 'down-to',
+				title: 'Slide down'
+			}, {
+				const: 'left-to',
+				title: 'Slide left'
+			}, {
+				const: 'right-to',
+				title: 'Slide right'
+			}, {
+				const: 'fade-to',
+				title: 'Fade'
+			}]
 		},
 		redirect: {
 			title: 'Redirect',
@@ -68,9 +87,6 @@ Pageboard.elements.page.properties.transition = {
 		}
 	}
 };
-Pageboard.elements.page.properties.transition.properties.from.anyOf =
-Pageboard.elements.page.properties.transition.properties.to.anyOf =
-Pageboard.elements.page.properties.transition.list;
 
 Pageboard.elements.page.apiRender = Pageboard.elements.page.render;
 
