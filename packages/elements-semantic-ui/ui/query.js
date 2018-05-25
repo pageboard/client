@@ -162,6 +162,7 @@ HTMLElementQuery.filters.checked = function(val, what, selector) {
 };
 HTMLElementQuery.filters.sum = function(obj, what, ...list) {
 	var sum = 0;
+	if (obj == null) return sum;
 	list.forEach(function(str) {
 		var sign = 1;
 		if (str.startsWith('-')) {
