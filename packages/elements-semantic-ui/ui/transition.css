@@ -73,7 +73,7 @@ html.transition > body.transition {
 .transition.right-from > .transition-from[block-type="main"],
 .transition.left-from > .transition-from[block-type="main"] {
 	transition: transform 1.5s ease-in;
-	transform: translate(0, 0);
+	transform: translate3d(0, 0, 0);
 	z-index:1;
 }
 .transition.up-from > .transition-to[block-type="main"],
@@ -84,16 +84,16 @@ html.transition > body.transition {
 }
 
 .transition.transitioning.up-from > .transition-from[block-type="main"] {
-	transform: translate(0, -100%);
+	transform: translate3d(0, -100%, 0);
 }
 .transition.transitioning.down-from > .transition-from[block-type="main"] {
-	transform: translate(0, 100%);
+	transform: translate3d(0, 100%, 0);
 }
 .transition.transitioning.left-from > .transition-from[block-type="main"] {
-	transform: translate(-100%, 0);
+	transform: translate3d(-100%, 0, 0);
 }
 .transition.transitioning.right-from > .transition-from[block-type="main"] {
-	transform: translate(100%, 0);
+	transform: translate3d(100%, 0, 0);
 }
 
 .transition.up-to > .transition-to[block-type="main"],
@@ -104,16 +104,16 @@ html.transition > body.transition {
 	z-index:1;
 }
 .transition.up-to > .transition-to[block-type="main"] {
-	transform: translate(0, -100%);
+	transform: translate3d(0, -100%, 0);
 }
 .transition.down-to > .transition-to[block-type="main"] {
-	transform: translate(0, 100%);
+	transform: translate3d(0, 100%, 0);
 }
 .transition.left-to > .transition-to[block-type="main"] {
-	transform: translate(-100%, 0);
+	transform: translate3d(-100%, 0, 0);
 }
 .transition.right-to > .transition-to[block-type="main"] {
-	transform: translate(100%, 0);
+	transform: translate3d(100%, 0, 0);
 }
 .transition.up-to > .transition-from[block-type="main"],
 .transition.down-to > .transition-from[block-type="main"],
@@ -126,7 +126,7 @@ html.transition > body.transition {
 .transition.transitioning.down-to > .transition-to[block-type="main"],
 .transition.transitioning.left-to > .transition-to[block-type="main"],
 .transition.transitioning.right-to > .transition-to[block-type="main"] {
-	transform: translate(0, 0);
+	transform: translate3d(0, 0, 0);
 }
 
 /* opacity transitions */
