@@ -113,7 +113,7 @@ HTMLElementQuery.filters.byWeek = function(val, what, path) {
 		if (data == null) break;
 	}
 	if (!Array.isArray(data)) {
-		console.warn("Cannot filter groupBy with a value that is not an array");
+		return;
 	}
 
 	var weeks = {};
