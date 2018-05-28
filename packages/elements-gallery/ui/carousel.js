@@ -179,3 +179,11 @@ Page.setup(function() {
 	HTMLCustomElement.define('element-carousel-cell', HTMLElementCarouselCell);
 });
 
+Page.close(function() {
+	Array.from(document.body.querySelectorAll('element-carousel')).forEach(function(node) {
+		if (node.carousel) {
+			node.carousel.stopPlayer();
+		}
+	});
+});
+
