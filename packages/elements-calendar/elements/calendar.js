@@ -1,7 +1,7 @@
 Pageboard.elements.IntlPolyfill = {
 	priority: -102, // before polyfill element
 	install: function(doc, page) {
-		var lang = (page.site.lang || window.navigator.language || 'en').substring(0, 2);
+		var lang = (Pageboard.site.lang || window.navigator.language || 'en').substring(0, 2);
 		this.polyfills = [`Intl.~locale.${lang}`];
 	}
 };
