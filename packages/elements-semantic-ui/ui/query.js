@@ -83,9 +83,10 @@ class HTMLElementQuery extends HTMLCustomElement {
 					vars[name] = val;
 				} else {
 					var node = document.querySelector(`form [name="${name}"]`);
-					if (!node || node.required) missing++;
+					if (node && node.required) missing++;
 				}
 			});
+			if (candidate == 0) return;
 		}
 		var form = this;
 		if (missing > 0) {
