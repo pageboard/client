@@ -130,18 +130,30 @@ html.transition > body.transition {
 }
 
 /* opacity transitions */
+.transition.fade-to > .transition-to,
+.transition.fade-to > .transition-from,
 .transition.fade-from > .transition-to,
-.transition.fade-to > .transition-to {
-	z-index:0;
+.transition.fade-from > .transition-from {
+	transform: translate3d(0, 0, 0) !important;
 }
-.transition.fade-from > .transition-from,
-.transition.fade-to > .transition-from {
+.transition.fade-to > .transition-to[block-type="main"] {
+	z-index:1;
+	opacity:0;
+	transition: opacity 1.5s ease-in;
+	transform: translate3d(0, 0, 0) !important;
+	height:100% !important;
+}
+.transition.transitioning.fade-to > .transition-to[block-type="main"] {
+	opacity:1;
+}
+
+.transition.fade-from > .transition-from[block-type="main"] {
 	z-index:1;
 	opacity:1;
 	transition: opacity 1.5s ease-in;
+	height:100% !important;
 }
-.transition.transitioning.fade-from > .transition-from,
-.transition.transitioning.fade-to > .transition-from {
+.transition.transitioning.fade-from > .transition-from[block-type="main"] {
 	opacity:0;
 }
 
