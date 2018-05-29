@@ -229,21 +229,21 @@ Pageboard.elements.input_property = {
 		var listOf = prop.anyOf || prop.oneOf;
 		var propType;
 		if (listOf) {
-			listOf = listOf.filter(function(item) {
-				if (item.type == "null" && d.multiple) {
-					required = false;
-					return false;
-				} else {
-					return true;
-				}
+			var listOfNo = listOf.filter(function(item) {
+				return item.type != "null";
 			});
-			if (listOf.length == 1 && listOf[0].const === undefined) {
-				propType = listOf[0];
+			if (listOfNo.length != listOf.length) {
+				required = false;
+			}
+			if (listOfNo.length == 1 && listOfNo[0].const === undefined) {
+				propType = listOfNo[0];
 				listOf = null;
+			} else if (d.multiple) {
+				listOf = listOfNo;
 			}
 		} else if (Array.isArray(prop.type)) {
 			listOf = prop.type.filter(function(type) {
-				if (type == "null" && d.multiple) {
+				if (type == "null") {
 					required = false;
 					return false;
 				} else {
