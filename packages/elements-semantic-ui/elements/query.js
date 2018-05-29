@@ -34,9 +34,6 @@ Pageboard.elements.query = {
 				}).join(',');
 			}
 		}
-		if (d.binding) {
-			node.dataset.binding = d.binding;
-		}
 		return node;
 	},
 	required: ["query"],
