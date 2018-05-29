@@ -20,3 +20,10 @@ element-query[block-focused] > .results {
 [data-expr][block-type="query_template"]:after {
 	content:']';
 }
+
+element-query-tags {
+	display:block;
+}
+element-query-tags > div {
+	display:inline-block;
+}

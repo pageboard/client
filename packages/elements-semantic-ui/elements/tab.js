@@ -43,7 +43,8 @@ Pageboard.elements.tabs = {
 		</element-tabs>`;
 	},
 	stylesheets: [
-		'../semantic-ui/tab.css'
+		'../semantic-ui/tab.css',
+		'../ui/tab.css'
 	],
 	scripts: [
 		'../ui/tab.js'

@@ -5,3 +5,8 @@ element-sticky {
 element-sticky[data-collapsed="true"] {
 	height:0;
 }
+
+
+element-sticky.header {
+	z-index:1001; /* above other sticky elements */
+}

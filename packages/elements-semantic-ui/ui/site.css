@@ -227,6 +227,10 @@ i.icon.up:before {
 	content: '>';
 }
 
+i.icon.delete:before {
+	content:'❌';
+}
+
 /*******************************
 				 Scrollbars
 *******************************/
@@ -250,53 +254,6 @@ i.icon.up:before {
 ::selection {
 	background-color: #CCE2FF;
 	color: rgba(0, 0, 0, 0.87);
-}
-
-/* Form */
-fieldset.plain {
-	border-width:0;
-	padding-right:0;
-	padding-left:0;
-}
-textarea::-webkit-selection,
-input::-webkit-selection {
-	background-color: rgba(100, 100, 100, 0.4);
-	color: rgba(0, 0, 0, 0.87);
-}
-textarea::-moz-selection,
-input::-moz-selection {
-	background-color: rgba(100, 100, 100, 0.4);
-	color: rgba(0, 0, 0, 0.87);
-}
-textarea::selection,
-input::selection {
-	background-color: rgba(100, 100, 100, 0.4);
-	color: rgba(0, 0, 0, 0.87);
-}
-
-.ui.checkbox input + label[for] {
-	cursor:pointer;
-}
-
-element-select {
-	z-index:1; /* or else dropdown menu goes under what's next */
-}
-element-query-tags {
-	display:block;
-}
-element-query-tags > div {
-	display:inline-block;
-}
-element-sticky.header {
-	z-index:1001; /* above other sticky elements */
-}
-element-tabs {
-	display:block;
-}
-
-i.icon.delete:before {
-	/*background-image: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" viewBox="0 0 2048 2048" xmlns="http://www.w3.org/2000/svg"><path d="M1523 1312q0 13-10 23l-50 50q-10 10-23 10t-23-10l-393-393-393 393q-10 10-23 10t-23-10l-50-50q-10-10-10-23t10-23l466-466q10-10 23-10t23 10l466 466q10 10 10 23z"/></svg>');*/
-	content:'❌';
 }
 
 /* Force Simple Scrollbars */
