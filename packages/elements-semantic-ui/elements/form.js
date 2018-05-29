@@ -229,7 +229,7 @@ Pageboard.elements.input_property = {
 		var propType;
 		if (listOf) {
 			listOf = listOf.filter(function(item) {
-				if (item.type == "null") {
+				if (item.type == "null" && d.multiple) {
 					required = false;
 					return false;
 				} else {
@@ -242,7 +242,7 @@ Pageboard.elements.input_property = {
 			}
 		} else if (Array.isArray(prop.type)) {
 			listOf = prop.type.filter(function(type) {
-				if (type == "null") {
+				if (type == "null" && d.multiple) {
 					required = false;
 					return false;
 				} else {
@@ -276,7 +276,7 @@ Pageboard.elements.input_property = {
 						type: d.multiple ? 'input_checkbox' : 'input_radio',
 						data: {
 							name: name,
-							value: item.const,
+							value: item.type == "null" ? null : item.const,
 							disabled: d.disabled
 						},
 						content: {
@@ -290,7 +290,7 @@ Pageboard.elements.input_property = {
 					var option = view.render({
 						type: 'input_select_option',
 						data: {
-							value: item.const
+							value: item.type == "null" ? null : item.const
 						},
 						content: {
 							label: item.title
@@ -813,7 +813,8 @@ Pageboard.elements.input_radio = {
 	render: function(doc, block, view) {
 		var d = block.data;
 		var id = (block.id || view.blocks.genId(4)).substring(0, 4);
-		var input = doc.dom`<input type="radio" name="${d.name}" value="${d.value}" id="for${id}" />`;
+		var val = d.value == null ? '' : d.value;
+		var input = doc.dom`<input type="radio" name="${d.name}" value="${val}" id="for${id}" />`;
 		if (d.disabled) input.disabled = true;
 		return doc.dom`<div class="field">
 			<div class="ui radio checkbox">

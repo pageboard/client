@@ -26,8 +26,10 @@ HTMLFormElement.prototype.fill = function(values) {
 			break;
 			case 'radio':
 			case 'checkbox':
-				if (val) elem.checked = (Array.isArray(val) ? val : [val]).some(function(val) {
-					return val.toString() == elem.value;
+				if (val == null) val = [''];
+				else if (!Array.isArray(val)) val = [val];
+				elem.checked = val.some(function(str) {
+					return str.toString() == elem.value;
 				});
 			break;
 			case 'select-multiple':
