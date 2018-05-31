@@ -103,7 +103,9 @@ function formSet(form, values) {
 			break;
 			case 'radio':
 			case 'checkbox':
-				if (val) elem.checked = (Array.isArray(val) ? val : [val]).some(function(val) {
+				if (val == null) val = [''];
+				else if (!Array.isArray(val)) val = [val];
+				elem.checked = val.some(function(val) {
 					return val.toString() == elem.value;
 				});
 				// TODO it's preferable if this line is not needed
@@ -200,27 +202,26 @@ Semafor.prototype.convert = function(vals, field) {
 		val = vals[name];
 		if (field) {
 			var type = field.type;
-			var typeList = Array.isArray(type) && type
+			var listOf = Array.isArray(type) && type
 				|| Array.isArray(field.oneOf) && field.oneOf
 				|| Array.isArray(field.anyOf) && field.anyOf
 				|| null;
 			var nullable = false;
-			if (typeList) {
+			if (listOf) {
 				// we support promotion to null and that's it
-				typeList = typeList.filter(function(item) {
-					if (item.type == "null") {
-						nullable = true;
-						return false;
-					} else {
-						return true;
-					}
+				var listOfNo = listOf.filter(function(item) {
+					return item.type != "null";
 				});
-				if (typeList.length == 1) type = typeList[0].type || typeList[0];
-				else if (typeList.every(function(item) {
+				if (listOfNo.length != listOf.length) {
+					nullable = true;
+				}
+				if (listOfNo.length == 1) {
+					type = listOfNo[0].type || listOfNo[0];
+				} else if (listOfNo.every(function(item) {
 					return item.const !== undefined;
 				})) {
-					// do nothing
-				} else if (typeList.every(function(item) {
+					// nothing
+				} else if (listOfNo.every(function(item) {
 					return item == "string" || item.type === undefined || item.type == "string";
 				})) {
 					type = "string";
@@ -331,7 +332,8 @@ types.string = function(key, schema, node, fields) {
 
 types.oneOf = function(key, schema, node, fields) {
 	var field;
-	var alts = (schema.oneOf || schema.anyOf).filter(function(item) {
+	var listOf = schema.oneOf || schema.anyOf;
+	var alts = listOf.filter(function(item) {
 		return item.type != "null";
 	});
 	var oneOfType;
@@ -355,6 +357,9 @@ types.oneOf = function(key, schema, node, fields) {
 		return process(key, Object.assign({}, schema, oneOfType), node, fields);
 	}
 
+	var def = schema.default;
+	if (def === null) def = "";
+
 	if (icons) {
 		field = node.dom`<div class="inline fields">
 			<label for="${key}">${schema.title}</label>
@@ -364,45 +369,55 @@ types.oneOf = function(key, schema, node, fields) {
 		</div>`;
 		node.appendChild(field);
 		$(field).find('.radio.checkbox').checkbox();
-	} else if (alts.length <= 3) {
+	} else if (listOf.length <= 3) {
 		field = node.dom`<div class="inline fields">
 			<label for="${key}">${schema.title}</label>
 			<div class="field">
-				${alts.map(getRadioOption)}
+				${listOf.map(getRadioOption)}
 			</div>
 		</div>`;
 		node.appendChild(field);
+		if (def !== undefined) {
+			$(field).find(`[name="${key}"][value="${def}"]`).prop('checked', true);
+		}
 		$(field).find('.radio.checkbox').checkbox();
-		if (schema.default !== null) $(field).find(`[name="${key}"][value="${schema.default}"]`).prop('checked', true);
 	} else {
 		field = node.dom`<div class="flex field" title="${schema.description || ''}">
 			<label>${schema.title}</label>
 			<select name="${key}" class="ui compact dropdown">
-				${alts.map(getSelectOption)}
+				${listOf.map(getSelectOption)}
 			</select>
 		</div>`;
 		node.appendChild(field);
-		if (schema.default !== null) $(field).find(`[value="${schema.default}"]`).prop('selected', true);
+		if (def !== undefined) {
+			$(field).find(`[value="${def}"]`).prop('selected', true);
+		}
 		$(field).find('.dropdown').dropdown({placeholder: false});
 	}
 
 	function getIconOption(item) {
 		return `<div class="ui radio checkbox item" title="${item.title}">
-			<input type="radio" name="${key}" value="${item.const}" tabindex="0" class="hidden">
+			<input type="radio" name="${key}" value="${getValStr(item)}" tabindex="0" class="hidden">
 			<label>${item.icon}</label>
 		</div>`;
 	}
 
 	function getRadioOption(item) {
 		return node.dom`<div class="ui radio checkbox">
-				<input type="radio" name="${key}" value="${item.const}" tabindex="0" class="hidden">
+				<input type="radio" name="${key}" value="${getValStr(item)}" tabindex="0" class="hidden">
 				<label>${item.title}</label>
 			</div>`;
 	}
 
 	function getSelectOption(item) {
-		if (item.const === undefined) console.error("We can't really support non-const oneOf here");
-		return node.dom`<option value="${item.const}">${item.title || item.const}</option>`;
+		return node.dom`<option value="${getValStr(item)}">${item.title || item.const}</option>`;
+	}
+
+	function getValStr(item) {
+		if (item.const === undefined && item.type != "null") {
+			console.error("non-const/non-null oneOf/anyOf");
+		}
+		return item.const != null ? item.const : '';
 	}
 };
 
