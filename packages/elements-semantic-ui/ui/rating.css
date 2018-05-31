@@ -1,0 +1,140 @@
+element-rating {
+	display: inline-flex;
+	white-space: nowrap;
+	vertical-align: top;
+	font-size:2.2em;
+	line-height:0.6;
+}
+element-rating:last-child {
+	margin-right: 0em;
+}
+
+/* Icon */
+element-rating .icon {
+	background: transparent;
+	padding:0;
+	padding-right: 0.1em;
+	margin: 0em;
+	text-align: center;
+	font-weight: normal;
+	font-style: normal;
+	flex: 1 0 auto;
+	cursor: pointer;
+	width: auto;
+	height: auto;
+	transition: opacity 0.1s ease, background 0.1s ease, text-shadow 0.1s ease, color 0.1s ease;
+	backface-visibility: hidden;
+}
+element-rating .icon:last-child {
+	padding-right:0em;
+}
+
+element-rating .icon:before {
+	width: auto;
+	height: auto;
+	content: attr(data-char);
+}
+
+
+/*******************************
+						 Types
+*******************************/
+
+
+/*-------------------
+			Standard
+--------------------*/
+
+
+/* Inactive Icon */
+element-rating .icon {
+	color: rgba(0, 0, 0, 0.15);
+}
+
+/* Active Icon */
+element-rating .active.icon {
+	color: rgba(0, 0, 0, 0.85);
+}
+
+/* Selected Icon */
+element-rating .icon.selected,
+element-rating .icon.selected.active {
+	color: rgba(0, 0, 0, 0.87);
+}
+
+/*-------------------
+				Star
+--------------------*/
+
+
+/* Inactive */
+element-rating.star .icon {
+	color: rgba(0, 0, 0, 0.15);
+	text-shadow: none;
+}
+
+/* Active Star */
+element-rating.star .active.icon {
+	color: #FFE623 !important;
+	text-shadow: 0px -1px 0px #DDC507, -1px 0px 0px #DDC507, 0px 1px 0px #DDC507, 1px 0px 0px #DDC507 !important;
+}
+
+/* Selected Star */
+element-rating.star .icon.selected,
+element-rating.star .icon.selected.active {
+	color: #FFCC00 !important;
+	text-shadow: 0px -1px 0px #E6A200, -1px 0px 0px #E6A200, 0px 1px 0px #E6A200, 1px 0px 0px #E6A200 !important;
+}
+
+/*-------------------
+				Heart
+--------------------*/
+
+element-rating.heart .icon {
+	color: rgba(0, 0, 0, 0.15);
+	text-shadow: none !important;
+}
+
+/* Active Heart */
+element-rating.heart .active.icon {
+	color: #FF6D75 !important;
+	text-shadow: 0px -1px 0px #CD0707, -1px 0px 0px #CD0707, 0px 1px 0px #CD0707, 1px 0px 0px #CD0707 !important;
+}
+
+/* Selected Heart */
+element-rating.heart .icon.selected,
+element-rating.heart .icon.selected.active {
+	color: #FF3000 !important;
+	text-shadow: 0px -1px 0px #AA0101, -1px 0px 0px #AA0101, 0px 1px 0px #AA0101, 1px 0px 0px #AA0101 !important;
+}
+
+
+/*******************************
+						 States
+*******************************/
+
+
+/*-------------------
+			 Disabled
+--------------------*/
+
+
+/* disabled rating */
+element-rating.disabled .icon {
+	cursor: default;
+}
+
+/*-------------------
+	 User Interactive
+--------------------*/
+
+
+/* Selected Rating */
+element-rating.selected .active.icon {
+	opacity: 1;
+}
+element-rating.selected .icon.selected,
+element-rating .icon.selected {
+	opacity: 1;
+}
+

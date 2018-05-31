@@ -8,13 +8,16 @@ class HTMLElementRating extends HTMLCustomElement {
 	update() {
 		var maximum = parseInt(this.getAttribute('maximum'));
 		var value = parseFloat(this.getAttribute('value'));
+		var char = this.getAttribute('char');
+		if (!char) char = '⭐';
 		while (this.children.length > maximum) {
 			this.firstElementChild.remove();
 		}
 		while (this.children.length < maximum) {
-			this.insertAdjacentHTML('beforeEnd', '<i class="icon"></i>');
+			this.insertAdjacentHTML('beforeEnd', `<i class="icon" data-char="${char}"></i>`);
 		}
 		Array.from(this.children).forEach(function(item, i) {
+			item.dataset.char = char;
 			item.classList.toggle('active', i + 1 <= value);
 		});
 	}

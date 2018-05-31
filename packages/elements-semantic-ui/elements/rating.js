@@ -21,8 +21,15 @@ Pageboard.elements.rating = {
 			type: 'string',
 			context: 'query|form'
 		},
-		icon: {
-			title: 'Icon',
+		char: {
+			title: 'Symbol',
+			type: 'string',
+			maxLength: 1,
+			minLength: 1,
+			default: '⭐'
+		},
+		color: {
+			title: 'Color',
 			anyOf: [{
 				title: 'Default',
 				type: 'null'
@@ -37,12 +44,12 @@ Pageboard.elements.rating = {
 	},
 	render: function(doc, block) {
 		var d = block.data;
-		var node = doc.dom`<element-rating class="ui ${d.icon || ''} rating" value="${d.value}" maximum="${d.maximum}"></element-rating>`;
+		var node = doc.dom`<element-rating class="${d.color || ''}" value="${d.value}" maximum="${d.maximum}" char="${d.char}"></element-rating>`;
 		if (d.template) node.dataset.value = d.template;
 		return node;
 	},
 	stylesheets: [
-		'../semantic-ui/rating.css'
+		'../ui/rating.css'
 	],
 	scripts: [
 		'../ui/rating.js'
