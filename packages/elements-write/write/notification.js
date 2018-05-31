@@ -14,8 +14,13 @@ Pageboard.notify = function(title, obj) {
 		obj = {};
 	} else if (obj.stack && obj.message) {
 		console.error(obj);
+		if (obj.body) {
+			title = obj.message;
+			text = obj.body;
+		} else {
+			title = obj.message;
+		}
 		type = 'negative';
-		text = obj.toString();
 		obj = {};
 	} else if (typeof obj == "string") {
 		text = obj;
