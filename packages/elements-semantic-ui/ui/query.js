@@ -105,7 +105,7 @@ class HTMLElementQuery extends HTMLCustomElement {
 		if (this.dataset.nocall == "true") {
 			matchdom(template, {
 				$query: vars
-			}, HTMLElementQuery.filters, {});
+			}, HTMLElementQuery.filters);
 			while (template.firstChild) results.appendChild(template.firstChild);
 			this._refreshing = false;
 			return;
@@ -114,7 +114,7 @@ class HTMLElementQuery extends HTMLCustomElement {
 		form.classList.add('loading');
 		return Pageboard.fetch('get', '/.api/query', vars).then(function(answer) {
 			answer.$query = vars;
-			matchdom(template, answer, HTMLElementQuery.filters, answer.data);
+			matchdom(template, answer, HTMLElementQuery.filters, answer);
 			while (template.firstChild) results.appendChild(template.firstChild);
 			if (!answer.data || answer.data.length === 0) {
 				form.classList.add('warning');
@@ -133,23 +133,49 @@ class HTMLElementQuery extends HTMLCustomElement {
 
 HTMLElementQuery.filters = {};
 HTMLElementQuery.filters.title = function(val, what) {
+	// return title of repeated key, title of anyOf/listOf const value
 	if (val === undefined) return;
-	var path = what.expr.path;
-	var rootPath = path.slice(0, -2);
-	var block = what.expr.get(what.scope, rootPath);
+	var path = what.scope.path.slice();
+	var cur = what.expr.path.slice();
+	if (what.scope.alias && cur[0] == what.scope.alias) {
+		cur.shift();
+	}
+	path = path.concat(cur);
+	var block;
+	if (what.scope.keys) {
+		var last = path.pop();
+		if (last == "key") {
+			path.push(val);
+			val = undefined;
+		} else if (last == "val") {
+			var key = what.scope.data[what.scope.index].key;
+			path.push(key);
+		}
+		block = what.data;
+	} else {
+		block = what.scope.data;
+	}
+	for (var i=0; i < path.length; i++) {
+		if (block && block.id && block.type) break;
+		block = block[path[i]];
+	}
+	if (!what.scope.keys) path = path.slice(i);
+
 	if (!block || !block.type) {
-		console.warn("No block found matching", rootPath, what);
+		console.warn("No block found matching", what.scope.path, what.expr.path);
 		return;
 	}
-	var schemaPath = 'schemas.' + block.type + '.properties.' + path.slice(rootPath.length).join('.properties.');
+	var schemaPath = 'schemas.' + block.type + '.properties.' + path.join('.properties.');
 	var schema = what.expr.get(what.data, schemaPath);
 	if (!schema) {
-		console.warn("No matching schema for title of", schemaPath, what);
+		console.warn("No schema for", schemaPath);
 		return;
 	}
+	if (val === undefined && schema.title) return schema.title;
 	var listOf = schema.oneOf || schema.anyOf;
 	if (!listOf) {
 		console.warn("No oneOf/anyOf schema for property of", schemaPath);
+		return;
 	}
 	var prop = listOf.find(function(item) {
 		return item.const === val; // null !== undefined
