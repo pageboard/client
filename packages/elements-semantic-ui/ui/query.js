@@ -201,6 +201,12 @@ HTMLElementQuery.filters.sum = function(obj, what, ...list) {
 	});
 	return sum;
 };
+HTMLElementQuery.filters.query = function(val, what, name) {
+	var q = Object.assign({}, what.data.$query);
+	for (var key in q) if (key[0] == "_") delete q[key];
+	q[name] = val;
+	return Page.format({pathname: "", query: q});
+};
 
 HTMLCustomElement.define('element-query', HTMLElementQuery);
 
