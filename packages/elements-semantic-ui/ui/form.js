@@ -183,6 +183,7 @@ Page.setup(function(state) {
 		var fd = new FormData(form);
 		var query = {};
 		fd.forEach(function(val, key) {
+			if (val == null || val == "") return;
 			if (noUnderscore && key[0] == "_") return;
 			var old = query[key];
 			if (old !== undefined) {
