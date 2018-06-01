@@ -232,6 +232,7 @@ class HTMLElementQueryTags extends HTMLCustomElement {
 		var control, field, label;
 		for (var name in query) {
 			HTMLElementQuery.find(name, query[name]).forEach(function(control) {
+				if (control.type == "hidden") return;
 				field = control.closest('.field');
 				if (!field) return;
 				label = field.querySelector('label');
@@ -248,6 +249,7 @@ class HTMLElementQueryTags extends HTMLCustomElement {
 		var label = e.target.closest('.label');
 		if (!label) return;
 		HTMLElementQuery.find(label.dataset.name, label.dataset.value).forEach(function(control) {
+			if (control.type == "hidden") return;
 			if (control.checked) control.checked = false;
 			else if (control.reset) control.reset();
 			else if (control.value) control.value = "";
