@@ -131,7 +131,18 @@ FormBlock.prototype.propInputs = function(props, parentKey) {
 		}
 		var opts = prop.input;
 		if (!opts || !opts.name) {
-			if (prop.properties) this.propInputs(prop.properties, key);
+			if (prop.oneOf || prop.anyOf) {
+				var list = prop.oneOf || prop.anyOf;
+				var listNoNull = list.filter(function(item) {
+					return item.type != "null";
+				});
+				if (listNoNull.length == 1 && listNoNull[0].properties) {
+					prop = listNoNull[0];
+				}
+			}
+			if (prop.properties) {
+				this.propInputs(prop.properties, key);
+			}
 			return;
 		}
 		var CurInput = Pageboard.inputs[opts.name];

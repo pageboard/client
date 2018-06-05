@@ -178,9 +178,17 @@ Semafor.prototype.flatten = function(tree, obj, schema) {
 	var props = schema && schema.properties;
 	Object.keys(tree).forEach(function(key) {
 		var val = tree[key];
-		var subSchema = props && props[key];
+		var field = props && props[key];
 		if (val != null && typeof val == "object") {
-			if (!subSchema || !subSchema.properties) {
+			if (field && (field.oneOf || field.anyOf)) {
+				var listNoNull = (field.oneOf || field.anyOf).filter(function(item) {
+					return item.type != "null";
+				});
+				if (listNoNull.length == 1 && listNoNull[0].properties) {
+					field = listNoNull[0];
+				}
+			}
+			if (!field || !field.properties) {
 				obj[key] = JSON.stringify(val);
 			} else {
 				var sub = this.flatten(val);
@@ -243,6 +251,14 @@ Semafor.prototype.convert = function(vals, field) {
 					val = val == "true";
 				break;
 				case "object":
+					if (field.oneOf || field.anyOf) {
+						var listNoNull = (field.oneOf || field.anyOf).filter(function(item) {
+							return item.type != "null";
+						});
+						if (listNoNull.length == 1 && listNoNull[0].properties) {
+							field = listNoNull[0];
+						}
+					}
 					if (!field.properties) {
 						try {
 							val = val ? JSON.parse(val) : val;
