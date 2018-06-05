@@ -11,7 +11,7 @@ function ElementProperty(input, opts, props, block) {
 	var formBlock = Pageboard.editor.blocks.get(formId);
 	if (!formBlock) throw new Error("Cannot find form block for " + formId);
 	this.formBlock = formBlock;
-	var type = formBlock.data.action.type;
+	var type = formBlock.data.type;
 	var el = Pageboard.editor.element(type);
 	if (!el) throw new Error("Cannot map type to element " + type);
 	this.el = el;
