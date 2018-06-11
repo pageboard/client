@@ -4,6 +4,7 @@ Pageboard.inputs.href = Href;
 Href.cache = {};
 
 function Href(input, opts, props, block) {
+	this.trigger = Pageboard.debounce(this.realTrigger, 500);
 	this.renderList = this.renderList.bind(this);
 	this.cache = this.cache.bind(this);
 	this.set = this.set.bind(this);
@@ -13,6 +14,17 @@ function Href(input, opts, props, block) {
 	this.init();
 	this.update();
 }
+
+Href.prototype.realTrigger = function() {
+	var input = this.node.querySelector('input');
+	if (input.value != this.input.value) {
+		this.input.value = input.value;
+		Pageboard.trigger(this.input, 'change');
+		setTimeout(function() {
+			input.focus();
+		});
+	}
+};
 
 Href.prototype.init = function() {
 	var input = this.input;
@@ -33,8 +45,7 @@ Href.prototype.init = function() {
 		if (me.action == "search") {
 			me.searchUpdate();
 		} else if (me.action == "manual") {
-			// change on destroy or focusout
-			me.manualChange = true;
+			me.trigger();
 		} else if (!me.action) {
 			input.value = "";
 			Pageboard.trigger(input, 'change');
@@ -109,7 +120,6 @@ Href.prototype.init = function() {
 };
 
 Href.prototype.destroy = function() {
-	if (this.manualChange) this.manualStop();
 	Pageboard.write.classList.remove('href');
 };
 
@@ -224,11 +234,7 @@ Href.prototype.manualStart = function() {
 };
 
 Href.prototype.manualStop = function() {
-	var input = this.node.querySelector('input');
-	if (input.value != this.input.value) {
-		this.input.value = input.value;
-		Pageboard.trigger(this.input, 'change');
-	}
+	this.realTrigger();
 };
 
 Href.prototype.pasteStart = function() {
