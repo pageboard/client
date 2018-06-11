@@ -15,6 +15,9 @@ Pageboard.setup = function(state) {
 	modeControl = document.querySelector('#store > [data-command="view"]');
 	modeControl.removeEventListener('click', modeControlListener, false);
 	modeControl.addEventListener('click', modeControlListener, false);
+	document.body.addEventListener('submit', function(e) {
+		e.preventDefault();
+	});
 };
 
 Pageboard.install = function(doc) {

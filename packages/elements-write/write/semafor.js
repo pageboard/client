@@ -26,7 +26,8 @@ function Semafor(schema, node) {
 	// then initialize the form using semantic-ui form behavior
 	this.$node.form({
 		on: 'blur',
-		fields: this.fields
+		fields: this.fields,
+		keyboardShortcuts: false
 	});
 }
 
