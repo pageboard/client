@@ -46,6 +46,7 @@ Href.prototype.init = function() {
 		if (!me.action) {
 			if (me.input.value) {
 				me.node.querySelector('input').select();
+				if (me.list && me.list.length == 0) me.start('manual');
 			} else {
 				me.start('search');
 			}
@@ -57,6 +58,7 @@ Href.prototype.init = function() {
 		if (!actioner) {
 			if (e.altKey) {
 				this.start('manual');
+				me.node.querySelector('input').focus();
 			}
 			return;
 		}
@@ -81,7 +83,7 @@ Href.prototype.init = function() {
 		} else {
 			if (href == input.value) {
 				if (this.action == 'search') {
-					this.start(this.action);
+					this.stop(this.action);
 				} else {
 //					this.set(input.value);
 				}
@@ -105,15 +107,21 @@ Href.prototype.destroy = function() {
 };
 
 Href.prototype.update = function() {
-	if (this.action) this[this.action + "Stop"]();
-	this.action = null;
 	this.list = [];
 	this.renderField();
 	var me = this;
 	var val = this.input.value;
+	var input = this.node.querySelector('input');
+	if (val && !input.value) {
+		input.value = val;
+	}
 	if (val) {
-		this.get(val).then(this.cache).then(function() {
-			me.set(val);
+		this.get(val).then(this.cache).then(function(list) {
+			if (list.length == 0) {
+				me.start("manual");
+			} else {
+				me.set(val);
+			}
 		});
 	} else {
 		this.renderList();
@@ -121,23 +129,19 @@ Href.prototype.update = function() {
 };
 
 Href.prototype.start = function(action) {
-	if (this.stop(action)) return;
+	var same = this.action == action;
+	this.stop();
 	this.action = action;
 	this.renderField();
-	this[action + 'Start']();
+	this[action + 'Start'](same);
 };
 
-Href.prototype.stop = function(action) {
+Href.prototype.stop = function() {
 	var prev = this.action;
-	var same = prev == action;
-
-	if (this.action) {
+	if (prev) {
 		this.action = null;
 		this[prev + 'Stop']();
-		if (same) {
-			this.renderField();
-			return true;
-		}
+		this.renderField();
 	}
 };
 
@@ -147,7 +151,7 @@ Href.prototype.renderField = function() {
 	case "manual":
 		content = document.dom`<input class="search" type="text" placeholder="Type url..." />
 		<div class="ui blue icon buttons">
-			<div class="ui button" data-action="manual" title="Stop">
+			<div class="ui button" data-action="search" title="Stop">
 				<i class="close icon"></i>
 			</div>
 		</div>`;
@@ -209,12 +213,12 @@ Href.prototype.cache = function(list) {
 Href.prototype.manualStart = function() {
 	var input = this.node.querySelector('input');
 	input.value = this.input.value;
-	input.focus();
 };
 
 Href.prototype.manualStop = function() {
 	var input = this.node.querySelector('input');
 	if (input.value != this.input.value) {
+		this.input.value = input.value;
 		Pageboard.trigger(this.input, 'change');
 	}
 };
@@ -236,7 +240,10 @@ Href.prototype.pasteStop = function() {
 	Pageboard.trigger(this.input, 'change');
 };
 
-Href.prototype.searchStart = function() {
+Href.prototype.searchStart = function(same) {
+	if (same) {
+		return;
+	}
 	var me = this;
 	var input = this.node.querySelector('input');
 	input.focus();
