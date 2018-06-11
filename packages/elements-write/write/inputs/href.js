@@ -33,12 +33,18 @@ Href.prototype.init = function() {
 		if (me.action == "search") {
 			me.searchUpdate();
 		} else if (me.action == "manual") {
-			// do nothing
+			// change on destroy or focusout
+			me.manualChange = true;
 		} else if (!me.action) {
 			input.value = "";
 			Pageboard.trigger(input, 'change');
 			me.start("search");
 		}
+	});
+
+	this.node.addEventListener('focusout', function(e) {
+		if (!e.target.matches('input')) return;
+		if (me.action == "manual") me.manualStop();
 	});
 
 	this.node.addEventListener('focusin', function(e) {
@@ -103,6 +109,7 @@ Href.prototype.init = function() {
 };
 
 Href.prototype.destroy = function() {
+	if (this.manualChange) this.manualStop();
 	Pageboard.write.classList.remove('href');
 };
 
@@ -213,6 +220,7 @@ Href.prototype.cache = function(list) {
 Href.prototype.manualStart = function() {
 	var input = this.node.querySelector('input');
 	input.value = this.input.value;
+	this.renderList([]);
 };
 
 Href.prototype.manualStop = function() {
