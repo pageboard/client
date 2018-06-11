@@ -25,7 +25,7 @@ Form.prototype.update = function(parents, sel) {
 		return;
 	}
 	if (!parents.length) {
-		this.clear();
+		this.destroy();
 		return;
 	}
 	var parent = parents[0];
