@@ -9,6 +9,11 @@ Pageboard.elements.google_translate = {
 			title: 'Automatic banner',
 			type: 'boolean',
 			default: false
+		},
+		opened: {
+			title: 'Keep opened',
+			type: 'boolean',
+			default: false
 		}
 	},
 	contents: {

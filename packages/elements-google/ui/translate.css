@@ -5,6 +5,9 @@ element-google-translate {
 iframe.goog-te-menu-frame {
 	margin-top:0.5em;
 }
+body.google-translate-keep > iframe.goog-te-menu-frame {
+	display:block !important;
+}
 element-google-translate .goog-te-menu-value {
 	display: none;
 }
