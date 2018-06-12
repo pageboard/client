@@ -14,10 +14,10 @@ body.google-translate-keep > iframe.goog-te-menu-frame ~ .goog-te-menu-frame {
 element-google-translate .goog-te-menu-value {
 	display: none;
 }
-element-google-translate [block-content="title"] + .goog-te-gadget {
+element-google-translate > .goog-te-gadget {
 	visibility:hidden;
 }
-element-google-translate [block-content="title"]:empty + .goog-te-gadget {
+element-google-translate.active > .goog-te-gadget {
 	visibility:visible;
 }
 
