@@ -21,7 +21,7 @@ Pageboard.elements.google_translate = {
 	},
 	render: function(doc, block) {
 		var node = doc.dom`<element-google-translate class="item">
-			<div block-content="title"></div>
+			<div block-content="title">Google Translate</div>
 		</element-google-translate>`;
 		Object.assign(node.dataset, block.data);
 		return node;
