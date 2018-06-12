@@ -8,23 +8,25 @@ iframe.goog-te-menu-frame {
 body.google-translate-keep:not(.transition) > iframe.goog-te-menu-frame {
 	display:block !important;
 }
+body.google-translate-keep > iframe.goog-te-menu-frame ~ .goog-te-menu-frame {
+	display:none !important;
+}
 element-google-translate .goog-te-menu-value {
 	display: none;
 }
-element-google-translate .goog-te-gadget {
-	display:none;
-	overflow:visible;
-	width:0;
-	position: absolute;
-	left: 1em;
-}
-element-google-translate.active [block-content="title"] {
+element-google-translate [block-content="title"] + .goog-te-gadget {
 	visibility:hidden;
 }
-[contenteditable] element-google-translate.active [block-content="title"] {
+element-google-translate [block-content="title"]:empty + .goog-te-gadget {
 	visibility:visible;
 }
-element-google-translate.active .goog-te-gadget {
-	display:block;
+
+[contenteditable] element-google-translate [block-content="title"]:after {
+	content:'(g)';
 }
 
+html.translated-ltr > body,
+html.translated-rtl > body {
+	top:0px !important;
+	padding-top:40px !important;
+}
