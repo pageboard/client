@@ -42,21 +42,6 @@ Pageboard.elements.itemlink = {
 	menu: "widget",
 	priority: 10,
 	properties: {
-		target: {
-			title: 'Target window',
-			description: 'Choose how to open link',
-			default: "",
-			anyOf: [{
-				const: "",
-				title: "auto"
-			}, {
-				const: "_blank",
-				title: "new"
-			}, {
-				const: "_self",
-				title: "same"
-			}]
-		},
 		url: {
 			title: 'Address',
 			description: 'Local or remote URL',
@@ -107,9 +92,8 @@ Pageboard.elements.itemlink = {
 	icon: '<i class="icon linkify"></i>',
 	render: function(doc, block) {
 		var a = doc.dom`<a class="itemlink" href="${block.data.url}" block-content="text"></a>`;
-		if (a.hostname != document.location.hostname) a.rel = "noopener";
+		Pageboard.elements.link.auto(a);
 		var d = block.data;
-		if (d.target) a.target = d.target;
 		if (d.icon) {
 			a.classList.add('icon');
 			a.style.backgroundImage = `url(${d.icon})`;
