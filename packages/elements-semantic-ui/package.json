@@ -20,7 +20,7 @@
   "dependencies": {
     "@pageboard/stickybits": "^3.1.1",
     "formdata-polyfill": "^3.0.9",
-    "matchdom": "^2.0.0",
+    "matchdom": "^2.1.1",
     "nouislider": "^11.1.0",
     "object-fit-images": "^3.2.3",
     "postinstall": "^0.1.0",
