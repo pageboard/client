@@ -81,7 +81,7 @@ Pageboard.elements.link = {
 	render: function(doc, block) {
 		var d = block.data;
 		var a = doc.dom`<a href="${d.url}"></a>`;
-		if (a.hostname != document.location.hostname) a.rel = "noopener";
+		if (a.hostname && a.hostname != document.location.hostname) a.rel = "noopener";
 		if (d.target) a.target = d.target;
 		if (d.button) a.className = "ui button";
 		if (d.icon) {
