@@ -35,7 +35,6 @@ class HTMLElementGoogleTranslate extends HTMLCustomElement {
 		return false;
 	}
 	static update() {
-		console.log("update", this.shown);
 		document.documentElement.classList.toggle('google-translate-shown', this.shown);
 	}
 	static setup() {
