@@ -2,21 +2,6 @@ Pageboard.elements.link = {
 	title: "Link",
 	priority: 11,
 	properties: {
-		target: {
-			title: 'Target window',
-			description: 'Choose how to open link',
-			default: "",
-			anyOf: [{
-				const: "",
-				title: "auto"
-			}, {
-				const: "_blank",
-				title: "new"
-			}, {
-				const: "_self",
-				title: "same"
-			}]
-		},
 		button: {
 			title: 'Button',
 			description: 'Show link as button',
@@ -78,11 +63,24 @@ Pageboard.elements.link = {
 	group: "inline",
 	tag: 'a:not(.itemlink)',
 	icon: '<i class="icon linkify"></i>',
+	auto: function(a) {
+		if (a.hostname && a.hostname != document.location.hostname) {
+			a.target = "_blank";
+			a.rel = "noopener";
+		} else if (a.pathname && a.pathname.startsWith('/.')) {
+			a.target = "_blank";
+		} else {
+			var href = a.getAttribute('href').split('?')[0];
+			var meta = Pageboard.hrefs[href];
+			if (meta && meta.mime && meta.mime.startsWith("text/html") == false) {
+				a.target = "_blank";
+			}
+		}
+		return a;
+	},
 	render: function(doc, block) {
 		var d = block.data;
-		var a = doc.dom`<a href="${d.url}"></a>`;
-		if (a.hostname && a.hostname != document.location.hostname) a.rel = "noopener";
-		if (d.target) a.target = d.target;
+		var a = this.auto(doc.dom`<a href="${d.url}"></a>`);
 		if (d.button) a.className = "ui button";
 		if (d.icon) {
 			a.classList.add('icon');

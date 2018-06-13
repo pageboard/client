@@ -80,7 +80,7 @@ Pageboard.elements.menu_item_link = {
 	render: function(doc, block) {
 		var d = block.data;
 		var a = doc.dom`<a class="item" href="${d.url}" block-content="content">Item</a>`;
-		if (a.hostname != document.location.hostname) a.rel = "noopener";
+		Pageboard.elements.link.auto(a);
 		if (d.template) a.setAttribute('attr-href', d.template);
 		return a;
 	}

@@ -110,6 +110,7 @@ Pageboard.elements.card = {
 	render: function(doc, block) {
 		var d = block.data;
 		var node = d.url ? doc.dom`<a href="${d.url}"></a>` : doc.dom`<div></div>`;
+		if (d.url) Pageboard.elements.link.auto(node);
 		node.classList.add('ui');
 		if (d.fluid) node.classList.add('fluid');
 		if (d.centered) node.classList.add('centered');
