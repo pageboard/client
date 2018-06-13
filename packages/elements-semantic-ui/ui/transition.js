@@ -74,12 +74,14 @@ Page.setup(function(state) {
 		if (from) {
 			clist.add(from);
 		}
-		var fromList = Array.prototype.map.call(document.body.children, function(node, i) {
+		var fromList = [];
+		Array.prototype.forEach.call(document.body.children, function(node, i) {
+			if (node.dataset.transitionKeep) return;
 			if (fromCoords[i]) {
 				Object.assign(node.style, fromCoords[i]);
 			}
 			node.classList.add('transition-from');
-			return node;
+			fromList.push(node);
 		});
 		var toList = Array.prototype.map.call(body.children, function(node) {
 			node.classList.add('transition-to');
