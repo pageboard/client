@@ -396,6 +396,13 @@ Store.prototype.changes = function() {
 		if (changes.remove[id] || initial[id]) return; // already dealt
 		var kblock = kids[id];
 		if (!unsaved[id] && !kblock.standalone && !Store.generated[id] && !kblock.virtual) {
+			var el = this.editor.element(kblock.type);
+			if (el && !el.render) {
+				// we are not going to remove this relation because
+				// it is not a mistake coming from html editor, which
+				// cannot insert non-rendering elements.
+				return;
+			}
 			changes.remove[id] = true;
 			parentList(changes.unrelate, {
 				id: id,
