@@ -156,7 +156,7 @@ HTMLElementQuery.filters.title = function(val, what) {
 		block = what.scope.data;
 	}
 	for (var i=0; i < path.length; i++) {
-		if (block && block.id && block.type) break;
+		if (!block || block.id && block.type) break;
 		block = block[path[i]];
 	}
 	if (!what.scope.keys) path = path.slice(i);
