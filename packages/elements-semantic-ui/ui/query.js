@@ -141,9 +141,9 @@ HTMLElementQuery.filters.title = function(val, what) {
 		cur.shift();
 	}
 	path = path.concat(cur);
-	var block;
+	var block, last;
 	if (what.scope.keys) {
-		var last = path.pop();
+		last = path.pop();
 		if (last == "key") {
 			path.push(val);
 			val = undefined;
@@ -174,7 +174,8 @@ HTMLElementQuery.filters.title = function(val, what) {
 	if (val === undefined && schema.title) return schema.title;
 	var listOf = schema.oneOf || schema.anyOf;
 	if (!listOf) {
-		console.warn("No oneOf/anyOf schema for property of", schemaPath);
+		if (last == "val") return val;
+		console.warn("No oneOf/anyOf schema for property of", schemaPath, val);
 		return;
 	}
 	var prop = listOf.find(function(item) {
