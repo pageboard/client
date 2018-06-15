@@ -51,7 +51,11 @@
   },
   "pageboard": {
     "directories": [
-      "write"
+      "write/elements",
+      "write/ui"
+    ],
+    "elements": [
+      "write/elements/"
     ]
   }
 }
