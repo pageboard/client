@@ -60,6 +60,7 @@ Share.prototype.change = function() {
 	nodes.forEach(function(node) {
 		editor.utils.refreshTr(tr, node, block);
 	});
+	// TODO restore selection ?
 	editor.dispatch(tr);
 };
 

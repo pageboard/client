@@ -4,7 +4,8 @@ Object.assign(window.Pageboard, {
 	Controls: {},
 	inputs: {},
 	trigger: function trigger(node, event) {
-		var e = document.createEvent('Event');
+		var e = document.createEvent('Event'); // TODO depending on the actual event,
+		// might need 'HTMLEvent' instead (or UIEvent, etc...)
 		e.initEvent(event, true, true);
 		node.dispatchEvent(e);
 		if (window.Pageboard.editor) window.Pageboard.editor.focus();

@@ -111,6 +111,7 @@ Href.prototype.init = function() {
 					Pageboard.hrefs[href] = Object.assign({
 						mime: data.mime
 					}, data.meta);
+					console.info("added href to cache", href, Pageboard.hrefs[href]);
 				}
 				this.renderList();
 				Pageboard.trigger(input, 'change');
@@ -320,6 +321,8 @@ Href.prototype.set = function(str) {
 };
 
 Href.prototype.uploadStart = function() {
+	// TODO is it possible to upload multiple files in separate steps
+	// to avoid reaching the max body server upload limit ?
 	var input = document.createElement('input');
 	input.type = "file";
 	input.multiple = true;

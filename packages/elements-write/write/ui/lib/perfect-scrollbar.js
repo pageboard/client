@@ -1,1 +1,0 @@
-/home/dev/Projects/pageboard/write/node_modules/perfect-scrollbar/dist/perfect-scrollbar.min.js

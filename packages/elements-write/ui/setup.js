@@ -1,8 +1,8 @@
 (function(Pageboard) {
 
 var modeControl;
-var editStylePath = "/.pageboard/write/read.css";
-var editScriptPath = "/.pageboard/pagecut/editor.js";
+var editStylePath = Pageboard.elements.write.resources[0];
+var editScriptPath = Pageboard.elements.write.resources[1];
 
 Pageboard.setup = function(state) {
 	var parentRead = document.getElementById('pageboard-read');
@@ -82,7 +82,7 @@ function anchorListener(e) {
 				where: 'write'
 			});
 		}
-	} else if (node.matches('input')) {
+	} else if (node.matches('input')) { // TODO never reached ?
 		if (node.ownerDocument.body.matches('.ProseMirror')) {
 			e.preventDefault();
 			Pageboard.notify("Use view mode to fill forms", {
@@ -237,6 +237,7 @@ function editorSetup(win, view) {
 		delete Pageboard.editor;
 	}
 	var content = win.document.body.cloneNode(true);
+	delete view.elementsMap.write;
 	// and the editor must be running from child
 	var editor = new win.Pagecut.Editor({
 		topNode: 'page',
@@ -313,7 +314,7 @@ Pageboard.dev = function() {
 			script.remove();
 			Pageboard.dev();
 		};
-		script.src = "/.pageboard/write/lib/prosemirror-dev-tools.min.js";
+		script.src = "../lib/prosemirror-dev-tools.min.js";
 		window.document.head.appendChild(script);
 	}
 };
