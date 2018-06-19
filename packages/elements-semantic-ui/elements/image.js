@@ -165,7 +165,7 @@ Pageboard.elements.image = {
 	},
 	render: function(doc, block) {
 		var d = block.data;
-		var loc = this.buildLoc(d.url || '/.pageboard/read/empty.png', d);
+		var loc = this.buildLoc(d.url || this.resources[0], d);
 
 		var img = doc.dom`<img alt="${d.alt || ''}" />`;
 		var node = doc.dom`<element-image>
@@ -211,6 +211,9 @@ Pageboard.elements.image = {
 		if (d.template) img.dataset.src = d.template;
 		return node;
 	},
+	resources: [
+		'../ui/empty.png'
+	],
 	stylesheets: [
 		'../ui/image.css'
 	],
@@ -357,7 +360,7 @@ Pageboard.elements.inlineImage = {
 	icon: '<i class="icon image"></i>',
 	render: function(doc, block) {
 		var d = block.data;
-		var loc = Pageboard.elements.image.buildLoc(d.url || '/.pageboard/read/empty.png', d);
+		var loc = Pageboard.elements.image.buildLoc(d.url || this.resources[0], d);
 		var node = doc.dom`<img src="${Page.format(loc)}" alt="" class="ui inline image" />`;
 		var display = d.display || {};
 		if (display.avatar) node.classList.add('avatar');
@@ -373,6 +376,9 @@ Pageboard.elements.inlineImage = {
 		if (d.template) node.dataset.src = d.template;
 		return node;
 	},
+	resources: [
+		'../ui/empty.png'
+	],
 	stylesheets: [
 		'../semantic-ui/image.css'
 	],
