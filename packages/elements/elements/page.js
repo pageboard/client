@@ -105,8 +105,8 @@ Pageboard.elements.page = {
 		return doc.body;
 	},
 	scripts: [
-		'../ui/lib/custom-elements.js',
-		'../ui/lib/window-page.js',
+		'../lib/custom-elements.js',
+		'../lib/window-page.js',
 		'../ui/pageboard.js'
 	]
 };

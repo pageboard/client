@@ -75,9 +75,9 @@ Pageboard.elements.site = {
 		}
 	},
 	resources: [
-		"../ui/lib/window-page.js",
-		"../ui/lib/dom-template-strings.js",
-		"../pagecut/viewer.js",
+		"../lib/window-page.js",
+		"../lib/dom-template-strings.js",
+		"../lib/viewer.js",
 		"../ui/route.js"
 	]
 };

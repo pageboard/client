@@ -25,10 +25,10 @@
     "window-page": "^3.0.3"
   },
   "postinstall": {
-    "pagecut/dist": "link pagecut",
-    "document-register-element/build/document-register-element.max.js": "link ui/lib/custom-elements.js",
-    "window-page/window-page.js": "link ui/lib/",
-    "dom-template-strings/dist/dom-template-strings.js": "link ui/lib/"
+    "pagecut/dist/viewer.js": "link lib/viewer.js",
+    "document-register-element/build/document-register-element.max.js": "link lib/custom-elements.js",
+    "window-page/window-page.js": "link lib/",
+    "dom-template-strings/dist/dom-template-strings.js": "link lib/"
   },
   "pageboard": {
     "elements": [
@@ -37,7 +37,7 @@
     "directories": [
       "elements",
       "ui",
-      "pagecut"
+      "lib"
     ]
   }
 }
