@@ -31,9 +31,9 @@
     "dom-template-strings/dist/dom-template-strings.js": "link lib/"
   },
   "pageboard": {
-    "elements": {
+    "elements": [
       "elements/"
-    },
+    ],
     "directories": [
       "elements",
       "ui",
