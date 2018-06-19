@@ -25,7 +25,7 @@
     "window-page": "^3.0.3"
   },
   "postinstall": {
-    "pagecut/dist": "link pagecut",
+    "pagecut/dist/viewer.js": "link lib/",
     "document-register-element/build/document-register-element.max.js": "link lib/custom-elements.js",
     "window-page/window-page.js": "link lib/",
     "dom-template-strings/dist/dom-template-strings.js": "link lib/"
@@ -36,9 +36,8 @@
     ],
     "directories": [
       "elements",
-      "ui",
       "lib",
-      "pagecut"
+      "ui"
     ]
   }
 }

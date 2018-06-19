@@ -77,7 +77,7 @@ Pageboard.elements.site = {
 	resources: [
 		"../lib/window-page.js",
 		"../lib/dom-template-strings.js",
-		"../pagecut/viewer.js",
+		"../lib/viewer.js",
 		"../ui/route.js"
 	]
 };

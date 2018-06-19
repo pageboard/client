@@ -111,10 +111,6 @@ Pageboard.elements.page = {
 	]
 };
 
-Pageboard.elements.pagecut = {
-	resources: ['../pagecut'];
-};
-
 // extend page
 Pageboard.elements.notfound = Object.assign({}, Pageboard.elements.page, {
 	title: 'Page not found',
