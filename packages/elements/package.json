@@ -1,0 +1,43 @@
+{
+  "name": "@pageboard/elements",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "postinstall"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pageboard/elements.git"
+  },
+  "author": "Jérémy Lal <kapouer@melix.org>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pageboard/elements/issues"
+  },
+  "homepage": "https://github.com/pageboard/elements#readme",
+  "dependencies": {
+    "document-register-element": "^1.9.0",
+    "dom-template-strings": "^2.4.2",
+    "pagecut": "1.0.0-beta.70",
+    "postinstall": "^0.1.0",
+    "window-page": "^3.0.3"
+  },
+  "postinstall": {
+    "pagecut/dist": "link lib/pagecut",
+    "document-register-element/build/document-register-element.max.js": "link lib/custom-elements.js",
+    "window-page/window-page.js": "link lib/",
+    "dom-template-strings/dist/dom-template-strings.js": "link lib/"
+  },
+  "pageboard": {
+    "elements": {
+      "elements/"
+    },
+    "directories": [
+      "elements",
+      "ui",
+      "lib"
+    ]
+  }
+}
