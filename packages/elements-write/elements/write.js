@@ -125,7 +125,8 @@ Pageboard.elements.write = {
 	]),
 	resources: [
 		"../ui/read.css",
-		"../lib/pagecut/editor.js"
+		"../lib/pagecut/editor.js",
+		"../lib/prosemirror-dev-tools.min.js"
 	]
 };
 

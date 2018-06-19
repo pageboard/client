@@ -3,6 +3,7 @@
 var modeControl;
 var editStylePath = Pageboard.elements.write.resources[0];
 var editScriptPath = Pageboard.elements.write.resources[1];
+var devToolsScriptPath = Pageboard.elements.write.resources[2];
 
 Pageboard.setup = function(state) {
 	var parentRead = document.getElementById('pageboard-read');
@@ -314,7 +315,7 @@ Pageboard.dev = function() {
 			script.remove();
 			Pageboard.dev();
 		};
-		script.src = "../lib/prosemirror-dev-tools.min.js";
+		script.src = devToolsScriptPath;
 		window.document.head.appendChild(script);
 	}
 };
