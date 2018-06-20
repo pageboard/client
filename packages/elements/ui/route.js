@@ -1,35 +1,30 @@
 Page.route(function(state) {
 	return Promise.resolve().then(function() {
-		if (state.query.write !== undefined) {
-			delete state.query.write;
-			return {type:'write', data:{}, content:{}, site: {}};
-		} else {
-			return fetch(Page.format({
-				pathname: '/.api/page',
-				query: {
-					url: state.pathname
-				}
-			}), {
-				credentials: "same-origin",
-				headers: {
-					'Accept': 'application/json'
-				}
-			}).then(function(res) {
-				if (res.status >= 400) {
-					var err = new Error(res.statusText);
-					err.code = res.status;
-					throw err;
-				}
-				return res.json();
-			}).catch(function(err) {
-				// emergency error handling
-				// TODO fix err.code here
-				document.body.textContent = `${err.code} ${err}`;
-				document.title = err.code;
-				document.head.insertAdjacentHTML('afterBegin', `<meta http-equiv="Status" content="${err.code} ${err}">`);
+		return fetch(Page.format({
+			pathname: '/.api/page',
+			query: {
+				url: state.pathname
+			}
+		}), {
+			credentials: "same-origin",
+			headers: {
+				'Accept': 'application/json'
+			}
+		}).then(function(res) {
+			if (res.status >= 400) {
+				var err = new Error(res.statusText);
+				err.code = res.status;
 				throw err;
-			});
-		}
+			}
+			return res.json();
+		}).catch(function(err) {
+			// emergency error handling
+			// TODO fix err.code here
+			document.body.textContent = `${err.code} ${err}`;
+			document.title = err.code;
+			document.head.insertAdjacentHTML('afterBegin', `<meta http-equiv="Status" content="${err.code} ${err}">`);
+			throw err;
+		});
 	}).then(function(page) {
 		Pageboard.view = new Pagecut.Viewer({
 			elements: Pageboard.elements
@@ -49,6 +44,7 @@ Page.route(function(state) {
 			}
 
 			if (window.parent.Pageboard && window.parent.Pageboard.write) {
+				// TODO move this to write element
 				Pageboard.write = true;
 				window.parent.Pageboard.install(doc);
 			}
