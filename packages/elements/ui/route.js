@@ -26,6 +26,7 @@ Page.route(function(state) {
 			throw err;
 		});
 	}).then(function(page) {
+		if (!page.data) page.data = {};
 		Pageboard.view = new Pagecut.Viewer({
 			elements: Pageboard.elements
 		});
