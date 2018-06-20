@@ -1,5 +1,5 @@
 Pageboard.elements.write = {
-	priority: -100,
+	priority: 100,
 	replaces: 'doc',
 	title: 'Editor',
 	group: 'page',

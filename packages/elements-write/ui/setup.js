@@ -1,9 +1,9 @@
 (function(Pageboard) {
 
 var modeControl;
-var editStylePath = Pageboard.elements.write.resources[0];
-var editScriptPath = Pageboard.elements.write.resources[1];
-var devToolsScriptPath = Pageboard.elements.write.resources[2];
+var editStylePath;
+var editScriptPath;
+var devToolsScriptPath;
 
 Pageboard.setup = function(state) {
 	var parentRead = document.getElementById('pageboard-read');
@@ -153,6 +153,11 @@ function buildListener(win, doc) {
 	var page = win.Pageboard.elements.page;
 	if (!page.stylesheets) page.stylesheets = [];
 	if (!page.scripts) page.scripts = [];
+	var writeElt = win.Pageboard.elements.write;
+	editStylePath = writeElt.resources[0];
+	editScriptPath = writeElt.resources[1];
+	devToolsScriptPath = writeElt.resources[2];
+
 	page.stylesheets.push(editStylePath);
 	page.scripts.unshift(editScriptPath);
 	editMode(doc);
