@@ -8,7 +8,7 @@ Pageboard.elements.google_site_verification = {
 		if (page.data.url != "/") return;
 		var id = Pageboard.site.google_site_verification;
 		if (!id || Pageboard.site.env != "production") return;
-		doc.head.appendChild(doc.dom`<meta name="google-site-verification" content="${id}">`);
+		doc.head.insertAdjacentHTML('beforeEnd', `<meta name="google-site-verification" content="${id}">`);
 	}
 };
 
