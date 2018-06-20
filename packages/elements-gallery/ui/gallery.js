@@ -1,4 +1,4 @@
-class HTMLElementGallery extends HTMLCustomElement {
+window.HTMLElementGallery = class HTMLElementGallery extends HTMLCustomElement {
 	init() {
 		this._itemClick = this._itemClick.bind(this);
 		this._switchListener = this._switchListener.bind(this);
