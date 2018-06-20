@@ -12,6 +12,13 @@ Pageboard.elements.page = {
 				name: 'pageTitle'
 			}
 		},
+		description: {
+			title: 'Description',
+			type: ['string', 'null'],
+			input: {
+				multiline: true
+			}
+		},
 		url: {
 			title: 'Address',
 			type: "string",
@@ -45,23 +52,10 @@ Pageboard.elements.page = {
 			default: 0,
 			minimum: 0
 		},
-		metas: {
-			title: 'Meta tags',
-			type: 'array',
-			items: [{
-				type: 'object',
-				title: 'Meta',
-				properties: {
-					name: {
-						title: 'Name',
-						type: 'string'
-					},
-					value: {
-						title: 'Value',
-						type: 'string'
-					}
-				}
-			}]
+		noindex: {
+			title: 'Block search engine indexing',
+			type: 'boolean',
+			default: false
 		}
 	},
 	contents: {
@@ -80,7 +74,15 @@ Pageboard.elements.page = {
 		var metas = [{
 			name: "viewport",
 			value: "width=device-width, initial-scale=1"
-		}].concat(d.metas || []);
+		}];
+		if (d.noindex) metas.push({
+			name: "robots",
+			value: "noindex"
+		});
+		if (d.description) metas.push({
+			name: "description",
+			value: d.description
+		});
 		metas.forEach(function(meta) {
 			doc.head.appendChild(doc.dom`<meta name="${meta.name}" content="${meta.value}">`);
 		});
