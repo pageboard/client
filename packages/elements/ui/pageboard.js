@@ -13,6 +13,7 @@ HTMLCustomElement.define = function(name, cla) {
 	if (cla.init) cla.init();
 	if (!window.customElements.get(name)) window.customElements.define(name, cla);
 };
+window.HTMLCustomElement = HTMLCustomElement;
 
 Pageboard.fetch = function(method, url, data) {
 	method = method.toLowerCase();
