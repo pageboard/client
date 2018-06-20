@@ -30,7 +30,7 @@ Page.route(function(state) {
 			elements: Pageboard.elements
 		});
 		Pageboard.hrefs = page.hrefs || {};
-		Pageboard.site = page.site;
+		Pageboard.site = page.site || {};
 		delete page.hrefs;
 		delete page.site;
 		return Pageboard.view.from(page).then(function(body) {
