@@ -1,4 +1,4 @@
-class HTMLElementTabs extends HTMLCustomElement {
+window.HTMLElementTabs = class HTMLElementTabs extends HTMLCustomElement {
 	init() {
 		this.click = this.click.bind(this);
 	}
