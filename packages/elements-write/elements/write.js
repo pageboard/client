@@ -86,7 +86,7 @@ Pageboard.elements.write = {
 		"../ui/write.css",
 		"../ui/menu.css",
 		"../ui/inputs/href.css",
-		"../lib/cropper.min.css",
+		"../lib/cropper.css",
 		"../ui/inputs/crop.css"
 	],
 	scripts: Pageboard.elements.page.scripts.concat([
@@ -117,11 +117,11 @@ Pageboard.elements.write = {
 		"../ui/store.js",
 		"../ui/share.js",
 		"../lib/perfect-scrollbar.js",
-		"../lib/infinite-scroll.min.js",
+		"../lib/infinite-scroll.js",
 		"../ui/setup.js",
 		"../lib/pagecut/menu.js",
-		"../lib/cropper.min.js",
-		"../lib/speakingurl.min.js"
+		"../lib/cropper.js",
+		"../lib/speakingurl.js"
 	]),
 	resources: [
 		"../ui/read.css",
