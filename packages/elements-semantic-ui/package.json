@@ -23,14 +23,15 @@
     "matchdom": "^2.1.1",
     "nouislider": "^11.1.0",
     "object-fit-images": "^3.2.3",
-    "postinstall": "^0.1.0",
+    "postinstall": "^0.2.0",
+    "postinstall-browserify": "^0.1.0",
     "semantic-ui-css": "^2.2.14"
   },
   "postinstall": {
     "semantic-ui-css/components": "link semantic-ui",
     "@pageboard/stickybits/dist/stickybits.js": "link ui/lib/",
-    "object-fit-images/dist/ofi.js": "link ui/lib/object-fit-images.js",
     "formdata-polyfill/formdata.min.js": "link ui/lib/formdata.js",
+    "object-fit-images/dist/ofi.common-js.js": "browserify --standalone=objectFitImages ui/lib/object-fit-images.js",
     "nouislider/distribute/nouislider.js": "link ui/lib/",
     "nouislider/distribute/nouislider.css": "link ui/lib/",
     "matchdom/matchdom.js": "link ui/lib/"
