@@ -47,6 +47,85 @@ Pageboard.elements.paragraph = {
 	}
 };
 
+Pageboard.elements.segment = {
+	title: "Segment",
+	properties: {
+		raised: {
+			title: 'Raised',
+			type: 'boolean',
+			default: false
+		},
+		disabled: {
+			title: 'Disabled',
+			type: 'boolean',
+			default: false
+		},
+		inverted: {
+			title: 'Inverted',
+			type: 'boolean',
+			default: false
+		},
+		padded: {
+			title: 'Padded',
+			type: 'boolean',
+			default: false
+		},
+		compact: {
+			title: 'Compact',
+			type: 'boolean',
+			default: false
+		},
+		circular: {
+			title: 'Circular',
+			type: 'boolean',
+			default: false
+		},
+		basic: {
+			title: 'Basic',
+			type: 'boolean',
+			default: false
+		},
+		attached: {
+			title: 'Attached',
+			anyOf: [{
+				type: 'null',
+				title: 'no',
+			}, {
+				const: 'top',
+				title: 'top'
+			}, {
+				const: 'both',
+				title: 'both'
+			}, {
+				const: 'bottom',
+				title: 'bottom'
+			}]
+		}
+	},
+	contents: {
+		"content": "block+"
+	},
+	group: "block",
+	icon: '<b class="icon">Seg</b>',
+	render: function(doc, block) {
+		var d = block.data;
+		var node = doc.dom`<div class="ui segment"></div>`;
+		Object.keys(d).forEach(function(key) {
+			if (this.properties[key].type == 'boolean' && d[key]) {
+				node.classList.add(key);
+			}
+		}, this);
+		if (d.attached) {
+			if (d.attached != "both")	node.classList.add(d.attached);
+			node.classList.add('attached');
+		}
+		return node;
+	},
+	stylesheets: [
+		'../semantic-ui/segment.css'
+	]
+};
+
 Pageboard.elements.heading = {
 	title: "Heading",
 	properties: {
