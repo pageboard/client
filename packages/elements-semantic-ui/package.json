@@ -37,6 +37,7 @@
     "matchdom/matchdom.js": "link ui/lib/"
   },
   "pageboard": {
+    "priority": -10,
     "directories": [
       "elements",
       "ui",
