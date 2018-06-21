@@ -22,11 +22,12 @@
     "postinstall": "^0.1.0"
   },
   "postinstall": {
-    "@pageboard/datetime-entry/dist/datetime.js": "link ui/lib/"
+    "@pageboard/datetime-entry/dist/datetime.js": "link lib/"
   },
   "pageboard": {
     "directories": [
       "elements",
+      "lib",
       "ui"
     ],
     "elements": [

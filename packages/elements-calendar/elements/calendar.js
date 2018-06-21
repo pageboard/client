@@ -78,7 +78,7 @@ Pageboard.elements.input_date_time = {
 		'../ui/input-date-time.css'
 	],
 	scripts: [
-		'../ui/lib/datetime.js',
+		'../lib/datetime.js',
 		'../ui/input-date-time.js'
 	]
 };
@@ -140,7 +140,7 @@ Pageboard.elements.input_date_slot = {
 		</div>`;
 	},
 	scripts: [
-		'../ui/lib/datetime.js',
+		'../lib/datetime.js',
 		'../ui/input-date-slot.js'
 	]
 };
