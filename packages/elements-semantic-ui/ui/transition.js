@@ -33,6 +33,7 @@ Page.setup(function(state) {
 		var a = e.target.closest('a');
 		var href = a && a.getAttribute('href');
 		if (href) {
+			if (e.defaultPrevented) return;
 			if (document.body.isContentEditable) {
 				e.preventDefault();
 				return;
