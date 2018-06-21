@@ -49,12 +49,9 @@ Pageboard.elements.mail = {
 		title.textContent = d.title || '';
 		return doc.body;
 	},
-	scripts: [
-		'/.pageboard/read/custom-elements.min.js',
-		'/.pageboard/read/pageboard.js',
-		'/.pageboard/read/window-page.js'
-	],
+	scripts: Pageboard.elements.page.scripts.slice(0, 3),
 	stylesheets: [
+		'../lib/foundation-emails.css',
 		'../ui/mail.css'
 	]
 };
