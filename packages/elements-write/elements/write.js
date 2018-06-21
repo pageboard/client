@@ -89,7 +89,7 @@ Pageboard.elements.write = {
 		"../lib/cropper.css",
 		"../ui/inputs/crop.css"
 	],
-	scripts: Pageboard.elements.page.scripts.concat([
+	scripts: Pageboard.elements.page.scripts.slice(0, 3).concat([
 		Pageboard.elements.site.resources[1],
 		"../lib/jquery.min.js",
 		"../lib/moment.js",
