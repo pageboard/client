@@ -53,6 +53,7 @@
     "pagecut/dist": "link lib/pagecut"
   },
   "pageboard": {
+    "priority": -1,
     "directories": [
       "elements",
       "lib",
