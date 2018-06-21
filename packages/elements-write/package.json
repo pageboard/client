@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "make build",
-    "postinstall": "postinstall && make build"
+    "postinstall": "postinstall"
   },
   "repository": {
     "type": "git",
@@ -28,7 +27,8 @@
     "morphdom": "^2.3.3",
     "pagecut": "1.0.0-beta.71",
     "perfect-scrollbar": "^1.3.0",
-    "postinstall": "^0.1.0",
+    "postinstall": "^0.2.0",
+    "postinstall-browserify": "^0.1.0",
     "pretty-bytes": "^4.0.2",
     "prosemirror-dev-tools": "^2.1.0",
     "semantic-ui-css": "2.3.0",
@@ -39,6 +39,7 @@
     "semantic-ui-css/themes": "link lib/themes",
     "perfect-scrollbar/css/perfect-scrollbar.css": "link lib/",
     "perfect-scrollbar/dist/perfect-scrollbar.min.js": "link lib/perfect-scrollbar.js",
+    "pretty-bytes/index.js": "browserify --standalone=Pageboard.PrettyBytes lib/pretty-bytes.js",
     "moment/moment.js": "link lib/",
     "moment/locale": "link lib/moment-locales",
     "cropperjs/dist/cropper.min.css": "link lib/cropper.min.css",
