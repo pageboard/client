@@ -31,6 +31,7 @@
     "dom-template-strings/dist/dom-template-strings.js": "link lib/"
   },
   "pageboard": {
+    "priority": -100,
     "elements": [
       "elements/"
     ],
