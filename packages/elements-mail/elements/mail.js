@@ -25,14 +25,13 @@ Pageboard.elements.mail = {
 	},
 	contents: {
 		body: {
-			spec: 'text*',
+			spec: 'mail_block+',
 			title: 'body'
 		}
 	},
 	icon: '<i class="icon file outline"></i>',
 	render: function(doc, block) {
 		var d = block.data;
-		doc.body.setAttribute('block-content', "body");
 		var title = doc.head.querySelector('title');
 		if (!title) {
 			title = doc.createElement('title');
@@ -47,6 +46,11 @@ Pageboard.elements.mail = {
 			console.warn("no site set");
 		}
 		title.textContent = d.title || '';
+		doc.body.innerHTML = `<table class="container" align="center">
+		<tr>
+			<td block-content="body"></td>
+		</tr>
+	</table>`;
 		return doc.body;
 	},
 	scripts: Pageboard.elements.page.scripts.slice(0, 3),
