@@ -1,17 +1,9 @@
-/*
-sitemap
-sitepage
-sitedir is a "container" pattern: it contains a sitepage if its url has a page,
-and a list of sitepages which url starts with that sitedir.
-sitedir is inplace to avoid having unnecessary structure hanging in the blocks table
-
-*/
 Pageboard.elements.sitemap = {
 	title: "Site map",
 	menu: "link",
 	contents: {
 		children: {
-			spec: "sitepage+",
+			spec: "sitemap_item+",
 			virtual: true
 		}
 	},
@@ -61,7 +53,7 @@ Pageboard.elements.sitemap = {
 					parent.content.children = view.doc.createDocumentFragment();
 				}
 				var newChild = view.render(page, {
-					type: 'sitepage'
+					type: `site${page.type}`
 				});
 				var existing = parent.content.children.querySelector(`[block-id="${page.id}"]`);
 				if (existing) {
@@ -103,12 +95,13 @@ Pageboard.elements.sitemap = {
 };
 
 Pageboard.elements.sitepage = {
-	title: "Site page",
+	title: "Page",
 	menu: "link",
+	group: 'sitemap_item',
 	properties: Pageboard.elements.page.properties,
 	contents: {
 		children: {
-			spec: "sitepage*",
+			spec: "sitemap_item*",
 			title: 'pages',
 			virtual: true // this drops block.content.children, and all
 		}
@@ -129,6 +122,32 @@ Pageboard.elements.sitepage = {
 				<a href="${block.data.url}" class="description">${block.data.url || '-'}</a>
 			</div>
 			<div class="list content ui accordion" block-content="children"></div>
+		</element-sitepage>`;
+	}
+};
+
+Pageboard.elements.sitemail = {
+	title: "Mail",
+	menu: "link",
+	group: 'sitemap_item',
+	get properties() {
+		return Pageboard.elements.mail.properties;
+	},
+	unmount: function(block, node) {
+		// added pages NEED to have their type overriden
+		block.type = 'mail';
+		var pos = 0;
+		while (node=node.previousElementSibling) pos++;
+		block.data.index = pos;
+	},
+	icon: '<i class="icon mail outline"></i>',
+	context: 'sitemap/ | sitepage/',
+	render: function(doc, block) {
+		return doc.dom`<element-sitepage class="item" data-url="${block.data.url}">
+			<div class="title">
+				<span class="header">${block.data.title || 'Untitled'}</span><br />
+				<a href="${block.data.url}" class="description">${block.data.url || '-'}</a>
+			</div>
 		</element-sitepage>`;
 	}
 };
