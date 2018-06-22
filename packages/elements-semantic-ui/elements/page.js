@@ -1,20 +1,19 @@
+Pageboard.elements.page.contents.body = {
+	spec: 'header? main+ footer?',
+	title: 'body'
+};
 
-Object.assign(Pageboard.elements.page, {
-	contents: {
-		body: {
-			spec: 'header? main+ footer?',
-			title: 'body'
-		}
-	},
-	stylesheets: [
-		'../semantic-ui/reset.css',
-		'../ui/site.css',
-		'../ui/transition.css'
-	],
-	scripts: Pageboard.elements.page.scripts.concat([
-		'../ui/transition.js'
-	])
-});
+Pageboard.elements.page.stylesheets = [
+	'../semantic-ui/reset.css',
+	'../ui/site.css',
+	'../ui/transition.css'
+];
+Pageboard.elements.notfound.stylesheets = Pageboard.elements.page.stylesheets.slice();
+
+Pageboard.elements.page.scripts = Pageboard.elements.page.scripts.concat([
+	'../ui/transition.js'
+]);
+Pageboard.elements.notfound.scripts = Pageboard.elements.page.scripts.slice();
 
 Pageboard.elements.page.properties.transition = {
 	title: 'Transition',
