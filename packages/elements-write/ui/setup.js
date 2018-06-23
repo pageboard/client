@@ -158,18 +158,18 @@ function buildListener(win, doc, page) {
 	editMode(doc);
 	var resolver = function() {
 		win.removeEventListener('pagebuild', resolver);
-		setupListener(win);
+		setupListener(win, page);
 	};
 	if (win.Page.stage() >= 2) resolve();
 	else win.addEventListener('pagebuild', resolver);
 }
 
-function setupListener(win) {
+function setupListener(win, page) {
 	Pageboard.view = win.Pageboard.view;
 	Pageboard.bindings = win.Pageboard.bindings;
 	Pageboard.hrefs = win.Pageboard.hrefs;
 
-	editorSetup(win, win.Pageboard.view);
+	editorSetup(win, win.Pageboard.view, page);
 }
 
 function pageUpdate(page) {
@@ -226,7 +226,7 @@ function editorUpdate(editor, state, focusParents, focusSelection) {
 	Page.replace(Page.state);
 }
 
-function editorSetup(win, view) {
+function editorSetup(win, view, page) {
 	console.info("Use Pageboard.dev() to debug prosemirror");
 	Pageboard.write.classList.remove('loading');
 	Pageboard.notify.destroy();
@@ -242,7 +242,7 @@ function editorSetup(win, view) {
 
 	// and the editor must be running from child
 	var editor = new win.Pagecut.Editor({
-		topNode: 'page',
+		topNode: page.type,
 		elements: view.elementsMap,
 		place: win.document.body,
 		genId: Pageboard.Controls.Store.genId,
