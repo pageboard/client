@@ -227,7 +227,7 @@ function editorUpdate(editor, state, focusParents, focusSelection) {
 }
 
 function editorSetup(win, view) {
-	console.log("Use Pageboard.dev() to debug prosemirror");
+	console.info("Use Pageboard.dev() to debug prosemirror");
 	Pageboard.write.classList.remove('loading');
 	Pageboard.notify.destroy();
 	if (Pageboard.editor) {
