@@ -1,9 +1,6 @@
 (function(Pageboard) {
 
 var modeControl;
-var editStylePath;
-var editScriptPath;
-var devToolsScriptPath;
 
 Pageboard.setup = function(state) {
 	var parentRead = document.getElementById('pageboard-read');
@@ -21,8 +18,8 @@ Pageboard.setup = function(state) {
 	});
 };
 
-Pageboard.install = function(doc) {
-	buildListener(Pageboard.read.contentWindow, doc);
+Pageboard.install = function(doc, page) {
+	buildListener(Pageboard.read.contentWindow, doc, page);
 };
 
 Pageboard.patch = init;
@@ -117,14 +114,14 @@ function editMode(doc) {
 	if (!doc) doc = Pageboard.window.document;
 	doc.body.classList.add('ProseMirror');
 	doc.body.setAttribute('contenteditable', 'true');
-	var sheet = doc.head.querySelector(`[href="${editStylePath}"]`);
+	var sheet = doc.head.querySelector(`[href="${document.body.dataset.js}"]`);
 	if (sheet) sheet.disabled = false;
 	modeControl.classList.remove('active');
 }
 
 function viewMode() {
 	var doc = Pageboard.window.document;
-	var sheet = doc.head.querySelector(`[href="${editStylePath}"]`);
+	var sheet = doc.head.querySelector(`[href="${document.body.dataset.css}"]`);
 	if (sheet) sheet.disabled = true;
 	doc.body.classList.remove('ProseMirror');
 	doc.body.removeAttribute('contenteditable');
@@ -136,7 +133,7 @@ function modeControlListener() {
 	else viewMode();
 }
 
-function buildListener(win, doc) {
+function buildListener(win, doc, page) {
 	Pageboard.window = win;
 	win.addEventListener('click', anchorListener, true);
 	// FIXME this prevents setting selection inside a selected link...
@@ -150,17 +147,14 @@ function buildListener(win, doc) {
 	win.addEventListener('keyup', function(e) {
 		win.document.body.classList.remove('ProseMirror-alt');
 	});
-	var pageType = doc.body.getAttribute('block-type');
-	var page = win.Pageboard.elements[pageType];
-	if (!page.stylesheets) page.stylesheets = [];
-	if (!page.scripts) page.scripts = [];
-	var writeElt = win.Pageboard.elements.write;
-	editStylePath = writeElt.resources[0];
-	editScriptPath = writeElt.resources[1];
-	devToolsScriptPath = writeElt.resources[2];
 
-	page.stylesheets.push(editStylePath);
-	page.scripts.unshift(editScriptPath);
+	var pageEl = win.Pageboard.elements[page.type];
+	if (!pageEl.stylesheets) pageEl.stylesheets = [];
+	if (!pageEl.scripts) pageEl.scripts = [];
+
+	pageEl.stylesheets.push(document.body.dataset.css);
+	pageEl.scripts.unshift(document.body.dataset.js);
+
 	editMode(doc);
 	var resolver = function() {
 		win.removeEventListener('pagebuild', resolver);
@@ -174,6 +168,7 @@ function setupListener(win) {
 	Pageboard.view = win.Pageboard.view;
 	Pageboard.bindings = win.Pageboard.bindings;
 	Pageboard.hrefs = win.Pageboard.hrefs;
+
 	editorSetup(win, win.Pageboard.view);
 }
 
@@ -244,7 +239,7 @@ function editorSetup(win, view) {
 		delete Pageboard.editor;
 	}
 	var content = win.document.body.cloneNode(true);
-	delete view.elementsMap.write;
+
 	// and the editor must be running from child
 	var editor = new win.Pagecut.Editor({
 		topNode: 'page',
@@ -321,7 +316,7 @@ Pageboard.dev = function() {
 			script.remove();
 			Pageboard.dev();
 		};
-		script.src = devToolsScriptPath;
+		script.src = document.body.dataset.devtools;
 		window.document.head.appendChild(script);
 	}
 };
