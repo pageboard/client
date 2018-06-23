@@ -17,6 +17,22 @@ Page.route(function(state) {
 				throw err;
 			}
 			return res.json();
+		}).then(function(page) {
+			var node = document.createElement('script');
+			node.src = "/.api/elements.js?type=" + encodeURIComponent(page.type);
+			return new Promise(function(resolve, reject) {
+				node.addEventListener('load', function() {
+					node.remove();
+					resolve(page);
+				});
+				node.addEventListener('error', function() {
+					node.remove();
+					var err = new Error(`Cannot load ${node.getAttribute('src')}`);
+					err.code = 404;
+					reject(err);
+				});
+				document.head.appendChild(node);
+			});
 		}).catch(function(err) {
 			// emergency error handling
 			// TODO fix err.code here
@@ -45,9 +61,9 @@ Page.route(function(state) {
 			}
 
 			if (window.parent.Pageboard && window.parent.Pageboard.write) {
-				// TODO move this to write element
+				// FIXME find a better way for write element to insert js/css before page is handed to Page
 				Pageboard.write = true;
-				window.parent.Pageboard.install(doc);
+				window.parent.Pageboard.install(doc, page);
 			}
 			return Promise.all(Pageboard.view.elements.map(function(el) {
 				if (el.install) return el.install.call(el, doc, page, Pageboard.view);
