@@ -28,6 +28,7 @@ Pageboard.elements.mail_row = {
 };
 
 Pageboard.elements.mail_column_first = {
+	group: "mail_block",
 	contents: {
 		content: {
 			spec: "mail_block+",
@@ -40,6 +41,7 @@ Pageboard.elements.mail_column_first = {
 };
 
 Pageboard.elements.mail_column_last = {
+	group: "mail_block",
 	contents: {
 		content: {
 			spec: "mail_block+",
@@ -52,12 +54,14 @@ Pageboard.elements.mail_column_last = {
 };
 
 Pageboard.elements.mail_column_expander = {
+	group: "mail_block",
 	render: function(doc, block) {
 		return doc.dom`<th class="expander"></th>`;
 	}
 };
 
 Pageboard.elements.mail_column = {
+	group: "mail_block",
 	title: "Column",
 	contents: {
 		content: {
