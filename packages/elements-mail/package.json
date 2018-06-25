@@ -20,6 +20,7 @@
   "pageboard": {
     "directories": [
       "elements",
+      "lib",
       "ui"
     ],
     "elements": [
