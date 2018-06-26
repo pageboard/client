@@ -70,8 +70,10 @@ Store.prototype.importVirtuals = function(blocks) {
 
 Store.prototype.checkUrl = function(pageId, pageUrl) {
 	// TODO use similar approach to update links when a pageUrl changes ?
+	var editor = this.editor;
 	return findInTreeBlock(this.initial, function(block) {
-		return block.type == "page" && block.id != pageId && block.data.url == pageUrl;
+		var el = editor.element(block.type);
+		return el.group == "page" && block.id != pageId && block.data.url == pageUrl;
 	});
 };
 
