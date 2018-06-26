@@ -1,5 +1,3 @@
-// https://foundation.zurb.com/emails/docs
-
 Pageboard.elements.mail_paragraph = {
 	title: "Paragraph",
 	priority: -10,
