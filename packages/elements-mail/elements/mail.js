@@ -25,7 +25,7 @@ Pageboard.elements.mail = {
 	},
 	contents: {
 		body: {
-			spec: 'mail_block+',
+			spec: 'mail_container',
 			title: 'body'
 		}
 	},
@@ -46,11 +46,7 @@ Pageboard.elements.mail = {
 			console.warn("no site set");
 		}
 		title.textContent = d.title || '';
-		doc.body.innerHTML = `<table class="container" align="center">
-		<tr>
-			<td block-content="body"></td>
-		</tr>
-	</table>`;
+		doc.body.setAttribute('block-content', 'body');
 		return doc.body;
 	},
 	scripts: Pageboard.elements.page.scripts.slice(0, 3),
@@ -58,5 +54,24 @@ Pageboard.elements.mail = {
 		'../lib/foundation-emails.css',
 		'../ui/mail.css'
 	]
+};
+
+Pageboard.elements.mail_container = {
+	title: "Container",
+	contents: {
+		content: {
+			spec: "mail_block+",
+			title: 'content'
+		}
+	},
+	group: "mail_block",
+	icon: '<b class="icon">Cont</b>',
+	render: function(doc, block) {
+		return doc.dom`<table class="container" align="center">
+			<tr>
+				<td block-content="content"></td>
+			</tr>
+		</table>`;
+	}
 };
 
