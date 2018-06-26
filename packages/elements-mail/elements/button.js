@@ -74,6 +74,12 @@ Pageboard.elements.mail_button = {
 			title: 'Rounded',
 			type: 'boolean',
 			default: false
+		},
+		template: {
+			title: 'Template',
+			description: 'Query template',
+			type: 'string',
+			context: 'mail_query'
 		}
 	},
 	render: function(doc, block) {
@@ -88,6 +94,7 @@ Pageboard.elements.mail_button = {
 		if (d.expanded) node.classList.add('expanded');
 		if (d.radius) node.classList.add('radius');
 		if (d.rounded) node.classList.add('rounded');
+		if (d.template) node.querySelector('a').dataset.href = d.template;
 		return node;
 	}
 };
