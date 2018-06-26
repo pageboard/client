@@ -7,7 +7,7 @@ Pageboard.elements.mail_wrapper = {
 		}
 	},
 	group: "mail_block",
-	icon: '<b class="icon">wrap</b>',
+	icon: '<b class="icon">Wr</b>',
 	render: function(doc, block) {
 		var d = block.data;
 		return doc.dom`<table class="wrapper" align="center">

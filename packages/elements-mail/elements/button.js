@@ -4,7 +4,7 @@ Pageboard.elements.mail_button = {
 		text: "text*",
 	},
 	group: "mail_block",
-	icon: '<b class="icon">butn</b>',
+	icon: '<b class="icon">Bt</b>',
 	properties: {
 		url: {
 			title: 'Address',

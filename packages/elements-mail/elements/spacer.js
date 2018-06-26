@@ -9,7 +9,7 @@ Pageboard.elements.mail_spacer = {
 		}
 	},
 	group: "mail_block",
-	icon: '<b class="icon">spac</b>',
+	icon: '<b class="icon">Sp</b>',
 	render: function(doc, block) {
 		var d = block.data;
 		return doc.dom`<table class="spacer">

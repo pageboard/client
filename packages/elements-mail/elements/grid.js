@@ -16,7 +16,7 @@ Pageboard.elements.mail_row = {
 		}
 	},
 	group: "mail_block",
-	icon: '<b class="icon">row</b>',
+	icon: '<b class="icon">Rw</b>',
 	render: function(doc, block) {
 		var d = block.data;
 		var node = doc.dom`<table class="row">
@@ -71,7 +71,7 @@ Pageboard.elements.mail_column = {
 			title: 'content'
 		}
 	},
-	icon: '<b class="icon">col</b>',
+	icon: '<b class="icon">Cl</b>',
 	render: function(doc, block) {
 		return doc.dom`<th class="small-12 large-6 columns" block-content="content"></th>`;
 	}

@@ -65,7 +65,7 @@ Pageboard.elements.mail_container = {
 		}
 	},
 	group: "mail_block",
-	icon: '<b class="icon">Cont</b>',
+	icon: '<b class="icon">Co</b>',
 	render: function(doc, block) {
 		return doc.dom`<table class="container" align="center">
 			<tr>
