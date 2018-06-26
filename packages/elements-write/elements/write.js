@@ -61,6 +61,7 @@ Pageboard.elements.write = {
 		doc.body.dataset.css = this.resources[0];
 		doc.body.dataset.js = this.resources[1];
 		doc.body.dataset.devtools = this.resources[2];
+		doc.body.dataset.placeholder = this.resources[3];
 		return doc.body;
 	},
 	stylesheets: [
@@ -129,7 +130,8 @@ Pageboard.elements.write = {
 	resources: [
 		"../ui/read.css",
 		"../lib/pagecut/editor.js",
-		"../lib/prosemirror-dev-tools.min.js"
+		"../lib/prosemirror-dev-tools.min.js",
+		"../ui/empty.png"
 	]
 };
 
