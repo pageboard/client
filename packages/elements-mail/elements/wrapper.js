@@ -11,11 +11,9 @@ Pageboard.elements.mail_wrapper = {
 	render: function(doc, block) {
 		var d = block.data;
 		return doc.dom`<table class="wrapper" align="center">
-			<tbody>
-				<tr>
-					<td class="wrapper-inner" block-content="content"></td>
-				</tr>
-			</tbody>
+			<tr>
+				<td class="wrapper-inner" block-content="content"></td>
+			</tr>
 		</table>`;
 	}
 };
