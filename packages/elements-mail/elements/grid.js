@@ -28,6 +28,7 @@ Pageboard.elements.mail_row = {
 };
 
 Pageboard.elements.mail_column_first = {
+	title: 'First Column',
 	group: "mail_block",
 	contents: {
 		content: {
@@ -41,6 +42,7 @@ Pageboard.elements.mail_column_first = {
 };
 
 Pageboard.elements.mail_column_last = {
+	title: 'Last Column',
 	group: "mail_block",
 	contents: {
 		content: {
