@@ -1,3 +1,9 @@
+Pageboard.elements._ = {
+	group: "mail_block"
+};
+Pageboard.elements.text = {
+	group: "mail_inline"
+};
 Pageboard.elements.mail_strong = {
 	priority: 12,
 	title: "Strong",
