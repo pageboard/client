@@ -20,9 +20,9 @@ Pageboard.elements.sitemap = {
 		}
 		return fetch('/.api/pages', {credentials: "same-origin"}).then(function(res) {
 			return res.json();
-		}).then(function(pages) {
+		}).then(function(obj) {
 			var tree = {};
-			pages.forEach(function(page) {
+			obj.data.forEach(function(page) {
 				var storedPage = blocks[page.id];
 				if (storedPage) {
 					// do not overwrite the actual page object, use it for up-to-date render
