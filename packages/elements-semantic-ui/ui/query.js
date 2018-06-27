@@ -56,7 +56,7 @@ class HTMLElementQuery extends HTMLCustomElement {
 		var candidate = 0;
 		if (this.dataset.type) {
 			var form = document.querySelector(`form[data-type="${this.dataset.type}"]`);
-			if (form && form.closest('[block-type="query"]') != this) {
+			if (form && form.closest('[block-type="query"],[block-type="mail_query"]') != this) {
 				Array.prototype.forEach.call(form.elements, function(node) {
 					var key = node.name;
 					if (!key) return;
