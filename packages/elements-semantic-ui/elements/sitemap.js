@@ -18,7 +18,7 @@ Pageboard.elements.sitemap = {
 			// restore might have already filled children
 			block.content.children = view.doc.createDocumentFragment();
 		}
-		return fetch('/.api/pages').then(function(res) {
+		return fetch('/.api/pages', {credentials: "same-origin"}).then(function(res) {
 			return res.json();
 		}).then(function(pages) {
 			var tree = {};
