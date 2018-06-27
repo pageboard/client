@@ -28,10 +28,17 @@
     ]
   },
   "dependencies": {
+    "europa": "^4.0.0",
     "foundation-emails": "^2.2.1",
-    "postinstall": "^0.2.0"
+    "inlineresources": "^1.0.0",
+    "juice": "^4.3.1",
+    "postinstall": "^0.2.0",
+    "postinstall-browserify": "^0.1.0"
   },
   "postinstall": {
-    "foundation-emails/dist/foundation-emails.css": "link lib/"
+    "inlineresources/dist/inlineresources.allinone.js": "link lib/inlineresources.js",
+    "foundation-emails/dist/foundation-emails.css": "link lib/",
+    "europa/dist/europa.js": "link lib/",
+    "juice/client.js": "browserify --standalone=Juice lib/juice.js"
   }
 }

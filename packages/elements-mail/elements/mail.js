@@ -49,7 +49,12 @@ Pageboard.elements.mail = {
 		doc.body.setAttribute('block-content', 'body');
 		return doc.body;
 	},
-	scripts: Pageboard.elements.page.scripts.slice(0, 3),
+	scripts: Pageboard.elements.page.scripts.slice(0, 3).concat([
+		'../lib/inlineresources.js',
+		'../lib/europa.js',
+		'../lib/juice.js',
+		'../ui/mail.js'
+	]),
 	stylesheets: [
 		'../lib/foundation-emails.css',
 		'../ui/mail.css'
