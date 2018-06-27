@@ -23,6 +23,7 @@ Pageboard.elements.sitemap = {
 		}).then(function(obj) {
 			var tree = {};
 			obj.data.forEach(function(page) {
+				if (!page.data.url) return;
 				var storedPage = blocks[page.id];
 				if (storedPage) {
 					// do not overwrite the actual page object, use it for up-to-date render
