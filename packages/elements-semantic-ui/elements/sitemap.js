@@ -137,9 +137,6 @@ Pageboard.elements.sitemail = {
 	unmount: function(block, node) {
 		// added pages NEED to have their type overriden
 		block.type = 'mail';
-		var pos = 0;
-		while (node=node.previousElementSibling) pos++;
-		block.data.index = pos;
 	},
 	icon: '<i class="icon mail outline"></i>',
 	context: 'sitemap/ | sitepage/',
