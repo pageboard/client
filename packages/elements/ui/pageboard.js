@@ -25,7 +25,7 @@ Pageboard.fetch = function(method, url, data) {
 		credentials: "same-origin"
 	};
 	var pendings = Pageboard.fetch.pendings;
-	if (method == "get") {
+	if (method == "get" || method == "delete") {
 		url = Page.format(Object.assign(Page.parse(url), {query: data}));
 		var pending = pendings[url];
 		if (pending) {
