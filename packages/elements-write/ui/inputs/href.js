@@ -416,15 +416,13 @@ Href.prototype.uploading = function() {
 
 Href.prototype.remove = function(href) {
 	var me = this;
-	Pageboard.uiLoad(this.node, Pageboard.fetch('delete', '/.api/href', {
+	return Pageboard.uiLoad(this.node, Pageboard.fetch('delete', '/.api/href', {
 		url: href
 	})).then(function(obj) {
-		var list = [];
-		me.map[normUrl(href)] = obj; // remove is actually "hide from others" so keep a ref to it
-		me.list.forEach(function(obj) {
-			if (obj.url != href) list.push(obj);
+		me.cache([obj]);
+		me.list = me.list.filter(function(obj) {
+			return obj.url != href;
 		});
-		me.list = list;
 	});
 };
 
