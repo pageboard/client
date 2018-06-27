@@ -8,22 +8,26 @@ class HTMLElementSitepage extends HTMLCustomElement {
 				this.setAttribute('data-url', this.dataset.url);
 			}.bind(this));
 		}
+		var content = this.querySelector('[block-content="children"]');
+		if (!content) return;
 		this.observer = new MutationObserver(function(mutations) {
 			this.updateChildren();
 		}.bind(this));
-		this.observer.observe(this.querySelector('[block-content="children"]'), {
+		this.observer.observe(content, {
 			childList: true
 		});
 	}
 
 	disconnectedCallback() {
-		this.observer.disconnect();
+		if (this.observer) this.observer.disconnect();
+		delete this.observer;
 	}
 
 	updateChildren() {
 		var parentUrl = this.dataset.url;
-		var children = this.querySelector('[block-content="children"]').children;
-		Array.prototype.forEach.call(children, function(child) {
+		var content = this.querySelector('[block-content="children"]');
+		if (!content) return;
+		Array.prototype.forEach.call(content.children, function(child) {
 			if (!child.matches('element-sitepage')) return; // cursor
 			var childUrl = child.dataset.url;
 			var name = childUrl.split('/').pop();
