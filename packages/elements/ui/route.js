@@ -66,6 +66,7 @@ Page.route(function(state) {
 				window.parent.Pageboard.install(doc, page);
 			}
 			return Promise.all(Pageboard.view.elements.map(function(el) {
+				if (el.group == "page" && el.name != page.type) return;
 				if (el.install) return el.install.call(el, doc, page, Pageboard.view);
 			})).then(function() {
 				var pageEl = Pageboard.elements[page.type];
