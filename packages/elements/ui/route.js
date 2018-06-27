@@ -3,7 +3,8 @@ Page.route(function(state) {
 		return fetch(Page.format({
 			pathname: '/.api/page',
 			query: {
-				url: state.pathname
+				url: state.pathname,
+				develop: state.query.develop
 			}
 		}), {
 			credentials: "same-origin",
