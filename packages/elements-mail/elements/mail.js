@@ -25,8 +25,7 @@ Pageboard.elements.mail = {
 	},
 	contents: {
 		body: {
-			spec: 'mail_container',
-			title: 'body'
+			spec: 'mail_body'
 		}
 	},
 	icon: '<i class="icon file outline"></i>',
@@ -59,6 +58,22 @@ Pageboard.elements.mail = {
 		'../lib/foundation-emails.css',
 		'../ui/mail.css'
 	]
+};
+
+Pageboard.elements.mail_body = {
+	title: "Body",
+	contents: {
+		content: {
+			spec: "mail_block+"
+		}
+	},
+	render: function(doc, block) {
+		return doc.dom`<table class="body">
+			<tr>
+				<td block-content="content"></td>
+			</tr>
+		</table>`;
+	}
 };
 
 Pageboard.elements.mail_container = {
