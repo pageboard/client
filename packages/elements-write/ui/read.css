@@ -61,3 +61,7 @@
 	opacity:1;
 }
 
+::selection {
+	background-color: #CCE2FF;
+}
+
