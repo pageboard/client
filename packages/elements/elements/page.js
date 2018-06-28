@@ -110,6 +110,9 @@ Pageboard.elements.page = {
 		'../lib/custom-elements.js',
 		'../lib/window-page.js',
 		'../ui/pageboard.js'
+	],
+	polyfills: [
+		'fetch'
 	]
 };
 
