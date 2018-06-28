@@ -144,7 +144,7 @@ Pageboard.elements.form = {
 		'../ui/form.css'
 	],
 	scripts: [ // for asynchronous submits and automatic triggers
-		'../ui/lib/formdata.js',
+		'../lib/formdata.js',
 		'../ui/form.js'
 	],
 	polyfills: ['fetch'] // unfortunately there is no formdata polyfill available right now
@@ -722,11 +722,11 @@ Pageboard.elements.input_range = {
 		</div>`;
 	},
 	stylesheets: [
-		'../ui/lib/nouislider.css',
+		'../lib/nouislider.css',
 		'../ui/input-range.css'
 	],
 	scripts: [
-		'../ui/lib/nouislider.js',
+		'../lib/nouislider.js',
 		'../ui/input-range.js'
 	]
 };

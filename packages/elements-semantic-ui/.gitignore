@@ -39,5 +39,5 @@ jspm_packages
 # Update this using
 # find . -type l -not -path "./node_modules/*"
 
-/ui/lib/
+/lib/
 /semantic-ui

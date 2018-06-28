@@ -29,17 +29,18 @@
   },
   "postinstall": {
     "semantic-ui-css/components": "link semantic-ui",
-    "@pageboard/stickybits/dist/stickybits.js": "link ui/lib/",
-    "object-fit-images/dist/ofi.common-js.js": "browserify --standalone=objectFitImages ui/lib/object-fit-images.js",
-    "formdata-polyfill/FormData.js": "link ui/lib/formdata.js",
-    "nouislider/distribute/nouislider.js": "link ui/lib/",
-    "nouislider/distribute/nouislider.css": "link ui/lib/",
-    "matchdom/matchdom.js": "link ui/lib/"
+    "@pageboard/stickybits/dist/stickybits.js": "link lib/",
+    "object-fit-images/dist/ofi.common-js.js": "browserify --standalone=objectFitImages lib/object-fit-images.js",
+    "formdata-polyfill/FormData.js": "link lib/formdata.js",
+    "nouislider/distribute/nouislider.js": "link lib/",
+    "nouislider/distribute/nouislider.css": "link lib/",
+    "matchdom/matchdom.js": "link lib/"
   },
   "pageboard": {
     "priority": -10,
     "directories": [
       "elements",
+      "lib",
       "ui",
       "semantic-ui"
     ],

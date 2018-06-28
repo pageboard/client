@@ -28,7 +28,7 @@ Pageboard.elements.header = {
 		'../ui/layout.css'
 	],
 	scripts: [
-		'../ui/lib/stickybits.js',
+		'../lib/stickybits.js',
 		'../ui/sticky.js'
 	]
 };
