@@ -1,6 +1,6 @@
 {
   "name": "site-semantic-ui",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Default pageboard site using semantic-ui elements",
   "main": "index.js",
   "scripts": {
@@ -17,7 +17,11 @@
   },
   "homepage": "https://github.com/pageboard/site-semantic-ui#readme",
   "dependencies": {
-    "@pageboard/elements-gallery": "github:pageboard/elements-gallery",
-    "@pageboard/elements-semantic-ui": "github:pageboard/elements-semantic-ui"
+    "@pageboard/elements": "latest",
+    "@pageboard/elements-gallery": "latest",
+    "@pageboard/elements-mail": "latest",
+    "@pageboard/elements-google": "latest",
+    "@pageboard/elements-semantic-ui": "latest",
+    "@pageboard/elements-write": "latest"
   }
 }
