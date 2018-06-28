@@ -108,7 +108,7 @@ Pageboard.elements.mail_image = {
 		return doc.dom`<img alt="${d.alt || ''}" src="${Page.format(loc)}" />`;
 	},
 	resources: [
-		Pageboard.elements.image.resources[0]
+		'../ui/empty.png'
 	]
 };
 
