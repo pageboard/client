@@ -20,7 +20,6 @@
   "dependencies": {
     "@pageboard/stickybits": "^3.1.1",
     "formdata-polyfill": "^3.0.11",
-    "matchdom": "^2.1.1",
     "nouislider": "^11.1.0",
     "object-fit-images": "^3.2.3",
     "postinstall": "^0.2.0",
@@ -33,8 +32,7 @@
     "object-fit-images/dist/ofi.common-js.js": "browserify --standalone=objectFitImages lib/object-fit-images.js",
     "formdata-polyfill/FormData.js": "link lib/formdata.js",
     "nouislider/distribute/nouislider.js": "link lib/",
-    "nouislider/distribute/nouislider.css": "link lib/",
-    "matchdom/matchdom.js": "link lib/"
+    "nouislider/distribute/nouislider.css": "link lib/"
   },
   "pageboard": {
     "priority": -1,
