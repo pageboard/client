@@ -19,13 +19,13 @@
   "homepage": "https://github.com/pageboard/elements-semantic-ui#readme",
   "dependencies": {
     "@pageboard/stickybits": "^3.1.1",
-    "formdata-polyfill": "^3.0.9",
+    "formdata-polyfill": "^3.0.11",
     "matchdom": "^2.1.1",
     "nouislider": "^11.1.0",
     "object-fit-images": "^3.2.3",
     "postinstall": "^0.2.0",
     "postinstall-browserify": "^0.1.0",
-    "semantic-ui-css": "^2.2.14"
+    "semantic-ui-css": "^2.3.2"
   },
   "postinstall": {
     "semantic-ui-css/components": "link semantic-ui",
