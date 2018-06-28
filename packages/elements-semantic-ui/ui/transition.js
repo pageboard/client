@@ -15,7 +15,13 @@
 		});
 		var timeout = 0;
 		if (cur == "setup" || cur == "patch") timeout = 400;
-		if (cur == "error") timeout = 3000;
+		if (cur == "error") {
+			timeout = 3000;
+			var err = e.state && e.state.error;
+			if (typeof err == "number" && err >= 500) {
+				document.location.reload();
+			}
+		}
 		if (timeout) {
 			idTimeout = setTimeout(function() {
 				idTimeout = null;
