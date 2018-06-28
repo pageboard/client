@@ -126,8 +126,7 @@ Pageboard.elements.sitepage = {
 		</element-sitepage>`;
 	}
 };
-
-Pageboard.elements.sitemail = {
+if (Pageboard.elements.mail) Pageboard.elements.sitemail = {
 	title: "Mail",
 	menu: "link",
 	group: 'sitemap_item',
