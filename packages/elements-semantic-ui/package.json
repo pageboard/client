@@ -37,7 +37,7 @@
     "matchdom/matchdom.js": "link lib/"
   },
   "pageboard": {
-    "priority": -10,
+    "priority": -1,
     "directories": [
       "elements",
       "lib",
