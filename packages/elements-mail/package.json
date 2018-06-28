@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/pageboard/elements-mail#readme",
   "pageboard": {
+    "priority": -5,
     "directories": [
       "elements",
       "lib",
