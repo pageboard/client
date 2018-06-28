@@ -3,7 +3,7 @@
 	var tokens = document.documentElement.classList;
 	var idTimeout;
 	function pageListener(e) {
-		if (!Page.state) return;
+		if (!Page.state) return; // we don't want progress bar on first load
 		if (idTimeout) {
 			clearTimeout(idTimeout);
 			idTimeout = null;
