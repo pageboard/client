@@ -1,0 +1,6 @@
+element-query-tags {
+	display:block;
+}
+element-query-tags > div {
+	display:inline-block;
+}
