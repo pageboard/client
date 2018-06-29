@@ -42,14 +42,18 @@ class HTMLInputMap extends HTMLCustomElement {
 		body.textContent = '';
 		var focused = false;
 		Object.keys(obj).concat([""]).forEach(function(key) {
-			var row = body.appendChild(this.dom`<tr>
-				<td><input class="ui input" value="${key}" /></td>
-				<td><input class="ui input" value="${obj[key]}" /></td>
-			</tr>`);
-			if (this._cur && this._cur.key == key && !focused) {
-				row.children[this._cur.index].firstChild.focus();
-				focused = true;
-			}
+			var val = obj[key];
+			if (!Array.isArray(val)) val = [val];
+			val.forEach(function(val) {
+				var row = body.appendChild(this.dom`<tr>
+					<td><input class="ui input" value="${key}" /></td>
+					<td><input class="ui input" value="${val}" /></td>
+				</tr>`);
+				if (this._cur && this._cur.key == key && !focused) {
+					row.children[this._cur.index].firstChild.focus();
+					focused = true;
+				}
+			}, this);
 		}, this);
 	}
 	_focus(e) {
@@ -66,8 +70,17 @@ class HTMLInputMap extends HTMLCustomElement {
 		var focus = e.target;
 		Array.from(this._table.querySelector('tbody').children).forEach(function(tr) {
 			var key = tr.children[0].firstChild.value;
+			var val = obj[key];
+			var inputVal = tr.children[1].firstChild.value;
 			if (key) {
-				obj[key] = tr.children[1].firstChild.value;
+				if (val != null) {
+					if (!Array.isArray(val)) {
+						obj[key] = val = [val];
+					}
+					val.push(inputVal);
+				} else {
+					obj[key] = inputVal;
+				}
 				if (focus && focus.closest('tr') == tr) {
 					this._cur = {key: key, index: focus == tr.children[0] ? 0 : 1};
 				}
