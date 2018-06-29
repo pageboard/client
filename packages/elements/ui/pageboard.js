@@ -40,6 +40,7 @@ Pageboard.fetch = function(method, url, data) {
 		if (res.status >= 400) {
 			return res.text().then(function(text) {
 				var err = new Error(res.statusText);
+				err.status = res.status;
 				err.body = text;
 				throw err;
 			});
