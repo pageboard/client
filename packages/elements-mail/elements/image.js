@@ -100,6 +100,8 @@ Pageboard.elements.mail_image = {
 		if (r.zoom != null && r.zoom != 100) {
 			loc.query.rs = `z-${r.zoom}`;
 		}
+		var meta = Pageboard.hrefs[url];
+		if (meta && meta.mime == "image/svg+xml") loc.query.format = 'png';
 		return loc;
 	},
 	render: function(doc, block) {
