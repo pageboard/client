@@ -147,7 +147,7 @@ Page.setup(function(state) {
 		if (!form) return;
 		e.preventDefault();
 		if (form.matches('.loading')) return;
-		form.classList.remove('error', 'success');
+		form.classList.remove('error', 'warning', 'success');
 		form.classList.add('loading');
 		var p;
 		if (form.method.toLowerCase() == "get") {
@@ -172,8 +172,8 @@ Page.setup(function(state) {
 			});
 		}
 		p.catch(function(err) {
-			console.error(err);
-			form.classList.add('error');
+			if (err.status == 404) form.classList.add('warning');
+			else form.classList.add('error');
 		}).then(function() {
 			form.classList.remove('loading');
 		});
