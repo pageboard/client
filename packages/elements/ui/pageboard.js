@@ -118,5 +118,5 @@ if (document.visibilityState == "prerender") return;
 if (Pageboard.adv) return;
 if (window.parent.Pageboard && window.parent.Pageboard.adv) return;
 Pageboard.adv = true;
-console.log("Built and served by Pageboard");
+console.info("Powered by https://pageboard.fr");
 })();
