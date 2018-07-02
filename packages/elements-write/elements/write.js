@@ -56,6 +56,17 @@ Pageboard.elements.write = {
 		<div class="ui bound bottom sticky wide notifications"></div>
 	</div>
 	`;
+		var site = Pageboard.site;
+		if (site) {
+			if (site.favicon) {
+				doc.head.appendChild(doc.dom`<link rel="icon" href="${site.favicon}?format=ico">`);
+			}
+			if (site.lang) {
+				doc.documentElement.lang = site.lang;
+			}
+		} else {
+			console.warn("no site set");
+		}
 		doc.head.insertAdjacentHTML('beforeEnd', "\n" +
 			'<link rel="icon" href="/.pageboard/statics/pageboard.ico" />');
 		doc.body.dataset.css = this.resources[0];
