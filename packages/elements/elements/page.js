@@ -95,7 +95,7 @@ Pageboard.elements.page = {
 		var site = Pageboard.site;
 		if (site) {
 			if (site.favicon) {
-				doc.head.appendChild(doc.dom`<link rel="icon" href="${site.favicon}">`);
+				doc.head.appendChild(doc.dom`<link rel="icon" href="${site.favicon}?format=ico">`);
 			}
 			if (site.lang) {
 				doc.documentElement.lang = site.lang;
