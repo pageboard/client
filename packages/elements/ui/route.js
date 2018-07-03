@@ -20,7 +20,13 @@ Page.route(function(state) {
 			return res.json();
 		}).then(function(page) {
 			var node = document.createElement('script');
-			node.src = "/.api/elements.js?type=" + encodeURIComponent(page.type);
+			node.src = Page.format({
+				pathname: "/.api/elements.js",
+				query: {
+					type: page.type,
+					v: page.site.version || undefined
+				}
+			});
 			return new Promise(function(resolve, reject) {
 				node.addEventListener('load', function() {
 					node.remove();
@@ -48,7 +54,7 @@ Page.route(function(state) {
 			elements: Pageboard.elements
 		});
 		Pageboard.hrefs = page.hrefs || {};
-		Pageboard.site = page.site || {};
+		Pageboard.site = page.site;
 		delete page.hrefs;
 		delete page.site;
 		return Pageboard.view.from(page).then(function(body) {
