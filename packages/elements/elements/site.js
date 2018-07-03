@@ -4,24 +4,15 @@ Pageboard.elements.site = {
 			title: 'Site title',
 			anyOf: [{type: "null"}, {type: "string"}]
 		},
-		domain: {
-			title: 'Domain name',
-			anyOf: [{
-				type: "null",
-			}, {
+		domains: {
+			title: 'Domain names',
+			description: 'The main domain and the redirecting ones if any',
+			type: "array",
+			items: {
 				type: "string",
 				format: 'hostname'
-			}]
-		},
-		alt: {
-			title: 'Alt domain name',
-			description: 'redirects to domain',
-			anyOf: [{
-				type: "null",
-			}, {
-				type: "string",
-				format: 'hostname'
-			}]
+			},
+			default: []
 		},
 		lang: {
 			title: 'Language',
