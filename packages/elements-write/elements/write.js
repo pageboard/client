@@ -67,8 +67,6 @@ Pageboard.elements.write = {
 		} else {
 			console.warn("no site set");
 		}
-		doc.head.insertAdjacentHTML('beforeEnd', "\n" +
-			'<link rel="icon" href="/.pageboard/statics/pageboard.ico" />');
 		doc.body.dataset.css = this.resources[0];
 		doc.body.dataset.js = this.resources[1];
 		doc.body.dataset.devtools = this.resources[2];
