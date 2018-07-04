@@ -30,7 +30,7 @@
     "semantic-ui-css/components": "link semantic-ui",
     "@pageboard/stickybits/dist/stickybits.js": "link lib/",
     "object-fit-images/dist/ofi.common-js.js": "browserify --standalone=objectFitImages lib/object-fit-images.js",
-    "formdata-polyfill/FormData.js": "link lib/formdata.js",
+    "formdata-polyfill/formdata.min.js": "link lib/formdata.js",
     "nouislider/distribute/nouislider.js": "link lib/",
     "nouislider/distribute/nouislider.css": "link lib/"
   },
