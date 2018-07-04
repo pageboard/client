@@ -19,7 +19,8 @@
 			timeout = 3000;
 			var err = e.state && e.state.error;
 			if (typeof err == "number" && err >= 500) {
-				document.location.reload();
+				// document.location.reload() is not always in sync with state
+				document.location = Page.format(e.state);
 			}
 		}
 		if (timeout) {
