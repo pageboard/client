@@ -89,7 +89,7 @@ Page.route(function(state) {
 				);
 				doc.head.insertAdjacentHTML('beforeEnd', "\n" +
 					pageEl.scripts.map(function(src) {
-						return `<script src="${src}"></script>`;
+						return `<script defer src="${src}"></script>`;
 					}).join("\n")
 				);
 				state.document = doc;
