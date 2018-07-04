@@ -112,7 +112,7 @@ Pageboard.elements.page = {
 		'../ui/pageboard.js'
 	],
 	polyfills: [
-		'dataset', fetch'
+		'dataset', 'fetch'
 	]
 };
 
