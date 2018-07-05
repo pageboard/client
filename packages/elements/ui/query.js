@@ -132,8 +132,8 @@ class HTMLElementQuery extends HTMLCustomElement {
 }
 
 HTMLElementQuery.filters = {};
-HTMLElementQuery.filters.title = function(val, what) {
-	// return title of repeated key, title of anyOf/listOf const value
+HTMLElementQuery.filters.schema = function(val, what, spath) {
+	// return schema of repeated key, schema of anyOf/listOf const value
 	if (val === undefined) return;
 	var path = what.scope.path.slice();
 	var cur = what.expr.path.slice();
@@ -171,17 +171,21 @@ HTMLElementQuery.filters.title = function(val, what) {
 		console.warn("No schema for", schemaPath);
 		return;
 	}
-	if (val === undefined && schema.title) return schema.title;
 	var listOf = schema.oneOf || schema.anyOf;
-	if (!listOf) {
-		if (last == "val") return val;
-		console.warn("No oneOf/anyOf schema for property of", schemaPath, val);
-		return;
+	if (val !== undefined) {
+		if (listOf) {
+			var prop = listOf.find(function(item) {
+				return item.const === val; // null !== undefined
+			});
+			if (prop != null) schema = prop;
+		}
 	}
-	var prop = listOf.find(function(item) {
-		return item.const === val; // null !== undefined
-	});
-	if (prop != null) return prop.title;
+	var sval = what.expr.get(schema, spath);
+	if (sval === undefined) {
+		console.warn("Cannot find path in schema", schema, spath);
+		sval = null;
+	}
+	return sval;
 };
 HTMLElementQuery.filters.checked = function(val, what, selector) {
 	var ret = what.filters.attr(val === true ? 'checked' : null, what, 'checked', selector);
