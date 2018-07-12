@@ -136,50 +136,42 @@ HTMLElementQuery.filters.schema = function(val, what, spath) {
 	// return schema of repeated key, schema of anyOf/listOf const value
 	if (val === undefined) return;
 	var path = what.scope.path.slice();
-	var cur = what.expr.path.slice();
-	if (what.scope.alias && cur[0] == what.scope.alias) {
-		cur.shift();
-	}
-	path = path.concat(cur);
-	var block, last;
-	if (what.scope.keys) {
-		last = path.pop();
-		if (last == "key") {
-			path.push(val);
-			val = undefined;
-		} else if (last == "val") {
-			var key = what.scope.data[what.scope.index].key;
-			path.push(key);
-		}
-		block = what.data;
-	} else {
-		block = what.scope.data;
-	}
+	var data = what.data.data;
+	var blocks = [];
 	for (var i=0; i < path.length; i++) {
-		if (!block || block.id && block.type) break;
-		block = block[path[i]];
+		if (!data) break;
+		if (data.id && data.type) blocks.push({index: i, block: data});
+		data = data[path[i]];
 	}
-	if (!what.scope.keys) path = path.slice(i);
-
-	if (!block || !block.type) {
-		console.warn("No block found matching", what.scope.path, what.expr.path);
+	var item = blocks.pop();
+	if (!item) {
+		console.warn("No block found in", what.scope.path);
 		return;
 	}
-	var schemaPath = 'schemas.' + block.type + '.properties.' + path.join('.properties.');
+	var relPath = path.slice(item.index).map(function(item) {
+		if (typeof item == "number") return "items";
+		else return item;
+	});
+	var block = item.block;
+	var schemaPath = 'schemas.' + block.type + '.properties.' + relPath.join('.properties.');
 	var schema = what.expr.get(what.data, schemaPath);
 	if (!schema) {
 		console.warn("No schema for", schemaPath);
 		return;
 	}
-	var listOf = schema.oneOf || schema.anyOf;
-	if (val !== undefined) {
+	if (what.scope.iskey == false && val !== undefined) {
+		var listOf = schema.oneOf || schema.anyOf;
 		if (listOf) {
 			var prop = listOf.find(function(item) {
 				return item.const === val; // null !== undefined
 			});
 			if (prop != null) schema = prop;
+		} else {
+			// pointless to return a schema piece when dealing with a value
+			spath = null;
 		}
 	}
+	if (spath == null) return val;
 	var sval = what.expr.get(schema, spath);
 	if (sval === undefined) {
 		console.warn("Cannot find path in schema", schema, spath);
