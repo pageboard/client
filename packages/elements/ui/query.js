@@ -159,7 +159,7 @@ HTMLElementQuery.filters.schema = function(val, what, spath) {
 		console.warn("No schema for", schemaPath);
 		return;
 	}
-	if (what.scope.iskey == false && val !== undefined) {
+	if ((what.scope.iskey === undefined || what.scope.iskey === false) && val !== undefined) {
 		var listOf = schema.oneOf || schema.anyOf;
 		if (listOf) {
 			var prop = listOf.find(function(item) {
