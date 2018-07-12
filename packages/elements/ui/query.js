@@ -136,7 +136,7 @@ HTMLElementQuery.filters.schema = function(val, what, spath) {
 	// return schema of repeated key, schema of anyOf/listOf const value
 	if (val === undefined) return;
 	var path = what.scope.path.slice();
-	var data = what.data.data;
+	var data = what.index != null ? what.scope.data : what.data.data;
 	var blocks = [];
 	for (var i=0; i < path.length; i++) {
 		if (!data) break;
