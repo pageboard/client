@@ -114,7 +114,7 @@ class HTMLElementQuery extends HTMLCustomElement {
 		form.classList.add('loading');
 		return Pageboard.fetch('get', '/.api/query', vars).then(function(answer) {
 			answer.$query = vars;
-			matchdom(template, answer, HTMLElementQuery.filters, answer);
+			matchdom(template, answer, HTMLElementQuery.filters, {data: answer.data});
 			while (template.firstChild) results.appendChild(template.firstChild);
 			if (!answer.data || answer.data.length === 0) {
 				form.classList.add('warning');
