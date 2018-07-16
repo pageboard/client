@@ -403,7 +403,7 @@ Pageboard.elements.input_property = {
 				type: 'input_text',
 				data: {
 					name: name,
-					type: 'text',
+					type: propType.format == 'singleline' ? 'text' : 'textarea',
 					disabled: d.disabled,
 					default: propType.default,
 					required: required,
