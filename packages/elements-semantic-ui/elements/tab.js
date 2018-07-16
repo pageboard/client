@@ -76,7 +76,7 @@ Pageboard.elements.tab_item = {
 	},
 	parse: function(dom) {
 		var d = {};
-		if (dom.matches('.active')) d.active = true;
+		d.active = dom.previousElementSibling == null;
 		return d;
 	},
 	icon: '<i class="icons"><b class="icon">Tab</b><i class="corner add icon"></i></i>',
@@ -101,7 +101,7 @@ Pageboard.elements.tab = {
 	},
 	parse: function(dom) {
 		var d = {};
-		if (dom.matches('.active')) d.active = true;
+		d.active = dom.previousElementSibling == null;
 		return d;
 	},
 	render: function(doc, block) {
