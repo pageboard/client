@@ -82,7 +82,7 @@ Pageboard.elements.tab_item = {
 	icon: '<i class="icons"><b class="icon">Tab</b><i class="corner add icon"></i></i>',
 	render: function(doc, block) {
 		var d = block.data;
-		return doc.dom`<a class="item ${d.active ? 'active' : ''}" block-content="content">tab</a>`;
+		return doc.dom`<a class="item ${d.active ? 'active' : ''}" block-content="content">Tab Item</a>`;
 	}
 };
 
@@ -106,7 +106,7 @@ Pageboard.elements.tab = {
 	},
 	render: function(doc, block) {
 		var d = block.data;
-		return doc.dom`<div class="ui tab ${d.active ? 'active' : ''} segment" block-content="content">tab</div>`;
+		return doc.dom`<div class="ui tab ${d.active ? 'active' : ''} segment" block-content="content"></div>`;
 	}
 };
 
