@@ -72,7 +72,8 @@ Pageboard.elements.menu_item_link = {
 	},
 	contents: {
 		content: {
-			spec: "inline*"
+			spec: "inline*",
+			marks: "nolink"
 		}
 	},
 	group: 'menu_item',
@@ -94,6 +95,7 @@ Pageboard.elements.menu_item_dropdown = {
 	contents: {
 		title: {
 			spec: "inline*",
+			marks: "nolink",
 			title: "Title"
 		},
 		items: {
@@ -129,6 +131,7 @@ Pageboard.elements.menu_item_popup = {
 	contents: {
 		title: {
 			spec: "inline*",
+			marks: "nolink",
 			title: "Title"
 		},
 		content: {

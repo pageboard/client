@@ -4,7 +4,7 @@ Pageboard.elements.strong = {
 	contents: "text*",
 	inplace: true,
 	inline: true,
-	group: "inline",
+	group: "inline nolink",
 	icon: '<i class="icon bold"></i>',
 	render: function(doc, block) {
 		return doc.dom`<strong></strong>`;
@@ -17,7 +17,7 @@ Pageboard.elements.em = {
 	contents: "text*",
 	inline: true,
 	inplace: true,
-	group: "inline",
+	group: "inline nolink",
 	icon: '<i class="icon italic"></i>',
 	render: function(doc, block) {
 		return doc.dom`<em></em>`;
@@ -30,7 +30,7 @@ Pageboard.elements.light = {
 	contents: "text*",
 	inline: true,
 	inplace: true,
-	group: "inline",
+	group: "inline nolink",
 	icon: '<i class="icon" style="font-weight:lighter">L</i>',
 	render: function(doc, block) {
 		return doc.dom`<span class="lighter"></span>`;
@@ -43,7 +43,7 @@ Pageboard.elements.sup = {
 	contents: "text*",
 	inline: true,
 	inplace: true,
-	group: "inline",
+	group: "inline nolink",
 	icon: '<b class="icon">S<sup>up</sup></b>',
 	render: function(doc, block) {
 		return doc.dom`<sup></sup>`;
@@ -56,7 +56,7 @@ Pageboard.elements.caps = {
 	contents: "text*",
 	inline: true,
 	inplace: true,
-	group: "inline",
+	group: "inline nolink",
 	tag: 'span[block-type="caps"]',
 	properties: {
 		transform: {
@@ -132,7 +132,7 @@ Pageboard.elements.color = {
 	contents: "text*",
 	inline: true,
 	inplace: true,
-	group: "inline",
+	group: "inline nolink",
 	icon: `<i class="icon" style="background-image:
 		linear-gradient(
 			to right,

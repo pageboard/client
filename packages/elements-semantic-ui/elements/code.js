@@ -2,6 +2,7 @@ Pageboard.elements.code = {
 	title: "Literal",
 	inline: true,
 	inplace: true,
+	group: "nolink",
 	contents: "text*",
 	icon: '<i class="left quote icon"></i>',
 	render: function(doc, block) {
