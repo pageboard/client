@@ -1,6 +1,7 @@
 Pageboard.elements.mail_paragraph = {
-	title: "Paragraph",
 	priority: -10,
+	title: "Paragraph",
+	icon: '<i class="icon paragraph"></i>',
 	tag: 'p',
 	isolating: false,
 	properties: {
@@ -35,15 +36,13 @@ Pageboard.elements.mail_paragraph = {
 	contents: "mail_inline*",
 	group: "mail_block",
 	inplace: true,
-	icon: '<i class="icon paragraph"></i>',
-	render: function(doc, block) {
-		return doc.dom`<p class="${block.data.align || 'text-left'}">Text</p>`;
-	}
+	html: `<p class="[align|or:text-left]">Text</p>`
 };
 
 
 Pageboard.elements.mail_heading = {
 	title: "Heading",
+	icon: '<i class="icon header"></i>',
 	properties: {
 		level: {
 			title: 'Level',
@@ -75,18 +74,16 @@ Pageboard.elements.mail_heading = {
 		"text": "mail_inline*"
 	},
 	group: "mail_block",
-	icon: '<i class="icon header"></i>',
 	tag: 'h1,h2,h3,h4,h5,h6',
 	parse: function(dom) {
 		var level = parseInt(dom.nodeName.substring(1));
 		return {level: level};
 	},
 	render: function(doc, block) {
-		var node = doc.createElement('h' + block.data.level);
-		node.setAttribute('block-content', 'text');
-		node.className = `${block.data.align || 'text-left'}`;
-		node.innerText = 'Heading';
-		return node;
+		var n = block.data.level;
+		return doc.dom(
+			`<h${n} block-content="text" class="[align|or:text-left]">Heading</h${n}>`
+		).fuse(block.data);
 	}
 };
 

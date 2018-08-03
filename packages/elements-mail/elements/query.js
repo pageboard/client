@@ -7,12 +7,9 @@ Pageboard.elements.mail_query = Object.assign({}, Pageboard.elements.query, {
 	},
 	group: "mail_block"
 });
-Pageboard.elements.mail_query._render = Pageboard.elements.query.render;
-Pageboard.elements.mail_query.render = function(doc, block) {
-	var node = Pageboard.elements.mail_query._render(doc, block);
-	node.classList.remove('ui', 'form');
+Pageboard.elements.mail_query.fuse = function(node, d) {
+	node.fuse(d);
 	node.querySelector('[block-content="messages"]').remove();
-	return node;
 };
 
 Pageboard.elements.mail_query_template = Object.assign({}, Pageboard.elements.query_template, {

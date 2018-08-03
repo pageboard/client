@@ -1,5 +1,6 @@
 Pageboard.elements.mail_image = {
 	title: "Image",
+	icon: '<i class="icon image"></i>',
 	properties: {
 		alt: {
 			title: 'Alternative text',
@@ -71,7 +72,6 @@ Pageboard.elements.mail_image = {
 		}
 	},
 	group: "mail_block",
-	icon: '<i class="icon image"></i>',
 	buildLoc: function(url, d) {
 		if (!url) return {
 			pathname: "",
@@ -104,10 +104,12 @@ Pageboard.elements.mail_image = {
 		if (meta && meta.mime == "image/svg+xml") loc.query.format = 'png';
 		return loc;
 	},
-	render: function(doc, block) {
-		var d = block.data;
-		var loc = this.buildLoc(d.url || this.resources[0], d);
-		return doc.dom`<img alt="${d.alt || ''}" src="${Page.format(loc)}" />`;
+	html: '<img src="[src]" alt="" />',
+	fuse: function(node, d, scope) {
+		var loc = Pageboard.elements.image.buildLoc(d.url || this.resources[0], d);
+		node.fuse(Object.assign({
+			src: Page.format(loc)
+		}, d));
 	},
 	resources: [
 		'../ui/empty.png'

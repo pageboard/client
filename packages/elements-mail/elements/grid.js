@@ -2,6 +2,7 @@
 
 Pageboard.elements.mail_row = {
 	title: "Row",
+	icon: '<b class="icon">Rw</b>',
 	properties: {
 		collapse: {
 			type:'boolean',
@@ -16,15 +17,9 @@ Pageboard.elements.mail_row = {
 		}
 	},
 	group: "mail_block",
-	icon: '<b class="icon">Rw</b>',
-	render: function(doc, block) {
-		var d = block.data;
-		var node = doc.dom`<table class="row">
-			<tr block-content="columns"></tr>
-		</table>`;
-		if (d.collapse) node.classList.add('collapse');
-		return node;
-	}
+	html: `<table class="row [collapse|?]">
+		<tr block-content="columns"></tr>
+	</table>`
 };
 
 Pageboard.elements.mail_column_first = {
@@ -36,9 +31,7 @@ Pageboard.elements.mail_column_first = {
 			title: 'content'
 		}
 	},
-	render: function(doc, block) {
-		return doc.dom`<th class="small-12 large-6 columns first" block-content="content"></th>`;
-	}
+	html: '<th class="small-12 large-6 columns first" block-content="content"></th>'
 };
 
 Pageboard.elements.mail_column_last = {
@@ -50,29 +43,23 @@ Pageboard.elements.mail_column_last = {
 			title: 'content'
 		}
 	},
-	render: function(doc, block) {
-		return doc.dom`<th class="small-12 large-6 columns last" block-content="content"></th>`;
-	}
+	html: '<th class="small-12 large-6 columns last" block-content="content"></th>'
 };
 
 Pageboard.elements.mail_column_expander = {
 	group: "mail_block",
-	render: function(doc, block) {
-		return doc.dom`<th class="expander"></th>`;
-	}
+	html: '<th class="expander"></th>'
 };
 
 Pageboard.elements.mail_column = {
 	group: "mail_block",
 	title: "Column",
+	icon: '<b class="icon">Cl</b>',
 	contents: {
 		content: {
 			spec: "mail_block+",
 			title: 'content'
 		}
 	},
-	icon: '<b class="icon">Cl</b>',
-	render: function(doc, block) {
-		return doc.dom`<th class="small-12 large-6 columns" block-content="content"></th>`;
-	}
+	html: '<th class="small-12 large-6 columns" block-content="content"></th>'
 };

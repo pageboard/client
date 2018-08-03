@@ -1,5 +1,6 @@
 Pageboard.elements.mail_spacer = {
 	title: "Spacer",
+	icon: '<b class="icon">Sp</b>',
 	properties: {
 		height: {
 			type: 'integer',
@@ -9,16 +10,12 @@ Pageboard.elements.mail_spacer = {
 		}
 	},
 	group: "mail_block",
-	icon: '<b class="icon">Sp</b>',
-	render: function(doc, block) {
-		var d = block.data;
-		return doc.dom`<table class="spacer">
-			<tbody>
-				<tr>
-					<td height="${d.height}px" style="font-size:${d.height}px;line-height:${d.height}px;">&#xA0;</td>
-				</tr>
-			</tbody>
-		</table>`;
-	}
+	html: `<table class="spacer">
+		<tbody>
+			<tr>
+				<td height="[height|post:px]" style="font-size:[height|post:px];line-height:[height|post:px];">&#xA0;</td>
+			</tr>
+		</tbody>
+	</table>`
 };
 

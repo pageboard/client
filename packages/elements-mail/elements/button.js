@@ -1,10 +1,10 @@
 Pageboard.elements.mail_button = {
 	title: "Button",
+	icon: '<b class="icon">Bt</b>',
 	contents: {
 		text: "text*",
 	},
 	group: "mail_block",
-	icon: '<b class="icon">Bt</b>',
 	properties: {
 		url: {
 			title: 'Address',
@@ -82,20 +82,12 @@ Pageboard.elements.mail_button = {
 			context: 'mail_query'
 		}
 	},
-	render: function(doc, block) {
-		var d = block.data;
-		var node = doc.dom`<table class="button"><tr><td><table>
-			<tr>
-				<td><a href="${d.url || '#'}" block-content="text">Button</a></td>
-			</tr>
-		</table></td></tr></table>`;
-		if (d.label) node.classList.add(d.label);
-		if (d.size) node.classList.add(d.size);
-		if (d.expanded) node.classList.add('expanded');
-		if (d.radius) node.classList.add('radius');
-		if (d.rounded) node.classList.add('rounded');
-		if (d.template) node.querySelector('a').dataset.href = d.template;
-		return node;
-	}
+	html: `<table class="button [label] [size]
+		[expanded|?] [radius|?] [rounded|?]"
+	><tr><td><table>
+		<tr>
+			<td><a href="[url|or:#]" data-href="[template]" block-content="text">Button</a></td>
+		</tr>
+	</table></td></tr></table>`
 };
 

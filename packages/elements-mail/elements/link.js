@@ -1,6 +1,7 @@
 Pageboard.elements.mail_link = {
-	title: "Link",
 	priority: 11,
+	title: "Link",
+	icon: '<i class="icon linkify"></i>',
 	properties: {
 		url: {
 			title: 'Address',
@@ -33,12 +34,6 @@ Pageboard.elements.mail_link = {
 	},
 	inline: true,
 	group: "mail_inline",
-	icon: '<i class="icon linkify"></i>',
-	render: function(doc, block) {
-		var d = block.data;
-		var a = doc.dom`<a href="${d.url}"></a>`;
-		if (d.template) a.dataset.href = d.template;
-		return a;
-	}
+	html: '<a href="[url]" data-href="[template]"></a>'
 };
 

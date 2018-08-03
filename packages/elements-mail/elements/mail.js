@@ -2,6 +2,7 @@ Pageboard.elements.mail = {
 	priority: -100,
 	replaces: 'doc',
 	title: 'Mail',
+	icon: '<i class="icon file outline"></i>',
 	group: 'page',
 	standalone: true, // besides site, can be child of zero or more parents
 	properties: {
@@ -28,26 +29,13 @@ Pageboard.elements.mail = {
 			spec: 'mail_body'
 		}
 	},
-	icon: '<i class="icon file outline"></i>',
-	render: function(doc, block) {
-		var d = block.data;
-		var title = doc.head.querySelector('title');
-		if (!title) {
-			title = doc.createElement('title');
-			doc.head.insertBefore(title, doc.head.firstChild);
-		}
-		var site = Pageboard.site;
-		if (site) {
-			if (site.lang) {
-				doc.documentElement.lang = site.lang;
-			}
-		} else {
-			console.warn("no site set");
-		}
-		title.textContent = d.title || '';
-		doc.body.setAttribute('block-content', 'body');
-		return doc.body;
-	},
+	html: `<html lang="[$site.lang]">
+	<head>
+		<title>[title]</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+	</head>
+	<body block-content="body"></body>
+</html>`,
 	scripts: Pageboard.elements.page.scripts.slice(0, 3).concat([
 		'../lib/inlineresources.js',
 		'../lib/europa.js',
@@ -67,17 +55,16 @@ Pageboard.elements.mail_body = {
 			spec: "mail_block+"
 		}
 	},
-	render: function(doc, block) {
-		return doc.dom`<table class="body">
-			<tr>
-				<td block-content="content"></td>
-			</tr>
-		</table>`;
-	}
+	html: `<table class="body">
+		<tr>
+			<td block-content="content"></td>
+		</tr>
+	</table>`
 };
 
 Pageboard.elements.mail_container = {
 	title: "Container",
+	icon: '<b class="icon">Co</b>',
 	contents: {
 		content: {
 			spec: "mail_block+",
@@ -85,13 +72,10 @@ Pageboard.elements.mail_container = {
 		}
 	},
 	group: "mail_block",
-	icon: '<b class="icon">Co</b>',
-	render: function(doc, block) {
-		return doc.dom`<table class="container" align="center">
-			<tr>
-				<td block-content="content"></td>
-			</tr>
-		</table>`;
-	}
+	html: `<table class="container" align="center">
+		<tr>
+			<td block-content="content"></td>
+		</tr>
+	</table>`
 };
 
