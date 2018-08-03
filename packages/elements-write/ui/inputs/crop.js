@@ -24,9 +24,9 @@ function Crop(input, opts, props, block) {
 
 	this.debouncedChange = Pageboard.debounce(this.change, 500);
 
-	this.container = input.appendChild(input.dom`<div class="crop">
+	this.container = input.appendChild(input.dom(`<div class="crop">
 		<img src="${this.thumbnail(this.block.data.url)}" />
-	</div>`);
+	</div>`));
 
 	this.cropper = new Cropper(this.container.querySelector('img'), {
 		viewMode: 1,
@@ -85,16 +85,16 @@ Crop.prototype.zoomOut = function() {
 Crop.prototype.initControls = function() {
 	var doc = this.input.ownerDocument;
 
-	var btnCont = this.container.appendChild(doc.dom`<div class="bottom-buttons"></div>`);
-	this.resetButton = btnCont.appendChild(doc.dom`<div class="mini ui basic inverted circular icon button">
+	var btnCont = this.container.appendChild(doc.dom(`<div class="bottom-buttons"></div>`));
+	this.resetButton = btnCont.appendChild(doc.dom(`<div class="mini ui basic inverted circular icon button">
 		<i class="maximize icon"></i>
-	</div>`);
-	this.zoomOutButton = btnCont.appendChild(doc.dom`<div class="ui mini basic inverted circular icon button out">
+	</div>`));
+	this.zoomOutButton = btnCont.appendChild(doc.dom(`<div class="ui mini basic inverted circular icon button out">
 		<i class="compress icon"></i>
-	</div>`);
-	this.zoomInButton = btnCont.appendChild(doc.dom`<div class="ui mini basic inverted circular icon button in">
+	</div>`));
+	this.zoomInButton = btnCont.appendChild(doc.dom(`<div class="ui mini basic inverted circular icon button in">
 		<i class="expand icon"></i>
-	</div>`);
+	</div>`));
 
 	this.resetButton.addEventListener('click', this.reset, false);
 	this.zoomOutButton.addEventListener('click', this.zoomOut, false);
@@ -102,11 +102,11 @@ Crop.prototype.initControls = function() {
 
 	var zoomProp = this.props.properties.zoom;
 
-	this.slider = this.container.appendChild(doc.dom`<div class="slider">
+	this.slider = this.container.appendChild(doc.dom(`<div class="slider">
 		<input type="range" step="0.0001" min="${zoomProp.minimum / 100}" max="${zoomProp.maximum / 100}">
-	</div>`);
+	</div>`));
 
-	this.sliderValue = this.slider.appendChild(doc.dom`<textarea class="values"></textarea>`);
+	this.sliderValue = this.slider.appendChild(doc.dom(`<textarea class="values"></textarea>`));
 	this.slider.addEventListener('input', this.zoomChange, false);
 	this.sliderValue.addEventListener('input', this.valueChange, false);
 	this.sliderValue.addEventListener('focus', this.valueFocus, false);

@@ -12,12 +12,12 @@ Binding.prototype.init = function() {
 	this.input.hidden = true;
 	var doc = this.input.ownerDocument;
 	function getSelectOption(name) {
-		return doc.dom`<option value="${name}">${Pageboard.bindings[name].title}</option>`;
+		return `<option value="${name}">${Pageboard.bindings[name].title}</option>`;
 	}
-	this.select = doc.dom`<select class="ui compact dropdown">
+	this.select = doc.dom(`<select class="ui compact dropdown">
 		<option value="">--</option>
-		${Object.keys(Pageboard.bindings).map(getSelectOption)}
-	</select>`;
+		${Object.keys(Pageboard.bindings).map(getSelectOption).join('\n')}
+	</select>`);
 	this.field.appendChild(this.select);
 	this.select.addEventListener('change', this.toInput.bind(this));
 };

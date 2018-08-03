@@ -7,11 +7,11 @@ Menu.tabs = ["common", "widget", "link", "form"];
 function Menu(editor, node) {
 	this.editor = editor;
 	this.node = node;
-	this.tabMenu = this.node.dom`<div class="ui top attached tabular mini menu"></div>`;
+	this.tabMenu = this.node.dom(`<div class="ui top attached tabular mini menu"></div>`);
 	this.node.appendChild(this.tabMenu);
 	this.tabs = {};
 	this.lastTab;
-	this.inlines = this.node.dom`<div class="ui icon menu"></div>`;
+	this.inlines = this.node.dom(`<div class="ui icon menu"></div>`);
 	this.node.appendChild(this.inlines);
 	Menu.tabs.forEach(function(name) {
 		this.tab(name);
@@ -74,8 +74,8 @@ Menu.prototype.tab = function(name) {
 	var tab = this.tabs[name];
 	if (!tab) {
 		this.tabs[name] = tab = {
-			menu: this.node.dom`<a class="item" data-tab="${name}">${name}</a>`,
-			div: this.node.dom`<div class="ui mini labeled icon menu bottom attached tab" data-tab="${name}"></div>`
+			menu: this.node.dom(`<a class="item" data-tab="${name}">${name}</a>`),
+			div: this.node.dom(`<div class="ui mini labeled icon menu bottom attached tab" data-tab="${name}"></div>`)
 		};
 		this.tabMenu.appendChild(tab.menu);
 		this.node.insertBefore(tab.div, this.inlines);

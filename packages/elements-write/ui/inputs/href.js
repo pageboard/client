@@ -167,15 +167,15 @@ Href.prototype.renderField = function() {
 	var content;
 	switch (this.action) {
 	case "manual":
-		content = document.dom`<input class="search" type="text" placeholder="Type url..." />
+		content = document.dom(`<input class="search" type="text" placeholder="Type url..." />
 		<div class="ui blue icon buttons">
 			<div class="ui button" data-action="search" title="Stop">
 				<i class="close icon"></i>
 			</div>
-		</div>`;
+		</div>`);
 	break;
 	case "paste":
-		content = document.dom`<input class="search" type="text" placeholder="Paste url..." />
+		content = document.dom(`<input class="search" type="text" placeholder="Paste url..." />
 		<div class="ui blue icon buttons">
 			<div class="ui button" data-action="search" title="Search">
 				<i class="search icon"></i>
@@ -186,10 +186,10 @@ Href.prototype.renderField = function() {
 			<div class="ui button" data-action="upload" title="Upload files">
 				<i class="upload icon"></i>
 			</div>
-		</div>`;
+		</div>`);
 	break;
 	case "search":
-		content = document.dom`<input class="search" type="text" placeholder="Search..." />
+		content = document.dom(`<input class="search" type="text" placeholder="Search..." />
 		<div class="ui blue icon buttons">
 			<div class="ui active button" data-action="search" title="Search">
 				<i class="search icon"></i>
@@ -200,10 +200,10 @@ Href.prototype.renderField = function() {
 			<div class="ui button" data-action="upload" title="Upload files">
 				<i class="upload icon"></i>
 			</div>
-		</div>`;
+		</div>`);
 	break;
 	default:
-		content = document.dom`<input class="search" type="text" placeholder="Search..." value="${this.input.value}" />
+		content = document.dom(`<input class="search" type="text" placeholder="Search..." value="${this.input.value}" />
 		<div class="ui blue icon buttons">
 			<div class="ui button" data-action="search" title="Search">
 				<i class="search icon"></i>
@@ -214,7 +214,7 @@ Href.prototype.renderField = function() {
 			<div class="ui button" data-action="upload" title="Upload files">
 				<i class="upload icon"></i>
 			</div>
-		</div>`;
+		</div>`);
 	}
 	this.node.textContent = '';
 	this.node.appendChild(content);
@@ -389,7 +389,7 @@ Href.prototype.uploadStop = function() {};
 
 Href.prototype.uploading = function() {
 	var root = Pageboard.notify.dom();
-	var progress = root.dom`<div class="ui blue attached progress"><div class="bar"></div></div>`;
+	var progress = root.dom(`<div class="ui blue attached progress"><div class="bar"></div></div>`);
 	root.appendChild(progress);
 	var $node = $(progress).progress({
 		percent: 0
@@ -482,7 +482,7 @@ Href.prototype.renderItem = function(obj) {
 	var dims = tplDims(obj);
 	var display = this.opts.display;
 
-	var item = document.dom`<a href="${normUrl(obj.url)}" class="item">
+	var item = document.dom(`<a href="${normUrl(obj.url)}" class="item">
 		<div class="content">
 			<div class="ui tiny header">
 				${obj.title}
@@ -491,21 +491,21 @@ Href.prototype.renderItem = function(obj) {
 				</div>
 			</div>
 		</div>
-	</a>`;
+	</a>`);
 	var content = item.firstElementChild;
 	if (display != "icon") {
-		content.appendChild(item.dom`<div class="left floated meta">
+		content.appendChild(item.dom(`<div class="left floated meta">
 			${obj.mime.split(';').shift()}<em>${tplSize(obj.meta.size)}</em><br>
 			${dims ? dims + '<br>' : ''}
 			${moment(obj.updated_at).fromNow()}
 			${obj.type == 'link' ? ('<br><span class="line">' + obj.pathname + '</span>') : ''}
 		</div>
-		${tplPreview(obj.preview)}`);
+		${tplPreview(obj.preview)}`));
 		if (obj.icon) {
-			content.appendChild(item.dom`<img src="${obj.icon}" class="ui avatar icon image" />`);
+			content.appendChild(item.dom(`<img src="${obj.icon}" class="ui avatar icon image" />`));
 		}
 	} else {
-		content.appendChild(item.dom`<img class="ui tiny centered image" src="${obj.url}" />`);
+		content.appendChild(item.dom(`<img class="ui tiny centered image" src="${obj.url}" />`));
 	}
 	if (!obj.visible) {
 		item.querySelector('[data-action="remove"]').remove();
@@ -536,11 +536,11 @@ function tplDims(obj) {
 
 function tplPreview(preview) {
 	if (!preview) return '';
-	preview = document.dom`${preview}`;
+	preview = document.dom(preview);
 	if (preview.nodeType != Node.ELEMENT_NODE) return preview;
 	if (preview.matches('img')) {
 		preview.className = "ui tiny image";
-		return document.dom`<div class="thumbnail">${preview}</div>`;
+		return document.dom(`<div class="thumbnail">${preview.outerHTML}</div>`);
 	} else {
 		console.warn("fixme, render preview", preview);
 	}
@@ -606,7 +606,7 @@ function PageUrl(input, opts, props, block) {
 	this.block = block;
 	this.check = this.check.bind(this);
 	$(this.input).on('input title-input', this.check);
-	this.sameDom = this.field.dom`<div class="ui pointing red basic label">Another page has the same address</div>`;
+	this.sameDom = this.field.dom(`<div class="ui pointing red basic label">Another page has the same address</div>`);
 }
 
 PageUrl.prototype.check = function(e) {

@@ -7,7 +7,7 @@ class HTMLInputMap extends HTMLCustomElement {
 	connectedCallback() {
 		if (this._proxy) return;
 		this._proxy = this.appendChild(
-			this.dom`<input name="${this.getAttribute('name')}" type="hidden" />`
+			this.dom(`<input name="${this.getAttribute('name')}" type="hidden" />`)
 		);
 		this._observer = new MutationObserver(function(mutations) {
 			this._render();
@@ -15,9 +15,9 @@ class HTMLInputMap extends HTMLCustomElement {
 		this._observer.observe(this._proxy, {
 			attributes: true
 		});
-		this._table = this.appendChild(this.dom`<table class="ui very compact celled small striped table">
+		this._table = this.appendChild(this.dom(`<table class="ui very compact celled small striped table">
 			<tbody></tbody>
-		</table>`);
+		</table>`));
 		this._table.addEventListener('change', this._parse, false);
 		this._table.addEventListener('focus', this._focus, true);
 		this._render();
@@ -45,10 +45,10 @@ class HTMLInputMap extends HTMLCustomElement {
 			var val = obj[key];
 			if (!Array.isArray(val)) val = [val];
 			val.forEach(function(val) {
-				var row = body.appendChild(this.dom`<tr>
+				var row = body.appendChild(this.dom(`<tr>
 					<td><input class="ui input" value="${key}" /></td>
 					<td><input class="ui input" value="${val}" /></td>
-				</tr>`);
+				</tr>`));
 				if (this._cur && this._cur.key == key && !focused) {
 					row.children[this._cur.index].firstChild.focus();
 					focused = true;

@@ -332,18 +332,18 @@ function process(key, schema, node, fields) {
 
 types.string = function(key, schema, node, fields) {
 	if (schema.input && schema.input.multiline) {
-		node.appendChild(node.dom`<div class="field">
+		node.appendChild(node.dom(`<div class="field">
 			<label>${schema.title}</label>
 			<textarea name="${key}"	title="${schema.description || ''}">${schema.default || ''}</textarea>
-		</div>`);
+		</div>`));
 	} else {
-		node.appendChild(node.dom`<div class="field">
+		node.appendChild(node.dom(`<div class="field">
 			<label>${schema.title}</label>
 			<input type="text" name="${key}"
 				value="${schema.default || ''}"
 				title="${schema.description || ''}"
 			/>
-		</div>`);
+		</div>`));
 	}
 };
 
@@ -378,33 +378,33 @@ types.oneOf = function(key, schema, node, fields) {
 	if (def === null) def = "";
 
 	if (icons) {
-		field = node.dom`<div class="inline fields">
+		field = node.dom(`<div class="inline fields">
 			<label for="${key}">${schema.title}</label>
 			<div class="ui compact icon menu">
-				${alts.map(getIconOption)}
+				${alts.map(getIconOption).join('\n')}
 			</div>
-		</div>`;
+		</div>`);
 		node.appendChild(field);
 		$(field).find('.radio.checkbox').checkbox();
 	} else if (listOf.length <= 3) {
-		field = node.dom`<div class="inline fields">
+		field = node.dom(`<div class="inline fields">
 			<label for="${key}">${schema.title}</label>
 			<div class="field">
-				${listOf.map(getRadioOption)}
+				${listOf.map(getRadioOption).join('\n')}
 			</div>
-		</div>`;
+		</div>`);
 		node.appendChild(field);
 		if (def !== undefined) {
 			$(field).find(`[name="${key}"][value="${def}"]`).prop('checked', true);
 		}
 		$(field).find('.radio.checkbox').checkbox();
 	} else {
-		field = node.dom`<div class="flex field" title="${schema.description || ''}">
+		field = node.dom(`<div class="flex field" title="${schema.description || ''}">
 			<label>${schema.title}</label>
 			<select name="${key}" class="ui compact dropdown">
-				${listOf.map(getSelectOption)}
+				${listOf.map(getSelectOption).join('\n')}
 			</select>
-		</div>`;
+		</div>`);
 		node.appendChild(field);
 		if (def !== undefined) {
 			$(field).find(`[value="${def}"]`).prop('selected', true);
@@ -420,14 +420,14 @@ types.oneOf = function(key, schema, node, fields) {
 	}
 
 	function getRadioOption(item) {
-		return node.dom`<div class="ui radio checkbox">
+		return `<div class="ui radio checkbox">
 				<input type="radio" name="${key}" value="${getValStr(item)}" tabindex="0" class="hidden">
 				<label>${item.title}</label>
 			</div>`;
 	}
 
 	function getSelectOption(item) {
-		return node.dom`<option value="${getValStr(item)}">${item.title || item.const}</option>`;
+		return `<option value="${getValStr(item)}">${item.title || item.const}</option>`;
 	}
 
 	function getValStr(item) {
@@ -446,7 +446,7 @@ types.integer = function(key, schema, node, fields) {
 };
 
 types.number = function(key, schema, node, fields) {
-	node.appendChild(node.dom`<div class="inline fields">
+	node.appendChild(node.dom(`<div class="inline fields">
 		<label>${schema.title || ''}</label>
 		<div class="field"><input type="number" name="${key}"
 			value="${schema.default !== undefined ? schema.default : ''}"
@@ -455,7 +455,7 @@ types.number = function(key, schema, node, fields) {
 			max="${schema.maximum != null ? schema.maximum : ''}"
 			step="${schema.multipleOf != null ? schema.multipleOf : ''}"
 		/></div>
-	</div>`);
+	</div>`));
 
 	fields[key].type = 'number';
 };
@@ -464,18 +464,18 @@ types.object = function(key, schema, node, fields) {
 	var fieldset = node;
 	if (schema.title) {
 		if (schema.properties) {
-			fieldset = node.dom`<fieldset name="${key}"><legend>${schema.title}</legend></fieldset>`;
+			fieldset = node.dom(`<fieldset name="${key}"><legend>${schema.title}</legend></fieldset>`);
 			node.appendChild(fieldset);
 			if (schema.description) {
-				fieldset.appendChild(node.dom`<label>${schema.description}</label>`);
+				fieldset.appendChild(node.dom(`<label>${schema.description}</label>`));
 			}
 		} else {
-			fieldset = node.dom`<div class="field"></div>`;
+			fieldset = node.dom(`<div class="field"></div>`);
 			node.appendChild(fieldset);
-			fieldset.appendChild(node.dom`
+			fieldset.appendChild(node.dom(`
 				<label>${schema.title}</label>
 				<input-map name="${key}"><label>${schema.description}</label></input-map>
-			`);
+			`));
 		}
 	}
 	if (schema.properties) for (var name in schema.properties) {
@@ -486,14 +486,14 @@ types.object = function(key, schema, node, fields) {
 };
 
 types.boolean = function(key, schema, node, fields) {
-	var field = node.dom`<div class="inline fields">
+	var field = node.dom(`<div class="inline fields">
 		<label>${schema.title}</label>
 		<div class="field">
 			<div class="ui toggle checkbox" title="${schema.description || ''}">
 				<input type="checkbox" name="${key}" class="hidden" value="true" />
 			</div>
 		</div>
-	</div>`;
+	</div>`);
 	node.appendChild(field);
 	$(field).find('.checkbox').checkbox(schema.default ? 'check' : 'uncheck');
 };

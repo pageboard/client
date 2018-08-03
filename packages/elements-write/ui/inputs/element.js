@@ -5,7 +5,7 @@ function Element(input, opts, props, block) {
 	this.field = input.closest('.field');
 	this.input = input;
 	this.elements = Pageboard.editor.elements.filter(function(el) {
-		return (opts.properties ? el.properties : true) && el.menu && Pageboard.Controls.Menu.tabs.indexOf(el.menu) < 0;
+		return opts.standalone ? el.standalone : true;
 	});
 	this.init();
 	this.update(block);
@@ -15,12 +15,12 @@ Element.prototype.init = function() {
 	this.input.hidden = true;
 	var doc = this.input.ownerDocument;
 	function getSelectOption(el) {
-		return doc.dom`<option value="${el.name}">${el.title}</option>`;
+		return `<option value="${el.name}">${el.title}</option>`;
 	}
-	this.select = doc.dom`<select class="ui compact dropdown">
+	this.select = doc.dom(`<select class="ui compact dropdown">
 		<option value="">--</option>
-		${this.elements.map(getSelectOption)}
-	</select>`;
+		${this.elements.map(getSelectOption).join('\n')}
+	</select>`);
 	this.field.appendChild(this.select);
 	this.select.addEventListener('change', this.toInput.bind(this));
 };

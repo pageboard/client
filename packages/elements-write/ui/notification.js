@@ -54,11 +54,11 @@ Pageboard.notify = function(title, obj) {
 
 	var parent = Pageboard.notify.dom(obj.where);
 
-	var msg = document.dom`<div class="ui ${type} message">
+	var msg = document.dom(`<div class="ui ${type} message">
 		<i class="close icon"></i>
 		<div class="header">${title}</div>
 		${withText(text)}
-	</div>`;
+	</div>`);
 
 	if (obj.timeout) {
 		item.node = msg;
@@ -73,7 +73,7 @@ Pageboard.notify = function(title, obj) {
 };
 
 function withText(text) {
-	if (text) return document.dom`<p>${text}</p>`;
+	if (text) return `<p>${text}</p>`;
 	else return '';
 }
 

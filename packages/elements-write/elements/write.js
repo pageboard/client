@@ -4,8 +4,18 @@ Pageboard.elements.write = {
 	title: 'Editor',
 	group: 'page',
 	standalone: true,
-	render: function(doc, block) {
-		doc.body.innerHTML = `
+	html: `<html lang="[$site.lang]">
+	<head>
+		<title>[title]</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="icon" href="[$site.favicon|magnet:*|url]?format=ico">
+	</head>
+	<body
+		data-css="[paths.0]"
+		data-js="[paths.1]"
+		data-devtools="[paths.2]"
+		data-placeholder="[paths.3]"
+	>
 	<div id="pageboard-read">
 		<div class="ui bound bottom sticky wide notifications"></div>
 	</div>
@@ -55,23 +65,12 @@ Pageboard.elements.write = {
 		<div id="form" class="ui form"></div>
 		<div class="ui bound bottom sticky wide notifications"></div>
 	</div>
-	`;
-		var site = Pageboard.site;
-		if (site) {
-			if (site.favicon) {
-				doc.head.appendChild(doc.dom`<link rel="icon" href="${site.favicon}?format=ico">`);
-			}
-			if (site.lang) {
-				doc.documentElement.lang = site.lang;
-			}
-		} else {
-			console.warn("no site set");
-		}
-		doc.body.dataset.css = this.resources[0];
-		doc.body.dataset.js = this.resources[1];
-		doc.body.dataset.devtools = this.resources[2];
-		doc.body.dataset.placeholder = this.resources[3];
-		return doc.body;
+	</body>
+</html>`,
+	fuse: function(node, d, scope) {
+		node.fuse({
+			paths: this.resources
+		}, scope);
 	},
 	stylesheets: [
 		"../lib/components/reset.css",

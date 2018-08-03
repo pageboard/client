@@ -15,12 +15,12 @@ return;
 	this.input.hidden = true;
 	var doc = this.input.ownerDocument;
 	function getSelectOption(el) {
-		return doc.dom`<option value="${el.name}">${el.title}</option>`;
+		return `<option value="${el.name}">${el.title}</option>`;
 	}
-	this.select = doc.dom`<select class="ui compact dropdown">
+	this.select = doc.dom(`<select class="ui compact dropdown">
 		<option value="">--</option>
 		${this.elements.map(getSelectOption)}
-	</select>`;
+	</select>`);
 	this.field.appendChild(this.select);
 	this.select.addEventListener('change', this.toInput.bind(this));
 };

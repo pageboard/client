@@ -41,18 +41,18 @@ ElementProperty.prototype.init = function() {
 		var prop = paths[key];
 		if (!prop.title) return;
 		if (prop.type == "object") {
-			node = doc.dom`<optgroup label="${prop.title}"></optgroup>`;
+			node = doc.dom(`<optgroup label="${prop.title}"></optgroup>`);
 		} else {
-			node = doc.dom`<option value="${key}">${prop.title}</option>`;
+			node = doc.dom(`<option value="${key}">${prop.title}</option>`);
 			var pkey = key.split('.').slice(1).join('.');
 			node.disabled = !!content.querySelector(`[name="${pkey}"]`);
 		}
-		return node;
+		return node.outerHTML;
 	}
-	this.select = doc.dom`<select class="ui compact dropdown">
+	this.select = doc.dom(`<select class="ui compact dropdown">
 		<option value="">--</option>
-		${Object.keys(paths).map(getSelectOption)}
-	</select>`;
+		${Object.keys(paths).map(getSelectOption).join('\n')}
+	</select>`);
 	this.field.appendChild(this.select);
 	this.select.addEventListener('change', this.toInput.bind(this));
 };
