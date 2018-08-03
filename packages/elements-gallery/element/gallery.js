@@ -1,7 +1,8 @@
 Pageboard.elements.gallery = {
-	title: "Gallery",
-	menu: "widget",
 	priority: 20,
+	title: "Gallery",
+	icon: '<i class="university icon"></i>',
+	menu: "widget",
 	properties: {
 		showMenu: {
 			type: 'boolean',
@@ -15,13 +16,9 @@ Pageboard.elements.gallery = {
 		}
 	},
 	group: 'block',
-	icon: '<i class="university icon"></i>',
-	render: function(doc, block, view) {
-		var d = block.data;
-		return doc.dom`<element-gallery data-show-menu="${d.showMenu}">
-			<div block-content="galleries"></div>
-		</element-gallery>`;
-	},
+	html: `<element-gallery data-show-menu="[showMenu]">
+		<div block-content="galleries"></div>
+	</element-gallery>`,
 	resources: [
 		'../ui/lib/list-diff.js',
 		'../ui/gallery-helper.js'
@@ -32,15 +29,16 @@ Pageboard.elements.gallery = {
 	scripts: [
 		'../ui/gallery.js'
 	],
-	install: function(doc, page, view) {
-		if (Pageboard.write) this.scripts = this.resources;
+	install: function(doc, page, scope) {
+		if (scope.$write) this.scripts = this.resources;
 	}
 };
 
 Pageboard.elements.itemlink = {
-	title: "Item Link",
-	menu: "widget",
 	priority: 10,
+	title: "Item Link",
+	icon: '<i class="icon linkify"></i>',
+	menu: "widget",
 	properties: {
 		url: {
 			title: 'Address',
@@ -89,15 +87,8 @@ Pageboard.elements.itemlink = {
 			spec: "(paragraph|heading|image)+"
 		}
 	},
-	icon: '<i class="icon linkify"></i>',
-	render: function(doc, block) {
-		var a = doc.dom`<a class="itemlink" href="${block.data.url}" block-content="text"></a>`;
-		Pageboard.elements.link.auto(a);
-		var d = block.data;
-		if (d.icon) {
-			a.classList.add('icon');
-			a.style.backgroundImage = `url(${d.icon})`;
-		}
-		return a;
+	html: '<a class="itemlink [icon|?]" style="background-image:url([icon|magnet])" href="[url]" block-content="text"></a>',
+	fuse: function(node, d, scope) {
+		Pageboard.elements.link.auto(node.fuse(d), scope.$hrefs);
 	}
 };

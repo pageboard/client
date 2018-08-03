@@ -1,7 +1,8 @@
 Pageboard.elements.carousel = {
-	title: "Carousel",
-	menu: "widget",
 	priority: 21,
+	title: "Carousel",
+	icon: '<i class="image icon"></i>',
+	menu: "widget",
 	group: 'block',
 	properties: {
 		autoPlay: {
@@ -66,21 +67,17 @@ Pageboard.elements.carousel = {
 			title: 'cells'
 		}
 	},
-	icon: '<i class="image icon"></i>',
 	tag: 'element-carousel',
-	render: function(doc, block, view) {
-		var d = block.data;
-		var node = doc.dom`<element-carousel>
-			<div class="flickity-viewport">
-				<div class="flickity-slider" block-content="items"></div>
-			</div>
-		</element-carousel>`;
-		var opts = Object.assign({}, d);
-		if (!opts.width) opts.width = 'auto';
-		if (!opts.height) opts.height = 'auto';
-		Object.assign(node.dataset, opts);
-		return node;
-	},
+	html: `<element-carousel
+		data-width="[width|or:auto]" data-height="[height|or:auto]"
+		data-auto-play="[autoPlay]" data-page-dots="[pageDots]"
+		data-prev-next-buttons="[prevNextButtons]" data-full-view-button="[fullviewButton]"
+		data-group-cells="[groupCells]" data-wrap-around="[wrapAround]" data-fade="[fade]"
+	>
+		<div class="flickity-viewport">
+			<div class="flickity-slider" block-content="items"></div>
+		</div>
+	</element-carousel>`,
 	stylesheets: [
 		'../ui/lib/flickity.css',
 		'../ui/carousel.css'
@@ -93,6 +90,7 @@ Pageboard.elements.carousel = {
 
 Pageboard.elements.carousel_item = {
 	title: "Cell",
+	icon: '<i class="icons"><i class="image icon"></i><i class="corner add icon"></i></i>',
 	menu: "widget",
 	contents: {
 		media: {
@@ -104,14 +102,11 @@ Pageboard.elements.carousel_item = {
 			title: "content"
 		}
 	},
-	icon: '<i class="icons"><i class="image icon"></i><i class="corner add icon"></i></i>',
 	context: 'carousel/',
 	tag: 'element-carousel-cell',
-	render: function(doc, block) {
-		return doc.dom`<element-carousel-cell>
-			<div class="media" block-content="media"></div>
-			<div class="content" block-content="content"></div>
-		</element-carousel-cell>`;
-	}
+	html: `<element-carousel-cell>
+		<div class="media" block-content="media"></div>
+		<div class="content" block-content="content"></div>
+	</element-carousel-cell>`
 };
 

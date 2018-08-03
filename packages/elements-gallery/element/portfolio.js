@@ -1,7 +1,8 @@
 Pageboard.elements.portfolio = {
-	title: "Portfolio",
-	menu: "widget",
 	priority: 21,
+	title: "Portfolio",
+	icon: '<i class="grid layout icon"></i>',
+	menu: "widget",
 	group: 'block',
 	properties: {
 		shape: {
@@ -28,13 +29,9 @@ Pageboard.elements.portfolio = {
 			title: 'items'
 		}
 	},
-	icon: '<i class="grid layout icon"></i>',
-	render: function(doc, block, view) {
-		var d = block.data;
-		return doc.dom`<element-portfolio data-shape="${d.shape}">
-			<div block-content="items"></div>
-		</element-portfolio>`;
-	},
+	html: `<element-portfolio data-shape="[shape]">
+		<div block-content="items"></div>
+	</element-portfolio>`,
 	stylesheets: [
 		'../ui/portfolio.css'
 	],
@@ -46,6 +43,7 @@ Pageboard.elements.portfolio = {
 
 Pageboard.elements.portfolio_item = {
 	title: "Item",
+	icon: '<i class="icons"><i class="grid layout icon"></i><i class="corner add icon"></i></i>',
 	menu: "widget",
 	context: "portfolio/",
 	properties: {
@@ -82,13 +80,10 @@ Pageboard.elements.portfolio_item = {
 			title: "content"
 		}
 	},
-	icon: '<i class="icons"><i class="grid layout icon"></i><i class="corner add icon"></i></i>',
 	tag: 'element-portfolio-item',
-	render: function(doc, block) {
-		return doc.dom`<element-portfolio-item data-scale-width="${block.data.scaleWidth}" data-scale-height="${block.data.scaleHeight}">
-			<div class="media" block-content="media"></div>
-			<div class="content" block-content="content"></div>
-		</element-portfolio-item>`;
-	}
+	html: `<element-portfolio-item data-scale-width="[scaleWidth]" data-scale-height="[scaleHeight]">
+		<div class="media" block-content="media"></div>
+		<div class="content" block-content="content"></div>
+	</element-portfolio-item>`
 };
 
