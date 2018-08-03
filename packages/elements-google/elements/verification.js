@@ -4,11 +4,13 @@ Pageboard.elements.site.properties.google_site_verification = {
 };
 
 Pageboard.elements.google_site_verification = {
-	install: function(doc, page) {
+	install: function(doc, page, scope) {
 		if (page.data.url != "/") return;
-		var id = Pageboard.site.google_site_verification;
-		if (!id || Pageboard.site.env != "production") return;
-		doc.head.insertAdjacentHTML('beforeEnd', `<meta name="google-site-verification" content="${id}">`);
+		var id = scope.$site.google_site_verification;
+		if (!id || scope.$site.env != "production") return;
+		doc.head.appendChild(
+			doc.dom('<meta name="google-site-verification" content="[id]">').fuse({id: id})
+		);
 	}
 };
 
