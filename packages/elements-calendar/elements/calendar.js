@@ -1,12 +1,13 @@
 Pageboard.elements.IntlPolyfill = {
 	priority: -102, // before polyfill element
-	install: function(doc, page) {
-		var lang = (Pageboard.site.lang || window.navigator.language || 'en').substring(0, 2);
+	install: function(doc, page, scope) {
+		var lang = (scope.$site.lang || window.navigator.language || 'en').substring(0, 2);
 		this.polyfills = [`Intl.~locale.${lang}`];
 	}
 };
 Pageboard.elements.input_date_time = {
 	title: 'DateTime',
+	icon: '<i class="calendar outline icon"></i>',
 	menu: "form",
 	required: ["name"],
 	group: "block",
@@ -59,21 +60,15 @@ Pageboard.elements.input_date_time = {
 	contents: {
 		label: 'inline*'
 	},
-	icon: '<i class="calendar outline icon"></i>',
-	render: function(doc, block) {
-		var d = block.data;
-		var input = doc.dom`<input name="${d.name}" />`;
-		var ce = doc.dom`<element-input-date-time format="${d.format}" data-value="${d.value || ''}">${input}</element-input-date-time>`;
-		if (d.disabled) input.disabled = true;
-		if (d.placeholder) input.placeholder = d.placeholder;
-		if (d.required) input.required = true;
-		if (d.step) input.step = d.step;
-		var node = doc.dom`<div class="field">
-			<label block-content="label">Label</label>
-			${ce}
-		</div>`;
-		return node;
-	},
+	html: `<div class="field">
+		<label block-content="label">Label</label>
+		<element-input-date-time
+			format="[format]"
+			data-value="[value]"
+		><input name="[name]" disabled="[disabled]" placeholder="[placeholder]"
+			required="[required]" step="[step]"
+		/></element-input-date-time>
+	</div>`,
 	stylesheets: [
 		'../ui/input-date-time.css'
 	],
@@ -85,6 +80,7 @@ Pageboard.elements.input_date_time = {
 
 Pageboard.elements.input_date_slot = {
 	title: 'DateSlot',
+	icon: '<i class="calendar outline icon"></i>',
 	menu: "form",
 	required: ["nameStart", "nameEnd"],
 	group: "block",
@@ -128,17 +124,13 @@ Pageboard.elements.input_date_slot = {
 	contents: {
 		label: 'inline*'
 	},
-	icon: '<i class="calendar outline icon"></i>',
-	render: function(doc, block) {
-		var d = block.data;
-		return doc.dom`<div class="field">
-			<label block-content="label">Label</label>
-			<element-input-date-slot data-start="${d.valueStart}" data-end="${d.valueEnd}">
-				<element-input-date-time><input type="text" name="${d.nameStart}" /></element-input-date-time>
-				<element-input-date-time><input type="text" name="${d.nameEnd}" /></element-input-date-time>
-			</element-input-date-slot>
-		</div>`;
-	},
+	html: `<div class="field">
+		<label block-content="label">Label</label>
+		<element-input-date-slot data-start="[valueStart]" data-end="[valueEnd]">
+			<element-input-date-time><input type="text" name="[nameStart]" /></element-input-date-time>
+			<element-input-date-time><input type="text" name="[nameEnd]" /></element-input-date-time>
+		</element-input-date-slot>
+	</div>`,
 	scripts: [
 		'../lib/datetime.js',
 		'../ui/input-date-slot.js'
@@ -146,8 +138,8 @@ Pageboard.elements.input_date_slot = {
 };
 
 Pageboard.elements.event = {
-	title: 'Event',
 	priority: 2, // must install scripts after query element scripts
+	title: 'Event',
 	menu: "Calendar",
 	required: ['title'],
 	properties: {
