@@ -14,6 +14,15 @@ Pageboard.elements.site = {
 			},
 			default: []
 		},
+		author: {
+			title: 'Author',
+			anyOf: [{type: "null"}, {type: "string"}]
+		},
+		license: {
+			title: 'License',
+			anyOf: [{type: "null"}, {type: "string"}]
+			// TODO use spdx.org/licenses for choosing a license
+		},
 		lang: {
 			title: 'Language',
 			anyOf: [{type: "null"}, {type: "string"}]
@@ -67,7 +76,7 @@ Pageboard.elements.site = {
 	},
 	resources: [
 		"../lib/window-page.js",
-		"../lib/dom-template-strings.js",
+		"../lib/pageboard.js",
 		"../lib/viewer.js",
 		"../ui/route.js"
 	]

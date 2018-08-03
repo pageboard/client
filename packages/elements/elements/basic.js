@@ -1,6 +1,7 @@
 Pageboard.elements.paragraph = {
-	title: "Paragraph",
 	priority: -10,
+	title: "Paragraph",
+	icon: '<i class="icon paragraph"></i>',
 	tag: 'p',
 	isolating: false,
 	properties: {
@@ -28,7 +29,7 @@ Pageboard.elements.paragraph = {
 	},
 	parse: function(dom) {
 		var align = "left";
-		var prop = Pageboard.elements.paragraph.properties.align;
+		var prop = this.properties.align;
 		if (dom.classList.contains("aligned")) {
 			align = prop.anyOf.find(function(item) {
 				return dom.classList.contains(item.const);
@@ -41,9 +42,6 @@ Pageboard.elements.paragraph = {
 	contents: "inline*",
 	group: "block",
 	inplace: true,
-	icon: '<i class="icon paragraph"></i>',
-	render: function(doc, block) {
-		return doc.dom`<p class="${block.data.align || 'left'} aligned"></p>`;
-	}
+	html: '<p class="[align|or:left] aligned"></p>'
 };
 

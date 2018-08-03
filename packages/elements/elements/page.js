@@ -2,6 +2,7 @@ Pageboard.elements.page = {
 	priority: -100,
 	replaces: 'doc',
 	title: 'Page',
+	icon: '<i class="icon file outline"></i>',
 	group: 'page',
 	standalone: true, // besides site, can be child of zero or more parents
 	properties: {
@@ -64,52 +65,43 @@ Pageboard.elements.page = {
 			title: 'body'
 		}
 	},
-	icon: '<i class="icon file outline"></i>',
-	render: function(doc, block) {
-		var d = block.data;
+	html: `<html lang="[$site.lang]">
+	<head>
+		<title>[title]</title>
+		<meta http-equiv="Status" content="[status|magnet:*]">
+		<meta http-equiv="Location" content="[redirect|magnet:*]">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="[metas.name|repeat:*:meta]" content="[meta.value]">
+		<link rel="icon" href="[$site.favicon|magnet:*|url]?format=ico">
+	</head>
+	<body block-content="body"></body>
+</html>`,
+	fuse: function(node, d, scope) {
+		var obj = {
+			metas: [],
+			status: null
+		};
 		if (d.redirect && d.redirect != d.url && (!d.transition || !d.transition.from)) {
-			doc.head.appendChild(doc.dom`<meta http-equiv="Status" content="302 Found">
-	<meta http-equiv="Location" content="${d.redirect}">`);
+			obj.redirect = d.redirect;
+			obj.status = "302 Found";
 		}
-		var metas = [{
-			name: "viewport",
-			value: "width=device-width, initial-scale=1"
-		}];
-		if (d.noindex) metas.push({
+		if (!d.url) {
+			obj.status = "404 Not Found";
+		}
+		if (d.noindex) obj.metas.push({
 			name: "robots",
 			value: "noindex"
 		});
-		if (d.description) metas.push({
+		if (d.description) obj.metas.push({
 			name: "description",
 			value: d.description
 		});
-		metas.forEach(function(meta) {
-			doc.head.appendChild(doc.dom`<meta name="${meta.name}" content="${meta.value}">`);
-		});
-		doc.body.setAttribute('block-content', "body");
-		var title = doc.head.querySelector('title');
-		if (!title) {
-			title = doc.createElement('title');
-			doc.head.insertBefore(title, doc.head.firstChild);
-		}
-		var site = Pageboard.site;
-		if (site) {
-			if (site.favicon) {
-				doc.head.appendChild(doc.dom`<link rel="icon" href="${site.favicon}?format=ico">`);
-			}
-			if (site.lang) {
-				doc.documentElement.lang = site.lang;
-			}
-		} else {
-			console.warn("no site set");
-		}
-		title.textContent = d.title || '';
-		return doc.body;
+		node.fuse(d, scope);
 	},
 	scripts: [
 		'../lib/custom-elements.js',
 		'../lib/window-page.js',
-		'../ui/pageboard.js'
+		'../lib/pageboard.js'
 	],
 	polyfills: [
 		'dataset', 'fetch'
@@ -119,12 +111,7 @@ Pageboard.elements.page = {
 // extend page
 Pageboard.elements.notfound = Object.assign({}, Pageboard.elements.page, {
 	title: 'Page not found',
-	properties: Object.assign({}, Pageboard.elements.page.properties),
-	render: function(doc, block, view) {
-		doc.head.appendChild(doc.dom`<meta http-equiv="Status" content="404 Not Found">`);
-		return this.pageRender(doc, block, view);
-	}
+	properties: Object.assign({}, Pageboard.elements.page.properties)
 });
-Pageboard.elements.notfound.pageRender = Pageboard.elements.page.render;
 delete Pageboard.elements.notfound.properties.url;
 
