@@ -1,6 +1,7 @@
 Pageboard.elements.link = {
-	title: "Link",
 	priority: 11,
+	title: "Link",
+	icon: '<i class="icon linkify"></i>',
 	properties: {
 		button: {
 			title: 'Button',
@@ -62,8 +63,7 @@ Pageboard.elements.link = {
 	inline: true,
 	group: "inline",
 	tag: 'a:not(.itemlink)',
-	icon: '<i class="icon linkify"></i>',
-	auto: function(a) {
+	auto: function(a, hrefs) {
 		if (a.hostname && a.hostname != document.location.hostname) {
 			a.target = "_blank";
 			a.rel = "noopener";
@@ -71,23 +71,17 @@ Pageboard.elements.link = {
 			a.target = "_blank";
 		} else {
 			var href = a.getAttribute('href').split('?')[0];
-			var meta = Pageboard.hrefs[href];
+			var meta = hrefs[href];
 			if (meta && meta.mime && meta.mime.startsWith("text/html") == false) {
 				a.target = "_blank";
 			}
 		}
 		return a;
 	},
-	render: function(doc, block) {
-		var d = block.data;
-		var a = this.auto(doc.dom`<a href="${d.url}"></a>`);
-		if (d.button) a.className = "ui button";
-		if (d.icon) {
-			a.classList.add('icon');
-			a.style.backgroundImage = `url(${d.icon})`;
-		}
-		if (d.template) a.dataset.href = d.template;
-		return a;
+	html: '<a href="[url]" class="[button|?:ui button] [icon|?]" data-href="[template]"></a>',
+	fuse: function(node, d, scope) {
+		if (d.icon) node.style.backgroundImage = `url(${d.icon})`;
+		return this.auto(node.fuse(d), scope.$hrefs);
 	},
 	stylesheets: [
 		'../semantic-ui/button.css'

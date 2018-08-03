@@ -1,5 +1,6 @@
 Pageboard.elements.nav = {
 	title: "Nav",
+	icon: '<i class="icon hand pointer"></i>',
 	menu: "link",
 	description: "Navigation links",
 	properties: {
@@ -19,44 +20,33 @@ Pageboard.elements.nav = {
 		}
 	},
 	group: "block",
-	icon: '<i class="icon hand pointer"></i>',
-	render: function(doc, block, view) {
-		var links = view.block.links || {};
-		var rel = block.data.relation;
-		var obj = links[rel];
-		if (rel == "up") {
-			if (obj && obj.length) obj = obj[0];
+	html: `<a class="ui icon button [url|!?:disabled]" href="[url]" title="[title]">
+		<i class="icon [rel]"></i>
+	</a>`,
+	fuse: function(node, d, scope) {
+		var obj = scope.$links[d.relation] || {};
+		if (d.relation == "up") {
+			if (obj.length) obj = obj[0];
 		}
-		var a = doc.dom`<a class="ui icon button">
-			<i class="icon ${rel}"></i>
-		</a>`;
-		if (obj) {
-			a.setAttribute('href', obj.url);
-			a.setAttribute('title', obj.title);
-		} else {
-			a.classList.add('disabled');
-		}
-		return a;
+		node.fuse({
+			url: obj.url,
+			title: obj.title,
+			rel: d.relation,
+		}, scope);
 	}
 };
 
 Pageboard.elements.breadcrumb = {
 	title: "Breadcrumb",
+	icon: '<b class="icon">&gt;&gt;&gt;</b>',
 	menu: "link",
 	group: "block",
-	icon: '<b class="icon">&gt;&gt;&gt;</b>',
-	render: function(doc, block, view) {
-		var page = view.block;
-		var list = page.links && page.links.up || [];
-		var node = doc.dom`<div class="ui breadcrumb"></div>`;
-		list.forEach(function(item, i) {
-			if (i > 0) node.insertBefore(doc.dom`<div class="divider"></div>`, node.firstChild);
-			node.insertBefore(doc.dom`<a href="${item.url}" class="section">${item.title}</a>`, node.firstChild);
-		});
-		node.appendChild(doc.dom`<div class="divider"></div>`);
-		node.appendChild(doc.dom`<div class="active section">${page.data.title}</div>`);
-		return node;
-	},
+	html: `<div class="ui breadcrumb">
+		<div class="divider"></div>
+		<a href="[$links.up.url|repeat:+a:link]" class="section">[link.title]</a>
+		<div class="divider"></div>
+		<div class="active section">[$page.title]</div>
+	</div>`,
 	stylesheets: [
 		'../semantic-ui/breadcrumb.css'
 	]

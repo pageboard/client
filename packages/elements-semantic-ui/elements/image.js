@@ -1,5 +1,6 @@
 Pageboard.elements.image = {
 	title: "Image",
+	icon: '<i class="icon image"></i>',
 	properties: {
 		alt: {
 			title: 'Alternative text',
@@ -125,7 +126,6 @@ Pageboard.elements.image = {
 		}
 	},
 	group: "block",
-	icon: '<i class="icon image"></i>',
 	tag: 'element-image',
 	buildLoc: function(url, d) {
 		if (!url) return {
@@ -163,53 +163,49 @@ Pageboard.elements.image = {
 			spec: "inline*"
 		}
 	},
-	render: function(doc, block) {
-		var d = block.data;
+	html: `<element-image class="[lqip|?]"
+		data-fit="[fit]" data-position="[position]" data-lqip="[lqip]"
+		data-url="[url]"
+	>
+		<img alt="[alt]" data-src="[template]" src="[src]"
+			data-width="[width]" data-height="[height]" data-zoom="[zoom]" />
+		<div block-content="legend"></div>
+	</element-image>`,
+	fuse: function(node, d, scope) {
+		var obj = {
+			alt: d.alt
+		};
 		var loc = this.buildLoc(d.url || this.resources[0], d);
-
-		var img = doc.dom`<img alt="${d.alt || ''}" />`;
-		var node = doc.dom`<element-image>
-			${img}
-			<div block-content="legend"></div>
-		</element-image>`;
-
-		if (d.roi) {
-			// legacy property
-			d.display = d.roi;
-			delete d.roi;
-		}
 		var display = d.display;
 		var fit = display && display.fit || "none";
 		if (display) {
-			node.dataset.fit = fit;
+			obj.fit = fit;
 			var posx = display.horizontal;
 			if (posx == "hcenter") posx = "center";
 			var posy = display.vertical;
 			if (posy == "vcenter") posy = "center";
-			node.dataset.position = `${posx || 'center'} ${posy || 'center'}`;
+			obj.position = `${posx || 'center'} ${posy || 'center'}`;
 		}
 		var zoom = (d.crop || {}).zoom || 100;
-		var meta = Pageboard.hrefs[d.url];
+		var meta = scope.$hrefs[d.url];
 		if (meta && meta.width && meta.height) {
 			var wf = (d.crop || {}).width || 100;
 			var wh = (d.crop || {}).height || 100;
-			img.dataset.width = Math.round(meta.width * wf / 100);
-			img.dataset.height = Math.round(meta.height * wh / 100);
-			if (zoom != 100) img.dataset.zoom = zoom;
+			obj.width = Math.round(meta.width * wf / 100);
+			obj.height = Math.round(meta.height * wh / 100);
+			if (zoom != 100) obj.zoom = zoom;
 			var isSvg = meta.mime == "image/svg+xml";
 			var isFit = fit != "none";
 			if (!isSvg && (!isFit || d.template)) {
-				node.dataset.lqip = loc.query.q = 5;
-				node.classList.add('lqip');
+				obj.lqip = loc.query.q = 5;
 				if (isFit) loc.query.rs = "w-320_h-320_max";
 			} else if (isFit || !isSvg) {
-				node.dataset.url = Page.format(loc);
+				obj.url = Page.format(loc);
 				loc = null;
 			}
 		}
-		if (loc) img.setAttribute('src', Page.format(loc));
-		if (d.template) img.dataset.src = d.template;
-		return node;
+		obj.src = loc ? Page.format(loc) : null;
+		node.fuse(obj);
 	},
 	resources: [
 		'../ui/empty.png'
@@ -226,6 +222,7 @@ Pageboard.elements.image = {
 Pageboard.elements.inlineImage = {
 	priority: 12,
 	title: "Icon",
+	icon: '<i class="icon image"></i>',
 	properties: {
 		url: {
 			title: 'Address',
@@ -357,24 +354,20 @@ Pageboard.elements.inlineImage = {
 	inline: true,
 	group: "inline",
 	tag: "img",
-	icon: '<i class="icon image"></i>',
-	render: function(doc, block) {
-		var d = block.data;
+	html: `<img src="[src]"
+		alt="" class="ui inline image
+		[display.avatar|?]
+		[display.rounded|?]
+		[display.circular|?]
+		[display.spaced|?]
+		[display.floated|pre:floated ]
+		[display.align|post: aligned]"
+		data-src="[template]" />`,
+	fuse: function(node, d, scope) {
 		var loc = Pageboard.elements.image.buildLoc(d.url || this.resources[0], d);
-		var node = doc.dom`<img src="${Page.format(loc)}" alt="" class="ui inline image" />`;
-		var display = d.display || {};
-		if (display.avatar) node.classList.add('avatar');
-		if (display.rounded) node.classList.add('rounded');
-		if (display.circular) node.classList.add('circular');
-		if (display.spaced) node.classList.add('spaced');
-		if (display.floated) {
-			node.classList.add('floated', display.floated);
-		}
-		if (display.align) {
-			node.classList.add(display.align, 'aligned');
-		}
-		if (d.template) node.dataset.src = d.template;
-		return node;
+		node.fuse(Object.assign({
+			src: Page.format(loc)
+		}, d));
 	},
 	resources: [
 		'../ui/empty.png'

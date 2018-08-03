@@ -28,7 +28,7 @@ Pageboard.elements.paragraph = {
 	},
 	parse: function(dom) {
 		var align = "left";
-		var prop = Pageboard.elements.paragraph.properties.align;
+		var prop = this.properties.align;
 		if (dom.classList.contains("aligned")) {
 			align = prop.anyOf.find(function(item) {
 				return dom.classList.contains(item.const);
@@ -42,10 +42,14 @@ Pageboard.elements.paragraph = {
 	group: "block",
 	inplace: true,
 	icon: '<i class="icon paragraph"></i>',
-	render: function(doc, block) {
-		return doc.dom`<p class="${block.data.align || 'left'} aligned">Text</p>`;
-	}
+	html: '<p class="[align|or:left] aligned">Text</p>'
 };
+Pageboard.elements.paragraph_nolink = Object.assign({}, Pageboard.elements.paragraph, {
+	contents: {
+		spec: "inline*",
+		marks: "nolink"
+	}
+});
 
 Pageboard.elements.segment = {
 	title: "Segment",
@@ -107,9 +111,8 @@ Pageboard.elements.segment = {
 	},
 	group: "block",
 	icon: '<b class="icon">Seg</b>',
-	render: function(doc, block) {
-		var d = block.data;
-		var node = doc.dom`<div class="ui segment"></div>`;
+	html: '<div class="ui segment"></div>',
+	fuse: function(node, d) {
 		Object.keys(d).forEach(function(key) {
 			if (this.properties[key].type == 'boolean' && d[key]) {
 				node.classList.add(key);
@@ -170,11 +173,10 @@ Pageboard.elements.heading = {
 		return {level: level};
 	},
 	render: function(doc, block) {
-		var node = doc.createElement('h' + block.data.level);
-		node.setAttribute('block-content', 'text');
-		node.className = `${block.data.align || 'left'} aligned`;
-		node.innerText = 'Heading';
-		return node;
+		var n = block.data.level;
+		return doc.dom(
+			`<h${n} block-content="text" class="[align|or:left]">Heading</h${n}>`
+		).fuse(block.data);
 	}
 };
 
@@ -205,16 +207,9 @@ Pageboard.elements.divider = {
 			default: false
 		}
 	},
-	render: function(doc, block) {
-		var d = block.data;
-		var node = doc.dom`<div class="ui divider"></div>`;
-		if (d.ruler == false) node.classList.add('hidden');
-		if (d.large) node.classList.add('section');
-		if (d.clearing) node.classList.add('clearing');
-		if (d.fitted) node.classList.add('fitted');
-		return node;
-	},
+	html: '<div class="ui divider [ruler|!?:hidden] [large|?:section] [clearing|?] [fitted|?]"></div>',
 	stylesheets: [
 		'../semantic-ui/divider.css'
 	]
 };
+

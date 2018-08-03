@@ -1,15 +1,11 @@
-Pageboard.elements.query._render = Pageboard.elements.query.render;
-Pageboard.elements.query.render = function(doc, block) {
-	var node = Pageboard.elements.query._render(doc, block);
+Pageboard.elements.query.fuse = function(node, d) {
+	node.fuse(d);
 	node.classList.add('ui', 'form');
-	return node;
 };
 
-Pageboard.elements.query_message._render = Pageboard.elements.query_message.render;
-Pageboard.elements.query_message.render = function(doc, block) {
-	var node = Pageboard.elements.query_message._render(doc, block);
+Pageboard.elements.query_message.fuse = function(node, d) {
+	node.fuse(d);
 	node.classList.add('ui', 'message');
-	return node;
 };
 Pageboard.elements.query_message.stylesheets.push(
 	'../semantic-ui/message.css'
@@ -17,18 +13,16 @@ Pageboard.elements.query_message.stylesheets.push(
 
 Pageboard.elements.query_tags = {
 	title: 'Tags',
+	icon: '<i class="tags icon"></i>',
 	menu: "form",
 	group: "block",
 	contents: {
 		title: 'inline*'
 	},
-	icon: '<i class="tags icon"></i>',
-	render: function(doc, block) {
-		return doc.dom`<element-query-tags>
-			<div block-content="title">Filters:</div>
-			<div class="ui labels"></div>
-		</element-query-tags>`
-	},
+	html: `<element-query-tags>
+		<div block-content="title">Filters:</div>
+		<div class="ui labels"></div>
+	</element-query-tags>`,
 	stylesheets: [
 		'../semantic-ui/label.css',
 		'../ui/query-tags.css'

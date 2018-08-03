@@ -1,8 +1,8 @@
 Pageboard.elements.rating = {
 	title: "Rating",
+	icon: '<i class="star outline icon"></i>',
 	menu: 'widget',
 	group: "block",
-	icon: '<i class="star outline icon"></i>',
 	properties: {
 		value: {
 			title: 'Value',
@@ -42,12 +42,7 @@ Pageboard.elements.rating = {
 			}]
 		}
 	},
-	render: function(doc, block) {
-		var d = block.data;
-		var node = doc.dom`<element-rating class="${d.color || ''}" value="${d.value}" maximum="${d.maximum}" char="${d.char}"></element-rating>`;
-		if (d.template) node.dataset.value = d.template;
-		return node;
-	},
+	html: '<element-rating class="[color]" value="[value]" maximum="[maximum]" char="[char]" data-value="[template|magnet]"></element-rating>',
 	stylesheets: [
 		'../ui/rating.css'
 	],

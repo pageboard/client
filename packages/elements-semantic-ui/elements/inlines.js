@@ -27,32 +27,29 @@ Pageboard.elements.em = {
 Pageboard.elements.light = {
 	priority: 12,
 	title: "Light",
+	icon: '<i class="icon" style="font-weight:lighter">L</i>',
 	contents: "text*",
 	inline: true,
 	inplace: true,
 	group: "inline nolink",
-	icon: '<i class="icon" style="font-weight:lighter">L</i>',
-	render: function(doc, block) {
-		return doc.dom`<span class="lighter"></span>`;
-	}
+	html: '<span class="lighter"></span>'
 };
 
 Pageboard.elements.sup = {
 	priority: 12,
 	title: "Sup",
+	icon: '<b class="icon">S<sup>up</sup></b>',
 	contents: "text*",
 	inline: true,
 	inplace: true,
 	group: "inline nolink",
-	icon: '<b class="icon">S<sup>up</sup></b>',
-	render: function(doc, block) {
-		return doc.dom`<sup></sup>`;
-	}
+	html: '<sup></sup>'
 };
 
 Pageboard.elements.caps = {
 	priority: 12,
 	title: "Capitalization",
+	icon: '<span class="icon">Aa</span>',
 	contents: "text*",
 	inline: true,
 	inplace: true,
@@ -81,15 +78,17 @@ Pageboard.elements.caps = {
 			}]
 		}
 	},
-	icon: '<span class="icon">Aa</span>',
-	render: function(doc, block) {
-		return doc.dom`<span class="${block.data.transform}"></span>`;
-	}
+	html: '<span class="[transform]"></span>'
 };
 
 Pageboard.elements.color = {
 	priority: 12,
 	title: "Color",
+	icon: `<i class="icon" style="background-image:
+		linear-gradient(
+			to right,
+			red, orange, yellow, green, blue, purple
+		);"></i>`,
 	properties: {
 		color: {
 			default: "",
@@ -133,12 +132,5 @@ Pageboard.elements.color = {
 	inline: true,
 	inplace: true,
 	group: "inline nolink",
-	icon: `<i class="icon" style="background-image:
-		linear-gradient(
-			to right,
-			red, orange, yellow, green, blue, purple
-		);"></i>`,
-	render: function(doc, block) {
-		return doc.dom`<span class="${block.data.color} color"></span>`;
-	}
+	html: '<span class="[color] color"></span>'
 };

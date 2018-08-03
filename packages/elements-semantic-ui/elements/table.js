@@ -1,6 +1,7 @@
 Pageboard.elements.table = {
 	title: "Table",
 	menu: 'widget',
+	icon: '<i class="table icon"></i>',
 	group: "block",
 	contents: {
 		content: {
@@ -54,21 +55,8 @@ Pageboard.elements.table = {
 			default: false
 		}
 	},
-	icon: '<i class="table icon"></i>',
-	render: function(doc, block) {
-		var d = block.data;
-		var node = doc.dom`<table class="ui table" block-content="content"></table>`;
-		if (d.definition) node.classList.add('definition');
-		if (d.single) node.classList.add('single', 'line');
-		if (d.unstackable) node.classList.add('unstackable');
-		if (d.selectable) node.classList.add('selectable');
-		if (d.striped) node.classList.add('striped');
-		if (d.celled) node.classList.add('celled');
-		if (d.basic) node.classList.add('basic');
-		if (d.collapsing) node.classList.add('collapsing');
-		if (d.compact) node.classList.add('compact');
-		return node;
-	},
+	html: `<table block-content="content"
+	class="ui table [definition|?] [single|?|post: line] [unstackable|?] [selectable|?] [striped|?] [celled|?] [basic|?] [collapsing|?] [compact|?]"></table>`,
 	stylesheets: [
 		'../semantic-ui/table.css'
 	]
@@ -78,54 +66,47 @@ Pageboard.elements.table = {
 Pageboard.elements.table_head = {
 	title: "Head",
 	menu: 'widget',
+	icon: '<b class="icon">head</b>',
 	contents: {
 		cells: 'table_head_cell+'
 	},
-	icon: '<b class="icon">head</b>',
 	inplace: true,
-	render: function(doc, block) {
-		return doc.dom`<thead><tr block-content="cells"></tr></thead>`;
-	}
+	html: '<thead><tr block-content="cells"></tr></thead>'
 };
 
 Pageboard.elements.table_foot = {
 	title: "Foot",
 	menu: 'widget',
+	icon: '<b class="icon">foot</b>',
 	contents: {
 		cells: 'table_head_cell+'
 	},
 	inplace: true,
-	icon: '<b class="icon">foot</b>',
-	render: function(doc, block) {
-		return doc.dom`<tfoot><tr block-content="cells"></tr></tfoot>`;
-	}
+	html: '<tfoot><tr block-content="cells"></tr></tfoot>'
 };
 
 Pageboard.elements.table_body = {
 	title: "Body",
 	menu: 'widget',
+	icon: '<b class="icon">body</b>',
 	contents: 'table_row+',
 	inplace: true,
-	icon: '<b class="icon">body</b>',
-	render: function(doc, block) {
-		return doc.dom`<tbody></tbody>`;
-	}
+	html: '<tbody></tbody>'
 };
 
 Pageboard.elements.table_row = {
 	title: "Row",
 	menu: 'widget',
+	icon: '<b class="icon">row</b>',
 	contents: 'table_cell+',
 	inplace: true,
-	icon: '<b class="icon">row</b>',
-	render: function(doc, block) {
-		return doc.dom`<tr></tr>`;
-	}
+	html: '<tr></tr>'
 };
 
 Pageboard.elements.table_cell = {
 	title: "Cell",
 	menu: 'widget',
+	icon: '<i class="icons"><b class="icon">cell</b><i class="corner add icon"></i></i>',
 	properties: {
 		align: {
 			title: 'Align',
@@ -153,7 +134,6 @@ Pageboard.elements.table_cell = {
 	},
 	inplace: true,
 	contents: "inline*",
-	icon: '<i class="icons"><b class="icon">cell</b><i class="corner add icon"></i></i>',
 	tag: 'td',
 	parse: function(dom) {
 		var d = {};
@@ -162,17 +142,13 @@ Pageboard.elements.table_cell = {
 		if (dom.matches('.selectable')) d.selectable = true;
 		return d;
 	},
-	render: function(doc, block) {
-		var node = doc.dom`<td></td>`;
-		if (block.data.align) node.classList.add(block.data.align, 'aligned');
-		if (block.data.selectable) node.classList.add('selectable');
-		return node;
-	}
+	html: '<td class="[align|post: aligned] [selectable|?]"></td>'
 };
 
 Pageboard.elements.table_head_cell = {
 	title: "Cell",
 	menu: 'widget',
+	icon: '<i class="icons"><b class="icon">head</b><i class="corner add icon"></i></i>',
 	properties: {
 		align: Pageboard.elements.table_cell.properties.align,
 		width: {
@@ -185,7 +161,6 @@ Pageboard.elements.table_head_cell = {
 		}
 	},
 	contents: "inline*",
-	icon: '<i class="icons"><b class="icon">head</b><i class="corner add icon"></i></i>',
 	tag: 'th',
 	inplace: true,
 	parse: function(dom) {
@@ -197,12 +172,6 @@ Pageboard.elements.table_head_cell = {
 		});
 		return d;
 	},
-	render: function(doc, block) {
-		var node = doc.dom`<th></th>`;
-		var pre = Pageboard.elements.grid.prefixes;
-		if (block.data.align) node.classList.add(block.data.align, 'aligned');
-		if (block.data.width) node.classList.add(pre[block.data.width], 'wide');
-		return node;
-	}
+	html: '<th class="[align|post: aligned] [width|num: wide]"></th>'
 };
 

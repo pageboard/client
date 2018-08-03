@@ -1,5 +1,6 @@
 Pageboard.elements.header = {
 	title: "Header",
+	icon: '<b class="icon">Head</b>',
 	group: "section",
 	properties: {
 		collapsed: {
@@ -14,15 +15,11 @@ Pageboard.elements.header = {
 			spec: "block+"
 		}
 	},
-	icon: '<b class="icon">Head</b>',
 	context: 'page/',
 	tag: "header,element-sticky.header",
-	render: function(doc, block) {
-		var d = block.data;
-		return doc.dom`<element-sticky class="header" data-collapsed="${d.collapsed}">
-			<header block-content="content"></header>
-		</element-sticky>`;
-	},
+	html: `<element-sticky class="header" data-collapsed="[collapsed|magnet]">
+		<header block-content="content"></header>
+	</element-sticky>`,
 	stylesheets: [
 		'../ui/sticky.css',
 		'../ui/layout.css'
@@ -35,6 +32,7 @@ Pageboard.elements.header = {
 
 Pageboard.elements.main = {
 	title: "Main",
+	icon: '<b class="icon">Main</b>',
 	group: "section",
 	properties: {},
 	contents: {
@@ -42,12 +40,9 @@ Pageboard.elements.main = {
 			spec: "block+"
 		}
 	},
-	icon: '<b class="icon">Main</b>',
 	context: 'page/',
 	tag: "main",
-	render: function(doc, block) {
-		return doc.dom`<main block-content="content"></main>`;
-	},
+	html: '<main block-content="content"></main>',
 	stylesheets: [
 		'../ui/layout.css'
 	]
@@ -55,6 +50,7 @@ Pageboard.elements.main = {
 
 Pageboard.elements.footer = {
 	title: "Footer",
+	icon: '<b class="icon">Main</b>',
 	group: "section",
 	properties: {},
 	contents: {
@@ -62,12 +58,9 @@ Pageboard.elements.footer = {
 			spec: "block+"
 		}
 	},
-	icon: '<b class="icon">Main</b>',
 	context: 'page/',
 	tag: "footer",
-	render: function(doc, block) {
-		return doc.dom`<footer block-content="content"></footer>`;
-	},
+	html: '<footer block-content="content"></footer>',
 	stylesheets: [
 		'../ui/layout.css'
 	]

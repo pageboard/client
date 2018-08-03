@@ -1,7 +1,8 @@
 Pageboard.elements.import = {
-	title: "Import",
-	menu: "form",
 	priority: 1, // scripts must run after 'form' scripts
+	title: "Import",
+	icon: '<b class="down arrow icon">?id=</b>',
+	menu: "form",
 	contents: {
 		blocks: {
 			title: 'Blocks',
@@ -10,10 +11,7 @@ Pageboard.elements.import = {
 		}
 	},
 	group: "block",
-	icon: '<b class="down arrow icon">?id=</b>',
-	render: function(doc, block) {
-		return doc.dom`<div block-content="blocks"></div>`;
-	},
+	html: '<div block-content="blocks"></div>',
 	required: ["type"],
 	properties: {
 		type: {

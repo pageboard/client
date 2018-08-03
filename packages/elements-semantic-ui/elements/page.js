@@ -66,14 +66,14 @@ Pageboard.elements.page.properties.transition = {
 	}
 };
 
-Pageboard.elements.page.apiRender = Pageboard.elements.page.render;
+Pageboard.elements.page.apiFuse = Pageboard.elements.page.fuse;
 
-Pageboard.elements.page.render = function(doc, block) {
-	var ret = this.apiRender(doc, block);
-	var tr = block.data.transition;
-	if (tr && tr.from) doc.body.dataset.transitionFrom = tr.from;
-	if (tr && tr.to) doc.body.dataset.transitionTo = tr.to;
-	if (block.data.redirect) doc.body.dataset.redirect = block.data.redirect;
-	return ret;
+Pageboard.elements.page.fuse = function(node, d, scope) {
+	this.apiFuse(node, d, scope);
+	var body = node.ownerDocument.body;
+	var tr = d.transition;
+	if (tr && tr.from) body.dataset.transitionFrom = tr.from;
+	if (tr && tr.to) body.dataset.transitionTo = tr.to;
+	if (d.redirect) body.dataset.redirect = d.redirect;
 };
 

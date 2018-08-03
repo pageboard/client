@@ -1,10 +1,11 @@
 Pageboard.elements.cards = {
 	title: "Cards",
 	menu: 'widget',
+	icon: '<i class="icon address card outline"></i>',
 	group: "block",
 	contents: {
 		cards: {
-			spec: "card+"
+			spec: "(card|cardlink)+"
 		}
 	},
 	properties: {
@@ -16,30 +17,7 @@ Pageboard.elements.cards = {
 			default: 0
 		}
 	},
-	icon: '<i class="icon address card outline"></i>',
-	render: function(doc, block) {
-		var count = '';
-		if (block.data.columnCount > 0) count = {
-			0: '',
-			1: 'one',
-			2: 'two',
-			3: 'three',
-			4: 'four',
-			5: 'five',
-			6: 'six',
-			7: 'seven',
-			8: 'eight',
-			9: 'nine',
-			10: 'ten',
-			11: 'eleven',
-			12: 'twelve',
-			13: 'thirteen',
-			14: 'fourteen',
-			15: 'fifteen',
-			16: 'sixteen'
-		}[block.data.columnCount];
-		return doc.dom`<div class="ui ${count} doubling stackable cards" block-content="cards"></div>`;
-	},
+	html: '<div class="ui [columnCount|num] doubling stackable cards" block-content="cards"></div>',
 	stylesheets: [
 		'../semantic-ui/card.css'
 	]
@@ -49,6 +27,50 @@ Pageboard.elements.cards = {
 Pageboard.elements.card = {
 	title: "Card",
 	menu: 'widget',
+	icon: '<i class="icons"><i class="address card outline icon"></i><i class="corner add icon"></i></i>',
+	properties: {
+		fluid: {
+			title: 'Fluid',
+			description: 'Takes up the width of its container',
+			type: 'boolean',
+			default: false
+		},
+		centered: {
+			title: 'Centered',
+			type: 'boolean',
+			default: false
+		},
+		image: {
+			title: 'With image',
+			type: 'boolean',
+			default: true
+		}
+	},
+	contents: {
+		image: {
+			spec: "image",
+			title: 'image'
+		},
+		content: {
+			spec: '(card_header|card_meta|card_description)+',
+			title: 'content'
+		},
+		extra: {
+			spec: 'paragraph+',
+			title: 'extra'
+		}
+	},
+	html: `<div class="ui [fluid|?] [centered|?] card">
+		<div class="image [image|?::hidden]" block-content="image"></div>
+		<div class="content" block-content="content"></div>
+		<div class="extra content" block-content="extra"></div>
+	</div>`
+};
+
+Pageboard.elements.cardlink = {
+	title: "Card Link",
+	menu: 'widget',
+	icon: '<i class="icons"><i class="linkify icon"></i><i class="corner add icon"></i></i>',
 	properties: {
 		fluid: {
 			title: 'Fluid',
@@ -98,7 +120,7 @@ Pageboard.elements.card = {
 			title: 'image'
 		},
 		content: {
-			spec: '(card_header|card_meta|card_description)+',
+			spec: '(card_header_nolink|card_meta_nolink|card_description_nolink)+',
 			title: 'content'
 		},
 		extra: {
@@ -106,60 +128,64 @@ Pageboard.elements.card = {
 			title: 'extra'
 		}
 	},
-	icon: '<i class="icons"><i class="address card outline icon"></i><i class="corner add icon"></i></i>',
-	render: function(doc, block) {
-		var d = block.data;
-		var node = d.url ? doc.dom`<a href="${d.url}"></a>` : doc.dom`<div></div>`;
-		if (d.url) Pageboard.elements.link.auto(node);
-		node.classList.add('ui');
-		if (d.fluid) node.classList.add('fluid');
-		if (d.centered) node.classList.add('centered');
-		node.classList.add('card');
-		node.appendChild(doc.dom`
-			<div class="image ${d.image ? '' : 'hidden'}" block-content="image"></div>
-			<div class="content" block-content="content"></div>
-			<div class="extra content" block-content="extra"></div>
-		`);
-		if (d.template) node.dataset.href = d.template;
-		return node;
-	}
+	html: `<a href="[url]" class="ui [fluid|?] [centered|?] card" data-href="[template]">
+		<div class="image [image|?::hidden]" block-content="image"></div>
+		<div class="content" block-content="content"></div>
+		<div class="extra content" block-content="extra"></div>
+	</a>`
 };
 
 Pageboard.elements.card_header = {
 	title: 'header',
 	menu: 'widget',
+	icon: '<b class="icon">H</b>',
 	inplace: true,
 	contents: {
 		text: "inline*"
 	},
-	icon: '<b class="icon">H</b>',
-	render: function(doc, block) {
-		return doc.dom`<div class="header" block-content="text"></div>`;
-	}
+	html: '<div class="header" block-content="text"></div>'
 };
+Pageboard.elements.card_header_nolink = Object.assign({}, Pageboard.elements.card_header, {
+	contents: {
+		text: {
+			spec: "inline*",
+			marks: "nolink"
+		}
+	}
+});
 
 Pageboard.elements.card_meta = {
 	title: 'meta',
 	menu: 'widget',
+	icon: '<em class="icon">M</em>',
 	inplace: true,
 	contents: {
 		text: "inline*"
 	},
-	icon: '<em class="icon">M</em>',
-	render: function(doc, block) {
-		return doc.dom`<div class="meta" block-content="text"></div>`;
-	}
+	html: '<div class="meta" block-content="text"></div>'
 };
+Pageboard.elements.card_meta_nolink = Object.assign({}, Pageboard.elements.card_meta, {
+	contents: {
+		text: {
+			spec: "inline*",
+			marks: "nolink"
+		}
+	}
+});
+
 Pageboard.elements.card_description = {
 	title: 'description',
 	menu: 'widget',
+	icon: '<span class="icon">P</span>',
 	inplace: true,
 	contents: {
 		paragraphs: "paragraph+"
 	},
-	icon: '<span class="icon">P</span>',
-	render: function(doc, block) {
-		return doc.dom`<div class="description" block-content="paragraphs"></div>`;
-	}
+	html: '<div class="description" block-content="paragraphs"></div>'
 };
+Pageboard.elements.card_description_nolink = Object.assign({}, Pageboard.elements.card_description, {
+	contents: {
+		paragraphs: "paragraph_nolink+"
+	}
+});
 

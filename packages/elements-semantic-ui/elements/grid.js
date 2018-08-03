@@ -1,5 +1,6 @@
 Pageboard.elements.grid = {
 	title: "Grid",
+	icon: '<i class="icon grid layout"></i>',
 	group: "block",
 	contents: {
 		columns: {
@@ -7,7 +8,6 @@ Pageboard.elements.grid = {
 			title: 'cells'
 		}
 	},
-	icon: '<i class="icon grid layout"></i>',
 	properties: {
 		width: {
 			title: 'control width',
@@ -21,38 +21,16 @@ Pageboard.elements.grid = {
 			}]
 		}
 	},
-	render: function(doc, block) {
-		var node = doc.dom`<div class="ui doubling stackable equal width grid" block-content="columns"></div>`;
-		if (block.data.width == "contained") node.classList.add('container');
-		return node;
-	},
+	html: '<div class="ui doubling stackable equal width grid [width|eq:contained:container]" block-content="columns"></div>',
 	stylesheets: [
 		'../semantic-ui/grid.css'
-	],
-	prefixes: {
-		0: '',
-		1: 'one',
-		2: 'two',
-		3: 'three',
-		4: 'four',
-		5: 'five',
-		6: 'six',
-		7: 'seven',
-		8: 'eight',
-		9: 'nine',
-		10: 'ten',
-		11: 'eleven',
-		12: 'twelve',
-		13: 'thirteen',
-		14: 'fourteen',
-		15: 'fifteen',
-		16: 'sixteen'
-	}
+	]
 };
 
 
 Pageboard.elements.grid_column = {
 	title: "Column",
+	icon: '<i class="icon columns"></i>',
 	properties: {
 		width: {
 			title: 'Column width',
@@ -69,25 +47,17 @@ Pageboard.elements.grid_column = {
 			title: 'content'
 		}
 	},
-	icon: '<i class="icon columns"></i>',
-	render: function(doc, block) {
-		var prefix = '';
-		if (block.data.width != null) prefix = Pageboard.elements.grid.prefixes[block.data.width];
-		if (prefix) prefix += " wide ";
-		return doc.dom`<div class="${prefix}column" block-content="content"></div>`;
-	}
+	html: '<div class="[width|num: wide] column" block-content="content"></div>'
 };
 
 Pageboard.elements.grid_row = {
 	title: "Row",
+	icon: '<b class="icon">row</b>',
 	contents: {
 		columns: {
 			spec: "grid_column+",
 			title: 'columns'
 		}
 	},
-	icon: '<b class="icon">row</b>',
-	render: function(doc, block) {
-		return doc.dom`<div class="row" block-content="columns"></div>`;
-	}
+	html: '<div class="row" block-content="columns"></div>'
 };

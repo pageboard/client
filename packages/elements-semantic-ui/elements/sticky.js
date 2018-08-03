@@ -1,5 +1,6 @@
 Pageboard.elements.sticky = {
 	title: "Sticky",
+	icon: '<i class="icon pin"></i>',
 	menu: "widget",
 	group: "block",
 	properties: {
@@ -27,10 +28,7 @@ Pageboard.elements.sticky = {
 			title: 'content'
 		}
 	},
-	icon: '<i class="icon pin"></i>',
-	render: function(doc, block) {
-		return doc.dom`<element-sticky block-content="content" data-collapsed="${block.data.collapsed}" data-position="${block.data.position}"></element-sticky>`;
-	},
+	html: '<element-sticky block-content="content" data-collapsed="[collapsed|magnet]" data-position="[position]"></element-sticky>',
 	stylesheets: [
 		'../ui/sticky.css'
 	],

@@ -1,6 +1,7 @@
 Pageboard.elements.accordion = {
-	title: "Accordion",
 	priority: 2, // scripts must run after 'query' scripts
+	title: "Accordion",
+	icon: '<i class="caret right icon"></i>',
 	menu: 'widget',
 	group: "block",
 	contents: {
@@ -8,10 +9,7 @@ Pageboard.elements.accordion = {
 			spec: "fold+"
 		}
 	},
-	icon: '<i class="caret right icon"></i>',
-	render: function(doc, block) {
-		return doc.dom`<element-accordion class="ui accordion" block-content="folds"></element-accordion>`;
-	},
+	html: '<element-accordion class="ui accordion" block-content="folds"></element-accordion>',
 	stylesheets: [
 		'../semantic-ui/accordion.css',
 		'../ui/accordion.css'
@@ -24,6 +22,7 @@ Pageboard.elements.accordion = {
 
 Pageboard.elements.fold = {
 	title: "Fold",
+	icon: '<i class="icons"><i class="caret right icon"></i><i class="corner add icon"></i></i>',
 	menu: 'widget',
 	contents: {
 		title: {
@@ -43,14 +42,9 @@ Pageboard.elements.fold = {
 			context: 'query'
 		}
 	},
-	icon: '<i class="icons"><i class="caret right icon"></i><i class="corner add icon"></i></i>',
-	render: function(doc, block) {
-		var node = doc.dom`<div class="fold">
-			<div class="title caret-icon" block-content="title">Title</div>
-			<div class="content" block-content="content"></div>
-		</div>`;
-		if (block.data.template) node.dataset.template = block.data.template;
-		return node;
-	}
+	html: `<div class="fold" data-template="[template|magnet]">
+		<div class="title caret-icon" block-content="title">Title</div>
+		<div class="content" block-content="content"></div>
+	</div>`
 };
 

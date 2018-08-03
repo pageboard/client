@@ -1,5 +1,6 @@
 Pageboard.elements.tabs = {
 	title: "Tabs",
+	icon: '<b class="icon">Tabs</b>',
 	menu: 'widget',
 	group: "block",
 	contents: {
@@ -12,7 +13,6 @@ Pageboard.elements.tabs = {
 			spec: "tab+"
 		}
 	},
-	icon: '<b class="icon">Tabs</b>',
 	properties: {
 		style: {
 			title: 'Style',
@@ -52,14 +52,15 @@ Pageboard.elements.tabs = {
 	resources: [
 		'../ui/tab-helper.js'
 	],
-	install: function(doc, page, view) {
-		if (Pageboard.write) this.scripts = this.resources;
+	install: function(doc, page, scope) {
+		if (scope.$write) this.scripts = this.resources;
 	}
 };
 
 
 Pageboard.elements.tab_item = {
 	title: "Item",
+	icon: '<i class="icons"><b class="icon">Tab</b><i class="corner add icon"></i></i>',
 	menu: 'widget',
 	inplace: true,
 	context: 'tabs/tabs_container_items/',
@@ -79,11 +80,7 @@ Pageboard.elements.tab_item = {
 		d.active = dom.previousElementSibling == null;
 		return d;
 	},
-	icon: '<i class="icons"><b class="icon">Tab</b><i class="corner add icon"></i></i>',
-	render: function(doc, block) {
-		var d = block.data;
-		return doc.dom`<a class="item ${d.active ? 'active' : ''}" block-content="content">Tab Item</a>`;
-	}
+	html: '<a class="item [active|?]" block-content="content">Tab Item</a>'
 };
 
 Pageboard.elements.tab = {
@@ -104,9 +101,6 @@ Pageboard.elements.tab = {
 		d.active = dom.previousElementSibling == null;
 		return d;
 	},
-	render: function(doc, block) {
-		var d = block.data;
-		return doc.dom`<div class="ui tab ${d.active ? 'active' : ''} segment" block-content="content"></div>`;
-	}
+	html: '<div class="ui tab [active|?] segment" block-content="content"></div>'
 };
 

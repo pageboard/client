@@ -1,5 +1,6 @@
 Pageboard.elements.sitemap = {
 	title: "Site map",
+	icon: '<i class="icon sitemap"></i>',
 	menu: "link",
 	contents: {
 		children: {
@@ -8,10 +9,7 @@ Pageboard.elements.sitemap = {
 		}
 	},
 	group: "block",
-	icon: '<i class="icon sitemap"></i>',
-	render: function(doc, block, view) {
-		return doc.dom`<element-accordion class="ui accordion" block-content="children"></element-accordion>`;
-	},
+	html: '<element-accordion class="ui accordion" block-content="children"></element-accordion>',
 	mount: function(block, blocks, view) {
 		if (!block.content) block.content = {};
 		if (!block.content.children) {
@@ -90,13 +88,14 @@ Pageboard.elements.sitemap = {
 	resources: [
 		'../ui/sitemap-helper.js'
 	],
-	install: function(doc, page, view) {
-		if (Pageboard.write) this.scripts = this.resources;
+	install: function(doc, page, scope) {
+		if (scope.$write) this.scripts = this.resources;
 	}
 };
 
 Pageboard.elements.sitepage = {
 	title: "Page",
+	icon: '<i class="icon file outline"></i>',
 	menu: "link",
 	group: 'sitemap_item',
 	properties: Pageboard.elements.page.properties,
@@ -114,20 +113,19 @@ Pageboard.elements.sitepage = {
 		while (node=node.previousElementSibling) pos++;
 		block.data.index = pos;
 	},
-	icon: '<i class="icon file outline"></i>',
 	context: 'sitemap/ | sitepage/',
-	render: function(doc, block) {
-		return doc.dom`<element-sitepage class="item fold" data-url="${block.data.url}">
-			<div class="title caret-icon">
-				<span class="header">${block.data.title || 'Untitled'}</span><br />
-				<a href="${block.data.url}" class="description">${block.data.url || '-'}</a>
-			</div>
-			<div class="list content ui accordion" block-content="children"></div>
-		</element-sitepage>`;
-	}
+	html: `<element-sitepage class="item fold" data-url="[url]">
+		<div class="title caret-icon">
+			<span class="header">[title|or:Untitled]</span><br />
+			<a href="[url]" class="description">[url|or:-]</a>
+		</div>
+		<div class="list content ui accordion" block-content="children"></div>
+	</element-sitepage>`
 };
+
 if (Pageboard.elements.mail) Pageboard.elements.sitemail = {
 	title: "Mail",
+	icon: '<i class="icon mail outline"></i>',
 	menu: "link",
 	group: 'sitemap_item',
 	get properties() {
@@ -137,15 +135,12 @@ if (Pageboard.elements.mail) Pageboard.elements.sitemail = {
 		// added pages NEED to have their type overriden
 		block.type = 'mail';
 	},
-	icon: '<i class="icon mail outline"></i>',
 	context: 'sitemap/ | sitepage/',
-	render: function(doc, block) {
-		return doc.dom`<element-sitepage class="item" data-url="${block.data.url}">
-			<div class="title">
-				<span class="header">${block.data.title || 'Untitled'}</span><br />
-				<a href="${block.data.url}" class="description">${block.data.url || '-'}</a>
-			</div>
-		</element-sitepage>`;
-	}
+	html: `<element-sitepage class="item" data-url="[url]">
+		<div class="title">
+			<span class="header">[title|or:Untitled]</span><br />
+			<a href="[url]" class="description">[url|or:-]</a>
+		</div>
+	</element-sitepage>`
 };
 

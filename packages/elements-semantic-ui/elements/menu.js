@@ -1,5 +1,6 @@
 Pageboard.elements.menu = {
 	title: "Menu",
+	icon: '<b class="icon">Menu</b>',
 	menu: "link",
 	contents: {
 		items: {
@@ -24,11 +25,7 @@ Pageboard.elements.menu = {
 		}
 	},
 	group: "block",
-	icon: '<b class="icon">Menu</b>',
-	render: function(doc, block, view) {
-		var it = doc.dom`<div class="ui ${block.data.direction} menu" block-content="items"></div>`;
-		return it;
-	},
+	html: '<div class="ui [direction] menu" block-content="items"></div>',
 	stylesheets: [
 		'../semantic-ui/menu.css',
 		'../ui/menu.css'
@@ -40,6 +37,7 @@ Pageboard.elements.menu = {
 
 Pageboard.elements.menu_item_link = {
 	title: "Link Item",
+	icon: '<b class="icon">Item</b>',
 	menu: "link",
 	priority: 10,
 	context: "menu//",
@@ -77,18 +75,16 @@ Pageboard.elements.menu_item_link = {
 		}
 	},
 	group: 'menu_item',
-	icon: '<b class="icon">Item</b>',
-	render: function(doc, block) {
-		var d = block.data;
-		var a = doc.dom`<a class="item" href="${d.url}" block-content="content">Item</a>`;
-		Pageboard.elements.link.auto(a);
-		if (d.template) a.setAttribute('attr-href', d.template);
-		return a;
+	html: '<a class="item" href="[url]" data-href="[template]" block-content="content">Item</a>',
+	fuse: function(node, d, scope) {
+		node.fuse(d);
+		Pageboard.elements.link.auto(node, scope.$hrefs);
 	}
 };
 
 Pageboard.elements.menu_item_dropdown = {
 	title: "Dropdown",
+	icon: '<b class="icon">Drop</b>',
 	menu: "link",
 	priority: 11,
 	context: "menu//",
@@ -111,13 +107,10 @@ Pageboard.elements.menu_item_dropdown = {
 		}
 	},
 	group: "menu_item",
-	icon: '<b class="icon">Drop</b>',
-	render: function(doc, block, view) {
-		return doc.dom`<div tabindex="0" class="ui simple dropdown item ${block.focused ? 'active' : ''}">
-			<div class="title ${block.data.icon ? 'caret-icon' : ''}" block-content="title">Dropdown</div>
-			<div class="menu" block-content="items"></div>
-		</div>`;
-	},
+	html: `<div tabindex="0" class="ui simple dropdown item [focused|?:active]">
+		<div class="title [icon|?:caret-icon]" block-content="title">Dropdown</div>
+		<div class="menu" block-content="items"></div>
+	</div>`,
 	stylesheets: [
 		'../semantic-ui/dropdown.css'
 	]
@@ -125,6 +118,7 @@ Pageboard.elements.menu_item_dropdown = {
 
 Pageboard.elements.menu_item_popup = {
 	title: "Popup",
+	icon: '<b class="icon">Pop</b>',
 	menu: "link",
 	priority: 11,
 	context: "menu//",
@@ -147,14 +141,11 @@ Pageboard.elements.menu_item_popup = {
 		}
 	},
 	group: "menu_item",
-	icon: '<b class="icon">Pop</b>',
-	render: function(doc, block, view) {
-		return doc.dom`<div tabindex="0" class="ui simple dropdown item">
-			<div class="title ${block.data.icon ? 'caret-icon' : ''}" block-content="title">Popup</div>
-			<div class="popup">
-				<div block-content="content"></div>
-			</div>
-		</div>`;
-	}
+	html: `<div tabindex="0" class="ui simple dropdown item">
+		<div class="title [icon|?:caret-icon]" block-content="title">Popup</div>
+		<div class="popup">
+			<div block-content="content"></div>
+		</div>
+	</div>`
 };
 

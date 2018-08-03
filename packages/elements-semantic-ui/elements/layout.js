@@ -1,5 +1,6 @@
 Pageboard.elements.layout = {
 	title: "Layout",
+	icon: '<i class="icon move"></i>',
 	properties: {
 		horizontal: {
 			title: 'horizontal',
@@ -74,24 +75,15 @@ Pageboard.elements.layout = {
 		}
 	},
 	group: 'block',
-	icon: '<i class="icon move"></i>',
-	render: function(doc, block) {
-		var d = block.data;
-		var node = doc.dom`<div class="layout" block-content="content"></div>`;
-		var list = node.classList;
-		if (d.width == "full") list.add('fullwidth');
-		else if (d.width == "contained") list.add('ui', 'container');
-		if (d.horizontal) list.add(d.horizontal);
-		if (d.vertical) list.add(d.vertical);
-		if (d.height) {
-			node.style.height = d.height + '%';
-		} else {
-			node.style.height = "auto";
-		}
-		if (d.direction) list.add(d.direction);
-		if (d.invert) list.add("inverted");
-		return node;
-	},
+	html: `<div class="layout
+		[width|eq:full:fullwidth:]
+		[width|eq:contained:ui container:]
+		[horizontal|?]
+		[vertical|?]
+		[height|eq:0:|not|post:%|or:auto]
+		[direction]
+		[invert|?:inverted]" block-content="content">
+	</div>`,
 	stylesheets: [
 		'../semantic-ui/container.css',
 		'../ui/layout.css'

@@ -1,12 +1,10 @@
 Pageboard.elements.code = {
 	title: "Literal",
+	icon: '<i class="left quote icon"></i>',
 	inline: true,
 	inplace: true,
 	group: "nolink",
 	contents: "text*",
-	icon: '<i class="left quote icon"></i>',
-	render: function(doc, block) {
-		return doc.dom`<code></code>`;
-	}
+	html:`<code></code>`
 };
 

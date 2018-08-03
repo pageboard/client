@@ -1,5 +1,6 @@
 Pageboard.elements.embed = {
 	title: "Embed",
+	// icon: '<i class="external icon"></i>', // FIXME embeds are a hack
 	menu: "widget",
 	properties: {
 		url: {
@@ -30,19 +31,19 @@ Pageboard.elements.embed = {
 		}
 	},
 	group: "block",
-//	icon: '<i class="external icon"></i>',
 	parse: function(dom) {
 		var attrs = {};
-		if (dom.matches('iframe')) attrs.url = dom.getAttribute('src');
+		if (dom.matches('iframe')) {
+			attrs.url = dom.getAttribute('src');
+		} else {
+			Object.keys(this.properties).forEach(function(key) {
+				if (dom.dataset[key]) attrs[key] = dom.dataset[key];
+			});
+		}
 		return attrs;
 	},
 	tag: 'iframe,element-embed',
-	render: function(doc, block, view) {
-		var d = block.data;
-		var node = doc.dom`<element-embed class="ui embed" data-url="${d.url}" data-auto-play="${!view.editable && d.autoPlay}"></element-embed>`;
-		if (d.placeholder) node.setAttribute('data-placeholder', d.placeholder);
-		return node;
-	},
+	html: `<element-embed class="ui embed" data-url="[url]" data-auto-play="[autoPlay]" data-placeholder="[placeholder]"></element-embed>`,
 	scripts: ['../ui/embed.js'],
 	stylesheets: [
 		'../semantic-ui/embed.css',

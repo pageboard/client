@@ -150,11 +150,14 @@ Page.setup(function(state) {
 		form.classList.remove('error', 'warning', 'success');
 		form.classList.add('loading');
 		var p;
-		if (form.method.toLowerCase() == "get") {
+		var isGet = form.method.toLowerCase() == "get";
+		if (isGet) {
 			var loc = Object.assign(Page.parse(form.action), {
 				query: formToQuery(form, true)
 			});
-			p = Page.push(loc);
+			p = Page.push(loc).then(function() {
+				return "";
+			});
 		} else {
 			p = Promise.all(Array.prototype.filter.call(form.elements, function(node) {
 				return node.type == "file";
@@ -162,20 +165,22 @@ Page.setup(function(state) {
 				return input.closest('element-input-file').upload();
 			})).then(function() {
 				return Pageboard.fetch(form.method, form.action, formToQuery(form));
-			}).then(function(data) {
-				form.classList.add('success');
-				if (data.redirect) {
-					return Page.push(data.redirect);
-				} else if (form.closest('[block-type="query"]')) {
-					return Page.push(Page.state);
-				}
+			}).then(function() {
+				return "success";
 			});
 		}
 		p.catch(function(err) {
-			if (err.status == 404) form.classList.add('warning');
-			else form.classList.add('error');
-		}).then(function() {
+			if (err.status == 404) return 'warning';
+			else return 'error';
+		}).then(function(state) {
 			form.classList.remove('loading');
+			if (!state) return;
+			if (isGet) {
+				form.classList.add(state);
+			} else {
+				Page.state.query[form.id] = state;
+				return Page.push(Page.state);
+			}
 		});
 	}
 
