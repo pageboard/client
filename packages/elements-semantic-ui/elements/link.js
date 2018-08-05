@@ -69,7 +69,7 @@ Pageboard.elements.link = {
 			a.rel = "noopener";
 		} else if (a.pathname && a.pathname.startsWith('/.')) {
 			a.target = "_blank";
-		} else {
+		} else if (a.href) {
 			var href = a.getAttribute('href').split('?')[0];
 			var meta = hrefs[href];
 			if (meta && meta.mime && meta.mime.startsWith("text/html") == false) {
