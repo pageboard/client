@@ -10,14 +10,20 @@ Pageboard.elements.query_form = {
 	group: 'block form',
 	menu: "form",
 	properties: {
-		query: {
-			title: 'Target query',
-			description: 'Query block that will consume the query parameters',
-			type: 'string',
-			pattern: '^[\\w-]+$',
+		url: {
+			title: 'Target page',
+			description: 'Can be empty to stay on same page',
+			anyOf: [{
+				type: "null"
+			}, {
+				type: "string",
+				pattern: "^(/[a-zA-Z0-9-.]*)+$"
+			}],
 			input: {
-				name: 'find',
-				type: 'query'
+				name: 'href',
+				filter: {
+					type: ["link"]
+				}
 			}
 		},
 		type: {
