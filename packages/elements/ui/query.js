@@ -104,7 +104,7 @@ class HTMLElementQuery extends HTMLCustomElement {
 		});
 		// TODO add ability to merge $page, $site, $host, $path ...?
 		if (this.dataset.nocall == "true") {
-			template.fuse({
+			template.fuse({}, {
 				$query: vars
 			}, HTMLElementQuery.filters);
 			while (template.firstChild) results.appendChild(template.firstChild);
@@ -114,10 +114,10 @@ class HTMLElementQuery extends HTMLCustomElement {
 		form.classList.remove('success', 'error', 'warning', 'loading');
 		form.classList.add('loading');
 		return Pageboard.fetch('get', '/.api/query', vars).then(function(answer) {
-			template.fuse(answer.data, HTMLElementQuery.filters, {
+			template.fuse(answer.data, {
 				$query: vars,
 				$schema: answer.schemas
-			});
+			}, HTMLElementQuery.filters);
 			while (template.firstChild) results.appendChild(template.firstChild);
 			if (!answer.data || answer.data.length === 0) {
 				form.classList.add('warning');
