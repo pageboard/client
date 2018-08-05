@@ -126,9 +126,6 @@ Page.setup(function(state) {
 
 	var toInput, ignoreInputChange = false;
 	function inputHandler(e) {
-		var form = e.target.matches('form') ? e.target : e.target.form;
-		if (!form) return;
-		if (form.dataset.live != "true") return;
 		if (e.type == "input") {
 			ignoreInputChange = true;
 		} else if (e.target.matches('input') && ignoreInputChange) {
@@ -150,15 +147,15 @@ Page.setup(function(state) {
 		form.classList.remove('error', 'warning', 'success');
 		form.classList.add('loading');
 		var p;
-		var isGet = form.method.toLowerCase() == "get";
-		if (isGet) {
-			var loc = Object.assign(Page.parse(form.action), {
-				query: formToQuery(form, true)
-			});
+		if (form.method == "get") {
+			var loc = Page.parse(form.action);
+			if (e.type != "submit" && Page.samePath(loc, state) == false) return;
+			loc.query = formToQuery(form, true);
 			p = Page.push(loc).then(function() {
-				return "";
+				return ""; // empty state
 			});
 		} else {
+			if (e.type != "submit") return;
 			p = Promise.all(Array.prototype.filter.call(form.elements, function(node) {
 				return node.type == "file";
 			}).map(function(input) {
@@ -175,7 +172,7 @@ Page.setup(function(state) {
 		}).then(function(state) {
 			form.classList.remove('loading');
 			if (!state) return;
-			if (isGet) {
+			if (form.method == "get") {
 				form.classList.add(state);
 			} else {
 				Page.state.query[form.id] = state;

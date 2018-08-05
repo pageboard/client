@@ -27,11 +27,6 @@ Pageboard.elements.query_form = {
 			input: {
 				name: 'element'
 			}
-		},
-		live: { // TODO submit on input if no elements are required ?
-			title: 'Submit on input',
-			type: 'boolean',
-			default: true
 		}
 	},
 	contents: {
@@ -39,7 +34,7 @@ Pageboard.elements.query_form = {
 			spec: 'block+'
 		}
 	},
-	html: `<form action="[url]" method="get" class="ui form" data-live="[live|not]" data-type="[type]">
+	html: `<form class="ui form" action="[url]" method="get" data-type="[type]">
 		<div block-content="form"></div>
 	</form>`,
 	stylesheets: [
