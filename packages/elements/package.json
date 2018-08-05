@@ -21,7 +21,7 @@
     "debounce": "^1.1.0",
     "document-register-element": "^1.11.0",
     "domify": "^1.4.0",
-    "matchdom": "^3.8.0",
+    "matchdom": "^4.1.0",
     "pagecut": "1.0.0-beta.74",
     "postinstall": "^0.4.1",
     "postinstall-browserify": "^0.1.0",
