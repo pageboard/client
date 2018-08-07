@@ -36,10 +36,10 @@ Pageboard.elements.menu = {
 };
 
 Pageboard.elements.menu_item_link = {
+	priority: 10,
 	title: "Link Item",
 	icon: '<b class="icon">Item</b>',
 	menu: "link",
-	priority: 10,
 	context: "menu//",
 	properties: {
 		url: {
@@ -83,10 +83,10 @@ Pageboard.elements.menu_item_link = {
 };
 
 Pageboard.elements.menu_item_dropdown = {
+	priority: 11,
 	title: "Dropdown",
 	icon: '<b class="icon">Drop</b>',
 	menu: "link",
-	priority: 11,
 	context: "menu//",
 	contents: {
 		title: {
@@ -117,10 +117,10 @@ Pageboard.elements.menu_item_dropdown = {
 };
 
 Pageboard.elements.menu_item_popup = {
+	priority: 11,
 	title: "Popup",
 	icon: '<b class="icon">Pop</b>',
 	menu: "link",
-	priority: 11,
 	context: "menu//",
 	contents: {
 		title: {
