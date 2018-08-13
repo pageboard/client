@@ -243,7 +243,7 @@ function editorSetup(win, view, page) {
 	// and the editor must be running from child
 	var editor = new win.Pagecut.Editor({
 		topNode: page.type,
-		elements: view.elementsMap,
+		elements: view.elements,
 		place: win.document.body,
 		genId: Pageboard.Controls.Store.genId,
 		plugins: [{
@@ -272,7 +272,6 @@ function editorSetup(win, view, page) {
 
 	editor.pageUpdate = pageUpdate;
 	editor.blocks.initial = view.blocks.initial;
-	editor.block = view.block;
 
 	Object.keys(view.blocks.store).forEach(function(id) {
 		if (!editor.blocks.store[id]) {
