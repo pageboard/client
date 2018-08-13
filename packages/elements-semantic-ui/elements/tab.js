@@ -26,22 +26,10 @@ Pageboard.elements.tabs = {
 			default: 'tabular'
 		}
 	},
-	render: function(doc, block) {
-		var d = block.data;
-		var style;
-		switch (d.style) {
-			case "pointing":
-				style = "secondary pointing";
-			break;
-			default:
-				style = "top attached tabular";
-			break;
-		}
-		return doc.dom`<element-tabs>
-			<div class="ui ${style} menu" block-content="items"></div>
-			<div block-content="tabs"></div>
-		</element-tabs>`;
-	},
+	html: `<element-tabs>
+		<div class="ui [style|eq:pointing:secondary pointing:top attached tabular] menu" block-content="items"></div>
+		<div block-content="tabs"></div>
+	</element-tabs>`,
 	stylesheets: [
 		'../semantic-ui/tab.css',
 		'../ui/tab.css'

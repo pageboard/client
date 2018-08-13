@@ -48,7 +48,7 @@ Pageboard.elements.input_property = {
 	render: function(doc, block, view) {
 		var d = block.data;
 		var name = d.name;
-		var node = doc.dom`<div><code>select property name</code></div>`;
+		var node = doc.dom('<div><code>select property name</code></div>');
 		if (!name) {
 			return node;
 		}
@@ -109,17 +109,17 @@ Pageboard.elements.input_property = {
 
 		if (listOf) {
 			if (listOf.length <= d.radios) {
-				var content = doc.dom`<div class="content"></div>`;
+				var content = '<div class="content"></div>';
 				if (d.foldable) {
-					node.appendChild(doc.dom`<element-accordion class="grouped fields">
+					node.appendChild(doc.dom(`<element-accordion class="grouped fields">
 						<label for="${name}" class="title active caret-icon">${prop.title}</label>
 						${content}
-					</element-accordion>`);
+					</element-accordion>`));
 				} else {
-					node.appendChild(doc.dom`<div class="grouped fields">
+					node.appendChild(doc.dom(`<div class="grouped fields">
 						<label for="${name}" class="title">${prop.title}</label>
 						${content}
-					</div>`);
+					</div>`));
 				}
 				listOf.forEach(function(item) {
 					content.appendChild(view.render({

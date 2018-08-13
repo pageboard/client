@@ -66,10 +66,8 @@ Pageboard.elements.page.properties.transition = {
 	}
 };
 
-Pageboard.elements.page.apiFuse = Pageboard.elements.page.fuse;
-
 Pageboard.elements.page.fuse = function(node, d, scope) {
-	this.apiFuse(node, d, scope);
+	node.fuse(d, scope);
 	var body = node.ownerDocument.body;
 	var tr = d.transition;
 	if (tr && tr.from) body.dataset.transitionFrom = tr.from;

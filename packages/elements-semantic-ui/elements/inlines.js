@@ -6,9 +6,7 @@ Pageboard.elements.strong = {
 	inline: true,
 	group: "inline nolink",
 	icon: '<i class="icon bold"></i>',
-	render: function(doc, block) {
-		return doc.dom`<strong></strong>`;
-	}
+	html: '<strong></strong>'
 };
 
 Pageboard.elements.em = {
@@ -19,9 +17,7 @@ Pageboard.elements.em = {
 	inplace: true,
 	group: "inline nolink",
 	icon: '<i class="icon italic"></i>',
-	render: function(doc, block) {
-		return doc.dom`<em></em>`;
-	}
+	html: '<em></em>'
 };
 
 Pageboard.elements.light = {

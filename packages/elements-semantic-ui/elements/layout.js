@@ -80,9 +80,8 @@ Pageboard.elements.layout = {
 		[width|eq:contained:ui container:]
 		[horizontal|?]
 		[vertical|?]
-		[height|eq:0:|not|post:%|or:auto]
 		[direction]
-		[invert|?:inverted]" block-content="content">
+		[invert|?:inverted]" block-content="content" style="height:[height|eq:0:|not|post:%|magnet]">
 	</div>`,
 	stylesheets: [
 		'../semantic-ui/container.css',
