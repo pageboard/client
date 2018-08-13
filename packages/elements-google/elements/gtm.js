@@ -12,8 +12,9 @@ Pageboard.elements.google_tag_manager = {
 		doc.head.appendChild(doc.dom(
 			'<script async src="https://www.googletagmanager.com/gtm.js?id=[id|url]" id="gtag"></script>'
 		).fuse({id: id}));
-		this.scripts = this.resources;
 	},
-	resources: [`../ui/gtm.js`]
+	scripts: [
+		'../ui/gtm.js'
+	]
 };
 
