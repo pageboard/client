@@ -28,7 +28,6 @@
     "window-page": "^3.1.0"
   },
   "postinstall": {
-    "pagecut/dist/viewer.js": "link lib/",
     "document-register-element/build/document-register-element.max.js": "link lib/custom-elements.js",
     "window-page/window-page.js": "link lib/",
     "./src/pageboard.js": "browserify --standalone=Pageboard lib/"
