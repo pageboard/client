@@ -68,36 +68,17 @@ Pageboard.elements.page = {
 	html: `<html lang="[$site.lang]">
 	<head>
 		<title>[title]</title>
-		<meta http-equiv="Status" content="[status|magnet:*]">
-		<meta http-equiv="Location" content="[redirect|magnet:*]">
+		<meta http-equiv="Status" content="404 Not Found[url|!|bmagnet:*]">
+		<meta http-equiv="Status" content="302 Found[transition.from|!|bmagnet:*+]">
+		<meta http-equiv="Location" content="[redirect|eq:[url]:|magnet:+*]">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta name="[metas.name|repeat:*:meta]" content="[meta.value]">
+		<meta name="robots" content="[noindex|?|magnet:*]">
+		<meta name="description" content="[description|magnet:*]">
 		<link rel="icon" href="[$site.favicon|magnet:*|url]?format=ico">
+		<link rel="stylesheet" href="[$elements.page.stylesheets|repeat]" />
+		<script defer src="[$elements.page.scripts|repeat]"></script>
 	</head>
-	<body block-content="body"></body>
-</html>`,
-	fuse: function(node, d, scope) {
-		var obj = {
-			metas: [],
-			status: null
-		};
-		if (d.redirect && d.redirect != d.url && (!d.transition || !d.transition.from)) {
-			obj.redirect = d.redirect;
-			obj.status = "302 Found";
-		}
-		if (!d.url) {
-			obj.status = "404 Not Found";
-		}
-		if (d.noindex) obj.metas.push({
-			name: "robots",
-			value: "noindex"
-		});
-		if (d.description) obj.metas.push({
-			name: "description",
-			value: d.description
-		});
-		node.fuse(d, scope);
-	},
+	<body block-content="body"></body></html>`,
 	scripts: [
 		'../lib/custom-elements.js',
 		'../lib/window-page.js',
