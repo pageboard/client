@@ -22,6 +22,34 @@ exports.num.map = {
 	16: 'sixteen'
 };
 
+exports.checked = function(val, what, selector) {
+	var ret = what.filters.attr(val === true ? 'checked' : null, what, 'checked', selector);
+	if (val !== true) delete what.attr;
+	return ret;
+};
+
+exports.sum = function(obj, what, ...list) {
+	var sum = 0;
+	if (obj == null) return sum;
+	list.forEach(function(str) {
+		var sign = 1;
+		if (str.startsWith('-')) {
+			sign = -1;
+			str = str.substring(1);
+		}
+		var curVal = what.expr.get(obj, str);
+		if (curVal != null && typeof curVal == "number") sum += sign * curVal;
+	});
+	return sum;
+};
+
+exports.query = function(val, what, name) {
+	var q = Object.assign({}, what.scope.$query);
+	for (var key in q) if (key[0] == "_") delete q[key];
+	q[name] = val;
+	return Page.format({pathname: "", query: q});
+};
+
 
 exports.schema = function(val, what, spath) {
 	// return schema of repeated key, schema of anyOf/listOf const value

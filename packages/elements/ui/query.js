@@ -134,32 +134,5 @@ class HTMLElementQuery extends HTMLCustomElement {
 	}
 }
 
-HTMLElementQuery.filters = {};
-HTMLElementQuery.filters.checked = function(val, what, selector) {
-	var ret = what.filters.attr(val === true ? 'checked' : null, what, 'checked', selector);
-	if (val !== true) delete what.attr;
-	return ret;
-};
-HTMLElementQuery.filters.sum = function(obj, what, ...list) {
-	var sum = 0;
-	if (obj == null) return sum;
-	list.forEach(function(str) {
-		var sign = 1;
-		if (str.startsWith('-')) {
-			sign = -1;
-			str = str.substring(1);
-		}
-		var curVal = what.expr.get(obj, str);
-		if (curVal != null && typeof curVal == "number") sum += sign * curVal;
-	});
-	return sum;
-};
-HTMLElementQuery.filters.query = function(val, what, name) {
-	var q = Object.assign({}, what.data.$query);
-	for (var key in q) if (key[0] == "_") delete q[key];
-	q[name] = val;
-	return Page.format({pathname: "", query: q});
-};
-
 HTMLCustomElement.define('element-query', HTMLElementQuery);
 
