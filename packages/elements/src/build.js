@@ -24,12 +24,25 @@ String.prototype.fuse = Node.prototype.fuse = function(obj, scope, filters) {
 var mSym = matchdom.Symbols;
 var reFuse = new RegExp(`\\${mSym.open}[^\\${mSym.open}\\${mSym.close}]+\\${mSym.close}`);
 
-module.exports = function(pathname, query, elem) {
+module.exports = function(opts) {
 	var view = Pageboard.view;
 	var elts = view.elements;
+	var elem = opts.element;
+
 	return Promise.resolve().then(function() {
-		return Pageboard.fetch("get", pathname, query).then(function(res) {
-			var p = res.elements ? Pageboard.script(res.elements) : Promise.resolve();
+		if (!opts.pathname) return {};
+		return Pageboard.fetch("get", opts.pathname, opts.query).then(function(res) {
+			var elPath = res.elements;
+			var p;
+			if (elPath && (!elem || elem.contents)) {
+				console.log("Loading", elPath);
+				if (!view.bundles[elPath]) {
+					view.bundles[elPath] = Pageboard.script(elPath);
+				}
+				p = view.bundles[elPath];
+			} else {
+				p = Promise.resolve();
+			}
 			return p.then(function() {
 				return res;
 			});
@@ -38,10 +51,12 @@ module.exports = function(pathname, query, elem) {
 			return { data: err };
 		});
 	}).then(function(res) {
-		var block = res.data;
+		if (opts.transform) opts.transform(res);
+		var block = res.data || {};
 		var type = null;
 		if (elem) {
 			type = elem.name;
+			if (!type) console.warn("Pageboard.build expects element.name to be set", elem);
 			view.elements[type] = elem;
 		} else if (block && block.type) {
 			type = block.type;
@@ -50,16 +65,22 @@ module.exports = function(pathname, query, elem) {
 		if (Array.isArray(block)) {
 			block = {
 				type: type,
-				data: res.data
+				children: res.data
 			};
+		} else if (!block.type) {
+			block.type = type;
 		}
 
+		var query = opts.state.query || {};
+		var writeMode = elem && elem.group == "page" && query.develop == "write";
+
 		var scope = {
+			$write: writeMode,
 			$query: query,
-			$pathname: pathname,
+			$pathname: opts.state.pathname,
 			$hrefs: res.hrefs || {},
 			$links: res.links || {},
-			$site: res.site,
+			$site: res.site || {},
 			$elements: elts,
 			$doc: view.doc
 		};
@@ -84,6 +105,11 @@ module.exports = function(pathname, query, elem) {
 			};
 		});
 
-		return view.from(block, null, type, scope);
+		return view.from(block, null, type, scope).then(function(node) {
+			if (writeMode && window.parent.Pageboard.install) {
+				window.parent.Pageboard.install(node.ownerDocument, block);
+			}
+			return node;
+		});
 	});
 };
