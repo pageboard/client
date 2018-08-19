@@ -9,6 +9,8 @@ Pageboard.elements.write = {
 		<title>[title]</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="icon" href="[$site.favicon|magnet:*|url]?format=ico">
+		<link rel="stylesheet" href="[$elements.write.stylesheets|repeat]" />
+		<script defer src="[$elements.write.scripts|repeat]"></script>
 	</head>
 	<body
 		data-css="[paths.0]"

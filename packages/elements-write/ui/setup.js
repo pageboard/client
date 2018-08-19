@@ -25,9 +25,9 @@ Pageboard.install = function(doc, page) {
 Pageboard.patch = init;
 
 function init(state) {
-	// setup "read" iframe in develop mode
+	// setup "read" iframe in develop write mode
 	var loc = Page.parse(Page.format(state)); // get a copy of state
-	loc.query.develop = null;
+	loc.query.develop = "write";
 	var src = Page.format(loc);
 
 	var iframe = Pageboard.read;
