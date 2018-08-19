@@ -1,77 +1,70 @@
 Pageboard.elements.query = {
-	title: "Query",
-	menu: "form",
 	priority: 1, // scripts must run after 'form' scripts
+	title: "Query",
+	icon: '<i class="search icon"></i>',
+	menu: "form",
+	group: "block",
 	contents: {
-		messages: {
-			title: 'Messages',
-			spec: '(paragraph|query_message)+'
-		},
 		template: {
 			title: 'Template',
 			spec: 'block+'
+		},
+		view: {
+			title: 'View',
+			spec: 'block+',
+			virtual: true
 		}
 	},
-	group: "block",
-	icon: '<i class="search icon"></i>',
 	html: `<element-query>
-		<div>
-			<div block-content="messages"></div>
-			<div block-content="template"></div>
-		</div>
-		<div class="results"></div>
+		<div block-content="template"></div>
+		<div block-content="view"></div>
 	</element-query>`,
 	fuse: function(node, d) {
-		node.dataset.nocall = !d.api;
-		if (d.type) {
-			node.dataset.type = d.type;
-		}
-		if (d.vars) {
-			node.dataset.vars = Object.keys(d.vars).map(function(key) {
-				return d.vars[key];
-			}).join(',');
-		}
+		// do not call /.api/query if not true
+		node.dataset.remote = !!d.api;
+		// needed to track query changes
+		var keys = [];
+		Object.keys((d.request || {}).parameters).forEach(function(key) {
+			var val = d.request.parameters[key];
+			if (val.startsWith('$query.')) keys.push(val.substring(7));
+		});
+		if (keys.length) node.dataset.keys = JSON.stringify(keys);
 	},
 	properties: {
-		api: {
-			title: 'Api call',
-			description: 'Can be empty to merge only url query',
-			anyOf: [{
-				type: 'null'
-			}, {
-				type: "string",
-				pattern: "^\\w+\.\\w+$"
-			}],
-			input: {
+		request: {
+			title: 'Request',
+			type: 'object',
+			properties: {
+				method: {
+					title: 'Method',
+					type: "string",
+					pattern: "^(\\w+\.\\w+)?$"
+				},
+				parameters: {
+					title: 'Parameters',
+					anyOf: [{
+						type: "object"
+					}, {
+						type: "null"
+					}]
+				},
+				input: {
+					name: 'service',
+					filter: {
+						type: "query"
+					}
+				}
 			}
 		},
 		type: {
-			title: 'Which element',
-			description: 'Checks query against schema',
+			title: 'To element',
+			description: 'Merge as element',
 			type: ['null', 'string'],
 			input: {
 				name: 'element',
 				standalone: true
 			}
 		},
-		consts: {
-			title: 'Constants',
-			description: 'list of path.to.key -> value',
-			anyOf: [{
-				type: "object"
-			}, {
-				type: "null"
-			}]
-		},
-		vars: {
-			title: 'Variables',
-			description: "list of path.to.key -> query.key",
-			anyOf: [{
-				type: "object"
-			}, {
-				type: "null"
-			}]
-		}
 	},
 	stylesheets: [
 		'../ui/query.css'
@@ -83,6 +76,7 @@ Pageboard.elements.query = {
 
 Pageboard.elements.query_message = {
 	title: 'Message',
+	icon: '<i class="announcement icon"></i>',
 	menu: "form",
 	group: "block",
 	context: 'query//',
@@ -109,13 +103,13 @@ Pageboard.elements.query_message = {
 			spec: "block+"
 		}
 	},
-	icon: '<i class="announcement icon"></i>',
 	html: '<div class="[type]" block-content="message">Message</div>'
 };
 
 
 Pageboard.elements.query_template = {
 	title: "Template",
+	icon: '<b class="icon">var</b>',
 	properties: {
 		fill: {
 			title: 'Fill',
@@ -141,7 +135,6 @@ Pageboard.elements.query_template = {
 	context: 'query//',
 	inline: true,
 	group: "inline nolink",
-	icon: '<b class="icon">var</b>',
 	html: '<span data-attr="[attr]" data-fill="[fill]">[ph]</span>',
 	fuse: function(node, d) {
 		var fill = (d.fill || '').trim().split('\n').join('|');
@@ -151,4 +144,23 @@ Pageboard.elements.query_template = {
 			fill: fill ? `[${fill}|fill]` : null
 		});
 	}
+};
+
+Pageboard.elements.query_content = {
+	title: "Content",
+	icon: '<b class="icon">cont</b>',
+	menu: "form",
+	group: 'block',
+	properties: {
+		name: {
+			title: 'Name',
+			description: 'Must match element content name',
+			type: 'string',
+			input: {
+				name: 'element-content',
+				standalone: true
+			}
+		}
+	},
+	html: '<div block-content="[name]"></div>'
 };

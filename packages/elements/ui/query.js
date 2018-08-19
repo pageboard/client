@@ -1,11 +1,11 @@
 Page.patch(function(state) {
 	return Promise.all(Array.from(document.querySelectorAll('element-query')).map(function(node) {
-		return node.refresh(state.query);
+		return node.refresh(state);
 	}));
 });
 
 class HTMLElementQuery extends HTMLCustomElement {
-	static find(name, value) {
+	static find(name, value) { // FIXME should move elsewhere
 		// convert query into a query that contains only
 		var nodes = document.querySelectorAll(`form [name="${name}"]`);
 		return Array.prototype.filter.call(nodes, function(node) {
@@ -17,7 +17,7 @@ class HTMLElementQuery extends HTMLCustomElement {
 			return true;
 		});
 	}
-	static filterQuery(query) {
+	static filterQuery(query) { // FIXME should move elsewhere
 		var obj = {};
 		for (var name in query) {
 			var vals = HTMLElementQuery.find(name, query[name]).map(function(node) {
@@ -40,17 +40,54 @@ class HTMLElementQuery extends HTMLCustomElement {
 	update() {
 		return this.refresh();
 	}
-	refresh(query) {
-		if (!this.children.length) return;
-		if (!query) {
-			if (!Page.state) return;
-			query = Page.state.query;
+	refresh(state) {
+		if (this._refreshing || this.closest('[contenteditable]')) return;
+		if (!state) state = Page.state;
+		// first find out if state.query has a key in this.dataset.keys
+		// what do we do if state.query has keys that are used by a form in this query template ?
+		var keys = [];
+		try {
+			keys = JSON.parse(this.dataset.keys);
+		} catch(err) {
+			console.error("Cannot parse element-query data-keys attribute", err);
 		}
-		if (this._refreshing) return;
+		var candidates = 0;
+		keys.forEach(function(key) {
+			if (state.query[key] !== undefined) candidates++;
+		});
+		if (keys.length && !candidates) {
+			// do not refresh because expected keys are not in query
+			return;
+		}
+		// build
+		var template = this.firstElementChild;
+		var view = this.lastElementChild;
+		var opts = {
+			state: state
+		};
+		if (this.dataset.remote == "true") {
+			opts.pathname = '/.api/query';
+			opts.query = {
+				_id: this.getAttribute('block-id')
+			};
+		}
+		if (template.children.length > 0) {
+			opts.element = {
+				html: template.innerHTML
+			};
+		}
+		this._refreshing = true;
+		return Pageboard.build(opts).then(function(node) {
+			view.textContent = '';
+			view.appendChild(node);
+		}).catch(function(err) {
+			console.error("Error building", opts, err);
+		}).then(function() {
+			this._refreshing = false;
+		});
 
-		var results = this.querySelector('.results');
 
-		if (query._id) console.warn("query._id is reserved");
+		/*
 		var vars = {};
 		var missing = 0;
 		var candidate = 0;
@@ -131,6 +168,7 @@ class HTMLElementQuery extends HTMLCustomElement {
 			form.classList.remove('loading');
 			this._refreshing = false;
 		}.bind(this));
+		*/
 	}
 }
 
