@@ -110,11 +110,11 @@ function dblclickListener(e) {
 	}
 }
 
-function editMode(doc) {
-	if (!doc) doc = Pageboard.window.document;
-	doc.body.classList.add('ProseMirror');
-	doc.body.setAttribute('contenteditable', 'true');
-	var sheet = doc.head.querySelector(`[href="${document.body.dataset.js}"]`);
+function editMode(body) {
+	if (!body) body = Pageboard.window.document.body;
+	body.classList.add('ProseMirror');
+	body.setAttribute('contenteditable', 'true');
+	var sheet = body.previousElementSibling.querySelector(`[href="${document.body.dataset.js}"]`);
 	if (sheet) sheet.disabled = false;
 	modeControl.classList.remove('active');
 }
@@ -133,7 +133,7 @@ function modeControlListener() {
 	else viewMode();
 }
 
-function buildListener(win, doc, page) {
+function buildListener(win, body, page) {
 	Pageboard.window = win;
 	win.addEventListener('click', anchorListener, true);
 	// FIXME this prevents setting selection inside a selected link...
@@ -152,10 +152,17 @@ function buildListener(win, doc, page) {
 	if (!pageEl.stylesheets) pageEl.stylesheets = [];
 	if (!pageEl.scripts) pageEl.scripts = [];
 
-	pageEl.stylesheets.push(document.body.dataset.css);
-	pageEl.scripts.unshift(document.body.dataset.js);
+	var head = body.previousElementSibling;
+	var doc = head.ownerDocument;
 
-	editMode(doc);
+	head.querySelector('script').insertAdjacentElement('beforeBegin', doc.dom(
+		`<link href="${document.body.dataset.css}" rel="stylesheet">`
+	));
+	head.querySelector('script').insertAdjacentElement('beforeBegin', doc.dom(
+		`<script src="${document.body.dataset.js}"></script>`
+	));
+
+	editMode(body);
 	var resolver = function() {
 		win.removeEventListener('pagebuild', resolver);
 		setupListener(win, page);
