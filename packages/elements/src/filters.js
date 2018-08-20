@@ -60,7 +60,8 @@ exports.schema = function(val, what, spath) {
 		if (typeof item == "number") return "items";
 		else return item;
 	});
-	if (what.scope.$schemas) {
+	var scopeData = what.scope.data;
+	if (scopeData.$elements) {
 		var data = what.index != null ? what.scope.data : what.data.data;
 		var blocks = [];
 		for (var i=0; i < path.length; i++) {
@@ -73,12 +74,12 @@ exports.schema = function(val, what, spath) {
 			console.warn("No block found in", what.scope.path);
 			return;
 		}
-		schemaPath = '$schemas.' + item.block.type + '.properties.'
+		schemaPath = '$elements.' + item.block.type + '.properties.'
 			+ rel.slice(item.index).join('.properties.');
-		schemaRoot = what.data;
-	} else if (what.scope.$schema) {
+		schemaRoot = scopeData.$elements;
+	} else if (scopeData.$element) {
 		schemaPath = rel.join('.properties.');
-		schemaRoot = what.scope.$schema.properties;
+		schemaRoot = scopeData.$element.properties;
 	} else {
 		console.warn("No schema in scope", what.scope);
 	}

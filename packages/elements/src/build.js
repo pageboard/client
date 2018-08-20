@@ -93,7 +93,7 @@ module.exports = function(opts) {
 			if (!el.render && el.html) el.render = function(doc, block, view, scope) {
 				var dom = doc.dom(el.html);
 				var rscope = Object.assign({}, scope, {
-					$schema: el.properties,
+					$element: el,
 					$id: block.id
 				});
 				if (el.fuse) dom = el.fuse.call(el, dom, block.data, rscope) || dom;
