@@ -151,6 +151,7 @@ Pageboard.elements.query_content = {
 	icon: '<b class="icon">cont</b>',
 	menu: "form",
 	group: 'block',
+	context: 'query//',
 	properties: {
 		name: {
 			title: 'Name',
