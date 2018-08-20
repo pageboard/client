@@ -33,6 +33,8 @@ Pageboard.elements.mail = {
 	<head>
 		<title>[title]</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="[$elements.mail.stylesheets|repeat]" />
+		<script defer src="[$elements.mail.scripts|repeat]"></script>
 	</head>
 	<body block-content="body"></body>
 </html>`,
