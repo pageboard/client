@@ -205,7 +205,7 @@ function renderItem(item, view) {
 
 Menu.prototype.items = function() {
 	var list = [];
-	Object.values(this.editor.elements).forEach(function(el) {
+	Object.values(Pageboard.editor.elements).forEach(function(el) {
 		var itemSpec = this.item(el);
 		if (!itemSpec) return;
 		list.push(new Pagecut.Menubar.Menu.MenuItem(itemSpec));

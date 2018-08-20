@@ -4,7 +4,7 @@ Pageboard.inputs.element = Element;
 function Element(input, opts, props, block) {
 	this.field = input.closest('.field');
 	this.input = input;
-	this.elements = Pageboard.editor.elements.filter(function(el) {
+	this.elements = Object.values(Pageboard.editor.elements).filter(function(el) {
 		return opts.standalone ? el.standalone : true;
 	});
 	this.init();
