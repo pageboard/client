@@ -24,7 +24,7 @@ Pageboard.elements.nav = {
 		<i class="icon [rel]"></i>
 	</a>`,
 	fuse: function(node, d, scope) {
-		var obj = scope.$links[d.relation] || {};
+		var obj = (scope.$links || {})[d.relation] || {};
 		if (d.relation == "up") {
 			if (obj.length) obj = obj[0];
 		}

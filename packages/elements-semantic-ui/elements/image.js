@@ -187,7 +187,7 @@ Pageboard.elements.image = {
 			obj.position = `${posx || 'center'} ${posy || 'center'}`;
 		}
 		var zoom = (d.crop || {}).zoom || 100;
-		var meta = scope.$hrefs[d.url];
+		var meta = (scope.$hrefs || {})[d.url];
 		if (meta && meta.width && meta.height) {
 			var wf = (d.crop || {}).width || 100;
 			var wh = (d.crop || {}).height || 100;

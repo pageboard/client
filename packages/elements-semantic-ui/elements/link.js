@@ -71,7 +71,7 @@ Pageboard.elements.link = {
 			a.target = "_blank";
 		} else if (a.href) {
 			var href = a.getAttribute('href').split('?')[0];
-			var meta = hrefs[href];
+			var meta = (hrefs || {})[href];
 			if (meta && meta.mime && meta.mime.startsWith("text/html") == false) {
 				a.target = "_blank";
 			}
