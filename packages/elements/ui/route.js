@@ -7,9 +7,11 @@ Page.route(function(state) {
 			develop: state.query.develop
 		}
 	}).then(function(node) {
-		if (!node || node.nodeName != "HTML") {
-			throw new Error("page render should return an html element");
+		if (!node || node.nodeName != "BODY") {
+			throw new Error("page render should return a body element");
 		}
-		state.document = node.ownerDocument;
+		var doc = node.ownerDocument;
+		doc.replaceChild(node.parentNode, doc.documentElement);
+		state.document = doc;
 	});
 });

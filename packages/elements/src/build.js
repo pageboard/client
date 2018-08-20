@@ -92,9 +92,6 @@ module.exports = function(opts) {
 			if (el.install) el.install.call(el, view.doc, block, scope);
 			if (!el.render && el.html) el.render = function(doc, block, view, scope) {
 				var dom = doc.dom(el.html);
-				if (dom && dom.nodeName == 'HTML') {
-					doc.replaceChild(dom, doc.documentElement);
-				}
 				var rscope = Object.assign({}, scope, {
 					$schema: el.properties,
 					$id: block.id
@@ -107,7 +104,7 @@ module.exports = function(opts) {
 
 		return view.from(block, null, type, scope).then(function(node) {
 			if (writeMode && window.parent.Pageboard.install) {
-				window.parent.Pageboard.install(node.ownerDocument, block);
+				window.parent.Pageboard.install(node, block);
 			}
 			return node;
 		});
