@@ -68,11 +68,6 @@ Pageboard.elements.api_form = {
 			type: 'string',
 			pattern: '[a-zA-Z]\\w*'
 		},
-		api: {
-			title: 'Api call',
-			type: "string",
-			pattern: "^(\\w+\.\\w+)?$"
-		},
 		type: {
 			title: 'Bind to element',
 			description: 'Checks schema and helps adding form controls',
@@ -81,40 +76,32 @@ Pageboard.elements.api_form = {
 				name: 'element'
 			}
 		},
-		redirection: {
-			title: 'Redirection',
-			description: 'Optional after successful submission',
-			anyOf: [{
-				type: "null"
-			}, {
-				type: 'object',
-				properties: {
-					url: {
-						title: 'Address',
-						anyOf: [{
-							type: "null"
-						}, {
-							type: "string",
-							pattern: "^(/[a-zA-Z0-9-.]*)+$"
-						}],
-						input: {
-							name: 'href',
-							filter: {
-								type: ["link"]
-							}
-						}
-					},
-					query: {
-						title: 'Query',
-						description: 'keys-values (const or $query.<path>)',
-						anyOf: [{
-							type: "object"
-						}, {
-							type: "null"
-						}]
+		request: {
+			title: 'Request',
+			type: 'object',
+			properties: {
+				method: {
+					title: 'Method',
+					type: "string",
+					pattern: "^(\\w+\.\\w+)?$"
+				},
+				parameters: {
+					title: 'Parameters',
+					description: 'Key-values', // NB request.parameters temporarily holds $query.<name> pairs
+					// they must be moved to hidden input templates !
+					anyOf: [{
+						type: "object"
+					}, {
+						type: "null"
+					}]
+				},
+				input: {
+					name: 'service',
+					filter: {
+						type: "submit"
 					}
 				}
-			}]
+			}
 		}
 	},
 	contents: {
