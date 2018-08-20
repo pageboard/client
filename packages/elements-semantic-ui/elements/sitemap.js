@@ -1,95 +1,31 @@
 Pageboard.elements.sitemap = {
 	title: "Site map",
-	icon: '<i class="icon sitemap"></i>',
-	menu: "link",
+	standalone: true,
 	contents: {
 		children: {
 			spec: "sitemap_item+",
 			virtual: true
 		}
 	},
-	group: "block",
 	html: '<element-accordion class="ui accordion" block-content="children"></element-accordion>',
-	mount: function(block, blocks, view) {
+	render: function(doc, block, view, scope) {
 		if (!block.content) block.content = {};
-		if (!block.content.children) {
-			// restore might have already filled children
-			block.content.children = view.doc.createDocumentFragment();
-		}
-		return fetch('/.api/pages', {credentials: "same-origin"}).then(function(res) {
-			return res.json();
-		}).then(function(obj) {
-			var tree = {};
-			obj.data.forEach(function(page) {
-				if (!page.data.url) return;
-				var storedPage = blocks[page.id];
-				if (storedPage) {
-					// do not overwrite the actual page object, use it for up-to-date render
-					page = storedPage;
-				} else {
-					blocks[page.id] = page;
-				}
-				var branch = tree;
-				var arr = page.data.url.substring(1).split('/');
-				arr.forEach(function(name, i) {
-					if (!branch[name]) branch[name] = {};
-					branch = branch[name];
-					if (i == arr.length - 1) branch._ = page;
-				});
-			});
-			return tree;
-		}).then(fillChildren).catch(function(err) {
-			console.error(err);
-		});
-
-		function fillChildren(tree, parent) {
-			if (!parent) parent = block;
-			var page = tree._;
-			if (page) {
-				if (!parent.content) parent.content = {};
-				if (!parent.content.children) {
-					// restore might have already filled children
-					parent.content.children = view.doc.createDocumentFragment();
-				}
-				var newChild = view.render(page, {
-					type: `site${page.type}`
-				});
-				var existing = parent.content.children.querySelector(`[block-id="${page.id}"]`);
-				if (existing) {
-					// this is a workaround - block.content.children above should be empty...
-					existing.replaceWith(newChild);
-				} else {
-					parent.content.children.appendChild(newChild);
-				}
-				delete tree._;
-			} else {
-				page = parent;
-			}
-			Object.keys(tree).sort(function(a, b) {
-				var pageA = tree[a]._;
-				var pageB = tree[b]._;
-				if (!pageA || !pageB) return 0;
-				var indexA = pageA.data.index;
-				if (indexA == null) indexA = Infinity;
-				var indexB = pageB.data.index;
-				if (indexB == null) indexB = Infinity;
-				if (indexA == indexB) return 0;
-				else if (indexA < indexB) return -1;
-				else if (indexA > indexB) return 1;
-			}).forEach(function(name) {
-				fillChildren(tree[name], page);
-			});
-		}
+		var html = '<div block-type="site[children.type|repeat]" block-id="[children.id]"></div>';
+		block.content.children = doc.dom(html).fuse(block);
+		return doc.dom(this.html).fuse(block.data, scope);
 	},
 	stylesheets: [
 		'../semantic-ui/accordion.css',
 		'../ui/sitemap.css'
 	],
+	scripts: [
+		'../ui/sitemap.js'
+	],
 	resources: [
 		'../ui/sitemap-helper.js'
 	],
 	install: function(doc, page, scope) {
-		if (scope.$write) this.scripts = this.resources;
+		if (scope.$write) this.scripts.push(this.resources[0]);
 	}
 };
 
@@ -106,13 +42,6 @@ Pageboard.elements.sitepage = {
 			virtual: true // this drops block.content.children, and all
 		}
 	},
-	unmount: function(block, node) {
-		// added pages NEED to have their type overriden
-		block.type = 'page';
-		var pos = 0;
-		while (node=node.previousElementSibling) pos++;
-		block.data.index = pos;
-	},
 	context: 'sitemap/ | sitepage/',
 	html: `<element-sitepage class="item fold" data-url="[url]">
 		<div class="title caret-icon">
@@ -120,7 +49,8 @@ Pageboard.elements.sitepage = {
 			<a href="[url]" class="description">[url|or:-]</a>
 		</div>
 		<div class="list content ui accordion" block-content="children"></div>
-	</element-sitepage>`
+	</element-sitepage>`,
+	render: Pageboard.elements.sitemap.render
 };
 
 if (Pageboard.elements.mail) Pageboard.elements.sitemail = {
@@ -131,16 +61,13 @@ if (Pageboard.elements.mail) Pageboard.elements.sitemail = {
 	get properties() {
 		return Pageboard.elements.mail.properties;
 	},
-	unmount: function(block, node) {
-		// added pages NEED to have their type overriden
-		block.type = 'mail';
-	},
 	context: 'sitemap/ | sitepage/',
 	html: `<element-sitepage class="item" data-url="[url]">
 		<div class="title">
 			<span class="header">[title|or:Untitled]</span><br />
 			<a href="[url]" class="description">[url|or:-]</a>
 		</div>
-	</element-sitepage>`
+	</element-sitepage>`,
+	render: Pageboard.elements.sitemap.render
 };
 

@@ -33,6 +33,7 @@ class HTMLElementSitepage extends HTMLCustomElement {
 			var name = childUrl.split('/').pop();
 			// do not trigger update, it would process twice
 			child.dataset.url = parentUrl + '/' + name;
+			// TODO child.dataset.index ?
 		});
 	}
 
@@ -51,6 +52,7 @@ class HTMLElementSitepage extends HTMLCustomElement {
 		}
 		var newUrl = parent ? parentUrl + '/' + name : url;
 		this.dataset.url = newUrl;
+		// TODO child.dataset.index ?
 		if (check && url == newUrl) {
 			return;
 		}
