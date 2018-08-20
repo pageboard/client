@@ -205,13 +205,11 @@ function renderItem(item, view) {
 
 Menu.prototype.items = function() {
 	var list = [];
-	for (var i=0; i < this.editor.elements.length; i++) {
-		var el = this.editor.elements[i];
+	Object.values(this.editor.elements).forEach(function(el) {
 		var itemSpec = this.item(el);
-		if (!itemSpec) continue;
-		item = new Pagecut.Menubar.Menu.MenuItem(itemSpec);
-		list.push(item);
-	}
+		if (!itemSpec) return;
+		list.push(new Pagecut.Menubar.Menu.MenuItem(itemSpec));
+	}, this);
 	return list;
 };
 
