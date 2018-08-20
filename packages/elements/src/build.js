@@ -77,12 +77,12 @@ module.exports = function(opts) {
 			$write: writeMode,
 			$query: query,
 			$pathname: opts.state.pathname,
-			$hrefs: res.hrefs || {},
-			$links: res.links || {},
-			$site: res.site || {},
 			$elements: elts,
 			$doc: view.doc
 		};
+		Object.keys(res).forEach(function(name) {
+			if (name != "data" && scope['$'+name] === undefined) scope['$'+name] = res[name];
+		});
 
 		Object.keys(elts).forEach(function(name) {
 			var el = elts[name];
