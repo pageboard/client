@@ -70,6 +70,7 @@ Pageboard.elements.card = {
 Pageboard.elements.cardlink = {
 	title: "Card Link",
 	menu: 'widget',
+	group: 'blocklink',
 	icon: '<i class="icons"><i class="linkify icon"></i><i class="corner add icon"></i></i>',
 	properties: {
 		fluid: {
@@ -124,7 +125,7 @@ Pageboard.elements.cardlink = {
 			title: 'content'
 		},
 		extra: {
-			spec: 'paragraph+',
+			spec: 'paragraph_nolink+',
 			title: 'extra'
 		}
 	},
@@ -146,6 +147,7 @@ Pageboard.elements.card_header = {
 	html: '<div class="header" block-content="text"></div>'
 };
 Pageboard.elements.card_header_nolink = Object.assign({}, Pageboard.elements.card_header, {
+	context: 'cardlink//',
 	contents: {
 		text: {
 			spec: "inline*",
@@ -165,6 +167,7 @@ Pageboard.elements.card_meta = {
 	html: '<div class="meta" block-content="text"></div>'
 };
 Pageboard.elements.card_meta_nolink = Object.assign({}, Pageboard.elements.card_meta, {
+	context: 'cardlink//',
 	contents: {
 		text: {
 			spec: "inline*",
@@ -184,6 +187,7 @@ Pageboard.elements.card_description = {
 	html: '<div class="description" block-content="paragraphs"></div>'
 };
 Pageboard.elements.card_description_nolink = Object.assign({}, Pageboard.elements.card_description, {
+	context: 'cardlink//',
 	contents: {
 		paragraphs: "paragraph_nolink+"
 	}

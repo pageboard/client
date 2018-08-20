@@ -45,6 +45,7 @@ Pageboard.elements.paragraph = {
 	html: '<p class="[align|or:left] aligned">Text</p>'
 };
 Pageboard.elements.paragraph_nolink = Object.assign({}, Pageboard.elements.paragraph, {
+	context: 'blocklink//',
 	contents: {
 		spec: "inline*",
 		marks: "nolink"
