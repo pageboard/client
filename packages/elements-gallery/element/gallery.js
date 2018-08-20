@@ -39,6 +39,7 @@ Pageboard.elements.itemlink = {
 	title: "Item Link",
 	icon: '<i class="icon linkify"></i>',
 	menu: "widget",
+	group: 'blocklink',
 	properties: {
 		url: {
 			title: 'Address',
@@ -84,7 +85,7 @@ Pageboard.elements.itemlink = {
 	},
 	contents: {
 		text: {
-			spec: "(paragraph|heading|image)+"
+			spec: "(paragraph_nolink|heading|image)+"
 		}
 	},
 	html: '<a class="itemlink [icon|?]" style="background-image:url([icon|magnet])" href="[url]" block-content="text"></a>',
