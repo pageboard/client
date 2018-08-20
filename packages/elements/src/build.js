@@ -35,7 +35,6 @@ module.exports = function(opts) {
 			var elPath = res.elements;
 			var p;
 			if (elPath && (!elem || elem.contents)) {
-				console.log("Loading", elPath);
 				if (!view.bundles[elPath]) {
 					view.bundles[elPath] = Pageboard.script(elPath);
 				}
