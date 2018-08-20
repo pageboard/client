@@ -68,7 +68,7 @@ Pageboard.elements.page.properties.transition = {
 
 Pageboard.elements.page.fuse = function(node, d, scope) {
 	node.fuse(d, scope);
-	var body = node.ownerDocument.body;
+	var body = node.querySelector('body');
 	var tr = d.transition;
 	if (tr && tr.from) body.dataset.transitionFrom = tr.from;
 	if (tr && tr.to) body.dataset.transitionTo = tr.to;
