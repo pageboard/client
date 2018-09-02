@@ -1,6 +1,6 @@
 Pageboard.elements.query = {
 	priority: 1, // scripts must run after 'form' scripts
-	title: "Query",
+	title: "Fetch",
 	icon: '<i class="search icon"></i>',
 	menu: "form",
 	group: "block",
