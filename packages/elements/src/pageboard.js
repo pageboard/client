@@ -14,7 +14,6 @@ exports.view = new Viewer({
 	elements: exports.elements,
 	doc: document.cloneNode()
 });
-exports.view.bundles = {};
 
 exports.debounce = require('debounce');
 exports.fetch = require('./fetch');

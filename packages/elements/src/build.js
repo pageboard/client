@@ -23,6 +23,7 @@ String.prototype.fuse = Node.prototype.fuse = function(obj, scope, filters) {
 
 var mSym = matchdom.Symbols;
 var reFuse = new RegExp(`\\${mSym.open}[^\\${mSym.open}\\${mSym.close}]+\\${mSym.close}`);
+var cache = {};
 
 module.exports = function(opts) {
 	var view = Pageboard.view;
@@ -32,13 +33,21 @@ module.exports = function(opts) {
 	return Promise.resolve().then(function() {
 		if (!opts.pathname) return {};
 		return Pageboard.fetch("get", opts.pathname, opts.query).then(function(res) {
-			var elPath = res.elements;
+			var meta = res.meta || {};
 			var p;
-			if (elPath && (!elem || elem.contents)) {
-				if (!view.bundles[elPath]) {
-					view.bundles[elPath] = Pageboard.script(elPath);
+			if (meta.elements) {
+				if (!cache[meta.elements]) {
+					cache[meta.elements] = Pageboard.load.js(meta.elements);
 				}
-				p = view.bundles[elPath];
+				if (meta.group != "page") {
+					if (meta.stylesheets) meta.stylesheets.forEach(function(url) {
+						Pageboard.load.css(url);
+					});
+					if (meta.scripts) meta.scripts.forEach(function(url) {
+						Pageboard.load.js(url);
+					});
+				}
+				p = cache[meta.elements];
 			} else {
 				p = Promise.resolve();
 			}
@@ -51,37 +60,33 @@ module.exports = function(opts) {
 		});
 	}).then(function(res) {
 		if (opts.transform) opts.transform(res);
-		var block = res.data || {};
-		var type = null;
-		if (elem) {
-			type = elem.name;
-			if (!type) console.warn("Pageboard.build expects element.name to be set", elem);
-			view.elements[type] = elem;
-		} else if (block && block.type) {
-			type = block.type;
-			elem = view.elements[type];
+		var block = res.item || {};
+		if (!block.type && elem) {
+			block.type = elem.name;
+			if (!block.type) console.warn("Pageboard.build expects element.name to be set", elem);
+			elts[block.type] = elem;
+		} else if (block.type) {
+			elem = elts[block.type];
 		}
-		if (Array.isArray(block)) {
-			block = {
-				type: type,
-				children: res.data
-			};
-		} else if (!block.type) {
-			block.type = type;
-		}
+		if (res.items) block.children = res.items;
 
-		var query = opts.state.query || {};
+		var state = opts.state || {};
+		var query = state.query || {};
 		var writeMode = elem && elem.group == "page" && query.develop == "write";
 
 		var scope = {
 			$write: writeMode,
 			$query: query,
-			$pathname: opts.state.pathname,
+			$pathname: state.pathname,
 			$elements: elts,
 			$doc: view.doc
 		};
+
+		delete res.item;
+		delete res.items;
+		delete res.meta;
 		Object.keys(res).forEach(function(name) {
-			if (name != "data" && scope['$'+name] === undefined) scope['$'+name] = res[name];
+			if (scope['$'+name] === undefined) scope['$'+name] = res[name];
 		});
 
 		Object.keys(elts).forEach(function(name) {
@@ -101,7 +106,7 @@ module.exports = function(opts) {
 			};
 		});
 
-		return view.from(block, null, type, scope).then(function(node) {
+		return view.from(block, null, block.type, scope).then(function(node) {
 			if (writeMode && window.parent.Pageboard.install) {
 				window.parent.Pageboard.install(node, block);
 			}
