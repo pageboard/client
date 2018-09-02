@@ -21,11 +21,12 @@ Pageboard.elements.query = {
 	</element-query>`,
 	fuse: function(node, d) {
 		// do not call /.api/query if not true
-		node.dataset.remote = !!d.api;
+		node.dataset.remote = !!(d.request && d.request.method);
 		// needed to track query changes
 		var keys = [];
 		Object.keys((d.request || {}).parameters).forEach(function(key) {
 			var val = d.request.parameters[key];
+			if (val != null) val = val.toString();
 			if (val.startsWith('$query.')) keys.push(val.substring(7));
 		});
 		if (keys.length) node.dataset.keys = JSON.stringify(keys);
@@ -38,7 +39,13 @@ Pageboard.elements.query = {
 				method: {
 					title: 'Method',
 					type: "string",
-					pattern: "^(\\w+\.\\w+)?$"
+					pattern: "^(\\w+\.\\w+)?$",
+					input: {
+						name: 'service',
+						filter: {
+							type: "query"
+						}
+					}
 				},
 				parameters: {
 					title: 'Parameters',
@@ -47,12 +54,6 @@ Pageboard.elements.query = {
 					}, {
 						type: "null"
 					}]
-				},
-				input: {
-					name: 'service',
-					filter: {
-						type: "query"
-					}
 				}
 			}
 		},
