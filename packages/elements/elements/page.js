@@ -72,7 +72,7 @@ Pageboard.elements.page = {
 		<meta http-equiv="Status" content="302 Found[transition.from|!|bmagnet:*+]">
 		<meta http-equiv="Location" content="[redirect|eq:[url]:|magnet:+*]">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta name="robots" content="[noindex|?|magnet:*]">
+		<meta name="robots" content="[noindex|bmagnet:*|?]">
 		<meta name="description" content="[description|magnet:*]">
 		<link rel="icon" href="[$site.favicon|magnet:*|url]?format=ico">
 		<link rel="stylesheet" href="[$elements.page.stylesheets|repeat]" />
