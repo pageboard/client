@@ -1,5 +1,6 @@
+Pageboard.elements.query._fuse = Pageboard.elements.query.fuse;
 Pageboard.elements.query.fuse = function(node, d) {
-	node.fuse(d);
+	this._fuse(node, d);
 	node.classList.add('ui', 'form');
 };
 
