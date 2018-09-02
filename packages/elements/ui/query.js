@@ -1,8 +1,8 @@
-Page.patch(function(state) {
-	return Promise.all(Array.from(document.querySelectorAll('element-query')).map(function(node) {
-		return node.refresh(state);
-	}));
-});
+//Page.patch(function(state) {
+//	return Promise.all(Array.from(document.querySelectorAll('element-query')).map(function(node) {
+//		return node.refresh(state);
+//	}));
+//});
 
 class HTMLElementQuery extends HTMLCustomElement {
 	static find(name, value) { // FIXME should move elsewhere
@@ -41,49 +41,66 @@ class HTMLElementQuery extends HTMLCustomElement {
 		return this.refresh();
 	}
 	refresh(state) {
-		if (this._refreshing || this.closest('[contenteditable]')) return;
+		var me = this;
+		if (me._refreshing || me.closest('[contenteditable]')) return;
 		if (!state) state = Page.state;
 		// first find out if state.query has a key in this.dataset.keys
 		// what do we do if state.query has keys that are used by a form in this query template ?
 		var keys = [];
-		try {
-			keys = JSON.parse(this.dataset.keys);
-		} catch(err) {
-			console.error("Cannot parse element-query data-keys attribute", err);
+		if (me.dataset.keys) {
+			try {
+				keys = JSON.parse(me.dataset.keys);
+			} catch(err) {
+				console.error("Cannot parse element-query data-keys attribute", err);
+			}
 		}
 		var candidates = 0;
+		var query = {};
 		keys.forEach(function(key) {
-			if (state.query[key] !== undefined) candidates++;
+			if (state.query[key] !== undefined) {
+				candidates++;
+				query[key] = state.query[key];
+			}
 		});
 		if (keys.length && !candidates) {
 			// do not refresh because expected keys are not in query
 			return;
 		}
+		// do not refresh if already queried with the same query
+		var queryJson = JSON.stringify(query);
+		if (queryJson == me.dataset.query) return;
+		me.dataset.query = queryJson;
 		// build
-		var template = this.firstElementChild;
-		var view = this.lastElementChild;
 		var opts = {
 			state: state
 		};
-		if (this.dataset.remote == "true") {
+		var queryId = me.getAttribute('block-id');
+		if (me.dataset.remote == "true") {
 			opts.pathname = '/.api/query';
-			opts.query = {
-				_id: this.getAttribute('block-id')
-			};
+			query._id = queryId;
+			opts.query = query;
 		}
+		var view = me.lastElementChild;
+		var template = me.firstElementChild;
 		if (template.children.length > 0) {
 			opts.element = {
+				name: 'template_element_' + queryId,
 				html: template.innerHTML
 			};
 		}
-		this._refreshing = true;
+		me._refreshing = true;
+		me.classList.remove('error', 'warning', 'success');
+		me.classList.add('loading');
 		return Pageboard.build(opts).then(function(node) {
 			view.textContent = '';
 			view.appendChild(node);
+			me.classList.add('success');
 		}).catch(function(err) {
+			me.classList.add('error');
 			console.error("Error building", opts, err);
 		}).then(function() {
-			this._refreshing = false;
+			me.classList.remove('loading');
+			me._refreshing = false;
 		});
 
 
