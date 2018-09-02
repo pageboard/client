@@ -1,14 +1,12 @@
 (function(Pageboard) {
 Pageboard.inputs.binding = Binding;
 
-function Binding(input, opts, props, block) {
+function Binding(input, opts, props) {
 	this.field = input.closest('.field');
 	this.input = input;
-	this.init();
-	this.update(block);
 }
 
-Binding.prototype.init = function() {
+Binding.prototype.init = function(block) {
 	this.input.hidden = true;
 	var doc = this.input.ownerDocument;
 	function getSelectOption(name) {
@@ -20,6 +18,7 @@ Binding.prototype.init = function() {
 	</select>`);
 	this.field.appendChild(this.select);
 	this.select.addEventListener('change', this.toInput.bind(this));
+	this.update(block);
 };
 
 Binding.prototype.toInput = function() {

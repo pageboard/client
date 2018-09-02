@@ -74,29 +74,36 @@ function FormBlock(editor, node, block) {
 	this.node.setAttribute('autocomplete', 'off');
 	this.block = block;
 	this.editor = editor;
-	this.el = editor.element(block.type);
-	if (!this.el) {
+	var el = editor.element(block.type);
+	if (!el) {
 		throw new Error(`Unknown element type ${block.type}`);
 	}
+	el = this.el = Object.assign({}, el);
+	el.properties = JSON.parse(JSON.stringify(el.properties));
 	this.changeListener = this.change.bind(this);
 	this.node.addEventListener('change', this.changeListener);
 	this.node.addEventListener('input', this.changeListener);
+	this.inputs = {};
 	this.form = new Semafor({
 		type: 'object',
-		properties: this.el.properties,
-		required: this.el.required
-	}, this.node);
-	this.inputs = {};
+		properties: el.properties,
+		required: el.required
+	}, this.node, this.customizeInputs.bind(this));
 }
 
 FormBlock.prototype.destroy = function() {
-	if (this.inputs) for (var name in this.inputs) {
-		if (this.inputs[name].destroy) this.inputs[name].destroy();
-	}
-	this.inputs = {};
+	this.destroyInputs();
+	this.form.destroy();
 	this.node.removeEventListener('change', this.changeListener);
 	this.node.removeEventListener('input', this.changeListener);
 	this.node.remove();
+};
+
+FormBlock.prototype.destroyInputs = function() {
+	Object.values(this.inputs).forEach(function(curInput) {
+		if (curInput.destroy) curInput.destroy();
+	});
+	this.inputs = {};
 };
 
 FormBlock.prototype.update = function(parents, block) {
@@ -109,53 +116,53 @@ FormBlock.prototype.update = function(parents, block) {
 	}
 	this.form.clear();
 	this.form.set(this.block.data);
-	if (this.el.properties) this.propInputs(this.el.properties);
+	this.updateInputs();
 	this.ignoreEvents = false;
 };
 
-FormBlock.prototype.propInputs = function(props, parentKey) {
-	var node = this.node;
-	var block = this.block;
-	Object.keys(props).forEach(function(key) {
-		var prop = props[key];
-		var ikey = key;
-		if (parentKey) ikey = `${parentKey}.${key}`;
-		if (prop.context && !this.parents.some(function(parent) {
-			return prop.context.split('|').some(function(tok) {
-				return parent.block.type == tok;
-			});
-		})) {
-			var input = node.querySelector(`[name="${key}"]`);
-			if (input) input.closest('.field').remove();
-			return;
-		}
-		var opts = prop.input;
-		if (!opts || !opts.name) {
-			if (prop.oneOf || prop.anyOf) {
-				var list = prop.oneOf || prop.anyOf;
-				var listNoNull = list.filter(function(item) {
-					return item.type != "null";
-				});
-				if (listNoNull.length == 1 && listNoNull[0].properties) {
-					prop = listNoNull[0];
-				}
-			}
-			if (prop.properties) {
-				this.propInputs(prop.properties, key);
-			}
-			return;
-		}
-		var CurInput = Pageboard.inputs[opts.name];
-		if (!CurInput) {
-			console.error("Unknown input name", Pageboard.inputs, prop);
-			return;
-		}
-		if (!this.inputs[ikey]) {
-			this.inputs[ikey] = new CurInput(node.querySelector(`[name="${ikey}"]`), opts, prop, block);
+FormBlock.prototype.updateSchema = function(path, schema) {
+	var cur = this.el.properties;
+	path.split('.').join('.properties.').split('.').some(function(comp, i, arr) {
+		if (i == arr.length - 1) {
+			var prev = cur[comp];
+			schema.title = prev.title;
+			cur[comp] = schema;
 		} else {
-			this.inputs[ikey].update(block);
+			cur = cur[comp];
 		}
 	}, this);
+};
+
+FormBlock.prototype.updateInputs = function() {
+	Object.values(this.inputs).forEach(function(curInput) {
+		curInput.update(this.block);
+	}, this);
+};
+
+FormBlock.prototype.customizeInputs = function(key, prop, node) {
+	console.log("customize", key, prop, node);
+	if (prop.context && this.parents && !this.parents.some(function(parent) {
+		return prop.context.split('|').some(function(tok) {
+			return parent.block.type == tok;
+		});
+	})) {
+		var input = node.querySelector(`[name="${key}"]`);
+		if (input) input.closest('.field').remove();
+		return;
+	}
+	var opts = prop.input;
+	if (!opts || !opts.name) return;
+	var CurInput = Pageboard.inputs[opts.name];
+	if (!CurInput) {
+		console.error("Unknown input name", Pageboard.inputs, prop);
+		return;
+	}
+	if (this.inputs[key]) {
+		console.warn("customizeInputs initializes twice a key", key, prop);
+		return;
+	}
+	this.inputs[key] = new CurInput(node.querySelector(`[name="${key}"]`), opts, prop, this);
+	this.inputs[key].init(this.block);
 };
 
 FormBlock.prototype.change = function() {

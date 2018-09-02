@@ -1,17 +1,15 @@
 (function(Pageboard) {
 Pageboard.inputs.element = Element;
 
-function Element(input, opts, props, block) {
+function Element(input, opts, props) {
 	this.field = input.closest('.field');
 	this.input = input;
 	this.elements = Object.values(Pageboard.editor.elements).filter(function(el) {
 		return opts.standalone ? el.standalone : true;
 	});
-	this.init();
-	this.update(block);
 }
 
-Element.prototype.init = function() {
+Element.prototype.init = function(block) {
 	this.input.hidden = true;
 	var doc = this.input.ownerDocument;
 	function getSelectOption(el) {
@@ -23,6 +21,7 @@ Element.prototype.init = function() {
 	</select>`);
 	this.field.appendChild(this.select);
 	this.select.addEventListener('change', this.toInput.bind(this));
+	this.update(block);
 };
 
 Element.prototype.toInput = function() {

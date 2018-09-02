@@ -3,16 +3,13 @@ Pageboard.inputs.href = Href;
 
 Href.cache = {};
 
-function Href(input, opts, props, block) {
+function Href(input, opts, props) {
 	this.trigger = Pageboard.debounce(this.realTrigger, 500);
 	this.renderList = this.renderList.bind(this);
 	this.cache = this.cache.bind(this);
 	this.set = this.set.bind(this);
 	this.opts = opts;
 	this.input = input;
-	this.block = block;
-	this.init();
-	this.update();
 }
 
 Href.prototype.realTrigger = function() {
@@ -26,7 +23,7 @@ Href.prototype.realTrigger = function() {
 	}
 };
 
-Href.prototype.init = function() {
+Href.prototype.init = function(block) {
 	var input = this.input;
 	input.parentNode.classList.add('href');
 
@@ -118,13 +115,14 @@ Href.prototype.init = function() {
 			}
 		}
 	}.bind(this));
+	this.update(block);
 };
 
 Href.prototype.destroy = function() {
 	Pageboard.write.classList.remove('href');
 };
 
-Href.prototype.update = function() {
+Href.prototype.update = function(block) {
 	this.list = [];
 	this.renderField();
 	var me = this;

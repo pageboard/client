@@ -1,11 +1,13 @@
 (function(Pageboard) {
 Pageboard.inputs.crop = Crop;
 
-function Crop(input, opts, props, block) {
+function Crop(input, opts, props) {
 	this.input = input;
-	this.block = block;
 	this.props = props;
+};
 
+Crop.prototype.init = function(block) {
+	var input = this.input;
 	this.x = input.querySelector('[name="crop.x"]');
 	this.y = input.querySelector('[name="crop.y"]');
 	this.width = input.querySelector('[name="crop.width"]');
@@ -25,7 +27,7 @@ function Crop(input, opts, props, block) {
 	this.debouncedChange = Pageboard.debounce(this.change, 500);
 
 	this.container = input.appendChild(input.dom(`<div class="crop">
-		<img src="${this.thumbnail(this.block.data.url)}" />
+		<img src="${this.thumbnail(block.data.url)}" />
 	</div>`));
 
 	this.cropper = new Cropper(this.container.querySelector('img'), {
@@ -232,7 +234,8 @@ Crop.prototype.updateData = function() {
 	this.cropper.setData(this.from(data));
 };
 
-Crop.prototype.update = function() {
+Crop.prototype.update = function(block) {
+	this.block = block;
 	if (this.load()) {
 		this.updateData();
 	}

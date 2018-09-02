@@ -1,22 +1,9 @@
 (function(Pageboard) {
 Pageboard.inputs['element-property'] = ElementProperty;
 
-function ElementProperty(input, opts, props, block) {
+function ElementProperty(input, opts, props) {
 	this.field = input.closest('.field');
 	this.input = input;
-	var dom = Pageboard.editor.blocks.domQuery(block.id);
-	if (!dom) throw new Error("Cannot create input, DOM node not found for block " + block.id);
-	var form = dom.closest('form');
-	var formId = form.getAttribute('block-id');
-	var formBlock = Pageboard.editor.blocks.get(formId);
-	if (!formBlock) throw new Error("Cannot find form block for " + formId);
-	this.formBlock = formBlock;
-	var type = formBlock.data.action.type;
-	var el = Pageboard.editor.element(type);
-	if (!el) throw new Error("Cannot map type to element " + type);
-	this.el = el;
-	this.init();
-	this.update(block);
 }
 
 function asPaths(obj, ret, pre) {
@@ -32,7 +19,19 @@ function asPaths(obj, ret, pre) {
 	return ret;
 }
 
-ElementProperty.prototype.init = function() {
+ElementProperty.prototype.init = function(block) {
+	var dom = Pageboard.editor.blocks.domQuery(block.id);
+	if (!dom) throw new Error("Cannot create input, DOM node not found for block " + block.id);
+	var form = dom.closest('form');
+	var formId = form.getAttribute('block-id');
+	var formBlock = Pageboard.editor.blocks.get(formId);
+	if (!formBlock) throw new Error("Cannot find form block for " + formId);
+	this.formBlock = formBlock;
+	var type = formBlock.data.action.type;
+	var el = Pageboard.editor.element(type);
+	if (!el) throw new Error("Cannot map type to element " + type);
+	this.el = el;
+
 	this.input.hidden = true;
 	var doc = this.input.ownerDocument;
 	var paths = asPaths(this.el, {}, this.el.name + '.');
@@ -55,6 +54,7 @@ ElementProperty.prototype.init = function() {
 	</select>`);
 	this.field.appendChild(this.select);
 	this.select.addEventListener('change', this.toInput.bind(this));
+	this.update(block);
 };
 
 ElementProperty.prototype.toInput = function() {
