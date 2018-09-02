@@ -55,8 +55,15 @@ module.exports = function(opts) {
 				return res;
 			});
 		}).catch(function(err) {
-			err.type = 'error';
-			return { data: err };
+			return { item: {
+				type: 'error',
+				data: {
+					name: err.name,
+					message: err.message,
+					stack: err.stack,
+					status: err.status
+				}
+			} };
 		});
 	}).then(function(res) {
 		if (opts.transform) opts.transform(res);

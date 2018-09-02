@@ -4,9 +4,15 @@ exports.elements = {
 	error: {
 		html: `<html>
 		<head>
-			<meta http-equiv="Status" content="[status] [message]">
+			<title>[status|or:500] [name]</title>
+			<meta name="viewport" content="width=device-width, initial-scale=1">
+			<meta name="robots" content="noindex">
+			<meta http-equiv="Status" content="[status|or:500] [name]">
 		</head>
-		<body>[body]</body></html>`
+		<body>
+			<h2>[message]</h2>
+			<p><code>[stack]</code></p>
+		</body></html>`
 	}
 };
 
