@@ -124,6 +124,7 @@ Pageboard.elements.write = {
 		"../lib/pretty-bytes.js",
 		"../ui/notification.js",
 		"../ui/inputs/href.js",
+		"../ui/inputs/page.js",
 		"../ui/inputs/crop.js",
 		"../ui/form.js",
 		"../ui/menu.js",
