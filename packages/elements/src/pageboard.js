@@ -18,7 +18,7 @@ exports.view.bundles = {};
 
 exports.debounce = require('debounce');
 exports.fetch = require('./fetch');
-exports.script = require('./script');
+exports.load = require('./load');
 exports.build = require('./build');
 
 window.HTMLCustomElement = require('./HTMLCustomElement');
