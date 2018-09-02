@@ -43,6 +43,7 @@ class HTMLInputMap extends HTMLCustomElement {
 		var focused = false;
 		Object.keys(obj).concat([""]).forEach(function(key) {
 			var val = obj[key];
+			if (val === undefined || val === null) val = '';
 			if (!Array.isArray(val)) val = [val];
 			val.forEach(function(val) {
 				var row = body.appendChild(this.dom(`<tr>
