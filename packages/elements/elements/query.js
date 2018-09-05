@@ -24,7 +24,7 @@ Pageboard.elements.query = {
 		node.dataset.remote = !!(d.request && d.request.method);
 		// needed to track query changes
 		var keys = [];
-		Object.keys((d.request || {}).parameters).forEach(function(key) {
+		Object.keys((d.request || {}).parameters || {}).forEach(function(key) {
 			var val = d.request.parameters[key];
 			if (val != null) val = val.toString();
 			if (val.startsWith('$query.')) keys.push(val.substring(7));
