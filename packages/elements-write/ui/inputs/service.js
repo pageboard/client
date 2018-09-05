@@ -1,55 +1,77 @@
 (function(Pageboard) {
-Pageboard.inputs.service = Service;
+Pageboard.schemaFilters.service = ServiceFilter;
+Pageboard.schemaHelpers.service = ServiceHelper;
 
-function Service(input, opts, props, block) {
-	this.field = input.closest('.field');
-	this.input = input;
-//	console.log("new service", input);
-//	this.init();
-//	this.update(block);
+function ServiceFilter(key, opts, schema) {
+	var list = [];
+	this.key = key;
+	var services = Pageboard.services;
+	Object.keys(services).forEach(function(group) {
+		Object.keys(services[group]).forEach(function(key) {
+			var it = services[group][key];
+			if (opts.action == it.$action || opts.action == "write" && it.$action != "read") {
+				list.push({
+					const: `${group}.${key}`,
+					title: it.title
+				});
+			}
+		});
+	});
+	this.list = list.sort(function(a, b) {
+		if (a.title < b.title) return -1;
+		else if (a.title > b.title) return 1;
+		else return 0;
+	});
+	var props = schema.properties;
+	this.schemas = {
+		parent: props,
+		method: Object.assign({}, props.method),
+		parameters: Object.assign({}, props.parameters),
+	};
 }
 
-Service.prototype.init = function() {
-//	console.log("init service");
-return;
-	this.input.hidden = true;
-	var doc = this.input.ownerDocument;
-	function getSelectOption(el) {
-		return `<option value="${el.name}">${el.title}</option>`;
-	}
-	this.select = doc.dom(`<select class="ui compact dropdown">
-		<option value="">--</option>
-		${this.elements.map(getSelectOption)}
-	</select>`);
-	this.field.appendChild(this.select);
-	this.select.addEventListener('change', this.toInput.bind(this));
+ServiceFilter.prototype.init = function(block) {
+	var props = this.schemas.parent;
+	props.method.anyOf = this.list;
+	delete props.method.type;
+	setServiceParameters(this.key, block, props);
 };
 
-Service.prototype.toInput = function() {
-//	console.log("toInput service");
-	return;
-	this.input.value = this.select.value;
-	// not sure it's useful to trigger something here
-	Pageboard.trigger(this.input, 'change');
+ServiceFilter.prototype.destroy = function() {
+	var props = this.schemas.parent;
+	props.method = this.schemas.method;
+	props.parameters = this.schemas.parameters;
 };
 
-Service.prototype.update = function(block) {
-//	console.log("update service");
-	return;
-	var list = this.input.name.split('.');
+
+function ServiceHelper(node, opts, schema) {
+	this.key = node.getAttribute('name');
+	this.props = schema.properties;
+}
+
+ServiceHelper.prototype.update = function(block) {
+	setServiceParameters(this.key, block, this.props);
+};
+
+ServiceHelper.prototype.destroy = function() {
+};
+
+function setServiceParameters(key, block, props) {
 	var val = block.data;
-	for (var i=0; i < list.length; i++) {
-		val = val[list[i]];
-		if (val == null) break;
-	}
-	this.select.value = val == null ? "" : val;
-};
-
-Service.prototype.destroy = function() {
-//	console.log("destroy service");
-	return;
-	this.select.remove();
-	this.input.hidden = false;
-};
+	key.split('.').some(function(str) {
+		val = val[str];
+		if (val == null) return true;
+	});
+	var method = (val || {}).method;
+	if (!method) return;
+	var parts = (method || "").split('.');
+	if (parts.length != 2) return;
+	var service = Pageboard.services[parts[0]][parts[1]];
+	Object.assign(props.parameters, {
+		properties: service.properties || {},
+		required: service.required || [],
+		type: 'object'
+	});
+}
 
 })(window.Pageboard);

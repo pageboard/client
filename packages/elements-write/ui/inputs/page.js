@@ -1,5 +1,5 @@
 (function(Pageboard) {
-Pageboard.inputs.pageTitle = PageTitle;
+Pageboard.schemaHelpers.pageTitle = PageTitle;
 
 function PageTitle(input, opts, props) {
 	this.input = input;
@@ -45,7 +45,7 @@ PageTitle.prototype.destroy = function() {
 	$(this.inputUrl).off('input', this.checkHandler);
 };
 
-Pageboard.inputs.pageUrl = PageUrl;
+Pageboard.schemaHelpers.pageUrl = PageUrl;
 
 function PageUrl(input, opts, props) {
 	this.field = input.closest('.field');

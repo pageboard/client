@@ -1,5 +1,5 @@
 (function(Pageboard) {
-Pageboard.inputs.crop = Crop;
+Pageboard.schemaHelpers.crop = Crop;
 
 function Crop(input, opts, props) {
 	this.input = input;

@@ -13,22 +13,15 @@
 
 window.Semafor = Semafor;
 
-function Semafor(schema, node) {
+function Semafor(schema, node, filter, helper) {
+	this.filter = filter;
+	this.helper = helper;
 	// a json schema
 	this.schema = schema;
 	// a jquery node selector
 	this.$node = $(node);
+	this.node = node;
 	this.fields = {};
-	// populates node with form markup matching schema,
-	// and configure fields object
-	process(null, schema, node, this.fields);
-
-	// then initialize the form using semantic-ui form behavior
-	this.$node.form({
-		on: 'blur',
-		fields: this.fields,
-		keyboardShortcuts: false
-	});
 }
 
 function formGet(form) {
@@ -129,6 +122,25 @@ function formSet(form, values) {
 				if (val) elem.value = val;
 		}
 	}
+};
+
+Semafor.prototype.destroy = function() {
+	this.$node.find('.dropdown').dropdown('hide').dropdown('destroy');
+	this.$node.find('.checkbox').checkbox('destroy');
+	this.$node.form('destroy');
+	this.fields = {};
+	this.node.textContent = '';
+};
+
+Semafor.prototype.update = function() {
+	this.destroy();
+	this.process(null, this.schema, this.node);
+
+	this.$node.form({
+		on: 'blur',
+		fields: this.fields,
+		keyboardShortcuts: false
+	});
 };
 
 Semafor.prototype.get = function() {
@@ -284,19 +296,20 @@ Semafor.prototype.convert = function(vals, field) {
 	return obj;
 };
 
-function process(key, schema, node, fields) {
+Semafor.prototype.process = function(key, schema, node) {
 	var type = schema.type;
+	if (key && this.filter) this.filter(key, schema);
+	var processed = false;
 	// TODO support array of types (user selects the type he needs)
 	if (type && types[type]) {
 		if (type == 'object') {
-			types[type](key, schema, node, fields);
+			if (types[type](key, schema, node, this)) processed = true;
 		} else if (!schema.title) {
 			// ignore this value
-			return;
 		} else if (!key) {
 			console.error('Properties of type', type, 'must have a name');
 		} else {
-			var field = fields[key] = {};
+			var field = this.fields[key] = {};
 			field.identifier = key; // TODO check if really needed
 			field.rules = [];
 			if (schema.format && formats[schema.format]) {
@@ -305,7 +318,7 @@ function process(key, schema, node, fields) {
 			if (schema.required && schema.required.indexOf(key) >= 0) { // TODO problem key != name if nested
 				field.rules.push({type: 'empty'});
 			}
-			for (var kw in schema) {
+			Object.keys(schema).forEach(function(kw) {
 				if ([
 					"type",
 					"required",
@@ -314,31 +327,32 @@ function process(key, schema, node, fields) {
 					"description",
 					"id",
 					"default"
-				].indexOf(kw) >= 0) continue;
+				].indexOf(kw) >= 0) return;
 				if (keywords[kw]) field.rules.push(keywords[kw](schema[kw]));
-			}
-			types[type](key, schema, node, fields);
+			});
+			if (types[type](key, schema, node, this)) processed = true;
 		}
 	} else if (!type && (schema.oneOf || schema.anyOf)) {
-		types.oneOf(key, schema, node, fields);
+		if (types.oneOf(key, schema, node, this)) processed = true;
 	} else if (Array.isArray(type)) {
 		type.forEach(function(type) {
-			types[type](key, schema, node, fields);
+			if (types[type](key, schema, node, this)) processed = true;
 		});
 	} else {
 		console.warn(key, 'has no supported type in schema', schema);
 	}
+	if (this.helper && key != null && !processed) this.helper(key, schema, node);
 }
 
-types.string = function(key, schema, node, fields) {
+types.string = function(key, schema, node, inst) {
 	if (schema.input && schema.input.multiline) {
 		node.appendChild(node.dom(`<div class="field">
-			<label>${schema.title}</label>
+			<label>${schema.title || key}</label>
 			<textarea name="${key}"	title="${schema.description || ''}">${schema.default || ''}</textarea>
 		</div>`));
 	} else {
 		node.appendChild(node.dom(`<div class="field">
-			<label>${schema.title}</label>
+			<label>${schema.title || key}</label>
 			<input type="text" name="${key}"
 				value="${schema.default || ''}"
 				title="${schema.description || ''}"
@@ -347,7 +361,7 @@ types.string = function(key, schema, node, fields) {
 	}
 };
 
-types.oneOf = function(key, schema, node, fields) {
+types.oneOf = function(key, schema, node, inst) {
 	var field;
 	var listOf = schema.oneOf || schema.anyOf;
 	var alts = listOf.filter(function(item) {
@@ -371,7 +385,8 @@ types.oneOf = function(key, schema, node, fields) {
 		oneOfType = {type: "string"};
 	}
 	if (oneOfType) {
-		return process(key, Object.assign({}, schema, oneOfType), node, fields);
+		inst.process(key, Object.assign({}, schema, oneOfType), node);
+		return true;
 	}
 
 	var def = schema.default;
@@ -379,7 +394,7 @@ types.oneOf = function(key, schema, node, fields) {
 
 	if (icons) {
 		field = node.dom(`<div class="inline fields">
-			<label for="${key}">${schema.title}</label>
+			<label for="${key}">${schema.title || key}</label>
 			<div class="ui compact icon menu">
 				${alts.map(getIconOption).join('\n')}
 			</div>
@@ -388,7 +403,7 @@ types.oneOf = function(key, schema, node, fields) {
 		$(field).find('.radio.checkbox').checkbox();
 	} else if (listOf.length <= 3) {
 		field = node.dom(`<div class="inline fields">
-			<label for="${key}">${schema.title}</label>
+			<label for="${key}">${schema.title || key}</label>
 			<div class="field">
 				${listOf.map(getRadioOption).join('\n')}
 			</div>
@@ -400,7 +415,7 @@ types.oneOf = function(key, schema, node, fields) {
 		$(field).find('.radio.checkbox').checkbox();
 	} else {
 		field = node.dom(`<div class="flex field" title="${schema.description || ''}">
-			<label>${schema.title}</label>
+			<label>${schema.title || key}</label>
 			<select name="${key}" class="ui compact dropdown">
 				${listOf.map(getSelectOption).join('\n')}
 			</select>
@@ -438,16 +453,16 @@ types.oneOf = function(key, schema, node, fields) {
 	}
 };
 
-types.integer = function(key, schema, node, fields) {
+types.integer = function(key, schema, node, inst) {
 	schema = Object.assign({}, schema);
 	if (!schema.multipleOf) schema.multipleOf = 1;
-	types.number(key, schema, node, fields);
-	fields[key].type = 'integer';
+	types.number(key, schema, node, inst);
+	inst.fields[key].type = 'integer';
 };
 
-types.number = function(key, schema, node, fields) {
+types.number = function(key, schema, node, inst) {
 	node.appendChild(node.dom(`<div class="inline fields">
-		<label>${schema.title || ''}</label>
+		<label>${schema.title || key}</label>
 		<div class="field"><input type="number" name="${key}"
 			value="${schema.default !== undefined ? schema.default : ''}"
 			title="${schema.description || ''}"
@@ -457,10 +472,10 @@ types.number = function(key, schema, node, fields) {
 		/></div>
 	</div>`));
 
-	fields[key].type = 'number';
+	inst.fields[key].type = 'number';
 };
 
-types.object = function(key, schema, node, fields) {
+types.object = function(key, schema, node, inst) {
 	var fieldset = node;
 	if (schema.title) {
 		if (schema.properties) {
@@ -473,21 +488,21 @@ types.object = function(key, schema, node, fields) {
 			fieldset = node.dom(`<div class="field"></div>`);
 			node.appendChild(fieldset);
 			fieldset.appendChild(node.dom(`
-				<label>${schema.title}</label>
-				<input-map name="${key}"><label>${schema.description}</label></input-map>
+				<label>${schema.title || key}</label>
+				<input-map name="${key}"><label>${schema.description || ''}</label></input-map>
 			`));
 		}
 	}
-	if (schema.properties) for (var name in schema.properties) {
+	if (schema.properties) Object.keys(schema.properties).forEach(function(name) {
 		var propSchema = schema.properties[name];
 		if (key) name = key + '.' + name;
-		process(name, propSchema, fieldset, fields);
-	}
+		inst.process(name, propSchema, fieldset);
+	});
 };
 
-types.boolean = function(key, schema, node, fields) {
+types.boolean = function(key, schema, node, inst) {
 	var field = node.dom(`<div class="inline fields">
-		<label>${schema.title}</label>
+		<label>${schema.title || key}</label>
 		<div class="field">
 			<div class="ui toggle checkbox" title="${schema.description || ''}">
 				<input type="checkbox" name="${key}" class="hidden" value="true" />
@@ -498,12 +513,12 @@ types.boolean = function(key, schema, node, fields) {
 	$(field).find('.checkbox').checkbox(schema.default ? 'check' : 'uncheck');
 };
 
-types.null = function(key, schema, node, fields) {
+types.null = function(key, schema, node, inst) {
 	// a lone type null means just ignore this
 };
 
-types.array = function(key, schema, node, fields) {
-
+types.array = function(key, schema, node, inst) {
+	console.log(key, schema.items);
 };
 
 formats.email = function() {

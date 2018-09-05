@@ -83,27 +83,24 @@ function FormBlock(editor, node, block) {
 	this.changeListener = this.change.bind(this);
 	this.node.addEventListener('change', this.changeListener);
 	this.node.addEventListener('input', this.changeListener);
-	this.inputs = {};
-	this.form = new Semafor({
-		type: 'object',
-		properties: el.properties,
-		required: el.required
-	}, this.node, this.customizeInputs.bind(this));
+	this.helpers = {};
+	this.filters = {};
 }
 
 FormBlock.prototype.destroy = function() {
-	this.destroyInputs();
+	Object.values(this.helpers).forEach(function(inst) {
+		if (inst.destroy) inst.destroy();
+	});
+	this.helpers = {};
+	Object.values(this.filters).forEach(function(inst) {
+		if (inst.destroy) inst.destroy();
+	});
+	this.filters = {};
+
 	this.form.destroy();
 	this.node.removeEventListener('change', this.changeListener);
 	this.node.removeEventListener('input', this.changeListener);
 	this.node.remove();
-};
-
-FormBlock.prototype.destroyInputs = function() {
-	Object.values(this.inputs).forEach(function(curInput) {
-		if (curInput.destroy) curInput.destroy();
-	});
-	this.inputs = {};
 };
 
 FormBlock.prototype.update = function(parents, block) {
@@ -114,33 +111,31 @@ FormBlock.prototype.update = function(parents, block) {
 	if (parents) {
 		this.parents = parents;
 	}
+	var schema = {
+		type: 'object',
+		properties: this.el.properties,
+		required: this.el.required
+	};
+	if (!this.form) this.form = new Semafor(
+		schema,
+		this.node,
+		this.customFilter.bind(this),
+		this.customHelper.bind(this)
+	);
+
+	this.form.update();
 	this.form.clear();
 	this.form.set(this.block.data);
-	this.updateInputs();
+	Object.values(this.helpers).forEach(function(inst) {
+		if (inst.update) inst.update(this.block);
+	}, this);
+	Object.values(this.filters).forEach(function(inst) {
+		if (inst.update) inst.update(this.block);
+	}, this);
 	this.ignoreEvents = false;
 };
 
-FormBlock.prototype.updateSchema = function(path, schema) {
-	var cur = this.el.properties;
-	path.split('.').join('.properties.').split('.').some(function(comp, i, arr) {
-		if (i == arr.length - 1) {
-			var prev = cur[comp];
-			schema.title = prev.title;
-			cur[comp] = schema;
-		} else {
-			cur = cur[comp];
-		}
-	}, this);
-};
-
-FormBlock.prototype.updateInputs = function() {
-	Object.values(this.inputs).forEach(function(curInput) {
-		curInput.update(this.block);
-	}, this);
-};
-
-FormBlock.prototype.customizeInputs = function(key, prop, node) {
-	console.log("customize", key, prop, node);
+FormBlock.prototype.customHelper = function(key, prop, node) {
 	if (prop.context && this.parents && !this.parents.some(function(parent) {
 		return prop.context.split('|').some(function(tok) {
 			return parent.block.type == tok;
@@ -150,19 +145,29 @@ FormBlock.prototype.customizeInputs = function(key, prop, node) {
 		if (input) input.closest('.field').remove();
 		return;
 	}
-	var opts = prop.input;
+	var opts = prop.$helper;
 	if (!opts || !opts.name) return;
-	var CurInput = Pageboard.inputs[opts.name];
-	if (!CurInput) {
-		console.error("Unknown input name", Pageboard.inputs, prop);
+	var Helper = Pageboard.schemaHelpers[opts.name];
+	if (!Helper) {
+		console.error("Unknown helper name", prop);
 		return;
 	}
-	if (this.inputs[key]) {
-		console.warn("customizeInputs initializes twice a key", key, prop);
+	var inst = new Helper(node.querySelector(`[name="${key}"]`), opts, prop);
+	if (inst.init) inst.init(this.block);
+	this.helpers[key] = inst;
+};
+
+FormBlock.prototype.customFilter = function(key, prop) {
+	var opts = prop.$filter;
+	if (!opts || !opts.name) return;
+	var Filter = Pageboard.schemaFilters[opts.name];
+	if (!Filter) {
+		console.error("Unknown filter name", prop);
 		return;
 	}
-	this.inputs[key] = new CurInput(node.querySelector(`[name="${key}"]`), opts, prop, this);
-	this.inputs[key].init(this.block);
+	var inst = new Filter(key, opts, prop);
+	if (inst.init) inst.init(this.block);
+	this.filters[key] = inst;
 };
 
 FormBlock.prototype.change = function() {

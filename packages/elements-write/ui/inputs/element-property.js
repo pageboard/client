@@ -1,5 +1,5 @@
 (function(Pageboard) {
-Pageboard.inputs['element-property'] = ElementProperty;
+Pageboard.schemaHelpers['element-property'] = ElementProperty;
 
 function ElementProperty(input, opts, props) {
 	this.field = input.closest('.field');

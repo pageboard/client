@@ -1,5 +1,5 @@
 (function(Pageboard) {
-Pageboard.inputs.href = Href;
+Pageboard.schemaHelpers.href = Href;
 
 Href.cache = {};
 

@@ -1,5 +1,5 @@
 (function(Pageboard) {
-Pageboard.inputs.binding = Binding;
+Pageboard.schemaHelpers.binding = Binding;
 
 function Binding(input, opts, props) {
 	this.field = input.closest('.field');

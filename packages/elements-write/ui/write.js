@@ -2,7 +2,8 @@ window.Pagecut = {modules:{}};
 Object.assign(window.Pageboard, {
 	write: true,
 	Controls: {},
-	inputs: {},
+	schemaHelpers: {},
+	schemaFilters: {},
 	trigger: function trigger(node, event) {
 		var e = document.createEvent('Event'); // TODO depending on the actual event,
 		// might need 'HTMLEvent' instead (or UIEvent, etc...)
