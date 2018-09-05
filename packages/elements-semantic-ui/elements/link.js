@@ -21,7 +21,7 @@ Pageboard.elements.link = {
 				type: "string",
 				pattern: "^(/[\\w-.]*)+$"
 			}],
-			input: {
+			$helper: {
 				name: 'href',
 				filter: {
 					type: ["link", "file", "archive"]
@@ -45,7 +45,7 @@ Pageboard.elements.link = {
 				type: "string",
 				pattern: "^(/[\\w-.]*)+$"
 			}],
-			input: {
+			$helper: {
 				name: 'href',
 				display: 'icon',
 				filter: {

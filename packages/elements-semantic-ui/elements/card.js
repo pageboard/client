@@ -101,7 +101,7 @@ Pageboard.elements.cardlink = {
 				type: "string",
 				pattern: "^(/[\\w-.]*)+$"
 			}],
-			input: {
+			$helper: {
 				name: 'href',
 				filter: {
 					type: ["link"]

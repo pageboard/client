@@ -54,7 +54,7 @@ Pageboard.elements.menu_item_link = {
 				type: "string",
 				pattern: "^(/[\\w-.]*)+$"
 			}],
-			input: {
+			$helper: {
 				name: 'href',
 				filter: {
 					type: "link"

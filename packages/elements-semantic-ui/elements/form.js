@@ -19,7 +19,7 @@ Pageboard.elements.query_form = {
 				type: "string",
 				pattern: "^(/[a-zA-Z0-9-.]*)+$"
 			}],
-			input: {
+			$helper: {
 				name: 'href',
 				filter: {
 					type: ["link"]
@@ -30,7 +30,7 @@ Pageboard.elements.query_form = {
 			title: 'Bind to element',
 			description: 'Checks schema and helps adding form controls',
 			type: ['null', 'string'],
-			input: {
+			$helper: {
 				name: 'element'
 			}
 		}
@@ -72,7 +72,7 @@ Pageboard.elements.api_form = {
 			title: 'Bind to element',
 			description: 'Checks schema and helps adding form controls',
 			type: ['null', 'string'],
-			input: {
+			$helper: {
 				name: 'element'
 			}
 		},
@@ -95,7 +95,7 @@ Pageboard.elements.api_form = {
 						type: "null"
 					}]
 				},
-				input: {
+				$helper: {
 					name: 'service',
 					filter: {
 						type: "submit"

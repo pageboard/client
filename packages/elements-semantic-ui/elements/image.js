@@ -19,7 +19,7 @@ Pageboard.elements.image = {
 				type: "string",
 				pattern: "^(/[\\w-.]*)+$"
 			}],
-			input: {
+			$helper: {
 				name: 'href',
 				filter: {
 					type: ["image"]
@@ -120,7 +120,7 @@ Pageboard.elements.image = {
 					title: "Zoom"
 				}
 			},
-			input: {
+			$helper: {
 				name: 'crop'
 			}
 		}
@@ -236,7 +236,7 @@ Pageboard.elements.inlineImage = {
 				type: "string",
 				pattern: "^(/[\\w-.]*)+$"
 			}],
-			input: {
+			$helper: {
 				name: 'href',
 				display: 'icon',
 				filter: {
@@ -346,7 +346,7 @@ Pageboard.elements.inlineImage = {
 					title: "Zoom"
 				}
 			},
-			input: {
+			$helper: {
 				name: 'crop'
 			}
 		}
