@@ -19,7 +19,7 @@ Pageboard.elements.mail_image = {
 				type: "string",
 				pattern: "^(/[\\w-.]*)+$"
 			}],
-			input: {
+			$helper: {
 				name: 'href',
 				filter: {
 					type: ["image"]
@@ -66,7 +66,7 @@ Pageboard.elements.mail_image = {
 					title: "Zoom"
 				}
 			},
-			input: {
+			$helper: {
 				name: 'crop'
 			}
 		}

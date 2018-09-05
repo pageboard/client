@@ -15,7 +15,7 @@ Pageboard.elements.mail_link = {
 				type: "string",
 				pattern: "^(/[\\w-.]*)+$"
 			}],
-			input: {
+			$helper: {
 				name: 'href',
 				filter: {
 					type: ["link", "file", "archive"]
