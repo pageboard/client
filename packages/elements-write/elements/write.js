@@ -11,7 +11,7 @@ Pageboard.elements.write = {
 		<link rel="icon" href="[$site.favicon|magnet:*|url]?format=ico">
 		<link rel="stylesheet" href="[$elements.write.stylesheets|repeat]" />
 		<script defer src="[$elements.write.scripts|repeat]"></script>
-		<script defer src="[$services]"></script>
+		<script defer src="[$meta.services]"></script>
 	</head>
 	<body
 		data-css="[paths.0]"
