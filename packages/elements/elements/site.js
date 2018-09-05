@@ -62,7 +62,7 @@ Pageboard.elements.site = {
 				type: "string",
 				pattern: "^(/[\\w-.]*)+$"
 			}],
-			input: {
+			$helper: {
 				name: 'href',
 				display: 'icon',
 				filter: {

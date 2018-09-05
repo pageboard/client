@@ -39,13 +39,7 @@ Pageboard.elements.query = {
 				method: {
 					title: 'Method',
 					type: "string",
-					pattern: "^(\\w+\.\\w+)?$",
-					input: {
-						name: 'service',
-						filter: {
-							type: "query"
-						}
-					}
+					pattern: "^(\\w+\.\\w+)?$"
 				},
 				parameters: {
 					title: 'Parameters',
@@ -55,13 +49,20 @@ Pageboard.elements.query = {
 						type: "null"
 					}]
 				}
+			},
+			$filter: {
+				name: 'service',
+				action: "read"
+			},
+			$helper: {
+				name: 'service'
 			}
 		},
 		type: {
 			title: 'To element',
 			description: 'Merge as element',
 			type: ['null', 'string'],
-			input: {
+			$helper: {
 				name: 'element',
 				standalone: true
 			}
@@ -116,7 +117,7 @@ Pageboard.elements.query_template = {
 			title: 'Fill',
 			description: 'fill content with matchdom expression, filters on new lines',
 			type: 'string',
-			input: {
+			$helper: {
 				multiline: true
 			}
 		},
@@ -124,7 +125,7 @@ Pageboard.elements.query_template = {
 			title: 'Attribute',
 			description: 'set attributes with matchdom expression, filters on new lines',
 			type: 'string',
-			input: {
+			$helper: {
 				multiline: true
 			}
 		},
@@ -158,7 +159,7 @@ Pageboard.elements.query_content = {
 			title: 'Name',
 			description: 'Must match element content name',
 			type: 'string',
-			input: {
+			$helper: {
 				name: 'element-content',
 				standalone: true
 			}

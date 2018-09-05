@@ -9,14 +9,14 @@ Pageboard.elements.page = {
 		title: {
 			title: 'Title',
 			type: ['string', 'null'],
-			input: {
+			$helper: {
 				name: 'pageTitle'
 			}
 		},
 		description: {
 			title: 'Description',
 			type: ['string', 'null'],
-			input: {
+			$helper: {
 				multiline: true
 			}
 		},
@@ -24,7 +24,7 @@ Pageboard.elements.page = {
 			title: 'Address',
 			type: "string",
 			pattern: "^(/[a-zA-Z0-9-.]*)+$", // notice the absence of underscore
-			input: {
+			$helper: {
 				// works with sitemap editor to update pages url in a coherent manner
 				// see also page.save: the href updater will only change input.name == "href".
 				name: 'pageUrl'
@@ -41,7 +41,7 @@ Pageboard.elements.page = {
 				type: "string",
 				pattern: "^(/[a-zA-Z0-9-.]*)+$" // notice the absence of underscore
 			}],
-			input: {
+			$helper: {
 				name: 'href',
 				filter: {
 					type: ["link", "file", "archive"]
