@@ -56,7 +56,7 @@ Pageboard.elements.query_form = {
 
 Pageboard.elements.api_form = {
 	priority: 0, // scripts must run before 'query' scripts
-	title: 'Api Form',
+	title: 'Submit',
 	icon: '<i class="write icon"></i>',
 	group: 'block form',
 	menu: "form",
@@ -109,12 +109,11 @@ Pageboard.elements.api_form = {
 			spec: 'block+'
 		}
 	},
-	html: `<form action="/.api/form" type="[type]"
+	html: `<form action="/.api/form/[$id]" type="[type]"
 		method="post"
 		class="ui form"
 		id="[name|or:[$id|slice:0:4]]"
 	>
-		<input type="hidden" name="_id" value="[$id]" />
 		<div block-content="form"></div>
 	</form>`,
 	stylesheets: [
