@@ -75,8 +75,8 @@ Pageboard.elements.page = {
 		<meta name="robots" content="[noindex|bmagnet:*|?]">
 		<meta name="description" content="[description|magnet:*]">
 		<link rel="icon" href="[$site.favicon|magnet:*|url]?format=ico">
-		<link rel="stylesheet" href="[$elements.page.stylesheets|repeat]" />
-		<script defer src="[$elements.page.scripts|repeat]"></script>
+		<link rel="stylesheet" href="[$element.stylesheets|repeat]" />
+		<script defer src="[$element.scripts|repeat]"></script>
 	</head>
 	<body block-content="body"></body></html>`,
 	scripts: [
