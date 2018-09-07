@@ -76,8 +76,7 @@ class HTMLElementQuery extends HTMLCustomElement {
 		};
 		var queryId = me.getAttribute('block-id');
 		if (me.dataset.remote == "true") {
-			opts.pathname = '/.api/query';
-			query._id = queryId;
+			opts.pathname = `/.api/query/${queryId}`;
 			opts.query = query;
 		}
 		var view = me.lastElementChild;

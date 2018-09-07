@@ -21,52 +21,37 @@ Pageboard.elements.query = {
 	</element-query>`,
 	fuse: function(node, d) {
 		// do not call /.api/query if not true
-		node.dataset.remote = !!(d.request && d.request.method);
+		node.dataset.remote = !!(d.method);
 		// needed to track query changes
 		var keys = [];
-		Object.keys((d.request || {}).parameters || {}).forEach(function(key) {
-			var val = d.request.parameters[key];
+		Object.keys(d.parameters || {}).forEach(function(key) {
+			var val = d.parameters[key];
 			if (val != null) val = val.toString();
 			if (val.startsWith('$query.')) keys.push(val.substring(7));
 		});
 		if (keys.length) node.dataset.keys = JSON.stringify(keys);
 	},
 	properties: {
-		request: {
-			title: 'Request',
-			type: 'object',
-			properties: {
-				method: {
-					title: 'Method',
-					type: "string",
-					pattern: "^(\\w+\.\\w+)?$"
-				},
-				parameters: {
-					title: 'Parameters',
-					anyOf: [{
-						type: "object"
-					}, {
-						type: "null"
-					}]
-				}
-			},
-			$filter: {
-				name: 'service',
-				action: "read"
-			},
-			$helper: {
-				name: 'service'
-			}
+		method: {
+			title: 'Method',
+			type: "string",
+			pattern: "^(\\w+\.\\w+)?$"
 		},
-		type: {
-			title: 'To element',
-			description: 'Merge as element',
-			type: ['null', 'string'],
-			$helper: {
-				name: 'element',
-				standalone: true
-			}
-		},
+		parameters: {
+			title: 'Parameters',
+			anyOf: [{
+				type: "object"
+			}, {
+				type: "null"
+			}]
+		}
+	},
+	$filter: {
+		name: 'service',
+		action: "read"
+	},
+	$helper: {
+		name: 'service'
 	},
 	stylesheets: [
 		'../ui/query.css'
