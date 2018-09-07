@@ -5,7 +5,7 @@ TODO use matchdom to map values from query to input values:
 */
 Pageboard.elements.query_form = {
 	priority: 0, // scripts must run before 'query' scripts
-	title: 'Query Form',
+	title: 'Query',
 	icon: '<i class="write icon"></i>',
 	group: 'block form',
 	menu: "form",
