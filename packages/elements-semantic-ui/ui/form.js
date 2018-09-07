@@ -88,37 +88,6 @@ HTMLInputElement.prototype.reset = function() {
 	else this.value = "";
 };
 
-Page.patch(function(state) {
-	var proms = [];
-	Array.from(document.forms).forEach(function(form) {
-		if (form.dataset.fill != "true") return;
-		if (form.matches('.warning')) {
-			form.classList.remove('warning');
-			form.enable();
-		}
-		var fillCount = form.fill(state.query);
-		var fetch = form.querySelector('[data-fetch]');
-		if (!fetch || fillCount <= 1 || !fetch.name || !fetch.value) return;
-		var _id = form.querySelector('input[name="_id"]');
-		if (!_id || !_id.value) {
-			console.warn("missing input _id");
-			return;
-		}
-		var obj = {
-			_id: _id.value
-		};
-		obj[fetch.name] = fetch.value;
-		proms.push(Pageboard.fetch('get', '/.api/form', obj).then(function(block) {
-			form.fill(block.data);
-		}).catch(function(err) {
-			console.error(err);
-			form.classList.add('warning');
-			form.disable();
-		}));
-	});
-	return Promise.all(proms);
-});
-
 Page.setup(function(state) {
 	document.body.addEventListener('submit', formHandler, false);
 	document.body.addEventListener('input', inputHandler, false);
