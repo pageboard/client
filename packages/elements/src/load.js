@@ -12,8 +12,9 @@ function load(node, head, url) {
 				reject(err);
 			});
 		}
-		var cursor = doc.head.querySelector(`${node.tagName}:nth-last-child(1)`);
-		doc.head.insertBefore(node, cursor && cursor.nextElementSibling || null);
+		var cursel = node.tagName == "LINK" ? 'script' : 'script:nth-last-child(1) + *';
+		var cursor = doc.head.querySelector(cursel);
+		doc.head.insertBefore(node, cursor);
 		if (!live) resolve();
 	});
 };
