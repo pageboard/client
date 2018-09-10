@@ -90,7 +90,6 @@ module.exports = function(opts) {
 		};
 
 		delete res.item;
-		delete res.items;
 		Object.keys(res).forEach(function(name) {
 			if (scope['$'+name] === undefined) scope['$'+name] = res[name];
 		});

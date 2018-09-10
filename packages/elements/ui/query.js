@@ -1,8 +1,9 @@
-//Page.patch(function(state) {
-//	return Promise.all(Array.from(document.querySelectorAll('element-query')).map(function(node) {
-//		return node.refresh(state);
-//	}));
-//});
+Page.patch(function(state) {
+	if (Page.samePath(state, Page.parse())) return;
+	return Promise.all(Array.from(document.querySelectorAll('element-query')).map(function(node) {
+		return node.refresh(state);
+	}));
+});
 
 class HTMLElementQuery extends HTMLCustomElement {
 	static find(name, value) { // FIXME should move elsewhere
@@ -43,7 +44,7 @@ class HTMLElementQuery extends HTMLCustomElement {
 	refresh(state) {
 		var me = this;
 		if (me._refreshing || me.closest('[contenteditable]')) return;
-		if (!state) state = Page.state;
+		if (!state) state = Page.parse();
 		// first find out if state.query has a key in this.dataset.keys
 		// what do we do if state.query has keys that are used by a form in this query template ?
 		var keys = [];
@@ -82,6 +83,9 @@ class HTMLElementQuery extends HTMLCustomElement {
 		var view = me.lastElementChild;
 		var template = me.firstElementChild;
 		if (template.children.length > 0) {
+			// remove all block-id from template
+			var rnode;
+			while (rnode = template.querySelector('[block-id]')) rnode.removeAttribute('block-id');
 			opts.element = {
 				name: 'template_element_' + queryId,
 				html: template.innerHTML

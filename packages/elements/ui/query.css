@@ -3,17 +3,18 @@ element-query {
 	position:relative;
 }
 
-element-query > div > [block-content="template"] {
+element-query > [block-content="template"] {
 	display:none;
 }
 
-element-query[block-focused] > div > [block-content="template"] {
+[contenteditable] element-query > [block-content="template"] {
 	display:block;
 }
 
-element-query[block-focused] > .results {
+[contenteditable] element-query > [block-content="view"] {
 	display:none;
 }
+
 [block-id][block-type="query_template"]:before {
 	content:'[';
 }
