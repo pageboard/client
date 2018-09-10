@@ -132,7 +132,7 @@ FormBlock.prototype.update = function(parents, block) {
 };
 
 FormBlock.prototype.customHelper = function(key, prop, node) {
-	if (prop.context && this.parents && !this.parents.some(function(parent) {
+	if (key && prop.context && this.parents && !this.parents.some(function(parent) {
 		return prop.context.split('|').some(function(tok) {
 			return parent.block.type == tok;
 		});
