@@ -145,7 +145,7 @@ Semafor.prototype.update = function() {
 
 Semafor.prototype.get = function() {
 	var vals = formGet(this.$node[0]);
-	var formVals = this.retree(vals);
+	var formVals = this.unflatten(vals);
 	return this.convert(formVals);
 };
 
@@ -170,7 +170,7 @@ var keywords = Semafor.keywords = {
 	// json schema allows custom keywords
 };
 
-Semafor.prototype.retree = function(map, obj) {
+Semafor.prototype.unflatten = function(map, obj) {
 	if (!obj) obj = {};
 	Object.keys(map).forEach(function(key) {
 		var list = key.split('.');
