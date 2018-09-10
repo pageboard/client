@@ -42,6 +42,6 @@ Pageboard.elements.paragraph = {
 	contents: "inline*",
 	group: "block",
 	inplace: true,
-	html: '<p class="[align|or:left] aligned"></p>'
+	html: '<p class="[align|or:left] aligned">Text</p>'
 };
 
