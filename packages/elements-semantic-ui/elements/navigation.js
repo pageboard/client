@@ -45,7 +45,7 @@ Pageboard.elements.breadcrumb = {
 		<div class="divider"></div>
 		<a href="[$links.up.url|repeat:+a:link]" class="section">[link.title]</a>
 		<div class="divider"></div>
-		<div class="active section">[$doc.title]</div>
+		<div class="active section">[$doc.title|magnet:+div]</div>
 	</div>`,
 	stylesheets: [
 		'../semantic-ui/breadcrumb.css'
