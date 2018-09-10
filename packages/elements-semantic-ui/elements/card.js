@@ -139,46 +139,53 @@ Pageboard.elements.cardlink = {
 Pageboard.elements.card_header = {
 	title: 'header',
 	menu: 'widget',
+	context: 'card//',
 	icon: '<b class="icon">H</b>',
 	inplace: true,
 	contents: {
 		text: "inline*"
 	},
-	html: '<div class="header" block-content="text"></div>'
+	html: '<div class="header" block-content="text">Header</div>'
 };
 Pageboard.elements.card_header_nolink = Object.assign({}, Pageboard.elements.card_header, {
 	context: 'cardlink//',
+	group: 'blocklink',
 	contents: {
 		text: {
 			spec: "inline*",
 			marks: "nolink"
 		}
-	}
+	},
+	html: '<div class="header nolink" block-content="text">Header</div>'
 });
 
 Pageboard.elements.card_meta = {
 	title: 'meta',
 	menu: 'widget',
+	context: 'card//',
 	icon: '<em class="icon">M</em>',
 	inplace: true,
 	contents: {
 		text: "inline*"
 	},
-	html: '<div class="meta" block-content="text"></div>'
+	html: '<div class="meta" block-content="text">Meta</div>'
 };
 Pageboard.elements.card_meta_nolink = Object.assign({}, Pageboard.elements.card_meta, {
 	context: 'cardlink//',
+	group: 'blocklink',
 	contents: {
 		text: {
 			spec: "inline*",
 			marks: "nolink"
 		}
-	}
+	},
+	html: '<div class="meta nolink" block-content="text">Meta</div>'
 });
 
 Pageboard.elements.card_description = {
 	title: 'description',
 	menu: 'widget',
+	context: 'card//',
 	icon: '<span class="icon">P</span>',
 	inplace: true,
 	contents: {
@@ -188,8 +195,10 @@ Pageboard.elements.card_description = {
 };
 Pageboard.elements.card_description_nolink = Object.assign({}, Pageboard.elements.card_description, {
 	context: 'cardlink//',
+	group: 'blocklink',
 	contents: {
 		paragraphs: "paragraph_nolink+"
-	}
+	},
+	html: '<div class="description nolink" block-content="paragraphs"></div>'
 });
 
