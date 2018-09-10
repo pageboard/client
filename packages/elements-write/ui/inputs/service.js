@@ -58,7 +58,7 @@ ServiceHelper.prototype.destroy = function() {
 
 function setServiceParameters(key, block, props) {
 	var val = block.data;
-	key.split('.').some(function(str) {
+	if (key) key.split('.').some(function(str) {
 		val = val[str];
 		if (val == null) return true;
 	});
