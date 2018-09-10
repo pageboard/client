@@ -142,7 +142,13 @@ FormBlock.prototype.customHelper = function(key, prop, node) {
 		return;
 	}
 	var opts = prop.$helper;
-	if (!opts || !opts.name) return;
+	if (!opts) return;
+	if (typeof opts == "string") {
+		opts = {name: opts};
+	} else if (!opts.name) {
+		console.warn("$helper without name", prop);
+		return;
+	}
 	var Helper = Pageboard.schemaHelpers[opts.name];
 	if (!Helper) {
 		console.error("Unknown helper name", prop);
@@ -155,7 +161,13 @@ FormBlock.prototype.customHelper = function(key, prop, node) {
 
 FormBlock.prototype.customFilter = function(key, prop) {
 	var opts = prop.$filter;
-	if (!opts || !opts.name) return;
+	if (!opts) return;
+	if (typeof opts == "string") {
+		opts = {name: opts};
+	} else if (!opts.name) {
+		console.warn("$filter without name", prop);
+		return;
+	}
 	var Filter = Pageboard.schemaFilters[opts.name];
 	if (!Filter) {
 		console.error("Unknown filter name", prop);
