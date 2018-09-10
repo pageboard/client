@@ -345,7 +345,7 @@ Semafor.prototype.process = function(key, schema, node) {
 }
 
 types.string = function(key, schema, node, inst) {
-	if (schema.input && schema.input.multiline) {
+	if (!schema.pattern && (!schema.format || schema.format != "singleline")) {
 		node.appendChild(node.dom(`<div class="field">
 			<label>${schema.title || key}</label>
 			<textarea name="${key}"	title="${schema.description || ''}">${schema.default || ''}</textarea>
@@ -530,6 +530,21 @@ formats.email = function() {
 formats.uri = function() {
 	return {
 		type: 'url'
+	};
+};
+
+
+formats.singleline = function() {
+	return {
+		type: 'regExp',
+		value: /^[^\n\r]*$/
+	};
+};
+
+formats.id = function() {
+	return {
+		type: 'regExp',
+		value: /^\w+$/
 	};
 };
 
