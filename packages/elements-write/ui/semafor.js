@@ -533,6 +533,12 @@ formats.uri = function() {
 	};
 };
 
+formats.pathname = function() {
+	return {
+		type: 'regExp',
+		value: /^(\/[\w-.]*)+$/
+	};
+};
 
 formats.singleline = function() {
 	return {
