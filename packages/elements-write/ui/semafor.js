@@ -298,7 +298,7 @@ Semafor.prototype.convert = function(vals, field) {
 
 Semafor.prototype.process = function(key, schema, node) {
 	var type = schema.type;
-	if (key && this.filter) this.filter(key, schema);
+	if (this.filter && schema.$filter) this.filter(key, schema);
 	var processed = false;
 	// TODO support array of types (user selects the type he needs)
 	if (type && types[type]) {
@@ -341,7 +341,7 @@ Semafor.prototype.process = function(key, schema, node) {
 	} else {
 		console.warn(key, 'has no supported type in schema', schema);
 	}
-	if (this.helper && key != null && !processed) this.helper(key, schema, node);
+	if (this.helper && !processed) this.helper(key, schema, node);
 }
 
 types.string = function(key, schema, node, inst) {
@@ -484,7 +484,7 @@ types.object = function(key, schema, node, inst) {
 			if (schema.description) {
 				fieldset.appendChild(node.dom(`<label>${schema.description}</label>`));
 			}
-		} else {
+		} else if (key) {
 			fieldset = node.dom(`<div class="field"></div>`);
 			node.appendChild(fieldset);
 			fieldset.appendChild(node.dom(`
