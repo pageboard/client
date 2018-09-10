@@ -111,11 +111,7 @@ FormBlock.prototype.update = function(parents, block) {
 	if (parents) {
 		this.parents = parents;
 	}
-	var schema = {
-		type: 'object',
-		properties: this.el.properties,
-		required: this.el.required
-	};
+	var schema = Object.assign({}, this.el, {type: 'object'});
 	if (!this.form) this.form = new Semafor(
 		schema,
 		this.node,
