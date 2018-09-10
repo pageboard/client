@@ -167,7 +167,7 @@ function buildListener(win, body, page) {
 		win.removeEventListener('pagebuild', resolver);
 		setupListener(win, page);
 	};
-	if (win.Page.stage() >= 2) resolve();
+	if (win.Page.stage() >= 2) resolver();
 	else win.addEventListener('pagebuild', resolver);
 }
 
