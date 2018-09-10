@@ -163,6 +163,11 @@ body {
 	margin-bottom:0;
 }
 
+.ui.form .field > textarea {
+	height:6em;
+	min-height:6em;
+}
+
 .ui.toggle.checkbox {
 	vertical-align:middle;
 }
