@@ -17,7 +17,7 @@ Pageboard.elements.image = {
 				format: "uri"
 			}, {
 				type: "string",
-				pattern: "^(/[\\w-.]*)+$"
+				format: "pathname"
 			}],
 			$helper: {
 				name: 'href',
@@ -234,7 +234,7 @@ Pageboard.elements.inlineImage = {
 				format: "uri"
 			}, {
 				type: "string",
-				pattern: "^(/[\\w-.]*)+$"
+				format: "pathname"
 			}],
 			$helper: {
 				name: 'href',

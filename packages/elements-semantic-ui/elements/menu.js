@@ -52,7 +52,7 @@ Pageboard.elements.menu_item_link = {
 				format: "uri"
 			}, {
 				type: "string",
-				pattern: "^(/[\\w-.]*)+$"
+				format: "pathname"
 			}],
 			$helper: {
 				name: 'href',

@@ -99,7 +99,7 @@ Pageboard.elements.cardlink = {
 				format: "uri"
 			}, {
 				type: "string",
-				pattern: "^(/[\\w-.]*)+$"
+				format: "pathname"
 			}],
 			$helper: {
 				name: 'href',

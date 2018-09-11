@@ -17,7 +17,7 @@ Pageboard.elements.query_form = {
 				type: "null"
 			}, {
 				type: "string",
-				pattern: "^(/[a-zA-Z0-9-.]*)+$"
+				format: "pathname"
 			}],
 			$helper: {
 				name: 'href',
