@@ -142,21 +142,17 @@ Pageboard.elements.card_header = {
 	context: 'card//',
 	icon: '<b class="icon">H</b>',
 	inplace: true,
-	contents: {
-		text: "inline*"
-	},
-	html: '<div class="header" block-content="text">Header</div>'
+	contents: "inline*",
+	html: '<div class="header">Header</div>'
 };
 Pageboard.elements.card_header_nolink = Object.assign({}, Pageboard.elements.card_header, {
 	context: 'cardlink//',
 	group: 'blocklink',
 	contents: {
-		text: {
-			spec: "inline*",
-			marks: "nolink"
-		}
+		spec: "inline*",
+		marks: "nolink"
 	},
-	html: '<div class="header nolink" block-content="text">Header</div>'
+	html: '<div class="header">Header</div>'
 });
 
 Pageboard.elements.card_meta = {
@@ -165,21 +161,17 @@ Pageboard.elements.card_meta = {
 	context: 'card//',
 	icon: '<em class="icon">M</em>',
 	inplace: true,
-	contents: {
-		text: "inline*"
-	},
-	html: '<div class="meta" block-content="text">Meta</div>'
+	contents: "inline*",
+	html: '<div class="meta">Meta</div>'
 };
 Pageboard.elements.card_meta_nolink = Object.assign({}, Pageboard.elements.card_meta, {
 	context: 'cardlink//',
 	group: 'blocklink',
 	contents: {
-		text: {
-			spec: "inline*",
-			marks: "nolink"
-		}
+		spec: "inline*",
+		marks: "nolink"
 	},
-	html: '<div class="meta nolink" block-content="text">Meta</div>'
+	html: '<div class="meta">Meta</div>'
 });
 
 Pageboard.elements.card_description = {
@@ -188,17 +180,13 @@ Pageboard.elements.card_description = {
 	context: 'card//',
 	icon: '<span class="icon">P</span>',
 	inplace: true,
-	contents: {
-		paragraphs: "paragraph+"
-	},
-	html: '<div class="description" block-content="paragraphs"></div>'
+	contents: "paragraph+",
+	html: '<div class="description"></div>'
 };
 Pageboard.elements.card_description_nolink = Object.assign({}, Pageboard.elements.card_description, {
 	context: 'cardlink//',
 	group: 'blocklink',
-	contents: {
-		paragraphs: "paragraph_nolink+"
-	},
-	html: '<div class="description nolink" block-content="paragraphs"></div>'
+	contents: "paragraph_nolink+",
+	html: '<div class="description"></div>'
 });
 
