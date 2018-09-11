@@ -50,9 +50,7 @@ Pageboard.elements.query = {
 		name: 'service',
 		action: "read"
 	},
-	$helper: {
-		name: 'service'
-	},
+	$helper: 'service',
 	stylesheets: [
 		'../ui/query.css'
 	],
@@ -101,22 +99,17 @@ Pageboard.elements.query_template = {
 		fill: {
 			title: 'Fill',
 			description: 'fill content with matchdom expression, filters on new lines',
-			type: 'string',
-			$helper: {
-				multiline: true
-			}
+			type: 'string'
 		},
 		attr: {
 			title: 'Attribute',
 			description: 'set attributes with matchdom expression, filters on new lines',
 			type: 'string',
-			$helper: {
-				multiline: true
-			}
 		},
 		placeholder: {
 			title: 'Placeholder',
-			type: 'string'
+			type: 'string',
+			format: 'singleline'
 		}
 	},
 	context: 'query//',
@@ -144,6 +137,7 @@ Pageboard.elements.query_content = {
 			title: 'Name',
 			description: 'Must match element content name',
 			type: 'string',
+			format: "id",
 			$helper: {
 				name: 'element-content',
 				standalone: true

@@ -8,27 +8,24 @@ Pageboard.elements.page = {
 	properties: {
 		title: {
 			title: 'Title',
-			type: ['string', 'null'],
-			$helper: {
-				name: 'pageTitle'
-			}
+			anyOf: [{
+				type: "null"
+			}, {
+				type: "string",
+				format: "singleline"
+			}],
+			$helper: 'pageTitle'
 		},
 		description: {
 			title: 'Description',
-			type: ['string', 'null'],
-			$helper: {
-				multiline: true
-			}
+			type: ['string', 'null']
 		},
 		url: {
 			title: 'Address',
 			type: "string",
 			pattern: "^(/[a-zA-Z0-9-.]*)+$", // notice the absence of underscore
-			$helper: {
-				// works with sitemap editor to update pages url in a coherent manner
-				// see also page.save: the href updater will only change input.name == "href".
-				name: 'pageUrl'
-			}
+			$helper: 'pageUrl' // works with sitemap editor to update pages url in a coherent manner
+			// see also page.save: the href updater will only change input.name == "href".
 		},
 		redirect: {
 			title: 'Redirect',
@@ -39,7 +36,7 @@ Pageboard.elements.page = {
 				format: "uri"
 			}, {
 				type: "string",
-				pattern: "^(/[a-zA-Z0-9-.]*)+$" // notice the absence of underscore
+				format: "pathname"
 			}],
 			$helper: {
 				name: 'href',

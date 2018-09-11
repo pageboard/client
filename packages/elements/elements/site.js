@@ -16,20 +16,40 @@ Pageboard.elements.site = {
 		},
 		author: {
 			title: 'Author',
-			anyOf: [{type: "null"}, {type: "string"}]
+			anyOf: [{
+				type: "null"
+			}, {
+				type: "string",
+				format: "singleline"
+			}]
 		},
 		license: {
 			title: 'License',
-			anyOf: [{type: "null"}, {type: "string"}]
+			anyOf: [{
+				type: "null"
+			}, {
+				type: "string",
+				format: "singleline"
+			}]
 			// TODO use spdx.org/licenses for choosing a license
 		},
 		lang: {
 			title: 'Language',
-			anyOf: [{type: "null"}, {type: "string"}]
+			anyOf: [{
+				type: "null"
+			}, {
+				type: "string",
+				format: "singleline"
+			}]
 		},
 		module: {
 			title: 'Module name',
-			anyOf: [{type: "null"}, {type: "string"}]
+			anyOf: [{
+				type: "null"
+			}, {
+				type: "string",
+				format: "singleline"
+			}]
 		},
 		version: {
 			title: 'Module version',
@@ -37,7 +57,8 @@ Pageboard.elements.site = {
 			anyOf: [{
 				type: "null"
 			}, {
-				type: "string" // TODO patterns, see core
+				type: "string",
+				format: "singleline" // a "version" format ?
 			}]
 		},
 		env: {
@@ -60,7 +81,7 @@ Pageboard.elements.site = {
 				type: "null"
 			}, {
 				type: "string",
-				pattern: "^(/[\\w-.]*)+$"
+				format: "pathname"
 			}],
 			$helper: {
 				name: 'href',
