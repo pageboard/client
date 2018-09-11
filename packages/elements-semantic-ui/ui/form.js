@@ -90,6 +90,7 @@ HTMLInputElement.prototype.reset = function() {
 
 Page.patch(function(state) {
 	Array.from(document.forms).forEach(function(form) {
+		if (form.closest('[contenteditable]')) return;
 		if (form.method != "get") return;
 		var loc = Page.parse(form.action);
 		if (Page.samePath(loc, state) == false) return;
@@ -120,6 +121,7 @@ Page.setup(function(state) {
 	function formHandler(e) {
 		var form = e.target.matches('form') ? e.target : e.target.form;
 		if (!form) return;
+		if (form.closest('[contenteditable]')) return;
 		e.preventDefault();
 		if (form.matches('.loading')) return;
 		form.classList.remove('error', 'warning', 'success');
