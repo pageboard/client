@@ -67,11 +67,17 @@ Pageboard.elements.input_text = {
 		name: {
 			title: "name",
 			description: "The form object key",
-			type: "string"
+			type: "string",
+			format: "singleline"
 		},
 		value: {
 			title: "default value",
-			type: ["string", "null"]
+			anyOf: [{
+				type: "null"
+			}, {
+				type: "string",
+				format: "singleline"
+			}]
 		},
 		template: {
 			title: 'Template',
@@ -81,7 +87,12 @@ Pageboard.elements.input_text = {
 		},
 		placeholder: {
 			title: "placeholder",
-			type: ["string", "null"]
+			anyOf: [{
+				type: "null"
+			}, {
+				type: "string",
+				format: "singleline"
+			}]
 		},
 		required: {
 			title: 'required',
@@ -150,11 +161,17 @@ Pageboard.elements.input_file = {
 		name: {
 			title: "name",
 			description: "The form object key",
-			type: "string"
+			type: "string",
+			format: "singleline"
 		},
 		placeholder: {
 			title: "placeholder",
-			type: ["string", "null"]
+			anyOf: [{
+				type: "null"
+			}, {
+				type: "string",
+				format: "singleline"
+			}]
 		},
 		required: {
 			title: 'required',
@@ -210,7 +227,8 @@ Pageboard.elements.input_range = {
 		name: {
 			title: "name",
 			description: "The form object key",
-			type: "string"
+			type: "string",
+			format: "singleline"
 		},
 		disabled: {
 			title: 'disabled',
@@ -278,11 +296,13 @@ Pageboard.elements.input_checkbox = {
 	properties: {
 		name: {
 			title: "name",
-			type: "string"
+			type: "string",
+			format: "singleline"
 		},
 		value: {
 			title: "value",
-			type: "string"
+			type: "string",
+			format: "singleline"
 		},
 		disabled: {
 			title: 'disabled',
@@ -329,11 +349,13 @@ Pageboard.elements.input_radio = {
 	properties: {
 		name: {
 			title: "name",
-			type: "string"
+			type: "string",
+			format: "singleline"
 		},
 		value: {
 			title: "value",
-			type: "string"
+			type: "string",
+			format: "singleline"
 		},
 		disabled: {
 			title: 'disabled',
@@ -369,11 +391,17 @@ Pageboard.elements.input_select = {
 		name: {
 			title: "name",
 			description: "The form object key",
-			type: "string"
+			type: "string",
+			format: "singleline"
 		},
 		placeholder: {
 			title: "placeholder",
-			type: ["string", "null"]
+			anyOf: [{
+				type: "null"
+			}, {
+				type: "string",
+				format: "singleline"
+			}]
 		},
 		disabled: {
 			title: 'disabled',
@@ -398,7 +426,12 @@ Pageboard.elements.input_select = {
 		},
 		value: {
 			title: "default value",
-			type: ["string", "null"]
+			anyOf: [{
+				type: "null"
+			}, {
+				type: "string",
+				format: "singleline"
+			}]
 		}
 	},
 	contents: {
@@ -438,7 +471,12 @@ Pageboard.elements.input_select_option = {
 		value: {
 			title: "value",
 			description: "Defaults to option label",
-			type: ["string", "null"]
+			anyOf: [{
+				type: "null"
+			}, {
+				type: "string",
+				format: "singleline"
+			}]
 		}
 	},
 	contents: {

@@ -8,9 +8,8 @@ Pageboard.elements.input_property = {
 		name: {
 			title: 'name',
 			type: 'string',
-			$helper: {
-				name: 'element-property'
-			}
+			format: 'singleline',
+			$helper: 'element-property'
 		},
 		disabled: {
 			title: 'disabled',

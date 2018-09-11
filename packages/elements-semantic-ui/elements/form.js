@@ -29,10 +29,13 @@ Pageboard.elements.query_form = {
 		type: {
 			title: 'Bind to element',
 			description: 'Checks schema and helps adding form controls',
-			type: ['null', 'string'],
-			$helper: {
-				name: 'element'
-			}
+			anyOf: [{
+				type: 'null'
+			}, {
+				type: 'string',
+				format: 'id'
+			}],
+			$helper: 'element'
 		}
 	},
 	contents: {
@@ -71,10 +74,13 @@ Pageboard.elements.api_form = {
 		type: {
 			title: 'Bind to element',
 			description: 'Checks schema and helps adding form controls',
-			type: ['null', 'string'],
-			$helper: {
-				name: 'element'
-			}
+			anyOf: [{
+				type: 'null'
+			}, {
+				type: 'string',
+				format: 'id'
+			}],
+			$helper: 'element'
 		},
 		request: {
 			title: 'Request',
