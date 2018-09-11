@@ -1,4 +1,5 @@
 Pageboard.elements.paragraph_nolink = Object.assign({}, Pageboard.elements.paragraph, {
+	priority: Pageboard.elements.paragraph.priority - 1,
 	context: 'blocklink//',
 	contents: {
 		spec: "inline*",
