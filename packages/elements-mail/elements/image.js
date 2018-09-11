@@ -17,7 +17,7 @@ Pageboard.elements.mail_image = {
 				format: "uri"
 			}, {
 				type: "string",
-				pattern: "^(/[\\w-.]*)+$"
+				format: "pathname"
 			}],
 			$helper: {
 				name: 'href',

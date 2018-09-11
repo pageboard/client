@@ -8,20 +8,20 @@ Pageboard.elements.mail = {
 	properties: {
 		title: {
 			title: 'Title',
-			type: ['string', 'null'],
-			$helper: {
-				name: 'pageTitle'
-			}
+			anyOf: [{
+				type: "null"
+			}, {
+				type: "string",
+				format: "singleline"
+			}],
+			$helper: 'pageTitle'
 		},
 		url: {
 			title: 'Address',
 			type: "string",
-			pattern: "^(/[a-zA-Z0-9-.]*)+$", // notice the absence of underscore
-			$helper: {
-				// works with sitemap editor to update pages url in a coherent manner
-				// see also page.save: the href updater will only change input.name == "href".
-				name: 'pageUrl'
-			}
+			pattern: "^(/[a-zA-Z0-9-]*)+$",
+			$helper: 'pageUrl' // works with sitemap editor to update pages url in a coherent manner
+			// see also page.save: the href updater will only change input.name == "href".
 		}
 	},
 	contents: {
