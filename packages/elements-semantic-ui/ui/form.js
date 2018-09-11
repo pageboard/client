@@ -88,6 +88,15 @@ HTMLInputElement.prototype.reset = function() {
 	else this.value = "";
 };
 
+Page.patch(function(state) {
+	Array.from(document.forms).forEach(function(form) {
+		if (form.method != "get") return;
+		var loc = Page.parse(form.action);
+		if (Page.samePath(loc, state) == false) return;
+		form.fill(state.query);
+	});
+});
+
 Page.setup(function(state) {
 	document.body.addEventListener('submit', formHandler, false);
 	document.body.addEventListener('input', inputHandler, false);
