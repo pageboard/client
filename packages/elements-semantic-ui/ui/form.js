@@ -99,26 +99,24 @@ Page.patch(function(state) {
 });
 
 Page.setup(function(state) {
-	document.body.addEventListener('submit', formHandler, false);
+	var debouncedHandler = Pageboard.debounce(formHandler, 300);
+	document.body.addEventListener('submit', debouncedHandler, false);
 	document.body.addEventListener('input', inputHandler, false);
 	document.body.addEventListener('change', inputHandler, false);
 
-	var toInput, ignoreInputChange = false;
+	var ignoreInputChange = false;
 	function inputHandler(e) {
 		if (e.type == "input") {
 			ignoreInputChange = true;
 		} else if (e.target.matches('input') && ignoreInputChange) {
 			return;
 		}
-		if (toInput) clearTimeout(toInput);
-		toInput = setTimeout(function() {
-			toInput = null;
-			formHandler(e);
-		}, 300);
+		debouncedHandler(e);
 	}
 
 	// https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Using_XMLHttpRequest
 	function formHandler(e) {
+		ignoreInputChange = false;
 		var form = e.target.matches('form') ? e.target : e.target.form;
 		if (!form) return;
 		if (form.closest('[contenteditable]')) return;
