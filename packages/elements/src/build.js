@@ -79,6 +79,9 @@ module.exports = function(opts) {
 
 		var state = opts.state || {};
 		var query = state.query || {};
+		if (query.develop === null || query.develop == "write") {
+			state.data.develop = true;
+		}
 		var writeMode = elem && elem.group == "page" && query.develop == "write";
 
 		var scope = {

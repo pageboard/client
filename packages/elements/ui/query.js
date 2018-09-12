@@ -61,6 +61,7 @@ class HTMLElementQuery extends HTMLCustomElement {
 			if (state.query[key] !== undefined) {
 				candidates++;
 				query[key] = state.query[key];
+				state.data[key] = true;
 			}
 		});
 		if (keys.length && !candidates) {
