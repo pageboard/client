@@ -1,10 +1,3 @@
-Page.patch(function(state) {
-	if (Page.samePath(state, Page.parse())) return;
-	return Promise.all(Array.from(document.querySelectorAll('element-query')).map(function(node) {
-		return node.refresh(state);
-	}));
-});
-
 class HTMLElementQuery extends HTMLCustomElement {
 	static find(name, value) { // FIXME should move elsewhere
 		// convert query into a query that contains only
@@ -32,19 +25,21 @@ class HTMLElementQuery extends HTMLCustomElement {
 		}
 		return obj;
 	}
+	init() {
+		this.refresh = this.refresh.bind(this);
+	}
 	connectedCallback() {
-		this.refresh();
+		Page.patch(this.refresh);
 	}
 	attributeChangedCallback(attributeName, oldValue, newValue, namespace) {
-		if (attributeName.startsWith('data-')) this.refresh();
+		if (attributeName.startsWith('data-')) Page.patch(this.refresh);
 	}
 	update() {
-		return this.refresh();
+		return Page.patch(this.refresh);
 	}
 	refresh(state) {
 		var me = this;
 		if (me._refreshing || me.closest('[contenteditable]')) return;
-		if (!state) state = Page.parse();
 		// first find out if state.query has a key in this.dataset.keys
 		// what do we do if state.query has keys that are used by a form in this query template ?
 		var keys = [];
