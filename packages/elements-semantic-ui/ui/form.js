@@ -93,7 +93,8 @@ Page.patch(function(state) {
 		if (form.closest('[contenteditable]')) return;
 		if (form.method != "get") return;
 		var loc = Page.parse(form.action);
-		if (Page.samePath(loc, state) == false) return;
+		// do not fill form from current state if form does not submit to current pathname
+		if (loc.pathname != state.pathname || Page.sameDomain(loc, state) == false) return;
 		form.fill(state.query);
 	});
 });
@@ -127,8 +128,14 @@ Page.setup(function(state) {
 		var p;
 		if (form.method == "get") {
 			var loc = Page.parse(form.action);
-			if (e.type != "submit" && Page.samePath(loc, state) == false) return;
-			loc.query = formToQuery(form, true);
+			Object.assign(loc.query, formToQuery(form));
+
+			if (loc.pathname == state.pathname && Page.sameDomain(loc, state)) {
+				loc.query = Object.assign({}, state.query, loc.query);
+			} else if (e.type != "submit") {
+				// do not automatically submit form if form pathname is not same as current pathname
+				return;
+			}
 			p = Page.push(loc).then(function() {
 				return ""; // empty state
 			});
@@ -159,12 +166,11 @@ Page.setup(function(state) {
 		});
 	}
 
-	function formToQuery(form, noUnderscore) {
+	function formToQuery(form) {
 		var fd = new FormData(form);
 		var query = {};
 		fd.forEach(function(val, key) {
 			if (val == null || val == "") return;
-			if (noUnderscore && key[0] == "_") return;
 			var old = query[key];
 			if (old !== undefined) {
 				if (!Array.isArray(old)) {
