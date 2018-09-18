@@ -538,7 +538,7 @@ function tplPreview(preview) {
 	if (preview.nodeType != Node.ELEMENT_NODE) return preview;
 	if (preview.matches('img')) {
 		preview.className = "ui tiny image";
-		return document.dom(`<div class="thumbnail">${preview.outerHTML}</div>`);
+		return `<div class="thumbnail">${preview.outerHTML}</div>`;
 	} else {
 		console.warn("fixme, render preview", preview);
 	}
