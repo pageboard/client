@@ -1,21 +1,21 @@
 {
-  "name": "site-semantic-ui",
-  "version": "0.2.1",
-  "description": "Default pageboard site using semantic-ui elements",
+  "name": "@pageboard/client",
+  "version": "0.3.0",
+  "description": "Pageboard client modules",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pageboard/site-semantic-ui.git"
+    "url": "git+https://github.com/pageboard/client.git"
   },
   "author": "Jérémy Lal <kapouer@melix.org>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/pageboard/site-semantic-ui/issues"
+    "url": "https://github.com/pageboard/client/issues"
   },
-  "homepage": "https://github.com/pageboard/site-semantic-ui#readme",
+  "homepage": "https://github.com/pageboard/client#readme",
   "dependencies": {
     "@pageboard/elements": "^0.6.2",
     "@pageboard/elements-calendar": "^0.1.0",
@@ -24,5 +24,11 @@
     "@pageboard/elements-google": "^0.3.2",
     "@pageboard/elements-semantic-ui": "^0.3.6",
     "@pageboard/elements-write": "^0.2.7"
+  },
+  "devDependencies": {
+    "@pageboard/pagecut": "*",
+    "@pageboard/stickybits": "*",
+    "@pageboard/flickity": "*",
+    "@pageboard/datetime-entry": "*"
   }
 }
