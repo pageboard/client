@@ -79,11 +79,11 @@ Pageboard.elements.carousel = {
 		</div>
 	</element-carousel>`,
 	stylesheets: [
-		'../ui/lib/flickity.css',
+		'../lib/flickity.css',
 		'../ui/carousel.css'
 	],
 	scripts: [
-		'../ui/lib/flickity.js',
+		'../lib/flickity.js',
 		'../ui/carousel.js'
 	]
 };

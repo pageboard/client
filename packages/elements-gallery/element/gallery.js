@@ -20,7 +20,7 @@ Pageboard.elements.gallery = {
 		<div block-content="galleries"></div>
 	</element-gallery>`,
 	resources: [
-		'../ui/lib/list-diff.js',
+		'../lib/list-diff.js',
 		'../ui/gallery-helper.js'
 	],
 	stylesheets: [

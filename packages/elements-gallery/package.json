@@ -24,14 +24,15 @@
     "postinstall": "^0.1.0"
   },
   "postinstall": {
-    "list-diff.js/list-diff.js": "link ui/lib/list-diff.js",
-    "@pageboard/flickity/dist/flickity.pkgd.js": "link ui/lib/flickity.js",
-    "@pageboard/flickity/dist/flickity.css": "link ui/lib/flickity.css",
-    "isotope-layout/dist/isotope.pkgd.js": "link ui/lib/isotope.js"
+    "list-diff.js/list-diff.js": "link lib/list-diff.js",
+    "@pageboard/flickity/dist/flickity.pkgd.js": "link lib/flickity.js",
+    "@pageboard/flickity/dist/flickity.css": "link lib/flickity.css",
+    "isotope-layout/dist/isotope.pkgd.js": "link lib/isotope.js"
   },
   "pageboard": {
     "directories": [
       "element",
+      "lib",
       "ui"
     ],
     "elements": "element/"
