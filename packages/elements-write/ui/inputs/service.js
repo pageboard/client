@@ -22,6 +22,10 @@ function ServiceFilter(key, opts, schema) {
 		else if (a.title > b.title) return 1;
 		else return 0;
 	});
+	this.list.unshift({
+		const: '',
+		title: 'None'
+	});
 	var props = schema.properties;
 	this.schemas = {
 		parent: props,
@@ -62,16 +66,22 @@ function setServiceParameters(key, block, props) {
 		val = val[str];
 		if (val == null) return true;
 	});
+	var service = {};
 	var method = (val || {}).method;
-	if (!method) return;
 	var parts = (method || "").split('.');
-	if (parts.length != 2) return;
-	var service = Pageboard.services[parts[0]][parts[1]];
-	Object.assign(props.parameters, {
-		properties: service.properties || {},
-		required: service.required || [],
-		type: 'object'
-	});
+	if (parts.length == 2) {
+		service = Pageboard.services[parts[0]][parts[1]];
+	}
+	if (!service.properties) {
+		delete props.parameters;
+	} else {
+		if (!props.parameters) props.parameters = {};
+		Object.assign(props.parameters, {
+			properties: service.properties || {},
+			required: service.required || [],
+			type: 'object'
+		});
+	}
 }
 
 })(window.Pageboard);
