@@ -341,7 +341,7 @@ Semafor.prototype.process = function(key, schema, node) {
 	} else {
 		console.warn(key, 'has no supported type in schema', schema);
 	}
-	if (this.helper && !processed) this.helper(key, schema, node);
+	if (key && this.helper && !processed) this.helper(key, schema, node);
 }
 
 types.string = function(key, schema, node, inst) {
