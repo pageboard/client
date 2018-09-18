@@ -1,6 +1,11 @@
 Pageboard.elements.site.properties.google_site_verification = {
 	title: 'Google Site Verification Code',
-	type: ['string', 'null']
+	anyOf: [{
+		type: "null"
+	}, {
+		type: "string",
+		format: "singleline"
+	}]
 };
 
 Pageboard.elements.google_site_verification = {
