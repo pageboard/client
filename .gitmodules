@@ -1,0 +1,21 @@
+[submodule "modules/elements"]
+	path = modules/elements
+	url = git@github.com:pageboard/elements
+[submodule "modules/elements-write"]
+	path = modules/elements-write
+	url = git@github.com:pageboard/elements-write
+[submodule "modules/elements-mail"]
+	path = modules/elements-mail
+	url = git@github.com:pageboard/elements-mail
+[submodule "modules/elements-semantic-ui"]
+	path = modules/elements-semantic-ui
+	url = git@github.com:pageboard/elements-semantic-ui
+[submodule "modules/elements-google"]
+	path = modules/elements-google
+	url = git@github.com:pageboard/elements-google
+[submodule "modules/elements-gallery"]
+	path = modules/elements-gallery
+	url = git@github.com:pageboard/elements-gallery
+[submodule "modules/elements-calendar"]
+	path = modules/elements-calendar
+	url = git@github.com:pageboard/elements-calendar
