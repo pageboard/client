@@ -345,7 +345,7 @@ Semafor.prototype.process = function(key, schema, node) {
 }
 
 types.string = function(key, schema, node, inst) {
-	if (!schema.pattern && (!schema.format || schema.format != "singleline")) {
+	if (!schema.pattern && !schema.format) {
 		node.appendChild(node.dom(`<div class="field">
 			<label>${schema.title || key}</label>
 			<textarea name="${key}"	title="${schema.description || ''}">${schema.default || ''}</textarea>
@@ -382,7 +382,7 @@ types.oneOf = function(key, schema, node, inst) {
 	} else if (alts.every(function(item) {
 		return item == "string" || item.type === undefined || item.type == "string";
 	})) {
-		oneOfType = {type: "string"};
+		oneOfType = {type: "string", format: 'singleline'}; // FIXME use an array of formats
 	}
 	if (oneOfType) {
 		inst.process(key, Object.assign({}, schema, oneOfType), node);
