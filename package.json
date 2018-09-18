@@ -17,11 +17,12 @@
   },
   "homepage": "https://github.com/pageboard/site-semantic-ui#readme",
   "dependencies": {
-    "@pageboard/elements": "latest",
-    "@pageboard/elements-gallery": "latest",
-    "@pageboard/elements-mail": "latest",
-    "@pageboard/elements-google": "latest",
-    "@pageboard/elements-semantic-ui": "latest",
-    "@pageboard/elements-write": "latest"
+    "@pageboard/elements": "^0.6.2",
+    "@pageboard/elements-calendar": "^0.1.0",
+    "@pageboard/elements-gallery": "^0.2.1",
+    "@pageboard/elements-mail": "^0.3.1",
+    "@pageboard/elements-google": "^0.3.2",
+    "@pageboard/elements-semantic-ui": "^0.3.6",
+    "@pageboard/elements-write": "^0.2.7"
   }
 }
