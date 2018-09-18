@@ -51,7 +51,7 @@ Pageboard.elements.itemlink = {
 				format: "uri"
 			}, {
 				type: "string",
-				pattern: "^(/[\\w-.]*)+$"
+				format: "pathname"
 			}],
 			$helper: {
 				name: 'href',
@@ -69,7 +69,7 @@ Pageboard.elements.itemlink = {
 				format: "uri"
 			}, {
 				type: "string",
-				pattern: "^(/[\\w-.]*)+$"
+				format: "pathname"
 			}],
 			$helper: {
 				name: 'href',
