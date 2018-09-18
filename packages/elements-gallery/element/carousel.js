@@ -67,7 +67,6 @@ Pageboard.elements.carousel = {
 			title: 'cells'
 		}
 	},
-	tag: 'element-carousel',
 	html: `<element-carousel
 		data-width="[width|or:auto]" data-height="[height|or:auto]"
 		data-auto-play="[autoPlay]" data-page-dots="[pageDots]"
@@ -103,7 +102,6 @@ Pageboard.elements.carousel_item = {
 		}
 	},
 	context: 'carousel/',
-	tag: 'element-carousel-cell',
 	html: `<element-carousel-cell>
 		<div class="media" block-content="media"></div>
 		<div class="content" block-content="content"></div>
