@@ -19,3 +19,15 @@
 [submodule "modules/elements-calendar"]
 	path = modules/elements-calendar
 	url = git@github.com:pageboard/elements-calendar
+[submodule "modules/pagecut"]
+	path = modules/pagecut
+	url = git@github.com:pageboard/pagecut
+[submodule "modules/stickybits"]
+	path = modules/stickybits
+	url = git@github.com:pageboard/stickybits
+[submodule "modules/flickity"]
+	path = modules/flickity
+	url = git@github.com:pageboard/flickity
+[submodule "modules/datetime-entry"]
+	path = modules/datetime-entry
+	url = git@github.com:pageboard/datetime
