@@ -104,8 +104,10 @@ Href.prototype.init = function(block) {
 			} else {
 				input.value = href;
 				var data = Href.cache[href];
-				if (!Pageboard.hrefs[href]) {
-					Pageboard.hrefs[href] = Object.assign({
+//				if (!Pageboard.hrefs[href]) {
+				if (!data) {
+//					Pageboard.hrefs[href] = Object.assign({
+					Href.cache[href] = Object.assign({
 						mime: data.mime
 					}, data.meta);
 					console.info("added href to cache", href, Pageboard.hrefs[href]);
