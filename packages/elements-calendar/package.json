@@ -1,5 +1,5 @@
 {
-  "name": "elements-calendar",
+  "name": "@pageboard/elements-calendar",
   "version": "0.1.0",
   "description": "Manage calendar/events in pageboard",
   "main": "index.js",
