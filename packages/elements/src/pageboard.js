@@ -1,4 +1,4 @@
-var Viewer = require('pagecut/src/viewer.js');
+var Viewer = require('@pageboard/pagecut/src/viewer.js');
 
 exports.elements = {
 	error: {

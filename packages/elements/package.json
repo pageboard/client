@@ -21,11 +21,11 @@
     "debounce": "^1.1.0",
     "document-register-element": "^1.11.0",
     "domify": "^1.4.0",
-    "matchdom": "^4.1.0",
-    "pagecut": "1.0.0-beta.74",
-    "postinstall": "^0.4.1",
+    "matchdom": "^4.2.0",
+    "@pageboard/pagecut": "^1.0.0",
+    "postinstall": "^0.4.2",
     "postinstall-browserify": "^0.1.0",
-    "window-page": "^3.1.1"
+    "window-page": "^3.2.0"
   },
   "postinstall": {
     "document-register-element/build/document-register-element.max.js": "link lib/custom-elements.js",
