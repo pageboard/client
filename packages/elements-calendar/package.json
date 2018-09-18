@@ -19,7 +19,7 @@
   "homepage": "https://github.com/pageboard/elements-calendar#readme",
   "dependencies": {
     "@pageboard/datetime-entry": "^3.2.0",
-    "postinstall": "^0.1.0"
+    "postinstall": "^0.4.2"
   },
   "postinstall": {
     "@pageboard/datetime-entry/dist/datetime.js": "link lib/"
