@@ -550,7 +550,7 @@ formats.singleline = function() {
 formats.id = function() {
 	return {
 		type: 'regExp',
-		value: /^\w+$/
+		value: /^[\w-]+$/
 	};
 };
 
