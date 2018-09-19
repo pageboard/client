@@ -1,33 +1,33 @@
-[submodule "modules/elements"]
-	path = modules/elements
+[submodule "packages/elements"]
+	path = packages/elements
 	url = git@github.com:pageboard/elements
-[submodule "modules/elements-write"]
-	path = modules/elements-write
+[submodule "packages/elements-write"]
+	path = packages/elements-write
 	url = git@github.com:pageboard/elements-write
-[submodule "modules/elements-mail"]
-	path = modules/elements-mail
+[submodule "packages/elements-mail"]
+	path = packages/elements-mail
 	url = git@github.com:pageboard/elements-mail
-[submodule "modules/elements-semantic-ui"]
-	path = modules/elements-semantic-ui
+[submodule "packages/elements-semantic-ui"]
+	path = packages/elements-semantic-ui
 	url = git@github.com:pageboard/elements-semantic-ui
-[submodule "modules/elements-google"]
-	path = modules/elements-google
+[submodule "packages/elements-google"]
+	path = packages/elements-google
 	url = git@github.com:pageboard/elements-google
-[submodule "modules/elements-gallery"]
-	path = modules/elements-gallery
+[submodule "packages/elements-gallery"]
+	path = packages/elements-gallery
 	url = git@github.com:pageboard/elements-gallery
-[submodule "modules/elements-calendar"]
-	path = modules/elements-calendar
+[submodule "packages/elements-calendar"]
+	path = packages/elements-calendar
 	url = git@github.com:pageboard/elements-calendar
-[submodule "modules/pagecut"]
-	path = modules/pagecut
+[submodule "packages/pagecut"]
+	path = packages/pagecut
 	url = git@github.com:pageboard/pagecut
-[submodule "modules/stickybits"]
-	path = modules/stickybits
+[submodule "packages/stickybits"]
+	path = packages/stickybits
 	url = git@github.com:pageboard/stickybits
-[submodule "modules/flickity"]
-	path = modules/flickity
+[submodule "packages/flickity"]
+	path = packages/flickity
 	url = git@github.com:pageboard/flickity
-[submodule "modules/datetime-entry"]
-	path = modules/datetime-entry
+[submodule "packages/datetime-entry"]
+	path = packages/datetime-entry
 	url = git@github.com:pageboard/datetime

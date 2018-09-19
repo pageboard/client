@@ -1,21 +1,22 @@
 
-nodeModules := node_modules/@pageboard
-modules := $(wildcard ./modules/*)
-links := $(patsubst ./modules/%,$(nodeModules)/%,$(modules))
+modules := node_modules/@pageboard
+packages := $(wildcard ./packages/*)
+links := $(patsubst ./packages/%,$(modules)/%,$(packages))
 
-all: $(nodeModules) $(links) install
+all: $(modules) $(links) install
 
-$(nodeModules):
+$(modules):
 	mkdir -p $@
 
-$(nodeModules)/%: modules/%
+$(modules)/%: packages/%
 	ln -s ../../$< $@
 
 clean:
-	rm $(nodeModules)/*
+	rm $(modules)/*
 
 install:
 	# Do not forget to run prepare on development modules
 	npm install --prod
+	cd packages/pagecut/; npm install
 	for mod in $(links); do cd $$mod; npm run postinstall; cd ../../..; done
 
