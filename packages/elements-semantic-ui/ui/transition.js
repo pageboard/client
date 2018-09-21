@@ -65,8 +65,8 @@ Page.setup(function(state) {
 
 		var fromCoords = Array.prototype.map.call(document.body.children, function(node) {
 			if (node.matches('[block-type="main"]')) return {
-				top: `${node.offsetTop}px`,
-				left: `${node.offsetLeft}px`,
+				top: `${node.offsetTop - window.scrollY}px`,
+				left: `${node.offsetLeft - window.scrollX}px`,
 				width: `${node.offsetWidth}px`,
 				height: `${node.offsetHeight}px`
 			};
