@@ -64,7 +64,11 @@ html.transition > body.transition {
 	width:100%;
 }
 .transition > .transition-from:not([block-type="main"]) {
-	display:none;
+	display: none !important;
+}
+
+.transition > .transition-to:not([block-type="main"]) {
+	visibility:hidden !important;
 }
 
 /* translate transitions */

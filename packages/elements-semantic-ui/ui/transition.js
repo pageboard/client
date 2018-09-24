@@ -44,7 +44,9 @@
 		Page.historySave('replace', Page.state);
 	}, 500), false);
 
-	window.addEventListener('pageinit', function(e) {
+	if (window.history && 'scrollRestoration' in window.history) {
+		window.history.scrollRestoration = 'manual';
+	} else window.addEventListener('pageinit', function(e) {
 		var scroll = Page.state.data.scroll;
 		if (scroll) {
 			setTimeout(function() {
@@ -107,13 +109,21 @@ Page.updateBody = function(body, state) {
 	toList.forEach(function(node) {
 		document.body.appendChild(node);
 	});
-	setTimeout(function() {
-		clist.add('transitioning');
-	});
-	document.documentElement.addEventListener(transitionEnd, trDone);
-	var safeTo = setTimeout(function() {
-		trDone({target: {parentNode: document.body}});
-	}, 3000);
+
+	var safeTo;
+
+	function pageSetup(e) {
+		window.removeEventListener('pagesetup', pageSetup, false);
+		safeTo = setTimeout(function() {
+			trDone({target: {parentNode: document.body}});
+		}, 3000);
+		document.documentElement.addEventListener(transitionEnd, trDone);
+		setTimeout(function() {
+			clist.add('transitioning');
+		});
+	}
+
+	window.addEventListener('pagesetup', pageSetup, false);
 
 	function trDone(e) {
 		if (safeTo) {
