@@ -9,7 +9,6 @@ Pageboard.elements.sitemap = {
 	},
 	html: '<element-accordion class="ui accordion" block-content="children"></element-accordion>',
 	render: function(doc, block, view, scope) {
-		var rootUrl = block.data.url || "/";
 		if (block.type == "sitemap") {
 			var tree = {};
 			block.children.forEach(function(page) {

@@ -129,7 +129,7 @@ class HTMLElementInputFile extends HTMLCustomElement {
 				xhr.send(fd);
 				self._xhr = xhr;
 			} catch(err) {
-				fail(err)
+				fail(err);
 			}
 		}.bind(this));
 		this._promise = p;

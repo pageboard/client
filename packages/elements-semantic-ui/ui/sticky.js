@@ -1,3 +1,4 @@
+/* global stickybits */
 class HTMLElementSticky extends HTMLCustomElement {
 	static init() {
 		this.manager = stickybits({

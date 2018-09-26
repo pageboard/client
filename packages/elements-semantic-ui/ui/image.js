@@ -1,3 +1,4 @@
+/* global objectFitImages */
 class HTMLElementImage extends HTMLCustomElement {
 	static init() {
 		var me = this;

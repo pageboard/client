@@ -54,7 +54,7 @@ Pageboard.elements.import = {
 			var node = view.render(standalone);
 			var existing = block.content.blocks.querySelector(`[block-id="${standalone.id}"]`);
 			if (existing) {
-					// this is a workaround - block.content.children above should be empty...
+				// this is a workaround - block.content.children above should be empty...
 				existing.replaceWith(node);
 			} else {
 				block.content.blocks.appendChild(node);

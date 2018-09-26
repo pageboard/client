@@ -1,3 +1,4 @@
+/* global HTMLElementTabs */
 window.HTMLElementTabs = class HTMLElementTabs extends HTMLCustomElement {
 	init() {
 		this.click = this.click.bind(this);
@@ -13,7 +14,7 @@ window.HTMLElementTabs = class HTMLElementTabs extends HTMLCustomElement {
 		var menu = item.closest('[block-content="items"]');
 		if (!menu || menu.parentNode != this) return;
 		var pos = 0, cur = item;
-		while (cur = cur.previousElementSibling) pos++;
+		while ((cur = cur.previousElementSibling)) pos++;
 		var tabs = this.querySelector('[block-content="tabs"]');
 		var tabItem = tabs.children[pos];
 		if (!tabItem) {
@@ -30,7 +31,7 @@ window.HTMLElementTabs = class HTMLElementTabs extends HTMLCustomElement {
 		});
 		tabItem.classList.add('active');
 	}
-}
+};
 
 Page.setup(function() {
 	HTMLCustomElement.define('element-tabs', HTMLElementTabs);

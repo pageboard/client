@@ -101,7 +101,6 @@ class HTMLElementSelect extends HTMLCustomElement {
 		if (this.dataset.required) select.required = true;
 		if (this.dataset.multiple) select.multiple = true;
 
-		var text = this.querySelector('.text');
 		select.insertAdjacentHTML('beforeBegin', `<div class="text"></div>`);
 		this._setPlaceholder();
 

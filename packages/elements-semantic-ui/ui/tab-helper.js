@@ -1,3 +1,4 @@
+/* global HTMLElementTabs */
 HTMLElementTabs.prototype._init = HTMLElementTabs.prototype.init;
 HTMLElementTabs.prototype._connectedCallback = HTMLElementTabs.prototype.connectedCallback;
 HTMLElementTabs.prototype._disconnectedCallback = HTMLElementTabs.prototype.disconnectedCallback;
@@ -44,8 +45,9 @@ HTMLElementTabs.prototype._sync = function() {
 	var diff = items.children.length - tabs.children.length;
 	if (diff == 0) return;
 	var tr = editor.state.tr;
+	var sel;
 	if (diff > 0) {
-		var sel = editor.utils.selectTr(tr, tabs.lastElementChild, true);
+		sel = editor.utils.selectTr(tr, tabs.lastElementChild, true);
 		var pos = sel.to + 1;
 		var $pos = tr.doc.resolve(pos);
 		var block = editor.blocks.create('tab');
@@ -54,7 +56,7 @@ HTMLElementTabs.prototype._sync = function() {
 		var node = editor.utils.fill(editor.utils.parseTr(tr, dom, $pos).content.firstChild);
 		tr.insert(pos, node);
 	} else if (diff < 0) {
-		var sel = editor.utils.selectTr(tr, tabs.lastElementChild);
+		sel = editor.utils.selectTr(tr, tabs.lastElementChild);
 		editor.utils.deleteTr(tr, sel);
 	}
 	editor.dispatch(tr);

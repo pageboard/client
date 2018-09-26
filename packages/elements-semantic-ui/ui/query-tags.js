@@ -1,3 +1,4 @@
+/* global HTMLElementQuery */
 class HTMLElementQueryTags extends HTMLCustomElement {
 	init() {
 		this.close = this.close.bind(this);
@@ -17,7 +18,7 @@ class HTMLElementQueryTags extends HTMLCustomElement {
 		var labels = this.querySelector('.labels');
 		if (!labels) return;
 		labels.textContent = '';
-		var control, field, label;
+		var field, label;
 		for (var name in query) {
 			HTMLElementQuery.find(name, query[name]).forEach(function(control) {
 				if (control.type == "hidden") return;
