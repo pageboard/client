@@ -5,7 +5,7 @@ TODO use matchdom to map values from query to input values:
 */
 Pageboard.elements.query_form = {
 	priority: 0, // scripts must run before 'query' scripts
-	title: 'Query',
+	title: 'Form Query',
 	icon: '<i class="write icon"></i>',
 	group: 'block form',
 	menu: "form",
@@ -59,11 +59,11 @@ Pageboard.elements.query_form = {
 
 Pageboard.elements.api_form = {
 	priority: 0, // scripts must run before 'query' scripts
-	title: 'Submit',
+	title: 'Form Submit',
 	icon: '<i class="write icon"></i>',
 	group: 'block form',
 	menu: "form",
-	required: ["api", "name"],
+	required: ["request"],
 	properties: {
 		name: {
 			title: 'Name',
@@ -85,11 +85,16 @@ Pageboard.elements.api_form = {
 		request: {
 			title: 'Request',
 			type: 'object',
+			required: ["method"],
 			properties: {
 				method: {
 					title: 'Method',
-					type: "string",
-					pattern: "^(\\w+\.\\w+)?$"
+					anyOf: [{
+						type: "null"
+					}, {
+						type: "string",
+						pattern: "^(\\w+\\.\\w+)?$"
+					}]
 				},
 				parameters: {
 					title: 'Parameters',
@@ -100,12 +105,39 @@ Pageboard.elements.api_form = {
 					}, {
 						type: "null"
 					}]
-				},
-				$helper: {
-					name: 'service',
-					filter: {
-						type: "submit"
+				}
+			},
+			$filter: {
+				name: 'service',
+				action: "write"
+			},
+			$helper: 'service',
+		},
+		response: {
+			title: 'Response',
+			description: 'Change location using response',
+			type: 'object',
+			properties: {
+				url: {
+					title: 'Target page',
+					description: 'Can be empty to stay on same page',
+					anyOf: [{
+						type: "null"
+					}, {
+						type: "string",
+						format: "pathname"
+					}],
+					$helper: {
+						name: 'href',
+						filter: {
+							type: ["link"]
+						}
 					}
+				},
+				query: {
+					title: 'Target query',
+					description: 'Use $response.<path> to merge response fields into query',
+					type: ['null', 'object']
 				}
 			}
 		}
@@ -119,9 +151,7 @@ Pageboard.elements.api_form = {
 		method="post"
 		class="ui form"
 		id="[name|or:[$id|slice:0:4]]"
-	>
-		<div block-content="form"></div>
-	</form>`,
+		block-content="form"></form>`,
 	stylesheets: [
 		'../semantic-ui/form.css',
 		'../ui/form.css'
