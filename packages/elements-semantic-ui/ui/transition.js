@@ -68,8 +68,10 @@ Page.updateBody = function(body, state) {
 	var to = body.dataset.transitionTo;
 	var transitionEnd = transitionEndEvent();
 	if (!transitionEnd || !from && !to) {
+		state.transition = false;
 		return body;
 	}
+	state.transition = true;
 
 	var doc = document.documentElement;
 
@@ -106,6 +108,14 @@ Page.updateBody = function(body, state) {
 		window.removeEventListener('pagesetup', pageSetup, false);
 
 		var scroll = e.state.data.scroll;
+		if (scroll.node) {
+			var scrollX = window.scrollX;
+			var scrollY = window.scrollY;
+			scroll.node.scrollIntoView();
+			scroll.x += window.scrollX - scrollX;
+			scroll.y += window.scrollY - scrollY;
+			delete scroll.node;
+		}
 		fromList.forEach(function(node, i) {
 			var rect = fromRects[i];
 			if (!node || !rect) return;
@@ -116,6 +126,7 @@ Page.updateBody = function(body, state) {
 				height: `${Math.round(rect.height)}px`
 			});
 		});
+
 		doc.classList.add('transition');
 		clist.add('transition');
 
@@ -127,7 +138,6 @@ Page.updateBody = function(body, state) {
 		}
 
 		clist.remove('transition-before');
-
 
 		safeTo = setTimeout(function() {
 			console.warn("Transition timeout", from, to);
