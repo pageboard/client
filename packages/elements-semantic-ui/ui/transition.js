@@ -54,12 +54,12 @@
 			});
 		}
 	});
-})();
 
-Page.updateDone = function(state) {
-	var scroll = state.data.scroll || {x: 0, y: 0};
-	window.scrollTo(scroll.x, scroll.y);
-};
+	window.addEventListener('pagepatch', function(e) {
+		var scroll = e.state.data.scroll || {x: 0, y: 0};
+		window.scrollTo(scroll.x, scroll.y);
+	}, false);
+})();
 
 Page.updateBody = function(body, state) {
 	if (!state.data.scroll) state.data.scroll = {x:0, y:0};
@@ -73,35 +73,25 @@ Page.updateBody = function(body, state) {
 
 	var doc = document.documentElement;
 
-	var fromCoords = Array.prototype.map.call(document.body.children, function(node) {
-		if (!node.matches('[block-type="main"]')) return;
-		return {
-			top: `${node.offsetTop - window.scrollY + state.data.scroll.y}px`,
-			left: `${node.offsetLeft - window.scrollX + state.data.scroll.x}px`,
-			width: `${node.offsetWidth}px`,
-			height: `${node.offsetHeight}px`
-		};
+	// First, store positions of current sections
+	var fromRects = Array.prototype.map.call(document.body.children, function(node) {
+		if (node.dataset.transitionKeep || !node.matches('[block-type="main"]')) return;
+		return node.getBoundingClientRect();
 	});
 
+	// Second, add transition-from class to current sections
+	var fromList = Array.prototype.map.call(document.body.children, function(node) {
+		if (node.dataset.transitionKeep) return;
+		node.classList.add('transition-from');
+		return node;
+	});
+
+	// Third, insert new sections
 	Page.updateAttributes(document.body, body);
 	var clist = document.body.classList;
-	clist.add('transition');
-	doc.classList.add('transition');
-	if (to) {
-		clist.add(to);
-	}
-	if (from) {
-		clist.add(from);
-	}
-	var fromList = [];
-	Array.prototype.forEach.call(document.body.children, function(node, i) {
-		if (node.dataset.transitionKeep) return;
-		if (fromCoords[i]) {
-			Object.assign(node.style, fromCoords[i]);
-		}
-		node.classList.add('transition-from');
-		fromList.push(node);
-	});
+	clist.add('transition-before');
+
+
 	var toList = Array.prototype.map.call(body.children, function(node) {
 		node.classList.add('transition-to');
 		return node;
@@ -114,11 +104,37 @@ Page.updateBody = function(body, state) {
 
 	function pageSetup(e) {
 		window.removeEventListener('pagesetup', pageSetup, false);
+
+		var scroll = e.state.data.scroll;
+		fromList.forEach(function(node, i) {
+			var rect = fromRects[i];
+			if (!node || !rect) return;
+			Object.assign(node.style, {
+				left: `${Math.round(rect.left + scroll.x)}px`,
+				top: `${Math.round(rect.top + scroll.y)}px`,
+				width: `${Math.round(rect.width)}px`,
+				height: `${Math.round(rect.height)}px`
+			});
+		});
+		doc.classList.add('transition');
+		clist.add('transition');
+
+		if (from) {
+			clist.add(from);
+		}
+		if (to) {
+			clist.add(to);
+		}
+
+		clist.remove('transition-before');
+
+
 		safeTo = setTimeout(function() {
+			console.warn("Transition timeout", from, to);
 			trDone({target: {parentNode: document.body}});
 		}, 3000);
-		document.documentElement.addEventListener(transitionEnd, trDone);
 		setTimeout(function() {
+			document.documentElement.addEventListener(transitionEnd, trDone);
 			clist.add('transitioning');
 		});
 	}
@@ -133,16 +149,18 @@ Page.updateBody = function(body, state) {
 		// only transitions of body children are considered
 		if (e.target.parentNode != document.body) return;
 		document.documentElement.removeEventListener(transitionEnd, trDone);
-		fromList.forEach(function(node) {
-			node.remove();
+		setTimeout(function() {
+			fromList.forEach(function(node) {
+				if (node) node.remove();
+			});
+			toList.forEach(function(node) {
+				node.classList.remove('transition-to');
+			});
+			clist.remove('transition', 'transitioning');
+			doc.classList.remove('transition');
+			if (from) clist.remove(from);
+			if (to) clist.remove(to);
 		});
-		toList.forEach(function(node) {
-			node.classList.remove('transition-to');
-		});
-		clist.remove('transition', 'transitioning');
-		doc.classList.remove('transition');
-		if (from) clist.remove(from);
-		if (to) clist.remove(to);
 	}
 
 	function transitionEndEvent() {
