@@ -38,8 +38,12 @@ Pageboard.elements.query = {
 	properties: {
 		method: {
 			title: 'Method',
-			type: "string",
-			pattern: "^(\\w+\.\\w+)?$"
+			anyOf: [{
+				type: "null"
+			}, {
+				type: "string",
+				pattern: "^(\\w+\\.\\w+)?$"
+			}]
 		},
 		parameters: {
 			title: 'Parameters',
