@@ -27,7 +27,6 @@
   },
   "devDependencies": {
     "@pageboard/pagecut": "*",
-    "@pageboard/stickybits": "*",
     "@pageboard/flickity": "*",
     "@pageboard/datetime-entry": "*"
   }
