@@ -22,14 +22,18 @@ Pageboard.elements.query = {
 	fuse: function(node, d) {
 		// do not call /.api/query if not true
 		node.dataset.remote = !!(d.method);
-		// needed to track query changes
 		var keys = [];
-		Object.keys(d.parameters || {}).forEach(function(key) {
-			var val = d.parameters[key];
-			if (val != null) val = val.toString();
-			if (val.startsWith('$query.')) keys.push(val.substring(7));
-		});
-		if (keys.length) node.dataset.keys = JSON.stringify(keys);
+		(function findKeys(val) {
+			if (!val) return;
+			if (typeof val == "string") {
+				if (val.startsWith('$query.')) keys.push(val.substring(7));
+			} else if (Array.isArray(val)) {
+				val.forEach(findKeys);
+			} else if (typeof val == "object") {
+				Object.values(val).forEach(findKeys);
+			}
+		})(d.parameters);
+		if (keys.length) node.dataset.keys = keys.join(',');
 	},
 	properties: {
 		method: {

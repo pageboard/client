@@ -44,29 +44,25 @@ class HTMLElementQuery extends HTMLCustomElement {
 		// what do we do if state.query has keys that are used by a form in this query template ?
 		var keys = [];
 		if (me.dataset.keys) {
-			try {
-				keys = JSON.parse(me.dataset.keys);
-			} catch(err) {
-				console.error("Cannot parse element-query data-keys attribute", err);
-			}
+			keys = me.dataset.keys.split(',');
 		}
 		var candidates = 0;
 		var query = {};
 		keys.forEach(function(key) {
-			if (state.query[key] !== undefined) {
+			if (Object.prototype.hasOwnProperty.call(state.query, key)) {
 				candidates++;
 				query[key] = state.query[key];
 				state.data[key] = true;
 			}
 		});
 		if (keys.length && !candidates) {
-			// do not refresh because expected keys are not in query
+			// this is only to avoid doing useless requests
 			return;
 		}
-		// do not refresh if already queried with the same query
-		var queryJson = JSON.stringify(query);
-		if (queryJson == me.dataset.query) return;
-		me.dataset.query = queryJson;
+		// do not refresh if the same query was already done
+		var queryStr = Page.format({query: query});
+		if (queryStr == me.dataset.query) return;
+		me.dataset.query = queryStr;
 		// build
 		var opts = {
 			state: state
