@@ -81,7 +81,7 @@ class HTMLElementQuery extends HTMLCustomElement {
 		if (template.children.length > 0) {
 			// remove all block-id from template
 			var rnode;
-			while (rnode = template.querySelector('[block-id]')) rnode.removeAttribute('block-id');
+			while ((rnode = template.querySelector('[block-id]'))) rnode.removeAttribute('block-id');
 			opts.element = {
 				name: 'template_element_' + queryId,
 				html: template.innerHTML

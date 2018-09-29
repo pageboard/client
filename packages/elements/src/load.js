@@ -17,7 +17,7 @@ function load(node, head, url) {
 		doc.head.insertBefore(node, cursor);
 		if (!live) resolve();
 	});
-};
+}
 
 exports.js = function(url, doc) {
 	if (!doc) doc = document;
