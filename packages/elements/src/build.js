@@ -17,8 +17,11 @@ Node.prototype.dom = function() {
 	return domify(Array.prototype.join.call(arguments, '\n'), this.ownerDocument);
 };
 
-String.prototype.fuse = Node.prototype.fuse = function(obj, scope, filters) {
+Node.prototype.fuse = function(obj, scope, filters) {
 	return matchdom(this, obj, filters, {data: scope});
+};
+String.prototype.fuse = function(obj, scope, filters) {
+	return matchdom(this.toString(), obj, filters, {data: scope});
 };
 
 var mSym = matchdom.Symbols;
