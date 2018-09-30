@@ -67,11 +67,7 @@ Page.updateBody = function(body, state) {
 	var from = document.body.dataset.transitionFrom;
 	var to = body.dataset.transitionTo;
 	var transitionEnd = transitionEndEvent();
-	if (!transitionEnd || !from && !to) {
-		state.transition = false;
-		return body;
-	}
-	state.transition = true;
+	state.transition = transitionEnd && (from || to);
 
 	var doc = document.documentElement;
 
@@ -83,7 +79,9 @@ Page.updateBody = function(body, state) {
 
 	// Second, add transition-from class to current sections
 	var fromList = Array.prototype.map.call(document.body.children, function(node) {
-		if (node.dataset.transitionKeep) return;
+		if (node.dataset.transitionKeep) {
+			return;
+		}
 		node.classList.add('transition-from');
 		return node;
 	});
@@ -116,28 +114,34 @@ Page.updateBody = function(body, state) {
 			scroll.y += window.scrollY - scrollY;
 			delete scroll.node;
 		}
-		fromList.forEach(function(node, i) {
-			var rect = fromRects[i];
-			if (!node || !rect) return;
-			Object.assign(node.style, {
-				left: `${Math.round(rect.left + scroll.x)}px`,
-				top: `${Math.round(rect.top + scroll.y)}px`,
-				width: `${Math.round(rect.width)}px`,
-				height: `${Math.round(rect.height)}px`
+		if (state.transition) {
+			fromList.forEach(function(node, i) {
+				var rect = fromRects[i];
+				if (!node || !rect) return;
+				Object.assign(node.style, {
+					left: `${Math.round(rect.left + scroll.x)}px`,
+					top: `${Math.round(rect.top + scroll.y)}px`,
+					width: `${Math.round(rect.width)}px`,
+					height: `${Math.round(rect.height)}px`
+				});
 			});
-		});
 
-		doc.classList.add('transition');
-		clist.add('transition');
+			doc.classList.add('transition');
+			clist.add('transition');
 
-		if (from) {
-			clist.add(from);
-		}
-		if (to) {
-			clist.add(to);
+			if (from) {
+				clist.add(from);
+			}
+			if (to) {
+				clist.add(to);
+			}
 		}
 
 		clist.remove('transition-before');
+		if (!state.transition) {
+			cleanup();
+			return;
+		}
 
 		safeTo = setTimeout(function() {
 			console.warn("Transition timeout", from, to);
@@ -159,18 +163,20 @@ Page.updateBody = function(body, state) {
 		// only transitions of body children are considered
 		if (e.target.parentNode != document.body) return;
 		document.documentElement.removeEventListener(transitionEnd, trDone);
-		setTimeout(function() {
-			fromList.forEach(function(node) {
-				if (node) node.remove();
-			});
-			toList.forEach(function(node) {
-				node.classList.remove('transition-to');
-			});
-			clist.remove('transition', 'transitioning');
-			doc.classList.remove('transition');
-			if (from) clist.remove(from);
-			if (to) clist.remove(to);
+		setTimeout(cleanup);
+	}
+
+	function cleanup() {
+		fromList.forEach(function(node) {
+			if (node) node.remove();
 		});
+		toList.forEach(function(node) {
+			node.classList.remove('transition-to');
+		});
+		clist.remove('transition', 'transitioning');
+		doc.classList.remove('transition');
+		if (from) clist.remove(from);
+		if (to) clist.remove(to);
 	}
 
 	function transitionEndEvent() {
