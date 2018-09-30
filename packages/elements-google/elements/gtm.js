@@ -1,7 +1,7 @@
 Pageboard.elements.site.properties.google_tag_manager = {
 	title: 'Google Tag Manager ID',
 	type: 'string',
-	pattern: '^GTM-\w+$'
+	pattern: '^GTM-\\w+$'
 };
 
 Pageboard.elements.google_tag_manager = {
