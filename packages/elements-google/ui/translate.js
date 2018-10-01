@@ -67,13 +67,12 @@ class HTMLElementGoogleTranslate extends HTMLCustomElement {
 			return updateHead.call(Page, head);
 		};
 	}
-	static destroy() {
+	static close() {
 		Array.prototype.forEach.call(document.body.children, function(node) {
 			if (node.matches('.skiptranslate,.goog-te-spinner-pos')) {
 				node.dataset.transitionKeep = true;
 			}
 		});
-		this.observer.disconnect();
 	}
 	connectedCallback() {
 		this.addEventListener('click', this.clickHandler, false);
@@ -92,9 +91,18 @@ class HTMLElementGoogleTranslate extends HTMLCustomElement {
 
 Page.setup(function() {
 	HTMLCustomElement.define('element-google-translate', HTMLElementGoogleTranslate);
+	if (HTMLElementGoogleTranslate.style) {
+		Object.assign(document.body.style, HTMLElementGoogleTranslate.style);
+	}
 });
 
 Page.close(function() {
-	HTMLElementGoogleTranslate.destroy();
+	var s = document.body.style;
+	HTMLElementGoogleTranslate.style = {
+		minHeight: s.minHeight,
+		top: s.top,
+		position: s.position
+	};
+	HTMLElementGoogleTranslate.close();
 });
 
