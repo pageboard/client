@@ -12,7 +12,7 @@ class HTMLElementGoogleTranslate extends HTMLCustomElement {
 			});
 		});
 		this.observer.observe(document.body, {attributes: true});
-		this.translate = (new RegExp('\\bgoogtrans=')).test(document.cookie);
+		this.translate = /\bgoogtrans=/.test(document.cookie);
 		if (this.translate) {
 			this.show();
 		}
