@@ -1,3 +1,4 @@
+/* global $ */
 (function(Pageboard) {
 
 var roots = {};
@@ -87,7 +88,7 @@ Pageboard.notify.dom = function(where) {
 		if (!msg) return;
 		var index = 0;
 		var cur = msg;
-		while (cur=cur.previousSibling) {
+		while ((cur = cur.previousSibling)) {
 			index++;
 		}
 		list.splice(index, 1);

@@ -1,3 +1,4 @@
+/* global PerfectScrollbar */
 (function(Pageboard) {
 
 var modeControl;
@@ -33,7 +34,6 @@ function init(state) {
 	var iframe = Pageboard.read;
 	if (!iframe) return;
 	if (iframe.getAttribute('src') == src) return;
-
 	iframe.setAttribute('src', src);
 }
 
@@ -192,7 +192,6 @@ function pageUpdate(page) {
 
 var lastFocusParents;
 var lastFocusSelection;
-var lastIgnore;
 
 function editorUpdate(editor, state, focusParents, focusSelection) {
 	if (!focusParents || !focusSelection || editor.destroying) {
@@ -272,7 +271,7 @@ function editorSetup(win, view, page) {
 						// called after all current transactions have been applied
 						editorUpdate(editor, state, lastFocusParents, lastFocusSelection);
 					}
-				}
+				};
 			}
 		}]
 	});

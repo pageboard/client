@@ -1,3 +1,4 @@
+/* global getSlug */
 window.Pagecut = {modules:{}};
 Object.assign(window.Pageboard, {
 	write: true,

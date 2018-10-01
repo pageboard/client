@@ -1,3 +1,4 @@
+/* global $ */
 (function(Pageboard, Pagecut) {
 
 Pageboard.Controls.Share = Share;
@@ -45,7 +46,7 @@ Share.prototype.change = function() {
 	var editor = this.editor;
 	var nodes = editor.blocks.domQuery(this.block.id, {all: true});
 	if (nodes.length == 0) {
-		if (!found) console.warn("No dom nodes found for this block", this.block);
+		console.warn("No dom nodes found for this block", this.block);
 		return;
 	}
 	var tr = editor.state.tr;

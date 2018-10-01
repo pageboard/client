@@ -216,7 +216,7 @@ Store.prototype.save = function(e) {
 	if (this.unsaved == null) return;
 	var changes = this.changes();
 	if (e && e.shiftKey) {
-		console.warn("Pageboard.test - saving disabled")
+		console.warn("Pageboard.test - saving disabled");
 		console.log(changes);
 		return;
 	}

@@ -1,3 +1,4 @@
+/* global $ */
 (function(Pageboard) {
 Pageboard.schemaHelpers.pageTitle = PageTitle;
 

@@ -1,3 +1,4 @@
+/* global Semafor */
 (function(Pageboard, Pagecut) {
 
 Pageboard.Controls.Form = Form;
@@ -187,14 +188,14 @@ FormBlock.prototype.change = function() {
 	var found = false;
 
 	// this must be done after reselecting with breadcrumb.click
-	this.block.data = Object.assign(this.block.data || {}, data);
+	this.block.data = Object.assign(this.block.data || {}, data);
 
 	if (id == editor.state.doc.attrs.id) {
 		found = true;
 		editor.blocks.set(this.block);
 		editor.controls.store.update();
 		return;
-//		editor.pageUpdate(this.block);
+		// editor.pageUpdate(this.block);
 	}
 
 	var tr = editor.state.tr;

@@ -39,6 +39,7 @@ ElementProperty.prototype.init = function(block) {
 	function getSelectOption(key) {
 		var prop = paths[key];
 		if (!prop.title) return;
+		var node;
 		if (prop.type == "object") {
 			node = doc.dom(`<optgroup label="${prop.title}"></optgroup>`);
 		} else {

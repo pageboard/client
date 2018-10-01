@@ -1,3 +1,4 @@
+/* global InfiniteScroll, $, moment */
 (function(Pageboard) {
 Pageboard.schemaHelpers.href = Href;
 
@@ -99,14 +100,14 @@ Href.prototype.init = function(block) {
 				if (this.action == 'search') {
 					this.stop(this.action);
 				} else {
-//					this.set(input.value);
+					// this.set(input.value);
 				}
 			} else {
 				input.value = href;
 				var data = Href.cache[href];
-//				if (!Pageboard.hrefs[href]) {
+				// if (!Pageboard.hrefs[href]) {
 				if (!data) {
-//					Pageboard.hrefs[href] = Object.assign({
+					// Pageboard.hrefs[href] = Object.assign({
 					Href.cache[href] = Object.assign({
 						mime: data.mime
 					}, data.meta);
@@ -173,7 +174,7 @@ Href.prototype.renderField = function() {
 				<i class="close icon"></i>
 			</div>
 		</div>`);
-	break;
+		break;
 	case "paste":
 		content = document.dom(`<input class="search" type="text" placeholder="Paste url..." />
 		<div class="ui blue icon buttons">
@@ -187,7 +188,7 @@ Href.prototype.renderField = function() {
 				<i class="upload icon"></i>
 			</div>
 		</div>`);
-	break;
+		break;
 	case "search":
 		content = document.dom(`<input class="search" type="text" placeholder="Search..." />
 		<div class="ui blue icon buttons">
@@ -201,7 +202,7 @@ Href.prototype.renderField = function() {
 				<i class="upload icon"></i>
 			</div>
 		</div>`);
-	break;
+		break;
 	default:
 		content = document.dom(`<input class="search" type="text" placeholder="Search..." value="${this.input.value}" />
 		<div class="ui blue icon buttons">
@@ -396,9 +397,6 @@ Href.prototype.uploading = function() {
 	});
 
 	var finished = false;
-	function clean() {
-		progress.remove();
-	}
 	return function(percent) {
 		if (finished) return;
 		if (typeof percent == "number") {
@@ -464,11 +462,9 @@ Href.prototype.renderList = function(list, container) {
 	}
 	list.rendered = true;
 	container.textContent = ' ';
-	var containsSelected = false;
 	list.forEach(function(obj) {
 		var item = this.renderItem(obj);
 		if (selected && item.getAttribute('href') == selected) {
-			containsSelected = true;
 			item.classList.add('selected');
 			container.insertBefore(item, container.firstChild);
 		} else {

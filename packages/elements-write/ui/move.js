@@ -34,11 +34,11 @@ Move.prototype.update = function(parents) {
 	var state = this.editor.state;
 	var utils = this.editor.utils;
 	this.node.querySelector('[data-command="left"]')
-		.classList.toggle('disabled', !utils.move(state.tr, -1));
+	.classList.toggle('disabled', !utils.move(state.tr, -1));
 	this.node.querySelector('[data-command="right"]')
-		.classList.toggle('disabled', !utils.move(state.tr, 1));
+	.classList.toggle('disabled', !utils.move(state.tr, 1));
 	this.node.querySelector('[data-command="delete"]')
-		.classList.toggle('disabled', !utils.deleteTr(state.tr));
+	.classList.toggle('disabled', !utils.deleteTr(state.tr));
 };
 
 })(window.Pageboard);

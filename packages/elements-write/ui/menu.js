@@ -1,3 +1,4 @@
+/* global $ */
 (function(Pageboard, Pagecut) {
 
 Pageboard.Controls.Menu = Menu;
@@ -105,8 +106,7 @@ Menu.prototype.item = function(el) {
 						if (resel) tr.setSelection(resel);
 						return tr;
 					} else {
-						editor.utils.toggleMark(nodeType, editor.blocks.toAttrs(block))
-						(state, function(atr) {
+						editor.utils.toggleMark(nodeType, editor.blocks.toAttrs(block))(state, function(atr) {
 							tr = atr;
 						});
 						return tr;
@@ -196,7 +196,7 @@ function renderItem(item, view) {
 		dom.classList.add("disabled");
 	} else {
 		dom.addEventListener("mousedown", function (e) {
-			e.preventDefault()
+			e.preventDefault();
 			spec.run(view.state, view.dispatch, view);
 		});
 	}

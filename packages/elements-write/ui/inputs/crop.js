@@ -1,10 +1,11 @@
+/* global Cropper */
 (function(Pageboard) {
 Pageboard.schemaHelpers.crop = Crop;
 
 function Crop(input, opts, props) {
 	this.input = input;
 	this.props = props;
-};
+}
 
 Crop.prototype.init = function(block) {
 	var input = this.input;
