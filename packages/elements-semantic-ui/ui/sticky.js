@@ -13,17 +13,22 @@ class HTMLElementSticky extends HTMLCustomElement {
 		};
 	}
 	setup() {
+		if (this._sticky || !this.parentNode) return;
+		if (this.closest('[contenteditable]')) return;
 		window.addEventListener('scroll', this.listener);
 		window.addEventListener('resize', this.listener);
 		this._sticky = this.constructor.stickyfill.addOne(this);
 		this.listener();
 	}
 	listener(e) {
+		if (!this._sticky) return;
 		var mode = this._sticky._stickyMode;
 		if (this.dataset.mode == mode) return;
 		this.dataset.mode = mode;
 	}
 	destroy() {
+		if (!this._sticky || !this.parentNode) return;
+		delete this._sticky;
 		window.removeEventListener('scroll', this.listener);
 		window.removeEventListener('resize', this.listener);
 		this.constructor.stickyfill.removeOne(this);
