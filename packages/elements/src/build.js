@@ -117,11 +117,6 @@ module.exports = function(opts) {
 			};
 		});
 
-		return view.from(block, null, block.type, scope).then(function(node) {
-			if (writeMode && window.parent.Pageboard.install) {
-				window.parent.Pageboard.install(node, block);
-			}
-			return node;
-		});
+		return view.from(block, null, block.type, scope);
 	});
 };
