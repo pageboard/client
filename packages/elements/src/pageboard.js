@@ -27,13 +27,15 @@ exports.load = require('./load');
 exports.build = require('./build');
 
 window.HTMLCustomElement = require('./HTMLCustomElement');
-
+window.addEventListener('pageinit', function(e) {
+	e.state.vars = {};
+});
 window.addEventListener('pagepatch', function(e) {
 	var state = e.state;
 	var query = {};
 	var extra = [];
 	Object.keys(state.query).forEach(function(key) {
-		if (state.data[key] === undefined) {
+		if (state.vars[key] === undefined) {
 			extra.push(key);
 		} else {
 			query[key] = state.query[key];

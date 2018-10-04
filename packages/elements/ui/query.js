@@ -52,7 +52,7 @@ class HTMLElementQuery extends HTMLCustomElement {
 			if (Object.prototype.hasOwnProperty.call(state.query, key)) {
 				candidates++;
 				query[key] = state.query[key];
-				state.data[key] = true;
+				state.vars[key] = true;
 			}
 		});
 		if (keys.length && !candidates) {

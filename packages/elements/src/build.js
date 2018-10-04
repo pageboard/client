@@ -32,6 +32,7 @@ module.exports = function(opts) {
 	var view = Pageboard.view;
 	var elts = view.elements;
 	var elem = opts.element;
+	var state = opts.state || {};
 
 	return Promise.resolve().then(function() {
 		if (!opts.pathname) return {};
@@ -80,10 +81,10 @@ module.exports = function(opts) {
 		}
 		if (res.items) block.children = res.items;
 
-		var state = opts.state || {};
+
 		var query = state.query || {};
 		if (query.develop === null || query.develop == "write") {
-			state.data.develop = true;
+			state.vars.develop = true;
 		}
 		var writeMode = elem && elem.group == "page" && query.develop == "write";
 
