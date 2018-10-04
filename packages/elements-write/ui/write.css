@@ -19,11 +19,10 @@ body {
 	border:0;
 	width:70vw;
 	min-width:320px;
-	max-width:100vw;
+	max-width:70vw;
 	height:100%;
 	display:block;
 	overflow:auto;
-	resize:horizontal;
 }
 #pageboard-write {
 	flex: 1 1 auto;
@@ -34,6 +33,36 @@ body {
 }
 #pageboard-write.loading > [id] {
 	display:none;
+}
+body.read #pageboard-write > :not(#store) {
+	display:none;
+}
+body.read #store > :not([data-command="view"]) {
+	display:none;
+}
+body.read #store > [data-command="view"] {
+	color: black !important;
+}
+body.read #store {
+	flex-wrap:nowrap;
+	background-color:white;
+	color:black;
+	opacity:0.5;
+}
+body.read #store.wide {
+	margin:0 !important;
+}
+body.read #pageboard-write {
+	max-width:3rem;
+	min-width:0;
+	position:fixed;
+	right:0;
+	margin:0;
+	padding:0;
+}
+body.read #pageboard-read > iframe {
+	max-width:100vw;
+	width:100vw;
 }
 .notifications:empty {
 	display:none;

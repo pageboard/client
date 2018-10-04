@@ -1,13 +1,12 @@
 /* global PerfectScrollbar */
 (function(Pageboard) {
 
-var modeControl;
+var modeControl, writeMode = true;
 
 Pageboard.setup = function(state) {
 	var parentRead = document.getElementById('pageboard-read');
 	var iframe = Pageboard.read = document.createElement('iframe');
 	parentRead.insertBefore(iframe, parentRead.lastElementChild);
-	iframe.addEventListener('dblclick', dblclickListener, false);
 	init(state);
 	Pageboard.write = document.getElementById('pageboard-write');
 	Pageboard.scrollbar = new PerfectScrollbar(Pageboard.write);
@@ -19,8 +18,12 @@ Pageboard.setup = function(state) {
 	});
 };
 
-Pageboard.install = function(doc, page) {
-	buildListener(Pageboard.read.contentWindow, doc, page);
+Pageboard.install = function(doc, page, scope) {
+	var store = Pageboard.editor && Pageboard.editor.controls.store;
+	if (store) Object.assign(page, store.unsaved || store.initial || {});
+	if (writeMode) {
+		buildListener(doc, page, scope);
+	}
 };
 
 Pageboard.patch = init;
@@ -35,6 +38,14 @@ function init(state) {
 	if (!iframe) return;
 	if (iframe.getAttribute('src') == src) return;
 	iframe.setAttribute('src', src);
+	// this should kick early enough
+	(function checkReady() {
+		var win = iframe.contentWindow;
+		if (win.Pageboard) win.Pageboard.elements.develop = {
+			install: Pageboard.install
+		};
+		else setTimeout(checkReady);
+	})();
 }
 
 Page.patch(function() {
@@ -91,50 +102,15 @@ function anchorListener(e) {
 	}
 }
 
-var lastWidth, lastMinWidth;
-function dblclickListener(e) {
-	var iframe = e.target;
-	if (!iframe.matches('iframe')) return;
-	if (lastWidth) {
-		iframe.style.width = lastWidth;
-		lastWidth = null;
-		editMode();
-		iframe.style.minWidth = lastMinWidth;
-	} else {
-		var style = window.getComputedStyle(iframe);
-		lastWidth = style.width;
-		lastMinWidth = style.minWidth;
-		iframe.style.width = '100vw';
-		iframe.style.minWidth = "100vw";
-		viewMode();
-	}
-}
-
-function editMode(body) {
-	if (!body) body = Pageboard.window.document.body;
-	body.classList.add('ProseMirror');
-	body.setAttribute('contenteditable', 'true');
-	var sheet = body.previousElementSibling.querySelector(`[href="${document.body.dataset.js}"]`);
-	if (sheet) sheet.disabled = false;
-	modeControl.classList.remove('active');
-}
-
-function viewMode() {
-	var doc = Pageboard.window.document;
-	var sheet = doc.head.querySelector(`[href="${document.body.dataset.css}"]`);
-	if (sheet) sheet.disabled = true;
-	doc.body.classList.remove('ProseMirror');
-	doc.body.removeAttribute('contenteditable');
-	modeControl.classList.add('active');
-}
-
 function modeControlListener() {
-	if (modeControl.matches('.active')) editMode();
-	else viewMode();
+	writeMode = !writeMode;
+	modeControl.classList.toggle('active');
+	document.body.classList.toggle('read');
+	Pageboard.window.document.location.reload();
 }
 
-function buildListener(win, body, page) {
-	Pageboard.window = win;
+function buildListener(doc, page, scope) {
+	var win = Pageboard.window = Pageboard.read.contentWindow;
 	win.addEventListener('click', anchorListener, true);
 	// FIXME this prevents setting selection inside a selected link...
 	//win.addEventListener('mouseup', anchorListener, true);
@@ -148,21 +124,19 @@ function buildListener(win, body, page) {
 		win.document.body.classList.remove('ProseMirror-alt');
 	});
 
-	var pageEl = win.Pageboard.elements[page.type];
-	if (!pageEl.stylesheets) pageEl.stylesheets = [];
-	if (!pageEl.scripts) pageEl.scripts = [];
+	var pageEl = scope.$elements[page.type];
+	pageEl.stylesheets.unshift(document.body.dataset.css);
+	pageEl.scripts.unshift(document.body.dataset.js);
 
-	var head = body.previousElementSibling;
-	var doc = head.ownerDocument;
+	var _fuse = pageEl.fuse;
+	pageEl.fuse = function(node, d, scope) {
+		var ret = _fuse ? _fuse.call(this, node, d, scope) : node.fuse(d, scope);
+		var body = node.querySelector('body');
+		body.classList.add('ProseMirror');
+		body.setAttribute('contenteditable', 'true');
+		return ret;
+	};
 
-	head.querySelector('script').insertAdjacentElement('beforeBegin', doc.dom(
-		`<link href="${document.body.dataset.css}" rel="stylesheet">`
-	));
-	head.querySelector('script').insertAdjacentElement('beforeBegin', doc.dom(
-		`<script src="${document.body.dataset.js}"></script>`
-	));
-
-	editMode(body);
 	var resolver = function() {
 		win.removeEventListener('pagebuild', resolver);
 		setupListener(win, page);
@@ -172,6 +146,7 @@ function buildListener(win, body, page) {
 }
 
 function setupListener(win, page) {
+	if (!writeMode) return;
 	Pageboard.view = win.Pageboard.view;
 	Pageboard.bindings = win.Pageboard.bindings;
 	Pageboard.hrefs = win.Pageboard.hrefs;
@@ -180,6 +155,7 @@ function setupListener(win, page) {
 }
 
 function pageUpdate(page) {
+	if (!writeMode) return;
 	var editor = this;
 	editor.root.title = page.data.title || "";
 	Page.replace({
@@ -194,6 +170,7 @@ var lastFocusParents;
 var lastFocusSelection;
 
 function editorUpdate(editor, state, focusParents, focusSelection) {
+	if (!writeMode) return;
 	if (!focusParents || !focusSelection || editor.destroying) {
 		// editor is updated only from focus changes
 		return;
