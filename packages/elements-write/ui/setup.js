@@ -16,6 +16,7 @@ Pageboard.setup = function(state) {
 	document.body.addEventListener('submit', function(e) {
 		if (writeMode) e.preventDefault();
 	});
+	document.body.addEventListener('store:change', storeUpdateListener);
 };
 
 Pageboard.patch = init;
@@ -40,15 +41,9 @@ function init(state) {
 	})();
 }
 
-Page.patch(function(state) {
-	var win = Pageboard.window;
-	if (!win) return;
-	var store = Pageboard.editor.controls.store;
-	document.title = (win.document.title || "") + (store.unsaved ? '*' : '');
-	if (win.Page.state && win.Page.state.$data) {
-		win.Page.state.$data.item = store.unsaved || store.initial;
-	}
-});
+function storeUpdateListener(e) {
+	document.title = (Pageboard.window.document.title || "") + (e.detail.changed ? '*' : '');
+}
 
 function submitListenerCapture(e) {
 	if (!writeMode) return;
@@ -102,7 +97,16 @@ function anchorListener(e) {
 }
 
 function modeControlListener() {
-	if (writeMode) editorClose();
+	if (writeMode) {
+		var state = Pageboard.window.Page.state;
+		var store = Pageboard.editor.controls.store;
+		if (state && state.$data) {
+			delete state.$data.items;
+			store.flush();
+			state.$data.item = store.unsaved || store.initial;
+		}
+		editorClose();
+	}
 	writeMode = !writeMode;
 	modeControl.classList.toggle('active');
 	document.body.classList.toggle('read');
