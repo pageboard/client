@@ -176,6 +176,7 @@ Store.prototype.realUpdate = function() {
 			this.clear();
 		}
 	}
+	Pageboard.trigger(document.body, 'store:change', {changed: !!this.unsaved});
 	this.uiUpdate();
 };
 
