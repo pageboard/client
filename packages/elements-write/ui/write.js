@@ -5,10 +5,8 @@ Object.assign(window.Pageboard, {
 	Controls: {},
 	schemaHelpers: {},
 	schemaFilters: {},
-	trigger: function trigger(node, event) {
-		var e = document.createEvent('Event'); // TODO depending on the actual event,
-		// might need 'HTMLEvent' instead (or UIEvent, etc...)
-		e.initEvent(event, true, true);
+	trigger: function trigger(node, event, detail) {
+		var e = detail ? new CustomEvent(event, {detail: detail}) : new Event(event);
 		node.dispatchEvent(e);
 		if (window.Pageboard.editor) window.Pageboard.editor.focus();
 	},
