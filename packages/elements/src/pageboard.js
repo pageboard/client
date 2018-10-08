@@ -30,6 +30,12 @@ window.HTMLCustomElement = require('./HTMLCustomElement');
 window.addEventListener('pageinit', function(e) {
 	e.state.vars = {};
 });
+window.addEventListener('pageroute', function(e) {
+	if (!e.state.vars) e.state.vars = {};
+});
+window.addEventListener('pagepatch', function(e) {
+	if (!e.state.vars) e.state.vars = {};
+});
 window.addEventListener('pagepatch', function(e) {
 	var state = e.state;
 	var query = {};

@@ -35,6 +35,9 @@ module.exports = function(opts) {
 	var state = opts.state || {};
 
 	return Promise.resolve().then(function() {
+		if (state.$data) {
+			return state.$data;
+		}
 		if (!opts.pathname) return {};
 		return Pageboard.fetch("get", opts.pathname, opts.query).then(function(res) {
 			var meta = res.meta || {};
@@ -70,7 +73,7 @@ module.exports = function(opts) {
 			} };
 		});
 	}).then(function(res) {
-		if (opts.transform) opts.transform(res);
+		state.$data = res;
 		var block = res.item || {};
 		if (!block.type && elem) {
 			block.type = elem.name;
@@ -96,9 +99,8 @@ module.exports = function(opts) {
 			$doc: view.doc
 		};
 
-		delete res.item;
 		Object.keys(res).forEach(function(name) {
-			if (scope['$'+name] === undefined) scope['$'+name] = res[name];
+			if (name != "item" && scope['$'+name] === undefined) scope['$'+name] = res[name];
 		});
 
 		Object.keys(elts).forEach(function(name) {
