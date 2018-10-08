@@ -14,7 +14,7 @@ Pageboard.setup = function(state) {
 	modeControl.removeEventListener('click', modeControlListener, false);
 	modeControl.addEventListener('click', modeControlListener, false);
 	document.body.addEventListener('submit', function(e) {
-		if (writeMode) e.preventDefault();
+		e.preventDefault();
 	});
 	document.body.addEventListener('store:change', storeUpdateListener);
 };
