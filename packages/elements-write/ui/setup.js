@@ -1,7 +1,7 @@
 /* global PerfectScrollbar */
 (function(Pageboard) {
 
-var modeControl, writeMode = true;
+var modeControl, writeMode = true, adv = false;
 
 Pageboard.setup = function(state) {
 	var parentRead = document.getElementById('pageboard-read');
@@ -14,16 +14,8 @@ Pageboard.setup = function(state) {
 	modeControl.removeEventListener('click', modeControlListener, false);
 	modeControl.addEventListener('click', modeControlListener, false);
 	document.body.addEventListener('submit', function(e) {
-		e.preventDefault();
+		if (writeMode) e.preventDefault();
 	});
-};
-
-Pageboard.install = function(doc, page, scope) {
-	var store = Pageboard.editor && Pageboard.editor.controls.store;
-	if (store) Object.assign(page, store.unsaved || store.initial || {});
-	if (writeMode) {
-		buildListener(doc, page, scope);
-	}
 };
 
 Pageboard.patch = init;
@@ -42,20 +34,24 @@ function init(state) {
 	(function checkReady() {
 		var win = iframe.contentWindow;
 		if (win.Pageboard) win.Pageboard.elements.develop = {
-			install: Pageboard.install
+			install: install
 		};
 		else setTimeout(checkReady);
 	})();
 }
 
-Page.patch(function() {
-	if (!Pageboard.window) return;
-	var ed = Pageboard.editor;
-	var unsaved = ed && ed.controls.store.unsaved;
-	document.title = (Pageboard.window.document.title || "") + (unsaved ? '*' : '');
+Page.patch(function(state) {
+	var win = Pageboard.window;
+	if (!win) return;
+	var store = Pageboard.editor.controls.store;
+	document.title = (win.document.title || "") + (store.unsaved ? '*' : '');
+	if (win.Page.state && win.Page.state.$data) {
+		win.Page.state.$data.item = store.unsaved || store.initial;
+	}
 });
 
 function submitListenerCapture(e) {
+	if (!writeMode) return;
 	e.preventDefault();
 	e.stopImmediatePropagation();
 	if (Pageboard.editor.destroying) return;
@@ -66,17 +62,20 @@ function submitListenerCapture(e) {
 }
 
 function invalidListenerCapture(e) {
+	if (!writeMode) return;
 	e.preventDefault();
 	e.stopImmediatePropagation();
 }
 
 function labelListener(e) {
+	if (!writeMode) return;
 	var node = e.target.closest('label[for]');
 	if (!node) return;
 	e.preventDefault();
 }
 
 function anchorListener(e) {
+	if (!writeMode) return;
 	var node = e.target.closest('a[href],input[type="file"]');
 	if (!node) return;
 	if (node.href) {
@@ -103,13 +102,14 @@ function anchorListener(e) {
 }
 
 function modeControlListener() {
+	if (writeMode) editorClose();
 	writeMode = !writeMode;
 	modeControl.classList.toggle('active');
 	document.body.classList.toggle('read');
-	Pageboard.window.document.location.reload();
+	Pageboard.window.Page.reload();
 }
 
-function buildListener(doc, page, scope) {
+function install(doc, page, scope) {
 	var win = Pageboard.window = Pageboard.read.contentWindow;
 	win.addEventListener('click', anchorListener, true);
 	// FIXME this prevents setting selection inside a selected link...
@@ -124,25 +124,29 @@ function buildListener(doc, page, scope) {
 		win.document.body.classList.remove('ProseMirror-alt');
 	});
 
-	var pageEl = scope.$elements[page.type];
-	pageEl.stylesheets.unshift(document.body.dataset.css);
-	pageEl.scripts.unshift(document.body.dataset.js);
-
-	var _fuse = pageEl.fuse;
-	pageEl.fuse = function(node, d, scope) {
-		var ret = _fuse ? _fuse.call(this, node, d, scope) : node.fuse(d, scope);
-		var body = node.querySelector('body');
-		body.classList.add('ProseMirror');
-		body.setAttribute('contenteditable', 'true');
+	var $el = scope.$elements[page.type];
+	var $orig = {
+		fuse: $el.fuse,
+		scripts: $el.scripts.slice(),
+		stylesheets: $el.stylesheets.slice()
+	};
+	$el.fuse = function(node, d, scope) {
+		if (writeMode) {
+			this.stylesheets = [document.body.dataset.css].concat($orig.stylesheets);
+			this.scripts = [document.body.dataset.js].concat($orig.scripts);
+		}
+		var ret = $orig.fuse ? $orig.fuse.call(this, node, d, scope) : node.fuse(d, scope);
+		if (writeMode) {
+			var body = node.querySelector('body');
+			body.classList.add('ProseMirror');
+			body.setAttribute('contenteditable', 'true');
+		}
 		return ret;
 	};
 
-	var resolver = function() {
-		win.removeEventListener('pagebuild', resolver);
-		setupListener(win, page);
-	};
-	if (win.Page.stage() >= 2) resolver();
-	else win.addEventListener('pagebuild', resolver);
+	win.addEventListener('pagebuild', function(e) {
+		setupListener(win, e.state.$data.item);
+	});
 }
 
 function setupListener(win, page) {
@@ -210,17 +214,11 @@ function editorUpdate(editor, state, focusParents, focusSelection) {
 }
 
 function editorSetup(win, view, page) {
-	console.info("Use Pageboard.dev() to debug prosemirror");
-	Pageboard.write.classList.remove('loading');
-	Pageboard.notify.destroy();
-	if (Pageboard.editor) {
-		Pageboard.editor.destroy();
-		Object.keys(Pageboard.editor.controls).forEach(function(name) {
-			var control = Pageboard.editor.controls[name];
-			if (control.destroy) control.destroy();
-		});
-		delete Pageboard.editor;
+	if (!adv) {
+		adv = true;
+		console.info("Use Pageboard.dev() to debug prosemirror");
 	}
+	Pageboard.write.classList.remove('loading');
 	var content = win.document.body.cloneNode(true);
 
 	// and the editor must be running from child
@@ -285,6 +283,18 @@ function editorSetup(win, view, page) {
 	editor.controls.store.realUpdate();
 	editor.controls.store.quirkStart(!contentSize && win.document.body.children.length > 0);
 	return editor;
+}
+
+function editorClose() {
+	Pageboard.notify.destroy();
+	if (Pageboard.editor) {
+		Pageboard.editor.destroy();
+		Object.keys(Pageboard.editor.controls).forEach(function(name) {
+			var control = Pageboard.editor.controls[name];
+			if (control.destroy) control.destroy();
+		});
+		delete Pageboard.editor;
+	}
 }
 
 Pageboard.dev = function() {
