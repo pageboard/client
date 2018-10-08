@@ -22,9 +22,6 @@
 [submodule "packages/pagecut"]
 	path = packages/pagecut
 	url = git@github.com:pageboard/pagecut
-[submodule "packages/stickybits"]
-	path = packages/stickybits
-	url = git@github.com:pageboard/stickybits
 [submodule "packages/flickity"]
 	path = packages/flickity
 	url = git@github.com:pageboard/flickity
