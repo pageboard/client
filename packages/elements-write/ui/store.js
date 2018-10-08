@@ -225,8 +225,16 @@ Store.prototype.save = function(e) {
 	if (!this.saving) this.saving = Promise.resolve();
 	var me = this;
 	this.saving.then(function() {
-		return Pageboard.uiLoad(me.uiSave, Pageboard.fetch('put', '/.api/page', changes));
-	}).then(function(result) {
+		var p = Pageboard.fetch('put', '/.api/page', changes)
+		.then(function(result) {
+			if (result && result.update) result.update.forEach(function(obj) {
+				var block = me.editor.blocks.get(obj.id);
+				if (block) block.updated_at = obj.updated_at;
+				else throw new Error(`Missing updated block ${obj.id}`);
+			});
+		});
+		return Pageboard.uiLoad(me.uiSave, p);
+	}).then(function() {
 		var unsaved = me.unsaved;
 		me.reset();
 		me.initial = unsaved;
