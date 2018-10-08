@@ -4,6 +4,9 @@ class HTMLElementSticky extends HTMLCustomElement {
 		this.stickyfill = Stickyfill;
 		Stickyfill.forceSticky();
 	}
+	static destroy() {
+		this.stickyfill.removeAll();
+	}
 	init() {
 		var listener = this.listener.bind(this);
 		var raf;
@@ -49,3 +52,6 @@ Page.setup(function() {
 	HTMLCustomElement.define('element-sticky', HTMLElementSticky);
 });
 
+Page.close(function() {
+	HTMLElementSticky.destroy();
+});
