@@ -65,7 +65,7 @@ Page.updateBody = function(body, state) {
 	var from = document.body.dataset.transitionFrom;
 	var to = body.dataset.transitionTo;
 	var transitionEnd = transitionEndEvent();
-	state.transition = transitionEnd && (from || to);
+	state.transition = transitionEnd && (from || to) && !body.contentEditable;
 
 	var doc = document.documentElement;
 
