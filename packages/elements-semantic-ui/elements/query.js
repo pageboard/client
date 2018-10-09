@@ -13,6 +13,7 @@ Pageboard.elements.query_message.stylesheets.push(
 );
 
 Pageboard.elements.query_tags = {
+	priority: 10, // must be loaded after query
 	title: 'Tags',
 	icon: '<i class="tags icon"></i>',
 	menu: "form",
