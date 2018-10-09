@@ -34,9 +34,7 @@
 		window.addEventListener(`page${name}`, pageListener);
 	});
 	window.addEventListener('scroll', Pageboard.debounce(function(e) {
-		if (Page.format(Page.state) != Page.format(document.location.toString())) {
-			return;
-		}
+		if (!Page.samePath(Page.state, document.location)) return;
 		Page.state.data.scroll = {
 			x: window.scrollX,
 			y: window.scrollY
