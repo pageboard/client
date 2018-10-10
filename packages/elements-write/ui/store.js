@@ -227,10 +227,19 @@ Store.prototype.save = function(e) {
 	this.saving.then(function() {
 		var p = Pageboard.fetch('put', '/.api/page', changes)
 		.then(function(result) {
-			if (result && result.update) result.update.forEach(function(obj) {
+			if (result && result.update) result.update.forEach(function(obj, i) {
 				var block = me.editor.blocks.get(obj.id);
-				if (block) block.updated_at = obj.updated_at;
-				else throw new Error(`Missing updated block ${obj.id}`);
+				if (!block) throw new Error(`Missing updated block ${obj.id}`);
+				block.updated_at = obj.updated_at;
+				if (me.unsaved.id == obj.id) {
+					me.unsaved.updated_at = obj.updated_at;
+				} else {
+					var child = me.unsaved.children.find(function(item) {
+						return obj.id == item.id;
+					});
+					if (!child) throw new Error(`Missing updated child ${obj.id}`);
+					child.updated_at = obj.updated_at;
+				}
 			});
 		});
 		return Pageboard.uiLoad(me.uiSave, p);
