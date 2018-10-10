@@ -1,18 +1,15 @@
-/* global $ */
 (function(Pageboard) {
 Pageboard.schemaHelpers.pageTitle = PageTitle;
 
 function PageTitle(input, opts, props) {
 	this.input = input;
-	this.inputUrl = input.closest('.form').querySelector('[name="url"]');
+	this.form = input.closest('form');
 	this.change = this.change.bind(this);
 	this.checkHandler = this.checkHandler.bind(this);
-	$(this.input).on('input', this.change);
-	$(this.inputUrl).on('input', this.checkHandler);
 }
 
 PageTitle.prototype.checkHandler = function(e) {
-	this.check();
+	if (e.target.closest('[name="url"]')) this.check();
 };
 
 PageTitle.prototype.check = function(only) {
@@ -32,18 +29,21 @@ PageTitle.prototype.change = function() {
 	var slug = Pageboard.slug(val);
 	var list = (this.block.data.url || '').split('/');
 	list[list.length - 1] = slug;
-	this.inputUrl.value = list.join('/');
-	$(this.inputUrl).trigger('title-input');
+	var inputUrl = this.form.querySelector('[name="url"]');
+	inputUrl.value = list.join('/');
+	Pageboard.trigger(inputUrl, 'input');
 };
 
 PageTitle.prototype.init = PageTitle.prototype.update = function(block) {
 	this.block = block;
+	this.input.addEventListener('input', this.change);
+	this.form.addEventListener('input', this.checkHandler);
 	this.check();
 };
 
 PageTitle.prototype.destroy = function() {
-	$(this.input).off('input', this.change);
-	$(this.inputUrl).off('input', this.checkHandler);
+	this.input.removeEventListener('input', this.change);
+	this.form.removeEventListener('input', this.checkHandler);
 };
 
 Pageboard.schemaHelpers.pageUrl = PageUrl;
@@ -52,7 +52,7 @@ function PageUrl(input, opts, props) {
 	this.field = input.closest('.field');
 	this.input = input;
 	this.check = this.check.bind(this);
-	$(this.input).on('input title-input', this.check);
+	this.input.addEventListener('input', this.check);
 	this.sameDom = this.field.dom(`<div class="ui pointing red basic label">Another page has the same address</div>`);
 }
 
@@ -72,7 +72,7 @@ PageUrl.prototype.init = PageUrl.prototype.update = function(block) {
 };
 
 PageUrl.prototype.destroy = function() {
-	$(this.input).off('input title-input', this.check);
+	this.input.removeEventListener('input', this.check);
 };
 
 })(window.Pageboard);
