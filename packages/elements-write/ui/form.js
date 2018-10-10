@@ -81,7 +81,7 @@ function FormBlock(editor, node, block) {
 	}
 	el = this.el = Object.assign({}, el);
 	el.properties = JSON.parse(JSON.stringify(el.properties));
-	this.changeListener = this.change.bind(this);
+	this.changeListener = Pageboard.debounce(this.change.bind(this), 250);
 	this.node.addEventListener('change', this.changeListener);
 	this.node.addEventListener('input', this.changeListener);
 	this.helpers = {};
