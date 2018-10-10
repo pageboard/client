@@ -8,7 +8,6 @@ Object.assign(window.Pageboard, {
 	trigger: function trigger(node, event, detail) {
 		var e = detail ? new CustomEvent(event, {detail: detail}) : new Event(event);
 		node.dispatchEvent(e);
-		if (window.Pageboard.editor) window.Pageboard.editor.focus();
 	},
 	uiLoad: function uiLoad(what, p) {
 		var classList = what.classList;
