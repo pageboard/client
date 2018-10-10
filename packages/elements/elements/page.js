@@ -54,6 +54,11 @@ Pageboard.elements.page = {
 			title: 'Block search engine indexing',
 			type: 'boolean',
 			default: false
+		},
+		nositemap: {
+			title: 'Do not show in sitemap',
+			type: 'boolean',
+			default: false
 		}
 	},
 	contents: {
