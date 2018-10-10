@@ -75,12 +75,7 @@ function setServiceParameters(key, block, props) {
 	if (!service.properties) {
 		delete props.parameters;
 	} else {
-		if (!props.parameters) props.parameters = {};
-		Object.assign(props.parameters, {
-			properties: service.properties || {},
-			required: service.required || [],
-			type: 'object'
-		});
+		props.parameters = Object.assign({}, service, {type: 'object'});
 	}
 }
 
