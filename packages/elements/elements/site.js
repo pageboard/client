@@ -64,6 +64,17 @@ Pageboard.elements.site = {
 				format: "singleline" // a "version" format ?
 			}]
 		},
+		server: {
+			title: 'Server',
+			anyOf: [{
+				const: "stable",
+				title: "Stable"
+			}, {
+				const: "latest",
+				title: "Latest"
+			}],
+			default: "latest"
+		},
 		env: {
 			title: 'Environment',
 			anyOf: [{
