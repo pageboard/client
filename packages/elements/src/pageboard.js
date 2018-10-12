@@ -49,6 +49,10 @@ window.addEventListener('pagepatch', function(e) {
 	});
 	if (extra.length > 0) {
 		console.warn("Unknown query parameters detected, rewriting location", extra);
+		document.head.appendChild(document.dom(`
+			<meta http-equiv="Status" content="301 Bad query parameters">
+			<meta http-equiv="Location" content="${Page.format({query: query})}">
+		`));
 		return Page.replace({query: query}, state);
 	}
 });
