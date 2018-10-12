@@ -33,6 +33,9 @@ window.addEventListener('pageinit', function(e) {
 window.addEventListener('pageroute', function(e) {
 	if (!e.state.vars) e.state.vars = {};
 });
+window.addEventListener('pagebuild', function(e) {
+	if (!e.state.vars) e.state.vars = {};
+});
 window.addEventListener('pagepatch', function(e) {
 	if (!e.state.vars) e.state.vars = {};
 });
