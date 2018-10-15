@@ -1,6 +1,8 @@
 pageboard client modules
 ========================
 
+[bug reports and feature requests for client modules must go here](https://github.com/pageboard/client/issues)
+
 install
 -------
 
