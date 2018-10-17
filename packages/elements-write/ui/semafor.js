@@ -205,7 +205,7 @@ Semafor.prototype.flatten = function(tree, obj, schema) {
 			if (!field || !field.properties) {
 				obj[key] = JSON.stringify(val);
 			} else {
-				var sub = this.flatten(val);
+				var sub = this.flatten(val, {}, field);
 				for (var k in sub) obj[key + '.' + k] = sub[k];
 			}
 		} else {
