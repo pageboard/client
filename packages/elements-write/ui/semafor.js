@@ -34,30 +34,30 @@ function formGet(form) {
 		if (!key) continue;
 		old = query[key];
 		switch (elem.type) {
-			case 'submit':
+		case 'submit':
 			break;
-			case 'checkbox':
-				val = elem.checked ? elem.value : "";
+		case 'checkbox':
+			val = elem.checked ? elem.value : "";
 			break;
-			case 'radio':
-				if (elem.checked) {
-					old = undefined;
-					val = elem.value;
-				} else if (old === undefined) {
-					val = "";
-				} else {
-					val = null;
-				}
-			break;
-			case 'file':
-				// skip
-			break;
-			case 'select-multiple':
-				// TODO
-				console.warn("not supported yet");
-			break;
-			default:
+		case 'radio':
+			if (elem.checked) {
+				old = undefined;
 				val = elem.value;
+			} else if (old === undefined) {
+				val = "";
+			} else {
+				val = null;
+			}
+			break;
+		case 'file':
+			// skip
+			break;
+		case 'select-multiple':
+			// TODO
+			console.warn("not supported yet");
+			break;
+		default:
+			val = elem.value;
 		}
 		if (val == null) continue;
 		if (old !== undefined) {
@@ -94,36 +94,36 @@ function formSet(form, values) {
 		if (!elem.name) continue;
 		val = flats[elem.name];
 		switch (elem.type) {
-			case 'submit':
+		case 'submit':
 			break;
-			case 'radio':
-			case 'checkbox':
-				if (val == null) val = [''];
-				else if (!Array.isArray(val)) val = [val];
-				elem.checked = val.some(function(val) {
-					return val.toString() == elem.value;
-				});
-				// TODO it's preferable if this line is not needed
-				elem.parentNode.classList.toggle('checked', elem.checked);
+		case 'radio':
+		case 'checkbox':
+			if (val == null) val = [''];
+			else if (!Array.isArray(val)) val = [val];
+			elem.checked = val.some(function(val) {
+				return val.toString() == elem.value;
+			});
+			// TODO it's preferable if this line is not needed
+			elem.parentNode.classList.toggle('checked', elem.checked);
 			break;
-			case 'select-one':
-				if (val) {
-					elem.value = val;
-					var dropdown = elem.closest('.dropdown');
-					if (dropdown) $(dropdown).dropdown({placeholder: false});
-				}
+		case 'select-one':
+			if (val) {
+				elem.value = val;
+				var dropdown = elem.closest('.dropdown');
+				if (dropdown) $(dropdown).dropdown({placeholder: false});
+			}
 			break;
-			case 'select-multiple':
-				console.warn("not supported yet");
+		case 'select-multiple':
+			console.warn("not supported yet");
 			break;
-			case 'file':
-				if (val) elem.setAttribute("value", val);
+		case 'file':
+			if (val) elem.setAttribute("value", val);
 			break;
-			default:
-				if (val) elem.value = val;
+		default:
+			if (val) elem.value = val;
 		}
 	}
-};
+}
 
 Semafor.prototype.destroy = function() {
 	this.$node.find('.dropdown').dropdown('hide').dropdown('destroy');
@@ -194,7 +194,7 @@ Semafor.prototype.flatten = function(tree, obj, schema) {
 		var val = tree[key];
 		var field = props && props[key];
 		if (val != null && typeof val == "object") {
-			if (field && (field.oneOf || field.anyOf)) {
+			if (field && !field.properties && (field.oneOf || field.anyOf)) {
 				var listNoNull = (field.oneOf || field.anyOf).filter(function(item) {
 					return item.type != "null";
 				});
@@ -217,7 +217,7 @@ Semafor.prototype.flatten = function(tree, obj, schema) {
 
 Semafor.prototype.convert = function(vals, field) {
 	var obj = {};
-	var field, val;
+	var val;
 	var schema = (field || this.schema).properties;
 	for (var name in vals) {
 		field = schema[name];
@@ -229,7 +229,7 @@ Semafor.prototype.convert = function(vals, field) {
 				|| Array.isArray(field.anyOf) && field.anyOf
 				|| null;
 			var nullable = false;
-			if (listOf) {
+			if (listOf && !field.properties) {
 				// we support promotion to null and that's it
 				var listOfNo = listOf.filter(function(item) {
 					return item.type != "null";
@@ -252,40 +252,40 @@ Semafor.prototype.convert = function(vals, field) {
 				}
 			}
 			switch(type) {
-				case "integer":
-					val = parseInt(val);
-					if (isNaN(val) && nullable) val = null;
+			case "integer":
+				val = parseInt(val);
+				if (isNaN(val) && nullable) val = null;
 				break;
-				case "number":
-					val = parseFloat(val);
-					if (isNaN(val) && nullable) val = null;
+			case "number":
+				val = parseFloat(val);
+				if (isNaN(val) && nullable) val = null;
 				break;
-				case "boolean":
-					if (val === "" && nullable) val = null; // not really useful
-					val = val == "true";
+			case "boolean":
+				if (val === "" && nullable) val = null; // not really useful
+				val = val == "true";
 				break;
-				case "object":
-					if (field.oneOf || field.anyOf) {
-						var listNoNull = (field.oneOf || field.anyOf).filter(function(item) {
-							return item.type != "null";
-						});
-						if (listNoNull.length == 1 && listNoNull[0].properties) {
-							field = listNoNull[0];
-						}
+			case "object":
+				if (!field.properties && (field.oneOf || field.anyOf)) {
+					var listNoNull = (field.oneOf || field.anyOf).filter(function(item) {
+						return item.type != "null";
+					});
+					if (listNoNull.length == 1 && listNoNull[0].properties) {
+						field = listNoNull[0];
 					}
-					if (!field.properties) {
-						try {
-							val = val ? JSON.parse(val) : val;
-						} catch(ex) {
-							console.error(ex);
-						}
-					} else {
-						val = this.convert(val, field);
+				}
+				if (!field.properties) {
+					try {
+						val = val ? JSON.parse(val) : val;
+					} catch(ex) {
+						console.error(ex);
 					}
-					if (Object.keys(val).length == 0 && nullable) val = null;
+				} else {
+					val = this.convert(val, field);
+				}
+				if (Object.keys(val).length == 0 && nullable) val = null;
 				break;
-				default:
-					if (nullable && val === "") val = null;
+			default:
+				if (nullable && val === "") val = null;
 				break;
 			}
 
@@ -342,8 +342,11 @@ Semafor.prototype.process = function(key, schema, node) {
 	} else {
 		console.warn(key, 'has no supported type in schema', schema);
 	}
-	if (key && this.helper && !processed) this.helper(key, schema, node);
-}
+	if (key && this.helper && !processed) {
+		if (!schema.title) console.warn("schema has $helper but no title", key, schema);
+		else this.helper(key, schema, node);
+	}
+};
 
 types.string = function(key, schema, node, inst) {
 	if (!schema.pattern && !schema.format) {
@@ -519,7 +522,8 @@ types.null = function(key, schema, node, inst) {
 };
 
 types.array = function(key, schema, node, inst) {
-	console.log(key, schema.items);
+	console.info("FIXME: array implements only selection of single value");
+	inst.process(key, Object.assign({}, schema.items, {title: schema.title}), node);
 };
 
 formats.email = function() {
