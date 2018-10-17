@@ -176,8 +176,8 @@ Store.prototype.realUpdate = function() {
 			this.clear();
 		}
 	}
-	Pageboard.trigger(document.body, 'store:change', {changed: !!this.unsaved});
 	this.uiUpdate();
+	this.pageUpdate();
 };
 
 Store.prototype.importStandalones = function(root, ancestor) {
@@ -264,6 +264,7 @@ Store.prototype.reset = function() {
 Store.prototype.discard = function(e) {
 	Store.generated = {};
 	this.clear();
+	this.flush();
 	if (this.unsaved == null) return;
 	delete this.unsaved;
 	return this.restore(this.initial).then(function() {
@@ -277,10 +278,10 @@ Store.prototype.discard = function(e) {
 };
 
 Store.prototype.pageUpdate = function() {
-	var root = this.editor.blocks.get(this.pageId);
+	var root = this.unsaved || this.initial;
 	var el = this.editor.element(root.type);
-	if (el.group == this.editor.state.doc.type.spec.group) {
-		this.editor.pageUpdate(root);
+	if (el.group == "page") {
+		this.editor.updatePage();
 	}
 };
 

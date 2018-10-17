@@ -16,7 +16,6 @@ Pageboard.setup = function(state) {
 	document.body.addEventListener('submit', function(e) {
 		e.preventDefault();
 	});
-	document.body.addEventListener('store:change', storeUpdateListener);
 };
 
 Pageboard.patch = init;
@@ -41,59 +40,17 @@ function init(state) {
 	})();
 }
 
-function storeUpdateListener(e) {
-	document.title = (Pageboard.window.document.title || "") + (e.detail.changed ? '*' : '');
-}
-
-function submitListenerCapture(e) {
+function submitListener(e) {
 	if (!writeMode) return;
 	e.preventDefault();
 	e.stopImmediatePropagation();
-	if (Pageboard.editor.destroying) return;
-	Pageboard.notify(`Cannot edit and submit forms`, {
-		timeout: 1,
-		where: 'write'
-	});
-}
-
-function invalidListenerCapture(e) {
-	if (!writeMode) return;
-	e.preventDefault();
-	e.stopImmediatePropagation();
-}
-
-function labelListener(e) {
-	if (!writeMode) return;
-	var node = e.target.closest('label[for]');
-	if (!node) return;
-	e.preventDefault();
 }
 
 function anchorListener(e) {
 	if (!writeMode) return;
-	var node = e.target.closest('a[href],input[type="file"]');
+	var node = e.target.closest('a[href],input,button,textarea,label[for]');
 	if (!node) return;
-	if (node.href) {
-		e.preventDefault();
-		if (Pageboard.editor.destroying) return;
-		if (!node.ownerDocument.body.matches('.ProseMirror')) {
-			Pageboard.editor.destroying = true;
-			Page.push(node.href);
-		} else {
-			Pageboard.notify("Use view mode to follow links", {
-				timeout: 3,
-				where: 'write'
-			});
-		}
-	} else if (node.matches('input')) { // TODO never reached ?
-		if (node.ownerDocument.body.matches('.ProseMirror')) {
-			e.preventDefault();
-			Pageboard.notify("Use view mode to fill forms", {
-				timeout: 3,
-				where: 'write'
-			});
-		}
-	}
+	e.preventDefault();
 }
 
 function modeControlListener() {
@@ -115,12 +72,14 @@ function modeControlListener() {
 
 function install(doc, page, scope) {
 	var win = Pageboard.window = Pageboard.read.contentWindow;
+	Pageboard.hrefs = scope.$hrefs;
+
+	win.Page.window = window;
 	win.addEventListener('click', anchorListener, true);
 	// FIXME this prevents setting selection inside a selected link...
 	//win.addEventListener('mouseup', anchorListener, true);
-	win.addEventListener('click', labelListener, true);
-	win.addEventListener('submit', submitListenerCapture, true);
-	win.addEventListener('invalid', invalidListenerCapture, true);
+	win.addEventListener('submit', submitListener, true);
+	win.addEventListener('invalid', submitListener, true);
 	win.addEventListener('keydown', function(e) {
 		if (e.altKey) win.document.body.classList.add('ProseMirror-alt');
 	});
@@ -149,35 +108,35 @@ function install(doc, page, scope) {
 	};
 
 	win.addEventListener('pagebuild', function(e) {
-		setupListener(win, e.state.$data.item);
+		document.title = win.document.title;
+		if (!writeMode) return;
+		Pageboard.view = win.Pageboard.view;
+		editorSetup(win, win.Pageboard.view, e.state.$data.item);
 	});
 }
 
-function setupListener(win, page) {
+function updatePage() {
 	if (!writeMode) return;
-	Pageboard.view = win.Pageboard.view;
-	Pageboard.bindings = win.Pageboard.bindings;
-	Pageboard.hrefs = win.Pageboard.hrefs;
-
-	editorSetup(win, win.Pageboard.view, page);
-}
-
-function pageUpdate(page) {
-	if (!writeMode) return;
-	var editor = this;
-	editor.root.title = page.data.title || "";
-	Page.replace({
+	var store = this.controls.store;
+	if (!store) return;
+	var page = store.unsaved || store.initial;
+	if (!page || !page.data) return;
+	window.document.title = (page.data.title || "") + (store.unsaved ? '*' : '');
+	Page.historySave('replace', {
 		pathname: page.data.url,
 		query: Page.state.query
-	}).then(function() {
-		editorUpdate(editor, editor.state, lastFocusParents, lastFocusSelection);
 	});
+}
+
+function updateControls() {
+	this.updateEditor(this.state, lastFocusParents, lastFocusSelection);
 }
 
 var lastFocusParents;
 var lastFocusSelection;
 
-function editorUpdate(editor, state, focusParents, focusSelection) {
+function updateEditor(state, focusParents, focusSelection) {
+	var editor = this;
 	if (!writeMode) return;
 	if (!focusParents || !focusSelection || editor.destroying) {
 		// editor is updated only from focus changes
@@ -214,7 +173,7 @@ function editorUpdate(editor, state, focusParents, focusSelection) {
 		}
 	});
 	Pageboard.scrollbar.update();
-	Page.replace(Page.state);
+	editor.updatePage();
 }
 
 function editorSetup(win, view, page) {
@@ -222,6 +181,7 @@ function editorSetup(win, view, page) {
 		adv = true;
 		console.info("Use Pageboard.dev() to debug prosemirror");
 	}
+	editorClose();
 	Pageboard.write.classList.remove('loading');
 	var content = win.document.body.cloneNode(true);
 
@@ -248,14 +208,16 @@ function editorSetup(win, view, page) {
 				return {
 					update: function(editor, state) {
 						// called after all current transactions have been applied
-						editorUpdate(editor, state, lastFocusParents, lastFocusSelection);
+						editor.updateEditor(state, lastFocusParents, lastFocusSelection);
 					}
 				};
 			}
 		}]
 	});
 
-	editor.pageUpdate = pageUpdate;
+	editor.updatePage = updatePage.bind(editor);
+	editor.updateControls = updateControls.bind(editor);
+	editor.updateEditor = updateEditor.bind(editor);
 	editor.blocks.initial = view.blocks.initial;
 
 	Object.keys(view.blocks.store).forEach(function(id) {
