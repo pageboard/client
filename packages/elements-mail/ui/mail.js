@@ -7,7 +7,7 @@ Page.build(function(state) {
 		Array.from(document.querySelectorAll('element-query')).forEach(function(node) {
 			var tp = node.querySelector('[block-content="template"]');
 			if (tp) tp.remove();
-			var results = node.querySelector('.results');
+			var results = node.querySelector('[block-content="view"]');
 			while (results.firstChild) node.parentNode.insertBefore(results.firstChild, node);
 			node.remove();
 		});

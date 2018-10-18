@@ -72,7 +72,7 @@ Pageboard.elements.mail_image = {
 		}
 	},
 	group: "mail_block",
-	buildLoc: function(url, d) {
+	buildLoc: function(url, d, meta) {
 		if (!url) return {
 			pathname: "",
 			query: {}
@@ -100,13 +100,12 @@ Pageboard.elements.mail_image = {
 		if (r.zoom != null && r.zoom != 100) {
 			loc.query.rs = `z-${r.zoom}`;
 		}
-		var meta = Pageboard.hrefs[url];
 		if (meta && meta.mime == "image/svg+xml") loc.query.format = 'png';
 		return loc;
 	},
 	html: '<img src="[src]" alt="" />',
 	fuse: function(node, d, scope) {
-		var loc = Pageboard.elements.image.buildLoc(d.url || this.resources[0], d);
+		var loc = this.buildLoc(d.url || this.resources[0], d, (scope.$hrefs || {})[d.url]);
 		node.fuse(Object.assign({
 			src: Page.format(loc)
 		}, d));
