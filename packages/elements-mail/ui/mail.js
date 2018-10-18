@@ -1,3 +1,4 @@
+/* global Europa, inlineresources, Juice */
 Page.build(function(state) {
 	Page.patch(function(state) {
 		if (document.body.isContentEditable) return;
