@@ -86,7 +86,7 @@ window.HTMLElementQuery = class HTMLElementQuery extends HTMLCustomElement {
 		me._refreshing = true;
 		me.classList.remove('error', 'warning', 'success');
 		me.classList.add('loading');
-		return Pageboard.build(opts).then(function(node) {
+		return Pageboard.build(opts).then(function({node, data}) {
 			view.textContent = '';
 			view.appendChild(node);
 			me.classList.add('success');
