@@ -1,4 +1,3 @@
-/* global Europa, inlineresources, Juice */
 Page.build(function(state) {
 	Page.patch(function(state) {
 		if (document.body.isContentEditable) return;
@@ -27,12 +26,12 @@ Page.build(function(state) {
 		}
 		absolut('a', 'href');
 		absolut('img', 'src');
-		var md = (new Europa()).convert(document.documentElement);
-		return inlineresources.loadAndInlineCssLinks(document, {}).then(function(errors) {
+		var md = (new window.Europa()).convert(document.documentElement);
+		return window.inlineresources.loadAndInlineCssLinks(document, {}).then(function(errors) {
 			Array.from(document.querySelectorAll('[block-id]')).forEach(function(node) {
 				node.removeAttribute('block-id');
 			});
-			var html = Juice(document.documentElement.outerHTML);
+			var html = window.Juice(document.documentElement.outerHTML);
 			document.errors = errors;
 			document.text = md;
 			document.html = '<!DOCTYPE html>\n' + html;
