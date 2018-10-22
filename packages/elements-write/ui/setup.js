@@ -1,4 +1,3 @@
-/* global PerfectScrollbar */
 (function(Pageboard) {
 
 var modeControl, writeMode = true, adv = false;
@@ -9,7 +8,7 @@ Pageboard.setup = function(state) {
 	parentRead.insertBefore(iframe, parentRead.lastElementChild);
 	init(state);
 	Pageboard.write = document.getElementById('pageboard-write');
-	Pageboard.scrollbar = new PerfectScrollbar(Pageboard.write);
+	Pageboard.scrollbar = new window.PerfectScrollbar(Pageboard.write);
 	modeControl = document.querySelector('#store > [data-command="view"]');
 	modeControl.removeEventListener('click', modeControlListener, false);
 	modeControl.addEventListener('click', modeControlListener, false);

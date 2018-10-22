@@ -1,4 +1,3 @@
-/* global Semafor */
 (function(Pageboard, Pagecut) {
 
 Pageboard.Controls.Form = Form;
@@ -115,7 +114,7 @@ FormBlock.prototype.update = function(parents, block) {
 		this.parents = parents;
 	}
 	var schema = Object.assign({}, this.el, {type: 'object'});
-	if (!this.form) this.form = new Semafor(
+	if (!this.form) this.form = new window.Semafor(
 		schema,
 		this.node,
 		this.customFilter.bind(this),

@@ -1,4 +1,3 @@
-/* global Cropper */
 (function(Pageboard) {
 Pageboard.schemaHelpers.crop = Crop;
 
@@ -31,7 +30,7 @@ Crop.prototype.init = function(block) {
 		<img src="${this.thumbnail(block.data.url)}" />
 	</div>`));
 
-	this.cropper = new Cropper(this.container.querySelector('img'), {
+	this.cropper = new window.Cropper(this.container.querySelector('img'), {
 		viewMode: 1,
 		zoomOnTouch: false,
 		zoomOnWheel: false,

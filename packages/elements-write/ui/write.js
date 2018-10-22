@@ -1,4 +1,3 @@
-/* global getSlug */
 window.Pagecut = {modules:{}};
 Object.assign(window.Pageboard, {
 	write: true,
@@ -23,7 +22,7 @@ Object.assign(window.Pageboard, {
 		});
 	},
 	slug: function(str) {
-		return getSlug(str, {
+		return window.getSlug(str, {
 			custom: {
 				"_": "-"
 			}

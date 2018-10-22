@@ -1,4 +1,4 @@
-/* global InfiniteScroll, $, moment */
+/* global $ */
 (function(Pageboard) {
 Pageboard.schemaHelpers.href = Href;
 
@@ -263,7 +263,7 @@ Href.prototype.searchStart = function(same) {
 	var me = this;
 	var input = this.node.querySelector('input');
 	input.focus();
-	this.infinite = new InfiniteScroll(this.container, {
+	this.infinite = new window.InfiniteScroll(this.container, {
 		path: function() {
 			var filter = Object.assign({
 				text: me.node.querySelector('input').value
@@ -493,7 +493,7 @@ Href.prototype.renderItem = function(obj) {
 		content.appendChild(item.dom(`<div class="left floated meta">
 			${obj.mime.split(';').shift()}<em>${tplSize(obj.meta.size)}</em><br>
 			${dims ? dims + '<br>' : ''}
-			${moment(obj.updated_at).fromNow()}
+			${window.moment(obj.updated_at).fromNow()}
 			${obj.type == 'link' ? ('<br><span class="line">' + obj.pathname + '</span>') : ''}
 		</div>
 		${tplPreview(obj.preview)}`));
