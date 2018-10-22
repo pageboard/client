@@ -80,7 +80,7 @@ class HTMLElementGallery extends HTMLCustomElement {
 		if (!carousel) return;
 		this.dataset.mode = "carousel";
 		var position = 0;
-		while (item=item.previousSibling) position++;
+		while ((item=item.previousSibling)) position++;
 		this._initGalleries({
 			initialIndex: position,
 			fullview: true
