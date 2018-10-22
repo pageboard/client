@@ -1,4 +1,4 @@
-window.HTMLElementQuery = class HTMLElementQuery extends HTMLCustomElement {
+class HTMLElementQuery extends HTMLCustomElement {
 	static find(name, value) { // FIXME should move elsewhere
 		// convert query into a query that contains only
 		var nodes = document.querySelectorAll(`form [name="${name}"]`);
@@ -184,5 +184,5 @@ window.HTMLElementQuery = class HTMLElementQuery extends HTMLCustomElement {
 	}
 }
 
-HTMLCustomElement.define('element-query', HTMLElementQuery);
+window.HTMLElementQuery = HTMLCustomElement.define('element-query', HTMLElementQuery);
 
