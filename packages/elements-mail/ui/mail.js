@@ -5,10 +5,10 @@ Page.build(function(state) {
 			node.remove();
 		});
 		Array.from(document.querySelectorAll('element-query')).forEach(function(node) {
-			var tp = node.querySelector('[block-content="template"]');
-			if (tp) tp.remove();
-			var results = node.querySelector('[block-content="view"]');
-			while (results.firstChild) node.parentNode.insertBefore(results.firstChild, node);
+			var template = node.firstElementChild;
+			var view = node.lastElementChild;
+			template.remove();
+			while (view.firstChild) node.parentNode.insertBefore(view.firstChild, node);
 			node.remove();
 		});
 		var dloc = document.location;
