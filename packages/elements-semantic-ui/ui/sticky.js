@@ -1,4 +1,5 @@
-/* global Stickyfill */
+const Stickyfill = window.Stickyfill;
+
 class HTMLElementSticky extends HTMLCustomElement {
 	static init() {
 		this.stickyfill = Stickyfill;

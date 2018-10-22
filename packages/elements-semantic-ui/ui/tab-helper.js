@@ -1,4 +1,5 @@
-/* global HTMLElementTabs */
+const HTMLElementTabs = window.HTMLElementTabs;
+
 HTMLElementTabs.prototype._init = HTMLElementTabs.prototype.init;
 HTMLElementTabs.prototype._connectedCallback = HTMLElementTabs.prototype.connectedCallback;
 HTMLElementTabs.prototype._disconnectedCallback = HTMLElementTabs.prototype.disconnectedCallback;

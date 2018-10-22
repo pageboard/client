@@ -1,4 +1,5 @@
-/* global objectFitImages */
+const objectFitImages = window.objectFitImages;
+
 class HTMLElementImage extends HTMLCustomElement {
 	static init() {
 		var me = this;

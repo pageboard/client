@@ -1,4 +1,5 @@
-/* global HTMLElementQuery */
+const HTMLElementQuery = window.HTMLElementQuery;
+
 class HTMLElementQueryTags extends HTMLCustomElement {
 	init() {
 		this.close = this.close.bind(this);

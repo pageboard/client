@@ -1,4 +1,5 @@
-/* global noUiSlider */
+const noUiSlider = window.noUiSlider;
+
 class HTMLElementInputRange extends HTMLCustomElement {
 	// changing only one value, connected to the minimum value
 	connectedCallback() {
