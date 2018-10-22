@@ -1,4 +1,4 @@
-/* async progress bar */
+/* async progress bar and error signal */
 body:after {
 	content: '';
 	position:fixed;
@@ -8,9 +8,6 @@ body:after {
 	width:0%;
 	height:0px;
 	opacity:0;
-	transition-property:width opacity;
-	transition-duration:1s;
-	transition-timing-function:linear;
 	background: #4486cc;
 	box-shadow: 0 0 5px rgba(99,162,235,0.7);
 	z-index:1000;
@@ -29,6 +26,9 @@ html.transition:not(.error) > body:after {
 	height:0 !important;
 	opacity:0;
 	width:0;
+	transition-property:width opacity;
+	transition-duration:1s;
+	transition-timing-function:linear;
 }
 
 html.close > body:after {
