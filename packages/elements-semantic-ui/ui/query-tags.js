@@ -1,5 +1,3 @@
-const HTMLElementQuery = window.HTMLElementQuery;
-
 class HTMLElementQueryTags extends HTMLCustomElement {
 	init() {
 		this.close = this.close.bind(this);
@@ -21,7 +19,7 @@ class HTMLElementQueryTags extends HTMLCustomElement {
 		labels.textContent = '';
 		var field, label;
 		for (var name in query) {
-			HTMLElementQuery.find(name, query[name]).forEach(function(control) {
+			window.HTMLElementQuery.find(name, query[name]).forEach(function(control) {
 				if (control.type == "hidden") return;
 				field = control.closest('.field');
 				if (!field) return;
@@ -38,7 +36,7 @@ class HTMLElementQueryTags extends HTMLCustomElement {
 	close(e) {
 		var label = e.target.closest('.label');
 		if (!label) return;
-		HTMLElementQuery.find(label.dataset.name, label.dataset.value).forEach(function(control) {
+		window.HTMLElementQuery.find(label.dataset.name, label.dataset.value).forEach(function(control) {
 			if (control.type == "hidden") return;
 			if (control.checked) control.checked = false;
 			else if (control.reset) control.reset();

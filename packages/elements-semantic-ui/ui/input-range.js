@@ -1,5 +1,3 @@
-const noUiSlider = window.noUiSlider;
-
 class HTMLElementInputRange extends HTMLCustomElement {
 	// changing only one value, connected to the minimum value
 	connectedCallback() {
@@ -10,7 +8,7 @@ class HTMLElementInputRange extends HTMLCustomElement {
 		var start = parseFloat(this._input.value || this._input.dataset.default);
 		var step = parseFloat(this._input.getAttribute('step'));
 		var maximum = parseFloat(this._input.getAttribute('max'));
-		noUiSlider.create(this, {
+		window.noUiSlider.create(this, {
 			start: [minimum, start],
 			step: step,
 			range: {

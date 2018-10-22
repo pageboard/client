@@ -1,5 +1,4 @@
-/* global HTMLElementTabs */
-window.HTMLElementTabs = class HTMLElementTabs extends HTMLCustomElement {
+class HTMLElementTabs extends HTMLCustomElement {
 	init() {
 		this.click = this.click.bind(this);
 	}
@@ -31,8 +30,8 @@ window.HTMLElementTabs = class HTMLElementTabs extends HTMLCustomElement {
 		});
 		tabItem.classList.add('active');
 	}
-};
+}
 
 Page.setup(function() {
-	HTMLCustomElement.define('element-tabs', HTMLElementTabs);
+	window.HTMLElementTabs = HTMLCustomElement.define('element-tabs', HTMLElementTabs);
 });

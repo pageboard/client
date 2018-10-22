@@ -1,5 +1,3 @@
-const objectFitImages = window.objectFitImages;
-
 class HTMLElementImage extends HTMLCustomElement {
 	static init() {
 		var me = this;
@@ -43,7 +41,7 @@ class HTMLElementImage extends HTMLCustomElement {
 		this.constructor.observe(this);
 	}
 	fix(img) {
-		if (!objectFitImages.supportsObjectFit) {
+		if (!window.objectFitImages.supportsObjectFit) {
 			var style = "";
 			if (this.dataset.fit) {
 				style += `object-fit: ${this.dataset.fit};`;
@@ -53,7 +51,7 @@ class HTMLElementImage extends HTMLCustomElement {
 			}
 			if (style.length) {
 				img.style.fontFamily = `'${style}'`;
-				objectFitImages(img);
+				window.objectFitImages(img);
 			}
 		}
 	}

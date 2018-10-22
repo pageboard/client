@@ -1,9 +1,7 @@
-const Stickyfill = window.Stickyfill;
-
 class HTMLElementSticky extends HTMLCustomElement {
 	static init() {
-		this.stickyfill = Stickyfill;
-		Stickyfill.forceSticky();
+		this.stickyfill = window.Stickyfill;
+		this.stickyfill.forceSticky();
 	}
 	static destroy() {
 		this.stickyfill.removeAll();
