@@ -209,7 +209,11 @@ Page.setup(function(state) {
 				return;
 			} else {
 				e.preventDefault();
-				Page.push(href);
+				var obj = Page.parse(href);
+				if (Page.sameDomain(obj, state) && state.query.develop) {
+					obj.query.develop = state.query.develop;
+				}
+				Page.push(obj);
 			}
 		}
 	}, false);
