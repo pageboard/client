@@ -26,7 +26,7 @@ class HTMLElementPortfolio extends HTMLCustomElement {
 			this._loading = true;
 			var scrollX = window.scrollX;
 			var scrollY = window.scrollY;
-			this._portfolio = new Isotope(this._items, this._options);
+			this._portfolio = new window.Isotope(this._items, this._options);
 			window.scrollTo(scrollX, scrollY);
 			var notAllLoaded = Array.from(this.querySelectorAll('img')).some(function(img) {
 				return !img.complete || !img.naturalWidth;
