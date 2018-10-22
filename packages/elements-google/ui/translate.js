@@ -1,4 +1,3 @@
-/* global google */
 class HTMLElementGoogleTranslate extends HTMLCustomElement {
 	static init() {
 		var me = this;
@@ -39,7 +38,7 @@ class HTMLElementGoogleTranslate extends HTMLCustomElement {
 		document.documentElement.classList.toggle('google-translate-shown', this.shown);
 	}
 	static setup() {
-		var TE = google.translate.TranslateElement;
+		var TE = window.google.translate.TranslateElement;
 		this.inst = new TE({
 			pageLanguage: document.documentElement.lang,
 			layout: TE.InlineLayout.SIMPLE,
