@@ -142,6 +142,7 @@ Page.patch(function(state) {
 	// TODO support multiple galleries
 	var gallery = document.querySelector('element-gallery');
 	if (!gallery) return;
+	state.vars.gallery = true;
 	var mode = state.query.gallery || HTMLElementGallery.defaultMode(gallery);
 	if (gallery.setMode) gallery.setMode(mode);
 	else gallery.dataset.mode = mode;
