@@ -19,6 +19,8 @@ class HTMLElementSticky extends HTMLCustomElement {
 		if (this.closest('[contenteditable]')) return;
 		window.addEventListener('scroll', this.listener);
 		window.addEventListener('resize', this.listener);
+		// some stylesheets might target :not([data-mode="start"]) so it must be the initial value
+		this.dataset.mode = "start";
 		this._sticky = this.constructor.stickyfill.addOne(this);
 		this.listener();
 	}
