@@ -1,3 +1,5 @@
+// deprecated, use query element instead
+/*
 Pageboard.elements.import = {
 	priority: 1, // scripts must run after 'form' scripts
 	title: "Import",
@@ -70,4 +72,4 @@ Pageboard.elements.import = {
 		}
 	}
 };
-
+*/
