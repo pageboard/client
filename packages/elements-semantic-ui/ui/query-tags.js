@@ -1,4 +1,15 @@
 class HTMLElementQueryTags extends HTMLCustomElement {
+	static find(name, value) {
+		var nodes = document.querySelectorAll(`form [name="${name}"]`);
+		return Array.prototype.filter.call(nodes, function(node) {
+			if (Array.isArray(value)) {
+				if (value.indexOf(node.value) < 0) return;
+			} else {
+				if (value != node.value) return;
+			}
+			return true;
+		});
+	}
 	init() {
 		this.close = this.close.bind(this);
 	}
@@ -19,7 +30,7 @@ class HTMLElementQueryTags extends HTMLCustomElement {
 		labels.textContent = '';
 		var field, label;
 		for (var name in query) {
-			window.HTMLElementQuery.find(name, query[name]).forEach(function(control) {
+			HTMLElementQueryTags.find(name, query[name]).forEach(function(control) {
 				if (control.type == "hidden") return;
 				field = control.closest('.field');
 				if (!field) return;
@@ -36,7 +47,7 @@ class HTMLElementQueryTags extends HTMLCustomElement {
 	close(e) {
 		var label = e.target.closest('.label');
 		if (!label) return;
-		window.HTMLElementQuery.find(label.dataset.name, label.dataset.value).forEach(function(control) {
+		HTMLElementQueryTags.find(label.dataset.name, label.dataset.value).forEach(function(control) {
 			if (control.type == "hidden") return;
 			if (control.checked) control.checked = false;
 			else if (control.reset) control.reset();

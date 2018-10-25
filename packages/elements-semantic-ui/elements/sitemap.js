@@ -8,7 +8,7 @@ Pageboard.elements.sitemap = {
 		}
 	},
 	html: '<element-accordion class="ui accordion" block-content="children"></element-accordion>',
-	render: function(doc, block, view, scope) {
+	render: function(block, scope) {
 		if (block.type == "sitemap") {
 			var tree = {};
 			block.children.forEach(function(page) {
@@ -23,13 +23,13 @@ Pageboard.elements.sitemap = {
 			});
 			block.children = this.tree(tree).children;
 		}
-		return this.virtualRender(doc, block, view, scope);
+		return this.virtualRender(block, scope);
 	},
-	virtualRender: function(doc, block, view, scope) {
+	virtualRender: function(block, scope) {
 		var html = '<div block-type="site[children.type|repeat]" block-id="[children.id]"></div>';
 		if (!block.content) block.content = {};
-		block.content.children = doc.dom(html).fuse(block);
-		return doc.dom(this.html).fuse(block.data, scope);
+		block.content.children = scope.$doc.dom(html).fuse(block);
+		return scope.$doc.dom(this.html).fuse(block.data, scope);
 	},
 	tree: function(tree, parent) {
 		if (!parent) parent = {};
@@ -64,7 +64,7 @@ Pageboard.elements.sitemap = {
 	resources: [
 		'../ui/sitemap-helper.js'
 	],
-	install: function(doc, page, scope) {
+	install: function(scope) {
 		if (scope.$write) this.scripts.push(this.resources[0]);
 	}
 };

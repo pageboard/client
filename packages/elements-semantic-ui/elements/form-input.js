@@ -491,7 +491,7 @@ Pageboard.elements.input_select_option = {
 	resources: [
 		'../ui/select-helper.js'
 	],
-	install: function(doc, page, scope) {
+	install: function(scope) {
 		if (scope.$write) this.scripts = this.resources;
 	}
 };

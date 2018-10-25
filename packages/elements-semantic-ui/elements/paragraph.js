@@ -124,15 +124,10 @@ Pageboard.elements.heading = {
 	group: "block",
 	icon: '<i class="icon header"></i>',
 	tag: 'h1,h2,h3,h4,h5,h6',
+	html: '<h[level] block-content="text" class="[align|or:left]">Heading</hn>',
 	parse: function(dom) {
 		var level = parseInt(dom.nodeName.substring(1));
 		return {level: level};
-	},
-	render: function(doc, block) {
-		var n = block.data.level;
-		return doc.dom(
-			`<h${n} block-content="text" class="[align|or:left]">Heading</h${n}>`
-		).fuse(block.data);
 	}
 };
 

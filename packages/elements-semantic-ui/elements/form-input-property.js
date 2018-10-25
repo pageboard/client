@@ -44,15 +44,16 @@ Pageboard.elements.input_property = {
 			context: 'query'
 		}
 	},
-	render: function(doc, block, view) {
+	render: function(block, scope) {
+		var doc = scope.$doc;
 		var d = block.data;
 		var name = d.name;
-		var node = doc.dom('<div><code>select property name</code></div>');
+		var node = scope.$doc.dom('<div><code>select property name</code></div>');
 		if (!name) {
 			return node;
 		}
 		var list = name.split('.');
-		var el = view.element(list[0]);
+		var el = scope.$elements[list[0]];
 		if (!el) {
 			return node;
 		}
@@ -121,7 +122,7 @@ Pageboard.elements.input_property = {
 					</div>`));
 				}
 				listOf.forEach(function(item) {
-					content.appendChild(view.render({
+					content.appendChild(scope.$render({
 						type: d.multiple ? 'input_checkbox' : 'input_radio',
 						data: {
 							name: name,
@@ -136,7 +137,7 @@ Pageboard.elements.input_property = {
 			} else {
 				var frag = doc.createDocumentFragment();
 				listOf.forEach(function(item) {
-					var option = view.render({
+					var option = scope.$render({
 						type: 'input_select_option',
 						data: {
 							value: item.type == "null" ? null : item.const
@@ -147,7 +148,7 @@ Pageboard.elements.input_property = {
 					});
 					frag.appendChild(option);
 				});
-				var select = view.render({
+				var select = scope.$render({
 					type: 'input_select',
 					data: {
 						name: name,
@@ -167,7 +168,7 @@ Pageboard.elements.input_property = {
 		} else if (propType.type == "integer") {
 			if (propType.minimum != null && propType.maximum != null) {
 				if (propType.maximum - propType.minimum <= d.range) {
-					return node.appendChild(view.render({
+					return node.appendChild(scope.$render({
 						type: 'input_range',
 						data: {
 							name: name,
@@ -185,7 +186,7 @@ Pageboard.elements.input_property = {
 					}));
 				}
 			}
-			node.appendChild(view.render({
+			node.appendChild(scope.$render({
 				type: 'input_text',
 				data: {
 					name: name,
@@ -200,7 +201,7 @@ Pageboard.elements.input_property = {
 				}
 			}));
 		} else if (propType.type == "boolean") {
-			node.appendChild(view.render({
+			node.appendChild(scope.$render({
 				type: 'input_checkbox',
 				data: {
 					name: name,
@@ -214,7 +215,7 @@ Pageboard.elements.input_property = {
 				}
 			}));
 		} else if (propType.type == "string" && propType.format == "date") {
-			node.appendChild(view.render({
+			node.appendChild(scope.$render({
 				type: 'input_date_time',
 				data: {
 					name: name,
@@ -230,7 +231,7 @@ Pageboard.elements.input_property = {
 				}
 			}));
 		} else if (propType.type == "string" && propType.format == "time") {
-			node.appendChild(view.render({
+			node.appendChild(scope.$render({
 				type: 'input_date_time',
 				data: {
 					name: name,
@@ -246,7 +247,7 @@ Pageboard.elements.input_property = {
 				}
 			}));
 		} else {
-			var input = view.render({
+			var input = scope.$render({
 				type: 'input_text',
 				data: {
 					name: name,
