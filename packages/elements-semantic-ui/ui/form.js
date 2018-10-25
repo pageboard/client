@@ -1,18 +1,4 @@
 HTMLFormElement.prototype.fill = function(values) {
-	function asPaths(obj, ret, pre) {
-		if (!ret) ret = {};
-		Object.keys(obj).forEach(function(key) {
-			var val = obj[key];
-			var cur = `${pre || ""}${key}`;
-			if (val == null || Array.isArray(val) || typeof val != "object") {
-				ret[cur] = val;
-			} else if (typeof val == "object") {
-				asPaths(val, ret, cur + '.');
-			}
-		});
-		return ret;
-	}
-	var flats = asPaths(values, {});
 	var count = 0;
 	var elem = null, name, val;
 	for (var i = 0; i < this.elements.length; i++) {
@@ -20,31 +6,29 @@ HTMLFormElement.prototype.fill = function(values) {
 		name = elem.name;
 		if (!name) continue;
 		count++;
-		val = flats[name];
+		val = `[${name}]`.fuse(values);
 		switch (elem.type) {
-			case 'submit':
+		case 'submit':
 			break;
-			case 'radio':
-			case 'checkbox':
-				if (val == null) val = [''];
-				else if (!Array.isArray(val)) val = [val];
-				elem.checked = val.some(function(str) {
-					return str.toString() == elem.value;
-				});
+		case 'radio':
+		case 'checkbox':
+			if (!Array.isArray(val)) val = [val];
+			elem.checked = val.some(function(str) {
+				return str.toString() == elem.value;
+			});
 			break;
-			case 'select-multiple':
-				if (val) elem.fill(val);
+		case 'select-multiple':
+			elem.fill(val);
 			break;
-			case 'textarea':
-				if (val) elem.innerText = val;
-			default:
-				if (val) {
-					if (elem.fill) {
-						elem.fill(val);
-					} else {
-						elem.value = val;
-					}
-				}
+		case 'textarea':
+			elem.innerText = val;
+			break;
+		default:
+			if (elem.fill) {
+				elem.fill(val);
+			} else {
+				elem.value = val;
+			}
 			break;
 		}
 	}
@@ -100,8 +84,7 @@ Page.patch(function(state) {
 });
 
 Page.setup(function(state) {
-	var debouncedHandler = Pageboard.debounce(formHandler, 300);
-	document.body.addEventListener('submit', debouncedHandler, false);
+	document.body.addEventListener('submit', formHandler, false);
 	document.body.addEventListener('input', inputHandler, false);
 	document.body.addEventListener('change', inputHandler, false);
 
@@ -109,68 +92,79 @@ Page.setup(function(state) {
 	function inputHandler(e) {
 		if (e.type == "input") {
 			ignoreInputChange = true;
-		} else if (e.target.matches('input') && ignoreInputChange) {
+		} else if (e.target && e.target.matches('input') && ignoreInputChange) {
 			return;
 		}
-		debouncedHandler(e);
+		formHandler(e);
 	}
 
-	// https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Using_XMLHttpRequest
-	function formHandler(e) {
+	var formGet = Pageboard.debounce(function(form, submit) {
 		ignoreInputChange = false;
-		var form = e.target.matches('form') ? e.target : e.target.form;
-		if (!form) return;
-		if (form.closest('[contenteditable]')) return;
-		e.preventDefault();
-		if (form.matches('.loading')) return;
-		form.classList.remove('error', 'warning', 'success');
-		form.classList.add('loading');
-		var p;
-		if (form.method == "get") {
-			var loc = Page.parse(form.action);
-			Object.assign(loc.query, formToQuery(form));
-
-			if (loc.pathname == state.pathname && Page.sameDomain(loc, state)) {
-				loc.query = Object.assign({}, state.query, loc.query);
-			} else if (e.type != "submit") {
-				// do not automatically submit form if form pathname is not same as current pathname
-				return;
-			}
-			p = Page.push(loc).then(function() {
-				return ""; // empty state
-			});
-		} else {
-			if (e.type != "submit") return;
-			p = Promise.all(Array.prototype.filter.call(form.elements, function(node) {
-				return node.type == "file";
-			}).map(function(input) {
-				return input.closest('element-input-file').upload();
-			})).then(function() {
-				return Pageboard.fetch(form.method, form.action, formToQuery(form));
-			}).then(function() {
-				return "success";
-			});
+		var loc = Page.parse(form.action);
+		Object.assign(loc.query, formToQuery(form));
+		if (loc.pathname == state.pathname && Page.sameDomain(loc, state)) {
+			loc.query = Object.assign({}, state.query, loc.query);
+		} else if (!submit) {
+			// do not automatically submit form if form pathname is not same as current pathname
+			return;
 		}
-		p.catch(function(err) {
+		form.classList.add('loading');
+		return Page.push(loc).then(function() {
+			return ""; // empty state
+		}).catch(function(err) {
 			if (err.status == 404) return 'warning';
 			else return 'error';
 		}).then(function(state) {
 			form.classList.remove('loading');
-			if (!state) return;
-			if (form.method == "get") {
-				form.classList.add(state);
-			} else {
+			if (state) form.classList.add(state);
+		});
+	}, 300);
+
+	function formPost(form, submit) {
+		if (!submit) return;
+		form.classList.add('loading');
+		return Promise.all(Array.prototype.filter.call(form.elements, function(node) {
+			return node.type == "file";
+		}).map(function(input) {
+			return input.closest('element-input-file').upload();
+		})).then(function() {
+			return Pageboard.fetch(form.method, form.action, formToQuery(form));
+		}).then(function() {
+			return "success";
+		}).catch(function(err) {
+			if (err.status == 404) return 'warning';
+			else return 'error';
+		}).then(function(state) {
+			form.classList.remove('loading');
+			if (state) {
 				Page.state.query[form.id] = state;
 				return Page.push(Page.state);
 			}
 		});
 	}
 
+	function formHandler(e) {
+		var form = e.target.matches('form') ? e.target : e.target.form;
+		if (!form) return;
+		if (form.closest('[contenteditable]')) return;
+		var submit = e.type == "submit";
+		if (submit) e.preventDefault();
+		form.classList.remove('error', 'warning', 'success');
+		if (form.matches('.loading')) return;
+		if (form.method == "get") formGet(form, submit);
+		else if (form.method == "post") formPost(form, submit);
+		else console.error("Unsupported form method", form.method);
+	}
+
 	function formToQuery(form) {
 		var fd = new FormData(form);
 		var query = {};
 		fd.forEach(function(val, key) {
-			if (val == null || val == "") return;
+			if (val == null || val == "") {
+				if (form.querySelector(`[name="${key}"]`).required) {
+					val = undefined;
+				}
+			}
 			var old = query[key];
 			if (old !== undefined) {
 				if (!Array.isArray(old)) {
