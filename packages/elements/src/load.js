@@ -19,6 +19,25 @@ function load(node, head, url) {
 	});
 }
 
+var cache = {};
+
+exports.meta = function(meta) {
+	if (!meta || !meta.elements) return Promise.resolve();
+	if (!cache[meta.elements]) {
+		cache[meta.elements] = Pageboard.load.js(meta.elements);
+	}
+	if (meta.group != "page") {
+		// standalone resources are imported after page has been imported by router
+		if (meta.stylesheets) meta.stylesheets.forEach(function(url) {
+			Pageboard.load.css(url);
+		});
+		if (meta.scripts) meta.scripts.forEach(function(url) {
+			Pageboard.load.js(url);
+		});
+	}
+	return cache[meta.elements];
+};
+
 exports.js = function(url, doc) {
 	if (!doc) doc = document;
 	if (doc.head.querySelector(`script[src="${url}"]`)) {
