@@ -29,7 +29,7 @@ Pageboard.elements.gallery = {
 	scripts: [
 		'../ui/gallery.js'
 	],
-	install: function(doc, page, scope) {
+	install: function(scope) {
 		if (scope.$write) this.scripts = this.resources;
 	}
 };
