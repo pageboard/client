@@ -1,6 +1,6 @@
 Pageboard.elements.IntlPolyfill = {
 	priority: -102, // before polyfill element
-	install: function(doc, page, scope) {
+	install: function(scope) {
 		var lang = (scope.$site.lang || window.navigator.language || 'en').substring(0, 2);
 		this.polyfills = [`Intl.~locale.${lang}`];
 	}
