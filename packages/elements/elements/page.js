@@ -69,7 +69,7 @@ Pageboard.elements.page = {
 	},
 	html: `<html lang="[$site.lang]">
 	<head>
-		<title>[title]</title>
+		<title>[$site.title|post:%3A ][title]</title>
 		<meta http-equiv="Status" content="404 Not Found[url|!|bmagnet:*]">
 		<meta http-equiv="Status" content="302 Found[transition.from|!|bmagnet:*+]">
 		<meta http-equiv="Location" content="[redirect|eq:[url]:|magnet:+*]">
