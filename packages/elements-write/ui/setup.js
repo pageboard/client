@@ -69,7 +69,7 @@ function modeControlListener() {
 	Pageboard.window.Page.reload();
 }
 
-function install(doc, page, scope) {
+function install(scope) {
 	var win = Pageboard.window = Pageboard.read.contentWindow;
 	Pageboard.hrefs = scope.$hrefs;
 
@@ -86,7 +86,7 @@ function install(doc, page, scope) {
 		win.document.body.classList.remove('ProseMirror-alt');
 	});
 
-	var $el = scope.$elements[page.type];
+	var $el = scope.$element;
 	var $orig = {
 		fuse: $el.fuse,
 		scripts: $el.scripts.slice(),

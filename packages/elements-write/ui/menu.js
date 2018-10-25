@@ -113,15 +113,14 @@ Menu.prototype.item = function(el) {
 					}
 				} else {
 					var blocks = {};
-					return editor.blocks.parseFrom(block, blocks).then(function(fragment) {
-						editor.controls.store.importVirtuals(blocks);
-						var pos = editor.utils.insertTr(tr, fragment, sel);
-						if (pos != null) {
-							sel = editor.utils.selectTr(tr, pos);
-							if (sel) tr.setSelection(sel);
-						}
-						return tr;
-					});
+					var fragment = editor.blocks.renderFrom(block, blocks);
+					editor.controls.store.importVirtuals(blocks);
+					var pos = editor.utils.insertTr(tr, fragment, sel);
+					if (pos != null) {
+						sel = editor.utils.selectTr(tr, pos);
+						if (sel) tr.setSelection(sel);
+					}
+					return tr;
 				}
 			}).then(function(tr) {
 				tr.setMeta('editor', true);
