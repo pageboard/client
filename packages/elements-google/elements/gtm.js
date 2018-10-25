@@ -9,13 +9,12 @@ Pageboard.elements.site.properties.google_tag_manager = {
 };
 
 Pageboard.elements.google_tag_manager = {
-	install: function(doc, page, scope) {
+	html: `<script async src="https://www.googletagmanager.com/gtm.js?id=[id|url]"></script>`,
+	install: function(scope) {
 		var id = scope.$site.google_tag_manager;
 		if (!id || scope.$site.env != "production") return;
-		// FIXME we do not have a way to tell page.render we want an async script here
-		doc.head.appendChild(doc.dom(
-			'<script async src="https://www.googletagmanager.com/gtm.js?id=[id|url]" id="gtag"></script>'
-		).fuse({id: id}));
+		var pageEl = scope.$elements[scope.$page.type];
+		pageEl.dom.querySelector('head').append(this.dom.fuse({id: id}));
 	},
 	scripts: [
 		'../ui/gtm.js'

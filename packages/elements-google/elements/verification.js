@@ -9,13 +9,13 @@ Pageboard.elements.site.properties.google_site_verification = {
 };
 
 Pageboard.elements.google_site_verification = {
-	install: function(doc, page, scope) {
-		if (page.data.url != "/") return;
+	html: '<meta name="google-site-verification" content="[id]">',
+	install: function(scope) {
+		if (scope.$pathname != "/") return;
 		var id = scope.$site.google_site_verification;
 		if (!id || scope.$site.env != "production") return;
-		doc.head.appendChild(
-			doc.dom('<meta name="google-site-verification" content="[id]">').fuse({id: id})
-		);
+		var pageEl = scope.$elements[scope.$page.type];
+		pageEl.dom.querySelector('head').append(this.dom.fuse({id: id}));
 	}
 };
 
