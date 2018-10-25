@@ -5,7 +5,7 @@ Page.build(function(state) {
 		Array.from(document.querySelectorAll('script')).forEach(function(node) {
 			node.remove();
 		});
-		Array.from(document.querySelectorAll('element-query')).forEach(function(node) {
+		Array.from(document.querySelectorAll('element-template')).forEach(function(node) {
 			var template = node.firstElementChild;
 			var view = node.lastElementChild;
 			template.remove();
