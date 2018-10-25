@@ -1,0 +1,23 @@
+element-template {
+	display:block;
+	position:relative;
+}
+
+element-template > [block-content="template"] {
+	display:none;
+}
+
+[contenteditable] element-template > [block-content="template"] {
+	display:block;
+}
+
+[contenteditable] element-template > .view {
+	display:none;
+}
+
+[block-id][block-type="binding"]:before {
+	content:'[';
+}
+[block-id][block-type="binding"]:after {
+	content:']';
+}

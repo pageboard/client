@@ -1,24 +1,54 @@
-Pageboard.elements.query = {
-	priority: 1, // scripts must run after 'form' scripts
-	title: "Fetch",
-	icon: '<i class="search icon"></i>',
-	menu: "form",
-	group: "block",
+Pageboard.elements.template = {
+	priority: 1,
+	title: 'Template',
+	icon: '<b class="icon">[*]</b>',
+	menu: 'form',
+	group: 'block template',
 	contents: {
 		template: {
 			title: 'Template',
 			spec: 'block+'
-		},
-		view: {
-			title: 'View',
-			spec: 'block+',
-			virtual: true
 		}
 	},
-	html: `<element-query>
+	html: `<element-template>
 		<div block-content="template"></div>
-		<div block-content="view"></div>
-	</element-query>`,
+		<div class="view"></div>
+	</element-template>`,
+	stylesheets: [
+		'../ui/template.css'
+	],
+	scripts: [
+		'../ui/template.js'
+	]
+};
+
+/*
+element-template se charge de la fusion et n'est pas connecté à Page.patch
+
+GET : change l'url, requête les données correspondantes à l'url, met à jour la page
+ contrainte n°1: recharger la page doit la mettre à jour correctement
+ contrainte n°2: le prérendu affiche la même chose
+POST: envoie des données, change l'url, met à jour la page
+ contrainte n°1: recharger la page ne doit pas resoumettre les données.
+  est-ce qu'on doit voir le même résultat quand même ?
+ contrainte n°2: le prérendu affiche la même chose
+ contrainte n°3: le prérendu du POST peut fonctionner dans ce cas là
+
+Le POST est clairement dans le bon ordre.
+Peut-être que le GET n'est pas dans le bon ordre:
+GET: requête les données, change l'url, met à jour
+mais "fetch" est censé réagir à Page.patch, et en réalité Page.patch(state)
+est appelé "pendant" que l'url change, d'où la confusion.
+
+En définitive, si le résultat d'un POST doit être utilisé pour mettre à jour la page,
+il faut que le POST "redirige" vers une url, qui est récupérée par un fetch (qui ensuite
+fait une requête ou pas).
+
+*/
+
+Pageboard.elements.fetch = Object.assign({}, Pageboard.elements.template, {
+	title: "Fetch",
+	icon: '<i class="search icon"></i>',
 	fuse: function(node, d) {
 		// do not call /.api/query if not true
 		node.dataset.remote = !!(d.method);
@@ -52,27 +82,28 @@ Pageboard.elements.query = {
 			}, {
 				type: "null"
 			}]
+		},
+		keys: {
+			type: 'array',
+			uniqueItems: true,
+			items: {
+				type: 'string'
+			}
 		}
 	},
 	$filter: {
 		name: 'service',
 		action: "read"
 	},
-	$helper: 'service',
-	stylesheets: [
-		'../ui/query.css'
-	],
-	scripts: [
-		'../ui/query.js'
-	]
-};
+	$helper: 'service'
+});
 
-Pageboard.elements.query_message = {
+Pageboard.elements.fetch_message = {
 	title: 'Message',
 	icon: '<i class="announcement icon"></i>',
 	menu: "form",
 	group: "block",
-	context: 'query//',
+	context: 'fetch//',
 	properties: {
 		type: {
 			title: "type",
@@ -100,9 +131,9 @@ Pageboard.elements.query_message = {
 };
 
 
-Pageboard.elements.query_template = {
-	title: "Template",
-	icon: '<b class="icon">var</b>',
+Pageboard.elements.binding = {
+	title: "Binding",
+	icon: '<b class="icon">[*]</b>',
 	properties: {
 		fill: {
 			title: 'Fill',
@@ -120,7 +151,7 @@ Pageboard.elements.query_template = {
 			format: 'singleline'
 		}
 	},
-	context: 'query//',
+	context: 'template//',
 	inline: true,
 	group: "inline nolink",
 	html: '<span data-attr="[attr]" data-fill="[fill]">[ph]</span>',
@@ -134,12 +165,12 @@ Pageboard.elements.query_template = {
 	}
 };
 
-Pageboard.elements.query_content = {
+Pageboard.elements.content = {
 	title: "Content",
 	icon: '<b class="icon">cont</b>',
 	menu: "form",
 	group: 'block',
-	context: 'query//',
+	context: 'template//',
 	properties: {
 		name: {
 			title: 'Name',
