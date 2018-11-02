@@ -36,7 +36,9 @@ class HTMLElementQueryTags extends HTMLCustomElement {
 				if (!field) return;
 				label = field.querySelector('label');
 				if (!label) return;
-				if (control.value == "") return;
+				if (control.value == null || control.value == "" || !label.innerText) return;
+				var prev = labels.querySelector(`[data-name="${name}"][data-value="${control.value}"]`);
+				if (prev) return;
 				labels.insertAdjacentHTML('beforeEnd', `<a class="ui label" data-name="${name}" data-value="${control.value}">
 					${label.innerText}
 					<i class="delete icon"></i>
