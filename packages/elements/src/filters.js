@@ -61,7 +61,10 @@ exports.schema = function(val, what, spath) {
 		else return item;
 	});
 	var scopeData = what.scope.data;
-	if (scopeData.$elements) {
+	if (scopeData.$element) {
+		schemaPath = rel.join('.properties.');
+		schemaRoot = scopeData.$element.properties;
+	} else if (scopeData.$elements) {
 		var data = what.index != null ? what.scope.data : what.data.data;
 		var blocks = [];
 		for (var i=0; i < path.length; i++) {
@@ -77,9 +80,6 @@ exports.schema = function(val, what, spath) {
 		schemaPath = '$elements.' + item.block.type + '.properties.'
 			+ rel.slice(item.index).join('.properties.');
 		schemaRoot = scopeData.$elements;
-	} else if (scopeData.$element) {
-		schemaPath = rel.join('.properties.');
-		schemaRoot = scopeData.$element.properties;
 	} else {
 		console.warn("No schema in scope", what.scope);
 	}
