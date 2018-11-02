@@ -11,20 +11,20 @@ class HTMLElementQueryTags extends HTMLCustomElement {
 		});
 	}
 	init() {
-		this.close = this.close.bind(this);
+		this.remove = this.remove.bind(this);
+		this.patch = this.patch.bind(this);
 	}
 	connectedCallback() {
-		this.addEventListener('click', this.close);
-		if (this.children.length) this.refresh();
+		this.addEventListener('click', this.remove);
+		Page.patch(this.patch);
 	}
 	disconnectedCallback() {
-		this.removeEventListener('click', this.close);
+		this.removeEventListener('click', this.remove);
+		Page.unpatch(this.patch);
 	}
-	refresh(query) {
-		if (!query) {
-			if (!Page.state) return;
-			query = Page.state.query;
-		}
+	patch(state) {
+		if (this.closest('[block-content="template"]')) return;
+		var query = state.query;
 		var labels = this.querySelector('.labels');
 		if (!labels) return;
 		labels.textContent = '';
@@ -46,7 +46,7 @@ class HTMLElementQueryTags extends HTMLCustomElement {
 			}, this);
 		}
 	}
-	close(e) {
+	remove(e) {
 		var label = e.target.closest('.label');
 		if (!label) return;
 		HTMLElementQueryTags.find(label.dataset.name, label.dataset.value).forEach(function(control) {
@@ -62,11 +62,7 @@ class HTMLElementQueryTags extends HTMLCustomElement {
 	}
 }
 
-HTMLCustomElement.define('element-query-tags', HTMLElementQueryTags);
-
-Page.patch(function(state) {
-	Array.from(document.querySelectorAll('element-query-tags')).forEach(function(node) {
-		node.refresh(state.query);
-	});
+Page.init(function() {
+	HTMLCustomElement.define('element-query-tags', HTMLElementQueryTags);
 });
 
