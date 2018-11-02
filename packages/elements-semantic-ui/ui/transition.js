@@ -198,3 +198,15 @@ window.addEventListener('scroll', Pageboard.debounce(function(e) {
 	Page.historySave('replace', Page.state);
 }, 500), false);
 
+Page.init(function(state) {
+	if (window.history && 'scrollRestoration' in window.history) {
+		window.history.scrollRestoration = 'manual';
+	} else {
+		var scroll = Page.state.data.scroll; // need "old" state
+		if (scroll) {
+			setTimeout(function() {
+				window.scrollTo(scroll.x, scroll.y);
+			});
+		}
+	}
+});
