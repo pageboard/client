@@ -1,73 +1,8 @@
-(function() {
-	var list = ['init', 'route', 'build', 'patch', 'setup', 'close', 'error'];
-	var tokens = document.documentElement.classList;
-	var idTimeout;
-	function pageListener(e) {
-		if (!Page.state) return; // we don't want progress bar on first load
-		if (idTimeout) {
-			clearTimeout(idTimeout);
-			idTimeout = null;
-		}
-		var cur = e.type.substring(4);
-		tokens.add(cur);
-		list.forEach(function(name) {
-			if (name != cur) tokens.remove(name);
-		});
-		var timeout = 0;
-		if (cur == "setup" || cur == "patch") timeout = 400;
-		if (cur == "error") {
-			timeout = 3000;
-			var err = e.state && e.state.error;
-			if (typeof err == "number" && err >= 500) {
-				// document.location.reload() is not always in sync with state
-				document.location = Page.format(e.state);
-			}
-		}
-		if (timeout) {
-			idTimeout = setTimeout(function() {
-				idTimeout = null;
-				tokens.remove(cur);
-			}, timeout);
-		}
-	}
-	list.forEach(function(name) {
-		window.addEventListener(`page${name}`, pageListener);
-	});
-	window.addEventListener('scroll', Pageboard.debounce(function(e) {
-		if (!Page.state || !Page.samePath(Page.state, document.location)) return;
-		Page.state.data.scroll = {
-			x: window.scrollX,
-			y: window.scrollY
-		};
-		Page.historySave('replace', Page.state);
-	}, 500), false);
-
-	if (window.history && 'scrollRestoration' in window.history) {
-		window.history.scrollRestoration = 'manual';
-	} else window.addEventListener('pageinit', function(e) {
-		var scroll = Page.state.data.scroll;
-		if (scroll) {
-			setTimeout(function() {
-				window.scrollTo(scroll.x, scroll.y);
-			});
-		}
-	});
-
-	window.addEventListener('pagepatch', function(e) {
-		var scroll = e.state.data.scroll || {x: 0, y: 0};
-		window.scrollTo(scroll.x, scroll.y);
-	}, false);
-})();
-
 Page.updateBody = function(body, state) {
 	if (!state.data.scroll) state.data.scroll = {x:0, y:0};
 
 	var from = document.body.dataset.transitionFrom;
 	var to = body.dataset.transitionTo;
-	var transitionEnd = transitionEndEvent();
-	state.transition = transitionEnd && (from || to) && !body.isContentEditable;
-
-	var doc = document.documentElement;
 
 	// First, store positions of current sections
 	var fromRects = Array.prototype.map.call(document.body.children, function(node) {
@@ -98,85 +33,6 @@ Page.updateBody = function(body, state) {
 		document.body.appendChild(node);
 	});
 
-	var safeTo;
-
-	function pageSetup(e) {
-		window.removeEventListener('pagesetup', pageSetup, false);
-
-		var scroll = e.state.data.scroll;
-		if (scroll.node) {
-			var scrollX = window.scrollX;
-			var scrollY = window.scrollY;
-			scroll.node.scrollIntoView();
-			scroll.x += window.scrollX - scrollX;
-			scroll.y += window.scrollY - scrollY;
-			delete scroll.node;
-		}
-		if (state.transition) {
-			fromList.forEach(function(node, i) {
-				var rect = fromRects[i];
-				if (!node || !rect) return;
-				Object.assign(node.style, {
-					left: `${Math.round(rect.left + scroll.x)}px`,
-					top: `${Math.round(rect.top + scroll.y)}px`,
-					width: `${Math.round(rect.width)}px`,
-					height: `${Math.round(rect.height)}px`
-				});
-			});
-
-			doc.classList.add('transition');
-			clist.add('transition');
-
-			if (from) {
-				clist.add(from);
-			}
-			if (to) {
-				clist.add(to);
-			}
-		}
-
-		clist.remove('transition-before');
-		if (!state.transition) {
-			cleanup();
-			return;
-		}
-
-		safeTo = setTimeout(function() {
-			console.warn("Transition timeout", from, to);
-			trDone({target: {parentNode: document.body}});
-		}, 3000);
-		setTimeout(function() {
-			document.documentElement.addEventListener(transitionEnd, trDone);
-			clist.add('transitioning');
-		});
-	}
-
-	window.addEventListener('pagesetup', pageSetup, false);
-
-	function trDone(e) {
-		if (safeTo) {
-			clearTimeout(safeTo);
-			safeTo = null;
-		}
-		// only transitions of body children are considered
-		if (e.target.parentNode != document.body) return;
-		document.documentElement.removeEventListener(transitionEnd, trDone);
-		setTimeout(cleanup);
-	}
-
-	function cleanup() {
-		fromList.forEach(function(node) {
-			if (node) node.remove();
-		});
-		toList.forEach(function(node) {
-			node.classList.remove('transition-to');
-		});
-		clist.remove('transition', 'transitioning');
-		doc.classList.remove('transition');
-		if (from) clist.remove(from);
-		if (to) clist.remove(to);
-	}
-
 	function transitionEndEvent() {
 		var transitions = {
 			transition: "transitionend",
@@ -193,10 +49,116 @@ Page.updateBody = function(body, state) {
 			}
 		}
 	}
+
+	var ctx = state.transition = {
+		rects: fromRects,
+		fromList: fromList,
+		toList: toList,
+		from: from,
+		to: to,
+		event: transitionEndEvent()
+	};
+	if (ctx.event && (from || to) && !body.isContentEditable) ctx.ok = true;
 };
 
 Page.setup(function(state) {
-	document.body.addEventListener('click', function(e) {
+	var scroll = state.data.scroll;
+	if (scroll && (scroll.x || scroll.y)) return;
+	var ref = Page.referrer;
+	if (!ref) return;
+	if (!Page.sameDomain(ref, state) || ref.pathname == state.pathname) return;
+	var anc = document.querySelector(`a[href="${ref.pathname}"]:not(.item):not([block-type="nav"])`);
+	if (!anc) return;
+	var parent = anc.parentNode.closest('[block-id]');
+	if (!parent) return;
+	if (!state.transition || !state.transition.ok) {
+		if (parent.scrollIntoView) parent.scrollIntoView();
+	} else {
+		state.transition.node = parent;
+	}
+});
+
+Page.setup(function(state) {
+	var ctx = state.transition;
+	if (!ctx) return;
+	var doc = document.documentElement;
+	var clist = document.body.classList;
+	var scroll = state.data.scroll;
+	if (ctx.node) {
+		var scrollX = window.scrollX;
+		var scrollY = window.scrollY;
+		ctx.node.scrollIntoView();
+		scroll.x += window.scrollX - scrollX;
+		scroll.y += window.scrollY - scrollY;
+		delete ctx.node;
+	}
+	if (ctx.ok) {
+		ctx.fromList.forEach(function(node, i) {
+			var rect = ctx.rects[i];
+			if (!node || !rect) return;
+			Object.assign(node.style, {
+				left: `${Math.round(rect.left + scroll.x)}px`,
+				top: `${Math.round(rect.top + scroll.y)}px`,
+				width: `${Math.round(rect.width)}px`,
+				height: `${Math.round(rect.height)}px`
+			});
+		});
+
+		doc.classList.add('transition');
+		clist.add('transition');
+
+		if (ctx.from) {
+			clist.add(ctx.from);
+		}
+		if (ctx.to) {
+			clist.add(ctx.to);
+		}
+	}
+	window.scrollTo(scroll.x, scroll.y);
+
+	clist.remove('transition-before');
+	if (!ctx.ok) {
+		cleanup();
+		return;
+	}
+
+	ctx.safeTo = setTimeout(function() {
+		console.warn("Transition timeout", from, to);
+		trDone({target: {parentNode: document.body}});
+	}, 3000);
+
+	setTimeout(function() {
+		document.documentElement.addEventListener(ctx.event, trDone);
+		clist.add('transitioning');
+	});
+
+	function trDone(e) {
+		if (ctx.safeTo) {
+			clearTimeout(ctx.safeTo);
+			delete ctx.safeTo;
+		}
+		// only transitions of body children are considered
+		if (e.target.parentNode != document.body) return;
+		document.documentElement.removeEventListener(ctx.event, trDone);
+		setTimeout(cleanup);
+	}
+
+	function cleanup() {
+		ctx.fromList.forEach(function(node) {
+			if (node) node.remove();
+		});
+		ctx.toList.forEach(function(node) {
+			node.classList.remove('transition-to');
+		});
+		clist.remove('transition', 'transitioning');
+		doc.classList.remove('transition');
+		if (ctx.from) clist.remove(ctx.from);
+		if (ctx.to) clist.remove(ctx.to);
+	}
+});
+
+Page.setup(function(state) {
+	document.addEventListener('click', function(e) {
 		var a = e.target.closest('a');
 		var href = a && a.getAttribute('href');
 		if (href) {
@@ -213,7 +175,7 @@ Page.setup(function(state) {
 				if (Page.sameDomain(obj, state) && state.query.develop) {
 					obj.query.develop = state.query.develop;
 				}
-				Page.push(obj);
+				Page.push(href);
 			}
 		}
 	}, false);
@@ -224,4 +186,13 @@ Page.setup(function(state) {
 		}, 10);
 	}
 });
+
+window.addEventListener('scroll', Pageboard.debounce(function(e) {
+	if (!Page.state || !Page.samePath(Page.state, document.location)) return;
+	Page.state.data.scroll = {
+		x: window.scrollX,
+		y: window.scrollY
+	};
+	Page.historySave('replace', Page.state);
+}, 500), false);
 
