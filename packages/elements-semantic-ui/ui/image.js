@@ -19,26 +19,27 @@ class HTMLElementImage extends HTMLCustomElement {
 		if (this.observer) {
 			this.observer.observe(el);
 		} else {
-			el.reveal();
-			Page.patch(function() {
-				el.reveal();
-			});
-			Page.setup(function() {
-				el.reveal();
-			});
+			Page.setup(el.patch);
 		}
 	}
 	static unobserve(el) {
 		if (this.observer) {
 			this.observer.unobserve(el);
-		} else {
-			// TODO
 		}
+		Page.unsetup(el.patch);
+	}
+	init() {
+		this.load = this.load.bind(this);
+		this.error = this.error.bind(this);
+		this.patch = this.patch.bind(this);
 	}
 	connectedCallback() {
 		this.addEventListener('load', this.load, true);
 		this.addEventListener('error', this.error, true);
 		this.constructor.observe(this);
+	}
+	patch(state) {
+		this.reveal();
 	}
 	fix(img) {
 		if (!window.objectFitImages.supportsObjectFit) {
