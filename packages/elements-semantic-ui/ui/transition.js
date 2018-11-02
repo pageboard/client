@@ -33,32 +33,34 @@ Page.updateBody = function(body, state) {
 		document.body.appendChild(node);
 	});
 
-	function transitionEndEvent() {
-		var transitions = {
-			transition: "transitionend",
-			OTransition: 'oTransitionEnd',
-			MozTransition: "transitionend",
-			msTransition: 'MSTransitionEnd',
-			WebkitTransition: 'webkitTransitionEnd'
-		};
-
-		var st = document.body.style;
-		for (var t in transitions) {
-			if (st[t] !== undefined) {
-				return transitions[t];
-			}
-		}
-	}
-
 	var ctx = state.transition = {
 		rects: fromRects,
 		fromList: fromList,
 		toList: toList,
 		from: from,
 		to: to,
-		event: transitionEndEvent()
+		event: Pageboard.transitionEvent('end')
 	};
 	if (ctx.event && (from || to) && !body.isContentEditable) ctx.ok = true;
+};
+
+Pageboard.transitionEvent = function(name) {
+	var low = name.toLowerCase();
+	var caps = name[0].toUpperCase() + low.substring(1);
+	var transitions = {
+		transition: "transition" + low,
+		OTransition: 'oTransition' + caps,
+		MozTransition: "transition" + low,
+		msTransition: 'MSTransition' + caps,
+		WebkitTransition: 'webkitTransition' + caps
+	};
+
+	var st = document.body.style;
+	for (var t in transitions) {
+		if (st[t] !== undefined) {
+			return transitions[t];
+		}
+	}
 };
 
 Page.setup(function(state) {
