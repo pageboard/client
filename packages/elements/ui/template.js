@@ -1,39 +1,19 @@
 class HTMLElementTemplate extends HTMLCustomElement {
-	render(data, state) {
-		if (this.closest('[contenteditable]')) return;
-		if (this.children.length != 2) return;
-		var view = this.lastElementChild;
-		var template = this.firstElementChild;
-		// remove all block-id from template
-		var rnode;
-		while ((rnode = template.querySelector('[block-id]'))) rnode.removeAttribute('block-id');
-
-		var el = state.scope.$element = {
-			name: 'template_element_' + this.getAttribute('block-id'),
-			html: template.innerHTML,
-			filters: {
-				'||': function(val, what) {
-					var path = what.scope.path;
-					if (path[0] == "$query" && path.length > 1) {
-						state.vars[path.slice(1).join('.')] = true;
-					}
-				}
-			}
-		};
-
-		var node = Pageboard.render(data || {type: el.name}, state.scope);
-
-		view.textContent = '';
-		view.appendChild(node);
+	init() {
+		this.patch = this.patch.bind(this);
 	}
-}
-
-HTMLCustomElement.define('element-template', HTMLElementTemplate);
-
-Page.patch(function(state) {
-	var nodes = Array.from(document.querySelectorAll('element-template'));
-	nodes.forEach(function(me) {
-		if (me._refreshing || me.closest('[contenteditable]')) return;
+	connectedCallback() {
+		Page.patch(this.patch);
+	}
+	disconnectedCallback() {
+		Page.unpatch(this.patch);
+	}
+	attributeChangedCallback(attributeName, oldValue, newValue, namespace) {
+		if (attributeName.startsWith('data-')) Page.patch(this.patch);
+	}
+	patch(state) {
+		var me = this;
+		if (me._refreshing || me.closest('[contenteditable],[block-content="template"]')) return;
 		// first find out if state.query has a key in this.dataset.keys
 		// what do we do if state.query has keys that are used by a form in this query template ?
 		var keys = [];
@@ -79,5 +59,36 @@ Page.patch(function(state) {
 			me.classList.remove('loading');
 			me._refreshing = false;
 		});
-	});
+	}
+	render(data, state) {
+		if (this.closest('[contenteditable]')) return;
+		if (this.children.length != 2) return;
+		var view = this.lastElementChild;
+		var template = this.firstElementChild;
+		// remove all block-id from template
+		var rnode;
+		while ((rnode = template.querySelector('[block-id]'))) rnode.removeAttribute('block-id');
+
+		var el = state.scope.$element = {
+			name: 'template_element_' + this.getAttribute('block-id'),
+			html: template.innerHTML,
+			filters: {
+				'||': function(val, what) {
+					var path = what.scope.path;
+					if (path[0] == "$query" && path.length > 1) {
+						state.vars[path.slice(1).join('.')] = true;
+					}
+				}
+			}
+		};
+
+		var node = Pageboard.render(data || {type: el.name}, state.scope);
+
+		view.textContent = '';
+		view.appendChild(node);
+	}
+}
+Page.init(function() {
+	HTMLCustomElement.define('element-template', HTMLElementTemplate);
 });
+
