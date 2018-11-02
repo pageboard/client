@@ -63,7 +63,7 @@ Pageboard.transitionEvent = function(name) {
 	}
 };
 
-Page.setup(function(state) {
+Page.setup(function restoreScrollReferrer(state) {
 	var scroll = state.data.scroll;
 	if (scroll && (scroll.x || scroll.y)) return;
 	var ref = Page.referrer;
@@ -80,7 +80,7 @@ Page.setup(function(state) {
 	}
 });
 
-Page.setup(function(state) {
+Page.setup(function pageTransition(state) {
 	var ctx = state.transition;
 	if (!ctx) return;
 	var doc = document.documentElement;
@@ -159,7 +159,7 @@ Page.setup(function(state) {
 	}
 });
 
-Page.setup(function(state) {
+Page.setup(function navigate(state) {
 	document.addEventListener('click', function(e) {
 		var a = e.target.closest('a');
 		var href = a && a.getAttribute('href');
