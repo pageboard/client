@@ -25,7 +25,7 @@
     "matchdom": "^4.4.0",
     "postinstall": "^0.4.2",
     "postinstall-browserify": "^0.1.0",
-    "window-page": "^4.0.1"
+    "window-page": "^4.1.0"
   },
   "postinstall": {
     "document-register-element/build/document-register-element.max.js": "link lib/custom-elements.js",
