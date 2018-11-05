@@ -18,11 +18,11 @@
   },
   "homepage": "https://github.com/pageboard/elements#readme",
   "dependencies": {
+    "@pageboard/pagecut": "^1.0.0",
     "debounce": "^1.1.0",
     "document-register-element": "^1.11.0",
     "domify": "^1.4.0",
     "matchdom": "^4.3.1",
-    "@pageboard/pagecut": "^1.0.0",
     "postinstall": "^0.4.2",
     "postinstall-browserify": "^0.1.0",
     "window-page": "^4.0.1"
