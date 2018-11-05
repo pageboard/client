@@ -43,7 +43,7 @@ Pageboard.elements.breadcrumb = {
 	group: "block",
 	html: `<div class="ui breadcrumb">
 		<div class="divider"></div>
-		<a href="[$links.up.url|repeat:+a:link]" class="section">[link.title]</a>
+		<a href="[$links.up.url|reverse|repeat:+a:link:-1]" class="section">[link.title]</a>
 		<div class="divider"></div>
 		<div class="active section">[$doc.title|magnet:+div]</div>
 	</div>`,
