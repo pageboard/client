@@ -11,8 +11,7 @@ Pageboard.elements.polyfill = {
 				map[item] = true;
 			});
 		});
-		var pageEl = scope.$elements[scope.$page.type];
-		pageEl.dom.querySelector('head > script').before(this.dom.fuse({
+		scope.$element.dom.querySelector('head > script').before(this.dom.fuse({
 			features: Object.keys(map).join(',')
 		}));
 	},
