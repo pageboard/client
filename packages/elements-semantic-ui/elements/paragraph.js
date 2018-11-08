@@ -67,7 +67,7 @@ Pageboard.elements.segment = {
 	},
 	group: "block",
 	icon: '<b class="icon">Seg</b>',
-	html: '<div class="ui segment"></div>',
+	html: '<div class="ui segment" block-content="content"></div>',
 	fuse: function(node, d) {
 		Object.keys(d).forEach(function(key) {
 			if (this.properties[key].type == 'boolean' && d[key]) {
