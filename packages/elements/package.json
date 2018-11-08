@@ -19,8 +19,9 @@
   "homepage": "https://github.com/pageboard/elements#readme",
   "dependencies": {
     "@pageboard/pagecut": "^1.0.0",
+    "built-in-element": "^0.1.4",
     "debounce": "^1.1.0",
-    "document-register-element": "^1.11.0",
+    "document-register-element": "^1.13.1",
     "domify": "^1.4.0",
     "matchdom": "^4.4.0",
     "postinstall": "^0.4.2",
@@ -29,6 +30,7 @@
   },
   "postinstall": {
     "document-register-element/build/document-register-element.max.js": "link lib/custom-elements.js",
+    "built-in-element/index.js": "link lib/built-in-element.js",
     "window-page/window-page.js": "link lib/",
     "./src/pageboard.js": "browserify --standalone=Pageboard lib/"
   },

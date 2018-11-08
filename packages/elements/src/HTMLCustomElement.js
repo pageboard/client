@@ -1,15 +1,29 @@
 // this works in babel 6, see postinstall-js
 class HTMLCustomElement extends HTMLElement {
-	constructor(me) {
-		me = super(me);
-		me.init();
-		return me;
+	constructor(...args) {
+		const self = super(...args);
+		self.init();
+		return self;
 	}
 	init() {}
 }
-HTMLCustomElement.define = function(name, cla) {
+HTMLCustomElement.define = function(name, cla, is) {
 	if (cla.init) cla.init();
-	if (!window.customElements.get(name)) window.customElements.define(name, cla);
+	if (!window.customElements.get(name)) {
+		var opts;
+		if (is) {
+			opts = {extends: is};
+			cla.prototype._connectedCallback = cla.prototype.connectedCallback;
+			cla.prototype.connectedCallback = function() {
+				if (!this._initialized) {
+					this._initialized = true;
+					if (this.init) this.init();
+				}
+				this._connectedCallback();
+			};
+		}
+		window.customElements.define(name, cla, opts);
+	}
 	return cla;
 };
 
