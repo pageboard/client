@@ -116,6 +116,15 @@ Pageboard.elements.heading = {
 				title: "justify",
 				icon: '<i class="icon align justify"></i>'
 			}]
+		},
+		linkable: {
+			title: 'Linkable',
+			description: 'Shows a link hash on hover',
+			type: 'boolean',
+			default: false
+		},
+		id: {
+			type: ['null', 'string']
 		}
 	},
 	contents: {
@@ -124,10 +133,22 @@ Pageboard.elements.heading = {
 	group: "block",
 	icon: '<i class="icon header"></i>',
 	tag: 'h1,h2,h3,h4,h5,h6',
-	html: '<h[level] block-content="text" class="[align|or:left]">Heading</hn>',
+	html: `<h[level] class="[align|or:left]" is="h[level]-helper"><a aria-hidden="true" href="#[id]" id="[id]">[linkable|bmagnet]#</a><inline block-content="text">Heading</inline></hn>`,
 	parse: function(dom) {
-		var level = parseInt(dom.nodeName.substring(1));
-		return {level: level};
+		var anchor = dom.querySelector('a');
+		return {
+			level: parseInt(dom.nodeName.substring(1)),
+			id: anchor && anchor.getAttribute('id') || null
+		};
+	},
+	stylesheets: [
+		'../ui/heading.css'
+	],
+	resources: [
+		'../ui/heading-helper.js'
+	],
+	install: function(scope) {
+		if (scope.$write) Pageboard.load.js(this.resources[0], scope);
 	}
 };
 

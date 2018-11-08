@@ -1,0 +1,10 @@
+[block-type="heading"] > a {
+	display:inline-block;
+	position:relative;
+	left:-1ch;
+	width:0;
+	visibility:hidden;
+}
+[block-type="heading"]:hover > a {
+	visibility:visible;
+}
