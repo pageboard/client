@@ -65,6 +65,7 @@ Pageboard.elements.sitemap = {
 		'../ui/sitemap-helper.js'
 	],
 	install: function(scope) {
+		// sitemap is standalone so has scripts array
 		if (scope.$write) this.scripts.push(this.resources[0]);
 	}
 };
