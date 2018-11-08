@@ -1,4 +1,6 @@
-(function(Proto, Diff) {
+Page.setup(function() {
+	var Proto = window.HTMLElementGallery.prototype;
+	var Diff = window.listDiff;
 	Proto._init = Proto.init;
 	Proto.init = function() {
 		this._init();
@@ -157,5 +159,4 @@
 
 		this._syncing = false;
 	};
-})(window.HTMLElementGallery.prototype, window.listDiff);
-
+});
