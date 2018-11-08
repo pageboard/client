@@ -13,8 +13,7 @@ Pageboard.elements.google_tag_manager = {
 	install: function(scope) {
 		var id = scope.$site.google_tag_manager;
 		if (!id || scope.$site.env != "production") return;
-		var pageEl = scope.$elements[scope.$page.type];
-		pageEl.dom.querySelector('head').append(this.dom.fuse({id: id}));
+		scope.$element.dom.querySelector('head').append(this.dom.fuse({id: id}));
 	},
 	scripts: [
 		'../ui/gtm.js'
