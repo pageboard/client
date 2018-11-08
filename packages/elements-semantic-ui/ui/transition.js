@@ -63,6 +63,14 @@ Pageboard.transitionEvent = function(name) {
 	}
 };
 
+Page.hash(function(state) {
+	var hash = state.hash;
+	if (!hash) return;
+	var node = document.getElementById(hash);
+	if (!node) return;
+	if (node.scrollIntoView) node.scrollIntoView();
+});
+
 Page.setup(function restoreScrollReferrer(state) {
 	var scroll = state.data.scroll;
 	if (scroll && (scroll.x || scroll.y)) return;
