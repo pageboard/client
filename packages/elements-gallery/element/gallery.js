@@ -30,7 +30,9 @@ Pageboard.elements.gallery = {
 		'../ui/gallery.js'
 	],
 	install: function(scope) {
-		if (scope.$write) this.scripts = this.resources;
+		if (scope.$write) this.resources.forEach(function(url) {
+			Pageboard.load.js(url, scope);
+		});
 	}
 };
 
