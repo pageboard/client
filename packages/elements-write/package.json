@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/pageboard/elements-write#readme",
   "dependencies": {
-    "@pageboard/pagecut": "^1.0.0",
+    "@pageboard/pagecut": "^1.0.0-pre1",
     "browserify": "^14.1.0",
     "cropperjs": "^1.4.3",
     "fast-safe-stringify": "^2.0.6",
