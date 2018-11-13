@@ -297,8 +297,15 @@ Semafor.prototype.convert = function(vals, field) {
 	return obj;
 };
 
+function getNonNullType(type) {
+	if (!type || !Array.isArray(type)) return type;
+	if (type.length != 2) return type;
+	if (type[0] == "null") return type[1];
+	if (type[1] == "null") return type[0];
+	return type;
+}
 Semafor.prototype.process = function(key, schema, node) {
-	var type = schema.type;
+	var type = getNonNullType(schema.type);
 	if (this.filter && schema.$filter) this.filter(key, schema);
 	var processed = false;
 	// TODO support array of types (user selects the type he needs)
