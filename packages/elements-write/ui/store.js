@@ -118,17 +118,16 @@ Store.prototype.key = function() {
 };
 
 Store.prototype.restore = function(blocks) {
-	var self = this;
-	return this.editor.from(blocks).then(function(frag) {
-		self.ignoreNext = true;
-		self.editor.utils.setDom(frag);
-	}).catch(function(err) {
-		self.clear();
+	try {
+		var frag = this.editor.from(blocks);
+		this.ignoreNext = true;
+		this.editor.utils.setDom(frag);
+	} catch (err) {
+		this.clear();
 		throw err;
-	}).then(function() {
-		self.uiUpdate();
-		self.pageUpdate();
-	});
+	}
+	this.uiUpdate();
+	this.pageUpdate();
 };
 
 Store.prototype.update = function() {
@@ -264,17 +263,15 @@ Store.prototype.reset = function() {
 Store.prototype.discard = function(e) {
 	Store.generated = {};
 	this.clear();
+	Pageboard.notify.clear();
 	this.flush();
 	if (this.unsaved == null) return;
 	delete this.unsaved;
-	return this.restore(this.initial).then(function() {
-		Pageboard.notify.clear();
-	}).catch(function(err) {
+	try {
+		this.restore(this.initial);
+	} catch(err) {
 		Pageboard.notify("Impossible to restore<br><a href=''>please reload</a>", err);
-	}).then(function() {
-		this.uiUpdate();
-		this.pageUpdate();
-	}.bind(this));
+	}
 };
 
 Store.prototype.pageUpdate = function() {
