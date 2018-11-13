@@ -20,8 +20,8 @@
     "@pageboard/elements": "0.6.x",
     "@pageboard/elements-calendar": "0.1.x",
     "@pageboard/elements-gallery": "0.3.x",
-    "@pageboard/elements-mail": "0.4.x",
     "@pageboard/elements-google": "0.4.x",
+    "@pageboard/elements-mail": "0.4.x",
     "@pageboard/elements-semantic-ui": "0.4.x",
     "@pageboard/elements-write": "^0.3.x"
   }
