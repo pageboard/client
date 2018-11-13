@@ -19,9 +19,6 @@
 [submodule "packages/elements-calendar"]
 	path = packages/elements-calendar
 	url = git@github.com:pageboard/elements-calendar
-[submodule "packages/flickity"]
-	path = packages/flickity
-	url = git@github.com:pageboard/flickity
 [submodule "packages/datetime-entry"]
 	path = packages/datetime-entry
 	url = git@github.com:pageboard/datetime
