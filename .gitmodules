@@ -1,6 +1,3 @@
-[submodule "packages/elements"]
-	path = packages/elements
-	url = git@github.com:pageboard/elements
 [submodule "packages/elements-write"]
 	path = packages/elements-write
 	url = git@github.com:pageboard/elements-write
