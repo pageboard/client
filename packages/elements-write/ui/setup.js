@@ -106,11 +106,11 @@ function install(scope) {
 		return ret;
 	};
 
-	win.addEventListener('pagebuild', function(e) {
+	win.Page.setup(function(state) {
 		document.title = win.document.title;
 		if (!writeMode) return;
 		Pageboard.view = win.Pageboard.view;
-		editorSetup(win, win.Pageboard.view, e.state.$data.item);
+		editorSetup(win, win.Pageboard.view, state.$data.item);
 	});
 }
 
