@@ -5,7 +5,18 @@ Object.assign(window.Pageboard, {
 	schemaHelpers: {},
 	schemaFilters: {},
 	trigger: function trigger(node, event, detail) {
-		var e = detail ? new CustomEvent(event, {detail: detail}) : new Event(event);
+		var opts = {
+			view: window,
+			bubbles: true,
+			cancelable: true
+		};
+		var e;
+		if (detail) {
+			opts.detail = detail;
+			e = new CustomEvent(event, opts);
+		} else {
+			e = new Event(event, opts);
+		}
 		node.dispatchEvent(e);
 	},
 	uiLoad: function uiLoad(what, p) {
