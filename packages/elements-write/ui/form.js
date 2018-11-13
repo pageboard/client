@@ -36,13 +36,16 @@ Form.prototype.update = function(parents, sel) {
 		return;
 	}
 
-	if (this.main && block != this.main.block) {
-		this.main.destroy();
-		delete this.main;
+	if (block != this.block) {
+		if (this.main) {
+			this.main.destroy();
+			delete this.main;
+		}
+		this.block = block;
 	}
 
-	if (!this.main) this.main = new FormBlock(this.editor, this.node, block);
-	this.main.update(parents);
+	if (!this.main) this.main = new FormBlock(this.editor, this.node, block.type);
+	this.main.update(parents, block);
 
 	var curInlines = this.inlines;
 	var inlines = (parent.inline && parent.inline.blocks || []).map(function(block) {
@@ -56,7 +59,7 @@ Form.prototype.update = function(parents, sel) {
 			}
 		});
 		if (!curForm) {
-			curForm = new FormBlock(this.editor, this.node, block);
+			curForm = new FormBlock(this.editor, this.node, block.type);
 		} else {
 			curForm.node.parentNode.appendChild(curForm.node);
 		}
@@ -69,14 +72,13 @@ Form.prototype.update = function(parents, sel) {
 	this.inlines = inlines;
 };
 
-function FormBlock(editor, node, block) {
+function FormBlock(editor, node, type) {
 	this.node = node.appendChild(document.createElement('form'));
 	this.node.setAttribute('autocomplete', 'off');
-	this.block = block;
 	this.editor = editor;
-	var el = editor.element(block.type);
+	var el = editor.element(type);
 	if (!el) {
-		throw new Error(`Unknown element type ${block.type}`);
+		throw new Error(`Unknown element type ${type}`);
 	}
 	el = this.el = Object.assign({}, el);
 	if (el.properties) {
@@ -85,6 +87,7 @@ function FormBlock(editor, node, block) {
 	this.changeListener = Pageboard.debounce(this.change.bind(this), 250);
 	this.node.addEventListener('change', this.changeListener);
 	this.node.addEventListener('input', this.changeListener);
+
 	this.helpers = {};
 	this.filters = {};
 }
@@ -107,29 +110,50 @@ FormBlock.prototype.destroy = function() {
 
 FormBlock.prototype.update = function(parents, block) {
 	this.ignoreEvents = true;
+	var same = false;
 	if (block) {
-		this.block = block;
+		if (this.block) {
+			same = Pageboard.JSON.stableStringify(this.block.data) == Pageboard.JSON.stableStringify(block.data);
+		}
+		this.block = Object.assign({}, block);
+		this.block.data = JSON.parse(JSON.stringify(block.data || {}));
 	}
 	if (parents) {
 		this.parents = parents;
 	}
-	var schema = Object.assign({}, this.el, {type: 'object'});
-	if (!this.form) this.form = new window.Semafor(
-		schema,
-		this.node,
-		this.customFilter.bind(this),
-		this.customHelper.bind(this)
-	);
+	if (!same) {
+		var schema = Object.assign({}, this.el, {type: 'object'});
+		if (!this.form) this.form = new window.Semafor(
+			schema,
+			this.node,
+			this.customFilter.bind(this),
+			this.customHelper.bind(this)
+		);
+		var active = document.activeElement;
+		var selection = active ? {
+			name: active.name,
+			start: active.selectionStart,
+			end: active.selectionEnd,
+			dir: active.selectionDirection
+		} : null;
 
-	this.form.update();
-	this.form.clear();
-	this.form.set(this.block.data);
-	Object.values(this.helpers).forEach(function(inst) {
-		if (inst.update) inst.update(this.block);
-	}, this);
-	Object.values(this.filters).forEach(function(inst) {
-		if (inst.update) inst.update(this.block);
-	}, this);
+		this.form.update();
+		this.form.clear();
+		this.form.set(this.block.data);
+		Object.values(this.helpers).forEach(function(inst) {
+			if (inst.update) inst.update(this.block);
+		}, this);
+		Object.values(this.filters).forEach(function(inst) {
+			if (inst.update) inst.update(this.block);
+		}, this);
+		if (selection && selection.name) {
+			var found = this.form.node.querySelector(`[name="${selection.name}"]`);
+			if (found) {
+				found.setSelectionRange(selection.start, selection.end, selection.dir);
+				found.focus();
+			}
+		}
+	}
 	this.ignoreEvents = false;
 };
 
@@ -180,23 +204,27 @@ FormBlock.prototype.customFilter = function(key, prop) {
 	this.filters[key] = inst;
 };
 
-FormBlock.prototype.change = function() {
+FormBlock.prototype.change = function(e) {
 	if (!this.block || this.ignoreEvents || !this.form) return;
 	var editor = this.editor;
 	var data = this.form.get();
+
+	var same = Pageboard.JSON.stableStringify(this.block.data) == Pageboard.JSON.stableStringify(data);
+	if (same) return;
 
 	var id = this.block.id;
 	var found = false;
 
 	// this must be done after reselecting with breadcrumb.click
-	this.block.data = Object.assign(this.block.data || {}, data);
+	var block = Object.assign({}, this.block);
+	block.data = JSON.parse(JSON.stringify(block.data));
+	Object.assign(block.data, data);
 
 	if (id == editor.state.doc.attrs.id) {
 		found = true;
-		editor.blocks.set(this.block);
+		editor.blocks.set(block);
 		editor.controls.store.update();
 		return;
-		// editor.pageUpdate(this.block);
 	}
 
 	var tr = editor.state.tr;
@@ -206,23 +234,22 @@ FormBlock.prototype.change = function() {
 		// simply select focused node
 		var node = this.el.inline ? this.parents[0].inline.rpos : editor.root.querySelector('[block-focused="last"]');
 		if (node) {
-			editor.utils.refreshTr(tr, node, this.block);
+			editor.utils.refreshTr(tr, node, block);
 			dispatch = true;
 		}
 	} else {
 		var nodes = editor.blocks.domQuery(id, {all: true});
 
 		if (nodes.length == 0) {
-			if (!found) console.warn("No dom nodes found for this block", this.block);
+			if (!found) console.warn("No dom nodes found for this block", block);
 		} else {
 			nodes.forEach(function(node) {
-				editor.utils.refreshTr(tr, node, this.block);
-			}, this);
+				editor.utils.refreshTr(tr, node, block);
+			});
 			dispatch = true;
 		}
 	}
 	if (dispatch) {
-		editor.controls.form.ignoreNext = true;
 		editor.dispatch(tr);
 	}
 };

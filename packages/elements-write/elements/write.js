@@ -125,6 +125,7 @@ Pageboard.elements.write = {
 		"../ui/inputs/href.js",
 		"../ui/inputs/page.js",
 		"../ui/inputs/crop.js",
+		"../lib/json-stringify.js",
 		"../ui/form.js",
 		"../ui/menu.js",
 		"../ui/move.js",
