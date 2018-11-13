@@ -1,3 +1,0 @@
-[submodule "packages/elements-calendar"]
-	path = packages/elements-calendar
-	url = git@github.com:pageboard/elements-calendar
