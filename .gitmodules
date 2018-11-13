@@ -1,6 +1,3 @@
-[submodule "packages/elements-google"]
-	path = packages/elements-google
-	url = git@github.com:pageboard/elements-google
 [submodule "packages/elements-gallery"]
 	path = packages/elements-gallery
 	url = git@github.com:pageboard/elements-gallery
