@@ -313,7 +313,7 @@ Semafor.prototype.process = function(key, schema, node) {
 		if (type == 'object') {
 			if (types[type](key, schema, node, this)) processed = true;
 		} else if (!schema.title) {
-			// ignore this value
+			processed = true;
 		} else if (!key) {
 			console.error('Properties of type', type, 'must have a name');
 		} else {
