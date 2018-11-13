@@ -57,3 +57,6 @@ typings/
 # dotenv environment variables file
 .env
 
+packages/datetime-entry
+packages/flickity
+packages/pagecut
