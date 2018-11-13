@@ -182,6 +182,10 @@ function editorSetup(win, view, page) {
 	}
 	editorClose();
 	Pageboard.write.classList.remove('loading');
+	if (!page || page.type == "error") {
+		Pageboard.write.hidden = true;
+		return;
+	}
 	var content = win.document.body.cloneNode(true);
 
 	// and the editor must be running from child
