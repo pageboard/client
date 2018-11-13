@@ -1,6 +1,3 @@
-[submodule "packages/elements-write"]
-	path = packages/elements-write
-	url = git@github.com:pageboard/elements-write
 [submodule "packages/elements-mail"]
 	path = packages/elements-mail
 	url = git@github.com:pageboard/elements-mail
