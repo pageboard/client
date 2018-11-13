@@ -228,16 +228,28 @@ Store.prototype.save = function(e) {
 		.then(function(result) {
 			if (result && result.update) result.update.forEach(function(obj, i) {
 				var block = me.editor.blocks.get(obj.id);
-				if (!block) throw new Error(`Missing updated block ${obj.id}`);
-				block.updated_at = obj.updated_at;
+				if (block) block.updated_at = obj.updated_at;
+				else Pageboard.notify("Cannot update editor with modified block");
 				if (me.unsaved.id == obj.id) {
 					me.unsaved.updated_at = obj.updated_at;
 				} else {
-					var child = me.unsaved.children.find(function(item) {
-						return obj.id == item.id;
+					var child;
+					me.unsaved.children.find(function(item) {
+						if (obj.id == item.id) {
+							child = item;
+							return true;
+						}
+						if (item.standalone && item.children) {
+							if (item.children.find(function(item) {
+								if (obj.id == item.id) {
+									child = item;
+									return true;
+								}
+							})) return true;
+						}
 					});
-					if (!child) throw new Error(`Missing updated child ${obj.id}`);
-					child.updated_at = obj.updated_at;
+					if (child) child.updated_at = obj.updated_at;
+					else Pageboard.notify("Cannot update store with modified block");
 				}
 			});
 		});
