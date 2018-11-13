@@ -1,6 +1,3 @@
-[submodule "packages/elements-semantic-ui"]
-	path = packages/elements-semantic-ui
-	url = git@github.com:pageboard/elements-semantic-ui
 [submodule "packages/elements-google"]
 	path = packages/elements-google
 	url = git@github.com:pageboard/elements-google
