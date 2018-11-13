@@ -2,6 +2,8 @@ var Viewer = require('@pageboard/pagecut/src/viewer.js');
 
 exports.elements = {
 	error: {
+		scripts: [],
+		stylesheets: [],
 		html: `<html>
 		<head>
 			<title>[status|or:500] [name]</title>
@@ -40,17 +42,13 @@ exports.bundle = function(loader, scope) {
 	return loader.then(function(res) {
 		if (!res) return Promise.resolve();
 		return exports.load.meta(res.meta).then(function() {
-			initScope(res, scope);
-			var elts = scope.$elements;
-			Object.keys(elts).forEach(function(name) {
-				var el = elts[name];
-				exports.render.install(el, scope);
-			});
-		}).then(function() {
 			return res;
 		});
 	}).catch(function(err) {
 		return {
+			meta: {
+				group: 'page'
+			},
 			item: {
 				type: 'error',
 				data: {
@@ -61,6 +59,14 @@ exports.bundle = function(loader, scope) {
 				}
 			}
 		};
+	}).then(function(res) {
+		if (res) initScope(res, scope);
+		var elts = scope.$elements;
+		Object.keys(elts).forEach(function(name) {
+			var el = elts[name];
+			exports.render.install(el, scope);
+		});
+		return res;
 	});
 };
 
