@@ -108,7 +108,6 @@ Pageboard.elements.write = {
 		Pageboard.elements.site.resources[1],
 		"../lib/jquery.min.js",
 		"../lib/moment.js",
-		"../lib/dom4.js",
 		"../lib/components/form.js",
 		"../lib/components/progress.js",
 		"../lib/components/dropdown.js",
