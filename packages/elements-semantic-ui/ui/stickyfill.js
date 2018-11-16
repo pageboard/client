@@ -202,7 +202,7 @@ class Sticky {
          */
         const clone = this._clone = {};
         clone.node = document.createElement('div');
-        clone.node.setAttribute('block-ignore', '');
+        clone.node.setAttribute('contenteditable', 'false');
 
         // Apply styles to the clone
         extend(clone.node.style, {
