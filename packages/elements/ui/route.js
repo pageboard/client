@@ -17,6 +17,6 @@ Page.route(function(state) {
 		}
 		var doc = node.ownerDocument;
 		doc.replaceChild(node.parentNode, doc.documentElement);
-		state.document = doc;
+		return doc;
 	});
 });

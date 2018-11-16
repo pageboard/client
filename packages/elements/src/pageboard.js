@@ -70,8 +70,7 @@ exports.bundle = function(loader, scope) {
 	});
 };
 
-function updateState(e) {
-	var s = e.state;
+function updateState(s) {
 	Object.assign(s.scope, {
 		$pathname: s.pathname,
 		$query: s.query || {}
@@ -83,20 +82,19 @@ function updateState(e) {
 }
 
 window.HTMLCustomElement = require('./HTMLCustomElement');
-window.addEventListener('pageinit', function(e) {
-	e.state.vars = {};
-	e.state.scope = {
+
+Page.init(function(state) {
+	state.vars = {};
+	state.scope = {
 		$elements: exports.elements,
 		$doc: exports.view.doc,
 		$render: exports.view.render.bind(exports.view)
 	};
 });
-window.addEventListener('pageroute', updateState);
-window.addEventListener('pagebuild', updateState);
-window.addEventListener('pagepatch', updateState);
-
-window.addEventListener('pagepatch', function(e) {
-	var state = e.state;
+Page.ready(function(state) {
+	updateState(state);
+});
+Page.patch(function(state) {
 	var query = {};
 	var extra = [];
 	Object.keys(state.query).forEach(function(key) {
@@ -112,7 +110,7 @@ window.addEventListener('pagepatch', function(e) {
 			<meta http-equiv="Status" content="301 Bad query parameters">
 			<meta http-equiv="Location" content="${Page.format({query: query})}">
 		`));
-		return Page.replace({query: query}, state);
+		return state.replace({query: query});
 	}
 });
 

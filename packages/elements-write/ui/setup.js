@@ -53,20 +53,24 @@ function anchorListener(e) {
 }
 
 function modeControlListener() {
-	if (writeMode) {
-		var state = Pageboard.window.Page.state;
-		var store = Pageboard.editor.controls.store;
-		if (state && state.$data) {
-			delete state.$data.items;
-			store.flush();
-			state.$data.item = store.unsaved || store.initial;
+	var win = Pageboard.window;
+	win.Page.init(function(state) {
+		modeControl.classList.toggle('active');
+		document.body.classList.toggle('read');
+		if (writeMode) {
+			var store = Pageboard.editor.controls.store;
+			if (state && state.$data) {
+				delete state.$data.items;
+				store.flush();
+				state.$data.item = store.unsaved || store.initial;
+			}
+			editorClose();
+			state.reload();
+		} else {
+			editorSetup(win, win.Pageboard.view, state);
 		}
-		editorClose();
-	}
-	writeMode = !writeMode;
-	modeControl.classList.toggle('active');
-	document.body.classList.toggle('read');
-	Pageboard.window.Page.reload();
+		writeMode = !writeMode;
+	});
 }
 
 function install(scope) {
@@ -110,21 +114,19 @@ function install(scope) {
 		document.title = win.document.title;
 		if (!writeMode) return;
 		Pageboard.view = win.Pageboard.view;
-		editorSetup(win, win.Pageboard.view, state.$data.item);
+		editorSetup(win, win.Pageboard.view, state);
 	});
 }
 
-function updatePage() {
+function updatePage(state) {
 	if (!writeMode) return;
 	var store = this.controls.store;
 	if (!store) return;
 	var page = store.unsaved || store.initial;
 	if (!page || !page.data) return;
 	window.document.title = (page.data.title || "") + (store.unsaved ? '*' : '');
-	Page.historySave('replace', {
-		pathname: page.data.url,
-		query: Page.state.query
-	});
+	state.pathname = page.data.url;
+	state.save();
 }
 
 function updateControls() {
@@ -175,12 +177,12 @@ function updateEditor(state, focusParents, focusSelection) {
 	editor.updatePage();
 }
 
-function editorSetup(win, view, page) {
+function editorSetup(win, view, state) {
+	var page = state.$data.item;
 	if (!adv) {
 		adv = true;
 		console.info("Use Pageboard.dev() to debug prosemirror");
 	}
-	editorClose();
 	Pageboard.write.classList.remove('loading');
 	if (!page || page.type == "error") {
 		Pageboard.write.hidden = true;
@@ -218,7 +220,7 @@ function editorSetup(win, view, page) {
 		}]
 	});
 
-	editor.updatePage = updatePage.bind(editor);
+	editor.updatePage = updatePage.bind(editor, state);
 	editor.updateControls = updateControls.bind(editor);
 	editor.updateEditor = updateEditor.bind(editor);
 	editor.blocks.initial = view.blocks.initial;
