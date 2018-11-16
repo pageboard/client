@@ -16,7 +16,6 @@ class HTMLElementSticky extends HTMLCustomElement {
 	}
 	setup() {
 		if (this._sticky || !this.parentNode) return;
-		if (this.closest('[contenteditable]')) return;
 		window.addEventListener('scroll', this.listener);
 		window.addEventListener('resize', this.listener);
 		// some stylesheets might target :not([data-mode="start"]) so it must be the initial value
@@ -44,8 +43,7 @@ class HTMLElementSticky extends HTMLCustomElement {
 		this.destroy();
 	}
 	update() {
-		this.destroy();
-		this.setup();
+		if (this._sticky) this._sticky.refresh();
 	}
 }
 
