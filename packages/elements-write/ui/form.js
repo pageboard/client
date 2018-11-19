@@ -149,7 +149,9 @@ FormBlock.prototype.update = function(parents, block) {
 		if (selection && selection.name) {
 			var found = this.form.node.querySelector(`[name="${selection.name}"]`);
 			if (found) {
-				found.setSelectionRange(selection.start, selection.end, selection.dir);
+				if (found.setSelectionRange && selection.start != null && selection.end != null) {
+					found.setSelectionRange(selection.start, selection.end, selection.dir);
+				}
 				found.focus();
 			}
 		}
