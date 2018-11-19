@@ -73,7 +73,7 @@ class HTMLElementInputFile extends HTMLCustomElement {
 			}
 			function pass(obj) {
 				var val = Page.parse(obj[0]);
-				if (Page.sameDomain(val, Page.state)) {
+				if (Page.sameDomain(val, document.location)) {
 					val = Page.format(val);
 				} else {
 					val = obj[0];
