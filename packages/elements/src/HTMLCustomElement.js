@@ -19,13 +19,14 @@ HTMLCustomElement.define = function(name, cla, is) {
 		var opts;
 		if (is) {
 			opts = {extends: is};
-			cla.prototype._connectedCallback = cla.prototype.connectedCallback;
-			cla.prototype.connectedCallback = function() {
+			var proto = cla.prototype;
+			proto._connectedCallback = proto.connectedCallback;
+			proto.connectedCallback = function() {
 				if (!this._initialized) {
 					this._initialized = true;
 					if (this.init) this.init();
 				}
-				this._connectedCallback();
+				if (this._connectedCallback) this._connectedCallback();
 			};
 		}
 		window.customElements.define(name, cla, opts);
