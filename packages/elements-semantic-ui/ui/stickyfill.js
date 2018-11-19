@@ -46,6 +46,18 @@ const scroll = {
 // Array of created Sticky instances
 const stickies = [];
 
+let docHiddenKey;
+let visibilityChangeEventName;
+
+if ('hidden' in document) {
+    docHiddenKey = 'hidden';
+    visibilityChangeEventName = 'visibilitychange';
+}
+else if ('webkitHidden' in document) {
+    docHiddenKey = 'webkitHidden';
+    visibilityChangeEventName = 'webkitvisibilitychange';
+}
+
 
 /*
  * 3. Utility functions
@@ -71,6 +83,47 @@ function getDocOffsetTop (node) {
     }
 
     return docOffsetTop;
+}
+
+// Watch for scroll position changes and trigger recalc/refresh if needed
+function checkScroll () {
+    if (window.pageXOffset != scroll.left) {
+        scroll.top = window.pageYOffset;
+        scroll.left = window.pageXOffset;
+
+        Stickyfill.refreshAll();
+    }
+    else if (window.pageYOffset != scroll.top) {
+        scroll.top = window.pageYOffset;
+        scroll.left = window.pageXOffset;
+
+        // recalc position for all stickies
+        stickies.forEach(sticky => sticky._recalcPosition());
+    }
+}
+
+//Fast dirty check for layout changes every 500ms
+let fastCheckTimer;
+
+function startFastCheckTimer () {
+    fastCheckTimer = setInterval(function () {
+        stickies.forEach(sticky => sticky._fastCheck());
+    }, 500);
+}
+
+function stopFastCheckTimer () {
+    clearInterval(fastCheckTimer);
+}
+
+
+
+function toggleTimer() {
+    if (document[docHiddenKey]) {
+        stopFastCheckTimer();
+    }
+    else {
+        startFastCheckTimer();
+    }
 }
 
 
@@ -339,6 +392,18 @@ const Stickyfill = {
         this.refreshAll();
     },
 
+    destroy () {
+        if (!isInitialized) return;
+        Stickyfill.removeAll();
+        isInitialized = false;
+        window.removeEventListener('scroll', checkScroll);
+        window.removeEventListener('resize', Stickyfill.refreshAll);
+        window.removeEventListener('orientationchange', Stickyfill.refreshAll);
+        if (visibilityChangeEventName) {
+            document.removeEventListener(visibilityChangeEventName, toggleTimer);
+        }
+    },
+
     addOne (node) {
         // Check whether it’s a node
         if (!(node instanceof HTMLElement)) {
@@ -439,7 +504,6 @@ const Stickyfill = {
     }
 };
 
-
 /*
  * 6. Setup events (unless the polyfill was disabled)
  */
@@ -450,23 +514,6 @@ function init () {
 
     isInitialized = true;
 
-    // Watch for scroll position changes and trigger recalc/refresh if needed
-    function checkScroll () {
-        if (window.pageXOffset != scroll.left) {
-            scroll.top = window.pageYOffset;
-            scroll.left = window.pageXOffset;
-
-            Stickyfill.refreshAll();
-        }
-        else if (window.pageYOffset != scroll.top) {
-            scroll.top = window.pageYOffset;
-            scroll.left = window.pageXOffset;
-
-            // recalc position for all stickies
-            stickies.forEach(sticky => sticky._recalcPosition());
-        }
-    }
-
     checkScroll();
     window.addEventListener('scroll', checkScroll);
 
@@ -474,42 +521,9 @@ function init () {
     window.addEventListener('resize', Stickyfill.refreshAll);
     window.addEventListener('orientationchange', Stickyfill.refreshAll);
 
-    //Fast dirty check for layout changes every 500ms
-    let fastCheckTimer;
-
-    function startFastCheckTimer () {
-        fastCheckTimer = setInterval(function () {
-            stickies.forEach(sticky => sticky._fastCheck());
-        }, 500);
-    }
-
-    function stopFastCheckTimer () {
-        clearInterval(fastCheckTimer);
-    }
-
-    let docHiddenKey;
-    let visibilityChangeEventName;
-
-    if ('hidden' in document) {
-        docHiddenKey = 'hidden';
-        visibilityChangeEventName = 'visibilitychange';
-    }
-    else if ('webkitHidden' in document) {
-        docHiddenKey = 'webkitHidden';
-        visibilityChangeEventName = 'webkitvisibilitychange';
-    }
-
     if (visibilityChangeEventName) {
         if (!document[docHiddenKey]) startFastCheckTimer();
-
-        document.addEventListener(visibilityChangeEventName, () => {
-            if (document[docHiddenKey]) {
-                stopFastCheckTimer();
-            }
-            else {
-                startFastCheckTimer();
-            }
-        });
+        document.addEventListener(visibilityChangeEventName, toggleTimer);
     }
     else startFastCheckTimer();
 }
