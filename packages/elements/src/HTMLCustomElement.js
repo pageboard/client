@@ -6,6 +6,12 @@ class HTMLCustomElement extends HTMLElement {
 		return self;
 	}
 	init() {}
+	connectedCallback() {
+		Page.connect(this);
+	}
+	disconnectedCallback() {
+		Page.disconnect(this);
+	}
 }
 HTMLCustomElement.define = function(name, cla, is) {
 	if (cla.init) cla.init();

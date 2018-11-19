@@ -1,13 +1,4 @@
 class HTMLElementTemplate extends HTMLCustomElement {
-	init() {
-		this.patch = this.patch.bind(this);
-	}
-	connectedCallback() {
-		Page.patch(this.patch);
-	}
-	disconnectedCallback() {
-		Page.unpatch(this.patch);
-	}
 	attributeChangedCallback(attributeName, oldValue, newValue, namespace) {
 		if (attributeName.startsWith('data-')) Page.patch(this.patch);
 	}
