@@ -1,67 +1,23 @@
-Page.updateBody = function(body, state) {
-	if (!state.data.scroll) state.data.scroll = {x:0, y:0};
-
-	var from = document.body.dataset.transitionFrom;
-	var to = body.dataset.transitionTo;
-
-	// First, store positions of current sections
-	var fromRects = Array.prototype.map.call(document.body.children, function(node) {
-		if (node.dataset.transitionKeep || !node.matches('[block-type="main"]')) return;
-		return node.getBoundingClientRect();
-	});
-
-	// Second, add transition-from class to current sections
-	var fromList = Array.prototype.map.call(document.body.children, function(node) {
-		if (node.dataset.transitionKeep) {
-			return;
-		}
-		node.classList.add('transition-from');
-		return node;
-	});
-
-	// Third, insert new sections
-	Page.updateAttributes(document.body, body);
-	var clist = document.body.classList;
-	clist.add('transition-before');
-
-
-	var toList = Array.prototype.map.call(body.children, function(node) {
-		node.classList.add('transition-to');
-		return node;
-	});
-	toList.forEach(function(node) {
-		document.body.appendChild(node);
-	});
-
-	var ctx = state.transition = {
-		rects: fromRects,
-		fromList: fromList,
-		toList: toList,
-		from: from,
-		to: to,
-		event: Pageboard.transitionEvent('end')
-	};
-	if (ctx.event && (from || to) && !body.isContentEditable) ctx.ok = true;
-};
-
-Pageboard.transitionEvent = function(name) {
-	var low = name.toLowerCase();
-	var caps = name[0].toUpperCase() + low.substring(1);
-	var transitions = {
-		transition: "transition" + low,
-		OTransition: 'oTransition' + caps,
-		MozTransition: "transition" + low,
-		msTransition: 'MSTransition' + caps,
-		WebkitTransition: 'webkitTransition' + caps
-	};
-
-	var st = document.body.style;
-	for (var t in transitions) {
-		if (st[t] !== undefined) {
-			return transitions[t];
-		}
+Page.init(function(state) {
+	var root = document.documentElement;
+	function dtr(state) {
+		root.dataset.stage = state.stage;
+		if (state.stage == "setup") setTimeout(function() {
+			root.removeAttribute('data-stage');
+		}, 500);
 	}
-};
+	dtr(state);
+	Page.ready(dtr);
+	Page.setup(dtr);
+	Page.error(dtr);
+});
+
+Page.init(function(state) {
+	state.mergeBody = function(body, corpse) {
+		if (this.referrer.transition) this.referrer.transition.stop();
+		this.transition = new Page.Transition(this, body, corpse);
+	};
+});
 
 Page.hash(function(state) {
 	var hash = state.hash;
@@ -74,9 +30,10 @@ Page.hash(function(state) {
 Page.setup(function restoreScrollReferrer(state) {
 	var scroll = state.data.scroll;
 	if (scroll && (scroll.x || scroll.y)) return;
-	var ref = Page.referrer;
-	if (!ref) return;
-	if (!Page.sameDomain(ref, state) || ref.pathname == state.pathname) return;
+	var ref = state.referrer;
+	if (!Page.sameDomain(ref, state) || Page.samePathname(ref, state)) {
+		return;
+	}
 	var anc = document.querySelector(`a[href="${ref.pathname}"]:not(.item):not([block-type="nav"])`);
 	if (!anc) return;
 	var parent = anc.parentNode.closest('[block-id]');
@@ -88,84 +45,151 @@ Page.setup(function restoreScrollReferrer(state) {
 	}
 });
 
-Page.setup(function pageTransition(state) {
-	var ctx = state.transition;
-	if (!ctx) return;
-	var doc = document.documentElement;
-	var clist = document.body.classList;
-	var scroll = state.data.scroll;
-	if (ctx.node) {
-		var scrollX = window.scrollX;
-		var scrollY = window.scrollY;
-		ctx.node.scrollIntoView();
-		scroll.x += window.scrollX - scrollX;
-		scroll.y += window.scrollY - scrollY;
-		delete ctx.node;
+Page.setup(function(state) {
+	if (state.transition) state.transition.start();
+});
+
+Page.Transition = class {
+	static event(name) {
+		var low = name.toLowerCase();
+		var caps = name[0].toUpperCase() + low.substring(1);
+		var transitions = {
+			transition: "transition" + low,
+			OTransition: 'oTransition' + caps,
+			MozTransition: "transition" + low,
+			msTransition: 'MSTransition' + caps,
+			WebkitTransition: 'webkitTransition' + caps
+		};
+
+		var st = document.body.style;
+		for (var t in transitions) {
+			if (st[t] !== undefined) {
+				return transitions[t];
+			}
+		}
 	}
-	if (ctx.ok) {
-		ctx.fromList.forEach(function(node, i) {
-			var rect = ctx.rects[i];
-			if (!node || !rect) return;
-			Object.assign(node.style, {
-				left: `${Math.round(rect.left + scroll.x)}px`,
-				top: `${Math.round(rect.top + scroll.y)}px`,
-				width: `${Math.round(rect.width)}px`,
-				height: `${Math.round(rect.height)}px`
-			});
+	constructor(state, body, corpse) {
+		this.state = state;
+		this.body = corpse;
+
+		if (!state.data.scroll) state.data.scroll = {x:0, y:0};
+
+		this.from = corpse.dataset.transitionFrom;
+		this.to = body.dataset.transitionTo;
+
+		// First, store positions of current sections
+		this.rects = Array.prototype.map.call(corpse.children, function(node) {
+			if (node.dataset.transitionKeep || !node.matches('[block-type="main"]')) return;
+			return node.getBoundingClientRect();
 		});
 
-		doc.classList.add('transition');
-		clist.add('transition');
+		// Second, add transition-from class to current sections
+		this.fromList = Array.prototype.map.call(corpse.children, function(node) {
+			if (node.dataset.transitionKeep) {
+				return;
+			}
+			node.classList.add('transition-from');
+			return node;
+		});
 
-		if (ctx.from) {
-			clist.add(ctx.from);
+		// Third, insert new sections
+		state.updateAttributes(corpse, body);
+		corpse.classList.add('transition-before');
+
+		this.toList = Array.prototype.map.call(body.children, function(node) {
+			node.classList.add('transition-to');
+			return node;
+		});
+		this.toList.forEach(function(node) {
+			corpse.appendChild(node);
+		});
+		this.event = this.constructor.event('end');
+		if (this.event && (this.from || this.to) && !body.isContentEditable) this.ok = true;
+	}
+	start() {
+		var clist = this.body.classList;
+		var scroll = this.state.data.scroll;
+		if (this.node) {
+			var scrollX = window.scrollX;
+			var scrollY = window.scrollY;
+			this.node.scrollIntoView();
+			scroll.x += window.scrollX - scrollX;
+			scroll.y += window.scrollY - scrollY;
+			delete this.node;
 		}
-		if (ctx.to) {
-			clist.add(ctx.to);
+		if (this.ok) {
+			this.fromList.forEach(function(node, i) {
+				var rect = this.rects[i];
+				if (!node || !rect) return;
+				Object.assign(node.style, {
+					left: `${Math.round(rect.left + scroll.x)}px`,
+					top: `${Math.round(rect.top + scroll.y)}px`,
+					width: `${Math.round(rect.width)}px`,
+					height: `${Math.round(rect.height)}px`
+				});
+			}, this);
+
+			this.body.parentNode.classList.add('transition');
+			clist.add('transition');
+
+			if (this.from) {
+				clist.add(this.from);
+			}
+			if (this.to) {
+				clist.add(this.to);
+			}
+		}
+		window.scrollTo(scroll.x, scroll.y);
+
+		clist.remove('transition-before');
+
+		var it = this;
+
+		if (!this.ok) {
+			this.cleanup();
+		} else {
+			setTimeout(function() {
+				it.body.parentNode.addEventListener(it.event, it);
+				clist.add('transitioning');
+			});
+			this.safeTo = setTimeout(function() {
+				console.warn("Transition timeout", it.from, it.to);
+				it.stop();
+			}, 3000);
 		}
 	}
-	window.scrollTo(scroll.x, scroll.y);
-
-	clist.remove('transition-before');
-	if (!ctx.ok) {
-		cleanup();
-		return;
+	stop(immediate) {
+		this.ok = false;
+		this.handleEvent();
 	}
-
-	ctx.safeTo = setTimeout(function() {
-		console.warn("Transition timeout", from, to);
-		trDone({target: {parentNode: document.body}});
-	}, 3000);
-
-	setTimeout(function() {
-		document.documentElement.addEventListener(ctx.event, trDone);
-		clist.add('transitioning');
-	});
-
-	function trDone(e) {
-		if (ctx.safeTo) {
-			clearTimeout(ctx.safeTo);
-			delete ctx.safeTo;
+	handleEvent(e) {
+		if (this.safeTo) {
+			clearTimeout(this.safeTo);
+			delete this.safeTo;
 		}
 		// only transitions of body children are considered
-		if (e.target.parentNode != document.body) return;
-		document.documentElement.removeEventListener(ctx.event, trDone);
-		setTimeout(cleanup);
+		if (e && e.target.parentNode != this.body) return;
+		this.body.parentNode.removeEventListener(this.event, this);
+		if (e) setTimeout(this.cleanup.bind(this));
+		else this.cleanup();
 	}
-
-	function cleanup() {
-		ctx.fromList.forEach(function(node) {
+	cleanup() {
+		this.fromList.forEach(function(node) {
 			if (node) node.remove();
 		});
-		ctx.toList.forEach(function(node) {
+		this.toList.forEach(function(node) {
 			node.classList.remove('transition-to');
 		});
+		var clist = this.body.classList;
 		clist.remove('transition', 'transitioning');
-		doc.classList.remove('transition');
-		if (ctx.from) clist.remove(ctx.from);
-		if (ctx.to) clist.remove(ctx.to);
+		this.body.parentNode.classList.remove('transition');
+		if (this.from) clist.remove(this.from);
+		if (this.to) clist.remove(this.to);
+		delete this.body;
+		delete this.state.transition;
+		delete this.state;
 	}
-});
+};
 
 Page.setup(function navigate(state) {
 	document.addEventListener('click', function(e) {
@@ -185,32 +209,34 @@ Page.setup(function navigate(state) {
 				if (Page.sameDomain(obj, state) && state.query.develop) {
 					obj.query.develop = state.query.develop;
 				}
-				Page.push(href);
+				state.push(obj);
 			}
 		}
 	}, false);
 
 	if (!document.body.isContentEditable && document.body.dataset.redirect) {
 		setTimeout(function() {
-			Page.replace(document.body.dataset.redirect);
+			state.replace(document.body.dataset.redirect);
 		}, 10);
 	}
 });
 
-window.addEventListener('scroll', Pageboard.debounce(function(e) {
-	if (!Page.state || !Page.samePath(Page.state, document.location)) return;
-	Page.state.data.scroll = {
-		x: window.scrollX,
-		y: window.scrollY
-	};
-	Page.historySave('replace', Page.state);
-}, 500), false);
+Page.setup(function(state) {
+	// Page removes event listener automatically
+	window.addEventListener('scroll', Pageboard.debounce(function(e) {
+		state.data.scroll = {
+			x: window.scrollX,
+			y: window.scrollY
+		};
+		state.save();
+	}, 500), false);
+});
 
 Page.init(function(state) {
 	if (window.history && 'scrollRestoration' in window.history) {
 		window.history.scrollRestoration = 'manual';
 	} else {
-		var scroll = Page.state.data.scroll; // need "old" state
+		var scroll = state.referrer && state.referrer.data.scroll; // need "old" state
 		if (scroll) {
 			setTimeout(function() {
 				window.scrollTo(scroll.x, scroll.y);
