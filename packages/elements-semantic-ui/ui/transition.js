@@ -191,29 +191,28 @@ Page.Transition = class {
 	}
 };
 
+// this listener avoids missing clicks during transitions
+window.addEventListener('click', function(e) {
+	var a = e.target.closest('a');
+	var href = a && a.getAttribute('href');
+	var editable = document.body && document.body.isContentEditable;
+	if (href && !e.defaultPrevented && (!a.target || editable)) {
+		e.preventDefault();
+	}
+}, true);
+
 Page.setup(function navigate(state) {
 	document.addEventListener('click', function(e) {
+		if (!e.defaultPrevented) return; // window listener already did it
 		var a = e.target.closest('a');
 		var href = a && a.getAttribute('href');
-		if (href) {
-			if (e.defaultPrevented) return;
-			if (document.body.isContentEditable) {
-				e.preventDefault();
-				return;
-			}
-			if (a.target) {
-				return;
-			} else {
-				e.preventDefault();
-				var obj = Page.parse(href);
-				if (Page.sameDomain(obj, state) && state.query.develop) {
-					obj.query.develop = state.query.develop;
-				}
-				state.push(obj);
-			}
+		if (!href) return; // just in case
+		var obj = Page.parse(href);
+		if (Page.sameDomain(obj, state) && state.query.develop) {
+			obj.query.develop = state.query.develop;
 		}
+		state.push(obj);
 	}, false);
-
 	if (!document.body.isContentEditable && document.body.dataset.redirect) {
 		setTimeout(function() {
 			state.replace(document.body.dataset.redirect);
