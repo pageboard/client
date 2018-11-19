@@ -7,6 +7,7 @@ class HTMLElementSticky extends HTMLCustomElement {
 		this.stickyfill.destroy();
 	}
 	init() {
+		this.dataset.mode = "start";
 		var listener = this.listener.bind(this);
 		var raf;
 		this.listener = function() {
@@ -19,7 +20,6 @@ class HTMLElementSticky extends HTMLCustomElement {
 		window.addEventListener('scroll', this.listener);
 		window.addEventListener('resize', this.listener);
 		// some stylesheets might target :not([data-mode="start"]) so it must be the initial value
-		this.dataset.mode = "start";
 		this._sticky = this.constructor.stickyfill.addOne(this);
 		this.listener();
 	}
