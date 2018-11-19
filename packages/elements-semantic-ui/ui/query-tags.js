@@ -10,17 +10,11 @@ class HTMLElementQueryTags extends HTMLCustomElement {
 			return true;
 		});
 	}
-	init() {
-		this.remove = this.remove.bind(this);
-		this.patch = this.patch.bind(this);
+	setup() {
+		this.addEventListener('click', this);
 	}
-	connectedCallback() {
-		this.addEventListener('click', this.remove);
-		Page.patch(this.patch);
-	}
-	disconnectedCallback() {
-		this.removeEventListener('click', this.remove);
-		Page.unpatch(this.patch);
+	close() {
+		this.removeEventListener('click', this);
 	}
 	patch(state) {
 		if (this.closest('[block-content="template"]')) return;
@@ -46,8 +40,10 @@ class HTMLElementQueryTags extends HTMLCustomElement {
 			}, this);
 		}
 	}
-	remove(e) {
-		var label = e.target.closest('.label');
+	handleEvent(e) {
+		if (e.type == 'click') this.remove(e.target.closest('.label'));
+	}
+	remove(label) {
 		if (!label) return;
 		HTMLElementQueryTags.find(label.dataset.name, label.dataset.value).forEach(function(control) {
 			if (control.type == "hidden") return;
