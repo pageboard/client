@@ -29,18 +29,12 @@ class HTMLElementSticky extends HTMLCustomElement {
 		if (this.dataset.mode == mode) return;
 		this.dataset.mode = mode;
 	}
-	destroy() {
+	close() {
 		if (!this._sticky || !this.parentNode) return;
 		delete this._sticky;
 		window.removeEventListener('scroll', this.listener);
 		window.removeEventListener('resize', this.listener);
 		this.constructor.stickyfill.removeOne(this);
-	}
-	connectedCallback() {
-		this.setup();
-	}
-	disconnectedCallback() {
-		this.destroy();
 	}
 	update() {
 		if (this._sticky) this._sticky.refresh();
