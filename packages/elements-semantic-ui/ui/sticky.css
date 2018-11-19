@@ -1,3 +1,6 @@
+body {
+	position:relative;
+}
 element-sticky {
 	display:block;
 	z-index:1000;
