@@ -29,13 +29,15 @@ class HTMLElementImage extends HTMLCustomElement {
 		Page.unsetup(el.patch);
 	}
 	init() {
-		this.load = this.load.bind(this);
-		this.error = this.error.bind(this);
 		this.patch = this.patch.bind(this);
 	}
+	handleEvent(e) {
+		if (e.type == 'load') this.load();
+		else if (e.type == 'error') this.error();
+	}
 	connectedCallback() {
-		this.addEventListener('load', this.load, true);
-		this.addEventListener('error', this.error, true);
+		this.addEventListener('load', this, true);
+		this.addEventListener('error', this, true);
 		this.constructor.observe(this);
 	}
 	patch(state) {
@@ -134,8 +136,8 @@ class HTMLElementImage extends HTMLCustomElement {
 	}
 	disconnectedCallback() {
 		this.constructor.unobserve(this);
-		this.removeEventListener('load', this.load, true);
-		this.removeEventListener('error', this.error, true);
+		this.removeEventListener('load', this, true);
+		this.removeEventListener('error', this, true);
 	}
 }
 
