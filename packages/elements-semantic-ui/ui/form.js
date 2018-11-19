@@ -102,21 +102,21 @@ Page.setup(function(state) {
 		ignoreInputChange = false;
 		var loc = Page.parse(form.action);
 		Object.assign(loc.query, formToQuery(form));
-		if (loc.pathname == state.pathname && Page.sameDomain(loc, state)) {
+		if (Page.samePathname(loc, state)) {
 			loc.query = Object.assign({}, state.query, loc.query);
 		} else if (!submit) {
 			// do not automatically submit form if form pathname is not same as current pathname
 			return;
 		}
 		form.classList.add('loading');
-		return Page.push(loc).then(function() {
-			return ""; // empty state
+		return state.push(loc).then(function() {
+			return ""; // empty statusText
 		}).catch(function(err) {
 			if (err.status == 404) return 'warning';
 			else return 'error';
-		}).then(function(state) {
+		}).then(function(statusText) {
 			form.classList.remove('loading');
-			if (state) form.classList.add(state);
+			if (statusText) form.classList.add(statusText);
 		});
 	}, 300);
 
@@ -134,11 +134,12 @@ Page.setup(function(state) {
 		}).catch(function(err) {
 			if (err.status == 404) return 'warning';
 			else return 'error';
-		}).then(function(state) {
+		}).then(function(statusText) {
 			form.classList.remove('loading');
-			if (state) {
-				Page.state.query[form.id] = state;
-				return Page.push(Page.state);
+			if (statusText) {
+				var query = Object.assign({}, state.query);
+				query[form.id] = statusText;
+				return state.push({query: query});
 			}
 		});
 	}
