@@ -202,11 +202,8 @@ Page.setup(function navigate(state) {
 	document.addEventListener('click', function(e) {
 		var a = e.target.closest('a');
 		var href = a && a.getAttribute('href');
-		if (!href) return;
-		if (!e.defaultPrevented) {
-			if (!document.body.isContentEditable && a.target) return;
-			e.preventDefault();
-		}
+		if (!href || e.defaultPrevented || a.target) return;
+		e.preventDefault();
 		state.push(href);
 	}, false);
 
