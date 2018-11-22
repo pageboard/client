@@ -108,6 +108,7 @@ function install(scope) {
 			var body = node.querySelector('body');
 			body.classList.add('ProseMirror');
 			body.setAttribute('contenteditable', 'true');
+			body.setAttribute('spellcheck', 'false');
 		}
 		return ret;
 	};
