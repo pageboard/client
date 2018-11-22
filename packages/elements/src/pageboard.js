@@ -70,32 +70,28 @@ exports.bundle = function(loader, scope) {
 	});
 };
 
-function updateState(s) {
-	Object.assign(s.scope, {
-		$pathname: s.pathname,
-		$query: s.query || {}
-	});
-	if (s.query.develop === null || s.query.develop == "write") {
-		s.vars.develop = true;
-	}
-	s.scope.$write = s.query.develop == "write";
-}
-
 window.HTMLCustomElement = require('./HTMLCustomElement');
 
 Page.init(function(state) {
-	state.vars = {};
+	if (state.referrer.query.develop !== undefined) {
+		state.query.develop = state.referrer.query.develop;
+	}
+	var dev = state.query.develop;
+	state.vars = {
+		develop: dev === null || dev === "write"
+	};
 	state.scope = {
 		$elements: exports.elements,
 		$doc: exports.view.doc,
-		$render: exports.view.render.bind(exports.view)
+		$render: exports.view.render.bind(exports.view),
+		$write: dev == "write",
+		$pathname: state.pathname,
+		$query: state.query
 	};
 });
-Page.ready(function(state) {
-	updateState(state);
-});
+
 Page.patch(function(state) {
-	Page.patch(function() { // this is a way to append after all other calls to patch
+	state.finish(function() {
 		var query = {};
 		var extra = [];
 		Object.keys(state.query).forEach(function(key) {
@@ -111,15 +107,17 @@ Page.patch(function(state) {
 				<meta http-equiv="Status" content="301 Bad query parameters">
 				<meta http-equiv="Location" content="${Page.format({query: query})}">
 			`));
-			return state.replace({query: query});
+			state.replace({query: query});
 		}
 	});
 });
 
-Page.setup(function() {
+Page.setup(function(state) {
 	if (exports.adv) return;
 	exports.adv = true;
-	if (window.parent == window) {
-		console.info("Powered by https://pageboard.fr");
-	}
+	state.finish(function() {
+		if (window.parent == window) {
+			console.info("Powered by https://pageboard.fr");
+		}
+	});
 });
