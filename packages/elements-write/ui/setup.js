@@ -54,7 +54,7 @@ function anchorListener(e) {
 
 function modeControlListener() {
 	var win = Pageboard.window;
-	win.Page.init(function(state) {
+	win.Page.setup(function(state) {
 		modeControl.classList.toggle('active');
 		document.body.classList.toggle('read');
 		if (writeMode) {
