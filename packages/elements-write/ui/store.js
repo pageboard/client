@@ -199,15 +199,13 @@ Store.prototype.importStandalones = function(root, ancestor) {
 Store.prototype.quirkStart = function(invalidatePage) {
 	var prevkeys = Object.keys(Store.generated);
 	if (!invalidatePage && !prevkeys.length) return;
-	if (!this.unsaved) this.unsaved = {};
+	Object.assign(Store.generatedBefore, Store.generated);
 	if (invalidatePage) {
 		this.unsaved = this.initial;
 		this.initial = JSON.parse(JSON.stringify(this.initial));
 		this.initial.content.body = "";
+		if (Object.keys(flattenBlock(this.unsaved)).length == 0) delete this.unsaved;
 	}
-	Object.assign(Store.generatedBefore, Store.generated);
-
-	if (Object.keys(flattenBlock(this.unsaved)).length == 0) delete this.unsaved;
 	this.uiUpdate();
 };
 
@@ -263,13 +261,26 @@ Store.prototype.save = function(e) {
 	});
 };
 
-Store.prototype.reset = function() {
-	Store.generated = {};
-	Store.generatedBefore = {};
-	this.clear();
-	delete this.unsaved;
-	delete this.editor.blocks.initial;
-	delete this.initial;
+Store.prototype.reset = function(to) {
+	if (to) {
+		Store.generated = to.generated;
+		this.unsaved = to.unsaved;
+		this.initial = to.initial;
+		this.uiUpdate();
+	} else {
+		to = {
+			generated: Store.generated,
+			unsaved: this.unsaved,
+			initial: this.initial
+		};
+		Store.generated = {};
+		Store.generatedBefore = {};
+		this.clear();
+		delete this.unsaved;
+		delete this.editor.blocks.initial;
+		delete this.initial;
+	}
+	return to;
 };
 
 Store.prototype.discard = function(e) {

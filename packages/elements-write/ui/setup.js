@@ -62,7 +62,9 @@ function modeControlListener() {
 			if (state && state.$data) {
 				delete state.$data.items;
 				store.flush();
-				state.$data.item = store.unsaved || store.initial;
+				var backup = store.reset();
+				state.$data.item = backup.unsaved || backup.initial;
+				state.$store = backup;
 			}
 			editorClose();
 			state.reload();
@@ -239,6 +241,10 @@ function editorSetup(win, view, state) {
 		controls[lKey] = new Pageboard.Controls[key](editor, document.getElementById(lKey));
 	});
 	editor.controls = controls;
+	if (state.$store) {
+		controls.store.reset(state.$store);
+		delete state.$store;
+	}
 
 	editor.focus();
 	var contentSize = content.children.length;
@@ -251,8 +257,8 @@ function editorSetup(win, view, state) {
 		contentSize = 0;
 		editor.utils.setDom(win.document.createTextNode(""));
 	}
-	editor.controls.store.realUpdate();
-	editor.controls.store.quirkStart(!contentSize && win.document.body.children.length > 0);
+	controls.store.realUpdate();
+	controls.store.quirkStart(!contentSize && win.document.body.children.length > 0);
 	return editor;
 }
 
