@@ -2,12 +2,13 @@ Page.init(function(state) {
 	var root = document.documentElement;
 	function dtr(state) {
 		root.dataset.stage = state.stage;
-		if (state.stage == "setup") setTimeout(function() {
+		if (state.stage == "setup" || state.stage == "patch") setTimeout(function() {
 			root.removeAttribute('data-stage');
 		}, 500);
 	}
 	dtr(state);
 	Page.ready(dtr);
+	Page.patch(dtr);
 	Page.setup(dtr);
 	Page.error(dtr);
 });
