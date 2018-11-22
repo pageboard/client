@@ -148,20 +148,20 @@ Page.Transition = class {
 
 		var it = this;
 
-		if (!this.ok) {
-			this.cleanup();
-		} else {
-			setTimeout(function() {
-				it.body.parentNode.addEventListener(it.event, it);
-				clist.add('transitioning');
-			});
-			this.safeTo = setTimeout(function() {
-				console.warn("Transition timeout", it.from, it.to);
-				it.stop();
-			}, 3000);
-		}
 		return new Promise(function(resolve) {
 			it.resolve = resolve;
+			if (!it.ok) {
+				it.cleanup();
+			} else {
+				setTimeout(function() {
+					it.body.parentNode.addEventListener(it.event, it);
+					clist.add('transitioning');
+				});
+				it.safeTo = setTimeout(function() {
+					console.warn("Transition timeout", it.from, it.to);
+					it.stop();
+				}, 3000);
+			}
 		});
 	}
 	stop(immediate) {
