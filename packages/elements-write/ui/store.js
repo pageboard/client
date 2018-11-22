@@ -284,6 +284,10 @@ Store.prototype.reset = function(to) {
 };
 
 Store.prototype.discard = function(e) {
+	var doc = Pageboard.window.document;
+	var focused = Array.from(doc.querySelectorAll('[block-focused][block-id]')).map(function(node) {
+		return node.getAttribute('block-id');
+	}).reverse();
 	Store.generated = {};
 	this.clear();
 	Pageboard.notify.clear();
@@ -295,6 +299,18 @@ Store.prototype.discard = function(e) {
 	} catch(err) {
 		Pageboard.notify("Impossible to restore<br><a href=''>please reload</a>", err);
 	}
+	var editor = this.editor;
+	setTimeout(function() {
+		focused.some(function(id) {
+			var node = doc.querySelector(`[block-id="${id}"]`);
+			if (!node) return false;
+			var sel = editor.utils.select(node);
+			if (!sel) return false;
+			editor.focus();
+			editor.dispatch(editor.state.tr.setSelection(sel));
+			return true;
+		});
+	});
 };
 
 Store.prototype.pageUpdate = function() {
