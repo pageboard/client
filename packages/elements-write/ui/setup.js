@@ -29,14 +29,36 @@ function init(state) {
 	if (!iframe) return;
 	if (iframe.getAttribute('src') == src) return;
 	iframe.setAttribute('src', src);
+
 	// this should kick early enough
 	(function checkReady() {
 		var win = iframe.contentWindow;
-		if (win.Pageboard) win.Pageboard.elements.develop = {
-			install: install
-		};
-		else setTimeout(checkReady);
+		if (win.Pageboard) {
+			win.Pageboard.elements.develop = {
+				install: install
+			};
+			followPage(win, state);
+		} else {
+			setTimeout(checkReady);
+		}
 	})();
+}
+
+function followPage(win, state) {
+	var script = win.document.head.querySelector('script');
+	script.addEventListener('pagepatch', function(e) {
+		var winState = e.detail;
+		window.document.title = win.document.title;
+		state.pathname = winState.pathname;
+		var develop = state.query.develop;
+		state.query = Object.assign({}, winState.query);
+		if (develop !== undefined) state.query.develop = develop;
+		else delete state.query.develop;
+		state.save();
+	});
+	win.addEventListener('popstate', function(e) {
+		if (writeMode) document.location.reload();
+	});
 }
 
 function submitListener(e) {
@@ -79,7 +101,6 @@ function install(scope) {
 	var win = Pageboard.window = Pageboard.read.contentWindow;
 	Pageboard.hrefs = scope.$hrefs;
 
-	win.Page.window = window;
 	win.addEventListener('click', anchorListener, true);
 	// FIXME this prevents setting selection inside a selected link...
 	//win.addEventListener('mouseup', anchorListener, true);
