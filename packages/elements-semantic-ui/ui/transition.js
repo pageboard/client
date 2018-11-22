@@ -107,7 +107,7 @@ Page.Transition = class {
 			corpse.appendChild(node);
 		});
 		this.event = this.constructor.event('end');
-		if (this.event && (this.from || this.to) && !body.isContentEditable) this.ok = true;
+		if (this.event && (this.from || this.to) && !body.isContentEditable && this.fromList.length > 0 && this.toList.length > 0) this.ok = true;
 	}
 	start() {
 		var clist = this.body.classList;
