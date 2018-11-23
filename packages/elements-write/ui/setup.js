@@ -30,7 +30,7 @@ Page.setup(function(state) {
 			};
 			followPage(win, state);
 		} else {
-			setTimeout(checkReady);
+			setTimeout(checkReady, 10);
 		}
 	})();
 });
