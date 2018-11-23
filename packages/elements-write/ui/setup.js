@@ -2,11 +2,10 @@
 
 var modeControl, writeMode = true, adv = false;
 
-Pageboard.setup = function(state) {
+Page.setup(function(state) {
 	var parentRead = document.getElementById('pageboard-read');
 	var iframe = Pageboard.read = document.createElement('iframe');
 	parentRead.insertBefore(iframe, parentRead.lastElementChild);
-	init(state);
 	Pageboard.write = document.getElementById('pageboard-write');
 	Pageboard.scrollbar = new window.PerfectScrollbar(Pageboard.write);
 	modeControl = document.querySelector('#store > [data-command="view"]');
@@ -15,18 +14,10 @@ Pageboard.setup = function(state) {
 	document.body.addEventListener('submit', function(e) {
 		e.preventDefault();
 	});
-};
-
-Pageboard.patch = init;
-
-function init(state) {
-	// setup "read" iframe in develop write mode
 	var loc = Page.parse(Page.format(state)); // get a copy of state
 	loc.query.develop = "write";
 	var src = Page.format(loc);
 
-	var iframe = Pageboard.read;
-	if (!iframe) return;
 	if (iframe.getAttribute('src') == src) return;
 	iframe.setAttribute('src', src);
 
@@ -42,22 +33,34 @@ function init(state) {
 			setTimeout(checkReady);
 		}
 	})();
-}
+});
 
-function followPage(win, state) {
+function followPage(win, writeState) {
 	var script = win.document.head.querySelector('script');
-	script.addEventListener('pagepatch', function(e) {
-		var winState = e.detail;
-		window.document.title = win.document.title;
-		state.pathname = winState.pathname;
-		var develop = state.query.develop;
-		state.query = Object.assign({}, winState.query);
-		if (develop !== undefined) state.query.develop = develop;
-		else delete state.query.develop;
-		state.save();
-	});
-	win.addEventListener('popstate', function(e) {
-		if (writeMode) document.location.reload();
+	script.addEventListener('pageinit', function(e) {
+		win.Page.setup(function(readState) {
+			readState.finish(function() {
+				window.document.title = win.document.title;
+				var readCopy = readState.copy();
+				var writeCopy = writeState.copy();
+				delete readCopy.query.develop;
+				delete writeCopy.query.develop;
+				// if (Page.samePath(readCopy, writeCopy)) return;
+				var dev = writeState.query.develop;
+				if (dev !== undefined) readCopy.query.develop = dev;
+				else delete readCopy.query.develop;
+				writeState.pathname = readCopy.pathname;
+				writeState.query = readCopy.query;
+				writeState.save();
+
+				Pageboard.view = win.Pageboard.view;
+				Pageboard.hrefs = readState.scope.$hrefs;
+
+				if (writeMode) {
+					editorSetup(win, win.Pageboard.view, readState);
+				}
+			});
+		});
 	});
 }
 
@@ -99,7 +102,6 @@ function modeControlListener() {
 
 function install(scope) {
 	var win = Pageboard.window = Pageboard.read.contentWindow;
-	Pageboard.hrefs = scope.$hrefs;
 
 	win.addEventListener('click', anchorListener, true);
 	// FIXME this prevents setting selection inside a selected link...
@@ -133,13 +135,6 @@ function install(scope) {
 		}
 		return ret;
 	};
-
-	win.Page.setup(function(state) {
-		document.title = win.document.title;
-		if (!writeMode) return;
-		Pageboard.view = win.Pageboard.view;
-		editorSetup(win, win.Pageboard.view, state);
-	});
 }
 
 function updatePage(state) {
@@ -213,6 +208,7 @@ function editorSetup(win, view, state) {
 		return;
 	}
 	var content = win.document.body.cloneNode(true);
+	if (Pageboard.editor) editorClose();
 
 	// and the editor must be running from child
 	var editor = new win.Pagecut.Editor({

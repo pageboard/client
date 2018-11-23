@@ -41,9 +41,3 @@ Object.assign(window.Pageboard, {
 	}
 });
 
-Page.patch(function(state) {
-	Pageboard.patch(state);
-});
-Page.setup(function(state) {
-	Pageboard.setup(state);
-});
