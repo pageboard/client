@@ -32,7 +32,7 @@ Pageboard.elements.link = {
 			title: 'Template',
 			description: 'Query template',
 			type: 'string',
-			context: 'query|form'
+			context: 'template//'
 		},
 		icon: { // TODO remove me in favor of inline images
 			title: 'Icon',
