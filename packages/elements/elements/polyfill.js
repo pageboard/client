@@ -13,7 +13,7 @@ Pageboard.elements.polyfill = {
 		});
 		scope.$element.dom.querySelector('head > script').before(this.dom.fuse({
 			features: Object.keys(map).join(',')
-		}));
+		}, scope));
 	},
 	polyfills: 'default'
 };

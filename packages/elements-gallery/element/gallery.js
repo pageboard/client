@@ -92,6 +92,6 @@ Pageboard.elements.itemlink = {
 	},
 	html: '<a class="itemlink [icon|?]" style="background-image:url([icon|magnet])" href="[url]" block-content="text"></a>',
 	fuse: function(node, d, scope) {
-		Pageboard.elements.link.auto(node.fuse(d), scope.$hrefs);
+		Pageboard.elements.link.auto(node.fuse(d, scope), scope.$hrefs);
 	}
 };

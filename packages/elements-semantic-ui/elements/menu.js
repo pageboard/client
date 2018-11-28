@@ -77,7 +77,7 @@ Pageboard.elements.menu_item_link = {
 	group: 'menu_item',
 	html: '<a class="item" href="[url]" data-href="[template]" block-content="content">Item</a>',
 	fuse: function(node, d, scope) {
-		node.fuse(d);
+		node.fuse(d, scope);
 		Pageboard.elements.link.auto(node, scope.$hrefs);
 	}
 };

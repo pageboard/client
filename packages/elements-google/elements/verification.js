@@ -14,7 +14,7 @@ Pageboard.elements.google_site_verification = {
 		if (scope.$pathname != "/") return;
 		var id = scope.$site.google_site_verification;
 		if (!id || scope.$site.env != "production") return;
-		scope.$element.dom.querySelector('head').append(this.dom.fuse({id: id}));
+		scope.$element.dom.querySelector('head').append(this.dom.fuse({id: id}, scope));
 	}
 };
 

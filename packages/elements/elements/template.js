@@ -49,7 +49,7 @@ fait une requête ou pas).
 Pageboard.elements.fetch = Object.assign({}, Pageboard.elements.template, {
 	title: "Fetch",
 	icon: '<i class="search icon"></i>',
-	fuse: function(node, d) {
+	fuse: function(node, d, scope) {
 		// do not call /.api/query if not true
 		node.dataset.remote = !!(d.method);
 		var keys = [];
@@ -155,13 +155,13 @@ Pageboard.elements.binding = {
 	inline: true,
 	group: "inline nolink",
 	html: '<span data-attr="[attr]" data-fill="[fill]">[ph]</span>',
-	fuse: function(node, d) {
+	fuse: function(node, d, scope) {
 		var fill = (d.fill || '').trim().split('\n').join('|');
 		node.fuse({
 			ph: d.placeholder || fill.split('|', 1)[0].split('.').pop() || '-',
 			attr: d.attr ? `[${d.attr.trim().split('\n').join('|')}]`: null,
 			fill: fill ? `[${fill}|fill]` : null
-		});
+		}, scope);
 	}
 };
 

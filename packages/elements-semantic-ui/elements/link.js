@@ -81,7 +81,7 @@ Pageboard.elements.link = {
 	html: '<a href="[url]" class="[button|?:ui button] [icon|?]" data-href="[template]"></a>',
 	fuse: function(node, d, scope) {
 		if (d.icon) node.style.backgroundImage = `url(${d.icon})`;
-		return this.auto(node.fuse(d), scope.$hrefs);
+		return this.auto(node.fuse(d, scope), scope.$hrefs);
 	},
 	stylesheets: [
 		'../semantic-ui/button.css'

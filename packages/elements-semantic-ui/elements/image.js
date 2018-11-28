@@ -205,7 +205,7 @@ Pageboard.elements.image = {
 			}
 		}
 		obj.src = loc ? Page.format(loc) : null;
-		node.fuse(obj);
+		node.fuse(obj, scope);
 	},
 	resources: [
 		'../ui/empty.png'
@@ -367,7 +367,7 @@ Pageboard.elements.inlineImage = {
 		var loc = Pageboard.elements.image.buildLoc(d.url || this.resources[0], d);
 		node.fuse(Object.assign({
 			src: Page.format(loc)
-		}, d));
+		}, d), scope);
 	},
 	resources: [
 		'../ui/empty.png'

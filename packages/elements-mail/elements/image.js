@@ -108,7 +108,7 @@ Pageboard.elements.mail_image = {
 		var loc = this.buildLoc(d.url || this.resources[0], d, (scope.$hrefs || {})[d.url]);
 		node.fuse(Object.assign({
 			src: Page.format(loc)
-		}, d));
+		}, d), scope);
 	},
 	resources: [
 		'../ui/empty.png'
