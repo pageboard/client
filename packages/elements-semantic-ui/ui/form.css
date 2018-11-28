@@ -58,3 +58,15 @@ form[data-authfield] button[type="submit"]:before {
 	padding-left:2.65714em;
 }
 
+
+[contenteditable] .ui.form .ui.message {
+	display:block;
+}
+
+[contenteditable] [block-type="fetch"] .ui.message {
+	display:block !important;
+}
+
+[contenteditable] .ui.form .field.hidden {
+	display: block !important;
+}

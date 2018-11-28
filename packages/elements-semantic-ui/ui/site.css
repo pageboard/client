@@ -307,17 +307,6 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 	pointer-events: auto !important;
 }
 
-[contenteditable] .ui.form[block-focused] .ui.message {
-	display:block;
-}
-
-[contenteditable] [block-type="query"][block-focused] .ui.message {
-	display:block !important;
-}
-
-[contenteditable] .ui.form[block-focused] .field.hidden {
-	display: block !important;
-}
 
 [contenteditable] .ui.dropdown[block-focused] > .menu {
 	overflow: visible;
