@@ -43,7 +43,7 @@ Pageboard.elements.query_form = {
 			spec: 'block+'
 		}
 	},
-	html: `<form class="ui form" action="[url]" method="get" data-type="[type]">
+	html: `<form is="element-form" class="ui form" action="[url]" method="get" data-type="[type]">
 		<div block-content="form"></div>
 	</form>`,
 	stylesheets: [
@@ -147,7 +147,7 @@ Pageboard.elements.api_form = {
 			spec: 'block+'
 		}
 	},
-	html: `<form action="/.api/form/[$id]" type="[type]"
+	html: `<form is="element-form" action="/.api/form/[$id]" type="[type]"
 		method="post"
 		class="ui form"
 		id="[name|or:[$id|slice:0:4]]"
