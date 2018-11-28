@@ -57,6 +57,13 @@ typings/
 # dotenv environment variables file
 .env
 
-packages/datetime-entry
-packages/flickity
-packages/pagecut
+# postinstall to /lib
+/lib
+
+# always ignore TODO
+TODO*
+
+# dev symlinks
+/packages/datetime-entry
+/packages/flickity
+/packages/pagecut
