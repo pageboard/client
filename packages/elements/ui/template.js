@@ -79,7 +79,7 @@ class HTMLElementTemplate extends HTMLCustomElement {
 		view.appendChild(node);
 	}
 }
-Page.init(function() {
+Page.ready(function() {
 	HTMLCustomElement.define('element-template', HTMLElementTemplate);
 });
 
