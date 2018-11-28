@@ -127,7 +127,7 @@ Pageboard.elements.fetch_message = {
 			spec: "block+"
 		}
 	},
-	html: '<div class="[type]" block-content="message">Message</div>'
+	html: '<div class="[type]" block-content="message"><p>Message</p></div>'
 };
 
 
