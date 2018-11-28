@@ -1,8 +1,3 @@
-/*
-TODO use matchdom to map values from query to input values:
-- query_form: the ones that are changing the url often need to map id to produit
-- submission_form: some of them need to set an hidden input from a query value
-*/
 Pageboard.elements.query_form = {
 	priority: 0, // scripts must run before 'query' scripts
 	title: 'Form Query',
