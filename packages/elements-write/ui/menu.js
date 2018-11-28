@@ -95,21 +95,19 @@ Menu.prototype.item = function(el) {
 	var item = {
 		element: el,
 		run: function(state, dispatch, view) {
-			var tr = state.tr;
-			var sel = self.selection;
-			var block = editor.blocks.create(el.name);
-			Promise.resolve().then(function() {
+			try {
+				var tr = state.tr;
+				var sel = self.selection;
+				var block = editor.blocks.create(el.name);
 				if (el.inline) {
 					if (nodeType.isAtom) {
 						tr.replaceSelectionWith(nodeType.create(editor.blocks.toAttrs(block)));
 						var resel = sel ? editor.utils.selectTr(tr, sel) : null;
 						if (resel) tr.setSelection(resel);
-						return tr;
 					} else {
 						editor.utils.toggleMark(nodeType, editor.blocks.toAttrs(block))(state, function(atr) {
 							tr = atr;
 						});
-						return tr;
 					}
 				} else {
 					var blocks = {};
@@ -120,15 +118,13 @@ Menu.prototype.item = function(el) {
 						sel = editor.utils.selectTr(tr, pos);
 						if (sel) tr.setSelection(sel);
 					}
-					return tr;
 				}
-			}).then(function(tr) {
 				tr.setMeta('editor', true);
 				tr.scrollIntoView();
 				dispatch(tr);
-			}).catch(function(err) {
+			} catch (err) {
 				Pageboard.notify("Error while inserting " + el.title, err);
-			});
+			}
 		},
 		select: function(state) {
 			if (el.inline && !nodeType.isAtom) {
