@@ -30,7 +30,7 @@ class HTMLElementHeadingHelper extends HTMLHeadingElement {
 	}
 }
 
-Page.init(function() {
+Page.setup(function() {
 	for (var i=1; i <= 6; i++) {
 		HTMLCustomElement.define(`h${i}-helper`, class extends HTMLElementHeadingHelper {}, `h${i}`);
 	}
