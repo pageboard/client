@@ -52,7 +52,7 @@ Pageboard.elements.input_button = {
 	},
 	html: '<button type="[type]" class="ui button" block-content="label">[type|schema:title]</button>',
 	stylesheets: [
-		'../semantic-ui/button.css',
+		'../lib/components/button.css',
 	]
 };
 
@@ -207,8 +207,8 @@ Pageboard.elements.input_file = {
 		</element-input-file>
 	</div>`,
 	stylesheets: [
-		'../semantic-ui/input.css',
-		'../semantic-ui/label.css',
+		'../lib/components/input.css',
+		'../lib/components/label.css',
 		'../ui/input-file.css'
 	],
 	scripts: [
@@ -335,7 +335,7 @@ Pageboard.elements.input_checkbox = {
 		</div>
 	</div>`,
 	stylesheets: [
-		'../semantic-ui/checkbox.css'
+		'../lib/components/checkbox.css'
 	]
 };
 
@@ -376,7 +376,7 @@ Pageboard.elements.input_radio = {
 		</div>
 	</div>`,
 	stylesheets: [
-		'../semantic-ui/checkbox.css'
+		'../lib/components/checkbox.css'
 	]
 };
 
@@ -455,8 +455,8 @@ Pageboard.elements.input_select = {
 		</element-select>
 	</div>`,
 	stylesheets: [
-		'../semantic-ui/dropdown.css',
-		'../semantic-ui/label.css'
+		'../lib/components/dropdown.css',
+		'../lib/components/label.css'
 	],
 	scripts: [
 		'../ui/select.js'

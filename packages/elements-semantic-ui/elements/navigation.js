@@ -48,7 +48,7 @@ Pageboard.elements.breadcrumb = {
 		<div class="active section">[$doc.title|magnet:+div]</div>
 	</div>`,
 	stylesheets: [
-		'../semantic-ui/breadcrumb.css'
+		'../lib/components/breadcrumb.css'
 	]
 };
 

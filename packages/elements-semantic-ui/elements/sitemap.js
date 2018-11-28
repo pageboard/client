@@ -58,7 +58,7 @@ Pageboard.elements.sitemap = {
 		return parent;
 	},
 	stylesheets: [
-		'../semantic-ui/accordion.css',
+		'../lib/components/accordion.css',
 		'../ui/sitemap.css'
 	],
 	resources: [

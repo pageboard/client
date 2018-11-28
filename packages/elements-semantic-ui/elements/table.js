@@ -58,7 +58,7 @@ Pageboard.elements.table = {
 	html: `<table block-content="content"
 	class="ui table [definition|?] [single|?|post: line] [unstackable|?] [selectable|?] [striped|?] [celled|?] [basic|?] [collapsing|?] [compact|?]"></table>`,
 	stylesheets: [
-		'../semantic-ui/table.css'
+		'../lib/components/table.css'
 	]
 };
 

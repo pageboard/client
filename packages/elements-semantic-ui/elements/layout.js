@@ -84,7 +84,7 @@ Pageboard.elements.layout = {
 		[invert|?:inverted]" block-content="content" style="height:[height|eq:0:|not|post:%|magnet]">
 	</div>`,
 	stylesheets: [
-		'../semantic-ui/container.css',
+		'../lib/components/container.css',
 		'../ui/layout.css'
 	]
 };

@@ -43,7 +43,7 @@ Pageboard.elements.query_form = {
 		<div block-content="form"></div>
 	</form>`,
 	stylesheets: [
-		'../semantic-ui/form.css',
+		'../lib/components/form.css',
 		'../ui/form.css'
 	],
 	scripts: [ // for asynchronous submits and automatic triggers
@@ -150,7 +150,7 @@ Pageboard.elements.api_form = {
 		id="[name|or:[$id|slice:0:4]]"
 		block-content="form"></form>`,
 	stylesheets: [
-		'../semantic-ui/form.css',
+		'../lib/components/form.css',
 		'../ui/form.css'
 	],
 	scripts: [ // for asynchronous submits and automatic triggers
@@ -191,6 +191,6 @@ Pageboard.elements.form_message = {
 	},
 	html: '<div class="ui message [type]" block-content="message">[type|schema:title] message</div>',
 	stylesheets: [
-		'../semantic-ui/message.css'
+		'../lib/components/message.css'
 	]
 };

@@ -46,7 +46,7 @@ Pageboard.elements.embed = {
 	html: `<element-embed class="ui embed" data-url="[url]" data-auto-play="[autoPlay]" data-placeholder="[placeholder]"></element-embed>`,
 	scripts: ['../ui/embed.js'],
 	stylesheets: [
-		'../semantic-ui/embed.css',
+		'../lib/components/embed.css',
 		'../ui/embed.css'
 	]
 };

@@ -14,7 +14,7 @@ Pageboard.elements.medialist = {
 	},
 	html: '<div class="ui items unstackable medialist" block-content="items"></div>',
 	stylesheets: [
-		'../semantic-ui/item.css',
+		'../lib/components/item.css',
 		'../ui/medialist.css',
 	]
 };

@@ -31,7 +31,7 @@ Pageboard.elements.tabs = {
 		<div block-content="tabs"></div>
 	</element-tabs>`,
 	stylesheets: [
-		'../semantic-ui/tab.css',
+		'../lib/components/tab.css',
 		'../ui/tab.css'
 	],
 	scripts: [

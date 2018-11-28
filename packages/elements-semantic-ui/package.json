@@ -27,7 +27,8 @@
     "stickyfilljs": "^2.1.0"
   },
   "postinstall": {
-    "semantic-ui-css/components": "link semantic-ui",
+    "semantic-ui-css/components": "link lib/components",
+    "semantic-ui-css/themes": "link lib/themes",
     "stickyfilljs/dist/stickyfill.js": "link lib/",
     "object-fit-images/dist/ofi.common-js.js": "browserify --standalone=objectFitImages lib/object-fit-images.js",
     "formdata-polyfill/formdata.min.js": "link lib/formdata.js",

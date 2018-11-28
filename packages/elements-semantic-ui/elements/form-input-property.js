@@ -266,7 +266,7 @@ Pageboard.elements.input_property = {
 		return node;
 	},
 	stylesheets: [
-		'../semantic-ui/accordion.css',
+		'../lib/components/accordion.css',
 		'../ui/accordion.css'
 	],
 	scripts: [

@@ -23,7 +23,7 @@ Pageboard.elements.grid = {
 	},
 	html: '<div class="ui doubling stackable equal width grid [width|eq:contained:container]" block-content="columns"></div>',
 	stylesheets: [
-		'../semantic-ui/grid.css'
+		'../lib/components/grid.css'
 	]
 };
 

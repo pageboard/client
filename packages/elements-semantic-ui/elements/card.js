@@ -19,7 +19,7 @@ Pageboard.elements.cards = {
 	},
 	html: '<div class="ui [columnCount|num] doubling stackable cards" block-content="cards"></div>',
 	stylesheets: [
-		'../semantic-ui/card.css'
+		'../lib/components/card.css'
 	]
 };
 

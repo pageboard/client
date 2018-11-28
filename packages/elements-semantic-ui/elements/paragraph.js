@@ -81,7 +81,7 @@ Pageboard.elements.segment = {
 		return node;
 	},
 	stylesheets: [
-		'../semantic-ui/segment.css'
+		'../lib/components/segment.css'
 	]
 };
 
@@ -181,7 +181,7 @@ Pageboard.elements.divider = {
 	},
 	html: '<div class="ui divider [ruler|!?:hidden] [large|?:section] [clearing|?] [fitted|?]"></div>',
 	stylesheets: [
-		'../semantic-ui/divider.css'
+		'../lib/components/divider.css'
 	]
 };
 

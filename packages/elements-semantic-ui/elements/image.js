@@ -373,7 +373,7 @@ Pageboard.elements.inlineImage = {
 		'../ui/empty.png'
 	],
 	stylesheets: [
-		'../semantic-ui/image.css'
+		'../lib/components/image.css'
 	],
 	polyfills: [
 		'IntersectionObserver'

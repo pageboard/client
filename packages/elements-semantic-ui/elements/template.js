@@ -6,7 +6,7 @@ Pageboard.elements.fetch_message.install = function(node, d, scope) {
 	this.dom.classList.add('ui', 'message');
 };
 Pageboard.elements.fetch_message.stylesheets.push(
-	'../semantic-ui/message.css'
+	'../lib/components/message.css'
 );
 
 Pageboard.elements.query_tags = {
@@ -23,7 +23,7 @@ Pageboard.elements.query_tags = {
 		<div class="ui labels"></div>
 	</element-query-tags>`,
 	stylesheets: [
-		'../semantic-ui/label.css',
+		'../lib/components/label.css',
 		'../ui/query-tags.css'
 	],
 	scripts: [

@@ -4,7 +4,7 @@ Pageboard.elements.page.contents.body = {
 };
 
 Pageboard.elements.page.stylesheets = [
-	'../semantic-ui/reset.css',
+	'../lib/components/reset.css',
 	'../ui/site.css',
 	'../ui/transition.css'
 ];

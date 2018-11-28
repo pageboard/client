@@ -84,7 +84,7 @@ Pageboard.elements.link = {
 		return this.auto(node.fuse(d, scope), scope.$hrefs);
 	},
 	stylesheets: [
-		'../semantic-ui/button.css'
+		'../lib/components/button.css'
 	]
 };
 

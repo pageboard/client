@@ -27,7 +27,7 @@ Pageboard.elements.menu = {
 	group: "block",
 	html: '<div class="ui [direction] menu" block-content="items"></div>',
 	stylesheets: [
-		'../semantic-ui/menu.css',
+		'../lib/components/menu.css',
 		'../ui/menu.css'
 	],
 	scripts: [
@@ -112,7 +112,7 @@ Pageboard.elements.menu_item_dropdown = {
 		<div class="menu" block-content="items"></div>
 	</div>`,
 	stylesheets: [
-		'../semantic-ui/dropdown.css'
+		'../lib/components/dropdown.css'
 	]
 };
 
