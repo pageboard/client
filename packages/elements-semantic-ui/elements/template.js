@@ -1,12 +1,9 @@
-Pageboard.elements.fetch._fuse = Pageboard.elements.fetch.fuse;
-Pageboard.elements.fetch.fuse = function(node, d) {
-	this._fuse(node, d);
-	node.classList.add('ui', 'form');
+Pageboard.elements.fetch.install = function() {
+	this.dom.classList.add('ui', 'form');
 };
 
-Pageboard.elements.fetch_message.fuse = function(node, d) {
-	node.fuse(d);
-	node.classList.add('ui', 'message');
+Pageboard.elements.fetch_message.install = function(node, d, scope) {
+	this.dom.classList.add('ui', 'message');
 };
 Pageboard.elements.fetch_message.stylesheets.push(
 	'../semantic-ui/message.css'
