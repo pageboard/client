@@ -1,6 +1,6 @@
 {
   "name": "@pageboard/elements-write",
-  "version": "0.3.0",
+  "version": "0.6.3",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pageboard/elements-write.git"
+    "url": "git+https://github.com/pageboard/client.git"
   },
   "author": "Jérémy Lal <kapouer@melix.org>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/pageboard/elements-write/issues"
+    "url": "https://github.com/pageboard/client/issues"
   },
-  "homepage": "https://github.com/pageboard/elements-write#readme",
+  "homepage": "https://github.com/pageboard/client#readme",
   "dependencies": {
     "@pageboard/pagecut": "^1.0.0-pre1",
     "browserify": "^14.1.0",

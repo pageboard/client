@@ -1,6 +1,6 @@
 {
   "name": "@pageboard/elements-mail",
-  "version": "0.4.0",
+  "version": "0.6.3",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pageboard/elements-mail.git"
+    "url": "git+https://github.com/pageboard/client.git"
   },
   "author": "Jérémy Lal <kapouer@melix.org>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/pageboard/elements-mail/issues"
+    "url": "https://github.com/pageboard/client/issues"
   },
-  "homepage": "https://github.com/pageboard/elements-mail#readme",
+  "homepage": "https://github.com/pageboard/client#readme",
   "pageboard": {
     "priority": -5,
     "directories": [
