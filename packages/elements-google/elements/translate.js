@@ -1,4 +1,5 @@
 Pageboard.elements.google_translate = {
+	priority: 12,
 	title: 'Translate',
 	group: 'menu_item',
 	context: "menu/",

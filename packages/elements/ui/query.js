@@ -1,10 +1,4 @@
-Page.patch(function(state) {
-	return Promise.all(Array.from(document.querySelectorAll('element-query')).map(function(node) {
-		return node.refresh(state.query);
-	}));
-});
-
-class HTMLElementQuery extends HTMLCustomElement {
+window.HTMLElementQuery = class HTMLElementQuery extends HTMLCustomElement {
 	static find(name, value) {
 		// convert query into a query that contains only
 		var nodes = document.querySelectorAll(`form [name="${name}"]`);
@@ -31,21 +25,25 @@ class HTMLElementQuery extends HTMLCustomElement {
 		}
 		return obj;
 	}
+	init() {
+		this.patch = this.patch.bind(this);
+	}
 	connectedCallback() {
-		this.refresh();
+		Page.patch(this.patch);
+	}
+	disconnectedCallback() {
+		Page.unpatch(this.patch);
 	}
 	attributeChangedCallback(attributeName, oldValue, newValue, namespace) {
-		if (attributeName.startsWith('data-')) this.refresh();
+		if (attributeName.startsWith('data-')) this.update();
 	}
 	update() {
-		return this.refresh();
+		return Page.patch(this.patch);
 	}
-	refresh(query) {
+	patch(state) {
+		if (this.closest('[block-content="template"]')) return;
 		if (!this.children.length) return;
-		if (!query) {
-			if (!Page.state) return;
-			query = Page.state.query;
-		}
+		var query = state.query;
 		if (this._refreshing) return;
 
 		var results = this.querySelector('.results');
@@ -55,7 +53,7 @@ class HTMLElementQuery extends HTMLCustomElement {
 		var missing = 0;
 		var candidate = 0;
 		if (this.dataset.type) {
-			var form = document.querySelector(`form[data-type="${this.dataset.type}"]`);
+			var form = document.querySelector(`body > *:not(.transition-from) form[data-type="${this.dataset.type}"]`);
 			if (form && form.closest('[block-type="query"],[block-type="mail_query"]') != this) {
 				Array.prototype.forEach.call(form.elements, function(node) {
 					var key = node.name;
@@ -88,9 +86,9 @@ class HTMLElementQuery extends HTMLCustomElement {
 			});
 			if (candidate == 0) return;
 		}
-		var form = this;
+		var me = this;
 		if (missing > 0) {
-			form.classList.add('error');
+			me.classList.add('error');
 			return;
 		}
 		this._refreshing = true;
@@ -110,78 +108,86 @@ class HTMLElementQuery extends HTMLCustomElement {
 			this._refreshing = false;
 			return;
 		}
-		form.classList.remove('success', 'error', 'warning', 'loading');
-		form.classList.add('loading');
+		me.classList.remove('success', 'error', 'warning', 'loading');
+		me.classList.add('loading');
 		return Pageboard.fetch('get', '/.api/query', vars).then(function(answer) {
 			answer.$query = vars;
 			matchdom(template, answer, HTMLElementQuery.filters, answer);
 			while (template.firstChild) results.appendChild(template.firstChild);
 			if (!answer.data || answer.data.length === 0) {
-				form.classList.add('warning');
+				me.classList.add('warning');
 			} else {
-				form.classList.add('success');
+				me.classList.add('success');
 			}
 		}.bind(this)).catch(function(err) {
 			console.error(err);
-			form.classList.add('error');
+			me.classList.add('error');
 		}).then(function() {
-			form.classList.remove('loading');
+			me.classList.remove('loading');
 			this._refreshing = false;
 		}.bind(this));
 	}
 }
 
 HTMLElementQuery.filters = {};
-HTMLElementQuery.filters.title = function(val, what) {
-	// return title of repeated key, title of anyOf/listOf const value
+HTMLElementQuery.filters.schema = function(val, what, spath) {
+	// return schema of repeated key, schema of anyOf/listOf const value
 	if (val === undefined) return;
-	var path = what.scope.path.slice();
-	var cur = what.expr.path.slice();
-	if (what.scope.alias && cur[0] == what.scope.alias) {
-		cur.shift();
+	var schemaPath, schemaRoot;
+	var path = what.scope.path;
+	var rel = path.map(function(item) {
+		if (typeof item == "number") return "items";
+		else return item;
+	});
+	if (!what.scope.schemas) {
+		console.warn("No schemas");
+		return val;
 	}
-	path = path.concat(cur);
-	var block, last;
-	if (what.scope.keys) {
-		last = path.pop();
-		if (last == "key") {
-			path.push(val);
-			val = undefined;
-		} else if (last == "val") {
-			var key = what.scope.data[what.scope.index].key;
-			path.push(key);
-		}
-		block = what.data;
-	} else {
-		block = what.scope.data;
-	}
-	for (var i=0; i < path.length; i++) {
-		if (!block || block.id && block.type) break;
-		block = block[path[i]];
-	}
-	if (!what.scope.keys) path = path.slice(i);
 
-	if (!block || !block.type) {
-		console.warn("No block found matching", what.scope.path, what.expr.path);
+	var data = what.index != null ? what.scope.data : what.data.data;
+	var blocks = [];
+	for (var i=0; i < path.length; i++) {
+		if (!data) break;
+		if (data.id && data.type) blocks.push({index: i, block: data});
+		data = data[path[i]];
+	}
+	var item = blocks.pop();
+	if (!item) {
+		console.warn("No block found in", what.scope.path);
 		return;
 	}
-	var schemaPath = 'schemas.' + block.type + '.properties.' + path.join('.properties.');
-	var schema = what.expr.get(what.data, schemaPath);
+	schemaPath = 'schemas.' + item.block.type + '.properties.'
+			+ rel.slice(item.index).join('.properties.');
+	schemaRoot = what.scope;
+
+	var schema = what.expr.get(schemaRoot, schemaPath);
 	if (!schema) {
 		console.warn("No schema for", schemaPath);
 		return;
 	}
-	if (val === undefined && schema.title) return schema.title;
-	var listOf = schema.oneOf || schema.anyOf;
-	if (!listOf) {
-		if (last == "val") return val;
-		console.warn("No oneOf/anyOf schema for property of", schemaPath, val);
-		return;
+	if ((what.scope.iskey === undefined || what.scope.iskey === false) && val !== undefined) {
+		var listOf = schema.oneOf || schema.anyOf;
+		if (listOf) {
+			var prop = listOf.find(function(item) {
+				return item.const === val; // null !== undefined
+			});
+			if (prop != null) schema = prop;
+		} else {
+			// pointless to return a schema piece when dealing with a value
+			spath = null;
+		}
 	}
-	var prop = listOf.find(function(item) {
-		return item.const === val; // null !== undefined
-	});
-	if (prop != null) return prop.title;
+	if (spath == null) return val;
+	var sval = what.expr.get(schema, spath);
+	if (sval === undefined) {
+		console.warn("Cannot find path in schema", schema, spath);
+		sval = null;
+	}
+	return sval;
+};
+
+HTMLElementQuery.filters.title = function(val, what) {
+	return HTMLElementQuery.filters.schema(val, what, "title");
 };
 HTMLElementQuery.filters.checked = function(val, what, selector) {
 	var ret = what.filters.attr(val === true ? 'checked' : null, what, 'checked', selector);
@@ -209,5 +215,7 @@ HTMLElementQuery.filters.query = function(val, what, name) {
 	return Page.format({pathname: "", query: q});
 };
 
-HTMLCustomElement.define('element-query', HTMLElementQuery);
+Page.init(function(state) {
+	HTMLCustomElement.define('element-query', HTMLElementQuery);
+});
 

@@ -252,6 +252,7 @@ Pageboard.elements.input_property = {
 			});
 			if (listOf.length == 1) {
 				propType = listOf[0];
+				listOf = null;
 			} else {
 				listOf = null; // cannot deal with this for now
 			}
@@ -402,7 +403,7 @@ Pageboard.elements.input_property = {
 				type: 'input_text',
 				data: {
 					name: name,
-					type: 'text',
+					type: propType.format == 'singleline' ? 'text' : 'textarea',
 					disabled: d.disabled,
 					default: propType.default,
 					required: required,

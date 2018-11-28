@@ -20,20 +20,22 @@ class HTMLElementImage extends HTMLCustomElement {
 			this.observer.observe(el);
 		} else {
 			el.reveal();
-			Page.patch(function() {
-				el.reveal();
-			});
-			Page.setup(function() {
-				el.reveal();
-			});
+			Page.patch(el.reveal);
+			Page.setup(el.reveal);
 		}
 	}
 	static unobserve(el) {
 		if (this.observer) {
 			this.observer.unobserve(el);
 		} else {
-			// TODO
+			Page.unpatch(el.reveal);
+			Page.unsetup(el.reveal);
 		}
+	}
+	init() {
+		this.load = this.load.bind(this);
+		this.error = this.error.bind(this);
+		this.reveal = this.reveal.bind(this);
 	}
 	connectedCallback() {
 		this.addEventListener('load', this.load, true);

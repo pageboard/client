@@ -1,6 +1,6 @@
 {
   "name": "@pageboard/elements-semantic-ui",
-  "version": "0.3.2",
+  "version": "0.5.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -18,17 +18,17 @@
   },
   "homepage": "https://github.com/pageboard/elements-semantic-ui#readme",
   "dependencies": {
-    "@pageboard/stickybits": "^3.1.1",
     "formdata-polyfill": "^3.0.11",
     "nouislider": "^11.1.0",
     "object-fit-images": "^3.2.3",
     "postinstall": "^0.2.0",
     "postinstall-browserify": "^0.1.0",
-    "semantic-ui-css": "^2.3.2"
+    "semantic-ui-css": "^2.3.2",
+    "stickyfilljs": "^2.1.0"
   },
   "postinstall": {
     "semantic-ui-css/components": "link semantic-ui",
-    "@pageboard/stickybits/dist/stickybits.js": "link lib/",
+    "stickyfilljs/dist/stickyfill.js": "link lib/",
     "object-fit-images/dist/ofi.common-js.js": "browserify --standalone=objectFitImages lib/object-fit-images.js",
     "formdata-polyfill/formdata.min.js": "link lib/formdata.js",
     "nouislider/distribute/nouislider.js": "link lib/",

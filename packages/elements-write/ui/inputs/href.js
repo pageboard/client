@@ -536,11 +536,11 @@ function tplDims(obj) {
 
 function tplPreview(preview) {
 	if (!preview) return '';
-	preview = document.dom`${preview}`;
-	if (preview.nodeType != Node.ELEMENT_NODE) return preview;
-	if (preview.matches('img')) {
-		preview.className = "ui tiny image";
-		return document.dom`<div class="thumbnail">${preview}</div>`;
+	var node = document.dom`${preview}`;
+	if (node.nodeType != Node.ELEMENT_NODE) return preview;
+	if (node.matches('img')) {
+		node.className = "ui tiny image";
+		return document.dom`<div class="thumbnail">${node}</div>`;
 	} else {
 		console.warn("fixme, render preview", preview);
 	}

@@ -76,13 +76,13 @@ Pageboard.elements.tab_item = {
 	},
 	parse: function(dom) {
 		var d = {};
-		if (dom.matches('.active')) d.active = true;
+		d.active = dom.previousElementSibling == null;
 		return d;
 	},
 	icon: '<i class="icons"><b class="icon">Tab</b><i class="corner add icon"></i></i>',
 	render: function(doc, block) {
 		var d = block.data;
-		return doc.dom`<a class="item ${d.active ? 'active' : ''}" block-content="content">tab</a>`;
+		return doc.dom`<a class="item ${d.active ? 'active' : ''}" block-content="content">Tab Item</a>`;
 	}
 };
 
@@ -101,12 +101,12 @@ Pageboard.elements.tab = {
 	},
 	parse: function(dom) {
 		var d = {};
-		if (dom.matches('.active')) d.active = true;
+		d.active = dom.previousElementSibling == null;
 		return d;
 	},
 	render: function(doc, block) {
 		var d = block.data;
-		return doc.dom`<div class="ui tab ${d.active ? 'active' : ''} segment" block-content="content">tab</div>`;
+		return doc.dom`<div class="ui tab ${d.active ? 'active' : ''} segment" block-content="content"></div>`;
 	}
 };
 

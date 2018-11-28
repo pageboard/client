@@ -207,7 +207,7 @@ Crop.prototype.load = function() {
 };
 
 Crop.prototype.thumbnail = function(url) {
-	if (url) url += '?rs=w:512&q=65';
+	if (url) url += '?rs=w-512_h-512_max&q=65';
 	else url = document.body.dataset.placeholder;
 	return url;
 };

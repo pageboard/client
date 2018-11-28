@@ -1,23 +1,23 @@
 class HTMLElementQueryTags extends HTMLCustomElement {
 	init() {
-		this.close = this.close.bind(this);
+		this.remove = this.remove.bind(this);
+		this.patch = this.patch.bind(this);
 	}
 	connectedCallback() {
-		this.addEventListener('click', this.close);
-		if (this.children.length) this.refresh();
+		Page.patch(this.patch);
+		this.addEventListener('click', this.remove);
 	}
 	disconnectedCallback() {
-		this.removeEventListener('click', this.close);
+		Page.unpatch(this.patch);
+		this.removeEventListener('click', this.remove);
 	}
-	refresh(query) {
-		if (!query) {
-			if (!Page.state) return;
-			query = Page.state.query;
-		}
+	patch(state) {
+		if (this.closest('[block-content="template"]')) return;
+		var query = state.query;
 		var labels = this.querySelector('.labels');
 		if (!labels) return;
 		labels.textContent = '';
-		var control, field, label;
+		var field, label;
 		for (var name in query) {
 			HTMLElementQuery.find(name, query[name]).forEach(function(control) {
 				if (control.type == "hidden") return;
@@ -25,7 +25,9 @@ class HTMLElementQueryTags extends HTMLCustomElement {
 				if (!field) return;
 				label = field.querySelector('label');
 				if (!label) return;
-				if (control.value == "") return;
+				if (control.value == null || control.value == "" || !label.innerText) return;
+				var prev = labels.querySelector(`[data-name="${name}"][data-value="${control.value}"]`);
+				if (prev) return;
 				labels.insertAdjacentHTML('beforeEnd', `<a class="ui label" data-name="${name}" data-value="${control.value}">
 					${label.innerText}
 					<i class="delete icon"></i>
@@ -33,7 +35,7 @@ class HTMLElementQueryTags extends HTMLCustomElement {
 			}, this);
 		}
 	}
-	close(e) {
+	remove(e) {
 		var label = e.target.closest('.label');
 		if (!label) return;
 		HTMLElementQuery.find(label.dataset.name, label.dataset.value).forEach(function(control) {
@@ -49,11 +51,7 @@ class HTMLElementQueryTags extends HTMLCustomElement {
 	}
 }
 
-HTMLCustomElement.define('element-query-tags', HTMLElementQueryTags);
-
-Page.patch(function(state) {
-	Array.from(document.querySelectorAll('element-query-tags')).forEach(function(node) {
-		node.refresh(state.query);
-	});
+Page.init(function() {
+	HTMLCustomElement.define('element-query-tags', HTMLElementQueryTags);
 });
 

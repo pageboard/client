@@ -1,3 +1,4 @@
+/* global google */
 class HTMLElementGoogleTranslate extends HTMLCustomElement {
 	static init() {
 		var me = this;
@@ -11,7 +12,7 @@ class HTMLElementGoogleTranslate extends HTMLCustomElement {
 			});
 		});
 		this.observer.observe(document.body, {attributes: true});
-		this.translate = (new RegExp('\\bgoogtrans=')).test(document.cookie);
+		this.translate = /\bgoogtrans=/.test(document.cookie);
 		if (this.translate) {
 			this.show();
 		}
@@ -51,7 +52,7 @@ class HTMLElementGoogleTranslate extends HTMLCustomElement {
 
 		var node = this.script;
 		var styles = [];
-		while (node=node.nextElementSibling) {
+		while ((node = node.nextElementSibling)) {
 			if (node.href && /(https?:)?\/\/translate\.google.*\.com\//.test(node.href)) {
 				styles.push(node);
 			}
@@ -66,13 +67,12 @@ class HTMLElementGoogleTranslate extends HTMLCustomElement {
 			return updateHead.call(Page, head);
 		};
 	}
-	static destroy() {
+	static close() {
 		Array.prototype.forEach.call(document.body.children, function(node) {
 			if (node.matches('.skiptranslate,.goog-te-spinner-pos')) {
 				node.dataset.transitionKeep = true;
 			}
 		});
-		this.observer.disconnect();
 	}
 	connectedCallback() {
 		this.addEventListener('click', this.clickHandler, false);
@@ -91,9 +91,18 @@ class HTMLElementGoogleTranslate extends HTMLCustomElement {
 
 Page.setup(function() {
 	HTMLCustomElement.define('element-google-translate', HTMLElementGoogleTranslate);
+	if (HTMLElementGoogleTranslate.style) {
+		Object.assign(document.body.style, HTMLElementGoogleTranslate.style);
+	}
 });
 
 Page.close(function() {
-	HTMLElementGoogleTranslate.destroy();
+	var s = document.body.style;
+	HTMLElementGoogleTranslate.style = {
+		minHeight: s.minHeight,
+		top: s.top,
+		position: s.position
+	};
+	HTMLElementGoogleTranslate.close();
 });
 

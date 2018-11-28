@@ -16,6 +16,7 @@ Pageboard.elements.query_message.stylesheets.push(
 );
 
 Pageboard.elements.query_tags = {
+	priority: 10, // must be loaded after query
 	title: 'Tags',
 	menu: "form",
 	group: "block",

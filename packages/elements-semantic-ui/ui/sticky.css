@@ -1,12 +1,16 @@
 element-sticky {
 	display:block;
 	z-index:1000;
+	position:sticky;
+	top:0;
 }
 element-sticky[data-collapsed="true"] {
 	height:0;
 }
 
-
 element-sticky.header {
 	z-index:1001; /* above other sticky elements */
+}
+html.google-translate-shown > body > element-sticky.header {
+	top:40px;
 }

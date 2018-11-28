@@ -1,23 +1,42 @@
+/* global Stickyfill */
 class HTMLElementSticky extends HTMLCustomElement {
 	static init() {
-		this.manager = stickybits({
-			stickyClass: 'is-sticky',
-			activeClass: 'is-sticky',
-			parentClass: null,
-			useStickyClasses: true
-		});
+		this.stickyfill = Stickyfill;
+		Stickyfill.forceSticky();
+	}
+	static destroy() {
+		this.stickyfill.removeAll();
+	}
+	init() {
+		var listener = this.listener.bind(this);
+		var raf;
+		this.listener = function() {
+			window.cancelAnimationFrame(raf);
+			raf = window.requestAnimationFrame(listener);
+		};
 	}
 	setup() {
-		if (!this.parentNode) return;
-		if (this._sticky) this.destroy();
-		this._sticky = this.constructor.manager.addInstance(this, {
-			verticalPosition: this.dataset.position
-		});
+		if (this._sticky || !this.parentNode) return;
+		if (this.closest('[contenteditable]')) return;
+		window.addEventListener('scroll', this.listener);
+		window.addEventListener('resize', this.listener);
+		// some stylesheets might target :not([data-mode="start"]) so it must be the initial value
+		this.dataset.mode = "start";
+		this._sticky = this.constructor.stickyfill.addOne(this);
+		this.listener();
+	}
+	listener(e) {
+		if (!this._sticky) return;
+		var mode = this._sticky._stickyMode;
+		if (this.dataset.mode == mode) return;
+		this.dataset.mode = mode;
 	}
 	destroy() {
-		if (!this._sticky) return;
-		this.constructor.manager.removeInstance(this._sticky);
+		if (!this._sticky || !this.parentNode) return;
 		delete this._sticky;
+		window.removeEventListener('scroll', this.listener);
+		window.removeEventListener('resize', this.listener);
+		this.constructor.stickyfill.removeOne(this);
 	}
 	connectedCallback() {
 		this.setup();
@@ -33,4 +52,8 @@ class HTMLElementSticky extends HTMLCustomElement {
 
 Page.setup(function() {
 	HTMLCustomElement.define('element-sticky', HTMLElementSticky);
+});
+
+Page.close(function() {
+	HTMLElementSticky.destroy();
 });

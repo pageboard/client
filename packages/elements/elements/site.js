@@ -7,12 +7,15 @@ Pageboard.elements.site = {
 		domains: {
 			title: 'Domain names',
 			description: 'The main domain and the redirecting ones if any',
-			type: "array",
-			items: {
-				type: "string",
-				format: 'hostname'
-			},
-			default: []
+			anyOf: [{
+				type: "null"
+			}, {
+				type: "array",
+				items: {
+					type: "string",
+					format: 'hostname'
+				}
+			}]
 		},
 		lang: {
 			title: 'Language',
