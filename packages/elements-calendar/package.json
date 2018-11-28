@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pageboard/elements-calendar.git"
+    "url": "git+https://github.com/pageboard/client.git"
   },
   "author": "Jérémy Lal <kapouer@melix.org>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/pageboard/elements-calendar/issues"
+    "url": "https://github.com/pageboard/client/issues"
   },
-  "homepage": "https://github.com/pageboard/elements-calendar#readme",
+  "homepage": "https://github.com/pageboard/client/packages/elements-calendar#readme",
   "dependencies": {
     "@pageboard/datetime-entry": "^3.2.0",
     "postinstall": "^0.1.0"

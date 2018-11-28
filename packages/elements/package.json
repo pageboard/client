@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pageboard/elements.git"
+    "url": "git+https://github.com/pageboard/client.git"
   },
   "author": "Jérémy Lal <kapouer@melix.org>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/pageboard/elements/issues"
+    "url": "https://github.com/pageboard/client/issues"
   },
-  "homepage": "https://github.com/pageboard/elements#readme",
+  "homepage": "https://github.com/pageboard/client/packages/elements#readme",
   "dependencies": {
     "document-register-element": "^1.9.0",
     "dom-template-strings": "^2.4.2",
