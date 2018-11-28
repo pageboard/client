@@ -32,7 +32,7 @@
     "europa": "^4.0.0",
     "foundation-emails": "^2.2.1",
     "inlineresources": "^1.0.0",
-    "juice": "^4.3.1",
+    "juice": "^5.0.1",
     "postinstall": "^0.4.2",
     "postinstall-browserify": "^0.1.0"
   },
