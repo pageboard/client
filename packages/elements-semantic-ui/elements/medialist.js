@@ -1,6 +1,7 @@
 Pageboard.elements.medialist = {
 	priority: 20,
 	title: "List",
+	group: "block",
 	menu: "widget",
 	properties: {
 	},
