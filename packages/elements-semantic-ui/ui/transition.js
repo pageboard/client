@@ -217,6 +217,7 @@ Page.setup(function navigate(state) {
 Page.setup(function(state) {
 	// Page removes event listener automatically
 	window.addEventListener('scroll', Pageboard.debounce(function(e) {
+		if (state.transition) return;
 		state.data.scroll = {
 			x: window.scrollX,
 			y: window.scrollY
