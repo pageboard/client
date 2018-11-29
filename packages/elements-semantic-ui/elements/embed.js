@@ -31,7 +31,7 @@ Pageboard.elements.embed = {
 	render: function(doc, block, view) {
 		var d = block.data;
 		var node = doc.dom`<element-embed class="ui embed" src="${d.url}"></element-embed>`;
-		if (d.template) node.data.src = d.template;
+		if (d.template) node.dataset.src = d.template;
 		return node;
 	},
 	scripts: ['../ui/embed.js'],
