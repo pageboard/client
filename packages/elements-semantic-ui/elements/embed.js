@@ -14,21 +14,6 @@ Pageboard.elements.embed = {
 			}]
 			// TODO plug embeds to href, but url-inspector makes it difficult for us right now
 		},
-		placeholder: {
-			title: 'Placeholder',
-			description: 'The iframe previsualisation image',
-			anyOf: [{
-				type: "null"
-			}, {
-				type: "string",
-				format: "uri"
-			}]
-		},
-		autoPlay: {
-			title: 'Auto play',
-			type: "boolean",
-			default: false
-		},
 		template: {
 			title: 'Template',
 			description: 'Query template',
@@ -38,18 +23,12 @@ Pageboard.elements.embed = {
 	},
 	group: "block",
 	parse: function(dom) {
-		var attrs = {};
-		if (dom.matches('iframe')) {
-			attrs.url = dom.getAttribute('src');
-		} else {
-			Object.keys(this.properties).forEach(function(key) {
-				if (dom.dataset[key]) attrs[key] = dom.dataset[key];
-			});
-		}
-		return attrs;
+		return {
+			url: dom.getAttribute('src')
+		};
 	},
 	tag: 'iframe,element-embed',
-	html: `<element-embed class="ui embed" data-url="[url]" data-auto-play="[autoPlay]" data-placeholder="[placeholder]"></element-embed>`,
+	html: `<element-embed class="ui embed" src="[url]" data-src="[template]"></element-embed>`,
 	scripts: ['../ui/embed.js'],
 	stylesheets: [
 		'../lib/components/embed.css',
