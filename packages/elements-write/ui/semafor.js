@@ -232,7 +232,11 @@ Semafor.prototype.convert = function(vals, field) {
 			if (listOf && !field.properties) {
 				// we support promotion to null and that's it
 				var listOfNo = listOf.filter(function(item) {
-					return item.type != "null";
+					if (typeof item == "string") {
+						return item != "null";
+					} else {
+						return item.type != "null";
+					}
 				});
 				if (listOfNo.length != listOf.length) {
 					nullable = true;
