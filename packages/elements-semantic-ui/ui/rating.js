@@ -21,8 +21,6 @@ class HTMLElementRating extends HTMLCustomElement {
 			item.classList.toggle('active', i + 1 <= value);
 		});
 	}
-	disconnectedCallback() {
-	}
 }
 
 Page.setup(function() {
