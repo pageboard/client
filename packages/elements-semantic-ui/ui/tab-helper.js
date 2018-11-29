@@ -1,41 +1,24 @@
-(function(Proto) {
-
-	Proto._init = Proto.init;
-	Proto._connectedCallback = Proto.connectedCallback;
-	Proto._disconnectedCallback = Proto.disconnectedCallback;
-
-	Proto.init = function() {
-		this._init();
-		this._initHelper();
-	};
-
-	Proto.connectedCallback = function() {
-		this._connectedCallback();
-		if (window.parent.Pageboard.editor) this._setupHelper();
-	};
-
-	Proto.disconnectedCallback = function() {
-		this._disconnectedCallback();
-		this._teardownHelper();
-	};
-
-	Proto._initHelper = function() {
+HTMLCustomElement.override(window.HTMLElementTabs, {
+	init: function() {
 		if (this.menuObserver) return;
 		this.menuObserver = new MutationObserver(function(mutations) {
 			this._sync();
 		}.bind(this));
-	};
-
-	Proto._setupHelper = function() {
+	},
+	connectedCallback: function() {
+		if (window.parent.Pageboard.editor) this._setupHelper();
+	},
+	disconnectedCallback: function() {
+		this._teardownHelper();
+	},
+	_setupHelper: function() {
 		this._editor = window.parent.Pageboard.editor;
 		this.menuObserver.observe(this.querySelector('[block-content="items"]'), {childList: true});
-	};
-
-	Proto._teardownHelper = function() {
+	},
+	_teardownHelper: function() {
 		this.menuObserver.disconnect();
-	};
-
-	Proto._sync = function() {
+	},
+	_sync: function() {
 		if (this._syncing || !this._editor) return;
 		this._syncing = true;
 		var editor = this._editor;
@@ -63,7 +46,6 @@
 		editor.dispatch(tr);
 
 		this._syncing = false;
-	};
-
-})(window.HTMLElementTabs.prototype);
+	}
+});
 
