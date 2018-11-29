@@ -28,6 +28,12 @@ Pageboard.elements.embed = {
 			title: 'Auto play',
 			type: "boolean",
 			default: false
+		},
+		template: {
+			title: 'Template',
+			description: 'Query template',
+			type: 'string',
+			context: 'query|form'
 		}
 	},
 	group: "block",
