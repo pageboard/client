@@ -31,18 +31,19 @@ class HTMLElementTemplate extends HTMLCustomElement {
 
 		var queryId = me.getAttribute('block-id');
 		var loader;
-		if (me.dataset.remote == "true") {
+		var remote = me.dataset.remote == "true";
+		if (remote) {
 			loader = Pageboard.fetch('get', `/.api/query/${queryId}`, query);
 		} else {
 			loader = Promise.resolve();
 		}
 		me._refreshing = true;
 		me.classList.remove('error', 'warning', 'success');
-		me.classList.add('loading');
+		if (remote) me.classList.add('loading');
 
-		return Pageboard.bundle(loader).then(function(res) {
+		return Pageboard.bundle(loader, state.scope).then(function(res) {
 			me.render(res, state);
-			me.classList.add('success');
+			if (remote) me.classList.add('success');
 		}).catch(function(err) {
 			me.classList.add('error');
 			console.error("Error building", err);
