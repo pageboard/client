@@ -2,12 +2,6 @@ class HTMLCustomFormElement extends HTMLFormElement {
 	init() {
 		this.getMethod = Pageboard.debounce(this.getMethod, 300);
 	}
-	connectedCallback() {
-		Page.connect(this);
-	}
-	disconnectedCallback() {
-		Page.disconnect(this);
-	}
 	patch(state) {
 		if (state.scope.$write) return;
 		if (this.method != "get") return;
