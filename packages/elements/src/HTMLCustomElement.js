@@ -6,32 +6,50 @@ class HTMLCustomElement extends HTMLElement {
 		return self;
 	}
 	init() {}
-	connectedCallback() {
-		Page.connect(this);
-	}
-	disconnectedCallback() {
-		Page.disconnect(this);
-	}
 }
 HTMLCustomElement.define = function(name, cla, is) {
 	if (cla.init) cla.init();
-	if (!window.customElements.get(name)) {
-		var opts;
-		if (is) {
-			opts = {extends: is};
-			var proto = cla.prototype;
-			proto._connectedCallback = proto.connectedCallback;
-			proto.connectedCallback = function() {
+	if (window.customElements.get(name)) return cla;
+	var opts;
+	if (is) {
+		opts = {extends: is};
+		HTMLCustomElement.intercept(cla, {
+			connectedCallback: function() {
 				if (!this._initialized) {
 					this._initialized = true;
 					if (this.init) this.init();
 				}
-				if (this._connectedCallback) this._connectedCallback();
-			};
-		}
-		window.customElements.define(name, cla, opts);
+			}
+		});
 	}
+	HTMLCustomElement.intercept(cla, {
+		connectedCallback: function() {
+			Page.connect(this);
+		},
+		disconnectedCallback: function() {
+			Page.disconnect(this);
+		}
+	});
+
+
+	window.customElements.define(name, cla, opts);
 	return cla;
+};
+
+function intercept(proto, meth, cb) {
+	proto[meth] = (function(fn) {
+		return function(...args) {
+			var ret = cb.apply(this, ...args);
+			if (fn) ret = fn.apply(this, ...args);
+			return ret;
+		};
+	})(proto[meth]);
+}
+
+HTMLCustomElement.intercept = function(cla, obj) {
+	Object.keys(obj).forEach(function(name) {
+		intercept(cla.prototype, name, obj[name]);
+	});
 };
 
 module.exports = HTMLCustomElement;
