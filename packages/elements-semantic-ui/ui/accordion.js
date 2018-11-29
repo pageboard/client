@@ -1,14 +1,5 @@
 class HTMLElementAccordion extends HTMLCustomElement {
-	init() {
-		this.click = this.click.bind(this);
-	}
-	connectedCallback() {
-		this.addEventListener('click', this.click, false);
-	}
-	disconnectedCallback() {
-		this.removeEventListener('click', this.click, false);
-	}
-	click(e) {
+	handleClick(e) {
 		var title = e.target.closest('.title');
 		if (!title) return;
 		var fold = title.parentNode;
