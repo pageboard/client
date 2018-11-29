@@ -10,12 +10,6 @@ class HTMLElementQueryTags extends HTMLCustomElement {
 			return true;
 		});
 	}
-	setup() {
-		this.addEventListener('click', this);
-	}
-	close() {
-		this.removeEventListener('click', this);
-	}
 	patch(state) {
 		if (this.closest('[block-content="template"]')) return;
 		var query = state.query;
@@ -40,8 +34,8 @@ class HTMLElementQueryTags extends HTMLCustomElement {
 			}, this);
 		}
 	}
-	handleEvent(e) {
-		if (e.type == 'click') this.remove(e.target.closest('.label'));
+	handleClick(e) {
+		this.remove(e.target.closest('.label'));
 	}
 	remove(label) {
 		if (!label) return;
@@ -58,7 +52,7 @@ class HTMLElementQueryTags extends HTMLCustomElement {
 	}
 }
 
-Page.init(function() {
+Page.ready(function() {
 	HTMLCustomElement.define('element-query-tags', HTMLElementQueryTags);
 });
 
