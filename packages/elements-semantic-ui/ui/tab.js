@@ -1,14 +1,5 @@
 class HTMLElementTabs extends HTMLCustomElement {
-	init() {
-		this.click = this.click.bind(this);
-	}
-	connectedCallback() {
-		this.addEventListener('click', this.click, false);
-	}
-	disconnectedCallback() {
-		this.removeEventListener('click', this.click, false);
-	}
-	click(e) {
+	handleClick(e) {
 		var item = e.target;
 		var menu = item.closest('[block-content="items"]');
 		if (!menu || menu.parentNode != this) return;
