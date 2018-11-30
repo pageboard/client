@@ -47,9 +47,12 @@ Page.setup(function restoreScrollReferrer(state) {
 });
 
 Page.setup(function(state) {
-	if (state.transition) state.finish(function() {
-		return state.transition.start();
-	});
+	if (state.transition) {
+		if (state.transition.ok) state.finish(function() {
+			return state.transition.start();
+		});
+		else state.transition.cleanup();
+	}
 });
 
 Page.Transition = class {
@@ -107,7 +110,11 @@ Page.Transition = class {
 			corpse.appendChild(node);
 		});
 		this.event = this.constructor.event('end');
-		if (this.event && (this.from || this.to) && !body.isContentEditable && this.fromList.length > 0 && this.toList.length > 0) this.ok = true;
+		this.ok = this.event
+			&& (this.from || this.to)
+			&& !body.isContentEditable
+			&& this.fromList.length > 0
+			&& this.toList.length > 0;
 	}
 	start() {
 		var clist = this.body.classList;
@@ -194,7 +201,7 @@ Page.Transition = class {
 		delete this.body;
 		delete this.state.transition;
 		delete this.state;
-		this.resolve();
+		if (this.resolve) this.resolve();
 	}
 };
 

@@ -15,16 +15,16 @@ Pageboard.elements.write = {
 	</head>
 	<body
 		data-css="[paths.0]"
-		data-js="[paths.1]"
-		data-devtools="[paths.2]"
-		data-placeholder="[paths.3]"
+		data-js="[paths.1],[paths.2]"
+		data-devtools="[paths.3]"
+		data-placeholder="[paths.4]"
 	>
 	<div id="pageboard-read">
 		<div class="ui bound bottom sticky wide notifications"></div>
 	</div>
 	<div id="pageboard-write" class="ui basic loading segment">
 		<div id="store" class="ui inverted wide mini menu">
-			<a class="vertically fitted item" data-command="view">
+			<a class="vertically fitted item" data-command="view" id="mode">
 				<i class="unhide large icon"></i>
 				<i class="hide large icon"></i>
 			</a>
@@ -132,6 +132,7 @@ Pageboard.elements.write = {
 		"../ui/breadcrumb.js",
 		"../ui/store.js",
 		"../ui/share.js",
+		"../ui/mode.js",
 		"../lib/perfect-scrollbar.js",
 		"../lib/infinite-scroll.js",
 		"../ui/setup.js",
@@ -142,6 +143,7 @@ Pageboard.elements.write = {
 	resources: [
 		"../ui/read.css",
 		"../lib/pagecut/editor.js",
+		"../ui/read.js",
 		"../lib/prosemirror-dev-tools.min.js",
 		"../ui/empty.png"
 	]
