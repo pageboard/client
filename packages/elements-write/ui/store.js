@@ -64,9 +64,7 @@ Store.genId =  function(len) {
 
 Store.prototype.importVirtuals = function(blocks) {
 	for (var id in blocks) {
-		this.fakeInitials[id] = JSON.parse(JSON.stringify(
-			this.editor.blocks.serializeTo(blocks[id])
-		));
+		this.fakeInitials[id] = ownProto(this.editor.blocks.serializeTo(blocks[id]));
 	}
 };
 
@@ -164,7 +162,7 @@ Store.prototype.realUpdate = function() {
 	}
 
 	// import data into this context
-	root = JSON.parse(JSON.stringify(root));
+	root = ownProto(root);
 
 	if (!this.initial) {
 		this.initial = root;
@@ -205,7 +203,7 @@ Store.prototype.quirkStart = function(invalidatePage) {
 	Object.assign(Store.generatedBefore, Store.generated);
 	if (invalidatePage) {
 		this.unsaved = this.initial;
-		this.initial = JSON.parse(JSON.stringify(this.initial));
+		this.initial = ownProto(this.initial);
 		this.initial.content.body = "";
 		if (Object.keys(flattenBlock(this.unsaved)).length == 0) delete this.unsaved;
 	}
@@ -266,9 +264,9 @@ Store.prototype.save = function(e) {
 
 Store.prototype.reset = function(to) {
 	if (to) {
-		Store.generated = to.generated;
-		this.unsaved = to.unsaved;
-		this.initial = to.initial;
+		Store.generated = ownProto(to.generated);
+		this.unsaved = ownProto(to.unsaved);
+		this.initial = ownProto(to.initial);
 		this.uiUpdate();
 	} else {
 		to = {
@@ -486,6 +484,10 @@ Store.prototype.changes = function() {
 
 	return changes;
 };
+
+function ownProto(obj) {
+	return JSON.parse(JSON.stringify(obj));
+}
 
 })(window.Pageboard);
 
