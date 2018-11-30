@@ -209,6 +209,7 @@ function editorSetup(win, view, state) {
 	Pageboard.write.classList.remove('loading');
 	if (!page || page.type == "error") {
 		Pageboard.write.hidden = true;
+		console.warn("Not loading editor: no page or error page");
 		return;
 	}
 	var content = win.document.body.cloneNode(true);
