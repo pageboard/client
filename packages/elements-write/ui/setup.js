@@ -197,7 +197,7 @@ function updateEditor(state, focusParents, focusSelection) {
 }
 
 function editorSetup(win, view, state) {
-	var page = state.$data.item;
+	var page = state.data.$cache.item;
 	if (!adv) {
 		adv = true;
 		console.info("Use Pageboard.dev() to debug prosemirror");
