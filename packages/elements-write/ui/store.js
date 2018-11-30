@@ -21,7 +21,9 @@ function Store(editor, node) {
 
 	window.addEventListener('beforeunload', this.flush, false);
 	window.addEventListener('keydown', this.keydown, false);
-	Pageboard.window.addEventListener('keydown', this.keydown, false);
+
+	this.window = editor.root.defaultView;
+	this.window.addEventListener('keydown', this.keydown, false);
 
 	this.fakeInitials = {};
 	this.unsaved = this.get();
@@ -40,7 +42,7 @@ Store.prototype.destroy = function() {
 	this.uiDiscard.removeEventListener('click', this.discard);
 	window.removeEventListener('beforeunload', this.flush, false);
 	window.removeEventListener('keydown', this.keydown, false);
-	Pageboard.window.removeEventListener('keydown', this.keydown, false);
+	this.window.removeEventListener('keydown', this.keydown, false);
 };
 
 Store.generatedBefore = {};
@@ -284,7 +286,7 @@ Store.prototype.reset = function(to) {
 };
 
 Store.prototype.discard = function(e) {
-	var doc = Pageboard.window.document;
+	var doc = this.window.document;
 	var focused = Array.from(doc.querySelectorAll('[block-focused][block-id]')).map(function(node) {
 		return node.getAttribute('block-id');
 	}).reverse();

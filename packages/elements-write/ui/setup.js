@@ -244,6 +244,9 @@ function editorSetup(win, view, state) {
 	editor.updateControls = updateControls.bind(editor);
 	editor.updateEditor = updateEditor.bind(editor);
 	editor.blocks.initial = view.blocks.initial;
+	Pageboard.dev = function() {
+		editor.devTools();
+	};
 
 	Object.keys(view.blocks.store).forEach(function(id) {
 		if (!editor.blocks.store[id]) {
@@ -292,21 +295,22 @@ function editorClose() {
 	}
 }
 
-Pageboard.dev = function() {
+function devTools() {
+	var editor = this;
 	if (window.ProseMirrorDevTools) {
-		window.ProseMirrorDevTools.applyDevTools(Pageboard.editor, {
-			EditorState: Pageboard.window.Pagecut.View.EditorState
+		window.ProseMirrorDevTools.applyDevTools(editor, {
+			EditorState: editor.root.defaultView.Pagecut.View.EditorState
 		});
 	} else {
-		var script = window.document.createElement('script');
+		var script = document.createElement('script');
 		script.onload = function() {
 			script.remove();
-			Pageboard.dev();
+			editor.setupDevTools();
 		};
 		script.src = document.body.dataset.devtools;
-		window.document.head.appendChild(script);
+		document.head.appendChild(script);
 	}
-};
+}
 
 })(window.Pageboard);
 
