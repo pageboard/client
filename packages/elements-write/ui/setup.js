@@ -143,9 +143,13 @@ function updatePage(state) {
 	if (!store) return;
 	var page = store.unsaved || store.initial;
 	if (!page || !page.data) return;
-	window.document.title = (page.data.title || "") + (store.unsaved ? '*' : '');
-	state.pathname = page.data.url;
-	state.save();
+	var title = (page.data.title || "") + (store.unsaved ? '*' : '');
+	var path = page.data.url;
+	if (title != window.document.title || state.pathname != path) {
+		state.pathname = page.data.url;
+		window.document.title = title;
+		state.save();
+	}
 }
 
 function updateControls() {
