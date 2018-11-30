@@ -14,7 +14,7 @@ Page.setup(function(state) {
 	document.body.addEventListener('submit', function(e) {
 		e.preventDefault();
 	});
-	var loc = Page.parse(Page.format(state)); // get a copy of state
+	var loc = state.copy();
 	loc.query.develop = "write";
 	var src = Page.format(loc);
 
