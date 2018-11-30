@@ -37,6 +37,7 @@ function Store(editor, node) {
 }
 
 Store.prototype.destroy = function() {
+	this.flush();
 	delete this.editor;
 	this.uiSave.removeEventListener('click', this.save);
 	this.uiDiscard.removeEventListener('click', this.discard);
