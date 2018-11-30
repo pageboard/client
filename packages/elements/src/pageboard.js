@@ -73,7 +73,8 @@ exports.bundle = function(loader, scope) {
 window.HTMLCustomElement = require('./HTMLCustomElement');
 
 Page.init(function(state) {
-	if (state.referrer.query.develop !== undefined) {
+	if (state.query.develop === undefined && state.referrer.query.develop !== undefined) {
+		// copy from previous state
 		state.query.develop = state.referrer.query.develop;
 	}
 	var dev = state.query.develop;
