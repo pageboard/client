@@ -151,6 +151,7 @@ Store.prototype.flush = function() {
 
 Store.prototype.realUpdate = function() {
 	this.debounceWaiting = false;
+	if (!this.editor) return;
 	var root;
 	try {
 		root = this.editor.to();
