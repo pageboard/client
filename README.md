@@ -1,8 +1,6 @@
 pageboard client modules
 ========================
 
-[bug reports and feature requests for client modules must go here](https://github.com/pageboard/client/issues)
-
 install
 -------
 
@@ -12,10 +10,7 @@ install
 dev install
 -----------
 
-First checkout all git submodules using `git submodules update`,
-then install them and link them in node_modules using `make`.
-
-Some modules need to be rebuilt when doing that (pagecut).
+Install and run `make`.
 
 
 modules
