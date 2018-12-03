@@ -100,7 +100,7 @@ Menu.prototype.item = function(el) {
 				var sel = self.selection;
 				var block = editor.blocks.create(el.name);
 				if (el.inline) {
-					if (nodeType.isAtom) {
+					if (!el.contents) {
 						tr.replaceSelectionWith(nodeType.create(editor.blocks.toAttrs(block)));
 						var resel = sel ? editor.utils.selectTr(tr, sel) : null;
 						if (resel) tr.setSelection(resel);
