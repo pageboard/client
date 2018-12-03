@@ -32,6 +32,7 @@ function formGet(form) {
 		elem = form.elements[i];
 		key = elem.name;
 		if (!key) continue;
+		if (key.startsWith('$')) continue;
 		old = query[key];
 		switch (elem.type) {
 		case 'submit':
@@ -92,6 +93,7 @@ function formSet(form, values) {
 	for (var i = 0; i < form.elements.length; i++) {
 		elem = form.elements[i];
 		if (!elem.name) continue;
+		if (elem.name.startsWith('$')) continue;
 		val = flats[elem.name];
 		switch (elem.type) {
 		case 'submit':

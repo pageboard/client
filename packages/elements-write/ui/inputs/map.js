@@ -1,8 +1,8 @@
 class HTMLInputMap extends HTMLCustomElement {
 	init() {
 		this.style.display = "block";
-		this._parse = this._parse.bind(this);
-		this._focus = this._focus.bind(this);
+		this._changed = Pageboard.debounce(this._changed.bind(this), 50);
+		this._focused = this._focused.bind(this);
 	}
 	connectedCallback() {
 		if (this._proxy) return;
@@ -18,8 +18,9 @@ class HTMLInputMap extends HTMLCustomElement {
 		this._table = this.appendChild(this.dom(`<table class="ui very compact celled small striped table">
 			<tbody></tbody>
 		</table>`));
-		this._table.addEventListener('change', this._parse, false);
-		this._table.addEventListener('focus', this._focus, true);
+		this._table.addEventListener('change', this._changed, false);
+		this._table.addEventListener('input', this._focused, false);
+		this._table.addEventListener('focus', this._focused, true);
 		this._render();
 	}
 	disconnectedCallback() {
@@ -28,8 +29,9 @@ class HTMLInputMap extends HTMLCustomElement {
 			delete this._observer;
 		}
 		delete this._proxy;
-		this._table.removeEventListener('focus', this._focus, true);
-		this._table.removeEventListener('input', this._parse, false);
+		this._table.removeEventListener('input', this._focused, false);
+		this._table.removeEventListener('focus', this._focused, true);
+		this._table.removeEventListener('change', this._changed, false);
 	}
 	_render() {
 		var obj = {};
@@ -40,35 +42,45 @@ class HTMLInputMap extends HTMLCustomElement {
 		}
 		var body = this._table.querySelector('tbody');
 		body.textContent = '';
-		var focused = false;
-		Object.keys(obj).concat([""]).forEach(function(key) {
+		var name = this.getAttribute('name');
+		Object.keys(obj).concat([""]).forEach(function(key, i) {
 			var val = obj[key];
 			if (val === undefined || val === null) val = '';
 			if (!Array.isArray(val)) val = [val];
-			val.forEach(function(val) {
-				var row = body.appendChild(this.dom(`<tr>
-					<td><input class="ui input" value="${key}" /></td>
-					<td><input class="ui input" value="${val}" /></td>
+			val.forEach(function(val, j) {
+				body.appendChild(this.dom(`<tr>
+					<td><input class="ui input" name="$key-${name}.${i}-${j}" value="${key}" /></td>
+					<td><input class="ui input" name="$val-${name}.${i}-${j}" value="${val}" /></td>
 				</tr>`));
-				if (this._cur && this._cur.key == key && !focused) {
-					row.children[this._cur.index].firstChild.focus();
-					focused = true;
-				}
 			}, this);
 		}, this);
+		this._restoreSel();
 	}
-	_focus(e) {
-		var focus = e.target;
-		if (focus.matches('input')) {
-			var tr = focus.closest('tr');
-			var key = tr.children[0].firstChild.value;
-			this._cur = {key: key, index: focus == tr.children[0] ? 0 : 1};
+	_focused(e) {
+		if (e.target.matches('input')) {
+			this._saveSel(e.target);
 		}
 	}
-	_parse(e) {
+	_saveSel(node) {
+		this._selection = {
+			name: node.name,
+			start: node.selectionStart,
+			end: node.selectionEnd,
+			dir: node.selectionDirection
+		};
+	}
+	_restoreSel() {
+		var sel = this._selection;
+		if (!sel) return;
+		var node = this._table.querySelector(`[name="${sel.name}"]`);
+		if (!node) return;
+		node.focus();
+		if (node.setSelectionRange) node.setSelectionRange(sel.start, sel.end, sel.dir);
+	}
+	_changed(e) {
 		var obj = {};
 		var removals = [];
-		var focus = e.target;
+
 		Array.from(this._table.querySelector('tbody').children).forEach(function(tr) {
 			var key = tr.children[0].firstChild.value;
 			var val = obj[key];
@@ -81,9 +93,6 @@ class HTMLInputMap extends HTMLCustomElement {
 					val.push(inputVal);
 				} else {
 					obj[key] = inputVal;
-				}
-				if (focus && focus.closest('tr') == tr) {
-					this._cur = {key: key, index: focus == tr.children[0] ? 0 : 1};
 				}
 			} else {
 				removals.push(tr);

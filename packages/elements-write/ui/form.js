@@ -123,7 +123,8 @@ FormBlock.prototype.update = function(parents, block) {
 	}
 	if (!same) {
 		var schema = Object.assign({}, this.el, {type: 'object'});
-		if (!this.form) this.form = new window.Semafor(
+		var form = this.form;
+		if (!form) form = this.form = new window.Semafor(
 			schema,
 			this.node,
 			this.customFilter.bind(this),
@@ -137,9 +138,9 @@ FormBlock.prototype.update = function(parents, block) {
 			dir: active.selectionDirection
 		} : null;
 
-		this.form.update();
-		this.form.clear();
-		this.form.set(this.block.data);
+		form.update();
+		form.clear();
+		form.set(this.block.data);
 		Object.values(this.helpers).forEach(function(inst) {
 			if (inst.update) inst.update(this.block);
 		}, this);
@@ -147,13 +148,16 @@ FormBlock.prototype.update = function(parents, block) {
 			if (inst.update) inst.update(this.block);
 		}, this);
 		if (selection && selection.name) {
-			var found = this.form.node.querySelector(`[name="${selection.name}"]`);
-			if (found) {
-				if (found.setSelectionRange && selection.start != null && selection.end != null) {
-					found.setSelectionRange(selection.start, selection.end, selection.dir);
+			setTimeout(function() {
+				// give an instant for input mutations to propagate
+				var found = form.node.querySelector(`[name="${selection.name}"]`);
+				if (found) {
+					if (found.setSelectionRange && selection.start != null && selection.end != null) {
+						found.setSelectionRange(selection.start, selection.end, selection.dir);
+					}
+					found.focus();
 				}
-				found.focus();
-			}
+			});
 		}
 	}
 	this.ignoreEvents = false;
@@ -208,6 +212,7 @@ FormBlock.prototype.customFilter = function(key, prop) {
 
 FormBlock.prototype.change = function(e) {
 	if (!this.block || this.ignoreEvents || !this.form) return;
+	if (e && e.target && e.target.name && e.target.name.startsWith('$')) return;
 	var editor = this.editor;
 	var data = this.form.get();
 
