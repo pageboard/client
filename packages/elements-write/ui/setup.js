@@ -170,7 +170,7 @@ Pageboard.Editor = function Editor(win, state) {
 	var page = state.data.$cache.item;
 	if (!adv) {
 		adv = true;
-		console.info("Use Pageboard.dev() to debug prosemirror");
+		console.info("Use top.Pageboard.dev() to debug prosemirror");
 	}
 	Pageboard.write.classList.remove('loading');
 	if (!page || page.type == "error") {
@@ -278,7 +278,7 @@ function devTools() {
 		var script = document.createElement('script');
 		script.onload = function() {
 			script.remove();
-			editor.setupDevTools();
+			editor.devTools();
 		};
 		script.src = document.body.dataset.devtools;
 		document.head.appendChild(script);
