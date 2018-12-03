@@ -260,7 +260,7 @@ Pageboard.elements.inlineImage = {
 				avatar: {
 					title: 'avatar',
 					type: 'boolean',
-					default: false
+					default: true
 				},
 				rounded: {
 					title: 'rounded',
