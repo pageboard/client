@@ -15,7 +15,7 @@ class HTMLElementTemplate extends HTMLCustomElement {
 		else return [];
 	}
 	attributeChangedCallback(attributeName, oldValue, newValue, namespace) {
-		if (attributeName.startsWith('data-')) Page.patch(this.patch);
+		Page.patch(this);
 	}
 	patch(state) {
 		var me = this;
