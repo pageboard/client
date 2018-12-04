@@ -217,9 +217,18 @@ Href.prototype.renderField = function() {
 			</div>
 		</div>`);
 	}
+	if (this.opts.readOnly) {
+		removeBtn(content, 'upload');
+		removeBtn(content, 'paste');
+	}
 	this.node.textContent = '';
 	this.node.appendChild(content);
 };
+
+function removeBtn(from, what) {
+	var btn = from.querySelector(`[data-action="${what}"]`);
+	if (btn) btn.remove();
+}
 
 Href.prototype.cache = function(list) {
 	var map = Href.cache;
@@ -503,7 +512,7 @@ Href.prototype.renderItem = function(obj) {
 	} else {
 		content.appendChild(item.dom(`<img class="ui tiny centered image" src="${obj.url}" />`));
 	}
-	if (!obj.visible) {
+	if (!obj.visible || this.opts.readOnly) {
 		item.querySelector('[data-action="remove"]').remove();
 	}
 	return item;
