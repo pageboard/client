@@ -1,16 +1,28 @@
 class HTMLElementTemplate extends HTMLCustomElement {
+	static get observedAttributes() {
+		return ['remote', 'keys'];
+	}
+	get remote() {
+		return this.getAttribute('remote') == 'true';
+	}
+	set remote(val) {
+		if (val) this.setAttribute('remote', 'true');
+		else this.removeAttribute('remote');
+	}
+	get keys() {
+		var str = this.getAttribute('keys');
+		if (str) return str.split(',');
+		else return [];
+	}
 	attributeChangedCallback(attributeName, oldValue, newValue, namespace) {
 		if (attributeName.startsWith('data-')) Page.patch(this.patch);
 	}
 	patch(state) {
 		var me = this;
 		if (me._refreshing || me.closest('[contenteditable],[block-content="template"]')) return;
-		// first find out if state.query has a key in this.dataset.keys
+		// first find out if state.query has a key in this.keys
 		// what do we do if state.query has keys that are used by a form in this query template ?
-		var keys = [];
-		if (me.dataset.keys) {
-			keys = me.dataset.keys.split(',');
-		}
+		var keys = me.keys;
 		var candidates = 0;
 		var query = {};
 		keys.forEach(function(key) {
@@ -31,7 +43,7 @@ class HTMLElementTemplate extends HTMLCustomElement {
 
 		var queryId = me.getAttribute('block-id');
 		var loader;
-		var remote = me.dataset.remote == "true";
+		var remote = me.remote;
 		if (remote) {
 			loader = Pageboard.fetch('get', `/.api/query/${queryId}`, query);
 		} else {

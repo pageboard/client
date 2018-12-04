@@ -51,7 +51,7 @@ Pageboard.elements.fetch = Object.assign({}, Pageboard.elements.template, {
 	icon: '<i class="search icon"></i>',
 	fuse: function(node, d, scope) {
 		// do not call /.api/query if not true
-		node.dataset.remote = !!(d.method);
+		node.setAttribute('remote', !!(d.method));
 		var keys = [];
 		(function findKeys(val) {
 			if (!val) return;
@@ -63,7 +63,7 @@ Pageboard.elements.fetch = Object.assign({}, Pageboard.elements.template, {
 				Object.values(val).forEach(findKeys);
 			}
 		})(d.parameters);
-		if (keys.length) node.dataset.keys = keys.join(',');
+		if (keys.length) node.setAttribute('keys', keys.join(','));
 	},
 	properties: {
 		method: {
