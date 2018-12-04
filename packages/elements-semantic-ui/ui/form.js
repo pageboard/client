@@ -144,6 +144,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			if (statusText) {
 				var query = Object.assign({}, state.query);
 				query[form.id] = statusText;
+				state.vars[form.id] = true;
 				return state.push({query: query});
 			}
 		});
