@@ -1,17 +1,30 @@
 class HTMLInputMap extends HTMLCustomElement {
 	init() {
-		this.style.display = "block";
-		this._changed = Pageboard.debounce(this._changed.bind(this), 50);
+		this._changed = this._changed.bind(this);
 		this._focused = this._focused.bind(this);
+	}
+	get value() {
+		var obj;
+		if (this._proxy && this._proxy.value) try {
+			obj = JSON.parse(this._proxy.value);
+		} catch(ex) {
+			console.error(ex);
+		}
+		return obj;
+	}
+	set value(obj) {
+		if (!this._proxy) return;
+		this._proxy.value = JSON.stringify(obj);
 	}
 	connectedCallback() {
 		if (this._proxy) return;
 		this._proxy = this.appendChild(
 			this.dom(`<input name="${this.getAttribute('name')}" type="hidden" />`)
 		);
+		var renderer = Pageboard.debounce(this._render.bind(this), 10);
 		this._observer = new MutationObserver(function(mutations) {
-			this._render();
-		}.bind(this));
+			renderer();
+		});
 		this._observer.observe(this._proxy, {
 			attributes: true
 		});
@@ -34,12 +47,7 @@ class HTMLInputMap extends HTMLCustomElement {
 		this._table.removeEventListener('change', this._changed, false);
 	}
 	_render() {
-		var obj = {};
-		if (this._proxy.value) try {
-			obj = JSON.parse(this._proxy.value);
-		} catch(ex) {
-			console.error(ex);
-		}
+		var obj = this.value || {};
 		var body = this._table.querySelector('tbody');
 		body.textContent = '';
 		var name = this.getAttribute('name');
@@ -98,10 +106,10 @@ class HTMLInputMap extends HTMLCustomElement {
 				removals.push(tr);
 			}
 		}, this);
+		this.value = obj;
 		removals.forEach(function(node) {
 			node.remove();
 		});
-		this._proxy.value = JSON.stringify(obj);
 	}
 }
 window.customElements.define('input-map', HTMLInputMap);

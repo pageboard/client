@@ -11,6 +11,7 @@ function Href(input, opts, props) {
 	this.set = this.set.bind(this);
 	this.opts = opts;
 	this.input = input;
+	input.type = "hidden";
 }
 
 Href.prototype.realTrigger = function() {
@@ -28,11 +29,11 @@ Href.prototype.init = function(block) {
 	var input = this.input;
 	input.parentNode.classList.add('href');
 
-	input.insertAdjacentHTML('afterEnd', '<div class="ui input"></div>\
-<div class="ui items"></div>');
+	input.insertAdjacentHTML('afterEnd', `<div class="ui input"></div>
+		<div class="ui items"></div>`);
 
-	this.node = input.nextSibling;
-	this.container = this.node.nextSibling;
+	this.node = input.nextElementSibling;
+	this.container = this.node.nextElementSibling;
 	this.container.addEventListener('click', function(e) {
 		if (e.target.closest('a')) e.preventDefault();
 	}, true);

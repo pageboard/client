@@ -1,3 +1,6 @@
+input-map {
+	display:block;
+}
 .field.href .ui.avatar.icon.image {
 	width: 16px;
 	height: 16px;
@@ -60,6 +63,16 @@
 	padding-top:0.32em;
 	margin:0;
 }
+.field.href.page-href .items > .item > .content > .header {
+	white-space: normal;
+}
+.field.href.page-href .items > .item > .content {
+	max-height:none;
+}
+.href .field.href.page-href input-map,
+.href .field.href.page-href .input + label {
+	display:none;
+}
 
 .field.href .items > .item > .content > .meta {
 	margin-top:0.15em;
@@ -96,7 +109,8 @@
 	overflow:hidden;
 }
 
-.field.href .items > .item.selected > .content > .header {
+.field.href .items > .item.selected > .content > .header,
+.field.href.page-href .items > .item:hover > .content > .header {
 	background-color: #4165A0;
 	border-bottom:1px solid #4165A0;
 	color:white;
@@ -118,10 +132,6 @@
 	display:none;
 }
 
-.field.href input:not(.search) {
-	display:none !important;
-}
-
 .field.href .search + .buttons > .button:first-child {
 	margin-right:0;
 	border-top-left-radius:0 !important;
@@ -141,3 +151,4 @@
 	border-top-right-radius:0 !important;
 	border-bottom-right-radius:0 !important;
 }
+

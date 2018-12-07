@@ -5,52 +5,65 @@ Pageboard.schemaHelpers.page = PageHelper;
 PageHelper.cache = {};
 
 function PageHelper(input, opts, props, block) {
-	this.trigger = Pageboard.debounce(this.realTrigger, 500);
 	this.renderList = this.renderList.bind(this);
 	this.cache = this.cache.bind(this);
-	this.set = this.set.bind(this);
 	this.opts = opts;
 	this.input = input;
+	input.type = "hidden";
 	this.block = block;
+	this.ignoreEvents = false;
 }
-
-PageHelper.prototype.realTrigger = function() {
-	var input = this.node.querySelector('input');
-	if (input.value != this.input.value) {
-		this.input.value = input.value;
-		Pageboard.trigger(this.input, 'change');
-		setTimeout(function() {
-			input.focus();
-		});
-	}
-};
 
 PageHelper.prototype.init = function() {
 	var input = this.input;
-	input.parentNode.classList.add('href');
 
-	input.insertAdjacentHTML('afterEnd', '<div class="ui input"></div>\
-<div class="ui items"></div>');
+	var nodes = input.dom(`<div class="ui input"></div>
+		<div class="ui items"></div>`);
+	this.container = nodes.lastElementChild;
+	this.node = this.container.previousElementSibling;
 
-	this.node = input.nextSibling;
-	this.container = this.node.nextSibling;
+	if (this.opts.query) {
+		var fieldset = input.dom('<fieldset class="field href page-href"></fieldset>');
+		input.after(fieldset);
+		fieldset.appendChild(nodes);
+		var label = input.previousElementSibling;
+		label.remove();
+		fieldset.prepend(input.dom(`<legend>${label.innerHTML}</legend>`));
+		nodes = input.dom(`
+			<label>[opts.title|or:Query]</label>
+			<input-map title="[opts.description]"></input-map>
+		`).fuse({
+			opts: this.opts
+		}, {});
+		this.inputMap = nodes.lastElementChild;
+		this.node.after(...nodes.children);
+		this.inputMap.addEventListener('change', function(e) {
+			e.stopPropagation();
+			this.searchStop();
+		}.bind(this));
+	} else {
+		input.parentNode.classList.add('href', 'page-href');
+		input.after(...nodes.children);
+	}
+
 	this.container.addEventListener('click', function(e) {
 		if (e.target.closest('a')) e.preventDefault();
 	}, true);
 
 	var me = this;
 
-	this.node.addEventListener('input', function(e) {
+	this.node.addEventListener('input', Pageboard.debounce(function(e) {
+		if (me.ignoreEvents) return;
 		if (me.action == "search") {
 			me.searchUpdate();
 		} else if (!me.action) {
-			input.value = "";
-			Pageboard.trigger(input, 'change');
+			me.write();
 			me.start("search");
 		}
-	});
+	}, 100));
 
 	this.node.addEventListener('focusin', function(e) {
+		if (me.ignoreEvents) return;
 		if (!e.target.matches('input')) return;
 		if (!me.action) {
 			if (me.input.value) {
@@ -61,14 +74,12 @@ PageHelper.prototype.init = function() {
 		}
 	});
 
-	this.node.addEventListener('focusout', function(e) {
-		if (!e.target.matches('input')) return;
-		me.stop('search');
-	});
-
 	this.node.addEventListener('click', function(e) {
+		if (me.ignoreEvents) return;
+		if (e.target.closest('input')) return;
 		var actioner = e.target.closest('[data-action]');
 		if (actioner) this.start(actioner.dataset.action);
+		else this.stop();
 	}.bind(this));
 
 	this.container.addEventListener('click', function(e) {
@@ -78,16 +89,9 @@ PageHelper.prototype.init = function() {
 			e.stopPropagation();
 			return;
 		}
-		var href = item.getAttribute('href');
-
-		if (href == input.value) {
-			if (this.action == 'search') {
-				this.stop(this.action);
-			}
-		} else {
-			input.value = href;
-			this.renderList();
-			Pageboard.trigger(input, 'change');
+		if (this.action == 'search') {
+			me.fakeInput.value = item.getAttribute('href');
+			this.stop();
 		}
 	}.bind(this));
 };
@@ -99,55 +103,46 @@ PageHelper.prototype.destroy = function() {
 PageHelper.prototype.update = function() {
 	this.list = [];
 	this.renderField();
-	var me = this;
 	var val = this.input.value;
-	var input = this.node.querySelector('input');
-	if (val && !input.value) {
-		input.value = val;
+	if (val && !this.fakeInput.value) {
+		this.read();
 	}
-	if (val) {
-		this.get(val).then(this.cache).then(function(list) {
-			if (list.length == 0) {
-				me.start("search");
-			} else {
-				me.set(val);
-			}
-		});
-	} else {
-		this.renderList();
-	}
+	this.renderList();
 };
 
 PageHelper.prototype.start = function(action) {
-	var same = this.action == action;
+	if (this.action == action) return;
+	this.ignoreEvents = true;
 	this.stop();
 	this.action = action;
 	this.renderField();
-	this[action + 'Start'](same);
+	this[action + 'Start']();
+	this.ignoreEvents = false;
 };
 
 PageHelper.prototype.stop = function() {
 	var prev = this.action;
 	if (prev) {
-		this.action = null;
 		this[prev + 'Stop']();
-		this.renderField();
+		this.action = null;
 	}
+	this.renderField();
 };
 
 PageHelper.prototype.renderField = function() {
 	var content;
+	var title = this.input.title || "";
 	switch (this.action) {
 	case "search":
-		content = document.dom(`<input class="search" type="text" placeholder="PageHelper..." />
+		content = document.dom(`<input class="search" type="text" placeholder="${title}" />
 		<div class="ui blue icon buttons">
-			<div class="ui active button" data-action="search" title="Search">
-				<i class="search icon"></i>
+			<div class="ui active button" title="Stop">
+				<i class="close icon"></i>
 			</div>
 		</div>`);
 		break;
 	default:
-		content = document.dom(`<input class="search" type="text" placeholder="PageHelper..." value="${this.input.value}" />
+		content = document.dom(`<input class="search" type="text" placeholder="${title}" />
 		<div class="ui blue icon buttons">
 			<div class="ui button" data-action="search" title="Search">
 				<i class="search icon"></i>
@@ -156,6 +151,8 @@ PageHelper.prototype.renderField = function() {
 	}
 	this.node.textContent = '';
 	this.node.appendChild(content);
+	this.fakeInput = this.node.querySelector('input');
+	this.read();
 };
 
 PageHelper.prototype.cache = function(list) {
@@ -166,33 +163,26 @@ PageHelper.prototype.cache = function(list) {
 	return list;
 };
 
-PageHelper.prototype.manualStart = function() {
-	var input = this.node.querySelector('input');
-	input.value = this.input.value;
-	this.renderList([]);
-};
-
-PageHelper.prototype.manualStop = function() {
-	this.realTrigger();
-};
-
-
 PageHelper.prototype.searchStart = function(same) {
 	if (same) {
 		return;
 	}
 	var me = this;
-	var input = this.node.querySelector('input');
-	input.focus();
+	var input = this.fakeInput;
+	setTimeout(function() {
+		input.focus();
+	});
 	this.infinite = new window.InfiniteScroll(this.container, {
 		path: function() {
 			var limit = me.opts.limit || 10;
 			var filter = {
-				text: me.node.querySelector('input').value,
 				type: me.opts.type,
 				limit: limit,
 				offset: (this.pageIndex - 1) * limit
 			};
+			var text = me.fakeInput.value;
+			if (text && !text.startsWith('/')) filter.text = text;
+			else filter.url = text || '/';
 			return Page.format({
 				pathname: '/.api/pages',
 				query: filter
@@ -228,27 +218,19 @@ PageHelper.prototype.searchStop = function() {
 		this.infinite.destroy();
 		delete this.infinite;
 	}
+	this.container.textContent = '';
 	Pageboard.write.classList.remove('href');
-	this.set(this.input.value);
 	Pageboard.scrollbar.update();
+	this.write();
 	Pageboard.trigger(this.input, 'change');
 };
 
-PageHelper.prototype.set = function(str) {
-	if (!str) {
-		this.list = [];
-	} else {
-		if (PageHelper.cache[str]) this.list = [PageHelper.cache[str]];
-	}
-	this.renderList(this.list);
-};
-
-
 PageHelper.prototype.get = function(href) {
-	var obj = PageHelper.cache[href];
+	var urlObj = Page.parse(href);
+	var obj = PageHelper.cache[urlObj.pathname];
 	if (obj) return Promise.resolve(obj);
 	return Pageboard.uiLoad(this.node, Pageboard.fetch('get', '/.api/pages', {
-		url: href,
+		url: urlObj.pathname,
 		type: this.opts.type
 	})).then(function(obj) {
 		return obj.items;
@@ -281,7 +263,6 @@ PageHelper.prototype.renderList = function(list, container) {
 			container.appendChild(item);
 		}
 	}, this);
-	container.className = 'ui items';
 };
 
 PageHelper.prototype.renderItem = function(block) {
@@ -291,11 +272,46 @@ PageHelper.prototype.renderItem = function(block) {
 				${block.data.title}
 			</div>
 			<div class="left floated meta">
-				${window.moment(block.data.updated_at).fromNow()}
+				${window.moment(block.updated_at || block.data.updated_at).fromNow()}
 				<br><span class="line">${block.data.url}</span>
 			</div>
 		</div>
 	</a>`);
+};
+
+PageHelper.prototype.read = function() {
+	var val = Page.parse(this.input.value);
+	if (this.input.value.startsWith('/')) {
+		this.fakeInput.value = val.pathname;
+	} else {
+		this.fakeInput.value = "";
+	}
+	if (this.inputMap) this.inputMap.value = val.query;
+};
+
+PageHelper.prototype.write = function() {
+	this.input.value = this.format(this.fakeInput.value, this.inputMap && this.inputMap.value);
+};
+
+PageHelper.prototype.format = function(pathname, query) {
+	var list = [];
+	if (query) Object.keys(query).forEach(function(key) {
+		var val = query[key];
+		if (!Array.isArray(val)) val = [val];
+		val.forEach(function(val) {
+			var item = encodeURIComponent(key);
+			if (typeof val == "string" && val.fuse({$query: {}, $body: {}, $response: {}}, {}) != val) {
+				// do not escape val
+				item += '=' + val;
+			} else if (val != null) {
+				item += '=' + encodeURIComponent(val);
+			}
+			list.push(item);
+		});
+	});
+	var qstr = list.join('&');
+	if (qstr.length) qstr = '?' + qstr;
+	return (pathname || "") + qstr;
 };
 
 
