@@ -118,7 +118,7 @@ Pageboard.elements.binding = {
 	fuse: function(node, d, scope) {
 		var fill = (d.fill || '').trim().split('\n').join('|');
 		node.fuse({
-			ph: d.placeholder || fill.split('|', 1)[0].split('.').pop() || '-',
+			ph: d.placeholder || fill.split('|', 1)[0].split('.').pop() || '',
 			attr: d.attr ? `[${d.attr.trim().split('\n').join('|')}]`: null,
 			fill: fill ? `[${fill}|fill]` : null
 		}, scope);
