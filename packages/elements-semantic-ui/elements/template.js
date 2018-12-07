@@ -1,11 +1,10 @@
 Pageboard.elements.fetch.install = function() {
-	this.dom.classList.add('ui', 'form');
+	this.dom.classList.add('ui');
 };
-
-Pageboard.elements.fetch_message.install = function(node, d, scope) {
-	this.dom.classList.add('ui', 'message');
+Pageboard.elements.message.install = function(node, d, scope) {
+	this.dom.classList.add('ui');
 };
-Pageboard.elements.fetch_message.stylesheets.push(
+Pageboard.elements.message.stylesheets.unshift(
 	'../lib/components/message.css'
 );
 

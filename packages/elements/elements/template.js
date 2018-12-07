@@ -98,39 +98,6 @@ Pageboard.elements.fetch = Object.assign({}, Pageboard.elements.template, {
 	$helper: 'service'
 });
 
-Pageboard.elements.fetch_message = {
-	title: 'Message',
-	icon: '<i class="announcement icon"></i>',
-	menu: "form",
-	group: "block",
-	context: 'fetch//',
-	properties: {
-		type: {
-			title: "type",
-			description: "Message is shown depending on type",
-			default: "success",
-			anyOf: [{
-				const: "success",
-				title: "Success"
-			}, {
-				const: "warning",
-				title: "Not found"
-			}, {
-				const: "error",
-				title: "Error"
-			}]
-		}
-	},
-	contents: {
-		message: {
-			title: 'Message',
-			spec: "block+"
-		}
-	},
-	html: '<div class="[type]" block-content="message"><p>Message</p></div>'
-};
-
-
 Pageboard.elements.binding = {
 	title: "Binding",
 	icon: '<b class="icon">[*]</b>',

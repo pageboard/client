@@ -58,6 +58,9 @@ form[data-authfield] button[type="submit"]:before {
 	padding-left:2.65714em;
 }
 
+element-messages.ui > .ui.message {
+	margin-top:1em;
+}
 
 [contenteditable] .ui.form .ui.message {
 	display:block;

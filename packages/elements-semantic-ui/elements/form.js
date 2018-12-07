@@ -139,37 +139,3 @@ Pageboard.elements.api_form = {
 	polyfills: ['fetch'] // unfortunately there is no formdata polyfill available right now
 };
 
-Pageboard.elements.form_message = {
-	title: 'Message',
-	icon: '<i class="announcement icon"></i>',
-	menu: "form",
-	group: "block",
-	context: 'form//',
-	properties: {
-		type: {
-			title: "type",
-			description: "Message is shown depending on type",
-			default: "success",
-			anyOf: [{
-				const: "success",
-				title: "Success"
-			}, {
-				const: "warning",
-				title: "Not found"
-			}, {
-				const: "error",
-				title: "Error"
-			}]
-		}
-	},
-	contents: {
-		message: {
-			title: 'Message',
-			spec: "block+"
-		}
-	},
-	html: '<div class="ui message [type]" block-content="message">[type|schema:title] message</div>',
-	stylesheets: [
-		'../lib/components/message.css'
-	]
-};

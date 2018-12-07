@@ -1,0 +1,8 @@
+.message {
+	display:none;
+}
+.message.success,
+.message.warning,
+.message.error {
+	display:block;
+}

@@ -109,6 +109,12 @@ exports.schema = function(val, what, spath) {
 	return sval;
 };
 
+exports.statusClass = function(val) {
+	if (val == 404) return "warning";
+	else if (val >= 400) return "error";
+	else return "success";
+};
+
 exports.autolink = function(val, what) {
 	var hrefs = what.scope.data.$hrefs;
 	var a = what.parent;
