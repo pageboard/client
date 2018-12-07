@@ -13,12 +13,6 @@ Pageboard.elements.embed = {
 				format: "uri"
 			}]
 			// TODO plug embeds to href, but url-inspector makes it difficult for us right now
-		},
-		template: {
-			title: 'Template',
-			description: 'Query template',
-			type: 'string',
-			context: 'query|form'
 		}
 	},
 	group: "block",
@@ -28,7 +22,7 @@ Pageboard.elements.embed = {
 		};
 	},
 	tag: 'iframe,element-embed',
-	html: `<element-embed class="ui embed" src="[url]" data-src="[template]"></element-embed>`,
+	html: `<element-embed class="ui embed" src="[url]"></element-embed>`,
 	scripts: ['../ui/embed.js'],
 	stylesheets: [
 		'../lib/components/embed.css',

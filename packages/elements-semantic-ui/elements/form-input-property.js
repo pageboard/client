@@ -36,12 +36,6 @@ Pageboard.elements.input_property = {
 			title: 'Foldable',
 			type: 'boolean',
 			default: false
-		},
-		template: {
-			title: 'Template',
-			description: 'Query value template',
-			type: 'string',
-			context: 'query'
 		}
 	},
 	render: function(block, scope) {
@@ -155,8 +149,7 @@ Pageboard.elements.input_property = {
 						multiple: d.multiple,
 						placeholder: prop.description,
 						disabled: d.disabled,
-						required: required,
-						template: d.template
+						required: required
 					},
 					content: {
 						label: prop.title,
@@ -177,7 +170,6 @@ Pageboard.elements.input_property = {
 							value: propType.default,
 							disabled: d.disabled,
 							required: required,
-							template: d.template,
 							step: 1
 						},
 						content: {
@@ -193,8 +185,7 @@ Pageboard.elements.input_property = {
 					type: 'number',
 					default: propType.default,
 					disabled: d.disabled,
-					required: required,
-					template: d.template
+					required: required
 				},
 				content: {
 					label: prop.title
@@ -207,8 +198,7 @@ Pageboard.elements.input_property = {
 					name: name,
 					value: "true",
 					disabled: d.disabled,
-					required: required,
-					template: d.template
+					required: required
 				},
 				content: {
 					label: prop.title
@@ -223,8 +213,7 @@ Pageboard.elements.input_property = {
 					default: propType.default,
 					disabled: d.disabled,
 					required: required,
-					step: propType.step,
-					template: d.template
+					step: propType.step
 				},
 				content: {
 					label: prop.title
@@ -239,8 +228,7 @@ Pageboard.elements.input_property = {
 					default: propType.default,
 					disabled: d.disabled,
 					required: required,
-					step: propType.step,
-					template: d.template
+					step: propType.step
 				},
 				content: {
 					label: prop.title
@@ -254,8 +242,7 @@ Pageboard.elements.input_property = {
 					type: propType.format == 'singleline' ? 'text' : 'textarea',
 					disabled: d.disabled,
 					default: propType.default,
-					required: required,
-					template: d.template
+					required: required
 				},
 				content: {
 					label: prop.title

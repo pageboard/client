@@ -74,19 +74,13 @@ Pageboard.elements.mail_button = {
 			title: 'Rounded',
 			type: 'boolean',
 			default: false
-		},
-		template: {
-			title: 'Template',
-			description: 'Query template',
-			type: 'string',
-			context: 'mail_query'
 		}
 	},
 	html: `<table class="button [label] [size]
 		[expanded|?] [radius|?] [rounded|?]"
 	><tr><td><table>
 		<tr>
-			<td><a href="[url|or:#]" data-href="[template]" block-content="text">Button</a></td>
+			<td><a href="[url|or:#]" block-content="text">Button</a></td>
 		</tr>
 	</table></td></tr></table>`
 };

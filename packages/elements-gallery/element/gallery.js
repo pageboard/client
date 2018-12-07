@@ -61,28 +61,6 @@ Pageboard.elements.itemlink = {
 					type: ["link", "file", "archive"]
 				}
 			}
-		},
-		icon: {
-			title: 'Icon',
-			anyOf: [{
-				type: "null"
-			}, {
-				type: "string",
-				format: "uri"
-			}, {
-				type: "string",
-				format: "pathname"
-			}],
-			$helper: {
-				name: 'href',
-				display: 'icon',
-				filter: {
-					type: ["image", "svg"],
-					maxSize: 20000,
-					maxWidth: 320,
-					maxHeight: 320
-				}
-			}
 		}
 	},
 	contents: {
@@ -90,8 +68,5 @@ Pageboard.elements.itemlink = {
 			spec: "(paragraph_nolink|heading|image)+"
 		}
 	},
-	html: '<a class="itemlink [icon|?]" style="background-image:url([icon|magnet])" href="[url]" block-content="text"></a>',
-	fuse: function(node, d, scope) {
-		Pageboard.elements.link.auto(node.fuse(d, scope), scope.$hrefs);
-	}
+	html: '<a class="itemlink" href="[url|autolink]" block-content="text"></a>'
 };

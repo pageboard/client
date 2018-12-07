@@ -21,12 +21,6 @@ Pageboard.elements.mail_link = {
 					type: ["link", "file", "archive"]
 				}
 			}
-		},
-		template: {
-			title: 'Template',
-			description: 'Query template',
-			type: 'string',
-			context: 'mail_query'
 		}
 	},
 	contents: {
@@ -34,6 +28,6 @@ Pageboard.elements.mail_link = {
 	},
 	inline: true,
 	group: "mail_inline",
-	html: '<a href="[url]" data-href="[template]"></a>'
+	html: '<a href="[url]"></a>'
 };
 

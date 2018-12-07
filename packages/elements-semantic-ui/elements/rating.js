@@ -15,12 +15,6 @@ Pageboard.elements.rating = {
 			type: 'integer',
 			default: 4
 		},
-		template: {
-			title: 'Template',
-			description: 'Query template',
-			type: 'string',
-			context: 'query|form'
-		},
 		char: {
 			title: 'Symbol',
 			type: 'string',
@@ -42,7 +36,7 @@ Pageboard.elements.rating = {
 			}]
 		}
 	},
-	html: '<element-rating class="[color]" value="[value]" maximum="[maximum]" char="[char]" data-value="[template|magnet]"></element-rating>',
+	html: '<element-rating class="[color]" value="[value]" maximum="[maximum]" char="[char]"></element-rating>',
 	stylesheets: [
 		'../ui/rating.css'
 	],

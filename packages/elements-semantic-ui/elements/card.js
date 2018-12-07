@@ -107,12 +107,6 @@ Pageboard.elements.cardlink = {
 					type: ["link"]
 				}
 			}
-		},
-		template: {
-			title: 'Template',
-			description: 'Query template',
-			type: 'string',
-			context: 'query|form'
 		}
 	},
 	contents: {
@@ -129,7 +123,7 @@ Pageboard.elements.cardlink = {
 			title: 'extra'
 		}
 	},
-	html: `<a href="[url]" class="ui [fluid|?] [centered|?] card" data-href="[template]">
+	html: `<a href="[url]" class="ui [fluid|?] [centered|?] card">
 		<div class="image [image|?::hidden]" block-content="image"></div>
 		<div class="content" block-content="content"></div>
 		<div class="extra content" block-content="extra"></div>

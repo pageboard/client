@@ -79,12 +79,6 @@ Pageboard.elements.input_text = {
 				format: "singleline"
 			}]
 		},
-		template: {
-			title: 'Template',
-			description: 'Query value template',
-			type: 'string',
-			context: 'query'
-		},
 		placeholder: {
 			title: "placeholder",
 			anyOf: [{
@@ -138,13 +132,11 @@ Pageboard.elements.input_text = {
 			required="[required|not]"
 			disabled="[disabled|not]"
 			placeholder="[placeholder]"
-			data-value="[template]"
 		>[value|br]</textarea>[type|eq:textarea|bmagnet:+*]
 		<input name="[name]"
 			required="[required]"
 			disabled="[disabled]"
 			placeholder="[placeholder]"
-			data-value="[template]"
 			type="[type]"
 			value="[value]" />[type|neq:textarea|bmagnet:+*]
 	</div>`
@@ -313,12 +305,6 @@ Pageboard.elements.input_checkbox = {
 			title: 'required',
 			type: 'boolean',
 			default: false
-		},
-		template: {
-			title: 'Template',
-			description: 'Query value template',
-			type: 'string',
-			context: 'query'
 		}
 	},
 	contents: {
@@ -329,7 +315,6 @@ Pageboard.elements.input_checkbox = {
 			<input type="checkbox" required="[required]" disabled="[disabled]"
 				name="[name]"
 				value="[value]"
-				data-checked="[template]"
 				id="[$id|slice:0:4|pre:for]" />
 			<label block-content="label" for="[$id|slice:0:4|pre:for]">Label</label>
 		</div>
@@ -418,12 +403,6 @@ Pageboard.elements.input_select = {
 			type: 'boolean',
 			default: false
 		},
-		template: {
-			title: 'Template',
-			description: 'Query value template',
-			type: 'string',
-			context: 'query'
-		},
 		value: {
 			title: "default value",
 			anyOf: [{
@@ -449,7 +428,7 @@ Pageboard.elements.input_select = {
 		<element-select class="ui selection dropdown [multiple|?]"
 			data-name="[name]" data-disabled="[disabled]" data-required="[required]"
 			data-multiple="[multiple]" data-placeholder="[placeholder]"
-			value="[value]" data-value="[template]"
+			value="[value]"
 		>
 			<div class="menu" block-content="options"></div>
 		</element-select>

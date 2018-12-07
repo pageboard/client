@@ -27,34 +27,6 @@ Pageboard.elements.link = {
 					type: ["link", "file", "archive"]
 				}
 			}
-		},
-		template: {
-			title: 'Template',
-			description: 'Query template',
-			type: 'string',
-			context: 'template//'
-		},
-		icon: { // TODO remove me in favor of inline images
-			title: 'Icon',
-			anyOf: [{
-				type: "null"
-			}, {
-				type: "string",
-				format: "uri"
-			}, {
-				type: "string",
-				format: "pathname"
-			}],
-			$helper: {
-				name: 'href',
-				display: 'icon',
-				filter: {
-					type: ["image", "svg"],
-					maxSize: 20000,
-					maxWidth: 320,
-					maxHeight: 320
-				}
-			}
 		}
 	},
 	contents: {
@@ -63,26 +35,7 @@ Pageboard.elements.link = {
 	inline: true,
 	group: "inline",
 	tag: 'a:not(.itemlink)',
-	auto: function(a, hrefs) {
-		if (a.hostname && a.hostname != document.location.hostname) {
-			a.target = "_blank";
-			a.rel = "noopener";
-		} else if (a.pathname && a.pathname.startsWith('/.')) {
-			a.target = "_blank";
-		} else if (a.href) {
-			var href = a.getAttribute('href').split('?')[0];
-			var meta = (hrefs || {})[href];
-			if (meta && meta.mime && meta.mime.startsWith("text/html") == false) {
-				a.target = "_blank";
-			}
-		}
-		return a;
-	},
-	html: '<a href="[url]" class="[button|?:ui button] [icon|?]" data-href="[template]"></a>',
-	fuse: function(node, d, scope) {
-		if (d.icon) node.style.backgroundImage = `url(${d.icon})`;
-		return this.auto(node.fuse(d, scope), scope.$hrefs);
-	},
+	html: '<a href="[url|autolink]" class="[button|?:ui button]"></a>',
 	stylesheets: [
 		'../lib/components/button.css'
 	]

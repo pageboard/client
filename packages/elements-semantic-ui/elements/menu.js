@@ -60,12 +60,6 @@ Pageboard.elements.menu_item_link = {
 					type: "link"
 				}
 			}
-		},
-		template: {
-			title: 'Template',
-			description: 'Query template',
-			type: 'string',
-			context: 'query|form'
 		}
 	},
 	contents: {
@@ -75,11 +69,7 @@ Pageboard.elements.menu_item_link = {
 		}
 	},
 	group: 'menu_item',
-	html: '<a class="item" href="[url]" data-href="[template]" block-content="content">Item</a>',
-	fuse: function(node, d, scope) {
-		node.fuse(d, scope);
-		Pageboard.elements.link.auto(node, scope.$hrefs);
-	}
+	html: '<a class="item" href="[url|autolink]" block-content="content">Item</a>'
 };
 
 Pageboard.elements.menu_item_dropdown = {

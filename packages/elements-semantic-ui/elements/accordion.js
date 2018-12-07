@@ -34,15 +34,7 @@ Pageboard.elements.fold = {
 			title: 'content'
 		}
 	},
-	properties: {
-		template: {
-			title: 'Template',
-			description: 'Query value template',
-			type: 'string',
-			context: 'query'
-		}
-	},
-	html: `<div class="fold" data-template="[template|magnet]">
+	html: `<div class="fold">
 		<div class="title caret-icon" block-content="title">Title</div>
 		<div class="content" block-content="content"></div>
 	</div>`

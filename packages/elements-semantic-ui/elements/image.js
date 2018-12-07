@@ -26,12 +26,6 @@ Pageboard.elements.image = {
 				}
 			}
 		},
-		template: {
-			title: 'Template',
-			description: 'Query template',
-			type: 'string',
-			context: 'query|form'
-		},
 		display: {
 			title: "Display",
 			type: "object",
@@ -167,7 +161,7 @@ Pageboard.elements.image = {
 		data-fit="[fit]" data-position="[position]" data-lqip="[lqip]"
 		data-url="[url]"
 	>
-		<img alt="[alt]" data-src="[template]" src="[src]"
+		<img alt="[alt]" src="[src]"
 			data-width="[width]" data-height="[height]" data-zoom="[zoom]" />
 		<div block-content="legend"></div>
 	</element-image>`,
@@ -196,7 +190,7 @@ Pageboard.elements.image = {
 			if (zoom != 100) obj.zoom = zoom;
 			var isSvg = meta.mime == "image/svg+xml";
 			var isFit = fit != "none";
-			if (!isSvg && (!isFit || d.template)) {
+			if (!isSvg && !isFit) {
 				obj.lqip = loc.query.q = 5;
 				if (isFit) loc.query.rs = "w-320_h-320_max";
 			} else if (isFit || !isSvg) {
@@ -246,12 +240,6 @@ Pageboard.elements.inlineImage = {
 					maxHeight: 320
 				}
 			}
-		},
-		template: {
-			title: 'Template',
-			description: 'Query template',
-			type: 'string',
-			context: 'query|form'
 		},
 		display: {
 			title: 'Display options',
@@ -361,8 +349,7 @@ Pageboard.elements.inlineImage = {
 		[display.circular|?]
 		[display.spaced|?]
 		[display.floated|pre:floated ]
-		[display.align|post: aligned]"
-		data-src="[template]" />`,
+		[display.align|post: aligned]" />`,
 	fuse: function(node, d, scope) {
 		var loc = Pageboard.elements.image.buildLoc(d.url || this.resources[0], d);
 		node.fuse(Object.assign({

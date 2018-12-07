@@ -108,3 +108,21 @@ exports.schema = function(val, what, spath) {
 	}
 	return sval;
 };
+
+exports.autolink = function(val, what) {
+	var hrefs = what.scope.data.$hrefs;
+	var a = what.parent;
+	var obj = Page.parse(val);
+	if (obj.hostname && obj.hostname != document.location.hostname) {
+		a.target = "_blank";
+		a.rel = "noopener";
+	} else if (obj.pathname && obj.pathname.startsWith('/.')) {
+		a.target = "_blank";
+	} else if (val) {
+		var href = val.split('?')[0];
+		var meta = (hrefs || {})[href];
+		if (meta && meta.mime && meta.mime.startsWith("text/html") == false) {
+			a.target = "_blank";
+		}
+	}
+};
