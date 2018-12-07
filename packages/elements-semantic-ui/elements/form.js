@@ -39,9 +39,7 @@ Pageboard.elements.query_form = {
 		}
 	},
 	tag: 'form[method="get"]',
-	html: `<form is="element-form" class="ui form" action="[url]" method="get" data-type="[type]">
-		<div block-content="form"></div>
-	</form>`,
+	html: `<form is="element-form" class="ui form" action="[url]" method="get" data-type="[type]" block-content="form"></form>`,
 	stylesheets: [
 		'../lib/components/form.css',
 		'../ui/form.css'
