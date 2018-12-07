@@ -311,8 +311,10 @@ function getNonNullType(type) {
 	return type;
 }
 Semafor.prototype.process = function(key, schema, node) {
+	if (this.filter) {
+		schema = this.filter(key, schema) || schema;
+	}
 	var type = getNonNullType(schema.type);
-	if (this.filter && schema.$filter) this.filter(key, schema);
 	var processed = false;
 	// TODO support array of types (user selects the type he needs)
 	if (type && types[type]) {
