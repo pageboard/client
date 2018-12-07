@@ -22,30 +22,6 @@ Pageboard.elements.template = {
 	]
 };
 
-/*
-element-template se charge de la fusion et n'est pas connecté à Page.patch
-
-GET : change l'url, requête les données correspondantes à l'url, met à jour la page
- contrainte n°1: recharger la page doit la mettre à jour correctement
- contrainte n°2: le prérendu affiche la même chose
-POST: envoie des données, change l'url, met à jour la page
- contrainte n°1: recharger la page ne doit pas resoumettre les données.
-  est-ce qu'on doit voir le même résultat quand même ?
- contrainte n°2: le prérendu affiche la même chose
- contrainte n°3: le prérendu du POST peut fonctionner dans ce cas là
-
-Le POST est clairement dans le bon ordre.
-Peut-être que le GET n'est pas dans le bon ordre:
-GET: requête les données, change l'url, met à jour
-mais "fetch" est censé réagir à Page.patch, et en réalité Page.patch(state)
-est appelé "pendant" que l'url change, d'où la confusion.
-
-En définitive, si le résultat d'un POST doit être utilisé pour mettre à jour la page,
-il faut que le POST "redirige" vers une url, qui est récupérée par un fetch (qui ensuite
-fait une requête ou pas).
-
-*/
-
 Pageboard.elements.fetch = Object.assign({}, Pageboard.elements.template, {
 	title: "Fetch",
 	icon: '<i class="search icon"></i>',
