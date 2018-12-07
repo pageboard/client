@@ -247,7 +247,8 @@ Crop.prototype.destroy = function() {
 	this.slider.removeEventListener('input', this.zoomChange, false);
 	this.sliderValue.removeEventListener('input', this.valueChange, false);
 	this.sliderValue.removeEventListener('focus', this.valueFocus, false);
-	this.input.closest('#form').removeEventListener('change', this.formChange, false);
+	var form = this.input.closest('#form');
+	if (form) form.removeEventListener('change', this.formChange, false);
 	this.resetButton.removeEventListener('click', this.reset, false);
 	this.zoomOutButton.removeEventListener('click', this.zoomOut, false);
 	this.zoomInButton.removeEventListener('click', this.zoomIn, false);
