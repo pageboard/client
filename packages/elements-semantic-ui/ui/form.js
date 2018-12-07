@@ -128,25 +128,24 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		if (!submit) return;
 		var form = this;
 		form.classList.add('loading');
+		var data = {
+			$query: state.query
+		};
 		return Promise.all(Array.prototype.filter.call(form.elements, function(node) {
 			return node.type == "file";
 		}).map(function(input) {
 			return input.closest('element-input-file').upload();
 		})).then(function() {
-			return Pageboard.fetch(form.method, form.action, form.read());
-		}).then(function() {
-			return "success";
+			data.$body = form.read();
+			return Pageboard.fetch(form.method, form.action, data.$body);
 		}).catch(function(err) {
-			if (err.status == 404) return 'warning';
-			else return 'error';
-		}).then(function(statusText) {
+			return err;
+		}).then(function(response) {
 			form.classList.remove('loading');
-			if (statusText) {
-				var query = Object.assign({}, state.query);
-				query[form.id] = statusText;
-				state.vars[form.id] = true;
-				return state.push({query: query});
-			}
+			var redirect = form.getAttribute('redirect');
+			if (!redirect) return;
+			data.$response = response;
+			return state.push(redirect.fuse(data, state.scope));
 		});
 	}
 }

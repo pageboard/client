@@ -59,12 +59,6 @@ Pageboard.elements.api_form = {
 	menu: "form",
 	required: ["request"],
 	properties: {
-		name: {
-			title: 'Name',
-			description: 'The form id used to track state in address bar',
-			type: 'string',
-			pattern: '[a-zA-Z]\\w*'
-		},
 		type: {
 			title: 'Bind to element',
 			description: 'Checks schema and helps adding form controls',
@@ -92,8 +86,6 @@ Pageboard.elements.api_form = {
 				},
 				parameters: {
 					title: 'Parameters',
-					description: 'Key-values', // NB request.parameters temporarily holds $query.<name> pairs
-					// they must be moved to hidden input templates !
 					anyOf: [{
 						type: "object"
 					}, {
@@ -107,32 +99,20 @@ Pageboard.elements.api_form = {
 			},
 			$helper: 'service',
 		},
-		response: {
-			title: 'Response',
-			description: 'Change location using response',
-			type: 'object',
-			properties: {
-				url: {
-					title: 'Target page',
-					description: 'Can be empty to stay on same page',
-					anyOf: [{
-						type: "null"
-					}, {
-						type: "string",
-						format: "pathname"
-					}],
-					$helper: {
-						name: 'href',
-						filter: {
-							type: ["link"]
-						}
-					}
-				},
-				query: {
-					title: 'Target query',
-					description: 'Use $response.<path> to merge response fields into query',
-					type: ['null', 'object']
-				}
+		redirect: {
+			title: 'Redirect',
+			description: 'Select a page, or leave empty',
+			anyOf: [{
+				type: "null"
+			}, {
+				type: "string",
+				format: "uri-reference"
+			}],
+			$helper: {
+				name: 'page',
+				title: 'Query',
+				description: 'Values can be [$query.xxx], [$body.xxx], [$response.xxx]',
+				query: true
 			}
 		}
 	},
@@ -143,6 +123,7 @@ Pageboard.elements.api_form = {
 	},
 	tag: 'form[method="post"]',
 	html: `<form is="element-form" action="/.api/form/[$id]" type="[type]"
+		redirect="[redirect]"
 		method="post"
 		class="ui form"
 		id="[name|or:[$id|slice:0:4]]"
