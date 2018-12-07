@@ -125,11 +125,6 @@ body.read #pageboard-read > iframe {
 	padding-top:0;
 	padding-bottom:0.5em;
 }
-#form fieldset > label {
-	display:block;
-	font-style:italic;
-	font-size:0.9em;
-}
 #form fieldset > .inline.fields:last-child {
 	margin-bottom:0em;
 }
