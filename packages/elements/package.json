@@ -19,7 +19,7 @@
   "homepage": "https://github.com/pageboard/client#readme",
   "dependencies": {
     "@pageboard/pagecut": "^1.0.0-pre1",
-    "built-in-element": "^0.1.4",
+    "@ungap/custom-elements-builtin": "^0.1.2",
     "debounce": "^1.1.0",
     "document-register-element": "^1.13.1",
     "domify": "^1.4.0",
@@ -30,7 +30,7 @@
   },
   "postinstall": {
     "document-register-element/build/document-register-element.max.js": "link lib/custom-elements.js",
-    "built-in-element/index.js": "link lib/built-in-element.js",
+    "@ungap/custom-elements-builtin/index.js": "link lib/custom-elements-builtin.js",
     "window-page/window-page.js": "link lib/",
     "./src/pageboard.js": "browserify --standalone=Pageboard lib/"
   },
