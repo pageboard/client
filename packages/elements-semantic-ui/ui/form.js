@@ -82,9 +82,9 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		return count;
 	}
 	handleSubmit(e, state) {
-		if (state.scope.$write) return;
 		var submit = e.type == "submit";
 		if (submit) e.preventDefault();
+		if (state.scope.$write) return;
 		this.classList.remove('error', 'warning', 'success');
 		if (this.matches('.loading')) return;
 		var fn = this[this.method + 'Method'];
