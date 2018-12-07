@@ -82,13 +82,6 @@ Pageboard.elements.fetch = Object.assign({}, Pageboard.elements.template, {
 			}, {
 				type: "null"
 			}]
-		},
-		keys: {
-			type: 'array',
-			uniqueItems: true,
-			items: {
-				type: 'string'
-			}
 		}
 	},
 	$filter: {
