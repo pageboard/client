@@ -52,8 +52,13 @@ module.exports.install = install;
 function install(el, scope) {
 	if (el.$installed) return;
 	el.$installed = true;
-	if (el.html) el.dom = scope.$doc.dom(el.html);
-	if (el.install) el.install.call(el, scope);
+	try {
+		if (el.html) el.dom = scope.$doc.dom(el.html);
+		if (el.install) el.install.call(el, scope);
+	} catch(err) {
+		console.error("Invalid element", el, err);
+		return;
+	}
 	if (!el.render && el.html) el.render = function(block, scope) {
 		var dom = el.dom.cloneNode(true);
 		var rscope = Object.assign({}, scope, {
