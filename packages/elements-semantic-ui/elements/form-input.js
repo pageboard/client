@@ -18,7 +18,7 @@ Pageboard.elements.fieldset = {
 };
 
 Pageboard.elements.fieldset_legend = {
-	inplace: "true",
+	inplace: true,
 	contents: {
 		legend: "inline*"
 	},

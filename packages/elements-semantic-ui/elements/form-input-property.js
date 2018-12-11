@@ -196,7 +196,7 @@ Pageboard.elements.input_property = {
 				type: 'input_checkbox',
 				data: {
 					name: name,
-					value: "true",
+					value: true,
 					disabled: d.disabled,
 					required: required
 				},
