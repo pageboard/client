@@ -24,11 +24,11 @@ class HTMLElementTemplate extends HTMLCustomElement {
 		// what do we do if state.query has keys that are used by a form in this query template ?
 		var keys = me.keys;
 		var candidates = 0;
-		var query = {};
+		var queryParams = {};
 		keys.forEach(function(key) {
 			if (Object.prototype.hasOwnProperty.call(state.query, key)) {
 				candidates++;
-				query[key] = state.query[key];
+				queryParams[key] = state.query[key];
 				state.vars[key] = true;
 			}
 		});
@@ -36,16 +36,16 @@ class HTMLElementTemplate extends HTMLCustomElement {
 			// this is only to avoid doing useless requests
 			return;
 		}
-		// do not refresh if the same query was already done
-		var queryStr = Page.format({query: query});
-		if (queryStr == me.dataset.query) return;
-		me.dataset.query = queryStr;
 
 		var queryId = me.getAttribute('block-id');
 		var loader;
 		var remote = me.remote;
 		if (remote) {
-			loader = Pageboard.fetch('get', `/.api/query/${queryId}`, query);
+			// do not refresh if the same query was already done
+			var queryStr = Page.format({query: queryParams});
+			if (queryStr == me.dataset.query) return;
+			me.dataset.query = queryStr;
+			loader = Pageboard.fetch('get', `/.api/query/${queryId}`, queryParams);
 		} else {
 			loader = Promise.resolve();
 		}
