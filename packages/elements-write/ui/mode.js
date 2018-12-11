@@ -30,11 +30,11 @@ Pageboard.Controls.Mode = class Mode {
 				state.save();
 			}
 			this.editor.close();
-			state.reload();
 		} else {
 			this.node.removeEventListener('click', this);
-			Pageboard.Editor(this.win, state);
+			delete Pageboard.editor;
 		}
+		state.reload();
 	}
 };
 

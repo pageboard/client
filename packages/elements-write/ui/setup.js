@@ -218,7 +218,6 @@ Pageboard.Editor = function Editor(win, state) {
 	editor.updatePage = updatePage.bind(editor, state);
 	editor.updateControls = updateControls.bind(editor);
 	editor.updateEditor = updateEditor.bind(editor);
-	editor.blocks.initial = view.blocks.initial;
 	editor.close = editorClose.bind(editor);
 	editor.devTools = devTools.bind(editor);
 
@@ -226,6 +225,7 @@ Pageboard.Editor = function Editor(win, state) {
 		editor.devTools();
 	};
 
+	editor.blocks.initial = view.blocks.initial;
 	Object.keys(view.blocks.store).forEach(function(id) {
 		if (!editor.blocks.store[id]) {
 			editor.blocks.store[id] = view.blocks.store[id];
@@ -238,8 +238,9 @@ Pageboard.Editor = function Editor(win, state) {
 		controls[lKey] = new Pageboard.Controls[key](editor, document.getElementById(lKey));
 	});
 	editor.controls = controls;
-	if (state.data.$store) {
-		controls.store.reset(state.data.$store);
+	var $store = state.data.$store;
+	if ($store) {
+		controls.store.reset($store);
 	}
 
 	editor.focus();

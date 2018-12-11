@@ -6,6 +6,9 @@ function Form(editor, node) {
 	this.editor = editor;
 	this.node = node;
 	this.inlines = [];
+	this.mode = "data";
+	this.switcher = this.node.dom(`<div class="ui floating right mini circular blue label button">$</div>`);
+	this.switcher.addEventListener('click', this.handleSwitch.bind(this));
 }
 
 Form.prototype.destroy = function() {
@@ -17,9 +20,10 @@ Form.prototype.destroy = function() {
 		form.destroy();
 	});
 	this.inlines = [];
+	if (this.switcher) this.switcher.remove();
 };
 
-Form.prototype.update = function(parents, sel) {
+Form.prototype.update = function(parents) {
 	if (this.ignoreNext) {
 		this.ignoreNext = false;
 		return;
@@ -29,6 +33,7 @@ Form.prototype.update = function(parents, sel) {
 		return;
 	}
 	var parent = parents[0];
+	this.parents = parents;
 
 	var block = parent.block;
 	if (!block) {
@@ -43,9 +48,18 @@ Form.prototype.update = function(parents, sel) {
 		}
 		this.block = block;
 	}
+	var editor = this.editor;
 
-	if (!this.main) this.main = new FormBlock(this.editor, this.node, block.type);
-	this.main.update(parents, block);
+	var inTemplate = parents.find(function(item) {
+		var el = editor.element(item.block.type);
+		return el && el.template;
+	});
+
+	if (!this.main) this.main = new FormBlock(editor, this.node, block.type);
+
+	this.main.update(parents, block, this.mode);
+
+	var allowTemplateMode = this.main.el.properties;
 
 	var curInlines = this.inlines;
 	var inlines = (parent.inline && parent.inline.blocks || []).map(function(block) {
@@ -59,17 +73,30 @@ Form.prototype.update = function(parents, sel) {
 			}
 		});
 		if (!curForm) {
-			curForm = new FormBlock(this.editor, this.node, block.type);
+			curForm = new FormBlock(editor, this.node, block.type);
 		} else {
 			curForm.node.parentNode.appendChild(curForm.node);
 		}
-		curForm.update(parents, block);
+		curForm.update(parents, block, this.mode);
+		allowTemplateMode = allowTemplateMode || curForm.el.properties;
 		return curForm;
 	}, this);
+
+	if (allowTemplateMode && inTemplate) {
+		if (!this.switcher.parentNode) this.node.appendChild(this.switcher);
+	} else {
+		this.switcher.remove();
+	}
+
 	curInlines.forEach(function(form) {
 		form.destroy();
 	});
 	this.inlines = inlines;
+};
+
+Form.prototype.handleSwitch = function(e) {
+	this.mode = this.mode == "template" ? "data" : "template";
+	this.update(this.parents);
 };
 
 function FormBlock(editor, node, type) {
@@ -108,19 +135,24 @@ FormBlock.prototype.destroy = function() {
 	this.node.remove();
 };
 
-FormBlock.prototype.update = function(parents, block) {
+FormBlock.prototype.update = function(parents, block, mode) {
 	this.ignoreEvents = true;
 	var same = false;
 	if (block) {
 		if (this.block) {
-			same = Pageboard.JSON.stableStringify(this.block.data) == Pageboard.JSON.stableStringify(block.data);
+			if (mode != this.mode) {
+				same = false;
+			} else {
+				same = Pageboard.JSON.stableStringify(this.block[mode]) == Pageboard.JSON.stableStringify(block[mode]);
+			}
 		}
 		this.block = Object.assign({}, block);
-		this.block.data = JSON.parse(JSON.stringify(block.data || {}));
+		this.block[mode] = JSON.parse(JSON.stringify(block[mode] || {}));
 	}
 	if (parents) {
 		this.parents = parents;
 	}
+
 	if (!same) {
 		var schema = Object.assign({}, this.el, {type: 'object'});
 		var form = this.form;
@@ -130,6 +162,7 @@ FormBlock.prototype.update = function(parents, block) {
 			this.customFilter.bind(this),
 			this.customHelper.bind(this)
 		);
+		this.mode = mode;
 		var active = document.activeElement;
 		var selection = active ? {
 			name: active.name,
@@ -140,13 +173,14 @@ FormBlock.prototype.update = function(parents, block) {
 
 		form.update();
 		form.clear();
-		form.set(this.block.data);
+		form.set(this.block[mode]);
 		Object.values(this.helpers).forEach(function(inst) {
 			if (inst.update) inst.update(this.block);
 		}, this);
 		Object.values(this.filters).forEach(function(inst) {
 			if (inst.update) inst.update(this.block);
 		}, this);
+
 		if (selection && selection.name) {
 			setTimeout(function() {
 				// give an instant for input mutations to propagate
@@ -186,13 +220,34 @@ FormBlock.prototype.customHelper = function(key, prop, node) {
 		console.error("Unknown helper name", prop);
 		return;
 	}
-	var inst = new Helper(node.querySelector(`[name="${key}"]`), opts, prop);
-	if (inst.init) inst.init(this.block);
-	this.helpers[key] = inst;
+
+	if (this.mode == "template") {
+		return;
+	}
+	var inst = this.helpers[key];
+	if (inst) {
+		if (inst.destroy) inst.destroy();
+		inst = null;
+	}
+	if (!inst) {
+		inst = this.helpers[key] = new Helper(node.querySelector(`[name="${key}"]`), opts, prop);
+		if (inst.init) inst.init(this.block);
+	}
 };
 
 FormBlock.prototype.customFilter = function(key, prop) {
 	var opts = prop.$filter;
+	if (this.mode == "template") {
+		if (!prop.properties && (prop.type || prop.anyOf || prop.oneOf)) {
+			return {
+				title: prop.title,
+				type: 'string',
+				format: 'singleline'
+			};
+		} else {
+			return;
+		}
+	}
 	if (!opts) return;
 	if (typeof opts == "string") {
 		opts = {name: opts};
@@ -205,18 +260,21 @@ FormBlock.prototype.customFilter = function(key, prop) {
 		console.error("Unknown filter name", prop);
 		return;
 	}
-	var inst = new Filter(key, opts, prop);
-	if (inst.init) inst.init(this.block);
-	this.filters[key] = inst;
+	var inst = this.filters[key];
+	if (!inst) {
+		inst = this.filters[key] = new Filter(key, opts, prop);
+		if (inst.init) inst.init(this.block);
+	}
 };
 
 FormBlock.prototype.change = function(e) {
 	if (!this.block || this.ignoreEvents || !this.form) return;
-	if (e && e.target && e.target.name && e.target.name.startsWith('$')) return;
+	if (e && e.target && (!e.target.name || e.target.name.startsWith('$'))) return;
 	var editor = this.editor;
-	var data = this.form.get();
+	var formData = pruneObj(this.form.get());
+	var mode = this.mode;
 
-	var same = Pageboard.JSON.stableStringify(this.block.data) == Pageboard.JSON.stableStringify(data);
+	var same = Pageboard.JSON.stableStringify(this.block[mode]) == Pageboard.JSON.stableStringify(formData);
 	if (same) return;
 
 	var id = this.block.id;
@@ -224,8 +282,7 @@ FormBlock.prototype.change = function(e) {
 
 	// this must be done after reselecting with breadcrumb.click
 	var block = Object.assign({}, this.block);
-	block.data = JSON.parse(JSON.stringify(block.data));
-	Object.assign(block.data, data);
+	block[mode] = formData;
 
 	if (id == editor.state.doc.attrs.id) {
 		found = true;
@@ -237,7 +294,7 @@ FormBlock.prototype.change = function(e) {
 	var tr = editor.state.tr;
 	var dispatch = false;
 
-	if (this.el.inplace) {
+	if (this.el.inplace || block.template) {
 		// simply select focused node
 		var node = this.el.inline ? this.parents[0].inline.rpos : editor.root.querySelector('[block-focused="last"]');
 		if (node) {
@@ -260,6 +317,20 @@ FormBlock.prototype.change = function(e) {
 		editor.dispatch(tr);
 	}
 };
+
+function pruneObj(obj) {
+	var copy = Object.assign({}, obj);
+	Object.keys(copy).forEach(function(key) {
+		var val = copy[key];
+		if (val == null || val === "" || typeof val == "number" && isNaN(val)) {
+			delete copy[key];
+		} else if (typeof val == "object") {
+			val = pruneObj(val);
+			if (Object.keys(val).length == 0) delete copy[key];
+		}
+	});
+	return copy;
+}
 
 })(window.Pageboard, window.Pagecut);
 

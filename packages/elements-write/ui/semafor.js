@@ -149,11 +149,11 @@ Semafor.prototype.update = function() {
 Semafor.prototype.get = function() {
 	var vals = formGet(this.$node[0]);
 	var formVals = this.unflatten(vals);
-	return this.convert(formVals);
+	return this.convert(formVals, this.lastSchema);
 };
 
 Semafor.prototype.set = function(obj) {
-	var vals = this.flatten(obj, {}, this.schema);
+	var vals = this.flatten(obj, {}, this.lastSchema);
 	formSet(this.$node[0], vals);
 };
 
@@ -220,7 +220,7 @@ Semafor.prototype.flatten = function(tree, obj, schema) {
 Semafor.prototype.convert = function(vals, field) {
 	var obj = {};
 	var val;
-	var schema = (field || this.schema).properties;
+	var schema = field.properties;
 	for (var name in vals) {
 		field = schema[name];
 		val = vals[name];
@@ -294,10 +294,7 @@ Semafor.prototype.convert = function(vals, field) {
 				if (nullable && val === "") val = null;
 				break;
 			}
-
-
 		}
-
 		obj[name] = val;
 	}
 	return obj;
@@ -314,6 +311,7 @@ Semafor.prototype.process = function(key, schema, node) {
 	if (this.filter) {
 		schema = this.filter(key, schema) || schema;
 	}
+	if (!key) this.lastSchema = schema;
 	var type = getNonNullType(schema.type);
 	var processed = false;
 	// TODO support array of types (user selects the type he needs)
