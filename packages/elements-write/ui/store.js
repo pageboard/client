@@ -487,6 +487,7 @@ Store.prototype.changes = function() {
 };
 
 function ownProto(obj) {
+	if (obj == null) return obj;
 	return JSON.parse(JSON.stringify(obj));
 }
 
