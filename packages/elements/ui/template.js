@@ -89,7 +89,7 @@ class HTMLElementTemplate extends HTMLCustomElement {
 		var node = Pageboard.render(data || {type: el.name}, state.scope);
 
 		view.textContent = '';
-		view.appendChild(node);
+		if (node) view.appendChild(node);
 	}
 }
 Page.ready(function() {
