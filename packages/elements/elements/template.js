@@ -4,6 +4,7 @@ Pageboard.elements.template = {
 	icon: '<b class="icon">[*]</b>',
 	menu: 'form',
 	group: 'block template',
+	template: true,
 	contents: {
 		template: {
 			title: 'Template',

@@ -60,17 +60,31 @@ function install(el, scope) {
 		return;
 	}
 	if (el.dom) el.render = function(block) {
+		var data = block.data;
+		if (block.template && !scope.$write) {
+			data = merge(data, block.template);
+		}
 		var dom = el.dom.cloneNode(true);
 		var rscope = Object.assign({}, scope, {
 			$element: el,
 			$id: block.id
 		});
 		if (el.fuse) {
-			dom = el.fuse.call(el, dom, block.data, rscope) || dom;
+			dom = el.fuse.call(el, dom, data, rscope) || dom;
 		} else if (reFuse.test(el.html)) {
-			dom = dom.fuse(block.data, rscope, el.filters);
+			dom = dom.fuse(data, rscope, el.filters);
 		}
 		return dom;
 	};
 }
 
+function merge(data, template) {
+	var copy = Object.assign({}, data);
+	Object.keys(template).forEach(function(key) {
+		copy[key] = template[key];
+		if (typeof copy[key] == "object") {
+			copy[key] = merge(copy[key], template[key]);
+		}
+	});
+	return copy;
+}
