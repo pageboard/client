@@ -9,6 +9,7 @@ element-template > [block-content="template"] {
 
 [contenteditable] element-template > [block-content="template"] {
 	display:block;
+	min-height:1em;
 }
 
 [contenteditable] element-template > .view {
