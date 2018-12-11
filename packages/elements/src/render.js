@@ -44,7 +44,7 @@ module.exports = function(res, scope) {
 	}
 	if (res.items) block.children = res.items;
 
-	return Pageboard.view.from(block, null, block.type, scope);
+	return Pageboard.view.from(block, null, block.type);
 };
 
 module.exports.install = install;
@@ -53,13 +53,13 @@ function install(el, scope) {
 	if (el.$installed) return;
 	el.$installed = true;
 	try {
-		if (el.html) el.dom = scope.$doc.dom(el.html);
+		if (el.html != null) el.dom = scope.$doc.dom(el.html);
 		if (el.install) el.install.call(el, scope);
 	} catch(err) {
 		console.error("Invalid element", el, err);
 		return;
 	}
-	if (!el.render && el.html) el.render = function(block, scope) {
+	if (el.dom) el.render = function(block) {
 		var dom = el.dom.cloneNode(true);
 		var rscope = Object.assign({}, scope, {
 			$element: el,
