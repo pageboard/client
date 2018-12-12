@@ -186,7 +186,9 @@ body.read #pageboard-read > iframe {
 #form .field > label {
 	margin-bottom:0;
 }
-
+#form > form {
+	margin-top:1em;
+}
 .ui.form .field > textarea {
 	height:6em;
 	min-height:6em;
