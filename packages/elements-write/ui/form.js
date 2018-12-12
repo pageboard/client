@@ -137,13 +137,13 @@ FormBlock.prototype.destroy = function() {
 
 FormBlock.prototype.update = function(parents, block, mode) {
 	this.ignoreEvents = true;
-	var same = false;
+	var sameData = false;
+	var sameMode = mode == this.mode;
+	this.mode = mode;
 	if (block) {
 		if (this.block) {
-			if (mode != this.mode) {
-				same = false;
-			} else {
-				same = Pageboard.JSON.stableStringify(this.block[mode]) == Pageboard.JSON.stableStringify(block[mode]);
+			if (!sameMode) {
+				sameData = Pageboard.JSON.stableStringify(this.block[mode]) == Pageboard.JSON.stableStringify(block[mode]);
 			}
 		}
 		this.block = Object.assign({}, block);
@@ -153,16 +153,8 @@ FormBlock.prototype.update = function(parents, block, mode) {
 		this.parents = parents;
 	}
 
-	if (!same) {
+	if (!sameData || !sameMode) {
 		var schema = Object.assign({}, this.el, {type: 'object'});
-		var form = this.form;
-		if (!form) form = this.form = new window.Semafor(
-			schema,
-			this.node,
-			this.customFilter.bind(this),
-			this.customHelper.bind(this)
-		);
-		this.mode = mode;
 		var active = document.activeElement;
 		var selection = active ? {
 			name: active.name,
@@ -171,13 +163,23 @@ FormBlock.prototype.update = function(parents, block, mode) {
 			dir: active.selectionDirection
 		} : null;
 
-		form.update();
-		form.clear();
+		var form = this.form;
+		if (!form) form = this.form = new window.Semafor(
+			schema,
+			this.node,
+			this.customFilter.bind(this),
+			this.customHelper.bind(this)
+		);
+
+		if (!form.lastSchema || !sameMode || Object.keys(this.filters).length > 0) {
+			form.update();
+			form.clear();
+		}
 		form.set(this.block[mode]);
-		Object.values(this.helpers).forEach(function(inst) {
+		Object.values(this.filters).forEach(function(inst) {
 			if (inst.update) inst.update(this.block);
 		}, this);
-		Object.values(this.filters).forEach(function(inst) {
+		Object.values(this.helpers).forEach(function(inst) {
 			if (inst.update) inst.update(this.block);
 		}, this);
 
@@ -225,14 +227,9 @@ FormBlock.prototype.customHelper = function(key, prop, node) {
 		return;
 	}
 	var inst = this.helpers[key];
-	if (inst) {
-		if (inst.destroy) inst.destroy();
-		inst = null;
-	}
-	if (!inst) {
-		inst = this.helpers[key] = new Helper(node.querySelector(`[name="${key}"]`), opts, prop);
-		if (inst.init) inst.init(this.block);
-	}
+	if (inst && inst.destroy) inst.destroy();
+	inst = this.helpers[key] = new Helper(node.querySelector(`[name="${key}"]`), opts, prop);
+	if (inst.init) inst.init(this.block);
 };
 
 FormBlock.prototype.customFilter = function(key, prop) {
@@ -261,9 +258,11 @@ FormBlock.prototype.customFilter = function(key, prop) {
 		return;
 	}
 	var inst = this.filters[key];
-	if (!inst) {
+	if (!inst || !inst.update) {
 		inst = this.filters[key] = new Filter(key, opts, prop);
 		if (inst.init) inst.init(this.block);
+	} else {
+		inst.update(this.block);
 	}
 };
 
