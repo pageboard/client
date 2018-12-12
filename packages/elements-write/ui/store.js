@@ -131,11 +131,12 @@ Store.prototype.restore = function(blocks) {
 	this.pageUpdate();
 };
 
-Store.prototype.update = function() {
+Store.prototype.update = function(parents, sel, changed) {
 	if (this.ignoreNext) {
 		delete this.ignoreNext;
 		return;
 	}
+	if (!changed) return;
 	this.debounceWaiting = true;
 	this.debounceUpdate();
 };
