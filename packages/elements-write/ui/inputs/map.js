@@ -19,7 +19,7 @@ class HTMLInputMap extends HTMLCustomElement {
 	connectedCallback() {
 		if (this._proxy) return;
 		this._proxy = this.appendChild(
-			this.dom(`<input name="${this.getAttribute('name')}" type="hidden" />`)
+			this.dom(`<input name="${this.getAttribute('name') || ''}" type="hidden" />`)
 		);
 		var renderer = Pageboard.debounce(this._render.bind(this), 10);
 		this._observer = new MutationObserver(function(mutations) {
@@ -50,7 +50,7 @@ class HTMLInputMap extends HTMLCustomElement {
 		var obj = this.value || {};
 		var body = this._table.querySelector('tbody');
 		body.textContent = '';
-		var name = this.getAttribute('name');
+		var name = this.getAttribute('name') || '';
 		Object.keys(obj).concat([""]).forEach(function(key, i) {
 			var val = obj[key];
 			if (val === undefined || val === null) val = '';

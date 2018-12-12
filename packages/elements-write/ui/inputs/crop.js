@@ -201,7 +201,7 @@ Crop.prototype.change = function(obj) {
 
 Crop.prototype.load = function() {
 	var url = this.block.data.url;
-	if (url == this.lastUrl) return this.cropper && this.cropper.complete;
+	if (url == this.lastUrl) return this.cropper && this.cropper.cropped;
 	this.lastUrl = url;
 
 	this.cropper.replace(this.thumbnail(url));
