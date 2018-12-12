@@ -118,23 +118,14 @@ function updatePage(state) {
 	}
 }
 
-function updateControls() {
-	this.updateEditor(this.state, lastFocusParents, lastFocusSelection);
-}
-
-var lastFocusParents;
-var lastFocusSelection;
-
-function updateEditor(state, focusParents, focusSelection) {
-	if (this.closed) return;
+function filterEditor(tr) {
 	var editor = this;
-	if (!focusParents || !focusSelection || editor.destroying) {
-		// editor is updated only from focus changes
-		return;
-	}
-	var parents = [];
-
-	focusParents.forEach(function(item) {
+	if (editor.destroying || editor.closed) return;
+	var focus = editor.focusState;
+	var list = tr.getMeta('focus-plugin');
+	var sel = tr.getMeta('focus-selection');
+	if (sel) focus.selection = sel;
+	if (list) focus.parents = list.map(function(item) {
 		var node = item.root.node;
 		var obj = {
 			node: node,
@@ -151,13 +142,17 @@ function updateEditor(state, focusParents, focusSelection) {
 				rpos: item.inline.rpos
 			};
 		}
-		parents.push(obj);
+		return obj;
 	});
+	if (tr.docChanged) focus.changed = true;
+}
 
+function updateEditor(parents, selection, changed) {
+	var editor = this;
 	if (editor.controls) Object.keys(editor.controls).forEach(function(key) {
 		var c = editor.controls[key];
 		try {
-			if (c.update) c.update(parents, focusSelection);
+			if (c.update) c.update(parents, selection, changed);
 		} catch(err) {
 			Pageboard.notify(`control.${key}`, err);
 		}
@@ -193,31 +188,25 @@ Pageboard.Editor = function Editor(win, state) {
 		genId: Pageboard.Controls.Store.genId,
 		plugins: [{
 			filterTransaction: function(tr) {
-				// filters all transactions
-				var focusParents = tr.getMeta('focus-plugin');
-				if (focusParents) {
-					lastFocusParents = focusParents;
-				}
-				var focusSelection = tr.getMeta('focus-selection');
-				if (focusSelection) {
-					lastFocusSelection = focusSelection;
-				}
+				editor.filterEditor(tr);
 				return true;
 			},
 			view: function() {
 				return {
 					update: function(editor, state) {
-						// called after all current transactions have been applied
-						editor.updateEditor(state, lastFocusParents, lastFocusSelection);
+						var obj = editor.focusState;
+						if (obj.parents) editor.updateEditor(obj.parents, obj.selection, obj.changed);
+						obj.changed = false;
 					}
 				};
 			}
 		}]
 	});
+	editor.focusState = {};
 
 	editor.updatePage = updatePage.bind(editor, state);
-	editor.updateControls = updateControls.bind(editor);
-	editor.updateEditor = updateEditor.bind(editor);
+	editor.updateEditor = Pageboard.debounce(updateEditor.bind(editor), 50);
+	editor.filterEditor = filterEditor.bind(editor);
 	editor.close = editorClose.bind(editor);
 	editor.devTools = devTools.bind(editor);
 
