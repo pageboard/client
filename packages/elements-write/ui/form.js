@@ -7,7 +7,7 @@ function Form(editor, node) {
 	this.node = node;
 	this.inlines = [];
 	this.mode = "data";
-	this.switcher = this.node.dom(`<div class="ui floating right mini circular blue label button">$</div>`);
+	this.switcher = this.node.dom(`<div class="ui floating right mini circular label button">$</div>`);
 	this.switcher.addEventListener('click', this.handleSwitch.bind(this));
 }
 
@@ -50,16 +50,19 @@ Form.prototype.update = function(parents) {
 	}
 	var editor = this.editor;
 
-	var inTemplate = parents.find(function(item) {
+	var showExpressions = parents.find(function(item, i) {
 		var el = editor.element(item.block.type);
-		return el && el.template;
+		if (!el) return false;
+		if (el.expressions && !i) return true;
+		var spec = item.contentName && el.contents && el.contents[item.contentName];
+		return spec && spec.expressions || false;
 	});
 
 	if (!this.main) this.main = new FormBlock(editor, this.node, block.type);
 
 	this.main.update(parents, block, this.mode);
 
-	var allowTemplateMode = this.main.el.properties;
+	var canShowExpressions = this.main.el.properties;
 
 	var curInlines = this.inlines;
 	var inlines = (parent.inline && parent.inline.blocks || []).map(function(block) {
@@ -78,11 +81,11 @@ Form.prototype.update = function(parents) {
 			curForm.node.parentNode.appendChild(curForm.node);
 		}
 		curForm.update(parents, block, this.mode);
-		allowTemplateMode = allowTemplateMode || curForm.el.properties;
+		canShowExpressions = canShowExpressions || curForm.el.properties;
 		return curForm;
 	}, this);
 
-	if (allowTemplateMode && inTemplate) {
+	if (canShowExpressions && showExpressions) {
 		if (!this.switcher.parentNode) this.node.appendChild(this.switcher);
 	} else {
 		this.switcher.remove();
@@ -95,7 +98,8 @@ Form.prototype.update = function(parents) {
 };
 
 Form.prototype.handleSwitch = function(e) {
-	this.mode = this.mode == "template" ? "data" : "template";
+	this.mode = this.mode == "expr" ? "data" : "expr";
+	this.switcher.classList.toggle('active', this.mode == "expr");
 	this.update(this.parents);
 };
 
@@ -172,7 +176,7 @@ FormBlock.prototype.update = function(parents, block, mode) {
 		);
 
 		if (!form.lastSchema || !sameMode || Object.keys(this.filters).length > 0) {
-			form.update();
+			form.update(mode == "expr" ? form.lastSchema : form.schema);
 			form.clear();
 		}
 		form.set(this.block[mode]);
@@ -223,7 +227,7 @@ FormBlock.prototype.customHelper = function(key, prop, node) {
 		return;
 	}
 
-	if (this.mode == "template") {
+	if (this.mode == "expr") {
 		return;
 	}
 	var inst = this.helpers[key];
@@ -234,13 +238,13 @@ FormBlock.prototype.customHelper = function(key, prop, node) {
 
 FormBlock.prototype.customFilter = function(key, prop) {
 	var opts = prop.$filter;
-	if (this.mode == "template") {
-		if (!prop.properties && (prop.type || prop.anyOf || prop.oneOf)) {
-			return {
-				title: prop.title,
-				type: 'string',
-				format: 'singleline'
-			};
+	if (this.mode == "expr") {
+		if (!prop.properties && prop.type != "object" && (prop.type || prop.anyOf || prop.oneOf)) {
+			Object.keys(prop).forEach(function(key) {
+				if (['title', 'type', 'format'].includes(key) == false && !key.startsWith('$')) delete prop[key];
+			});
+			prop.type = 'string';
+			prop.format = 'singleline';
 		} else {
 			return;
 		}
@@ -293,7 +297,7 @@ FormBlock.prototype.change = function(e) {
 	var tr = editor.state.tr;
 	var dispatch = false;
 
-	if (this.el.inplace || block.template) {
+	if (this.el.inplace) {
 		// simply select focused node
 		var node = this.el.inline ? this.parents[0].inline.rpos : editor.root.querySelector('[block-focused="last"]');
 		if (node) {
@@ -326,6 +330,7 @@ function pruneObj(obj) {
 		} else if (typeof val == "object") {
 			val = pruneObj(val);
 			if (Object.keys(val).length == 0) delete copy[key];
+			else copy[key] = val;
 		}
 	});
 	return copy;

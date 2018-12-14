@@ -26,23 +26,11 @@ Pageboard.elements.template = {
 Pageboard.elements.fetch = Object.assign({}, Pageboard.elements.template, {
 	title: "Fetch",
 	icon: '<i class="search icon"></i>',
-	fuse: function(node, d, scope) {
-		// do not call /.api/query if not true
-		node.setAttribute('remote', !!(d.method));
-		var keys = [];
-		(function findKeys(val) {
-			if (!val) return;
-			if (typeof val == "string") {
-				if (val.startsWith('$query.')) keys.push(val.substring(7));
-			} else if (Array.isArray(val)) {
-				val.forEach(findKeys);
-			} else if (typeof val == "object") {
-				Object.values(val).forEach(findKeys);
-			}
-		})(d.parameters);
-		if (keys.length) node.setAttribute('keys', keys.join(','));
-	},
 	expressions: true,
+	html: `<element-template remote="[method|!!]">
+		<div block-content="template"></div>
+		<div class="view"></div>
+	</element-template>`,
 	properties: {
 		method: {
 			title: 'Method',

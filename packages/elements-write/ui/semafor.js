@@ -135,9 +135,10 @@ Semafor.prototype.destroy = function() {
 	this.node.textContent = '';
 };
 
-Semafor.prototype.update = function() {
+Semafor.prototype.update = function(newSchema) {
 	this.destroy();
-	this.process(null, this.schema, this.node);
+	this.lastSchema = JSON.parse(JSON.stringify(newSchema || this.schema));
+	this.process(null, this.lastSchema, this.node);
 
 	this.$node.form({
 		on: 'blur',
@@ -308,10 +309,7 @@ function getNonNullType(type) {
 	return type;
 }
 Semafor.prototype.process = function(key, schema, node) {
-	if (this.filter) {
-		schema = this.filter(key, schema) || schema;
-	}
-	if (!key) this.lastSchema = schema;
+	if (this.filter) this.filter(key, schema);
 	var type = getNonNullType(schema.type);
 	var processed = false;
 	// TODO support array of types (user selects the type he needs)

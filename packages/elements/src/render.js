@@ -61,8 +61,8 @@ function install(el, scope) {
 	}
 	if (el.dom) el.render = function(block) {
 		var data = block.data;
-		if (block.template && !scope.$write) {
-			data = merge(data, block.template);
+		if (block.expr && !scope.$write) {
+			data = merge(data, block.expr);
 		}
 		var dom = el.dom.cloneNode(true);
 		var rscope = Object.assign({}, scope, {
@@ -78,12 +78,15 @@ function install(el, scope) {
 	};
 }
 
-function merge(data, template) {
+function merge(data, expr) {
 	var copy = Object.assign({}, data);
-	Object.keys(template).forEach(function(key) {
-		copy[key] = template[key];
-		if (typeof copy[key] == "object") {
-			copy[key] = merge(copy[key], template[key]);
+	Object.keys(expr).forEach(function(key) {
+		var val = expr[key];
+		if (val == null) return;
+		else if (typeof val == "object") {
+			copy[key] = merge(copy[key], val);
+		} else {
+			copy[key] = val;
 		}
 	});
 	return copy;
