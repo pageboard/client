@@ -9,12 +9,6 @@ Pageboard.elements.query_form = {
 		url: {
 			title: 'Target page',
 			description: 'Can be empty to stay on same page',
-			$helper: {
-				name: 'href',
-				filter: {
-					type: ["link"]
-				}
-			}
 			nullable: true,
 			type: "string",
 			format: "pathname",
@@ -23,10 +17,10 @@ Pageboard.elements.query_form = {
 		type: {
 			title: 'Bind to element',
 			description: 'Checks schema and helps adding form controls',
-			$helper: 'element'
 			nullable: true,
 			type: 'string',
 			format: 'id',
+			$filter: 'element'
 		}
 	},
 	contents: {
@@ -59,10 +53,10 @@ Pageboard.elements.api_form = {
 		type: {
 			title: 'Bind to element',
 			description: 'Checks schema and helps adding form controls',
-			$helper: 'element'
 			nullable: true,
 			type: 'string',
 			format: 'id',
+			$filter: 'element'
 		},
 		request: {
 			title: 'Request',
