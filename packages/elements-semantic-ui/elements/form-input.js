@@ -72,21 +72,15 @@ Pageboard.elements.input_text = {
 		},
 		value: {
 			title: "default value",
-			anyOf: [{
-				type: "null"
-			}, {
-				type: "string",
-				format: "singleline"
-			}]
+			nullable: true,
+			type: "string",
+			format: "singleline"
 		},
 		placeholder: {
 			title: "placeholder",
-			anyOf: [{
-				type: "null"
-			}, {
-				type: "string",
-				format: "singleline"
-			}]
+			nullable: true,
+			type: "string",
+			format: "singleline"
 		},
 		required: {
 			title: 'required',
@@ -158,12 +152,9 @@ Pageboard.elements.input_file = {
 		},
 		placeholder: {
 			title: "placeholder",
-			anyOf: [{
-				type: "null"
-			}, {
-				type: "string",
-				format: "singleline"
-			}]
+			nullable: true,
+			type: "string",
+			format: "singleline"
 		},
 		required: {
 			title: 'required',
@@ -381,12 +372,9 @@ Pageboard.elements.input_select = {
 		},
 		placeholder: {
 			title: "placeholder",
-			anyOf: [{
-				type: "null"
-			}, {
-				type: "string",
-				format: "singleline"
-			}]
+			nullable: true,
+			type: "string",
+			format: "singleline"
 		},
 		disabled: {
 			title: 'disabled',
@@ -405,12 +393,9 @@ Pageboard.elements.input_select = {
 		},
 		value: {
 			title: "default value",
-			anyOf: [{
-				type: "null"
-			}, {
-				type: "string",
-				format: "singleline"
-			}]
+			nullable: true,
+			type: "string",
+			format: "singleline"
 		}
 	},
 	contents: {
@@ -450,12 +435,9 @@ Pageboard.elements.input_select_option = {
 		value: {
 			title: "value",
 			description: "Defaults to option label",
-			anyOf: [{
-				type: "null"
-			}, {
-				type: "string",
-				format: "singleline"
-			}]
+			nullable: true,
+			type: "string",
+			format: "singleline"
 		}
 	},
 	contents: {

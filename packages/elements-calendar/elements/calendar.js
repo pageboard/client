@@ -20,11 +20,13 @@ Pageboard.elements.input_date_time = {
 		},
 		value: {
 			title: "default value",
-			type: ["string", "null"]
+			nullable: true,
+			type: "string"
 		},
 		placeholder: {
 			title: "placeholder",
-			type: ["string", "null"]
+			nullable: true,
+			type: "string"
 		},
 		required: {
 			title: 'required',
@@ -98,11 +100,13 @@ Pageboard.elements.input_date_slot = {
 		},
 		valueStart: {
 			title: 'Start time',
-			type: ["string", "null"]
+			nullable: true,
+			type: "string"
 		},
 		valueEnd: {
 			title: 'End time',
-			type: ["string", "null"]
+			nullable: true,
+			type: "string"
 		},
 		required: {
 			title: 'required',
@@ -181,28 +185,21 @@ Pageboard.elements.event_date = {
 	properties: {
 		groupsOnly: {
 			title: 'For groups only',
-			anyOf: [{
-				type: 'null'
-			}, {
-				type: 'boolean',
-				default: false
-			}]
+			nullable: true,
+			type: 'boolean',
+			default: false
 		},
 		reservationRequired: {
 			title: 'Require reservation',
-			anyOf: [{
-				type: 'null'
-			}, {
-				type: 'boolean',
-				default: false
-			}]
+			nullable: true,
+			type: 'boolean',
+			default: false
 		},
 		seats: {
 			title: 'Available seats for this date',
-			anyOf: [
-				{type: 'null'},
-				{type: 'integer', minimum: 0}
-			]
+			nullable: true,
+			type: 'integer',
+			minimum: 0
 		},
 		reservations: {
 			description: 'Use event.subscribe to manage this field',

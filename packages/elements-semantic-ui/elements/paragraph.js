@@ -124,7 +124,8 @@ Pageboard.elements.heading = {
 			default: false
 		},
 		id: {
-			type: ['null', 'string']
+			nullable: true,
+			type: 'string'
 		}
 	},
 	contents: {

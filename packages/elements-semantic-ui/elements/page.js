@@ -21,8 +21,9 @@ Pageboard.elements.page.properties.transition = {
 	properties: {
 		from: {
 			title: 'Closing',
+			nullable: true,
 			anyOf: [{
-				const: '',
+				type: 'null',
 				title: 'none'
 			}, {
 				const: 'up-from',
@@ -43,8 +44,9 @@ Pageboard.elements.page.properties.transition = {
 		},
 		to: {
 			title: 'Opening',
+			nullable: true,
 			anyOf: [{
-				const: '',
+				type: 'null',
 				title: 'none'
 			}, {
 				const: 'up-to',

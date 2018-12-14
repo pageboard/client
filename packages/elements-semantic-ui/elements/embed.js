@@ -6,12 +6,9 @@ Pageboard.elements.embed = {
 		url: {
 			title: 'Address',
 			description: 'The iframe src URL',
-			anyOf: [{
-				type: "null"
-			}, {
-				type: "string",
-				format: "uri"
-			}]
+			nullable: true,
+			type: "string",
+			format: "uri"
 			// TODO plug embeds to href, but url-inspector makes it difficult for us right now
 		}
 	},

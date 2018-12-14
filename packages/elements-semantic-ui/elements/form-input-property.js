@@ -68,6 +68,7 @@ Pageboard.elements.input_property = {
 			return node;
 		}
 		node.textContent = "";
+		if (prop.nullable) required = false;
 		var listOf = prop.anyOf || prop.oneOf;
 		var propType;
 		if (listOf) {

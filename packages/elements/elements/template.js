@@ -45,20 +45,14 @@ Pageboard.elements.fetch = Object.assign({}, Pageboard.elements.template, {
 	properties: {
 		method: {
 			title: 'Method',
-			anyOf: [{
-				type: "null"
-			}, {
-				type: "string",
-				pattern: "^(\\w+\\.\\w+)?$"
-			}]
+			nullable: true,
+			type: "string",
+			pattern: "^(\\w+\\.\\w+)?$"
 		},
 		parameters: {
 			title: 'Parameters',
-			anyOf: [{
-				type: "object"
-			}, {
-				type: "null"
-			}]
+			nullable: true,
+			type: "object"
 		}
 	},
 	$filter: {

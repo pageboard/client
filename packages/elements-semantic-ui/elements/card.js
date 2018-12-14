@@ -92,9 +92,8 @@ Pageboard.elements.cardlink = {
 		url: {
 			title: 'Link',
 			description: 'link the entire content to another page',
+			nullable: true,
 			anyOf: [{
-				type: "null"
-			}, {
 				type: "string",
 				format: "uri"
 			}, {

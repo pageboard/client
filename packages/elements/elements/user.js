@@ -52,12 +52,9 @@ Pageboard.elements.settings = {
 					type: 'string'
 				},
 				referer: {
-					anyOf: [{
-						type: 'null'
-					}, {
-						type: 'string',
-						format: 'uri'
-					}]
+					nullable: true,
+					type: 'string',
+					format: 'uri'
 				}
 			}
 		}

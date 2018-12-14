@@ -8,17 +8,15 @@ Pageboard.elements.page = {
 	properties: {
 		title: {
 			title: 'Title',
-			anyOf: [{
-				type: "null"
-			}, {
-				type: "string",
-				format: "singleline"
-			}],
+			nullable: true,
+			type: "string",
+			format: "singleline",
 			$helper: 'pageTitle'
 		},
 		description: {
 			title: 'Description',
-			type: ['string', 'null']
+			nullable: true,
+			type: 'string'
 		},
 		url: {
 			title: 'Address',
@@ -29,9 +27,8 @@ Pageboard.elements.page = {
 		},
 		redirect: {
 			title: 'Redirect',
+			nullable: true,
 			anyOf: [{
-				type: "null"
-			}, {
 				type: "string",
 				format: "uri"
 			}, {

@@ -2,67 +2,50 @@ Pageboard.elements.site = {
 	properties : {
 		title: {
 			title: 'Site title',
-			anyOf: [{type: "null"}, {type: "string"}]
+			nullable: true,
+			type: "string"
 		},
 		domains: {
 			title: 'Domain names',
 			description: 'The main domain and the redirecting ones if any',
-			anyOf: [{
-				type: "null"
-			}, {
-				type: "array",
-				items: {
-					type: "string",
-					format: 'hostname'
-				}
-			}]
+			nullable: true,
+			type: "array",
+			items: {
+				type: "string",
+				format: 'hostname'
+			}
 		},
 		author: {
 			title: 'Author',
-			anyOf: [{
-				type: "null"
-			}, {
-				type: "string",
-				format: "singleline"
-			}]
+			nullable: true,
+			type: "string",
+			format: "singleline"
 		},
 		license: {
 			title: 'License',
-			anyOf: [{
-				type: "null"
-			}, {
-				type: "string",
-				format: "singleline"
-			}]
+			nullable: true,
+			type: "string",
+			format: "singleline"
 			// TODO use spdx.org/licenses for choosing a license
 		},
 		lang: {
 			title: 'Language',
-			anyOf: [{
-				type: "null"
-			}, {
-				type: "string",
-				format: "singleline"
-			}]
+			nullable: true,
+			type: "string",
+			format: "singleline"
 		},
 		module: {
 			title: 'Module name',
-			anyOf: [{
-				type: "null"
-			}, {
-				type: "string",
-				format: "singleline"
-			}]
+			nullable: true,
+			type: "string",
+			format: "singleline"
 		},
 		version: {
 			title: 'Module version',
 			description: 'Semantic version or git tag or commit',
-			anyOf: [{
-				type: "null"
-			}, {
-				type: "string",
-				format: "singleline" // a "version" format ?
-			}]
+			nullable: true,
+			type: "string",
+			format: "singleline" // a "version" format ?
 		},
 		server: {
 			title: 'Server',
@@ -91,12 +74,9 @@ Pageboard.elements.site = {
 		},
 		favicon: {
 			title: 'Favicon',
-			anyOf: [{
-				type: "null"
-			}, {
-				type: "string",
-				format: "pathname"
-			}],
+			nullable: true,
+			type: "string",
+			format: "pathname",
 			$helper: {
 				name: 'href',
 				display: 'icon',

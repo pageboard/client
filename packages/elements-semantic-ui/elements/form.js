@@ -8,29 +8,24 @@ Pageboard.elements.query_form = {
 		url: {
 			title: 'Target page',
 			description: 'Can be empty to stay on same page',
-			anyOf: [{
-				type: "null"
-			}, {
-				type: "string",
-				format: "pathname"
-			}],
 			$helper: {
 				name: 'href',
 				filter: {
 					type: ["link"]
 				}
 			}
+			nullable: true,
+			type: "string",
+			format: "pathname",
+			$helper: 'page'
 		},
 		type: {
 			title: 'Bind to element',
 			description: 'Checks schema and helps adding form controls',
-			anyOf: [{
-				type: 'null'
-			}, {
-				type: 'string',
-				format: 'id'
-			}],
 			$helper: 'element'
+			nullable: true,
+			type: 'string',
+			format: 'id',
 		}
 	},
 	contents: {
@@ -62,13 +57,10 @@ Pageboard.elements.api_form = {
 		type: {
 			title: 'Bind to element',
 			description: 'Checks schema and helps adding form controls',
-			anyOf: [{
-				type: 'null'
-			}, {
-				type: 'string',
-				format: 'id'
-			}],
 			$helper: 'element'
+			nullable: true,
+			type: 'string',
+			format: 'id',
 		},
 		request: {
 			title: 'Request',
@@ -77,20 +69,14 @@ Pageboard.elements.api_form = {
 			properties: {
 				method: {
 					title: 'Method',
-					anyOf: [{
-						type: "null"
-					}, {
-						type: "string",
-						pattern: "^(\\w+\\.\\w+)?$"
-					}]
+					nullable: true,
+					type: "string",
+					pattern: "^(\\w+\\.\\w+)?$"
 				},
 				parameters: {
 					title: 'Parameters',
-					anyOf: [{
-						type: "object"
-					}, {
-						type: "null"
-					}]
+					nullable: true,
+					type: "object"
 				}
 			},
 			$filter: {
@@ -102,12 +88,9 @@ Pageboard.elements.api_form = {
 		redirect: {
 			title: 'Redirect',
 			description: 'Select a page, or leave empty',
-			anyOf: [{
-				type: "null"
-			}, {
-				type: "string",
-				format: "uri-reference"
-			}],
+			nullable: true,
+			type: "string",
+			format: "uri-reference",
 			$helper: {
 				name: 'page',
 				title: 'Query',

@@ -1,11 +1,8 @@
 Pageboard.elements.site.properties.google_tag_manager = {
 	title: 'Google Tag Manager ID',
-	anyOf: [{
-		type: 'null'
-	}, {
-		type: 'string',
-		pattern: '^GTM-\\w+$'
-	}]
+	nullable: true,
+	type: 'string',
+	pattern: '^GTM-\\w+$'
 };
 
 Pageboard.elements.google_tag_manager = {

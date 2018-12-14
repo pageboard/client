@@ -8,12 +8,9 @@ Pageboard.elements.mail = {
 	properties: {
 		title: {
 			title: 'Title',
-			anyOf: [{
-				type: "null"
-			}, {
-				type: "string",
-				format: "singleline"
-			}],
+			nullable: true,
+			type: "string",
+			format: "singleline",
 			$helper: 'pageTitle'
 		},
 		url: {

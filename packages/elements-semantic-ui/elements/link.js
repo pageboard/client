@@ -12,9 +12,8 @@ Pageboard.elements.link = {
 		url: {
 			title: 'Address',
 			description: 'Path without query or full url',
+			nullable: true,
 			anyOf: [{
-				type: "null"
-			}, {
 				type: "string",
 				format: "uri"
 			}, {
