@@ -64,25 +64,15 @@ Pageboard.elements.binding = {
 			title: 'Attribute',
 			description: 'set attributes with matchdom expression, filters on new lines',
 			type: 'string',
-		},
-		placeholder: {
-			title: 'Placeholder',
-			type: 'string',
-			format: 'singleline'
 		}
 	},
 	context: 'template//',
 	inline: true,
 	group: "inline nolink",
-	html: '<span data-attr="[attr]" data-fill="[fill]">[ph]</span>',
-	fuse: function(node, d, scope) {
-		var fill = (d.fill || '').trim().split('\n').join('|');
-		node.fuse({
-			ph: d.placeholder || fill.split('|', 1)[0].split('.').pop() || '',
-			attr: d.attr ? `[${d.attr.trim().split('\n').join('|')}]`: null,
-			fill: fill ? `[${fill}|fill]` : null
-		}, scope);
-	}
+	html: `<span
+		data-attr="[attr|trim|split:%0A|join:%7C|pre:%5B|post:%5D]"
+		data-label="[fill|split:%0A|slice:0:1|join:|split:.|slice:-1|join:]"
+	>[fill|trim|split:%0A|join:%7C|pre:%5B|post:%5D]</span>`
 };
 
 Pageboard.elements.content = {
