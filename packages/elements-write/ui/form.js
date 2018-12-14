@@ -115,9 +115,7 @@ function FormBlock(editor, node, type) {
 	if (el.properties) {
 		el.properties = JSON.parse(JSON.stringify(el.properties));
 	}
-	this.changeListener = Pageboard.debounce(this.change.bind(this), 250);
-	this.node.addEventListener('change', this.changeListener);
-	this.node.addEventListener('input', this.changeListener);
+	this.node.addEventListener('change', this);
 
 	this.helpers = {};
 	this.filters = {};
@@ -134,9 +132,8 @@ FormBlock.prototype.destroy = function() {
 	this.filters = {};
 
 	this.form.destroy();
-	this.node.removeEventListener('change', this.changeListener);
-	this.node.removeEventListener('input', this.changeListener);
 	this.node.remove();
+	this.node.removeEventListener('change', this);
 };
 
 FormBlock.prototype.update = function(parents, block, mode) {
@@ -270,7 +267,7 @@ FormBlock.prototype.customFilter = function(key, prop) {
 	}
 };
 
-FormBlock.prototype.change = function(e) {
+FormBlock.prototype.handleEvent = function(e) {
 	if (!this.block || this.ignoreEvents || !this.form) return;
 	if (e && e.target && (!e.target.name || e.target.name.startsWith('$'))) return;
 	var editor = this.editor;
