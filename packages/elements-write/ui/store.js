@@ -136,7 +136,7 @@ Store.prototype.update = function(parents, sel, changed) {
 		delete this.ignoreNext;
 		return;
 	}
-	if (!changed) return;
+	// if (!changed) return; // not quite ready yet...
 	this.debounceWaiting = true;
 	this.debounceUpdate();
 };
