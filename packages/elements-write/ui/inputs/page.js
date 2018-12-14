@@ -253,7 +253,7 @@ PageHelper.prototype.renderList = function(list, container) {
 		return;
 	}
 	list.rendered = true;
-	container.textContent = ' ';
+	container.textContent = '';
 	list.forEach(function(obj) {
 		var item = this.renderItem(obj);
 		if (selected && item.getAttribute('href') == selected) {
