@@ -6,7 +6,10 @@ Pageboard.elements.google_translate = {
 	context: "menu/",
 	menu: 'link',
 	contents: {
-		title: "inline*"
+		title: {
+			spec: "inline*",
+			marks: "nolink"
+		}
 	},
 	html: '<element-google-translate class="item" block-content="title">Translate</element-google-translate>',
 	scripts: [

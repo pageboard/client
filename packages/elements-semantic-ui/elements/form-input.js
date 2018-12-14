@@ -32,7 +32,10 @@ Pageboard.elements.input_button = {
 	group: "block",
 	context: 'form//',
 	contents: {
-		label: "text*"
+		label: {
+			spec: "inline*",
+			marks: "nolink"
+		}
 	},
 	properties: {
 		type: {
