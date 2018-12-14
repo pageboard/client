@@ -98,6 +98,9 @@ function install(scope) {
 			body.classList.add('ProseMirror');
 			body.setAttribute('contenteditable', 'true');
 			body.setAttribute('spellcheck', 'false');
+			scope.$write = false;
+		} else {
+			scope.$write = true;
 		}
 		return ret;
 	};
