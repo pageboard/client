@@ -132,7 +132,7 @@ function filterEditor(tr) {
 			block: editor.blocks.get(node.attrs.id) || editor.blocks.fromAttrs(node.attrs),
 		};
 		obj.type = node.attrs.type || obj.block.type;
-		if (item.container) obj.contentName = item.container.node.type.spec.contentName;
+		if (item.container) obj.contentName = item.container.name;
 		if (item.inline) {
 			obj.inline = {
 				node: item.inline.node,
