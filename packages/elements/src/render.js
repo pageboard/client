@@ -33,7 +33,9 @@ module.exports = function(res, scope) {
 	var elem = scope.$element;
 	if (elem) install(elem, scope);
 
+	res = Object.assign({}, res);
 	var block = res.item || {};
+	delete res.item;
 	if (!block.type && elem) {
 		block.type = elem.name;
 		if (!block.type) console.warn("Pageboard.build expects element.name to be set", elem);
@@ -41,7 +43,19 @@ module.exports = function(res, scope) {
 	} else if (block.type) {
 		elem = elts[block.type];
 	}
-	if (res.items) block.children = res.items;
+
+	if (block.data) {
+		if (res.items) {
+			block.children = res.items;
+			delete res.items;
+		}
+	} else {
+		block.data = {
+			items: res.items
+		};
+		delete res.items;
+	}
+	block.scope = res;
 
 	return Pageboard.view.from(block, null, block.type);
 };
@@ -64,10 +78,17 @@ function install(el, scope) {
 			data = merge(data, block.expr);
 		}
 		var dom = el.dom.cloneNode(true);
+
 		var rscope = Object.assign({}, scope, {
 			$element: el,
 			$id: block.id
 		});
+		if (block.scope) Object.keys(block.scope).forEach(function(name) {
+			if (rscope[name] === undefined) {
+				rscope['$'+name] = block.scope[name];
+			}
+		});
+
 		if (el.fuse) {
 			dom = el.fuse.call(el, dom, data, rscope) || dom;
 		} else if (reFuse.test(el.html)) {

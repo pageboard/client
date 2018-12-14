@@ -33,9 +33,6 @@ function initScope(res, scope) {
 		scope.$page = res.item;
 		scope.$element = res.item && scope.$elements[res.item.type];
 	}
-	Object.keys(res).forEach(function(name) {
-		if (name != "item" && scope['$'+name] === undefined) scope['$'+name] = res[name];
-	});
 }
 
 exports.bundle = function(loader, scope) {
