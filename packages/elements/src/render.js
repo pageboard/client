@@ -22,7 +22,6 @@ Node.prototype.fuse = function(obj, scope, filters) {
 	return matchdom(this, obj, filters, {data: scope});
 };
 String.prototype.fuse = function(obj, scope, filters) {
-	if (!scope) console.warn("Missing scope param");
 	return matchdom(this.toString(), obj, filters, {data: scope});
 };
 
