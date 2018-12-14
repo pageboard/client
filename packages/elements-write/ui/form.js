@@ -90,6 +90,7 @@ Form.prototype.update = function(parents) {
 	} else {
 		this.switcher.remove();
 	}
+	this.switcher.classList.toggle('blue', !!this.block.expr);
 
 	curInlines.forEach(function(form) {
 		form.destroy();
