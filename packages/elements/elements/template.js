@@ -4,11 +4,11 @@ Pageboard.elements.template = {
 	icon: '<b class="icon">[*]</b>',
 	menu: 'form',
 	group: 'block template',
-	template: true,
 	contents: {
 		template: {
 			title: 'Template',
-			spec: 'block+'
+			spec: 'block+',
+			expressions: true
 		}
 	},
 	html: `<element-template>
@@ -42,6 +42,7 @@ Pageboard.elements.fetch = Object.assign({}, Pageboard.elements.template, {
 		})(d.parameters);
 		if (keys.length) node.setAttribute('keys', keys.join(','));
 	},
+	expressions: true,
 	properties: {
 		method: {
 			title: 'Method',

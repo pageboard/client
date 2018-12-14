@@ -3,6 +3,7 @@ Pageboard.elements.query_form = {
 	title: 'Form Query',
 	icon: '<i class="write icon"></i>',
 	group: 'block form',
+	expressions: true,
 	menu: "form",
 	properties: {
 		url: {
@@ -51,6 +52,7 @@ Pageboard.elements.api_form = {
 	title: 'Form Submit',
 	icon: '<i class="write icon"></i>',
 	group: 'block form',
+	expressions: true,
 	menu: "form",
 	required: ["request"],
 	properties: {
