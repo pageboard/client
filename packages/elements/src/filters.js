@@ -132,3 +132,14 @@ exports.autolink = function(val, what) {
 		}
 	}
 };
+
+exports.query = function(obj, what) {
+	if (obj == null || typeof obj != "object") return null;
+	var str = Object.keys(obj).map(function(key) {
+		var val = obj[key];
+		if (val == null) return key;
+		else return key + "=" + val;
+	}).join('&');
+	if (str) return '?' + str;
+	else return '';
+};

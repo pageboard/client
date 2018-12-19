@@ -103,11 +103,10 @@ class HTMLElementTemplate extends HTMLCustomElement {
 		// remove all block-id from template
 		var rnode;
 		while ((rnode = template.querySelector('[block-id]'))) rnode.removeAttribute('block-id');
-		while ((rnode = template.querySelector('[block-expr]'))) rnode.removeAttribute('block-expr');
 
 		var el = state.scope.$element = {
 			name: 'template_element_' + this.getAttribute('block-id'),
-			html: template.innerHTML,
+			html: '<div>' + template.innerHTML + '</div>',
 			filters: {
 				'||': function(val, what) {
 					var path = what.scope.path;
@@ -121,7 +120,7 @@ class HTMLElementTemplate extends HTMLCustomElement {
 		var node = Pageboard.render(data || {type: el.name}, state.scope);
 
 		view.textContent = '';
-		if (node) view.appendChild(node);
+		while (node.firstChild) view.appendChild(node.firstChild);
 	}
 }
 Page.ready(function() {

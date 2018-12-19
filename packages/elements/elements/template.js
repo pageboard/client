@@ -27,28 +27,35 @@ Pageboard.elements.fetch = Object.assign({}, Pageboard.elements.template, {
 	title: "Fetch",
 	icon: '<i class="search icon"></i>',
 	expressions: true,
-	html: `<element-template remote="[method|!!]">
+	html: `<element-template remote="[action.method|!!]">
 		<div block-content="template"></div>
 		<div class="view"></div>
 	</element-template>`,
 	properties: {
-		method: {
-			title: 'Method',
-			nullable: true,
-			type: "string",
-			pattern: "^(\\w+\\.\\w+)?$"
-		},
-		parameters: {
-			title: 'Parameters',
-			nullable: true,
-			type: "object"
+		action: {
+			title: 'Action',
+			type: 'object',
+			required: ["method"],
+			properties: {
+				method: {
+					title: 'Method',
+					nullable: true,
+					type: "string",
+					pattern: "^(\\w+\\.\\w+)?$"
+				},
+				parameters: {
+					title: 'Parameters',
+					nullable: true,
+					type: "object"
+				}
+			},
+			$filter: {
+				name: 'service',
+				action: "read"
+			},
+			$helper: 'service'
 		}
-	},
-	$filter: {
-		name: 'service',
-		action: "read"
-	},
-	$helper: 'service'
+	}
 });
 
 Pageboard.elements.binding = {
@@ -71,7 +78,7 @@ Pageboard.elements.binding = {
 	group: "inline nolink",
 	html: `<span
 		data-attr="[attr|trim|split:%0A|join:%7C|pre:%5B|post:%5D]"
-		data-label="[fill|split:%0A|slice:0:1|join:|split:.|slice:-1|join:]"
+		data-label="[fill|split:%0A|slice:0:1|join:|split:.|slice:-1|join:|or: ]"
 	>[fill|trim|split:%0A|join:%7C|pre:%5B|post:%5D]</span>`
 };
 

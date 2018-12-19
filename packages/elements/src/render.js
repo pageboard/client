@@ -75,7 +75,7 @@ function install(el, scope) {
 	if (el.dom) el.render = function(block) {
 		var data = block.data;
 		if (block.expr && !scope.$write) {
-			data = merge(data, block.expr);
+			data = Pageboard.merge(data, block.expr);
 		}
 		var dom = el.dom.cloneNode(true);
 
@@ -98,16 +98,3 @@ function install(el, scope) {
 	};
 }
 
-function merge(data, expr) {
-	var copy = Object.assign({}, data);
-	Object.keys(expr).forEach(function(key) {
-		var val = expr[key];
-		if (val == null) return;
-		else if (typeof val == "object") {
-			copy[key] = merge(copy[key], val);
-		} else {
-			copy[key] = val;
-		}
-	});
-	return copy;
-}

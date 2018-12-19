@@ -3,17 +3,8 @@ Pageboard.elements.query_form = {
 	title: 'Form Query',
 	icon: '<i class="write icon"></i>',
 	group: 'block form',
-	expressions: true,
 	menu: "form",
 	properties: {
-		url: {
-			title: 'Target page',
-			description: 'Can be empty to stay on same page',
-			nullable: true,
-			type: "string",
-			format: "pathname",
-			$helper: 'page'
-		},
 		type: {
 			title: 'Bind to element',
 			description: 'Checks schema and helps adding form controls',
@@ -21,6 +12,24 @@ Pageboard.elements.query_form = {
 			type: 'string',
 			format: 'id',
 			$filter: 'element'
+		},
+		redirection: {
+			title: 'Redirection',
+			type: 'object',
+			properties: {
+				url: {
+					title: 'Page',
+					nullable: true,
+					type: "string",
+					format: "pathname",
+					$helper: "page"
+				},
+				parameters: {
+					title: 'Parameters',
+					nullable: true,
+					type: "object"
+				}
+			}
 		}
 	},
 	contents: {
@@ -29,7 +38,10 @@ Pageboard.elements.query_form = {
 		}
 	},
 	tag: 'form[method="get"]',
-	html: `<form is="element-form" class="ui form" action="[url]" method="get" data-type="[type]" block-content="form"></form>`,
+	html: `<form is="element-form" method="get"
+		action="[redirection.url][redirection.parameters|query|url]"
+		class="ui form"
+		block-content="form"></form>`,
 	stylesheets: [
 		'../lib/components/form.css',
 		'../ui/form.css'
@@ -46,9 +58,11 @@ Pageboard.elements.api_form = {
 	title: 'Form Submit',
 	icon: '<i class="write icon"></i>',
 	group: 'block form',
-	expressions: true,
 	menu: "form",
-	required: ["request"],
+	required: ["action"],
+	$locks: {
+		'data.action.parameters': ['webmaster', 'root']
+	},
 	properties: {
 		type: {
 			title: 'Bind to element',
@@ -58,8 +72,8 @@ Pageboard.elements.api_form = {
 			format: 'id',
 			$filter: 'element'
 		},
-		request: {
-			title: 'Request',
+		action: {
+			title: 'Action',
 			type: 'object',
 			required: ["method"],
 			properties: {
@@ -81,17 +95,22 @@ Pageboard.elements.api_form = {
 			},
 			$helper: 'service',
 		},
-		redirect: {
-			title: 'Redirect',
-			description: 'Select a page, or leave empty',
-			nullable: true,
-			type: "string",
-			format: "uri-reference",
-			$helper: {
-				name: 'page',
-				title: 'Query',
-				description: 'Values can be [$query.xxx], [$body.xxx], [$response.xxx]',
-				query: true
+		redirection: {
+			title: 'Redirection',
+			type: 'object',
+			properties: {
+				url: {
+					title: 'Page',
+					nullable: true,
+					type: "string",
+					format: "pathname",
+					$helper: "page"
+				},
+				parameters: {
+					title: 'Parameters',
+					nullable: true,
+					type: "object"
+				}
 			}
 		}
 	},
@@ -101,11 +120,11 @@ Pageboard.elements.api_form = {
 		}
 	},
 	tag: 'form[method="post"]',
-	html: `<form is="element-form" action="/.api/form/[$id]" type="[type]"
-		redirect="[redirect]"
-		method="post"
+	html: `<form is="element-form" method="post"
+		action="/.api/form/[$id]"
+		parameters="[action.parameters|query]"
+		redirection="[redirection.url][redirection.parameters|query]"
 		class="ui form"
-		id="[name|or:[$id|slice:0:4]]"
 		block-content="form"></form>`,
 	stylesheets: [
 		'../lib/components/form.css',

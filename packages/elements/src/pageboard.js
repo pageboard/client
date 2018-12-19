@@ -119,3 +119,21 @@ Page.setup(function(state) {
 		}
 	});
 });
+
+exports.merge = merge;
+
+function merge(data, expr) {
+	if (!expr) return data;
+	var copy = Object.assign({}, data);
+	Object.keys(expr).forEach(function(key) {
+		var val = expr[key];
+		if (val == null) return;
+		else if (typeof val == "object") {
+			copy[key] = merge(copy[key], val);
+		} else {
+			copy[key] = val;
+		}
+	});
+	return copy;
+};
+
