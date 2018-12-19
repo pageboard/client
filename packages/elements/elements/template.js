@@ -1,7 +1,7 @@
 Pageboard.elements.template = {
 	priority: 1,
 	title: 'Template',
-	icon: '<b class="icon">[*]</b>',
+	// icon: '<b class="icon">[*]</b>',
 	menu: 'form',
 	group: 'block template',
 	contents: {
