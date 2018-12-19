@@ -91,7 +91,7 @@ function install(el, scope) {
 
 		if (el.fuse) {
 			dom = el.fuse.call(el, dom, data, rscope) || dom;
-		} else if (reFuse.test(el.html)) {
+		} else if (!el.html || reFuse.test(el.html)) {
 			dom = dom.fuse(data, rscope, el.filters);
 		}
 		return dom;

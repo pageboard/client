@@ -99,14 +99,16 @@ class HTMLElementTemplate extends HTMLCustomElement {
 		if (this.closest('[contenteditable]')) return;
 		if (this.children.length != 2) return;
 		var view = this.lastElementChild;
-		var template = this.firstElementChild;
+		var template = this.firstElementChild.cloneNode(true);
+		template.removeAttribute('block-content');
 		// remove all block-id from template
 		var rnode;
 		while ((rnode = template.querySelector('[block-id]'))) rnode.removeAttribute('block-id');
+		while ((rnode = template.querySelector('[block-expr]'))) rnode.removeAttribute('block-expr');
 
 		var el = state.scope.$element = {
 			name: 'template_element_' + this.getAttribute('block-id'),
-			html: '<div>' + template.innerHTML + '</div>',
+			dom: template,
 			filters: {
 				'||': function(val, what) {
 					var path = what.scope.path;
