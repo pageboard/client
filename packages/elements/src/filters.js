@@ -110,9 +110,10 @@ exports.schema = function(val, what, spath) {
 };
 
 exports.statusClass = function(val) {
-	if (val == 404) return "warning";
+	val = parseInt(val);
+	if (val >= 200 && val < 300) return "success";
+	else if (val == 404) return "warning";
 	else if (val >= 400) return "error";
-	else return "success";
 };
 
 exports.autolink = function(val, what) {
