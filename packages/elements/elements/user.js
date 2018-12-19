@@ -9,6 +9,25 @@ Pageboard.elements.user = {
 	}
 };
 
+Pageboard.elements.priv = {
+	$locks: ['root'],
+	properties: {
+		otp: {
+			type: 'object',
+			properties: {
+				secret: {
+					type: 'string'
+				},
+				checked_at: {
+					nullable: true,
+					type: 'string',
+					format: 'date-time'
+				}
+			}
+		}
+	}
+};
+
 Pageboard.elements.settings = {
 	properties: {
 		grants: {
@@ -37,27 +56,7 @@ Pageboard.elements.settings = {
 					description: 'Allowed to modify some private blocks'
 				}]
 			}
-		},
-		session: {
-			type: 'object',
-			properties: {
-				grants: {
-					// filled below
-				},
-				verified: {
-					type: 'boolean',
-					default: false
-				},
-				hash: {
-					type: 'string'
-				},
-				referer: {
-					nullable: true,
-					type: 'string',
-					format: 'uri'
-				}
-			}
 		}
 	}
 };
-Pageboard.elements.settings.properties.session.properties.grants = Pageboard.elements.settings.properties.grants;
+
