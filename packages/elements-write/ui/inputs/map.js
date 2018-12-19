@@ -15,6 +15,7 @@ class HTMLInputMap extends HTMLCustomElement {
 	set value(obj) {
 		if (!this._proxy) return;
 		this._proxy.value = JSON.stringify(obj);
+		Pageboard.trigger(this._proxy, 'change');
 	}
 	connectedCallback() {
 		if (this._proxy) return;
