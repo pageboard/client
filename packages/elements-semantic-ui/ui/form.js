@@ -137,17 +137,21 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			return input.closest('element-input-file').upload();
 		})).then(function() {
 			var params = Page.parse((form.getAttribute('parameters') || '?').fuse(data, state.scope)).query;
-			data.$body = Pageboard.merge(form.read(), params);
+			data.$request = Pageboard.merge(form.read(), params);
 			form.disable();
-			return Pageboard.fetch(form.method, form.action, data.$body);
+			return Pageboard.fetch(form.method, form.action, data.$request);
 		}).catch(function(err) {
-			return err;
+			data.$response = err;
 		}).then(function(response) {
 			form.classList.remove('loading');
 			form.enable();
 			var redirect = form.getAttribute('redirection');
 			if (!redirect) return;
-			data.$response = response;
+			if (!data.$response) {
+				if (response) response.status = 200;
+				else response = {status: 204};
+				data.$response = response;
+			}
 			return state.push(redirect.fuse(data, state.scope));
 		});
 	}
