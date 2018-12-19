@@ -70,7 +70,7 @@ function setServiceParameters(key, block, props) {
 	var method = (val || {}).method;
 	var parts = (method || "").split('.');
 	if (parts.length == 2) {
-		service = Pageboard.services[parts[0]][parts[1]];
+		service = (Pageboard.services[parts[0]] || {})[parts[1]] || {};
 	}
 	if (!service.properties) {
 		delete props.parameters;
