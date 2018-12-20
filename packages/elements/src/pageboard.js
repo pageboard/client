@@ -78,14 +78,14 @@ Page.init(function(state) {
 	state.vars = {
 		develop: dev === null || dev === "write"
 	};
-	state.scope = {
+	var scope = state.scope;
+	if (!scope) scope = state.scope = {
 		$elements: exports.elements,
 		$doc: exports.view.doc,
-		$render: exports.view.render.bind(exports.view),
-		$write: dev == "write",
-		$pathname: state.pathname,
-		$query: state.query
+		$render: exports.view.render.bind(exports.view)
 	};
+	// once elements are installed they all refer to the same scope object
+	scope.$write = dev == "write";
 });
 
 Page.patch(function(state) {

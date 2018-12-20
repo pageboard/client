@@ -118,8 +118,12 @@ class HTMLElementTemplate extends HTMLCustomElement {
 				}
 			}
 		};
+		var scope = Object.assign({}, state.scope);
+		scope.$pathname = state.pathname;
+		scope.$query = state.query;
+		scope.$referrer = state.referrer.pathname || state.pathname;
 
-		var node = Pageboard.render(data || {type: el.name}, state.scope);
+		var node = Pageboard.render(data || {type: el.name}, scope);
 
 		view.textContent = '';
 		while (node.firstChild) view.appendChild(node.firstChild);

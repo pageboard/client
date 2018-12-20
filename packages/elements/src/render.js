@@ -74,7 +74,7 @@ function install(el, scope) {
 	}
 	if (el.dom) el.render = function(block) {
 		var data = block.data;
-		if (block.expr && !scope.$write) {
+		if (block.expr) {
 			data = Pageboard.merge(data, block.expr);
 		}
 		var dom = el.dom.cloneNode(true);
