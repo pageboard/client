@@ -114,14 +114,14 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			return;
 		}
 		form.classList.add('loading');
-		return state.push(loc).then(function() {
-			return ""; // empty statusText
-		}).catch(function(err) {
-			if (err.status == 404) return 'warning';
-			else return 'error';
-		}).then(function(statusText) {
+		var status = 200;
+		return state.push(loc).catch(function(err) {
+			if (err.status != null) status = err.status;
+			else status = 0;
+		}).then(function() {
 			form.classList.remove('loading');
-			if (statusText) form.classList.add(statusText);
+			var statusClass = `[n|statusClass]`.fuse({n: status});
+			if (statusClass) form.classList.add(statusClass);
 		});
 	}
 	postMethod(state, submit) {
@@ -131,6 +131,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		var data = {
 			$query: state.query
 		};
+		var status = 200;
 		return Promise.all(Array.prototype.filter.call(form.elements, function(node) {
 			return node.type == "file";
 		}).map(function(input) {
@@ -141,18 +142,23 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			form.disable();
 			return Pageboard.fetch(form.method, form.action, data.$request);
 		}).catch(function(err) {
-			data.$response = err;
+			if (err.status != null) status = err.status;
+			else status = 0;
 		}).then(function(response) {
 			form.classList.remove('loading');
+			var statusClass = `[n|statusClass]`.fuse({n: status});
+			if (statusClass) form.classList.add(statusClass);
 			form.enable();
+			if (status < 200 || status >= 400) return;
 			var redirect = form.getAttribute('redirection');
 			if (!redirect) return;
-			if (!data.$response) {
-				if (response) response.status = 200;
-				else response = {status: 204};
-				data.$response = response;
+			data.$response = response;
+			data.$status = status;
+			var loc = Page.parse(redirect.fuse(data, state.scope));
+			if (Page.samePathname(loc, state)) {
+				loc.query = Object.assign({}, state.query, loc.query);
 			}
-			return state.push(redirect.fuse(data, state.scope));
+			return state.push(loc);
 		});
 	}
 }
