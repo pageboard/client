@@ -55,7 +55,6 @@ Pageboard.adopt = function(win, readState) {
 			// writeState.data = readState.data;
 			writeState.save();
 
-			Pageboard.view = win.Pageboard.view;
 			Pageboard.hrefs = readState.scope.$hrefs;
 
 			var editor = Pageboard.editor;
@@ -178,7 +177,7 @@ Pageboard.Editor = function Editor(win, state) {
 	}
 
 	var content = win.document.body.cloneNode(true);
-	var view = win.Pageboard.view;
+	var view = state.scope.$view;
 	var editor = Pageboard.editor;
 	if (editor && !editor.closed) {
 		editor.close();

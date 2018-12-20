@@ -116,7 +116,7 @@ Pageboard.elements.color = {
 		}
 	},
 	parse: function(dom) {
-		var prop = Pageboard.elements.color.properties.color;
+		var prop = this.properties.color;
 		var color = prop.anyOf.find(function(item) {
 			return item.const && dom.classList.contains(item.const);
 		});

@@ -1,5 +1,6 @@
 var matchdom = require('matchdom');
 var domify = require('domify');
+var Viewer = require('@pageboard/pagecut/src/viewer.js');
 
 Object.assign(matchdom.filters, require('./filters'));
 
@@ -31,6 +32,11 @@ var reFuse = new RegExp(`\\${mSym.open}[^\\${mSym.open}\\${mSym.close}]+\\${mSym
 module.exports = function(res, scope) {
 	var elts = scope.$elements;
 	var elem = scope.$element;
+
+	scope.$view = new Viewer({
+		elements: elts,
+		doc: scope.$doc
+	});
 	if (elem) install(elem, scope);
 
 	res = Object.assign({}, res);
@@ -57,7 +63,7 @@ module.exports = function(res, scope) {
 	}
 	block.scope = res;
 
-	return Pageboard.view.from(block, null, block.type);
+	return scope.$view.from(block, null, block.type);
 };
 
 module.exports.install = install;

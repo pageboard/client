@@ -349,7 +349,7 @@ Pageboard.elements.inlineImage = {
 		[display.floated|pre:floated ]
 		[display.align|post: aligned]" />`,
 	fuse: function(node, d, scope) {
-		var loc = Pageboard.elements.image.buildLoc(d.url || this.resources[0], d);
+		var loc = scope.$elements.image.buildLoc(d.url || this.resources[0], d);
 		node.fuse(Object.assign({
 			src: Page.format(loc)
 		}, d), scope);

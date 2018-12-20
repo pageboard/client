@@ -163,15 +163,6 @@ Pageboard.elements.table_head_cell = {
 	contents: "inline*",
 	tag: 'th',
 	inplace: true,
-	parse: function(dom) {
-		var d = {};
-		var pre = Pageboard.elements.grid.prefixes;
-		Object.keys(pre).forEach(function(w) {
-			var sel = pre[w];
-			if (sel && dom.matches(`.${sel}.wide`)) d.width = w;
-		});
-		return d;
-	},
 	html: '<th class="[align|post: aligned] [width|num: wide]"></th>'
 };
 
