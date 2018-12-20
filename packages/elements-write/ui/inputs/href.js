@@ -306,8 +306,10 @@ Href.prototype.searchStart = function(same) {
 
 Href.prototype.searchUpdate = function() {
 	this.container.textContent = "";
-	this.infinite.pageIndex = 1;
-	this.infinite.loadNextPage();
+	if (this.infinite) {
+		this.infinite.pageIndex = 1;
+		this.infinite.loadNextPage();
+	}
 };
 
 Href.prototype.searchStop = function() {
