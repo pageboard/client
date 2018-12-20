@@ -72,6 +72,12 @@ Pageboard.elements.api_form = {
 			format: 'id',
 			$filter: 'element'
 		},
+		hidden: {
+			title: 'Hidden',
+			type: 'boolean',
+			default: false,
+			context: 'template'
+		},
 		action: {
 			title: 'Action',
 			type: 'object',
@@ -124,7 +130,7 @@ Pageboard.elements.api_form = {
 		action="/.api/form/[$id]"
 		parameters="[action.parameters|query]"
 		redirection="[redirection.url][redirection.parameters|query]"
-		class="ui form"
+		class="ui form [hidden|?]"
 		block-content="form"></form>`,
 	stylesheets: [
 		'../lib/components/form.css',
