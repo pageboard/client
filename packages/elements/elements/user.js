@@ -23,6 +23,10 @@ Pageboard.elements.priv = {
 					nullable: true,
 					type: 'string',
 					format: 'date-time'
+				},
+				tries: {
+					type: 'integer',
+					default: 0
 				}
 			}
 		}
