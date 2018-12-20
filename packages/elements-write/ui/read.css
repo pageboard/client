@@ -65,3 +65,7 @@
 	background-color: #CCE2FF;
 }
 
+[contenteditable] .hidden {
+	display: block !important;
+	opacity:0.5;
+}
