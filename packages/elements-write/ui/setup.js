@@ -125,8 +125,8 @@ function filterEditor(tr) {
 	var editor = this;
 	if (editor.destroying || editor.closed) return;
 	var focus = editor.focusState;
-	var list = tr.getMeta('focus-plugin');
-	var sel = tr.getMeta('focus-selection');
+	var sel = tr.getMeta('focus-selection') || tr.selection;
+	var list = tr.getMeta('focus-plugin') || editor.utils.selectionParents(tr, sel);
 	if (sel) focus.selection = sel;
 	if (list) focus.parents = list.map(function(item) {
 		var node = item.root.node;
