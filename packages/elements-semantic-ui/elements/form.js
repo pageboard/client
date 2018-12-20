@@ -61,7 +61,7 @@ Pageboard.elements.api_form = {
 	menu: "form",
 	required: ["action"],
 	$locks: {
-		'data.action.parameters': ['webmaster', 'root']
+		'data.action.parameters': 'webmaster'
 	},
 	properties: {
 		type: {

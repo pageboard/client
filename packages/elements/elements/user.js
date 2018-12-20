@@ -1,5 +1,6 @@
 Pageboard.elements.user = {
 	required: ['email'],
+	$locks: [],
 	properties: {
 		email: {
 			type: 'string',
@@ -10,7 +11,7 @@ Pageboard.elements.user = {
 };
 
 Pageboard.elements.priv = {
-	$locks: ['root'],
+	$locks: [],
 	properties: {
 		otp: {
 			type: 'object',
