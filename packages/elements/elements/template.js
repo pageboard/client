@@ -70,7 +70,7 @@ Pageboard.elements.binding = {
 		attr: {
 			title: 'Attribute',
 			description: 'set attributes with matchdom expression, filters on new lines',
-			type: 'string',
+			type: 'string'
 		}
 	},
 	context: 'template//',
