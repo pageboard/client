@@ -202,13 +202,20 @@ FormBlock.prototype.update = function(parents, block, mode) {
 };
 
 FormBlock.prototype.customHelper = function(key, prop, node) {
+	var editor = this.editor;
 	if (prop.context && this.parents && !this.parents.some(function(parent) {
 		return prop.context.split('|').some(function(tok) {
-			return parent.block.type == tok;
+			var type = parent.block.type;
+			if (type == tok) return true;
+			var el = editor.element(type);
+			return (el.group || "").split(' ').includes(tok);
 		});
 	})) {
 		var input = node.querySelector(`[name="${key}"]`);
-		if (input) input.closest('.field').remove();
+		if (input) {
+			var field = input.closest('.inline.fields') || input.closest('.field');
+			if (field) field.remove();
+		}
 		return;
 	}
 	var opts = prop.$helper;
