@@ -106,19 +106,20 @@ class HTMLElementTemplate extends HTMLCustomElement {
 		while ((rnode = template.querySelector('[block-id]'))) rnode.removeAttribute('block-id');
 		while ((rnode = template.querySelector('[block-expr]'))) rnode.removeAttribute('block-expr');
 
-		var el = state.scope.$element = {
+		var scope = Object.assign({}, state.scope);
+
+		var el = scope.$element = {
 			name: 'template_element_' + this.getAttribute('block-id'),
 			dom: template,
-			filters: {
+			filters: Object.assign({}, scope.$filters, {
 				'||': function(val, what) {
 					var path = what.scope.path;
 					if (path[0] == "$query" && path.length > 1) {
 						state.vars[path.slice(1).join('.')] = true;
 					}
 				}
-			}
+			})
 		};
-		var scope = Object.assign({}, state.scope);
 		scope.$pathname = state.pathname;
 		scope.$query = state.query;
 		scope.$referrer = state.referrer.pathname || state.pathname;
