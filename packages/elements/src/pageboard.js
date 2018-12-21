@@ -26,6 +26,9 @@ function initScope(res, scope) {
 		scope.$doc = document.cloneNode();
 		scope.$page = res.item;
 		scope.$element = res.item && scope.$elements[res.item.type];
+		Object.keys(res).forEach(function(key) {
+			if (key != "item" && key != "items") scope[`$${key}`] = res[key];
+		});
 	}
 }
 
