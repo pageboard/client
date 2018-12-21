@@ -41,7 +41,7 @@ Pageboard.elements.write = {
 					<i class="dropdown icon"></i>
 					<div class="menu">
 	<!--					<a class="item">My account</a>-->
-						<a class="item" href="/.api/auth/logout">Log out</a>
+						<a class="item" href="/.api/logout">Log out</a>
 					</div>
 				</div>
 			</div>
