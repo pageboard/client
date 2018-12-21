@@ -104,7 +104,7 @@ Page.ready(function(state) {
 		// val is an array
 		// path accessor to a property
 		// unit is year/month/week/day
-		var data = val;
+		var data = what.data;
 		var comps = what.expr.clone().path;
 		var head;
 		while (comps.length) {
@@ -146,8 +146,8 @@ Page.ready(function(state) {
 			week.list.push(item);
 		});
 		// mutate val on purpose
-		while (val.length) val.pop();
-		while (arr.length) val.push(arr.shift());
+		while (data.length) data.pop();
+		while (arr.length) data.push(arr.shift());
 	};
 });
 
