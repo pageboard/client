@@ -24,7 +24,6 @@ exports.render = require('./render');
 function initScope(res, scope) {
 	if (res.meta && res.meta.group == "page") {
 		scope.$doc = document.cloneNode();
-		scope.$filters = {};
 		scope.$page = res.item;
 		scope.$element = res.item && scope.$elements[res.item.type];
 		Object.keys(res).forEach(function(key) {
@@ -78,7 +77,8 @@ Page.init(function(state) {
 	};
 	var scope = state.scope;
 	if (!scope) scope = state.scope = {
-		$elements: exports.elements
+		$elements: exports.elements,
+		$filters: {}
 	};
 	// once elements are installed they all refer to the same scope object
 	scope.$write = dev == "write";
