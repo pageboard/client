@@ -54,36 +54,27 @@ exports.query = function(val, what, name) {
 exports.schema = function(val, what, spath) {
 	// return schema of repeated key, schema of anyOf/listOf const value
 	if (val === undefined) return;
-	var schemaPath, schemaRoot;
+
 	var path = what.scope.path;
-	var rel = path.map(function(item) {
-		if (typeof item == "number") return "items";
-		else return item;
-	});
-	var scopeData = what.scope.data;
-	if (scopeData.$element) {
-		schemaPath = rel.join('.properties.');
-		schemaRoot = scopeData.$element.properties;
-	} else if (scopeData.$elements) {
-		var data = what.index != null ? what.scope.data : what.data.data;
-		var blocks = [];
-		for (var i=0; i < path.length; i++) {
-			if (!data) break;
-			if (data.id && data.type) blocks.push({index: i, block: data});
-			data = data[path[i]];
-		}
-		var item = blocks.pop();
-		if (!item) {
-			console.warn("No block found in", what.scope.path);
-			return;
-		}
-		schemaPath = '$elements.' + item.block.type + '.properties.'
-			+ rel.slice(item.index).join('.properties.');
-		schemaRoot = scopeData.$elements;
-	} else {
-		console.warn("No schema in scope", what.scope);
+	var data = what.data;
+	var blocks = [];
+	for (var i=0; i < path.length; i++) {
+		if (!data) break;
+		if (data.id && data.type) blocks.push({
+			index: i + 1, // add one because path will be block.data and schema is block.data schema
+			block: data
+		});
+		data = data[path[i]];
 	}
-	var schema = what.expr.get(schemaRoot, schemaPath);
+	var item = blocks.pop();
+	if (!item) {
+		console.warn("No block found in", what.scope.path);
+		return;
+	}
+	var schemaPath = item.block.type + '.properties.'
+		+ path.slice(item.index).join('.properties.');
+
+	var schema = what.expr.get(what.scope.data.$elements, schemaPath);
 	if (!schema) {
 		console.warn("No schema for", schemaPath);
 		return;
