@@ -2,25 +2,23 @@ class HTMLElementTemplate extends HTMLCustomElement {
 	static get observedAttributes() {
 		return ['remote', 'keys'];
 	}
-	static getVars(obj, map) {
-		if (!map) map = {};
+	static queryVars(obj, map, scope) {
 		Object.keys(obj).forEach(function(key) {
 			var val = obj[key];
 			if (typeof val == "string") {
-				val.fuse({$query: {}}, {}, {
+				val.fuse({$query: {}}, scope, Object.assign({}, scope.$filters, {
 					'||': function(val, what) {
 						var path = what.scope.path.slice();
 						if (path[0] == "$query") {
 							path = path.slice(1).join('.');
-							if (path.length) map[path] = true;
+							if (path.length && val != null) map[path] = val;
 						}
 					}
-				});
+				}));
 			} else if (val != null && typeof val == "object") {
-				this.getVars(val, map);
+				this.queryVars(val, map, scope);
 			}
 		}, this);
-		return Object.keys(map);
 	}
 	get remote() {
 		return this.hasAttribute('remote');
@@ -42,41 +40,33 @@ class HTMLElementTemplate extends HTMLCustomElement {
 		if (me._refreshing || me.closest('[contenteditable],[block-content="template"]')) return;
 		// first find out if state.query has a key in this.keys
 		// what do we do if state.query has keys that are used by a form in this query template ?
-		var candidates = 0;
 		var expressions = this.getAttribute('block-expr');
-		var vars;
+		var vars = {};
 		if (expressions) {
 			try {
 				expressions = JSON.parse(expressions);
 			} catch(ex) {
 				console.warn("block-expr attribute should contain JSON");
 			}
-			vars = this.constructor.getVars(expressions);
+			this.constructor.queryVars(expressions, vars, state.scope);
 		} else {
-			vars = [];
+			vars = {};
 		}
-		var queryParams = {};
-		vars.forEach(function(key) {
-			if (Object.prototype.hasOwnProperty.call(state.query, key)) {
-				candidates++;
-				queryParams[key] = state.query[key];
-				state.vars[key] = true;
-			}
+		var ok = false;
+		Object.keys(vars).forEach(function(key) {
+			ok = state.vars[key] = true;
 		});
-		if (vars.length && !candidates) {
-			// this is only to avoid doing useless requests
-			return;
-		}
+		if (!ok) return;
 
 		var queryId = me.getAttribute('block-id');
 		var loader;
 		var remote = me.remote;
 		if (remote) {
 			// do not refresh if the same query was already done
-			var queryStr = Page.format({pathname: "", query: queryParams});
+			var queryStr = Page.format({pathname: "", query: vars});
 			if (queryStr == me.dataset.query) return;
 			me.dataset.query = queryStr;
-			loader = Pageboard.fetch('get', `/.api/query/${queryId}`, queryParams);
+			loader = Pageboard.fetch('get', `/.api/query/${queryId}`, vars);
 		} else {
 			loader = Promise.resolve();
 		}
