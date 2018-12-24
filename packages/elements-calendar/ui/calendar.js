@@ -44,6 +44,11 @@ Page.ready(function(state) {
 		return d.toISOString();
 	};
 
+	filters.now = function(val, what) {
+		if (val == null) return Date.now();
+		else return val;
+	};
+
 	filters.toTime = function(val) {
 		if (!val) return val;
 		return filters.parseDate(val).toISOString().split('T').pop().split('.').shift();
