@@ -23,7 +23,7 @@ Form.prototype.destroy = function() {
 	if (this.switcher) this.switcher.remove();
 };
 
-Form.prototype.update = function(parents) {
+Form.prototype.update = function(parents, sel) {
 	if (this.ignoreNext) {
 		this.ignoreNext = false;
 		return;
@@ -34,6 +34,8 @@ Form.prototype.update = function(parents) {
 	}
 	var parent = parents[0];
 	this.parents = parents;
+	var showBlocks = sel.node && (sel.node.isBlock || sel.node.isLeaf);
+	var showInlines = !sel.node || sel.node && sel.node.isLeaf;
 
 	var block = parent.block;
 	if (!block) {
@@ -63,9 +65,10 @@ Form.prototype.update = function(parents) {
 	this.main.update(parents, block, this.mode);
 
 	var canShowExpressions = this.main.el.properties;
+	this.main.node.classList.toggle('hidden', !showBlocks);
 
 	var curInlines = this.inlines;
-	var inlines = (parent.inline && parent.inline.blocks || []).map(function(block) {
+	var inlines = (showInlines && parent.inline && parent.inline.blocks || []).map(function(block) {
 		var curForm;
 		curInlines = curInlines.filter(function(form) {
 			if (form.block.type == block.type) {

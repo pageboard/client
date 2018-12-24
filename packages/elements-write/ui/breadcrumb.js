@@ -32,12 +32,14 @@ Breadcrumb.prototype.update = function(parents, selection) {
 		} else {
 			item = children[i];
 		}
-		item.firstElementChild.classList.toggle('active', parent.node.attrs.focused == "last");
+		if (item && item.children.length > 0) {
+			item.firstElementChild.classList.toggle('active', parent.node.attrs.focused == "last");
+		}
 	}
 
 	if (!cut) for (j=i; j < elders.length; j++) {
 		item = children[j];
-		if (!item) break;
+		if (!item || item.children.length == 0) break;
 		parents.push(elders[j]);
 		if (!item.hasAttribute('block-id')) {
 			cut = true;
@@ -48,6 +50,13 @@ Breadcrumb.prototype.update = function(parents, selection) {
 	}
 	if (cut) while (children[j]) children[j].remove();
 
+	var last = this.node.lastElementChild;
+	var lastIsText = last && last.children.length == 0;
+	if (!selection.node) {
+		if (!lastIsText) this.node.insertAdjacentHTML("beforeEnd", "<span>text</span>");
+	} else if (lastIsText) {
+		last.remove();
+	}
 };
 
 Breadcrumb.prototype.item = function(parent) {
@@ -56,10 +65,15 @@ Breadcrumb.prototype.item = function(parent) {
 	item.textContent = this.editor.element(parent.type).title;
 	node.setAttribute('block-type', parent.type);
 	if (parent.block.id) node.setAttribute('block-id', parent.block.id);
-	if (parent.contentName) {
-		var contents = this.editor.element(parent.type).contents;
+	var contentName = parent.contentName;
+	if (contentName) {
+		var el = this.editor.element(parent.type);
+		var contents = el.contents;
 		if (Object.keys(contents).length > 1) {
-			node.insertBefore(node.ownerDocument.createTextNode(contents[parent.contentName].title), node.lastElementChild);
+			var title = contents[contentName].title;
+			if (title) {
+				node.insertBefore(node.ownerDocument.createTextNode(title), node.lastElementChild);
+			}
 		}
 	}
 	return node;
