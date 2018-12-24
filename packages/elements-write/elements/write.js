@@ -61,8 +61,10 @@ Pageboard.elements.write = {
 			</div>
 		</div>
 		<div id="breadcrumb" class="ui breadcrumb">
-			<a class="section"></a>
-			<i class="right chevron icon divider"></i>
+			<span>
+				<a class="section"></a>
+				<i class="right chevron icon divider"></i>
+			</span>
 		</div>
 		<div id="menu"></div>
 		<div id="form" class="ui form"></div>

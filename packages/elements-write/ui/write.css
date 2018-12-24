@@ -92,6 +92,9 @@ body.read #pageboard-read > iframe {
 #breadcrumb {
 	line-height:1.4; /* prettier multiple lines */
 }
+#breadcrumb > span:last-child > .divider {
+	display:none;
+}
 #form {
 	margin-top:1em;
 	padding-left:0.5em;

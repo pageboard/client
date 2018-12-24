@@ -7,60 +7,74 @@ function Breadcrumb(editor, node) {
 	this.node = node;
 	this.editor = editor;
 
-	template = this.template = template || this.node.cloneNode(true);
-	this.clear();
-	this.click = this.click.bind(this);
-	this.node.addEventListener('click', this.click);
+	template = this.template = template || this.node.firstElementChild.cloneNode(true);
+	this.node.textContent = "";
+	this.node.addEventListener('click', this);
 }
 
 Breadcrumb.prototype.destroy = function() {
-	this.node.removeEventListener('click', this.click);
+	this.node.removeEventListener('click', this);
 };
 
-Breadcrumb.prototype.update = function(parents) {
-	this.clear();
-	var parent;
-	for (var i = parents.length - 1; i >= 0; i--) {
+Breadcrumb.prototype.update = function(parents, selection) {
+	var elders = this.parents || [];
+	this.parents = parents = parents.slice().reverse();
+	var parent, elder, item, cut = false;
+	var children = this.node.children;
+	for (var i = 0, j = 0; i < parents.length; i++,j++) {
 		parent = parents[i];
-		this.node.insertAdjacentHTML('beforeEnd', this.item(parent));
+		elder = elders[j];
+		if (!elder || parent.block.id !== elder.block.id) {
+			cut = true;
+			item = this.item(parent);
+			this.node.insertBefore(item, children[i]);
+			if (children[i+1]) children[i+1].remove();
+		} else {
+			item = children[i];
+		}
+		item.firstElementChild.classList.toggle('active', parent.node.attrs.focused == "last");
 	}
-	if (this.node.lastElementChild) {
-		this.node.lastElementChild.remove();
-	}
-};
 
-Breadcrumb.prototype.clear = function() {
-	this.node.textContent = '';
+	if (!cut) for (j=i; j < elders.length; j++) {
+		item = children[j];
+		if (!item) break;
+		parents.push(elders[j]);
+		if (!item.hasAttribute('block-id')) {
+			cut = true;
+			break;
+		}	else {
+			item.firstElementChild.classList.remove('active');
+		}
+	}
+	if (cut) while (children[j]) children[j].remove();
+
 };
 
 Breadcrumb.prototype.item = function(parent) {
 	var node = this.template.cloneNode(true);
 	var item = node.querySelector('.section');
 	item.textContent = this.editor.element(parent.type).title;
-	if (parent.block.id) item.setAttribute('block-id', parent.block.id);
+	node.setAttribute('block-type', parent.type);
+	if (parent.block.id) node.setAttribute('block-id', parent.block.id);
 	if (parent.contentName) {
 		var contents = this.editor.element(parent.type).contents;
 		if (Object.keys(contents).length > 1) {
 			node.insertBefore(node.ownerDocument.createTextNode(contents[parent.contentName].title), node.lastElementChild);
 		}
 	}
-	return node.innerHTML;
-}
+	return node;
+};
 
-Breadcrumb.prototype.click = function(e) {
+Breadcrumb.prototype.handleEvent = function(e) {
+	if (e.type != "click") return;
 	var editor = this.editor;
 	var selectors = [];
-	var items = Array.from(this.node.querySelectorAll('.section'));
-	var target = e && e.target || this.node.querySelector('.section.active');
+	var items = Array.from(this.node.children);
+	var target = e.target.closest('span');
 	items.some(function(item, i) {
-		var position;
-		if (i == items.length - 1) position = "last";
-		else if (i == 0) position = "first";
-		else position = "middle";
-		var sel = i > 0 ? `[block-focused="${position}"]` : '';
 		var id = item.getAttribute('block-id');
-		if (id) sel += `[block-id="${id}"]`;
-		selectors.push(sel);
+		var type = item.getAttribute('block-type');
+		selectors.push(id ? `[block-id="${id}"]` : `[block-type="${type}"][block-focused]`);
 		if (item == target) return true;
 	});
 	var selector = selectors.join(' ');
