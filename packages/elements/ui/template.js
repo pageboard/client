@@ -2,24 +2,6 @@ class HTMLElementTemplate extends HTMLCustomElement {
 	static get observedAttributes() {
 		return ['remote', 'keys'];
 	}
-	static queryVars(obj, map, scope) {
-		Object.keys(obj).forEach(function(key) {
-			var val = obj[key];
-			if (typeof val == "string") {
-				val.fuse({$query: {}}, scope, Object.assign({}, scope.$filters, {
-					'||': function(val, what) {
-						var path = what.scope.path.slice();
-						if (path[0] == "$query") {
-							path = path.slice(1).join('.');
-							if (path.length && val != null) map[path] = val;
-						}
-					}
-				}));
-			} else if (val != null && typeof val == "object") {
-				this.queryVars(val, map, scope);
-			}
-		}, this);
-	}
 	get remote() {
 		return this.hasAttribute('remote');
 	}
@@ -42,15 +24,24 @@ class HTMLElementTemplate extends HTMLCustomElement {
 		// what do we do if state.query has keys that are used by a form in this query template ?
 		var expressions = this.getAttribute('block-expr');
 		var vars = {};
+		var scope = state.scope;
 		if (expressions) {
 			try {
 				expressions = JSON.parse(expressions);
 			} catch(ex) {
 				console.warn("block-expr attribute should contain JSON");
 			}
-			this.constructor.queryVars(expressions, vars, state.scope);
-		} else {
-			vars = {};
+			scope.$filters['||'] = function(val, what) {
+				var path = what.scope.path.slice();
+				if (path[0] == "$query") {
+					path = path.slice(1).join('.');
+					if (path.length && val != null) vars[path] = val;
+				}
+			};
+			Pageboard.merge(expressions, function(val) {
+				if (typeof val == "string") return val.fuse({$query: {}}, scope);
+			});
+			delete scope.$filters['||'];
 		}
 		var ok = false;
 		Object.keys(vars).forEach(function(key) {
@@ -62,7 +53,6 @@ class HTMLElementTemplate extends HTMLCustomElement {
 		var loader;
 		var remote = me.remote;
 		if (remote) {
-			// do not refresh if the same query was already done
 			var queryStr = Page.format({pathname: "", query: vars});
 			if (queryStr == me.dataset.query) return;
 			me.dataset.query = queryStr;
@@ -98,23 +88,23 @@ class HTMLElementTemplate extends HTMLCustomElement {
 
 		var scope = Object.assign({}, state.scope);
 
-		var el = scope.$element = {
+		scope.$element = {
 			name: 'template_element_' + this.getAttribute('block-id'),
 			dom: template,
-			filters: Object.assign({}, scope.$filters, {
+			filters: {
 				'||': function(val, what) {
 					var path = what.scope.path;
 					if (path[0] == "$query" && path.length > 1) {
 						state.vars[path.slice(1).join('.')] = true;
 					}
 				}
-			})
+			}
 		};
 		scope.$pathname = state.pathname;
 		scope.$query = state.query;
 		scope.$referrer = state.referrer.pathname || state.pathname;
 
-		var node = Pageboard.render(data || {type: el.name}, scope);
+		var node = Pageboard.render(data || {type: scope.$element.name}, scope);
 
 		view.textContent = '';
 		while (node.firstChild) view.appendChild(node.firstChild);

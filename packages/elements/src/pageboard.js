@@ -118,15 +118,26 @@ Page.setup(function(state) {
 
 exports.merge = merge;
 
-function merge(data, expr) {
-	if (!expr) return data;
-	var copy = Object.assign({}, data);
-	Object.keys(expr).forEach(function(key) {
-		var val = expr[key];
-		if (val == null) return;
-		else if (typeof val == "object") {
-			copy[key] = merge(copy[key], val);
+function merge(obj, extra, fn) {
+	var single = arguments.length == 2;
+	if ((fn == null || single) && typeof extra == "function") {
+		fn = extra;
+		extra = obj;
+		obj = {};
+	}
+	if (!extra) return obj;
+	var copy = Object.assign({}, obj);
+	Object.keys(extra).forEach(function(key) {
+		var val = extra[key];
+		if (val == null) {
+			return;
+		} else if (typeof val == "object") {
+			copy[key] = single ? merge(val, fn) : merge(copy[key], val, fn);
 		} else {
+			if (fn) {
+				var fval = single ? fn(val) : fn(copy[key], val);
+				if (fval !== undefined) val = fval;
+			}
 			copy[key] = val;
 		}
 	});
