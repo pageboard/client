@@ -149,12 +149,12 @@ Semafor.prototype.update = function(newSchema) {
 
 Semafor.prototype.get = function() {
 	var vals = formGet(this.$node[0]);
-	var formVals = this.unflatten(vals);
+	var formVals = Semafor.unflatten(vals);
 	return this.convert(formVals, this.lastSchema);
 };
 
 Semafor.prototype.set = function(obj) {
-	var vals = this.flatten(obj, {}, this.lastSchema);
+	var vals = Semafor.flatten(obj, {}, this.lastSchema);
 	formSet(this.$node[0], vals);
 };
 
@@ -174,7 +174,8 @@ var keywords = Semafor.keywords = {
 	// json schema allows custom keywords
 };
 
-Semafor.prototype.unflatten = function(map, obj) {
+Semafor.unflatten = function(map, obj) {
+	if (!map) return map;
 	if (!obj) obj = {};
 	Object.keys(map).forEach(function(key) {
 		var list = key.split('.');
@@ -190,7 +191,8 @@ Semafor.prototype.unflatten = function(map, obj) {
 	return obj;
 };
 
-Semafor.prototype.flatten = function(tree, obj, schema) {
+Semafor.flatten = function(tree, obj, schema) {
+	if (!tree) return tree;
 	if (!obj) obj = {};
 	var props = schema && schema.properties;
 	Object.keys(tree).forEach(function(key) {
@@ -205,10 +207,10 @@ Semafor.prototype.flatten = function(tree, obj, schema) {
 					field = listNoNull[0];
 				}
 			}
-			if (!field || !field.properties) {
+			if (schema !== undefined && (!field || !field.properties)) {
 				obj[key] = JSON.stringify(val);
 			} else {
-				var sub = this.flatten(val, {}, field);
+				var sub = Semafor.flatten(val, {}, field);
 				for (var k in sub) obj[key + '.' + k] = sub[k];
 			}
 		} else {

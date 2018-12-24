@@ -14,7 +14,9 @@ class HTMLInputMap extends HTMLCustomElement {
 	}
 	set value(obj) {
 		if (!this._proxy) return;
-		this._proxy.value = JSON.stringify(obj);
+		var val = JSON.stringify(obj);
+		if (this._proxy.value == val) return;
+		this._proxy.value = val;
 		Pageboard.trigger(this._proxy, 'change');
 	}
 	connectedCallback() {
@@ -48,7 +50,7 @@ class HTMLInputMap extends HTMLCustomElement {
 		this._table.removeEventListener('change', this._changed, false);
 	}
 	_render() {
-		var obj = this.value || {};
+		var obj = Semafor.flatten(this.value || {});
 		var body = this._table.querySelector('tbody');
 		body.textContent = '';
 		var name = this.getAttribute('name') || '';
@@ -107,7 +109,7 @@ class HTMLInputMap extends HTMLCustomElement {
 				removals.push(tr);
 			}
 		}, this);
-		this.value = obj;
+		this.value = Semafor.unflatten(obj);
 		removals.forEach(function(node) {
 			node.remove();
 		});
