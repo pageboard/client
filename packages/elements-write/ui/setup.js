@@ -120,14 +120,8 @@ function updatePage(state) {
 	}
 }
 
-function filterEditor(tr) {
-	var editor = this;
-	if (editor.destroying || editor.closed) return;
-	var focus = editor.focusState;
-	var sel = tr.getMeta('focus-selection') || tr.selection;
-	var list = tr.getMeta('focus-plugin') || editor.utils.selectionParents(tr, sel);
-	if (sel) focus.selection = sel;
-	if (list) focus.parents = list.map(function(item) {
+function filterParents(editor, list) {
+	return list.map(function(item) {
 		var node = item.root.node;
 		var obj = {
 			node: node,
@@ -146,15 +140,20 @@ function filterEditor(tr) {
 		}
 		return obj;
 	});
-	if (tr.docChanged) focus.changed = true;
 }
 
-function updateEditor(parents, selection, changed) {
+function update() {
 	var editor = this;
+	var tr = editor.state.tr;
+	var sel = tr.selection;
+	var parents = filterParents(editor, editor.utils.selectionParents(tr, sel));
+	var changed = editor.docChanged;
+	editor.docChanged = false;
+	if (!parents.length) return;
 	if (editor.controls) Object.keys(editor.controls).forEach(function(key) {
 		var c = editor.controls[key];
 		try {
-			if (c.update) c.update(parents, selection, changed);
+			if (c.update) c.update(parents, sel, changed);
 		} catch(err) {
 			Pageboard.notify(`control.${key}`, err);
 		}
@@ -190,25 +189,21 @@ Pageboard.Editor = function Editor(win, state) {
 		genId: Pageboard.Controls.Store.genId,
 		plugins: [{
 			filterTransaction: function(tr) {
-				editor.filterEditor(tr);
+				if (tr.docChanged) editor.docChanged = true;
 				return true;
 			},
 			view: function() {
 				return {
-					update: function(editor, state) {
-						var obj = editor.focusState;
-						if (obj.parents) editor.updateEditor(obj.parents, obj.selection, obj.changed);
-						obj.changed = false;
+					update: function(editor) {
+						editor.update();
 					}
 				};
 			}
 		}]
 	});
-	editor.focusState = {};
 
 	editor.updatePage = updatePage.bind(editor, state);
-	editor.updateEditor = Pageboard.debounce(updateEditor.bind(editor), 50);
-	editor.filterEditor = filterEditor.bind(editor);
+	editor.update = Pageboard.debounce(update.bind(editor), 50);
 	editor.close = editorClose.bind(editor);
 	editor.devTools = devTools.bind(editor);
 
