@@ -34,13 +34,19 @@ Menu.prototype.destroy = function() {
 
 Menu.prototype.showTab = function(name) {
 	this.lastTab = name;
+	this.hideTabs();
+	this.tabMenu.removeAttribute('hidden');
+	var tab = this.tabs[name];
+	tab.menu.classList.add('active');
+	tab.div.classList.add('active');
+};
+
+Menu.prototype.hideTabs = function() {
+	this.tabMenu.setAttribute('hidden', '');
 	for (var k in this.tabs) {
 		this.tabs[k].menu.classList.remove('active');
 		this.tabs[k].div.classList.remove('active');
 	}
-	var tab = this.tabs[name];
-	tab.menu.classList.add('active');
-	tab.div.classList.add('active');
 };
 
 Menu.prototype.update = function(parents, sel) {
@@ -52,23 +58,28 @@ Menu.prototype.update = function(parents, sel) {
 		this.tabs[name].div.textContent = '';
 	}
 	this.inlines.textContent = "";
+	var isBlockSelection = sel.node && sel.node.isBlock;
 	var activeTab;
 	this.menu.items.forEach(function(item) {
 		var dom = renderItem(item, this.editor);
 		if (!dom) return;
 		if (item.spec.element.inline) {
-			this.inlines.appendChild(dom);
-		} else {
+			if (!isBlockSelection) this.inlines.appendChild(dom);
+		} else if (isBlockSelection) {
 			var menu = item.spec.element.menu || 'common';
 			this.tab(menu).appendChild(dom);
 			if (!activeTab && dom.matches('.active')) activeTab = menu;
 		}
 	}, this);
-	if (!activeTab) {
-		if (this.tab(this.lastTab).children.length) activeTab = this.lastTab;
-		else activeTab = "common";
+	if (isBlockSelection) {
+		if (!activeTab) {
+			if (this.tab(this.lastTab).children.length) activeTab = this.lastTab;
+			else activeTab = "common";
+		}
+		this.showTab(activeTab);
+	} else {
+		this.hideTabs();
 	}
-	this.showTab(activeTab);
 };
 
 Menu.prototype.tab = function(name) {
