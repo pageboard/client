@@ -39,7 +39,7 @@ class HTMLElementTemplate extends HTMLCustomElement {
 				}
 			};
 			Pageboard.merge(expressions, function(val) {
-				if (typeof val == "string") return val.fuse({$query: {}}, scope);
+				if (typeof val == "string") return val.fuse({$query: state.query}, scope);
 			});
 			delete scope.$filters['||'];
 		}
