@@ -245,30 +245,60 @@ FormBlock.prototype.customHelper = function(key, prop, node) {
 	if (inst.init) inst.init(this.block);
 };
 
+function schemaToMeta(schema) {
+	var copy = propToMeta(schema);
+	if (schema.properties) {
+		Object.entries(schema.properties).forEach(function([key, prop]) {
+			copy.properties[key] = schemaToMeta(prop);
+		});
+	}
+	return copy;
+}
+
+function propToMeta(schema) {
+	var copy = {};
+	if (schema.properties || schema.type == "object") {
+		copy.type = 'object';
+		if (schema.properties) copy.properties = schema.properties;
+		else copy.description = 'object';
+	} else if (schema.type || schema.anyOf || schema.oneOf) {
+		var hint = '';
+		if (schema.type) {
+			hint = schema.type;
+		} else if (schema.anyOf) {
+			hint = 'any of: ' + schema.anyOf.map(function(item) {
+				return item.const;
+			}).join(', ');
+		} else if (schema.oneOf) {
+			hint = 'one of: ' + schema.anyOf.map(function(item) {
+				return item.const;
+			}).join(', ');
+		}
+		copy.type = 'string';
+		copy.format = 'singleline';
+		if (schema.pattern) hint = schema.pattern;
+		else if (schema.format) hint = schema.format;
+		if (schema.default) hint += ` (default: ${schema.default})`;
+		copy.default = hint;
+	}
+	copy.title = schema.title;
+	return copy;
+}
+
 FormBlock.prototype.customFilter = function(key, prop) {
 	var opts = prop.$filter;
-	if (this.mode == "expr") {
-		if (!prop.properties && prop.type != "object" && (prop.type || prop.anyOf || prop.oneOf)) {
-			Object.keys(prop).forEach(function(key) {
-				if (['title', 'type', 'format'].includes(key) == false && !key.startsWith('$')) delete prop[key];
-			});
-			prop.type = 'string';
-			prop.format = 'singleline';
-		} else {
-			return;
-		}
-	}
-	if (!opts) return;
+	if (this.mode == "expr") prop = propToMeta(prop);
+	if (!opts) return prop;
 	if (typeof opts == "string") {
 		opts = {name: opts};
 	} else if (!opts.name) {
 		console.warn("$filter without name", prop);
-		return;
+		return prop;
 	}
 	var Filter = Pageboard.schemaFilters[opts.name];
 	if (!Filter) {
 		console.error("Unknown filter name", prop);
-		return;
+		return prop;
 	}
 	var inst = this.filters[key];
 	if (!inst || !inst.update) {
@@ -277,6 +307,7 @@ FormBlock.prototype.customFilter = function(key, prop) {
 	} else {
 		inst.update(this.block);
 	}
+	return prop;
 };
 
 FormBlock.prototype.handleEvent = function(e) {
