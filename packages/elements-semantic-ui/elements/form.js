@@ -11,7 +11,11 @@ Pageboard.elements.query_form = {
 			nullable: true,
 			type: 'string',
 			format: 'id',
-			$filter: 'element'
+			$filter: {
+				name: 'element',
+				contentless: true,
+				standalone: true
+			}
 		},
 		redirection: {
 			title: 'Redirection',
