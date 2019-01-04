@@ -22,8 +22,9 @@ exports.load = require('./load');
 exports.render = require('./render');
 
 function initScope(res, scope) {
+	if (!scope.$doc) scope.$doc = document.cloneNode();
+	if (!res) return;
 	if (res.meta && res.meta.group == "page") {
-		scope.$doc = document.cloneNode();
 		scope.$page = res.item;
 		scope.$element = res.item && scope.$elements[res.item.type];
 		Object.keys(res).forEach(function(key) {
@@ -54,7 +55,7 @@ exports.bundle = function(loader, scope) {
 			}
 		};
 	}).then(function(res) {
-		if (res) initScope(res, scope);
+		initScope(res, scope);
 		var elts = scope.$elements;
 		Object.keys(elts).forEach(function(name) {
 			var el = elts[name];

@@ -105,7 +105,7 @@ class HTMLElementTemplate extends HTMLCustomElement {
 		scope.$query = state.query;
 		scope.$referrer = state.referrer.pathname || state.pathname;
 
-		var node = Pageboard.render(data || {type: scope.$element.name}, scope);
+		var node = Pageboard.render(data, scope);
 
 		view.textContent = '';
 		while (node.firstChild) view.appendChild(node.firstChild);

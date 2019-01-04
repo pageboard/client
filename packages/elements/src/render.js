@@ -42,28 +42,19 @@ module.exports = function(res, scope) {
 	res = Object.assign({}, res);
 	var block = res.item || {};
 	delete res.item;
-	if (!block.type && elem) {
-		block.type = elem.name;
-		if (!block.type) console.warn("Pageboard.build expects element.name to be set", elem);
-		elts[block.type] = elem;
+	if (elem) {
+		elts[elem.name] = elem;
+		if (!block.type) block.type = elem.name;
 	} else if (block.type) {
 		elem = elts[block.type];
-	}
-
-	if (block.data) {
 		if (res.items) {
 			block.children = res.items;
 			delete res.items;
 		}
-	} else {
-		block.data = {
-			items: res.items
-		};
-		delete res.items;
 	}
 	block.scope = res;
 
-	return scope.$view.from(block, null, block.type);
+	return scope.$view.from(block, null, elem.name);
 };
 
 module.exports.install = install;
@@ -82,18 +73,34 @@ function install(el, scope) {
 		var dom = el.dom.cloneNode(true);
 
 		var rscope = Object.assign({}, scope, {
-			$element: el,
-			$id: block.id,
+			$element: el
 		});
 		if (block.scope) Object.keys(block.scope).forEach(function(name) {
 			if (rscope[name] === undefined) {
 				rscope['$'+name] = block.scope[name];
 			}
 		});
+		Object.keys(block).forEach(function(name) {
+			if (["id", "parent", "child", "parents", "children", "updated_at", "created_at"].includes(name)) {
+				if (rscope[name] === undefined) {
+					rscope['$'+name] = block[name];
+				}
+			}
+		});
 		if (el.filters) rscope.$filters = Object.assign({}, rscope.$filters, el.filters);
 
 		var data = Pageboard.merge(block.data, block.expr, function(c, v) {
-			if (v != null) return v.fuse({$default: c}, rscope);
+			var useDefault = false;
+			rscope.$filters['||'] = function(val, what) {
+				if (!useDefault) useDefault = what.expr.path[0] == '$default';
+				return val;
+			};
+			var nv;
+			if (typeof v == "string" && c != null) {
+				nv = v.fuse({$default: c}, rscope);
+			}
+			delete rscope.$filters['||'];
+			if (useDefault) return nv;
 		});
 
 		if (el.fuse) {
