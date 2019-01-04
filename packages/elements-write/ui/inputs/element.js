@@ -1,7 +1,4 @@
-(function(Pageboard) {
-Pageboard.schemaFilters.element = ElementFilter;
-
-function ElementFilter(key, opts, schema) {
+Pageboard.schemaFilters.element = function ElementFilter(key, opts, schema) {
 	delete schema.type;
 	schema.anyOf = [{type: 'null', title: 'none'}];
 	Object.values(Pageboard.editor.elements).forEach(function(el) {
@@ -18,6 +15,5 @@ function ElementFilter(key, opts, schema) {
 			title: el.title
 		});
 	});
-}
+};
 
-})(window.Pageboard);
