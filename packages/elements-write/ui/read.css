@@ -65,7 +65,7 @@
 	background-color: #CCE2FF;
 }
 
-[contenteditable] .hidden {
+[contenteditable] .hidden[block-id] {
 	display: block !important;
 	opacity:0.5;
 }
