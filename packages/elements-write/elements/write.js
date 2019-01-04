@@ -81,6 +81,8 @@ Pageboard.elements.write = {
 		"../lib/components/reset.css",
 		"../ui/site.css",
 		"../lib/components/container.css",
+		"../lib/components/divider.css",
+		"../lib/components/header.css",
 		"../lib/components/segment.css",
 		"../lib/components/form.css",
 		"../lib/components/dropdown.css",
