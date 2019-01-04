@@ -86,6 +86,23 @@ Pageboard.elements.event_date = {
 				}
 			}
 		}
+	},
+	parents: {
+		type: 'array',
+		items: [{
+			type: 'object',
+			properties: {
+				type: {
+					title: 'event',
+					const: 'event'
+				},
+				id: {
+					title: 'id',
+					type: 'string',
+					format: 'id'
+				}
+			}
+		}]
 	}
 };
 
@@ -113,6 +130,34 @@ Pageboard.elements.event_reservation = {
 			type: 'string',
 			pattern: '^\\d+(\\s*\\.*-*\\d+)*$'
 		}
+	},
+	parents: {
+		type: 'array',
+		items: [{
+			type: 'object',
+			properties: {
+				type: {
+					const: 'settings'
+				},
+				id: {
+					title: 'user settings id',
+					type: 'string',
+					format: 'id'
+				}
+			}
+		}, {
+			type: 'object',
+			properties: {
+				type: {
+					const: 'event_date'
+				},
+				id: {
+					title: 'event date id',
+					type: 'string',
+					format: 'id'
+				}
+			}
+		}]
 	}
 };
 
