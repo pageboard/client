@@ -72,10 +72,19 @@ function submitListener(e) {
 }
 
 function anchorListener(e) {
-	if (!Pageboard.editor || Pageboard.editor.closed) return;
+	var editor = Pageboard.editor;
+	if (!editor || editor.closed) return;
 	var node = e.target.closest('a[href],input,button,textarea,label[for]');
 	if (!node) return;
 	e.preventDefault();
+	var isInput = node.matches('input,textarea,select');
+	if (!isInput) return;
+	var parent = node.closest('[block-type]');
+	var sel = editor.utils.select(parent);
+	if (sel) {
+		editor.focus();
+		editor.dispatch(editor.state.tr.setSelection(sel));
+	}
 }
 
 function install(scope) {
