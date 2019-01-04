@@ -132,7 +132,6 @@ Pageboard.elements.api_form = {
 	tag: 'form[method="post"]',
 	html: `<form is="element-form" method="post"
 		action="/.api/form/[$id]"
-		parameters="[action.parameters|query]"
 		redirection="[redirection.url][redirection.parameters|query]"
 		class="ui form [hidden|?]"
 		block-content="form"></form>`,
