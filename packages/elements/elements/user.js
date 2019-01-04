@@ -30,6 +30,23 @@ Pageboard.elements.priv = {
 				}
 			}
 		}
+	},
+	parents: {
+		type: 'array',
+		items: [{
+			type: 'object',
+			properties: {
+				type: {
+					title: 'user',
+					const: 'user'
+				},
+				id: {
+					title: 'id',
+					type: 'string',
+					format: 'id'
+				}
+			}
+		}]
 	}
 };
 
@@ -62,6 +79,23 @@ Pageboard.elements.settings = {
 				}]
 			}
 		}
+	},
+	parents: {
+		type: 'array',
+		items: [{
+			type: 'object',
+			properties: {
+				type: {
+					title: 'user',
+					const: 'user'
+				},
+				id: {
+					title: 'id',
+					type: 'string',
+					format: 'id'
+				}
+			}
+		}]
 	}
 };
 

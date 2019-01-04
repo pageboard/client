@@ -299,13 +299,18 @@ Pageboard.elements.input_checkbox = {
 			title: 'required',
 			type: 'boolean',
 			default: false
+		},
+		toggle: {
+			title: 'toggle',
+			type: 'boolean',
+			default: false
 		}
 	},
 	contents: {
 		label: 'inline*'
 	},
 	html: `<div class="field">
-		<div class="ui checkbox">
+		<div class="ui [toggle|?] checkbox">
 			<input type="checkbox" required="[required]" disabled="[disabled]"
 				name="[name]"
 				value="[value]"
