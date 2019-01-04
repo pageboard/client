@@ -25,6 +25,7 @@ class HTMLElementTemplate extends HTMLCustomElement {
 		var expressions = this.getAttribute('block-expr');
 		var vars = {};
 		var scope = state.scope;
+		var remote = me.remote;
 		if (expressions) {
 			try {
 				expressions = JSON.parse(expressions);
@@ -42,16 +43,16 @@ class HTMLElementTemplate extends HTMLCustomElement {
 				if (typeof val == "string") return val.fuse({$query: state.query}, scope);
 			});
 			delete scope.$filters['||'];
+			var ok = false;
+			Object.keys(vars).forEach(function(key) {
+				ok = state.vars[key] = true;
+			});
+			if (!ok) return;
+		} else if (!remote) {
+			// non-remotes cannot know if they will need $query
 		}
-		var ok = false;
-		Object.keys(vars).forEach(function(key) {
-			ok = state.vars[key] = true;
-		});
-		if (!ok) return;
-
 		var queryId = me.getAttribute('block-id');
 		var loader;
-		var remote = me.remote;
 		if (remote) {
 			var queryStr = Page.format({pathname: "", query: vars});
 			if (queryStr == me.dataset.query) return;
