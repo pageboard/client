@@ -2,7 +2,12 @@ Pageboard.elements.fetch.install = function() {
 	this.dom.classList.add('ui');
 };
 Pageboard.elements.message.install = function(node, d, scope) {
-	this.dom.classList.add('ui');
+	this.dom.classList.add('ui', '[inverted|?]');
+};
+Pageboard.elements.message.properties.inverted = {
+	title: 'Inverted',
+	type: 'boolean',
+	default: false
 };
 Pageboard.elements.message.stylesheets.unshift(
 	'../lib/components/message.css'
