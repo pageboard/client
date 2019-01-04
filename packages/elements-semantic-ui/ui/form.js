@@ -137,10 +137,13 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		}).map(function(input) {
 			return input.closest('element-input-file').upload();
 		})).then(function() {
-			var params = Page.parse((form.getAttribute('parameters') || '?').fuse(data, state.scope)).query;
-			data.$request = Pageboard.merge(form.read(), params);
+			data.$query = state.query;
+			data.$request = form.read();
 			form.disable();
-			return Pageboard.fetch(form.method, form.action, data.$request);
+			return Pageboard.fetch(form.method, Page.format({
+				pathname: form.action,
+				query: data.$query
+			}), data.$request);
 		}).catch(function(err) {
 			if (err.status != null) status = err.status;
 			else status = 0;
