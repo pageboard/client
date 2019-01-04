@@ -29,21 +29,6 @@ Page.ready(function(state) {
 		return d;
 	};
 
-	filters.thatday = function(val, what, hours, minutes) {
-		if (val != null) return val;
-		// TODO drop this when matchdom can merge recursively
-		var queryDate = what.data.$query && what.data.$query.date;
-		var d = new Date(queryDate);
-		if (isNaN(d.getTime())) {
-			d = new Date(new Date().toISOString().split('T')[0]);
-		}
-		hours = parseInt(hours);
-		minutes = parseInt(minutes);
-		if (!isNaN(hours)) d.setHours(hours);
-		if (!isNaN(minutes)) d.setMinutes(minutes);
-		return d.toISOString();
-	};
-
 	filters.now = function(val, what) {
 		if (val == null) return Date.now();
 		else return val;
