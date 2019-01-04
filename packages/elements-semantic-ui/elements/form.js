@@ -93,6 +93,10 @@ Pageboard.elements.api_form = {
 					type: "string",
 					pattern: "^(\\w+\\.\\w+)?$"
 				},
+				lock: Object.assign({}, Pageboard.elements.settings.properties.grants.items, {
+					title: 'Lock',
+					nullable: true
+				}),
 				parameters: {
 					title: 'Parameters',
 					nullable: true,
