@@ -68,14 +68,6 @@ Pageboard.elements.api_form = {
 		'data.action.parameters': 'webmaster'
 	},
 	properties: {
-		type: {
-			title: 'Bind to element',
-			description: 'Checks schema and helps adding form controls',
-			nullable: true,
-			type: 'string',
-			format: 'id',
-			$filter: 'element'
-		},
 		hidden: {
 			title: 'Hidden',
 			type: 'boolean',
