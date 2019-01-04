@@ -22,10 +22,6 @@ function ServiceFilter(key, opts, schema) {
 		else if (a.const > b.const) return 1;
 		else return 0;
 	});
-	this.list.unshift({
-		const: '',
-		title: 'None'
-	});
 	var props = schema.properties;
 	this.schemas = {
 		parent: props,
