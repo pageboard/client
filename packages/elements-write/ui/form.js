@@ -32,6 +32,7 @@ Form.prototype.update = function(parents, sel) {
 		this.destroy();
 		return;
 	}
+	this.selection = sel;
 	var parent = parents[0];
 	this.parents = parents;
 	var showBlocks = sel.node && (sel.node.isBlock || sel.node.isLeaf);
@@ -104,7 +105,7 @@ Form.prototype.update = function(parents, sel) {
 Form.prototype.handleSwitch = function(e) {
 	this.mode = this.mode == "expr" ? "data" : "expr";
 	this.switcher.classList.toggle('active', this.mode == "expr");
-	this.update(this.parents);
+	this.update(this.parents, this.selection);
 };
 
 function FormBlock(editor, node, type) {
