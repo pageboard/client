@@ -76,10 +76,9 @@ function formGet(form) {
 function formSet(form, values) {
 	function asPaths(obj, ret, pre) {
 		if (!ret) ret = {};
-		Object.keys(obj).forEach(function(key) {
-			var val = obj[key];
+		Object.entries(obj).forEach(function([key, val]) {
 			var cur = `${pre || ""}${key}`;
-			if (val == null || Array.isArray(val) || typeof val != "object") {
+			if (val == null || typeof val != "object") {
 				ret[cur] = val;
 			} else if (typeof val == "object") {
 				asPaths(val, ret, cur + '.');
@@ -180,11 +179,18 @@ Semafor.unflatten = function(map, obj) {
 	Object.keys(map).forEach(function(key) {
 		var list = key.split('.');
 		var val = obj;
+		var prev = val;
 		list.forEach(function(sub, i) {
+			var num = parseInt(sub);
+			if (!isNaN(num) && sub == num && !Array.isArray(val)) {
+				val = [];
+				prev[list[i-1]] = val = [];
+			}
 			if (!val[sub]) {
 				if (i < list.length - 1) val[sub] = {};
 				else val[sub] = map[key];
 			}
+			prev = val;
 			val = val[sub];
 		});
 	});
@@ -195,8 +201,7 @@ Semafor.flatten = function(tree, obj, schema) {
 	if (!tree) return tree;
 	if (!obj) obj = {};
 	var props = schema && schema.properties;
-	Object.keys(tree).forEach(function(key) {
-		var val = tree[key];
+	Object.entries(tree).forEach(function([key, val]) {
 		var field = props && props[key];
 		if (val != null && typeof val == "object") {
 			if (field && !field.properties && (field.oneOf || field.anyOf)) {
@@ -207,12 +212,20 @@ Semafor.flatten = function(tree, obj, schema) {
 					field = listNoNull[0];
 				}
 			}
-			if (schema !== undefined && (!field || !field.properties)) {
-				obj[key] = JSON.stringify(val);
-			} else {
-				var sub = Semafor.flatten(val, {}, field);
-				for (var k in sub) obj[key + '.' + k] = sub[k];
+			if (schema !== undefined) {
+				if (field && field.type == "array") {
+					Object.entries(Semafor.flatten(val, {})).forEach(function([k, kval]) {
+						obj[`${key}.${k}`] = kval;
+					});
+					return;
+				} else if (!field || !field.properties) {
+					obj[key] = JSON.stringify(val);
+					return;
+				}
 			}
+			Object.entries(Semafor.flatten(val, {}, field)).forEach(function([k, kval]) {
+				obj[`${key}.${k}`] = kval;
+			});
 		} else {
 			obj[key] = val;
 		}
@@ -311,15 +324,16 @@ function getNonNullType(type) {
 	return type;
 }
 Semafor.prototype.process = function(key, schema, node) {
-	if (this.filter) this.filter(key, schema);
+	if (this.filter) {
+		schema = this.filter(key, schema) || schema;
+	}
 	var type = getNonNullType(schema.type);
-	var processed = false;
-	// TODO support array of types (user selects the type he needs)
+	var hasHelper = false;
 	if (type && types[type]) {
 		if (type == 'object') {
-			if (types[type](key, schema, node, this)) processed = true;
+			types.object(key, schema, node, this);
 		} else if (!schema.title) {
-			processed = true;
+			hasHelper = true;
 		} else if (!key) {
 			console.error('Properties of type', type, 'must have a name');
 		} else {
@@ -344,20 +358,21 @@ Semafor.prototype.process = function(key, schema, node) {
 				].indexOf(kw) >= 0) return;
 				if (keywords[kw]) field.rules.push(keywords[kw](schema[kw]));
 			});
-			if (types[type](key, schema, node, this)) processed = true;
+			types[type](key, schema, node, this);
 		}
 	} else if (!type && (schema.oneOf || schema.anyOf)) {
-		if (types.oneOf(key, schema, node, this)) processed = true;
+		hasHelper = !!types.oneOf(key, schema, node, this);
 	} else if (Array.isArray(type)) {
 		type.forEach(function(type) {
-			if (types[type](key, schema, node, this)) processed = true;
+			types[type](key, schema, node, this);
 		});
+	} else if (schema.const != null) {
+		types.const(key, schema, node, this);
 	} else {
 		console.warn(key, 'has no supported type in schema', schema);
 	}
-	if (key && this.helper && !processed) {
-		if (!schema.title) console.warn("schema has $helper but no title", key, schema);
-		else this.helper(key, schema, node);
+	if (key && this.helper && !hasHelper) {
+		this.helper(key, schema, node);
 	}
 };
 
@@ -365,13 +380,13 @@ types.string = function(key, schema, node, inst) {
 	if (!schema.pattern && !schema.format) {
 		node.appendChild(node.dom(`<div class="field">
 			<label>${schema.title || key}</label>
-			<textarea name="${key}"	title="${schema.description || ''}">${schema.default || ''}</textarea>
+			<textarea name="${key}"	title="${schema.description || ''}" placeholder="${schema.default || ''}"></textarea>
 		</div>`));
 	} else {
 		node.appendChild(node.dom(`<div class="field">
 			<label>${schema.title || key}</label>
 			<input type="text" name="${key}"
-				value="${schema.default || ''}"
+				placeholder="${schema.default || ''}"
 				title="${schema.description || ''}"
 			/>
 		</div>`));
@@ -381,8 +396,16 @@ types.string = function(key, schema, node, inst) {
 types.oneOf = function(key, schema, node, inst) {
 	var field;
 	var listOf = schema.oneOf || schema.anyOf;
+	var nullable = schema.nullable;
+	var hasNullOption = false;
 	var alts = listOf.filter(function(item) {
-		return item.type != "null";
+		if (item.type == "null") {
+			nullable = true;
+			hasNullOption = true;
+			return false;
+		} else {
+			return true;
+		}
 	});
 	var oneOfType;
 	var icons = false;
@@ -408,6 +431,22 @@ types.oneOf = function(key, schema, node, inst) {
 
 	var def = schema.default;
 	if (def === null) def = "";
+
+	if (nullable && !hasNullOption) {
+		listOf = listOf.slice();
+		if (icons) {
+			listOf.splice(0, 0, {
+				type: "null",
+				icon: '<i class="close icon"></i>',
+				title: 'None'
+			});
+		} else {
+			listOf.splice(0, 0, {
+				type: "null",
+				title: 'None'
+			});
+		}
+	}
 
 	if (icons) {
 		field = node.dom(`<div class="inline fields">
@@ -481,7 +520,7 @@ types.number = function(key, schema, node, inst) {
 	node.appendChild(node.dom(`<div class="inline fields">
 		<label>${schema.title || key}</label>
 		<div class="field"><input type="number" name="${key}"
-			value="${schema.default !== undefined ? schema.default : ''}"
+			placeholder="${schema.default !== undefined ? schema.default : ''}"
 			title="${schema.description || ''}"
 			min="${schema.minimum != null ? schema.minimum : ''}"
 			max="${schema.maximum != null ? schema.maximum : ''}"
@@ -535,8 +574,27 @@ types.null = function(key, schema, node, inst) {
 };
 
 types.array = function(key, schema, node, inst) {
-	console.info("FIXME: array implements only selection of single value");
-	inst.process(key, Object.assign({}, schema.items, {title: schema.title}), node);
+	if (Array.isArray(schema.items)) {
+		var fieldset = node.dom(`<fieldset><legend>${schema.title}</legend></fieldset>`);
+		node.appendChild(fieldset);
+		schema.items.forEach(function(item, i) {
+			inst.process(`${key}.${i}`, item, fieldset);
+		});
+	} else {
+		console.info("FIXME: array implements only selection of single value");
+		return inst.process(key, Object.assign({}, schema.items, {title: schema.title}), node);
+	}
+};
+
+types.const = function(key, schema, node, inst) {
+	schema = Object.assign({}, schema);
+	schema.pattern = new RegExp(schema.const);
+	schema.placeholder = schema.const;
+	if (schema.title) schema.title = `> ${schema.title}`;
+	types.string(key, schema, node, inst);
+	var last = node.lastElementChild;
+	if (!schema.title) last.classList.add('hidden');
+	else last.querySelector('input').hidden = true;
 };
 
 formats.email = function() {
