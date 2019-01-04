@@ -18,8 +18,8 @@ function ServiceFilter(key, opts, schema) {
 		});
 	});
 	this.list = list.sort(function(a, b) {
-		if (a.title < b.title) return -1;
-		else if (a.title > b.title) return 1;
+		if (a.const < b.const) return -1;
+		else if (a.const > b.const) return 1;
 		else return 0;
 	});
 	this.list.unshift({
