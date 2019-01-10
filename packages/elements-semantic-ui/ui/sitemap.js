@@ -2,9 +2,12 @@ class HTMLElementSitemap extends HTMLCustomElement {
 	static makeTree(tree, parent) {
 		if (!parent) parent = {};
 		if (!parent.children) parent.children = [];
+		if (!parent.content) parent.content = {};
+		if (!parent.content.children) parent.content.children = '';
 		var page = tree._;
 		if (page) {
 			parent.children.push(page);
+			parent.content.children += `<div block-id="${page.id}" block-type="site${page.type}"></div>`;
 			delete tree._;
 		} else {
 			page = parent;
@@ -26,7 +29,7 @@ class HTMLElementSitemap extends HTMLCustomElement {
 		return parent;
 	}
 
-	static transformResponse(res) {
+	static transformResponse(res, view) {
 		var pages = res.items;
 		var tree = {};
 		pages.forEach(function(page) {
@@ -39,13 +42,15 @@ class HTMLElementSitemap extends HTMLCustomElement {
 				if (i == arr.length - 1) branch._ = page;
 			});
 		});
-		res.item = this.makeTree(tree);
-		res.item.type = 'sitemap';
+		return this.makeTree(tree);
 	}
 	patch(state) {
+		var view = state.scope.$view;
 		return Pageboard.bundle(Pageboard.fetch('get', `/.api/pages`), state.scope).then(function(res) {
-			this.constructor.transformResponse(res);
-			var node = Pageboard.render(res, state.scope);
+			state.scope.$element = state.scope.$elements.sitemap;
+			var node = Pageboard.render({
+				item: this.constructor.transformResponse(res, view)
+			}, state.scope);
 			this.textContent = '';
 			Array.from(node.children).forEach(function(node) {
 				this.appendChild(node);

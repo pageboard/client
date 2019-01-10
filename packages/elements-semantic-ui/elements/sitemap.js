@@ -9,16 +9,7 @@ Pageboard.elements.sitemap = {
 			virtual: true
 		}
 	},
-	html: '<element-sitemap class="ui accordion" block-content="children"></element-sitemap>',
-	render: function(block, scope) {
-		return this.virtualRender(block, scope);
-	},
-	virtualRender: function(block, scope) {
-		var html = '<div block-type="site[children.type|repeat]" block-id="[children.id]"></div>';
-		if (!block.content) block.content = {};
-		block.content.children = scope.$doc.dom(html).fuse(block);
-		return scope.$doc.dom(this.html).fuse(block.data, scope);
-	},
+	html: `<element-sitemap class="ui accordion" block-content="children"></element-sitemap>`,
 	stylesheets: [
 		'../lib/components/accordion.css',
 		'../ui/sitemap.css'
@@ -31,7 +22,7 @@ Pageboard.elements.sitemap = {
 	],
 	install: function(scope) {
 		// sitemap is standalone so has scripts array
-		if (scope.$write) Pageboard.load.js(this.resources[0], scope);
+		// if (scope.$write) Pageboard.load.js(this.resources[0], scope);
 	}
 };
 
@@ -55,8 +46,7 @@ Pageboard.elements.sitepage = {
 			<a href="[url]" class="description">[url|or:-]</a>
 		</div>
 		<div class="list content ui accordion" block-content="children"></div>
-	</element-sitepage>`,
-	render: Pageboard.elements.sitemap.virtualRender
+	</element-sitepage>`
 };
 
 if (Pageboard.elements.mail) Pageboard.elements.sitemail = {
@@ -73,7 +63,6 @@ if (Pageboard.elements.mail) Pageboard.elements.sitemail = {
 			<span class="header">[title|or:Untitled]</span><br />
 			<a href="[url]" class="description">[url|or:-]</a>
 		</div>
-	</element-sitepage>`,
-	render: Pageboard.elements.sitemap.virtualRender
+	</element-sitepage>`
 };
 
