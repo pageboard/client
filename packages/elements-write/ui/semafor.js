@@ -136,8 +136,7 @@ Semafor.prototype.destroy = function() {
 
 Semafor.prototype.update = function(newSchema) {
 	this.destroy();
-	this.lastSchema = JSON.parse(JSON.stringify(newSchema || this.schema));
-	this.process(null, this.lastSchema, this.node);
+	this.lastSchema = this.process(null, newSchema || this.schema, this.node);
 
 	this.$node.form({
 		on: 'blur',
@@ -347,15 +346,6 @@ Semafor.prototype.process = function(key, schema, node) {
 				field.rules.push({type: 'empty'});
 			}
 			Object.keys(schema).forEach(function(kw) {
-				if ([
-					"type",
-					"required",
-					"format",
-					"title",
-					"description",
-					"id",
-					"default"
-				].indexOf(kw) >= 0) return;
 				if (keywords[kw]) field.rules.push(keywords[kw](schema[kw]));
 			});
 			types[type](key, schema, node, this);
@@ -372,8 +362,9 @@ Semafor.prototype.process = function(key, schema, node) {
 		console.warn(key, 'has no supported type in schema', schema);
 	}
 	if (key && this.helper && !hasHelper) {
-		this.helper(key, schema, node);
+		schema = this.helper(key, schema, node) || schema;
 	}
+	return schema;
 };
 
 types.string = function(key, schema, node, inst) {
@@ -549,11 +540,14 @@ types.object = function(key, schema, node, inst) {
 			`));
 		}
 	}
-	if (schema.properties) Object.keys(schema.properties).forEach(function(name) {
+	if (!schema.properties) return;
+	var props = {};
+	var prefix = key ? (key + '.') : '';
+	Object.keys(schema.properties).forEach(function(name) {
 		var propSchema = schema.properties[name];
-		if (key) name = key + '.' + name;
-		inst.process(name, propSchema, fieldset);
+		props[name] = inst.process(prefix + name, propSchema, fieldset) || propSchema;
 	});
+	schema.properties = props;
 };
 
 types.boolean = function(key, schema, node, inst) {

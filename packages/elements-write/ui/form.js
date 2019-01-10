@@ -177,14 +177,11 @@ FormBlock.prototype.update = function(parents, block, mode) {
 			this.customHelper.bind(this)
 		);
 
-		if (!form.lastSchema || !sameMode || Object.keys(this.filters).length > 0) {
-			form.update(mode == "expr" ? form.lastSchema : form.schema);
+		if (!sameMode || Object.keys(this.filters).length > 0) {
+			form.update(form.schema);
 			form.clear();
 		}
 		form.set(this.block[mode]);
-		Object.values(this.filters).forEach(function(inst) {
-			if (inst.update) inst.update(this.block);
-		}, this);
 		Object.values(this.helpers).forEach(function(inst) {
 			if (inst.update) inst.update(this.block);
 		}, this);
@@ -242,7 +239,7 @@ FormBlock.prototype.customHelper = function(key, prop, node) {
 	var inst = this.helpers[key];
 	if (inst && inst.destroy) inst.destroy();
 	inst = this.helpers[key] = new Helper(node.querySelector(`[name="${key}"]`), opts, prop);
-	if (inst.init) inst.init(this.block);
+	if (inst.init) prop = inst.init(this.block, prop);
 };
 
 function schemaToMeta(schema) {
@@ -301,13 +298,10 @@ FormBlock.prototype.customFilter = function(key, prop) {
 		return prop;
 	}
 	var inst = this.filters[key];
-	if (!inst || !inst.update) {
+	if (!inst) {
 		inst = this.filters[key] = new Filter(key, opts, prop);
-		if (inst.init) inst.init(this.block);
-	} else {
-		inst.update(this.block);
 	}
-	return prop;
+	return inst.update && inst.update(this.block, prop) || prop;
 };
 
 FormBlock.prototype.handleEvent = function(e) {
@@ -362,18 +356,29 @@ FormBlock.prototype.handleEvent = function(e) {
 };
 
 function pruneObj(obj) {
-	var copy = Object.assign({}, obj);
-	Object.keys(copy).forEach(function(key) {
-		var val = copy[key];
+	var entries = Object.entries(obj).map(function([key, val]) {
 		if (val == null || val === "" || typeof val == "number" && isNaN(val)) {
-			delete copy[key];
+			return null;
 		} else if (typeof val == "object") {
 			val = pruneObj(val);
-			if (Object.keys(val).length == 0) delete copy[key];
-			else copy[key] = val;
+			if (val == null) return null;
 		}
+		return [key, val];
+	}).filter(function(entry) {
+		return entry != null;
 	});
-	return copy;
+	if (entries.length == 0) return null;
+	if (Array.isArray(obj)) {
+		return entries.map(function([key, val]) {
+			return val;
+		});
+	} else {
+		var copy = {};
+		entries.forEach(function([key, val]) {
+			copy[key] = val;
+		});
+		return copy;
+	}
 }
 
 })(window.Pageboard, window.Pagecut);

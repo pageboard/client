@@ -22,38 +22,27 @@ function ServiceFilter(key, opts, schema) {
 		else if (a.const > b.const) return 1;
 		else return 0;
 	});
-	var props = schema.properties;
-	this.schemas = {
-		parent: props,
-		method: Object.assign({}, props.method),
-		parameters: Object.assign({}, props.parameters),
-	};
 }
 
-ServiceFilter.prototype.init = function(block) {
-	var props = this.schemas.parent;
-	props.method.anyOf = this.list;
+ServiceFilter.prototype.update = function(block, schema) {
+	schema = Object.assign({}, schema);
+	var props = schema.properties = Object.assign({}, schema.properties);
+	props.method = Object.assign({}, props.method, {anyOf: this.list});
 	delete props.method.type;
 	setServiceParameters(this.key, block, props);
-};
-
-ServiceFilter.prototype.destroy = function() {
-	var props = this.schemas.parent;
-	props.method = this.schemas.method;
-	props.parameters = this.schemas.parameters;
+	return schema;
 };
 
 
-function ServiceHelper(node, opts, schema) {
+function ServiceHelper(node, opts) {
 	this.key = node.getAttribute('name');
-	this.props = schema.properties;
 }
 
-ServiceHelper.prototype.update = function(block) {
-	setServiceParameters(this.key, block, this.props);
-};
-
-ServiceHelper.prototype.destroy = function() {
+ServiceHelper.prototype.update = function(block, schema) {
+	schema = Object.assign({}, schema);
+	var props = schema.properties = Object.assign({}, schema.properties);
+	setServiceParameters(this.key, block, props);
+	return schema;
 };
 
 function setServiceParameters(key, block, props) {

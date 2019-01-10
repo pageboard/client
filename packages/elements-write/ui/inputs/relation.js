@@ -1,29 +1,35 @@
 (function(Pageboard) {
 Pageboard.schemaFilters.relation = RelationFilter;
 
-function RelationFilter(key, opts, schema) {
+function RelationFilter(key, opts) {
 	this.key = key;
-	this.schema = schema;
 	this.opts = opts;
 }
 
-RelationFilter.prototype.init = function(block) {
-	var type = block.data;
+RelationFilter.prototype.update = function(block, schema) {
+	var type, el;
 	var path = this.key.split('.');
-	path.splice(-1, 1, 'type');
-	path.forEach(function(name) {
-		type = type[name] || {};
-	});
-	if (!type) return;
-	var el = Pageboard.editor.elements[type];
+	if (this.opts.from == "service") {
+		path.splice(-2, 2, 'method');
+		type = path.reduce(function(obj, name) {
+			return obj[name] || null;
+		}, block.data);
+		if (!type) return;
+		var parts = type.split('.');
+		if (parts.length == 2) {
+			el = (Pageboard.services[parts[0]] || {})[parts[1]] || {};
+		}
+	} else {
+		path.splice(-1, 1, 'type');
+		type = path.reduce(function(obj, name) {
+			return obj[name] || null;
+		}, block.data);
+		if (!type) return;
+		el = Pageboard.editor.elements[type];
+	}
 	var parents = el && el.parents;
 	if (!parents) return;
-	this.items = this.schema.items;
-	Object.assign(this.schema, parents);
-};
-
-RelationFilter.prototype.destroy = function() {
-	this.schema.items = this.items;
+	return Object.assign({}, schema, parents);
 };
 
 })(window.Pageboard);
