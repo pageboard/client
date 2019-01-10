@@ -9,21 +9,6 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		if (!Page.samePathname(state, this.action)) return;
 		this.fill(state.query);
 	}
-	disable() {
-		var elem = null;
-		for (var i = 0; i < this.elements.length; i++) {
-			elem = this.elements[i];
-			elem.disabled = true;
-		}
-	}
-	enable() {
-		var elem = null;
-		for (var i = 0; i < this.elements.length; i++) {
-			elem = this.elements[i];
-			elem.disabled = false;
-			if (elem.hasAttribute('disabled')) elem.removeAttribute('disabled');
-		}
-	}
 	read() {
 		var fd = new FormData(this);
 		var query = {};
@@ -167,6 +152,23 @@ class HTMLCustomFormElement extends HTMLFormElement {
 	}
 }
 
+/* these methods must be available even on non-upgraded elements */
+HTMLFormElement.prototype.enable = function() {
+	var elem = null;
+	for (var i = 0; i < this.elements.length; i++) {
+		elem = this.elements[i];
+		elem.disabled = false;
+		if (elem.hasAttribute('disabled')) elem.removeAttribute('disabled');
+	}
+};
+HTMLFormElement.prototype.disable = function() {
+	var elem = null;
+	for (var i = 0; i < this.elements.length; i++) {
+		elem = this.elements[i];
+		elem.disabled = true;
+	}
+};
+
 Page.setup(function() {
 	HTMLCustomElement.define(`element-form`, HTMLCustomFormElement, 'form');
 });
@@ -221,4 +223,21 @@ Page.setup(function(state) {
 		if (!el.matches('input,textarea,select')) return;
 		updateClass(el.closest('.field') || el, el.validity, true);
 	}
+});
+
+Page.ready(function(state) {
+	var filters = state.scope.$filters;
+	filters.form = function(val, what, action) {
+		var form = what.parent.closest('form');
+		if (!form) {
+			console.warn("No parent form found");
+			return val;
+		}
+		if (action == "toggle") {
+			action = val ? "enable" : "disable";
+		}
+		if (action == "enable") form.enable();
+		else if (action == "disable") form.disable();
+		return val;
+	};
 });
