@@ -56,7 +56,7 @@ exports.schema = function(val, what, spath) {
 	if (val === undefined) return;
 
 	var path = what.scope.path;
-	var data = what.data;
+	var data = (path[0] && path[0].startsWith('$')) ? what.scope.data : what.data;
 	var blocks = [];
 	for (var i=0; i < path.length; i++) {
 		if (!data) break;
