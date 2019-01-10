@@ -25,16 +25,23 @@ exports.meta = function(meta) {
 	if (!cache[meta.elements]) {
 		cache[meta.elements] = Pageboard.load.js(meta.elements);
 	}
+	var pr = Promise.resolve();
 	if (meta.group != "page") {
 		// standalone resources are imported after page has been imported by router
-		if (meta.stylesheets) meta.stylesheets.forEach(function(url) {
-			Pageboard.load.css(url);
+		if (meta.stylesheets) pr = pr.then(function() {
+			return Promise.all(meta.stylesheets.map(function(url) {
+				return Pageboard.load.css(url);
+			}));
 		});
-		if (meta.scripts) meta.scripts.forEach(function(url) {
-			Pageboard.load.js(url);
+		if (meta.scripts) pr = pr.then(function() {
+			return Promise.all(meta.scripts.map(function(url) {
+				return Pageboard.load.js(url);
+			}));
 		});
 	}
-	return cache[meta.elements];
+	return cache[meta.elements].then(function() {
+		return pr;
+	});
 };
 
 function getHead(doc) {
