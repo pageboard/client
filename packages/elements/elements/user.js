@@ -52,6 +52,22 @@ Pageboard.elements.priv = {
 
 Pageboard.elements.settings = {
 	properties: {
+		consents: {
+			title: 'User Consents',
+			type: 'object',
+			properties: {
+				mandatory: {
+					title: 'Mandatory Contacts',
+					type: 'boolean',
+					default: false
+				},
+				extra: {
+					title: 'Extra Contacts',
+					type: 'boolean',
+					default: false
+				}
+			}
+		},
 		grants: {
 			type: 'array',
 			uniqueItems: true,
