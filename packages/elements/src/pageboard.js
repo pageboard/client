@@ -35,11 +35,16 @@ function initScope(res, scope) {
 
 exports.bundle = function(loader, scope) {
 	return loader.then(function(res) {
+		scope.$status = 200;
 		if (!res) return Promise.resolve();
-		return exports.load.meta(res.meta).then(function() {
+		var metas = res.metas || res.meta && [res.meta] || [];
+		return Promise.all(metas.map(function(meta) {
+			return exports.load.meta(meta);
+		})).then(function() {
 			return res;
 		});
 	}).catch(function(err) {
+		scope.$status = err.status || -1;
 		return {
 			meta: {
 				group: 'page'
