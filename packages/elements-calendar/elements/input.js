@@ -5,6 +5,9 @@ Pageboard.elements.IntlPolyfill = {
 		this.polyfills = [`Intl.~locale.${lang}`];
 	}
 };
+Pageboard.elements.CalendarScript = {
+	scripts: ['../ui/calendar.js']
+};
 Pageboard.elements.input_date_time = {
 	title: 'DateTime',
 	icon: '<i class="calendar outline icon"></i>',
@@ -75,7 +78,6 @@ Pageboard.elements.input_date_time = {
 		'../ui/input-date-time.css'
 	],
 	scripts: [
-		'../ui/calendar.js',
 		'../lib/datetime.js',
 		'../ui/input-date-time.js'
 	]
