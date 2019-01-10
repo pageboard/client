@@ -1,31 +1,5 @@
-Page.build(function(state) {
-	var sitemaps = Array.from(document.querySelectorAll('[block-type="sitemap"]'));
-	if (sitemaps.length > 0) return Pageboard.build('/.api/pages', {
-		transform: function(res) {
-			var pages = res.data;
-			var tree = {};
-			pages.forEach(function(page) {
-				if (!page.data.url) return;
-				var branch = tree;
-				var arr = page.data.url.substring(1).split('/');
-				arr.forEach(function(name, i) {
-					if (!branch[name]) branch[name] = {};
-					branch = branch[name];
-					if (i == arr.length - 1) branch._ = page;
-				});
-			});
-			res.data = makeTree(tree);
-			res.data.type = 'sitemap';
-		}
-	}).then(function(dom) {
-		Array.from(dom.children).forEach(function(node) {
-			sitemaps.forEach(function(sitemap) {
-				sitemap.appendChild(node.cloneNode(true));
-			});
-		});
-	});
-
-	function makeTree(tree, parent) {
+class HTMLElementSitemap extends HTMLCustomElement {
+	static makeTree(tree, parent) {
 		if (!parent) parent = {};
 		if (!parent.children) parent.children = [];
 		var page = tree._;
@@ -47,9 +21,40 @@ Page.build(function(state) {
 			else if (indexA < indexB) return -1;
 			else if (indexA > indexB) return 1;
 		}).forEach(function(name) {
-			makeTree(tree[name], page);
-		});
+			this.makeTree(tree[name], page);
+		}, this);
 		return parent;
 	}
+
+	static transformResponse(res) {
+		var pages = res.items;
+		var tree = {};
+		pages.forEach(function(page) {
+			if (!page.data.url) return;
+			var branch = tree;
+			var arr = page.data.url.substring(1).split('/');
+			arr.forEach(function(name, i) {
+				if (!branch[name]) branch[name] = {};
+				branch = branch[name];
+				if (i == arr.length - 1) branch._ = page;
+			});
+		});
+		res.item = this.makeTree(tree);
+		res.item.type = 'sitemap';
+	}
+	patch(state) {
+		return Pageboard.bundle(Pageboard.fetch('get', `/.api/pages`), state.scope).then(function(res) {
+			this.constructor.transformResponse(res);
+			var node = Pageboard.render(res, state.scope);
+			this.textContent = '';
+			Array.from(node.children).forEach(function(node) {
+				this.appendChild(node);
+			}, this);
+		}.bind(this));
+	}
+}
+
+Page.ready(function() {
+	HTMLCustomElement.define('element-sitemap', HTMLElementSitemap);
 });
 

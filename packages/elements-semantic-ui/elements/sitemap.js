@@ -1,28 +1,16 @@
 Pageboard.elements.sitemap = {
 	title: "Site map",
-	standalone: true,
+	group: "block",
+	icon: '<i class="sitemap icon"></i>',
+	menu: 'link',
 	contents: {
 		children: {
 			spec: "sitemap_item+",
 			virtual: true
 		}
 	},
-	html: '<element-accordion class="ui accordion" block-content="children"></element-accordion>',
+	html: '<element-sitemap class="ui accordion" block-content="children"></element-sitemap>',
 	render: function(block, scope) {
-		if (block.type == "sitemap") {
-			var tree = {};
-			block.children.forEach(function(page) {
-				if (!page.data.url) return;
-				var branch = tree;
-				var arr = page.data.url.substring(1).split('/');
-				arr.forEach(function(name, i) {
-					if (!branch[name]) branch[name] = {};
-					branch = branch[name];
-					if (i == arr.length - 1) branch._ = page;
-				});
-			});
-			block.children = this.tree(tree).children;
-		}
 		return this.virtualRender(block, scope);
 	},
 	virtualRender: function(block, scope) {
@@ -31,42 +19,19 @@ Pageboard.elements.sitemap = {
 		block.content.children = scope.$doc.dom(html).fuse(block);
 		return scope.$doc.dom(this.html).fuse(block.data, scope);
 	},
-	tree: function(tree, parent) {
-		if (!parent) parent = {};
-		if (!parent.children) parent.children = [];
-		var page = tree._;
-		if (page) {
-			parent.children.push(page);
-			delete tree._;
-		} else {
-			page = parent;
-		}
-		Object.keys(tree).sort(function(a, b) {
-			var pageA = tree[a]._;
-			var pageB = tree[b]._;
-			if (!pageA || !pageB) return 0;
-			var indexA = pageA.data.index;
-			if (indexA == null) indexA = Infinity;
-			var indexB = pageB.data.index;
-			if (indexB == null) indexB = Infinity;
-			if (indexA == indexB) return 0;
-			else if (indexA < indexB) return -1;
-			else if (indexA > indexB) return 1;
-		}).forEach(function(name) {
-			this.tree(tree[name], page);
-		}, this);
-		return parent;
-	},
 	stylesheets: [
 		'../lib/components/accordion.css',
 		'../ui/sitemap.css'
+	],
+	scripts: [
+		'../ui/sitemap.js'
 	],
 	resources: [
 		'../ui/sitemap-helper.js'
 	],
 	install: function(scope) {
 		// sitemap is standalone so has scripts array
-		if (scope.$write) this.scripts.push(this.resources[0]);
+		if (scope.$write) Pageboard.load.js(this.resources[0], scope);
 	}
 };
 
