@@ -41,7 +41,7 @@ Pageboard.elements.tabs = {
 		'../ui/tab-helper.js'
 	],
 	install: function(scope) {
-		if (scope.$write) this.scripts = this.resources;
+		if (scope.$write) Pageboard.load.js(this.resources[0], scope);
 	}
 };
 
