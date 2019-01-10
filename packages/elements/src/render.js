@@ -88,20 +88,21 @@ function install(el, scope) {
 			}
 		});
 		if (el.filters) rscope.$filters = Object.assign({}, rscope.$filters, el.filters);
+		var filters = rscope.$filters;
 
 		var data = Pageboard.merge(block.data, block.expr, function(c, v) {
 			var useDefault = false;
-			rscope.$filters['||'] = function(val, what) {
-				if (!useDefault) useDefault = what.expr.path[0] == '$default';
-				return val;
-			};
 			var nv;
 			if (typeof v == "string" && c != null) {
-				nv = v.fuse({$default: c}, rscope);
+				filters['||'] = function(val, what) {
+					if (!useDefault) useDefault = what.expr.path[0] == '$default';
+					return val;
+				};
+				nv = v.fuse({$default: c}, { $filters: filters });
 			}
-			delete rscope.$filters['||'];
 			if (useDefault) return nv;
 		});
+		delete filters['||'];
 
 		if (el.fuse) {
 			dom = el.fuse.call(el, dom, data, rscope) || dom;
