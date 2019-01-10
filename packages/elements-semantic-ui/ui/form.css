@@ -31,10 +31,6 @@ form[data-authfield] button[type="submit"]:before {
 	content:'🔒';
 }
 
-element-messages.ui > .ui.message {
-	margin-top:1em;
-}
-
 [contenteditable] .ui.form .ui.message {
 	display:block;
 }
