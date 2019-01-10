@@ -75,6 +75,7 @@ Pageboard.elements.input_date_time = {
 		'../ui/input-date-time.css'
 	],
 	scripts: [
+		'../ui/calendar.js',
 		'../lib/datetime.js',
 		'../ui/input-date-time.js'
 	]
