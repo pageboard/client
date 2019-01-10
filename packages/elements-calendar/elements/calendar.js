@@ -2,6 +2,8 @@ Pageboard.elements.event = {
 	priority: 2, // must install scripts after query element scripts
 	title: 'Event',
 	menu: "Calendar",
+	group: 'calendar',
+	standalone: true,
 	required: ['title'],
 	properties: {
 		title: {
@@ -12,6 +14,24 @@ Pageboard.elements.event = {
 			title: 'For groups only',
 			type: 'boolean',
 			default: false
+		},
+		maxSeatsReservations: {
+			title: 'Max. number of seats per reservation',
+			type: 'integer',
+			default: 10,
+			minimum: 1
+		},
+		openReservations: {
+			title: 'Open reservations n seconds before',
+			type: 'integer',
+			default: 30,
+			minimum: 0,
+		},
+		closeReservations: {
+			title: 'Close reservations n seconds before',
+			type: 'integer',
+			default: 0,
+			minimum: 0,
 		},
 		reservationRequired: {
 			title: 'Require reservation',
@@ -24,6 +44,25 @@ Pageboard.elements.event = {
 			default: 0,
 			minimum: 0
 		},
+		slot: { // TODO set eventDate default to this
+			type: 'object',
+			title: 'Time slot',
+			properties: {
+				start: {
+					title: 'Start',
+					type: 'string',
+					format: 'date-time'
+				},
+				end: {
+					title: 'End',
+					type: 'string',
+					format: 'date-time',
+					formatMinimum: {
+						$data: "1/start"
+					}
+				}
+			}
+		},
 		venue: {
 			title: 'Venue',
 			type: 'string'
@@ -32,13 +71,13 @@ Pageboard.elements.event = {
 			title: 'Label',
 			type: 'string'
 		}
-	},
-	scripts: ['../ui/calendar.js']
+	}
 };
 
 Pageboard.elements.event_date = {
 	title: 'Date',
 	menu: "Calendar",
+	group: 'calendar',
 	properties: {
 		groupsOnly: {
 			title: 'For groups only',
@@ -109,6 +148,7 @@ Pageboard.elements.event_date = {
 Pageboard.elements.event_reservation = {
 	title: 'Reservation',
 	menu: "Calendar",
+	group: 'calendar',
 	required: ['seats', 'name'],
 	properties: {
 		seats: {

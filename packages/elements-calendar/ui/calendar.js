@@ -90,18 +90,18 @@ Page.ready(function(state) {
 		return d.toLocaleString(lang, p);
 	};
 
-	filters.byWeek = function(val, what, path) {
+	filters.byWeek = function(val, what, datapath) {
 		// val is an array
 		// path accessor to a property
 		// unit is year/month/week/day
-		var data = what.data;
-		var comps = what.expr.clone().path;
+		var path = what.expr.clone().path;
+		var data = (path[0] && path[0].startsWith('$')) ? what.scope.data : what.data;
 		var head;
-		while (comps.length) {
+		while (path.length) {
 			if (typeof data == "object" && data.length) {
 				break;
 			}
-			head = comps.shift();
+			head = path.shift();
 			data = data[head];
 			if (data == null) break;
 		}
@@ -113,9 +113,9 @@ Page.ready(function(state) {
 		var arr = [];
 		var aday = 1000 * 60 * 60 * 24;
 		data.forEach(function(item) {
-			var time = (new Date(what.expr.get(item, path))).getTime();
+			var time = (new Date(what.expr.get(item, datapath))).getTime();
 			if (isNaN(time)) {
-				console.warn("byWeek filter cannot find a valid date at", path, "in", item);
+				console.warn("byWeek filter cannot find a valid date at", datapath, "in", item);
 				return;
 			}
 			var d = new Date(Math.round(time / aday) * aday);
