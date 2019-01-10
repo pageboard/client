@@ -67,11 +67,12 @@ class HTMLElementTemplate extends HTMLCustomElement {
 
 		return Pageboard.bundle(loader, state.scope).then(function(res) {
 			me.render(res, state);
-			if (remote) me.classList.add('success');
 		}).catch(function(err) {
-			me.classList.add('error');
+			state.scope.$status = -1;
 			console.error("Error building", err);
 		}).then(function() {
+			var name = '[$status|statusClass]'.fuse(state.scope);
+			if (name) me.classList.add(name);
 			me.classList.remove('loading');
 			me._refreshing = false;
 		});
