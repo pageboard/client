@@ -3,7 +3,8 @@ Pageboard.elements.mail_template = Object.assign({}, Pageboard.elements.template
 	contents: {
 		template: {
 			title: 'Template',
-			spec: 'mail_block+'
+			spec: 'mail_block+',
+			expressions: true
 		}
 	}
 });
