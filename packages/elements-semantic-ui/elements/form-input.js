@@ -116,6 +116,9 @@ Pageboard.elements.input_text = {
 			}, {
 				const: "hidden",
 				title: "hidden"
+			}, {
+				const: "password",
+				title: "password"
 			}]
 		}
 	},
