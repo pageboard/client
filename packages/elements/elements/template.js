@@ -12,9 +12,16 @@ Pageboard.elements.template = {
 		}
 	},
 	html: `<element-template>
-		<div block-content="template"></div>
+		<template block-content="template"></template>
 		<div class="view"></div>
 	</element-template>`,
+	fuse: function(node, d, scope) {
+		var dom = node.fuse(d, scope);
+		if (scope.$write) {
+			dom.firstElementChild.replaceWith(node.dom('<div block-content="template"></div>'));
+		}
+		return dom;
+	},
 	stylesheets: [
 		'../ui/template.css'
 	],
@@ -28,7 +35,7 @@ Pageboard.elements.fetch = Object.assign({}, Pageboard.elements.template, {
 	icon: '<i class="search icon"></i>',
 	expressions: true,
 	html: `<element-template remote="[action.method|!!]">
-		<div block-content="template"></div>
+		<template block-content="template"></template>
 		<div class="view"></div>
 	</element-template>`,
 	properties: {

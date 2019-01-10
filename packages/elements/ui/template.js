@@ -81,8 +81,8 @@ class HTMLElementTemplate extends HTMLCustomElement {
 		if (this.closest('[contenteditable]')) return;
 		if (this.children.length != 2) return;
 		var view = this.lastElementChild;
-		var template = this.firstElementChild.cloneNode(true);
-		template.removeAttribute('block-content');
+		var template = this.firstElementChild;
+		if (template.content) template = template.content;
 		// remove all block-id from template
 		var rnode;
 		while ((rnode = template.querySelector('[block-id]'))) rnode.removeAttribute('block-id');
