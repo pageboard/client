@@ -22,7 +22,7 @@ RelationFilter.prototype.update = function(block, schema) {
 	} else {
 		path.splice(-1, 1, 'type');
 		type = path.reduce(function(obj, name) {
-			return obj[name] || null;
+			return obj && obj[name] || null;
 		}, block.data);
 		if (!type) return;
 		el = Pageboard.editor.elements[type];
