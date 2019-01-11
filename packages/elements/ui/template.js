@@ -19,7 +19,7 @@ class HTMLElementTemplate extends HTMLCustomElement {
 	}
 	patch(state) {
 		var me = this;
-		if (me._refreshing || me.closest('[contenteditable],[block-content="template"]')) return;
+		if (me._refreshing || me.closest('[block-content="template"]')) return;
 		// first find out if state.query has a key in this.keys
 		// what do we do if state.query has keys that are used by a form in this query template ?
 		var expressions = this.getAttribute('block-expr');
