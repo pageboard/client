@@ -27,7 +27,7 @@ ElementProperty.prototype.init = function(block) {
 	var formBlock = Pageboard.editor.blocks.get(formId);
 	if (!formBlock) throw new Error("Cannot find form block for " + formId);
 	this.formBlock = formBlock;
-	var type = formBlock.data.action.type;
+	var type = formBlock.data.type;
 	var el = Pageboard.editor.element(type);
 	if (!el) throw new Error("Cannot map type to element " + type);
 	this.el = el;
@@ -80,7 +80,7 @@ ElementProperty.prototype.update = function(block) {
 };
 
 ElementProperty.prototype.destroy = function() {
-	this.select.remove();
+	if (this.select) this.select.remove();
 	this.input.hidden = false;
 };
 
