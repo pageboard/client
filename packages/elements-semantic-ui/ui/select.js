@@ -2,13 +2,12 @@ class HTMLElementSelect extends HTMLCustomElement {
 	static get observedAttributes() {
 		return ['data-placeholder', 'data-name', 'data-multiple', 'value'];
 	}
-	init() {
-		this._click = this._click.bind(this);
-		this._change = this._change.bind(this);
-	}
-	_click(e) {
+	handleClick(e, state) {
 		var me = e.target.closest('element-select');
-		if (me != this) return; // not for us
+		if (me != this) {
+			this._selectSelf(true);
+			return;
+		}
 		var item = e.target.closest('element-select .item');
 		if (item) {
 			this._selectItem(item);
@@ -18,7 +17,7 @@ class HTMLElementSelect extends HTMLCustomElement {
 			var val = label.dataset.value;
 			this._deselectItem(val);
 		} else {
-			this._selectSelf(!e.target.closest('element-select'));
+			this._selectSelf(false);
 		}
 	}
 	_selectSelf(close) {
@@ -28,8 +27,10 @@ class HTMLElementSelect extends HTMLCustomElement {
 		else menu.style.display = 'none';
 	}
 	_selectItem(item) {
-		var val = item.dataset.value || item.innerText.trim();
-		var str = item.innerHTML;
+		var text = item.innerText.trim();
+		var val = item.dataset.value;
+		if (val == null) val = text;
+		var html = item.innerHTML;
 		var wasSelected = false;
 		var option = this.querySelector(`select > option[value="${val}"]`);
 		if (option) {
@@ -38,14 +39,18 @@ class HTMLElementSelect extends HTMLCustomElement {
 		}
 		if (this.dataset.multiple) {
 			if (!wasSelected) {
-				this._setText("").insertAdjacentHTML('beforeBegin', `<a class="ui label" data-value="${val}">${str}<i class="delete icon"></i></a>`);
+				this._setText("").insertAdjacentHTML('beforeBegin', `<a class="ui label" data-value="${val}">${html}<i class="delete icon"></i></a>`);
 			}
 		} else {
-			this._setText(str);
+			this._setText(text);
 		}
 
 		var defaultOption = this.querySelector(`select > option[value=""]`);
 		if (defaultOption) defaultOption.selected = false;
+		if (!wasSelected && val != this.getAttribute('value')) this.querySelector('select').dispatchEvent(new Event('change', {
+			cancelable: true,
+			bubbles: true
+		}));
 	}
 	_deselectItem(val) {
 		if (this.dataset.multiple) {
@@ -73,7 +78,8 @@ class HTMLElementSelect extends HTMLCustomElement {
 		var select = this.querySelector('select');
 		select.querySelector('option[value=""]').innerHTML = str || "-";
 	}
-	_change(e) {
+	handleChange(e, state) {
+		if (!e.isTrusted) return;
 		var items = Array.from(this.querySelector('.menu').children);
 		Array.from(e.target.children).forEach(function(option, i) {
 			var item = items.children[i];
@@ -86,7 +92,7 @@ class HTMLElementSelect extends HTMLCustomElement {
 		node.innerHTML = item.innerHTML;
 		return node;
 	}
-	connectedCallback() {
+	setup(state) {
 		if (!this.querySelector('.icon')) {
 			this.insertAdjacentHTML('afterBegin', '<i class="dropdown icon"></i>');
 		}
@@ -103,15 +109,13 @@ class HTMLElementSelect extends HTMLCustomElement {
 
 		select.insertAdjacentHTML('beforeBegin', `<div class="text"></div>`);
 		this._setPlaceholder();
-
-		this.ownerDocument.body.addEventListener('click', this._click, false);
-		select.addEventListener('change', this._change, false);
 		this._observer = new MutationObserver(function(mutations) {
 			this._update();
 		}.bind(this));
 		this._observer.observe(menu, {
 			childList: true
 		});
+
 		var initialValue = this.getAttribute('value');
 		if (initialValue != null) this.attributeChangedCallback("value", null, initialValue);
 	}
@@ -132,11 +136,11 @@ class HTMLElementSelect extends HTMLCustomElement {
 		});
 		this._setPlaceholder();
 	}
-	disconnectedCallback() {
-		this.ownerDocument.body.removeEventListener('click', this._click, false);
-		var select = this.querySelector('select');
-		if (select) select.removeEventListener('change', this._change, false);
-		this._observer.disconnect();
+	close() {
+		if (this._observer) {
+			this._observer.disconnect();
+			delete this._observer;
+		}
 	}
 	attributeChangedCallback(attributeName, oldValue, newValue, namespace) {
 		var select = this.querySelector('select');
