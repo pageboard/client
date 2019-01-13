@@ -67,10 +67,8 @@ exports.schema = function(val, what, spath) {
 		data = data[path[i]];
 	}
 	var item = blocks.pop();
-	if (!item) {
-		console.warn("No block found in", what.scope.path);
-		return;
-	}
+	if (!item) return;
+
 	var schemaPath = item.block.type + '.properties.'
 		+ path.slice(item.index).join('.properties.');
 
