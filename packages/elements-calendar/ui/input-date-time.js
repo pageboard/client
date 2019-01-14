@@ -1,7 +1,4 @@
 class HTMLElementInputDateTime extends HTMLCustomElement {
-	init() {
-		this.controlListener = this.controlListener.bind(this);
-	}
 	static get observedAttributes() {
 		return ['value', 'format'];
 	}
@@ -9,17 +6,18 @@ class HTMLElementInputDateTime extends HTMLCustomElement {
 		return this.getAttribute('format') || 'datetime';
 	}
 	set format(f) {
-		this.setAttribute('format', f);
+		if (f) this.setAttribute('format', f);
+		else this.removeAttribute('format');
 	}
 	get value() {
-		return this._input ? this._input.value : null;
+		return this.getAttribute('value');
 	}
 	set value(v) {
-		this._input.value = v;
-		this._dt.setTime(v);
+		if (v) this.setAttribute('value', v);
+		else this.removeAttribute('value');
 	}
 
-	controlListener(e) {
+	handleClick(e, state) {
 		if (e.target.classList.contains('incr')) {
 			this._dt.step(1);
 		} else if (e.target.classList.contains('decr')) {
@@ -27,16 +25,13 @@ class HTMLElementInputDateTime extends HTMLCustomElement {
 		} else return;
 	}
 
-	controlDownListener(e) {
+	handleMousedown(e, state) {
 		if (e.target.closest('.controls')) {
 			e.preventDefault();
 		}
 	}
 
-	connectedCallback() {
-		this.addEventListener('click', this.controlListener);
-		this.addEventListener('mousedown', this.controlDownListener);
-
+	setup(state) {
 		var input = this.querySelector('input[type="hidden"]');
 		var view = this.querySelector('input:not([type="hidden"])');
 		if (!view && !input) {
@@ -53,16 +48,15 @@ class HTMLElementInputDateTime extends HTMLCustomElement {
 			view = this.ownerDocument.createElement('input');
 			this.insertBefore(view, input);
 		}
+		this._view = view;
 		this._input = input;
 		if (!this.querySelector('.controls')) {
 			this.insertAdjacentHTML('beforeEnd', '<div class="controls"><span class="incr"></span><span class="decr"></span></div>');
 		}
-
-		var lang = document.documentElement.lang || window.navigator.language;
 		view.value = this.getAttribute('value') || input.value;
-
-		this._dt = window.DateTimeEntry(view, {
-			locale: lang,
+		if (!input.value && view.value) input.value = view.value;
+		this._dt = window.DateTimeEntry(this._view, {
+			locale: document.documentElement.lang || window.navigator.language,
 			format: this._formatOptions(this.format),
 			useUTC: false,
 			onChange: function(val) {
@@ -72,13 +66,14 @@ class HTMLElementInputDateTime extends HTMLCustomElement {
 	}
 
 	attributeChangedCallback(name, old, val) {
-		if (!this._dt) return;
-		if (name == "value") {
-			this._dt.setTime(val);
-		} else if (name == "format") {
+		if (old == val || !this._dt) return;
+		if (name == "format") {
 			var props = this._dt.props;
 			props.format = this._formatOptions(val || 'datetime');
 			this._dt.setOptions(props);
+		} else if (name == "value") {
+			this._input.value = val;
+			this._dt.setTime(val);
 		}
 	}
 
@@ -100,9 +95,7 @@ class HTMLElementInputDateTime extends HTMLCustomElement {
 		return fmt;
 	}
 
-	disconnectedCallback() {
-		this.removeEventListener('click', this.controlListener);
-		this.removeEventListener('mousedown', this.controlDownListener);
+	close() {
 		if (this._dt) {
 			this._dt.destroy();
 			delete this._dt;
@@ -111,6 +104,6 @@ class HTMLElementInputDateTime extends HTMLCustomElement {
 }
 
 
-Page.setup(function() {
-	HTMLCustomElement.define('element-input-date-time', HTMLElementInputDateTime);
-});
+
+HTMLCustomElement.define('element-input-date-time', HTMLElementInputDateTime);
+

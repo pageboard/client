@@ -2,11 +2,8 @@ class HTMLElementInputDateSlot extends HTMLCustomElement {
 	static get observedAttributes() {
 		return ['start', 'end'];
 	}
-	init() {
-		this.dateChange = this.dateChange.bind(this);
-		this.timeChange = this.timeChange.bind(this);
-	}
-	connectedCallback() {
+
+	patch(state) {
 		var els = Array.from(this.querySelectorAll('element-input-date-time'));
 		if (els.length == 0) return;
 		if (els.length == 2) {
@@ -22,9 +19,11 @@ class HTMLElementInputDateSlot extends HTMLCustomElement {
 		els[2].format = "time";
 		els[0].value = els[1].value = this.getAttribute('start');
 		els[2].value = this.getAttribute('end');
-		els[0].addEventListener('change', this.dateChange);
-		els[1].addEventListener('change', this.timeChange);
-		els[2].addEventListener('change', this.timeChange);
+	}
+
+	handleChange(e, state) {
+		if (e.target == this._els[0]) this.dateChange(e);
+		else this.timeChange(e);
 	}
 
 	dateChange(e) {
@@ -54,17 +53,10 @@ class HTMLElementInputDateSlot extends HTMLCustomElement {
 		}
 	}
 
-	disconnectedCallback() {
-		if (this._els) {
-			this._els[0].removeEventListener('change', this.dateChange);
-			this._els[1].removeEventListener('change', this.timeChange);
-			this._els[2].removeEventListener('change', this.timeChange);
-			delete this._els;
-		}
+	close() {
+		if (this._els) delete this._els;
 	}
 }
 
+HTMLCustomElement.define('element-input-date-slot', HTMLElementInputDateSlot);
 
-Page.setup(function() {
-	HTMLCustomElement.define('element-input-date-slot', HTMLElementInputDateSlot);
-});
