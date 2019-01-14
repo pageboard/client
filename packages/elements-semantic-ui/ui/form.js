@@ -30,6 +30,11 @@ class HTMLCustomFormElement extends HTMLFormElement {
 				query[key] = val;
 			}
 		}, this);
+		// checkbox fix
+		Array.from(this.elements).forEach(function(node) {
+			if (node.type != "checkbox") return;
+			if (node.name && node.value == "true" && !query[node.name]) query[node.name] = node.checked;
+		});
 		return query;
 	}
 	fill(values) {
