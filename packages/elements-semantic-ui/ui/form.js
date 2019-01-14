@@ -11,6 +11,8 @@ class HTMLCustomFormElement extends HTMLFormElement {
 	}
 	read() {
 		var fd = new FormData(this);
+		var btn = document.activeElement;
+		if (btn && btn.type == "submit" && btn.name) fd.append(btn.name, btn.value);
 		var query = {};
 		fd.forEach(function(val, key) {
 			if (val == null || val == "") {

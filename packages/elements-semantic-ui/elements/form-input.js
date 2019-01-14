@@ -51,9 +51,21 @@ Pageboard.elements.input_button = {
 				title: 'Cancel',
 				const: 'cancel'
 			}]
+		},
+		name: {
+			title: "name",
+			description: "The form object key",
+			type: "string",
+			format: "singleline"
+		},
+		value: {
+			title: "default value",
+			nullable: true,
+			type: "string",
+			format: "singleline"
 		}
 	},
-	html: '<button type="[type]" class="ui button" block-content="label">[type|schema:title]</button>',
+	html: '<button type="[type]" class="ui button" block-content="label" name="[name]" value="[value]">[type|schema:title]</button>',
 	stylesheets: [
 		'../lib/components/button.css',
 	]
