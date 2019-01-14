@@ -1,6 +1,6 @@
 class HTMLElementSelect extends HTMLCustomElement {
 	static get observedAttributes() {
-		return ['data-placeholder', 'data-name', 'data-multiple', 'value'];
+		return ['data-placeholder', 'data-name', 'data-multiple'];
 	}
 	handleClick(e, state) {
 		var me = e.target.closest('element-select');
@@ -29,10 +29,11 @@ class HTMLElementSelect extends HTMLCustomElement {
 	_selectItem(item) {
 		var text = item.innerText.trim();
 		var val = item.dataset.value;
-		if (val == null) val = text;
 		var html = item.innerHTML;
 		var wasSelected = false;
-		var option = this.querySelector(`select > option[value="${val}"]`);
+		var select = this.querySelector('select');
+		if (!select) return;
+		var option = select.querySelector(`option[value="${val}"]`);
 		if (option) {
 			if (option.selected) wasSelected = true;
 			option.selected = true;
@@ -45,12 +46,15 @@ class HTMLElementSelect extends HTMLCustomElement {
 			this._setText(text);
 		}
 
-		var defaultOption = this.querySelector(`select > option[value=""]`);
-		if (defaultOption) defaultOption.selected = false;
-		if (!wasSelected && val != this.getAttribute('value')) this.querySelector('select').dispatchEvent(new Event('change', {
-			cancelable: true,
-			bubbles: true
-		}));
+		var defaultOption = select.querySelector(`option[value=""]`);
+		if (defaultOption && val) defaultOption.selected = false;
+		if (!wasSelected && val != this.getAttribute('value')) {
+			this.setAttribute('value', val);
+			select.dispatchEvent(new Event('change', {
+				cancelable: true,
+				bubbles: true
+			}));
+		}
 	}
 	_deselectItem(val) {
 		if (this.dataset.multiple) {
@@ -61,9 +65,11 @@ class HTMLElementSelect extends HTMLCustomElement {
 		}
 		var option = this.querySelector(`select > option[value="${val}"]`);
 		if (option) option.selected = false;
+		// FIXME dispatchEvent
 	}
 	_setText(str) {
 		var text = this.querySelector('.text');
+		if (!text) return;
 		text.textContent = str;
 		text.classList.remove('default');
 		return text;
@@ -117,7 +123,7 @@ class HTMLElementSelect extends HTMLCustomElement {
 		});
 
 		var initialValue = this.getAttribute('value');
-		if (initialValue != null) this.attributeChangedCallback("value", null, initialValue);
+		this.attributeChangedCallback("value", null, initialValue);
 	}
 	_update() {
 		var select = this.querySelector('select');
@@ -156,7 +162,8 @@ class HTMLElementSelect extends HTMLCustomElement {
 				this._reset();
 			}
 		} else if (attributeName == "value") {
-			this._selectItem(this.querySelector(`[data-value="${newValue}"]`));
+			var item = this.querySelector(`element-select-option[data-value="${newValue}"]`);
+			if (item) this._selectItem(item);
 		}
 	}
 }
