@@ -105,13 +105,11 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			// do not automatically submit form if form pathname is not same as current pathname
 			return;
 		}
-		form.classList.add('loading');
 		var status = 200;
 		return state.push(loc).catch(function(err) {
 			if (err.status != null) status = err.status;
 			else status = 0;
 		}).then(function() {
-			form.classList.remove('loading');
 			var statusClass = `[n|statusClass]`.fuse({n: status});
 			if (statusClass) form.classList.add(statusClass);
 		});
