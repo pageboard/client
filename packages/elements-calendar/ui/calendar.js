@@ -2,14 +2,16 @@ Page.ready(function(state) {
 	var filters = state.scope.$filters;
 	filters.isoDate = function(val, what) {
 		var d = filters.parseDate(val);
-		return d.toISOString();
+		if (isNaN(d.getTime())) return null;
+		else return d.toISOString();
 	};
 	filters.parseDate = function(val, what, amount, unit) {
 		var d;
 		if (val instanceof Date) {
 			d = val;
 		} else {
-			if (val && /^\d\d:\d\d/.test(val)) {
+			if (!val) val = filters.toDate(new Date(), what);
+			else if (/^\d\d:\d\d/.test(val)) {
 				val = '0 ' + val;
 			}
 			d = new Date(val);
