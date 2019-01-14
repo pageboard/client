@@ -211,7 +211,9 @@ Page.setup(function navigate(state) {
 		var href = a && a.getAttribute('href');
 		if (!href || e.defaultPrevented || a.target) return;
 		e.preventDefault();
-		state.push(href);
+		Page.setup(function(state) {
+			state.push(href);
+		});
 	}, false);
 
 	if (!document.body.isContentEditable && document.body.dataset.redirect) {
@@ -224,12 +226,14 @@ Page.setup(function navigate(state) {
 Page.setup(function(state) {
 	// Page removes event listener automatically
 	window.addEventListener('scroll', Pageboard.debounce(function(e) {
-		if (state.transition) return;
-		state.data.scroll = {
-			x: window.scrollX,
-			y: window.scrollY
-		};
-		state.save();
+		Page.setup(function(state) {
+			if (state.transition) return;
+			state.data.scroll = {
+				x: window.scrollX,
+				y: window.scrollY
+			};
+			state.save();
+		});
 	}, 500), false);
 });
 
