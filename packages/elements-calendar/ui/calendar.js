@@ -1,5 +1,9 @@
 Page.ready(function(state) {
 	var filters = state.scope.$filters;
+	filters.isoDate = function(val, what) {
+		var d = filters.parseDate(val);
+		return d.toISOString();
+	};
 	filters.parseDate = function(val, what, amount, unit) {
 		var d;
 		if (val instanceof Date) {
