@@ -27,7 +27,8 @@ ElementProperty.prototype.init = function(block) {
 	var formBlock = Pageboard.editor.blocks.get(formId);
 	if (!formBlock) throw new Error("Cannot find form block for " + formId);
 	this.formBlock = formBlock;
-	var type = formBlock.data.type;
+	var type = (formBlock.expr || {}).type || (formBlock.data || {}).type;
+	if (!type) throw new Error("Please select a type to bind the form to");
 	var el = Pageboard.editor.element(type);
 	if (!el) throw new Error("Cannot map type to element " + type);
 	this.el = el;
