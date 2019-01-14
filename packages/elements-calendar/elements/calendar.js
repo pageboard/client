@@ -132,11 +132,10 @@ Pageboard.elements.event_date = {
 			type: 'object',
 			properties: {
 				type: {
-					title: 'event',
 					const: 'event'
 				},
 				id: {
-					title: 'id',
+					title: 'event id',
 					type: 'string',
 					format: 'id'
 				}
