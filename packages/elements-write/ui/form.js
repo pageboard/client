@@ -308,7 +308,7 @@ FormBlock.prototype.handleEvent = function(e) {
 	if (!this.block || this.ignoreEvents || !this.form) return;
 	if (e && e.target && (!e.target.name || e.target.name.startsWith('$'))) return;
 	var editor = this.editor;
-	var formData = pruneObj(this.form.get());
+	var formData = pruneObj(this.form.get()) || {};
 	var mode = this.mode;
 
 	var same = Pageboard.JSON.stableStringify(this.block[mode]) == Pageboard.JSON.stableStringify(formData);
