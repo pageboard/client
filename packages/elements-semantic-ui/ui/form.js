@@ -16,7 +16,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		var query = {};
 		fd.forEach(function(val, key) {
 			if (val == null || val == "") {
-				if (this.querySelector(`[name="${key}"]`).required) {
+				if (this.querySelector(`[name="${key}"]`).required == false) {
 					val = undefined;
 				}
 			}
