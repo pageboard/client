@@ -134,7 +134,7 @@ Pageboard.elements.heading = {
 	group: "block",
 	icon: '<i class="icon header"></i>',
 	tag: 'h1,h2,h3,h4,h5,h6',
-	html: `<h[level] class="[align|or:left]" is="h[level]-helper"><a aria-hidden="true" href="#[id]" id="[id]">[linkable|bmagnet]#</a><inline block-content="text">Heading</inline></hn>`,
+	html: `<h[level] class="ui [align|or:left] aligned header" is="h[level]-helper"><a aria-hidden="true" href="#[id]" id="[id]">[linkable|bmagnet]#</a><inline block-content="text">Heading</inline></hn>`,
 	parse: function(dom) {
 		var anchor = dom.querySelector('a');
 		return {
