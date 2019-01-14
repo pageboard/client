@@ -478,7 +478,7 @@ Pageboard.elements.input_select_option = {
 		}
 	},
 	html: `<element-select-option class="item"
-		block-content="label" data-value="[value]"
+		block-content="label" data-value="[value|or:]"
 	></element-select-option>`,
 	resources: [
 		'../ui/select-helper.js'
