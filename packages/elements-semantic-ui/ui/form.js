@@ -45,7 +45,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			name = elem.name;
 			if (!name) continue;
 			count++;
-			val = `[${name}|]`.fuse(values);
+			val = `[${name}|or:]`.fuse(values);
 			switch (elem.type) {
 			case 'submit':
 				break;
