@@ -152,6 +152,9 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			if (Page.samePathname(loc, state)) {
 				loc.query = Object.assign({}, state.query, loc.query);
 			}
+			Array.from(document.querySelectorAll('element-template')).forEach(function(node) {
+				delete node.dataset.query;
+			});
 			return state.push(loc);
 		});
 	}
