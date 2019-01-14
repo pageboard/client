@@ -9,5 +9,5 @@ class HTMLElementSelectOption extends HTMLCustomElement {
 }
 
 Page.setup(function() {
-	HTMLCustomElement.define('element-select-option', HTMLElementSelectOption);
+	// HTMLCustomElement.define('element-select-option', HTMLElementSelectOption);
 });
