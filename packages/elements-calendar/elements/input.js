@@ -69,7 +69,7 @@ Pageboard.elements.input_date_time = {
 		<label block-content="label">Label</label>
 		<element-input-date-time
 			format="[format]"
-			data-value="[value]"
+			value="[value]"
 		><input name="[name]" disabled="[disabled]" placeholder="[placeholder]"
 			required="[required]" step="[step]"
 		/></element-input-date-time>
@@ -133,7 +133,7 @@ Pageboard.elements.input_date_slot = {
 	},
 	html: `<div class="field">
 		<label block-content="label">Label</label>
-		<element-input-date-slot data-start="[valueStart]" data-end="[valueEnd]">
+		<element-input-date-slot start="[valueStart]" end="[valueEnd]">
 			<element-input-date-time><input type="text" name="[nameStart]" /></element-input-date-time>
 			<element-input-date-time><input type="text" name="[nameEnd]" /></element-input-date-time>
 		</element-input-date-slot>
