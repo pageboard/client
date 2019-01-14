@@ -40,7 +40,11 @@ class HTMLElementTemplate extends HTMLCustomElement {
 				}
 			};
 			Pageboard.merge(expressions, function(val) {
-				if (typeof val == "string") return val.fuse({$query: state.query}, scope);
+				if (typeof val == "string") try {
+					return val.fuse({$query: state.query}, scope);
+				} catch(ex) {
+					return val;
+				}
 			});
 			delete scope.$filters['||'];
 			var ok = false;
