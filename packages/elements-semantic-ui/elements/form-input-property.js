@@ -38,11 +38,11 @@ Pageboard.elements.input_property = {
 			default: false
 		}
 	},
-	render: function(block, scope) {
+	html: '<div><code>select property name</code></div>',
+	fuse: function(node, d, scope) {
+		var view = scope.$view;
 		var doc = scope.$doc;
-		var d = block.data;
 		var name = d.name;
-		var node = scope.$doc.dom('<div><code>select property name</code></div>');
 		if (!name) {
 			return node;
 		}
@@ -117,7 +117,7 @@ Pageboard.elements.input_property = {
 					</div>`));
 				}
 				listOf.forEach(function(item) {
-					content.appendChild(scope.$render({
+					content.appendChild(view.render({
 						type: d.multiple ? 'input_checkbox' : 'input_radio',
 						data: {
 							name: name,
@@ -132,7 +132,7 @@ Pageboard.elements.input_property = {
 			} else {
 				var frag = doc.createDocumentFragment();
 				listOf.forEach(function(item) {
-					var option = scope.$render({
+					var option = view.render({
 						type: 'input_select_option',
 						data: {
 							value: item.type == "null" ? null : item.const
@@ -143,7 +143,7 @@ Pageboard.elements.input_property = {
 					});
 					frag.appendChild(option);
 				});
-				var select = scope.$render({
+				var select = view.render({
 					type: 'input_select',
 					data: {
 						name: name,
@@ -162,7 +162,7 @@ Pageboard.elements.input_property = {
 		} else if (propType.type == "integer") {
 			if (propType.minimum != null && propType.maximum != null) {
 				if (propType.maximum - propType.minimum <= d.range) {
-					return node.appendChild(scope.$render({
+					return node.appendChild(view.render({
 						type: 'input_range',
 						data: {
 							name: name,
@@ -179,7 +179,7 @@ Pageboard.elements.input_property = {
 					}));
 				}
 			}
-			node.appendChild(scope.$render({
+			node.appendChild(view.render({
 				type: 'input_text',
 				data: {
 					name: name,
@@ -193,7 +193,7 @@ Pageboard.elements.input_property = {
 				}
 			}));
 		} else if (propType.type == "boolean") {
-			node.appendChild(scope.$render({
+			node.appendChild(view.render({
 				type: 'input_checkbox',
 				data: {
 					name: name,
@@ -206,7 +206,7 @@ Pageboard.elements.input_property = {
 				}
 			}));
 		} else if (propType.type == "string" && propType.format == "date") {
-			node.appendChild(scope.$render({
+			node.appendChild(view.render({
 				type: 'input_date_time',
 				data: {
 					name: name,
@@ -221,7 +221,7 @@ Pageboard.elements.input_property = {
 				}
 			}));
 		} else if (propType.type == "string" && propType.format == "time") {
-			node.appendChild(scope.$render({
+			node.appendChild(view.render({
 				type: 'input_date_time',
 				data: {
 					name: name,
@@ -236,7 +236,7 @@ Pageboard.elements.input_property = {
 				}
 			}));
 		} else {
-			var input = scope.$render({
+			var input = view.render({
 				type: 'input_text',
 				data: {
 					name: name,
