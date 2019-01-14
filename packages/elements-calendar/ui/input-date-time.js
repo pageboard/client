@@ -60,8 +60,8 @@ class HTMLElementInputDateTime extends HTMLCustomElement {
 			format: this._formatOptions(this.format),
 			useUTC: false,
 			onChange: function(val) {
-				input.value = val.toISOString();
-			}
+				this.value = val.toISOString();
+			}.bind(this)
 		});
 	}
 

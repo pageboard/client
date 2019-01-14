@@ -3,7 +3,7 @@ class HTMLElementInputDateSlot extends HTMLCustomElement {
 		return ['start', 'end'];
 	}
 
-	patch(state) {
+	setup(state) {
 		var els = Array.from(this.querySelectorAll('element-input-date-time'));
 		if (els.length == 0) return;
 		if (els.length == 2) {
@@ -22,8 +22,8 @@ class HTMLElementInputDateSlot extends HTMLCustomElement {
 	}
 
 	handleChange(e, state) {
-		if (e.target == this._els[0]) this.dateChange(e);
-		else this.timeChange(e);
+		if (e.target.closest('element-input-date-time') == this._els[0]) this.dateChange(e);
+		this.timeChange(e);
 	}
 
 	dateChange(e) {
@@ -36,11 +36,20 @@ class HTMLElementInputDateSlot extends HTMLCustomElement {
 	}
 
 	timeChange(e) {
-		var startVal = new Date(this._els[1].value).getTime();
-		var endVal = new Date(this._els[2].value).getTime();
-		if (isNaN(endVal) || !isNaN(startVal) && endVal < startVal) {
-			this._els[2].value = this._els[1].value;
+		var start = new Date(this._els[1].value);
+		var end = new Date(this._els[2].value);
+		var startTime = start.getTime();
+		var endTime = end.getTime();
+		if (isNaN(endTime)) endTime = startTime;
+		if (isNaN(startTime)) return;
+		// keep start and end on the same day
+		if (endTime >= startTime) return;
+		if (start.getDate() > end.getDate()) {
+			end.setDate(start.getDate());
+		} else {
+			end = start;
 		}
+		this._els[2].value = end.toISOString();
 	}
 
 	attributeChangedCallback(name, old, val) {
