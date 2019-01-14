@@ -32,6 +32,12 @@ body {
 .layout.vcenter {
 	align-items: center;
 }
+.layout.vbaseline {
+	align-items: baseline;
+}
+.layout.vstretch {
+	align-items: stretch;
+}
 .layout.bottom {
 	align-items: flex-end;
 }
@@ -40,6 +46,12 @@ body {
 }
 .layout.hcenter {
 	justify-content: center;
+}
+.layout.hbetween {
+	justify-content: space-between;
+}
+.layout.haround {
+	justify-content: space-around;
 }
 .layout.right {
 	justify-content: flex-end;

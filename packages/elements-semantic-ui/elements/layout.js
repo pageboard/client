@@ -13,6 +13,12 @@ Pageboard.elements.layout = {
 				const: "hcenter",
 				title: "center"
 			}, {
+				const: "hbetween",
+				title: "spaced between"
+			}, {
+				const: "haround",
+				title: "spaced around"
+			}, {
 				const: "right",
 				title: "right"
 			}]
@@ -27,6 +33,12 @@ Pageboard.elements.layout = {
 			}, {
 				const: "vcenter",
 				title: "center"
+			}, {
+				const: "vstretch",
+				title: "stretch"
+			}, {
+				const: "vbaseline",
+				title: "baseline"
 			}, {
 				const: "bottom",
 				title: "bottom"
