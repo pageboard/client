@@ -1,6 +1,6 @@
 class HTMLCustomFormElement extends HTMLFormElement {
 	init() {
-		this.getMethod = Pageboard.debounce(this.getMethod, 300);
+		this.getMethodLater = Pageboard.debounce(this.getMethod, 300);
 	}
 	patch(state) {
 		if (state.scope.$write) return;
@@ -69,13 +69,13 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		return count;
 	}
 	handleSubmit(e, state) {
-		var submit = e.type == "submit";
-		if (submit) e.preventDefault();
+		if (e.type == "submit") e.preventDefault();
 		if (state.scope.$write) return;
 		this.classList.remove('error', 'warning', 'success');
 		if (this.matches('.loading')) return;
 		var fn = this[this.method + 'Method'];
-		if (fn) fn.call(this, state, submit);
+		if (e.type == "input") fn = this[this.method + 'MethodLater'] || fn;
+		if (fn) fn.call(this, e, state);
 		else console.error("Unsupported form method", this.method);
 	}
 	handleInput(e, state) {
@@ -89,14 +89,14 @@ class HTMLCustomFormElement extends HTMLFormElement {
 	handleChange(e, state) {
 		this.handleInput(e, state);
 	}
-	getMethod(state, submit) {
+	getMethod(e, state) {
 		this.ignoreInputChange = false;
 		var form = this;
 		var loc = Page.parse(form.action);
 		Object.assign(loc.query, form.read());
 		if (Page.samePathname(loc, state)) {
 			loc.query = Object.assign({}, state.query, loc.query);
-		} else if (!submit) {
+		} else if (e.type != "submit") {
 			// do not automatically submit form if form pathname is not same as current pathname
 			return;
 		}
@@ -111,8 +111,8 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			if (statusClass) form.classList.add(statusClass);
 		});
 	}
-	postMethod(state, submit) {
-		if (!submit) return;
+	postMethod(e, state) {
+		if (e.type != "submit") return;
 		var form = this;
 		form.classList.add('loading');
 		var data = {
