@@ -70,8 +70,6 @@ function install(el, scope) {
 		return;
 	}
 	if (el.dom) el.render = function(block) {
-		var dom = el.dom.cloneNode(true);
-
 		var rscope = Object.assign({}, scope, {
 			$element: el
 		});
@@ -102,10 +100,11 @@ function install(el, scope) {
 			}
 			if (useDefault) return nv;
 		});
-
+		var dom = el.dom && el.dom.cloneNode(true);
 		if (el.fuse) {
 			dom = el.fuse.call(el, dom, data, rscope) || dom;
 		} else if (!el.html || reFuse.test(el.html)) {
+			if (!dom) throw new Error("Invalid element", el, "missing dom");
 			dom = dom.fuse(data, rscope);
 		}
 		return dom;
