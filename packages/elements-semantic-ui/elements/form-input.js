@@ -305,6 +305,11 @@ Pageboard.elements.input_checkbox = {
 			type: "string",
 			format: "singleline"
 		},
+		checked: {
+			title: 'checked',
+			type: 'boolean',
+			default: false
+		},
 		disabled: {
 			title: 'disabled',
 			type: 'boolean',
@@ -327,8 +332,7 @@ Pageboard.elements.input_checkbox = {
 	html: `<div class="field">
 		<div class="ui [toggle|?] checkbox">
 			<input type="checkbox" required="[required]" disabled="[disabled]"
-				name="[name]"
-				value="[value]"
+				name="[name]" value="[value]" checked="[checked]"
 				id="[$id|slice:0:4|pre:for]" />
 			<label block-content="label" for="[$id|slice:0:4|pre:for]">Label</label>
 		</div>
@@ -351,6 +355,11 @@ Pageboard.elements.input_radio = {
 			type: "string",
 			format: "singleline"
 		},
+		checked: {
+			title: 'checked',
+			type: 'boolean',
+			default: false
+		},
 		value: {
 			title: "value",
 			type: "string",
@@ -368,8 +377,7 @@ Pageboard.elements.input_radio = {
 	html: `<div class="field">
 		<div class="ui radio checkbox">
 			<input type="radio" disabled="[disabled]"
-				name="[name]"
-				value="[value|or:]"
+				name="[name]" value="[value|or:]" checked="[checked]"
 				id="[$id|slice:0:4|pre:for]" />
 			<label block-content="label" for="[$id|slice:0:4|pre:for]">Label</label>
 		</div>
