@@ -75,7 +75,7 @@ function parseNumeric (val) {
 }
 
 function getDocOffsetTop (node) {
-    let docOffsetTop = 0;
+    var docOffsetTop = 0;
 
     while (node) {
         docOffsetTop += node.offsetTop;
