@@ -200,20 +200,3 @@ Pageboard.elements.event_reservation = {
 	}
 };
 
-Pageboard.elements.settings.properties.event = {
-	title: 'Event settings',
-	type: 'object',
-	properties: {
-		allowNews: {
-			title: 'Allow sending news',
-			type: 'boolean',
-			default: false
-		},
-		allowEmail: {
-			title: 'Allow emails',
-			type: 'boolean',
-			default: false
-		}
-	}
-};
-
