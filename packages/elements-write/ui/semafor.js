@@ -587,8 +587,10 @@ types.const = function(key, schema, node, inst) {
 	if (schema.title) schema.title = `> ${schema.title}`;
 	types.string(key, schema, node, inst);
 	var last = node.lastElementChild;
+	var input = last.querySelector('input');
 	if (!schema.title) last.classList.add('hidden');
-	else last.querySelector('input').hidden = true;
+	else input.hidden = true;
+	input.setAttribute('value', schema.const);
 };
 
 formats.email = function() {
