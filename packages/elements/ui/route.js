@@ -9,7 +9,7 @@ Page.route(function(state) {
 		});
 	}
 
-	return Pageboard.bundle(loader, state.scope).then(function(res) {
+	return Pageboard.bundle(loader, state).then(function(res) {
 		state.data.$cache = res;
 		var node = Pageboard.render(res, state.scope);
 		if (!node || node.nodeName != "BODY") {

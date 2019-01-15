@@ -21,9 +21,11 @@ exports.fetch = require('./fetch');
 exports.load = require('./load');
 exports.render = require('./render');
 
-function initScope(res, scope) {
+function initState(res, state) {
+	var scope = state.scope;
 	if (!scope.$doc) scope.$doc = document.cloneNode();
 	if (!res) return;
+	if (res.grants) state.data.$grants = res.grants;
 	if (res.meta && res.meta.group == "page") {
 		scope.$page = res.item;
 		scope.$element = res.item && scope.$elements[res.item.type];
@@ -33,7 +35,8 @@ function initScope(res, scope) {
 	}
 }
 
-exports.bundle = function(loader, scope) {
+exports.bundle = function(loader, state) {
+	var scope = state.scope;
 	return loader.then(function(res) {
 		scope.$status = 200;
 		if (!res) return Promise.resolve();
@@ -60,7 +63,7 @@ exports.bundle = function(loader, scope) {
 			}
 		};
 	}).then(function(res) {
-		initScope(res, scope);
+		initState(res, state);
 		var elts = scope.$elements;
 		Object.keys(elts).forEach(function(name) {
 			var el = elts[name];

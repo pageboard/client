@@ -138,7 +138,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			if (err.status != null) status = err.status;
 			else status = 0;
 		}).then(function(res) {
-			if (res && res.grants) state.scope.$grants = res.grants;
+			if (res && res.grants) state.data.$grants = res.grants;
 			form.classList.remove('loading');
 			var statusClass = `[n|statusClass]`.fuse({n: status});
 			if (statusClass) form.classList.add(statusClass);
@@ -149,6 +149,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			data.$response = res;
 			data.$status = status;
 			var loc = Page.parse(redirect.fuse(data, state.scope));
+			loc.data = state.data;
 			if (Page.samePathname(loc, state)) {
 				loc.query = Object.assign({}, state.query, loc.query);
 			}

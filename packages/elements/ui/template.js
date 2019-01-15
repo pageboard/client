@@ -69,7 +69,7 @@ class HTMLElementTemplate extends HTMLCustomElement {
 		me.classList.remove('error', 'warning', 'success');
 		if (remote) me.classList.add('loading');
 
-		return Pageboard.bundle(loader, state.scope).then(function(res) {
+		return Pageboard.bundle(loader, state).then(function(res) {
 			me.render(res, state);
 		}).catch(function(err) {
 			state.scope.$status = -1;
@@ -106,6 +106,7 @@ class HTMLElementTemplate extends HTMLCustomElement {
 				}
 			}
 		};
+		scope.$grants = state.data.$grants;
 		scope.$pathname = state.pathname;
 		scope.$query = state.query;
 		scope.$referrer = state.referrer.pathname || state.pathname;
