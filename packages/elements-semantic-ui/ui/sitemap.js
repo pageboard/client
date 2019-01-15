@@ -46,7 +46,7 @@ class HTMLElementSitemap extends HTMLCustomElement {
 	}
 	patch(state) {
 		var view = state.scope.$view;
-		return Pageboard.bundle(Pageboard.fetch('get', `/.api/pages`), state.scope).then(function(res) {
+		return Pageboard.bundle(Pageboard.fetch('get', `/.api/pages`), state).then(function(res) {
 			state.scope.$element = state.scope.$elements.sitemap;
 			var node = Pageboard.render({
 				item: this.constructor.transformResponse(res, view)
