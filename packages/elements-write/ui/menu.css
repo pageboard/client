@@ -52,7 +52,10 @@
 	width:1px;
 	background-color:#353535;
 }
-#menu .item.disabled {
+#menu .menu .item.disabled {
+	opacity:0.55;
+}
+#menu .icon.menu .item.disabled {
 	/* opacity:0.45; */
 	display:none;
 }

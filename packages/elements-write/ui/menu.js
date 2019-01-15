@@ -20,10 +20,11 @@ function Menu(editor, node) {
 	this.menu = new Pagecut.Menubar({
 		items: this.items()
 	});
-	// delegate
 	var me = this;
-	$(this.tabMenu).on('click', '.item', function(e) {
-		me.showTab($(this).data('tab'));
+	this.tabMenu.addEventListener('click', function(e) {
+		var item = e.target.closest('.item');
+		if (!item || item.matches('.disabled')) return;
+		me.showTab(item.dataset.tab);
 	});
 }
 
@@ -54,9 +55,9 @@ Menu.prototype.update = function(parents, sel) {
 	// because updates are done by the editor
 	this.selection = sel;
 	this.parents = parents;
-	for (var name in this.tabs) {
-		this.tabs[name].div.textContent = '';
-	}
+	Object.values(this.tabs).forEach(function(tab) {
+		tab.div.textContent = '';
+	});
 	this.inlines.textContent = "";
 	var isBlockSelection = sel.node && sel.node.isBlock;
 	var activeTab;
@@ -71,9 +72,12 @@ Menu.prototype.update = function(parents, sel) {
 			if (!activeTab && dom.matches('.active')) activeTab = menu;
 		}
 	}, this);
+	Object.values(this.tabs).forEach(function(tab) {
+		tab.menu.classList.toggle('disabled', tab.div.children.length == 0);
+	});
 	if (isBlockSelection) {
 		if (!activeTab) {
-			if (this.tab(this.lastTab).children.length) activeTab = this.lastTab;
+			if (this.lastTab && this.tab(this.lastTab).children.length) activeTab = this.lastTab;
 			else activeTab = "common";
 		}
 		this.showTab(activeTab);
