@@ -277,6 +277,8 @@ function propToMeta(schema) {
 		else if (schema.format) hint = schema.format;
 		if (schema.default) hint += ` (default: ${schema.default})`;
 		copy.default = hint;
+	} else {
+		return schema;
 	}
 	copy.title = schema.title;
 	return copy;
