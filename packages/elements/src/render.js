@@ -52,9 +52,7 @@ module.exports = function(res, scope) {
 			delete res.items;
 		}
 	}
-	block.scope = res;
-
-	return scope.$view.from(block, null, elem.name);
+	return scope.$view.from(block, null, elem.name, res);
 };
 
 module.exports.install = install;
@@ -69,13 +67,13 @@ function install(el, scope) {
 		console.error("Invalid element", el, err);
 		return;
 	}
-	if (el.dom) el.render = function(block) {
+	if (el.dom) el.render = function(block, opts) {
 		var rscope = Object.assign({}, scope, {
 			$element: el
 		});
-		if (block.scope) Object.keys(block.scope).forEach(function(name) {
+		if (opts.scope) Object.keys(opts.scope).forEach(function(name) {
 			if (rscope[name] === undefined) {
-				rscope['$'+name] = block.scope[name];
+				rscope['$'+name] = opts.scope[name];
 			}
 		});
 		Object.keys(block).forEach(function(name) {
