@@ -35,8 +35,8 @@ Form.prototype.update = function(parents, sel) {
 	this.selection = sel;
 	var parent = parents[0];
 	this.parents = parents;
-	var showBlocks = sel.node && (sel.node.isBlock || sel.node.isLeaf);
-	var showInlines = !sel.node || sel.node && sel.node.isLeaf;
+	var showBlocks = sel.jsonID == "all" || sel.node && (sel.node.isBlock || sel.node.isLeaf);
+	var showInlines = sel.jsonID != "all" && (!sel.node || sel.node && sel.node.isLeaf);
 
 	var block = parent.block;
 	if (!block) {
