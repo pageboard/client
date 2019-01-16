@@ -45,6 +45,7 @@ Form.prototype.update = function(parents, sel) {
 	}
 
 	if (block != this.block) {
+		this.mode = "data";
 		if (this.main) {
 			this.main.destroy();
 			delete this.main;
