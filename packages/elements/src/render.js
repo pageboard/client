@@ -52,7 +52,10 @@ module.exports = function(res, scope) {
 			delete res.items;
 		}
 	}
-	return scope.$view.from(block, null, elem.name, res);
+	return scope.$view.from(block, null, {
+		type: elem.name,
+		scope: res
+	});
 };
 
 module.exports.install = install;
