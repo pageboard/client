@@ -494,7 +494,7 @@ Href.prototype.renderItem = function(obj) {
 		<div class="content">
 			<div class="ui tiny header">
 				${obj.title}
-				<div class="ui pinned right compact circular icon button" data-action="remove">
+				<div class="ui pinned right compact circular large icon button" data-action="remove">
 					<i class="icon ban"></i>
 				</div>
 			</div>
