@@ -11,8 +11,6 @@ class HTMLCustomFormElement extends HTMLFormElement {
 	}
 	read() {
 		var fd = new FormData(this);
-		var btn = document.activeElement;
-		if (btn && btn.type == "submit" && btn.name) fd.append(btn.name, btn.value);
 		var query = {};
 		fd.forEach(function(val, key) {
 			if (val == null || val == "") {
@@ -35,6 +33,10 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			if (node.type != "checkbox") return;
 			if (node.name && node.value == "true" && !query[node.name]) query[node.name] = node.checked;
 		});
+		var btn = document.activeElement;
+		if (btn && btn.type == "submit" && btn.name && query[btn.name] === undefined) {
+			query[btn.name] = btn.value;
+		}
 		return query;
 	}
 	fill(values) {
