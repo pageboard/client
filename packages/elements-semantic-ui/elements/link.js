@@ -67,7 +67,7 @@ Pageboard.elements.link = {
 		if (a.hostname && a.hostname != document.location.hostname) {
 			a.target = "_blank";
 			a.rel = "noopener";
-		} else if (a.pathname && a.pathname.startsWith('/.')) {
+		} else if (a.pathname && (a.pathname.startsWith('/.') || /\.\w+$/.test(a.pathname))) {
 			a.target = "_blank";
 		} else {
 			var href = a.getAttribute('href').split('?')[0];
