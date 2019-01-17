@@ -112,7 +112,7 @@ exports.autolink = function(val, what) {
 	if (obj.hostname && obj.hostname != document.location.hostname) {
 		a.target = "_blank";
 		a.rel = "noopener";
-	} else if (obj.pathname && obj.pathname.startsWith('/.')) {
+	} else if (obj.pathname && (obj.pathname.startsWith('/.') || /\.\w+$/.test(obj.pathname))) {
 		a.target = "_blank";
 	} else if (val) {
 		var href = val.split('?')[0];
