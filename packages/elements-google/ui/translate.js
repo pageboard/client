@@ -1,27 +1,42 @@
 class HTMLElementGoogleTranslate extends HTMLCustomElement {
-	static init() {
+	setup(state) {
+		// delegate to singleton
+		this.constructor.setup(state);
+	}
+	static setup(state) {
+		if (this.style) {
+			Object.assign(document.body.style, this.style);
+		}
 		var me = this;
+		if (this.observer) return;
 		this.observer = new MutationObserver(function(list) {
 			list.forEach(function(mut) {
 				if (mut.attributeName == "style") {
-					var top = parseInt(mut.target.style.top);
+					var s = mut.target.style;
+					var top = parseInt(s.top);
 					me.shown = !isNaN(top) && top != 0;
-					me.update();
+					if (me.shown) me.style = {
+						minHeight: s.minHeight,
+						top: s.top,
+						position: s.position
+					};
+					else if (top === 0) delete me.style;
+					me.setClass();
 				}
 			});
 		});
 		this.observer.observe(document.body, {attributes: true});
 		this.translate = /\bgoogtrans=/.test(document.cookie);
 		if (this.translate) {
-			this.show();
+			this.show(state);
 		}
 	}
-	static show() {
+	static show(state) {
 		if (document.body.isContentEditable) return;
 		if (!this.id) {
 			this.id = `id${Date.now()}`;
 			var cb = `HTMLElementGoogleTranslate_${this.id}`;
-			window[cb] = this.setup.bind(this);
+			window[cb] = this.cb.bind(this, state);
 			var script = document.createElement('script');
 			script.src = `https://translate.google.com/translate_a/element.js?cb=${cb}`;
 			this.script = script;
@@ -34,10 +49,10 @@ class HTMLElementGoogleTranslate extends HTMLCustomElement {
 		}
 		return false;
 	}
-	static update() {
+	static setClass() {
 		document.documentElement.classList.toggle('google-translate-shown', this.shown);
 	}
-	static setup() {
+	static cb(state) {
 		var TE = window.google.translate.TranslateElement;
 		this.inst = new TE({
 			pageLanguage: document.documentElement.lang,
@@ -46,62 +61,52 @@ class HTMLElementGoogleTranslate extends HTMLCustomElement {
 		});
 		this.inst.showBanner();
 
-		if (this.patched) return;
-		this.patched = true;
+		if (this.links) return;
 
 		var node = this.script;
-		var styles = [];
+		var links = [];
 		while ((node = node.nextElementSibling)) {
 			if (node.href && /(https?:)?\/\/translate\.google.*\.com\//.test(node.href)) {
-				styles.push(node);
+				links.push(node);
 			}
 		}
-		var updateHead = Page.updateHead;
-		var me = this;
-		Page.updateHead = function(head) {
-			me.update();
-			styles.forEach(function(node) {
-				head.appendChild(node.cloneNode(true));
+		this.links = links;
+		setTimeout(function() {
+			var teSel = 'body > .skiptranslate, body > .goog-te-spinner-pos';
+			Array.from(document.querySelectorAll(teSel)).forEach(function(node) {
+				node.dataset.transitionKeep = true;
 			});
-			return updateHead.call(Page, head);
-		};
+		}, 100);
+	}
+	close() {
+		this.constructor.close(); // delegate to singleton
 	}
 	static close() {
-		Array.prototype.forEach.call(document.body.children, function(node) {
-			if (node.matches('.skiptranslate,.goog-te-spinner-pos')) {
-				node.dataset.transitionKeep = true;
-			}
-		});
+
 	}
-	connectedCallback() {
-		this.addEventListener('click', this.clickHandler, false);
-	}
-	disconnectedCallback() {
-		this.removeEventListener('click', this.clickHandler, false);
-	}
-	clickHandler(e) {
+	handleClick(e, state) {
 		e.stopPropagation();
 		e.preventDefault();
-		if (HTMLElementGoogleTranslate.show()) {
+		if (this.constructor.show(state)) {
 			window.scrollTo({top: 0});
 		}
 	}
 }
 
-Page.setup(function() {
-	HTMLCustomElement.define('element-google-translate', HTMLElementGoogleTranslate);
-	if (HTMLElementGoogleTranslate.style) {
-		Object.assign(document.body.style, HTMLElementGoogleTranslate.style);
-	}
+Page.init(function(state) {
+	var mergeHead = state.mergeHead;
+	var me = HTMLElementGoogleTranslate;
+	state.mergeHead = function(head) {
+		me.setClass();
+		if (me.links) me.links.forEach(function(node) {
+			head.appendChild(node.cloneNode(true));
+		});
+		return mergeHead.call(state, head);
+	};
+	state.mergeHead.HTMLElementGoogleTranslate = true;
 });
 
-Page.close(function() {
-	var s = document.body.style;
-	HTMLElementGoogleTranslate.style = {
-		minHeight: s.minHeight,
-		top: s.top,
-		position: s.position
-	};
-	HTMLElementGoogleTranslate.close();
+Page.setup(function() {
+	HTMLCustomElement.define('element-google-translate', HTMLElementGoogleTranslate);
 });
 
