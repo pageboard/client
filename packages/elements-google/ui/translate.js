@@ -50,7 +50,7 @@ class HTMLElementGoogleTranslate extends HTMLCustomElement {
 		return false;
 	}
 	static setClass() {
-		document.documentElement.classList.toggle('google-translate-shown', this.shown);
+		document.documentElement.classList.toggle('google-translate-shown', !!this.shown);
 	}
 	static cb(state) {
 		var TE = window.google.translate.TranslateElement;
