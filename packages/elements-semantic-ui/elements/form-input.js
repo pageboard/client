@@ -131,6 +131,9 @@ Pageboard.elements.input_text = {
 			}, {
 				const: "password",
 				title: "password"
+			}, {
+				const: "new-password",
+				title: "new password"
 			}]
 		}
 	},
@@ -149,8 +152,9 @@ Pageboard.elements.input_text = {
 			required="[required]"
 			disabled="[disabled]"
 			placeholder="[placeholder]"
-			type="[type]"
-			value="[value]" />[type|neq:textarea|bmagnet:+*]
+			type="[type|eq:new-password:password]"
+			value="[value]"
+			autocomplete="[type|neq:new-password:|not]" />[type|neq:textarea|bmagnet:+*]
 	</div>`
 };
 
