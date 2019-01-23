@@ -7,7 +7,7 @@ class HTMLElementSitemap extends HTMLCustomElement {
 		var page = tree._;
 		if (page) {
 			parent.children.push(page);
-			parent.content.children += `<div block-id="${page.id}" block-type="site${page.type}"></div>`;
+			parent.content.children += `<div block-id="${page.id}" block-type="${page.type}"></div>`;
 			delete tree._;
 		} else {
 			page = parent;
@@ -33,6 +33,7 @@ class HTMLElementSitemap extends HTMLCustomElement {
 		var pages = res.items;
 		var tree = {};
 		pages.forEach(function(page) {
+			page.type = 'site' + page.type;
 			if (!page.data.url) return;
 			var branch = tree;
 			var arr = page.data.url.substring(1).split('/');

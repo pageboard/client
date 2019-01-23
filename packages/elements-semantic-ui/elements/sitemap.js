@@ -39,6 +39,9 @@ Pageboard.elements.sitepage = {
 			virtual: true // this drops block.content.children, and all
 		}
 	},
+	unmount: function(block) {
+		if (block.type.startsWith('site')) block.type = block.type.substring(4);
+	},
 	context: 'sitemap/ | sitepage/',
 	html: `<element-sitepage class="item fold" data-url="[url]">
 		<div class="title caret-icon">
@@ -56,6 +59,9 @@ if (Pageboard.elements.mail) Pageboard.elements.sitemail = {
 	group: 'sitemap_item',
 	get properties() {
 		return Pageboard.elements.mail.properties;
+	},
+	unmount: function(block) {
+		if (block.type.startsWith('site')) block.type = block.type.substring(4);
 	},
 	context: 'sitemap/ | sitepage/',
 	html: `<element-sitepage class="item" data-url="[url]">
