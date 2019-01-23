@@ -21,11 +21,16 @@ function load(node, head) {
 var cache = {};
 
 exports.meta = function(meta) {
-	if (!meta || !meta.elements) return Promise.resolve();
-	if (!cache[meta.elements]) {
-		cache[meta.elements] = Pageboard.load.js(meta.elements);
-	}
 	var pr = Promise.resolve();
+	if (!meta) return pr;
+	if (meta.elements) Object.entries(meta.elements).forEach(function([name, el]) {
+		if (!Pageboard.elements[name]) Pageboard.elements[name] = el;
+	});
+	if (!meta.bundle) return pr;
+	if (!cache[meta.bundle]) {
+		cache[meta.bundle] = Pageboard.load.js(meta.bundle);
+	}
+
 	if (meta.group != "page") {
 		// standalone resources are imported after page has been imported by router
 		if (meta.stylesheets) pr = pr.then(function() {
@@ -39,7 +44,7 @@ exports.meta = function(meta) {
 			}));
 		});
 	}
-	return cache[meta.elements].then(function() {
+	return cache[meta.bundle].then(function() {
 		return pr;
 	});
 };
