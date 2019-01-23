@@ -33,7 +33,7 @@ module.exports = function(res, scope) {
 	var elts = scope.$elements;
 	var elem = scope.$element;
 
-	scope.$view = new Viewer({
+	if (!scope.$view) scope.$view = new Viewer({
 		elements: elts,
 		doc: scope.$doc
 	});
