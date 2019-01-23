@@ -70,13 +70,13 @@ function install(el, scope) {
 		console.error("Invalid element", el, err);
 		return;
 	}
-	if (el.dom) el.render = function(block, opts) {
+	if (el.dom) el.render = function(block, bscope) {
 		var rscope = Object.assign({}, scope, {
 			$element: el
 		});
-		if (opts.scope) Object.keys(opts.scope).forEach(function(name) {
+		Object.keys(bscope).forEach(function(name) {
 			if (rscope[name] === undefined) {
-				rscope['$'+name] = opts.scope[name];
+				rscope['$'+name] = bscope[name];
 			}
 		});
 		Object.keys(block).forEach(function(name) {
