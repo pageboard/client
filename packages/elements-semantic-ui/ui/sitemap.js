@@ -52,9 +52,10 @@ class HTMLElementSitemap extends HTMLCustomElement {
 			var node = Pageboard.render({
 				item: this.constructor.transformResponse(res, view)
 			}, state.scope);
-			this.textContent = '';
+			var content = this.firstElementChild;
+			content.textContent = '';
 			Array.from(node.children).forEach(function(node) {
-				this.appendChild(node);
+				content.appendChild(node);
 			}, this);
 		}.bind(this));
 	}

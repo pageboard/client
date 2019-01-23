@@ -9,7 +9,9 @@ Pageboard.elements.sitemap = {
 			virtual: true
 		}
 	},
-	html: `<element-sitemap class="ui accordion" block-content="children"></element-sitemap>`,
+	html: `<element-sitemap>
+		<element-accordion class="ui accordion" block-content="children"></element-accordion>
+	</element-sitemap>`,
 	stylesheets: [
 		'../lib/components/accordion.css',
 		'../ui/sitemap.css'
@@ -48,7 +50,7 @@ Pageboard.elements.sitepage = {
 			<span class="header">[title|or:Untitled]</span><br />
 			<a href="[url]" class="description">[url|or:-]</a>
 		</div>
-		<div class="list content ui accordion" block-content="children"></div>
+		<div class="list content" block-content="children"></div>
 	</element-sitepage>`
 };
 
