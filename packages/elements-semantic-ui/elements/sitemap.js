@@ -44,7 +44,7 @@ Pageboard.elements.sitepage = {
 		if (block.type.startsWith('site')) block.type = block.type.substring(4);
 	},
 	context: 'sitemap/ | sitepage/',
-	html: `<element-sitepage class="item fold" data-url="[url]">
+	html: `<element-sitepage class="item fold" data-url="[url]" data-index="[index]">
 		<div class="title caret-icon">
 			<span class="header">[title|or:Untitled]</span><br />
 			<a href="[url]" class="description">[url|or:-]</a>
@@ -65,7 +65,7 @@ if (Pageboard.elements.mail) Pageboard.elements.sitemail = {
 		if (block.type.startsWith('site')) block.type = block.type.substring(4);
 	},
 	context: 'sitemap/ | sitepage/',
-	html: `<element-sitepage class="item" data-url="[url]">
+	html: `<element-sitepage class="item" data-url="[url]" data-index="[index]">
 		<div class="title">
 			<span class="header">[title|or:Untitled]</span><br />
 			<a href="[url]" class="description">[url|or:-]</a>
