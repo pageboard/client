@@ -1,4 +1,4 @@
-exports.elements = {
+exports.elements = window.Pageboard && window.Pageboard.elements || {
 	error: {
 		scripts: [],
 		stylesheets: [],
