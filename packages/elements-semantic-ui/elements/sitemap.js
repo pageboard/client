@@ -23,8 +23,7 @@ Pageboard.elements.sitemap = {
 		'../ui/sitemap-helper.js'
 	],
 	install: function(scope) {
-		// sitemap is standalone so has scripts array
-		// if (scope.$write) Pageboard.load.js(this.resources[0], scope);
+		if (scope.$write) Pageboard.load.js(this.resources[0], scope);
 	}
 };
 
