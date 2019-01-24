@@ -221,11 +221,14 @@ Pageboard.Editor = function Editor(win, state) {
 	};
 
 	editor.blocks.initial = view.blocks.initial;
+
+	// keep runtime store in sync with editor store
 	Object.keys(view.blocks.store).forEach(function(id) {
 		if (!editor.blocks.store[id]) {
 			editor.blocks.store[id] = view.blocks.store[id];
 		}
 	});
+	view.blocks.store = editor.blocks.store;
 
 	var controls = {};
 	Object.keys(Pageboard.Controls).forEach(function(key) {
