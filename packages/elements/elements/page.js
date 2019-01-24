@@ -27,13 +27,14 @@ Pageboard.elements.page = {
 		},
 		redirect: {
 			title: 'Redirect',
-			nullable: true,
 			anyOf: [{
 				type: "string",
-				format: "uri"
+				format: "uri",
+				nullable: true
 			}, {
 				type: "string",
-				format: "pathname"
+				format: "pathname",
+				nullable: true
 			}],
 			$helper: {
 				name: 'href',
