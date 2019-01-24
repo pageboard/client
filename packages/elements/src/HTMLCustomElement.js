@@ -10,20 +10,13 @@ class HTMLCustomElement extends HTMLElement {
 HTMLCustomElement.define = function(name, cla, is) {
 	if (cla.init) cla.init();
 	if (window.customElements.get(name)) return cla;
-	var opts;
-	if (is) {
-		opts = {extends: is};
-		HTMLCustomElement.intercept(cla, {
-			connectedCallback: function() {
-				if (!this._initialized) {
-					this._initialized = true;
-					if (this.init) this.init();
-				}
-			}
-		});
-	}
+
 	HTMLCustomElement.intercept(cla, {
 		connectedCallback: function() {
+			if (is && !this._initialized) {
+				this._initialized = true;
+				if (this.init) this.init();
+			}
 			Page.connect(this);
 		},
 		disconnectedCallback: function() {
@@ -32,7 +25,7 @@ HTMLCustomElement.define = function(name, cla, is) {
 	});
 
 
-	window.customElements.define(name, cla, opts);
+	window.customElements.define(name, cla, is ? {extends: is} : undefined);
 	return cla;
 };
 
