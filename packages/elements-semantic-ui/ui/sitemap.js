@@ -29,7 +29,7 @@ class HTMLElementSitemap extends HTMLCustomElement {
 		return parent;
 	}
 
-	static transformResponse(res, view) {
+	static transformResponse(res) {
 		var pages = res.items;
 		var tree = {};
 		pages.forEach(function(page) {
@@ -45,12 +45,12 @@ class HTMLElementSitemap extends HTMLCustomElement {
 		});
 		return this.makeTree(tree);
 	}
-	patch(state) {
-		var view = state.scope.$view;
+
+	build(state) {
 		return Pageboard.bundle(Pageboard.fetch('get', `/.api/pages`), state).then(function(res) {
 			state.scope.$element = state.scope.$elements.sitemap;
 			var node = Pageboard.render({
-				item: this.constructor.transformResponse(res, view)
+				item: this.constructor.transformResponse(res)
 			}, state.scope);
 			var content = this.firstElementChild;
 			content.textContent = '';
