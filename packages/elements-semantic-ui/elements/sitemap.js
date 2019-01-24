@@ -5,7 +5,7 @@ Pageboard.elements.sitemap = {
 	menu: 'link',
 	contents: {
 		children: {
-			spec: "sitemap_item+",
+			spec: "sitemap_item*",
 			virtual: true
 		}
 	},
