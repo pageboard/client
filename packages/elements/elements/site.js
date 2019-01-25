@@ -1,4 +1,5 @@
 Pageboard.elements.site = {
+	standalone: true,
 	properties : {
 		title: {
 			title: 'Site title',
@@ -89,7 +90,7 @@ Pageboard.elements.site = {
 			}
 		}
 	},
-	resources: [
+	scripts: [
 		"../lib/window-page.js",
 		"../lib/pageboard.js",
 		"../ui/route.js"
