@@ -81,7 +81,9 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		this.classList.remove('error', 'warning', 'success');
 		if (this.matches('.loading')) return;
 		var fn = this[this.method + 'Method'];
-		if (e.type == "input") fn = this[this.method + 'MethodLater'] || fn;
+		if (e.type == "input" && (!e.target || !["radio", "checkbox"].includes(e.target.type))) {
+			fn = this[this.method + 'MethodLater'] || fn;
+		}
 		if (fn) fn.call(this, e, state);
 		else console.error("Unsupported form method", this.method);
 	}
