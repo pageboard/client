@@ -23,7 +23,7 @@
     "debounce": "^1.1.0",
     "document-register-element": "^1.13.1",
     "domify": "^1.4.0",
-    "matchdom": "^5.0.0",
+    "matchdom": "^5.0.1",
     "postinstall": "^0.4.2",
     "postinstall-browserify": "^0.1.0",
     "window-page": "^7.0.2"
