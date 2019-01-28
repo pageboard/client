@@ -6,7 +6,7 @@ Pageboard.elements.write = {
 	standalone: true,
 	html: `<html lang="[$site.lang]">
 	<head>
-		<title>[title]</title>
+		<title>[title][$site.title|pre: - |or:]</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="icon" href="[$site.favicon|magnet:*|url]?format=ico">
 		<link rel="stylesheet" href="[$elements.write.stylesheets|repeat]" />

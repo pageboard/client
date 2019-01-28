@@ -28,7 +28,7 @@ Pageboard.elements.mail = {
 	},
 	html: `<html lang="[$site.lang]">
 	<head>
-		<title>[$site.title|post:%3A |][title]</title>
+		<title>[$site.title|post:%3A |or:][title]</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" href="[$elements.mail.stylesheets|repeat]" />
 		<script defer src="[$elements.mail.scripts|repeat]"></script>
