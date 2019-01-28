@@ -151,6 +151,7 @@ class Sticky {
         if (this._active) this._deactivate();
 
         const node = this._node;
+        if (!node.parentNode) return;
 
         /*
          * 1. Save node computed props
@@ -331,7 +332,7 @@ class Sticky {
     }
 
     _fastCheck () {
-        if (!this._active || this._removed) return;
+        if (!this._active || this._removed || !this._clone) return;
 
         if (
             Math.abs(getDocOffsetTop(this._clone.node) - this._clone.docOffsetTop) > 1 ||
