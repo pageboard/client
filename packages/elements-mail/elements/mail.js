@@ -35,7 +35,7 @@ Pageboard.elements.mail = {
 	</head>
 	<body block-content="body"></body>
 </html>`,
-	scripts: Pageboard.elements.page.scripts.slice(0, 3).concat([
+	scripts: Pageboard.elements.page.scripts.slice().concat([
 		'../lib/inlineresources.js',
 		'../lib/europa.js',
 		'../lib/juice.js',

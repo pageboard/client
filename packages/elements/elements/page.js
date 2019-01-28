@@ -81,10 +81,8 @@ Pageboard.elements.page = {
 	<body block-content="body"></body></html>`,
 	scripts: [
 		'../lib/custom-elements.js',
-		'../lib/custom-elements-builtin.js',
-		'../lib/window-page.js',
-		'../lib/pageboard.js'
-	],
+		'../lib/custom-elements-builtin.js'
+	].concat(Pageboard.elements.site.resources),
 	polyfills: [
 		'dataset', 'fetch'
 	]
