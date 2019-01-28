@@ -72,29 +72,35 @@ Pageboard.elements.settings = {
 			}
 		},
 		grants: {
+			title: 'Grants',
 			type: 'array',
 			uniqueItems: true,
 			items: {
 				anyOf: [{
 					const: 'root',
 					title: 'Root',
-					description: 'Allowed to do anything'
+					description: 'anything'
 				}, {
 					const: 'owner',
 					title: 'Owner',
-					description: 'Allowed to modify site'
+					description: 'site owner'
 				}, {
 					const: 'webmaster',
 					title: 'Webmaster',
-					description: 'Allowed to modify pages'
+					description: 'site developer'
 				}, {
 					const: 'writer',
 					title: 'Writer',
-					description: 'Allowed to modify some public blocks'
+					description: 'content editor'
 				}, {
 					const: 'user',
 					title: 'User',
-					description: 'Allowed to modify some private blocks'
+					description: 'public user'
+				}, {
+					type: 'string',
+					format: 'id',
+					title: 'Custom',
+					description: 'custom grant'
 				}]
 			}
 		}
