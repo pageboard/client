@@ -1,4 +1,5 @@
 Pageboard.elements.site = {
+	priority: -1000,
 	standalone: true,
 	properties : {
 		title: {

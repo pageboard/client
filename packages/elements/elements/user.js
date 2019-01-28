@@ -1,4 +1,5 @@
 Pageboard.elements.user = {
+	priority: -10,
 	required: ['email'],
 	$locks: [],
 	properties: {
@@ -11,6 +12,7 @@ Pageboard.elements.user = {
 };
 
 Pageboard.elements.priv = {
+	priority: -10,
 	$locks: [],
 	properties: {
 		otp: {
@@ -51,6 +53,7 @@ Pageboard.elements.priv = {
 };
 
 Pageboard.elements.settings = {
+	priority: -10,
 	properties: {
 		consents: {
 			title: 'User Consents',
