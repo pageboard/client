@@ -1,10 +1,10 @@
-[block-type="heading"] > a {
+[block-type="heading"] > a[aria-hidden="true"] {
 	display:inline-block;
 	position:relative;
 	left:-1ch;
 	width:0;
 	visibility:hidden;
 }
-[block-type="heading"]:hover > a {
+[block-type="heading"]:hover > a[aria-hidden="true"] {
 	visibility:visible;
 }
