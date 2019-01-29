@@ -234,6 +234,7 @@ Page.setup(function(state) {
 	function focusHandler(e) {
 		var el = e.target;
 		if (!el.matches('input,textarea,select')) return;
+		if (e.relatedTarget && e.relatedTarget.type == "submit") return;
 		updateClass(el.closest('.field') || el, el.validity, true);
 	}
 });
