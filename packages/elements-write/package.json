@@ -30,12 +30,12 @@
     "postinstall-browserify": "^0.1.0",
     "pretty-bytes": "^5.1.0",
     "prosemirror-dev-tools": "^2.1.1",
-    "semantic-ui-css": "2.4.1",
+    "fomantic-ui-css": "2.7.1",
     "speakingurl": "^14.0.1"
   },
   "postinstall": {
-    "semantic-ui-css/components": "link lib/components",
-    "semantic-ui-css/themes": "link lib/themes",
+    "fomantic-ui-css/components": "link lib/components",
+    "fomantic-ui-css/themes": "link lib/themes",
     "perfect-scrollbar/css/perfect-scrollbar.css": "link lib/",
     "perfect-scrollbar/dist/perfect-scrollbar.js": "link lib/",
     "pretty-bytes/index.js": "browserify --standalone=Pageboard.PrettyBytes lib/pretty-bytes.js",
