@@ -7,7 +7,8 @@ function Form(editor, node) {
 	this.node = node;
 	this.inlines = [];
 	this.mode = "data";
-	this.switcher = this.node.dom(`<div class="ui floating right mini circular label button">$</div>`);
+	this.switcherMenu = document.querySelector('#move > .right.menu');
+	this.switcher = this.node.dom(`<a class="inverted item"><b class="icon">$</b></a>`);
 	this.switcher.addEventListener('click', this.handleSwitch.bind(this));
 }
 
@@ -91,7 +92,7 @@ Form.prototype.update = function(parents, sel) {
 	}, this);
 
 	if (canShowExpressions && showExpressions) {
-		if (!this.switcher.parentNode) this.node.appendChild(this.switcher);
+		if (!this.switcher.parentNode) this.switcherMenu.appendChild(this.switcher);
 	} else {
 		this.switcher.remove();
 	}

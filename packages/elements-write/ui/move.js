@@ -30,7 +30,8 @@ Move.prototype.destroy = function() {
 	this.node.removeEventListener('click', this.click);
 };
 
-Move.prototype.update = function(parents) {
+Move.prototype.update = function(parents, sel) {
+	this.node.classList.toggle('hidden', sel.empty);
 	var state = this.editor.state;
 	var utils = this.editor.utils;
 	this.node.querySelector('[data-command="left"]')

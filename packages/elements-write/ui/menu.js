@@ -91,7 +91,7 @@ Menu.prototype.tab = function(name) {
 	if (!tab) {
 		this.tabs[name] = tab = {
 			menu: this.node.dom(`<a class="item" data-tab="${name}">${name}</a>`),
-			div: this.node.dom(`<div class="ui mini labeled icon menu bottom attached tab" data-tab="${name}"></div>`)
+			div: this.node.dom(`<div class="ui mini labeled icon menu attached tab" data-tab="${name}"></div>`)
 		};
 		this.tabMenu.appendChild(tab.menu);
 		this.node.insertBefore(tab.div, this.inlines);

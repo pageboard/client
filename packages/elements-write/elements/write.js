@@ -46,20 +46,6 @@ Pageboard.elements.write = {
 				</div>
 			</div>
 		</div>
-		<div id="move" class="ui tiny icon menu">
-			<a class="item" data-command="left"><i class="left arrow icon"></i></a>
-			<a class="item" data-command="delete"><i class="close icon"></i></a>
-			<a class="item" data-command="right"><i class="right arrow icon"></i></a>
-			<div class="right menu">
-				<div class="item" id="share">
-					<div class="ui toggle checkbox checked" title="">
-						<input type="checkbox" name="standalone" class="hidden" value="true" tabindex="0"><label>shared</label>
-					</div>
-					<div class="ancestor">shared<br>ancestor</div>
-					<div class="descendant">shared<br>descendant</div>
-				</div>
-			</div>
-		</div>
 		<div id="breadcrumb" class="ui breadcrumb">
 			<span>
 				<a class="section"></a>
@@ -67,6 +53,20 @@ Pageboard.elements.write = {
 			</span>
 		</div>
 		<div id="menu"></div>
+		<div id="move" class="ui inverted tiny icon menu">
+			<a class="item" data-command="left"><i class="left arrow icon"></i></a>
+			<a class="item" data-command="delete"><i class="close icon"></i></a>
+			<a class="item" data-command="right"><i class="right arrow icon"></i></a>
+			<div class="right menu">
+				<div class="item" id="share">
+					<div class="ui inverted toggle checkbox checked" title="">
+						<input type="checkbox" name="standalone" class="hidden" value="true" tabindex="0"><label>shared</label>
+					</div>
+					<div class="ancestor">shared<br>ancestor</div>
+					<div class="descendant">shared<br>descendant</div>
+				</div>
+			</div>
+		</div>
 		<div id="form" class="ui form"></div>
 		<div class="ui bound bottom sticky wide notifications"></div>
 	</div>
