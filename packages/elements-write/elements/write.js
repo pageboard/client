@@ -129,6 +129,7 @@ Pageboard.elements.write = {
 		"../ui/inputs/element.js",
 		"../ui/inputs/element-property.js",
 		"../ui/inputs/binding.js",
+		"../ui/inputs/schema.js",
 		"../ui/inputs/relation.js",
 		"../ui/inputs/service.js",
 		"../lib/pretty-bytes.js",
