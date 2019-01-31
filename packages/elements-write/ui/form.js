@@ -4,12 +4,17 @@ Pageboard.Controls.Form = Form;
 
 function Form(editor, node) {
 	this.editor = editor;
+
 	this.node = node;
 	this.inlines = [];
+
 	this.mode = "data";
-	this.switcherMenu = document.querySelector('#move > .right.menu');
-	this.switcher = this.node.dom(`<a class="inverted item"><b class="icon">$</b></a>`);
-	this.switcher.addEventListener('click', this.handleSwitch.bind(this));
+
+	this.toggleExpr = document.querySelector('#toggle-expr');
+	this.toggleExpr.addEventListener('click', this.handleToggleExpr.bind(this));
+
+	this.toggleLocks = document.querySelector('#toggle-lock');
+	this.toggleLocks.addEventListener('click', this.handleToggleLocks.bind(this));
 }
 
 Form.prototype.destroy = function() {
@@ -21,7 +26,6 @@ Form.prototype.destroy = function() {
 		form.destroy();
 	});
 	this.inlines = [];
-	if (this.switcher) this.switcher.remove();
 };
 
 Form.prototype.update = function(parents, sel) {
@@ -64,7 +68,6 @@ Form.prototype.update = function(parents, sel) {
 	});
 
 	if (!this.main) this.main = new FormBlock(editor, this.node, block.type);
-
 	this.main.update(parents, block, this.mode);
 
 	var canShowExpressions = this.main.el.properties;
@@ -91,12 +94,18 @@ Form.prototype.update = function(parents, sel) {
 		return curForm;
 	}, this);
 
-	if (canShowExpressions && showExpressions) {
-		if (!this.switcher.parentNode) this.switcherMenu.appendChild(this.switcher);
-	} else {
-		this.switcher.remove();
+	this.toggleExpr.classList.toggle('inactive', canShowExpressions && showExpressions);
+	this.toggleExpr.classList.toggle('blue', !!this.block.expr);
+
+	var lock = this.block.lock;
+	var unlocked = true;
+	if (lock) {
+		if (lock.read && lock.read.length) unlocked = false;
+		else if (lock.write && lock.write.length) unlocked = false;
 	}
-	this.switcher.classList.toggle('blue', !!this.block.expr);
+	this.toggleLocks.firstElementChild.classList.toggle('lock', !unlocked);
+	this.toggleLocks.firstElementChild.classList.toggle('red', !unlocked);
+	this.toggleLocks.firstElementChild.classList.toggle('unlock', unlocked);
 
 	curInlines.forEach(function(form) {
 		form.destroy();
@@ -104,9 +113,15 @@ Form.prototype.update = function(parents, sel) {
 	this.inlines = inlines;
 };
 
-Form.prototype.handleSwitch = function(e) {
+Form.prototype.handleToggleLocks = function(e) {
+	this.mode = this.mode == "lock" ? "data" : "lock";
+	this.toggleLocks.classList.toggle('active', this.mode == "lock");
+	this.update(this.parents, this.selection);
+};
+
+Form.prototype.handleToggleExpr = function(e) {
 	this.mode = this.mode == "expr" ? "data" : "expr";
-	this.switcher.classList.toggle('active', this.mode == "expr");
+	this.toggleExpr.classList.toggle('active', this.mode == "expr");
 	this.update(this.parents, this.selection);
 };
 
@@ -289,6 +304,25 @@ function propToMeta(schema) {
 FormBlock.prototype.customFilter = function(key, prop) {
 	var opts = prop.$filter;
 	if (this.mode == "expr") prop = propToMeta(prop);
+	else if (this.mode == "lock") {
+		if (key == null) return {
+			title: 'Locks',
+			type: 'object',
+			properties: {
+				read: {
+					title: 'Read',
+					type: 'array',
+					items: this.editor.element('settings').properties.grants.items
+				},
+				write: {
+					title: 'Write',
+					type: 'array',
+					items: this.editor.element('settings').properties.grants.items
+				}
+			}
+		};
+		else return;
+	}
 	if (!opts) return prop;
 	if (typeof opts == "string") {
 		opts = {name: opts};
@@ -326,8 +360,9 @@ FormBlock.prototype.handleEvent = function(e) {
 	block[mode] = formData;
 
 	if (id == editor.state.doc.attrs.id) {
-		found = true;
-		editor.blocks.set(block);
+		var stored = editor.blocks.get(block.id);
+		if (stored) Object.assign(stored, block);
+		else editor.blocks.set(block);
 		editor.controls.store.update();
 		return;
 	}

@@ -65,6 +65,12 @@ Pageboard.elements.write = {
 					<div class="ancestor">shared<br>ancestor</div>
 					<div class="descendant">shared<br>descendant</div>
 				</div>
+				<a class="item" id="toggle-lock">
+					<i class="lock icon"></i>
+				</a>
+				<a class="item" id="toggle-expr">
+					<b class="icon">[|or:%5B*%5D]</b>
+				</a>
 			</div>
 		</div>
 		<div id="form" class="ui form"></div>
