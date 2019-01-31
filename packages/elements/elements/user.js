@@ -96,11 +96,6 @@ Pageboard.elements.settings = {
 					const: 'user',
 					title: 'User',
 					description: 'public user'
-				}, {
-					type: 'string',
-					format: 'id',
-					title: 'Custom',
-					description: 'custom grant'
 				}]
 			}
 		}
