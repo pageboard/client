@@ -1,6 +1,12 @@
 (function(Pageboard) {
 Pageboard.schemaFilters.schema = SchemaFilter;
-
+/*
+$filter: {
+	name: 'schema',
+	path: 'settings.properties.grants'
+}
+will replace current schema with the one given in path
+*/
 function SchemaFilter(key, opts) {
 	this.key = key;
 	this.opts = opts;
