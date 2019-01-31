@@ -90,6 +90,7 @@ Pageboard.elements.write = {
 		"../lib/components/divider.css",
 		"../lib/components/header.css",
 		"../lib/components/segment.css",
+		"../lib/components/loader.css",
 		"../lib/components/form.css",
 		"../lib/components/dropdown.css",
 		"../lib/components/input.css",
