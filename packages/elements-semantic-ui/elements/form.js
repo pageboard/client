@@ -64,7 +64,7 @@ Pageboard.elements.api_form = {
 	group: 'block form',
 	menu: "form",
 	required: ["action"],
-	$locks: {
+	$lock: {
 		'data.action.parameters': 'webmaster'
 	},
 	properties: {
@@ -85,10 +85,6 @@ Pageboard.elements.api_form = {
 					type: "string",
 					pattern: "^(\\w+\\.\\w+)?$"
 				},
-				lock: Object.assign({}, Pageboard.elements.settings.properties.grants.items, {
-					title: 'Lock',
-					nullable: true
-				}),
 				parameters: {
 					title: 'Parameters',
 					nullable: true,

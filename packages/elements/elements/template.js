@@ -50,13 +50,6 @@ Pageboard.elements.fetch = Object.assign({}, Pageboard.elements.template, {
 					type: "string",
 					pattern: "^(\\w+\\.\\w+)?$"
 				},
-				get lock() {
-					// properties are immediately evaluated
-					return Object.assign({}, Pageboard.elements.settings.properties.grants.items, {
-						title: 'Lock',
-						nullable: true
-					});
-				},
 				parameters: {
 					title: 'Parameters',
 					nullable: true,
