@@ -168,7 +168,7 @@ Pageboard.elements.page = {
 	html: `<html lang="[$site.lang]">
 	<head>
 		<title>[title][$site.title|pre: - |or:]</title>
-		<meta http-equiv="Status" content="404 Not Found[url|!|bmagnet:*]">
+		<meta http-equiv="Status" content="[$status|or:200] [$statusText|or:OK][redirect|!|bmagnet:*]">
 		<meta http-equiv="Status" content="302 Found[transition.from|!|bmagnet:*+]">
 		<meta http-equiv="Location" content="[redirect|eq:[url]:|magnet:+*]">
 		<meta name="viewport" content="width=device-width, initial-scale=1">

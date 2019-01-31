@@ -21,16 +21,29 @@ module.exports = function(method, url, data) {
 	}
 
 	var p = fetch(url, fetchOpts).then(function(res) {
-		if (res.status >= 400) {
+		var type = res.headers.get('Content-Type') || "";
+		if (res.status == 204 || !type.startsWith('application/json')) {
 			return res.text().then(function(text) {
-				var err = new Error(res.statusText);
-				err.status = res.status;
-				err.body = text;
-				throw err;
+				if (res.status >= 400) {
+					var err = new Error(res.statusText);
+					err.status = res.status;
+					err.body = text;
+					throw err;
+				} else {
+					return {
+						status: res.status,
+						statusText: res.statusText,
+						body: text
+					};
+				}
+			});
+		} else {
+			return res.json().then(function(obj) {
+				obj.status = res.status;
+				obj.statusText = res.statusText;
+				return obj;
 			});
 		}
-		if (res.status == 204) return null;
-		return res.json();
 	});
 	if (method == "get") {
 		pendings[url] = p;

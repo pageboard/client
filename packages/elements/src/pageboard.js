@@ -38,7 +38,6 @@ function initState(res, state) {
 exports.bundle = function(loader, state) {
 	var scope = state.scope;
 	return loader.then(function(res) {
-		scope.$status = 200;
 		if (!res) return Promise.resolve();
 		var metas = res.metas || res.meta && [res.meta] || [];
 		return Promise.all(metas.map(function(meta) {
@@ -47,18 +46,17 @@ exports.bundle = function(loader, state) {
 			return res;
 		});
 	}).catch(function(err) {
-		scope.$status = err.status || -1;
 		return {
 			meta: {
 				group: 'page'
 			},
+			status: err.status || -1,
+			statusText: err.message,
 			item: {
 				type: 'error',
 				data: {
 					name: err.name,
-					message: err.message,
-					stack: err.stack,
-					status: err.status
+					stack: err.stack
 				}
 			}
 		};
