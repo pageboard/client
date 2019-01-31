@@ -121,7 +121,7 @@ Pageboard.elements.page = {
 		url: {
 			title: 'Address',
 			type: "string",
-			pattern: "^(/[a-zA-Z0-9-]*)+$",
+			pattern: "^((/[a-zA-Z0-9-]*)+)|(/.well-known/\\d{3})$",
 			$helper: 'pageUrl' // works with sitemap editor to update pages url in a coherent manner
 			// see also page.save: the href updater will only change input.name == "href".
 		},
@@ -188,10 +188,4 @@ Pageboard.elements.page = {
 	]
 };
 
-// extend page
-Pageboard.elements.notfound = Object.assign({}, Pageboard.elements.page, {
-	title: 'Page not found',
-	properties: Object.assign({}, Pageboard.elements.page.properties)
-});
-delete Pageboard.elements.notfound.properties.url;
 

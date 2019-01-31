@@ -8,12 +8,10 @@ Pageboard.elements.page.stylesheets = [
 	'../ui/site.css',
 	'../ui/transition.css'
 ];
-Pageboard.elements.notfound.stylesheets = Pageboard.elements.page.stylesheets.slice();
 
 Pageboard.elements.page.scripts = Pageboard.elements.page.scripts.concat([
 	'../ui/transition.js'
 ]);
-Pageboard.elements.notfound.scripts = Pageboard.elements.page.scripts.slice();
 
 Pageboard.elements.page.properties.transition = {
 	title: 'Transition',
