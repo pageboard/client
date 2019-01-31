@@ -78,22 +78,27 @@ Pageboard.elements.settings = {
 			items: {
 				anyOf: [{
 					const: 'root',
+					$level: 1,
 					title: 'Root',
 					description: 'anything'
 				}, {
 					const: 'owner',
+					$level: 10,
 					title: 'Owner',
 					description: 'site owner'
 				}, {
 					const: 'webmaster',
+					$level: 100,
 					title: 'Webmaster',
 					description: 'site developer'
 				}, {
 					const: 'writer',
+					$level: 1000,
 					title: 'Writer',
 					description: 'content editor'
 				}, {
 					const: 'user',
+					$level: 10000,
 					title: 'User',
 					description: 'public user'
 				}]
