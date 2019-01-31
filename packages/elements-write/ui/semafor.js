@@ -54,8 +54,9 @@ function formGet(form) {
 			// skip
 			break;
 		case 'select-multiple':
-			// TODO
-			console.warn("not supported yet");
+			Array.from(elem.selectedOptions).forEach(function(item, i) {
+				query[`${key}.${i}`] = item.value;
+			});
 			break;
 		default:
 			val = elem.value;
@@ -110,12 +111,27 @@ function formSet(form, values) {
 		case 'select-one':
 			if (val) {
 				elem.value = val;
-				var dropdown = elem.closest('.dropdown');
-				if (dropdown) $(dropdown).dropdown({placeholder: false});
+				$(elem.closest('.dropdown')).dropdown({placeholder: false});
 			}
 			break;
 		case 'select-multiple':
-			console.warn("not supported yet");
+			var k = 0;
+			if (val === undefined) {
+				val = [];
+				var subval;
+				do {
+					subval = flats[elem.name + '.' + k++];
+					if (subval !== undefined) val.push(subval);
+				} while (subval !== undefined);
+			} else if (val == null) {
+				val = [];
+			}	else if (!Array.isArray(val)) {
+				val = [val];
+			}
+			Array.from(elem.options).forEach(function(item) {
+				item.selected = val.includes(item.value);
+			});
+			$(elem.closest('.dropdown')).dropdown({placeholder: false});
 			break;
 		case 'file':
 			if (val) elem.setAttribute("value", val);
@@ -443,7 +459,7 @@ types.oneOf = function(key, schema, node, inst) {
 		field = node.dom(`<div class="inline fields">
 			<label for="${key}">${schema.title || key}</label>
 			<div class="ui compact icon menu">
-				${alts.map(getIconOption).join('\n')}
+				${alts.map(item => getIconOption(item, key)).join('\n')}
 			</div>
 		</div>`);
 		node.appendChild(field);
@@ -452,7 +468,7 @@ types.oneOf = function(key, schema, node, inst) {
 		field = node.dom(`<div class="inline fields">
 			<label for="${key}">${schema.title || key}</label>
 			<div class="field">
-				${listOf.map(getRadioOption).join('\n')}
+				${listOf.map(item => getRadioOption(item, key)).join('\n')}
 			</div>
 		</div>`);
 		node.appendChild(field);
@@ -464,7 +480,7 @@ types.oneOf = function(key, schema, node, inst) {
 		field = node.dom(`<div class="flex field" title="${schema.description || ''}">
 			<label>${schema.title || key}</label>
 			<select name="${key}" class="ui compact dropdown">
-				${listOf.map(getSelectOption).join('\n')}
+				${listOf.map(item => getSelectOption(item, key)).join('\n')}
 			</select>
 		</div>`);
 		node.appendChild(field);
@@ -472,31 +488,6 @@ types.oneOf = function(key, schema, node, inst) {
 			$(field).find(`[value="${def}"]`).prop('selected', true);
 		}
 		$(field).find('.dropdown').dropdown({placeholder: false});
-	}
-
-	function getIconOption(item) {
-		return `<div class="ui radio checkbox item" title="${item.title}">
-			<input type="radio" name="${key}" value="${getValStr(item)}" tabindex="0" class="hidden">
-			<label>${item.icon}</label>
-		</div>`;
-	}
-
-	function getRadioOption(item) {
-		return `<div class="ui radio checkbox">
-				<input type="radio" name="${key}" value="${getValStr(item)}" tabindex="0" class="hidden">
-				<label>${item.title}</label>
-			</div>`;
-	}
-
-	function getSelectOption(item) {
-		return `<option value="${getValStr(item)}">${item.title || item.const}</option>`;
-	}
-
-	function getValStr(item) {
-		if (item.const === undefined && item.type != "null") {
-			console.error("non-const/non-null oneOf/anyOf");
-		}
-		return item.const != null ? item.const : '';
 	}
 };
 
@@ -574,8 +565,20 @@ types.array = function(key, schema, node, inst) {
 		schema.items.forEach(function(item, i) {
 			inst.process(`${key}.${i}`, item, fieldset);
 		});
+	} else if (schema.items.anyOf) {
+		var field = node.dom(`<div class="field" title="${schema.description || ''}">
+			<label>${schema.title || key}</label>
+			<select name="${key}" class="ui dropdown" multiple>
+				${schema.items.anyOf.map(item => getSelectOption(item, key)).join('\n')}
+			</select>
+		</div>`);
+		node.appendChild(field);
+		// if (def !== undefined) {
+		// 	$(field).find(`[value="${def}"]`).prop('selected', true);
+		// }
+		$(field).find('.dropdown').dropdown({placeholder: false});
 	} else {
-		console.info("FIXME: array implements only selection of single value");
+		console.info("FIXME: array type supports only items: [schemas], or items.anyOf");
 		return inst.process(key, Object.assign({}, schema.items, {title: schema.title}), node);
 	}
 };
@@ -632,5 +635,30 @@ keywords.pattern = function(value) {
 		value: new RegExp(value)
 	};
 };
+
+function getIconOption(item, key) {
+	return `<div class="ui radio checkbox item" title="${item.title}">
+		<input type="radio" name="${key}" value="${getValStr(item)}" tabindex="0" class="hidden">
+		<label>${item.icon}</label>
+	</div>`;
+}
+
+function getRadioOption(item, key) {
+	return `<div class="ui radio checkbox">
+			<input type="radio" name="${key}" value="${getValStr(item)}" tabindex="0" class="hidden">
+			<label>${item.title}</label>
+		</div>`;
+}
+
+function getSelectOption(item) {
+	return `<option value="${getValStr(item)}">${item.title || item.const}</option>`;
+}
+
+function getValStr(item) {
+	if (item.const === undefined && item.type != "null") {
+		console.error("non-const/non-null oneOf/anyOf");
+	}
+	return item.const != null ? item.const : '';
+}
 
 })();
