@@ -39,9 +39,9 @@ module.exports = function(res, scope) {
 	});
 	if (elem) install(elem, scope);
 
-	res = Object.assign({}, res);
+	for (var k in res) scope[`$${k}`] = res[k];
+
 	var block = res.item || {};
-	delete res.item;
 	if (elem) {
 		elts[elem.name] = elem;
 		if (!block.type) block.type = elem.name;
@@ -49,12 +49,11 @@ module.exports = function(res, scope) {
 		elem = elts[block.type];
 		if (res.items) {
 			block.children = res.items;
-			delete res.items;
 		}
 	}
 	return scope.$view.from(block, null, {
 		type: elem.name,
-		scope: res
+		scope: scope
 	});
 };
 
@@ -73,19 +72,12 @@ function install(el, scope) {
 	if (el.dom) el.render = function(block, bscope) {
 		var rscope = Object.assign({}, scope, {
 			$element: el
+		}, bscope);
+		["id", "parent", "child", "parents", "children", "updated_at", "created_at"].forEach(function(name) {
+			var val = block[name];
+			if (val !== undefined) rscope['$'+name] = val;
 		});
-		Object.keys(bscope).forEach(function(name) {
-			if (rscope[name] === undefined) {
-				rscope['$'+name] = bscope[name];
-			}
-		});
-		Object.keys(block).forEach(function(name) {
-			if (["id", "parent", "child", "parents", "children", "updated_at", "created_at"].includes(name)) {
-				if (rscope[name] === undefined) {
-					rscope['$'+name] = block[name];
-				}
-			}
-		});
+
 		if (el.filters) rscope.$filters = Object.assign({}, rscope.$filters, el.filters);
 
 		var data = Pageboard.merge(block.data, block.expr, function(c, v) {

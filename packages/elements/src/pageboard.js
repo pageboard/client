@@ -27,11 +27,8 @@ function initState(res, state) {
 	if (!res) return;
 	if (res.grants) state.data.$grants = res.grants;
 	if (res.meta && res.meta.group == "page") {
-		scope.$page = res.item;
+		for (var k in res) scope[`$${k}`] = res[k];
 		scope.$element = res.item && scope.$elements[res.item.type];
-		Object.keys(res).forEach(function(key) {
-			if (key != "item" && key != "items") scope[`$${key}`] = res[key];
-		});
 	}
 }
 
