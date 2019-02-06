@@ -4,10 +4,10 @@ exports.elements = window.Pageboard && window.Pageboard.elements || {
 		stylesheets: [],
 		html: `<html>
 		<head>
-			<title>[status|or:500] [name]</title>
+			<title>[$status|or:500] [$statusText|or:Error]</title>
 			<meta name="viewport" content="width=device-width, initial-scale=1">
 			<meta name="robots" content="noindex">
-			<meta http-equiv="Status" content="[status|or:500] [name]">
+			<meta http-equiv="Status" content="[$status|or:500] [$statusText|or:Error]">
 		</head>
 		<body>
 			<h2>[message]</h2>
