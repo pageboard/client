@@ -32,6 +32,7 @@ var reFuse = new RegExp(`\\${mSym.open}[^\\${mSym.open}\\${mSym.close}]+\\${mSym
 module.exports = function(res, scope) {
 	var elts = scope.$elements;
 	var elem = scope.$element;
+	if (!res) res = {};
 
 	if (!scope.$view) scope.$view = new Viewer({
 		elements: elts,
