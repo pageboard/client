@@ -16,6 +16,7 @@ exports.elements = window.Pageboard && window.Pageboard.elements || {
 	}
 };
 
+exports.cache = window.Pageboard && window.Pageboard.cache || {};
 exports.debounce = require('debounce');
 exports.fetch = require('./fetch');
 exports.load = require('./load');

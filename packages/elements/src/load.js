@@ -18,8 +18,6 @@ function load(node, head) {
 	});
 }
 
-var cache = {};
-
 exports.meta = function(meta) {
 	var pr = Promise.resolve();
 	if (!meta) return pr;
@@ -27,8 +25,8 @@ exports.meta = function(meta) {
 		if (!Pageboard.elements[name]) Pageboard.elements[name] = el;
 	});
 	if (!meta.bundle) return pr;
-	if (!cache[meta.bundle]) {
-		cache[meta.bundle] = Pageboard.load.js(meta.bundle);
+	if (!Pageboard.cache[meta.bundle]) {
+		Pageboard.cache[meta.bundle] = Pageboard.load.js(meta.bundle);
 	}
 
 	if (meta.group != "page") {
@@ -44,7 +42,7 @@ exports.meta = function(meta) {
 			}));
 		});
 	}
-	return cache[meta.bundle].then(function() {
+	return Pageboard.cache[meta.bundle].then(function() {
 		return pr;
 	});
 };
