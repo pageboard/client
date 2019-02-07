@@ -38,6 +38,7 @@ module.exports = function(res, scope) {
 		elements: elts,
 		doc: scope.$doc
 	});
+
 	if (elem) install(elem, scope);
 
 	for (var k in res) scope[`$${k}`] = res[k];
@@ -64,7 +65,12 @@ function install(el, scope) {
 	if (el.$installed) return;
 	el.$installed = true;
 	try {
-		if (el.html != null) el.dom = scope.$doc.dom(el.html);
+		if (el.html != null) {
+			el.dom = scope.$doc.dom(el.html);
+			el.fusable = reFuse.test(el.html);
+		} else {
+			el.fusable = true;
+		}
 		if (el.install) el.install.call(el, scope);
 	} catch(err) {
 		console.error("Invalid element", el, err);
@@ -97,7 +103,7 @@ function install(el, scope) {
 		var dom = el.dom && el.dom.cloneNode(true);
 		if (el.fuse) {
 			dom = el.fuse.call(el, dom, data, rscope) || dom;
-		} else if (!el.html || reFuse.test(el.html)) {
+		} else if (el.fusable) {
 			if (!dom) throw new Error("Invalid element", el, "missing dom");
 			dom = dom.fuse(data, rscope);
 		}
