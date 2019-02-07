@@ -298,6 +298,7 @@ Href.prototype.searchStart = function() {
 		this.appendItems(Array.from(node.children));
 	});
 	Pageboard.write.classList.add('href');
+	this.input.closest('form').classList.add('href');
 	return this.searchUpdate();
 };
 
@@ -315,6 +316,7 @@ Href.prototype.searchStop = function() {
 		delete this.infinite;
 	}
 	Pageboard.write.classList.remove('href');
+	this.input.closest('form').classList.remove('href');
 	this.set(this.input.value);
 	Pageboard.scrollbar.update();
 	Pageboard.trigger(this.input, 'change');
