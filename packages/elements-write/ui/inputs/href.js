@@ -114,7 +114,6 @@ Href.prototype.init = function(block) {
 					}, data.meta);
 					console.info("added href to cache", href, Pageboard.hrefs[href]);
 				}
-				this.renderList();
 				Pageboard.trigger(input, 'change');
 			}
 		}
@@ -127,7 +126,7 @@ Href.prototype.destroy = function() {
 };
 
 Href.prototype.update = function(block) {
-	this.list = [];
+	if (!this.list) this.list = [];
 	this.renderField();
 	var me = this;
 	var val = this.input.value;
@@ -135,7 +134,7 @@ Href.prototype.update = function(block) {
 	if (val && !input.value) {
 		input.value = val;
 	}
-	if (val) {
+	if (val && !this.action) {
 		this.get(val).then(this.cache).then(function(list) {
 			if (list.length == 0) {
 				me.start("manual");
@@ -151,9 +150,10 @@ Href.prototype.update = function(block) {
 Href.prototype.start = function(action) {
 	var same = this.action == action;
 	this.stop();
+	if (same) return;
 	this.action = action;
 	this.renderField();
-	this[action + 'Start'](same);
+	this[action + 'Start']();
 };
 
 Href.prototype.stop = function() {
@@ -266,10 +266,7 @@ Href.prototype.pasteStop = function() {
 	Pageboard.trigger(this.input, 'change');
 };
 
-Href.prototype.searchStart = function(same) {
-	if (same) {
-		return;
-	}
+Href.prototype.searchStart = function() {
 	var me = this;
 	var input = this.node.querySelector('input');
 	input.focus();
