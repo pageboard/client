@@ -17,7 +17,7 @@ element-image > [block-content="legend"] {
 	right:0;
 	text-align:center;
 }
-element-image.lqip-reveal > img {
+element-image.lqip.reveal > img {
 	transition: 0.3s filter linear;
 }
 element-image.lqip > img {
@@ -25,7 +25,7 @@ element-image.lqip > img {
 	filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='6'); /* old ie support */
 }
 
-element-image.lazy-reveal > img {
+element-image.lazy.reveal > img {
 	transition: 0.1s opacity linear;
 	opacity:1;
 }
@@ -70,19 +70,19 @@ element-image.error:after {
 	opacity: 0.75;
 }
 
-element-image[data-fit="contain"],
-element-image[data-fit="contain"] > img {
+element-image.contain,
+element-image.contain > img {
 	width:100%;
 }
-element-image[data-fit="cover"],
-element-image[data-fit="cover"] > img {
+element-image.cover,
+element-image.cover > img {
 	width:100%;
 	height:100%;
 }
-element-image[data-fit="contain"] > img {
+element-image.contain > img {
 	object-fit: contain;
 }
-element-image[data-fit="cover"] > img {
+element-image.cover > img {
 	object-fit: cover;
 }
 
@@ -92,118 +92,110 @@ element-image > img {
 	align-self:center; /* not stretch */
 }
 
-element-image[data-position="left top"] {
+element-image.left.top {
 
 }
-element-image[data-position="left top"] > img {
+element-image.left.top > img {
 	object-position:left top;
 }
-element-image[data-position="left center"] {
+element-image.left.vcenter {
 	height:100%;
 }
-element-image[data-position="left center"] > img {
+element-image.left.vcenter > img {
 	object-position:left center;
 	height:100%;
 }
-element-image[data-position="left bottom"] {
+element-image.left.bottom {
 	height:100%;
 }
-element-image[data-position="left bottom"] > img {
+element-image.left.bottom > img {
 	object-position:left bottom;
 	height:100%;
 }
-element-image[data-position="center top"] > img {
+element-image.hcenter.top > img {
 	object-position:center top;
 }
-element-image[data-position="center center"] {
+element-image.hcenter.vcenter {
 	height:100%;
 }
-element-image[data-position="center center"] > img {
+element-image.hcenter.vcenter > img {
 	object-position:center center;
 	height:100%;
 }
-element-image[data-position="center bottom"] {
+element-image.hcenter.bottom {
 	height:100%;
 }
-element-image[data-position="center bottom"] > img {
+element-image.hcenter.bottom > img {
 	object-position:center bottom;
 	height:100%;
 }
-element-image[data-position="right top"] > img {
+element-image.right.top > img {
 	object-position:right top;
 }
-element-image[data-position="right center"] {
+element-image.right.vcenter {
 	height:100%;
 }
-element-image[data-position="right center"] > img {
+element-image.right.vcenter > img {
 	height:100%;
 	object-position:right center;
 }
-element-image[data-position="right bottom"] {
+element-image.right.bottom {
 	height:100%;
 }
-element-image[data-position="right bottom"] > img {
+element-image.right.bottom > img {
 	height:100%;
 	object-position:right bottom;
 }
 
-element-image[data-fit="none"],
-element-image[data-fit="none"] > img {
+element-image.none,
+element-image.none > img {
 	max-width:100%;
 	max-height:100%;
 	width: auto;
 	height: auto;
 }
-element-image[data-fit="none"][data-position="left top"] {
+element-image.none.left.top {
 	justify-content: flex-start;
 	vertical-align:top;
 }
-element-image[data-fit="none"][data-position="right top"] {
+element-image.none.right.top {
 	justify-content: flex-end;
 	vertical-align:top;
 }
-element-image[data-fit="none"][data-position="center top"] {
+element-image.none.hcenter.top {
 	vertical-align:top;
 }
-element-image[data-fit="none"][data-position="left center"] {
+element-image.none.left.vcenter {
 	justify-content: flex-start;
 	height:100%;
 }
-element-image[data-fit="none"][data-position="right center"] {
+element-image.none.right.vcenter {
 	justify-content: flex-end;
 	vertical-align:middle;
 	height:100%;
 }
-element-image[data-fit="none"][data-position="center center"] {
+element-image.none.hcenter.vcenter {
 	vertical-align:middle;
 	height:100%;
 }
-element-image[data-fit="none"][data-position="left bottom"] {
+element-image.none.left.bottom {
 	justify-content: flex-start;
 	height:100%;
 }
-element-image[data-fit="none"][data-position="left bottom"] > img {
+element-image.none.left.bottom > img {
 	align-self:flex-end;
 }
-element-image[data-fit="none"][data-position="right bottom"] {
+element-image.none.right.bottom {
 	justify-content: flex-end;
 	height:100%;
 }
-element-image[data-fit="none"][data-position="right bottom"] > img {
+element-image.none.right.bottom > img {
 	align-self:flex-end;
 }
-element-image[data-fit="none"][data-position="center bottom"] {
+element-image.none.hcenter.bottom {
 	height:100%;
 }
-element-image[data-fit="none"][data-position="center bottom"] > img {
+element-image.none.hcenter.bottom > img {
 	align-self:flex-end;
 }
 
-
-element-image > [block-content="overlay"] {
-	position:absolute;
-	top:0;
-	left:0;
-	right:0;
-	bottom:0;
-}

@@ -1,4 +1,7 @@
 class HTMLElementImage extends HTMLCustomElement {
+	static get observedAttributes() {
+		return ['url', 'reveal'];
+	}
 	static init() {
 		var me = this;
 		if ("IntersectionObserver" in window) {
@@ -7,7 +10,7 @@ class HTMLElementImage extends HTMLCustomElement {
 					var target = entry.target;
 					if (entry.isIntersecting || entry.intersectionRatio > 0) {
 						me.unobserve(target);
-						target.reveal();
+						Page.setup(target);
 					}
 				});
 			}, {
@@ -17,40 +20,75 @@ class HTMLElementImage extends HTMLCustomElement {
 	}
 	static observe(el) {
 		if (this.observer) {
-			this.observer.observe(el);
-		} else {
-			Page.setup(el.patch);
+			if (!el.observed && !el.revealed) {
+				el.observed = true;
+				this.observer.observe(el);
+				return true;
+			}
 		}
 	}
 	static unobserve(el) {
 		if (this.observer) {
+			el.observed = false;
 			this.observer.unobserve(el);
 		}
-		Page.unsetup(el.patch);
 	}
-	init() {
-		this.patch = this.patch.bind(this);
+	findClass(list) {
+		return list.find(function(name) {
+			return this.matches(`.${name}`);
+		}, this) || list[0];
 	}
-	handleEvent(e) {
-		if (e.type == 'load') this.load();
-		else if (e.type == 'error') this.error();
+	get fit() {
+		return this.findClass(['none', 'natural', 'contain']);
 	}
-	connectedCallback() {
-		this.addEventListener('load', this, true);
-		this.addEventListener('error', this, true);
-		this.constructor.observe(this);
+	get position() {
+		var h = this.findClass(['left', 'hcenter', 'right']);
+		var v = this.findClass(['top', 'vcenter', 'bottom']);
+		return `${h} ${v}`.trim();
 	}
-	patch(state) {
-		this.reveal();
+	set fit(val) {
+		this.classList.add(val);
+	}
+	set position(val) {
+		(val || '').split(' ').forEach(function(val) {
+			if (val) this.classList.add(val);
+		}, this);
+	}
+	get width() {
+		return parseInt(this.getAttribute('width'));
+	}
+	get height() {
+		return parseInt(this.getAttribute('height'));
+	}
+	get zoom() {
+		var z = parseFloat(this.getAttribute('zoom'));
+		if (isNaN(z)) z = 100;
+		return z;
+	}
+	get lazyload() {
+		return this.getAttribute('lazyload');
+	}
+	get url() {
+		return this.getAttribute('url');
+	}
+
+	attributeChangedCallback(name, old, val) {
+		if (name == "url" && old != val) {
+			if (this.lazyload != "lazy" || this.revealed) this.show();
+		}
+	}
+	close() {
+		this.constructor.unobserve(this);
 	}
 	fix(img) {
 		if (!window.objectFitImages.supportsObjectFit) {
 			var style = "";
-			if (this.dataset.fit) {
-				style += `object-fit: ${this.dataset.fit};`;
+			if (this.fit) {
+				style += `object-fit: ${this.fit};`;
 			}
-			if (this.dataset.position) {
-				style += `object-position: ${this.dataset.position};`;
+			if (this.position) {
+				var pos = this.position.replace(/(h|v)center/g, 'center');
+				style += `object-position: ${pos};`;
 			}
 			if (style.length) {
 				img.style.fontFamily = `'${style}'`;
@@ -58,36 +96,22 @@ class HTMLElementImage extends HTMLCustomElement {
 			}
 		}
 	}
-	reveal(force) {
-		var img = this.querySelector('img');
-		if (!img) return;
-
-		var src = img.getAttribute('src');
-		var lazy = !src && this.dataset.url;
-		var lqip = this.dataset.lqip != null;
-		if (!lazy && !lqip) return;
-
-		if (!force && this._revealAt) {
-			return;
+	show() {
+		var img = this.firstElementChild;
+		if (!img || !img.matches('img')) {
+			img = this.ownerDocument.createElement('img');
+			this.insertBefore(img, this.firstChild);
 		}
-
-		if (lazy) {
-			this.classList.add('lazy');
-			src = this.dataset.url;
-		} else if (lqip) {
-			this.classList.add('lqip');
-		}
-
-		var z = parseFloat(img.dataset.zoom);
-		if (isNaN(z)) z = 100;
-		var w = parseInt(img.dataset.width);
-		var h = parseInt(img.dataset.height);
+		var z = this.zoom;
+		var w = this.width;
+		var h = this.height;
 		var zoom;
 		if (!isNaN(w) && !isNaN(h)) {
 			var rect = this.parentNode.getBoundingClientRect();
 			var rw = rect.width;
 			var rh = rect.height;
 			if (rw == 0 && rh == 0) {
+				// don't show
 				return;
 			}
 
@@ -97,11 +121,11 @@ class HTMLElementImage extends HTMLCustomElement {
 				zoom = Math.round(Math.max(rw / w, rh / h) * 100);
 				// what's the point
 				if (zoom > 100) zoom = null;
-				else if (!isNaN(z) && z < zoom && zoom < z + 10) zoom = z;
+				else if (z < zoom && zoom < z + 10) zoom = z;
 			}
 		}
-		this._revealAt = Date.now();
-		var loc = Page.parse(src);
+		this.revealed = Date.now();
+		var loc = Page.parse(this.url);
 		delete loc.query.q;
 		if (!zoom) {
 			delete loc.query.rs;
@@ -109,38 +133,39 @@ class HTMLElementImage extends HTMLCustomElement {
 			zoom = Math.ceil(zoom / 10) * 10;
 			loc.query.rs = "z-" + zoom;
 		}
-		src = Page.format(loc);
-		img.setAttribute('src', src);
+		img.setAttribute('src', Page.format(loc));
 	}
-	update() {
-		this.reveal(true);
+
+	patch() {
+		if (this.lazyload != "lazy" && !this.revealed) {
+			this.show();
+		}
 	}
-	load() {
-		if (!this.matches('.lqip,.lazy')) return;
-		var img = this.querySelector('img');
-		var rev = this._revealAt;
+
+	setup() {
+		if (!this.constructor.observe(this)) {
+			this.show();
+		} else if (!this.revealed) {
+			this.classList.add(this.lazyload);
+			this.show();
+		}
+	}
+	captureLoad() {
+		var rev = this.revealed;
+		if (!rev) return;
+		var img = this.firstElementChild;
 		if (rev && Date.now() - rev > 500) {
-			if (this.dataset.lqip != null) {
-				this.classList.add('lqip-reveal');
-			}
-			if (this.classList.contains('lazy')) {
-				this.classList.add('lazy-reveal');
-			}
+			this.classList.add('reveal');
 		}
 		this.classList.remove('lqip', 'lazy');
 		this.fix(img);
 	}
-	error() {
+	captureError() {
 		this.classList.remove('lqip', 'lazy');
 		this.classList.add('error');
 	}
-	disconnectedCallback() {
-		this.constructor.unobserve(this);
-		this.removeEventListener('load', this, true);
-		this.removeEventListener('error', this, true);
-	}
 }
 
-Page.setup(function() {
+Page.ready(function() {
 	HTMLCustomElement.define('element-image', HTMLElementImage);
 });

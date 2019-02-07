@@ -156,29 +156,23 @@ Pageboard.elements.image = {
 			spec: "inline*"
 		}
 	},
-	html: `<element-image class="[lqip|?]"
-		data-fit="[fit]" data-position="[position]" data-lqip="[lqip]"
-		data-url="[url]"
-	>
-		<img alt="[alt]" src="[src]"
-			data-width="[width]" data-height="[height]" data-zoom="[zoom]" />
-		<div block-content="legend"></div>
-	</element-image>`,
+	html: `<element-image class="[fit] [position]"
+		lazyload="[lazy]"
+		url="[url]"
+		alt="[src]"
+		width="[width]"
+		height="[height]"
+		zoom="[zoom]"
+	><div block-content="legend"></div></element-image>`,
 	fuse: function(node, d, scope) {
 		var obj = {
 			alt: d.alt
 		};
 		var loc = this.buildLoc(d.url || this.resources[0], d);
-		var display = d.display;
-		var fit = display && display.fit || "none";
-		if (display) {
-			obj.fit = fit;
-			var posx = display.horizontal;
-			if (posx == "hcenter") posx = "center";
-			var posy = display.vertical;
-			if (posy == "vcenter") posy = "center";
-			obj.position = `${posx || 'center'} ${posy || 'center'}`;
-		}
+		var display = d.display || {};
+		obj.fit = display.fit || "none";
+		obj.position = `${display.horizontal} ${display.vertical}`;
+
 		var zoom = (d.crop || {}).zoom || 100;
 		var meta = (scope.$hrefs || {})[d.url];
 		if (meta && meta.width && meta.height) {
@@ -188,16 +182,16 @@ Pageboard.elements.image = {
 			obj.height = Math.round(meta.height * wh / 100);
 			if (zoom != 100) obj.zoom = zoom;
 			var isSvg = meta.mime == "image/svg+xml";
-			var isFit = fit != "none";
+			var isFit = obj.fit != "none";
 			if (!isSvg && !isFit) {
-				obj.lqip = loc.query.q = 5;
+				loc.query.q = 5;
+				obj.lazy = "lqip";
 				if (isFit) loc.query.rs = "w-320_h-320_max";
 			} else if (isFit || !isSvg) {
-				obj.url = Page.format(loc);
-				loc = null;
+				obj.lazy = "lazy";
 			}
 		}
-		obj.src = loc ? Page.format(loc) : null;
+		obj.url = Page.format(loc);
 		node.fuse(obj, scope);
 	},
 	resources: [
