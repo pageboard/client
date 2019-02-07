@@ -53,7 +53,9 @@ Breadcrumb.prototype.update = function(parents, selection) {
 	var last = this.node.lastElementChild;
 	var lastIsText = last && last.children.length == 0;
 	if (!selection.node) {
-		if (!lastIsText) this.node.insertAdjacentHTML("beforeEnd", "<span>text</span>");
+		if (!lastIsText) {
+			this.node.insertAdjacentHTML("beforeEnd", `<span>${parent.contentName || 'text'}</span>`);
+		}
 	} else if (lastIsText) {
 		last.remove();
 	}
