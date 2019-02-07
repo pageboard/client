@@ -196,6 +196,7 @@ Pageboard.Editor = function Editor(win, state) {
 		elements: view.elements,
 		place: win.document.body,
 		genId: Pageboard.Controls.Store.genId,
+		scope: state.scope,
 		plugins: [{
 			filterTransaction: function(tr) {
 				if (tr.docChanged) editor.docChanged = true;
