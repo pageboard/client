@@ -16,7 +16,11 @@ Page.init(function(state) {
 Page.init(function(state) {
 	state.mergeBody = function(body, corpse) {
 		if (this.referrer.transition) this.referrer.transition.stop();
-		this.transition = new Page.Transition(this, body, corpse);
+		if (body.getAttribute('block-type') != corpse.getAttribute('block-type')) {
+			corpse.replaceWith(body);
+		} else {
+			this.transition = new Page.Transition(this, body, corpse);
+		}
 	};
 });
 
