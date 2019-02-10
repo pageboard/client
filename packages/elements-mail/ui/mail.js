@@ -1,7 +1,7 @@
-Page.build(function(state) {
-	if (state.query.email == "true") state.vars.email = true;
-	Page.patch(function(state) {
-		if (document.body.isContentEditable) return;
+Page.patch(function(state) {
+	if (state.query.email != "true" || document.body.isContentEditable) return;
+	state.vars.email = true;
+	state.finish(function(state) {
 		Array.from(document.querySelectorAll('script')).forEach(function(node) {
 			node.remove();
 		});
