@@ -244,8 +244,7 @@ Page.setup(function(state) {
 Page.init(function(state) {
 	if (window.history && 'scrollRestoration' in window.history) {
 		window.history.scrollRestoration = 'manual';
-	} else {
-		var scroll = state.referrer && state.referrer.data.scroll; // need "old" state
+		var scroll = state.data.scroll; // need "old" state
 		if (scroll) {
 			setTimeout(function() {
 				window.scrollTo(scroll.x, scroll.y);
