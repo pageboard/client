@@ -28,7 +28,7 @@ RelationFilter.prototype.update = function(block, schema) {
 		el = Pageboard.editor.elements[type];
 	}
 	var parents = el && el.parents;
-	if (!parents) return;
+	if (!parents) parents = {type: "null"};
 	return Object.assign({}, schema, parents);
 };
 
