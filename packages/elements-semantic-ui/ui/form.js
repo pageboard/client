@@ -14,8 +14,11 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		var query = {};
 		fd.forEach(function(val, key) {
 			if (val == null || val == "") {
-				if (this.querySelector(`[name="${key}"]`).required == false) {
+				var cur = this.querySelector(`[name="${key}"]`);
+				if (cur.required == false && cur.type != "radio") {
 					val = undefined;
+				} else {
+					val = null;
 				}
 			}
 			var old = query[key];
