@@ -6,6 +6,7 @@ Pageboard.elements.site.properties.google_site_verification = {
 };
 
 Pageboard.elements.google_site_verification = {
+	group: "block",
 	html: '<meta name="google-site-verification" content="[id]">',
 	install: function(scope) {
 		if (scope.$pathname != "/") return;

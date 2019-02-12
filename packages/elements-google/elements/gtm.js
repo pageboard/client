@@ -6,6 +6,7 @@ Pageboard.elements.site.properties.google_tag_manager = {
 };
 
 Pageboard.elements.google_tag_manager = {
+	group: "block",
 	html: `<script async src="https://www.googletagmanager.com/gtm.js?id=[id|url]"></script>`,
 	install: function(scope) {
 		var id = scope.$site.google_tag_manager;
