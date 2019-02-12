@@ -28,6 +28,11 @@ exports.checked = function(val, what, selector) {
 	return ret;
 };
 
+exports.includes = function(val, what, str) {
+	if (Array.isArray(val)) return val.includes(str);
+	else if (typeof val == "string") return val == str;
+};
+
 exports.sum = function(obj, what, ...list) {
 	var sum = 0;
 	if (obj == null) return sum;
