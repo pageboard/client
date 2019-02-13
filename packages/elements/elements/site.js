@@ -179,11 +179,13 @@ Pageboard.elements.page = {
 		<meta http-equiv="Status" content="[$status|or:200] [$statusText|or:OK][redirect|!|bmagnet:*]">
 		<meta http-equiv="Status" content="302 Found[transition.from|!|bmagnet:*+]">
 		<meta http-equiv="Location" content="[redirect|eq:[url]:|magnet:+*]">
+		<meta http-equiv="Content-Security-Policy" content="[$elements|csp]">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="robots" content="[noindex|bmagnet:*|?]">
 		<meta name="description" content="[description|magnet:*]">
 		<link rel="icon" href="[$site.favicon|magnet:*|url]?format=ico">
 		<link rel="stylesheet" href="[$element.stylesheets|repeat]" />
+		<script defer src="https://cdn.polyfill.io/v2/polyfill.min.js?flags=gated&features=[$elements|polyfills|url|magnet:*]"></script>
 		<script defer src="[$element.scripts|repeat]"></script>
 	</head>
 	<body block-content="body"></body></html>`,
@@ -193,7 +195,50 @@ Pageboard.elements.page = {
 	].concat(Pageboard.elements.site.resources),
 	polyfills: [
 		'dataset', 'fetch'
-	]
+	],
+	filters: {
+		polyfills: function($elements, what) {
+			var map = {};
+			Object.keys($elements).forEach(function(key) {
+				var list = $elements[key].polyfills;
+				if (!list) return;
+				if (typeof list == "string") list = [list];
+				list.forEach(function(item) {
+					map[item] = true;
+				});
+			});
+			return Object.keys(map).join(',');
+		},
+		csp: function($elements, what) {
+			var csp = {};
+			Object.keys($elements).forEach(function(key) {
+				var ecsp = $elements[key].csp;
+				if (!ecsp) return;
+				Object.keys(ecsp).forEach(function(src) {
+					var gcsp = csp[src];
+					if (!gcsp) csp[src] = gcsp = [];
+					var list = ecsp[src];
+					if (!list) return;
+					if (typeof list == "string") list = [list];
+					list.forEach(function(val) {
+						if (gcsp.includes(val) == false) gcsp.push(val);
+					});
+				});
+			});
+			return Object.keys(csp).filter(function(src) {
+				return csp[src].length > 0;
+			}).map(function(src) {
+				return `${src}-src ${csp[src].join(' ')}`;
+			}).join('; ');
+		}
+	},
+	csp: {
+		default: ["'self'"],
+		script: ["'self'", "https://cdn.polyfill.io"],
+		frame: ["https:"],
+		style: ["'self'", "'unsafe-inline'"],
+		font: ["'self'", "data:"],
+		img: ["'self'", "data:"]
+	}
 };
-
 

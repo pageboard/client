@@ -13,6 +13,9 @@ Pageboard.elements.google_tag_manager = {
 		if (!id || scope.$site.env != "production") return;
 		scope.$element.dom.querySelector('head').append(this.dom.fuse({id: id}, scope));
 	},
+	csp: {
+		script: ["https://www.googletagmanager.com"]
+	},
 	scripts: [
 		'../ui/gtm.js'
 	]

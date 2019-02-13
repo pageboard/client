@@ -15,6 +15,11 @@ Pageboard.elements.google_translate = {
 	scripts: [
 		'../ui/translate.js'
 	],
+	csp: {
+		script: ["https://translate.googleapis.com", "https://translate.google.com"],
+		style: ["https://translate.googleapis.com"],
+		img: ["https://translate.googleapis.com", "https://www.gstatic.com", "https://www.google.com"]
+	},
 	stylesheets: [
 		'../ui/translate.css'
 	]
