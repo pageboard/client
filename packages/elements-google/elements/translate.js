@@ -18,7 +18,8 @@ Pageboard.elements.google_translate = {
 	csp: {
 		script: ["https://translate.googleapis.com", "https://translate.google.com"],
 		style: ["https://translate.googleapis.com"],
-		img: ["https://translate.googleapis.com", "https://www.gstatic.com", "https://www.google.com"]
+		img: ["https://translate.googleapis.com", "https://www.gstatic.com", "https://www.google.com"],
+		connect: ["https://translate.googleapis.com"]
 	},
 	stylesheets: [
 		'../ui/translate.css'
