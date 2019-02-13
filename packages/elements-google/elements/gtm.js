@@ -14,7 +14,7 @@ Pageboard.elements.google_tag_manager = {
 		scope.$element.dom.querySelector('head').append(this.dom.fuse({id: id}, scope));
 	},
 	csp: {
-		script: ["https://www.googletagmanager.com"]
+		script: ["https://www.googletagmanager.com", "https://www.google-analytics.com"]
 	},
 	scripts: [
 		'../ui/gtm.js'
