@@ -234,6 +234,7 @@ Pageboard.elements.page = {
 	},
 	csp: {
 		default: ["'self'"],
+		connect: ["'self'"],
 		script: ["'self'", "https://cdn.polyfill.io"],
 		frame: ["https:"],
 		style: ["'self'", "'unsafe-inline'"],
