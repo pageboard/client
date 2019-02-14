@@ -15,7 +15,7 @@ Pageboard.elements.google_tag_manager = {
 	},
 	csp: {
 		script: ["https://www.googletagmanager.com", "https://www.google-analytics.com"],
-		img: ["https://www.google-analytics.com", "https://stats.g.doubleclick.net"]
+		img: ["https://www.googletagmanager.com", "https://www.google-analytics.com", "https://stats.g.doubleclick.net"]
 	},
 	scripts: [
 		'../ui/gtm.js'
