@@ -54,7 +54,7 @@ Pageboard.elements.tab_item = {
 	context: 'tabs/tabs_container_items/',
 	contents: {
 		content: {
-			spec: "text*"
+			spec: "inline*"
 		}
 	},
 	properties: {
