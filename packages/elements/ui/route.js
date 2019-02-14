@@ -4,7 +4,7 @@ Page.route(function(state) {
 		loader = Promise.resolve(state.data.$cache);
 	} else {
 		loader = Pageboard.fetch('get', '/.api/page', {
-			url: state.pathname,
+			url: state.pathname.replace(/\.\w+$/, ''),
 			develop: state.query.develop
 		});
 	}
