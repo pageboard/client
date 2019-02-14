@@ -14,10 +14,10 @@ Pageboard.elements.write = {
 		<script defer src="[$meta.services]"></script>
 	</head>
 	<body
-		data-css="[paths.0]"
-		data-js="[paths.1],[paths.2]"
-		data-devtools="[paths.3]"
-		data-placeholder="[paths.4]"
+		data-css="[$element.resources.0]"
+		data-js="[$element.resources.1],[$element.resources.2]"
+		data-devtools="[$element.resources.3]"
+		data-placeholder="[$element.resources.4]"
 	>
 	<div id="pageboard-read">
 		<div class="ui bound bottom sticky wide notifications"></div>
@@ -78,11 +78,6 @@ Pageboard.elements.write = {
 	</div>
 	</body>
 </html>`,
-	fuse: function(node, d, scope) {
-		node.fuse({
-			paths: this.resources
-		}, scope);
-	},
 	stylesheets: [
 		"../lib/components/reset.css",
 		"../ui/site.css",
