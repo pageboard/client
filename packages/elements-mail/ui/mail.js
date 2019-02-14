@@ -1,6 +1,5 @@
 Page.patch(function(state) {
-	if (state.query.email != "true" || document.body.isContentEditable) return;
-	state.vars.email = true;
+	if (!state.pathname.endsWith('.mail')) return;
 	state.finish(function(state) {
 		Array.from(document.querySelectorAll('script')).forEach(function(node) {
 			node.remove();
