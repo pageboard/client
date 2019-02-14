@@ -42,8 +42,11 @@ exports.sum = function(obj, what, ...list) {
 			sign = -1;
 			str = str.substring(1);
 		}
-		var curVal = what.expr.get(obj, str);
-		if (curVal != null && typeof curVal == "number") sum += sign * curVal;
+		var val = what.expr.get(obj, str);
+		if (val == null) return;
+		if (typeof val == "string") val = parseFloat(val);
+		if (isNaN(val)) return;
+		sum += sign * val;
 	});
 	return sum;
 };
