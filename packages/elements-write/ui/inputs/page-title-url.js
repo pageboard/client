@@ -23,7 +23,6 @@ PageTitle.prototype.check = function(only) {
 };
 
 PageTitle.prototype.change = function() {
-	this.check(true);
 	if (!this.tracking) return;
 	var val = this.input.value;
 	var slug = Pageboard.slug(val);
@@ -37,13 +36,13 @@ PageTitle.prototype.change = function() {
 PageTitle.prototype.init = PageTitle.prototype.update = function(block) {
 	this.block = block;
 	this.input.addEventListener('input', this.change);
-	this.form.addEventListener('input', this.checkHandler);
+// 	this.form.addEventListener('input', this.checkHandler);
 	this.check();
 };
 
 PageTitle.prototype.destroy = function() {
 	this.input.removeEventListener('input', this.change);
-	this.form.removeEventListener('input', this.checkHandler);
+// 	this.form.removeEventListener('input', this.checkHandler);
 };
 
 Pageboard.schemaHelpers.pageUrl = PageUrl;
