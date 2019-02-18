@@ -26,7 +26,7 @@ PageTitle.prototype.change = function() {
 	if (!this.tracking) return;
 	var val = this.input.value;
 	var slug = Pageboard.slug(val);
-	var list = (this.block.data.url || '').split('/');
+	var list = (this.block.data.url || '/').split('/');
 	list[list.length - 1] = slug;
 	var inputUrl = this.form.querySelector('[name="url"]');
 	inputUrl.value = list.join('/');
