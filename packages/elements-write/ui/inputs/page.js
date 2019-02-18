@@ -205,7 +205,10 @@ PageHelper.prototype.searchStart = function(same) {
 	});
 	Pageboard.write.classList.add('href');
 	this.input.closest('form').classList.add('href');
-	this.input.closest('fieldset').classList.add('href');
+	var parent = this.input;
+	while ((parent=parent.parentNode.closest('fieldset'))) {
+		parent.classList.add('href');
+	}
 	return this.searchUpdate();
 };
 
@@ -223,7 +226,10 @@ PageHelper.prototype.searchStop = function() {
 	this.container.textContent = '';
 	Pageboard.write.classList.remove('href');
 	this.input.closest('form').classList.remove('href');
-	this.input.closest('fieldset').classList.remove('href');
+	var parent = this.input;
+	while ((parent=parent.parentNode.closest('fieldset'))) {
+		parent.classList.remove('href');
+	}
 	Pageboard.scrollbar.update();
 	this.write();
 	Pageboard.trigger(this.input, 'change');
