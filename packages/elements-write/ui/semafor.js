@@ -566,17 +566,24 @@ types.array = function(key, schema, node, inst) {
 			inst.process(`${key}.${i}`, item, fieldset);
 		});
 	} else if (schema.items.anyOf) {
-		var field = node.dom(`<div class="field" title="${schema.description || ''}">
-			<label>${schema.title || key}</label>
-			<select name="${key}" class="ui dropdown" multiple>
-				${schema.items.anyOf.map(item => getSelectOption(item, key)).join('\n')}
-			</select>
-		</div>`);
-		node.appendChild(field);
-		// if (def !== undefined) {
-		// 	$(field).find(`[value="${def}"]`).prop('selected', true);
-		// }
-		$(field).find('.dropdown').dropdown({placeholder: false});
+		var allStrings = schema.items.anyOf.every(function(item) {
+			return item.type == "string";
+		});
+		if (allStrings) {
+			types.string(key, schema, node, inst);
+		} else {
+			var field = node.dom(`<div class="field" title="${schema.description || ''}">
+				<label>${schema.title || key}</label>
+				<select name="${key}" class="ui dropdown" multiple>
+					${schema.items.anyOf.map(item => getSelectOption(item, key)).join('\n')}
+				</select>
+			</div>`);
+			node.appendChild(field);
+			// if (def !== undefined) {
+			// 	$(field).find(`[value="${def}"]`).prop('selected', true);
+			// }
+			$(field).find('.dropdown').dropdown({placeholder: false});
+		}
 	} else {
 		console.info("FIXME: array type supports only items: [schemas], or items.anyOf");
 		return inst.process(key, Object.assign({}, schema.items, {title: schema.title}), node);
