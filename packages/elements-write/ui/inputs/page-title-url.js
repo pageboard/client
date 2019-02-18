@@ -55,11 +55,9 @@ function PageUrl(input, opts, props) {
 	this.sameDom = this.field.dom(`<div class="ui pointing red basic label">Another page has the same address</div>`);
 }
 
-PageUrl.prototype.check = function(e) {
+PageUrl.prototype.check = function() {
 	if (Pageboard.editor.controls.store.checkUrl(this.block.id, this.input.value)) {
 		this.field.appendChild(this.sameDom);
-		e.preventDefault();
-		e.stopImmediatePropagation();
 	} else {
 		if (this.sameDom.parentNode) this.sameDom.remove();
 	}

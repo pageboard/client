@@ -35,7 +35,7 @@ class HTMLElementSitepage extends HTMLCustomElement {
 		Array.prototype.forEach.call(content.children, function(child, index) {
 			if (!child.matches('element-sitepage')) return; // cursor
 			var childUrl = child.dataset.url;
-			var name = childUrl.split('/').pop();
+			var name = (childUrl || "").split('/').pop();
 			// do not trigger update, it would process twice
 			var newUrl = parentUrl + '/' + name;
 			if (childUrl != newUrl) {
