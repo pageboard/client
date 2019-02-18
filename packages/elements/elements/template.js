@@ -42,7 +42,6 @@ Pageboard.elements.fetch = Object.assign({}, Pageboard.elements.template, {
 		action: {
 			title: 'Action',
 			type: 'object',
-			required: ["method"],
 			properties: {
 				method: {
 					title: 'Method',
