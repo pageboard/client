@@ -154,7 +154,7 @@ Pageboard.elements.event_reservation = {
 			title: 'Number of reserved seats',
 			type: 'integer',
 			default: 1,
-			minimum: 1
+			minimum: 0
 		},
 		comment: {
 			title: 'Comment',
