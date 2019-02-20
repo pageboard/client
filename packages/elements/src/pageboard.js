@@ -72,14 +72,13 @@ exports.bundle = function(loader, state) {
 window.HTMLCustomElement = require('./HTMLCustomElement');
 
 Page.init(function(state) {
-	if (state.query.develop === undefined && state.referrer.query.develop !== undefined) {
-		// copy from previous state
-		state.query.develop = state.referrer.query.develop;
-	}
 	var dev = state.query.develop;
-	state.vars = {
-		develop: dev === null || dev === "write"
-	};
+	if (dev === undefined && state.referrer.query.develop !== undefined) {
+		// copy from previous state
+		dev = state.query.develop = state.referrer.query.develop;
+	}
+	state.vars = {};
+	if (dev === null || dev === "write") state.vars.develop = true;
 	var scope = state.scope;
 	if (!scope) scope = state.scope = {
 		$elements: exports.elements,
@@ -93,6 +92,7 @@ Page.patch(function(state) {
 	state.finish(function() {
 		var query = {};
 		var extra = [];
+		var missing = [];
 		Object.keys(state.query).forEach(function(key) {
 			if (state.vars[key] === undefined) {
 				extra.push(key);
@@ -100,13 +100,20 @@ Page.patch(function(state) {
 				query[key] = state.query[key];
 			}
 		});
+		Object.keys(state.vars).forEach(function(key) {
+			if (state.vars[key] === false) missing.push(key);
+		});
+		var head = document.head;
 		if (extra.length > 0) {
 			console.warn("Unknown query parameters detected, rewriting location", extra);
-			document.head.appendChild(document.dom(`
+			head.appendChild(head.dom(`
 				<meta http-equiv="Status" content="301 Bad query parameters">
 				<meta http-equiv="Location" content="${Page.format({query: query})}">
 			`));
 			state.replace({query: query});
+		} else if (missing.length > 0) {
+			console.warn("Missing query parameters detected", missing);
+			head.appendChild(head.dom(`<meta http-equiv="Status" content="400 Missing query parameters">`));
 		}
 	});
 });
