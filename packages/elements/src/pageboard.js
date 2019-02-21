@@ -112,7 +112,6 @@ Page.patch(function(state) {
 			`));
 			state.replace({query: query});
 		} else if (missing.length > 0) {
-			console.warn("Missing query parameters detected", missing);
 			head.appendChild(head.dom(`<meta http-equiv="Status" content="400 Missing query parameters">`));
 		}
 	});
