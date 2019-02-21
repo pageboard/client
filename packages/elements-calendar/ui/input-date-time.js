@@ -1,6 +1,6 @@
 class HTMLElementInputDateTime extends HTMLCustomElement {
 	static get observedAttributes() {
-		return ['value', 'format'];
+		return ['value', 'format', 'time-zone'];
 	}
 	get format() {
 		return this.getAttribute('format') || 'datetime';
@@ -8,6 +8,13 @@ class HTMLElementInputDateTime extends HTMLCustomElement {
 	set format(f) {
 		if (f) this.setAttribute('format', f);
 		else this.removeAttribute('format');
+	}
+	get timeZone() {
+		return this.getAttribute('time-zone');
+	}
+	set timeZone(f) {
+		if (f) this.setAttribute('time-zone', f);
+		else this.removeAttribute('time-zone');
 	}
 	get value() {
 		return this.getAttribute('value');
@@ -55,10 +62,11 @@ class HTMLElementInputDateTime extends HTMLCustomElement {
 		}
 		view.value = this.getAttribute('value') || input.value;
 		if (!input.value && view.value) input.value = view.value;
+		var tz = this.timeZone;
 		this._dt = window.DateTimeEntry(this._view, {
 			locale: document.documentElement.lang || window.navigator.language,
-			format: this._formatOptions(this.format),
-			useUTC: false,
+			format: this._formatOptions(this.format, tz),
+			useUTC: !!tz,
 			onChange: function(val) {
 				this.value = val.toISOString();
 			}.bind(this)
@@ -67,9 +75,11 @@ class HTMLElementInputDateTime extends HTMLCustomElement {
 
 	attributeChangedCallback(name, old, val) {
 		if (old == val || !this._dt) return;
-		if (name == "format") {
+		if (name == "format" || name == "time-zone") {
 			var props = this._dt.props;
-			props.format = this._formatOptions(val || 'datetime');
+			var tz = this.timeZone;
+			props.format = this._formatOptions(val || 'datetime', tz);
+			props.useUTC = !!tz;
 			this._dt.setOptions(props);
 		} else if (name == "value") {
 			this._input.value = val;
@@ -77,7 +87,7 @@ class HTMLElementInputDateTime extends HTMLCustomElement {
 		}
 	}
 
-	_formatOptions(format) {
+	_formatOptions(format, tz) {
 		var l = 'long';
 		var n = 'numeric';
 		var d = '2-digit';
@@ -92,6 +102,7 @@ class HTMLElementInputDateTime extends HTMLCustomElement {
 			hour: d,
 			minute: d
 		});
+		if (tz) fmt.timeZone = tz;
 		return fmt;
 	}
 

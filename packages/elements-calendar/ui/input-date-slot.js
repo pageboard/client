@@ -1,6 +1,6 @@
 class HTMLElementInputDateSlot extends HTMLCustomElement {
 	static get observedAttributes() {
-		return ['start', 'end'];
+		return ['start', 'end', 'time-zone'];
 	}
 
 	setup(state) {
@@ -14,6 +14,10 @@ class HTMLElementInputDateSlot extends HTMLCustomElement {
 			throw new Error("Expected three element-input-date-time");
 		}
 		this._els = els;
+		var tz = this.getAttribute('time-zone');
+		els[0].timeZone = tz;
+		els[1].timeZone = tz;
+		els[2].timeZone = tz;
 		els[0].format = "date";
 		els[1].format = "time";
 		els[2].format = "time";
@@ -59,6 +63,10 @@ class HTMLElementInputDateSlot extends HTMLCustomElement {
 			this._els[1].value = val;
 		} else if (name == "end") {
 			this._els[2].value = val;
+		} else if (name == "time-zone") {
+			this._els[0].timeZone = val;
+			this._els[1].timeZone = val;
+			this._els[2].timeZone = val;
 		}
 	}
 
