@@ -89,11 +89,25 @@ Page.ready(function(state) {
 			case 'ss': p.second = dig; break;
 			case 'tz': p.timeZoneName = s; break;
 			case 'timezone': p.timeZoneName = l; break;
-			default: console.warn("Unrecognized date format option", tok); break;
+			default:
+				if (/\w+\/\w+/.test(tok)) p.timeZone = tok;
+				else console.warn("Unrecognized date format option", tok);
+				break;
 			}
 		});
 		var lang = document.documentElement.lang || window.navigator.language;
-		return d.toLocaleString(lang, p);
+		var str;
+		try {
+			str = d.toLocaleString(lang, p);
+		} catch(err) {
+			if (p.timeZone && p.timeZone != "UTC") {
+				p.timeZone = "UTC";
+				str = d.toLocaleString(lang, p) + " UTC";
+			} else {
+				throw err;
+			}
+		}
+		return str;
 	};
 
 	filters.byWeek = function(val, what, datapath) {
