@@ -103,8 +103,10 @@ class HTMLElementTemplate extends HTMLCustomElement {
 					if (path[0] == "$query" && path.length > 1) {
 						// (b)magnet sets val to null so optional values are not undefined
 						var key = path.slice(1).join('.');
+						var undef = val === undefined;
+						if (undef) console.info("$query." + key, "is undefined");
 						if (!state.vars[key]) {
-							state.vars[key] = val !== undefined;
+							state.vars[key] = !undef;
 						}
 					}
 				}
