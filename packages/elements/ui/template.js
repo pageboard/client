@@ -102,7 +102,10 @@ class HTMLElementTemplate extends HTMLCustomElement {
 					var path = what.scope.path;
 					if (path[0] == "$query" && path.length > 1) {
 						// (b)magnet sets val to null so optional values are not undefined
-						state.vars[path.slice(1).join('.')] = val !== undefined;
+						var key = path.slice(1).join('.');
+						if (!state.vars[key]) {
+							state.vars[key] = val !== undefined;
+						}
 					}
 				}
 			}
