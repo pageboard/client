@@ -57,7 +57,7 @@ Pageboard.elements.event = {
 			default: 0,
 			minimum: 0
 		},
-		slot: { // TODO set eventDate default to this
+		slot: {
 			type: 'object',
 			title: 'Time slot',
 			properties: {
