@@ -22,6 +22,12 @@ Pageboard.elements.event = {
 			type: 'boolean',
 			default: false
 		},
+		minSeatsReservations: {
+			title: 'Min. number of seats per reservation',
+			type: 'integer',
+			default: 0,
+			minimum: 0
+		},
 		maxSeatsReservations: {
 			title: 'Max. number of seats per reservation',
 			type: 'integer',
