@@ -1,3 +1,10 @@
+Pageboard.elements.settings.properties.grants.items.anyOf.push({
+	const: 'scheduler',
+	$level: 1000,
+	title: 'Scheduler',
+	description: 'Events, dates, reservations'
+});
+
 Pageboard.elements.event = {
 	priority: 2, // must install scripts after query element scripts
 	title: 'Event',
