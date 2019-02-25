@@ -41,6 +41,7 @@ module.exports = function(res, scope) {
 
 	if (elem) install(elem, scope);
 
+	scope = Object.assign({}, scope);
 	for (var k in res) scope[`$${k}`] = res[k];
 
 	var block = res.item || {};
