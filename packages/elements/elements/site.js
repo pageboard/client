@@ -228,13 +228,18 @@ Pageboard.elements.page = {
 			return Object.keys(csp).filter(function(src) {
 				return csp[src].length > 0;
 			}).map(function(src) {
-				return `${src}-src ${csp[src].join(' ')}`;
+				var key = src.indexOf('-') > 0 ? src : `${src}-src`;
+				return `${key} ${csp[src].join(' ')}`.trim();
 			}).join('; ');
 		}
 	},
 	csp: {
 		default: ["'self'"],
+		'block-all-mixed-content': [""],
+		'form-action': ["'self'"],
+		'base-uri': ["'self'"],
 		connect: ["'self'"],
+		object: ["'none'"],
 		script: ["'self'", "https://cdn.polyfill.io"],
 		frame: ["https:"],
 		style: ["'self'", "'unsafe-inline'"],
