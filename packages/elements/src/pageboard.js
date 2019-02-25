@@ -28,7 +28,9 @@ function initState(res, state) {
 	if (!res) return;
 	if (res.grants) state.data.$grants = res.grants;
 	if (res.meta && res.meta.group == "page") {
-		for (var k in res) scope[`$${k}`] = res[k];
+		["grants", "hrefs", "links", "site"].forEach(function(k) {
+			if (res[k] !== undefined) scope[`$${k}`] = res[k];
+		});
 		scope.$element = res.item && scope.$elements[res.item.type];
 	}
 }
