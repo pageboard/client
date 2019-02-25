@@ -47,11 +47,9 @@ module.exports = function(res, scope) {
 	if (elem) {
 		elts[elem.name] = elem;
 		if (!block.type) block.type = elem.name;
+		else if (res.items) block.children = res.items;
 	} else if (block.type) {
 		elem = elts[block.type];
-		if (res.items) {
-			block.children = res.items;
-		}
 	}
 	return scope.$view.from(block, null, {
 		type: elem.name,
