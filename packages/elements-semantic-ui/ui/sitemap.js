@@ -33,7 +33,11 @@ class HTMLElementSitemap extends HTMLCustomElement {
 		var pages = res.items;
 		var tree = {};
 		pages.forEach(function(page) {
-			page.type = 'site' + page.type;
+			if (!page.type) return; // locked pages
+			if (!page.type.startsWith('site')) {
+				// this shouldn't happen, and is a workaround
+				page.type = 'site' + page.type;
+			}
 			if (!page.data.url) return;
 			var branch = tree;
 			var arr = page.data.url.substring(1).split('/');
