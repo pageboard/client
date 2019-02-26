@@ -69,7 +69,7 @@ Pageboard.elements.write = {
 					<i class="lock icon"></i>
 				</a>
 				<a class="item" id="toggle-expr">
-					<b class="icon">[|or:%5B*%5D]</b>
+					<i class="star of life icon"></i>
 				</a>
 			</div>
 		</div>

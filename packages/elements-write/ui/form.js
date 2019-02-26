@@ -94,8 +94,8 @@ Form.prototype.update = function(parents, sel) {
 		return curForm;
 	}, this);
 
-	this.toggleExpr.classList.toggle('inactive', canShowExpressions && showExpressions);
-	this.toggleExpr.classList.toggle('blue', !!this.block.expr);
+	this.toggleExpr.classList.toggle('inactive', !(canShowExpressions && showExpressions));
+	this.toggleExpr.firstElementChild.classList.toggle('yellow', !!this.block.expr);
 
 	var lock = this.block.lock;
 	var unlocked = true;
