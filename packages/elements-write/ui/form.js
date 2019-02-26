@@ -93,8 +93,9 @@ Form.prototype.update = function(parents, sel) {
 		canShowExpressions = canShowExpressions || curForm.el.properties;
 		return curForm;
 	}, this);
-
-	this.toggleExpr.classList.toggle('inactive', !(canShowExpressions && showExpressions));
+	this.toggleExpr.classList.toggle('hidden', !showExpressions);
+	this.toggleExpr.classList.toggle('disabled', !canShowExpressions);
+	this.toggleExpr.classList.toggle('active', this.mode == "expr");
 	this.toggleExpr.firstElementChild.classList.toggle('yellow', !!this.block.expr);
 
 	var lock = this.block.lock;
@@ -106,6 +107,7 @@ Form.prototype.update = function(parents, sel) {
 	this.toggleLocks.firstElementChild.classList.toggle('lock', !unlocked);
 	this.toggleLocks.firstElementChild.classList.toggle('red', !unlocked);
 	this.toggleLocks.firstElementChild.classList.toggle('unlock', unlocked);
+	this.toggleLocks.classList.toggle('active', this.mode == "lock");
 
 	curInlines.forEach(function(form) {
 		form.destroy();
