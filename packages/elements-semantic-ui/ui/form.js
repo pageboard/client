@@ -67,6 +67,8 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			case 'textarea':
 				elem.innerText = val;
 				break;
+			case 'hidden':
+				break;
 			default:
 				if (elem.fill) {
 					elem.fill(val);
