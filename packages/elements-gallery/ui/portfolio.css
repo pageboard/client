@@ -152,10 +152,12 @@ element-portfolio[data-shape="small"] element-portfolio-item[data-scale-height="
 	element-portfolio-item,
 	element-portfolio[data-shape="wide"] element-portfolio-item {
 		width:100%;
+		padding-bottom: 66.6666%;
 	}
 	element-portfolio-item[data-scale-width="2"],
 	element-portfolio[data-shape="wide"] element-portfolio-item[data-scale-width="2"] {
 		width:100%;
+		padding-bottom: 66.6666%;
 	}
 }
 
@@ -163,10 +165,12 @@ element-portfolio[data-shape="small"] element-portfolio-item[data-scale-height="
 	element-portfolio[data-shape="tall"] element-portfolio-item,
 	element-portfolio[data-shape="small"] element-portfolio-item {
 		width:100%;
+		padding-bottom: 66.6666%;
 	}
 	element-portfolio[data-shape="small"] element-portfolio-item[data-scale-width="2"],
 	element-portfolio[data-shape="tall"] element-portfolio-item[data-scale-width="2"] {
 		width:100%;
+		padding-bottom: 66.6666%;
 	}
 }
 
