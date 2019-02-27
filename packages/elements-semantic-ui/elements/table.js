@@ -133,7 +133,7 @@ Pageboard.elements.table_cell = {
 		}
 	},
 	inplace: true,
-	contents: "inline*",
+	contents: "block+",
 	tag: 'td',
 	parse: function(dom) {
 		var d = {};
@@ -160,7 +160,7 @@ Pageboard.elements.table_head_cell = {
 			maximum: 16
 		}
 	},
-	contents: "inline*",
+	contents: "block+",
 	tag: 'th',
 	inplace: true,
 	html: '<th class="[align|post: aligned] [width|num: wide]"></th>'
