@@ -35,7 +35,7 @@ Pageboard.elements.sticky = {
 		'../ui/sticky.css'
 	],
 	scripts: [
-		'../lib/stickyfill.js',
+		'../ui/stickyfill.js',
 		'../ui/sticky.js'
 	]
 };
