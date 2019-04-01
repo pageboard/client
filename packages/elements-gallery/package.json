@@ -21,7 +21,7 @@
     "@pageboard/flickity": "^2.1.1-3",
     "isotope-layout": "^3.0.6",
     "list-diff.js": "^0.1.0",
-    "postinstall": "^0.1.0"
+    "postinstall": "^0.4.0"
   },
   "postinstall": {
     "list-diff.js/list-diff.js": "link ui/lib/list-diff.js",

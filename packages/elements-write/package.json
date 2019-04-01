@@ -27,7 +27,7 @@
     "morphdom": "^2.3.3",
     "pagecut": "1.0.0-beta.73",
     "perfect-scrollbar": "^1.3.0",
-    "postinstall": "^0.2.0",
+    "postinstall": "^0.4.0",
     "postinstall-browserify": "^0.1.0",
     "pretty-bytes": "^4.0.2",
     "prosemirror-dev-tools": "^2.1.0",
