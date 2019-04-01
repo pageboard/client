@@ -30,6 +30,7 @@ class HTMLElementGoogleTranslate extends HTMLCustomElement {
 			return true;
 		} else if (this.inst) {
 			if (this.shown) return false;
+			this.inst.setEnabled(true);
 			this.inst.showBanner();
 			return true;
 		}
@@ -45,6 +46,7 @@ class HTMLElementGoogleTranslate extends HTMLCustomElement {
 			layout: TE.InlineLayout.SIMPLE,
 			autoDisplay: true
 		});
+		this.inst.setEnabled(true);
 		this.inst.showBanner();
 
 		if (this.patched) return;
@@ -96,7 +98,7 @@ Page.setup(function() {
 	}
 });
 
-Page.close(function() {
+Page.init(function() {
 	var s = document.body.style;
 	HTMLElementGoogleTranslate.style = {
 		minHeight: s.minHeight,
