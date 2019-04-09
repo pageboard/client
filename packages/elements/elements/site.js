@@ -34,6 +34,15 @@ Pageboard.elements.site = {
 				type: "string" // TODO patterns, see core
 			}]
 		},
+		server: {
+			title: 'Server version',
+			description: 'Major.minor pageboard server version',
+			anyOf: [{
+				type: "null"
+			}, {
+				type: "string"
+			}]
+		},
 		env: {
 			title: 'Environment',
 			anyOf: [{
