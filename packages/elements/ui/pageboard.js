@@ -20,8 +20,7 @@ Pageboard.fetch = function(method, url, data) {
 	var fetchOpts = {
 		method: method,
 		headers: {
-			'Accept': 'application/json',
-			'Accept-Version': '0.5'
+			'Accept': 'application/json'
 		},
 		credentials: "same-origin"
 	};
