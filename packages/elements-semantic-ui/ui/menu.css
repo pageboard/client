@@ -6,6 +6,10 @@
 	transform:rotate(90deg);
 }
 
+.ui.dropdown.item > .title.active {
+	font-weight: bold;
+}
+
 [block-type="menu_item_popup"] {
 	display:block !important;
 	position:static !important;
