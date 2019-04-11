@@ -22,8 +22,6 @@
 	width:90%;
 	left:5%;
 	max-width:none;
-	min-width: -webkit-min-content;
-	min-width: -moz-min-content;
 	min-width: min-content;
 	padding: 0.833em 1em;
 }
