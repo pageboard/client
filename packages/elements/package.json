@@ -23,7 +23,7 @@
     "matchdom": "3.0.0",
     "pagecut": "1.0.0-beta.73",
     "postinstall": "^0.4.0",
-    "window-page": "^4.2.2"
+    "window-page": "^4.2.4"
   },
   "postinstall": {
     "pagecut/dist/viewer.js": "link lib/",
