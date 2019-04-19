@@ -50,15 +50,16 @@ Pageboard.elements.site = {
 			format: "singleline" // a "version" format ?
 		},
 		server: {
-			title: 'Server',
-			anyOf: [{
-				const: "stable",
-				title: "Stable"
-			}, {
-				const: "latest",
-				title: "Latest"
-			}],
-			default: "latest"
+			title: 'Server version',
+			description: 'Major.minor pageboard server version',
+			nullable: true,
+			pattern: '^\\d+\\.\\d+$'
+		},
+		maintenance: {
+			title: 'Maintenance',
+			description: 'Site-wide read-only mode',
+			type: "boolean",
+			nullable: true
 		},
 		env: {
 			title: 'Environment',
