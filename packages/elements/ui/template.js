@@ -48,11 +48,11 @@ class HTMLElementTemplate extends HTMLCustomElement {
 				}
 			});
 			delete scope.$filters['||'];
-			var ok = false;
-			Object.keys(vars).forEach(function(key) {
-				ok = state.vars[key] = true;
+			var varsKeys = Object.keys(vars);
+			varsKeys.forEach(function(key) {
+				state.vars[key] = true;
 			});
-			if (!ok) return;
+			if (Object.keys(expr).length && varsKeys.length == 0) return;
 		} else if (!remote) {
 			// non-remotes cannot know if they will need $query
 		}
