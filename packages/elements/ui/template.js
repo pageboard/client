@@ -33,11 +33,15 @@ class HTMLElementTemplate extends HTMLCustomElement {
 				console.warn("block-expr attribute should contain JSON");
 				expr = {};
 			}
+			var missing = 0;
 			scope.$filters['||'] = function(val, what) {
 				var path = what.scope.path.slice();
 				if (path[0] == "$query") {
 					path = path.slice(1).join('.');
-					if (path.length && val != null) vars[path] = val;
+					if (path.length) {
+						if (val != null) vars[path] = val;
+						else missing++;
+					}
 				}
 			};
 			Pageboard.merge(expr, function(val) {
@@ -48,11 +52,10 @@ class HTMLElementTemplate extends HTMLCustomElement {
 				}
 			});
 			delete scope.$filters['||'];
-			var varsKeys = Object.keys(vars);
-			varsKeys.forEach(function(key) {
+			Object.keys(vars).forEach(function(key) {
 				state.vars[key] = true;
 			});
-			if (Object.keys(expr).length && varsKeys.length == 0) return;
+			if (missing) return;
 		} else if (!remote) {
 			// non-remotes cannot know if they will need $query
 		}
