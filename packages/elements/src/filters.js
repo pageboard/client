@@ -123,6 +123,11 @@ exports.autolink = function(val, what) {
 	}
 };
 
+exports.enc = function(str) {
+	if (str == null || typeof str != "string") return str;
+	return encodeURIComponent(str);
+};
+
 exports.query = function(obj, what) {
 	if (obj == null || typeof obj != "object") return null;
 	var str = Object.keys(obj).map(function(key) {
