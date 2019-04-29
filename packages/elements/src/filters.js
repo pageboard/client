@@ -51,14 +51,6 @@ exports.sum = function(obj, what, ...list) {
 	return sum;
 };
 
-exports.query = function(val, what, name) {
-	var q = Object.assign({}, what.scope.$query);
-	for (var key in q) if (key[0] == "_") delete q[key];
-	q[name] = val;
-	return Page.format({pathname: "", query: q});
-};
-
-
 exports.schema = function(val, what, spath) {
 	// return schema of repeated key, schema of anyOf/listOf const value
 	if (val === undefined) return;
