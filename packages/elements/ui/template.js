@@ -22,15 +22,16 @@ class HTMLElementTemplate extends HTMLCustomElement {
 		if (me._refreshing || me.closest('[block-content="template"]')) return;
 		// first find out if state.query has a key in this.keys
 		// what do we do if state.query has keys that are used by a form in this query template ?
-		var expressions = this.getAttribute('block-expr');
+		var expr = this.getAttribute('block-expr');
 		var vars = {};
 		var scope = state.scope;
 		var remote = me.remote;
-		if (expressions) {
+		if (expr) {
 			try {
-				expressions = JSON.parse(expressions);
+				expr = JSON.parse(expr);
 			} catch(ex) {
 				console.warn("block-expr attribute should contain JSON");
+				expr = {};
 			}
 			scope.$filters['||'] = function(val, what) {
 				var path = what.scope.path.slice();
@@ -39,7 +40,7 @@ class HTMLElementTemplate extends HTMLCustomElement {
 					if (path.length && val != null) vars[path] = val;
 				}
 			};
-			Pageboard.merge(expressions, function(val) {
+			Pageboard.merge(expr, function(val) {
 				if (typeof val == "string") try {
 					return val.fuse({$query: state.query}, scope);
 				} catch(ex) {
