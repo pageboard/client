@@ -74,12 +74,8 @@ exports.bundle = function(loader, state) {
 window.HTMLCustomElement = require('./HTMLCustomElement');
 
 Page.init(function(state) {
-	var dev = state.query.develop;
-	if (dev === undefined && state.referrer.query.develop !== undefined) {
-		// copy from previous state
-		dev = state.query.develop = state.referrer.query.develop;
-	}
 	state.vars = {};
+	var dev = state.query.develop;
 	if (dev === null || dev === "write") state.vars.develop = true;
 	var scope = state.scope;
 	if (!scope) scope = state.scope = {
