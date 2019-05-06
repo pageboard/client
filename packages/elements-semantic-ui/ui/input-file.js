@@ -1,50 +1,32 @@
 class HTMLElementInputFile extends HTMLCustomElement {
-	init() {
-		this.change = this.change.bind(this);
-		this.click = this.click.bind(this);
-	}
-	connectedCallback() {
-		var file = this.querySelector('input[type="file"]');
-		if (!file) return;
+	captureClick(e, state) {
 		var input = this.querySelector('input[type="text"]');
-		if (input && !input.value) input.removeAttribute('value');
-		file.addEventListener('change', this.change);
-		this.addEventListener('click', this.click);
-	}
-
-	click(e) {
-		if (e.target.closest('.icon.delete')) {
+		if (!input) return;
+		if (input.value) {
+			e.preventDefault();
 			if (this._xhr) {
 				this._xhr.abort();
 				delete this._xhr;
 			}
-			var input = this.querySelector('input[type="text"]');
-			input.removeAttribute('value');
+			input.setAttribute('value', '');
+			input.value = '';
+			var file = this.querySelector('input[type="file"]');
+			file.reset();
 			this.closest('.field').classList.remove('filled', 'loading', 'error', 'success');
+		} else {
+			// ok
 		}
 	}
 
-	uploadName(str) {
-		return (str || "").split(/\/|\\/).pop();
-	}
-
-	change(e) {
+	handleChange(e, state) {
 		var input = this.querySelector('input[type="text"]');
 		if (!input) return;
-		if (e.target.value) {
-			input.setAttribute("value", this.uploadName(e.target.value));
+		if (e.target.type == "file" && e.target.value) {
+			input.value = (e.target.value || "").split(/\/|\\/).pop();
 		}
+		input.setAttribute('value', input.value);
 		if (this.dataset.now != null) this.upload();
 	}
-
-	disconnectedCallback() {
-		var file = this.querySelector('input[type="file"]');
-		if (file) file.removeEventListener('change', this.change);
-		this.removeEventListener('click', this.click);
-	}
-
-	// TODO use input file to maintain a list of input text(s)
-	// and do not try to keep the input text
 
 	upload() {
 		if (this._promise) return this._promise;
@@ -52,7 +34,6 @@ class HTMLElementInputFile extends HTMLCustomElement {
 		var input = this.querySelector('input[type="text"]');
 		if (!input || !file) throw new Error("Unitialized input-file");
 		if (!file.files.length) return Promise.resolve();
-		input.value = "";
 		var self = this;
 		var field = this.closest('.field');
 		field.classList.remove('success', 'error');
@@ -72,13 +53,10 @@ class HTMLElementInputFile extends HTMLCustomElement {
 				delete self._promise;
 			}
 			function pass(obj) {
-				var val = Page.parse(obj[0]);
-				if (Page.sameDomain(val, document.location)) {
-					val = Page.format(val);
-				} else {
-					val = obj[0];
-				}
+				if (!obj.items || obj.items.length == 0) return fail(new Error("File rejected"));
+				var val = obj.items[0];
 				input.value = val;
+				input.setAttribute('value', val);
 				track(-1);
 				field.classList.add('success');
 				field.classList.remove('loading');
@@ -89,10 +67,6 @@ class HTMLElementInputFile extends HTMLCustomElement {
 			if (file.files.length == 0) return resolve(); // or reject ?
 			track(0);
 			var fd = new FormData();
-			// TODO input multiple can be symbolized by showing multiple
-			// .action.input with a close button. Closing means not adding
-			// from the list of files. It should also be possible to
-			// transparently use again the input file and concat file.files
 			for (var i=0; i < file.files.length; i++) {
 				fd.append("files", file.files[i]);
 			}
@@ -123,8 +97,11 @@ class HTMLElementInputFile extends HTMLCustomElement {
 				err.statusCode = xhr.status;
 				fail(err);
 			});
+			var url = "/.api/upload";
+			var id = this.parentNode && this.parentNode.getAttribute('block-id');
+			if (id) url += `/${id}`;
 			try {
-				xhr.open("POST", "/.api/upload", true);
+				xhr.open("POST", url, true);
 				xhr.setRequestHeader('Accept', "application/json; q=1.0");
 				xhr.send(fd);
 				self._xhr = xhr;
