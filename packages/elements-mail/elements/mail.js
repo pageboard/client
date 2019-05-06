@@ -26,7 +26,7 @@ Pageboard.elements.mail = {
 			spec: 'mail_body'
 		}
 	},
-	html: `<html lang="[$site.lang]">
+	html: `<html lang="[$site.lang|ornull]">
 	<head>
 		<title>[$site.title|post:%3A |or:][title]</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">

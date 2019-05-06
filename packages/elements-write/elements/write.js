@@ -4,7 +4,7 @@ Pageboard.elements.write = {
 	title: 'Editor',
 	group: 'page',
 	standalone: true,
-	html: `<html lang="[$site.lang]">
+	html: `<html lang="[$site.lang|ornull]">
 	<head>
 		<title>[title][$site.title|pre: - |or:]</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">

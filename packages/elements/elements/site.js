@@ -174,7 +174,7 @@ Pageboard.elements.page = {
 			title: 'body'
 		}
 	},
-	html: `<html lang="[$site.lang]">
+	html: `<html lang="[$site.lang|ornull]">
 	<head>
 		<title>[title][$site.title|pre: - |or:]</title>
 		<meta http-equiv="Status" content="[$status|or:200] [$statusText|or:OK][redirect|!|bmagnet:*]">
