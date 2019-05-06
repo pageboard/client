@@ -28,6 +28,7 @@ SchemaFilter.prototype.update = function(block, schema) {
 	var copy = {
 		title: schema.title,
 		description: schema.description,
+		nullable: schema.nullable
 	};
 
 	return Object.assign({}, otherSchema, copy);
