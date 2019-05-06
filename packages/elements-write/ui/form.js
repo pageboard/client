@@ -96,7 +96,7 @@ Form.prototype.update = function(parents, sel) {
 	this.toggleExpr.classList.toggle('hidden', !showExpressions);
 	this.toggleExpr.classList.toggle('disabled', !canShowExpressions);
 	this.toggleExpr.classList.toggle('active', this.mode == "expr");
-	this.toggleExpr.firstElementChild.classList.toggle('yellow', !!this.block.expr);
+	this.toggleExpr.firstElementChild.classList.toggle('yellow', this.block.expr && Object.keys(this.block.expr).length && true || false);
 
 	var lock = this.block.lock;
 	var unlocked = true;
@@ -305,8 +305,7 @@ function propToMeta(schema) {
 
 FormBlock.prototype.customFilter = function(key, prop) {
 	var opts = prop.$filter;
-	if (this.mode == "expr") prop = propToMeta(prop);
-	else if (this.mode == "lock") {
+	if (this.mode == "lock") {
 		if (key == null) return {
 			title: 'Locks',
 			type: 'object',
@@ -325,23 +324,28 @@ FormBlock.prototype.customFilter = function(key, prop) {
 		};
 		else return;
 	}
-	if (!opts) return prop;
-	if (typeof opts == "string") {
-		opts = {name: opts};
-	} else if (!opts.name) {
-		console.warn("$filter without name", prop);
-		return prop;
+	if (opts) {
+		if (typeof opts == "string") {
+			opts = {name: opts};
+		} else if (!opts.name) {
+			console.warn("$filter without name", prop);
+			return prop;
+		}
+		var Filter = Pageboard.schemaFilters[opts.name];
+		if (!Filter) {
+			console.error("Unknown filter name", prop);
+			return prop;
+		}
+		var inst = this.filters[key];
+		if (!inst) {
+			inst = this.filters[key] = new Filter(key, opts, prop);
+		}
+		prop = inst.update && inst.update(this.block, prop) || prop;
 	}
-	var Filter = Pageboard.schemaFilters[opts.name];
-	if (!Filter) {
-		console.error("Unknown filter name", prop);
-		return prop;
+	if (this.mode == "expr") {
+		prop = propToMeta(prop);
 	}
-	var inst = this.filters[key];
-	if (!inst) {
-		inst = this.filters[key] = new Filter(key, opts, prop);
-	}
-	return inst.update && inst.update(this.block, prop) || prop;
+	return prop;
 };
 
 FormBlock.prototype.handleEvent = function(e) {
