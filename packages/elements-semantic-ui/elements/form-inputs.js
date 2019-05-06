@@ -158,69 +158,6 @@ Pageboard.elements.input_text = {
 	</div>`
 };
 
-Pageboard.elements.input_file = {
-	title: 'Upload',
-	icon: '<i class="upload icon"></i>',
-	menu: "form",
-	required: ["name"],
-	group: "block",
-	context: 'form//',
-	properties: {
-		name: {
-			title: "name",
-			description: "The form object key",
-			type: "string",
-			format: "singleline"
-		},
-		placeholder: {
-			title: "placeholder",
-			nullable: true,
-			type: "string",
-			format: "singleline"
-		},
-		required: {
-			title: 'required',
-			type: 'boolean',
-			default: false
-		},
-		disabled: {
-			title: 'disabled',
-			type: 'boolean',
-			default: false
-		},
-		now: {
-			title: 'upload on change',
-			type: 'boolean',
-			default: false
-		}
-	},
-	contents: {
-		label: 'inline*'
-	},
-	html: `<div class="field">
-		<label block-content="label">Label</label>
-		<element-input-file class="ui action input" data-now="[now]">
-			<input type="text" name="[name]" />
-			<input type="file" required="[required]"
-				disabled="[disabled]"
-				placeholder="[placeholder]" />
-			<div class="ui icon button">
-				<i class="upload icon"></i>
-				<i class="delete icon"></i>
-			</div>
-			<div class="mini floating ui basic label"></div>
-		</element-input-file>
-	</div>`,
-	stylesheets: [
-		'../lib/components/input.css',
-		'../lib/components/label.css',
-		'../ui/input-file.css'
-	],
-	scripts: [
-		'../ui/input-file.js'
-	]
-};
-
 Pageboard.elements.input_range = {
 	title: 'Range',
 	icon: '<i class="options icon"></i>',
