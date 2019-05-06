@@ -75,7 +75,9 @@ function install(el, scope) {
 		console.error("Invalid element", el, err);
 		return;
 	}
-	if (el.dom) el.render = function(block, bscope) {
+
+	if (!el.dom) return;
+	el.render = function(block, bscope) {
 		var rscope = Object.assign({}, scope, {
 			$element: el
 		}, bscope);
