@@ -35,7 +35,10 @@ Crop.prototype.init = function(block) {
 		zoomOnTouch: false,
 		zoomOnWheel: false,
 		scalable: true,
-		// rotatable: false, uncomment after cropperjs >= 1.1.3
+		rotatable: false,
+		autoCropArea: 1,
+		minContainerWidth: this.container.offsetWidth,
+		minContainerHeight: this.container.offsetWidth * 3 / 4,
 		dragMode: 'move',
 		toggleDragModeOnDblclick: false,
 		ready: this.ready.bind(this),
@@ -65,15 +68,6 @@ Crop.prototype.formChange = function(e) {
 
 Crop.prototype.reset = function() {
 	this.cropper.reset();
-	this.cropper.scale(1, 1);
-	this.block.data.crop = {
-		x:50,
-		y:50,
-		width:100,
-		height:100,
-		zoom:100
-	};
-	this.updateData();
 };
 
 Crop.prototype.zoomIn = function() {
@@ -89,13 +83,13 @@ Crop.prototype.initControls = function() {
 
 	var btnCont = this.container.appendChild(doc.dom(`<div class="bottom-buttons"></div>`));
 	this.resetButton = btnCont.appendChild(doc.dom(`<div class="mini ui basic inverted circular icon button">
-		<i class="maximize icon"></i>
+		<i class="arrows alternate icon"></i>
 	</div>`));
 	this.zoomOutButton = btnCont.appendChild(doc.dom(`<div class="ui mini basic inverted circular icon button out">
-		<i class="compress icon"></i>
+		<i class="compress arrows alternate icon"></i>
 	</div>`));
 	this.zoomInButton = btnCont.appendChild(doc.dom(`<div class="ui mini basic inverted circular icon button in">
-		<i class="expand icon"></i>
+		<i class="expand arrows alternate icon"></i>
 	</div>`));
 
 	this.resetButton.addEventListener('click', this.reset, false);
