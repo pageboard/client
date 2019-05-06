@@ -229,6 +229,24 @@ Semafor.flatten = function(tree, obj, schema) {
 			}
 			if (schema !== undefined) {
 				if (field && field.type == "array") {
+					var allStrings = false;
+					if (field.items && field.items.anyOf) {
+						allStrings = field.items.anyOf.every(function(item) {
+							return item.type == "string";
+						});
+					}
+					if (field.items && field.items.type == "string") {
+						allStrings = true;
+					}
+					if (allStrings) {
+						if (typeof val == "string") val = [val];
+						if (Array.isArray(val)) {
+							obj[key] = val.join('\n');
+						} else {
+							obj[key] = val;
+						}
+						return;
+					}
 					Object.entries(Semafor.flatten(val, {})).forEach(function([k, kval]) {
 						obj[`${key}.${k}`] = kval;
 					});
@@ -321,6 +339,13 @@ Semafor.prototype.convert = function(vals, field) {
 				}
 				if (Object.keys(val).length == 0 && nullable) val = null;
 				break;
+			case "array":
+				if (typeof val == "string") {
+					val = val.split('\n').filter(function(str) {
+						return str.length > 0;
+					});
+				}
+				break;
 			default:
 				if (nullable && val === "") val = null;
 				break;
@@ -360,6 +385,8 @@ Semafor.prototype.process = function(key, schema, node) {
 			}
 			if (schema.required && schema.required.indexOf(key) >= 0) { // TODO problem key != name if nested
 				field.rules.push({type: 'empty'});
+			} else {
+				field.optional = true;
 			}
 			Object.keys(schema).forEach(function(kw) {
 				if (keywords[kw]) field.rules.push(keywords[kw](schema[kw]));
@@ -565,6 +592,8 @@ types.array = function(key, schema, node, inst) {
 		schema.items.forEach(function(item, i) {
 			inst.process(`${key}.${i}`, item, fieldset);
 		});
+	} else if (schema.items.type == "string") {
+		types.string(key, schema, node, inst);
 	} else if (schema.items.anyOf) {
 		var allStrings = schema.items.anyOf.every(function(item) {
 			return item.type == "string";
@@ -585,7 +614,7 @@ types.array = function(key, schema, node, inst) {
 			$(field).find('.dropdown').dropdown({placeholder: false});
 		}
 	} else {
-		console.info("FIXME: array type supports only items: [schemas], or items.anyOf");
+		console.info("FIXME: array type supports only items: [schemas], or items.anyOf", schema);
 		return inst.process(key, Object.assign({}, schema.items, {title: schema.title}), node);
 	}
 };
