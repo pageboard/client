@@ -16,15 +16,15 @@ function Share(editor, node) {
 Share.prototype.update = function(parents) {
 	this.block = parents[0].block;
 	this.disabled = true;
-	this.standalone = this.block.standalone;
-	this.toggle.checkbox(this.standalone ? 'set checked' : 'set unchecked');
 	var el = this.editor.element(this.block.type);
+	this.standalone = this.block.standalone || el.standalone;
+	this.toggle.checkbox(this.standalone ? 'set checked' : 'set unchecked');
 	var hide = !this.block.id || el.standalone || el.inplace || el.inline;
-	var hasAncestor = parents.slice(1, -1).some(function(parent) {
+	var hasAncestor = !this.standalone && parents.slice(1, -1).some(function(parent) {
 		return parent.block.standalone;
 	});
 	var hasDescendant = false;
-	parents[0].node.descendants(function(child) {
+	if (!this.standalone) parents[0].node.descendants(function(child) {
 		if (child.attrs.standalone == "true") {
 			hasDescendant = true;
 			return false;
@@ -33,7 +33,7 @@ Share.prototype.update = function(parents) {
 	this.node.classList.toggle('standalone-no', !!hide);
 	this.node.classList.toggle('standalone-descendant', hasDescendant);
 	this.node.classList.toggle('standalone-ancestor', hasAncestor);
-	var disabled = hasAncestor || hasDescendant || hide;
+	var disabled = hasAncestor || hasDescendant || hide || el.standalone || el.virtual;
 	this.toggle.checkbox(disabled ? 'set disabled' : 'set enabled');
 	this.disabled = disabled;
 };
