@@ -385,8 +385,8 @@ Href.prototype.uploadStart = function() {
 		});
 		input.click();
 		input.value = null;
-	}).then(function(files) {
-		if (!files) return;
+	}).then(function(obj) {
+		var files = Array.isArray(obj) ? obj : (obj && obj.items || []);
 		var p = Promise.resolve();
 		files.forEach(function(file) {
 			p = p.then(function() {
@@ -492,7 +492,7 @@ Href.prototype.renderItem = function(obj) {
 	var item = document.dom(`<a href="${normUrl(obj.url)}" class="item">
 		<div class="content">
 			<div class="ui tiny header">
-				${obj.title}
+				${obj.title || '-'}
 				<div class="ui pinned right compact circular large icon button" data-action="remove">
 					<i class="icon ban"></i>
 				</div>
