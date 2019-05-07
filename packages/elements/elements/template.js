@@ -1,4 +1,4 @@
-Pageboard.elements.template = {
+exports.template = {
 	priority: 1,
 	title: 'Template',
 	// icon: '<b class="icon">[*]</b>',
@@ -30,7 +30,7 @@ Pageboard.elements.template = {
 	]
 };
 
-Pageboard.elements.fetch = Object.assign({}, Pageboard.elements.template, {
+exports.fetch = Object.assign({}, exports.template, {
 	title: "Fetch",
 	icon: '<i class="search icon"></i>',
 	expressions: true,
@@ -64,7 +64,7 @@ Pageboard.elements.fetch = Object.assign({}, Pageboard.elements.template, {
 	}
 });
 
-Pageboard.elements.binding = {
+exports.binding = {
 	title: "Binding",
 	icon: '<b class="icon">[*]</b>',
 	properties: {
@@ -88,7 +88,7 @@ Pageboard.elements.binding = {
 	>[fill|trim|split:%0A|join:%7C|pre:%5B|post:%5D]</span>`
 };
 
-Pageboard.elements.content = {
+exports.content = {
 	title: "Content",
 	icon: '<b class="icon">cont</b>',
 	menu: "form",

@@ -1,4 +1,4 @@
-Pageboard.elements.layout = {
+exports.layout = {
 	title: "Layout",
 	icon: '<i class="icon move"></i>',
 	properties: {

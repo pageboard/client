@@ -1,4 +1,4 @@
-Pageboard.elements.input_property = {
+exports.input_property = {
 	title: 'Property',
 	menu: 'form',
 	group: 'block',

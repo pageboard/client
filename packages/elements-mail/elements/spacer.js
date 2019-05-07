@@ -1,4 +1,4 @@
-Pageboard.elements.mail_spacer = {
+exports.mail_spacer = {
 	title: "Spacer",
 	icon: '<b class="icon">Sp</b>',
 	properties: {

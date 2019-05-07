@@ -1,4 +1,4 @@
-Pageboard.elements.sticky = {
+exports.sticky = {
 	title: "Sticky",
 	icon: '<i class="icon pin"></i>',
 	menu: "widget",

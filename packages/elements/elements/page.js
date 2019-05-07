@@ -1,4 +1,4 @@
-Pageboard.elements.page = {
+exports.page = {
 	priority: -100,
 	replaces: 'doc',
 	title: 'Page',
@@ -78,13 +78,13 @@ Pageboard.elements.page = {
 		<title>[title][$site.title|pre: - |or:]</title>
 		<meta http-equiv="Status" content="[$status|or:200] [$statusText|or:OK][redirect|!|bmagnet:*]">
 		<meta http-equiv="Status" content="302 Found[transition.from|!|bmagnet:*+]">
-		<meta http-equiv="Location" content="[redirect|eq:[url]:|magnet:+*]">
+		<meta http-equiv="Location" content="[redirect|eq:[url]:|ornull|magnet:+*]">
 		<meta http-equiv="Content-Security-Policy" content="[$elements|csp]">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta name="robots" content="[noindex|bmagnet:*|?]">
+		<meta name="robots" content="[noindex|?|ornull|magnet:*]">
 		<meta name="description" content="[description|magnet:*]">
 		<link rel="icon" href="[$site.favicon|magnet:*|url]?format=ico">
-		<link rel="stylesheet" href="[$element.stylesheets|repeat]" />
+		<link rel="stylesheet" href="[$element.stylesheets|repeat]">
 		<script defer src="https://cdn.polyfill.io/v2/polyfill.min.js?flags=gated&features=[$elements|polyfills|url|magnet:*]"></script>
 		<script defer src="[$element.scripts|repeat]"></script>
 	</head>
@@ -92,7 +92,7 @@ Pageboard.elements.page = {
 	scripts: [
 		'../lib/custom-elements.js',
 		'../lib/custom-elements-builtin.js'
-	].concat(Pageboard.elements.site.resources),
+	].concat(exports.site.resources),
 	polyfills: [
 		'dataset', 'fetch'
 	],
@@ -134,7 +134,7 @@ Pageboard.elements.page = {
 		}
 	},
 	csp: {
-		default: ["'self'"],
+		default: ["'none'"],
 		'block-all-mixed-content': [""],
 		'form-action': ["'self'"],
 		'base-uri': ["'self'"],

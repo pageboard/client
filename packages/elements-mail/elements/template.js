@@ -1,4 +1,4 @@
-Pageboard.elements.mail_template = Object.assign({}, Pageboard.elements.template, {
+exports.mail_template = Object.assign({}, exports.template, {
 	group: "mail_block mail_template",
 	contents: {
 		template: {
@@ -9,12 +9,12 @@ Pageboard.elements.mail_template = Object.assign({}, Pageboard.elements.template
 	}
 });
 
-Pageboard.elements.mail_fetch = Object.assign({}, Pageboard.elements.fetch, {
-	group: Pageboard.elements.mail_template.group,
-	contents: Pageboard.elements.mail_template.contents
+exports.mail_fetch = Object.assign({}, exports.fetch, {
+	group: exports.mail_template.group,
+	contents: exports.mail_template.contents
 });
 
-Pageboard.elements.mail_binding = Object.assign({}, Pageboard.elements.binding, {
+exports.mail_binding = Object.assign({}, exports.binding, {
 	context: 'mail_template//',
 	group: "mail_inline"
 });

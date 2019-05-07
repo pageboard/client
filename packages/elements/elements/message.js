@@ -1,4 +1,4 @@
-Pageboard.elements.message = {
+exports.message = {
 	title: 'Message',
 	icon: '<i class="announcement icon"></i>',
 	menu: "form",

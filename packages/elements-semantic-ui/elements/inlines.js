@@ -1,4 +1,4 @@
-Pageboard.elements.strong = {
+exports.strong = {
 	priority: 12,
 	title: "Strong",
 	contents: "text*",
@@ -9,7 +9,7 @@ Pageboard.elements.strong = {
 	html: '<strong></strong>'
 };
 
-Pageboard.elements.em = {
+exports.em = {
 	priority: 12,
 	title: "Emphasize",
 	contents: "text*",
@@ -20,7 +20,7 @@ Pageboard.elements.em = {
 	html: '<em></em>'
 };
 
-Pageboard.elements.light = {
+exports.light = {
 	priority: 12,
 	title: "Light",
 	icon: '<i class="icon" style="font-weight:lighter">L</i>',
@@ -31,7 +31,7 @@ Pageboard.elements.light = {
 	html: '<span class="lighter"></span>'
 };
 
-Pageboard.elements.sup = {
+exports.sup = {
 	priority: 12,
 	title: "Sup",
 	icon: '<b class="icon">S<sup>up</sup></b>',
@@ -42,7 +42,7 @@ Pageboard.elements.sup = {
 	html: '<sup></sup>'
 };
 
-Pageboard.elements.caps = {
+exports.caps = {
 	priority: 12,
 	title: "Capitalization",
 	icon: '<span class="icon">Aa</span>',
@@ -77,7 +77,7 @@ Pageboard.elements.caps = {
 	html: '<span class="[transform]"></span>'
 };
 
-Pageboard.elements.color = {
+exports.color = {
 	priority: 12,
 	title: "Color",
 	icon: `<i class="icon" style="background-image:

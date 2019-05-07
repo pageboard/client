@@ -1,4 +1,4 @@
-Pageboard.elements.query_form = {
+exports.query_form = {
 	priority: 0, // scripts must run before 'query' scripts
 	title: 'Form Query',
 	icon: '<i class="write icon"></i>',
@@ -57,7 +57,7 @@ Pageboard.elements.query_form = {
 	polyfills: ['fetch'] // unfortunately there is no formdata polyfill available right now
 };
 
-Pageboard.elements.api_form = {
+exports.api_form = {
 	priority: 0, // scripts must run before 'query' scripts
 	title: 'Form Submit',
 	icon: '<i class="write icon"></i>',

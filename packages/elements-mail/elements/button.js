@@ -1,4 +1,4 @@
-Pageboard.elements.mail_button = {
+exports.mail_button = {
 	title: "Button",
 	icon: '<b class="icon">Bt</b>',
 	contents: {

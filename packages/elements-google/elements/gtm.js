@@ -1,11 +1,11 @@
-Pageboard.elements.site.properties.google_tag_manager = {
+exports.site.properties.google_tag_manager = {
 	title: 'Google Tag Manager ID',
 	nullable: true,
 	type: 'string',
 	pattern: '^GTM-\\w+$'
 };
 
-Pageboard.elements.google_tag_manager = {
+exports.google_tag_manager = {
 	group: "block",
 	html: `<script async src="https://www.googletagmanager.com/gtm.js?id=[id|url]"></script>`,
 	install: function(scope) {

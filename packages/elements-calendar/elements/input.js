@@ -1,14 +1,14 @@
-Pageboard.elements.IntlPolyfill = {
+exports.IntlPolyfill = {
 	priority: -102, // before polyfill element
 	install: function(scope) {
 		var lang = (scope.$site.lang || window.navigator.language || 'en').substring(0, 2);
 		this.polyfills = [`Intl.~locale.${lang}`];
 	}
 };
-Pageboard.elements.CalendarScript = {
+exports.CalendarScript = {
 	scripts: ['../ui/calendar.js']
 };
-Pageboard.elements.input_date_time = {
+exports.input_date_time = {
 	title: 'DateTime',
 	icon: '<i class="calendar outline icon"></i>',
 	menu: "form",
@@ -89,7 +89,7 @@ Pageboard.elements.input_date_time = {
 	]
 };
 
-Pageboard.elements.input_date_slot = {
+exports.input_date_slot = {
 	title: 'DateSlot',
 	icon: '<i class="calendar outline icon"></i>',
 	menu: "form",

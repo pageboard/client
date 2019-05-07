@@ -1,4 +1,4 @@
-Pageboard.elements.portfolio = {
+exports.portfolio = {
 	priority: 21,
 	title: "Portfolio",
 	icon: '<i class="grid layout icon"></i>',
@@ -41,7 +41,7 @@ Pageboard.elements.portfolio = {
 	]
 };
 
-Pageboard.elements.portfolio_item = {
+exports.portfolio_item = {
 	title: "Item",
 	icon: '<i class="icons"><i class="grid layout icon"></i><i class="corner add icon"></i></i>',
 	menu: "widget",

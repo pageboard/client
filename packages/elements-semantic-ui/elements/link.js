@@ -1,4 +1,4 @@
-Pageboard.elements.link = {
+exports.link = {
 	priority: 11,
 	title: "Link",
 	icon: '<i class="icon linkify"></i>',

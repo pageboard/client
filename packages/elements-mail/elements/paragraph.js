@@ -1,4 +1,4 @@
-Pageboard.elements.mail_paragraph = {
+exports.mail_paragraph = {
 	priority: -10,
 	title: "Paragraph",
 	icon: '<i class="icon paragraph"></i>',
@@ -40,7 +40,7 @@ Pageboard.elements.mail_paragraph = {
 };
 
 
-Pageboard.elements.mail_heading = {
+exports.mail_heading = {
 	title: "Heading",
 	icon: '<i class="icon header"></i>',
 	properties: {

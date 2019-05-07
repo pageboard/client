@@ -1,4 +1,4 @@
-Pageboard.elements.tabs = {
+exports.tabs = {
 	title: "Tabs",
 	icon: '<b class="icon">Tabs</b>',
 	menu: 'widget',
@@ -46,7 +46,7 @@ Pageboard.elements.tabs = {
 };
 
 
-Pageboard.elements.tab_item = {
+exports.tab_item = {
 	title: "Item",
 	icon: '<i class="icons"><b class="icon">Tab</b><i class="corner add icon"></i></i>',
 	menu: 'widget',
@@ -71,7 +71,7 @@ Pageboard.elements.tab_item = {
 	html: '<a class="item [active|?]" block-content="content">Tab Item</a>'
 };
 
-Pageboard.elements.tab = {
+exports.tab = {
 	title: 'Tab',
 	inplace: true,
 	context: 'tabs/tabs_container_tabs/',

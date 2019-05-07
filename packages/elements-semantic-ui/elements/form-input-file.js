@@ -1,4 +1,4 @@
-Pageboard.elements.input_file = {
+exports.input_file = {
 	title: 'Upload',
 	icon: '<i class="upload icon"></i>',
 	menu: "form",

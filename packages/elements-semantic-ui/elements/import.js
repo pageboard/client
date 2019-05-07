@@ -1,6 +1,6 @@
 // deprecated, use query element instead
 /*
-Pageboard.elements.import = {
+exports.import = {
 	priority: 1, // scripts must run after 'form' scripts
 	title: "Import",
 	icon: '<b class="down arrow icon">?id=</b>',

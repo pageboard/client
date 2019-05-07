@@ -1,19 +1,19 @@
-Pageboard.elements.page.contents.body = {
+exports.page.contents.body = {
 	spec: 'header? main+ footer?',
 	title: 'body'
 };
 
-Pageboard.elements.page.stylesheets = [
+exports.page.stylesheets = [
 	'../lib/components/reset.css',
 	'../ui/site.css',
 	'../ui/transition.css'
 ];
 
-Pageboard.elements.page.scripts = Pageboard.elements.page.scripts.concat([
+exports.page.scripts = exports.page.scripts.concat([
 	'../ui/transition.js'
 ]);
 
-Pageboard.elements.page.properties.transition = {
+exports.page.properties.transition = {
 	title: 'Transition',
 	type: 'object',
 	properties: {
@@ -66,7 +66,7 @@ Pageboard.elements.page.properties.transition = {
 	}
 };
 
-Pageboard.elements.page.fuse = function(node, d, scope) {
+exports.page.fuse = function(node, d, scope) {
 	node.fuse(d, scope);
 	var body = node.querySelector('body');
 	var tr = d.transition;

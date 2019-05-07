@@ -1,4 +1,4 @@
-Pageboard.elements.code = {
+exports.code = {
 	title: "Literal",
 	icon: '<i class="left quote icon"></i>',
 	inline: true,

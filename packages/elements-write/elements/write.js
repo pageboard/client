@@ -1,4 +1,4 @@
-Pageboard.elements.write = {
+exports.write = {
 	priority: 100,
 	replaces: 'doc',
 	title: 'Editor',
@@ -110,7 +110,7 @@ Pageboard.elements.write = {
 		"../lib/cropper.css",
 		"../ui/inputs/crop.css"
 	],
-	scripts: Pageboard.elements.page.scripts.slice().concat([
+	scripts: exports.page.scripts.slice().concat([
 		"../lib/jquery.min.js",
 		"../lib/moment.js",
 		"../lib/components/form.js",

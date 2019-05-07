@@ -1,4 +1,4 @@
-Pageboard.elements.carousel = {
+exports.carousel = {
 	priority: 21,
 	title: "Carousel",
 	icon: '<i class="image icon"></i>',
@@ -87,7 +87,7 @@ Pageboard.elements.carousel = {
 	]
 };
 
-Pageboard.elements.carousel_item = {
+exports.carousel_item = {
 	title: "Cell",
 	icon: '<i class="icons"><i class="image icon"></i><i class="corner add icon"></i></i>',
 	menu: "widget",

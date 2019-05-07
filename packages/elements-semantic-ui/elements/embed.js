@@ -1,4 +1,4 @@
-Pageboard.elements.embed = {
+exports.embed = {
 	title: "Embed",
 	// icon: '<i class="external icon"></i>', // FIXME embeds are a hack
 	menu: "widget",

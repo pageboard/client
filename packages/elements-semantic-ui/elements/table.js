@@ -1,4 +1,4 @@
-Pageboard.elements.table = {
+exports.table = {
 	title: "Table",
 	menu: 'widget',
 	icon: '<i class="table icon"></i>',
@@ -63,7 +63,7 @@ Pageboard.elements.table = {
 };
 
 
-Pageboard.elements.table_head = {
+exports.table_head = {
 	title: "Head",
 	menu: 'widget',
 	icon: '<b class="icon">head</b>',
@@ -74,7 +74,7 @@ Pageboard.elements.table_head = {
 	html: '<thead><tr block-content="cells"></tr></thead>'
 };
 
-Pageboard.elements.table_foot = {
+exports.table_foot = {
 	title: "Foot",
 	menu: 'widget',
 	icon: '<b class="icon">foot</b>',
@@ -85,7 +85,7 @@ Pageboard.elements.table_foot = {
 	html: '<tfoot><tr block-content="cells"></tr></tfoot>'
 };
 
-Pageboard.elements.table_body = {
+exports.table_body = {
 	title: "Body",
 	menu: 'widget',
 	icon: '<b class="icon">body</b>',
@@ -94,7 +94,7 @@ Pageboard.elements.table_body = {
 	html: '<tbody></tbody>'
 };
 
-Pageboard.elements.table_row = {
+exports.table_row = {
 	title: "Row",
 	menu: 'widget',
 	icon: '<b class="icon">row</b>',
@@ -103,7 +103,7 @@ Pageboard.elements.table_row = {
 	html: '<tr></tr>'
 };
 
-Pageboard.elements.table_cell = {
+exports.table_cell = {
 	title: "Cell",
 	menu: 'widget',
 	icon: '<i class="icons"><b class="icon">cell</b><i class="corner add icon"></i></i>',
@@ -145,12 +145,12 @@ Pageboard.elements.table_cell = {
 	html: '<td class="[align|post: aligned] [selectable|?]"></td>'
 };
 
-Pageboard.elements.table_head_cell = {
+exports.table_head_cell = {
 	title: "Cell",
 	menu: 'widget',
 	icon: '<i class="icons"><b class="icon">head</b><i class="corner add icon"></i></i>',
 	properties: {
-		align: Pageboard.elements.table_cell.properties.align,
+		align: exports.table_cell.properties.align,
 		width: {
 			title: 'Column width',
 			description: 'Between 1 and 16, set to 0 for none',

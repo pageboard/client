@@ -1,11 +1,11 @@
-Pageboard.elements.settings.properties.grants.items.anyOf.push({
+exports.settings.properties.grants.items.anyOf.push({
 	const: 'scheduler',
 	$level: 1000,
 	title: 'Scheduler',
 	description: 'Events, dates, reservations'
 });
 
-Pageboard.elements.event = {
+exports.event = {
 	priority: 2, // must install scripts after query element scripts
 	title: 'Event',
 	menu: "Calendar",
@@ -87,7 +87,7 @@ Pageboard.elements.event = {
 	}
 };
 
-Pageboard.elements.event_date = {
+exports.event_date = {
 	title: 'Date',
 	menu: "Calendar",
 	group: 'calendar',
@@ -157,7 +157,7 @@ Pageboard.elements.event_date = {
 	}
 };
 
-Pageboard.elements.event_reservation = {
+exports.event_reservation = {
 	title: 'Reservation',
 	menu: "Calendar",
 	group: 'calendar',

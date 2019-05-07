@@ -1,11 +1,11 @@
-Pageboard.elements.site.properties.google_site_verification = {
+exports.site.properties.google_site_verification = {
 	title: 'Google Site Verification Code',
 	nullable: true,
 	type: "string",
 	format: "singleline"
 };
 
-Pageboard.elements.google_site_verification = {
+exports.google_site_verification = {
 	group: "block",
 	html: '<meta name="google-site-verification" content="[id]">',
 	install: function(scope) {

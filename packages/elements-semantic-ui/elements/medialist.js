@@ -1,4 +1,4 @@
-Pageboard.elements.medialist = {
+exports.medialist = {
 	priority: 20,
 	title: "List",
 	group: "block",
@@ -19,7 +19,7 @@ Pageboard.elements.medialist = {
 	]
 };
 
-Pageboard.elements.medialist_item = {
+exports.medialist_item = {
 	title: "Item",
 	icon: '<i class="icons"><i class="list icon"></i><i class="corner add icon"></i></i>',
 	menu: "widget",

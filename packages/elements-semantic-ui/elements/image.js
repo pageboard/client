@@ -1,4 +1,4 @@
-Pageboard.elements.image = {
+exports.image = {
 	title: "Image",
 	icon: '<i class="icon image"></i>',
 	properties: {
@@ -206,7 +206,7 @@ Pageboard.elements.image = {
 	]
 };
 
-Pageboard.elements.inlineImage = {
+exports.inlineImage = {
 	priority: 12,
 	title: "Icon",
 	icon: '<i class="icon image"></i>',

@@ -1,10 +1,10 @@
-Pageboard.elements._ = {
+exports._ = {
 	group: "mail_block"
 };
-Pageboard.elements.text = {
+exports.text = {
 	group: "mail_inline"
 };
-Pageboard.elements.mail_strong = {
+exports.mail_strong = {
 	priority: 12,
 	title: "Strong",
 	icon: '<i class="icon bold"></i>',
@@ -15,7 +15,7 @@ Pageboard.elements.mail_strong = {
 	html: '<strong></strong>'
 };
 
-Pageboard.elements.mail_em = {
+exports.mail_em = {
 	priority: 12,
 	title: "Emphasize",
 	icon: '<i class="icon italic"></i>',
@@ -26,7 +26,7 @@ Pageboard.elements.mail_em = {
 	html: '<em></em>'
 };
 
-Pageboard.elements.mail_light = {
+exports.mail_light = {
 	priority: 12,
 	title: "Light",
 	icon: '<i class="icon" style="font-weight:lighter">L</i>',
@@ -37,7 +37,7 @@ Pageboard.elements.mail_light = {
 	html: '<span class="lighter"></span>'
 };
 
-Pageboard.elements.mail_sup = {
+exports.mail_sup = {
 	priority: 12,
 	title: "Sup",
 	icon: '<b class="icon">S<sup>up</sup></b>',
@@ -48,7 +48,7 @@ Pageboard.elements.mail_sup = {
 	html: '<sup></sup>'
 };
 
-Pageboard.elements.mail_caps = {
+exports.mail_caps = {
 	priority: 12,
 	title: "Capitalization",
 	icon: '<span class="icon">Aa</span>',
@@ -83,7 +83,7 @@ Pageboard.elements.mail_caps = {
 	html: '<span class="[transform]"></span>'
 };
 
-Pageboard.elements.mail_color = {
+exports.mail_color = {
 	priority: 12,
 	title: "Color",
 	icon: `<i class="icon" style="background-image:

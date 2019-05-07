@@ -1,4 +1,4 @@
-Pageboard.elements.fieldset = {
+exports.fieldset = {
 	title: 'Fieldset',
 	icon: '<i class="folder outline icon"></i>',
 	menu: 'form',
@@ -17,7 +17,7 @@ Pageboard.elements.fieldset = {
 	html: '<fieldset block-content="content" class="[plain|?]"></fieldset>'
 };
 
-Pageboard.elements.fieldset_legend = {
+exports.fieldset_legend = {
 	inplace: true,
 	contents: {
 		legend: "inline*"
@@ -25,7 +25,7 @@ Pageboard.elements.fieldset_legend = {
 	html: '<legend block-content="legend">Title</legend>'
 };
 
-Pageboard.elements.input_button = {
+exports.input_button = {
 	title: 'Button',
 	icon: '<i class="hand pointer icon"></i>',
 	menu: "form",
@@ -71,7 +71,7 @@ Pageboard.elements.input_button = {
 	]
 };
 
-Pageboard.elements.input_text = {
+exports.input_text = {
 	title: 'Input',
 	icon: '<i class="text cursor icon"></i>',
 	menu: "form",
@@ -158,7 +158,7 @@ Pageboard.elements.input_text = {
 	</div>`
 };
 
-Pageboard.elements.input_range = {
+exports.input_range = {
 	title: 'Range',
 	icon: '<i class="options icon"></i>',
 	menu: "form",
@@ -228,7 +228,7 @@ Pageboard.elements.input_range = {
 	]
 };
 
-Pageboard.elements.input_checkbox = {
+exports.input_checkbox = {
 	title: 'Checkbox',
 	icon: '<i class="checkmark box icon"></i>',
 	menu: "form",
@@ -283,7 +283,7 @@ Pageboard.elements.input_checkbox = {
 	]
 };
 
-Pageboard.elements.input_radio = {
+exports.input_radio = {
 	title: 'Radio',
 	icon: '<i class="selected radio icon"></i>',
 	menu: "form",
@@ -328,7 +328,7 @@ Pageboard.elements.input_radio = {
 	]
 };
 
-Pageboard.elements.input_select = {
+exports.input_select = {
 	title: 'Select',
 	icon: '<i class="caret down icon"></i>',
 	menu: "form",
@@ -399,7 +399,7 @@ Pageboard.elements.input_select = {
 	]
 };
 
-Pageboard.elements.input_select_option = {
+exports.input_select_option = {
 	title: 'Option',
 	menu: "form",
 	icon: '<b class="icon">Opt</b>',

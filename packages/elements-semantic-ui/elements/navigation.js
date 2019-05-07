@@ -1,4 +1,4 @@
-Pageboard.elements.nav = {
+exports.nav = {
 	title: "Nav",
 	icon: '<i class="icon hand pointer"></i>',
 	menu: "link",
@@ -36,7 +36,7 @@ Pageboard.elements.nav = {
 	}
 };
 
-Pageboard.elements.breadcrumb = {
+exports.breadcrumb = {
 	title: "Breadcrumb",
 	icon: '<b class="icon">&gt;&gt;&gt;</b>',
 	menu: "link",

@@ -1,4 +1,4 @@
-Pageboard.elements.gallery = {
+exports.gallery = {
 	priority: 20,
 	title: "Gallery",
 	icon: '<i class="university icon"></i>',
@@ -36,7 +36,7 @@ Pageboard.elements.gallery = {
 	}
 };
 
-Pageboard.elements.itemlink = {
+exports.itemlink = {
 	priority: 10,
 	title: "Item Link",
 	icon: '<i class="icon linkify"></i>',

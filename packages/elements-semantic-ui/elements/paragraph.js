@@ -1,5 +1,5 @@
-Pageboard.elements.paragraph_nolink = Object.assign({}, Pageboard.elements.paragraph, {
-	priority: Pageboard.elements.paragraph.priority - 1,
+exports.paragraph_nolink = Object.assign({}, exports.paragraph, {
+	priority: exports.paragraph.priority - 1,
 	context: 'blocklink//',
 	contents: {
 		spec: "inline*",
@@ -7,7 +7,7 @@ Pageboard.elements.paragraph_nolink = Object.assign({}, Pageboard.elements.parag
 	}
 });
 
-Pageboard.elements.segment = {
+exports.segment = {
 	title: "Segment",
 	properties: {
 		raised: {
@@ -85,7 +85,7 @@ Pageboard.elements.segment = {
 	]
 };
 
-Pageboard.elements.heading = {
+exports.heading = {
 	title: "Heading",
 	properties: {
 		level: {
@@ -153,7 +153,7 @@ Pageboard.elements.heading = {
 	}
 };
 
-Pageboard.elements.divider = {
+exports.divider = {
 	title: "Divider",
 	group: "block",
 	icon: '<b class="icon">--</b>',

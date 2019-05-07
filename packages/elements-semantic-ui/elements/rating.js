@@ -1,4 +1,4 @@
-Pageboard.elements.rating = {
+exports.rating = {
 	title: "Rating",
 	icon: '<i class="star outline icon"></i>',
 	menu: 'widget',

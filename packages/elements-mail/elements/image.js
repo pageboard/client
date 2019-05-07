@@ -1,4 +1,4 @@
-Pageboard.elements.mail_image = {
+exports.mail_image = {
 	title: "Image",
 	icon: '<i class="icon image"></i>',
 	properties: {

@@ -1,4 +1,4 @@
-Pageboard.elements.mail_link = {
+exports.mail_link = {
 	priority: 11,
 	title: "Link",
 	icon: '<i class="icon linkify"></i>',

@@ -1,4 +1,4 @@
-Pageboard.elements.mail = {
+exports.mail = {
 	priority: -100,
 	replaces: 'doc',
 	title: 'Mail',
@@ -35,7 +35,7 @@ Pageboard.elements.mail = {
 	</head>
 	<body block-content="body"></body>
 </html>`,
-	scripts: Pageboard.elements.page.scripts.slice().concat([
+	scripts: exports.page.scripts.slice().concat([
 		'../lib/inlineresources.js',
 		'../lib/europa.js',
 		'../lib/juice.js',
@@ -47,7 +47,7 @@ Pageboard.elements.mail = {
 	]
 };
 
-Pageboard.elements.mail_body = {
+exports.mail_body = {
 	title: "Body",
 	contents: {
 		content: {
@@ -61,7 +61,7 @@ Pageboard.elements.mail_body = {
 	</table>`
 };
 
-Pageboard.elements.mail_container = {
+exports.mail_container = {
 	title: "Container",
 	icon: '<b class="icon">Co</b>',
 	contents: {

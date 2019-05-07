@@ -1,4 +1,4 @@
-Pageboard.elements.paragraph = {
+exports.paragraph = {
 	priority: -10,
 	title: "Paragraph",
 	icon: '<i class="icon paragraph"></i>',

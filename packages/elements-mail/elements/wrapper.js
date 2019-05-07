@@ -1,4 +1,4 @@
-Pageboard.elements.mail_wrapper = {
+exports.mail_wrapper = {
 	title: "Wrapper",
 	icon: '<b class="icon">Wr</b>',
 	contents: {

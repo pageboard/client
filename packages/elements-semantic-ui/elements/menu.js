@@ -1,4 +1,4 @@
-Pageboard.elements.menu = {
+exports.menu = {
 	title: "Menu",
 	icon: '<b class="icon">Menu</b>',
 	menu: "link",
@@ -35,7 +35,7 @@ Pageboard.elements.menu = {
 	]
 };
 
-Pageboard.elements.menu_item_link = {
+exports.menu_item_link = {
 	priority: 10,
 	title: "Link Item",
 	icon: '<b class="icon">Item</b>',
@@ -71,7 +71,7 @@ Pageboard.elements.menu_item_link = {
 	html: '<a class="item" href="[url|autolink]" block-content="content">Item</a>'
 };
 
-Pageboard.elements.menu_item_dropdown = {
+exports.menu_item_dropdown = {
 	priority: 11,
 	title: "Dropdown",
 	icon: '<b class="icon">Drop</b>',
@@ -105,7 +105,7 @@ Pageboard.elements.menu_item_dropdown = {
 	]
 };
 
-Pageboard.elements.menu_item_popup = {
+exports.menu_item_popup = {
 	priority: 11,
 	title: "Popup",
 	icon: '<b class="icon">Pop</b>',

@@ -1,4 +1,4 @@
-Pageboard.elements.cards = {
+exports.cards = {
 	title: "Cards",
 	menu: 'widget',
 	icon: '<i class="icon address card outline"></i>',
@@ -24,7 +24,7 @@ Pageboard.elements.cards = {
 };
 
 
-Pageboard.elements.card = {
+exports.card = {
 	title: "Card",
 	menu: 'widget',
 	icon: '<i class="icons"><i class="address card outline icon"></i><i class="corner add icon"></i></i>',
@@ -67,7 +67,7 @@ Pageboard.elements.card = {
 	</div>`
 };
 
-Pageboard.elements.cardlink = {
+exports.cardlink = {
 	title: "Card Link",
 	menu: 'widget',
 	group: 'blocklink',
@@ -129,7 +129,7 @@ Pageboard.elements.cardlink = {
 	</a>`
 };
 
-Pageboard.elements.card_header = {
+exports.card_header = {
 	title: 'header',
 	menu: 'widget',
 	context: 'card//',
@@ -138,7 +138,7 @@ Pageboard.elements.card_header = {
 	contents: "inline*",
 	html: '<div class="header">Header</div>'
 };
-Pageboard.elements.card_header_nolink = Object.assign({}, Pageboard.elements.card_header, {
+exports.card_header_nolink = Object.assign({}, exports.card_header, {
 	context: 'cardlink//',
 	group: 'blocklink',
 	contents: {
@@ -148,7 +148,7 @@ Pageboard.elements.card_header_nolink = Object.assign({}, Pageboard.elements.car
 	html: '<div class="header">Header</div>'
 });
 
-Pageboard.elements.card_meta = {
+exports.card_meta = {
 	title: 'meta',
 	menu: 'widget',
 	context: 'card//',
@@ -157,7 +157,7 @@ Pageboard.elements.card_meta = {
 	contents: "inline*",
 	html: '<div class="meta">Meta</div>'
 };
-Pageboard.elements.card_meta_nolink = Object.assign({}, Pageboard.elements.card_meta, {
+exports.card_meta_nolink = Object.assign({}, exports.card_meta, {
 	context: 'cardlink//',
 	group: 'blocklink',
 	contents: {
@@ -167,7 +167,7 @@ Pageboard.elements.card_meta_nolink = Object.assign({}, Pageboard.elements.card_
 	html: '<div class="meta">Meta</div>'
 });
 
-Pageboard.elements.card_description = {
+exports.card_description = {
 	title: 'description',
 	menu: 'widget',
 	context: 'card//',
@@ -176,7 +176,7 @@ Pageboard.elements.card_description = {
 	contents: "paragraph+",
 	html: '<div class="description"></div>'
 };
-Pageboard.elements.card_description_nolink = Object.assign({}, Pageboard.elements.card_description, {
+exports.card_description_nolink = Object.assign({}, exports.card_description, {
 	context: 'cardlink//',
 	group: 'blocklink',
 	contents: "paragraph_nolink+",

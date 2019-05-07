@@ -1,4 +1,4 @@
-Pageboard.elements.sitemap = {
+exports.sitemap = {
 	title: "Site map",
 	group: "block",
 	icon: '<i class="sitemap icon"></i>',
@@ -27,12 +27,13 @@ Pageboard.elements.sitemap = {
 	}
 };
 
-Pageboard.elements.sitepage = {
+exports.sitepage = {
 	title: "Page",
 	icon: '<i class="icon file outline"></i>',
 	menu: "link",
 	group: 'sitemap_item',
-	properties: Pageboard.elements.page.properties,
+	properties: exports.page.properties,
+	virtual: true,
 	contents: {
 		children: {
 			spec: "sitemap_item*",
@@ -53,13 +54,14 @@ Pageboard.elements.sitepage = {
 	</element-sitepage>`
 };
 
-if (Pageboard.elements.mail) Pageboard.elements.sitemail = {
+if (exports.mail) exports.sitemail = {
 	title: "Mail",
 	icon: '<i class="icon mail outline"></i>',
 	menu: "link",
 	group: 'sitemap_item',
+	virtual: true,
 	get properties() {
-		return Pageboard.elements.mail.properties;
+		return exports.mail.properties;
 	},
 	unmount: function(block) {
 		if (block.type.startsWith('site')) block.type = block.type.substring(4);

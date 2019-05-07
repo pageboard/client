@@ -1,4 +1,4 @@
-Pageboard.elements.accordion = {
+exports.accordion = {
 	priority: 2, // scripts must run after 'query' scripts
 	title: "Accordion",
 	icon: '<i class="caret right icon"></i>',
@@ -20,7 +20,7 @@ Pageboard.elements.accordion = {
 };
 
 
-Pageboard.elements.fold = {
+exports.fold = {
 	title: "Fold",
 	icon: '<i class="icons"><i class="caret right icon"></i><i class="corner add icon"></i></i>',
 	menu: 'widget',

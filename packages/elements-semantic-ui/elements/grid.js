@@ -1,4 +1,4 @@
-Pageboard.elements.grid = {
+exports.grid = {
 	title: "Grid",
 	icon: '<i class="icon grid layout"></i>',
 	group: "block",
@@ -28,7 +28,7 @@ Pageboard.elements.grid = {
 };
 
 
-Pageboard.elements.grid_column = {
+exports.grid_column = {
 	title: "Column",
 	icon: '<i class="icon columns"></i>',
 	properties: {
@@ -50,7 +50,7 @@ Pageboard.elements.grid_column = {
 	html: '<div class="[width|num: wide] column" block-content="content"></div>'
 };
 
-Pageboard.elements.grid_row = {
+exports.grid_row = {
 	title: "Row",
 	icon: '<b class="icon">row</b>',
 	contents: {

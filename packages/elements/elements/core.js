@@ -1,4 +1,4 @@
-Pageboard.elements.user = {
+exports.user = {
 	priority: -10,
 	required: ['email'],
 	$lock: [],
@@ -11,7 +11,7 @@ Pageboard.elements.user = {
 	}
 };
 
-Pageboard.elements.priv = {
+exports.priv = {
 	priority: -10,
 	$lock: [],
 	properties: {
@@ -52,7 +52,7 @@ Pageboard.elements.priv = {
 	}
 };
 
-Pageboard.elements.settings = {
+exports.settings = {
 	priority: -10,
 	properties: {
 		consents: {
@@ -124,8 +124,7 @@ Pageboard.elements.settings = {
 	}
 };
 
-
-Pageboard.elements.site = {
+exports.site = {
 	priority: -1000,
 	standalone: true,
 	properties : {
@@ -225,5 +224,3 @@ Pageboard.elements.site = {
 		"../ui/route.js"
 	]
 };
-
-
