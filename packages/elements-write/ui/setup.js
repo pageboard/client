@@ -17,18 +17,6 @@ Page.setup(function(state) {
 
 	if (iframe.getAttribute('src') == src) return;
 	iframe.setAttribute('src', src);
-
-	// this should kick early enough
-	(function checkReady() {
-		var win = iframe.contentWindow;
-		if (win.Pageboard) {
-			win.Pageboard.elements.develop = {
-				install: install
-			};
-		} else {
-			setTimeout(checkReady, 100);
-		}
-	})();
 });
 
 Pageboard.adopt = function(win, readState) {
@@ -85,33 +73,6 @@ function anchorListener(e) {
 		editor.focus();
 		editor.dispatch(editor.state.tr.setSelection(sel));
 	}
-}
-
-function install(scope) {
-	var $el = scope.$element;
-	var $orig = {
-		fuse: $el.fuse,
-		scripts: $el.scripts.slice(),
-		stylesheets: $el.stylesheets.slice()
-	};
-	$el.fuse = function(node, d, scope) {
-		var editor = Pageboard.editor;
-		if (!editor || !editor.closed) {
-			this.stylesheets = document.body.dataset.css.split(',').concat($orig.stylesheets);
-			this.scripts = document.body.dataset.js.split(',').concat($orig.scripts);
-		}
-		var ret = $orig.fuse ? $orig.fuse.call(this, node, d, scope) : node.fuse(d, scope);
-		if (!editor || !editor.closed) {
-			var body = node.querySelector('body');
-			body.classList.add('ProseMirror');
-			body.setAttribute('contenteditable', 'true');
-			body.setAttribute('spellcheck', 'false');
-			scope.$write = false;
-		} else {
-			scope.$write = true;
-		}
-		return ret;
-	};
 }
 
 function updatePage(state) {

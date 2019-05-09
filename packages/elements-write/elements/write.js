@@ -14,10 +14,8 @@ exports.write = {
 		<script defer src="[$meta.services]"></script>
 	</head>
 	<body
-		data-css="[$element.resources.0]"
-		data-js="[$element.resources.1],[$element.resources.2]"
-		data-devtools="[$element.resources.3]"
-		data-placeholder="[$element.resources.4]"
+		data-devtools="[$element.resources.0]"
+		data-placeholder="[$element.resources.1]"
 	>
 	<div id="pageboard-read">
 		<div class="ui bound bottom sticky wide notifications"></div>
@@ -149,11 +147,12 @@ exports.write = {
 		"../lib/speakingurl.js"
 	]),
 	resources: [
-		"../ui/read.css",
+		"../lib/prosemirror-dev-tools.min.js",
+		"../ui/empty.png",
+		"../ui/develop.js",
 		"../lib/pagecut/editor.js",
 		"../ui/read.js",
-		"../lib/prosemirror-dev-tools.min.js",
-		"../ui/empty.png"
+		"../ui/read.css"
 	]
 };
 

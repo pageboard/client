@@ -29,19 +29,18 @@ exports.meta = function(meta) {
 		Pageboard.cache[meta.bundle] = Pageboard.load.js(meta.bundle);
 	}
 
-	if (meta.group != "page") {
-		// standalone resources are imported after page has been imported by router
-		if (meta.stylesheets) pr = pr.then(function() {
-			return Promise.all(meta.stylesheets.map(function(url) {
-				return Pageboard.load.css(url);
-			}));
-		});
-		if (meta.scripts) pr = pr.then(function() {
-			return Promise.all(meta.scripts.map(function(url) {
-				return Pageboard.load.js(url);
-			}));
-		});
-	}
+	// additional resources - elements in group page usually do not have those
+	if (meta.stylesheets) pr = pr.then(function() {
+		return Promise.all(meta.stylesheets.map(function(url) {
+			return Pageboard.load.css(url);
+		}));
+	});
+	if (meta.scripts) pr = pr.then(function() {
+		return Promise.all(meta.scripts.map(function(url) {
+			return Pageboard.load.js(url);
+		}));
+	});
+
 	return Pageboard.cache[meta.bundle].then(function() {
 		return pr;
 	});
