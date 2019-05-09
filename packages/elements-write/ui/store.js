@@ -261,6 +261,7 @@ Store.prototype.save = function(e) {
 		me.initial = unsaved;
 		me.uiUpdate();
 		me.pageUpdate();
+		me.editor.update();
 	});
 };
 
