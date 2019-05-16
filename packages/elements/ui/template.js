@@ -108,8 +108,8 @@ class HTMLElementTemplate extends HTMLCustomElement {
 						// (b)magnet sets val to null so optional values are not undefined
 						var key = path.slice(1).join('.');
 						var undef = val === undefined;
-						if (undef) console.info("$query." + key, "is undefined");
 						if (!state.vars[key]) {
+							if (undef) console.info("$query." + key, "is undefined");
 							state.vars[key] = !undef;
 						}
 					}
