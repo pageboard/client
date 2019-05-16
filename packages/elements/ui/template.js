@@ -39,7 +39,7 @@ class HTMLElementTemplate extends HTMLCustomElement {
 				if (path[0] == "$query") {
 					path = path.slice(1).join('.');
 					if (path.length) {
-						if (val != null) vars[path] = val;
+						if (val !== undefined) vars[path] = val;
 						else missing++;
 					}
 				}
