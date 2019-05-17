@@ -38,6 +38,7 @@ function formGet(form) {
 		elem = form.elements[i];
 		key = elem.name;
 		if (!key) continue;
+		if (key.startsWith('$')) continue;
 		old = query[key];
 		switch (elem.type) {
 			case 'submit':
@@ -81,10 +82,9 @@ function formGet(form) {
 function formSet(form, values) {
 	function asPaths(obj, ret, pre) {
 		if (!ret) ret = {};
-		Object.keys(obj).forEach(function(key) {
-			var val = obj[key];
+		Object.entries(obj).forEach(function([key, val]) {
 			var cur = `${pre || ""}${key}`;
-			if (val == null || Array.isArray(val) || typeof val != "object") {
+			if (val == null || typeof val != "object") {
 				ret[cur] = val;
 			} else if (typeof val == "object") {
 				asPaths(val, ret, cur + '.');
@@ -98,6 +98,7 @@ function formSet(form, values) {
 	for (var i = 0; i < form.elements.length; i++) {
 		elem = form.elements[i];
 		if (!elem.name) continue;
+		if (elem.name.startsWith('$')) continue;
 		val = flats[elem.name];
 		switch (elem.type) {
 			case 'submit':
@@ -175,13 +176,13 @@ Semafor.prototype.retree = function(map, obj) {
 };
 
 Semafor.prototype.flatten = function(tree, obj, schema) {
+	if (!tree) return tree;
 	if (!obj) obj = {};
 	var props = schema && schema.properties;
-	Object.keys(tree).forEach(function(key) {
-		var val = tree[key];
+	Object.entries(tree).forEach(function([key, val]) {
 		var field = props && props[key];
 		if (val != null && typeof val == "object") {
-			if (field && (field.oneOf || field.anyOf)) {
+			if (field && !field.properties && (field.oneOf || field.anyOf)) {
 				var listNoNull = (field.oneOf || field.anyOf).filter(function(item) {
 					return item.type != "null";
 				});
@@ -189,12 +190,38 @@ Semafor.prototype.flatten = function(tree, obj, schema) {
 					field = listNoNull[0];
 				}
 			}
-			if (!field || !field.properties) {
-				obj[key] = JSON.stringify(val);
-			} else {
-				var sub = this.flatten(val);
-				for (var k in sub) obj[key + '.' + k] = sub[k];
+			if (schema !== undefined) {
+				if (field && field.type == "array") {
+					var allStrings = false;
+					if (field.items && field.items.anyOf) {
+						allStrings = field.items.anyOf.every(function(item) {
+							return item.type == "string";
+						});
+					}
+					if (field.items && field.items.type == "string") {
+						allStrings = true;
+					}
+					if (allStrings) {
+						if (typeof val == "string") val = [val];
+						if (Array.isArray(val)) {
+							obj[key] = val.join('\n');
+						} else {
+							obj[key] = val;
+						}
+						return;
+					}
+					Object.entries(this.flatten(val, {})).forEach(function([k, kval]) {
+						obj[`${key}.${k}`] = kval;
+					});
+					return;
+				} else if (!field || !field.properties) {
+					obj[key] = JSON.stringify(val);
+					return;
+				}
 			}
+			Object.entries(this.flatten(val, {}, field)).forEach(function([k, kval]) {
+				obj[`${key}.${k}`] = kval;
+			});
 		} else {
 			obj[key] = val;
 		}
@@ -216,10 +243,14 @@ Semafor.prototype.convert = function(vals, field) {
 				|| Array.isArray(field.anyOf) && field.anyOf
 				|| null;
 			var nullable = false;
-			if (listOf) {
+			if (listOf && !field.properties) {
 				// we support promotion to null and that's it
 				var listOfNo = listOf.filter(function(item) {
-					return item.type != "null";
+					if (typeof item == "string") {
+						return item != "null";
+					} else {
+						return item.type != "null";
+					}
 				});
 				if (listOfNo.length != listOf.length) {
 					nullable = true;
@@ -252,7 +283,7 @@ Semafor.prototype.convert = function(vals, field) {
 					val = val == "true";
 				break;
 				case "object":
-					if (field.oneOf || field.anyOf) {
+					if (!field.properties && (field.oneOf || field.anyOf)) {
 						var listNoNull = (field.oneOf || field.anyOf).filter(function(item) {
 							return item.type != "null";
 						});
@@ -271,22 +302,33 @@ Semafor.prototype.convert = function(vals, field) {
 					}
 					if (Object.keys(val).length == 0 && nullable) val = null;
 				break;
+				case "array":
+					if (typeof val == "string") {
+						val = val.split('\n').filter(function(str) {
+							return str.length > 0;
+						});
+					}
+					break;
 				default:
 					if (nullable && val === "") val = null;
 				break;
 			}
-
-
 		}
-
 		obj[name] = val;
 	}
 	return obj;
 };
 
+function getNonNullType(type) {
+	if (!type || !Array.isArray(type)) return type;
+	if (type.length != 2) return type;
+	if (type[0] == "null") return type[1];
+	if (type[1] == "null") return type[0];
+	return type;
+}
+
 function process(key, schema, node, fields) {
-	var type = schema.type;
-	// TODO support array of types (user selects the type he needs)
+	var type = getNonNullType(schema.type);
 	if (type && types[type]) {
 		if (type == 'object') {
 			types[type](key, schema, node, fields);
@@ -304,6 +346,8 @@ function process(key, schema, node, fields) {
 			}
 			if (schema.required && schema.required.indexOf(key) >= 0) { // TODO problem key != name if nested
 				field.rules.push({type: 'empty'});
+			} else {
+				field.optional = true;
 			}
 			for (var kw in schema) {
 				if ([
@@ -350,8 +394,16 @@ types.string = function(key, schema, node, fields) {
 types.oneOf = function(key, schema, node, fields) {
 	var field;
 	var listOf = schema.oneOf || schema.anyOf;
+	var nullable = schema.nullable;
+	var hasNullOption = false;
 	var alts = listOf.filter(function(item) {
-		return item.type != "null";
+		if (item.type == "null") {
+			nullable = true;
+			hasNullOption = true;
+			return false;
+		} else {
+			return true;
+		}
 	});
 	var oneOfType;
 	var icons = false;
@@ -376,6 +428,22 @@ types.oneOf = function(key, schema, node, fields) {
 
 	var def = schema.default;
 	if (def === null) def = "";
+
+	if (nullable && !hasNullOption) {
+		listOf = listOf.slice();
+		if (icons) {
+			listOf.splice(0, 0, {
+				type: "null",
+				icon: '<i class="close icon"></i>',
+				title: 'None'
+			});
+		} else {
+			listOf.splice(0, 0, {
+				type: "null",
+				title: 'None'
+			});
+		}
+	}
 
 	if (icons) {
 		field = node.dom`<div class="inline fields">
@@ -503,7 +571,37 @@ types.null = function(key, schema, node, fields) {
 };
 
 types.array = function(key, schema, node, fields) {
-
+	if (Array.isArray(schema.items)) {
+		var fieldset = node.dom`<fieldset><legend>${schema.title}</legend></fieldset>`;
+		node.appendChild(fieldset);
+		schema.items.forEach(function(item, i) {
+			this.process(`${key}.${i}`, item, fieldset);
+		}, this);
+	} else if (schema.items.type == "string") {
+		types.string(key, Object.assign({}, schema, {input: {multiline: true}}), node, fields);
+	} else if (schema.items.anyOf) {
+		var allStrings = schema.items.anyOf.every(function(item) {
+			return item.type == "string";
+		});
+		if (allStrings) {
+			types.string(key, schema, node, fields);
+		} else {
+			var field = node.dom`<div class="field" title="${schema.description || ''}">
+				<label>${schema.title || key}</label>
+				<select name="${key}" class="ui dropdown" multiple>
+					${schema.items.anyOf.map(item => getSelectOption(item, key)).join('\n')}
+				</select>
+			</div>`;
+			node.appendChild(field);
+			// if (def !== undefined) {
+			// 	$(field).find(`[value="${def}"]`).prop('selected', true);
+			// }
+			$(field).find('.dropdown').dropdown({placeholder: false});
+		}
+	} else {
+		console.info("FIXME: array type supports only items: [schemas], or items.anyOf", schema);
+		return this.process(key, Object.assign({}, schema.items, {title: schema.title}), node);
+	}
 };
 
 formats.email = function() {
@@ -525,4 +623,14 @@ keywords.pattern = function(value) {
 	};
 };
 
+function getSelectOption(item) {
+	return `<option value="${getValStr(item)}">${item.title || item.const}</option>`;
+}
+
+function getValStr(item) {
+	if (item.const === undefined && item.type != "null") {
+		console.error("non-const/non-null oneOf/anyOf");
+	}
+	return item.const != null ? item.const : '';
+}
 })();
