@@ -1,7 +1,8 @@
 Pageboard.elements.rating = {
 	title: "Rating",
 	menu: 'widget',
-	group: "block",
+	inline: true,
+	group: "inline",
 	icon: '<i class="star outline icon"></i>',
 	properties: {
 		value: {
