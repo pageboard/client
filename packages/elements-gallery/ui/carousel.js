@@ -15,6 +15,7 @@ class HTMLElementCarousel extends HTMLCustomElement {
 		this._saveIndex = this._saveIndex.bind(this);
 		this.refresh = Pageboard.debounce(this.refresh, 100);
 		this.reload = Pageboard.debounce(this.reload, 100);
+		this.patch = this.patch.bind(this);
 	}
 
 	_setup(opts) {
@@ -71,10 +72,12 @@ class HTMLElementCarousel extends HTMLCustomElement {
 	}
 
 	connectedCallback() {
+		Page.patch(this.patch);
 		this._setup();
 	}
 
 	disconnectedCallback() {
+		Page.unpatch(this.patch);
 		this._teardown();
 	}
 
@@ -92,6 +95,7 @@ class HTMLElementCarousel extends HTMLCustomElement {
 			initialIndex: parseInt(this.dataset.initialIndex) || 0,
 			width: this.dataset.width,
 			height: this.dataset.height,
+			fullview: this.dataset.fullview == "true",
 			imagesLoaded: this.dataset.width == "auto",
 			fade: this.dataset.fade == "true"
 		};
@@ -109,6 +113,12 @@ class HTMLElementCarousel extends HTMLCustomElement {
 			}
 		}
 		return changed;
+	}
+
+	patch(state) {
+		if (state.query.fullview) this.dataset.fullview = state.query.fullview;
+		if (state.query.initialIndex) this.dataset.initialIndex = state.query.initialIndex;
+		this._setup();
 	}
 
 	update() {
