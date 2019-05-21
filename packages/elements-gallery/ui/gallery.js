@@ -24,6 +24,11 @@ class HTMLElementGallery extends HTMLCustomElement {
 		this._initGalleries({mode: mode});
 	}
 
+	patch(state) {
+		var mode = state.query.gallery || this.defaultMode();
+		this.setMode(mode);
+	}
+
 	connectedCallback() {
 		this._setup();
 	}
@@ -78,19 +83,21 @@ class HTMLElementGallery extends HTMLCustomElement {
 			return gal.getAttribute('block-type') == "carousel";
 		});
 		if (!carousel) return;
-		this.dataset.mode = "carousel";
 		var position = 0;
 		while ((item=item.previousSibling)) position++;
-		this._initGalleries({
-			initialIndex: position,
-			fullview: true
+		Page.push({
+			query: {
+				gallery: 'carousel',
+				initialIndex: position,
+				fullview: true
+			}
 		});
 	}
 
 	_setup() {
 		this._galleries = Array.prototype.slice.call(this.lastElementChild.children);
 		if (!this._galleries.length) return;
-		this._initGalleries({mode: this.dataset.mode || HTMLElementGallery.defaultMode(this)});
+		this._initGalleries({mode: this.dataset.mode || this.defaultMode()});
 		this._galleryMenu = this.firstElementChild.matches('.menu') ? this.firstElementChild : null;
 		if (this.showMenu) {
 			if (!this._galleryMenu) {
@@ -121,30 +128,19 @@ class HTMLElementGallery extends HTMLCustomElement {
 	update() {
 		this._setup();
 	}
-}
 
-HTMLElementGallery.defaultMode = function(node) {
-	if (node._defaultMode) return node._defaultMode;
-	var last = node.lastElementChild;
-	if (!last) return;
-	var first = last.firstElementChild;
-	if (!first) return;
-	var mode = first.getAttribute('block-type');
-	node._defaultMode = mode;
-	return mode;
-};
+	defaultMode() {
+		if (this._defaultMode) return this._defaultMode;
+		var last = this.lastElementChild;
+		if (!last) return;
+		var first = last.firstElementChild;
+		if (!first) return;
+		var mode = first.getAttribute('block-type');
+		this._defaultMode = mode;
+		return mode;	
+	}
+}
 
 Page.setup(function(state) {
 	window.HTMLElementGallery = HTMLCustomElement.define('element-gallery', HTMLElementGallery);
 });
-
-Page.patch(function(state) {
-	// TODO support multiple galleries
-	var gallery = document.querySelector('element-gallery');
-	if (!gallery) return;
-	state.vars.gallery = true;
-	var mode = state.query.gallery || HTMLElementGallery.defaultMode(gallery);
-	if (gallery.setMode) gallery.setMode(mode);
-	else gallery.dataset.mode = mode;
-});
-

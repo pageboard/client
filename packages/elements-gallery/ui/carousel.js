@@ -92,6 +92,7 @@ class HTMLElementCarousel extends HTMLCustomElement {
 			initialIndex: parseInt(this.dataset.initialIndex) || 0,
 			width: this.dataset.width,
 			height: this.dataset.height,
+			fullview: this.dataset.fullview == "true",
 			imagesLoaded: this.dataset.width == "auto",
 			fade: this.dataset.fade == "true"
 		};
@@ -109,6 +110,12 @@ class HTMLElementCarousel extends HTMLCustomElement {
 			}
 		}
 		return changed;
+	}
+
+	patch(state) {
+		if (state.query.fullview) this.dataset.fullview = state.query.fullview;
+		if (state.query.initialIndex) this.dataset.initialIndex = state.query.initialIndex;
+		this._setup();
 	}
 
 	update() {
