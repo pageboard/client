@@ -1,6 +1,6 @@
 Page.build(function(state) {
+	if (!state.pathname.endsWith('.mail')) return;
 	Page.patch(function(state) {
-		if (document.body.isContentEditable) return;
 		Array.from(document.querySelectorAll('script')).forEach(function(node) {
 			node.remove();
 		});
