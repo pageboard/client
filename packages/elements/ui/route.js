@@ -3,7 +3,7 @@ Page.route(function(state) {
 		return fetch(Page.format({
 			pathname: '/.api/page',
 			query: {
-				url: state.pathname,
+				url: state.pathname.replace(/\.\w+$/, ''),
 				develop: state.query.develop
 			}
 		}), {
