@@ -32,8 +32,8 @@ HTMLCustomElement.define = function(name, cla, is) {
 function intercept(proto, meth, cb) {
 	proto[meth] = (function(fn) {
 		return function(...args) {
-			var ret = cb.apply(this, ...args);
-			if (fn) ret = fn.apply(this, ...args);
+			var ret = cb.apply(this, args);
+			if (fn) ret = fn.apply(this, args);
 			return ret;
 		};
 	})(proto[meth]);
