@@ -1,3 +1,9 @@
+exports.id = function(id, what) {
+	if (id) return id;
+	id = what.scope.data.$id;
+	if (!id) return id;
+	return 'x' + id.slice(0, 4);
+};
 exports.num = function(val, what, str) {
 	if (!val) return '';
 	return what.filters.post(exports.num.map[val] || '', what, str);
