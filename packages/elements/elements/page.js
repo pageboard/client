@@ -85,7 +85,7 @@ exports.page = {
 		<meta name="description" content="[description|magnet:*]">
 		<link rel="icon" href="[$site.favicon|magnet:*|url]?format=ico">
 		<link rel="stylesheet" href="[$element.stylesheets|repeat]">
-		<script defer src="https://cdn.polyfill.io/v2/polyfill.min.js?flags=gated&features=[$elements|polyfills|url|magnet:*]"></script>
+		<script crossorigin="anonymous" defer src="https://cdn.polyfill.io/v3/polyfill.min.js?flags=gated&unknown=polyfill&features=[$elements|polyfills|url|magnet:*]"></script>
 		<script defer src="[$element.scripts|repeat]"></script>
 	</head>
 	<body block-content="body"></body></html>`,
@@ -94,7 +94,7 @@ exports.page = {
 		'../lib/custom-elements-builtin.js'
 	].concat(exports.site.resources),
 	polyfills: [
-		'dataset', 'fetch'
+		'default', 'dataset', 'fetch'
 	],
 	filters: {
 		polyfills: function($elements, what) {
