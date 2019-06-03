@@ -86,7 +86,7 @@ Page.init(function(state) {
 			}
 		});
 		return opts;
-	}
+	};
 	var dev = state.query.develop;
 	if (dev === null || dev === "write") state.vars.develop = true;
 	var scope = state.scope;
