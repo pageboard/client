@@ -1,6 +1,6 @@
 class HTMLElementPortfolio extends HTMLCustomElement {
 	init() {
-		this._options = {
+		this.options = {
 			masonry: {
 				columnWidth: 'element-portfolio-item'
 			},
@@ -12,12 +12,12 @@ class HTMLElementPortfolio extends HTMLCustomElement {
 		this.reload = Pageboard.debounce(this.reload, 100);
 	}
 
-	_setup() {
+	setup() {
 		if (this._loading) return;
 		var gallery = this.closest('element-gallery');
-		if (gallery && gallery.dataset.mode != "portfolio") return;
+		if (gallery && gallery.options.mode != "portfolio") return;
 		if (this._portfolio) {
-			this._teardown();
+			this.destroy();
 		}
 		this._items = this.querySelector('[block-content="items"]');
 		var mode = this._items.className;
@@ -26,36 +26,30 @@ class HTMLElementPortfolio extends HTMLCustomElement {
 			this._loading = true;
 			var scrollX = window.scrollX;
 			var scrollY = window.scrollY;
-			this._portfolio = new window.Isotope(this._items, this._options);
+			this._portfolio = new window.Isotope(this._items, this.options);
 			window.scrollTo(scrollX, scrollY);
 			var notAllLoaded = Array.from(this.querySelectorAll('img')).some(function(img) {
 				return !img.complete || !img.naturalWidth;
 			});
 			if (!notAllLoaded) this._loading = false;
-			this.addEventListener('load', this._loadListener, true);
 		}
 	}
 
-	_loadListener() {
+	captureLoad(e) {
 		delete this._loading;
 		this.refresh();
 	}
 
-	_teardown() {
+	close(state) {
+		this.destroy();
+	}
+
+	destroy() {
 		delete this._loading;
 		if (this._portfolio) {
 			this._portfolio.destroy();
 			delete this._portfolio;
-			this.removeEventListener('load', this._loadListener, true);
 		}
-	}
-
-	connectedCallback() {
-		this._setup();
-	}
-
-	disconnectedCallback() {
-		this._teardown();
 	}
 
 	refresh() {
@@ -71,22 +65,14 @@ class HTMLElementPortfolio extends HTMLCustomElement {
 		pf.arrange();
 		pf.layout();
 	}
-
-	update() {
-		this._setup();
-	}
 }
 
 class HTMLElementPortfolioItem extends HTMLCustomElement {
-	connectedCallback() {
+	setup() {
 		this.reload();
 	}
-	disconnectedCallback() {
+	close() {
 		this.reload();
-	}
-	update() {
-		var pf = this.closest('element-portfolio');
-		if (pf) pf.refresh();
 	}
 	reload() {
 		var pf = this.closest('element-portfolio');

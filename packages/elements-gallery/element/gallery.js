@@ -4,10 +4,11 @@ exports.gallery = {
 	icon: '<i class="university icon"></i>',
 	menu: "widget",
 	properties: {
-		showMenu: {
-			type: 'boolean',
-			default: true,
-			title: 'Show menu'
+		name: {
+			title: 'Name',
+			type: 'string',
+			format: 'id',
+			nullable: true
 		}
 	},
 	contents: {
@@ -16,7 +17,8 @@ exports.gallery = {
 		}
 	},
 	group: 'block',
-	html: `<element-gallery data-show-menu="[showMenu]">
+	html: `<element-gallery id="[name|id]">
+		<div class="ui tiny compact icon menu"></div>
 		<div block-content="galleries"></div>
 	</element-gallery>`,
 	resources: [

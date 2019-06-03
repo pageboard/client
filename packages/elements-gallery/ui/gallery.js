@@ -1,146 +1,102 @@
 class HTMLElementGallery extends HTMLCustomElement {
 	init() {
-		this._itemClick = this._itemClick.bind(this);
-		this._switchListener = this._switchListener.bind(this);
-	}
-
-	get showMenu() {
-		return this.dataset.showMenu != null && this.dataset.showMenu != "false";
-	}
-
-	set showMenu(val) {
-		this.dataset.showMenu = '' + !!val;
-	}
-
-	_switchListener(e) {
-		var target = e.target.closest('.item');
-		if (!target || target.matches('.active')) return;
-		Page.push({query: {gallery: target.dataset.mode}});
-	}
-
-	setMode(mode) {
-		var item = this._galleryMenu.querySelector(`.item[data-mode="${mode}"]`);
-		if (!item) return;
-		this._initGalleries({mode: mode});
+		this.options = this.parseOpts();
 	}
 
 	patch(state) {
-		var mode = state.query.gallery || this.defaultMode();
-		this.setMode(mode);
+		this.options = this.parseOpts(state.options(this.id, ['mode']));
+		this.initGalleries();
 	}
 
-	connectedCallback() {
-		this._setup();
+	parseOpts(obj) {
+		var src = this.dataset;
+		if (src.initialMode) src.mode = src.initialMode;
+		else if (src.mode) src.initialMode = src.mode;
+		return obj ? Object.assign({}, src, obj) : src;
 	}
 
-	disconnectedCallback() {
-		this._teardown();
+	get galleries() {
+		var last = this.lastElementChild;
+		if (last) return Array.from(last.children);
 	}
 
-	_initGalleries(opts) {
-		if (!opts) opts = {};
-		var mode = this.dataset.mode;
-		if (opts.mode) {
-			if (opts.mode == mode && this._gallery) return;
-			this.dataset.mode = mode = opts.mode;
-		}
+	initGalleries() {
+		var curGal = this.activeGallery || this.galleries[0];
+		var curMode = curGal.getAttribute('block-type');
+		var mode = this.options.mode || curMode;
+		if (curMode == mode && this.activeGallery) return;
 
-		this._galleries.forEach(function(gal) {
+		this.galleries.forEach(function(gal) {
 			if (gal.getAttribute('block-type') == mode) {
-				this._gallery = gal;
-			} else if (gal._teardown) {
-				gal._teardown();
+				curGal = gal;
+			} else if (gal.destroy) {
+				gal.destroy();
 			}
 		}, this);
-		if (!this._gallery || !mode) {
-			this._gallery = this._galleries[0];
-			mode = this.dataset.mode = this._gallery.getAttribute('block-type');
+		if (!curGal) {
+			return;
 		}
-		if (this._gallery._setup) this._gallery._setup(opts);
-		if (this._galleryMenu) {
-			Array.prototype.forEach.call(this._galleryMenu.children, function(node) {
-				node.classList.remove('active');
-			});
-			var item = this._galleryMenu.querySelector(`[data-mode="${mode}"]`);
-			if (item) item.classList.add('active');
-		}
-		if (mode != "carousel") {
-			this._gallery.addEventListener('click', this._itemClick, false);
-		} else {
-			this._gallery.removeEventListener('click', this._itemClick, false);
-		}
+		this.activeGallery = curGal;
+		this.options.mode = this.dataset.mode = mode;
+		var menu = this.firstElementChild;
+		Array.from(menu.children).forEach(function(node) {
+			node.classList.remove('active');
+		});
+		var item = menu.querySelector(`[data-mode="${mode}"]`);
+		if (item) item.classList.add('active');
+		
+		if (this.activeGallery.setup) Page.setup((state) => {
+			this.activeGallery.setup(state);
+		});
 	}
 
-	_itemClick(e) {
-		if (e.target.closest('a')) return;
-		var item = e.target.closest('[block-type="portfolio_item"],[block-type="medialist_item"]');
+	handleClick(e, state) {
+		var item = e.target.closest('a');
+		if (item) {
+			if (item.dataset.mode != this.options.mode) {
+				state.push({query: {
+					[`${this.id}.mode`]: item.dataset.mode
+				}});
+			}
+			return;
+		}
+		item = e.target.closest('[block-type="portfolio_item"],[block-type="medialist_item"]');
 		if (!item) return;
 		if (item.matches('[block-type="medialist_item"]') && !e.target.closest('[block-content="media"]')) {
 			// only allow click on medialist's media
 			return;
 		}
-		var carousel = this._galleries.find(function(gal) {
+		var carousel = this.galleries.find(function(gal) {
 			return gal.getAttribute('block-type') == "carousel";
 		});
 		if (!carousel) return;
 		var position = 0;
 		while ((item=item.previousSibling)) position++;
-		Page.push({
-			query: {
-				gallery: 'carousel',
-				initialIndex: position,
-				fullview: true
-			}
-		});
+		state.push({query: {
+			[`${this.id}.mode`]: 'carousel',
+			[`${carousel.id}.index`]: position,
+			[`${carousel.id}.fullview`]: true
+		}});
 	}
 
-	_setup() {
-		this._galleries = Array.prototype.slice.call(this.lastElementChild.children);
-		if (!this._galleries.length) return;
-		this._initGalleries({mode: this.dataset.mode || this.defaultMode()});
-		this._galleryMenu = this.firstElementChild.matches('.menu') ? this.firstElementChild : null;
-		if (this.showMenu) {
-			if (!this._galleryMenu) {
-				this._galleryMenu = this.ownerDocument.createElement("div");
-				this._galleryMenu.className = "ui tiny compact icon menu";
-				this.insertBefore(this._galleryMenu, this.firstElementChild);
-				this._galleryMenu.addEventListener('click', this._switchListener, false);
-			}
-			this._galleryMenu.textContent = "";
-			var mode = this.dataset.mode;
-			this._galleries.forEach(function(node) {
+	setup() {
+		var menu = this.firstElementChild;
+		menu.textContent = "";
+		var gals = this.galleries;
+		if (gals.length > 1) {
+			var mode = this.options.mode;
+			gals.forEach(function(node) {
 				var type = node.getAttribute('block-type');
-				this._galleryMenu.insertAdjacentHTML("beforeEnd", `<a class="icon item ${mode == type ? 'active' : ''}" data-mode="${type}"><i class="${type} icon"></i></a>`);
+				var active = mode == type ? 'active' : '';
+				menu.insertAdjacentHTML(
+					"beforeEnd",
+					`<a class="icon item ${active}" data-mode="${type}">
+						<i class="${type} icon"></i>
+					</a>`
+				);
 			}, this);
-		} else {
-			this._teardown();
 		}
-	}
-
-	_teardown() {
-		if (this._galleryMenu) {
-			this._galleryMenu.removeEventListener('click', this._switchListener, false);
-			this._galleryMenu.remove();
-			delete this._galleryMenu;
-		}
-	}
-
-	update() {
-		this._setup();
-	}
-
-	defaultMode() {
-		if (this._defaultMode) return this._defaultMode;
-		var last = this.lastElementChild;
-		if (!last) return;
-		var first = last.firstElementChild;
-		if (!first) return;
-		var mode = first.getAttribute('block-type');
-		this._defaultMode = mode;
-		return mode;	
+		if (gals.length) this.initGalleries();
 	}
 }
-
-Page.setup(function(state) {
-	window.HTMLElementGallery = HTMLCustomElement.define('element-gallery', HTMLElementGallery);
-});
+HTMLCustomElement.define('element-gallery', HTMLElementGallery);

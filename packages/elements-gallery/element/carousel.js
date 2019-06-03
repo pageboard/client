@@ -5,6 +5,12 @@ exports.carousel = {
 	menu: "widget",
 	group: 'block',
 	properties: {
+		name: {
+			title: 'Name',
+			type: 'string',
+			format: 'id',
+			nullable: true
+		},
 		autoPlay: {
 			title: 'Autoplay delay',
 			description: 'Autoplay delay in seconds, 0 to disable',
@@ -67,10 +73,10 @@ exports.carousel = {
 			title: 'cells'
 		}
 	},
-	html: `<element-carousel
+	html: `<element-carousel id="[name|id]"
 		data-width="[width|or:auto]" data-height="[height|or:auto]"
 		data-auto-play="[autoPlay]" data-page-dots="[pageDots]"
-		data-prev-next-buttons="[prevNextButtons]" data-full-view-button="[fullviewButton]"
+		data-prev-next-buttons="[prevNextButtons]" data-fullview-button="[fullviewButton]"
 		data-group-cells="[groupCells]" data-wrap-around="[wrapAround]" data-fade="[fade]"
 	>
 		<div class="flickity-viewport">
