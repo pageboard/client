@@ -2,19 +2,19 @@ class HTMLElementEmbed extends HTMLCustomElement {
 	static get observedAttributes() {
 		return ['src'];
 	}
-	connectedCallback() {
+	setup() {
+		var src = this.getAttribute('src');
 		if (!this.iframe) {
-			this.innerHTML = `<iframe src="${this.getAttribute('src')}" width="100%" height="100%" frameborder="0" scrolling="no" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>`;
+			this.innerHTML = `<iframe src="${src}" width="100%" height="100%" frameborder="0" scrolling="no" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>`;
 			this.iframe = this.firstElementChild;
+		} else {
+			this.iframe.setAttribute('src', src);
 		}
 	}
 	attributeChangedCallback(name, oldVal, newVal) {
-		this.update();
+		Page.setup(this);
 	}
-	update() {
-		if (this.iframe) this.iframe.setAttribute('src', this.getAttribute('src'));
-	}
-	disconnectedCallback() {
+	close() {
 		if (this.iframe) {
 			this.iframe.remove();
 			delete this.iframe;
