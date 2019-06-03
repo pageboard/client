@@ -417,13 +417,20 @@ types.string = function(key, schema, node, inst) {
 			<textarea name="${key}"	title="${schema.description || ''}" placeholder="${schema.default || ''}"></textarea>
 		</div>`));
 	} else {
-		node.appendChild(node.dom(`<div class="field">
+		var input = node.appendChild(node.dom(`<div class="field">
 			<label>${schema.title || key}</label>
 			<input type="text" name="${key}"
 				placeholder="${schema.default || ''}"
 				title="${schema.description || ''}"
 			/>
-		</div>`));
+		</div>`)).lastElementChild;
+		if (schema.format == "date") {
+			input.type = "date";
+		} else if (schema.format == "time") {
+			input.type = "time";
+		} else if (schema.format == "date-time") {
+			input.type = "datetime-local";
+		}
 	}
 };
 
