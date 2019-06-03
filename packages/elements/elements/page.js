@@ -94,7 +94,7 @@ exports.page = {
 		'../lib/custom-elements-builtin.js'
 	].concat(exports.site.resources),
 	polyfills: [
-		'default', 'dataset', 'fetch', 'es2015'
+		'default', 'dataset', 'fetch', 'es2015', 'es2016'
 	],
 	filters: {
 		polyfills: function($elements, what) {
