@@ -75,6 +75,18 @@ window.HTMLCustomElement = require('./HTMLCustomElement');
 
 Page.init(function(state) {
 	state.vars = {};
+	state.options = function(id, list) {
+		var opts = {};
+		Object.keys(state.query).forEach(function(key) {
+			var [qid, name] = key.split('.');
+			if (name == null || qid != id) return;
+			if (list.includes(name)) {
+				opts[name] = state.query[key];
+				state.vars[key] = true;
+			}
+		});
+		return opts;
+	}
 	var dev = state.query.develop;
 	if (dev === null || dev === "write") state.vars.develop = true;
 	var scope = state.scope;
@@ -152,4 +164,3 @@ function merge(obj, extra, fn) {
 	});
 	return copy;
 }
-
