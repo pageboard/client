@@ -24,7 +24,7 @@ Breadcrumb.prototype.update = function(parents, selection) {
 	for (var i = 0, j = 0; i < parents.length; i++,j++) {
 		parent = parents[i];
 		elder = elders[j];
-		if (!elder || parent.block.id !== elder.block.id || parent.block.id == null) {
+		if (!elder || parent.block.id !== elder.block.id || parent.block.id == null || parent.contentName !== elder.contentName) {
 			cut = true;
 			item = this.item(parent);
 			this.node.insertBefore(item, children[i]);
