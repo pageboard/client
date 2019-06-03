@@ -90,6 +90,11 @@ class HTMLElementTemplate extends HTMLCustomElement {
 		if (this.children.length != 2) return;
 		var view = this.lastElementChild;
 		var template = this.firstElementChild;
+		// minimal template polyfill, works only for rendering
+		if (template.nodeName == "TEMPLATE" && !("content" in template)) {
+			template.content = template.ownerDocument.createDocumentFragment();
+			while (template.firstChild) template.content.appendChild(template.firstChild);
+		}
 		if (template.content) template = template.content;
 		// remove all block-id from template
 		var rnode;

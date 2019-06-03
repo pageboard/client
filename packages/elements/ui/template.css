@@ -25,3 +25,6 @@ element-template > [block-content="template"] {
 	word-spacing:normal;
 }
 
+template {
+	display: none;
+}
