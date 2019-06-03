@@ -5,13 +5,20 @@ Page.setup(function(state) {
 });
 
 Page.patch(function(state) {
-	state.finish(function() {
-		Array.from(document.querySelectorAll('a[href]')).forEach(function(node) {
-			if (!node.hasAttribute('href')) return;
-			var href = Page.parse(node.getAttribute('href') || "");
-			href.query.develop = state.query.develop;
-			node.setAttribute('href', Page.format(href));
-		});
-	});
+	var it = window.parent.Pageboard;
+	state.push = function(url, opts) {
+		var active = !it.editor || !it.editor.closed;
+		if (active) return Promise.resolve();
+		var obj = typeof url == "string" ? Page.parse(url) : url;
+		if (!obj.query) obj.query = {};
+		obj.query.develop = this.query.develop;
+		return this.__proto__.push.call(this, obj, opts);
+	};
+	state.replace = function(url, opts) {
+		var active = !it.editor || !it.editor.closed;
+		var obj = typeof url == "string" ? Page.parse(url) : url;
+		if (!obj.query) obj.query = {};
+		obj.query.develop = this.query.develop;
+		return this.__proto__.replace.call(this, obj, opts);
+	};
 });
-
