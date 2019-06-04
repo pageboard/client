@@ -18,6 +18,7 @@ class HTMLElementGallery extends HTMLCustomElement {
 	get galleries() {
 		var last = this.lastElementChild;
 		if (last) return Array.from(last.children);
+		else return [];
 	}
 
 	initGalleries() {
