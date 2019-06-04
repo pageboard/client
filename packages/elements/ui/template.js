@@ -93,7 +93,9 @@ class HTMLElementTemplate extends HTMLCustomElement {
 		// minimal template polyfill, works only for rendering
 		if (template.nodeName == "TEMPLATE" && !("content" in template)) {
 			template.content = template.ownerDocument.createDocumentFragment();
-			while (template.firstChild) template.content.appendChild(template.firstChild);
+			for (var i=0; i < template.childNodes.length; i++) {
+				template.content.appendChild(template.childNodes[i].cloneNode(true));
+			}
 		}
 		if (template.content) template = template.content;
 		// remove all block-id from template
