@@ -10,6 +10,12 @@ exports.embed = {
 			type: "string",
 			format: "uri"
 			// TODO plug embeds to href, but url-inspector makes it difficult for us right now
+		},
+		name: {
+			title: 'Name',
+			type: 'string',
+			format: 'id',
+			nullable: true
 		}
 	},
 	group: "block",
@@ -19,7 +25,7 @@ exports.embed = {
 		};
 	},
 	tag: 'iframe,element-embed',
-	html: `<element-embed class="ui embed" src="[url]"></element-embed>`,
+	html: `<element-embed class="ui embed" src="[url]" id="[name|id]"></element-embed>`,
 	scripts: ['../ui/embed.js'],
 	stylesheets: [
 		'../lib/components/embed.css',
