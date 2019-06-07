@@ -1,8 +1,50 @@
 class HTMLElementCarousel extends HTMLCustomElement {
+	static get defaults() {
+		return {
+			wrapAround: false,
+			groupCells: false,
+			pageDots: false,
+			autoPlay: (x) => (parseFloat(x) || 0) * 1000,
+			draggable: true,
+			prevNextButtons: false,
+			index: (x) => parseInt(x) || 0,
+			width: null,
+			height: null,
+			fullview: false,
+			fullviewButton: false,
+			fade: false
+		};
+	}
+	static get observedAttributes() {
+		return Object.keys(this.defaults).map(function(x) {
+			return 'data-' + x.replace(/([A-Z])/g, (g) => `-${g[0].toLowerCase()}`);
+		});
+	}
+
+	options(state) {
+		var defs = this.constructor.defaults;
+		var list = Object.keys(defs);
+		var data = Object.assign({}, this.dataset, state ? state.options(this.id, list) : null);
+		var opts = {};
+		list.forEach((key) => {
+			var def = defs[key];
+			var val = data[key];
+			if (typeof def == "function") {
+				val = def(val);
+			}	else if (typeof def == "boolean") {
+				if (def === true) val = val != "false";
+				else val = val == "true";
+			} else if (typeof def == "number") {
+				val = parseFloat(val);
+			}
+			if (val != null) opts[key] = val;
+		});
+		return opts;
+	}
+
 	init(state) {
 		this.refresh = Pageboard.debounce(this.refresh, 10);
 		this.reload = Pageboard.debounce(this.reload, 100);
-		this.options = this.parseOpts();
 	}
 
 	handleClick(e, state) {
@@ -10,13 +52,12 @@ class HTMLElementCarousel extends HTMLCustomElement {
 		if (node.matches('a.fullview') && node.contains(e.target)) {
 			e.stopImmediatePropagation();
 			state.push({query:{
-				[`${this.id}.fullview`]: !this.options.fullview
+				[`${this.id}.fullview`]: !this.options(state).fullview
 			}});
 		}
 	}
 
 	setup(state) {
-		this.options = this.parseOpts(state.options(this.id, ['index', 'fullview']));
 		if (this.carousel) {
 			this.destroy();
 		} else {
@@ -29,7 +70,7 @@ class HTMLElementCarousel extends HTMLCustomElement {
 		}
 		var gallery = this.closest('element-gallery');
 		if (gallery && gallery.options.mode != "carousel") return;
-		var opts = Object.assign({}, this.options, {
+		var opts = Object.assign(this.options(state), {
 			noDomMod: true,
 			lazyLoad: false, // unless element-image populates the right attribute for carousel
 			cellSelector: 'element-carousel-cell',
@@ -42,12 +83,25 @@ class HTMLElementCarousel extends HTMLCustomElement {
 			wrapAround: false,
 			accessibility: false
 		}: {});
-		this.ownerDocument.body.classList.toggle('fullview', this.options.fullview);
-		this.classList.toggle('fade', this.options.fade);
+		opts.initialIndex = opts.index;
+		opts.imagesLoaded = opts.width == "auto";
+
+		this.ownerDocument.body.classList.toggle('fullview', opts.fullview);
+		if (opts.fullviewButton) this.insertAdjacentHTML(
+			'beforeEnd',
+			`<a class="ui icon button fullview"><i class="zoom icon"></i></a>`
+		);
+		else if (this.lastElementChild.matches('a.fullview')) {
+			this.lastElementChild.remove();
+		}
+		this.classList.toggle('fade', opts.fade);
 		this.updateCells();
 		this.carousel = new window.Flickity(this, opts);
 		this.carousel.on('select', (e) => {
-			this.dataset.index = this.carousel.selectedIndex;
+			if (gallery) {
+				state.query.index = this.id + '.' + this.carousel.selectedIndex;
+				state.save();
+			}
 		});
 	}
 
@@ -63,36 +117,7 @@ class HTMLElementCarousel extends HTMLCustomElement {
 		this.destroy();
 	}
 
-	parseOpts(obj) {
-		var src = this.dataset;
-		if (src.initialFullview) src.fullview = src.initialFullview;
-		else src.initialFullview = src.fullview || 'false';
-		obj = Object.assign(src, obj);
-		return {
-			wrapAround: obj.wrapAround == "true",
-			groupCells: obj.groupCells == "true",
-			pageDots: obj.pageDots == "true",
-			autoPlay: parseFloat(obj.autoPlay) * 1000 || false,
-			draggable: obj.draggable != "false",
-			prevNextButtons: obj.prevNextButtons == "true",
-			initialIndex: parseInt(obj.index) || 0,
-			width: obj.width,
-			height: obj.height,
-			fullview: obj.fullview == "true",
-			fullviewButton: obj.fullviewButton == "true",
-			imagesLoaded: obj.width == "auto",
-			fade: obj.fade == "true"
-		};
-	}
 	patch(state) {
-		this.options = this.parseOpts(state.options(this.id, ['index', 'fullview']));
-		if (this.lastElementChild.matches('a.fullview')) {
-			this.lastElementChild.remove();
-		}
-		if (this.options.fullviewButton) this.insertAdjacentHTML(
-			'beforeEnd',
-			`<a class="ui icon button fullview"><i class="zoom icon"></i></a>`
-		);
 		Page.setup(this);
 	}
 	updateCells() {
@@ -155,5 +180,5 @@ Page.ready(function() {
 });
 Page.setup(function() {
 	HTMLCustomElement.define('element-carousel-cell', HTMLElementCarouselCell);
-})
+});
 
