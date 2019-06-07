@@ -148,6 +148,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			else status = 0;
 		}).then(function(res) {
 			if (res && res.grants) state.data.$grants = res.grants;
+			state.scope.$response = res;
 			form.classList.remove('loading');
 			var statusClass = `[n|statusClass]`.fuse({n: status});
 			if (statusClass) form.classList.add(statusClass);
@@ -159,13 +160,22 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			data.$status = status;
 			var loc = Page.parse(redirect.fuse(data, state.scope));
 			loc.data = state.data;
+			var vary = false;
 			if (Page.samePathname(loc, state)) {
-				loc.query = Object.assign({}, state.query, loc.query);
+				if (res.granted) {
+					vary = true;
+				} else {
+					vary = "patch";
+					loc.query = Object.assign({}, state.query, loc.query);
+				}
+				state.data.$vary = vary
 			}
 			Array.from(document.querySelectorAll('element-template')).forEach(function(node) {
 				delete node.dataset.query;
 			});
-			return state.push(loc);
+			return state.push(loc, {
+				vary: vary
+			});
 		});
 	}
 }
