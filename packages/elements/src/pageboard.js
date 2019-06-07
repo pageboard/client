@@ -28,7 +28,7 @@ function initState(res, state) {
 	if (!res) return;
 	if (res.grants) state.data.$grants = res.grants;
 	if (res.meta && res.meta.group == "page") {
-		["grants", "hrefs", "links", "site"].forEach(function(k) {
+		["grants", "hrefs", "links", "site", "lock", "granted"].forEach(function(k) {
 			if (res[k] !== undefined) scope[`$${k}`] = res[k];
 		});
 		scope.$element = res.item && scope.$elements[res.item.type];
@@ -164,3 +164,4 @@ function merge(obj, extra, fn) {
 	});
 	return copy;
 }
+
