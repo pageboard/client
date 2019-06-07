@@ -21,7 +21,7 @@ exports.carousel = {
 		},
 		width: {
 			title: 'Cell width',
-			description: 'Cell width in % - 0 for auto',
+			description: 'in %, use 0 for auto',
 			type: 'number',
 			minimum: 0,
 			maximum: 100,
@@ -29,7 +29,7 @@ exports.carousel = {
 		},
 		height: {
 			title: 'Cell height',
-			description: 'Cell height in vh - 0 for auto',
+			description: 'in % of the vertical viewport, use 0 for auto',
 			type: 'number',
 			minimum: 0,
 			maximum: 999,
