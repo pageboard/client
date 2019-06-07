@@ -129,6 +129,23 @@ exports.autolink = function(val, what) {
 	}
 };
 
+exports.unset = function(obj, what, ...list) {
+	if (obj == null || typeof obj != "object") return obj;
+	obj = Object.assign({}, obj);
+	if (!list.length) list = Object.keys(obj);
+	list.forEach(function(name) {
+		obj[name] = undefined;
+	});
+	return obj;
+};
+
+exports.set = function(obj, what, name, val) {
+	if (obj == null || typeof obj != "object") return obj;
+	obj = Object.assign({}, obj);
+	obj[name] = val;
+	return obj;
+};
+
 exports.enc = function(str) {
 	if (str == null || typeof str != "string") return str;
 	return encodeURIComponent(str);
