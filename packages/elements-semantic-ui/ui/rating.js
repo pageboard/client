@@ -2,10 +2,8 @@ class HTMLElementRating extends HTMLCustomElement {
 	static get observedAttributes() {
 		return ['maximum', 'value'];
 	}
-	connectedCallback() {
-		this.update();
-	}
-	update() {
+
+	patch(state) {
 		var maximum = parseInt(this.getAttribute('maximum'));
 		var value = parseFloat(this.getAttribute('value'));
 		var char = this.getAttribute('char');
@@ -23,6 +21,5 @@ class HTMLElementRating extends HTMLCustomElement {
 	}
 }
 
-Page.setup(function() {
-	HTMLCustomElement.define('element-rating', HTMLElementRating);
-});
+HTMLCustomElement.define('element-rating', HTMLElementRating);
+
