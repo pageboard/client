@@ -6,6 +6,9 @@ class HTMLCustomElement extends HTMLElement {
 		return self;
 	}
 	init() {}
+	attributeChangedCallback(name, src, dst, ns) {
+		if (src !== dst && this.patch) Page.patch(this);
+	}
 }
 HTMLCustomElement.define = function(name, cla, is) {
 	if (cla.init) cla.init();
