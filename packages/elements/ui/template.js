@@ -111,19 +111,25 @@ class HTMLElementTemplate extends HTMLCustomElement {
 			filters: {
 				'||': function(val, what) {
 					var path = what.scope.path;
-					if (path[0] == "$query" && path.length > 1) {
+					if (path[0] != "$query") return;
+					var key;
+					if (path.length > 1) {
 						// (b)magnet sets val to null so optional values are not undefined
-						var key = path.slice(1).join('.');
+						key = path.slice(1).join('.');
 						var undef = val === undefined;
 						if (!state.vars[key]) {
 							if (undef) console.info("$query." + key, "is undefined");
 							state.vars[key] = !undef;
 						}
+					} else {
+						for (key in state.query) state.vars[key] = true;
 					}
 				}
 			}
 		};
-		scope.$grants = state.data.$grants;
+		Object.keys(state.data).forEach(function(key) {
+			if (key.startsWith('$') && scope[key] == null) scope[key] = state.data[key];
+		});
 		scope.$pathname = state.pathname;
 		scope.$query = state.query;
 		scope.$referrer = state.referrer.pathname || state.pathname;
