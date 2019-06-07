@@ -153,11 +153,14 @@ exports.enc = function(str) {
 
 exports.query = function(obj, what) {
 	if (obj == null || typeof obj != "object") return null;
-	var str = Object.keys(obj).map(function(key) {
+	var list = [];
+	Object.keys(obj).forEach(function(key) {
 		var val = obj[key];
-		if (val == null) return key;
-		else return key + "=" + val;
-	}).join('&');
+		if (val === undefined) return;
+		if (val === null) list.push(key);
+		else list.push(key + "=" + val);
+	});
+	var str = list.join('&');
 	if (str) return '?' + str;
 	else return '';
 };
