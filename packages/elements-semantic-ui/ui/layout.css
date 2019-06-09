@@ -1,22 +1,3 @@
-html {
-	height:100%;
-}
-body {
-	display:flex;
-	flex-direction:column;
-	min-height:100%;
-}
-[block-type="header"] {
-	flex:none;
-}
-[block-type="main"] {
-	flex:1 0 auto;
-	flex-direction:column;
-}
-[block-type="footer"] {
-	flex:none;
-}
-
 .layout,
 .ui.container.layout {
 	flex: 0 0 auto;

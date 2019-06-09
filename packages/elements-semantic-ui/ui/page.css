@@ -1,0 +1,18 @@
+html {
+	height:100%;
+}
+body {
+	display:flex;
+	flex-direction:column;
+	min-height:100%;
+}
+body > [block-type="header"] {
+	flex:none;
+}
+body > [block-type="main"] {
+	flex:1 0 auto;
+	flex-direction:column;
+}
+body > [block-type="footer"] {
+	flex:none;
+}
