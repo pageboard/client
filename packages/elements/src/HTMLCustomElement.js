@@ -14,7 +14,7 @@ HTMLCustomElement.define = function(name, cla, is) {
 	if (cla.init) cla.init();
 	if (window.customElements.get(name)) return cla;
 
-	HTMLCustomElement.intercept(cla, {
+	var exts = {
 		connectedCallback: function() {
 			if (is && !this._initialized) {
 				this._initialized = true;
@@ -25,8 +25,20 @@ HTMLCustomElement.define = function(name, cla, is) {
 		disconnectedCallback: function() {
 			Page.disconnect(this);
 		}
-	});
+	};
+	if (cla.defaults) {
+		if (!cla.observedAttributes) cla.observedAttributes = Object.keys(cla.defaults).map(function(x) {
+			return 'data-' + x.replace(/([A-Z])/g, (g) => `-${g[0].toLowerCase()}`);
+		});
+		exts.patch = function(state) {
+			this.options = nodeOptions(this, cla.defaults, state);
+		};
+		exts.setup = function(state) {
+			if (!this.options) this.options = nodeOptions(this, cla.defaults, state);
+		};
+	}
 
+	HTMLCustomElement.intercept(cla, exts);
 
 	window.customElements.define(name, cla, is ? {extends: is} : undefined);
 	return cla;
@@ -40,6 +52,40 @@ function intercept(proto, meth, cb) {
 			return ret;
 		};
 	})(proto[meth]);
+}
+
+function nodeOptions(node, defaults, state) {
+	var list = Object.keys(defaults);
+	var params = stateOptions(node.id, list, state);
+	var data = Object.assign({}, node.dataset, params);
+	var opts = {};
+	list.forEach((key) => {
+		var def = defaults[key];
+		var val = data[key];
+		if (typeof def == "function") {
+			val = def(val);
+		}	else if (typeof def == "boolean") {
+			if (def === true) val = val != "false";
+			else val = val == "true";
+		} else if (typeof def == "number") {
+			val = parseFloat(val);
+		}
+		if (val != null) opts[key] = val;
+	});
+	return opts;
+}
+
+function stateOptions(id, list, state) {
+	var opts = {};
+	Object.keys(state.query).forEach(function(key) {
+		var [qid, name] = key.split('.');
+		if (name == null || qid != id) return;
+		if (list.includes(name)) {
+			opts[name] = state.query[key];
+			state.vars[key] = true;
+		}
+	});
+	return opts;
 }
 
 HTMLCustomElement.intercept = function(cla, obj) {
