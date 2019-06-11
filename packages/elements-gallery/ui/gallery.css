@@ -2,28 +2,14 @@ element-gallery {
 	display:block;
 	position:relative;
 }
-element-gallery > .menu {
-	position:absolute;
-	right:0;
-	top:-3.1em;
-}
-i.portfolio.icon:before {
-	content:'P';
-}
-i.medialist.icon:before {
-	content:'L';
-}
-i.carousel.icon:before {
-	content:'C';
-}
 
-element-gallery > [block-content="galleries"] > * {
+element-gallery > [block-type] {
 	display:none;
 }
 
-element-gallery[data-mode="medialist"] > [block-content="galleries"] > [block-type="medialist"],
-element-gallery[data-mode="portfolio"] > [block-content="galleries"] > [block-type="portfolio"],
-element-gallery[data-mode="carousel"] > [block-content="galleries"] > [block-type="carousel"] {
+element-gallery[selected-mode="medialist"] > [block-type="medialist"],
+element-gallery[selected-mode="portfolio"] > [block-type="portfolio"],
+element-gallery[selected-mode="carousel"] > [block-type="carousel"] {
 	display:block;
 }
 

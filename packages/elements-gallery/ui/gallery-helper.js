@@ -10,49 +10,48 @@ Page.ready(function(state) {
 	}
 	HTMLCustomElement.intercept(window.customElements.get('element-gallery'), {
 		patch: function(state) {
-			if (!this.menuObserver) this.create();
-			this.syncGallery();
+			Page.setup((state) => {
+				this.setup(state);
+			});
 		},
 		setup: function(state) {
-			if (!this.menuObserver) this.create();
-			this.menuObserver.observe(this.lastElementChild, {childList: true});
+			this.create();
 			this.syncGallery();
 		},
 		create() {
-			if (this._syncAfter) {
-				return;	
+			if (!this._syncAfter) {
+				this._syncAfter = it.debounce(this._sync, 200);
 			}
-			this._syncAfter = it.debounce(this._sync, 200);
-			this.menuObserver = new MutationObserver(function(mutations) {
-				this.setup();
-				this._syncAfter();
-			}.bind(this));
-
-			this.itemsObserver = new MutationObserver(function(mutations) {
+			if (!this.itemsObserver) this.itemsObserver = new MutationObserver((mutations) => {
 				// we NEED to use href as key
-				var blockType = this.activeGallery.getAttribute('block-type');
+				var type = this.selectedMode;
 				var sel = '[block-content="items"],[block-type="image"]';
 				if (mutations.some(function(rec) {
-					return rec.type == "childList" && rec.target.matches(sel) && rec.target.closest(`[block-type="${blockType}"]`);
+					var cand = rec.type == "attributes" && rec.target.matches('element-image');
+					if (!cand) cand = rec.type == "childList" && rec.target.matches(sel);
+					if (cand && rec.target.closest(`[block-type="${type}"]`)) return true;
 				})) {
 					this._syncAfter();
 				}
-			}.bind(this));
+			});
 		},
 		destroy() {
-			this.menuObserver.disconnect();
-			this.itemsObserver.disconnect();
+			if (this.itemsObserver) {
+				this.itemsObserver.disconnect();
+				delete this.itemsObserver;
+			}
 		},
 		close: function(state) {
 			this.destroy();
 		},
 		syncGallery: function() {
-			var node = this.activeGallery;
-			if (!node) return;
 			this.itemsObserver.disconnect();
-			this.itemsObserver.observe(node, {
+			var gal = this.activeGallery;
+			if (!gal) return;
+			this.itemsObserver.observe(gal, {
 				childList: true,
-				subtree: true
+				subtree: true,
+				attributes: true
 			});
 		},
 		_selectMedias: function(gal) {
@@ -67,17 +66,17 @@ Page.ready(function(state) {
 			});
 		},
 		_sync: function() {
-			if (this._syncing || !this.activeGallery || !it.editor || it.editor.closed) return;
+			if (this._syncing || !this.selectedMode || !it.editor || it.editor.closed) return;
 			this._syncing = true;
 			var selItems = '[block-content="items"]';
-			var gallery = this.activeGallery;
-			var curList = this._selectMedias(gallery);
+			var selMode = this.selectedMode;
+			var curList = this._selectMedias(this.activeGallery);
 			var blocks = it.editor.blocks;
 			var utils = it.editor.utils;
 
-			this.galleries.forEach(function(gal) {
-				if (gal == gallery) return;
+			Array.from(this.children).forEach(function(gal) {
 				var oldType = gal.getAttribute('block-type');
+				if (oldType == selMode) return;
 				var oldList = this._selectMedias(gal);
 				var oldParent = gal.matches(selItems) ? gal : gal.querySelector(selItems);
 				if (!oldParent) return;

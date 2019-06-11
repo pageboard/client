@@ -6,6 +6,7 @@ exports.gallery = {
 	properties: {
 		name: {
 			title: 'Name',
+			description: 'Name appears in the url query parameters',
 			type: 'string',
 			format: 'id',
 			nullable: true
@@ -13,14 +14,11 @@ exports.gallery = {
 	},
 	contents: {
 		galleries: {
-			spec: "(portfolio medialist carousel)|(portfolio|medialist|carousel)+"
+			spec: "portfolio carousel"
 		}
 	},
 	group: 'block',
-	html: `<element-gallery id="[name|id]">
-		<div class="ui tiny compact icon menu"></div>
-		<div block-content="galleries"></div>
-	</element-gallery>`,
+	html: `<element-gallery id="[name|id]" block-content="galleries"></element-gallery>`,
 	resources: [
 		'../lib/list-diff.js',
 		'../ui/gallery-helper.js'

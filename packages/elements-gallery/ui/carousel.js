@@ -15,62 +15,45 @@ class HTMLElementCarousel extends HTMLCustomElement {
 			fade: false
 		};
 	}
-	static get observedAttributes() {
-		return Object.keys(this.defaults).map(function(x) {
-			return 'data-' + x.replace(/([A-Z])/g, (g) => `-${g[0].toLowerCase()}`);
-		});
+
+	fullview(val) {
+		this.classList.toggle('fullview', !!val);
+		var body = this.ownerDocument.body;
+		var len = body.querySelectorAll('element-carousel.fullview').length;
+		body.classList.toggle('fullview', len >= 1);
 	}
 
-	options(state) {
-		var defs = this.constructor.defaults;
-		var list = Object.keys(defs);
-		var data = Object.assign({}, this.dataset, state ? state.options(this.id, list) : null);
-		var opts = {};
-		list.forEach((key) => {
-			var def = defs[key];
-			var val = data[key];
-			if (typeof def == "function") {
-				val = def(val);
-			}	else if (typeof def == "boolean") {
-				if (def === true) val = val != "false";
-				else val = val == "true";
-			} else if (typeof def == "number") {
-				val = parseFloat(val);
-			}
-			if (val != null) opts[key] = val;
-		});
-		return opts;
-	}
-
-	init(state) {
+	init() {
 		this.refresh = Pageboard.debounce(this.refresh, 10);
 		this.reload = Pageboard.debounce(this.reload, 100);
+		this.resetup = Pageboard.debounce(this.resetup, 100);
 	}
 
 	handleClick(e, state) {
-		var node = this.lastElementChild;
-		if (node.matches('a.fullview') && node.contains(e.target)) {
+		var node = e.target.closest('a.fullview');
+		if (node) {
 			e.stopImmediatePropagation();
 			state.push({query:{
-				[`${this.id}.fullview`]: !this.options(state).fullview
+				[`${this.id}.fullview`]: !this.options.fullview || undefined
 			}});
 		}
 	}
 
+	patch(state) {
+		Page.setup((state) => {
+			this.resetup(state);
+		});
+	}
+
 	setup(state) {
-		if (this.carousel) {
-			this.destroy();
-		} else {
-			// because the element might have been setup on server
-			Array.from(this.querySelectorAll(
-				'.flickity-prev-next-button,.flickity-page-dots'
-			)).forEach(function(node) {
-				node.remove();
-			});
-		}
-		var gallery = this.closest('element-gallery');
-		if (gallery && gallery.options.mode != "carousel") return;
-		var opts = Object.assign(this.options(state), {
+		this.resetup(state);
+	}
+
+	resetup(state) {
+		if (this.widget) this.destroy();
+		var gallery = this.closest('[block-type="gallery"]');
+		if (gallery && gallery.selectedMode != "carousel") return;
+		var opts = Object.assign({}, this.options, {
 			noDomMod: true,
 			lazyLoad: false, // unless element-image populates the right attribute for carousel
 			cellSelector: 'element-carousel-cell',
@@ -85,62 +68,55 @@ class HTMLElementCarousel extends HTMLCustomElement {
 		}: {});
 		opts.initialIndex = opts.index;
 		opts.imagesLoaded = opts.width == "auto";
+		if (opts.autoPlay) opts.wrapAround = true;
 
-		this.ownerDocument.body.classList.toggle('fullview', opts.fullview);
-		if (opts.fullviewButton) this.insertAdjacentHTML(
-			'beforeEnd',
-			`<a class="ui icon button fullview"><i class="zoom icon"></i></a>`
-		);
-		else if (this.lastElementChild.matches('a.fullview')) {
-			this.lastElementChild.remove();
-		}
+		this.fullview(opts.fullview);
 		this.classList.toggle('fade', opts.fade);
+
 		this.updateCells();
-		this.carousel = new window.Flickity(this, opts);
-		this.carousel.on('select', (e) => {
-			if (gallery) {
-				state.query.index = this.id + '.' + this.carousel.selectedIndex;
+		this.widget = new window.Flickity(this, opts);
+		this.widget.on('select', (e) => {
+			if (opts.fullview) {
+				state.query[`${this.id}.index`] = this.widget.selectedIndex;
 				state.save();
 			}
 		});
 	}
 
 	destroy() {
-		if (this.carousel) {
-			this.carousel.stopPlayer();
-			this.carousel.destroy();
+		if (this.widget) {
+			this.widget.stopPlayer();
+			this.widget.destroy();
 		}
-		this.ownerDocument.body.classList.remove('fullview');
+		this.fullview(false);
 	}
 
 	close(state) {
 		this.destroy();
 	}
 
-	patch(state) {
-		Page.setup(this);
-	}
 	updateCells() {
+		var opts = this.options;
 		Array.prototype.forEach.call(
 			this.querySelectorAll('element-carousel-cell'),
 			function(cell) {
-				cell.dataset.width = this.options.width;
-				cell.dataset.height = this.options.height;
+				cell.dataset.width = opts.width;
+				cell.dataset.height = opts.height;
 				if (cell.update) cell.update();
 			},
 			this
 		);
 	}
 	refresh() {
-		if (this.carousel) {
-			this.carousel.resize();
+		if (this.widget) {
+			this.widget.resize();
 		}
 	}
-	reload(state) {
+	reload() {
 		this.updateCells();
-		if (this.carousel) {
-			this.carousel.reloadCells();
-			this.carousel.resize();
+		if (this.widget) {
+			this.widget.reloadCells();
+			this.widget.resize();
 		}
 	}
 }
@@ -150,7 +126,7 @@ class HTMLElementCarouselCell extends HTMLCustomElement {
 		this.update();
 		this.carousel = this.closest('element-carousel');
 		if (this.carousel) {
-			this.carousel.reload(state);
+			this.carousel.reload();
 		}
 	}
 
