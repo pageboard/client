@@ -160,7 +160,7 @@ Pageboard.Editor = function Editor(win, state) {
 		scope: state.scope,
 		plugins: [{
 			filterTransaction: function(tr) {
-				if (tr.docChanged) editor.docChanged = true;
+				if (tr && tr.docChanged) editor.docChanged = true;
 				return true;
 			},
 			view: function() {
