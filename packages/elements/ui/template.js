@@ -14,9 +14,6 @@ class HTMLElementTemplate extends HTMLCustomElement {
 		if (str) return str.split(',');
 		else return [];
 	}
-	attributeChangedCallback(attributeName, oldValue, newValue, namespace) {
-		Page.patch(this);
-	}
 	patch(state) {
 		var me = this;
 		if (me._refreshing || me.closest('[block-content="template"]')) return;
