@@ -21,11 +21,11 @@ exports.embed = {
 	group: "block",
 	parse: function(dom) {
 		return {
-			url: dom.getAttribute('src')
+			url: dom.dataset.src || dom.getAttribute('src')
 		};
 	},
 	tag: 'iframe,element-embed',
-	html: `<element-embed class="ui embed" src="[url]" id="[name|id]"></element-embed>`,
+	html: `<element-embed class="ui embed" data-src="[url]" id="[name|id]"></element-embed>`,
 	scripts: ['../ui/embed.js'],
 	stylesheets: [
 		'../lib/components/embed.css',

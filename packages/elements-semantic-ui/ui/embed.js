@@ -1,10 +1,13 @@
 class HTMLElementEmbed extends HTMLCustomElement {
-	static get observedAttributes() {
-		return ['src'];
+	static get defaults() {
+		return {
+			src: null,
+			hash: null
+		};
 	}
 	patch(state) {
-		var opts = state.options(this.id, ['hash']);
-		var url = this.getAttribute('src') || '';
+		var opts = this.options;
+		var url = opts.url;
 		if (opts.hash) {
 			var obj = Page.parse(url);
 			obj.hash = opts.hash;
@@ -17,9 +20,6 @@ class HTMLElementEmbed extends HTMLCustomElement {
 		} else {
 			this.iframe.setAttribute('src', url);
 		}
-	}
-	attributeChangedCallback(name, oldVal, newVal) {
-		Page.patch(this);
 	}
 	close() {
 		if (this.iframe) {
