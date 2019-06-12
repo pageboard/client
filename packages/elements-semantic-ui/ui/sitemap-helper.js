@@ -1,24 +1,20 @@
 class HTMLElementSitepage extends HTMLCustomElement {
-	static get observedAttributes() {
-		return ['data-url'];
+	static get defaults() {
+		return {
+			url: null,
+			index: (x) => parseInt(x) || 0
+		};
 	}
-	init() {
-		this.update = Pageboard.debounce(this.update, 100);
+	attributeChangedCallback(name, old, val) {
+		if (old) this.syncBlock();
 	}
 	setup(state) {
 		var content = this.querySelector('[block-content="children"]');
 		if (!content) return;
-		this.observer = new MutationObserver(function(mutations) {
-			this.updateChildren();
-		}.bind(this));
+		this.observer = new MutationObserver((mutations) => this.updateChildren());
 		this.observer.observe(content, {
 			childList: true
 		});
-	}
-
-	attributeChangedCallback(name, oldValue, newValue, namespace) {
-		if (oldValue == null || oldValue === newValue) return;
-		this.update();
 	}
 
 	close(state) {
@@ -28,44 +24,45 @@ class HTMLElementSitepage extends HTMLCustomElement {
 
 	updateChildren() {
 		if (this.updating) return;
-		var parentUrl = this.dataset.url;
 		var content = this.querySelector('[block-content="children"]');
 		if (!content) return;
 		this.updating = true;
+		var parentUrl = this.dataset.url || "";
 		Array.prototype.forEach.call(content.children, function(child, index) {
 			if (!child.matches('element-sitepage')) return; // cursor
-			var childUrl = child.dataset.url;
-			var name = (childUrl || "").split('/').pop();
-			// do not trigger update, it would process twice
-			var newUrl = parentUrl + '/' + name;
+			var childUrl = child.dataset.url || '';
+			if (childUrl.startsWith('/.')) return;
+			var newUrl = parentUrl + "/" + childUrl.split('/').pop();
 			if (childUrl != newUrl) {
 				child.setAttribute('data-url', newUrl);
 			}
 			var curIndex = child.dataset.index;
-			if (curIndex != index) child.setAttribute('data-index', index);
+			if (curIndex != index) {
+				child.setAttribute('data-index', index);
+			}
 		});
 		this.updating = false;
 	}
 
-	update() {
+	syncBlock() {
 		if (!this.parentNode) return;
-		var url = this.dataset.url;
-		var name = url.substring(1).split('/').pop();
-		var parent = this.parentNode.closest('[block-type="sitemap"],[block-type="sitepage"]');
-		if (!parent) return;
-		var parentUrl;
-		if (parent.matches('[block-type="sitemap"]')) {
-			parentUrl = "";
-		} else if (parent) {
-			parentUrl = parent.dataset.url;
+		var editor = window.parent.Pageboard.editor;
+		var block = editor.blocks.get(this.getAttribute('block-id'));
+		if (!block.data) block.data = {};
+		var data = this.dataset;
+		if (Object.keys(data).some((key) => data[key] != block.data[key])) {
+			Object.assign(block.data, data);
+			editor.dispatch(editor.utils.refreshTr(editor.state.tr, this, block));
+			this.updateChildren();
 		}
-
-		var newUrl = parentUrl ? parentUrl + '/' + name : url;
-		if (url != newUrl) this.setAttribute('data-url', newUrl);
-		this.updateChildren();
 	}
 }
 
 Page.setup(function() {
 	HTMLCustomElement.define('element-sitepage', HTMLElementSitepage);
+	HTMLCustomElement.intercept(window.customElements.get('element-sitemap'), {
+		setup: HTMLElementSitepage.prototype.setup,
+		close: HTMLElementSitepage.prototype.close,
+		updateChildren: HTMLElementSitepage.prototype.updateChildren
+	});
 });

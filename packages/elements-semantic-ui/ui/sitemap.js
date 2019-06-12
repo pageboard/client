@@ -58,7 +58,7 @@ class HTMLElementSitemap extends HTMLCustomElement {
 			}, state.scope);
 			var content = this.firstElementChild;
 			content.textContent = '';
-			Array.from(node.children).forEach(function(node) {
+			Array.from(node.children).forEach(function(node) {				
 				content.appendChild(node);
 			}, this);
 		}.bind(this));
