@@ -78,6 +78,7 @@ function install(el, scope) {
 
 	if (!el.dom) return;
 	el.render = function(block, bscope) {
+		if (!block) block = {};
 		var rscope = Object.assign({}, scope, {
 			$element: el
 		}, bscope);
