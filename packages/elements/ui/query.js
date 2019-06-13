@@ -111,12 +111,11 @@ window.HTMLElementQuery = class HTMLElementQuery extends HTMLCustomElement {
 		me.classList.remove('success', 'error', 'warning', 'loading');
 		me.classList.add('loading');
 		return Pageboard.fetch('get', '/.api/query', vars).then(function(answer) {
-			answer.$query = vars;
-			var data = answer.data;
-			delete answer.data;
-			matchdom(template, data, HTMLElementQuery.filters, {data: answer});
+			var scope = Object.assign({$query: vars}, answer);
+			delete scope.data;
+			matchdom(template, answer.data, HTMLElementQuery.filters, {data: scope});
 			while (template.firstChild) results.appendChild(template.firstChild);
-			if (!data || data.length === 0) {
+			if (!answer.data || answer.data.length === 0) {
 				me.classList.add('warning');
 			} else {
 				me.classList.add('success');
@@ -137,7 +136,7 @@ HTMLElementQuery.filters.schema = function(val, what, spath) {
 	if (val === undefined) return;
 
 	var path = what.scope.path;
-	var data = (path[0] && path[0].startsWith('$')) ? what.scope.data : what.data;
+	var data = (path[0] && path[0].startsWith('$') || Array.isArray(what.data)) ? what.scope.data : what.data;
 	var blocks = [];
 	for (var i=0; i < path.length; i++) {
 		if (!data) break;
