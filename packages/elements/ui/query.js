@@ -112,7 +112,7 @@ window.HTMLElementQuery = class HTMLElementQuery extends HTMLCustomElement {
 		me.classList.add('loading');
 		return Pageboard.fetch('get', '/.api/query', vars).then(function(answer) {
 			answer.$query = vars;
-			matchdom(template, answer, HTMLElementQuery.filters, answer);
+			matchdom(template, answer.data, HTMLElementQuery.filters, answer);
 			while (template.firstChild) results.appendChild(template.firstChild);
 			if (!answer.data || answer.data.length === 0) {
 				me.classList.add('warning');
@@ -133,34 +133,29 @@ HTMLElementQuery.filters = {};
 HTMLElementQuery.filters.schema = function(val, what, spath) {
 	// return schema of repeated key, schema of anyOf/listOf const value
 	if (val === undefined) return;
-	var schemaPath, schemaRoot;
+
 	var path = what.scope.path;
-	var rel = path.map(function(item) {
-		if (typeof item == "number") return "items";
-		else return item;
-	});
-	if (!what.scope.schemas) {
-		console.warn("No schemas");
-		return val;
+	var blocks;
+	function tryData(data) {
+		blocks = [];
+		for (var i=0; i < path.length; i++) {
+			if (!data) break;
+			if (data.id && data.type) blocks.push({
+				index: i, // add one because path will be block.data and schema is block.data schema
+				block: data
+			});
+			data = data[path[i]];
+		}
+		return blocks.pop();
 	}
+	var item = tryData(what.scope.data);
+	if (!item) item = tryData(what.data);
+	if (!item) return;
 
-	var data = what.index != null ? what.scope.data : what.data.data;
-	var blocks = [];
-	for (var i=0; i < path.length; i++) {
-		if (!data) break;
-		if (data.id && data.type) blocks.push({index: i, block: data});
-		data = data[path[i]];
-	}
-	var item = blocks.pop();
-	if (!item) {
-		console.warn("No block found in", what.scope.path);
-		return;
-	}
-	schemaPath = 'schemas.' + item.block.type + '.properties.'
-			+ rel.slice(item.index).join('.properties.');
-	schemaRoot = what.scope;
+	var schemaPath = item.block.type + '.properties.'
+		+ path.slice(item.index).join('.properties.');
 
-	var schema = what.expr.get(schemaRoot, schemaPath);
+	var schema = what.expr.get(what.scope.schemas, schemaPath);
 	if (!schema) {
 		console.warn("No schema for", schemaPath);
 		return;
