@@ -11,6 +11,7 @@ Page.route(function(state) {
 
 	return Pageboard.bundle(loader, state).then(function(res) {
 		state.data.$cache = res;
+		state.scope.$page = res.item;
 		var node = Pageboard.render(res, state.scope);
 		if (!node || node.nodeName != "BODY") {
 			throw new Error("page render should return a body element");
