@@ -2,8 +2,16 @@ element-tabs {
 	display:block;
 }
 .ui.tab.segment:not(.active) {
-	display:block;
+	display: none;
 	height:0;
 	overflow:hidden;
 	margin:0;
+}
+element-tabs > .ui.tabular.menu + div[block-content="tabs"] > .segment {
+  border-top: none;
+  margin-left: 0px;
+  margin-top: 0px;
+  margin-right: 0px;
+  margin-bottom:1rem;
+  width: 100%;
 }

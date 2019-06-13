@@ -1,28 +1,38 @@
 class HTMLElementTabs extends HTMLCustomElement {
-	handleClick(e) {
-		var item = e.target;
+	static get defaults() {
+		return {
+			index: (x) => parseInt(x) || 0
+		}
+	}
+	get items() {
+		return this.querySelector('[block-content="items"]');
+	}
+	get tabs() {
+		return this.querySelector('[block-content="tabs"]');
+	}
+	patch(state) {
+		var pos = this.options.index;
+		Array.prototype.forEach.call(this.items.children, function(item, i) {
+			item.classList.toggle('active', i == pos);
+		});
+		Array.prototype.forEach.call(this.tabs.children, function(item, i) {
+			item.classList.toggle('active', i == pos);
+		});
+	}
+	handleClick(e, state) {
+		var item = e.target.closest('[block-type="tab_item"]');
 		var menu = item.closest('[block-content="items"]');
 		if (!menu || menu.parentNode != this) return;
-		var pos = 0, cur = item;
-		while ((cur = cur.previousElementSibling)) pos++;
-		var tabs = this.querySelector('[block-content="tabs"]');
-		var tabItem = tabs.children[pos];
-		if (!tabItem) {
-			// do something weird
-			console.warn("Missing tab in", this);
-			return;
-		}
-		Array.prototype.forEach.call(menu.children, function(item) {
-			item.classList.remove('active');
-		});
-		item.classList.add('active');
-		Array.prototype.forEach.call(tabs.children, function(item) {
-			item.classList.remove('active');
-		});
-		tabItem.classList.add('active');
+		this.dataset.index = this.index(item);
+		this.patch(state);
+	}
+	index(child) {
+		var pos = 0;
+		while ((child = child.previousElementSibling)) pos++;
+		return pos;
 	}
 }
 
-Page.setup(function() {
-	window.HTMLElementTabs = HTMLCustomElement.define('element-tabs', HTMLElementTabs);
+Page.ready(function() {
+	HTMLCustomElement.define('element-tabs', HTMLElementTabs);
 });

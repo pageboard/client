@@ -13,21 +13,8 @@ exports.tabs = {
 			spec: "tab+"
 		}
 	},
-	properties: {
-		style: {
-			title: 'Style',
-			anyOf: [{
-				const: "tabular",
-				title: "Tabular"
-			}, {
-				const: "pointing",
-				title: "Pointing"
-			}],
-			default: 'tabular'
-		}
-	},
 	html: `<element-tabs>
-		<div class="ui [style|eq:pointing:secondary pointing:top attached tabular] menu" block-content="items"></div>
+		<div class="ui top attached tabular menu" block-content="items"></div>
 		<div block-content="tabs"></div>
 	</element-tabs>`,
 	stylesheets: [
@@ -51,44 +38,22 @@ exports.tab_item = {
 	icon: '<i class="icons"><b class="icon">Tab</b><i class="corner add icon"></i></i>',
 	menu: 'widget',
 	inplace: true,
-	context: 'tabs/tabs_container_items/',
+	context: 'tabs_container_items/',
 	contents: {
 		content: {
 			spec: "inline*"
 		}
 	},
-	properties: {
-		active: {
-			type: 'boolean',
-			default: false
-		}
-	},
-	parse: function(dom) {
-		var d = {};
-		d.active = dom.previousElementSibling == null;
-		return d;
-	},
-	html: '<a class="item [active|?]" block-content="content">Tab Item</a>'
+	html: '<a class="item" block-content="content">Tab Item</a>'
 };
 
 exports.tab = {
 	title: 'Tab',
 	inplace: true,
-	context: 'tabs/tabs_container_tabs/',
+	context: 'tabs_container_tabs/',
 	contents: {
 		content: "block+"
 	},
-	properties: {
-		active: {
-			type: 'boolean',
-			default: false
-		}
-	},
-	parse: function(dom) {
-		var d = {};
-		d.active = dom.previousElementSibling == null;
-		return d;
-	},
-	html: '<div class="ui tab [active|?] segment" block-content="content"></div>'
+	html: '<div class="ui bottom attached tab segment" block-content="content"></div>'
 };
 

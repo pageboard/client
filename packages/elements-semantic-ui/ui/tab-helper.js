@@ -1,52 +1,30 @@
 Page.setup(function(state) {
-	HTMLCustomElement.intercept(window.HTMLElementTabs, {
-		init: function() {
-			if (this.menuObserver) return;
-			this.menuObserver = new MutationObserver(function(mutations) {
-				this._sync();
-			}.bind(this));
+	HTMLCustomElement.intercept(window.customElements.get('element-tabs'), {
+		setup: function(state) {
+			if (!this.observer) this.observer = new MutationObserver((records) => {
+				records.forEach((record) => this.mutate(record, state));
+			});
+			this.observer.observe(this.items, {childList: true});
 		},
-		connectedCallback: function() {
-			if (window.parent.Pageboard.editor) this._setupHelper();
+		close: function() {
+			this.observer.disconnect();
 		},
-		disconnectedCallback: function() {
-			this._teardownHelper();
-		},
-		_setupHelper: function() {
-			this._editor = window.parent.Pageboard.editor;
-			this.menuObserver.observe(this.querySelector('[block-content="items"]'), {childList: true});
-		},
-		_teardownHelper: function() {
-			this.menuObserver.disconnect();
-		},
-		_sync: function() {
-			if (this._syncing || !this._editor) return;
-			this._syncing = true;
-			var editor = this._editor;
-
-			var items = this.querySelector('[block-content="items"]');
-			var tabs = this.querySelector('[block-content="tabs"]');
+		mutate: function(record, state) {
+			var items = this.items;
+			var tabs = this.tabs;
 			if (!items || !tabs) return;
-			var diff = items.children.length - tabs.children.length;
-			if (diff == 0) return;
-			var tr = editor.state.tr;
-			var sel;
-			if (diff > 0) {
-				sel = editor.utils.selectTr(tr, tabs.lastElementChild, true);
-				var pos = sel.to + 1;
-				var $pos = tr.doc.resolve(pos);
-				var block = editor.blocks.create('tab');
-				editor.blocks.set(block);
-				var dom = editor.render(block);
-				var node = editor.utils.fill(editor.utils.parseTr(tr, dom, $pos).content.firstChild);
-				tr.insert(pos, node);
-			} else if (diff < 0) {
-				sel = editor.utils.selectTr(tr, tabs.lastElementChild);
-				editor.utils.deleteTr(tr, sel);
+			var tabElt = state.scope.$elements.tab;
+			Array.from(record.addedNodes).forEach(node => {
+				tabs.insertBefore(tabElt.render(), tabs.children[this.index(node)]);
+			});
+			var deletions = record.removedNodes.length;
+			if (deletions) {
+				var pos = record.previousSibling ? this.index(record.previousSibling) + 1 : 0;
+				while (deletions-- > 0) {
+					var child = tabs.children[pos];
+					if (child) child.remove();
+				}
 			}
-			editor.dispatch(tr);
-
-			this._syncing = false;
 		}
 	});
 });
