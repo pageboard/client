@@ -112,9 +112,11 @@ window.HTMLElementQuery = class HTMLElementQuery extends HTMLCustomElement {
 		me.classList.add('loading');
 		return Pageboard.fetch('get', '/.api/query', vars).then(function(answer) {
 			answer.$query = vars;
-			matchdom(template, answer.data, HTMLElementQuery.filters, answer);
+			var data = answer.data;
+			delete answer.data;
+			matchdom(template, data, HTMLElementQuery.filters, {data: answer});
 			while (template.firstChild) results.appendChild(template.firstChild);
-			if (!answer.data || answer.data.length === 0) {
+			if (!data || data.length === 0) {
 				me.classList.add('warning');
 			} else {
 				me.classList.add('success');
@@ -135,29 +137,25 @@ HTMLElementQuery.filters.schema = function(val, what, spath) {
 	if (val === undefined) return;
 
 	var path = what.scope.path;
-	var blocks;
-	function tryData(data) {
-		blocks = [];
-		for (var i=0; i < path.length; i++) {
-			if (!data) break;
-			if (data.id && data.type) blocks.push({
-				index: i, // add one because path will be block.data and schema is block.data schema
-				block: data
-			});
-			data = data[path[i]];
-		}
-		return blocks.pop();
+	var data = (path[0] && path[0].startsWith('$')) ? what.scope.data : what.data;
+	var blocks = [];
+	for (var i=0; i < path.length; i++) {
+		if (!data) break;
+		if (data.id && data.type) blocks.push({
+			index: i, // add one because path will be block.data and schema is block.data schema
+			block: data
+		});
+		data = data[path[i]];
 	}
-	var item = tryData(what.scope.data);
-	if (!item) item = tryData(what.data);
+	var item = blocks.pop();
 	if (!item) return;
 
 	var schemaPath = item.block.type + '.properties.'
 		+ path.slice(item.index).join('.properties.');
 
-	var schema = what.expr.get(what.scope.schemas, schemaPath);
+	var schema = what.expr.get(what.scope.data.schemas, schemaPath);
 	if (!schema) {
-		console.warn("No schema for", schemaPath);
+		console.warn("No schema for", path, schemaPath);
 		return;
 	}
 	if ((what.scope.iskey === undefined || what.scope.iskey === false) && val !== undefined) {
