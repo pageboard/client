@@ -45,7 +45,7 @@ exports.breadcrumb = {
 		<div class="divider"></div>
 		<a href="[$links.up.url|reverse|repeat:+a:link:-1]" class="section">[link.title]</a>
 		<div class="divider"></div>
-		<div class="active section">[$item.data.title|magnet:+div]</div>
+		<div class="active section">[$page.data.title|magnet:+div]</div>
 	</div>`,
 	stylesheets: [
 		'../lib/components/breadcrumb.css'
