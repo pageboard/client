@@ -7,7 +7,6 @@ class HTMLElementSticky extends HTMLCustomElement {
 		this.stickyfill.destroy();
 	}
 	init() {
-		this.dataset.mode = "start";
 		var listener = this.listener.bind(this);
 		var raf;
 		this.listener = function() {
@@ -16,6 +15,7 @@ class HTMLElementSticky extends HTMLCustomElement {
 		};
 	}
 	setup() {
+		this.dataset.mode = "start";
 		if (this._sticky || !this.parentNode) return;
 		window.addEventListener('scroll', this.listener);
 		window.addEventListener('resize', this.listener);
