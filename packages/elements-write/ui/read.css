@@ -78,6 +78,7 @@ body[data-mode="code"] div[block-type] {
 	color: black !important;
 	/* display: flex !important; */
 	background-color: rgba(0, 0, 0, 0.02) !important;
+	max-width: 100%;
 }
 body[data-mode="code"] div[block-content] {
 	/* border: 1px solid rgba(0, 0, 0, 0.4) !important; */
@@ -108,4 +109,8 @@ body[data-mode="code"] div[block-type] > div.title {
 	text-align: center;
 }
 
-body[data-mode="code"] div.content {box-shadow: inset 0px 0px 1px 1px #0000001a;}
+body[data-mode="code"] div.content {box-shadow: inset 0px 0px 1px 1px #0000001a;flex-flow: row;display: flex;}
+
+body[data-mode="code"] [block-type="_"] {
+	display:none;
+}
