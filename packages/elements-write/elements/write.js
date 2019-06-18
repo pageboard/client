@@ -22,10 +22,17 @@ exports.write = {
 	</div>
 	<div id="pageboard-write" class="ui basic loading segment">
 		<div id="store" class="ui inverted wide mini menu">
-			<a class="vertically fitted item" data-command="view" id="mode">
-				<i class="unhide large icon"></i>
-				<i class="hide large icon"></i>
-			</a>
+			<div id="mode" class="menu">
+				<a class="vertically fitted item" data-command="read">
+					<i class="unhide large icon"></i>
+				</a>
+				<a class="vertically fitted item" data-command="write">
+					<i class="write large icon"></i>
+				</a>
+				<a class="vertically fitted item" data-command="code">
+					<i class="code large icon"></i>
+				</a>
+			</div>
 			<a class="item" data-command="save">
 				<i class="checkmark icon"></i>
 				Save
