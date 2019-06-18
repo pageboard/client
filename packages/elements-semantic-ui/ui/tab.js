@@ -21,9 +21,10 @@ class HTMLElementTabs extends HTMLCustomElement {
 	}
 	handleClick(e, state) {
 		var item = e.target.closest('[block-type="tab_item"]');
-		var menu = item.closest('[block-content="items"]');
+		if (!item) return;
+		var menu = item.parentNode;
 		if (!menu || menu.parentNode != this) return;
-		this.dataset.index = item.getIndex();
+		this.dataset.index = menu.children.indexOf(item);
 		this.patch(state);
 	}
 }

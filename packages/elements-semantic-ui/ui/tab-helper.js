@@ -16,7 +16,7 @@ Page.setup(function(state) {
 			Array.from(record.addedNodes).forEach((node) => {
 				tabs.insertBefore(state.scope.$view.render({
 					type: 'tab'
-				}), tabs.children.indexOf(node));
+				}), tabs.children[items.children.indexOf(node)]);
 			});
 			Array.from(record.removedNodes).forEach((node, i) => {
 				var pos = record.target.childNodes.indexOf(record.previousSibling) + 1 + i;
