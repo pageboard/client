@@ -13,18 +13,16 @@ Page.setup(function(state) {
 			var items = this.items;
 			var tabs = this.tabs;
 			if (!items || !tabs) return;
-			var tabElt = state.scope.$elements.tab;
-			Array.from(record.addedNodes).forEach(node => {
-				tabs.insertBefore(tabElt.render(), tabs.children[this.index(node)]);
+			Array.from(record.addedNodes).forEach((node) => {
+				tabs.insertBefore(state.scope.$view.render({
+					type: 'tab'
+				}), tabs.children.indexOf(node));
 			});
-			var deletions = record.removedNodes.length;
-			if (deletions) {
-				var pos = record.previousSibling ? this.index(record.previousSibling) + 1 : 0;
-				while (deletions-- > 0) {
-					var child = tabs.children[pos];
-					if (child) child.remove();
-				}
-			}
+			Array.from(record.removedNodes).forEach((node, i) => {
+				var pos = record.target.childNodes.indexOf(record.previousSibling) + 1 + i;
+				var child = tabs.childNodes[pos];
+				if (child) child.remove();
+			});
 		}
 	});
 });
