@@ -23,32 +23,30 @@ exports.write = {
 	<div id="pageboard-write" class="ui basic loading segment">
 		<div id="store" class="ui inverted wide mini menu">
 			<div id="mode" class="menu">
-				<a class="vertically fitted item" data-command="read">
+				<a class="vertically fitted item" data-command="read" title="Read Mode">
 					<i class="unhide large icon"></i>
 				</a>
-				<a class="vertically fitted item" data-command="write">
+				<a class="vertically fitted item" data-command="write" title="Write Mode">
 					<i class="write large icon"></i>
 				</a>
-				<a class="vertically fitted item" data-command="code">
+				<a class="vertically fitted item" data-command="code" title="HTML Mode">
 					<i class="code large icon"></i>
 				</a>
 			</div>
-			<a class="item" data-command="save">
-				<i class="checkmark icon"></i>
-				Save
-			</a>
-			<a class="item" data-command="discard">
-				<i class="cancel icon"></i>
-				Discard
-			</a>
+			<div class="right menu">
+				<a class="item" data-command="save">
+					<i class="checkmark icon"></i>
+					Save
+				</a>
+				<a class="item" data-command="discard">
+					<i class="cancel icon"></i>
+					Discard
+				</a>
+			</div>
 			<div class="right icon menu">
-				<div class="ui simple dropdown item">
-					<i class="dropdown icon"></i>
-					<div class="menu">
-	<!--					<a class="item">My account</a>-->
-						<a class="item" href="/.api/logout" target="_self">Log out</a>
-					</div>
-				</div>
+				<a class="fitted item" href="/.api/logout" target="_self" title="Sign Out">
+					<i class="sign out large icon"></i>
+				</a>
 			</div>
 		</div>
 		<div id="breadcrumb" class="ui breadcrumb">
