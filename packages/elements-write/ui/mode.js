@@ -10,7 +10,6 @@ Pageboard.Controls.Mode = class Mode {
 		if (!item) return;
 		var com = item.dataset.command;
 		this.win.Page.setup((state) => {
-			var elts = state.scope.$view.elements;
 			var mode = document.body.dataset.mode;
 			if (mode != "read") {
 				var store = this.editor.controls.store;
@@ -26,6 +25,7 @@ Pageboard.Controls.Mode = class Mode {
 			if (com == "code") {
 				this.editor.close();
 				delete Pageboard.editor;
+				var elts = state.scope.$view.elements;
 				Pageboard.backupElements = Object.assign({}, elts);
 				Object.entries(elts).forEach(([name, elt]) => {
 					elt = elts[name] = Object.assign({}, elt);
@@ -68,6 +68,7 @@ Pageboard.Controls.Mode = class Mode {
 				this.editor.close();
 			}
 			if (mode == "code") {
+				var elts = state.scope.$view.elements;
 				Object.entries(Pageboard.backupElements).forEach(([name, elt]) => {
 					if (elt.group == "page") {
 						delete elt.dom.querySelector('body').dataset.mode;
