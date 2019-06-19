@@ -45,13 +45,26 @@ HTMLCustomElement.define = function(name, cla, is) {
 };
 
 function intercept(proto, meth, cb) {
-	proto[meth] = (function(fn) {
-		return function(...args) {
-			var ret = cb.apply(this, args);
-			if (fn) ret = fn.apply(this, args);
-			return ret;
-		};
-	})(proto[meth]);
+	var fn = proto[meth];
+	var op;
+	function ops(...args) {
+		var ret;
+		for (var i=0; i < op.fns.length; i++) {
+			ret = op.fns[i].apply(this, args) || ret;
+		}
+		return ret;
+	}
+	if (fn && fn.fns) {
+		op = fn;
+		if (!op.fns.includes(cb)) {
+			op.fns.unshift(cb);
+		}
+	} else {
+		op = ops;
+		op.fns = [cb];
+		if (fn) op.fns.push(fn);
+		proto[meth] = op;
+	}
 }
 
 function nodeOptions(node, defaults, state) {
