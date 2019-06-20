@@ -2,8 +2,15 @@
 	display: block;
 	position: absolute;
 	visibility:hidden;
-	left: -0.3ch;
+	left: -1ch;
 }
 [block-type="heading"]:hover > a[aria-hidden="true"] {
 	visibility:visible;
+}
+h1,
+h2,
+h3,
+h4,
+h5 {
+	position:relative;
 }
