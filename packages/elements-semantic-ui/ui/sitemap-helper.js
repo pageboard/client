@@ -60,5 +60,5 @@ class HTMLElementSitepage extends HTMLCustomElement {
 
 Page.setup(function() {
 	HTMLCustomElement.define('element-sitepage', HTMLElementSitepage);
-	HTMLCustomElement.extends('element-sitemap', HTMLElementSitepage);
+	HTMLCustomElement.extend('element-sitemap', HTMLElementSitepage);
 });

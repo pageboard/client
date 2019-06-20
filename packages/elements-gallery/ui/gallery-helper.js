@@ -3,7 +3,7 @@ Page.ready(function(state) {
 	if (!state.scope.$write) {
 		return;
 	}
-	HTMLCustomElement.extends('element-gallery', class GalleryHelper {
+	HTMLCustomElement.extend('element-gallery', class {
 		patch(state) {
 			Page.setup((state) => {
 				this.setup(state);

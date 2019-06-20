@@ -1,5 +1,5 @@
 Page.setup(function(state) {
-	HTMLCustomElement.extends('element-tabs', class TabsHelper {
+	HTMLCustomElement.extend('element-tabs', class {
 		setup(state) {
 			if (!this.observer) this.observer = new MutationObserver((records) => {
 				records.forEach((record) => this.mutate(record, state));
