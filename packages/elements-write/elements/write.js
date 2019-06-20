@@ -42,7 +42,7 @@ exports.write = {
 					<i class="cancel icon"></i>
 					Discard
 				</a>
-				<a class="fitted item" href="/.api/logout" target="_self" title="Sign Out">
+				<a class="vertically fitted item" href="/.api/logout" target="_self" title="Sign Out">
 					<i class="sign out large icon"></i>
 				</a>
 			</div>
