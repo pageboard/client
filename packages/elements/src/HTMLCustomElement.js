@@ -10,38 +10,40 @@ class HTMLCustomElement extends HTMLElement {
 		if (src !== dst && this.patch) Page.patch(this);
 	}
 }
+
 HTMLCustomElement.define = function(name, cla, is) {
 	if (cla.init) cla.init();
 
 	var preset = window.customElements.get(name);
-	if (preset) return preset;
+	if (preset) return cla;
 
-	HTMLCustomElement.extends(cla, class PagePlugin {
-		connectedCallback() {
-			if (is && !this._initialized) {
-				this._initialized = true;
-				if (this.init) this.init();
-			}
-			Page.connect(this);
+	cla.prototype.connectedCallback = function() {
+		if (is && !this._initialized) {
+			this._initialized = true;
+			if (this.init) this.init();
 		}
-		disconnectedCallback() {
-			Page.disconnect(this);
-		}
-	}, is);
+		Page.connect(this);
+	};
+	cla.prototype.disconnectedCallback = function() {
+		Page.disconnect(this);
+	};
+
 	if (cla.defaults) {
 		if (!cla.observedAttributes) cla.observedAttributes = Object.keys(cla.defaults).map(function(x) {
 			return 'data-' + x.replace(/([A-Z])/g, (g) => `-${g[0].toLowerCase()}`);
 		});
-		HTMLCustomElement.extends(cla, class DefaultsPlugin {
-			patch(state) {
-				this.options = nodeOptions(this, cla.defaults, state);
-			}
-			setup(state) {
-				if (!this.options) this.options = nodeOptions(this, cla.defaults, state);
-			}
-		}, is);
 	}
 	window.customElements.define(name, cla, is ? {extends: is} : undefined);
+	if (cla.defaults) HTMLCustomElement.extend(name, class {
+		patch(state) {
+			this.options = nodeOptions(this, cla.defaults, state);
+		}
+		setup(state) {
+			if (!this.options) {
+				this.options = nodeOptions(this, cla.defaults, state);
+			}
+		}
+	}, is);
 	return cla;
 };
 
@@ -89,26 +91,21 @@ function stateOptions(id, list, state) {
 	return opts;
 }
 
-HTMLCustomElement.extends = function(Cla, Ext, is) {
-	var name = Cla;
-	if (typeof name == "string") {
-		Cla = window.customElements.get(name);
-	} else {
-		name = Cla.name;
-		if (!name) throw new Error("extends expects Class to have a name");
-	}
+HTMLCustomElement.extend = function(name, Ext, is) {
+	var Cla = window.customElements.get(name);
 	if (is) name += "_" + is;
-	var plugins = this.extends.cache;
+	var plugins = this.extend.cache;
 	var list = plugins[name];
 	if (!list) list = plugins[name] = {};
 	if (list[Ext.name]) return;
 	list[Ext.name] = true;
-	var Proto = Ext.prototype;
-	Object.getOwnPropertyNames(Proto).forEach(function(name) {
-		if (name != "constructor") monkeyPatch(Cla.prototype, name, Proto[name]);
+	var ExtProto = Ext.prototype;
+	var ClaProto = Cla.prototype;
+	Object.getOwnPropertyNames(ExtProto).forEach(function(name) {
+		if (name != "constructor") monkeyPatch(ClaProto, name, ExtProto[name]);
 	});
 };
-HTMLCustomElement.extends.cache = {};
+HTMLCustomElement.extend.cache = {};
 
 if (!NodeList.prototype.indexOf) NodeList.prototype.indexOf = function(node) {
 	return Array.prototype.indexOf.call(this, node);
