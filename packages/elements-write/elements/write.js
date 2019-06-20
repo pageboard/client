@@ -33,7 +33,7 @@ exports.write = {
 					<i class="code large icon"></i>
 				</a>
 			</div>
-			<div class="right menu">
+			<div class="right icon menu">
 				<a class="item" data-command="save">
 					<i class="checkmark icon"></i>
 					Save
@@ -42,8 +42,6 @@ exports.write = {
 					<i class="cancel icon"></i>
 					Discard
 				</a>
-			</div>
-			<div class="right icon menu">
 				<a class="fitted item" href="/.api/logout" target="_self" title="Sign Out">
 					<i class="sign out large icon"></i>
 				</a>
