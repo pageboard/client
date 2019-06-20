@@ -1,31 +1,29 @@
 class HTMLElementHeadingHelper extends HTMLHeadingElement {
 	init() {
-		this.observer = new MutationObserver(function(mutations) {
-			if (mutations.some(function(mut) {
-				return mut.type == "characterData";
-			}))	this.updateChildren();
-		}.bind(this));
+		this.observer = new MutationObserver((records) => {
+			if (records.some((mut) => {
+				return mut.type == "characterData" || mut.type == "childList" && mut.addedNodes.length;
+			}))	this.sync();
+		});
 	}
-	connectedCallback() {
+	setup() {
 		this.observer.observe(this, {
 			childList: true,
 			subtree: true,
 			characterData: true
 		});
 	}
-	disconnectedCallback() {
+	close() {
 		this.observer.disconnect();
 	}
-	updateChildren() {
+	sync() {
 		var Pb = window.parent.Pageboard;
-		if (!Pb || !Pb.slug) return;
+		if (!Pb.slug || !Pb.editor) return;
 		var id = Pb.slug(this.textContent);
 		if (id && id != this.id) {
-			var block = Pb.editor.blocks.get(this.getAttribute('block-id'));
-			block.data.id = id;
-			var tr = Pb.editor.state.tr;
-			Pb.editor.utils.refreshTr(tr, this, block);
-			Pb.editor.dispatch(tr);
+			Pb.editor.blocks.mutate(this, {
+				id: id
+			});
 		}
 	}
 }

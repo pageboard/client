@@ -1,9 +1,8 @@
 [block-type="heading"] > a[aria-hidden="true"] {
-	display:inline-block;
-	position:relative;
-	left:-1ch;
-	width:0;
+	display: block;
+	position: absolute;
 	visibility:hidden;
+	left: -0.3ch;
 }
 [block-type="heading"]:hover > a[aria-hidden="true"] {
 	visibility:visible;
