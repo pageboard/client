@@ -30,6 +30,7 @@ Pageboard.Controls.Mode = class Mode {
 				Object.entries(elts).forEach(([name, elt]) => {
 					elt = elts[name] = Object.assign({}, elt);
 					if (elt.group == "page") {
+						elt.stylesheets = elt.stylesheets.slice(0, 1);
 						elt.dom.querySelector('body').dataset.mode = "code";
 						return;
 					}
