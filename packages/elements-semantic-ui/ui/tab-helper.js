@@ -1,15 +1,15 @@
 Page.setup(function(state) {
-	HTMLCustomElement.intercept(window.customElements.get('element-tabs'), {
-		setup: function(state) {
+	HTMLCustomElement.extends('element-tabs', class TabsHelper {
+		setup(state) {
 			if (!this.observer) this.observer = new MutationObserver((records) => {
 				records.forEach((record) => this.mutate(record, state));
 			});
 			this.observer.observe(this.items, {childList: true});
-		},
-		close: function() {
+		}
+		close() {
 			this.observer.disconnect();
-		},
-		mutate: function(record, state) {
+		}
+		mutate(record, state) {
 			var items = this.items;
 			var tabs = this.tabs;
 			if (!items || !tabs) return;
