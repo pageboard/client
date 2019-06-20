@@ -3,48 +3,18 @@ Page.ready(function(state) {
 	if (!state.scope.$write) {
 		return;
 	}
-	var Diff = window.listDiff;
-	function getPosDest(parent, blockType, pos) {
-		var list = parent.querySelectorAll(`[block-type="${blockType}_item"]`);
-		if (list.length > pos) return list.item(pos);
-	}
-	HTMLCustomElement.intercept(window.customElements.get('element-gallery'), {
-		patch: function(state) {
+	HTMLCustomElement.extends('element-gallery', class GalleryHelper {
+		patch(state) {
 			Page.setup((state) => {
 				this.setup(state);
 			});
-		},
-		setup: function(state) {
-			this.create();
-			this.syncGallery();
-		},
-		create() {
-			if (!this._syncAfter) {
-				this._syncAfter = it.debounce(this._sync, 200);
-			}
-			if (!this.itemsObserver) this.itemsObserver = new MutationObserver((mutations) => {
-				// we NEED to use href as key
-				var type = this.selectedMode;
-				var sel = '[block-content="items"],[block-type="image"]';
-				if (mutations.some(function(rec) {
-					var cand = rec.type == "attributes" && rec.target.matches('element-image');
-					if (!cand) cand = rec.type == "childList" && rec.target.matches(sel);
-					if (cand && rec.target.closest(`[block-type="${type}"]`)) return true;
-				})) {
-					this._syncAfter();
-				}
+		}
+		setup(state) {
+			if (!this.itemsObserver) this.itemsObserver = new MutationObserver((records) => {
+				setTimeout(() => {
+					records.forEach((record) => this.mutate(record, state));
+				}, 300);
 			});
-		},
-		destroy() {
-			if (this.itemsObserver) {
-				this.itemsObserver.disconnect();
-				delete this.itemsObserver;
-			}
-		},
-		close: function(state) {
-			this.destroy();
-		},
-		syncGallery: function() {
 			this.itemsObserver.disconnect();
 			var gal = this.activeGallery;
 			if (!gal) return;
@@ -53,93 +23,74 @@ Page.ready(function(state) {
 				subtree: true,
 				attributes: true
 			});
-		},
-		_selectMedias: function(gal) {
-			return Array.from(gal.querySelectorAll('[block-content="media"] > [block-type="image"]'))
-			.map(function(node, i) {
-				var block = it.editor.blocks.get(node.getAttribute('block-id'));
-				return {
-					pos: i,
-					block: block,
-					url: (block.data || {}).url || ""
-				};
+		}
+		close(state) {
+			if (this.itemsObserver) {
+				this.itemsObserver.disconnect();
+				delete this.itemsObserver;
+			}
+		}
+		mutate(record, state) {
+			var ed = window.parent.Pageboard.editor;
+			if (!ed || ed.closed) return;
+			var mode = this.selectedMode;
+			var gals = Array.prototype.filter.call(this.children, (gal) => {
+				return gal.getAttribute('block-type') != mode;
 			});
-		},
-		_sync: function() {
-			if (this._syncing || !this.selectedMode || !it.editor || it.editor.closed) return;
-			this._syncing = true;
-			var selItems = '[block-content="items"]';
-			var selMode = this.selectedMode;
-			var curList = this._selectMedias(this.activeGallery);
-			var blocks = it.editor.blocks;
-			var utils = it.editor.utils;
-
-			Array.from(this.children).forEach(function(gal) {
-				var oldType = gal.getAttribute('block-type');
-				if (oldType == selMode) return;
-				var oldList = this._selectMedias(gal);
-				var oldParent = gal.matches(selItems) ? gal : gal.querySelector(selItems);
-				if (!oldParent) return;
-				// a move is: remove + create of the same url
-				var removedItem;
-				var tr = it.editor.state.tr;
-				var patches = Diff(oldList, curList, "url");
-				var sel, oldBlock, oldNode, curBlock;
-				patches.forEach(function(patch) {
-					switch (patch.type) {
-					case Diff.INSERTION:
-						// move selection to position
-						var atEnd = patch.index == oldList.length;
-						var toNode = getPosDest(oldParent, oldType, atEnd ? patch.index - 1 : patch.index);
-						sel = utils.selectTr(tr, toNode, true);
-						var pos = atEnd ? sel.to + 1 : sel.from - 1;
-						var $pos = tr.doc.resolve(pos);
-						var node;
-						if (removedItem && patch.item.url == removedItem.url) {
-							node = removedItem.node;
-						} else {
-							var block = blocks.create(`${oldType}_item`);
-							blocks.set(block);
-							var dom = it.editor.render(block);
-							curBlock = patch.item && patch.item.block;
-							if (curBlock) {
-								oldBlock = blocks.copy(curBlock);
-								delete oldBlock.id;
-								blocks.set(oldBlock);
-								dom.querySelector('[block-content="media"]').appendChild(it.editor.render(oldBlock));
-							}
-							node = utils.fill(utils.parseTr(tr, dom, $pos).content.firstChild);
-						}
-						tr.insert(pos, node);
-						removedItem = null;
-						break;
-					case Diff.SUBSTITUTION:
-						oldBlock = oldList[patch.index].block;
-						curBlock = curList[patch.item.pos].block;
-						if (curBlock.data.url != oldBlock.data.url) {
-							oldBlock.data.url = curBlock.data.url;
-							oldNode = getPosDest(oldParent, oldType, patch.index).querySelector('[block-type="image"]');
-							utils.refreshTr(tr, oldNode, oldBlock);
-						}
-						break;
-					case Diff.DELETION:
-						oldNode = getPosDest(oldParent, oldType, patch.index);
-						sel = utils.selectTr(tr, oldNode);
-						removedItem = {
-							node: sel.node,
-							url: oldList[patch.index].url
-						};
-						utils.deleteTr(tr, sel);
-						break;
-					}
-
+			var target = record.target;
+			if (target.matches('[block-content="items"]')) {
+				Array.from(record.addedNodes).forEach(function(node) {
+					if (node.nodeType != Node.ELEMENT_NODE) return;
+					var pos = target.children.indexOf(node);
+					gals.forEach((gal) => {
+						var items = gal.querySelector('[block-content="items"]');
+						var item = ed.render({
+							type: `${gal.getAttribute('block-type')}_item`
+						});
+						item.querySelector('[block-content="media"]').appendChild(ed.render({
+							type: 'image'
+						}));
+						items.insertBefore(item, items.children[pos]);
+					});
 				});
-				if (patches.length) {
-					it.editor.dispatch(tr);
+				Array.from(record.removedNodes).forEach(function(node, i) {
+					if (node.nodeType != Node.ELEMENT_NODE) return;
+					var pos = target.childNodes.indexOf(record.previousSibling) + 1 + i;
+					gals.forEach((gal) => {
+						var items = gal.querySelector('[block-content="items"]');
+						var child = items.childNodes[pos];
+						if (child) child.remove();
+					});
+				});
+				return;
+			}
+			if (target.matches('[block-type="image"]')) {
+				if (record.type == "attributes" && record.attributeName != "url") return;
+				var item = target.closest(`[block-type="${mode}_item"]`);
+				if (!item) return;
+				var pos = item.parentNode.children.indexOf(item);
+				var block = ed.blocks.get(target);
+				if (!block) {
+					console.warn("Cannot synchronize without source block", record);
+					return;
 				}
-			}, this);
-
-			this._syncing = false;
+				gals.forEach((gal) => {
+					var items = gal.querySelector('[block-content="items"]');
+					var child = items.children[pos];
+					if (!child) {
+						console.warn("Cannot synchronize", gal, "at pos", pos);
+						return;
+					}
+					var image = child.querySelector('[block-type="image"]');
+					if (!image) {
+						console.warn("Cannot synchronize", gal, "with image at pos", pos);
+						return;
+					}
+					ed.blocks.mutate(image, {
+						url: (block.data || {}).url
+					});
+				});
+			}
 		}
 	});
 });

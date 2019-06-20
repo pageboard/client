@@ -20,7 +20,6 @@ exports.gallery = {
 	group: 'block',
 	html: `<element-gallery id="[name|id]" block-content="galleries"></element-gallery>`,
 	resources: [
-		'../lib/list-diff.js',
 		'../ui/gallery-helper.js'
 	],
 	stylesheets: [
