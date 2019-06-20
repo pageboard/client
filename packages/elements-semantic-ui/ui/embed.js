@@ -7,18 +7,18 @@ class HTMLElementEmbed extends HTMLCustomElement {
 	}
 	patch(state) {
 		var opts = this.options;
-		var url = opts.url;
+		var src = opts.src;
 		if (opts.hash) {
-			var obj = Page.parse(url);
+			var obj = Page.parse(src);
 			obj.hash = opts.hash;
-			url = Page.format(obj);
+			src = Page.format(obj);
 		}
 		this.iframe = this.firstElementChild;
 		if (!this.iframe) {
-			this.innerHTML = `<iframe src="${url}" width="100%" height="100%" frameborder="0" scrolling="no" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>`;
+			this.innerHTML = `<iframe src="${src}" width="100%" height="100%" frameborder="0" scrolling="no" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>`;
 			this.iframe = this.firstElementChild;
 		} else {
-			this.iframe.setAttribute('src', url);
+			this.iframe.setAttribute('src', src);
 		}
 	}
 	close() {
