@@ -12,59 +12,47 @@ class HTMLCustomElement extends HTMLElement {
 }
 HTMLCustomElement.define = function(name, cla, is) {
 	if (cla.init) cla.init();
-	if (window.customElements.get(name)) return cla;
 
-	var exts = {
-		connectedCallback: function() {
+	var preset = window.customElements.get(name);
+	if (preset) return preset;
+
+	HTMLCustomElement.extends(cla, class PagePlugin {
+		connectedCallback() {
 			if (is && !this._initialized) {
 				this._initialized = true;
 				if (this.init) this.init();
 			}
 			Page.connect(this);
-		},
-		disconnectedCallback: function() {
+		}
+		disconnectedCallback() {
 			Page.disconnect(this);
 		}
-	};
+	}, is);
 	if (cla.defaults) {
 		if (!cla.observedAttributes) cla.observedAttributes = Object.keys(cla.defaults).map(function(x) {
 			return 'data-' + x.replace(/([A-Z])/g, (g) => `-${g[0].toLowerCase()}`);
 		});
-		exts.patch = function(state) {
-			this.options = nodeOptions(this, cla.defaults, state);
-		};
-		exts.setup = function(state) {
-			if (!this.options) this.options = nodeOptions(this, cla.defaults, state);
-		};
+		HTMLCustomElement.extends(cla, class DefaultsPlugin {
+			patch(state) {
+				this.options = nodeOptions(this, cla.defaults, state);
+			}
+			setup(state) {
+				if (!this.options) this.options = nodeOptions(this, cla.defaults, state);
+			}
+		}, is);
 	}
-
-	HTMLCustomElement.intercept(cla, exts);
-
 	window.customElements.define(name, cla, is ? {extends: is} : undefined);
 	return cla;
 };
 
-function intercept(proto, meth, cb) {
-	var fn = proto[meth];
-	var op;
-	function ops(...args) {
-		var ret;
-		for (var i=0; i < op.fns.length; i++) {
-			ret = op.fns[i].apply(this, args) || ret;
-		}
-		return ret;
-	}
-	if (fn && fn.fns) {
-		op = fn;
-		if (!op.fns.includes(cb)) {
-			op.fns.unshift(cb);
-		}
-	} else {
-		op = ops;
-		op.fns = [cb];
-		if (fn) op.fns.push(fn);
-		proto[meth] = op;
-	}
+function monkeyPatch(proto, meth, cb) {
+	proto[meth] = (function(fn) {
+		return function(...args) {
+			var ret = cb.apply(this, args);
+			if (fn) ret = fn.apply(this, args);
+			return ret;
+		};
+	})(proto[meth]);
 }
 
 function nodeOptions(node, defaults, state) {
@@ -101,11 +89,26 @@ function stateOptions(id, list, state) {
 	return opts;
 }
 
-HTMLCustomElement.intercept = function(cla, obj) {
-	Object.keys(obj).forEach(function(name) {
-		intercept(cla.prototype, name, obj[name]);
+HTMLCustomElement.extends = function(Cla, Ext, is) {
+	var name = Cla;
+	if (typeof name == "string") {
+		Cla = window.customElements.get(name);
+	} else {
+		name = Cla.name;
+		if (!name) throw new Error("extends expects Class to have a name");
+	}
+	if (is) name += "_" + is;
+	var plugins = this.extends.cache;
+	var list = plugins[name];
+	if (!list) list = plugins[name] = {};
+	if (list[Ext.name]) return;
+	list[Ext.name] = true;
+	var Proto = Ext.prototype;
+	Object.getOwnPropertyNames(Proto).forEach(function(name) {
+		if (name != "constructor") monkeyPatch(Cla.prototype, name, Proto[name]);
 	});
 };
+HTMLCustomElement.extends.cache = {};
 
 if (!NodeList.prototype.indexOf) NodeList.prototype.indexOf = function(node) {
 	return Array.prototype.indexOf.call(this, node);
