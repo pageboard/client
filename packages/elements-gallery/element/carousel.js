@@ -46,6 +46,11 @@ exports.carousel = {
 			type: 'boolean',
 			default: true
 		},
+		fullview: {
+			title: 'Full view',
+			type: 'boolean',
+			default: false
+		},
 		fullviewButton: {
 			title: 'Full view button',
 			type: 'boolean',
@@ -76,7 +81,7 @@ exports.carousel = {
 	html: `<element-carousel id="[name|id]"
 		data-width="[width|or:auto]" data-height="[height|or:auto]"
 		data-auto-play="[autoPlay]" data-page-dots="[pageDots]"
-		data-prev-next-buttons="[prevNextButtons]" data-fullview-button="[fullviewButton]"
+		data-prev-next-buttons="[prevNextButtons]" data-fullview-button="[fullviewButton]" data-fullview="[fullview]"
 		data-group-cells="[groupCells]" data-wrap-around="[wrapAround]" data-fade="[fade]"
 	>
 		<div class="flickity-viewport">

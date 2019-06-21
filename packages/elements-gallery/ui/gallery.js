@@ -55,8 +55,7 @@ class HTMLElementGallery extends HTMLCustomElement {
 		while ((item=item.previousSibling)) position++;
 		state.push({query: {
 			[`${this.id}.mode`]: 'carousel',
-			[`${carousel.id}.index`]: position,
-			[`${carousel.id}.fullview`]: true
+			[`${carousel.id}.index`]: position
 		}});
 	}
 }
