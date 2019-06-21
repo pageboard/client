@@ -57,7 +57,7 @@ body.fullview element-carousel.fullview {
 	right:0;
 	height:100%;
 	background-color:black;
-	z-index:1000;
+	z-index:1002;
 }
 body.fullview element-carousel.fullview element-carousel-cell {
 	height:100vh !important;
@@ -66,8 +66,16 @@ body.fullview element-carousel.fullview element-carousel-cell {
 element-carousel > .ui.icon.button.fullview {
 	display:block;
 	position:absolute;
-	top:0;
-	right:0;
+	top: 10px;
+	right: 10px;
+	background:transparent;
+	padding: 0;
+	margin: 0;
+	margin-left: -22px;
+}
+element-carousel[data-prev-next-buttons="true"] > .ui.icon.button.fullview {
+	right:auto;
+	left:50%;
 }
 element-carousel:not([data-fullview-button="true"]) > .ui.icon.button.fullview {
 	display:none;
@@ -77,6 +85,9 @@ element-gallery element-carousel:not([data-fullview-button="true"]) > .ui.icon.b
 }
 element-carousel > .ui.icon.button.fullview > .icon {
 	display:none;
+}
+element-carousel > .ui.icon.button.fullview > .icon:before {
+	filter: contrast(0.7);
 }
 body:not(.fullview) element-carousel > .ui.icon.button.fullview > .expand.icon {
 	display:inline-block;
@@ -96,20 +107,14 @@ i.expand.icon:before {
 }
 element-carousel > .ui.icon.button.fullview > .icon {
 	border-radius:400em;
-	width:4em;
-	height:4em;
-	padding:1.45em;
-	box-shadow: 0em 0em 0em 0.1em rgba(0, 0, 0, 0.7) inset;
-	filter: invert(50%);
+	width: 44px;
+	height: 44px;
+	padding: 15px;
+	background-color: hsla(0, 0%, 100%, 0.75);
 }
 
 element-carousel > .ui.icon.button.fullview > .icon:hover {
-	background-color:rgba(0, 0, 0, 0.5);
-	filter: invert(50%);
-}
-
-element-carousel > .ui.icon.button.fullview > .icon:before {
-	filter: invert(50%);
+	background-color:white;
 }
 
 @media screen and (max-width: 768px) {
