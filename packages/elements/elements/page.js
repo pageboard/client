@@ -148,3 +148,40 @@ exports.page = {
 	}
 };
 
+exports.redirection = {
+	priority: -100,
+	replaces: 'doc',
+	title: 'Redirection',
+	icon: '<i class="icon random"></i>',
+	group: 'page',
+	standalone: true,
+	properties: {
+		url: {
+			title: 'Address',
+			type: "string",
+			pattern: "^((/[a-zA-Z0-9-]*)+)$|^(/\\.well-known/\\d{3})$",
+			$helper: 'pageUrl' // works with sitemap editor to update pages url in a coherent manner
+			// see also page.save: the href updater will only change input.name == "href".
+		},
+		redirect: {
+			title: 'Redirect',
+			type: "string",
+			format: "uri-reference",
+			nullable: true,
+			$helper: {
+				name: 'href',
+				filter: {
+					type: ["link", "file", "archive"]
+				}
+			}
+		},
+	},
+	html: `<html>
+	<head>
+		<meta http-equiv="Status" content="301 Moved Permanently">
+		<meta http-equiv="Location" content="[redirect]">
+	</head>
+	<body>Redirecting to <a href="[redirect]">[redirect]</a></body>
+	</html>`
+};
+
