@@ -33,9 +33,19 @@ class HTMLElementCarousel extends HTMLCustomElement {
 		var node = e.target.closest('a.fullview');
 		if (node) {
 			e.stopImmediatePropagation();
-			state.push({query:{
-				[`${this.id}.fullview`]: !this.options.fullview || undefined
-			}});
+			var query = Object.assign({}, state.query);
+			var keyFv = `${this.id}.fullview`;
+			if (this.options.fullview) {
+				delete query[keyFv];
+			} else {
+				query[keyFv] = true;
+			}
+			var gallery = this.closest('[block-type="gallery"]');
+			if (gallery) {
+				// leaving current mode
+				delete query[`${gallery.id}.mode`];
+			}
+			state.push({query: query});
 		}
 	}
 
@@ -77,7 +87,7 @@ class HTMLElementCarousel extends HTMLCustomElement {
 		this.widget = new window.Flickity(this, opts);
 		this.widget.on('select', (e) => {
 			if (opts.fullview) {
-				state.query[`${this.id}.index`] = this.widget.selectedIndex;
+				state.query[`${this.id}.index`] = this.widget.selectedIndex || undefined;
 				state.save();
 			}
 		});
