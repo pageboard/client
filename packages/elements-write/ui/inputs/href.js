@@ -505,7 +505,7 @@ Href.prototype.renderItem = function(obj) {
 			${obj.mime.split(';').shift()}<em>${tplSize(obj.meta.size)}</em><br>
 			${dims ? dims + '<br>' : ''}
 			${window.moment(obj.updated_at).fromNow()}
-			${obj.type == 'link' ? ('<br><span class="line">' + obj.pathname + '</span>') : ''}
+			${obj.type == 'link' ? ('<br><span class="line">' + obj.url + '</span>') : ''}
 		</div>
 		${tplPreview(obj.preview)}`));
 		if (obj.icon) {
