@@ -7,8 +7,8 @@ exports.embed = {
 			title: 'Address',
 			description: 'The iframe src URL',
 			nullable: true,
-			type: "string",
-			format: "uri"
+			type: 'string',
+			format: 'uri-reference'
 			// TODO plug embeds to href, but url-inspector makes it difficult for us right now
 		},
 		name: {

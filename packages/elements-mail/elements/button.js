@@ -10,13 +10,8 @@ exports.mail_button = {
 			title: 'Address',
 			description: 'Path without query or full url',
 			nullable: true,
-			anyOf: [{
-				type: "string",
-				format: "uri"
-			}, {
-				type: "string",
-				format: "pathname"
-			}],
+			type: 'string',
+			format: 'uri-reference',
 			$helper: {
 				name: 'href',
 				filter: {

@@ -93,13 +93,8 @@ exports.cardlink = {
 			title: 'Link',
 			description: 'link the entire content to another page',
 			nullable: true,
-			anyOf: [{
-				type: "string",
-				format: "uri"
-			}, {
-				type: "string",
-				format: "pathname"
-			}],
+			type: "string",
+			format: "uri-reference",
 			$helper: {
 				name: 'href',
 				filter: {

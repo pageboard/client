@@ -46,13 +46,8 @@ exports.menu_item_link = {
 			title: 'Address',
 			description: 'Local or remote URL',
 			nullable: true,
-			anyOf: [{
-				type: "string",
-				format: "uri"
-			}, {
-				type: "string",
-				format: "pathname"
-			}],
+			type: 'string',
+			format: 'uri-reference',
 			$helper: {
 				name: 'href',
 				filter: {
