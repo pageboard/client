@@ -651,6 +651,12 @@ formats.uri = function() {
 	};
 };
 
+formats['uri-reference'] = function() {
+	return {
+		type: 'url'
+	};
+};
+
 formats.pathname = function() {
 	return {
 		type: 'regExp',
