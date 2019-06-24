@@ -37,7 +37,7 @@ exports.rating = {
 			}]
 		}
 	},
-	html: '<element-rating class="[color]" value="[value]" maximum="[maximum]" char="[char]"></element-rating>',
+	html: '<element-rating class="[color]" data-value="[value]" data-maximum="[maximum]" data-char="[char]"></element-rating>',
 	stylesheets: [
 		'../ui/rating.css'
 	],
