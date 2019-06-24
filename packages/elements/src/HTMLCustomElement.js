@@ -7,7 +7,7 @@ class HTMLCustomElement extends HTMLElement {
 	}
 	init() {}
 	attributeChangedCallback(name, src, dst, ns) {
-		if (src !== dst && this.patch) Page.patch(this);
+		if (src !== null && src !== dst && this.patch) Page.patch(this);
 	}
 }
 
