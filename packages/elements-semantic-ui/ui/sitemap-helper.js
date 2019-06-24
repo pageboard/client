@@ -36,7 +36,7 @@ class HTMLElementSitepage extends HTMLCustomElement {
 			if (childUrl != newUrl) {
 				child.setAttribute('data-url', newUrl);
 			}
-			var curIndex = child.dataset.index;
+			var curIndex = parseInt(child.dataset.index);
 			if (curIndex != index) {
 				child.setAttribute('data-index', index);
 			}
