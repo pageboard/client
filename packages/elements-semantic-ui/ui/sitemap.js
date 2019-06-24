@@ -51,7 +51,7 @@ class HTMLElementSitemap extends HTMLCustomElement {
 	}
 
 	build(state) {
-		return Pageboard.bundle(Pageboard.fetch('get', `/.api/pages`), state).then(function(res) {
+		return Pageboard.bundle(Pageboard.fetch('get', `/.api/pages`), state).then(res => {
 			state.scope.$element = state.scope.$elements.sitemap;
 			var node = Pageboard.render({
 				item: this.constructor.transformResponse(res)
@@ -61,7 +61,7 @@ class HTMLElementSitemap extends HTMLCustomElement {
 			Array.from(node.children).forEach(function(node) {				
 				content.appendChild(node);
 			}, this);
-		}.bind(this));
+		});
 	}
 }
 

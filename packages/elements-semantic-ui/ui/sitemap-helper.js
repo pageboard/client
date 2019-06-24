@@ -5,8 +5,8 @@ class HTMLElementSitepage extends HTMLCustomElement {
 			index: (x) => parseInt(x) || 0
 		};
 	}
-	attributeChangedCallback(name, old, val) {
-		if (old) this.syncBlock();
+	patch(state) {
+		this.syncBlock();
 	}
 	setup(state) {
 		var content = this.querySelector('[block-content="children"]');
@@ -49,7 +49,7 @@ class HTMLElementSitepage extends HTMLCustomElement {
 		var editor = window.parent.Pageboard.editor;
 		var block = editor.blocks.get(this.getAttribute('block-id'));
 		if (!block.data) block.data = {};
-		var data = this.dataset;
+		var data = this.options;
 		if (Object.keys(data).some((key) => data[key] != block.data[key])) {
 			Object.assign(block.data, data);
 			editor.dispatch(editor.utils.refreshTr(editor.state.tr, this, block));
@@ -60,5 +60,7 @@ class HTMLElementSitepage extends HTMLCustomElement {
 
 Page.setup(function() {
 	HTMLCustomElement.define('element-sitepage', HTMLElementSitepage);
-	HTMLCustomElement.extend('element-sitemap', HTMLElementSitepage);
+	HTMLCustomElement.extend('element-sitemap', class extends HTMLElementSitepage {
+		patch() { /* do not call syncBlock when attributes change */ }
+	});
 });
