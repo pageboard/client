@@ -411,10 +411,22 @@ Semafor.prototype.process = function(key, schema, node) {
 };
 
 types.string = function(key, schema, node, inst) {
-	if (!schema.pattern && !schema.format) {
+	var multiline = !schema.pattern && !schema.format;
+	var short = schema.maxLength != null && schema.maxLength <= 10;
+	if (multiline && !short) {
 		node.appendChild(node.dom(`<div class="field">
 			<label>${schema.title || key}</label>
 			<textarea name="${key}"	title="${schema.description || ''}" placeholder="${schema.default || ''}"></textarea>
+		</div>`));
+	} else if (short) {
+		node.appendChild(node.dom(`<div class="inline fields">
+			<label>${schema.title || key}</label>
+			<div class="field">
+				<input type="text" name="${key}"
+					placeholder="${schema.default || ''}"
+					title="${schema.description || ''}"
+				/>
+			</div>
 		</div>`));
 	} else {
 		var input = node.appendChild(node.dom(`<div class="field">
