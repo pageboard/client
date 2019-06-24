@@ -1,18 +1,8 @@
 class HTMLElementTemplate extends HTMLCustomElement {
-	static get observedAttributes() {
-		return ['remote', 'keys'];
-	}
-	get remote() {
-		return this.hasAttribute('remote');
-	}
-	set remote(val) {
-		if (val) this.setAttribute('remote', '');
-		else this.removeAttribute('remote');
-	}
-	get keys() {
-		var str = this.getAttribute('keys');
-		if (str) return str.split(',');
-		else return [];
+	static get defaults() {
+		return {
+			remote: false
+		};
 	}
 	patch(state) {
 		var me = this;
@@ -21,8 +11,8 @@ class HTMLElementTemplate extends HTMLCustomElement {
 		// what do we do if state.query has keys that are used by a form in this query template ?
 		var expr = this.getAttribute('block-expr');
 		var vars = {};
+		var opts = this.options;
 		var scope = state.scope;
-		var remote = me.remote;
 		if (expr) {
 			try {
 				expr = JSON.parse(expr);
@@ -53,12 +43,12 @@ class HTMLElementTemplate extends HTMLCustomElement {
 				state.vars[key] = true;
 			});
 			if (missing) return;
-		} else if (!remote) {
+		} else if (!opts.remote) {
 			// non-remotes cannot know if they will need $query
 		}
 		var queryId = me.getAttribute('block-id');
 		var loader;
-		if (remote) {
+		if (opts.remote) {
 			var queryStr = Page.format({pathname: "", query: vars});
 			if (queryStr == me.dataset.query) return;
 			me.dataset.query = queryStr;
@@ -68,7 +58,7 @@ class HTMLElementTemplate extends HTMLCustomElement {
 		}
 		me._refreshing = true;
 		me.classList.remove('error', 'warning', 'success');
-		if (remote) me.classList.add('loading');
+		if (opts.remote) me.classList.add('loading');
 
 		return Pageboard.bundle(loader, state).then(function(res) {
 			me.render(res, state);

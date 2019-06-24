@@ -34,7 +34,7 @@ exports.fetch = Object.assign({}, exports.template, {
 	title: "Fetch",
 	icon: '<i class="search icon"></i>',
 	expressions: true,
-	html: `<element-template remote="[action.method|!!]">
+	html: `<element-template data-remote="[action.method|!!]">
 		<template block-content="template"></template>
 		<div class="view"></div>
 	</element-template>`,
