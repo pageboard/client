@@ -6,6 +6,7 @@ exports.strong = {
 	inline: true,
 	group: "inline nolink",
 	icon: '<i class="icon bold"></i>',
+	tag: 'strong,b',
 	html: '<strong></strong>'
 };
 
@@ -16,8 +17,21 @@ exports.em = {
 	inline: true,
 	inplace: true,
 	group: "inline nolink",
-	icon: '<i class="icon italic"></i>',
+	icon: '<b class="icon">em</b>',
+	tag: 'em',
 	html: '<em></em>'
+};
+
+exports.i = {
+	priority: 12,
+	title: "Italic",
+	contents: "text*",
+	inline: true,
+	inplace: true,
+	group: "inline nolink",
+	icon: '<i class="icon italic"></i>',
+	tag: 'i',
+	html: '<i></i>'
 };
 
 exports.light = {
@@ -34,18 +48,55 @@ exports.light = {
 exports.sup = {
 	priority: 12,
 	title: "Sup",
-	icon: '<b class="icon">S<sup>up</sup></b>',
+	icon: '<i class="superscript icon"></i>',
 	contents: "text*",
 	inline: true,
 	inplace: true,
 	group: "inline nolink",
+	tag: 'sup',
 	html: '<sup></sup>'
+};
+
+exports.sub = {
+	priority: 12,
+	title: "Inf",
+	icon: '<i class="subscript icon"></i>',
+	contents: "text*",
+	inline: true,
+	inplace: true,
+	group: "inline nolink",
+	tag: 'sub',
+	html: '<sub></sub>'
+};
+
+exports.strike = {
+	priority: 12,
+	title: "Strike",
+	icon: '<i class="strikethrough icon"></i>',
+	contents: "text*",
+	inline: true,
+	inplace: true,
+	group: "inline nolink",
+	tag: 's',
+	html: '<s></s>'
+};
+
+exports.u = {
+	priority: 12,
+	title: "Strike",
+	icon: '<i class="underline icon"></i>',
+	contents: "text*",
+	inline: true,
+	inplace: true,
+	group: "inline nolink",
+	tag: 'u',
+	html: '<u></u>'
 };
 
 exports.caps = {
 	priority: 12,
 	title: "Capitalization",
-	icon: '<span class="icon">Aa</span>',
+	icon: '<span class="icon">A<span style="font-variant: small-caps;">a</span></span>',
 	contents: "text*",
 	inline: true,
 	inplace: true,
