@@ -20,6 +20,8 @@ Page.setup(function(state) {
 });
 
 Pageboard.adopt = function(win, readState) {
+	var readBody = readState.scope.$element.$body;
+	delete readState.scope.$element.$body;
 	Page.setup(function(writeState) {
 		win.addEventListener('click', anchorListener, true);
 		// FIXME this prevents setting selection inside a selected link...
@@ -47,7 +49,7 @@ Pageboard.adopt = function(win, readState) {
 
 			var editor = Pageboard.editor;
 			if (!editor || !editor.closed) {
-				Pageboard.Editor(win, readState);
+				Pageboard.Editor(win, readState, readBody);
 			}
 		});
 	});
@@ -132,7 +134,7 @@ function update() {
 	editor.updatePage();
 }
 
-Pageboard.Editor = function Editor(win, state) {
+Pageboard.Editor = function Editor(win, state, body) {
 	var page = state.data.$cache.item;
 	if (!adv) {
 		adv = true;
@@ -145,17 +147,18 @@ Pageboard.Editor = function Editor(win, state) {
 		return;
 	}
 
-	var content = win.document.body.cloneNode(true);
 	var view = state.scope.$view;
 	var editor = Pageboard.editor;
 	if (editor && !editor.closed) {
 		editor.close();
 	}
+	var doc = win.document;
+	doc.documentElement.replaceChild(body.cloneNode(false), doc.body);
 	// and the editor must be running from child
 	editor = Pageboard.editor = new win.Pagecut.Editor({
 		topNode: page.type,
 		elements: view.elements,
-		place: win.document.body,
+		place: doc.body,
 		genId: Pageboard.Controls.Store.genId,
 		scope: state.scope,
 		plugins: [{
@@ -204,6 +207,7 @@ Pageboard.Editor = function Editor(win, state) {
 	}
 
 	editor.focus();
+	var content = body.cloneNode(true);
 	var contentSize = content.children.length;
 
 	try {
@@ -215,7 +219,7 @@ Pageboard.Editor = function Editor(win, state) {
 		editor.utils.setDom(win.document.createTextNode(""));
 	}
 	controls.store.realUpdate();
-	controls.store.quirkStart(!contentSize && win.document.body.children.length > 0);
+	controls.store.quirkStart(!contentSize && body.children.length > 0);
 	return editor;
 };
 
