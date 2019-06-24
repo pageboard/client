@@ -5,7 +5,14 @@
 #menu {
 	margin-top:1em;
 }
-.ui.menu .active.item {
+.ui.menu .active.item,
+.ui.menu .ui.dropdown .menu > .active.item {
+	background-color: rgba(129, 165, 255, 0.4) !important;
+}
+.ui.tabular.menu .active.item {
+	background-color:transparent !important;
+}
+.ui.menu .ui.simple.dropdown.item.has-active {
 	background-color: rgba(129, 165, 255, 0.2);
 }
 .ui.link.menu .item:hover,
@@ -25,7 +32,7 @@
 	padding:0.7em 0;
 }
 #menu .ui.menu:not(.vertical) .item {
-	padding: 0.6em;
+	padding: 0.6em 0.7em;
 }
 .ui.menu {
 	flex-wrap:wrap;
@@ -83,7 +90,7 @@
 }
 
 .ui.compact.icon.menu > .ui.radio.checkbox.item {
-	padding: 0.7em;
+	padding: 0em 0.7em;
 }
 
 #move > .right.menu > .item {
@@ -106,4 +113,7 @@
 }
 .ui.labeled.icon.menu .item > i.icons > .corner.icon {
 	font-size:0.55em;
+}
+.ui.compact.icon.menu {
+	min-height: 2.4em;
 }

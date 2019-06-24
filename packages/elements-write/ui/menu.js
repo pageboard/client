@@ -61,17 +61,44 @@ Menu.prototype.update = function(parents, sel) {
 	this.inlines.textContent = "";
 	var isBlockSelection = sel.node && sel.node.isBlock;
 	var activeTab;
-	this.menu.items.forEach(function(item) {
+	var inlineBlocks = [];
+	var inlineSpans = [];
+	var inlineSpansActive = false;
+	this.menu.items.forEach((item) => {
 		var dom = renderItem(item, this.editor);
 		if (!dom) return;
-		if (item.spec.element.inline) {
-			if (!isBlockSelection) this.inlines.appendChild(dom);
+		var el = item.spec.element;
+		if (el.inline) {
+			if (!isBlockSelection) {
+				if (el.contents) {
+					if (['link', 'strong', 'i', 'u'].includes(el.name) == false) {
+						inlineSpans.push(dom);
+						if (dom.matches('.active')) inlineSpansActive = true;
+					} else {
+						this.inlines.appendChild(dom);
+					}
+				} else {
+					inlineBlocks.push(dom);	
+				}
+			}
 		} else if (isBlockSelection) {
-			var menu = item.spec.element.menu || 'common';
+			var menu = el.menu || 'common';
 			this.tab(menu).appendChild(dom);
 			if (!activeTab && dom.matches('.active')) activeTab = menu;
 		}
-	}, this);
+	});
+	if (inlineSpans.length) {
+		this.dropdown = this.inlines.dom(`<div class="ui simple dropdown item ${inlineSpansActive ? 'has-active' : ''}">
+			<i class="large dropdown icon" style="margin:0"></i><div class="menu"></div>
+		</div>`);
+		this.inlines.appendChild(this.dropdown);
+		inlineSpans.forEach((dom) => this.dropdown.lastElementChild.append(dom));
+	}
+	if (inlineBlocks.length) {
+		var inlineBlocksMenu = this.inlines.dom(`<div class="right menu"></div>`);
+		this.inlines.appendChild(inlineBlocksMenu);
+		inlineBlocks.forEach((dom) => inlineBlocksMenu.appendChild(dom));
+	}
 	Object.values(this.tabs).forEach(function(tab) {
 		tab.menu.classList.toggle('disabled', tab.div.children.length == 0);
 	});
@@ -94,7 +121,7 @@ Menu.prototype.tab = function(name) {
 			div: this.node.dom(`<div class="ui mini labeled icon menu attached tab" data-tab="${name}"></div>`)
 		};
 		this.tabMenu.appendChild(tab.menu);
-		this.node.insertBefore(tab.div, this.inlines);
+		this.node.insertBefore(tab.div, tab.menu.nextElementSibling);
 	}
 	return tab.div;
 };
@@ -127,6 +154,7 @@ Menu.prototype.item = function(el) {
 				} else {
 					var blocks = {};
 					var fragment = editor.blocks.renderFrom(block, blocks);
+					// NOT SURE importVirtuals is meaningful here
 					editor.controls.store.importVirtuals(blocks);
 					var pos = editor.utils.insertTr(tr, fragment, sel);
 					if (pos != null) {
@@ -142,24 +170,27 @@ Menu.prototype.item = function(el) {
 			}
 		},
 		select: function(state) {
+			var can;
 			if (el.inline && !nodeType.isAtom) {
-				return editor.utils.canMark(self.selection, nodeType);
+				can = editor.utils.canMark(self.selection, nodeType);
 			} else {
 				var sel = self.selection;
-				var can = !!editor.utils.canInsert(sel.$to, nodeType, false, false).node;
+				can = !!editor.utils.canInsert(sel.$to, nodeType, false, false).node;
 				if (!can && sel.node) {
 					can = !!editor.utils.canInsert(sel.$from, nodeType, false, true).node;
 				}
-				return can;
 			}
+			return can;
 		},
 		active: function(state) {
+			var active;
 			if (!el.inline || !el.contents) {
 				var parent = self.parents.length && self.parents[0];
-				return parent && parent.node.type.name == el.name;
+				active = parent && parent.node.type.name == el.name;
 			} else {
-				return editor.utils.markActive(state.tr.selection, nodeType);
+				active = editor.utils.markActive(state.tr.selection, nodeType);
 			}
+			return active;
 		}
 	};
 	return item;
