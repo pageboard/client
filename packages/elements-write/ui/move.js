@@ -31,7 +31,7 @@ Move.prototype.destroy = function() {
 };
 
 Move.prototype.update = function(parents, sel) {
-	this.node.classList.toggle('hidden', sel.empty);
+	this.node.classList.toggle('hidden', !sel.node);
 	var state = this.editor.state;
 	var utils = this.editor.utils;
 	this.node.querySelector('[data-command="left"]')
