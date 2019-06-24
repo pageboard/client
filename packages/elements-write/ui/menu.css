@@ -5,16 +5,29 @@
 #menu {
 	margin-top:1em;
 }
-.ui.menu .active.item,
-.ui.menu .ui.dropdown .menu > .active.item {
+#menu .ui.menu .active.item {
 	background-color: rgba(129, 165, 255, 0.4) !important;
 }
-.ui.tabular.menu .active.item {
+#menu .ui.tabular.menu .active.item {
 	background-color:transparent !important;
 }
-.ui.menu .ui.simple.dropdown.item.has-active {
+#menu .ui.menu .item.has-active {
 	background-color: rgba(129, 165, 255, 0.2);
 }
+#menu .popup {
+	display:none;
+	z-index:1;
+}
+#menu .ui.menu {
+	position:relative;
+}
+#menu .ui.menu > .item:hover + .popup,
+#menu .ui.menu > .item + .popup:hover {
+	display:block;
+	position:absolute;
+	top:100%;
+}
+
 .ui.link.menu .item:hover,
 .ui.menu .dropdown.item:hover,
 .ui.menu .link.item:hover,

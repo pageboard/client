@@ -88,11 +88,14 @@ Menu.prototype.update = function(parents, sel) {
 		}
 	});
 	if (inlineSpans.length) {
-		this.dropdown = this.inlines.dom(`<div class="ui simple dropdown item ${inlineSpansActive ? 'has-active' : ''}">
-			<i class="large dropdown icon" style="margin:0"></i><div class="menu"></div>
+		this.inlines.appendChild(this.inlines.dom(`<div class="item ${inlineSpansActive ? 'has-active' : ''}">
+			<i class="large dropdown icon" style="margin:0"></i>
+		</div>`));
+		var inlinesMenu = this.inlines.dom(`<div class="popup">
+			<div class="ui icon menu"></div>
 		</div>`);
-		this.inlines.appendChild(this.dropdown);
-		inlineSpans.forEach((dom) => this.dropdown.lastElementChild.append(dom));
+		this.inlines.appendChild(inlinesMenu);
+		inlineSpans.forEach((dom) => inlinesMenu.firstElementChild.append(dom));
 	}
 	if (inlineBlocks.length) {
 		var inlineBlocksMenu = this.inlines.dom(`<div class="right menu"></div>`);
