@@ -14,7 +14,7 @@ class HTMLElementHeadingHelper extends HTMLHeadingElement {
 		});
 	}
 	close() {
-		this.observer.disconnect();
+		if (this.observer) this.observer.disconnect();
 	}
 	sync() {
 		var Pb = window.parent.Pageboard;
