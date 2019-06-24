@@ -18,9 +18,9 @@ HTMLCustomElement.define = function(name, cla, is) {
 	if (preset) return cla;
 
 	cla.prototype.connectedCallback = function() {
-		if (is && !this._initialized) {
-			this._initialized = true;
-			if (this.init) this.init();
+		if (is && this.init && !this.initCalled) {
+			this.initCalled = true;
+			this.init();
 		}
 		Page.connect(this);
 	};
