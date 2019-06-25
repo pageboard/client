@@ -8,12 +8,12 @@ Menu.tabs = ["common", "widget", "link", "form"];
 function Menu(editor, node) {
 	this.editor = editor;
 	this.node = node;
-	this.tabMenu = this.node.dom(`<div class="ui top attached tabular mini menu"></div>`);
-	this.node.appendChild(this.tabMenu);
+	this.tabDiv = this.node.appendChild(this.node.dom('<div></div>'));
+	this.tabMenu = this.tabDiv.appendChild(
+		this.node.dom(`<div class="ui top attached tabular mini menu"></div>`)
+	);
 	this.tabs = {};
 	this.lastTab;
-	this.inlines = this.node.dom(`<div class="ui icon menu"></div>`);
-	this.node.appendChild(this.inlines);
 	Menu.tabs.forEach(function(name) {
 		this.tab(name);
 	}, this);
@@ -26,6 +26,8 @@ function Menu(editor, node) {
 		if (!item || item.matches('.disabled')) return;
 		me.showTab(item.dataset.tab);
 	});
+	this.inlines = this.node.dom(`<div class="ui icon menu"></div>`);
+	this.node.appendChild(this.inlines);
 }
 
 Menu.prototype.destroy = function() {
@@ -64,6 +66,7 @@ Menu.prototype.update = function(parents, sel) {
 	var inlineBlocks = [];
 	var inlineSpans = [];
 	var inlineSpansActive = false;
+	if (this.parents.length == 1) return;
 	this.menu.items.forEach((item) => {
 		var dom = renderItem(item, this.editor);
 		if (!dom) return;
@@ -107,8 +110,14 @@ Menu.prototype.update = function(parents, sel) {
 	});
 	if (isBlockSelection) {
 		if (!activeTab) {
-			if (this.lastTab && this.tab(this.lastTab).children.length) activeTab = this.lastTab;
-			else activeTab = "common";
+			if (this.lastTab && this.tab(this.lastTab).children.length) {
+				activeTab = this.lastTab;
+			} else {
+				activeTab = Object.keys(this.tabs).find(name => {
+					var tab = this.tabs[name];
+					return tab.div.children.length > 0;
+				}) || 'common';
+			}
 		}
 		this.showTab(activeTab);
 	} else {
@@ -124,7 +133,7 @@ Menu.prototype.tab = function(name) {
 			div: this.node.dom(`<div class="ui mini labeled icon menu attached tab" data-tab="${name}"></div>`)
 		};
 		this.tabMenu.appendChild(tab.menu);
-		this.node.insertBefore(tab.div, tab.menu.nextElementSibling);
+		this.tabDiv.appendChild(tab.div);
 	}
 	return tab.div;
 };
