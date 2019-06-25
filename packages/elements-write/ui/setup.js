@@ -20,8 +20,8 @@ Page.setup(function(state) {
 });
 
 Pageboard.adopt = function(win, readState) {
-	var readBody = readState.scope.$element.$body;
-	delete readState.scope.$element.$body;
+	var readBody = readState.scope.$body;
+	delete readState.scope.$body;
 	Page.setup(function(writeState) {
 		win.addEventListener('click', anchorListener, true);
 		// FIXME this prevents setting selection inside a selected link...

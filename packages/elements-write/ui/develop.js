@@ -25,14 +25,14 @@ Pageboard.elements.develop = {
 				body.setAttribute('contenteditable', 'true');
 				body.setAttribute('spellcheck', 'false');
 				scope.$write = true;
-				Page.init(function(state) {
-					state.mergeBody = function(node) {
-						$el.$body = node;
-					};
-				});
 			} else {
 				scope.$write = false;
 			}
+			Page.init(function(state) {
+				state.mergeBody = function(node) {
+					state.scope.$body = node;
+				};
+			});
 			return ret;
 		};
 	}
