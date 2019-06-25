@@ -5,11 +5,12 @@
 #menu {
 	margin-top:1em;
 }
-#menu .ui.menu .active.item {
-	background-color: rgba(129, 165, 255, 0.4) !important;
+#menu .ui.icon.menu .active.item {
+	background-color: rgba(129,165,255,0.3);
 }
 #menu .ui.tabular.menu .active.item {
-	background-color:transparent !important;
+	background-color: rgba(0, 0, 0, 0.07) !important;
+	border: none;
 }
 #menu .ui.menu .item.has-active {
 	background-color: rgba(129, 165, 255, 0.2);
@@ -43,7 +44,7 @@
 #menu .ui.labeled.icon.menu .item {
 	min-width:5em;
 	padding:0.7em 0;
-	border-radius: 0.4em;
+	border-radius: 0;
 }
 #menu .ui.menu:not(.vertical) .item {
 	padding: 0.6em 0.7em;
@@ -76,10 +77,9 @@
 	background-color:#353535;
 }
 #menu .menu .item.disabled {
-	opacity:0.55;
+	opacity:0.5;
 }
-#menu .icon.menu .item.disabled {
-	/* opacity:0.45; */
+#menu .tabular.menu .item.disabled {
 	display:none;
 }
 

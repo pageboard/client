@@ -66,9 +66,9 @@ Menu.prototype.update = function(parents, sel) {
 	var inlineBlocks = [];
 	var inlineSpans = [];
 	var inlineSpansActive = false;
-	if (this.parents.length == 1) return;
+	
 	this.menu.items.forEach((item) => {
-		var dom = renderItem(item, this.editor);
+		var dom = renderItem(item, this.editor, sel.node && sel.node.type.name || null);
 		if (!dom) return;
 		var el = item.spec.element;
 		if (el.inline) {
@@ -90,7 +90,7 @@ Menu.prototype.update = function(parents, sel) {
 			if (!activeTab && dom.matches('.active')) activeTab = menu;
 		}
 	});
-	if (inlineSpans.length) {
+	if (inlineSpans.length && this.parents.length > 1) {
 		this.inlines.appendChild(this.inlines.dom(`<div class="item ${inlineSpansActive ? 'has-active' : ''}">
 			<i class="large dropdown icon" style="margin:0"></i>
 		</div>`));
@@ -209,11 +209,11 @@ Menu.prototype.item = function(el) {
 };
 
 
-function renderItem(item, view) {
+function renderItem(item, view, name) {
 	var disabled = false;
 	var spec = item.spec;
 	if (spec.select && !spec.select(view.state)) {
-		if (spec.onDeselected == "disable") {
+		if (spec.onDeselected == "disable" || spec.element.name == name) {
 			disabled = true;
 		} else {
 			return null;
