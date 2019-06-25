@@ -17,13 +17,13 @@
   },
   "homepage": "https://github.com/pageboard/client#readme",
   "dependencies": {
-    "@pageboard/elements": "link:./packages/elements",
-    "@pageboard/elements-calendar": "link:./packages/elements-calendar",
-    "@pageboard/elements-gallery": "link:./packages/elements-gallery",
-    "@pageboard/elements-google": "link:./packages/elements-google",
-    "@pageboard/elements-mail": "link:./packages/elements-mail",
-    "@pageboard/elements-semantic-ui": "link:./packages/elements-semantic-ui",
-    "@pageboard/elements-write": "link:./packages/elements-write"
+    "@pageboard/elements": "0.6.x",
+    "@pageboard/elements-calendar": "0.6.x",
+    "@pageboard/elements-gallery": "0.6.x",
+    "@pageboard/elements-google": "0.6.x",
+    "@pageboard/elements-mail": "0.6.x",
+    "@pageboard/elements-semantic-ui": "0.6.x",
+    "@pageboard/elements-write": "0.6.x"
   },
   "pageboard": true
 }
