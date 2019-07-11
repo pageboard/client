@@ -1,6 +1,6 @@
 exports.paragraph_nolink = Object.assign({}, exports.paragraph, {
 	priority: exports.paragraph.priority - 1,
-	context: 'blocklink//',
+	group: null,
 	contents: {
 		nodes: "inline*",
 		marks: "nolink"
@@ -159,6 +159,15 @@ exports.heading = {
 		if (scope.$write) Pageboard.load.js(this.resources[0], scope);
 	}
 };
+
+
+exports.heading_nolink = Object.assign({}, exports.heading, {
+	priority: exports.heading.priority - 1,
+	group: null,
+	contents: Object.assign({}, exports.heading.contents, {
+		marks: "nolink"
+	})
+});
 
 exports.divider = {
 	title: "Divider",

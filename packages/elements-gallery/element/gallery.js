@@ -36,7 +36,6 @@ exports.itemlink = {
 	title: "Item Link",
 	icon: '<i class="icon linkify"></i>',
 	menu: "widget",
-	group: 'blocklink',
 	properties: {
 		url: {
 			title: 'Address',
@@ -52,6 +51,6 @@ exports.itemlink = {
 			}
 		}
 	},
-	contents: "(paragraph_nolink|heading|image)+",
+	contents: "(paragraph_nolink|heading_nolink|image)+",
 	html: '<a class="itemlink" href="[url|autolink]"></a>'
 };

@@ -65,7 +65,6 @@ exports.card = {
 exports.cardlink = {
 	title: "Card Link",
 	menu: 'widget',
-	group: 'blocklink',
 	icon: '<i class="icons"><i class="linkify icon"></i><i class="corner add icon"></i></i>',
 	properties: {
 		fluid: {
@@ -129,7 +128,6 @@ exports.card_header = {
 };
 exports.card_header_nolink = Object.assign({}, exports.card_header, {
 	context: 'cardlink//',
-	group: 'blocklink',
 	contents: {
 		nodes: "inline*",
 		marks: "nolink"
@@ -148,7 +146,6 @@ exports.card_meta = {
 };
 exports.card_meta_nolink = Object.assign({}, exports.card_meta, {
 	context: 'cardlink//',
-	group: 'blocklink',
 	contents: {
 		nodes: "inline*",
 		marks: "nolink"
@@ -167,7 +164,6 @@ exports.card_description = {
 };
 exports.card_description_nolink = Object.assign({}, exports.card_description, {
 	context: 'cardlink//',
-	group: 'blocklink',
 	contents: "paragraph_nolink+",
 	html: '<div class="description"></div>'
 });
