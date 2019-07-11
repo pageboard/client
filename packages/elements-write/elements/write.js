@@ -55,18 +55,18 @@ exports.write = {
 		</div>
 		<div id="menu"></div>
 		<div id="move" class="ui inverted tiny icon menu">
-			<a class="item" data-command="left"><i class="left arrow icon"></i></a>
-			<a class="item" data-command="delete"><i class="close icon"></i></a>
-			<a class="item" data-command="right"><i class="right arrow icon"></i></a>
+			<a class="item" data-command="left" title="Move left"><i class="left arrow icon"></i></a>
+			<a class="item" data-command="delete" title="Delete"><i class="close icon"></i></a>
+			<a class="item" data-command="right" title="Move right"><i class="right arrow icon"></i></a>
 			<div class="right menu">
 				<div class="item" id="share">
-					<div class="ui inverted toggle checkbox checked" title="">
+					<div class="ui inverted toggle checkbox checked" title="Toggle shared status">
 						<input type="checkbox" name="standalone" class="hidden" value="true" tabindex="0"><label>shared</label>
 					</div>
 					<div class="ancestor">shared<br>ancestor</div>
 					<div class="descendant">shared<br>descendant</div>
 				</div>
-				<a class="item" id="toggle-lock">
+				<a class="item" id="toggle-lock" title="Manage permissions">
 					<i class="lock icon"></i>
 				</a>
 				<a class="item" id="toggle-expr">
