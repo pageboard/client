@@ -27,15 +27,9 @@ exports.page = {
 		},
 		redirect: {
 			title: 'Redirect',
-			anyOf: [{
-				type: "string",
-				format: "uri",
-				nullable: true
-			}, {
-				type: "string",
-				format: "pathname",
-				nullable: true
-			}],
+			type: "string",
+			format: "uri-reference",
+			nullable: true,
 			$helper: {
 				name: 'href',
 				filter: {
