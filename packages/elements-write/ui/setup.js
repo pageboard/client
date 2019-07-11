@@ -20,8 +20,6 @@ Page.setup(function(state) {
 });
 
 Pageboard.adopt = function(win, readState) {
-	var readBody = readState.scope.$body;
-	delete readState.scope.$body;
 	Page.setup(function(writeState) {
 		win.addEventListener('click', anchorListener, true);
 		// FIXME this prevents setting selection inside a selected link...
@@ -49,7 +47,7 @@ Pageboard.adopt = function(win, readState) {
 
 			var editor = Pageboard.editor;
 			if (!editor || !editor.closed) {
-				Pageboard.Editor(win, readState, readBody);
+				Pageboard.Editor(win, readState);
 			}
 		});
 	});
@@ -134,7 +132,7 @@ function update() {
 	editor.updatePage();
 }
 
-Pageboard.Editor = function Editor(win, state, body) {
+Pageboard.Editor = function Editor(win, state) {
 	var page = state.data.$cache.item;
 	if (!adv) {
 		adv = true;
@@ -153,12 +151,14 @@ Pageboard.Editor = function Editor(win, state, body) {
 		editor.close();
 	}
 	var doc = win.document;
-	doc.documentElement.replaceChild(body.cloneNode(false), doc.body);
+	var body = doc.body;
 	// and the editor must be running from child
 	editor = Pageboard.editor = new win.Pagecut.Editor({
+		store: view.blocks.store,
 		topNode: page.type,
 		elements: view.elements,
 		place: doc.body,
+		content: body,
 		genId: Pageboard.Controls.Store.genId,
 		scope: state.scope,
 		plugins: [{
@@ -185,14 +185,7 @@ Pageboard.Editor = function Editor(win, state, body) {
 		editor.devTools();
 	};
 
-	editor.blocks.initial = view.blocks.initial;
-
 	// keep runtime store in sync with editor store
-	Object.keys(view.blocks.store).forEach(function(id) {
-		if (!editor.blocks.store[id]) {
-			editor.blocks.store[id] = view.blocks.store[id];
-		}
-	});
 	view.blocks.store = editor.blocks.store;
 
 	var controls = {};
@@ -207,19 +200,7 @@ Pageboard.Editor = function Editor(win, state, body) {
 	}
 
 	editor.focus();
-	var content = body.cloneNode(true);
-	var contentSize = content.children.length;
-
-	try {
-		editor.utils.setDom(content);
-	} catch(err) {
-		Pageboard.notify("Pageboard cannot read saved page", err);
-		editor.controls.store.reset();
-		contentSize = 0;
-		editor.utils.setDom(win.document.createTextNode(""));
-	}
 	controls.store.realUpdate();
-	controls.store.quirkStart(!contentSize && body.children.length > 0);
 	return editor;
 };
 
