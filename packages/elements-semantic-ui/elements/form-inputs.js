@@ -11,18 +11,14 @@ exports.fieldset = {
 			default: false
 		}
 	},
-	contents: {
-		content: "fieldset_legend block+"
-	},
-	html: '<fieldset block-content="content" class="[plain|?]"></fieldset>'
+	contents: "fieldset_legend block+",
+	html: '<fieldset class="[plain|?]"></fieldset>'
 };
 
 exports.fieldset_legend = {
 	inplace: true,
-	contents: {
-		legend: "inline*"
-	},
-	html: '<legend block-content="legend">Title</legend>'
+	contents: "inline*",
+	html: '<legend>Title</legend>'
 };
 
 exports.input_button = {
@@ -32,10 +28,8 @@ exports.input_button = {
 	group: "block",
 	context: 'form//',
 	contents: {
-		label: {
-			spec: "inline*",
-			marks: "nolink"
-		}
+		nodes: "inline*",
+		marks: "nolink"
 	},
 	properties: {
 		type: {
@@ -65,7 +59,7 @@ exports.input_button = {
 			format: "singleline"
 		}
 	},
-	html: '<button type="[type]" class="ui button" block-content="label" name="[name]" value="[value]">[type|schema:title]</button>',
+	html: '<button type="[type]" class="ui button" name="[name]" value="[value]">[type|schema:title]</button>',
 	stylesheets: [
 		'../lib/components/button.css',
 	]
@@ -138,7 +132,8 @@ exports.input_text = {
 		}
 	},
 	contents: {
-		label: 'inline*'
+		id: 'label',
+		nodes: 'inline*'
 	},
 	html: `<div class="field [type|eq:hidden:hidden:]">
 		<label block-content="label">Label</label>
@@ -204,7 +199,8 @@ exports.input_range = {
 		}
 	},
 	contents: {
-		label: 'inline*'
+		id: 'label',
+		nodes: 'inline*'
 	},
 	html: `<div class="field">
 		<label block-content="label">Label</label>
@@ -268,7 +264,8 @@ exports.input_checkbox = {
 		}
 	},
 	contents: {
-		label: 'inline*'
+		id: 'label',
+		nodes: 'inline*'
 	},
 	html: `<div class="field">
 		<div class="ui [toggle|?] checkbox">
@@ -313,7 +310,8 @@ exports.input_radio = {
 		}
 	},
 	contents: {
-		label: 'inline*'
+		id: 'label',
+		nodes: 'inline*'
 	},
 	html: `<div class="field">
 		<div class="ui radio checkbox">
@@ -370,16 +368,15 @@ exports.input_select = {
 			format: "singleline"
 		}
 	},
-	contents: {
-		label: {
-			title: 'Label',
-			spec: 'inline*'
-		},
-		options: {
-			title: 'Options',
-			spec: 'input_select_option+'
-		}
-	},
+	contents: [{
+		id: 'label',
+		nodes: 'inline*',
+		title: 'Label'
+	}, {
+		id: 'options',
+		title: 'Options',
+		nodes: 'input_select_option+'	
+	}],
 	html: `<div class="field">
 		<label block-content="label">Label</label>
 		<element-select class="ui selection dropdown [multiple|?]"
@@ -412,14 +409,8 @@ exports.input_select_option = {
 			format: "singleline"
 		}
 	},
-	contents: {
-		label: {
-			title: 'Label',
-			spec: 'inline*'
-		}
-	},
-	html: `<element-select-option class="item"
-		block-content="label" data-value="[value|or:]"
+	contents: 'inline*',
+	html: `<element-select-option class="item" data-value="[value|or:]"
 	></element-select-option>`,
 	resources: [
 		'../ui/select-helper.js'

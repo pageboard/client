@@ -62,6 +62,7 @@ Menu.prototype.update = function(parents, sel) {
 	});
 	this.inlines.textContent = "";
 	var isBlockSelection = sel.node && sel.node.isBlock;
+	var isRootSelection = this.parents.length == 1;
 	var activeTab;
 	var inlineBlocks = [];
 	var inlineSpans = [];
@@ -71,9 +72,11 @@ Menu.prototype.update = function(parents, sel) {
 		var dom = renderItem(item, this.editor, sel.node && sel.node.type.name || null);
 		if (!dom) return;
 		var el = item.spec.element;
-		if (el.inline) {
+		if (isRootSelection) {
+			// do nothing
+		} else if (el.inline) {
 			if (!isBlockSelection) {
-				if (el.contents) {
+				if (!el.leaf) {
 					if (['link', 'strong', 'i', 'u'].includes(el.name) == false) {
 						inlineSpans.push(dom);
 						if (dom.matches('.active')) inlineSpansActive = true;
@@ -90,7 +93,7 @@ Menu.prototype.update = function(parents, sel) {
 			if (!activeTab && dom.matches('.active')) activeTab = menu;
 		}
 	});
-	if (inlineSpans.length && this.parents.length > 1) {
+	if (inlineSpans.length && !isRootSelection) {
 		this.inlines.appendChild(this.inlines.dom(`<div class="item ${inlineSpansActive ? 'has-active' : ''}">
 			<i class="large dropdown icon" style="margin:0"></i>
 		</div>`));
@@ -154,7 +157,7 @@ Menu.prototype.item = function(el) {
 				var sel = self.selection;
 				var block = editor.blocks.create(el.name);
 				if (el.inline) {
-					if (!el.contents) {
+					if (el.leaf) {
 						tr.replaceSelectionWith(nodeType.create(editor.blocks.toAttrs(block)));
 						var resel = sel ? editor.utils.selectTr(tr, sel) : null;
 						if (resel) tr.setSelection(resel);
@@ -196,7 +199,7 @@ Menu.prototype.item = function(el) {
 		},
 		active: function(state) {
 			var active;
-			if (!el.inline || !el.contents) {
+			if (!el.inline || el.leaf) {
 				var parent = self.parents.length && self.parents[0];
 				active = parent && parent.node.type.name == el.name;
 			} else {

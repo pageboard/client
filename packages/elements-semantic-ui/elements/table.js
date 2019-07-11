@@ -3,11 +3,7 @@ exports.table = {
 	menu: 'widget',
 	icon: '<i class="table icon"></i>',
 	group: "block",
-	contents: {
-		content: {
-			spec: "table_head? table_body table_foot?"
-		}
-	},
+	contents: "table_head? table_body table_foot?",
 	properties: {
 		definition: {
 			title: 'Definition',
@@ -55,8 +51,17 @@ exports.table = {
 			default: false
 		}
 	},
-	html: `<table block-content="content"
-	class="ui table [definition|?] [single|?|post: line] [unstackable|?] [selectable|?] [striped|?] [celled|?] [basic|?] [collapsing|?] [compact|?]"></table>`,
+	html: `<table class="ui table
+		[definition|?]
+		[single|?|post: line]
+		[unstackable|?]
+		[selectable|?]
+		[striped|?]
+		[celled|?]
+		[basic|?]
+		[collapsing|?]
+		[compact|?]"
+	></table>`,
 	stylesheets: [
 		'../lib/components/table.css'
 	]
@@ -68,7 +73,8 @@ exports.table_head = {
 	menu: 'widget',
 	icon: '<b class="icon">head</b>',
 	contents: {
-		cells: 'table_head_cell+'
+		id: 'cells',
+		nodes: 'table_head_cell+'
 	},
 	inplace: true,
 	html: '<thead><tr block-content="cells"></tr></thead>'
@@ -79,7 +85,8 @@ exports.table_foot = {
 	menu: 'widget',
 	icon: '<b class="icon">foot</b>',
 	contents: {
-		cells: 'table_head_cell+'
+		id: 'cells',
+		nodes: 'table_head_cell+'
 	},
 	inplace: true,
 	html: '<tfoot><tr block-content="cells"></tr></tfoot>'

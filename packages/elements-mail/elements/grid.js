@@ -11,10 +11,8 @@ exports.mail_row = {
 		}
 	},
 	contents: {
-		columns: {
-			spec: "mail_column_first mail_column* mail_column_last mail_column_expander",
-			title: 'Columns'
-		}
+		id: 'columns',
+		nodes: "mail_column_first mail_column* mail_column_last mail_column_expander"
 	},
 	group: "mail_block",
 	html: `<table class="row [collapse|?]">
@@ -25,25 +23,15 @@ exports.mail_row = {
 exports.mail_column_first = {
 	title: 'First Column',
 	group: "mail_block",
-	contents: {
-		content: {
-			spec: "mail_block+",
-			title: 'content'
-		}
-	},
-	html: '<th class="small-12 large-6 columns first" block-content="content"></th>'
+	contents: "mail_block+",
+	html: '<th class="small-12 large-6 columns first"></th>'
 };
 
 exports.mail_column_last = {
 	title: 'Last Column',
 	group: "mail_block",
-	contents: {
-		content: {
-			spec: "mail_block+",
-			title: 'content'
-		}
-	},
-	html: '<th class="small-12 large-6 columns last" block-content="content"></th>'
+	contents: "mail_block+",
+	html: '<th class="small-12 large-6 columns last"></th>'
 };
 
 exports.mail_column_expander = {
@@ -55,11 +43,6 @@ exports.mail_column = {
 	group: "mail_block",
 	title: "Column",
 	icon: '<b class="icon">Cl</b>',
-	contents: {
-		content: {
-			spec: "mail_block+",
-			title: 'content'
-		}
-	},
-	html: '<th class="small-12 large-6 columns" block-content="content"></th>'
+	contents: "mail_block+",
+	html: '<th class="small-12 large-6 columns"></th>'
 };

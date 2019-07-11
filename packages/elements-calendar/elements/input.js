@@ -68,7 +68,8 @@ exports.input_date_time = {
 		}
 	},
 	contents: {
-		label: 'inline*'
+		id: 'label',
+		nodes: 'inline*'
 	},
 	html: `<div class="field">
 		<label block-content="label">Label</label>
@@ -140,7 +141,8 @@ exports.input_date_slot = {
 		}
 	},
 	contents: {
-		label: 'inline*'
+		id: 'label',
+		nodes: 'inline*'
 	},
 	html: `<div class="field">
 		<label block-content="label">Label</label>

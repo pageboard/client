@@ -12,13 +12,9 @@ exports.gallery = {
 			nullable: true
 		}
 	},
-	contents: {
-		galleries: {
-			spec: "portfolio carousel"
-		}
-	},
+	contents: "portfolio carousel",
 	group: 'block',
-	html: `<element-gallery id="[name|id]" block-content="galleries"></element-gallery>`,
+	html: `<element-gallery id="[name|id]"></element-gallery>`,
 	resources: [
 		'../ui/gallery-helper.js'
 	],
@@ -56,10 +52,6 @@ exports.itemlink = {
 			}
 		}
 	},
-	contents: {
-		text: {
-			spec: "(paragraph_nolink|heading|image)+"
-		}
-	},
-	html: '<a class="itemlink" href="[url|autolink]" block-content="text"></a>'
+	contents: "(paragraph_nolink|heading|image)+",
+	html: '<a class="itemlink" href="[url|autolink]"></a>'
 };

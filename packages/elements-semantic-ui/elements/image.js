@@ -151,10 +151,9 @@ exports.image = {
 		return loc;
 	},
 	contents: {
-		legend: {
-			title: 'legend',
-			spec: "inline*"
-		}
+		id: 'legend',
+		title: 'legend',
+		nodes: "inline*"
 	},
 	html: `<element-image class="[fit] [position]"
 		lazyload="[lazy]"

@@ -20,7 +20,8 @@ exports.query_tags = {
 	menu: "form",
 	group: "block",
 	contents: {
-		title: 'inline*'
+		id: 'title',
+		nodes: 'inline*'
 	},
 	html: `<element-query-tags>
 		<div block-content="title">Filters:</div>

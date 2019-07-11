@@ -73,10 +73,8 @@ exports.carousel = {
 		}
 	},
 	contents: {
-		items: {
-			spec: "carousel_item+",
-			title: 'cells'
-		}
+		id: "items",
+		nodes: "carousel_item+"
 	},
 	html: `<element-carousel id="[name|id]"
 		data-width="[width|or:auto]" data-height="[height|or:auto]"
@@ -103,16 +101,15 @@ exports.carousel_item = {
 	title: "Cell",
 	icon: '<i class="icons"><i class="image icon"></i><i class="corner add icon"></i></i>',
 	menu: "widget",
-	contents: {
-		media: {
-			spec: "image",
-			title: "media"
-		},
-		content: {
-			spec: "(block|itemlink)+",
-			title: "content"
-		}
-	},
+	contents: [{
+		id: 'media',
+		nodes: "image",
+		title: "media"
+	}, {
+		id: 'content',
+		nodes: "(block|itemlink)+",
+		title: "content"
+	}],
 	context: 'carousel/',
 	html: `<element-carousel-cell>
 		<div class="media" block-content="media"></div>

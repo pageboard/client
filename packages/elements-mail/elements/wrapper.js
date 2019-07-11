@@ -2,10 +2,8 @@ exports.mail_wrapper = {
 	title: "Wrapper",
 	icon: '<b class="icon">Wr</b>',
 	contents: {
-		content: {
-			spec: "mail_block+",
-			title: 'content'
-		}
+		id: 'content',
+		nodes: "mail_block+"
 	},
 	group: "mail_block",
 	html: `<table class="wrapper" align="center">

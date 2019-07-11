@@ -19,13 +19,8 @@ exports.message = {
 			}]
 		}
 	},
-	contents: {
-		message: {
-			title: 'Message',
-			spec: "block+"
-		}
-	},
-	html: '<div class="message [type]" block-content="message"><p>Message</p></div>',
+	contents: "block+",
+	html: '<div class="message [type]"><p>Message</p></div>',
 	stylesheets: ['../ui/message.css']
 };
 

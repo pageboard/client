@@ -4,10 +4,9 @@ exports.sitemap = {
 	icon: '<i class="sitemap icon"></i>',
 	menu: 'link',
 	contents: {
-		children: {
-			spec: "sitemap_item*",
-			virtual: true
-		}
+		id: 'children',
+		nodes: "sitemap_item*",
+		virtual: true
 	},
 	html: `<element-sitemap>
 		<element-accordion class="ui accordion" block-content="children"></element-accordion>
@@ -35,11 +34,9 @@ exports.sitepage = {
 	properties: exports.page.properties,
 	virtual: true,
 	contents: {
-		children: {
-			spec: "sitemap_item*",
-			title: 'pages',
-			virtual: true // this drops block.content.children, and all
-		}
+		id: 'children',
+		nodes: "sitemap_item*",
+		virtual: true
 	},
 	unmount: function(block) {
 		if (block.type.startsWith('site')) block.type = block.type.substring(4);

@@ -17,9 +17,7 @@ exports.mail_link = {
 			}
 		}
 	},
-	contents: {
-		text: "text*"
-	},
+	contents: "text*",
 	inline: true,
 	group: "mail_inline",
 	html: '<a href="[url]"></a>'

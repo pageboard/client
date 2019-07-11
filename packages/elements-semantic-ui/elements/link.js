@@ -23,9 +23,7 @@ exports.link = {
 			}
 		}
 	},
-	contents: {
-		text: "text*"
-	},
+	contents: "text*",
 	inline: true,
 	group: "inline",
 	tag: 'a:not(.itemlink)',

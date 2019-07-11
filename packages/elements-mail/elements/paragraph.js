@@ -70,12 +70,10 @@ exports.mail_heading = {
 			}]
 		}
 	},
-	contents: {
-		"text": "mail_inline*"
-	},
+	contents: "mail_inline*",
 	group: "mail_block",
 	tag: 'h1,h2,h3,h4,h5,h6',
-	html: '<h[level] block-content="text" class="[align|or:left]">Heading</hn>',
+	html: '<h[level] class="[align|or:left]">Heading</hn>',
 	parse: function(dom) {
 		var level = parseInt(dom.nodeName.substring(1));
 		return {level: level};

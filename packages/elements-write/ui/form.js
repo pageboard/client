@@ -63,7 +63,7 @@ Form.prototype.update = function(parents, sel) {
 		var el = editor.element(item.block.type);
 		if (!el) return false;
 		if (el.expressions && !i) return true;
-		var spec = item.contentName && el.contents && el.contents[item.contentName];
+		var spec = item.contentName && el.contents.find(item.contentName);
 		return spec && spec.expressions || false;
 	});
 

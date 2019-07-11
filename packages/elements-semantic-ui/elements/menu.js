@@ -2,12 +2,7 @@ exports.menu = {
 	title: "Menu",
 	icon: '<b class="icon">Menu</b>',
 	menu: "link",
-	contents: {
-		items: {
-			spec: "menu_item+",
-			title: 'Items'
-		}
-	},
+	contents: "menu_item+",
 	properties: {
 		direction: {
 			title: 'Direction',
@@ -25,7 +20,7 @@ exports.menu = {
 		}
 	},
 	group: "block",
-	html: '<div class="ui [direction] menu" block-content="items"></div>',
+	html: '<div class="ui [direction] menu"></div>',
 	stylesheets: [
 		'../lib/components/menu.css',
 		'../ui/menu.css'
@@ -57,13 +52,11 @@ exports.menu_item_link = {
 		}
 	},
 	contents: {
-		content: {
-			spec: "inline*",
-			marks: "nolink"
-		}
+		nodes: "inline*",
+		marks: "nolink"
 	},
 	group: 'menu_item',
-	html: '<a class="item" href="[url|autolink]" block-content="content">Item</a>'
+	html: '<a class="item" href="[url|autolink]">Item</a>'
 };
 
 exports.menu_item_dropdown = {
@@ -72,17 +65,16 @@ exports.menu_item_dropdown = {
 	icon: '<b class="icon">Drop</b>',
 	menu: "link",
 	context: "menu//",
-	contents: {
-		title: {
-			spec: "inline*",
-			marks: "nolink",
-			title: "Title"
-		},
-		items: {
-			spec: "menu_item+",
-			title: 'Items'
-		}
-	},
+	contents: [{
+		id: 'title',
+		nodes: "inline*",
+		marks: "nolink",
+		title: "Title"
+	}, {
+		id: 'items',
+		nodes: "menu_item+",
+		title: 'Items'
+	}],
 	properties: {
 		icon: {
 			title: 'Show dropdown icon',
@@ -106,17 +98,16 @@ exports.menu_item_popup = {
 	icon: '<b class="icon">Pop</b>',
 	menu: "link",
 	context: "menu//",
-	contents: {
-		title: {
-			spec: "inline*",
-			marks: "nolink",
-			title: "Title"
-		},
-		content: {
-			spec: "block+",
-			title: 'Content'
-		}
-	},
+	contents: [{
+		id: 'title',
+		nodes: "inline*",
+		marks: "nolink",
+		title: "Title"
+	}, {
+		id: 'content',
+		nodes: 'block+',
+		title: 'Content'
+	}],
 	properties: {
 		icon: {
 			title: 'Show dropdown icon',

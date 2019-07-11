@@ -24,10 +24,8 @@ exports.portfolio = {
 		}
 	},
 	contents: {
-		items: {
-			spec: "portfolio_item+",
-			title: 'items'
-		}
+		id: 'items',
+		nodes: "portfolio_item+"
 	},
 	html: `<element-portfolio data-shape="[shape]">
 		<div block-content="items"></div>
@@ -70,16 +68,15 @@ exports.portfolio_item = {
 			default: "1"
 		}
 	},
-	contents: {
-		media: {
-			spec: "image",
-			title: "media"
-		},
-		content: {
-			spec: "(block|itemlink)+",
-			title: "content"
-		}
-	},
+	contents: [{
+		id: 'media',
+		nodes: "image",
+		title: "media"
+	}, {
+		id: 'content',
+		nodes: "(block|itemlink)+",
+		title: "content"
+	}],
 	tag: 'element-portfolio-item',
 	html: `<element-portfolio-item data-scale-width="[scaleWidth]" data-scale-height="[scaleHeight]">
 		<div class="media" block-content="media"></div>

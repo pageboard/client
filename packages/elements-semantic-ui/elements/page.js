@@ -1,7 +1,4 @@
-exports.page.contents.body = {
-	spec: 'header? main+ footer?',
-	title: 'body'
-};
+exports.page.contents.nodes = 'header? main+ footer?';
 
 exports.page.stylesheets = [
 	'../lib/components/reset.css',

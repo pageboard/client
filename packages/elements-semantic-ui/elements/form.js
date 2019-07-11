@@ -36,16 +36,11 @@ exports.query_form = {
 			}
 		}
 	},
-	contents: {
-		form: {
-			spec: 'block+'
-		}
-	},
+	contents: 'block+',
 	tag: 'form[method="get"]',
 	html: `<form is="element-form" method="get"
 		action="[redirection.url][redirection.parameters|query|url]"
-		class="ui form"
-		block-content="form"></form>`,
+		class="ui form"></form>`,
 	stylesheets: [
 		'../lib/components/form.css',
 		'../ui/form.css'
@@ -116,17 +111,12 @@ exports.api_form = {
 			}
 		}
 	},
-	contents: {
-		form: {
-			spec: 'block+'
-		}
-	},
+	contents: 'block+',
 	tag: 'form[method="post"]',
 	html: `<form is="element-form" method="post"
 		action="/.api/form/[$id]"
 		redirection="[redirection.url][redirection.parameters|query]"
-		class="ui form [hidden|?]"
-		block-content="form"></form>`,
+		class="ui form [hidden|?]"></form>`,
 	stylesheets: [
 		'../lib/components/form.css',
 		'../ui/form.css'

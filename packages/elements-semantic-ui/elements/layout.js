@@ -81,11 +81,7 @@ exports.layout = {
 			type: 'boolean'
 		}
 	},
-	contents: {
-		content: {
-			spec: "block+"
-		}
-	},
+	contents: "block+",
 	group: 'block',
 	html: `<div class="layout
 		[width|eq:full:fullwidth:]
@@ -93,7 +89,7 @@ exports.layout = {
 		[horizontal|?]
 		[vertical|?]
 		[direction]
-		[invert|?:inverted]" block-content="content" style="height:[height|eq:0:|not|post:%|magnet]">
+		[invert|?:inverted]" style="height:[height|eq:0:|not|post:%|magnet]">
 	</div>`,
 	stylesheets: [
 		'../lib/components/container.css',

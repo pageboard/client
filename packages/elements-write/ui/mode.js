@@ -28,32 +28,36 @@ Pageboard.Controls.Mode = class Mode {
 				var elts = state.scope.$view.elements;
 				Pageboard.backupElements = Object.assign({}, elts);
 				Object.entries(elts).forEach(([name, elt]) => {
-					elt = elts[name] = Object.assign({}, elt);
+					elt = elts[name] = elt.clone();
+					if (!elt.dom) return;
 					if (elt.group == "page") {
 						elt.stylesheets = elt.stylesheets.slice(0, 1);
 						elt.dom.querySelector('body').dataset.mode = "code";
 						return;
 					}
-					if (!elt.dom) return;
 					delete elt.fuse;
 					delete elt.render;
 					delete elt.$installed;
 					if (elt.inplace) return;
 					delete elt.parse;
-					delete elt.tag;	
+					delete elt.tag;
 					elt.fusable = false;
 					if (elt.inline) {
-						if (elt.contents) {
+						if (!elt.leaf) {
 							elt.dom = state.scope.$doc.dom(`<span class="${name}"></span>`);
 						} else {
 							elt.dom = state.scope.$doc.dom(`<span class="${name}">${elt.title}</span>`);
 						}
 						elt.tag = `span[block-type="${name}"]`;
 					} else {
+						if (elt.contents.unnamed) {
+							elt.contents.list[0].id = "";
+							delete elt.contents.unnamed;
+						}
 						elt.dom = state.scope.$doc.dom(`<div class="${name}">
 							<div class="title">${elt.title}</div>
 							<div class="content">
-								<div block-content="[contents+.key|repeat:div]"></div>
+								<div block-content="[contents.list.id|repeat:div|or:]"></div>
 							</div>
 						</div>`).fuse(elt, state.scope);
 						elt.tag = `div[block-type="${name}"]`;

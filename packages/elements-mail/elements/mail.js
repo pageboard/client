@@ -22,9 +22,8 @@ exports.mail = {
 		}
 	},
 	contents: {
-		body: {
-			spec: 'mail_body'
-		}
+		id: 'body',
+		nodes: 'mail_body'
 	},
 	html: `<html lang="[$site.lang|ornull]">
 	<head>
@@ -50,9 +49,8 @@ exports.mail = {
 exports.mail_body = {
 	title: "Body",
 	contents: {
-		content: {
-			spec: "mail_block+"
-		}
+		id: 'content',
+		nodes: "mail_block+"
 	},
 	html: `<table class="body">
 		<tr>
@@ -65,10 +63,8 @@ exports.mail_container = {
 	title: "Container",
 	icon: '<b class="icon">Co</b>',
 	contents: {
-		content: {
-			spec: "mail_block+",
-			title: 'content'
-		}
+		id: 'content',
+		nodes: "mail_block+"
 	},
 	group: "mail_block",
 	html: `<table class="container" align="center">

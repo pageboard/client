@@ -2,7 +2,7 @@ exports.paragraph_nolink = Object.assign({}, exports.paragraph, {
 	priority: exports.paragraph.priority - 1,
 	context: 'blocklink//',
 	contents: {
-		spec: "inline*",
+		nodes: "inline*",
 		marks: "nolink"
 	}
 });
@@ -62,12 +62,10 @@ exports.segment = {
 			}]
 		}
 	},
-	contents: {
-		"content": "block+"
-	},
+	contents: "block+",
 	group: "block",
 	icon: '<b class="icon">Seg</b>',
-	html: '<div class="ui segment" block-content="content"></div>',
+	html: '<div class="ui segment"></div>',
 	fuse: function(node, d) {
 		Object.keys(d).forEach(function(key) {
 			if (this.properties[key].type == 'boolean' && d[key]) {
@@ -129,7 +127,8 @@ exports.heading = {
 		}
 	},
 	contents: {
-		"text": "inline*"
+		id: 'text',
+		nodes: "inline*"
 	},
 	group: "block",
 	icon: '<i class="icon header"></i>',

@@ -3,16 +3,15 @@ exports.tabs = {
 	icon: '<b class="icon">Tabs</b>',
 	menu: 'widget',
 	group: "block",
-	contents: {
-		items: {
-			title: 'Menu',
-			spec: "tab_item+"
-		},
-		tabs: {
-			title: 'Tabs',
-			spec: "tab+"
-		}
-	},
+	contents: [{
+		id: 'items',
+		title: 'Menu',
+		nodes: "tab_item+"
+	}, {
+		id: 'tabs',
+		title: 'Tabs',
+		nodes: "tab+"
+	}],
 	html: `<element-tabs>
 		<div class="ui top attached tabular menu" block-content="items"></div>
 		<div block-content="tabs"></div>
@@ -39,21 +38,15 @@ exports.tab_item = {
 	menu: 'widget',
 	inplace: true,
 	context: 'tabs_container_items/',
-	contents: {
-		content: {
-			spec: "inline*"
-		}
-	},
-	html: '<a class="item" block-content="content">Tab Item</a>'
+	contents: "inline*",
+	html: '<a class="item">Tab Item</a>'
 };
 
 exports.tab = {
 	title: 'Tab',
 	inplace: true,
 	context: 'tabs_container_tabs/',
-	contents: {
-		content: "block+"
-	},
-	html: '<div class="ui bottom attached tab segment" block-content="content"></div>'
+	contents: "block+",
+	html: '<div class="ui bottom attached tab segment"></div>'
 };
 

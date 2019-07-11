@@ -6,12 +6,10 @@ exports.google_translate = {
 	context: "menu/",
 	menu: 'link',
 	contents: {
-		title: {
-			spec: "inline*",
-			marks: "nolink"
-		}
+		nodes: "inline*",
+		marks: "nolink"
 	},
-	html: '<element-google-translate class="item" block-content="title">Translate</element-google-translate>',
+	html: '<element-google-translate class="item">Translate</element-google-translate>',
 	scripts: [
 		'../ui/translate.js'
 	],

@@ -63,7 +63,8 @@ exports.input_file = {
 		}
 	},
 	contents: {
-		label: 'inline*'
+		id: 'label',
+		nodes: 'inline*'
 	},
 	html: `<div class="field">
 		<label block-content="label">Label</label>

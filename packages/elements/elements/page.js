@@ -68,10 +68,8 @@ exports.page = {
 		}
 	},
 	contents: {
-		body: {
-			spec: 'block+',
-			title: 'body'
-		}
+		nodes: 'header? main+ footer?',
+		id: 'body'
 	},
 	html: `<html lang="[$site.lang|ornull]">
 	<head>

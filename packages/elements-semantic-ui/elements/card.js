@@ -3,11 +3,7 @@ exports.cards = {
 	menu: 'widget',
 	icon: '<i class="icon address card outline"></i>',
 	group: "block",
-	contents: {
-		cards: {
-			spec: "(card|cardlink)+"
-		}
-	},
+	contents: "(card|cardlink)+",
 	properties: {
 		columnCount: {
 			title: 'Column count',
@@ -17,7 +13,7 @@ exports.cards = {
 			default: 0
 		}
 	},
-	html: '<div class="ui [columnCount|num] doubling stackable cards" block-content="cards"></div>',
+	html: '<div class="ui [columnCount|num] doubling stackable cards"></div>',
 	stylesheets: [
 		'../lib/components/card.css'
 	]
@@ -46,20 +42,19 @@ exports.card = {
 			default: true
 		}
 	},
-	contents: {
-		image: {
-			spec: "image",
-			title: 'image'
-		},
-		content: {
-			spec: '(card_header|card_meta|card_description)+',
-			title: 'content'
-		},
-		extra: {
-			spec: 'paragraph+',
-			title: 'extra'
-		}
-	},
+	contents: [{
+		id: 'image',
+		nodes: "image",
+		title: 'image'
+	}, {
+		id: 'content',
+		nodes: '(card_header|card_meta|card_description)+',
+		title: 'content'
+	}, {
+		id: 'extra',
+		nodes: 'paragraph+',
+		title: 'extra'
+	}],
 	html: `<div class="ui [fluid|?] [centered|?] card">
 		<div class="image [image|?::hidden]" block-content="image"></div>
 		<div class="content" block-content="content"></div>
@@ -103,20 +98,19 @@ exports.cardlink = {
 			}
 		}
 	},
-	contents: {
-		image: {
-			spec: "image",
-			title: 'image'
-		},
-		content: {
-			spec: '(card_header_nolink|card_meta_nolink|card_description_nolink)+',
-			title: 'content'
-		},
-		extra: {
-			spec: 'paragraph_nolink+',
-			title: 'extra'
-		}
-	},
+	contents: [{
+		id: 'image',
+		nodes: "image",
+		title: 'image'
+	}, {
+		id: 'content',
+		nodes: '(card_header_nolink|card_meta_nolink|card_description_nolink)+',
+		title: 'content'
+	}, {
+		id: 'extra',
+		nodes: 'paragraph_nolink+',
+		title: 'extra'
+	}],
 	html: `<a href="[url]" class="ui [fluid|?] [centered|?] card">
 		<div class="image [image|?::hidden]" block-content="image"></div>
 		<div class="content" block-content="content"></div>
@@ -137,7 +131,7 @@ exports.card_header_nolink = Object.assign({}, exports.card_header, {
 	context: 'cardlink//',
 	group: 'blocklink',
 	contents: {
-		spec: "inline*",
+		nodes: "inline*",
 		marks: "nolink"
 	},
 	html: '<div class="header">Header</div>'
@@ -156,7 +150,7 @@ exports.card_meta_nolink = Object.assign({}, exports.card_meta, {
 	context: 'cardlink//',
 	group: 'blocklink',
 	contents: {
-		spec: "inline*",
+		nodes: "inline*",
 		marks: "nolink"
 	},
 	html: '<div class="meta">Meta</div>'

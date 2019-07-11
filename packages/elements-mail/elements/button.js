@@ -2,7 +2,8 @@ exports.mail_button = {
 	title: "Button",
 	icon: '<b class="icon">Bt</b>',
 	contents: {
-		text: "text*",
+		id: 'text',
+		nodes: "text*",
 	},
 	group: "mail_block",
 	properties: {

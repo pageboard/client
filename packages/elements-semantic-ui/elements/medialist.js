@@ -4,15 +4,8 @@ exports.medialist = {
 	group: "block",
 	icon: '<i class="list icon"></i>',
 	menu: "widget",
-	properties: {
-	},
-	contents: {
-		items: {
-			spec: "medialist_item+",
-			title: 'items'
-		}
-	},
-	html: '<div class="ui items unstackable medialist" block-content="items"></div>',
+	contents: "medialist_item+",
+	html: '<div class="ui items unstackable medialist"></div>',
 	stylesheets: [
 		'../lib/components/item.css',
 		'../ui/medialist.css',
@@ -24,17 +17,15 @@ exports.medialist_item = {
 	icon: '<i class="icons"><i class="list icon"></i><i class="corner add icon"></i></i>',
 	menu: "widget",
 	context: "medialist/",
-	properties: {},
-	contents: {
-		media: {
-			spec: "image",
-			title: "media"
-		},
-		content: {
-			spec: "block+",
-			title: "content"
-		}
-	},
+	contents: [{
+		nodes: "image",
+		id: 'media',
+		title: "media"
+	}, {
+		id: 'content',
+		nodes: "block+",
+		title: "content"
+	}],
 	html: `<div class="item">
 		<div class="image" block-content="media"></div>
 		<div class="content" block-content="content"></div>

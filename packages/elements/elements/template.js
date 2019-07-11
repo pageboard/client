@@ -5,11 +5,9 @@ exports.template = {
 	menu: 'form',
 	group: 'block template',
 	contents: {
-		template: {
-			title: 'Template',
-			spec: 'block+',
-			expressions: true
-		}
+		id: 'template',
+		nodes: 'block+',
+		expressions: true
 	},
 	html: `<element-template>
 		<template block-content="template"></template>
