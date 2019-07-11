@@ -24,7 +24,7 @@ Breadcrumb.prototype.update = function(parents, selection) {
 	for (var i = 0, j = 0; i < parents.length; i++,j++) {
 		parent = parents[i];
 		elder = elders[j];
-		if (!elder || parent.block.id !== elder.block.id || parent.block.id == null || parent.contentName !== elder.contentName) {
+		if (!elder || parent.block.id !== elder.block.id || parent.block.id == null || parent.contentName && parent.contentName !== elder.contentName) {
 			cut = true;
 			item = this.item(parent);
 			this.node.insertBefore(item, children[i]);
@@ -33,6 +33,7 @@ Breadcrumb.prototype.update = function(parents, selection) {
 			item = children[i];
 		}
 		if (item && item.children.length > 0) {
+			item.dataset.focused = parent.node.attrs.focused;
 			item.firstElementChild.classList.toggle('active', parent.node.attrs.focused == "last");
 		}
 	}
@@ -41,10 +42,11 @@ Breadcrumb.prototype.update = function(parents, selection) {
 		item = children[j];
 		if (!item || item.children.length == 0) break;
 		parents.push(elders[j]);
-		if (!item.hasAttribute('block-id')) {
+		if (!item.dataset.id) {
 			cut = true;
 			break;
 		}	else {
+			item.dataset.focused = elders[j].node.attrs.focused;
 			item.firstElementChild.classList.remove('active');
 		}
 	}
@@ -53,7 +55,7 @@ Breadcrumb.prototype.update = function(parents, selection) {
 	var last = this.node.lastElementChild;
 	var lastIsText = last && last.children.length == 0;
 	if (!selection.node && parents.length > 1) {
-		if (!lastIsText) {
+		if (!lastIsText && !last.dataset.content) {
 			this.node.insertAdjacentHTML("beforeEnd", `<span>${parent.contentName || 'text'}</span>`);
 		}
 	} else if (lastIsText) {
@@ -64,18 +66,18 @@ Breadcrumb.prototype.update = function(parents, selection) {
 Breadcrumb.prototype.item = function(parent) {
 	var node = this.template.cloneNode(true);
 	var item = node.querySelector('.section');
-	item.textContent = this.editor.element(parent.type).title;
-	node.setAttribute('block-type', parent.type);
-	if (parent.block.id) node.setAttribute('block-id', parent.block.id);
+	var el = this.editor.element(parent.type);
+	item.textContent = el.title;
+	node.dataset.selector = `[block-type="${parent.type}"]`;
+	if (parent.block.id) node.dataset.id = parent.block.id;
 	var contentName = parent.contentName;
 	if (contentName) {
 		var el = this.editor.element(parent.type);
-		var contents = el.contents;
-		if (Object.keys(contents).length > 1) {
-			var title = contents[contentName].title;
-			if (title) {
-				node.insertBefore(node.ownerDocument.createTextNode(title), node.lastElementChild);
-			}
+		var def = el.contents.find(contentName);
+		var title = def.title;
+		if (title) {
+			node.dataset.content = contentName;
+			node.insertBefore(node.ownerDocument.createTextNode(title), node.lastElementChild);
 		}
 	}
 	return node;
@@ -87,10 +89,14 @@ Breadcrumb.prototype.handleEvent = function(e) {
 	var selectors = [];
 	var items = Array.from(this.node.children);
 	var target = e.target.closest('span');
+	var subFocused = false;
 	items.some(function(item, i) {
-		var id = item.getAttribute('block-id');
-		var type = item.getAttribute('block-type');
-		selectors.push(id ? `[block-id="${id}"]` : `[block-type="${type}"][block-focused]`);
+		var id = item.dataset.id;
+		var sel = item.dataset.selector;
+		if (id) sel += `[block-id="${id}"]`;
+		if (!subFocused) sel += '[block-focused]';
+		if (item.dataset.focused == "last") subFocused = true;
+		selectors.push(sel);
 		if (item == target) return true;
 	});
 	var selector = selectors.join(' ');
