@@ -7,6 +7,7 @@ function Move(editor, node) {
 	this.node = node;
 	this.click = this.click.bind(this);
 	this.node.addEventListener('click', this.click);
+	this.update();
 }
 
 Move.prototype.click = function(e) {
@@ -31,7 +32,7 @@ Move.prototype.destroy = function() {
 };
 
 Move.prototype.update = function(parents, sel) {
-	this.node.classList.toggle('hidden', !sel.node);
+	this.node.classList.toggle('hidden', !sel || !sel.node);
 	var state = this.editor.state;
 	var utils = this.editor.utils;
 	this.node.querySelector('[data-command="left"]')
