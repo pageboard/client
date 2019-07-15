@@ -12,13 +12,15 @@ Page.patch(function(state) {
 		var obj = typeof url == "string" ? Page.parse(url) : url;
 		if (!obj.query) obj.query = {};
 		obj.query.develop = this.query.develop;
-		return this.__proto__.push.call(this, obj, opts);
+		if (Page.samePathname(this, Page.format(obj))) obj.data = this.data;
+		return Object.getPrototypeOf(this).push.call(this, obj, opts);
 	};
 	state.replace = function(url, opts) {
 		var active = !it.editor || !it.editor.closed;
 		var obj = typeof url == "string" ? Page.parse(url) : url;
 		if (!obj.query) obj.query = {};
 		obj.query.develop = this.query.develop;
-		return this.__proto__.replace.call(this, obj, opts);
+		if (Page.samePathname(this, Page.format(obj))) obj.data = this.data;
+		return Object.getPrototypeOf(this).replace.call(this, obj, opts);
 	};
 });
