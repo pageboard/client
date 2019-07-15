@@ -60,7 +60,7 @@ class HTMLElementSitepage extends HTMLCustomElement {
 
 Page.setup(function() {
 	HTMLCustomElement.define('element-sitepage', HTMLElementSitepage);
-	HTMLCustomElement.extend('element-sitemap', class extends HTMLElementSitepage {
+	HTMLCustomElement.extend('element-sitemap', class SitemapHelper extends HTMLElementSitepage {
 		patch() { /* do not call syncBlock when attributes change */ }
 	});
 });

@@ -1,15 +1,13 @@
-Page.ready(function(state) {
-	var it = window.parent.Pageboard;
-	if (!state.scope.$write) {
-		return;
-	}
-	HTMLCustomElement.extend('element-gallery', class {
+Page.setup(function() {
+	HTMLCustomElement.extend('element-gallery', class GalleryHelper {
 		patch(state) {
+			if (!state.scope.$write) return;
 			Page.setup((state) => {
 				this.setup(state);
 			});
 		}
 		setup(state) {
+			if (!state.scope.$write) return;
 			if (!this.itemsObserver) this.itemsObserver = new MutationObserver((records) => {
 				setTimeout(() => {
 					records.forEach((record) => this.mutate(record, state));
