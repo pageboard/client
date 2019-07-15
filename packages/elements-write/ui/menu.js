@@ -28,6 +28,7 @@ function Menu(editor, node) {
 	});
 	this.inlines = this.node.dom(`<div class="ui icon menu"></div>`);
 	this.node.appendChild(this.inlines);
+	this.update();
 }
 
 Menu.prototype.destroy = function() {
@@ -53,22 +54,20 @@ Menu.prototype.hideTabs = function() {
 };
 
 Menu.prototype.update = function(parents, sel) {
-	if (!sel || !parents) return;
-	// because updates are done by the editor
 	this.selection = sel;
-	this.parents = parents;
+	this.parents = parents || [];
 	Object.values(this.tabs).forEach(function(tab) {
 		tab.div.textContent = '';
 	});
 	this.inlines.textContent = "";
-	var isBlockSelection = sel.node && sel.node.isBlock;
+	var isBlockSelection = sel && sel.node && sel.node.isBlock;
 	var isRootSelection = this.parents.length == 1;
 	var activeTab;
 	var inlineBlocks = [];
 	var inlineSpans = [];
 	var inlineSpansActive = false;
 	
-	this.menu.items.forEach((item) => {
+	if (sel) this.menu.items.forEach((item) => {
 		var dom = renderItem(item, this.editor, sel.node && sel.node.type.name || null);
 		if (!dom) return;
 		var el = item.spec.element;
@@ -108,9 +107,6 @@ Menu.prototype.update = function(parents, sel) {
 		this.inlines.appendChild(inlineBlocksMenu);
 		inlineBlocks.forEach((dom) => inlineBlocksMenu.appendChild(dom));
 	}
-	Object.values(this.tabs).forEach(function(tab) {
-		tab.menu.classList.toggle('disabled', tab.div.children.length == 0);
-	});
 	if (isBlockSelection) {
 		if (!activeTab) {
 			if (this.lastTab && this.tab(this.lastTab).children.length) {
@@ -126,6 +122,9 @@ Menu.prototype.update = function(parents, sel) {
 	} else {
 		this.hideTabs();
 	}
+	Object.values(this.tabs).forEach(function(tab) {
+		tab.menu.classList.toggle('disabled', tab.div.children.length == 0);
+	});
 };
 
 Menu.prototype.tab = function(name) {
