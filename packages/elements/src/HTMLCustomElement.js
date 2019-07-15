@@ -34,7 +34,7 @@ HTMLCustomElement.define = function(name, cla, is) {
 		});
 	}
 	window.customElements.define(name, cla, is ? {extends: is} : undefined);
-	if (cla.defaults) HTMLCustomElement.extend(name, class {
+	if (cla.defaults) HTMLCustomElement.extend(name, class _NodeOptions {
 		patch(state) {
 			this.options = nodeOptions(this, cla.defaults, state);
 		}
@@ -97,6 +97,7 @@ HTMLCustomElement.extend = function(name, Ext, is) {
 	var plugins = this.extend.cache;
 	var list = plugins[name];
 	if (!list) list = plugins[name] = {};
+	if (!Ext.name) console.warn("Please name the extension of", name, Ext);
 	if (list[Ext.name]) return;
 	list[Ext.name] = true;
 	var ExtProto = Ext.prototype;
