@@ -152,6 +152,7 @@ Pageboard.Editor = function Editor(win, state) {
 	}
 	var doc = win.document;
 	var body = doc.body;
+	win.Pagecut.Editor.prototype.update = update;
 	// and the editor must be running from child
 	editor = Pageboard.editor = new win.Pagecut.Editor({
 		store: view.blocks.store,
@@ -168,7 +169,7 @@ Pageboard.Editor = function Editor(win, state) {
 			},
 			view: function() {
 				return {
-					update: function(editor) {
+					update: function(editor, prevState) {
 						editor.update();
 					}
 				};
@@ -177,7 +178,6 @@ Pageboard.Editor = function Editor(win, state) {
 	});
 
 	editor.updatePage = updatePage.bind(editor, state);
-	editor.update = Pageboard.debounce(update.bind(editor), 50);
 	editor.close = editorClose.bind(editor);
 	editor.devTools = devTools.bind(editor);
 
@@ -198,8 +198,6 @@ Pageboard.Editor = function Editor(win, state) {
 	if ($store) {
 		controls.store.reset($store);
 	}
-
-	editor.focus();
 	controls.store.realUpdate();
 	return editor;
 };
