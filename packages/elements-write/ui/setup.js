@@ -26,12 +26,6 @@ Pageboard.adopt = function(win, readState) {
 		//win.addEventListener('mouseup', anchorListener, true);
 		win.addEventListener('submit', submitListener, true);
 		win.addEventListener('invalid', submitListener, true);
-		win.addEventListener('keydown', function(e) {
-			if (e.altKey) win.document.body.classList.add('ProseMirror-alt');
-		});
-		win.addEventListener('keyup', function(e) {
-			win.document.body.classList.remove('ProseMirror-alt');
-		});
 		readState.finish(function() {
 			window.document.title = win.document.title;
 			var readCopy = readState.copy();

@@ -30,37 +30,6 @@
 	color:inherit;
 }
 
-.ProseMirror.ProseMirror-alt [block-type]:after {
-	pointer-events:none;
-	content: attr(block-type);
-	position: absolute;
-	font-size: 0.7rem;
-	color: #000;
-	font-family: monospace;
-	font-variant: none;
-	font-style: normal;
-	text-transform: none;
-	text-shadow: 0 0 2px #FFF;
-	overflow: visible;
-	height: 0;
-	width: 0;
-	white-space: nowrap;
-	opacity:0;
-	transition:opacity 0.3s;
-	transform:translateY(-2px);
-}
-.ProseMirror.ProseMirror-alt [block-type] {
-	outline: 1px dashed #4183c4;
-	outline-offset: -3px;
-}
-
-.ProseMirror.ProseMirror-alt [block-type]:hover {
-	outline: 1px solid #4183f4;
-}
-.ProseMirror.ProseMirror-alt [block-type]:hover:after {
-	opacity:1;
-}
-
 ::selection {
 	background-color: #CCE2FF;
 }
