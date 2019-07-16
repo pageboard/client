@@ -118,7 +118,7 @@ exports.image = {
 			}
 		}
 	},
-	group: "block",
+	group: "block media",
 	tag: 'element-image',
 	buildLoc: function(url, d) {
 		if (!url) return {
