@@ -7,12 +7,9 @@ exports.site.properties.google_site_verification = {
 
 exports.google_site_verification = {
 	group: "block",
-	html: '<meta name="google-site-verification" content="[id]">',
+	html: '<meta name="google-site-verification" content="[$site.google_site_verification|magnet:*][$page.data.url|eq:%2F|bmagnet:*]">',
 	install: function(scope) {
-		if (scope.$pathname != "/") return;
-		var id = scope.$site.google_site_verification;
-		if (!id || scope.$site.env != "production") return;
-		scope.$element.dom.querySelector('head').append(this.dom.fuse({id: id}, scope));
+		scope.$element.dom.querySelector('head > meta').after(this.dom);
 	}
 };
 
