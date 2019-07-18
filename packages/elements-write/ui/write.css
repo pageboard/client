@@ -56,6 +56,7 @@ body[data-mode="code"] .item[data-command="code"] {
 #store {
 	opacity:1;
 	transition:opacity 2s;
+	border-radius: 0;
 }
 body[data-mode="read"] #store {
 	flex-wrap:nowrap;
