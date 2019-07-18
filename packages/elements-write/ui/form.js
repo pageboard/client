@@ -369,8 +369,6 @@ FormBlock.prototype.handleEvent = function(e) {
 		var stored = editor.blocks.get(block.id);
 		if (stored) Object.assign(stored, block);
 		else editor.blocks.set(block);
-		editor.controls.store.update();
-		return;
 	}
 
 	var tr = editor.state.tr;
@@ -397,6 +395,8 @@ FormBlock.prototype.handleEvent = function(e) {
 	}
 	if (dispatch) {
 		editor.dispatch(tr);
+	} else {
+		editor.controls.store.update();
 	}
 };
 
