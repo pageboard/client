@@ -38,9 +38,6 @@ exports.sitepage = {
 		nodes: "sitemap_item*",
 		virtual: true
 	},
-	unmount: function(block) {
-		if (block.type.startsWith('site')) block.type = block.type.substring(4);
-	},
 	context: 'sitemap/ | sitepage/',
 	html: `<element-sitepage class="item fold" data-url="[url]" data-index="[index]">
 		<div class="title caret-icon">
@@ -59,9 +56,6 @@ if (exports.mail) exports.sitemail = {
 	virtual: true,
 	get properties() {
 		return exports.mail.properties;
-	},
-	unmount: function(block) {
-		if (block.type.startsWith('site')) block.type = block.type.substring(4);
 	},
 	context: 'sitemap/ | sitepage/',
 	html: `<element-sitepage class="item" data-url="[url]" data-index="[index]">
