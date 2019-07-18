@@ -45,7 +45,7 @@ class HTMLElementSitepage extends HTMLCustomElement {
 	}
 
 	syncBlock() {
-		if (!this.parentNode) return;
+		if (!this.parentNode || this.matches('element-sitemap')) return;
 		var editor = window.parent.Pageboard.editor;
 		var block = editor.blocks.get(this.getAttribute('block-id'));
 		if (!block.data) block.data = {};
@@ -60,7 +60,5 @@ class HTMLElementSitepage extends HTMLCustomElement {
 
 Page.setup(function() {
 	HTMLCustomElement.define('element-sitepage', HTMLElementSitepage);
-	HTMLCustomElement.extend('element-sitemap', class SitemapHelper extends HTMLElementSitepage {
-		patch() { /* do not call syncBlock when attributes change */ }
-	});
+	HTMLCustomElement.extend('element-sitemap', HTMLElementSitepage);
 });
