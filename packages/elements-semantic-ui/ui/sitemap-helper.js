@@ -6,7 +6,7 @@ class HTMLElementSitepage extends HTMLCustomElement {
 		};
 	}
 	patch(state) {
-		this.syncBlock();
+		if (this.isConnected) this.syncBlock();
 	}
 	setup(state) {
 		var content = this.querySelector('[block-content="children"]');
@@ -47,6 +47,7 @@ class HTMLElementSitepage extends HTMLCustomElement {
 	syncBlock() {
 		if (!this.parentNode || this.matches('element-sitemap')) return;
 		var editor = window.parent.Pageboard.editor;
+		if (!editor) return;
 		var block = editor.blocks.get(this.getAttribute('block-id'));
 		if (!block.data) block.data = {};
 		var data = this.options;
