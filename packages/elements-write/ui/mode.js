@@ -22,8 +22,8 @@ Pageboard.Controls.Mode = class Mode {
 					state.save();
 				}
 			}
+			this.editor.close();
 			if (com == "code") {
-				this.editor.close();
 				delete Pageboard.editor;
 				var elts = state.scope.$view.elements;
 				Pageboard.backupElements = Object.assign({}, elts);
@@ -66,11 +66,8 @@ Pageboard.Controls.Mode = class Mode {
 				});
 				this.node.removeEventListener('click', this);
 			} else if (com == "write") {
-				this.editor.close();
 				delete Pageboard.editor;
 				this.node.removeEventListener('click', this);
-			} else if (com == "read") {
-				this.editor.close();
 			}
 			if (mode == "code") {
 				var elts = state.scope.$view.elements;
