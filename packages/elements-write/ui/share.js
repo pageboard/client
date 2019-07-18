@@ -44,9 +44,9 @@ Share.prototype.change = function() {
 	if (newVal == this.standalone) return; // do nothing
 
 	var editor = this.editor;
-	var nodes = editor.blocks.domQuery(this.block.id, {all: true});
-	if (nodes.length == 0) {
-		console.warn("No dom nodes found for this block", this.block);
+	var node = editor.blocks.domQuery(this.block.id, {focused: true});
+	if (!node) {
+		console.warn("No dom node found for this block", this.block);
 		return;
 	}
 	var tr = editor.state.tr;
@@ -58,9 +58,7 @@ Share.prototype.change = function() {
 		this.block = block;
 	}
 	block.standalone = newVal;
-	nodes.forEach(function(node) {
-		editor.utils.refreshTr(tr, node, block);
-	});
+	editor.utils.refreshTr(tr, node, block);
 	// TODO restore selection ?
 	editor.dispatch(tr);
 };
