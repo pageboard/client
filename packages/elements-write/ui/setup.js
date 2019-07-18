@@ -85,8 +85,10 @@ function updatePage(state) {
 }
 
 function filterParents(editor, list) {
-	return list.map(function(item) {
+	var sec = [];
+	list.forEach(function(item) {
 		var node = item.root.node;
+		if (node.attrs.focused == null) return;
 		var obj = {
 			node: node,
 			block: editor.blocks.get(node.attrs.id) || editor.blocks.fromAttrs(node.attrs),
@@ -102,8 +104,9 @@ function filterParents(editor, list) {
 				rpos: item.inline.rpos
 			};
 		}
-		return obj;
+		sec.push(obj);
 	});
+	return sec;
 }
 
 function update() {
