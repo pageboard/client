@@ -40,6 +40,7 @@ Pageboard.adopt = function(win, readState) {
 			Pageboard.hrefs = readState.scope.$hrefs;
 			var editor = Pageboard.editor;
 			if (editor && editor.closed) return;
+			Pageboard.scrollbar.update();
 			if (!Pageboard.modeControl) {
 				Pageboard.modeControl = new Pageboard.Controls.Mode({
 					root: { defaultView: win },
