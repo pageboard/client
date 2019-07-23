@@ -43,13 +43,11 @@ body[data-mode="read"] #pageboard-write > :not(#store) {
 body[data-mode="read"] #store .item {
 	display:none;
 }
-body:not([data-mode="read"]) #mode [data-command="write"] {
+body:not([data-mode="read"]) #mode .label[data-command="write"] {
 	display:none;
 }
-body[data-mode="code"] #mode [data-command="write"] {
-	display: inline-flex !important;
-}
-body[data-mode="code"] #mode [data-command="code"] {
+body[data-mode="code"] #mode [data-command="code"],
+body[data-mode="write"] #mode [data-command="write"] {
 	display:none !important;
 }
 #store {

@@ -27,6 +27,9 @@ exports.write = {
 				<a class="vertically fitted item" data-command="read" title="Read Mode">
 					<i class="unhide large icon"></i>
 				</a>
+				<a class="vertically fitted item" data-command="write" title="Write Mode">
+					<i class="write large icon"></i>
+				</a>
 				<a class="ui black right corner label" data-command="write" title="Write Mode">
 					<i class="write icon"></i>
 				</a>
