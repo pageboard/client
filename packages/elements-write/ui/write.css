@@ -34,38 +34,31 @@ body {
 #pageboard-write.loading > [id] {
 	display:none;
 }
-
+body[data-mode="read"] #pageboard-write {
+	overflow:visible !important;
+}
 body[data-mode="read"] #pageboard-write > :not(#store) {
 	display:none;
 }
-body[data-mode="read"] #store .item:not([data-command="write"]) {
+body[data-mode="read"] #store .item {
 	display:none;
 }
-body:not([data-mode="read"]) #store .item[data-command="write"] {
+body:not([data-mode="read"]) #mode [data-command="write"] {
 	display:none;
 }
-body[data-mode="read"] #store .item[data-command="write"] {
-	color:black !important;
-}
-body[data-mode="code"] #mode .item[data-command="write"] {
+body[data-mode="code"] #mode [data-command="write"] {
 	display: inline-flex !important;
 }
-body[data-mode="code"] .item[data-command="code"] {
+body[data-mode="code"] #mode [data-command="code"] {
 	display:none !important;
 }
 #store {
-	opacity:1;
-	transition:opacity 2s;
 	border-radius: 0;
 }
 body[data-mode="read"] #store {
 	flex-wrap:nowrap;
 	background-color:white;
 	color:black;
-	opacity:0;
-}
-body[data-mode="read"] #store:hover {
-	opacity:1;
 }
 body[data-mode="read"] #store.wide {
 	margin:0 !important;

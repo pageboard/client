@@ -6,7 +6,7 @@ Pageboard.Controls.Mode = class Mode {
 		this.node.addEventListener('click', this);
 	}
 	handleEvent(e) {
-		var item = e.target.closest('.item');
+		var item = e.target.closest('[data-command]');
 		if (!item) return;
 		var com = item.dataset.command;
 		this.win.Page.setup((state) => {
@@ -23,6 +23,9 @@ Pageboard.Controls.Mode = class Mode {
 				}
 			}
 			this.editor.close();
+			if (com != "read") {
+				this.node.removeEventListener('click', this);
+			}
 			if (com == "code") {
 				delete Pageboard.editor;
 				var elts = state.scope.$view.elements;
@@ -64,10 +67,8 @@ Pageboard.Controls.Mode = class Mode {
 					}
 					elt.html = elt.dom.outerHTML;
 				});
-				this.node.removeEventListener('click', this);
 			} else if (com == "write") {
 				delete Pageboard.editor;
-				this.node.removeEventListener('click', this);
 			}
 			if (mode == "code") {
 				var elts = state.scope.$view.elements;

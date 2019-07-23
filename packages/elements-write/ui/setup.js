@@ -38,9 +38,14 @@ Pageboard.adopt = function(win, readState) {
 			writeState.save();
 
 			Pageboard.hrefs = readState.scope.$hrefs;
-
 			var editor = Pageboard.editor;
-			if (!editor || !editor.closed) {
+			if (editor && editor.closed) return;
+			if (!Pageboard.modeControl) {
+				Pageboard.modeControl = new Pageboard.Controls.Mode({
+					root: { defaultView: win },
+					close: function() {}
+				}, document.getElementById("mode"));
+			} else {
 				Pageboard.Editor(win, readState);
 			}
 		});
@@ -135,7 +140,6 @@ Pageboard.Editor = function Editor(win, state) {
 		adv = true;
 		console.info("Use top.Pageboard.dev() to debug prosemirror");
 	}
-	Pageboard.write.classList.remove('loading');
 	if (!page || page.type == "error") {
 		Pageboard.write.hidden = true;
 		console.warn("Not loading editor: no page or error page");

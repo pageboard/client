@@ -16,18 +16,19 @@ exports.write = {
 	<body
 		data-devtools="[$element.resources.0]"
 		data-placeholder="[$element.resources.1]"
+		data-mode="read"
 	>
 	<div id="pageboard-read">
 		<div class="ui bound bottom sticky wide notifications"></div>
 	</div>
-	<div id="pageboard-write" class="ui basic loading segment">
+	<div id="pageboard-write" class="ui basic segment">
 		<div id="store" class="ui inverted wide mini menu">
 			<div id="mode" class="menu">
 				<a class="vertically fitted item" data-command="read" title="Read Mode">
 					<i class="unhide large icon"></i>
 				</a>
-				<a class="vertically fitted item" data-command="write" title="Write Mode">
-					<i class="write large icon"></i>
+				<a class="ui black right corner label" data-command="write" title="Write Mode">
+					<i class="write icon"></i>
 				</a>
 				<a class="vertically fitted item" data-command="code" title="HTML Mode">
 					<i class="code large icon"></i>
