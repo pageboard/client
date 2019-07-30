@@ -1,0 +1,36 @@
+html {
+	width: 1190px;  /* this is 21cm at 144dpi - DO NOT CHANGE, EVER */
+}
+.page-break {
+	page-break-after: always;
+}
+.page-nobreak {
+	page-break-inside: avoid;
+}
+.page-sheet {
+	page-break-inside: avoid;
+	height: calc(1683px - 0px); /* 1683 is 29.7cm at 144dpi */
+}
+
+/*lazy loading*/
+
+element-image.lqip-reveal > img {
+	transition: none !important;
+}
+element-image.lqip > img {
+	filter: none !important;
+}
+
+element-image.lazy-reveal > img {
+	transition: none !important;
+}
+element-image.lazy > img {
+	opacity:1 !important;
+}
+
+element-image.lazy:after {
+	display:none;
+	content: none;
+}
+/*end lazy loading*/
+
