@@ -60,7 +60,21 @@ Menu.prototype.update = function(parents, sel) {
 		tab.div.textContent = '';
 	});
 	this.inlines.textContent = "";
-	var isBlockSelection = sel && sel.node && sel.node.isBlock;
+	var isBlockSelection = false;
+	if (sel) {
+		var node = sel.node;
+		if (!node) {
+			// show block elements if there is empty block content
+			// that should not happen anymore, thanks to placeholder
+			node = sel.$to.parent;
+			if (node && node.type.spec.typeName && !node.content.size && node.isBlock) {
+				isBlockSelection = true;
+			}
+		} else {
+			isBlockSelection = node.isBlock;
+		}
+		
+	}
 	var isRootSelection = this.parents.length == 1;
 	var activeTab;
 	var inlineBlocks = [];
