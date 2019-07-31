@@ -168,6 +168,7 @@ Store.prototype.realUpdate = function() {
 
 	if (!this.initial) {
 		this.initial = root;
+		Store.generatedBefore = Store.generated;
 	} else {
 		this.importStandalones(root);
 		if (!this.editor.utils.equal(this.initial, root)) {
@@ -227,30 +228,25 @@ Store.prototype.save = function(e) {
 	this.saving.then(function() {
 		var p = Pageboard.fetch('put', '/.api/page', changes)
 		.then(function(result) {
-			if (result && result.update) result.update.forEach(function(obj, i) {
-				var block = me.editor.blocks.get(obj.id);
-				if (block) block.updated_at = obj.updated_at;
-				else Pageboard.notify("Cannot update editor with modified block");
+			if (!result || !result.update) return;
+			result.update.forEach(function(obj, i) {
+ 				var block = me.editor.blocks.get(obj.id);
+ 				delete me.fakeInitials[obj.id];
+ 				var val = obj.updated_at;
+ 				if (block) block.updated_at = val;
+ 				else Pageboard.notify("Cannot update editor with modified block");
+				
 				if (me.unsaved.id == obj.id) {
-					me.unsaved.updated_at = obj.updated_at;
+					me.unsaved.updated_at = val;
 				} else {
-					var child;
-					me.unsaved.children.find(function(item) {
-						if (obj.id == item.id) {
-							child = item;
-							return true;
-						}
-						if (item.standalone && item.children) {
-							if (item.children.find(function(item) {
-								if (obj.id == item.id) {
-									child = item;
-									return true;
-								}
-							})) return true;
-						}
+					var child = findInTreeBlock(me.unsaved, function(block) {
+						return block.id == obj.id;
 					});
-					if (child) child.updated_at = obj.updated_at;
-					else Pageboard.notify("Cannot update store with modified block");
+					if (child) {
+						child.updated_at = val;
+					} else {
+						Pageboard.notify("Cannot update store with modified block");
+					}
 				}
 			});
 		});
@@ -354,7 +350,7 @@ function flattenBlock(root, ancestorId, blocks) {
 
 function findInTreeBlock(root, fun) {
 	var val = fun(root);
-	if (val) return val;
+	if (val) return root;
 	if (root.children) root.children.some(function(child) {
 		var ret = findInTreeBlock(child, fun);
 		if (ret) {
