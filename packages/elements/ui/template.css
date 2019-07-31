@@ -15,11 +15,11 @@ element-template > [block-content="template"] {
 [contenteditable] element-template > .view {
 	display:none;
 }
-[block-id][block-type="binding"][data-label] {
+[contenteditable] [block-id][block-type="binding"][data-label] {
 	letter-spacing:-9999px;
 	word-spacing:-9999px;
 }
-[block-id][block-type="binding"][data-label]:after {
+[contenteditable] [block-id][block-type="binding"][data-label]:after {
 	content:"[" attr(data-label) "]";
 	letter-spacing:normal;
 	word-spacing:normal;
