@@ -67,7 +67,7 @@ Form.prototype.update = function(parents, sel) {
 		return def && def.expressions || false;
 	});
 
-	if (!this.main) this.main = new FormBlock(editor, this.node, block.type);
+	if (!this.main) this.main = new FormBlock(editor, this.node, parent.type);
 	this.main.update(parents, block, this.mode);
 
 	var canShowExpressions = this.main.el.properties;
