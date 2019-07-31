@@ -27,6 +27,7 @@ Pageboard.Controls.Mode = class Mode {
 				this.node.removeEventListener('click', this);
 			}
 			if (com == "code") {
+				state.data.$jsonContent = pruneNonRoot(Pageboard.editor.state.doc.toJSON(), null, Pageboard.editor.schema);
 				delete Pageboard.editor;
 				var elts = state.scope.$view.elements;
 				Pageboard.backupElements = Object.assign({}, elts);
@@ -87,3 +88,19 @@ Pageboard.Controls.Mode = class Mode {
 	}
 };
 
+function pruneNonRoot(obj, parent, schema) {
+	var nodeType = schema.nodes[obj.type];
+	if (!nodeType) return obj;
+	var tn = nodeType.spec.typeName;
+	if (tn == null) return obj;
+	var list = obj.content || [];
+	var childList = [];
+	list.forEach((item) => { 
+		var list = pruneNonRoot(item, obj, schema);
+		if (Array.isArray(list)) childList = childList.concat(list);
+		else if (list != null) childList.push(list);
+	});
+	if (childList.length) obj.content = childList;
+	if (tn == "wrap") return list;
+	else return obj;
+}
