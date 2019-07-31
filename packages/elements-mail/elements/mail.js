@@ -19,6 +19,11 @@ exports.mail = {
 			pattern: "^(/[a-zA-Z0-9-]*)+$",
 			$helper: 'pageUrl' // works with sitemap editor to update pages url in a coherent manner
 			// see also page.save: the href updater will only change input.name == "href".
+		},
+		index: {
+			type: "integer",
+			default: 0,
+			minimum: 0
 		}
 	},
 	contents: {
