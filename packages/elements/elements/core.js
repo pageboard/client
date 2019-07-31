@@ -13,7 +13,7 @@ exports.user = {
 
 exports.priv = {
 	priority: -10,
-	$lock: [],
+	$lock: true,
 	properties: {
 		otp: {
 			type: 'object',
@@ -127,6 +127,7 @@ exports.settings = {
 exports.site = {
 	priority: -1000,
 	standalone: true,
+	$lock: true,
 	properties : {
 		title: {
 			title: 'Site title',
