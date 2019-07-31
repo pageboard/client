@@ -1,59 +1,5 @@
 Page.ready(function(state) {
 	var filters = state.scope.$filters;
-	filters.formatDate = function(val, what, ...list) {
-		if (/^\d\d:\d\d(:\d\d)?$/.test(val)) {
-			val = '1970-01-01T' + val + 'Z';
-		}
-		var d = new Date(val);
-		var p = {};
-		const n = 'narrow';
-		const s = 'short';
-		const l = 'long';
-		const num = 'numeric';
-		const dig = '2-digit';
-		list.forEach(function(tok) {
-			switch(tok) {
-			case 'd': p.weekday = n; break;
-			case 'da': p.weekday = s; break;
-			case 'day': p.weekday = l; break;
-			case 'Y': p.year = num; break;
-			case 'YY': p.year = dig; break;
-			case 'mo': p.month = n; break;
-			case 'mon': p.month = s; break;
-			case 'month': p.month = l; break;
-			case 'M': p.month = num; break;
-			case 'MM': p.month = dig; break;
-			case 'D': p.day = num; break;
-			case 'DD': p.day = dig; break;
-			case 'H': p.hour = num; break;
-			case 'HH': p.hour = dig; break;
-			case 'm': p.minute = num; break;
-			case 'mm': p.minute = dig; break;
-			case 's': p.second = num; break;
-			case 'ss': p.second = dig; break;
-			case 'tz': p.timeZoneName = s; break;
-			case 'timezone': p.timeZoneName = l; break;
-			default:
-				if (/\w+\/\w+/.test(tok)) p.timeZone = tok;
-				else console.warn("Unrecognized date format option", tok);
-				break;
-			}
-		});
-		var lang = document.documentElement.lang || window.navigator.language;
-		var str;
-		try {
-			str = d.toLocaleString(lang, p);
-		} catch(err) {
-			if (p.timeZone && p.timeZone != "UTC") {
-				p.timeZone = "UTC";
-				str = d.toLocaleString(lang, p) + " UTC";
-			} else {
-				throw err;
-			}
-		}
-		return str;
-	};
-
 	filters.byWeek = function(val, what, datapath) {
 		// val is an array
 		// path accessor to a property

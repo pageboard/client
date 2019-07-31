@@ -86,7 +86,7 @@ exports.page = {
 		'../lib/custom-elements-builtin.js'
 	].concat(exports.site.resources),
 	polyfills: [
-		'default', 'dataset', 'fetch', 'es2015', 'es2016'
+		'default', 'dataset', 'fetch', 'es2015', 'es2016', `Intl.~locale.[$site.lang|or:en]`
 	],
 	filters: {
 		polyfills: function($elements, what) {
@@ -96,6 +96,7 @@ exports.page = {
 				if (!list) return;
 				if (typeof list == "string") list = [list];
 				list.forEach(function(item) {
+					item = item.fuse({}, what.scope);
 					map[item] = true;
 				});
 			});

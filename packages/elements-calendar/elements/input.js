@@ -1,10 +1,3 @@
-exports.IntlPolyfill = {
-	priority: -102, // before polyfill element
-	install: function(scope) {
-		var lang = (scope.$site.lang || window.navigator.language || 'en').substring(0, 2);
-		this.polyfills = [`Intl.~locale.${lang}`];
-	}
-};
 exports.CalendarScript = {
 	scripts: ['../ui/calendar.js']
 };
