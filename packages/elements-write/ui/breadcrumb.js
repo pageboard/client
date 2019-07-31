@@ -1,14 +1,17 @@
 (function(Pageboard) {
 Pageboard.Controls.Breadcrumb = Breadcrumb;
 
-var template;
-
 function Breadcrumb(editor, node) {
 	this.node = node;
 	this.editor = editor;
 
-	template = this.template = template || this.node.firstElementChild.cloneNode(true);
-	this.node.textContent = "";
+	if (!Breadcrumb.template) {
+		Breadcrumb.template = this.node.firstElementChild;
+		Breadcrumb.template.remove();
+		Breadcrumb.text = this.node.textContent;
+	} else {
+		this.node.textContent = Breadcrumb.text;
+	}
 	this.node.addEventListener('click', this);
 }
 
@@ -17,6 +20,7 @@ Breadcrumb.prototype.destroy = function() {
 };
 
 Breadcrumb.prototype.update = function(parents, selection) {
+	if (!this.parents) this.node.textContent = "";
 	var elders = this.parents || [];
 	this.parents = parents = parents.slice().reverse();
 	var parent, elder, item, cut = false;
@@ -64,7 +68,7 @@ Breadcrumb.prototype.update = function(parents, selection) {
 };
 
 Breadcrumb.prototype.item = function(parent) {
-	var node = this.template.cloneNode(true);
+	var node = Breadcrumb.template.cloneNode(true);
 	var item = node.querySelector('.section');
 	var el = this.editor.element(parent.type);
 	item.textContent = el.title;
