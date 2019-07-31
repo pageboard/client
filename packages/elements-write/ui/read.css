@@ -6,24 +6,24 @@
 
 /* replaced elements cannot have pseudo elements,
  * that is why we must define is for both cases */
-.ProseMirror .ProseMirror-selectednode {
+.ProseMirror-selectednode {
 	outline: 1px solid #61A3E4 !important;
 	outline-offset: 0px !important;
 	cursor: pointer !important;
 	box-shadow: 0px 0px 0px 1px #61A3E4 !important;
 	cursor:pointer !important;
 }
-.ProseMirror .ProseMirror-selectednode:not(img) {
+.ProseMirror-selectednode:not(img) {
 	min-width:1em;
 }
 
 /* replaced elements cannot have pseudo elements,
  * that is why we must define is for both cases */
-.ProseMirror [block-focused="last"] {
+[block-focused="last"] {
 	outline: 1px dashed #888;
 	outline-offset:-1px;
 }
-.ProseMirror [block-focused="last"]:not(img) {
+[block-focused="last"]:not(img) {
 	min-width: 1em;
 }
 .ProseMirror *::selection {
@@ -96,4 +96,8 @@ body[data-mode="code"] div.content {box-shadow: inset 0px 0px 1px 1px #0000001a;
 
 body[data-mode="code"] [block-type="_"] {
 	display:none;
+}
+
+body[data-mode="code"] pagecut-placeholder:after {
+	padding:0;
 }
