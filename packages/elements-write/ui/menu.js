@@ -154,7 +154,7 @@ Menu.prototype.item = function(el) {
 			try {
 				var tr = state.tr;
 				var sel = self.selection;
-				var block = editor.blocks.create(el.name);
+				var block = editor.blocks.create(el.alias || el.name);
 				if (el.inline) {
 					if (el.leaf) {
 						tr.replaceSelectionWith(nodeType.create(editor.blocks.toAttrs(block)));
@@ -167,7 +167,7 @@ Menu.prototype.item = function(el) {
 					}
 				} else {
 					var blocks = {};
-					var fragment = editor.blocks.renderFrom(block, blocks);
+					var fragment = editor.blocks.renderFrom(block, blocks, null, {type: el.name});
 					// NOT SURE importVirtuals is meaningful here
 					editor.controls.store.importVirtuals(blocks);
 					var pos = editor.utils.insertTr(tr, fragment, sel);

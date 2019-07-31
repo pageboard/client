@@ -38,6 +38,7 @@ exports.sitepage = {
 		nodes: "sitemap_item*",
 		virtual: true
 	},
+	alias: 'page',
 	context: 'sitemap/ | sitepage/',
 	html: `<element-sitepage class="item fold" data-url="[url]" data-index="[index]">
 		<div class="title caret-icon">
@@ -53,6 +54,7 @@ if (exports.mail) exports.sitemail = {
 	icon: '<i class="icon mail outline"></i>',
 	menu: "link",
 	group: 'sitemap_item',
+	alias: 'mail',
 	virtual: true,
 	get properties() {
 		return exports.mail.properties;
