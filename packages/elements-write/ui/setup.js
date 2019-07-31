@@ -161,6 +161,7 @@ Pageboard.Editor = function Editor(win, state) {
 		topNode: page.type,
 		elements: view.elements,
 		place: doc.body,
+		jsonContent: state.data.$jsonContent,
 		content: body,
 		genId: Pageboard.Controls.Store.genId,
 		scope: state.scope,
