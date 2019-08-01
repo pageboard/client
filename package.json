@@ -1,6 +1,6 @@
 {
   "name": "@pageboard/client",
-  "version": "0.6.5",
+  "version": "0.7.0",
   "description": "Pageboard client modules",
   "main": "index.js",
   "scripts": {
@@ -17,13 +17,15 @@
   },
   "homepage": "https://github.com/pageboard/client#readme",
   "dependencies": {
-    "@pageboard/elements": "0.6.x",
-    "@pageboard/elements-calendar": "0.6.x",
-    "@pageboard/elements-gallery": "0.6.x",
-    "@pageboard/elements-google": "0.6.x",
-    "@pageboard/elements-mail": "0.6.x",
-    "@pageboard/elements-semantic-ui": "0.6.x",
-    "@pageboard/elements-write": "0.6.x"
+    "@pageboard/elements": "0.7.x",
+    "@pageboard/elements-calendar": "0.7.x",
+    "@pageboard/elements-gallery": "0.7.x",
+    "@pageboard/elements-google": "0.7.x",
+    "@pageboard/elements-mail": "0.7.x",
+    "@pageboard/elements-pdf": "0.7.x",
+    "@pageboard/elements-feed": "0.7.x",
+    "@pageboard/elements-semantic-ui": "0.7.x",
+    "@pageboard/elements-write": "0.7.x"
   },
   "pageboard": true
 }

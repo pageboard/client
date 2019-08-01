@@ -1,6 +1,6 @@
 {
   "name": "@pageboard/elements-write",
-  "version": "0.6.25",
+  "version": "0.7.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/pageboard/client#readme",
   "dependencies": {
-    "@pageboard/pagecut": "0.7.x",
+    "@pageboard/pagecut": "0.8.x",
     "cropperjs": "^1.5.1",
     "fast-safe-stringify": "^2.0.6",
     "infinite-scroll": "^3.0.5",
