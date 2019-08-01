@@ -18,9 +18,9 @@ exports.feed = {
 		}
 	},
 	contents: [{
-		id: 'header',
-		title: 'Header',
-		nodes: "block+"
+		id: 'title',
+		title: 'Title',
+		nodes: "inline*"
 	}, {
 		id: 'preview',
 		title: 'Preview',
@@ -30,8 +30,8 @@ exports.feed = {
 		title: 'Section',
 		nodes: 'paragraph+'
 	}, {
-		id: 'media',
-		title: 'Section',
+		id: 'extra',
+		title: 'Extra',
 		nodes: 'block+'
 	}, {
 		id: 'footer',
@@ -39,14 +39,20 @@ exports.feed = {
 		nodes: "paragraph+"
 	}],
 	group: "block",
-	html: `<article pubdate="[publication]" topics="[topics|join:%2C]" class="ui equal width stackable grid">
+	html: `<article pubdate="[publication]" class="ui equal width stackable grid">
 		<aside class="six wide column" block-content="preview"></aside>
 		<div class="column">
-			<header block-content="header"><h2>Title</h2></header>
+			<header>
+				<p>
+					<span class="topics">[topics|join:%20-%20]</span>
+					<span class="pubdate">[publication|formatDate:D:month:Y]</span>
+				</p>
+				<h2 block-content="title">Title</h2>
+			</header>
 			<section block-content="section"><p>Text</p></section>
 			<footer block-content="footer"><p>Footer</p></footer>
 		</div>
-		<div class="row" block-content="media"><p>Media</p></div>
+		<div class="row" block-content="extra"><p>Additional content</p></div>
 	</article>`
 };
 
