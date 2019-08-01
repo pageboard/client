@@ -165,12 +165,12 @@ Store.prototype.realUpdate = function() {
 
 	// import data into this context
 	root = ownProto(root);
+	this.importStandalones(root);
 
 	if (!this.initial) {
 		this.initial = root;
 		Store.generatedBefore = Store.generated;
 	} else {
-		this.importStandalones(root);
 		if (!this.editor.utils.equal(this.initial, root)) {
 			this.unsaved = root;
 			this.set(root);
