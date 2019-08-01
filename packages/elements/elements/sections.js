@@ -7,7 +7,7 @@ exports.paragraph = {
 	properties: {
 		align: {
 			title: 'Align',
-			default: "left",
+			nullable: true,
 			anyOf: [{
 				const: "left",
 				title: "left",
@@ -28,20 +28,19 @@ exports.paragraph = {
 		}
 	},
 	parse: function(dom) {
-		var align = "left";
+		var align;
 		var prop = this.properties.align;
 		if (dom.classList.contains("aligned")) {
 			align = prop.anyOf.find(function(item) {
 				return dom.classList.contains(item.const);
 			});
-			if (!align) align = prop.default;
-			else align = align.const;
+			if (align) align = align.const;
 		}
 		return {align: align};
 	},
 	contents: "inline*",
 	group: "block",
 	inplace: true,
-	html: '<p class="[align|or:left] aligned">Text</p>'
+	html: '<p class="[align|post: aligned]">Text</p>'
 };
 
