@@ -1,7 +1,7 @@
 exports.user = {
 	priority: -10,
 	required: ['email'],
-	$lock: [],
+	$lock: true,
 	properties: {
 		email: {
 			type: 'string',
