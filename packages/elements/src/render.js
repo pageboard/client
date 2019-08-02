@@ -45,20 +45,37 @@ module.exports = function(res, scope) {
 	for (var k in res) scope[`$${k}`] = res[k];
 
 	var block = res.item || {};
+	var blocks = {};
 	if (elem) {
 		scope.$view.setElement(elem);
 		if (!block.type) block.type = elem.name;
-		else if (res.items) block.children = res.items;
+		if (res.items) {
+			if (block.standalone) {
+				block.children = res.items;
+			} else {
+				importBlocks(res.items, blocks);
+			}
+		}
 	} else if (block.type) {
 		elem = elts[block.type];
 	}
-	return scope.$view.from(block, null, {
+	return scope.$view.from(block, blocks, {
 		type: elem.name,
 		scope: scope
 	});
 };
 
 module.exports.install = install;
+
+function importBlocks(children, blocks) {
+	children.forEach((child) => {
+		blocks[child.id] = child;
+		if (child.children) {
+			importBlocks(child.children, blocks);
+			delete child.children;
+		}
+	});
+}
 
 function install(el, scope) {
 	if (el.$installed) return;
