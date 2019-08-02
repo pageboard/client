@@ -350,7 +350,9 @@ FormBlock.prototype.customFilter = function(key, prop) {
 
 FormBlock.prototype.handleEvent = function(e) {
 	if (!this.block || this.ignoreEvents || !this.form) return;
-	if (e && e.target && (!e.target.name || e.target.name.startsWith('$'))) return;
+	if (e && e.target) {
+		if (!e.target.matches('.nullable') && !e.target.name || e.target.name.startsWith('$')) return;	
+	}
 	var editor = this.editor;
 	var formData = pruneObj(this.form.get()) || {};
 	var mode = this.mode;

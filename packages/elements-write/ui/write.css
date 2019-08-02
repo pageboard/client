@@ -140,6 +140,25 @@ body[data-mode="read"] #pageboard-read > iframe {
 #form fieldset > .inline.fields:last-child {
 	margin-bottom:0em;
 }
+#form .nullable-fieldset {
+	position:relative;
+}
+#form .nullable-fieldset > .nullable {
+	position:absolute;
+	left: 0;
+	z-index: 1;
+}
+#form .nullable-fieldset > fieldset > legend {
+	padding-left: 0.6em;
+}
+#form fieldset:disabled > :not(legend) {
+	display:none;
+}
+#form fieldset:disabled {
+	border-bottom:0;
+	border-right:0;
+	border-left:0;
+}
 
 #form .inline.fields .field {
 	padding:0;

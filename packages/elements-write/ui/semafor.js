@@ -27,12 +27,18 @@ function Semafor(schema, node, filter, helper) {
 
 function formGet(form) {
 	var query = {};
-	var old, key, val, elem;
+	var old, key, val, elem, fieldset;
 	for (var i = 0; i < form.elements.length; i++) {
 		elem = form.elements[i];
 		key = elem.name;
 		if (!key) continue;
 		if (key.startsWith('$')) continue;
+		if (elem.disabled) {
+			query[key] = null;
+		} else {
+			fieldset = elem.closest('fieldset');
+			if (fieldset && fieldset.disabled) continue;
+		}
 		old = query[key];
 		switch (elem.type) {
 		case 'submit':
@@ -87,13 +93,18 @@ function formSet(form, values) {
 		});
 		return ret;
 	}
-	var elem = null, val;
+	var elem = null, val, nullable;
 	var flats = asPaths(values, {});
 
 	for (var i = 0; i < form.elements.length; i++) {
 		elem = form.elements[i];
 		if (!elem.name) continue;
 		if (elem.name.startsWith('$')) continue;
+		nullable = elem.closest('.nullable-fieldset');
+		if (nullable) {
+			nullable.lastElementChild.disabled = false;
+			nullable.firstElementChild.checked = true;
+		}
 		val = flats[elem.name];
 		switch (elem.type) {
 		case 'submit':
@@ -145,6 +156,9 @@ function formSet(form, values) {
 Semafor.prototype.destroy = function() {
 	this.$node.find('.dropdown').dropdown('hide').dropdown('destroy');
 	this.$node.find('.checkbox').checkbox('destroy');
+	Array.from(this.node.querySelectorAll('.nullable-fieldset > .nullable')).forEach((node) => {
+		node.removeEventListener('change', this);
+	});
 	this.$node.form('destroy');
 	this.fields = {};
 	this.node.textContent = '';
@@ -410,6 +424,17 @@ Semafor.prototype.process = function(key, schema, node) {
 	return schema;
 };
 
+Semafor.prototype.handleEvent = function(e) {
+	if (e.type == "change") {
+		if (e.target.matches('.nullable')) {
+			var fieldset = e.target.nextElementSibling;
+			if (!fieldset) return;
+			e.target.checked = fieldset.disabled;
+			fieldset.disabled = !fieldset.disabled;
+		}
+	}
+};
+
 types.string = function(key, schema, node, inst) {
 	var multiline = !schema.pattern && !schema.format;
 	var short = schema.maxLength != null && schema.maxLength <= 10;
@@ -563,8 +588,23 @@ types.object = function(key, schema, node, inst) {
 	var fieldset = node;
 	if (schema.title) {
 		if (schema.properties && key && schema.title) {
-			fieldset = node.dom(`<fieldset name="${key}" class="field"><legend>${schema.title}</legend></fieldset>`);
-			node.appendChild(fieldset);
+			if (schema.nullable) {
+				fieldset = node.dom(`<div class="nullable-fieldset">
+					<input type="checkbox" class="ui nullable checkbox">
+					<fieldset name="${key}" class="field" disabled>
+						<legend>${schema.title}</legend>
+					</fieldset>
+				</div>`);
+				node.appendChild(fieldset);
+				fieldset = fieldset.lastElementChild;
+				fieldset.previousElementSibling.addEventListener('change', inst);
+			} else {
+				fieldset = node.dom(`<fieldset name="${key}" class="field">
+					<legend>${schema.title}</legend>
+				</fieldset>`);
+				node.appendChild(fieldset);
+			}
+			
 			if (schema.description) {
 				fieldset.appendChild(node.dom(`<label>${schema.description}</label>`));
 			}
