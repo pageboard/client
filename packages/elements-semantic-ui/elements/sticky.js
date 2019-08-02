@@ -22,13 +22,8 @@ exports.sticky = {
 			type: "boolean"
 		}
 	},
-	contents: {
-		content: {
-			spec: "block+",
-			title: 'content'
-		}
-	},
-	html: '<element-sticky block-content="content" data-collapsed="[collapsed|magnet]" data-position="[position]"></element-sticky>',
+	contents: "block+",
+	html: '<element-sticky data-collapsed="[collapsed|magnet]" data-position="[position]"></element-sticky>',
 	stylesheets: [
 		'../ui/sticky.css'
 	],

@@ -11,9 +11,8 @@ Pageboard.elements.header = {
 		}
 	},
 	contents: {
-		content: {
-			spec: "block+"
-		}
+		id: "content",
+		nodes: "block+"
 	},
 	context: 'page/',
 	tag: "header,element-sticky.header",
@@ -35,14 +34,10 @@ Pageboard.elements.main = {
 	icon: '<b class="icon">Main</b>',
 	group: "section",
 	properties: {},
-	contents: {
-		content: {
-			spec: "block+"
-		}
-	},
+	contents: "block+",
 	context: 'page/',
 	tag: "main",
-	html: '<main block-content="content"></main>',
+	html: '<main></main>',
 	stylesheets: [
 		'../ui/layout.css'
 	]
@@ -53,14 +48,10 @@ Pageboard.elements.footer = {
 	icon: '<b class="icon">Main</b>',
 	group: "section",
 	properties: {},
-	contents: {
-		content: {
-			spec: "block+"
-		}
-	},
+	contents: "block+",
 	context: 'page/',
 	tag: "footer",
-	html: '<footer block-content="content"></footer>',
+	html: '<footer></footer>',
 	stylesheets: [
 		'../ui/layout.css'
 	]
