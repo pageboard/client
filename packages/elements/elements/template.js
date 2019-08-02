@@ -88,7 +88,7 @@ exports.binding = {
 
 exports.content = {
 	title: "Content",
-	icon: '<b class="icon">cont</b>',
+	icon: '<i class="square outline icon"></i>',
 	menu: "form",
 	group: 'block',
 	context: 'template//',
@@ -98,11 +98,16 @@ exports.content = {
 			description: 'Must match element content name',
 			type: 'string',
 			format: "id",
-			$helper: {
-				name: 'element-content',
-				standalone: true
-			}
+			// $helper: {
+			// 	name: 'element-content',
+			// 	standalone: true
+			// }
+		},
+		fill: {
+			title: 'Fill',
+			description: 'Fill with template expression',
+			type: 'string'
 		}
 	},
-	html: '<div block-content="[name]"></div>'
+	html: '<div block-content="[name]">[fill|trim|split:%0A|join:%7C|pre:%5B|post:%5D]</div>'
 };
