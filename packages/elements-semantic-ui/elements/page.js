@@ -1,5 +1,3 @@
-exports.page.contents.nodes = 'header? main+ footer?';
-
 exports.page.stylesheets = [
 	'../lib/components/reset.css',
 	'../ui/site.css',
