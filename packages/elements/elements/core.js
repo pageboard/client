@@ -126,7 +126,6 @@ exports.settings = {
 
 exports.site = {
 	priority: -1000,
-	standalone: true,
 	$lock: true,
 	properties : {
 		title: {
