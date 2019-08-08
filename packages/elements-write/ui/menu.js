@@ -67,7 +67,7 @@ Menu.prototype.update = function(parents, sel) {
 			// show block elements if there is empty block content
 			// that should not happen anymore, thanks to placeholder
 			node = sel.$to.parent;
-			if (node && node.type.spec.typeName && !node.content.size && node.isBlock) {
+			if (node && node.type.spec.typeName && !node.content.size && node.isBlock && !node.isTextblock) {
 				isBlockSelection = true;
 			}
 		} else {
