@@ -1,9 +1,7 @@
 exports.write = {
 	priority: 100,
-	replaces: 'doc',
 	title: 'Editor',
 	group: 'page',
-	standalone: true,
 	html: `<html lang="[$site.lang|ornull]">
 	<head>
 		<title>[title][$site.title|pre: - |or:]</title>

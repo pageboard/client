@@ -1,6 +1,8 @@
 exports.feed = {
 	title: 'Feed',
 	menu: "widget",
+	standalone: true,
+	group: "block",
 	icon: '<i class="newspaper outline icon"></i>',
 	properties: {
 		topics: {
@@ -38,7 +40,6 @@ exports.feed = {
 		title: 'Footer',
 		nodes: "paragraph+"
 	}],
-	group: "block",
 	html: `<article pubdate="[publication]" class="ui equal width stackable grid">
 		<aside class="six wide column" block-content="preview"></aside>
 		<div class="column">

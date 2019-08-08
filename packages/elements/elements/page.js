@@ -1,10 +1,8 @@
 exports.page = {
 	priority: -100,
-	replaces: 'doc',
 	title: 'Page',
 	icon: '<i class="icon file outline"></i>',
 	group: 'page',
-	standalone: true, // besides site, can be child of zero or more parents
 	properties: {
 		title: {
 			title: 'Title',
@@ -143,11 +141,9 @@ exports.page = {
 
 exports.redirection = {
 	priority: -100,
-	replaces: 'doc',
 	title: 'Redirection',
 	icon: '<i class="icon random"></i>',
 	group: 'page',
-	standalone: true,
 	properties: {
 		url: {
 			title: 'Address',

@@ -1,10 +1,8 @@
 exports.mail = {
 	priority: -100,
-	replaces: 'doc',
 	title: 'Mail',
 	icon: '<i class="icon file outline"></i>',
 	group: 'page',
-	standalone: true, // besides site, can be child of zero or more parents
 	properties: {
 		title: {
 			title: 'Title',
