@@ -73,14 +73,13 @@ Menu.prototype.update = function(parents, sel) {
 		} else {
 			isBlockSelection = node.isBlock;
 		}
-		
 	}
 	var isRootSelection = this.parents.length == 1;
 	var activeTab;
 	var inlineBlocks = [];
 	var inlineSpans = [];
 	var inlineSpansActive = false;
-	
+
 	if (sel) this.menu.items.forEach((item) => {
 		var dom = renderItem(item, this.editor, sel.node && sel.node.type.name || null);
 		if (!dom) return;
