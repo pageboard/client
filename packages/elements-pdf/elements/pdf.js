@@ -1,19 +1,21 @@
 
 // extend page
-Pageboard.elements.pdf = Object.assign({}, Pageboard.elements.page, {
+exports.pdf = Object.assign({}, exports.page, {
 	title: 'PDF',
-	properties: Object.assign({}, Pageboard.elements.page.properties),
+	properties: Object.assign({}, exports.page.properties),
 	contents: {
 		id: 'body',
-		nodes: 'block+
+		nodes: 'block+'
 	},
 	stylesheets: [
 		'../ui/pdf.css'
+	],
+	scripts: [
+		'../ui/pdf.js'
 	]
 });
-Pageboard.elements.image.scripts.push('../ui/pdf.js');
 
-Pageboard.elements.sitepdf = {
+exports.sitepdf = {
 	title: "PDF",
 	menu: "link",
 	alias: 'pdf',
@@ -24,7 +26,7 @@ Pageboard.elements.sitepdf = {
 	render: Pageboard.elements.sitemail.render
 };
 
-Pageboard.elements.sheet = {
+exports.sheet = {
 	title: 'Sheet',
 	menu: "pdf",
 	group: 'block',
@@ -34,7 +36,7 @@ Pageboard.elements.sheet = {
 	html: '<div class="page-sheet"></div>'
 };
 
-Pageboard.elements.break = {
+exports.break = {
 	title: 'Break',
 	menu: "pdf",
 	group: 'block',
@@ -43,7 +45,7 @@ Pageboard.elements.break = {
 	html: '<div class="page-break"></div>'
 };
 
-Pageboard.elements.nobreak = {
+exports.nobreak = {
 	title: 'Avoid',
 	menu: "pdf",
 	group: 'block',

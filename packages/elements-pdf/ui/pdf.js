@@ -1,5 +1,7 @@
 Page.setup(function(state) {
-	Array.from(document.querySelectorAll('element-image')).forEach(function(node) {
-		node.reveal(true);
+	state.finish(function() {
+		Array.from(document.querySelectorAll('element-image')).forEach(function(node) {
+			node.reveal(true);
+		});
 	});
 });
