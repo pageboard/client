@@ -1,6 +1,3 @@
-exports.CalendarScript = {
-	scripts: ['../ui/calendar.js']
-};
 exports.input_date_time = {
 	title: 'DateTime',
 	icon: '<i class="calendar outline icon"></i>',

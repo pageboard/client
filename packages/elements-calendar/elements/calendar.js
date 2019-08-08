@@ -5,6 +5,12 @@ exports.settings.properties.grants.items.anyOf.push({
 	description: 'Events, dates, reservations'
 });
 
+exports.calendar = {
+	scripts: ['../ui/calendar.js'],
+	bundle: true,
+	contents: 'calendar'
+};
+
 exports.event = {
 	priority: 2, // must install scripts after query element scripts
 	title: 'Event',
