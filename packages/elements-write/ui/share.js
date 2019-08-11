@@ -19,7 +19,7 @@ Share.prototype.update = function(parents) {
 	var el = this.editor.element(this.block.type);
 	this.standalone = this.block.standalone || el.standalone;
 	this.toggle.checkbox(this.standalone ? 'set checked' : 'set unchecked');
-	var hide = !this.block.id || el.standalone || el.inplace || el.inline;
+	var hide = !this.block.id || el.inplace || el.inline;
 	var hasAncestor = !this.standalone && parents.slice(1, -1).some(function(parent) {
 		return parent.block.standalone;
 	});

@@ -248,6 +248,14 @@ body[data-mode="read"] #pageboard-read > iframe {
 	height:1rem;
 }
 
+#share .ui.toggle.checkbox.disabled label::before,
+#share .ui.toggle.checkbox.disabled label::after {
+	display:none;
+}
+#share .ui.toggle.checkbox.disabled label {
+	padding-left:0;
+	opacity:1;
+}
 .ui.toggle.checkbox.disabled .box:hover::before,
 .ui.toggle.checkbox.disabled label:hover::before {
 	background-color: rgba(0, 0, 0, 0.2);
