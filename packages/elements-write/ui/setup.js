@@ -46,7 +46,7 @@ Pageboard.adopt = function(win, readState) {
 					root: { defaultView: win },
 					close: function() {}
 				}, document.getElementById("mode"));
-			} else {
+			} else if (window.document.body.dataset.mode != "read") {
 				Pageboard.Editor(win, readState);
 			}
 		});
