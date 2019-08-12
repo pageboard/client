@@ -57,6 +57,12 @@ Breadcrumb.prototype.update = function(parents, selection) {
 	if (cut) while (children[j]) children[j].remove();
 
 	var last = this.node.lastElementChild;
+	if (!cut && last.dataset.content != parents[i-1].contentName) {
+		delete last.dataset.content;
+		while (last.firstElementChild.nextSibling.nodeType == Node.TEXT_NODE) {
+			last.firstElementChild.nextSibling.remove();
+		}
+	}
 	var lastIsText = last && last.children.length == 0;
 	if (!selection.node && parents.length > 1) {
 		if (!lastIsText && !last.dataset.content) {
