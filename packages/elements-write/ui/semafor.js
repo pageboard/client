@@ -231,7 +231,6 @@ Semafor.flatten = function(tree, obj, schema) {
 	if (!obj) obj = {};
 	var props = schema && schema.properties || {};
 	Object.entries(props).forEach(function([key, field]) {
-		var field = props && props[key];
 		var val = tree[key];
 		if (val == null && field.default) val = field.default;
 		if (val != null && typeof val == "object") {
