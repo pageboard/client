@@ -39,7 +39,7 @@ exports.carousel = {
 			title: 'Page dots',
 			description: 'Show page dots',
 			type: 'boolean',
-			default: true,
+			default: false,
 		},
 		prevNextButtons: {
 			title: 'Prev and next buttons',
