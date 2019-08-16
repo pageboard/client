@@ -229,7 +229,7 @@ Semafor.unflatten = function(map, obj) {
 Semafor.flatten = function(tree, obj, schema) {
 	if (!tree) return tree;
 	if (!obj) obj = {};
-	var props = schema && schema.properties;
+	var props = schema && schema.properties || {};
 	Object.entries(props).forEach(function([key, field]) {
 		var field = props && props[key];
 		var val = tree[key];
