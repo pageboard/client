@@ -24,6 +24,10 @@ exports.feed = {
 		title: 'Title',
 		nodes: "inline*"
 	}, {
+		id: 'description',
+		title: 'Description',
+		nodes: "inline*"
+	}, {
 		id: 'preview',
 		title: 'Preview',
 		nodes: 'image?'
@@ -35,25 +39,21 @@ exports.feed = {
 		id: 'extra',
 		title: 'Extra',
 		nodes: 'block+'
-	}, {
-		id: 'footer',
-		title: 'Footer',
-		nodes: "paragraph+"
 	}],
 	html: `<article pubdate="[publication]" class="ui equal width stackable grid">
 		<aside class="six wide column" block-content="preview"></aside>
 		<div class="column">
+			<nav>
+				<span class="topics">[topics|join:%20-%20]</span>
+				<span class="pubdate">[publication|formatDate:D:month:Y]</span>
+			</nav>
 			<header>
-				<p>
-					<span class="topics">[topics|join:%20-%20]</span>
-					<span class="pubdate">[publication|formatDate:D:month:Y]</span>
-				</p>
 				<h2 block-content="title">Title</h2>
+				<p block-content="description">Description</p>
 			</header>
-			<section block-content="section"><p>Text</p></section>
-			<footer block-content="footer"><p>Footer</p></footer>
+			<section block-content="section"><p>Article</p></section>
 		</div>
-		<div class="row" block-content="extra"><p>Additional content</p></div>
+		<div class="row" block-content="extra"><p>Extra content</p></div>
 	</article>`
 };
 
