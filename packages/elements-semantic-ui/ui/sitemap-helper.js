@@ -47,7 +47,7 @@ class HTMLElementSitepage extends HTMLCustomElement {
 	syncBlock() {
 		if (!this.parentNode || this.matches('element-sitemap')) return;
 		var editor = window.parent.Pageboard.editor;
-		if (!editor) return;
+		if (!editor || editor.closed) return;
 		var block = editor.blocks.get(this.getAttribute('block-id'));
 		if (!block.data) block.data = {};
 		var data = this.options;
