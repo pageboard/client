@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "postinstall"
+    "prepare": "postinstall"
   },
   "repository": {
     "type": "git",
@@ -17,8 +17,8 @@
     "url": "https://github.com/pageboard/client/issues"
   },
   "homepage": "https://github.com/pageboard/client#readme",
-  "dependencies": {
-    "@pageboard/pagecut": "^0.8.3",
+  "devDependencies": {
+    "@pageboard/pagecut": "^0.8.4",
     "cropperjs": "^1.5.1",
     "fast-safe-stringify": "^2.0.6",
     "infinite-scroll": "^3.0.5",
@@ -26,29 +26,29 @@
     "moment": "^2.20.1",
     "morphdom": "^2.3.3",
     "perfect-scrollbar": "^1.4.0",
-    "postinstall": "^0.4.2",
-    "postinstall-browserify": "^0.1.0",
+    "postinstall": "^0.5.1",
+    "postinstall-browserify": "^0.5.0",
     "pretty-bytes": "^5.1.0",
     "prosemirror-dev-tools": "^2.1.1",
     "fomantic-ui-css": "2.7.2",
     "speakingurl": "^14.0.1"
   },
-  "postinstall": {
-    "fomantic-ui-css/components": "link lib/components",
-    "fomantic-ui-css/themes": "link lib/themes",
-    "perfect-scrollbar/css/perfect-scrollbar.css": "link lib/",
-    "perfect-scrollbar/dist/perfect-scrollbar.js": "link lib/",
+  "prepare": {
+    "fomantic-ui-css/components": "copy lib/components",
+    "fomantic-ui-css/themes": "copy lib/themes",
+    "perfect-scrollbar/css/perfect-scrollbar.css": "copy lib/",
+    "perfect-scrollbar/dist/perfect-scrollbar.js": "copy lib/",
     "pretty-bytes/index.js": "browserify --standalone=Pageboard.PrettyBytes lib/pretty-bytes.js",
-    "moment/moment.js": "link lib/",
-    "moment/locale": "link lib/moment-locales",
-    "cropperjs/dist/cropper.css": "link lib/",
-    "cropperjs/dist/cropper.js": "link lib/",
-    "jquery/dist/jquery.slim.min.js": "link lib/jquery.min.js",
-    "jquery/dist/jquery.slim.min.map": "link lib/jquery.min.js.map",
-    "infinite-scroll/dist/infinite-scroll.pkgd.js": "link lib/infinite-scroll.js",
-    "speakingurl/lib/speakingurl.js": "link lib/",
-    "prosemirror-dev-tools/dist/umd/prosemirror-dev-tools.min.js": "link lib/",
-    "@pageboard/pagecut/dist": "link lib/pagecut",
+    "moment/moment.js": "copy lib/",
+    "moment/locale": "copy lib/moment-locales",
+    "cropperjs/dist/cropper.css": "copy lib/",
+    "cropperjs/dist/cropper.js": "copy lib/",
+    "jquery/dist/jquery.slim.min.js": "copy lib/jquery.min.js",
+    "jquery/dist/jquery.slim.min.map": "copy lib/jquery.min.js.map",
+    "infinite-scroll/dist/infinite-scroll.pkgd.js": "copy lib/infinite-scroll.js",
+    "speakingurl/lib/speakingurl.js": "copy lib/",
+    "prosemirror-dev-tools/dist/umd/prosemirror-dev-tools.min.js": "copy lib/",
+    "@pageboard/pagecut/dist": "copy lib/pagecut",
     "fast-safe-stringify/index.js": "browserify --standalone=Pageboard.JSON lib/json-stringify.js"
   },
   "pageboard": {

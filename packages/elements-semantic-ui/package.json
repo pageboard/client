@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "postinstall"
+    "prepare": "postinstall"
   },
   "repository": {
     "type": "git",
@@ -17,31 +17,30 @@
     "url": "https://github.com/pageboard/client/issues"
   },
   "homepage": "https://github.com/pageboard/client#readme",
-  "dependencies": {
+  "devDependencies": {
     "formdata-polyfill": "^3.0.11",
     "nouislider": "^11.1.0",
     "object-fit-images": "^3.2.3",
-    "postinstall": "^0.4.2",
-    "postinstall-browserify": "^0.1.0",
+    "postinstall": "^0.5.1",
+    "postinstall-browserify": "^0.5.0",
     "semantic-ui-css": "^2.3.2",
     "stickyfilljs": "^2.1.0"
   },
-  "postinstall": {
-    "semantic-ui-css/components": "link lib/components",
-    "semantic-ui-css/themes": "link lib/themes",
-    "stickyfilljs/dist/stickyfill.js": "link lib/",
+  "prepare": {
+    "semantic-ui-css/components": "copy lib/components",
+    "semantic-ui-css/themes": "copy lib/themes",
+    "stickyfilljs/dist/stickyfill.js": "copy lib/",
     "object-fit-images/dist/ofi.common-js.js": "browserify --standalone=objectFitImages lib/object-fit-images.js",
-    "formdata-polyfill/formdata.min.js": "link lib/formdata.js",
-    "nouislider/distribute/nouislider.js": "link lib/",
-    "nouislider/distribute/nouislider.css": "link lib/"
+    "formdata-polyfill/formdata.min.js": "copy lib/formdata.js",
+    "nouislider/distribute/nouislider.js": "copy lib/",
+    "nouislider/distribute/nouislider.css": "copy lib/"
   },
   "pageboard": {
     "priority": -1,
     "directories": [
       "elements",
       "lib",
-      "ui",
-      "semantic-ui"
+      "ui"
     ],
     "elements": [
       "elements/"

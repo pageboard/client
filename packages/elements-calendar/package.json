@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "postinstall"
+    "prepare": "postinstall"
   },
   "repository": {
     "type": "git",
@@ -17,12 +17,12 @@
     "url": "https://github.com/pageboard/client/issues"
   },
   "homepage": "https://github.com/pageboard/client#readme",
-  "dependencies": {
+  "devDependencies": {
     "@pageboard/datetime-entry": "^3.3.1",
-    "postinstall": "^0.4.2"
+    "postinstall": "^0.5.1"
   },
-  "postinstall": {
-    "@pageboard/datetime-entry/dist/datetime.js": "link lib/"
+  "prepare": {
+    "@pageboard/datetime-entry/dist/datetime.js": "copy lib/"
   },
   "pageboard": {
     "directories": [
