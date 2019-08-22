@@ -74,6 +74,9 @@ exports.bundle = function(loader, state) {
 window.HTMLCustomElement = require('./HTMLCustomElement');
 
 Page.init(function(state) {
+	state.serialize = () => {
+		return Promise.resolve('<!DOCTYPE html>\n' + document.documentElement.outerHTML);
+	};
 	state.vars = {};
 	var dev = state.query.develop;
 	if (dev === null || dev === "write") state.vars.develop = true;
