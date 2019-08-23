@@ -57,3 +57,12 @@ exports.feed = {
 	</article>`
 };
 
+exports['.rss'] = {
+	prerender: {
+		mime: 'application/xml'
+	},
+	scripts: [
+		'../lib/feed.js',
+		'../ui/feed.js'
+	]
+};

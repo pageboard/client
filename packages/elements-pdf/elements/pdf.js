@@ -9,11 +9,23 @@ exports.pdf = Object.assign({}, exports.page, {
 	},
 	stylesheets: [
 		'../ui/pdf.css'
-	],
+	]
+});
+
+exports['.pdf'] = {
+	prerender: {
+		display: true,
+		fonts: true,
+		medias: true
+	},
+	print: {
+		paper: 'iso_a4',
+		margins: '0mm'
+	},
 	scripts: [
 		'../ui/pdf.js'
 	]
-});
+};
 
 exports.sitepdf = {
 	title: "PDF",
