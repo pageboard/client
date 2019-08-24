@@ -160,6 +160,7 @@ Pageboard.Editor = function Editor(win, state) {
 		store: view.blocks.store,
 		topNode: page.type,
 		elements: view.elements,
+		explicit: document.body.dataset.mode == "code",
 		place: doc.body,
 		jsonContent: state.data.$jsonContent,
 		content: body,

@@ -46,27 +46,10 @@ Pageboard.Controls.Mode = class Mode {
 					delete elt.parse;
 					delete elt.tag;
 					elt.fusable = false;
-					if (elt.inline) {
-						if (!elt.leaf) {
-							elt.dom = state.scope.$doc.dom(`<span class="${name}"></span>`);
-						} else {
-							elt.dom = state.scope.$doc.dom(`<span class="${name}">${elt.title}</span>`);
-						}
-						elt.tag = `span[block-type="${name}"]`;
-					} else {
-						if (elt.contents.unnamed) {
-							elt.contents.list[0].id = "";
-							delete elt.contents.unnamed;
-						}
-						elt.dom = state.scope.$doc.dom(`<div class="${name}">
-							<div class="title">${elt.title}</div>
-							<div class="content">
-								<div block-content="[contents.list.id|repeat:div|or:]"></div>
-							</div>
-						</div>`).fuse(elt, state.scope);
-						elt.tag = `div[block-type="${name}"]`;
-					}
+					elt.dom.setAttribute('element-type', elt.inline ? 'inline' : 'block');
+					elt.dom.setAttribute('element-title', elt.title);
 					elt.html = elt.dom.outerHTML;
+					delete elt.dom;
 				});
 			} else if (com == "write") {
 				delete Pageboard.editor;

@@ -31,7 +31,7 @@ exports.write = {
 				<a class="ui black right corner label" data-command="write" title="Write Mode">
 					<i class="write icon"></i>
 				</a>
-				<a class="vertically fitted item" hidden data-command="code" title="HTML Mode">
+				<a class="vertically fitted item" data-command="code" title="HTML Mode">
 					<i class="code large icon"></i>
 				</a>
 			</div>

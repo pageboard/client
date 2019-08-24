@@ -47,22 +47,45 @@ body[data-mode="code"] {
 body[data-mode="code"] * {
 	padding:0;
 	margin:0;
-	line-height:1.15em;
-	font-style: normal;
-	font-weight: normal;
+	line-height:10px !important;
+	font-size:10px !important;
+	font-style: normal !important;
+	font-weight: normal !important;
 }
-
-body[data-mode="code"] div[block-type] {
+body[data-mode="code"] [block-type]:not([element-type]) {
+	margin:2px !important;
+	padding:2px !important;
+}
+body[data-mode="code"] [block-type][element-type] {
 	border: 1px solid rgba(0, 0, 0, 0.4) !important;
 	border-radius: 3px !important;
 	margin:2px !important;
 	padding:2px !important;
 	color: black !important;
-	/* display: flex !important; */
 	background-color: rgba(0, 0, 0, 0.02) !important;
 	max-width: 100%;
 }
-body[data-mode="code"] div[block-content] {
+body[data-mode="code"] [block-type][element-type="block"] {
+	display: flex !important;
+	flex-flow: row wrap;
+}
+body[data-mode="code"] [block-type]::before {
+	content: attr(element-title);
+	position: relative;
+	font-size:1em !important;
+	font-family:sans !important;
+	font-weight:normal !important;
+	font-style:normal !important;
+	text-decoration:none !important;
+	margin: 2px !important;
+	flex-basis: 100%;
+	z-index: 2;
+	text-align: center;
+}
+body[data-mode="code"] [block-type][element-type="block"]::before {
+	display:block;
+}
+body[data-mode="code"] [element-content] {
 	/* border: 1px solid rgba(0, 0, 0, 0.4) !important; */
 	border-radius: 3px !important;
 	margin:2px !important;
@@ -70,13 +93,7 @@ body[data-mode="code"] div[block-content] {
 	color: black !important;
 	display: flex !important;
 	flex-flow: row wrap;
-}
-body[data-mode="code"] span[block-type] {
-	margin:0 2px !important;
-	padding:0 2px !important;
-	border-radius: 3px !important;
-	font-style: italic !important;
-	background-color: rgba(0, 0, 0, 0.2) !important;
+	box-shadow: inset 0px 0px 1px 1px #0000001a;
 }
 body[data-mode="code"] {
 	background-color:white;
@@ -84,15 +101,9 @@ body[data-mode="code"] {
 body[data-mode="code"] [block-type]:not([block-id]) {
 	flex-basis: 100%;
 }
-body[data-mode="code"] div[block-type] > div.title {
-	color:grey;
-	font-size:10px;
-	font-family:monospace;
-	text-align: center;
-	text-transform: capitalize;
+body[data-mode="code"] [block-type] > *:not([block-type]):not([element-content]) {
+	display:none !important;
 }
-
-body[data-mode="code"] div.content {box-shadow: inset 0px 0px 1px 1px #0000001a;flex-flow: row;display: flex;}
 
 body[data-mode="code"] [block-type="_"] {
 	display:none;
