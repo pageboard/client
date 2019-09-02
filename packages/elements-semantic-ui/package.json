@@ -1,10 +1,11 @@
 {
   "name": "@pageboard/elements-semantic-ui",
-  "version": "0.7.2",
+  "version": "0.7.4",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "postinstall",
     "prepare": "postinstall"
   },
   "repository": {
@@ -17,18 +18,22 @@
     "url": "https://github.com/pageboard/client/issues"
   },
   "homepage": "https://github.com/pageboard/client#readme",
+  "dependencies": {
+    "postinstall": "^0.5.1",
+    "semantic-ui-css": "^2.3.2"
+  },
   "devDependencies": {
     "formdata-polyfill": "^3.0.11",
     "nouislider": "^11.1.0",
     "object-fit-images": "^3.2.3",
-    "postinstall": "^0.5.1",
     "postinstall-browserify": "^0.5.0",
-    "semantic-ui-css": "^2.3.2",
     "stickyfilljs": "^2.1.0"
   },
+  "postinstall": {
+    "semantic-ui-css/components": "link lib/components",
+    "semantic-ui-css/themes": "link lib/themes"
+  },
   "prepare": {
-    "semantic-ui-css/components": "copy lib/components",
-    "semantic-ui-css/themes": "copy lib/themes",
     "stickyfilljs/dist/stickyfill.js": "copy lib/",
     "object-fit-images/dist/ofi.common-js.js": "browserify --standalone=objectFitImages lib/object-fit-images.js",
     "formdata-polyfill/formdata.min.js": "copy lib/formdata.js",
