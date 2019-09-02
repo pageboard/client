@@ -46,7 +46,6 @@ body[data-mode="code"] {
 
 body[data-mode="code"] * {
 	padding:0;
-	margin:0;
 	line-height:10px !important;
 	font-size:10px !important;
 	font-style: normal !important;
@@ -59,8 +58,7 @@ body[data-mode="code"] [block-type]:not([element-type]) {
 body[data-mode="code"] [block-type][element-type] {
 	border: 1px solid rgba(0, 0, 0, 0.4) !important;
 	border-radius: 3px !important;
-	margin:2px !important;
-	padding:2px !important;
+	margin: 2px !important;
 	color: black !important;
 	background-color: rgba(0, 0, 0, 0.02) !important;
 	max-width: 100%;
@@ -74,19 +72,21 @@ body[data-mode="code"] [block-type]::before {
 	position: relative;
 	font-size:1em !important;
 	font-family:sans !important;
-	font-weight:normal !important;
 	font-style:normal !important;
 	text-decoration:none !important;
-	margin: 2px !important;
-	flex-basis: 100%;
 	z-index: 2;
 	text-align: center;
+	padding-left: 2px;
+	align-self: center;
+	padding-right: 2px;
+	box-shadow: 0px 0 0px 0px;
+	color: #4183C4;
+	font-weight: bold;
 }
 body[data-mode="code"] [block-type][element-type="block"]::before {
-	display:block;
+	
 }
 body[data-mode="code"] [element-content] {
-	/* border: 1px solid rgba(0, 0, 0, 0.4) !important; */
 	border-radius: 3px !important;
 	margin:2px !important;
 	padding:2px !important;
