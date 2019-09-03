@@ -59,7 +59,7 @@ Breadcrumb.prototype.update = function(parents, selection) {
 	var last = this.node.lastElementChild;
 	if (!cut && last.children.length && last.dataset.content != parents[i-1].contentName) {
 		delete last.dataset.content;
-		while (last.firstElementChild.nextSibling.nodeType == Node.TEXT_NODE) {
+		while (last.firstElementChild && last.firstElementChild.nextSibling.nodeType == Node.TEXT_NODE) {
 			last.firstElementChild.nextSibling.remove();
 		}
 	}
