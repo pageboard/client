@@ -82,7 +82,7 @@ exports.page = {
 	scripts: [
 		'../lib/custom-elements.js',
 		'../lib/custom-elements-builtin.js'
-	].concat(exports.site.resources),
+	].concat(exports.site.scripts),
 	polyfills: [
 		'default', 'dataset', 'fetch', 'es2015', 'es2016', `Intl.~locale.[$site.lang|or:en]`
 	],

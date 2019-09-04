@@ -127,6 +127,7 @@ exports.settings = {
 exports.site = {
 	priority: -1000,
 	$lock: true,
+	bundle: true,
 	properties : {
 		title: {
 			title: 'Site title',
@@ -218,7 +219,7 @@ exports.site = {
 			}
 		}
 	},
-	resources: [
+	scripts: [
 		"../lib/window-page.js",
 		"../lib/pageboard.js",
 		"../ui/route.js"
