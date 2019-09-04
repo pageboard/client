@@ -24,7 +24,7 @@
     "fomantic-ui-css": "2.7.2"
   },
   "devDependencies": {
-    "@pageboard/pagecut": "^0.8.6",
+    "@pageboard/pagecut": "^0.8.7",
     "cropperjs": "^1.5.1",
     "fast-safe-stringify": "^2.0.6",
     "infinite-scroll": "^3.0.5",
