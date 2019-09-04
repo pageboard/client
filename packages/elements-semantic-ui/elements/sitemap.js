@@ -18,11 +18,11 @@ exports.sitemap = {
 	scripts: [
 		'../ui/sitemap.js'
 	],
-	resources: [
-		'../ui/sitemap-helper.js'
-	],
+	resources: {
+		helper: '../ui/sitemap-helper.js'
+	},
 	install: function(scope) {
-		if (scope.$write) Pageboard.load.js(this.resources[0], scope);
+		if (scope.$write) Pageboard.load.js(this.resources.helper, scope);
 	}
 };
 

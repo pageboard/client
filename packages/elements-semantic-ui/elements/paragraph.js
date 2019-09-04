@@ -152,11 +152,11 @@ exports.heading = {
 	stylesheets: [
 		'../ui/heading.css'
 	],
-	resources: [
-		'../ui/heading-helper.js'
-	],
+	resources: {
+		helper: '../ui/heading-helper.js'
+	},
 	install: function(scope) {
-		if (scope.$write) Pageboard.load.js(this.resources[0], scope);
+		if (scope.$write) Pageboard.load.js(this.resources.helper, scope);
 	}
 };
 

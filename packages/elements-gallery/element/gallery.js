@@ -15,9 +15,9 @@ exports.gallery = {
 	contents: "portfolio carousel",
 	group: 'block',
 	html: `<element-gallery id="[name|id]"></element-gallery>`,
-	resources: [
-		'../ui/gallery-helper.js'
-	],
+	resources: {
+		helper: '../ui/gallery-helper.js'
+	},
 	stylesheets: [
 		'../ui/gallery.css'
 	],
@@ -25,9 +25,7 @@ exports.gallery = {
 		'../ui/gallery.js'
 	],
 	install: function(scope) {
-		if (scope.$write) this.resources.forEach(function(url) {
-			Pageboard.load.js(url, scope);
-		});
+		if (scope.$write) Pageboard.load.js(this.resources.helper, scope);
 	}
 };
 

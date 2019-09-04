@@ -35,10 +35,11 @@ Pageboard.Controls.Mode = class Mode {
 					elt = elts[name] = elt.clone();
 					if (!elt.dom) return;
 					if (elt.group == "page") {
-						elt.stylesheets = elt.stylesheets.slice(0, 1);
+						elt.stylesheets = [document.body.dataset.reset];
 						elt.dom.querySelector('body').dataset.mode = "code";
 						return;
 					}
+					if (!elt.title) return;
 					delete elt.fuse;
 					delete elt.render;
 					delete elt.$installed;

@@ -412,10 +412,10 @@ exports.input_select_option = {
 	contents: 'inline*',
 	html: `<element-select-option class="item" data-value="[value|or:]"
 	></element-select-option>`,
-	resources: [
-		'../ui/select-helper.js'
-	],
+	resources: {
+		helper: '../ui/select-helper.js'
+	},
 	install: function(scope) {
-		if (scope.$write) Pageboard.load.js(this.resources[0], scope);
+		if (scope.$write) Pageboard.load.js(this.resources.helper, scope);
 	}
 };

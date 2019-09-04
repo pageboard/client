@@ -12,8 +12,9 @@ exports.write = {
 		<script defer src="[$meta.services]"></script>
 	</head>
 	<body
-		data-devtools="[$element.resources.0]"
-		data-placeholder="[$element.resources.1]"
+		data-devtools="[$element.resources.devtools]"
+		data-placeholder="[$element.resources.empty]"
+		data-reset="[$element.resources.reset]"
 		data-mode="read"
 	>
 	<div id="pageboard-read">
@@ -152,13 +153,14 @@ exports.write = {
 		"../lib/cropper.js",
 		"../lib/speakingurl.js"
 	]),
-	resources: [
-		"../lib/prosemirror-dev-tools.min.js",
-		"../ui/empty.png",
-		"../ui/develop.js",
-		"../lib/pagecut/editor.js",
-		"../ui/read.js",
-		"../ui/read.css"
-	]
+	resources: {
+		devTools: "../lib/prosemirror-dev-tools.min.js",
+		empty: "../ui/empty.png",
+		develop: "../ui/develop.js",
+		editor: "../lib/pagecut/editor.js",
+		readScript: "../ui/read.js",
+		readStyle: "../ui/read.css",
+		reset: "../lib/components/reset.css",
+	}
 };
 

@@ -104,13 +104,13 @@ exports.mail_image = {
 	},
 	html: '<img src="[src]" alt="" />',
 	fuse: function(node, d, scope) {
-		var loc = this.buildLoc(d.url || this.resources[0], d, (scope.$hrefs || {})[d.url]);
+		var loc = this.buildLoc(d.url || this.resources.empty, d, (scope.$hrefs || {})[d.url]);
 		node.fuse(Object.assign({
 			src: Page.format(loc)
 		}, d), scope);
 	},
-	resources: [
-		'../ui/empty.png'
-	]
+	resources: {
+		empty: '../ui/empty.png'
+	}
 };
 

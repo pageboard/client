@@ -167,7 +167,7 @@ exports.image = {
 		var obj = {
 			alt: d.alt
 		};
-		var loc = this.buildLoc(d.url || this.resources[0], d);
+		var loc = this.buildLoc(d.url || this.resources.empty, d);
 		var display = d.display || {};
 		obj.fit = display.fit || "none";
 		obj.position = `${display.horizontal} ${display.vertical}`;
@@ -193,9 +193,9 @@ exports.image = {
 		obj.url = Page.format(loc);
 		node.fuse(obj, scope);
 	},
-	resources: [
-		'../ui/empty.png'
-	],
+	resources: {
+		empty: '../ui/empty.png'
+	},
 	stylesheets: [
 		'../ui/image.css'
 	],
@@ -342,14 +342,14 @@ exports.inlineImage = {
 		[display.floated|pre:floated ]
 		[display.align|post: aligned]" />`,
 	fuse: function(node, d, scope) {
-		var loc = scope.$elements.image.buildLoc(d.url || this.resources[0], d);
+		var loc = scope.$elements.image.buildLoc(d.url || this.resources.empty, d);
 		node.fuse(Object.assign({
 			src: Page.format(loc)
 		}, d), scope);
 	},
-	resources: [
-		'../ui/empty.png'
-	],
+	resources: {
+		empty: '../ui/empty.png'
+	},
 	stylesheets: [
 		'../lib/components/image.css'
 	],
