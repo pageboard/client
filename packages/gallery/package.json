@@ -1,7 +1,7 @@
 {
-  "name": "@pageboard/elements-calendar",
-  "version": "0.7.2",
-  "description": "Manage calendar/events in pageboard",
+  "name": "@pageboard/gallery",
+  "version": "0.7.0",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -18,20 +18,21 @@
   },
   "homepage": "https://github.com/pageboard/client#readme",
   "devDependencies": {
-    "@pageboard/datetime-entry": "^3.3.1",
+    "@pageboard/flickity": "^2.1.1-3",
+    "isotope-layout": "^3.0.6",
     "postinstall": "^0.5.1"
   },
   "prepare": {
-    "@pageboard/datetime-entry/dist/datetime.js": "copy lib/"
+    "@pageboard/flickity/dist/flickity.pkgd.js": "copy lib/flickity.js",
+    "@pageboard/flickity/dist/flickity.css": "copy lib/flickity.css",
+    "isotope-layout/dist/isotope.pkgd.js": "copy lib/isotope.js"
   },
   "pageboard": {
     "directories": [
-      "elements",
+      "element",
       "lib",
       "ui"
     ],
-    "elements": [
-      "elements/"
-    ]
+    "elements": "element/"
   }
 }

@@ -17,15 +17,15 @@
   },
   "homepage": "https://github.com/pageboard/client#readme",
   "dependencies": {
-    "@pageboard/elements": "0.7.x",
-    "@pageboard/elements-calendar": "0.7.x",
-    "@pageboard/elements-gallery": "0.7.x",
-    "@pageboard/elements-google": "0.7.x",
-    "@pageboard/elements-mail": "0.7.x",
-    "@pageboard/elements-pdf": "0.7.x",
-    "@pageboard/elements-feed": "0.7.x",
-    "@pageboard/elements-semantic-ui": "0.7.x",
-    "@pageboard/elements-write": "0.7.x"
+    "@pageboard/site": "0.7.x",
+    "@pageboard/calendar": "0.7.x",
+    "@pageboard/gallery": "0.7.x",
+    "@pageboard/google": "0.7.x",
+    "@pageboard/email": "0.7.x",
+    "@pageboard/print": "0.7.x",
+    "@pageboard/feed": "0.7.x",
+    "@pageboard/html": "0.7.x",
+    "@pageboard/write": "0.7.x"
   },
   "pageboard": true
 }

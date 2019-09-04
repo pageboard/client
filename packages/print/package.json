@@ -1,6 +1,6 @@
 {
-  "name": "@pageboard/elements-pdf",
-  "version": "0.7.2",
+  "name": "@pageboard/print",
+  "version": "0.7.0",
   "description": "",
   "main": "index.js",
   "scripts": {

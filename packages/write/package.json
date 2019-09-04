@@ -1,6 +1,6 @@
 {
-  "name": "@pageboard/elements-write",
-  "version": "0.7.5",
+  "name": "@pageboard/write",
+  "version": "0.7.0",
   "description": "",
   "main": "index.js",
   "scripts": {
