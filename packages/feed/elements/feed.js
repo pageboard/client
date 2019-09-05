@@ -53,7 +53,9 @@ exports.feed = {
 			</header>
 			<section block-content="section"><p>Article</p></section>
 		</div>
-		<div class="row" block-content="extra"><p>Extra content</p></div>
+		<div class="row">
+			<div class="column" block-content="extra"><p>Extra content</p></div>
+		</div>
 	</article>`
 };
 
