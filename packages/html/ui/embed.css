@@ -1,3 +1,7 @@
 element-embed {
 	display:block;
 }
+
+[contenteditable] element-embed iframe {
+	pointer-events:none;
+}
