@@ -7,6 +7,7 @@ Page.serialize = function(state) {
 		return (new URL(url, base)).href;
 	}
 	var categories = [];
+	var firstPubDate;
 	var feeds = Array.from(doc.querySelectorAll('[block-type="feed"]')).map((node) => {
 		var preview = node.querySelector('[block-content="preview"] [block-type="image"]');
 		var topics = (node.getAttribute('feed-topics') || '').split(' - ');
@@ -18,11 +19,13 @@ Page.serialize = function(state) {
 		if (!title) return;
 		var desc = node.querySelector('[block-content="description"]');
 		if (!desc) return;
+		var pubDate = node.getAttribute('feed-publication');
+		if (!firstPubDate) firstPubDate = pubDate;
 		return {
 			title: title.innerText,
 			description: desc.innerText,
 			link: absolute(node.getAttribute('feed-url')),
-			date: node.getAttribute('feed-publication'),
+			date: pubDate,
 			content: node.querySelector('[block-content="section"]').innerHTML,
 			image: preview ? absolute(preview.getAttribute('url')) : null
 		};
@@ -32,12 +35,13 @@ Page.serialize = function(state) {
 		title: state.scope.$page.data.title,
 		description: state.scope.$site.title,
 		link: url.replace('.rss', ''),
-		generator: 'pageboard',
+		updated: firstPubDate,
+		generator: 'Pageboard',
 		feedLinks: {
 			atom: url
-		},
-		categories: categories
+		}
 	});
+	categories.forEach((cat) => feed.addCategory(cat));
 	feeds.forEach((item) => {
 		if (!item || !item.title) return;
 		item.date = new Date(item.date);
@@ -45,7 +49,7 @@ Page.serialize = function(state) {
 	});
 	var xml = feed.rss2();
 	// https://github.com/jpmonette/feed/issues/87
-	xml = xml.replace(/<enclosure /g, '/<enclosure type="image/*" ');
+	xml = xml.replace(/<enclosure /g, '<enclosure type="image/*" ');
 	// https://github.com/jpmonette/feed/pull/97
 	xml = xml.replace('<docs>http://blogs.law.harvard.edu/tech/rss</docs>', '<docs>https://validator.w3.org/feed/docs/rss2.html</docs>');
 
