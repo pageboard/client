@@ -1,4 +1,4 @@
-Page.serialize = function() {
+Page.serialize = function(state) {
 	var doc = document;
 	var dloc = doc.location;
 	var base = dloc.protocol + '//' + dloc.host;
@@ -29,7 +29,8 @@ Page.serialize = function() {
 	});
 	var url = dloc.toString();
 	var feed = new window.Feed.Feed({
-		title: doc.title,
+		title: state.scope.$page.data.title,
+		description: state.scope.$site.title,
 		link: url.replace('.rss', ''),
 		generator: 'pageboard',
 		feedLinks: {
@@ -42,6 +43,11 @@ Page.serialize = function() {
 		item.date = new Date(item.date);
 		feed.addItem(item);
 	});
+	var xml = feed.rss2();
+	// https://github.com/jpmonette/feed/issues/87
+	xml = xml.replace(/<enclosure /g, '/<enclosure type="image/*" ');
+	// https://github.com/jpmonette/feed/pull/97
+	xml = xml.replace('<docs>http://blogs.law.harvard.edu/tech/rss</docs>', '<docs>https://validator.w3.org/feed/docs/rss2.html</docs>');
 
-	return feed.rss2();
+	return xml;
 };
