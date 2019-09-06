@@ -35,7 +35,7 @@ Page.serialize = function(state) {
 		title: state.scope.$page.data.title,
 		description: state.scope.$site.title,
 		link: url.replace('.rss', ''),
-		updated: firstPubDate,
+		updated: firstPubDate ? new Date(firstPubDate) : new Date(),
 		generator: 'Pageboard',
 		feedLinks: {
 			atom: url
