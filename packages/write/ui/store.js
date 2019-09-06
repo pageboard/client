@@ -230,11 +230,11 @@ Store.prototype.save = function(e) {
 		.then(function(result) {
 			if (!result || !result.update) return;
 			result.update.forEach(function(obj, i) {
- 				var block = me.editor.blocks.get(obj.id);
- 				delete me.fakeInitials[obj.id];
- 				var val = obj.updated_at;
- 				if (block) block.updated_at = val;
- 				else Pageboard.notify("Cannot update editor with modified block");
+				var block = me.editor.blocks.get(obj.id);
+				delete me.fakeInitials[obj.id];
+				var val = obj.updated_at;
+				if (block) block.updated_at = val;
+				else Pageboard.notify("Cannot update editor with modified block");
 				
 				if (me.unsaved.id == obj.id) {
 					me.unsaved.updated_at = val;
