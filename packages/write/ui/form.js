@@ -168,7 +168,7 @@ FormBlock.prototype.update = function(parents, block, mode) {
 	if (block) {
 		if (this.block) {
 			if (!sameMode) {
-				sameData = Pageboard.JSON.stableStringify(this.block[mode]) == Pageboard.JSON.stableStringify(block[mode]);
+				sameData = Pageboard.utils.JSON.stableStringify(this.block[mode]) == Pageboard.utils.JSON.stableStringify(block[mode]);
 			}
 		}
 		this.block = Object.assign({}, block);
@@ -357,7 +357,7 @@ FormBlock.prototype.handleEvent = function(e) {
 	var formData = pruneObj(this.form.get()) || {};
 	var mode = this.mode;
 
-	var same = Pageboard.JSON.stableStringify(this.block[mode]) == Pageboard.JSON.stableStringify(formData);
+	var same = Pageboard.utils.stableStringify(this.block[mode]) == Pageboard.utils.stableStringify(formData);
 	if (same) return;
 
 	var id = this.block.id;

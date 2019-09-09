@@ -522,7 +522,7 @@ Href.prototype.renderItem = function(obj) {
 
 function tplSize(size) {
 	if (!size) return '';
-	return ' (' + Pageboard.PrettyBytes(size) + ')';
+	return ' (' + Pageboard.utils.PrettyBytes(size) + ')';
 }
 
 function tplDims(obj) {
