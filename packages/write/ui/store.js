@@ -214,6 +214,7 @@ Store.prototype.quirkStart = function(invalidatePage) {
 };
 
 Store.prototype.save = function(e) {
+	if (this.saving) return;
 	this.flush();
 	if (this.unsaved == null) return;
 	var changes = this.changes();
@@ -222,43 +223,46 @@ Store.prototype.save = function(e) {
 		console.log(changes);
 		return;
 	}
-	// this will queue requests and fail them all if the first one fails
-	if (!this.saving) this.saving = Promise.resolve();
-	var me = this;
-	this.saving.then(function() {
-		var p = Pageboard.fetch('put', '/.api/page', changes)
-		.then(function(result) {
-			if (!result || !result.update) return;
-			result.update.forEach(function(obj, i) {
-				var block = me.editor.blocks.get(obj.id);
-				delete me.fakeInitials[obj.id];
-				var val = obj.updated_at;
-				if (block) block.updated_at = val;
-				else Pageboard.notify("Cannot update editor with modified block");
-				
-				if (me.unsaved.id == obj.id) {
-					me.unsaved.updated_at = val;
+	this.saving = true;
+
+	var p = Pageboard.fetch('put', '/.api/page', changes)
+	.then((result) => {
+		if (!result) return;
+		if (result.status != 200) {
+			throw result;
+		}
+		if (!result.update) return;
+		result.update.forEach(function(obj, i) {
+			var block = this.editor.blocks.get(obj.id);
+			delete this.fakeInitials[obj.id];
+			var val = obj.updated_at;
+			if (block) block.updated_at = val;
+			else Pageboard.notify("Cannot update editor with modified block");
+
+			if (this.unsaved.id == obj.id) {
+				this.unsaved.updated_at = val;
+			} else {
+				var child = findInTreeBlock(this.unsaved, function(block) {
+					return block.id == obj.id;
+				});
+				if (child) {
+					child.updated_at = val;
 				} else {
-					var child = findInTreeBlock(me.unsaved, function(block) {
-						return block.id == obj.id;
-					});
-					if (child) {
-						child.updated_at = val;
-					} else {
-						Pageboard.notify("Cannot update store with modified block");
-					}
+					Pageboard.notify("Cannot update store with modified block");
 				}
-			});
+			}
 		});
-		return Pageboard.uiLoad(me.uiSave, p);
-	}).then(function() {
-		var unsaved = me.unsaved;
-		me.reset();
-		me.initial = unsaved;
-		me.uiUpdate();
-		me.pageUpdate();
-		me.editor.update();
+	}).then(() => {
+		var unsaved = this.unsaved;
+		this.reset();
+		this.initial = unsaved;
+		this.uiUpdate();
+		this.pageUpdate();
+		this.editor.update();
+	}).finally(() => {
+		this.saving = false;
 	});
+	return Pageboard.uiLoad(this.uiSave, p);
 };
 
 Store.prototype.reset = function(to) {
