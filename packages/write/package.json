@@ -29,7 +29,6 @@
     "fast-safe-stringify": "^2.0.6",
     "infinite-scroll": "^3.0.5",
     "jquery": "^3.3.1",
-    "morphdom": "^2.3.3",
     "perfect-scrollbar": "^1.4.0",
     "postinstall-browserify": "^0.5.0",
     "pretty-bytes": "^5.1.0",
