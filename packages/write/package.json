@@ -44,7 +44,6 @@
   "prepare": {
     "perfect-scrollbar/css/perfect-scrollbar.css": "copy lib/",
     "perfect-scrollbar/dist/perfect-scrollbar.js": "copy lib/",
-    "pretty-bytes/index.js": "browserify --standalone=Pageboard.PrettyBytes lib/pretty-bytes.js",
     "cropperjs/dist/cropper.css": "copy lib/",
     "cropperjs/dist/cropper.js": "copy lib/",
     "jquery/dist/jquery.slim.min.js": "copy lib/jquery.min.js",
@@ -53,7 +52,7 @@
     "speakingurl/lib/speakingurl.js": "copy lib/",
     "prosemirror-dev-tools/dist/umd/prosemirror-dev-tools.min.js": "copy lib/",
     "@pageboard/pagecut/dist": "copy lib/pagecut",
-    "fast-safe-stringify/index.js": "browserify --standalone=Pageboard.JSON lib/json-stringify.js"
+    "./src/pageboard.js": "browserify --standalone=Pageboard.utils lib/"
   },
   "pageboard": {
     "priority": -1,
