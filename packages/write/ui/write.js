@@ -20,16 +20,21 @@ Object.assign(window.Pageboard, {
 		node.dispatchEvent(e);
 	},
 	uiLoad: function uiLoad(what, p) {
-		var classList = what.classList;
-		classList.add('loading');
+		var icon = what.querySelector('.icon');
+		var classes;
+		if (icon) {
+			classes = icon.className;
+			icon.className = "ui spinner icon loading";
+		} else {
+			what.classList.add('loading');
+		}
 		return p.catch(function(err) {
-			classList.remove('loading');
-			Pageboard.notify("Loading error", err);
+			Pageboard.notify("Request error", err);
 			// rethrow, we don't want to show any result
 			throw err;
-		}).then(function(res) {
-			classList.remove('loading');
-			return res;
+		}).finally(function() {
+			if (icon) icon.className = classes;
+			else what.classList.remove('loading');
 		});
 	},
 	slug: function(str) {
