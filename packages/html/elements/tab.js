@@ -3,6 +3,14 @@ exports.tabs = {
 	icon: '<b class="icon">Tabs</b>',
 	menu: 'widget',
 	group: "block",
+	properties: {
+		name: {
+			title: 'Name',
+			type: 'string',
+			format: 'id',
+			nullable: true
+		}
+	},
 	contents: [{
 		id: 'items',
 		title: 'Menu',
@@ -12,7 +20,7 @@ exports.tabs = {
 		title: 'Tabs',
 		nodes: "tab+"
 	}],
-	html: `<element-tabs>
+	html: `<element-tabs id="[name|id]">
 		<div class="ui top attached tabular menu" block-content="items"></div>
 		<div block-content="tabs"></div>
 	</element-tabs>`,

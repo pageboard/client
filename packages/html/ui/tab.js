@@ -12,20 +12,19 @@ class HTMLElementTabs extends HTMLCustomElement {
 	}
 	patch(state) {
 		var pos = this.options.index;
+		var id = this.id;
 		Array.prototype.forEach.call(this.items.children, function(item, i) {
+			item.setAttribute('href', Page.format({
+				pathname: state.pathname,
+				query: Object.assign({}, state.query, {
+					[`${id}.index`]: i
+				})
+			}));
 			item.classList.toggle('active', i == pos);
 		});
 		Array.prototype.forEach.call(this.tabs.children, function(item, i) {
 			item.classList.toggle('active', i == pos);
 		});
-	}
-	handleClick(e, state) {
-		var item = e.target.closest('[block-type="tab_item"]');
-		if (!item) return;
-		var menu = item.parentNode;
-		if (!menu || menu.parentNode != this) return;
-		this.dataset.index = menu.children.indexOf(item);
-		this.patch(state);
 	}
 }
 

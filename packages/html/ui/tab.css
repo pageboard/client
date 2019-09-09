@@ -8,10 +8,14 @@ element-tabs {
 	margin:0;
 }
 element-tabs > .ui.tabular.menu + div[block-content="tabs"] > .segment {
-  border-top: none;
-  margin-left: 0px;
-  margin-top: 0px;
-  margin-right: 0px;
-  margin-bottom:1rem;
-  width: 100%;
+	border-top: none;
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom:1rem;
+	width: 100%;
+}
+
+element-tabs[block-focused] .active[block-type="tab"] > pagecut-placeholder {
+	display:block !important;
 }

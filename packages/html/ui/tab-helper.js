@@ -4,7 +4,9 @@ Page.setup(function(state) {
 			if (!this.observer) this.observer = new MutationObserver((records) => {
 				records.forEach((record) => this.mutate(record, state));
 			});
-			this.observer.observe(this.items, {childList: true});
+			this.observer.observe(this.items, {
+				childList: true
+			});
 		}
 		close() {
 			this.observer.disconnect();
@@ -24,5 +26,14 @@ Page.setup(function(state) {
 				if (child) child.remove();
 			});
 		}
+		handleClick(e, state) {
+			var item = e.target.closest('[block-type="tab_item"]');
+			if (!item) return;
+			var menu = item.parentNode;
+			if (!menu || menu.parentNode != this) return;
+			this.dataset.index = menu.children.indexOf(item);
+			this.patch(state);
+		}
 	});
 });
+
