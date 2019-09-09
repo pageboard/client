@@ -13,7 +13,7 @@ Pageboard.notify = function(title, obj) {
 	}
 	if (obj == null) {
 		obj = {};
-	} else if (obj.stack && obj.message) {
+	} else if (obj.message) {
 		console.error(obj);
 		if (obj.body) {
 			title = obj.message;
