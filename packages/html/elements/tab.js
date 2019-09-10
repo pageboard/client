@@ -55,6 +55,7 @@ exports.tab = {
 	inplace: true,
 	context: 'tabs_container_tabs/',
 	contents: "block+",
+	tag: 'div.tab.segment', // ignore .bottom.attached
 	html: '<div class="ui bottom attached tab segment"></div>'
 };
 
