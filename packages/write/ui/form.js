@@ -170,7 +170,7 @@ FormBlock.prototype.update = function(parents, block, mode) {
 	if (block) {
 		if (this.block) {
 			if (!sameMode) {
-				sameData = Pageboard.utils.JSON.stableStringify(this.block[mode]) == Pageboard.utils.JSON.stableStringify(block[mode]);
+				sameData = Pageboard.utils.stableStringify(this.block[mode]) == Pageboard.utils.stableStringify(block[mode]);
 			}
 		}
 		this.block = Object.assign({}, block);
