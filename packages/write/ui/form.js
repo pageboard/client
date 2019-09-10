@@ -140,6 +140,7 @@ function FormBlock(editor, node, type) {
 		el.properties = JSON.parse(JSON.stringify(el.properties));
 	}
 	this.node.addEventListener('change', this);
+	this.node.addEventListener('input', this);
 
 	this.helpers = {};
 	this.filters = {};
@@ -158,6 +159,7 @@ FormBlock.prototype.destroy = function() {
 	this.form.destroy();
 	this.node.remove();
 	this.node.removeEventListener('change', this);
+	this.node.removeEventListener('input', this);
 };
 
 FormBlock.prototype.update = function(parents, block, mode) {
@@ -209,7 +211,7 @@ FormBlock.prototype.update = function(parents, block, mode) {
 			setTimeout(function() {
 				// give an instant for input mutations to propagate
 				var found = form.node.querySelector(`[name="${selection.name}"]`);
-				if (found) {
+				if (found && found != document.activeElement) {
 					if (found.setSelectionRange && selection.start != null && selection.end != null) {
 						found.setSelectionRange(selection.start, selection.end, selection.dir);
 					}
@@ -371,6 +373,7 @@ FormBlock.prototype.handleEvent = function(e) {
 		var stored = editor.blocks.get(block.id);
 		if (stored) Object.assign(stored, block);
 		else editor.blocks.set(block);
+		found = true;
 	}
 
 	var tr = editor.state.tr;

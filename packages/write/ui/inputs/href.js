@@ -169,7 +169,7 @@ Href.prototype.renderField = function() {
 	var content;
 	switch (this.action) {
 	case "manual":
-		content = document.dom(`<input class="search" type="text" placeholder="Type url..." />
+		content = document.dom(`<input name="$search" class="search" type="text" placeholder="Type url..." />
 		<div class="ui blue icon buttons">
 			<div class="ui button" data-action="search" title="Stop">
 				<i class="close icon"></i>
@@ -177,7 +177,7 @@ Href.prototype.renderField = function() {
 		</div>`);
 		break;
 	case "paste":
-		content = document.dom(`<input class="search" type="text" placeholder="Paste url..." />
+		content = document.dom(`<input name="$search" class="search" type="text" placeholder="Paste url..." />
 		<div class="ui blue icon buttons">
 			<div class="ui button" data-action="search" title="Search">
 				<i class="search icon"></i>
@@ -191,7 +191,7 @@ Href.prototype.renderField = function() {
 		</div>`);
 		break;
 	case "search":
-		content = document.dom(`<input class="search" type="text" placeholder="Search..." />
+		content = document.dom(`<input name="$search" class="search" type="text" placeholder="Search..." />
 		<div class="ui blue icon buttons">
 			<div class="ui active button" data-action="search" title="Search">
 				<i class="search icon"></i>
@@ -205,7 +205,7 @@ Href.prototype.renderField = function() {
 		</div>`);
 		break;
 	default:
-		content = document.dom(`<input class="search" type="text" placeholder="Search..." value="${this.input.value}" />
+		content = document.dom(`<input name="$search" class="search" type="text" placeholder="Search..." value="${this.input.value}" />
 		<div class="ui blue icon buttons">
 			<div class="ui button" data-action="search" title="Search">
 				<i class="search icon"></i>
