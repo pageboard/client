@@ -14,11 +14,13 @@ class HTMLElementTabs extends HTMLCustomElement {
 		var pos = this.options.index;
 		var id = this.id;
 		Array.prototype.forEach.call(this.items.children, function(item, i) {
+			var query = Object.assign({}, state.query);
+			var key = `${id}.index`;
+			if (i == 0) delete query[key];
+			else query[key] = i;
 			item.setAttribute('href', Page.format({
 				pathname: state.pathname,
-				query: Object.assign({}, state.query, {
-					[`${id}.index`]: i
-				})
+				query: query
 			}));
 			item.classList.toggle('active', i == pos);
 		});
