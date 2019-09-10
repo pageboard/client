@@ -275,12 +275,12 @@ function schemaToMeta(schema) {
 
 function propToMeta(schema) {
 	var copy = {};
+	var hint = '';
 	if (schema.properties || schema.type == "object") {
 		copy.type = 'object';
 		if (schema.properties) copy.properties = schema.properties;
 		else copy.description = 'object';
 	} else if (schema.type || schema.anyOf || schema.oneOf) {
-		var hint = '';
 		if (schema.type) {
 			hint = schema.type;
 		} else if (schema.anyOf) {
@@ -296,11 +296,12 @@ function propToMeta(schema) {
 		copy.format = 'singleline';
 		if (schema.pattern) hint = schema.pattern;
 		else if (schema.format) hint = schema.format;
-		if (schema.default) hint += ` (default: ${schema.default})`;
-		copy.default = hint;
 	} else {
 		return schema;
 	}
+	
+	if (schema.default !== undefined) hint += ` (default: ${schema.default})`;
+	copy.placeholder = hint;
 	copy.title = schema.title;
 	return copy;
 }

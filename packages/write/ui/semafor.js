@@ -232,7 +232,7 @@ Semafor.flatten = function(tree, obj, schema) {
 	var props = schema && schema.properties || {};
 	Object.entries(props).forEach(function([key, field]) {
 		var val = tree[key];
-		if (val == null && field.default) val = field.default;
+		//if (val == null && field.default) val = field.default;
 		if (val != null && typeof val == "object") {
 			if (field && !field.properties && (field.oneOf || field.anyOf)) {
 				var listNoNull = (field.oneOf || field.anyOf).filter(function(item) {
@@ -442,14 +442,14 @@ types.string = function(key, schema, node, inst) {
 	if (multiline && !short) {
 		node.appendChild(node.dom(`<div class="field">
 			<label>${schema.title || key}</label>
-			<textarea name="${key}"	title="${schema.description || ''}" placeholder="${schema.default || ''}"></textarea>
+			<textarea name="${key}"	title="${schema.description || ''}" placeholder="${schema.placeholder || schema.default || ''}"></textarea>
 		</div>`));
 	} else if (short) {
 		node.appendChild(node.dom(`<div class="inline fields">
 			<label>${schema.title || key}</label>
 			<div class="field">
 				<input type="text" name="${key}"
-					placeholder="${schema.default || ''}"
+					placeholder="${schema.placeholder || schema.default || ''}"
 					title="${schema.description || ''}"
 				/>
 			</div>
@@ -458,7 +458,7 @@ types.string = function(key, schema, node, inst) {
 		var input = node.appendChild(node.dom(`<div class="field">
 			<label>${schema.title || key}</label>
 			<input type="text" name="${key}"
-				placeholder="${schema.default || ''}"
+				placeholder="${schema.placeholder || schema.default || ''}"
 				title="${schema.description || ''}"
 			/>
 		</div>`)).lastElementChild;
