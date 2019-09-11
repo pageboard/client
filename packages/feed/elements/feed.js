@@ -56,7 +56,8 @@ exports.feed = {
 		<div class="row">
 			<div class="column" block-content="extra"><p>Extra content</p></div>
 		</div>
-	</article>`
+	</article>`,
+	scripts: ['../ui/rss.js']
 };
 
 exports['.rss'] = {
