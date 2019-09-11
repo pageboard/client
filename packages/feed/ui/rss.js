@@ -1,7 +1,7 @@
 Page.patch(function(state) {
 	state.finish(function(state) {
 		var feeds = document.body.querySelectorAll('[block-type="feed"]');
-		if (!feeds.length || state.pathname.endsWith('.rss')) return;
+		if (feeds.length <= 1 || state.pathname.endsWith('.rss')) return;
 		var node = document.head.querySelector('link,script');
 		var rss = Page.format({
 			pathname: state.pathname + '.rss',
