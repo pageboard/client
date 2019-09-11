@@ -21,6 +21,7 @@ exports.debounce = require('debounce');
 exports.fetch = require('./fetch');
 exports.load = require('./load');
 exports.render = require('./render');
+exports.equivs = require('./equivs');
 
 function initState(res, state) {
 	var scope = state.scope;
@@ -104,13 +105,15 @@ Page.patch(function(state) {
 		var head = document.head;
 		if (extra.length > 0) {
 			console.warn("Unknown query parameters detected, rewriting location", extra);
-			head.appendChild(head.dom(`
-				<meta http-equiv="Status" content="301 Bad query parameters">
-				<meta http-equiv="Location" content="${Page.format({query: query})}">
-			`));
+			exports.equivs({
+				Status: '302 Bad Parameters',
+				Location: Page.format({query: query})
+			});
 			state.replace({query: query});
 		} else if (missing.length > 0) {
-			head.appendChild(head.dom(`<meta http-equiv="Status" content="400 Missing query parameters">`));
+			exports.equivs({
+				Status: '400 Missing Parameters'
+			});
 		}
 	});
 });
