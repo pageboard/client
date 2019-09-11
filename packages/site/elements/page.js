@@ -173,7 +173,10 @@ exports.redirection = {
 		<meta http-equiv="Status" content="301 Moved Permanently">
 		<meta http-equiv="Location" content="[redirect]">
 	</head>
-	<body>Redirecting to <a href="[redirect]">[redirect]</a></body>
+	<body>
+		Redirecting to <br>
+		<a href="[redirect]">[redirect]</a>
+	</body>
 	</html>`
 };
 
