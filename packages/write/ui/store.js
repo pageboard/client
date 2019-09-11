@@ -232,7 +232,7 @@ Store.prototype.save = function(e) {
 			throw result;
 		}
 		if (!result.update) return;
-		result.update.forEach(function(obj, i) {
+		result.update.forEach((obj, i) => {
 			var block = this.editor.blocks.get(obj.id);
 			delete this.fakeInitials[obj.id];
 			var val = obj.updated_at;
