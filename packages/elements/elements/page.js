@@ -108,6 +108,8 @@ exports.page = {
 				if (!list) return;
 				if (typeof list == "string") list = [list];
 				list.forEach(function(item) {
+					// what.scope from matchdom is not like scope from pageboard
+					item = item.fuse({}, what.scope.data);
 					map[item] = true;
 				});
 			});
