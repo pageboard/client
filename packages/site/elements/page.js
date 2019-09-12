@@ -75,7 +75,9 @@ exports.page = {
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="robots" content="[noindex|?|ornull|magnet:*]">
 		<meta name="description" content="[description|magnet:*]">
+		<base href="[$loc.protocol]//[$location.host]/">
 		<link rel="icon" href="[$site.favicon|magnet:*|url]?format=ico">
+		<link rel="canonical" href="[$loc.pathname][$loc.search][noindex|!|bmagnet:*]">
 		<link rel="stylesheet" href="[$element.stylesheets|repeat]">
 		<script crossorigin="anonymous" defer src="https://cdn.polyfill.io/v3/polyfill.min.js?flags=gated&unknown=polyfill&features=[$elements|polyfills|url|magnet:*]"></script>
 		<script defer src="[$element.scripts|repeat]"></script>
