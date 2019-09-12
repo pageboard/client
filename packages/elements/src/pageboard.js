@@ -25,6 +25,7 @@ exports.render = require('./render');
 function initState(res, state) {
 	var scope = state.scope;
 	if (!scope.$doc) scope.$doc = document.cloneNode();
+	scope.$loc = document.location;
 	if (!res) return;
 	if (res.grants) state.data.$grants = res.grants;
 	if (res.meta && res.meta.group == "page") {
