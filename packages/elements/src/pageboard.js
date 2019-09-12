@@ -106,7 +106,7 @@ Page.patch(function(state) {
 		if (extra.length > 0) {
 			console.warn("Unknown query parameters detected, rewriting location", extra);
 			head.appendChild(head.dom(`
-				<meta http-equiv="Status" content="301 Bad query parameters">
+				<meta http-equiv="Status" content="302 Bad query parameters">
 				<meta http-equiv="Location" content="${Page.format({query: query})}">
 			`));
 			state.replace({query: query});
