@@ -42,7 +42,7 @@ exports.write = {
 					<i class="cancel icon"></i>
 					Discard
 				</a>
-				<a class="vertically fitted item" href="/.api/logout" target="_self" title="Sign Out">
+				<a id="auth" class="vertically fitted item" title="Sign Out" data-command="logout">
 					<i class="sign out large icon"></i>
 				</a>
 			</div>
@@ -141,6 +141,7 @@ exports.write = {
 		"../ui/breadcrumb.js",
 		"../ui/store.js",
 		"../ui/share.js",
+		"../ui/auth.js",
 		"../ui/mode.js",
 		"../lib/perfect-scrollbar.js",
 		"../lib/infinite-scroll.js",
