@@ -25,7 +25,7 @@
     "domify": "^1.4.0",
     "matchdom": "^5.3.4",
     "postinstall-browserify": "^0.5.0",
-    "window-page": "^7.5.3"
+    "window-page": "^8.0.0"
   },
   "prepare": {
     "document-register-element/build/document-register-element.max.js": "copy lib/custom-elements.js",
