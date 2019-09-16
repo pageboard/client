@@ -53,7 +53,6 @@ input-map {
 .field.href .items > .item > .content {
 	position:relative; /* for positioning the absolute icon on the right */
 	max-width:100%;
-	max-height:7em;
 	border-top:1px solid #999;
 	overflow:hidden;
 }
@@ -131,7 +130,6 @@ input-map {
 	margin:0;
 	/* box-shadow:2px 2px 1px #CCC; */
 	/* background: white; */
-	margin-bottom: 0.5em;
 }
 
 .field.href .items:empty {
@@ -166,4 +164,12 @@ input-map {
 }
 .href > .form > form.href > :not(.href) {
 	display:none;
+}
+
+
+.field.href > .items.icon .content img {
+	height: auto;
+	width: auto;
+	max-height: calc(100% - 1.8em);
+	max-width: 100%;
 }
