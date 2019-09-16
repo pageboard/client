@@ -292,6 +292,7 @@ Href.prototype.searchStart = function() {
 	this.infinite.on('load', function(response) {
 		response = JSON.parse(response);
 		var data = response.data;
+		if (data.length == 0) this.pageIndex--;
 		var node = me.container.ownerDocument.createElement('div');
 		me.cache(data);
 		me.renderList(data, node);
