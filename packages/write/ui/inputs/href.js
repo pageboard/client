@@ -270,12 +270,14 @@ Href.prototype.searchStart = function() {
 	var me = this;
 	var input = this.node.querySelector('input');
 	input.focus();
+	this.lastPageIndex = Infinity;
 	this.infinite = new window.InfiniteScroll(this.container, {
 		path: function() {
 			var filter = Object.assign({
 				text: me.node.querySelector('input').value
 			}, me.opts.filter);
 			filter.limit = 10;
+			if (this.lastPageIndex < this.pageIndex) return;
 			filter.offset = (this.pageIndex - 1) * filter.limit;
 			return Page.format({
 				pathname: '/.api/hrefs',
@@ -292,7 +294,7 @@ Href.prototype.searchStart = function() {
 	this.infinite.on('load', function(response) {
 		response = JSON.parse(response);
 		var data = response.data;
-		if (data.length == 0) this.pageIndex--;
+		if (data.length == 0) this.lastPageIndex = this.pageIndex;
 		var node = me.container.ownerDocument.createElement('div');
 		me.cache(data);
 		me.renderList(data, node);
