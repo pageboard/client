@@ -11,7 +11,7 @@ function Href(input, opts, props) {
 	this.set = this.set.bind(this);
 	this.opts = opts;
 	this.input = input;
-	input.type = "hidden";
+	input.hidden = true;
 }
 
 Href.prototype.realTrigger = function() {
@@ -205,7 +205,7 @@ Href.prototype.renderField = function() {
 		</div>`);
 		break;
 	default:
-		content = document.dom(`<input name="$search" class="search" type="text" placeholder="Search..." value="${this.input.value}" />
+		content = document.dom(`<input name="$search" class="search" type="text" placeholder="Search..." />
 		<div class="ui blue icon buttons">
 			<div class="ui button" data-action="search" title="Search">
 				<i class="search icon"></i>

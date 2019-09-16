@@ -88,6 +88,7 @@ Form.prototype.update = function(parents, sel) {
 			curForm = new FormBlock(editor, this.node, block.type);
 		} else {
 			curForm.node.parentNode.appendChild(curForm.node);
+			curForm.reset();
 		}
 		curForm.update(parents, block, this.mode);
 		canShowExpressions = canShowExpressions || curForm.el.properties;
@@ -404,6 +405,10 @@ FormBlock.prototype.handleEvent = function(e) {
 	} else {
 		editor.controls.store.update();
 	}
+};
+
+FormBlock.prototype.reset = function() {
+	this.form.clear();
 };
 
 function pruneObj(obj) {
