@@ -44,3 +44,36 @@ exports.paragraph = {
 	html: '<p class="[align|post: aligned]">Text</p>'
 };
 
+exports.header = {
+	title: "Header",
+	icon: '<b class="icon">Head</b>',
+	group: "section",
+	contents: {
+		id: "content",
+		nodes: "block+"
+	},
+	context: 'page/',
+	tag: 'header',
+	html: `<header block-content="content"></header>`
+};
+
+exports.main = {
+	title: "Main",
+	icon: '<b class="icon">Main</b>',
+	group: "section",
+	contents: "block+",
+	context: 'page/',
+	tag: "main",
+	html: '<main></main>'
+};
+
+exports.footer = {
+	title: "Footer",
+	icon: '<b class="icon">Foot</b>',
+	group: "section",
+	contents: "block+",
+	context: 'page/',
+	tag: "footer",
+	html: '<footer></footer>'
+};
+
