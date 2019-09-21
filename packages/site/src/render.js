@@ -96,9 +96,9 @@ function install(el, scope) {
 	if (!el.dom) return;
 	el.render = function(block, bscope) {
 		if (!block) block = {};
-		var rscope = Object.assign({}, scope, {
+		var rscope = Object.assign({}, scope, bscope, {
 			$element: el
-		}, bscope);
+		});
 		["id", "parent", "child", "parents", "children", "updated_at", "created_at", "lock"].forEach(function(name) {
 			var val = block[name];
 			if (val !== undefined) rscope['$'+name] = val;
