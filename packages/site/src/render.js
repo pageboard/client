@@ -61,7 +61,8 @@ module.exports = function(res, scope) {
 	}
 	return scope.$view.from(block, blocks, {
 		type: elem.name,
-		scope: scope
+		scope: scope,
+		strip: !scope.$write
 	});
 };
 
