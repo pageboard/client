@@ -22,7 +22,7 @@ Page.route(function(state) {
 	});
 });
 
-Page.serialize = function(state) {
+if (!Page.serialize) Page.serialize = function(state) {
 	Array.from(document.querySelectorAll('template')).forEach((node) => {
 		var dest = node.dom(`<script type="application/x-html-uriencoded"></script>`);
 		dest.textContent = encodeURIComponent(Array.from(node.content.childNodes).map(child => {
