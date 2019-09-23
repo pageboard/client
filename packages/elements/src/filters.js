@@ -107,8 +107,8 @@ exports.schema = function(val, what, spath) {
 exports.statusClass = function(val) {
 	val = parseInt(val);
 	if (val >= 200 && val < 300) return "success";
-	else if (val == 404) return "warning";
-	else if (val >= 400 || val === 0) return "error";
+	else if (val >= 400 && val < 500) return "warning";
+	else if (val || val === 0) return "error";
 };
 
 exports.autolink = function(val, what) {
