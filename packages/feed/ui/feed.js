@@ -57,5 +57,5 @@ Page.serialize = function(state) {
 		item.date = new Date(item.date);
 		feed.addItem(item);
 	});
-	return feed.rss2().toString();
+	return feed.rss2();
 };

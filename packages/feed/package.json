@@ -29,10 +29,10 @@
     ]
   },
   "devDependencies": {
-    "@pageboard/feed": "^4.1.0",
+    "feed": "^4.0.0",
     "postinstall-browserify": "^0.5.0"
   },
   "prepare": {
-    "@pageboard/feed/lib/feed.js": "browserify --standalone=Feed lib/"
+    "feed/lib/feed.js": "browserify --standalone=Feed lib/"
   }
 }
