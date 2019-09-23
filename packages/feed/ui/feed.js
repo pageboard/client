@@ -47,11 +47,5 @@ Page.serialize = function(state) {
 		item.date = new Date(item.date);
 		feed.addItem(item);
 	});
-	var xml = feed.rss2();
-	// https://github.com/jpmonette/feed/issues/87
-	xml = xml.replace(/<enclosure /g, '<enclosure type="image/*" ');
-	// https://github.com/jpmonette/feed/pull/97
-	xml = xml.replace('<docs>http://blogs.law.harvard.edu/tech/rss</docs>', '<docs>https://validator.w3.org/feed/docs/rss2.html</docs>');
-
-	return xml;
+	return feed.rss2().toString();
 };
