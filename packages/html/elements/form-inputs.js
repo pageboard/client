@@ -135,6 +135,10 @@ exports.input_text = {
 		id: 'label',
 		nodes: 'inline*'
 	},
+	patterns: {
+		tel: '^(\\(\\d+\\))? *\\d+([ .\\-]?\\d+)*$',
+		email: '^[a-zA-Z0-9.!#$%&\'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$'
+	},
 	html: `<div class="field [type|eq:hidden:hidden:]">
 		<label block-content="label">Label</label>
 		<textarea
@@ -148,6 +152,7 @@ exports.input_text = {
 			disabled="[disabled]"
 			placeholder="[placeholder]"
 			type="[type|eq:new-password:password]"
+			pattern="[$element.patterns.[type]|ornull]"
 			value="[value]"
 			autocomplete="[type|neq:new-password:|not]" />[type|neq:textarea|bmagnet:+*]
 	</div>`
