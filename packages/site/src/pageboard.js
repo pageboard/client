@@ -78,7 +78,7 @@ window.HTMLCustomElement = require('./HTMLCustomElement');
 Page.init(function(state) {
 	state.vars = {};
 	var dev = state.query.develop;
-	if (dev === null || dev === "write") state.vars.develop = true;
+	if (dev === "" || dev === "write") state.vars.develop = true;
 	var scope = state.scope;
 	if (!scope) scope = state.scope = {
 		$elements: exports.elements,
