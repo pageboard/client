@@ -21,3 +21,15 @@ Page.route(function(state) {
 		return doc;
 	});
 });
+
+Page.serialize = function(state) {
+	Array.from(document.querySelectorAll('template')).forEach((node) => {
+		var dest = node.dom(`<script type="application/x-html-uriencoded"></script>`);
+		dest.textContent = encodeURIComponent(Array.from(node.content.childNodes).map(child => {
+			if (child.nodeType == Node.TEXT_NODE) return child.nodeValue;
+			else return child.outerHTML;
+		}).join(''));
+		node.replaceWith(dest);
+	});
+	return '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+};
