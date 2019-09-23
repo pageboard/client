@@ -180,7 +180,7 @@ exports.event_reservation = {
 		phone: {
 			title: 'Phone',
 			type: 'string',
-			pattern: '^\\d+(\\s*\\.*-*\\d+)*$'
+			pattern: '^(\\(\\d+\\))? *\\d+([ .\\-]?\\d+)*$'
 		}
 	},
 	parents: {
