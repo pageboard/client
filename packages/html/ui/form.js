@@ -130,7 +130,6 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		var data = {
 			$query: state.query
 		};
-		var status = 200;
 		return Promise.all(Array.prototype.filter.call(form.elements, function(node) {
 			return node.type == "file";
 		}).map(function(input) {
@@ -144,20 +143,19 @@ class HTMLCustomFormElement extends HTMLFormElement {
 				query: data.$query
 			}), data.$request);
 		}).catch(function(err) {
-			if (err.status != null) status = err.status;
-			else status = 0;
+			return err;
 		}).then(function(res) {
 			if (res && res.grants) state.data.$grants = res.grants;
 			state.scope.$response = res;
 			form.classList.remove('loading');
-			var statusClass = `[n|statusClass]`.fuse({n: status});
+			var statusClass = `[n|statusClass]`.fuse({n: res.status});
 			if (statusClass) form.classList.add(statusClass);
 			form.enable();
-			if (status < 200 || status >= 400) return;
+			if (res.status < 200 || res.status >= 400) return;
 			var redirect = form.getAttribute('redirection');
 			if (!redirect) return;
 			data.$response = res;
-			data.$status = status;
+			data.$status = res.status;
 			var loc = Page.parse(redirect.fuse(data, state.scope));
 			loc.data = state.data;
 			var vary = false;
