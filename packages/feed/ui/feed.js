@@ -6,10 +6,18 @@ Page.serialize = function(state) {
 	function absolute(url) {
 		return (new URL(url, base)).href;
 	}
+	function stripBlock(node) {
+		var cur;
+		while ((cur = node.querySelector('[block-id],[block-type]'))) {
+			cur.removeAttribute('block-id');
+			cur.removeAttribute('block-type');
+		}
+		return node;
+	}
 	var categories = [];
 	var firstPubDate;
 	var feeds = Array.from(doc.querySelectorAll('[block-type="feed"]')).map((node) => {
-		var preview = node.querySelector('[block-content="preview"] [block-type="image"]');
+		var preview = node.querySelector('[block-content="preview"] [block-type="image"] > img');
 		var topics = (node.getAttribute('feed-topics') || '').split(' - ');
 		topics.forEach((topic) => {
 			topic = topic.trim();
@@ -21,13 +29,15 @@ Page.serialize = function(state) {
 		if (!desc) return;
 		var pubDate = node.getAttribute('feed-publication');
 		if (!firstPubDate) firstPubDate = pubDate;
+
+		if (preview) preview.src = absolute(preview.src);
+
 		return {
 			title: title.innerText,
-			description: desc.innerText,
+			description: (preview ? preview.outerHTML : '') + desc.innerText,
 			link: absolute(node.getAttribute('feed-url')),
 			date: pubDate,
-			content: node.querySelector('[block-content="section"]').innerHTML,
-			image: preview ? absolute(preview.getAttribute('url')) : null
+			content: stripBlock(node.querySelector('[block-content="section"]')).innerHTML
 		};
 	});
 	var url = dloc.toString();
