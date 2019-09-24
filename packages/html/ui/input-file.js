@@ -97,11 +97,8 @@ class HTMLElementInputFile extends HTMLCustomElement {
 				err.statusCode = xhr.status;
 				fail(err);
 			});
-			var url = "/.api/upload";
-			var id = this.parentNode && this.parentNode.getAttribute('block-id');
-			if (id) url += `/${id}`;
 			try {
-				xhr.open("POST", url, true);
+				xhr.open("POST", `/.api/upload/${file.id}`, true);
 				xhr.setRequestHeader('Accept', "application/json; q=1.0");
 				xhr.send(fd);
 				self._xhr = xhr;

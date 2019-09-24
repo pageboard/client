@@ -9,7 +9,7 @@ exports.template = {
 		nodes: 'block+',
 		expressions: true
 	},
-	html: `<element-template>
+	html: `<element-template id="[$id]">
 		<template block-content="template"></template>
 		<div class="view"></div>
 	</element-template>`,
@@ -32,7 +32,7 @@ exports.fetch = Object.assign({}, exports.template, {
 	title: "Fetch",
 	icon: '<i class="search icon"></i>',
 	expressions: true,
-	html: `<element-template data-remote="[action.method|!!]">
+	html: `<element-template data-remote="[action.method|!!]" id="[$id]">
 		<template block-content="template"></template>
 		<div class="view"></div>
 	</element-template>`,

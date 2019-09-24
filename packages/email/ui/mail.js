@@ -27,9 +27,6 @@ Page.serialize = function() {
 	absolut('img', 'src');
 	var md = (new window.Europa()).convert(doc.documentElement);
 	return window.inlineresources.loadAndInlineCssLinks(doc, {}).then(function(errors) {
-		Array.from(doc.querySelectorAll('[block-id]')).forEach(function(node) {
-			node.removeAttribute('block-id');
-		});
 		return JSON.stringify({
 			errors,
 			title: doc.title,

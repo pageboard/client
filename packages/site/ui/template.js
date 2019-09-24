@@ -46,13 +46,12 @@ class HTMLElementTemplate extends HTMLCustomElement {
 		} else if (!opts.remote) {
 			// non-remotes cannot know if they will need $query
 		}
-		var queryId = me.getAttribute('block-id');
 		var loader;
 		if (opts.remote) {
 			var queryStr = Page.format({pathname: "", query: vars});
 			if (queryStr == me.dataset.query) return;
 			me.dataset.query = queryStr;
-			loader = Pageboard.fetch('get', `/.api/query/${queryId}`, vars);
+			loader = Pageboard.fetch('get', `/.api/query/${this.id}`, vars);
 		} else {
 			loader = Promise.resolve();
 		}
@@ -90,7 +89,7 @@ class HTMLElementTemplate extends HTMLCustomElement {
 		var scope = Object.assign({}, state.scope);
 
 		scope.$element = {
-			name: 'template_element_' + this.getAttribute('block-id'),
+			name: `template_element_${this.id}`,
 			dom: template,
 			filters: {
 				'||': function(val, what) {

@@ -41,7 +41,7 @@ Page.setup(function restoreScrollReferrer(state) {
 	}
 	var anc = document.querySelector(`a[href="${ref.pathname}"]:not(.item):not([block-type="nav"])`);
 	if (!anc) return;
-	var parent = anc.parentNode.closest('[block-id]');
+	var parent = anc.parentNode.closest('[block-type]');
 	if (!parent) return;
 	if (!state.transition || !state.transition.ok) {
 		if (parent.scrollIntoView) parent.scrollIntoView();

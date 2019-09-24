@@ -8,8 +8,7 @@ Page.serialize = function(state) {
 	}
 	function stripBlock(node) {
 		var cur;
-		while ((cur = node.querySelector('[block-id],[block-type]'))) {
-			cur.removeAttribute('block-id');
+		while ((cur = node.querySelector('[block-type]'))) {
 			cur.removeAttribute('block-type');
 		}
 		return node;

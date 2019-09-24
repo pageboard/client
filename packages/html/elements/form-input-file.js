@@ -70,9 +70,9 @@ exports.input_file = {
 		<label block-content="label">Label</label>
 		<element-input-file class="ui action input" data-now="[now]">
 			<input type="text" name="[name]" placeholder="[placeholder]" />
-			<input type="file" id="x[$id|slice:0:4]" required="[required]"
+			<input type="file" id="[$id]" required="[required]"
 				disabled="[disabled]" multiple="[limits.files|gt:1|battr]" />
-			<label for="x[$id|slice:0:4]" class="ui icon button">
+			<label for="[$id]" class="ui icon button">
 				<i class="upload icon"></i>
 				<i class="delete icon"></i>
 			</label>
