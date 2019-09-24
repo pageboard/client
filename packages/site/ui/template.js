@@ -48,7 +48,7 @@ class HTMLElementTemplate extends HTMLCustomElement {
 		var loader;
 		if (opts.remote) {
 			var queryStr = Page.format({pathname: "", query: vars});
-			if (queryStr == me.dataset.query) return;
+			if (queryStr == this.dataset.query) return;
 			this.dataset.query = queryStr;
 			loader = Pageboard.fetch('get', `/.api/query/${this.id}`, vars);
 		} else {
