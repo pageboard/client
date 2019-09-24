@@ -5,8 +5,7 @@ class HTMLElementTemplate extends HTMLCustomElement {
 		};
 	}
 	patch(state) {
-		var me = this;
-		if (me._refreshing || me.closest('[block-content="template"]')) return;
+		if (this._refreshing || this.closest('[block-content="template"]')) return;
 		// first find out if state.query has a key in this.keys
 		// what do we do if state.query has keys that are used by a form in this query template ?
 		var expr = this.getAttribute('block-expr');
@@ -50,25 +49,25 @@ class HTMLElementTemplate extends HTMLCustomElement {
 		if (opts.remote) {
 			var queryStr = Page.format({pathname: "", query: vars});
 			if (queryStr == me.dataset.query) return;
-			me.dataset.query = queryStr;
+			this.dataset.query = queryStr;
 			loader = Pageboard.fetch('get', `/.api/query/${this.id}`, vars);
 		} else {
 			loader = Promise.resolve();
 		}
-		me._refreshing = true;
-		me.classList.remove('error', 'warning', 'success');
-		if (opts.remote) me.classList.add('loading');
+		this._refreshing = true;
+		this.classList.remove('error', 'warning', 'success');
+		if (opts.remote) this.classList.add('loading');
 
-		return Pageboard.bundle(loader, state).then(function(res) {
-			me.render(res, state);
+		return Pageboard.bundle(loader, state).then((res) => {
+			this.render(res, state);
 		}).catch(function(err) {
 			state.scope.$status = -1;
 			console.error("Error building", err);
-		}).then(function() {
+		}).then(() => {
 			var name = '[$status|statusClass]'.fuse(state.scope);
-			if (name) me.classList.add(name);
-			me.classList.remove('loading');
-			me._refreshing = false;
+			if (name) this.classList.add(name);
+			this.classList.remove('loading');
+			this._refreshing = false;
 		});
 	}
 	render(data, state) {
@@ -81,10 +80,9 @@ class HTMLElementTemplate extends HTMLCustomElement {
 			template.content.appendChild(template.dom(decodeURIComponent(template.textContent)));
 		}
 		if (template.content) template = template.content;
-		// remove all block-id from template
+		// remove all block-id from template - might be done in pagecut eventually
 		var rnode;
 		while ((rnode = template.querySelector('[block-id]'))) rnode.removeAttribute('block-id');
-		while ((rnode = template.querySelector('[block-expr]'))) rnode.removeAttribute('block-expr');
 
 		var scope = Object.assign({}, state.scope);
 
