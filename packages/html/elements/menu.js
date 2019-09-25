@@ -2,7 +2,13 @@ exports.menu = {
 	title: "Menu",
 	icon: '<b class="icon">Menu</b>',
 	menu: "link",
-	contents: "menu_item+",
+	upgrade: {
+		'content.': 'content.items'
+	},
+	contents: {
+		id: "items",
+		nodes: "menu_item+"
+	},
 	properties: {
 		direction: {
 			title: 'Direction',
@@ -20,13 +26,18 @@ exports.menu = {
 		}
 	},
 	group: "block",
-	html: '<div class="ui [direction] menu"></div>',
+	html: `<element-menu>
+		<div class="ui [direction] menu" block-content="items"></div>
+	</element-menu>`,
 	stylesheets: [
 		'../lib/components/menu.css',
 		'../ui/menu.css'
 	],
 	scripts: [
 		'../ui/menu.js'
+	],
+	polyfills: [
+		'ResizeObserver'
 	]
 };
 
