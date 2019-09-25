@@ -75,9 +75,12 @@ class HTMLElementTemplate extends HTMLCustomElement {
 		if (this.children.length != 2) return;
 		var view = this.lastElementChild;
 		var template = this.firstElementChild;
-		if (!("content" in template) && template.matches('script[type="application/x-html-uriencoded"]')) {
-			template.content = template.ownerDocument.createDocumentFragment();
-			template.content.appendChild(template.dom(decodeURIComponent(template.textContent)));
+		if (!("content" in template) && template.matches('script[type="text/html"]')) {
+			var helper =  this.ownerDocument.createElement('div');
+			helper.innerHTML = template.textContent;
+			template.content = this.ownerDocument.createDocumentFragment();
+			template.content.appendChild(template.dom(helper.textContent));
+			template.textContent = helper.textContent = '';
 		}
 		if (template.content) template = template.content;
 		// remove all block-id from template - might be done in pagecut eventually
