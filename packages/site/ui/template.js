@@ -83,6 +83,8 @@ class HTMLElementTemplate extends HTMLCustomElement {
 		// remove all block-id from template - might be done in pagecut eventually
 		var rnode;
 		while ((rnode = template.querySelector('[block-id]'))) rnode.removeAttribute('block-id');
+		// pagecut merges block-expr into block-data - contrast with above patch() method
+		while ((rnode = template.querySelector('[block-expr]'))) rnode.removeAttribute('block-expr');
 
 		var scope = Object.assign({}, state.scope);
 
