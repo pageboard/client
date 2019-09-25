@@ -120,6 +120,11 @@ Page.patch(function(state) {
 });
 
 Page.setup(function(state) {
+	try {
+		window.getSelection().removeAllRanges();
+	} catch(ex) {
+		// ignore
+	}
 	if (exports.adv) return;
 	exports.adv = true;
 	state.finish(function() {
