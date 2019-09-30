@@ -137,7 +137,7 @@ exports.input_text = {
 	},
 	patterns: {
 		tel: '^(\\(\\d+\\))? *\\d+([ .\\-]?\\d+)*$',
-		email: '^[a-zA-Z0-9.!#$%&\'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$'
+		email: '^[\\w.!#$%&\'*+\\/=?^`{|}~-]+@\\w(?:[\\w-]{0,61}\\w)?(?:\\.\\w(?:[\\w-]{0,61}\\w)?)*$'
 	},
 	html: `<div class="field [type|eq:hidden:hidden:]">
 		<label block-content="label">Label</label>
