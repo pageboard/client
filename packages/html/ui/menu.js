@@ -50,7 +50,7 @@ class HTMLElementMenu extends HTMLCustomElement {
 		if (this.active) {
 			this.active.classList.toggle('active', false);
 		}
-		let item = this.contains(e.target) && !e.target.closest('a') && e.target.closest('.item:not(.tosser)');
+		let item = this.lastElementChild.contains(e.target) && !e.target.closest('a') && e.target.closest('.item:not(.tosser)');
 		if (item) {
 			item.classList.toggle('active', true);
 			this.active = item;
