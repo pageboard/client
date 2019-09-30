@@ -4,6 +4,7 @@ exports.header.properties.collapsed = {
 	default: false,
 	type: "boolean"
 };
+exports.header.tag += ',[block-type="header"]';
 exports.header.html = `<element-sticky class="header" data-collapsed="[collapsed|magnet]">
 	<header block-content="content"></header>
 </element-sticky>`;
