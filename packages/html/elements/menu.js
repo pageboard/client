@@ -23,11 +23,32 @@ exports.menu = {
 				const: "compact",
 				title: "compact"
 			}]
+		},
+		position: {
+			title: 'Position',
+			anyOf: [{
+				const: null,
+				title: "left"
+			}, {
+				const: "right",
+				title: "right"
+			}]
+		},
+		symbol: {
+			title: 'Symbol',
+			type: 'string',
+			maxLength: 1,
+			minLength: 1,
+			default: '▼'
 		}
 	},
 	group: "block",
-	html: `<element-menu>
-		<div class="ui [direction] menu" block-content="items"></div>
+	html: `<element-menu class="ui [direction] menu">
+		<div class="[position] menu" block-content="items"></div>
+		<div tabindex="0" class="ui simple dropdown right icon item tosser">
+			<div class="icon">[symbol]</div>
+			<div class="menu"></div>
+		</div>
 	</element-menu>`,
 	stylesheets: [
 		'../lib/components/menu.css',

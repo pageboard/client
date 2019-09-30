@@ -7,8 +7,11 @@
 }
 
 [block-type="menu_item_popup"] {
-	display:block !important;
-	position:static !important;
+	display: block !important;
+	position: static !important;
+}
+[block-type="menu_item_popup"][hidden] {
+	display: none !important;
 }
 [block-type="menu_item_popup"] > .popup {
 	display:none;
@@ -42,5 +45,57 @@
 }
 
 element-menu {
-	display:block;
+	position: relative;
+}
+element-menu:not(.responsive) > .tosser {
+	display:none !important;
+}
+element-menu > .menu {
+	position: relative;
+}
+element-menu > .menu > .tossed {
+	visibility:hidden;
+}
+
+element-menu > .tosser {
+	display: block !important;
+	position: absolute !important;
+	right: 0;
+}
+element-menu > .tosser.active > .menu {
+	display: block !important;
+}
+
+element-menu > .ui.simple.dropdown > .menu > .item[block-type="menu_item_dropdown"]:hover > .menu,
+element-menu > .simple.dropdown:hover [block-type="menu_item_popup"]:hover > .popup {
+	display:none !important;
+}
+element-menu > .tosser .ui.dropdown:hover > .caret-icon:before {
+	transform: rotate(0deg);
+}
+element-menu > .tosser .ui.dropdown.active > .caret-icon:before {
+	transform: rotate(90deg);
+}
+element-menu > .ui.simple.dropdown > .menu > .item[block-type="menu_item_dropdown"].active > .menu {
+	display:block !important;
+	position:relative;
+	left:0 !important;
+	top: 0.5em !important;
+}
+element-menu > .simple.dropdown:hover [block-type="menu_item_popup"].active > .popup,
+element-menu > .simple.dropdown.active [block-type="menu_item_popup"].active > .popup {
+	display:block !important;
+}
+element-menu > .simple.dropdown:hover [block-type="menu_item_popup"] > .popup,
+element-menu > .simple.dropdown.active [block-type="menu_item_popup"] > .popup {
+	margin-top: 0.5em;
+	position:relative;
+	margin-left: 0 !important;
+	margin-right: 0 !important;
+	padding: 0;
+}
+element-menu > .simple.dropdown:hover [block-type="menu_item_popup"] > .popup > [block-content] > .grid,
+element-menu > .simple.dropdown.active [block-type="menu_item_popup"] > .popup > [block-content] > .grid {
+	border:0 !important;
+	margin-right:0em !important;
 }
