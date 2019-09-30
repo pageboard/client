@@ -12,9 +12,8 @@ exports.menu = {
 	properties: {
 		direction: {
 			title: 'Direction',
-			default: "",
 			anyOf: [{
-				const: "",
+				const: null,
 				title: "horizontal"
 			}, {
 				const: "vertical",
