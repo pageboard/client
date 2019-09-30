@@ -43,7 +43,7 @@ exports.menu = {
 	},
 	group: "block",
 	html: `<element-menu class="ui [direction] menu">
-		<div class="[position] menu" block-content="items"></div>
+		<div class="[position] [direction|neq:vertical:menu:]" block-content="items"></div>
 		<div tabindex="0" class="ui simple dropdown right icon item tosser">
 			<div class="icon">[symbol]</div>
 			<div class="menu"></div>
