@@ -14,9 +14,19 @@ exports.grid = {
 				const: "contained",
 				title: "contained"
 			}]
+		},
+		stackable: {
+			title: 'Stackable',
+			type: 'boolean',
+			default: true
+		},
+		doubling: {
+			title: 'Doubling',
+			type: 'boolean',
+			default: true
 		}
 	},
-	html: '<div class="ui doubling stackable equal width grid [width|eq:contained:container]"></div>',
+	html: '<div class="ui [doubling|?] [stackable|?] equal width grid [width|eq:contained:container]"></div>',
 	stylesheets: [
 		'../lib/components/grid.css'
 	]
