@@ -30,6 +30,7 @@ body {
 	margin-top:0 !important;
 	padding-top:0 !important;
 	overflow:auto;
+	user-select: none;
 }
 #pageboard-write.loading > [id] {
 	display:none;
