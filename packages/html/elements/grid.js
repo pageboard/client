@@ -5,7 +5,7 @@ exports.grid = {
 	contents: "(grid_column|grid_row)+",
 	properties: {
 		width: {
-			title: 'control width',
+			title: 'Width',
 			default: "full",
 			anyOf: [{
 				const: "full",
