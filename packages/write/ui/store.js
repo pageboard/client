@@ -198,19 +198,6 @@ Store.prototype.importStandalones = function(root, ancestor) {
 	}, this);
 };
 
-Store.prototype.quirkStart = function(invalidatePage) {
-	var prevkeys = Object.keys(Store.generated);
-	if (!invalidatePage && !prevkeys.length) return;
-	Object.assign(Store.generatedBefore, Store.generated);
-	if (invalidatePage) {
-		this.unsaved = this.initial;
-		this.initial = ownProto(this.initial);
-		this.initial.content.body = "";
-		if (Object.keys(flattenBlock(this.unsaved)).length == 0) delete this.unsaved;
-	}
-	this.uiUpdate();
-};
-
 Store.prototype.save = function(e) {
 	if (this.saving) return;
 	this.flush();
