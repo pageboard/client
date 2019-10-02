@@ -65,7 +65,7 @@ Store.genId =  function(len) {
 
 Store.prototype.importVirtuals = function(blocks) {
 	for (var id in blocks) {
-		this.fakeInitials[id] = ownProto(this.editor.blocks.serializeTo(blocks[id]));
+		this.fakeInitials[id] = this.editor.blocks.serializeTo(blocks[id]);
 	}
 };
 
@@ -163,8 +163,6 @@ Store.prototype.realUpdate = function() {
 		return;
 	}
 
-	// import data into this context
-	root = ownProto(root);
 	this.importStandalones(root);
 
 	if (!this.initial) {
@@ -267,9 +265,9 @@ Store.prototype.save = function(e) {
 
 Store.prototype.reset = function(to) {
 	if (to) {
-		Store.generated = ownProto(to.generated);
-		this.unsaved = ownProto(to.unsaved);
-		this.initial = ownProto(to.initial);
+		Store.generated = to.generated;
+		this.unsaved = to.unsaved;
+		this.initial = to.initial;
 		this.uiUpdate();
 	} else {
 		to = {
@@ -487,11 +485,6 @@ Store.prototype.changes = function() {
 
 	return changes;
 };
-
-function ownProto(obj) {
-	if (obj == null) return obj;
-	return JSON.parse(JSON.stringify(obj));
-}
 
 })(window.Pageboard);
 
