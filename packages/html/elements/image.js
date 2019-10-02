@@ -189,6 +189,8 @@ exports.image = {
 			} else if (isFit || !isSvg) {
 				obj.lazy = "lazy";
 			}
+		} else if (d.url) {
+			console.warn("image has no meta", d.url);
 		}
 		obj.url = Page.format(loc);
 		node.fuse(obj, scope);
