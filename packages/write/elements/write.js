@@ -22,21 +22,7 @@ exports.write = {
 	</div>
 	<div id="pageboard-write" class="ui basic segment">
 		<div id="store" class="ui inverted wide mini menu">
-			<div id="mode" class="menu">
-				<a class="vertically fitted item" data-command="read" title="Read Mode">
-					<i class="unhide large icon"></i>
-				</a>
-				<a class="vertically fitted item" data-command="write" title="Write Mode">
-					<i class="write large icon"></i>
-				</a>
-				<a class="ui black right corner label" data-command="write" title="Write Mode">
-					<i class="write icon"></i>
-				</a>
-				<a class="vertically fitted item" data-command="code" title="HTML Mode">
-					<i class="code large icon"></i>
-				</a>
-			</div>
-			<div class="right icon menu">
+			<div class="icon menu">
 				<a class="item" data-command="save">
 					<i class="checkmark icon"></i>
 					Save
@@ -47,6 +33,20 @@ exports.write = {
 				</a>
 				<a id="auth" class="vertically fitted item" title="Sign Out" data-command="logout">
 					<i class="sign out large icon"></i>
+				</a>
+			</div>
+			<div id="mode" class="right menu">
+				<a class="vertically fitted item" data-command="code" title="HTML Mode">
+					<i class="code large icon"></i>
+				</a>
+				<a class="vertically fitted item" data-command="read" title="Read Mode">
+					<i class="unhide large icon"></i>
+				</a>
+				<a class="vertically fitted item" data-command="write" title="Write Mode">
+					<i class="write large icon"></i>
+				</a>
+				<a class="ui black right corner label" data-command="write" title="Write Mode">
+					<i class="write icon"></i>
 				</a>
 			</div>
 		</div>
