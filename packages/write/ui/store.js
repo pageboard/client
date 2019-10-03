@@ -396,8 +396,8 @@ Store.prototype.changes = function() {
 	}, this);
 
 	Object.keys(initial).forEach(function(id) {
-		var block = Object.assign({}, unsaved[id]);
-		var iblock = Object.assign({}, initial[id]);
+		var block = unsaved[id];
+		var iblock = initial[id];
 		if (!block) {
 			if (iblock.virtual) {
 				// do not remove it
@@ -417,6 +417,8 @@ Store.prototype.changes = function() {
 				if (block.parent) parentList(changes.relate, block);
 			}
 			// compare content, not parent
+			block = Object.assign({}, block);
+			iblock = Object.assign({}, iblock);
 			delete block.parent;
 			delete iblock.parent;
 			delete block.virtual;
