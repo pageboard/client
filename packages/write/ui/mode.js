@@ -17,7 +17,8 @@ Pageboard.Controls.Mode = class Mode {
 					delete state.data.$cache.items;
 					store.flush();
 					var backup = store.reset();
-					state.data.$cache.item = backup.unsaved || backup.initial;
+					state.data.$cache.item = (backup.unsaved || backup.initial)[store.rootId];
+					state.data.$cache.items = Object.values(backup.unsaved || backup.initial);
 					state.data.$store = backup;
 					state.save();
 				}

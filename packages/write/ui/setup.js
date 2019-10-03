@@ -198,10 +198,11 @@ Pageboard.Editor = function Editor(win, state) {
 		controls[lKey] = new Pageboard.Controls[key](editor, document.getElementById(lKey));
 	});
 	editor.controls = controls;
-	controls.store.initial = page;
 	var $store = state.data.$store;
 	if ($store) {
 		controls.store.reset($store);
+	} else {
+		controls.store.setRoot(page);
 	}
 	controls.store.realUpdate();
 	return editor;

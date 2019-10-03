@@ -7,7 +7,6 @@ function Store(editor, node) {
 	this.debounceUpdate = Pageboard.debounce(this.realUpdate, 500);
 	this.node = node;
 	this.editor = editor;
-	this.pageId = editor.state.doc.attrs.id;
 
 	this.save = this.save.bind(this);
 	this.discard = this.discard.bind(this);
@@ -69,13 +68,14 @@ Store.prototype.importVirtuals = function(blocks) {
 	}
 };
 
-Store.prototype.checkUrl = function(pageId, pageUrl) {
+Store.prototype.checkUrl = function(rootId, url) {
 	// TODO use similar approach to update links when a pageUrl changes ?
 	var editor = this.editor;
-	return findInTreeBlock(this.initial, function(block) {
-		var el = editor.element(block.type);
-		return el.group == "page" && block.id != pageId && block.data.url == pageUrl;
+	var id = Object.keys(this.initial).find((bid) => {
+		var block = this.initial[bid];
+		return bid != rootId && block.data.url == url && editor.element(block.type).group == "page";
 	});
+	return this.initial[id];
 };
 
 Store.prototype.keydown = function(e) {
@@ -118,9 +118,14 @@ Store.prototype.key = function() {
 	return "pageboard-store-" + document.location.toString();
 };
 
+Store.prototype.setRoot = function(root) {
+	this.rootId = root.id;
+	this.initial = flattenBlock(root);
+}
+
 Store.prototype.restore = function(blocks) {
 	try {
-		var frag = this.editor.from(blocks);
+		var frag = this.editor.from(blocks[this.rootId], blocks);
 		this.ignoreNext = true;
 		this.editor.utils.setDom(frag);
 	} catch (err) {
@@ -165,6 +170,8 @@ Store.prototype.realUpdate = function() {
 
 	this.importStandalones(root);
 
+	root = flattenBlock(root);
+
 	if (!this.initial) {
 		this.initial = root;
 		Store.generatedBefore = Store.generated;
@@ -184,7 +191,7 @@ Store.prototype.realUpdate = function() {
 Store.prototype.importStandalones = function(root, ancestor) {
 	// all standalones that have not been generated in this page must be initial
 	if (!root.id) return console.error("importStandalones should run on a block with id", root);
-	if (root.id != this.pageId && !Store.generated[root.id]) {
+	if (root.id != this.rootId && !Store.generated[root.id]) {
 		if (root.standalone || ancestor) {
 			var copy = Object.assign({}, root);
 			delete copy.children;
@@ -223,18 +230,11 @@ Store.prototype.save = function(e) {
 			var val = obj.updated_at;
 			if (block) block.updated_at = val;
 			else Pageboard.notify("Cannot update editor with modified block");
-
-			if (this.unsaved.id == obj.id) {
-				this.unsaved.updated_at = val;
+			var child = this.unsaved[obj.id];
+			if (child) {
+				child.updated_at = val;
 			} else {
-				var child = findInTreeBlock(this.unsaved, function(block) {
-					return block.id == obj.id;
-				});
-				if (child) {
-					child.updated_at = val;
-				} else {
-					Pageboard.notify("Cannot update store with modified block");
-				}
+				Pageboard.notify("Cannot update store with modified block");
 			}
 		});
 	}).then(() => {
@@ -252,7 +252,8 @@ Store.prototype.save = function(e) {
 
 Store.prototype.reset = function(to) {
 	if (to) {
-		Store.generated = to.generated;
+		if (to.generated) Store.generated = to.generated;
+		this.rootId = to.rootId;
 		this.unsaved = to.unsaved;
 		this.initial = to.initial;
 		this.uiUpdate();
@@ -260,7 +261,8 @@ Store.prototype.reset = function(to) {
 		to = {
 			generated: Store.generated,
 			unsaved: this.unsaved,
-			initial: this.initial
+			initial: this.initial,
+			rootId: this.rootId
 		};
 		Store.generated = {};
 		Store.generatedBefore = {};
@@ -303,7 +305,7 @@ Store.prototype.discard = function(e) {
 };
 
 Store.prototype.pageUpdate = function() {
-	var root = this.unsaved || this.initial;
+	var root = (this.unsaved || this.initial)[this.rootId];
 	var el = this.editor.element(root.type);
 	if (el.group == "page") {
 		this.editor.updatePage();
@@ -337,19 +339,6 @@ function flattenBlock(root, ancestorId, blocks) {
 	return blocks;
 }
 
-function findInTreeBlock(root, fun) {
-	var val = fun(root);
-	if (val) return root;
-	if (root.children) root.children.some(function(child) {
-		var ret = findInTreeBlock(child, fun);
-		if (ret) {
-			val = ret;
-			return true;
-		}
-	});
-	return val;
-}
-
 function parentList(obj, block) {
 	if (block.virtual) {
 		return;
@@ -365,7 +354,8 @@ function parentList(obj, block) {
 
 Store.prototype.changes = function() {
 	var kids = this.editor.blocks.initial;
-	var initial = flattenBlock(this.initial);
+	var initial = this.initial;
+	var unsaved = this.unsaved;
 	Object.keys(this.fakeInitials).forEach(function(id) {
 		var news = flattenBlock(this.fakeInitials[id]);
 		Object.keys(news).forEach(function(id) {
@@ -374,8 +364,7 @@ Store.prototype.changes = function() {
 			}
 		});
 	}, this);
-	var unsaved = flattenBlock(this.unsaved);
-	var pageId = this.pageId;
+	var rootId = this.rootId;
 	for (var id in Store.generatedBefore) {
 		delete initial[id];
 	}
@@ -397,7 +386,7 @@ Store.prototype.changes = function() {
 		var block = unsaved[id];
 		if (!initial[id]) {
 			if (Store.generated[id]) {
-				changes.add.push(block);
+				changes.add.push(Object.assign({}, block));
 				parentList(changes.relate, block);
 			} else {
 				console.error("Ignoring ungenerated new block", block);
@@ -406,8 +395,8 @@ Store.prototype.changes = function() {
 	}, this);
 
 	Object.keys(initial).forEach(function(id) {
-		var block = unsaved[id];
-		var iblock = initial[id];
+		var block = Object.assign({}, unsaved[id]);
+		var iblock = Object.assign({}, initial[id]);
 		if (!block) {
 			if (iblock.virtual) {
 				// do not remove it
@@ -452,7 +441,7 @@ Store.prototype.changes = function() {
 			changes.remove[id] = true;
 			parentList(changes.unrelate, {
 				id: id,
-				parent: kblock.parent || pageId
+				parent: kblock.parent || rootId
 			});
 			console.warn("removing unused block", kblock.type, kblock.id);
 		}
