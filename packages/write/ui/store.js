@@ -71,11 +71,12 @@ Store.prototype.importVirtuals = function(blocks) {
 Store.prototype.checkUrl = function(rootId, url) {
 	// TODO use similar approach to update links when a pageUrl changes ?
 	var editor = this.editor;
-	var id = Object.keys(this.initial).find((bid) => {
-		var block = this.initial[bid];
+	var blocks = editor.blocks.store;
+	var id = Object.keys(blocks).find((bid) => {
+		var block = blocks[bid];
 		return bid != rootId && block.data.url == url && editor.element(block.type).group == "page";
 	});
-	return this.initial[id];
+	return blocks[id];
 };
 
 Store.prototype.keydown = function(e) {
