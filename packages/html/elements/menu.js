@@ -140,6 +140,11 @@ exports.menu_item_popup = {
 		title: 'Content'
 	}],
 	properties: {
+		fullwidth: {
+			title: 'Full width',
+			type: 'boolean',
+			nullable: true
+		},
 		icon: {
 			title: 'Show dropdown icon',
 			type: 'boolean',
@@ -149,7 +154,7 @@ exports.menu_item_popup = {
 	group: "menu_item",
 	html: `<div tabindex="0" class="ui simple dropdown item">
 		<div class="title [icon|?:caret-icon]" block-content="title">Popup</div>
-		<div class="popup">
+		<div class="[fullwidth|?] popup">
 			<div block-content="content"></div>
 		</div>
 	</div>`

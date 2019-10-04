@@ -38,6 +38,18 @@
 	max-height:60vh; /* this assumes the popup starts from the top */
 	overflow-y:auto;
 }
+[block-type="menu_item_popup"] > .fullwidth.popup {
+	position: fixed;
+	left: 1px;
+	width:100%;
+	padding: 0;
+}
+[block-type="menu_item_popup"] > .fullwidth.popup > div {
+	background:transparent;
+	border-radius:0;
+	border:none;
+	box-shadow:none;
+}
 [block-type="menu_item_popup"]:focus > .popup,
 [block-type="menu_item_popup"]:hover > .popup,
 [block-type="menu_item_popup"][block-focused] > .popup {
