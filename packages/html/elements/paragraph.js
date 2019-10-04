@@ -147,12 +147,6 @@ exports.heading = {
 			obj.id = id;
 			obj.linkable = true;
 		}
-		var align = this.properties.align.anyOf.find((def) => {
-			return dom.matches(`.${def.const}`);
-		});
-		if (align) {
-			obj.align = align.const;
-		}
 		return obj;
 	},
 	stylesheets: [
