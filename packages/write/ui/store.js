@@ -74,7 +74,9 @@ Store.prototype.checkUrl = function(rootId, url) {
 	var blocks = editor.blocks.store;
 	var id = Object.keys(blocks).find((bid) => {
 		var block = blocks[bid];
-		return bid != rootId && block.data.url == url && editor.element(block.type).group == "page";
+		if (bid != rootId && block.data) {
+			return block.data.url == url && editor.element(block.type).group == "page";
+		}
 	});
 	return blocks[id];
 };
