@@ -12,21 +12,32 @@ exports.grid = {
 				title: "full"
 			}, {
 				const: "contained",
-				title: "contained"
+				title: "container"
 			}]
 		},
-		stackable: {
-			title: 'Stackable',
-			type: 'boolean',
-			default: true
+		responsive: {
+			title: 'Responsive',
+			anyOf: [{
+				title: 'Disable',
+				const: null
+			}, {
+				title: 'Stackable',
+				const: 'stackable'
+			}, {
+				title: 'Doubling',
+				const: 'doubling'
+			}]
 		},
-		doubling: {
-			title: 'Doubling',
-			type: 'boolean',
-			default: true
+		columns: {
+			title: 'Columns Count',
+			description: 'Between 1 and 16, set to 0 to unknown - works well with doubling',
+			type: "integer",
+			default: 0,
+			minimum: 0,
+			maximum: 16
 		}
 	},
-	html: '<div class="ui [doubling|?] [stackable|?] equal width grid [width|eq:contained:container]"></div>',
+	html: '<div class="ui [responsive] equal width [columns|num: columns] grid [width|eq:contained:container]"></div>',
 	stylesheets: [
 		'../lib/components/grid.css'
 	]
@@ -54,5 +65,28 @@ exports.grid_row = {
 	title: "Row",
 	icon: '<b class="icon">row</b>',
 	contents: "grid_column+",
-	html: '<div class="row"></div>'
+	properties: {
+		responsive: {
+			title: 'Responsive',
+			anyOf: [{
+				title: 'Disable',
+				const: null
+			}, {
+				title: 'Stackable',
+				const: 'stackable'
+			}, {
+				title: 'Doubling',
+				const: 'doubling'
+			}]
+		},
+		columns: {
+			title: 'Columns Count',
+			description: 'Between 1 and 16, set to 0 to unknown - works well with doubling',
+			type: "integer",
+			default: 0,
+			minimum: 0,
+			maximum: 16
+		}
+	},
+	html: '<div class="[responsive] equal width [columns|num: columns] row"></div>'
 };
