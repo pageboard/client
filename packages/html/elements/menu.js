@@ -107,6 +107,16 @@ exports.menu_item_dropdown = {
 		title: 'Items'
 	}],
 	properties: {
+		position: {
+			title: 'Position',
+			anyOf: [{
+				const: null,
+				title: "left"
+			}, {
+				const: "right",
+				title: "right"
+			}]
+		},
 		icon: {
 			title: 'Show dropdown icon',
 			type: 'boolean',
@@ -114,7 +124,7 @@ exports.menu_item_dropdown = {
 		}
 	},
 	group: "menu_item",
-	html: `<div tabindex="0" class="ui simple dropdown item [focused|?:active]">
+	html: `<div tabindex="0" class="ui simple [position] dropdown item [focused|?:active]">
 		<div class="title [icon|?:caret-icon]" block-content="title">Dropdown</div>
 		<div class="menu" block-content="items"></div>
 	</div>`,
