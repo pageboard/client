@@ -34,6 +34,9 @@
 	overflow-y:auto;
 	overflow-x: hidden;
 }
+[block-type="menu_item_popup"] > .fixed.popup > .ui.grid:first-of-type {
+	margin-top:0;
+}
 [block-type="menu_item_popup"] > .fixed.popup > * {
 	background-color:white;
 }
