@@ -140,8 +140,8 @@ exports.menu_item_popup = {
 		title: 'Content'
 	}],
 	properties: {
-		fullwidth: {
-			title: 'Full width',
+		fixed: {
+			title: 'Fixed',
 			type: 'boolean',
 			nullable: true
 		},
@@ -154,9 +154,7 @@ exports.menu_item_popup = {
 	group: "menu_item",
 	html: `<div tabindex="0" class="ui simple dropdown item">
 		<div class="title [icon|?:caret-icon]" block-content="title">Popup</div>
-		<div class="[fullwidth|?] popup">
-			<div block-content="content"></div>
-		</div>
+		<div class="[fixed|?] popup" block-content="content"></div>
 	</div>`
 };
 
