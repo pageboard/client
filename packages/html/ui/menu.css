@@ -1,22 +1,23 @@
+/* semantic-ui fixes */
 .ui.menu:not(.vertical) .right.item.dropdown {
 	margin-left: 0 !important;
 }
-.dropdown > .menu > .item .ui.image {
+.dropdown.item > .menu > .item .ui.image {
 	max-width:none; /* workaround image width not being accounted for */
 }
 
-.ui.dropdown:hover > .caret-icon:before {
+/* menu item with icon */
+.item:hover > .caret-icon:before {
 	transform:rotate(90deg);
 }
 
-element-menu > [block-content="items"] {
-	display:flex;
+/* menu_item_popup */
+.popup.item > .placer {
+	flex-basis: 100%;
+	position: absolute;
+	bottom: 0;
 }
-[block-type="menu_item_popup"][hidden] {
-	display: none !important;
-}
-[block-type="menu_item_popup"] > .placer {flex-basis: 100%;position: absolute;bottom: 0;}
-[block-type="menu_item_popup"] > .placer > .popup {
+.popup.item > .placer > div {
 	display:none;
 	position: absolute;
 	z-index: 1900;
@@ -27,85 +28,95 @@ element-menu > [block-content="items"] {
 	min-width: -moz-min-content;
 	min-width: min-content;
 }
-[block-type="menu_item_popup"].fixed > .placer > .popup {
+.popup.fixed.item > .placer > div {
 	position: fixed;
 	left: 0px;
 	right:0px;
 	width: auto;
 	max-height:100%;
-	overflow: visible;
+	overflow: auto;
 }
-[block-type="menu_item_popup"].fixed > .placer > .popup > .ui.grid:first-of-type {
+.popup.item > .placer > div > .grid:first-of-type {
 	margin: 0;
 }
-[block-type="menu_item_popup"].fixed > .placer > .popup > * {
+.popup.item > .placer > div {
 	background-color:white;
 }
-[block-type="menu_item_popup"]:focus > .placer > .popup,
-[block-type="menu_item_popup"]:hover > .placer > .popup,
-[block-type="menu_item_popup"][block-focused] > .placer > .popup {
+.popup.item:focus > .placer > div,
+.popup.item:hover > .placer > div,
+.popup.item[block-focused] > .placer > div {
 	display:block;
 }
+.right.popup.item > .placer > div {
+	left:auto;
+	right:0;
+}
 
+element-menu.burger.right .popup.item > .placer > div {
+	text-align: right;
+}
+
+/* menu_group */
 element-menu {
 	position: relative;
 	flex-shrink: 1;
 }
-element-menu.responsive > .tosser {
+element-menu > [block-content="items"] {
+	display:flex;
 }
-element-menu:not(.responsive) > .tosser {
+element-menu:not(.burger) > .item {
 	display:none !important;
 }
 element-menu > .menu {
 	position: relative;
 }
-element-menu.responsive > [block-content="items"] {
+element-menu.burger > [block-content="items"] {
 	display: flex;
 	position: absolute;
 	right: 0;
 }
-element-menu > [block-content="items"] > .tossed {
+element-menu.burger > [block-content="items"] > * {
 	visibility:hidden;
 }
 
-element-menu > .tosser.active > .menu {
-	display: block !important;
-}
-
-element-menu > .ui.simple.dropdown > .menu > .item[block-type="menu_item_dropdown"]:hover > .menu,
-element-menu > .simple.dropdown:hover [block-type="menu_item_popup"]:hover > .placer > .popup {
+element-menu.burger > .item .dropdown.item:hover > .menu,
+element-menu.burger > .item .popup.item:hover > .placer > div {
 	display:none !important;
 }
-element-menu > .ui.simple.dropdown > .menu > .item[block-type="menu_item_dropdown"].active > .menu {
+element-menu.burger > .item .dropdown.item.active > .menu {
 	display:block !important;
 	position:relative;
 	left:0 !important;
 	top: 0.5em !important;
 }
-element-menu > .simple.dropdown:hover [block-type="menu_item_popup"].active > .placer > .popup,
-element-menu > .simple.dropdown.active [block-type="menu_item_popup"].active > .placer > .popup {
+element-menu.burger > .item .popup.item.active > .placer > div {
 	display:block !important;
-}
-element-menu > .simple.dropdown:hover [block-type="menu_item_popup"] > .placer,
-element-menu > .simple.dropdown.active [block-type="menu_item_popup"] > .placer {
 	position:relative;
 }
-element-menu > .simple.dropdown:hover [block-type="menu_item_popup"] > .placer > .popup,
-element-menu > .simple.dropdown.active [block-type="menu_item_popup"] > .placer > .popup {
+element-menu.burger > .item:hover > .popup.item {
+	display:block;
+}
+element-menu.burger > .item .popup.item {
+	display:block;
+}
+element-menu.burger > .item .popup.item > .placer {
+	position:relative;
+}
+/* element-menu > .item:hover .popup.item > .placer > div,
+element-menu > .item.active .popup.item > .placer > div {
 	margin-top: 0.5em;
 	position:relative;
 	margin-left: 0 !important;
 	margin-right: 0 !important;
 	padding: 0;
-}
-element-menu > .simple.dropdown:hover [block-type="menu_item_popup"] > .placer > .popup > .grid,
-element-menu > .simple.dropdown.active [block-type="menu_item_popup"] > .placer > .popup > .grid {
+} */
+element-menu.burger > .item .popup.item > .placer > div > .grid {
 	border:0 !important;
 	margin-right:0em !important;
 }
 
-element-menu > .simple.dropdown.active [block-type="menu_item_popup"] > .placer > .popup .ui.doubling.grid > .row > .column,
-element-menu > .simple.dropdown.active [block-type="menu_item_popup"] > .placer > .popup .ui.doubling.grid > .column:not(.row),
-element-menu > .simple.dropdown.active [block-type="menu_item_popup"] > .placer > .popup .ui.grid > .doubling.row.row > .column {
-	width:100% !important;
+element-menu.burger > .item .popup.item .ui.doubling.grid > .row > .column,
+element-menu.burger > .item .popup.item .ui.doubling.grid > .column:not(.row),
+element-menu.burger > .item .popup.item .ui.grid > .doubling.row.row > .column {
+	width: auto !important;
 }

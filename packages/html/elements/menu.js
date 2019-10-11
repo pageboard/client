@@ -45,22 +45,17 @@ exports.menu_group = {
 				const: "right",
 				title: "right"
 			}]
-		},
-		all: {
-			title: 'Toss all at once',
-			type: 'boolean',
-			default: true
 		}
 	},
 	contents: {
 		id: "items",
 		nodes: "menu_item+"
 	},
-	html: `<element-menu class="[position] menu" data-all="[all]">
+	html: `<element-menu class="[position] menu">
 		<div block-content="items"></div>
-		<div tabindex="0" class="ui simple dropdown icon item tosser">
+		<div tabindex="0" class="ui fixed popup item">
 			<div class="icon">☰</div>
-			<div class="menu"></div>
+			<div class="placer"><div></div></div>
 		</div>
 	</element-menu>`,
 	stylesheets: [
@@ -187,10 +182,10 @@ exports.menu_item_popup = {
 		}
 	},
 	group: "menu_item",
-	html: `<div tabindex="0" class="ui simple dropdown [fixed|?] item">
+	html: `<div tabindex="0" class="ui [fixed|?] popup item">
 		<div class="title [icon|?:caret-icon]" block-content="title">Popup</div>
 		<div class="placer">
-			<div class="popup" block-content="content"></div>
+			<div block-content="content"></div>
 		</div>
 	</div>`
 };

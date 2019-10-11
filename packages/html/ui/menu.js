@@ -17,16 +17,11 @@ Page.patch(function(state) {
 });
 
 class HTMLElementMenu extends HTMLCustomElement {
-	static get defaults() {
-		return {
-			all: true
-		}
-	}
 	setup(state) {
 		if (this.isContentEditable || this.matches('.vertical')) return;
 		const menu = this.firstElementChild;
 		const helper =  this.lastElementChild;
-		const helperMenu = helper.lastElementChild;
+		const helperMenu = helper.lastElementChild.lastElementChild;
 		helperMenu.appendChild(this.toHelper(menu));
 		document.body.addEventListener('click', (e) => {
 			this.bodyClick(e, state);
@@ -35,17 +30,8 @@ class HTMLElementMenu extends HTMLCustomElement {
 			var prev = this.previousElementSibling;
 			var availWidth = this.offsetLeft + this.offsetWidth - (prev ? prev.offsetLeft + prev.offsetWidth : 0);
 			entries.forEach((entry) => {
-				let child, tossed;
-				let enabled = false;
-				const len = menu.children.length - 1;
-				for (let i = len; i >= 0; i--) {
-					child = menu.children[i];
-					tossed = (this.options.all && tossed) || child.offsetLeft + child.offsetWidth > availWidth;
-					child.classList.toggle('tossed', tossed);
-					helperMenu.children[i].hidden = !tossed;
-					if (tossed) enabled = true;
-				}
-				this.classList.toggle('responsive', enabled);
+				let child = menu.lastElementChild;
+				this.classList.toggle('burger', child.offsetLeft + child.offsetWidth > availWidth);
 			});
 		});
 		this.observer.observe(this.parentNode);
