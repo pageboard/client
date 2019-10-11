@@ -17,6 +17,11 @@ Page.patch(function(state) {
 });
 
 class HTMLElementMenu extends HTMLCustomElement {
+	static get defaults() {
+		return {
+			all: true
+		}
+	}
 	setup(state) {
 		if (this.isContentEditable || this.matches('.vertical')) return;
 		const menu = this.firstElementChild;
@@ -27,13 +32,15 @@ class HTMLElementMenu extends HTMLCustomElement {
 			this.bodyClick(e, state);
 		});
 		this.observer = new ResizeObserver((entries, observer) => {
+			var prev = this.previousElementSibling;
+			var availWidth = this.offsetLeft + this.offsetWidth - (prev ? prev.offsetLeft + prev.offsetWidth : 0);
 			entries.forEach((entry) => {
 				let child, tossed;
 				let enabled = false;
 				const len = menu.children.length - 1;
 				for (let i = len; i >= 0; i--) {
 					child = menu.children[i];
-					tossed = child.offsetLeft + child.offsetWidth > entry.contentRect.right - (i == len ? 0 : helper.offsetWidth);
+					tossed = (this.options.all && tossed) || child.offsetLeft + child.offsetWidth > availWidth;
 					child.classList.toggle('tossed', tossed);
 					helperMenu.children[i].hidden = !tossed;
 					if (tossed) enabled = true;
@@ -41,7 +48,7 @@ class HTMLElementMenu extends HTMLCustomElement {
 				this.classList.toggle('responsive', enabled);
 			});
 		});
-		this.observer.observe(this);
+		this.observer.observe(this.parentNode);
 	}
 	close(state) {
 		if (this.observer) this.observer.disconnect();

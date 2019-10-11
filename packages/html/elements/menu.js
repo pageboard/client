@@ -3,11 +3,10 @@ exports.menu = {
 	icon: '<b class="icon">Menu</b>',
 	menu: "link",
 	upgrade: {
-		'content.': 'content.items'
+		'content.items': 'content.'
 	},
 	contents: {
-		id: "items",
-		nodes: "menu_item+"
+		nodes: "(menu_item|menu_group)+"
 	},
 	properties: {
 		direction: {
@@ -22,7 +21,21 @@ exports.menu = {
 				const: "compact",
 				title: "compact"
 			}]
-		},
+		}
+	},
+	group: "block",
+	html: `<div class="ui [direction] menu"></div>`,
+	stylesheets: [
+		'../lib/components/menu.css'
+	]
+};
+
+exports.menu_group = {
+	title: 'Menu Group',
+	icon: '<b class="icon">Group</b>',
+	menu: "link",
+	context: "menu//",
+	properties: {
 		position: {
 			title: 'Position',
 			anyOf: [{
@@ -33,24 +46,24 @@ exports.menu = {
 				title: "right"
 			}]
 		},
-		symbol: {
-			title: 'Symbol',
-			type: 'string',
-			maxLength: 1,
-			minLength: 1,
-			default: '▼'
+		all: {
+			title: 'Toss all at once',
+			type: 'boolean',
+			default: true
 		}
 	},
-	group: "block",
-	html: `<element-menu class="ui [direction] menu">
-		<div class="[position] [direction|neq:vertical:menu:]" block-content="items"></div>
-		<div tabindex="0" class="ui simple dropdown right icon item tosser">
-			<div class="icon">[symbol]</div>
+	contents: {
+		id: "items",
+		nodes: "menu_item+"
+	},
+	html: `<element-menu class="[position] menu" data-all="[all]">
+		<div block-content="items"></div>
+		<div tabindex="0" class="ui simple dropdown icon item tosser">
+			<div class="icon">☰</div>
 			<div class="menu"></div>
 		</div>
 	</element-menu>`,
 	stylesheets: [
-		'../lib/components/menu.css',
 		'../ui/menu.css'
 	],
 	scripts: [
@@ -61,10 +74,22 @@ exports.menu = {
 	]
 };
 
+exports.menu_item_text = {
+	title: 'Text',
+	icon: '<b class="icon">Item</b>',
+	menu: "link",
+	context: "menu//",
+	contents: {
+		nodes: "inline*"
+	},
+	group: 'menu_item',
+	html: '<div class="item">Text</div>'
+};
+
 exports.menu_item_link = {
 	priority: 10,
 	title: "Link Item",
-	icon: '<b class="icon">Item</b>',
+	icon: '<b class="icon">Link</b>',
 	menu: "link",
 	context: "menu//",
 	properties: {
@@ -87,7 +112,7 @@ exports.menu_item_link = {
 		marks: "nolink"
 	},
 	group: 'menu_item',
-	html: '<a class="item" href="[url|autolink]">Item</a>'
+	html: '<a class="item" href="[url|autolink]">Link</a>'
 };
 
 exports.menu_item_dropdown = {
@@ -162,9 +187,11 @@ exports.menu_item_popup = {
 		}
 	},
 	group: "menu_item",
-	html: `<div tabindex="0" class="ui simple dropdown item">
+	html: `<div tabindex="0" class="ui simple dropdown [fixed|?] item">
 		<div class="title [icon|?:caret-icon]" block-content="title">Popup</div>
-		<div class="[fixed|?] popup" block-content="content"></div>
+		<div class="placer">
+			<div class="popup" block-content="content"></div>
+		</div>
 	</div>`
 };
 
