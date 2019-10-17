@@ -383,8 +383,8 @@ Href.prototype.uploadStart = function() {
 
 			xhr.send(fd);
 		});
-		input.click();
 		input.value = null;
+		input.click();
 	}).then(function(obj) {
 		var files = Array.isArray(obj) ? obj : (obj && obj.items || []);
 		var p = Promise.resolve();
