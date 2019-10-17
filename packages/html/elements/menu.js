@@ -67,18 +67,6 @@ exports.menu_group = {
 	]
 };
 
-exports.menu_item_text = {
-	title: 'Text',
-	icon: '<b class="icon">Item</b>',
-	menu: "link",
-	context: "menu//",
-	contents: {
-		nodes: "inline*"
-	},
-	group: 'menu_item',
-	html: '<div class="item">Text</div>'
-};
-
 exports.menu_item_link = {
 	priority: 10,
 	title: "Link Item",
@@ -106,6 +94,18 @@ exports.menu_item_link = {
 	},
 	group: 'menu_item',
 	html: '<a class="item" href="[url|autolink]">Link</a>'
+};
+
+exports.menu_item_text = {
+	title: 'Text',
+	icon: '<b class="icon">Item</b>',
+	menu: "link",
+	context: "menu//",
+	contents: {
+		nodes: "inline*"
+	},
+	group: 'menu_item',
+	html: '<div class="item">Text</div>'
 };
 
 exports.menu_item_dropdown = {
