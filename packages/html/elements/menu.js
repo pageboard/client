@@ -5,9 +5,7 @@ exports.menu = {
 	upgrade: {
 		'content.items': 'content.'
 	},
-	contents: {
-		nodes: "(menu_item|menu_group)+"
-	},
+	contents: "(menu_item|menu_group)+",
 	properties: {
 		direction: {
 			title: 'Direction',
