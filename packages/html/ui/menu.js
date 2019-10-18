@@ -21,18 +21,14 @@ class HTMLElementMenu extends HTMLCustomElement {
 		if (this.isContentEditable || this.matches('.vertical')) return;
 		const menu = this.firstElementChild;
 		const helper =  this.lastElementChild;
-		const helperMenu = helper.lastElementChild.lastElementChild;
-		helperMenu.appendChild(this.toHelper(menu));
+		helper.lastElementChild.lastElementChild.appendChild(this.toHelper(menu));
 		document.body.addEventListener('click', (e) => {
 			this.bodyClick(e, state);
 		});
 		this.observer = new ResizeObserver((entries, observer) => {
-			var prev = this.previousElementSibling;
-			var availWidth = this.offsetLeft + this.offsetWidth - (prev ? prev.offsetLeft + prev.offsetWidth : 0);
-			entries.forEach((entry) => {
-				let child = menu.lastElementChild;
-				this.classList.toggle('burger', child.offsetLeft + child.offsetWidth > availWidth);
-			});
+			var parentWidth = parseFloat(window.getComputedStyle(this).marginLeft) + this.offsetWidth;
+			var menuWidth = menu.offsetWidth;
+			this.classList.toggle('burger', parentWidth <= menuWidth);
 		});
 		this.observer.observe(this.parentNode);
 	}

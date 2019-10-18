@@ -71,11 +71,7 @@ element-menu:not(.burger) > .item {
 element-menu > .menu {
 	position: relative;
 }
-element-menu.burger > [block-content="items"] {
-	display: flex;
-	position: absolute;
-	right: 0;
-}
+element-menu.burger > [block-content="items"] {position: fixed;right: 0;}
 element-menu.burger > [block-content="items"] > * {
 	visibility:hidden;
 }
