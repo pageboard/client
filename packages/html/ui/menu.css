@@ -121,3 +121,8 @@ element-menu.burger > .item .popup.item .ui.doubling.grid > .column:not(.row),
 element-menu.burger > .item .popup.item .ui.grid > .doubling.row.row > .column {
 	width: auto !important;
 }
+element-menu.burger > .popup > .icon {
+	font-size: 1.6429rem;
+	font-weight: bold;
+	font-family: sans-serif;
+}

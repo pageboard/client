@@ -52,7 +52,7 @@ exports.menu_group = {
 	html: `<element-menu class="[position] menu">
 		<div block-content="items"></div>
 		<div tabindex="0" class="ui fixed popup item">
-			<div class="icon">☰</div>
+			<div class="icon">≡</div>
 			<div class="dropdown placer"><div class="menu"></div></div>
 		</div>
 	</element-menu>`,
