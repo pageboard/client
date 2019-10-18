@@ -53,7 +53,7 @@ exports.menu_group = {
 		<div block-content="items"></div>
 		<div tabindex="0" class="ui fixed popup item">
 			<div class="icon">☰</div>
-			<div class="placer"><div></div></div>
+			<div class="dropdown placer"><div class="menu"></div></div>
 		</div>
 	</element-menu>`,
 	stylesheets: [

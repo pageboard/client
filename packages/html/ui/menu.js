@@ -39,12 +39,23 @@ class HTMLElementMenu extends HTMLCustomElement {
 		if (this.active) {
 			this.active.classList.toggle('active', false);
 		}
-		let item = this.lastElementChild.contains(e.target) && !e.target.closest('a') && e.target.closest('.item:not(.tosser)');
-		if (item) {
-			item.classList.toggle('active', true);
-			this.active = item;
+		var tosser = this.lastElementChild;
+		let item = tosser.contains(e.target) && !e.target.closest('a') && e.target.closest('.item');
+		if (item == tosser) {
+			if (tosser.classList.contains('active')) {
+				this.active = item = null;
+				tosser.blur();
+			} else {
+				var padding = this.offsetTop + this.offsetHeight;
+				var menu = tosser.lastElementChild.lastElementChild;
+				menu.style.maxHeight = `calc(100% - ${padding}px)`;
+			}
+		} else if (item) {
+			this.active = item != this.active ? item : null;
+			item.classList.toggle('active', !!this.active);
+			if (!this.active) item.blur();
 		}
-		this.lastElementChild.classList.toggle('active', !!item);
+		tosser.classList.toggle('active', !!item);
 	}
 	toHelper(root) {
 		var frag = root.ownerDocument.createDocumentFragment();
