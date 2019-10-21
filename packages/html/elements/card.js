@@ -4,16 +4,32 @@ exports.cards = {
 	icon: '<i class="icon address card outline"></i>',
 	group: "block",
 	contents: "(card|cardlink)+",
+	upgrade: {
+		'data.columnCount' : 'data.columns'
+	},
 	properties: {
-		columnCount: {
+		columns: {
 			title: 'Column count',
 			description: 'How many cards should exist in a row - zero for unknown',
 			type: 'integer',
 			minimum: 0,
 			default: 0
+		},
+		responsive: {
+			title: 'Responsive',
+			anyOf: [{
+				title: 'Disable',
+				const: null
+			}, {
+				title: 'Stackable',
+				const: 'stackable'
+			}, {
+				title: 'Doubling',
+				const: 'doubling'
+			}]
 		}
 	},
-	html: '<div class="ui [columnCount|num] doubling stackable cards"></div>',
+	html: '<div class="ui [columns|num] [responsive] cards"></div>',
 	stylesheets: [
 		'../lib/components/card.css'
 	]
