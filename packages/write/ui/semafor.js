@@ -232,7 +232,14 @@ Semafor.flatten = function(tree, obj, schema) {
 	var props = schema && schema.properties || {};
 	Object.entries(props).forEach(function([key, field]) {
 		var val = tree[key];
-		//if (val == null && field.default) val = field.default;
+		if (val == null) {
+			if (field.default && field.anyOf) {
+				// we want defaults to be checked
+				val = field.default;
+			} else if (field.properties) {
+				val = {};
+			}
+		}
 		if (val != null && typeof val == "object") {
 			if (field && !field.properties && (field.oneOf || field.anyOf)) {
 				var listNoNull = (field.oneOf || field.anyOf).filter(function(item) {
