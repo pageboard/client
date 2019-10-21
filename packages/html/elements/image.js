@@ -30,6 +30,8 @@ exports.image = {
 			type: "object",
 			properties: {
 				fit: {
+					title: "Fit",
+					default: "none",
 					anyOf: [{
 						title: "natural",
 						const: "none"
@@ -39,12 +41,11 @@ exports.image = {
 					}, {
 						title: "cover",
 						const: "cover"
-					}],
-					title: "fit",
-					default: "none"
+					}]
 				},
 				horizontal: {
-					title: "horizontal",
+					title: "Horizontal",
+					default: "hcenter",
 					anyOf: [{
 						const: "left",
 						title: "left"
@@ -54,11 +55,11 @@ exports.image = {
 					}, {
 						const: "right",
 						title: "right"
-					}],
-					default: "hcenter"
+					}]
 				},
 				vertical: {
-					title: "vertical",
+					title: "Vertical",
+					default: "top",
 					anyOf: [{
 						const: "top",
 						title: "top"
@@ -68,8 +69,7 @@ exports.image = {
 					}, {
 						const: "bottom",
 						title: "bottom"
-					}],
-					default: "top"
+					}]
 				}
 			}
 		},
