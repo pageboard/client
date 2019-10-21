@@ -536,10 +536,10 @@ types.oneOf = function(key, schema, node, inst) {
 		</div>`);
 		node.appendChild(field);
 		$(field).find('.radio.checkbox').checkbox();
-	} else if (listOf.length <= 3) {
+	} else if (listOf.length <= 4) {
 		field = node.dom(`<div class="inline fields">
 			<label for="${key}">${schema.title || key}</label>
-			<div class="field">
+			<div class="${listOf.length <= 2 ? 'inline' : ''} field">
 				${listOf.map(item => getRadioOption(item, key)).join('\n')}
 			</div>
 		</div>`);
@@ -549,7 +549,7 @@ types.oneOf = function(key, schema, node, inst) {
 		}
 		$(field).find('.radio.checkbox').checkbox();
 	} else {
-		field = node.dom(`<div class="flex field" title="${schema.description || ''}">
+		field = node.dom(`<div class="inline fields" title="${schema.description || ''}">
 			<label>${schema.title || key}</label>
 			<select name="${key}" class="ui compact dropdown">
 				${listOf.map(item => getSelectOption(item, key)).join('\n')}

@@ -173,3 +173,7 @@ input-map {
 	max-height: calc(100% - 1.8em);
 	max-width: 100%;
 }
+
+#form .field.href input[type="text"] {
+	width: auto;
+}

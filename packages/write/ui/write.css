@@ -166,8 +166,23 @@ body[data-mode="read"] #pageboard-read > iframe {
 	text-align:right;
 }
 
+#form .inline.fields > label {
+	width: 50%;
+}
+#form .inline.fields > .field {
+	width: 50%;
+}
+#form .inline.fields > .inline.field {
+	width:auto;
+}
+
 #form .inline.fields .field > .radio {
 	margin: 0em 0em 0em 0.85714286em;
+	display: block;
+	text-align: left;
+}
+#form .inline.fields .inline.field > .radio {
+	display:inline-block;
 }
 
 #form .ui.radio.checkbox .box,
@@ -292,4 +307,10 @@ body[data-mode="read"] #pageboard-read > iframe {
 #form input[type="text"] {
 	padding: 0.5em;
 	line-height: 1.3em;
+	width: 100%;
+}
+
+
+#form .inline.fields > .dropdown {
+	width: 50%;
 }
