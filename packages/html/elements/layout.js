@@ -89,7 +89,7 @@ exports.layout = {
 		[horizontal|?]
 		[vertical|?]
 		[direction]
-		[invert|?:inverted]" style="height:[height|eq:0:|not|post:%|magnet]">
+		[invert|?:inverted]" style="height:[height|eq:0:|not|post:vh|magnet]">
 	</div>`,
 	stylesheets: [
 		'../lib/components/container.css',
