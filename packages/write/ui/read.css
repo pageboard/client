@@ -1,9 +1,5 @@
 @import "../lib/pagecut/editor.css";
 
-.ProseMirror {
-	white-space:normal;
-}
-
 /* replaced elements cannot have pseudo elements,
  * that is why we must define is for both cases */
 .ProseMirror-selectednode {
