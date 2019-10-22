@@ -1,6 +1,6 @@
 {
   "name": "@pageboard/client",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Pageboard client modules",
   "main": "index.js",
   "files": [
