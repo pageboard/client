@@ -37,7 +37,7 @@ Pageboard.adopt = function(win, readState) {
 			// writeState.data = readState.data;
 			writeState.save();
 
-			Pageboard.hrefs = readState.scope.$hrefs;
+			Pageboard.hrefs = readState.scope.$hrefs || {};
 			var editor = Pageboard.editor;
 			if (editor && editor.closed) return;
 			Pageboard.scrollbar.update();
