@@ -1,0 +1,4 @@
+/coverage/
+/node_modules/
+/dist/
+/docs/datetime.min.js

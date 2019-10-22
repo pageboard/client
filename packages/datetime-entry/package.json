@@ -1,0 +1,49 @@
+{
+  "name": "@pageboard/datetime-entry",
+  "version": "3.3.1",
+  "description": "Enter formatted date and time without pickers - jquery-less edition",
+  "main": "dist/datetime.min.js",
+  "scripts": {
+    "test": "karma start --singleRun --browsers Firefox",
+    "build:prod": "BABEL_ENV=production babel src -o dist/datetime.min.js ",
+    "build:stg": "BABEL_ENV=production babel src -o dist/datetime.stg.js --source-maps",
+    "build:dev": "babel src -o dist/datetime.js",
+    "build:gh": "BABEL_ENV=production babel src -o docs/datetime.min.js",
+    "build": "npm run build:dev && npm run build:prod && npm run build:stg && npm run build:gh",
+    "prepare": "npm run build"
+  },
+  "authors": [
+    "Serge Balykov (ua9msn@gmail.com)",
+    "Jérémy Lal <kapouer@melix.org>"
+  ],
+  "homepage": "https://github.com/pageboard/datetime",
+  "keywords": [
+    "datetime",
+    "date-time",
+    "datepicker",
+    "timepicker"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pageboard/datetime"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-eslint": "^8.0.2",
+    "babel-minify": "^0.2.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "eslint": "^4.11.0",
+    "jasmine": "^2.8.0",
+    "jasmine-core": "^2.8.0",
+    "jquery": "*",
+    "karma": "^1.7.1",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-coverage": "^1.1.1",
+    "karma-firefox-launcher": "^1.0.1",
+    "karma-jasmine": "^1.1.0",
+    "karma-jasmine-jquery": "^0.1.1"
+  },
+  "dependencies": {}
+}
