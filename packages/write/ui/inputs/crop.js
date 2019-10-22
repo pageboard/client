@@ -40,6 +40,8 @@ Crop.prototype.init = function(block) {
 		minContainerWidth: this.container.offsetWidth,
 		minContainerHeight: this.container.offsetWidth * 3 / 4,
 		dragMode: 'move',
+		checkOrientation: false,
+		checkCrossOrigin: false,
 		toggleDragModeOnDblclick: false,
 		ready: this.ready.bind(this),
 		crop: function(e) {
