@@ -1,0 +1,49 @@
+--- node_modules/prosemirror-model/dist/index.js.orig	1985-10-26 09:15:00.000000000 +0100
++++ node_modules/prosemirror-model/dist/index.js	2019-08-05 11:44:07.268410620 +0200
+@@ -2648,7 +2648,8 @@
+     var rule = this$1.tags[i];
+     if (matches(dom, rule.tag) &&
+         (rule.namespace === undefined || dom.namespaceURI == rule.namespace) &&
+-        (!rule.context || context.matchesContext(rule.context))) {
++        (!rule.context || context.matchesContext(rule.context)) &&
++        (!rule.node || context.matchesType(this.schema.nodes[rule.node]))) {
+       if (rule.getAttrs) {
+         var result = rule.getAttrs(dom);
+         if (result === false) { continue }
+@@ -3136,6 +3137,36 @@
+   } }
+ };
+ 
++// : (NodeType) → bool
++// Determines whether the given node type
++// matches this context.
++ParseContext.prototype.matchesType = function matchesType (type) {
++    var this$1 = this;
++
++  var option = this.options.context;
++  var useRoot = !this.isOpen && (!option || option.parent.type == this.nodes[0].type);
++  var minDepth = -(option ? option.depth + 1 : 0) + (useRoot ? 0 : 1);
++  var match = function (depth) {
++    var next = depth > 0 || (depth == 0 && useRoot) ? this$1.nodes[depth]
++        : option && depth >= minDepth ? option.node(depth - minDepth)
++        : null;
++    if (!next) return false;
++    if (next.match && next.match.matchType(type)) return true;
++    if (next.type) {
++      var nextMatch = function(contentMatch) {
++        if (contentMatch.matchType(type)) return true;
++        if (!contentMatch.validEnd) {
++        	return nextMatch(contentMatch.next[contentMatch.next.length - 1]);
++        }
++        return false;
++      };
++      return nextMatch(next.type.contentMatch);
++    }
++    return match(depth - 1);
++  };
++  return match(this.open);
++};
++
+ // : (string) → bool
+ // Determines whether the given [context
+ // string](#ParseRule.context) matches this context.

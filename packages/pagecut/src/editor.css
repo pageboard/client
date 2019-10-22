@@ -1,0 +1,63 @@
+@import './prosemirror.css';
+
+.ProseMirror {
+	white-space: normal;
+}
+
+.ProseMirror [block-text] {
+	white-space: pre-wrap;
+}
+
+.ProseMirror-content {
+	outline:none;
+}
+
+.ProseMirror-selectednode {
+	outline: none;
+}
+
+[contenteditable="true"]:focus {
+	outline: none;
+}
+pagecut-placeholder {
+	display:none;
+	width:0;
+	height:0;
+	position:relative;
+	overflow:visible;
+	z-index:10000;
+}
+pagecut-placeholder:after {
+	content:'+';
+	color:black;
+	text-shadow: -1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white, 1px 1px 0 white;
+	padding: 0 8px;
+	cursor:pointer;
+	font-family: monospace;
+	font-size: 23px;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+}
+[block-focused][block-type] [block-type]:not([block-focused]) > pagecut-placeholder,
+[block-focused][block-type] [block-type]:not([block-focused]) [block-content] > pagecut-placeholder {
+	display:none;
+}
+[block-focused][block-type] > pagecut-placeholder,
+[block-focused][block-type] [block-content] > pagecut-placeholder {
+	display:inline-block;
+}
+
+pagecut-placeholder.ProseMirror-selectednode {
+	display:inline-block;
+	outline:none !important;
+	box-shadow:none !important;
+}
+pagecut-placeholder.ProseMirror-selectednode:after {
+	color:white;
+	text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
+}
+
+.ProseMirror-dropcursor {
+	z-index: 2147483647; /* max z-index everywhere but Safari <= 3
+}

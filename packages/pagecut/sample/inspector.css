@@ -1,0 +1,243 @@
+@import './inspector-font.css';
+
+.inspector {
+	display:inline-flex;
+	white-space: nowrap;
+	position:relative;
+	border:1px solid #aaa;
+	border-radius:.3em;
+	overflow:hidden;
+	max-height:2.75em;
+	max-width:100%;
+	margin:1px;
+}
+.inspector [hidden] {
+	display:none !important;
+}
+.inspector[block-focused] {
+	max-height:none;
+	box-shadow:1px 1px 1px #999;
+	border-color:#555;
+}
+
+.inspector > header.ProseMirror-selectednode,
+.inspector > aside.ProseMirror-selectednode {
+	outline: 1px solid red; /* debugging purpose - should never happen */
+}
+
+.inspector > header {
+	cursor:move;
+	background:#888;
+	flex: 0 0 auto;
+	padding-left:0.15em;
+	padding-right:0.2em;
+	text-align:center;
+	text-decoration:none;
+	min-width:1.2em;
+	display:flex;
+	flex-direction:column;
+}
+.inspector a[href] > * {
+	pointer-events: none;
+}
+
+.inspector.ProseMirror-selectednode > header {
+	background-color:#555;
+}
+
+.inspector > header > [name]:after {
+	font-family: "component-font";
+	speak: none;
+	display: inline-block;
+	vertical-align:middle;
+	text-decoration: inherit;
+	width: 1.2em;
+	text-align:center;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1em;
+	margin: 0 auto;
+	color:white;
+	padding-top:.1em;
+}
+@keyframes block-link-spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(359deg);
+	}
+}
+
+.inspector[type="none"] > header > [name="type"]:after {
+	content: '\e832';
+	animation: block-link-spin 2s infinite linear;
+}
+.inspector[type=""] > header > [name="type"]:after { content: '\e832'; }
+.inspector[type="video"] > header > [name="type"]:after { content: '\e800'; }
+.inspector[type="link"] > header > [name="type"]:after { content: '\e801'; }
+.inspector[type="image"] > header > [name="type"]:after { content: '\e802'; }
+.inspector[type="audio"] > header > [name="type"]:after { content: '\e803'; }
+.inspector[type="embed"] > header > [name="type"]:after { content: '\f10e'; }
+
+.inspector[block-focused] > header > [name="preview"] {
+	flex: 1 1 auto;
+	flex-direction:column;
+	justify-content:flex-end;
+	display:flex;
+}
+.inspector[block-focused] > header > [name="preview"]:after {
+	content: '\f082';
+	left:0.2em;
+	width:1.2em;
+	display:block;
+	padding-bottom:.2em;
+}
+.inspector > header > [title] {
+	display:block;
+}
+.inspector > header > [title] > img {
+	max-width:1.2em;
+	display:inline-block;
+	margin:0 auto;
+	cursor:move !important;
+	vertical-align:middle;
+	padding-top:.1em;
+	margin-bottom:.2em;
+}
+
+.inspector > aside {
+	background-color:#666;
+	flex: 0 2 auto;
+	display:flex;
+	position:relative;
+	max-width:14em; /* this is what makes root size reasonnable */
+	min-width:0; /* slightly better when small */
+	cursor:pointer;
+}
+
+.inspector > aside > figure {
+	flex: 1 1 auto;
+	min-height:0;
+	min-width:66%;
+	max-width:0; /* this is a trick */
+	display:flex;
+	margin:0;
+}
+.inspector > aside > figure:empty {
+	display:none;
+}
+
+.inspector > aside > figure > img {
+	width: 100%;
+	align-self:center;
+	max-height:8em;
+	box-shadow:0px 0px 3px white;
+}
+.inspector > aside > div > p {
+	white-space: normal;
+	color:#eee;
+	margin: 0 0.3em;
+	font-family: sans-serif;
+	font-size: 0.7em;
+	max-height:8em;
+	overflow:visible;
+	text-align:left;
+	padding:.3em;
+}
+.inspector > aside > div {
+	flex: 1 1 auto;
+	font-family: monospace;
+	white-space: normal;
+	color:white;
+	min-width:50%;
+	color:#eee;
+}
+.inspector > aside > div:empty {
+	display:none;
+}
+.inspector > aside > div > div {
+	float:right;
+	margin-right:0.15em;
+	background-color:#444;
+	font-size:.9em;
+	border-bottom-left-radius:.3em;
+	padding:.1em;
+}
+.inspector > aside > div > div > span {
+	float:right;
+	clear:both;
+	padding-left:0.2em;
+}
+
+.inspector > div {
+	flex: 1 1 auto;
+	padding-top:.1em;
+	background:#eee;
+	padding-right:.1em;
+}
+.inspector > div > div[block-content] {
+	display: block;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	position: relative;
+	line-height:1.15em;
+	margin-right: 0.2em;
+	padding-left: 0.4em;
+	font-family:sans-serif;
+	font-size:.95em;
+	margin-top:0.1em;
+}
+.inspector[block-focused] > div > div[block-content] {
+	white-space: pre-wrap;
+}
+
+.inspector[block-focused] > div {
+	background:#fff;
+}
+
+.inspector > div > div[block-content]:before {
+	color:grey;
+	font-family:sans-serif;
+	letter-spacing:-1px;
+	font-size:0.8em;
+}
+
+.inspector > div > div[block-content="title"]:before {
+	content: 'Title: ';
+}
+.inspector > div > div[block-content="content"] {
+	display:none;
+}
+
+/* image type */
+
+.inspector[type="image"] > div > div[block-content="content"] {
+	display:inline-block;
+}
+.inspector[type="image"] > div > div[block-content="content"]:before {
+	content: 'Credit: ';
+}
+
+
+/* link type */
+.inspector[type="link"] > header > [name="preview"],
+.inspector:not([block-focused])[type="link"] > header > [name="type"] {
+	display:none;
+}
+.inspector:not([block-focused])[type="link"] {
+	height:1.4em;
+}
+.inspector[type="link"]:not([block-focused]) > header {
+	display:flex;
+	align-items:center;
+}
+.inspector:not([block-focused])[type="link"]> header > img {
+	margin:0;
+}
+.inspector[type="link"] > div > div[block-content="content"] {
+	display:block;
+}
+.inspector[type="link"] > div > div[block-content="content"]:before {
+	content: 'Content: ';
+}

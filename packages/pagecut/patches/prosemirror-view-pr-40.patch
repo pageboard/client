@@ -1,0 +1,13 @@
+--- node_modules/prosemirror-view/dist/index.js.orig	1985-10-26 09:15:00.000000000 +0100
++++ node_modules/prosemirror-view/dist/index.js	2019-05-10 09:19:28.266053036 +0200
+@@ -1326,7 +1326,10 @@
+ // Create a view desc for the top-level document node, to be exported
+ // and used by the view class.
+ function docViewDesc(doc, outerDeco, innerDeco, dom, view) {
++  var custom = view.nodeViews[doc.type.name];
++  var spec = custom && custom(doc, view, () => { return 0; }, outerDeco);
+   applyOuterDeco(dom, outerDeco, doc);
++  if (spec) return new CustomNodeViewDesc(null, doc, outerDeco, innerDeco, dom, dom, dom, spec, view, 0)
+   return new NodeViewDesc(null, doc, outerDeco, innerDeco, dom, dom, dom, view, 0)
+ }
+ 
