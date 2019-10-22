@@ -3,6 +3,9 @@
   "version": "0.7.0",
   "description": "Pageboard client modules",
   "main": "index.js",
+  "files": [
+    "packages/*"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
