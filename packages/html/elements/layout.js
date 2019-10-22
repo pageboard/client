@@ -44,25 +44,6 @@ exports.layout = {
 				title: "bottom"
 			}]
 		},
-		width: {
-			title: 'control width',
-			default: "full",
-			anyOf: [{
-				const: "full",
-				title: "full"
-			}, {
-				const: "contained",
-				title: "contained"
-			}]
-		},
-		height: {
-			title: 'height',
-			description: 'height in vh units',
-			type: 'number',
-			minimum: 0,
-			maximum: 999,
-			default: 0
-		},
 		direction: {
 			title: 'direction',
 			default: "column",
@@ -79,7 +60,44 @@ exports.layout = {
 			description: 'Invert background',
 			default: false,
 			type: 'boolean'
-		}
+		},
+		width: {
+			title: 'control width',
+			default: "full",
+			anyOf: [{
+				const: "full",
+				title: "full"
+			}, {
+				const: "contained",
+				title: "contained"
+			}]
+		},
+		height: {
+			title: 'height',
+			type: 'number',
+			minimum: 0,
+			default: 0
+		},
+		heightUnits: {
+			title: 'height units',
+			default: '%',
+			anyOf: [{
+				title: '%',
+				const: '%'
+			}, {
+				title: 'vh',
+				const: 'vh'
+			}, {
+				title: 'em',
+				const: 'em'
+			}, {
+				title: 'rem',
+				const: 'rem'
+			}, {
+				title: 'px',
+				const: 'px'
+			}]
+		},
 	},
 	contents: "block+",
 	group: 'block',
@@ -89,7 +107,7 @@ exports.layout = {
 		[horizontal|?]
 		[vertical|?]
 		[direction]
-		[invert|?:inverted]" style="height:[height|eq:0:|not|post:vh|magnet]">
+		[invert|?:inverted]" style="height:[height|eq:0:|not|magnet][heightUnits|or:%]">
 	</div>`,
 	stylesheets: [
 		'../lib/components/container.css',
