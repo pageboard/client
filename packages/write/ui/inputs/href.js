@@ -447,9 +447,12 @@ Href.prototype.get = function(href) {
 
 Href.prototype.insert = function(url) {
 	var me = this;
-	return Pageboard.uiLoad(this.node, Pageboard.fetch('post', '/.api/href', {
-		url: url
-	})).then(function(result) {
+	return Pageboard.uiLoad(
+		this.node.querySelector(`[data-action="${this.action}"]`),
+		Pageboard.fetch('post', '/.api/href', {
+			url: url
+		})
+	).then(function(result) {
 		me.cache([result]);
 		me.renderList(me.list.concat(result));
 	});
