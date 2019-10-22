@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/pageboard/client#readme",
   "dependencies": {
+    "@pageboard/pagecut": "file:./packages/pagecut",
     "@pageboard/site": "file:./packages/site",
     "@pageboard/calendar": "file:./packages/calendar",
     "@pageboard/gallery": "file:./packages/gallery",
