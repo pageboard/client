@@ -55,14 +55,8 @@ exports.layout = {
 				title: "row"
 			}]
 		},
-		invert: {
-			title: 'invert',
-			description: 'Invert background',
-			default: false,
-			type: 'boolean'
-		},
 		width: {
-			title: 'control width',
+			title: 'width',
 			default: "full",
 			anyOf: [{
 				const: "full",
@@ -98,6 +92,12 @@ exports.layout = {
 				const: 'px'
 			}]
 		},
+		invert: {
+			title: 'invert',
+			description: 'Invert background',
+			default: false,
+			type: 'boolean'
+		}
 	},
 	contents: "block+",
 	group: 'block',
