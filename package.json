@@ -17,15 +17,15 @@
   },
   "homepage": "https://github.com/pageboard/client#readme",
   "dependencies": {
-    "@pageboard/site": "link:./packages/site",
-    "@pageboard/calendar": "link:./packages/calendar",
-    "@pageboard/gallery": "link:./packages/gallery",
-    "@pageboard/google": "link:./packages/google",
-    "@pageboard/email": "link:./packages/email",
-    "@pageboard/print": "link:./packages/print",
-    "@pageboard/feed": "link:./packages/feed",
-    "@pageboard/html": "link:./packages/html",
-    "@pageboard/write": "link:./packages/write"
+    "@pageboard/site": "file:./packages/site",
+    "@pageboard/calendar": "file:./packages/calendar",
+    "@pageboard/gallery": "file:./packages/gallery",
+    "@pageboard/google": "file:./packages/google",
+    "@pageboard/email": "file:./packages/email",
+    "@pageboard/print": "file:./packages/print",
+    "@pageboard/feed": "file:./packages/feed",
+    "@pageboard/html": "file:./packages/html",
+    "@pageboard/write": "file:./packages/write"
   },
   "pageboard": true
 }
