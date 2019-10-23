@@ -50,6 +50,7 @@ Pageboard.Controls.Mode = class Mode {
 					elt.fusable = false;
 					elt.dom.setAttribute('element-type', elt.inline ? 'inline' : 'block');
 					elt.dom.setAttribute('element-title', elt.title);
+					elt.dom.removeAttribute('style');
 					elt.html = elt.dom.outerHTML;
 					delete elt.dom;
 				});
