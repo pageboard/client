@@ -97,6 +97,7 @@ exports.menu_item_link = {
 };
 
 exports.menu_item_text = {
+	priority: 11,
 	title: 'Text',
 	icon: '<b class="icon">Item</b>',
 	menu: "link",
