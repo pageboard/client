@@ -554,7 +554,7 @@ types.oneOf = function(key, schema, node, inst) {
 		if (def !== undefined) {
 			$(field).find(`[name="${key}"][value="${def}"]`).prop('checked', true);
 		}
-		$(field).find('.radio.checkbox').checkbox();
+		$(field).find('.toggle.checkbox').checkbox();
 	} else {
 		field = node.dom(`<div class="inline fields" title="${schema.description || ''}">
 			<label>${schema.title || key}</label>
@@ -753,7 +753,7 @@ function getIconOption(item, key) {
 }
 
 function getRadioOption(item, key) {
-	return `<div class="ui radio checkbox">
+	return `<div class="ui toggle checkbox">
 			<input type="radio" name="${key}" value="${getValStr(item)}" tabindex="0" class="hidden">
 			<label>${item.title}</label>
 		</div>`;

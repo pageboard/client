@@ -176,7 +176,7 @@ body[data-mode="read"] #pageboard-read > iframe {
 	width:auto;
 }
 
-#form .inline.fields .field > .radio {
+#form .inline.fields .field > .radio, #form .inline.fields .field > .toggle {
 	margin: 0em 0em 0em 0.85714286em;
 	display: block;
 	text-align: left;
@@ -248,8 +248,7 @@ body[data-mode="read"] #pageboard-read > iframe {
 	padding-left:2.3em; /* compensate absolute inner width, see below */
 }
 .ui.toggle.checkbox label {
-	padding-left:3.2em;
-	font-size:0.8em;
+	padding-left: 3em;
 }
 
 .ui.toggle.checkbox .box:hover::before,
