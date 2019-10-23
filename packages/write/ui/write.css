@@ -173,7 +173,7 @@ body[data-mode="read"] #pageboard-read > iframe {
 	width: 50%;
 }
 #form .inline.fields > .inline.field {
-	width:auto;
+	/* width:auto; */
 }
 
 #form .inline.fields .field > .radio, #form .inline.fields .field > .toggle {
@@ -312,4 +312,9 @@ body[data-mode="read"] #pageboard-read > iframe {
 
 #form .inline.fields > .dropdown {
 	width: 50%;
+}
+
+#move .ui.toggle.checkbox > label {
+	font-size: 0.8em;
+	padding-left: 3.2em;
 }
