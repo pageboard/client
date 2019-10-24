@@ -1,4 +1,9 @@
-/* eslint indent: ["error", 4, { "SwitchCase": 1 }] */
+/*!
+  * Stickyfill – `position: sticky` polyfill
+  * v. 2.1.0 | https://github.com/wilddeer/stickyfill
+  * MIT License
+  */
+
 'use strict';
 
 /*
@@ -75,7 +80,7 @@ function parseNumeric (val) {
 }
 
 function getDocOffsetTop (node) {
-    var docOffsetTop = 0;
+    let docOffsetTop = 0;
 
     while (node) {
         docOffsetTop += node.offsetTop;
@@ -83,47 +88,6 @@ function getDocOffsetTop (node) {
     }
 
     return docOffsetTop;
-}
-
-// Watch for scroll position changes and trigger recalc/refresh if needed
-function checkScroll () {
-    if (window.pageXOffset != scroll.left) {
-        scroll.top = window.pageYOffset;
-        scroll.left = window.pageXOffset;
-
-        Stickyfill.refreshAll();
-    }
-    else if (window.pageYOffset != scroll.top) {
-        scroll.top = window.pageYOffset;
-        scroll.left = window.pageXOffset;
-
-        // recalc position for all stickies
-        stickies.forEach(sticky => sticky._recalcPosition());
-    }
-}
-
-//Fast dirty check for layout changes every 500ms
-let fastCheckTimer;
-
-function startFastCheckTimer () {
-    fastCheckTimer = setInterval(function () {
-        stickies.forEach(sticky => sticky._fastCheck());
-    }, 500);
-}
-
-function stopFastCheckTimer () {
-    clearInterval(fastCheckTimer);
-}
-
-
-
-function toggleTimer() {
-    if (document[docHiddenKey]) {
-        stopFastCheckTimer();
-    }
-    else {
-        startFastCheckTimer();
-    }
 }
 
 
@@ -505,6 +469,48 @@ const Stickyfill = {
     }
 };
 
+
+ // Watch for scroll position changes and trigger recalc/refresh if needed
+function checkScroll () {
+    if (window.pageXOffset != scroll.left) {
+        scroll.top = window.pageYOffset;
+        scroll.left = window.pageXOffset;
+
+
+        Stickyfill.refreshAll();
+    }
+    else if (window.pageYOffset != scroll.top) {
+        scroll.top = window.pageYOffset;
+        scroll.left = window.pageXOffset;
+
+
+        // recalc position for all stickies
+        stickies.forEach(sticky => sticky._recalcPosition());
+    }
+}
+
+//Fast dirty check for layout changes every 500ms
+let fastCheckTimer;
+
+function startFastCheckTimer () {
+    fastCheckTimer = setInterval(function () {
+        stickies.forEach(sticky => sticky._fastCheck());
+    }, 500);
+}
+
+function stopFastCheckTimer () {
+    clearInterval(fastCheckTimer);
+}
+
+function toggleTimer() {
+    if (document[docHiddenKey]) {
+        stopFastCheckTimer();
+    }
+    else {
+        startFastCheckTimer();
+    }
+}
+
 /*
  * 6. Setup events (unless the polyfill was disabled)
  */
@@ -541,3 +547,4 @@ if (typeof module != 'undefined' && module.exports) {
 else if (isWindowDefined) {
     window.Stickyfill = Stickyfill;
 }
+
