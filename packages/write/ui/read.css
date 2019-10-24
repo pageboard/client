@@ -90,6 +90,7 @@ body[data-mode="code"] [element-content] {
 	display: flex !important;
 	flex-flow: row wrap;
 	box-shadow: inset 0px 0px 1px 1px #0000001a;
+	background-color:inherit;
 }
 body[data-mode="code"] {
 	background-color:white;

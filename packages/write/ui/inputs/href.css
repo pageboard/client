@@ -97,10 +97,8 @@ input-map {
 
 .field.href .items > a.item > .content > .header {
 	color:#555;
-	background-color:#FCFCFC;
-	border-bottom:1px solid #999;
+	background-color: rgba(129,165,255,0.1);
 	padding-right:1.7em; /* leave space for pinned right button */
-	border-right: 1px solid #999;
 }
 
 .field.href .items > .item > .content > .thumbnail {
@@ -117,7 +115,6 @@ input-map {
 .field.href .items > .item.selected > .content > .header,
 .field.href.page-href .items > .item:hover > .content > .header {
 	background-color: #4165A0;
-	border-bottom:1px solid #4165A0;
 	color:white;
 }
 
