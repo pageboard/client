@@ -210,15 +210,17 @@ Page.Transition = class {
 };
 
 Page.setup(function navigate(state) {
-	document.addEventListener('click', function(e) {
-		var a = e.target.closest('a');
-		var href = a && a.getAttribute('href');
-		if (!href || e.defaultPrevented || a.target) return;
-		e.preventDefault();
-		Page.setup(function(state) {
-			state.push(href);
-		});
-	}, false);
+	Page.connect({
+		handleClick: (e) => {
+			var a = e.target.closest('a');
+			var href = a && a.getAttribute('href');
+			if (!href || e.defaultPrevented || a.target) return;
+			e.preventDefault();
+			Page.setup(function(state) {
+				state.push(href);
+			});
+		}
+	}, document)
 
 	if (!document.body.isContentEditable && document.body.dataset.redirect) {
 		setTimeout(function() {
@@ -228,17 +230,18 @@ Page.setup(function navigate(state) {
 });
 
 Page.setup(function(state) {
-	// Page removes event listener automatically
-	window.addEventListener('scroll', Pageboard.debounce(function(e) {
-		Page.setup(function(state) {
-			if (state.transition) return;
-			state.data.scroll = {
-				x: window.scrollX,
-				y: window.scrollY
-			};
-			state.save();
-		});
-	}, 500), false);
+	Page.connect({
+		handleScroll: Pageboard.debounce(function(e) {
+			Page.setup(function(state) {
+				if (state.transition) return;
+				state.data.scroll = {
+					x: window.scrollX,
+					y: window.scrollY
+				};
+				state.save();
+			});
+		}, 500)
+	}, window);
 });
 
 Page.init(function(state) {

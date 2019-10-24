@@ -3,9 +3,6 @@ class HTMLElementSticky extends HTMLCustomElement {
 		this.stickyfill = window.Stickyfill;
 		this.stickyfill.forceSticky();
 	}
-	static destroy() {
-		this.stickyfill.destroy();
-	}
 	init() {
 		var listener = this.listener.bind(this);
 		var raf;
@@ -17,8 +14,10 @@ class HTMLElementSticky extends HTMLCustomElement {
 	setup() {
 		this.dataset.mode = "start";
 		if (this._sticky || !this.parentNode) return;
-		window.addEventListener('scroll', this.listener);
-		window.addEventListener('resize', this.listener);
+		Page.connect({
+			handleScroll: this.listener,
+			handleResize: this.listener
+		}, window)
 		// some stylesheets might target :not([data-mode="start"]) so it must be the initial value
 		this._sticky = this.constructor.stickyfill.addOne(this);
 		this.listener();
@@ -30,21 +29,12 @@ class HTMLElementSticky extends HTMLCustomElement {
 		this.dataset.mode = mode;
 	}
 	close() {
-		if (!this._sticky || !this.parentNode) return;
+		if (!this._sticky) return;
 		delete this._sticky;
-		window.removeEventListener('scroll', this.listener);
-		window.removeEventListener('resize', this.listener);
 		this.constructor.stickyfill.removeOne(this);
-	}
-	update() {
-		if (this._sticky) this._sticky.refresh();
 	}
 }
 
 Page.setup(function() {
 	HTMLCustomElement.define('element-sticky', HTMLElementSticky);
-});
-
-Page.close(function() {
-	HTMLElementSticky.destroy();
 });
