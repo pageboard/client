@@ -5,8 +5,15 @@
 .dropdown.item > .menu > .item .ui.image {
 	max-width:none; /* workaround image width not being accounted for */
 }
-
+.ui.simple.dropdown:focus > .menu {
+	overflow: visible;
+	width: auto;
+	height: auto;
+	top: 100% !important;
+	opacity: 1;
+}
 /* menu item with icon */
+.item:focus > .caret-icon:before,
 .item:hover > .caret-icon:before {
 	transform:rotate(90deg);
 }
@@ -16,30 +23,45 @@
 	flex-basis: 100%;
 	position: absolute;
 	bottom: 0;
+	left: 0;
+}
+.fixed.popup.item > .placer > div {
+	position:fixed;
+	max-width: 100%;
+	max-height: 100%;
 }
 .popup.item > .placer > div {
 	display:none;
 	position: absolute;
-	z-index: 1900;
-	width:90%;
-	left:5%;
-	max-width:none;
-	min-width: -webkit-min-content;
-	min-width: -moz-min-content;
-	min-width: min-content;
-}
-.popup.fixed.item > .placer > div {
-	position: fixed;
-	left: 0px;
-	right: 0px;
+	z-index: 2000;
+	left:0;
+	right:auto;
 	width: auto;
-	max-width: 100%;
-	max-height: 100%;
 	overflow-y: auto;
 	overflow-x: hidden;
+	min-width: min-content;
+}
+.center.fixed.popup.item > .placer > div {
+	left:50%;
+	transform: translateX(-50%);
+	right:auto;
+}
+.center.popup.item:not(.fixed) > .placer {
+	left:50%;
+}
+.center.popup.item > .placer > div {
+	transform: translateX(-50%);
+	right:auto;
+}
+.right.popup.item > .placer {
+	right:0;
+}
+.right.popup.item > .placer > div {
+	left:auto;
+	right:0;
 }
 .popup.item > .placer > div > .grid:first-of-type {
-	margin: 0;
+	margin: 0 !important;
 }
 .popup.item > .placer > div {
 	background-color:white;
@@ -50,19 +72,26 @@
 	display: flex;
 	flex-direction: column;
 }
-.right.popup.item > .placer > div {
-	left:auto;
-	right:0;
-}
-
-element-menu.burger.right .popup.item > .placer > div {
-	/* text-align: right; */
-}
 
 /* menu_group */
 element-menu {
 	position: relative;
 	flex-shrink: 1;
+}
+.ui.menu:not(.vertical) > element-menu {
+	margin-right: auto !important; /* crucial for burger width calc */
+}
+.ui.menu:not(.vertical) > element-menu.right {
+	margin-right: 0 !important; /* crucial for burger width calc */
+	margin-left: auto !important;
+}
+element-menu.burger > [block-content="items"] {
+	position: fixed;
+	left:0;
+}
+element-menu.burger.right > [block-content="items"] {
+	left:auto;
+	right: 0;
 }
 element-menu > [block-content="items"] {
 	display:flex;
@@ -79,7 +108,6 @@ element-menu.burger .placer .title {
 element-menu.burger .placer .popup.active .title {
 	margin-bottom:0.5em;
 }
-element-menu.burger > [block-content="items"] {position: fixed;right: 0;}
 element-menu.burger > [block-content="items"] > * {
 	visibility:hidden;
 }
@@ -123,4 +151,7 @@ element-menu.burger > .popup > .icon {
 	font-size: 1.6429rem;
 	font-weight: bold;
 	font-family: sans-serif;
+}
+element-menu.burger > .popup > .placer > .menu {
+	right:auto; /* disables the right:0 given by .popup > .placer > div */
 }

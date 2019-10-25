@@ -172,7 +172,21 @@ exports.menu_item_popup = {
 		fixed: {
 			title: 'Fixed',
 			type: 'boolean',
-			nullable: true
+			default: false
+		},
+		position: {
+			title: 'Position',
+			anyOf: [{
+				title: 'left',
+				const: 'left'
+			}, {
+				title: 'center',
+				const: 'center'
+			}, {
+				title: 'right',
+				const: 'right'
+			}],
+			default: 'center'
 		},
 		icon: {
 			title: 'Show dropdown icon',
@@ -181,7 +195,7 @@ exports.menu_item_popup = {
 		}
 	},
 	group: "menu_item",
-	html: `<div tabindex="0" class="ui [fixed|?] popup item">
+	html: `<div tabindex="0" class="ui [position] [fixed|?] popup item">
 		<div class="title [icon|?:caret-icon]" block-content="title">Popup</div>
 		<div class="placer">
 			<div block-content="content"></div>

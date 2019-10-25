@@ -22,11 +22,12 @@ class HTMLElementMenu extends HTMLCustomElement {
 		const menu = this.firstElementChild;
 		const helper =  this.lastElementChild;
 		helper.lastElementChild.lastElementChild.appendChild(this.toHelper(menu));
-		document.body.addEventListener('click', (e) => {
-			this.bodyClick(e, state);
-		});
+		Page.connect({
+			handleClick: (e, state) => this.anyClick(e, state)
+		}, document);
 		this.observer = new ResizeObserver((entries, observer) => {
-			var parentWidth = parseFloat(window.getComputedStyle(this).marginLeft) + this.offsetWidth;
+			var styles = window.getComputedStyle(this);
+			var parentWidth = parseFloat(styles.marginLeft) + parseFloat(styles.marginRight) + this.offsetWidth;
 			var menuWidth = menu.offsetWidth;
 			this.classList.toggle('burger', parentWidth <= menuWidth);
 		});
@@ -35,7 +36,7 @@ class HTMLElementMenu extends HTMLCustomElement {
 	close(state) {
 		if (this.observer) this.observer.disconnect();
 	}
-	bodyClick(e, state) {
+	anyClick(e, state) {
 		if (this.active) {
 			this.active.classList.toggle('active', false);
 		}
