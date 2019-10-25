@@ -166,7 +166,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 					vary = "patch";
 					loc.query = Object.assign({}, state.query, loc.query);
 				}
-				state.data.$vary = vary
+				state.data.$vary = vary;
 			}
 			Array.from(document.querySelectorAll('element-template')).forEach(function(node) {
 				delete node.dataset.query;
