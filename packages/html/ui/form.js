@@ -222,9 +222,21 @@ HTMLInputElement.prototype.reset = function() {
 
 Page.setup(function(state) {
 	// https://daverupert.com/2017/11/happier-html5-forms/
-	document.body.addEventListener('blur', blurHandler, true);
-	document.body.addEventListener('focus', focusHandler, true);
-	document.body.addEventListener('invalid', invalidHandler, true);
+	Page.connect({
+		captureBlur: function(e, state) {
+			blurHandler(e, false);
+		},
+		captureFocus: function(e, state) {
+			var el = e.target;
+			if (!el.matches('input,textarea,select')) return;
+			if (e.relatedTarget && e.relatedTarget.type == "submit") return;
+			updateClass(el.closest('.field') || el, el.validity, true);
+		},
+		captureInvalid: function(e, state) {
+			// e.preventDefault(); // show native ui
+			blurHandler(e, true);
+		}
+	}, document);
 
 	function updateClass(field, validity, remove) {
 		for (var key in validity) {
@@ -234,21 +246,11 @@ Page.setup(function(state) {
 		}
 		field.classList.toggle('error', !remove && !validity.valid);
 	}
-	function invalidHandler(e) {
-		// e.preventDefault(); // disable when we have proper messages
-		blurHandler(e, true);
-	}
 	function blurHandler(e, checked) {
 		var el = e.target;
 		if (!e.target.matches('input,textarea,select')) return;
 		if (!checked) el.checkValidity();
 		updateClass(el.closest('.field') || el, el.validity);
-	}
-	function focusHandler(e) {
-		var el = e.target;
-		if (!el.matches('input,textarea,select')) return;
-		if (e.relatedTarget && e.relatedTarget.type == "submit") return;
-		updateClass(el.closest('.field') || el, el.validity, true);
 	}
 });
 
