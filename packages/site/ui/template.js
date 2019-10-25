@@ -90,6 +90,7 @@ class HTMLElementTemplate extends HTMLCustomElement {
 		while ((rnode = template.querySelector('[block-expr]'))) rnode.removeAttribute('block-expr');
 
 		var scope = Object.assign({}, state.scope);
+		var usesQuery = false;
 
 		scope.$element = {
 			name: `template_element_${this.id}`,
@@ -98,6 +99,7 @@ class HTMLElementTemplate extends HTMLCustomElement {
 				'||': function(val, what) {
 					var path = what.scope.path;
 					if (path[0] != "$query") return;
+					usesQuery = true;
 					var key;
 					if (path.length > 1) {
 						// (b)magnet sets val to null so optional values are not undefined
@@ -124,10 +126,14 @@ class HTMLElementTemplate extends HTMLCustomElement {
 
 		view.textContent = '';
 		while (node.firstChild) view.appendChild(node.firstChild);
-		if (!state.scrollIntoView && view.scrollIntoView) {
+		if (!state.scrollIntoView && view.scrollIntoView && usesQuery) {
 			state.scrollIntoView = true;
-			view.scrollIntoView({
-				block: "nearest"
+			Page.setup(function(state) {
+				state.finish(function() {
+					view.scrollIntoView({
+						block: "nearest"
+					});
+				});
 			});
 		}
 	}
