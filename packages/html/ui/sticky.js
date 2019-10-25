@@ -24,9 +24,11 @@ class HTMLElementSticky extends HTMLCustomElement {
 	}
 	listener(e) {
 		if (!this._sticky) return;
-		var mode = this._sticky._stickyMode;
-		if (this.dataset.mode == mode) return;
-		this.dataset.mode = mode;
+		var mode = this._sticky._stickyMode || 'start';
+		if (this.dataset.mode != mode) {
+			this.dataset.mode = mode;
+			this._sticky._recalcClone();
+		}
 	}
 	close() {
 		if (!this._sticky) return;

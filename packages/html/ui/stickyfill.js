@@ -222,10 +222,8 @@ class Sticky {
         clone.node = document.createElement('div');
         clone.node.setAttribute('contenteditable', 'false');
 
-        // Apply styles to the clone
+         // Apply styles to the clone
         extend(clone.node.style, {
-            width: nodeWinOffset.right - nodeWinOffset.left + 'px',
-            height: nodeWinOffset.bottom - nodeWinOffset.top + 'px',
             marginTop: nodeComputedProps.marginTop,
             marginBottom: nodeComputedProps.marginBottom,
             marginLeft: nodeComputedProps.marginLeft,
@@ -238,8 +236,20 @@ class Sticky {
             position: 'static'
         });
 
+        this._recalcClone(nodeWinOffset);
+
         referenceNode.insertBefore(clone.node, node);
         clone.docOffsetTop = getDocOffsetTop(clone.node);
+    }
+
+    _recalcClone(nodeWinOffset) {
+        var clone = this._clone;
+        if (!clone) return;
+        if (!nodeWinOffset) nodeWinOffset = this._node.getBoundingClientRect();
+        extend(clone.node.style, {
+            width: nodeWinOffset.right - nodeWinOffset.left + 'px',
+            height: nodeWinOffset.bottom - nodeWinOffset.top + 'px',
+        });
     }
 
     _recalcPosition () {
@@ -305,7 +315,7 @@ class Sticky {
     }
 
     _deactivate () {
-        if (!this._active || this._removed) return;
+        if (!this._active || this._removed || !this._clone) return;
 
         if (this._clone.node.parentNode) this._clone.node.parentNode.removeChild(this._clone.node);
         delete this._clone;
