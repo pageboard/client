@@ -185,6 +185,9 @@ exports.menu_item_popup = {
 			}, {
 				title: 'right',
 				const: 'right'
+			}, {
+				title: 'justify',
+				const: 'justify'
 			}],
 			default: 'center'
 		},

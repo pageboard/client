@@ -46,6 +46,9 @@
 	transform: translateX(-50%);
 	right:auto;
 }
+.justify.fixed.popup.item > .placer > div {
+	width:100%;
+}
 .center.popup.item:not(.fixed) > .placer {
 	left:50%;
 }
