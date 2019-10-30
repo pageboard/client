@@ -14,6 +14,11 @@ Document.prototype.dom = function(str) {
 	return domify(Array.prototype.join.call(arguments, '\n'), this);
 };
 
+Document.prototype.fuse = XMLDocument.prototype.fuse = function(obj, scope) {
+	this.documentElement.fuse(obj, scope);
+	return this;
+};
+
 Node.prototype.dom = function() {
 	return domify(Array.prototype.join.call(arguments, '\n'), this.ownerDocument);
 };
