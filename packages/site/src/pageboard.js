@@ -106,7 +106,6 @@ Page.patch(function(state) {
 		Object.keys(state.vars).forEach(function(key) {
 			if (state.vars[key] === false) missing.push(key);
 		});
-		var head = document.head;
 		if (extra.length > 0) {
 			console.warn("Unknown query parameters detected, rewriting location", extra);
 			exports.equivs({
