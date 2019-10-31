@@ -5,7 +5,7 @@ Page.serialize = function(state) {
 	var latestDate;
 	var items = Array.from(doc.querySelectorAll('[block-type="feed"]')).map((node) => {
 		var card = Pageboard.getFeedCard(node, state);
-		if (!card.title || !card.description || !card.date) return;
+		if (!card.title || !card.date) return;
 		card.topics.forEach((topic) => {
 			topic = topic.trim();
 			if (topic && !categories.includes(topic)) categories.push(topic);
@@ -14,7 +14,7 @@ Page.serialize = function(state) {
 		else if (card.date > latestDate) latestDate = card.date;
 
 		return card;
-	});
+	}).filter((item) => !!item);
 	var url = doc.location.toString();
 	var feed = {
 		title: state.scope.$page.data.title,
