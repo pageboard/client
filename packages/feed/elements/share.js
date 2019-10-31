@@ -3,7 +3,7 @@ exports.share = {
 	menu: "widget",
 	inline: true,
 	group: "inline",
-	icon: '<i class="share icon"></i>',
+	icon: '<i class="share alternate icon"></i>',
 	html: `<element-share></element-share>`,
 	scripts: [
 		'../ui/share.js'
