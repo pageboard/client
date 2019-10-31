@@ -21,11 +21,7 @@
 }
 pagecut-placeholder {
 	display:none;
-	width:0;
-	height:0;
 	position:relative;
-	overflow:visible;
-	z-index:10000;
 }
 pagecut-placeholder:after {
 	content:'+';
