@@ -46,6 +46,7 @@ exports.feed = {
 			<nav>
 				<span class="topics">[topics|join:%20-%20]</span>
 				<span class="pubdate">[publication|formatDate:D:month:Y]</span>
+				<element-share></element-share>
 			</nav>
 			<header>
 				<h2 block-content="title">Title</h2>
