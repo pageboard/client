@@ -1,11 +1,10 @@
 {
   "name": "@pageboard/feed",
-  "version": "0.7.9",
+  "version": "0.7.10",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "prepare": "postinstall"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -21,18 +20,10 @@
     "priority": -5,
     "directories": [
       "elements",
-      "lib",
       "ui"
     ],
     "elements": [
       "elements/"
     ]
-  },
-  "devDependencies": {
-    "feed": "^4.0.0",
-    "postinstall-browserify": "^0.6.0"
-  },
-  "prepare": {
-    "feed/lib/feed.js": "browserify --standalone=Feed lib/"
   }
 }
