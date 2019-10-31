@@ -4,15 +4,15 @@ Page.patch(function(state) {
 		if (state.pathname.endsWith('.rss')) {
 			return;
 		} else if (feeds.length == 1) {
-			var meta = document.head.querySelector('meta');
+			var meta = Array.from(document.head.querySelectorAll('meta')).pop();
 			var feed = feeds[0];
 			meta.after(meta.dom(`
 				<meta property="og:title" content="[title]">
 				<meta property="og:description" content="[description|magnet=*]">
-				<meta property="og:image" content="[preview.url|magnet=*]" />
-			`).fuse(Pageboard.getFeedCard(feed), state.scope));
-		} else {
-			var rss = Page.format({
+				<meta property="og:image" content="[enclosure.url|magnet=*]" />
+			`).fuse(Pageboard.getFeedCard(feed, state), state.scope));
+		} else if (feeds.length > 1) {
+			var link = Page.format({
 				pathname: state.pathname + '.rss',
 				query: state.query
 			});
@@ -20,9 +20,9 @@ Page.patch(function(state) {
 			if (!node) {
 				var cur = document.head.querySelector('link,script');
 				cur.before(cur.dom(`
-					<link rel="alternate" type="application/rss+xml" title="[$page.data.title]" href="[rss]">
+					<link rel="alternate" type="application/rss+xml" title="[$page.data.title]" href="[link]">
 				`).fuse({
-					rss:rss
+					link:link
 				}, state.scope));
 			}
 		}
