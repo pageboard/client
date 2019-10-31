@@ -16,6 +16,6 @@ element-tabs > .ui.tabular.menu + div[block-content="tabs"] > .segment {
 	width: 100%;
 }
 
-element-tabs[block-focused] .active[block-type="tab"] > pagecut-placeholder {
+element-tabs .active[block-type="tab"] > pagecut-placeholder {
 	display:block !important;
 }
