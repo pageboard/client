@@ -7,10 +7,12 @@ Page.patch(function(state) {
 			var meta = Array.from(document.head.querySelectorAll('meta')).pop();
 			var feed = feeds[0];
 			meta.after(meta.dom(`
-				<meta property="og:type" content="summary">
+				<meta property="og:type" content="article">
 				<meta property="og:title" content="[title]">
-				<meta property="og:description" content="[description|magnet=*]">
-				<meta property="og:image" content="[enclosure.url|magnet=*]" />
+				<meta property="og:description" content="[description|magnet:*]">
+				<meta property="og:image" content="[enclosure.url|magnet:*]">
+				<meta property="article:published_time" content="[date|magnet:*|isoDate]">
+				<meta property="article:tag" content="[topics|repeat:*|magnet:*]">
 			`).fuse(Pageboard.getFeedCard(feed, state), state.scope));
 		} else if (feeds.length > 1) {
 			var link = Page.format({
@@ -31,6 +33,10 @@ Page.patch(function(state) {
 });
 
 Pageboard.getFeedCard = function(node, state) {
+	state.scope.$filters.toUTCString = function(val) {
+		if (!val) return val;
+		return val.toUTCString();
+	};
 	function stripBlock(node) {
 		var cur;
 		while ((cur = node.querySelector('[block-type]'))) {
@@ -38,15 +44,20 @@ Pageboard.getFeedCard = function(node, state) {
 		}
 		return node;
 	}
+	var topics = node.getAttribute('feed-topics');
+	if (!topics) {
+		topics = node.querySelector('.topics');
+		if (topics) topics = topics.innerText;
+	}
 	var card = {
-		url: (new URL(node.getAttribute('feed-url'), document.baseURI)).href,
-		topics: (node.getAttribute('feed-topics') || '').split(' - ')
+		url: (new URL(node.getAttribute('feed-url') || "", document.baseURI)).href,
+		topics: topics ? topics.split(' - ') : []
 	};
 	var title = node.querySelector('[block-content="title"]');
 	if (title) card.title = title.innerText;
 	var desc = node.querySelector('[block-content="description"]');
 	if (desc) card.description = desc.innerText;
-	var date = node.getAttribute('feed-publication');
+	var date = node.getAttribute('feed-publication') || node.getAttribute('pubdate');
 	if (date) card.date = new Date(date);
 	var preview = node.querySelector('[block-content="preview"] [block-type="image"]');
 	if (preview) {

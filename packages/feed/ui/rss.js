@@ -45,7 +45,7 @@ Page.serialize = function(state) {
 			<pubDate>[item.date|toUTCString]</pubDate>
 			<description>[item.description|magnet|cdata]</description>
 			<content:encoded>[item.content|magnet|cdata]</content:encoded>
-			<enclosure url="[item.enclosure.url|magnet=*]" length="[item.enclosure.length|magnet]" type="[item.enclosure.type|magnet]" />
+			<enclosure url="[item.enclosure.url|magnet:*]" length="[item.enclosure.length|magnet]" type="[item.enclosure.type|magnet]" />
 		</item>
 	</channel>
 </rss>`;
@@ -53,9 +53,6 @@ Page.serialize = function(state) {
 	state.scope.$filters.cdata = function(val, what) {
 		what.mode = "html";
 		return '<![CDATA[' + val + ']]>';
-	};
-	state.scope.$filters.toUTCString = function(val) {
-		return val.toUTCString();
 	};
 	return (new XMLSerializer()).serializeToString(xml.fuse(feed, state.scope));
 };
