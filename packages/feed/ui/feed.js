@@ -7,6 +7,7 @@ Page.patch(function(state) {
 			var meta = Array.from(document.head.querySelectorAll('meta')).pop();
 			var feed = feeds[0];
 			meta.after(meta.dom(`
+				<meta property="og:type" content="summary">
 				<meta property="og:title" content="[title]">
 				<meta property="og:description" content="[description|magnet=*]">
 				<meta property="og:image" content="[enclosure.url|magnet=*]" />
