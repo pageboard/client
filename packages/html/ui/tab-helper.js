@@ -31,8 +31,7 @@ Page.setup(function(state) {
 			if (!item) return;
 			var menu = item.parentNode;
 			if (!menu || menu.parentNode != this) return;
-			this.dataset.index = menu.children.indexOf(item);
-			this.patch(state);
+			this.options.index = this.dataset.index = menu.children.indexOf(item);
 		}
 	});
 });
