@@ -29,8 +29,10 @@ function initState(res, state) {
 	scope.$loc = document.location;
 	if (!res) return;
 	if (res.grants) state.data.$grants = res.grants;
+	if (res.hrefs) Object.assign(state.data.$hrefs, res.hrefs);
+	scope.$hrefs = state.data.$hrefs; // backward compat FIXME get rid of this, data.$hrefs is good
 	if (res.meta && res.meta.group == "page") {
-		["grants", "hrefs", "links", "site", "lock", "granted"].forEach(function(k) {
+		["grants", "links", "site", "lock", "granted"].forEach(function(k) {
 			if (res[k] !== undefined) scope[`$${k}`] = res[k];
 		});
 		scope.$element = res.item && scope.$elements[res.item.type];
@@ -77,6 +79,7 @@ window.HTMLCustomElement = require('./HTMLCustomElement');
 
 Page.init(function(state) {
 	state.vars = {};
+	state.data.$hrefs = {};
 	var dev = state.query.develop;
 	if (dev === "" || dev === "write") state.vars.develop = true;
 	var scope = state.scope;
