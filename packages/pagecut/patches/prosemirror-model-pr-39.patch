@@ -1,5 +1,5 @@
---- node_modules/prosemirror-model/dist/index.js.orig	1985-10-26 09:15:00.000000000 +0100
-+++ node_modules/prosemirror-model/dist/index.js	2019-08-05 11:44:07.268410620 +0200
+--- dist/index.js.orig	1985-10-26 09:15:00.000000000 +0100
++++ dist/index.js	2019-08-05 11:44:07.268410620 +0200
 @@ -2648,7 +2648,8 @@
      var rule = this$1.tags[i];
      if (matches(dom, rule.tag) &&

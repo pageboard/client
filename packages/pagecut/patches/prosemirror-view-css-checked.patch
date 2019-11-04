@@ -1,5 +1,5 @@
---- node_modules/prosemirror-view/dist/index.js.orig	2019-10-21 09:53:38.499595224 +0200
-+++ node_modules/prosemirror-view/dist/index.js	2019-10-21 10:57:43.850916473 +0200
+--- dist/index.js.orig	2019-10-21 09:53:38.499595224 +0200
++++ dist/index.js	2019-10-21 10:57:43.850916473 +0200
 @@ -3058,7 +3058,7 @@
  var cssChecked = false;
  
