@@ -134,7 +134,7 @@ exports.heading = {
 	icon: '<i class="icon header"></i>',
 	tag: 'h1,h2,h3,h4,h5,h6',
 	html: `<h[level] class="ui [align|or:left] aligned header" is="h[level]-helper">
-		<a aria-hidden="true" href="#[id]" id="[id]">[linkable|bmagnet]#</a>
+		<a aria-hidden="true" href="[$loc.pathname][$loc.search]#[id]" id="[id]">[linkable|bmagnet]#</a>
 		<div block-content="text">Heading</div>
 	</hn>`,
 	parse: function(dom) {
