@@ -124,4 +124,5 @@
 }
 .ui.compact.icon.menu {
 	min-height: 2.4em;
+	flex-wrap:nowrap;
 }
