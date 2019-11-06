@@ -52,6 +52,19 @@ Href.prototype.init = function(block) {
 		}
 	});
 
+	this.node.addEventListener('paste', function(e) {
+		var input = e.target;
+		var val = e.clipboardData.getData('text/plain');
+		if (!val) return;
+		if (val.startsWith('/') || /^(http:|https:)?\/\//.test(val)) {
+			e.preventDefault();
+			e.stopImmediatePropagation();
+			me.insert(val);
+		} else {
+			// let input listener handle it
+		}
+	});
+
 	this.node.addEventListener('focusout', function(e) {
 		if (!e.target.matches('input')) return;
 		if (me.action == "manual") me.manualStop();
@@ -173,28 +186,11 @@ Href.prototype.renderField = function() {
 			</div>
 		</div>`);
 		break;
-	case "paste":
-		content = document.dom(`<input name="$search" class="search" type="text" placeholder="Paste url..." />
-		<div class="ui blue icon buttons">
-			<div class="ui button" data-action="search" title="Search">
-				<i class="search icon"></i>
-			</div>
-			<div class="ui active button" data-action="paste" title="Paste url">
-				<i class="paste icon"></i>
-			</div>
-			<div class="ui button" data-action="upload" title="Upload files">
-				<i class="upload icon"></i>
-			</div>
-		</div>`);
-		break;
 	case "search":
 		content = document.dom(`<input name="$search" class="search" type="text" placeholder="Search..." />
 		<div class="ui blue icon buttons">
 			<div class="ui active button" data-action="search" title="Search">
 				<i class="search icon"></i>
-			</div>
-			<div class="ui button" data-action="paste" title="Paste url">
-				<i class="paste icon"></i>
 			</div>
 			<div class="ui button" data-action="upload" title="Upload files">
 				<i class="upload icon"></i>
@@ -207,9 +203,6 @@ Href.prototype.renderField = function() {
 			<div class="ui button" data-action="search" title="Search">
 				<i class="search icon"></i>
 			</div>
-			<div class="ui button" data-action="paste" title="Paste url">
-				<i class="paste icon"></i>
-			</div>
 			<div class="ui button" data-action="upload" title="Upload files">
 				<i class="upload icon"></i>
 			</div>
@@ -217,7 +210,6 @@ Href.prototype.renderField = function() {
 	}
 	if (this.opts.readOnly) {
 		removeBtn(content, 'upload');
-		removeBtn(content, 'paste');
 	}
 	this.node.textContent = '';
 	this.node.appendChild(content);
@@ -246,23 +238,6 @@ Href.prototype.manualStop = function() {
 	this.realTrigger();
 };
 
-Href.prototype.pasteStart = function() {
-	var input = this.node.querySelector('input');
-	input.focus();
-	var me = this;
-	input.addEventListener('paste', function() {
-		setTimeout(function() {
-			me.insert(input.value);
-			if (me.action == "paste") me.pasteStop();
-		});
-	});
-};
-
-Href.prototype.pasteStop = function() {
-//	this.set(this.input.value);
-	Pageboard.trigger(this.input, 'change');
-};
-
 Href.prototype.searchStart = function() {
 	var me = this;
 	var input = this.node.querySelector('input');
@@ -270,8 +245,16 @@ Href.prototype.searchStart = function() {
 	this.lastPageIndex = Infinity;
 	this.infinite = new window.InfiniteScroll(this.container, {
 		path: function() {
+			var text = me.node.querySelector('input').value;
+			var url;
+			if (text.startsWith('#') || text.startsWith('/')) {
+				url = normUrl(text);
+				if (text.endsWith('#')) url = url + '#';
+				text = null;
+			}
 			var filter = Object.assign({
-				text: me.node.querySelector('input').value
+				text: text,
+				url: url
 			}, me.opts.filter);
 			filter.limit = 10;
 			if (this.lastPageIndex < this.pageIndex) return;
@@ -446,15 +429,17 @@ Href.prototype.get = function(href) {
 };
 
 Href.prototype.insert = function(url) {
-	var me = this;
+	url = normUrl(url);
 	return Pageboard.uiLoad(
 		this.node.querySelector(`[data-action="${this.action}"]`),
 		Pageboard.fetch('post', '/.api/href', {
 			url: url
 		})
-	).then(function(result) {
-		me.cache([result]);
-		me.renderList(me.list.concat(result));
+	).then((result) => {
+		this.cache([result]);
+		this.input.value = result.url;
+		this.set(result.url);
+		Pageboard.trigger(this.input, 'change');
 	});
 };
 
