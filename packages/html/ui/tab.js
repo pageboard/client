@@ -2,7 +2,7 @@ class HTMLElementTabs extends HTMLCustomElement {
 	static get defaults() {
 		return {
 			index: (x) => parseInt(x) || 0
-		}
+		};
 	}
 	get items() {
 		return this.querySelector('[block-content="items"]');
