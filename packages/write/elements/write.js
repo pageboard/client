@@ -117,7 +117,6 @@ exports.write = {
 	],
 	scripts: exports.page.scripts.slice().concat([
 		"../lib/jquery.min.js",
-		"../lib/moment.js",
 		"../lib/components/form.js",
 		"../lib/components/progress.js",
 		"../lib/components/dropdown.js",

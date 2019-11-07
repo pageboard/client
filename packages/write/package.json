@@ -19,13 +19,13 @@
   },
   "homepage": "https://github.com/pageboard/client#readme",
   "dependencies": {
-    "moment": "^2.20.1",
     "postinstall": "^0.6.0",
     "fomantic-ui-css": "2.7.2"
   },
   "devDependencies": {
     "@pageboard/pagecut": "^0.8.17",
     "cropperjs": "^1.5.6",
+    "duration-relativetimeformat": "^1.0.0",
     "fast-safe-stringify": "^2.0.6",
     "infinite-scroll": "^3.0.6",
     "jquery": "^3.4.1",
@@ -37,9 +37,7 @@
   },
   "postinstall": {
     "fomantic-ui-css/components": "link lib/components",
-    "fomantic-ui-css/themes": "link lib/themes",
-    "moment/moment.js": "link lib/",
-    "moment/locale": "link lib/moment-locales"
+    "fomantic-ui-css/themes": "link lib/themes"
   },
   "prepare": {
     "perfect-scrollbar/css/perfect-scrollbar.css": "copy lib/",

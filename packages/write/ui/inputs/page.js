@@ -282,7 +282,7 @@ PageHelper.prototype.renderItem = function(block) {
 				${block.data.title}
 			</div>
 			<div class="left floated meta">
-				${window.moment(block.updated_at || block.data.updated_at).fromNow()}
+				${Pageboard.utils.Duration(block.updated_at || block.data.updated_at)}
 				<br><span class="line">${block.data.url}</span>
 			</div>
 		</div>
