@@ -48,7 +48,7 @@
     "prosemirror-schema-list": "^1.0.3",
     "prosemirror-state": "^1.2.4",
     "prosemirror-transform": "^1.1.6",
-    "prosemirror-view": "^1.12.1"
+    "prosemirror-view": "^1.12.2"
   },
   "prepare": {
     "prosemirror-model": "patch patches/prosemirror-model-pr-39.patch",
