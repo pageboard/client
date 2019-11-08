@@ -1,5 +1,4 @@
 (function(Pageboard) {
-
 Pageboard.schemaHelpers.page = PageHelper;
 
 PageHelper.cache = {};

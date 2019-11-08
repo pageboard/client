@@ -29,72 +29,58 @@ Href.prototype.init = function(block) {
 	var input = this.input;
 	input.parentNode.classList.add('href');
 
-	input.insertAdjacentHTML('afterEnd', `<div class="ui input"></div>
-		<div class="ui items"></div>`);
+	input.insertAdjacentHTML('afterEnd', `<div class="ui input">
+		<input name="$search" class="search" type="text" placeholder="Search or Paste..." />
+		<div class="ui blue icon buttons">
+			<div class="ui button" data-action="upload" title="Upload">
+				<i class="upload icon"></i>
+			</div>
+			<div class="ui button" data-action="stop" title="Stop Search">
+				<i class="close icon"></i>
+			</div>
+		</div>
+	</div>
+	<div class="ui items"></div>`);
 
 	this.node = input.nextElementSibling;
+	this.uiInput = this.node.querySelector('input');
 	this.container = this.node.nextElementSibling;
 	this.container.addEventListener('click', function(e) {
 		if (e.target.closest('a')) e.preventDefault();
 	}, true);
 
-	var me = this;
-
-	this.node.addEventListener('input', function(e) {
-		if (me.action == "search") {
-			me.searchUpdate();
-		} else if (me.action == "manual") {
-			me.trigger();
-		} else if (!me.action) {
-			input.value = "";
-			Pageboard.trigger(input, 'change');
-			me.start("search");
-		}
+	this.node.addEventListener('input', (e) => {
+		this.searchUpdate();
 	});
 
-	this.node.addEventListener('paste', function(e) {
-		var input = e.target;
+	this.node.addEventListener('paste', (e) => {
 		var val = e.clipboardData.getData('text/plain');
 		if (!val) return;
 		if (val.startsWith('/') || /^(http:|https:)?\/\//.test(val)) {
 			e.preventDefault();
 			e.stopImmediatePropagation();
-			me.insert(val);
+			this.insert(val);
+			Pageboard.trigger(this.input, 'change');
 		} else {
 			// let input listener handle it
 		}
 	});
 
-	this.node.addEventListener('focusout', function(e) {
-		if (!e.target.matches('input')) return;
-		if (me.action == "manual") me.manualStop();
-	});
-
-	this.node.addEventListener('focusin', function(e) {
-		if (!e.target.matches('input')) return;
-		if (!me.action) {
-			if (me.input.value) {
-				me.node.querySelector('input').select();
-				if (me.list && me.list.length == 0) me.start('manual');
-			} else {
-				me.start('search');
-			}
+	this.node.addEventListener('focusin', (e) => {
+		if (this.input.value) {
+			this.uiInput.select();
 		}
+		this.searchUpdate();
 	});
 
-	this.node.addEventListener('click', function(e) {
+	this.node.addEventListener('click', (e) => {
 		var actioner = e.target.closest('[data-action]');
-		if (!actioner) {
-			if (e.altKey) {
-				this.start('manual');
-				me.node.querySelector('input').focus();
-			}
-			return;
-		}
-		this.start(actioner.dataset.action);
-	}.bind(this));
+		if (!actioner) return;
+		if (actioner.dataset.action == "upload") this.uploadStart();
+		else if (actioner.dataset.action == "stop") this.searchStop(true);
+	});
 
-	this.container.addEventListener('click', function(e) {
+	this.container.addEventListener('click', (e) => {
 		e.preventDefault();
 		var item = e.target.closest('.item');
 		if (!item) {
@@ -105,17 +91,13 @@ Href.prototype.init = function(block) {
 		var remove = e.target.closest('[data-action="remove"]');
 		if (remove) {
 			e.stopPropagation();
-			return Pageboard.uiLoad(remove, this.remove(Href.cache[href].url)).then(function() {
-				me.renderList();
+			return Pageboard.uiLoad(remove, this.remove(Href.cache[href].url)).then(() => {
+				this.renderList();
 				Pageboard.scrollbar.update();
 			});
 		} else {
 			if (href == input.value) {
-				if (this.action == 'search') {
-					this.stop(this.action);
-				} else {
-					// this.set(input.value);
-				}
+				this.searchStop();
 			} else {
 				input.value = href;
 				var data = Href.cache[href];
@@ -127,125 +109,55 @@ Href.prototype.init = function(block) {
 				Pageboard.trigger(input, 'change');
 			}
 		}
-	}.bind(this));
-	this.update(block);
+	});
 };
 
 Href.prototype.destroy = function() {
 	Pageboard.write.classList.remove('href');
 };
 
-Href.prototype.update = function(block) {
+Href.prototype.update = function() {
 	if (!this.list) this.list = [];
-	this.renderField();
-	var me = this;
+	this.node.querySelector(`[data-action="upload"]`).classList.toggle('hidden', !!this.opts.readOnly);
 	var val = this.input.value;
-	var input = this.node.querySelector('input');
-	if (val && !input.value) {
-		input.value = val;
+	if (val && !this.uiInput.value) {
+		this.uiInput.value = val;
 	}
-	if (val && !this.action) {
-		this.get(val).then(this.cache).then(function(list) {
-			if (list.length == 0) {
-				me.start("manual");
-			} else {
-				me.set(val);
-			}
+	if (val && !this.infinite) {
+		this.get(val).then(this.cache).then((list) => {
+			this.set(val);
 		});
 	} else {
 		this.renderList();
 	}
 };
 
-Href.prototype.start = function(action) {
-	var same = this.action == action;
-	this.stop();
-	if (same) return;
-	this.action = action;
-	this.renderField();
-	this[action + 'Start']();
-};
-
-Href.prototype.stop = function() {
-	var prev = this.action;
-	if (prev) {
-		this.action = null;
-		this[prev + 'Stop']();
-		this.renderField();
-	}
-};
-
-Href.prototype.renderField = function() {
-	var content;
-	switch (this.action) {
-	case "manual":
-		content = document.dom(`<input name="$search" class="search" type="text" placeholder="Type url..." />
-		<div class="ui blue icon buttons">
-			<div class="ui button" data-action="search" title="Stop">
-				<i class="close icon"></i>
-			</div>
-		</div>`);
-		break;
-	case "search":
-		content = document.dom(`<input name="$search" class="search" type="text" placeholder="Search..." />
-		<div class="ui blue icon buttons">
-			<div class="ui active button" data-action="search" title="Search">
-				<i class="search icon"></i>
-			</div>
-			<div class="ui button" data-action="upload" title="Upload files">
-				<i class="upload icon"></i>
-			</div>
-		</div>`);
-		break;
-	default:
-		content = document.dom(`<input name="$search" class="search" type="text" placeholder="Search..." />
-		<div class="ui blue icon buttons">
-			<div class="ui button" data-action="search" title="Search">
-				<i class="search icon"></i>
-			</div>
-			<div class="ui button" data-action="upload" title="Upload files">
-				<i class="upload icon"></i>
-			</div>
-		</div>`);
-	}
-	if (this.opts.readOnly) {
-		removeBtn(content, 'upload');
-	}
-	this.node.textContent = '';
-	this.node.appendChild(content);
-};
-
-function removeBtn(from, what) {
-	var btn = from.querySelector(`[data-action="${what}"]`);
-	if (btn) btn.remove();
-}
-
-Href.prototype.cache = function(list) {
+Href.prototype.cache = function(result) {
 	var map = Href.cache;
-	for (var i=0; i < list.length; i++) {
-		map[normUrl(list[i].url)] = list[i];
-	}
-	return list;
-};
-
-Href.prototype.manualStart = function() {
-	var input = this.node.querySelector('input');
-	input.value = this.input.value;
-	this.renderList([]);
-};
-
-Href.prototype.manualStop = function() {
-	this.realTrigger();
+	var hrefs = Pageboard.hrefs;
+	var list = result;
+	if (list == null) return;
+	if (!Array.isArray(list)) list = [list];
+	list.forEach((obj) => {
+		var href = normUrl(obj.url);
+		map[href] = obj;
+		if (!hrefs[href]) {
+			hrefs[href] = Object.assign({
+				mime: obj.mime
+			}, obj.meta);
+		}
+	});
+	return result;
 };
 
 Href.prototype.searchStart = function() {
 	var me = this;
-	var input = this.node.querySelector('input');
-	input.focus();
+	this.initialValue = this.input.value;
+	this.uiInput.focus();
 	this.lastPageIndex = Infinity;
 	this.infinite = new window.InfiniteScroll(this.container, {
 		path: function() {
-			var text = me.node.querySelector('input').value;
+			var text = me.uiInput.value;
 			var url;
 			if (text.startsWith('#') || text.startsWith('/')) {
 				url = normUrl(text);
@@ -286,6 +198,7 @@ Href.prototype.searchStart = function() {
 };
 
 Href.prototype.searchUpdate = function() {
+	if (!this.infinite) return this.searchStart();
 	this.container.textContent = "";
 	if (this.infinite) {
 		this.infinite.pageIndex = 1;
@@ -293,13 +206,17 @@ Href.prototype.searchUpdate = function() {
 	}
 };
 
-Href.prototype.searchStop = function() {
+Href.prototype.searchStop = function(cancel) {
 	if (this.infinite) {
 		this.infinite.destroy();
 		delete this.infinite;
 	}
 	Pageboard.write.classList.remove('href');
 	this.input.closest('form').classList.remove('href');
+	if (cancel) {
+		this.input.value = this.initialValue;
+	}
+	delete this.initialValue;
 	this.set(this.input.value);
 	Pageboard.scrollbar.update();
 	Pageboard.trigger(this.input, 'change');
@@ -310,7 +227,10 @@ Href.prototype.set = function(str) {
 		this.list = [];
 	} else {
 		str = normUrl(str);
-		if (Href.cache[str]) this.list = [Href.cache[str]];
+		if (Href.cache[str]) {
+			if (this.uiInput.value != str) this.uiInput.value = str;
+			this.list = [Href.cache[str]];
+		}
 	}
 	this.renderList(this.list);
 };
@@ -376,7 +296,9 @@ Href.prototype.uploadStart = function() {
 				return me.insert(file);
 			});
 		});
-		return p;
+		return p.then(function() {
+			if (files.length == 1) Pageboard.trigger(me.input, 'change');
+		});
 	});
 };
 
@@ -431,15 +353,16 @@ Href.prototype.get = function(href) {
 Href.prototype.insert = function(url) {
 	url = normUrl(url);
 	return Pageboard.uiLoad(
-		this.node.querySelector(`[data-action="${this.action}"]`),
+		this.node.querySelector(`[data-action]`),
 		Pageboard.fetch('post', '/.api/href', {
 			url: url
 		})
 	).then((result) => {
 		this.cache([result]);
 		this.input.value = result.url;
-		this.set(result.url);
-		Pageboard.trigger(this.input, 'change');
+		this.list.unshift(result);
+		this.list.rendered = false;
+		this.renderList();
 	});
 };
 

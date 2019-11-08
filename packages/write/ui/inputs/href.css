@@ -22,7 +22,7 @@ input-map {
 
 .field.href .items .pinned.right {
 	position:absolute;
-	right:1px;
+	right:2px;
 	top:1px;
 	margin-right:0;
 }
@@ -50,10 +50,24 @@ input-map {
 	width:31%;
 }
 
+.field.href .buttons > [data-action="stop"] {
+	display: none;
+}
+.href .field.href .buttons > [data-action="stop"] {
+	display:block;
+}
+.href .field.href .buttons > [data-action="upload"] {
+	display:none;
+}
+
+.field.href .buttons > .button {
+	border-top-right-radius: 0.28571429rem;
+	border-bottom-right-radius: 0.28571429rem;
+}
+
 .field.href .items > .item > .content {
 	position:relative; /* for positioning the absolute icon on the right */
 	max-width:100%;
-	border-top:1px solid #999;
 	overflow:hidden;
 }
 
@@ -96,9 +110,10 @@ input-map {
 }
 
 .field.href .items > a.item > .content > .header {
-	color:#555;
-	background-color: rgba(129,165,255,0.1);
-	padding-right:1.7em; /* leave space for pinned right button */
+	color: #555;
+	background-color: #EEE;
+	padding-right: 1.7em;
+	border-bottom: 1px solid #ddd;
 }
 
 .field.href .items > .item > .content > .thumbnail {
@@ -124,9 +139,10 @@ input-map {
 }
 
 .field.href .items > .item {
-	margin:0;
-	/* box-shadow:2px 2px 1px #CCC; */
-	/* background: white; */
+	margin: 0;
+	box-shadow: 2px 2px 3px #CCC;
+	background: white;
+	margin-bottom: 8px;
 }
 
 .field.href .items:empty {

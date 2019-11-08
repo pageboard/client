@@ -25,7 +25,7 @@
   "devDependencies": {
     "@pageboard/pagecut": "^0.8.18",
     "cropperjs": "^1.5.6",
-    "duration-relativetimeformat": "^1.0.0",
+    "duration-relativetimeformat": "^1.0.1",
     "fast-safe-stringify": "^2.0.6",
     "infinite-scroll": "^3.0.6",
     "jquery": "^3.4.1",
