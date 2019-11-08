@@ -212,7 +212,7 @@ Crop.prototype.thumbnail = function(url) {
 
 Crop.prototype.from = function(crop) {
 	var imgData = this.cropper.getImageData();
-	var ratio = crop.zoom / 100;
+	var ratio = (crop.zoom || 100) / 100;
 	var W = imgData.naturalWidth * ratio;
 	var H = imgData.naturalHeight * ratio;
 	return {
