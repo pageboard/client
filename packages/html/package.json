@@ -19,14 +19,14 @@
   },
   "homepage": "https://github.com/pageboard/client#readme",
   "dependencies": {
-    "postinstall": "^0.5.1",
+    "postinstall": "^0.7.0",
     "semantic-ui-css": "^2.3.2"
   },
   "devDependencies": {
-    "formdata-polyfill": "^3.0.11",
-    "nouislider": "^11.1.0",
-    "object-fit-images": "^3.2.3",
-    "postinstall-browserify": "^0.5.0",
+    "formdata-polyfill": "^3.0.19",
+    "nouislider": "^14.0.3",
+    "object-fit-images": "^3.2.4",
+    "postinstall-browserify": "^0.6.0",
     "stickyfilljs": "^2.1.0"
   },
   "postinstall": {
