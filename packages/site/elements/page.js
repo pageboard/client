@@ -108,12 +108,28 @@ exports.page = {
 		csp: function($elements, what) {
 			var csp = {};
 			Object.keys($elements).forEach(function(key) {
-				var ecsp = $elements[key].csp;
-				if (!ecsp) return;
-				Object.keys(ecsp).forEach(function(src) {
+				var el = $elements[key];
+				if (el.scripts) el.scripts.forEach(function(src) {
+					var origin = /(^https?:\/\/[.-\w]+)/.exec(src);
+					if (origin) {
+						if (!el.csp) el.csp = {};
+						if (!el.csp.script) el.csp.script;
+						el.csp.script.push(origin[0]);
+					}
+				});
+				if (el.stylesheets) el.stylesheets.forEach(function(src) {
+					var origin = /(^https?:\/\/[.-\w]+)/.exec(src);
+					if (origin) {
+						if (!el.csp) el.csp = {};
+						if (!el.csp.style) el.csp.style;
+						el.csp.style.push(origin[0]);
+					}
+				});
+				if (!el.csp) return;
+				Object.keys(el.csp).forEach(function(src) {
 					var gcsp = csp[src];
 					if (!gcsp) csp[src] = gcsp = [];
-					var list = ecsp[src];
+					var list = el.csp[src];
 					if (!list) return;
 					if (typeof list == "string") list = [list];
 					list.forEach(function(val) {
