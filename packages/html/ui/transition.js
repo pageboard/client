@@ -220,7 +220,7 @@ Page.setup(function navigate(state) {
 				state.push(href);
 			});
 		}
-	}, document)
+	}, document);
 
 	if (!document.body.isContentEditable && document.body.dataset.redirect) {
 		setTimeout(function() {
