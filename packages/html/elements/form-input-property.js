@@ -104,18 +104,20 @@ exports.input_property = {
 
 		if (listOf) {
 			if (listOf.length <= d.radios) {
-				var content = '<div class="content"></div>';
+				var content;
 				if (d.foldable) {
-					node.appendChild(doc.dom(`<element-accordion class="grouped fields">
+					content = doc.dom(`<element-accordion class="grouped fields">
 						<label for="${name}" class="title active caret-icon">${prop.title}</label>
-						${content}
-					</element-accordion>`));
+						<div class="content"></div>
+					</element-accordion>`);
 				} else {
-					node.appendChild(doc.dom(`<div class="grouped fields">
+					content = doc.dom(`<div class="grouped fields">
 						<label for="${name}" class="title">${prop.title}</label>
-						${content}
-					</div>`));
+						<div class="content"></div>
+					</div>`);
 				}
+				node.appendChild(content);
+				content = content.lastElementChild;
 				listOf.forEach(function(item) {
 					content.appendChild(view.render({
 						type: d.multiple ? 'input_checkbox' : 'input_radio',
