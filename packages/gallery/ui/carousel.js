@@ -70,7 +70,7 @@ class HTMLElementCarousel extends HTMLCustomElement {
 			adaptativeHeight: false,
 			cellAlign: 'left',
 			contain: true
-		}, document.body.isContentEditable ? {
+		}, this.isContentEditable ? {
 			autoPlay: 0,
 			draggable: false,
 			wrapAround: false,
