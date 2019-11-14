@@ -2,3 +2,11 @@ element-accordion, element-accordion .fold {
 	display:block;
 }
 
+/* workarounds for pagecut bug in ContainerNodeView ("active" class should stay on update) */
+.ui.accordion[block-focused] .active.title ~ .content {
+	display: block !important;
+}
+.ui.accordion[block-focused] .active.title ~ .content > pagecut-placeholder {
+	display: inline-block !important;
+}
+/* end */
