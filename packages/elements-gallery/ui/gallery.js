@@ -16,7 +16,11 @@ class HTMLElementGallery extends HTMLCustomElement {
 	_switchListener(e) {
 		var target = e.target.closest('.item');
 		if (!target || target.matches('.active')) return;
-		Page.push({query: {gallery: target.dataset.mode}});
+		if (this.isContentEditable) {
+			this.setMode(target.dataset.mode);
+		} else {
+			Page.push({query: {gallery: target.dataset.mode}});
+		}
 	}
 
 	setMode(mode) {
