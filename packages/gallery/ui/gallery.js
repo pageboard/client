@@ -12,7 +12,7 @@ class HTMLElementGallery extends HTMLCustomElement {
 		this.setAttribute('selected-mode', val);
 	}
 	get activeGallery() {
-		if (!this.selectedMode) return;
+		if (!this.selectedMode) return null;
 		return Array.from(this.children).find((node) => {
 			return node.getAttribute('block-type') == this.selectedMode;
 		});
