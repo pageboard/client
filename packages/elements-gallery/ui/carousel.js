@@ -38,7 +38,7 @@ class HTMLElementCarousel extends HTMLCustomElement {
 			this.ownerDocument.body.classList.add('fullview');
 		}
 		this.classList.toggle('fade', opts.fade);
-		this.carousel = new Flickity(this, opts);
+		this.carousel = new window.Flickity(this, opts);
 		this.carousel.on('select', this._saveIndex);
 
 		if (this.dataset.fullviewButton == "true") {

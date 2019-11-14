@@ -1,4 +1,4 @@
-window.HTMLElementGallery = class HTMLElementGallery extends HTMLCustomElement {
+class HTMLElementGallery extends HTMLCustomElement {
 	init() {
 		this._itemClick = this._itemClick.bind(this);
 		this._switchListener = this._switchListener.bind(this);
@@ -87,7 +87,7 @@ window.HTMLElementGallery = class HTMLElementGallery extends HTMLCustomElement {
 		});
 		if (!carousel) return;
 		var position = 0;
-		while (item=item.previousSibling) position++;
+		while ((item=item.previousSibling)) position++;
 		Page.push({
 			query: {
 				gallery: 'carousel',
@@ -142,6 +142,7 @@ window.HTMLElementGallery = class HTMLElementGallery extends HTMLCustomElement {
 		return mode;	
 	}
 }
+window.HTMLElementGallery = HTMLElementGallery;
 
 Page.setup(function(state) {
 	HTMLCustomElement.define('element-gallery', HTMLElementGallery);

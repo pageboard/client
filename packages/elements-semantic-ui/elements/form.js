@@ -37,7 +37,7 @@ Pageboard.elements.form = {
 					title: 'Call api or url',
 					description: 'Leave empty for current url',
 					type: ["null", "string"],
-					pattern: "^((\\w+\.\\w+)|((/[\\w-.]*)+)|)$"
+					pattern: "^((\\w+\\.\\w+)|((/[\\w-.]*)+)|)$"
 				},
 				type: {
 					title: 'Bind to element',
