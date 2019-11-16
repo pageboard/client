@@ -1,3 +1,9 @@
+/*!
+  * Stickyfill – `position: sticky` polyfill
+  * v. 2.1.0 | https://github.com/wilddeer/stickyfill
+  * MIT License
+  */
+
 'use strict';
 
 /*
@@ -45,6 +51,18 @@ const scroll = {
 // Array of created Sticky instances
 const stickies = [];
 
+let docHiddenKey;
+let visibilityChangeEventName;
+
+if ('hidden' in document) {
+	docHiddenKey = 'hidden';
+	visibilityChangeEventName = 'visibilitychange';
+}
+else if ('webkitHidden' in document) {
+	docHiddenKey = 'webkitHidden';
+	visibilityChangeEventName = 'webkitvisibilitychange';
+}
+
 
 /*
  * 3. Utility functions
@@ -62,7 +80,7 @@ function parseNumeric (val) {
 }
 
 function getDocOffsetTop (node) {
-	let docOffsetTop = 0;
+	var docOffsetTop = 0;
 
 	while (node) {
 		docOffsetTop += node.offsetTop;
@@ -84,6 +102,9 @@ class Sticky {
 			throw new Error('Stickyfill is already applied to this node');
 
 		this._node = node;
+		this._observer = new ResizeObserver((entries, observer) => {
+			this._fastCheck();
+		});
 		this._stickyMode = null;
 		this._active = false;
 
@@ -97,6 +118,7 @@ class Sticky {
 		if (this._active) this._deactivate();
 
 		const node = this._node;
+		if (!node.parentNode) return;
 
 		/*
 		 * 1. Save node computed props
@@ -121,7 +143,7 @@ class Sticky {
 			nodeComputedProps.display == 'table-cell' ||
 			nodeComputedProps.display == 'none'
 		) return;
-
+		this._observer.observe(this._node);
 		this._active = true;
 
 		/*
@@ -199,13 +221,15 @@ class Sticky {
 		/*
 		 * 7. Create a clone
 		 */
-		const clone = this._clone = {};
-		clone.node = document.createElement('div');
+		const clone = this._clone = this._clone || {};
+		if (!clone.node) {
+			clone.node = document.createElement('div');
+			clone.node.setAttribute('contenteditable', 'false');
+		}
 
 		// Apply styles to the clone
 		extend(clone.node.style, {
-			width: nodeWinOffset.right - nodeWinOffset.left + 'px',
-			height: nodeWinOffset.bottom - nodeWinOffset.top + 'px',
+			display: 'block',
 			marginTop: nodeComputedProps.marginTop,
 			marginBottom: nodeComputedProps.marginBottom,
 			marginLeft: nodeComputedProps.marginLeft,
@@ -218,8 +242,20 @@ class Sticky {
 			position: 'static'
 		});
 
-		referenceNode.insertBefore(clone.node, node);
+		this._recalcClone(nodeWinOffset);
+
+		if (!clone.node.parentNode) referenceNode.insertBefore(clone.node, node);
 		clone.docOffsetTop = getDocOffsetTop(clone.node);
+	}
+
+	_recalcClone(nodeWinOffset) {
+		var clone = this._clone;
+		if (!clone) return;
+		if (!nodeWinOffset) nodeWinOffset = this._node.getBoundingClientRect();
+		extend(clone.node.style, {
+			width: nodeWinOffset.right - nodeWinOffset.left + 'px',
+			height: nodeWinOffset.bottom - nodeWinOffset.top + 'px',
+		});
 	}
 
 	_recalcPosition () {
@@ -276,19 +312,26 @@ class Sticky {
 	}
 
 	_fastCheck () {
-		if (!this._active || this._removed) return;
+		if (!this._active || this._removed || !this._clone) return;
 
 		if (
 			Math.abs(getDocOffsetTop(this._clone.node) - this._clone.docOffsetTop) > 1 ||
-			Math.abs(this._parent.node.offsetHeight - this._parent.offsetHeight) > 1
+			Math.abs(this._parent.node.offsetHeight - this._parent.offsetHeight) > 1 ||
+			Math.abs(this._node.offsetHeight - this._clone.node.offsetHeight) > 1
 		) this.refresh();
 	}
 
-	_deactivate () {
-		if (!this._active || this._removed) return;
+	_deactivate (reset) {
+		if (!this._active || this._removed || !this._clone) return;
+		this._observer.disconnect();
 
-		this._clone.node.parentNode.removeChild(this._clone.node);
-		delete this._clone;
+		var clone = this._clone.node;
+		if (reset) {
+			if (clone.parentNode) clone.parentNode.removeChild(clone);
+			delete this._clone;
+		} else {
+			clone.style.display = "none";
+		}
 
 		extend(this._node.style, this._styles);
 		delete this._styles;
@@ -309,7 +352,7 @@ class Sticky {
 	}
 
 	remove () {
-		this._deactivate();
+		this._deactivate(true);
 
 		stickies.some((sticky, index) => {
 			if (sticky._node === this._node) {
@@ -335,6 +378,18 @@ const Stickyfill = {
 		init();
 
 		this.refreshAll();
+	},
+
+	destroy () {
+		if (!isInitialized) return;
+		Stickyfill.removeAll();
+		isInitialized = false;
+		window.removeEventListener('scroll', checkScroll);
+		window.removeEventListener('resize', Stickyfill.refreshAll);
+		window.removeEventListener('orientationchange', Stickyfill.refreshAll);
+		if (visibilityChangeEventName) {
+			document.removeEventListener(visibilityChangeEventName, toggleTimer);
+		}
 	},
 
 	addOne (node) {
@@ -438,6 +493,47 @@ const Stickyfill = {
 };
 
 
+// Watch for scroll position changes and trigger recalc/refresh if needed
+function checkScroll () {
+	if (window.pageXOffset != scroll.left) {
+		scroll.top = window.pageYOffset;
+		scroll.left = window.pageXOffset;
+
+
+		Stickyfill.refreshAll();
+	}
+	else if (window.pageYOffset != scroll.top) {
+		scroll.top = window.pageYOffset;
+		scroll.left = window.pageXOffset;
+
+
+		// recalc position for all stickies
+		stickies.forEach(sticky => sticky._recalcPosition());
+	}
+}
+
+//Fast dirty check for layout changes every 500ms
+let fastCheckTimer;
+
+function startFastCheckTimer () {
+	fastCheckTimer = setInterval(function () {
+		stickies.forEach(sticky => sticky._fastCheck());
+	}, 500);
+}
+
+function stopFastCheckTimer () {
+	clearInterval(fastCheckTimer);
+}
+
+function toggleTimer() {
+	if (document[docHiddenKey]) {
+		stopFastCheckTimer();
+	}
+	else {
+		startFastCheckTimer();
+	}
+}
+
 /*
  * 6. Setup events (unless the polyfill was disabled)
  */
@@ -448,23 +544,6 @@ function init () {
 
 	isInitialized = true;
 
-	// Watch for scroll position changes and trigger recalc/refresh if needed
-	function checkScroll () {
-		if (window.pageXOffset != scroll.left) {
-			scroll.top = window.pageYOffset;
-			scroll.left = window.pageXOffset;
-
-			Stickyfill.refreshAll();
-		}
-		else if (window.pageYOffset != scroll.top) {
-			scroll.top = window.pageYOffset;
-			scroll.left = window.pageXOffset;
-
-			// recalc position for all stickies
-			stickies.forEach(sticky => sticky._recalcPosition());
-		}
-	}
-
 	checkScroll();
 	window.addEventListener('scroll', checkScroll);
 
@@ -472,42 +551,9 @@ function init () {
 	window.addEventListener('resize', Stickyfill.refreshAll);
 	window.addEventListener('orientationchange', Stickyfill.refreshAll);
 
-	//Fast dirty check for layout changes every 500ms
-	let fastCheckTimer;
-
-	function startFastCheckTimer () {
-		fastCheckTimer = setInterval(function () {
-			stickies.forEach(sticky => sticky._fastCheck());
-		}, 500);
-	}
-
-	function stopFastCheckTimer () {
-		clearInterval(fastCheckTimer);
-	}
-
-	let docHiddenKey;
-	let visibilityChangeEventName;
-
-	if ('hidden' in document) {
-		docHiddenKey = 'hidden';
-		visibilityChangeEventName = 'visibilitychange';
-	}
-	else if ('webkitHidden' in document) {
-		docHiddenKey = 'webkitHidden';
-		visibilityChangeEventName = 'webkitvisibilitychange';
-	}
-
 	if (visibilityChangeEventName) {
 		if (!document[docHiddenKey]) startFastCheckTimer();
-
-		document.addEventListener(visibilityChangeEventName, () => {
-			if (document[docHiddenKey]) {
-				stopFastCheckTimer();
-			}
-			else {
-				startFastCheckTimer();
-			}
-		});
+		document.addEventListener(visibilityChangeEventName, toggleTimer);
 	}
 	else startFastCheckTimer();
 }
@@ -524,3 +570,4 @@ if (typeof module != 'undefined' && module.exports) {
 else if (isWindowDefined) {
 	window.Stickyfill = Stickyfill;
 }
+
