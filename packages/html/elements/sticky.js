@@ -30,6 +30,9 @@ exports.sticky = {
 	scripts: [
 		'../ui/stickyfill.js',
 		'../ui/sticky.js'
+	],
+	polyfills: [
+		'ResizeObserver'
 	]
 };
 
