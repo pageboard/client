@@ -116,7 +116,7 @@ if (!NodeList.prototype.indexOf) NodeList.prototype.indexOf = function(node) {
 	return Array.prototype.indexOf.call(this, node);
 };
 
-if (!HTMLCollection.prototype.indexOf) HTMLCollection.prototype.indexOf = NodeList.prototype.indexOf
+if (!HTMLCollection.prototype.indexOf) HTMLCollection.prototype.indexOf = NodeList.prototype.indexOf;
 
 module.exports = HTMLCustomElement;
 
