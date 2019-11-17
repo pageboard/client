@@ -56,6 +56,7 @@
       "patch patches/prosemirror-view-css-checked.patch",
       "patch patches/prosemirror-view-pr-40.patch"
     ],
+    "prosemirror-dropcursor": "patch patches/prosemirror-dropcursor-offset-parent.patch",
     "prosemirror-view/style/prosemirror.css": "copy src/prosemirror.css",
     "prosemirror-menu/style/menu.css": "copy src/prosemirror-menu.css"
   }
