@@ -6,6 +6,7 @@ exports.site.properties.google_analytics = {
 };
 
 exports.google_analytics = {
+	priority: 10,
 	group: "block",
 	html: `<script async src="https://www.googletagmanager.com/gtag/js?id=[id|url]"></script>`,
 	install: function(scope) {
