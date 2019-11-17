@@ -1,0 +1,4 @@
+[block-type="consent_form"][data-transient="true"]:not(.visible) {
+	display:none;
+}
+
