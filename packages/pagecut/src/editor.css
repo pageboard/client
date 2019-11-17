@@ -1,4 +1,5 @@
 @import './prosemirror.css';
+@import './prosemirror-gapcursor.css';
 
 .ProseMirror {
 	white-space: normal;

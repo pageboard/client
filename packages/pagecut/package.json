@@ -39,6 +39,7 @@
     "prosemirror-commands": "^1.0.7",
     "prosemirror-dropcursor": "^1.2.0",
     "prosemirror-example-setup": "^1.0.1",
+    "prosemirror-gapcursor": "^1.1.0",
     "prosemirror-history": "^1.0.4",
     "prosemirror-inputrules": "^1.0.4",
     "prosemirror-keymap": "^1.0.2",
@@ -57,6 +58,7 @@
       "patch patches/prosemirror-view-pr-40.patch"
     ],
     "prosemirror-dropcursor": "patch patches/prosemirror-dropcursor-offset-parent.patch",
+    "prosemirror-gapcursor/style/gapcursor.css": "copy src/prosemirror-gapcursor.css",
     "prosemirror-view/style/prosemirror.css": "copy src/prosemirror.css",
     "prosemirror-menu/style/menu.css": "copy src/prosemirror-menu.css"
   }

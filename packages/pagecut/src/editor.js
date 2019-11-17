@@ -6,6 +6,7 @@ const keymap = require("prosemirror-keymap").keymap;
 const Commands = require("prosemirror-commands");
 const Setup = require("prosemirror-example-setup");
 const DropCursor = require("prosemirror-dropcursor").dropCursor;
+const GapCursor = require("prosemirror-gapcursor").gapCursor;
 const History = require("prosemirror-history");
 const OrderedMap = require("orderedmap");
 
@@ -168,6 +169,7 @@ function Editor(opts) {
 				preserveItems: true // or else cancel does not keep selected node
 			});
 		},
+		GapCursor(),
 		DropCursor({
 			width: 2,
 			class: 'ProseMirror-dropcursor'
