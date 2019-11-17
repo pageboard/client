@@ -1,7 +1,7 @@
 exports.consent_form = {
 	priority: 11,
 	title: 'Consent',
-	icon: '<b class="icon">DNT</b>',
+	icon: '<i class="handshake icon"></i>',
 	group: "block",
 	menu: 'form',
 	properties: {
@@ -20,7 +20,7 @@ exports.consent_form = {
 
 exports.input_radio_yes = {
 	title: 'Yes',
-	icon: '<i class="selected radio icon"></i>',
+	icon: '<i class="thumbs up icon"></i>',
 	menu: "form",
 	group: "block",
 	context: 'consent_form//',
@@ -38,7 +38,7 @@ exports.input_radio_yes = {
 
 exports.input_radio_no = {
 	title: 'No',
-	icon: '<i class="selected radio icon"></i>',
+	icon: '<i class="thumbs down icon"></i>',
 	menu: "form",
 	group: "block",
 	context: 'consent_form//',
