@@ -36,3 +36,18 @@ exports.sticky = {
 	]
 };
 
+exports.header.properties.collapsed = {
+	title: "Collapsed",
+	description: "Collapse to zero height",
+	default: false,
+	type: "boolean"
+};
+exports.header.tag += ',[block-type="header"]';
+exports.header.html = `<element-sticky class="header" data-collapsed="[collapsed|magnet]">
+	<header block-content="content"></header>
+</element-sticky>`;
+exports.header.scripts = exports.sticky.scripts.slice();
+exports.header.stylesheets =  exports.sticky.stylesheets.concat(['../ui/layout.css']);
+exports.header.polyfills = exports.sticky.polyfills;
+
+
