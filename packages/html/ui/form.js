@@ -177,6 +177,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		});
 	}
 }
+window.HTMLCustomFormElement = HTMLCustomFormElement;
 
 /* these methods must be available even on non-upgraded elements */
 HTMLFormElement.prototype.enable = function() {
