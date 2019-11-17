@@ -42,7 +42,7 @@
     "prosemirror-gapcursor": "^1.1.0",
     "prosemirror-history": "^1.0.4",
     "prosemirror-inputrules": "^1.0.4",
-    "prosemirror-keymap": "^1.0.2",
+    "prosemirror-keymap": "^1.1.1",
     "prosemirror-menu": "^1.0.5",
     "prosemirror-model": "^1.7.5",
     "prosemirror-schema-basic": "^1.0.1",
