@@ -131,6 +131,7 @@ exports.settings = {
 };
 
 exports.site = {
+	title: 'Site',
 	priority: -1000,
 	$lock: true,
 	bundle: true,
