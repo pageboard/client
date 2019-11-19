@@ -139,7 +139,7 @@ Blocks.prototype.renderFrom = function(block, blocks, store, opts) {
 			if (!blocks[child.id]) {
 				blocks[child.id] = child;
 			} else {
-				console.warn("child already exists", child);
+				console.warn("child already exists", child, "in", block);
 			}
 		});
 		delete block.children;
