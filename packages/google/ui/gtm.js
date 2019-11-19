@@ -8,7 +8,8 @@ Page.setup(function(state) {
 		}
 		if (!window.dataLayer.length) window.dataLayer.push({
 			'gtm.start': new Date().getTime(),
-			event:'gtm.js'
+			event:'gtm.js',
+			anonymize_ip: true
 		});
 	});
 });
