@@ -26,7 +26,7 @@ exports.equivs = require('./equivs');
 function initState(res, state) {
 	var scope = state.scope;
 	if (!scope.$doc) scope.$doc = document.cloneNode();
-	scope.$loc = new URL('', document.location);
+	scope.$loc = new URL(state.toString(), document.location);
 	scope.$loc.searchParams.delete('develop');
 	if (!res) return;
 	if (res.grants) state.data.$grants = res.grants;
