@@ -22,6 +22,7 @@ class HTMLElementPortfolio extends HTMLCustomElement {
 		if (!mode) mode = this._items.className = 'cells';
 		if (mode == "cells") {
 			this._loading = true;
+			// https://github.com/metafizzy/isotope/issues/1075
 			var scrollX = window.scrollX;
 			var scrollY = window.scrollY;
 			this.widget = new window.Isotope(this._items, this.options);
