@@ -88,7 +88,13 @@ exports.page = {
 		'../lib/custom-elements-builtin.js'
 	].concat(exports.site.scripts),
 	polyfills: [
-		'default', 'dataset', 'fetch', 'es2015', 'es2016', 'es2017', 'es2018', 'URL', `Intl.~locale.[$site.lang|or:en]`
+		'default',
+		'dataset',
+		'fetch',
+		'es2015', 'es2016', 'es2017', 'es2018',
+		'URL',
+		`Intl.~locale.[$site.lang|or:en]`,
+		'smoothscroll'
 	],
 	filters: {
 		polyfills: function($elements, what) {
