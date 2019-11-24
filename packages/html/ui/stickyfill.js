@@ -189,7 +189,8 @@ class Sticky {
 			width: node.style.width,
 			marginTop: node.style.marginTop,
 			marginLeft: node.style.marginLeft,
-			marginRight: node.style.marginRight
+			marginRight: node.style.marginRight,
+			flex: node.style.flex
 		};
 
 		const nodeTopValue = parseNumeric(nodeComputedProps.top);
@@ -239,7 +240,8 @@ class Sticky {
 			border: 0,
 			borderSpacing: 0,
 			fontSize: '1em',
-			position: 'static'
+			position: 'static',
+			flex: 'none'
 		});
 
 		this._recalcClone(nodeWinOffset);
