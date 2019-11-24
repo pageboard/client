@@ -22,7 +22,7 @@ exports.menu = {
 		}
 	},
 	group: "block",
-	html: `<div class="ui [direction] menu"></div>`,
+	html: `<nav class="ui [direction] menu"></nav>`,
 	stylesheets: [
 		'../lib/components/menu.css'
 	]

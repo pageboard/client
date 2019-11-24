@@ -41,12 +41,12 @@ exports.breadcrumb = {
 	icon: '<b class="icon">&gt;&gt;&gt;</b>',
 	menu: "link",
 	group: "block",
-	html: `<div class="ui breadcrumb">
+	html: `<nav class="ui breadcrumb">
 		<div class="divider"></div>
 		<a href="[$links.up.url|reverse|repeat:+a:link:-1]" class="section">[link.title]</a>
 		<div class="divider"></div>
 		<div class="active section">[$page.data.title|magnet:+div]</div>
-	</div>`,
+	</nav>`,
 	stylesheets: [
 		'../lib/components/breadcrumb.css'
 	]
