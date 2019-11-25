@@ -4,6 +4,7 @@
 
 #menu {
 	margin-top:1em;
+	margin-bottom: 1em;
 }
 #menu .ui.icon.menu .active.item {
 	background-color: rgba(129,165,255,0.3);

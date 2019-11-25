@@ -50,18 +50,13 @@ exports.write = {
 				</a>
 			</div>
 		</div>
-		<div id="breadcrumb" class="ui breadcrumb">
-			No selection.
-			<span>
-				<a class="section"></a>
-				<i class="right chevron icon divider"></i>
-			</span>
-		</div>
 		<div id="menu"></div>
 		<div id="move" class="ui inverted tiny icon menu hidden">
-			<a class="item" data-command="left" title="Move left"><i class="left arrow icon"></i></a>
+			<a class="item" data-command="left-jump" title="Jump left"><i class="angle double left icon"></i></a>
+			<a class="item" data-command="left" title="Move left"><i class="angle left icon"></i></a>
 			<a class="item" data-command="delete" title="Delete"><i class="close icon"></i></a>
-			<a class="item" data-command="right" title="Move right"><i class="right arrow icon"></i></a>
+			<a class="item" data-command="right" title="Move right"><i class="angle right icon"></i></a>
+			<a class="item" data-command="right-jump" title="Jump right"><i class="angle double right icon"></i></a>
 			<div class="right menu">
 				<div class="item" id="share">
 					<div class="ui inverted toggle checkbox checked" title="Toggle shared status">
@@ -77,6 +72,13 @@ exports.write = {
 					<i class="star of life icon"></i>
 				</a>
 			</div>
+		</div>
+		<div id="breadcrumb" class="ui breadcrumb">
+			No selection.
+			<span>
+				<a class="section"></a>
+				<i class="right chevron icon divider"></i>
+			</span>
 		</div>
 		<div id="form" class="ui form"></div>
 		<div class="ui bound bottom sticky wide notifications"></div>
