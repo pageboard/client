@@ -539,34 +539,47 @@ function checkContext(list, type, $pos, d) {
 	});
 }
 
-Utils.prototype.insertPoint = function(tr, from, nodeType, dir, jump) {
-	from = from + dir;
+Utils.prototype.insertPoint = function(tr, from, nodeType, dir, around) {
+	var cur = from + dir;
 	var depth;
 	var $pos;
 	var doc = tr.doc;
 	var docSize = doc.content.size;
-	while (from >= 0 && from <= docSize) {
-		$pos = doc.resolve(from);
+	while (cur >= 0 && cur <= docSize) {
+		$pos = doc.resolve(cur);
 		depth = this.canInsert($pos, nodeType, true, dir > 0).depth;
 		if (depth != null && depth >= 0) break;
-		if (!jump) {
+		if (!around) {
 			if (dir == 1 && $pos.nodeAfter) break;
 			else if (dir == -1 && $pos.nodeBefore) break;
 		}
-		from = from + dir;
+		cur = cur + dir;
 	}
 	if (depth == null) return;
-	var npos = dir == 1 ? $pos.after(depth + 1) : $pos.before(depth + 1);
+	var npos = dir == 1 ?
+		($pos.nodeAfter ? $pos.after(depth + 1) : $pos.after(depth))
+		: ($pos.nodeBefore ? $pos.before(depth + 1) : $pos.before(depth));
 	return npos;
 };
 
-Utils.prototype.move = function(tr, dir) {
+Utils.prototype.move = function(tr, dir, jump) {
 	var sel = tr.selection;
 	var node = sel.node;
 	if (!node) return;
 	if (node.type.name == "_") return;
 	tr.delete(sel.from, sel.to);
-	var npos = this.insertPoint(tr, sel.from, node.type, dir, true);
+	var cur = sel.from;
+	var around = true;
+	if (jump) {
+		if (dir > 0 && sel.$to.nodeAfter) {
+			cur += sel.$to.nodeAfter.nodeSize - 2;
+			around = false;
+		} else if (dir < 0 && sel.$from.nodeBefore) {
+			cur -= sel.$from.nodeBefore.nodeSize - 2;
+			around = false;
+		}
+	}
+	var npos = this.insertPoint(tr, cur, node.type, dir, around);
 	if (npos == null) return;
 	node = node.cut(0);
 	tr.insert(npos, node);
