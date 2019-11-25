@@ -572,10 +572,10 @@ Utils.prototype.move = function(tr, dir, jump) {
 	var around = true;
 	if (jump) {
 		if (dir > 0 && sel.$to.nodeAfter) {
-			cur += sel.$to.nodeAfter.nodeSize - 2;
+			cur += sel.$to.nodeAfter.nodeSize - 1;
 			around = false;
 		} else if (dir < 0 && sel.$from.nodeBefore) {
-			cur -= sel.$from.nodeBefore.nodeSize - 2;
+			cur -= sel.$from.nodeBefore.nodeSize - 1;
 			around = false;
 		}
 	}
