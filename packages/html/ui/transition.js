@@ -93,6 +93,10 @@ Page.Transition = class {
 		this.ok = false;
 		this.handleEvent();
 	}
+	scrollTo(obj) {
+		this.to.scrollTop = obj.top;
+		this.to.scrollLeft = obj.left;
+	}
 	handleEvent(e, state) {
 		// only transitions of body children are considered
 		if (e) {
@@ -114,7 +118,11 @@ Page.Transition = class {
 	}
 	cleanup() {
 		this.from.remove();
+		var top = this.to.scrollTop;
+		var left = this.to.scrollLeft;
 		this.root.classList.remove('transition', 'transitioning');
+		this.root.scrollTop = top;
+		this.root.scrollLeft = left;
 		delete this.from;
 		delete this.to;
 		delete this.state.transition;

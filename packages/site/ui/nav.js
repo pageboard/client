@@ -33,7 +33,11 @@ Page.State.prototype.scroll = function(opts) {
 };
 
 Page.State.prototype.debounce = function(fn, to) {
-	// TODO cleanup listeners on close
+	var db = Pageboard.debounce(function(...args) {
+		fn(...args);
+	}, to);
+	this.chain('close', db.clear);
+	return db;
 };
 
 Page.init(function(state) {
@@ -51,7 +55,7 @@ Page.hash(function(state) {
 Page.setup(function(state) {
 	if (window.history && 'scrollRestoration' in window.history) {
 		window.history.scrollRestoration = 'manual';
-// 		if (!state.hash) window.scrollTo(state.data.$scroll);
+ 		if (!state.hash) state.scroll(state.data.$scroll);
 	}
 });
 
@@ -77,7 +81,7 @@ Page.setup(function(state) {
 
 Page.setup(function(state) {
 	Page.connect({
-		handleScroll: Pageboard.debounce(function(e, state) {
+		handleScroll: state.debounce(function(e, state) {
 			if (state.transition) return;
 			state.data.$scroll = {
 				left: window.scrollX,
