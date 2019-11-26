@@ -17,6 +17,7 @@ exports.cards = {
 		},
 		responsive: {
 			title: 'Responsive',
+			nullable: true,
 			anyOf: [{
 				title: 'Disable',
 				const: null

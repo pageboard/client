@@ -17,6 +17,7 @@ exports.grid = {
 		},
 		responsive: {
 			title: 'Responsive',
+			nullable: true,
 			anyOf: [{
 				title: 'Disable',
 				const: null
@@ -68,6 +69,7 @@ exports.grid_row = {
 	properties: {
 		responsive: {
 			title: 'Responsive',
+			nullable: true,
 			anyOf: [{
 				title: 'Disable',
 				const: null
