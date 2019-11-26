@@ -62,7 +62,7 @@ Page.Transition = class {
 		this.root = from.parentNode;
 		this.event = this.constructor.event('end');
 		this.ok = this.event
-			&& (from.dataset.transitionFrom || to.dataset.transitionTo);
+			&& (from.dataset.transitionClose || to.dataset.transitionOpen);
 
 		var fromLeft = from.scrollLeft;
 		var fromTop = from.scrollTop;
