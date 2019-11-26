@@ -116,7 +116,7 @@ exports.heading = {
 			}]
 		},
 		linkable: {
-			title: 'Linkable',
+			title: 'Show #link',
 			description: 'Shows a link hash on hover',
 			type: 'boolean',
 			default: false
