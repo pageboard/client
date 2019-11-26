@@ -133,19 +133,17 @@ exports.heading = {
 	group: "block",
 	icon: '<i class="icon header"></i>',
 	tag: 'h1,h2,h3,h4,h5,h6',
-	html: `<h[level] class="ui [align|or:left] aligned header" is="h[level]-helper">
-		<a aria-hidden="true" href="[$loc.pathname][$loc.search]#[id]" id="[id]">[linkable|bmagnet]#</a>
+	html: `<h[level] class="ui [align|or:left] aligned header" is="h[level]-helper" id="[id]">
+		<a aria-hidden="true" href="[$loc.pathname][$loc.search]#[id]">[linkable|bmagnet]#</a>
 		<div block-content="text">Heading</div>
 	</hn>`,
 	parse: function(dom) {
 		var obj = {
 			level: parseInt(dom.nodeName.substring(1))
 		};
-		var anchor = dom.querySelector('a');
-		var id = anchor && anchor.getAttribute('id') || null;
+		var id = dom && dom.getAttribute('id') || null;
 		if (id) {
 			obj.id = id;
-			obj.linkable = true;
 		}
 		return obj;
 	},
