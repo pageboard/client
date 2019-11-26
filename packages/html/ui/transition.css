@@ -43,30 +43,43 @@ html.transition > body:after {
 }
 
 /* transitions */
-html.transition,
-html.transition > body.transition,
-html.transition > body.transition-before {
-	overflow:hidden !important;
-}
-.transition-before > .transition-from[block-type="main"],
-.transition > .transition-from[block-type="main"] {
-	position:absolute;
-	height:100%;
+html.transition {
 	width:100%;
+	height:100%;
 }
-.transition-before > .transition-from:not([block-type="main"]),
-.transition > .transition-from:not([block-type="main"]) {
-	display: none !important;
+html.transition > body:first-of-type {
+	
+}
+html.transition > body + body {
+	z-index:1;
+	overflow:hidden !important;
+	position:absolute;
+	height: 100%;
+	width: 100%;
+	display: block;
+	top:0;
+	left:0;
 }
 
-.transition > .transition-to:not([block-type="main"]) {
-	visibility:hidden !important;
+html.transition > body + body[data-transition-to="right"] {
+	transform: translate3d(100%, 0, 0);
+	display: block;
+	position: absolute;
+	will-change: transform;
 }
-.transition-before > .transition-to {
-	visibility:hidden;
+
+html.transition > body + body > *:not([block-type="main"]) {
+	opacity:0;
+}
+
+html.transition.transitioning > body + body[data-transition-to="right"] {
+	transition: transform 1.5s ease-in;
+	transform: translate3d(0, 0, 0);
+	
 }
 
 /* translate transitions */
+/*
 .transition.up-from > .transition-from[block-type="main"],
 .transition.down-from > .transition-from[block-type="main"],
 .transition.right-from > .transition-from[block-type="main"],
@@ -130,8 +143,10 @@ html.transition > body.transition-before {
 	transition: transform 1.5s ease-in;
 	transform: translate3d(0, 0, 0) !important;
 }
+*/
 
 /* opacity transitions */
+/*
 .transition.fade-to > .transition-to,
 .transition.fade-to > .transition-from,
 .transition.fade-from > .transition-to,
@@ -158,4 +173,4 @@ html.transition > body.transition-before {
 .transition.transitioning.fade-from > .transition-from[block-type="main"] {
 	opacity:0;
 }
-
+*/

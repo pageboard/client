@@ -126,16 +126,10 @@ class HTMLElementTemplate extends HTMLCustomElement {
 
 		view.textContent = '';
 		while (node.firstChild) view.appendChild(node.firstChild);
-		if (!state.scrollIntoView && view.scrollIntoView && usesQuery) {
-			state.scrollIntoView = true;
-			Page.setup(function(state) {
-				state.finish(function() {
-					view.scrollIntoView({
-						block: "nearest"
-					});
-				});
-			});
-		}
+		if (usesQuery) state.scroll({
+			once: true,
+			node: view
+		});
 	}
 }
 Page.ready(function() {

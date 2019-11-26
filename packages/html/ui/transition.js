@@ -1,3 +1,8 @@
+Object.defineProperty(document, 'body', {
+	get: function() {
+		return this.documentElement.querySelector('body:last-of-type');
+	}
+});
 Page.init(function(state) {
 	var root = document.documentElement;
 	function dtr(state) {
@@ -13,42 +18,14 @@ Page.init(function(state) {
 	Page.error(dtr);
 });
 
-Page.init(function(state) {
-	state.mergeBody = function(body, corpse) {
-		if (this.referrer.transition) this.referrer.transition.stop();
-		if (body.getAttribute('block-type') != corpse.getAttribute('block-type')) {
-			corpse.replaceWith(body);
-		} else {
-			this.transition = new Page.Transition(this, body, corpse);
-		}
-	};
-});
-
-Page.hash(function(state) {
-	var hash = state.hash;
-	if (!hash) return;
-	var node = document.getElementById(hash);
-	if (!node) return;
-	if (node.scrollIntoView) node.scrollIntoView();
-});
-
-Page.setup(function restoreScrollReferrer(state) {
-	var scroll = state.data.scroll;
-	if (scroll && (scroll.x || scroll.y)) return;
-	var ref = state.referrer;
-	if (!Page.sameDomain(ref, state) || Page.samePathname(ref, state)) {
-		return;
-	}
-	var anc = document.querySelector(`a[href="${ref.pathname}"]:not(.item):not([block-type="nav"])`);
-	if (!anc) return;
-	var parent = anc.parentNode.closest('[block-type]');
-	if (!parent) return;
-	if (!state.transition || !state.transition.ok) {
-		if (parent.scrollIntoView) parent.scrollIntoView();
+Page.State.prototype.mergeBody = function(body, corpse) {
+	if (this.referrer.transition) this.referrer.transition.stop();
+	if (body.isContentEditable || body.getAttribute('block-type') != corpse.getAttribute('block-type')) {
+		corpse.replaceWith(body);
 	} else {
-		state.transition.node = parent;
+		this.transition = new Page.Transition(this, body, corpse);
 	}
-});
+};
 
 Page.setup(function(state) {
 	if (state.transition) {
@@ -78,180 +55,79 @@ Page.Transition = class {
 			}
 		}
 	}
-	constructor(state, body, corpse) {
+	constructor(state, to, from) {
 		this.state = state;
-		this.body = corpse;
-
-		if (!state.data.scroll) state.data.scroll = {x:0, y:0};
-
-		this.from = corpse.dataset.transitionFrom;
-		this.to = body.dataset.transitionTo;
-
-		// First, store positions of current sections
-		this.rects = Array.prototype.map.call(corpse.children, function(node) {
-			if (node.dataset.transitionKeep || !node.matches('[block-type="main"]')) return;
-			return node.getBoundingClientRect();
-		});
-
-		// Second, add transition-from class to current sections
-		this.fromList = Array.prototype.map.call(corpse.children, function(node) {
-			if (node.dataset.transitionKeep) {
-				return;
-			}
-			node.classList.add('transition-from');
-			return node;
-		});
-
-		// Third, insert new sections
-		state.updateAttributes(corpse, body);
-		corpse.classList.add('transition-before');
-
-		this.toList = Array.prototype.map.call(body.children, function(node) {
-			node.classList.add('transition-to');
-			return node;
-		});
-		this.toList.forEach(function(node) {
-			corpse.appendChild(node);
-		});
+		this.from = from;
+		this.to = to;
+		this.root = from.parentNode;
 		this.event = this.constructor.event('end');
 		this.ok = this.event
-			&& (this.from || this.to)
-			&& !body.isContentEditable
-			&& this.fromList.length > 0
-			&& this.toList.length > 0;
+			&& (from.dataset.transitionFrom || to.dataset.transitionTo);
+
+		var fromLeft = from.scrollLeft;
+		var fromTop = from.scrollTop;
+		this.root.classList.add('transition');
+
+		from.style.left = fromLeft;
+		from.style.top = fromTop;
+		window.scrollTo(0, 0);
+		// note that prepending new body would be nicer but there is a stacking context issue
+		from.after(to);
 	}
 	start() {
-		var clist = this.body.classList;
-		var scroll = this.state.data.scroll;
+		var scroll = this.state.data.$scroll;
 		if (this.node) {
+			/*
 			var scrollX = window.scrollX;
 			var scrollY = window.scrollY;
-			this.node.scrollIntoView();
-			scroll.x += window.scrollX - scrollX;
-			scroll.y += window.scrollY - scrollY;
+			this.node.scrollIntoView(); // this.state.scroll({node: this.node}) ?
+			scroll.left += window.scrollX - scrollX;
+			scroll.top += window.scrollY - scrollY;
+			*/
 			delete this.node;
 		}
-		if (this.ok) {
-			this.fromList.forEach(function(node, i) {
-				var rect = this.rects[i];
-				if (!node || !rect) return;
-				Object.assign(node.style, {
-					left: `${Math.round(rect.left + scroll.x)}px`,
-					top: `${Math.round(rect.top + scroll.y)}px`,
-					width: `${Math.round(rect.width)}px`,
-					height: `${Math.round(rect.height)}px`
-				});
-			}, this);
+		//window.scrollTo(scroll);
 
-			this.body.parentNode.classList.add('transition');
-			clist.add('transition');
-
-			if (this.from) {
-				clist.add(this.from);
-			}
-			if (this.to) {
-				clist.add(this.to);
-			}
-		}
-		window.scrollTo(scroll.x, scroll.y);
-
-		clist.remove('transition-before');
-
-		var it = this;
-
-		return new Promise(function(resolve) {
-			it.resolve = resolve;
-			if (!it.ok) {
-				it.cleanup();
+		return new Promise((resolve) => {
+			this.resolve = resolve;
+			if (!this.ok) {
+				this.cleanup();
 			} else {
-				setTimeout(function() {
-					it.body.parentNode.addEventListener(it.event, it);
-					clist.add('transitioning');
+				setTimeout(() => {
+					this.root.addEventListener(this.event, this);
+					this.root.classList.add('transitioning');
 				});
-				it.safeTo = setTimeout(function() {
-					console.warn("Transition timeout", it.from, it.to);
-					it.stop();
+				this.safe = setTimeout(() => {
+					console.warn("Transition timeout");
+					this.stop();
 				}, 3000);
 			}
 		});
 	}
-	stop(immediate) {
+	stop() {
 		this.ok = false;
 		this.handleEvent();
 	}
-	handleEvent(e) {
-		if (this.safeTo) {
-			clearTimeout(this.safeTo);
-			delete this.safeTo;
-		}
+	handleEvent(e, state) {
 		// only transitions of body children are considered
-		if (e && e.target.parentNode != this.body) return;
-		this.body.parentNode.removeEventListener(this.event, this);
-		if (e) setTimeout(this.cleanup.bind(this));
+		if (e && e.target != this.to) return;
+		if (this.safe) {
+			clearTimeout(this.safe);
+			delete this.safe;
+		}
+		this.root.removeEventListener(this.event, this);
+		if (e) setTimeout(() => this.cleanup());
 		else this.cleanup();
 	}
 	cleanup() {
-		this.fromList.forEach(function(node) {
-			if (node) node.remove();
-		});
-		this.toList.forEach(function(node) {
-			node.classList.remove('transition-to');
-		});
-		var clist = this.body.classList;
-		clist.remove('transition', 'transitioning');
-		this.body.parentNode.classList.remove('transition');
-		if (this.from) clist.remove(this.from);
-		if (this.to) clist.remove(this.to);
-		delete this.body;
+		this.from.remove();
+		this.root.classList.remove('transition', 'transitioning');
+		delete this.from;
+		delete this.to;
 		delete this.state.transition;
 		delete this.state;
 		if (this.resolve) this.resolve();
 	}
 };
 
-Page.setup(function navigate(state) {
-	Page.connect({
-		handleClick: (e) => {
-			var a = e.target.closest('a');
-			var href = a && a.getAttribute('href');
-			if (!href || e.defaultPrevented || a.target) return;
-			e.preventDefault();
-			Page.setup(function(state) {
-				state.push(href);
-			});
-		}
-	}, document);
 
-	if (!document.body.isContentEditable && document.body.dataset.redirect) {
-		setTimeout(function() {
-			state.replace(document.body.dataset.redirect);
-		}, 10);
-	}
-});
-
-Page.setup(function(state) {
-	Page.connect({
-		handleScroll: Pageboard.debounce(function(e) {
-			Page.setup(function(state) {
-				if (state.transition) return;
-				state.data.scroll = {
-					x: window.scrollX,
-					y: window.scrollY
-				};
-				state.save();
-			});
-		}, 500)
-	}, window);
-});
-
-Page.init(function(state) {
-	if (window.history && 'scrollRestoration' in window.history) {
-		window.history.scrollRestoration = 'manual';
-		var scroll = state.data.scroll; // need "old" state
-		if (scroll) {
-			setTimeout(function() {
-				window.scrollTo(scroll.x, scroll.y);
-			});
-		}
-	}
-});
