@@ -483,8 +483,13 @@ Utils.prototype.canInsert = function($pos, nodeType, all, after) {
 		var to = index;
 		var node = $pos.node(d);
 		if (!found) {
-			if ($pos.nodeAfter && d == $pos.depth && $pos.nodeAfter.type.name == "_") {
-				to += 1;
+			if (d == $pos.depth) {
+				if ($pos.nodeAfter && $pos.nodeAfter.type.name == "_") {
+					to += 1;
+				}
+				if ($pos.nodeBefore && $pos.nodeBefore.type.name == "_") {
+					index -= 1;
+				}
 			}
 			if (node.canReplaceWith(index, to, nodeType)) {
 				// check context
@@ -545,20 +550,29 @@ Utils.prototype.insertPoint = function(tr, from, nodeType, dir, around) {
 	var $pos;
 	var doc = tr.doc;
 	var docSize = doc.content.size;
+	var npos = null;
+	var all = !around;
 	while (cur >= 0 && cur <= docSize) {
 		$pos = doc.resolve(cur);
-		depth = this.canInsert($pos, nodeType, true, dir > 0).depth;
-		if (depth != null && depth >= 0) break;
+		depth = this.canInsert($pos, nodeType, all, dir > 0).depth;
+		if (depth != null && depth >= 0) {
+			npos = dir == 1 ? $pos.after(depth + 1) : $pos.before(depth + 1);
+		}
+		if (around) {
+			var $npos = doc.resolve(npos);
+			if (dir > 0 && $npos.parentOffset == $npos.parent.content.size && $pos.parentOffset == $pos.parent.content.size) {
+				npos = null;
+			} else if (dir < 0 && $npos.parentOffset == 0 && $pos.parentOffset == 0) {
+				npos = null;
+			}
+		}
+		if (npos != null) break;
 		if (!around) {
 			if (dir == 1 && $pos.nodeAfter) break;
 			else if (dir == -1 && $pos.nodeBefore) break;
 		}
 		cur = cur + dir;
 	}
-	if (depth == null) return;
-	var npos = dir == 1 ?
-		($pos.nodeAfter ? $pos.after(depth + 1) : $pos.after(depth))
-		: ($pos.nodeBefore ? $pos.before(depth + 1) : $pos.before(depth));
 	return npos;
 };
 
