@@ -33,6 +33,7 @@ Move.prototype.click = function(e) {
 		break;
 	}
 	tr.setMeta('editor', true);
+	tr.scrollIntoView();
 	this.editor.dispatch(tr);
 	this.editor.focus();
 };
