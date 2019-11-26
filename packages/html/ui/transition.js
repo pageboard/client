@@ -63,31 +63,16 @@ Page.Transition = class {
 		this.event = this.constructor.event('end');
 		this.ok = this.event
 			&& (from.dataset.transitionClose || to.dataset.transitionOpen);
-
-		var fromLeft = from.scrollLeft;
-		var fromTop = from.scrollTop;
+		// transition applies scroll from documentElement to body
+		var top = this.root.scrollTop;
+		var left = this.root.scrollLeft;
 		this.root.classList.add('transition');
-
-		from.style.left = fromLeft;
-		from.style.top = fromTop;
-		window.scrollTo(0, 0);
+		this.from.scrollTop = top;
+		this.from.scrollLeft = left;
 		// note that prepending new body would be nicer but there is a stacking context issue
 		from.after(to);
 	}
 	start() {
-		var scroll = this.state.data.$scroll;
-		if (this.node) {
-			/*
-			var scrollX = window.scrollX;
-			var scrollY = window.scrollY;
-			this.node.scrollIntoView(); // this.state.scroll({node: this.node}) ?
-			scroll.left += window.scrollX - scrollX;
-			scroll.top += window.scrollY - scrollY;
-			*/
-			delete this.node;
-		}
-		//window.scrollTo(scroll);
-
 		return new Promise((resolve) => {
 			this.resolve = resolve;
 			if (!this.ok) {
@@ -100,7 +85,7 @@ Page.Transition = class {
 				this.safe = setTimeout(() => {
 					console.warn("Transition timeout");
 					this.stop();
-				}, 3000);
+				}, 4000);
 			}
 		});
 	}
@@ -110,7 +95,15 @@ Page.Transition = class {
 	}
 	handleEvent(e, state) {
 		// only transitions of body children are considered
-		if (e && e.target != this.to) return;
+		if (e) {
+			if (this.to.dataset.transitionOpen) {
+				if (e.target != this.to) return;
+			} else if (this.from.dataset.transitionClose) {
+				if (e.target != this.from) return;
+			} else {
+				console.warn("Transition event without transition");
+			}
+		}
 		if (this.safe) {
 			clearTimeout(this.safe);
 			delete this.safe;

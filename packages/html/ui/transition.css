@@ -46,10 +46,15 @@ html.transition > body:after {
 html.transition {
 	width:100%;
 	height:100%;
+	overflow: hidden;
 }
-
+html.transition > body {
+	overflow:auto;
+	height:100%;
+}
 html.transition > body + body[data-transition-open],
-html.transition > body[data-transition-close|="tr"]:first-of-type {
+html.transition > body[data-transition-close|="tr"]:first-of-type,
+html.transition > body[data-transition-close] + body {
 	position:absolute;
 	height: 100%;
 	width: 100%;
@@ -106,6 +111,7 @@ html.transition > body[data-transition-close|="tr"]:first-of-type {
 }
 
 html.transition > body[data-transition-close="fade"]:first-of-type {
+	z-index:1;
 	opacity:1;
 	transition: opacity 1.5s ease-in;
 }

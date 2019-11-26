@@ -16,9 +16,10 @@ Page.State.prototype.scroll = function(opts) {
 		scrollOpts.left = window.pageXOffset + rect.left;
 		var section = opts.node.closest('body > [block-type="main"]');
 		if (section) {
-			while (section) {
-				scrollOpts.top -= section.getBoundingClientRect().height;
-				section = section.previousElementSibling;
+			while ((section = section.previousElementSibling)) {
+				if (["static", "relative"].includes(window.getComputedStyle(section).position) == false) {
+					scrollOpts.top -= section.getBoundingClientRect().height;
+				}				
 			}
 		} else {
 			return;
@@ -27,8 +28,8 @@ Page.State.prototype.scroll = function(opts) {
 	if (this.stage == "hash" && Page.samePathname(this, this.referrer) && this.referrer.data.$scroll) {
 		scrollOpts.behavior = 'smooth';
 	}
-	console.log("scroll disabled", scrollOpts);
-	// window.scrollTo(scrollOpts);
+	if (this.transition) this.transition.scrollTo(scrollOpts);
+	else window.scrollTo(scrollOpts);
 };
 
 Page.State.prototype.debounce = function(fn, to) {
