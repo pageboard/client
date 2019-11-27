@@ -155,7 +155,7 @@ exports.write = {
 		"../lib/speakingurl.js"
 	]),
 	resources: {
-		devTools: "../lib/prosemirror-dev-tools.min.js",
+		devtools: "../lib/prosemirror-dev-tools.min.js",
 		empty: "../ui/empty.png",
 		develop: "../ui/develop.js",
 		editor: "../lib/pagecut/editor.js",
