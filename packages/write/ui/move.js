@@ -20,10 +20,10 @@ Move.prototype.click = function(e) {
 		if (!this.editor.utils.move(tr, -1, true)) return;
 		break;
 	case "left":
-		if (!this.editor.utils.move(tr, -1)) return;
+		if (!this.editor.utils.move(tr, -1, false)) return;
 		break;
 	case "right":
-		if (!this.editor.utils.move(tr, 1)) return;
+		if (!this.editor.utils.move(tr, 1, false)) return;
 		break;
 	case "right-jump":
 		if (!this.editor.utils.move(tr, 1, true)) return;
@@ -47,13 +47,13 @@ Move.prototype.update = function(parents, sel) {
 	var state = this.editor.state;
 	var utils = this.editor.utils;
 	this.node.querySelector('[data-command="left-jump"]')
-	.classList.toggle('disabled', !utils.move(state.tr, -1, true));
+	.classList.toggle('disabled', !utils.move(state.tr, -1, true, true));
 	this.node.querySelector('[data-command="left"]')
-	.classList.toggle('disabled', !utils.move(state.tr, -1));
+	.classList.toggle('disabled', !utils.move(state.tr, -1, false, true));
 	this.node.querySelector('[data-command="right"]')
-	.classList.toggle('disabled', !utils.move(state.tr, 1));
+	.classList.toggle('disabled', !utils.move(state.tr, 1, false, true));
 	this.node.querySelector('[data-command="right-jump"]')
-	.classList.toggle('disabled', !utils.move(state.tr, 1, true));
+	.classList.toggle('disabled', !utils.move(state.tr, 1, true, true));
 	this.node.querySelector('[data-command="delete"]')
 	.classList.toggle('disabled', !utils.deleteTr(state.tr));
 };

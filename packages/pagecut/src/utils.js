@@ -558,14 +558,6 @@ Utils.prototype.insertPoint = function(tr, from, nodeType, dir, around) {
 		if (depth != null && depth >= 0) {
 			npos = dir == 1 ? $pos.after(depth + 1) : $pos.before(depth + 1);
 		}
-		if (around) {
-			var $npos = doc.resolve(npos);
-			if (dir > 0 && $npos.parentOffset == $npos.parent.content.size && $pos.parentOffset == $pos.parent.content.size) {
-				npos = null;
-			} else if (dir < 0 && $npos.parentOffset == 0 && $pos.parentOffset == 0) {
-				npos = null;
-			}
-		}
 		if (npos != null) break;
 		if (!around) {
 			if (dir == 1 && $pos.nodeAfter) break;
@@ -576,33 +568,49 @@ Utils.prototype.insertPoint = function(tr, from, nodeType, dir, around) {
 	return npos;
 };
 
-Utils.prototype.move = function(tr, dir, jump) {
+Utils.prototype.move = function(tr, dir, jump, check) {
 	var sel = tr.selection;
 	var node = sel.node;
 	if (!node) return;
 	if (node.type.name == "_") return;
 	tr.delete(sel.from, sel.to);
 	var cur = sel.from;
+	var $cur = tr.doc.resolve(cur);
 	var around = true;
 	if (jump) {
-		if (dir > 0 && sel.$to.nodeAfter) {
-			cur += sel.$to.nodeAfter.nodeSize - 1;
+		if (dir > 0 && $cur.nodeAfter) {
+			cur += $cur.nodeAfter.nodeSize - 1;
 			around = false;
-		} else if (dir < 0 && sel.$from.nodeBefore) {
-			cur -= sel.$from.nodeBefore.nodeSize - 1;
+		} else if (dir < 0 && $cur.nodeBefore) {
+			cur -= $cur.nodeBefore.nodeSize - 1;
 			around = false;
 		}
 	}
-	var npos = this.insertPoint(tr, cur, node.type, dir, around);
-	if (npos == null) return;
+	var pos = null, $pos = null;
+	while (pos == null) {
+		pos = this.insertPoint(tr, cur, node.type, dir, around);
+		if (pos == null) return;
+		$pos = tr.doc.resolve(pos);
+		if (compareNodesWithPlaceholder($cur.nodeBefore, $pos.nodeBefore) && compareNodesWithPlaceholder($cur.nodeAfter, $pos.nodeAfter)) {
+			cur = pos + dir;
+			pos = null;
+		}
+	}
+	if (check) return true;
 	node = node.cut(0);
-	tr.insert(npos, node);
+	tr.insert(pos, node);
 	if (tr.doc.content.size > 0) {
-		var $npos = tr.doc.resolve(npos);
-		if ($npos.nodeAfter) tr.setSelection(new State.NodeSelection($npos));
+		$pos = tr.doc.resolve(pos);
+		if ($pos.nodeAfter) tr.setSelection(new State.NodeSelection($pos));
 	}
 	return tr;
 };
+
+function compareNodesWithPlaceholder(a, b) {
+	if (a && a.type.name == "_") a = null;
+	if (b && b.type.name == "_") b = null;
+	return a == b;
+}
 
 Utils.prototype.markActive = function(sel, nodeType) {
 	var state = this.view.state;
