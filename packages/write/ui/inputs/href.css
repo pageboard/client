@@ -170,14 +170,12 @@ input-map {
 	border-bottom-right-radius:0 !important;
 }
 
-.href > .form > form:not(.href) {
-	display:none;
+.fieldset.href > :not(.href),
+fieldset.href > :not(.href):not(legend) {
+	display:none !important;
 }
 .href > .form {
 	height:100%;
-}
-.href > .form > form.href > :not(.href) {
-	display:none;
 }
 
 

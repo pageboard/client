@@ -22,6 +22,7 @@ function Semafor(schema, node, filter, helper) {
 	// a jquery node selector
 	this.$node = $(node);
 	this.node = node;
+	this.node.classList.add('fieldset');
 	this.fields = {};
 }
 
@@ -100,7 +101,7 @@ function formSet(form, values) {
 		elem = form.elements[i];
 		if (!elem.name) continue;
 		if (elem.name.startsWith('$')) continue;
-		nullable = elem.closest('.nullable-fieldset');
+		nullable = elem.closest('.fieldset.nullable');
 		if (nullable) {
 			nullable.lastElementChild.disabled = false;
 			nullable.firstElementChild.checked = true;
@@ -156,7 +157,7 @@ function formSet(form, values) {
 Semafor.prototype.destroy = function() {
 	this.$node.find('.dropdown').dropdown('hide').dropdown('destroy');
 	this.$node.find('.checkbox').checkbox('destroy');
-	Array.from(this.node.querySelectorAll('.nullable-fieldset > .nullable')).forEach((node) => {
+	Array.from(this.node.querySelectorAll('.nullable.fieldset > .nullable')).forEach((node) => {
 		node.removeEventListener('change', this);
 	});
 	this.$node.form('destroy');
@@ -597,7 +598,7 @@ types.object = function(key, schema, node, inst) {
 	if (schema.title) {
 		if (schema.properties && key && schema.title) {
 			if (schema.nullable) {
-				fieldset = node.dom(`<div class="nullable-fieldset">
+				fieldset = node.dom(`<div class="nullable fieldset">
 					<input type="checkbox" class="ui nullable checkbox">
 					<fieldset name="${key}" class="field" disabled>
 						<legend>${schema.title}</legend>

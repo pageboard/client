@@ -193,7 +193,11 @@ Href.prototype.searchStart = function() {
 		this.appendItems(Array.from(node.children));
 	});
 	Pageboard.write.classList.add('href');
-	this.input.closest('form').classList.add('href');
+	var parent = this.input.parentNode;
+	while (parent) {
+		parent = parent.parentNode.closest('.field,.fieldset');
+		if (parent) parent.classList.add('href');
+	}
 	return this.searchUpdate();
 };
 
@@ -212,7 +216,11 @@ Href.prototype.searchStop = function(cancel) {
 		delete this.infinite;
 	}
 	Pageboard.write.classList.remove('href');
-	this.input.closest('form').classList.remove('href');
+	var parent = this.input.parentNode;
+	while (parent) {
+		parent = parent.parentNode.closest('.field,.fieldset');
+		if (parent) parent.classList.remove('href');
+	}
 	if (cancel) {
 		this.input.value = this.initialValue;
 	}
