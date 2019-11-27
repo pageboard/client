@@ -74,14 +74,8 @@ exports.layout = {
 		},
 		heightUnits: {
 			title: 'height units',
-			default: '%',
+			default: 'em',
 			anyOf: [{
-				title: '%',
-				const: '%'
-			}, {
-				title: 'vh',
-				const: 'vh'
-			}, {
 				title: 'em',
 				const: 'em'
 			}, {
@@ -90,6 +84,12 @@ exports.layout = {
 			}, {
 				title: 'px',
 				const: 'px'
+			}, {
+				title: 'vh',
+				const: 'vh'
+			}, {
+				title: '%',
+				const: '%'
 			}]
 		},
 		invert: {
@@ -97,6 +97,110 @@ exports.layout = {
 			description: 'Invert background',
 			default: false,
 			type: 'boolean'
+		},
+		background: {
+			title: 'Background',
+			type: 'object',
+			nullable: true,
+			properties: {
+				image: {
+					title: 'Image',
+					description: 'Local or remote URL',
+					nullable: true,
+					anyOf: [{
+						type: "string",
+						format: "uri"
+					}, {
+						type: "string",
+						format: "pathname"
+					}],
+					$helper: {
+						name: 'href',
+						filter: {
+							type: ["image"]
+						}
+					}
+				},
+				size: {
+					title: 'Size',
+					anyOf: [{
+						type: 'null',
+						title: 'Auto'
+					}, {
+						const: 'cover',
+						title: 'Cover'
+					}, {
+						const: 'contain',
+						title: 'Contain'
+					}]
+				},
+				position: {
+					title: 'Position',
+					anyOf: [{
+						type: 'null',
+						title: 'Top Left'
+					}, {
+						const: 'top center',
+						title: 'Top Center'
+					}, {
+						const: 'top right',
+						title: 'Top Right'
+					}, {
+						const: 'center left',
+						title: 'Center Left'
+					}, {
+						const: 'center',
+						title: 'Center'
+					}, {
+						const: 'center right',
+						title: 'Center Right'
+					}, {
+						const: 'bottom left',
+						title: 'Bottom Left'
+					}, {
+						const: 'bottom center',
+						title: 'Bottom Center'
+					}, {
+						const: 'bottom right',
+						title: 'Bottom Right'
+					}]
+				},
+				repeat: {
+					title: 'Repeat',
+					anyOf: [{
+						type: 'null',
+						title: 'Repeat'
+					}, {
+						const: 'no-repeat',
+						title: 'No Repeat'
+					}, {
+						const: 'repeat-x',
+						title: 'Repeat X'
+					}, {
+						const: 'repeat-y',
+						title: 'Repeat Y'
+					}, {
+						const: 'space',
+						title: 'Space'
+					}, {
+						const: 'round',
+						title: 'Round'
+					}]
+				},
+				attachment: {
+					title: 'Attachment',
+					anyOf: [{
+						type: 'null',
+						title: 'Local'
+					}, {
+						const: 'scroll',
+						title: 'Scroll'
+					}, {
+						const: 'fixed',
+						title: 'Fixed'
+					}]
+				}
+			}
 		}
 	},
 	contents: "block+",
@@ -107,8 +211,26 @@ exports.layout = {
 		[horizontal|?]
 		[vertical|?]
 		[direction]
-		[invert|?:inverted]" style="height:[height|eq:0:|not|magnet][heightUnits|or:%]">
-	</div>`,
+		[invert|?:inverted]"
+		style-height="[height|eq:0:|not|magnet][heightUnits]"
+		style-background-image="url([background.image|magnet])"
+		style-background-size="[background.size]"
+		style-background-repeat="[background.repeat|?]"
+		style-background-attachment="[background.attachment]"
+		style-background-position="[background.position]"
+	></div>`,
+	fuse: function(node, d, scope) {
+		node.fuse(d, scope);
+		Array.from(node.attributes).forEach(attr => {
+			if (!attr.name.startsWith('style-')) return;
+			var style = attr.name.split('-').slice(1).map((w, i) => {
+				if (i > 0) w = w[0].toUpperCase() + w.substr(1);
+				return w;
+			}).join("");
+			node.style[style] = attr.value;
+			node.removeAttribute(attr.name);
+		});
+	},
 	stylesheets: [
 		'../lib/components/container.css',
 		'../ui/layout.css'
