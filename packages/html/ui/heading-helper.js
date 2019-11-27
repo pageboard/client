@@ -20,7 +20,7 @@ class HTMLElementHeadingHelper extends HTMLHeadingElement {
 		var Pb = window.parent.Pageboard;
 		if (!Pb.slug || !Pb.editor) return;
 		var txt = Pb.slug(this.textContent);
-		var id = txt.length > 64 ? txt : null;
+		var id = txt.length <= 64 ? txt : null;
 		if (id != this.id) {
 			Pb.editor.blocks.mutate(this, {
 				id: id
