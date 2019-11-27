@@ -19,8 +19,9 @@ class HTMLElementHeadingHelper extends HTMLHeadingElement {
 	sync() {
 		var Pb = window.parent.Pageboard;
 		if (!Pb.slug || !Pb.editor) return;
-		var id = Pb.slug(this.textContent);
-		if (id && id != this.id) {
+		var txt = Pb.slug(this.textContent);
+		var id = txt.length > 64 ? txt : null;
+		if (id != this.id) {
 			Pb.editor.blocks.mutate(this, {
 				id: id
 			});
@@ -33,3 +34,4 @@ Page.setup(function() {
 		HTMLCustomElement.define(`h${i}-helper`, class extends HTMLElementHeadingHelper {}, `h${i}`);
 	}
 });
+
