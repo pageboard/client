@@ -264,16 +264,6 @@ FormBlock.prototype.customHelper = function(key, prop, node) {
 	if (inst.init) prop = inst.init(this.block, prop);
 };
 
-function schemaToMeta(schema) {
-	var copy = propToMeta(schema);
-	if (schema.properties) {
-		Object.entries(schema.properties).forEach(function([key, prop]) {
-			copy.properties[key] = schemaToMeta(prop);
-		});
-	}
-	return copy;
-}
-
 function propToMeta(schema) {
 	var copy = {};
 	var hint = '';
