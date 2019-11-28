@@ -140,8 +140,6 @@ function FormBlock(editor, node, type) {
 	if (el.properties) {
 		el.properties = JSON.parse(JSON.stringify(el.properties));
 	}
-	this.node.addEventListener('change', this);
-	this.node.addEventListener('input', this);
 
 	this.helpers = {};
 	this.filters = {};
@@ -168,6 +166,8 @@ FormBlock.prototype.update = function(parents, block, mode) {
 	var sameData = false;
 	var sameMode = mode == this.mode;
 	this.mode = mode;
+	this.node.removeEventListener('change', this);
+	this.node.removeEventListener('input', this);
 	if (block) {
 		if (this.block) {
 			if (!sameMode) {
@@ -221,6 +221,8 @@ FormBlock.prototype.update = function(parents, block, mode) {
 			});
 		}
 	}
+	this.node.addEventListener('change', this);
+	this.node.addEventListener('input', this);
 	this.ignoreEvents = false;
 };
 
@@ -346,9 +348,10 @@ FormBlock.prototype.handleEvent = function(e) {
 	if (!this.block || this.ignoreEvents || !this.form) return;
 	if (e && e.target) {
 		if (!e.target.matches('.nullable') && !e.target.name || e.target.name.startsWith('$')) return;	
+		if (e.type == "input" && ["checkbox", "radio", "select"].includes(e.target.type)) return; // change events only
 	}
 	var editor = this.editor;
-	var formData = pruneObj(this.form.get()) || {};
+	var formData = pruneObj(this.form.get(), this.form.schema) || {};
 	var mode = this.mode;
 
 	var same = Pageboard.utils.stableStringify(this.block[mode]) == Pageboard.utils.stableStringify(formData);
@@ -401,13 +404,14 @@ FormBlock.prototype.reset = function() {
 	this.form.clear();
 };
 
-function pruneObj(obj) {
+function pruneObj(obj, schema) {
 	var entries = Object.entries(obj).map(function([key, val]) {
-		if (val == null || val === "" || typeof val == "number" && isNaN(val)) {
+		var prop = schema.properties && schema.properties[key] || null;
+		if (prop.type == "object") {
+			if (val != null) val = pruneObj(val, prop);
+			return [key, val];
+		} else if (val == null || val === "" || typeof val == "number" && isNaN(val)) {
 			return null;
-		} else if (typeof val == "object") {
-			val = pruneObj(val);
-			if (val == null) return null;
 		}
 		return [key, val];
 	}).filter(function(entry) {

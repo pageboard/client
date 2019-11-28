@@ -438,8 +438,7 @@ Semafor.prototype.handleEvent = function(e) {
 		if (e.target.matches('.nullable')) {
 			var fieldset = e.target.nextElementSibling;
 			if (!fieldset) return;
-			e.target.checked = fieldset.disabled;
-			fieldset.disabled = !fieldset.disabled;
+			fieldset.disabled = !e.target.checked;
 		}
 	}
 };
