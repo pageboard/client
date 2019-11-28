@@ -55,7 +55,7 @@ element-image.lazy:after {
 	opacity: 0.75;
 }
 
-element-image.error:after {
+element-image.error::after {
 	content: '';
 	box-sizing: border-box;
 	position: absolute;

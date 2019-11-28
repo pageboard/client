@@ -15,7 +15,7 @@ element-input-file {
 element-input-file > .ui.icon.button {
 	z-index: 1;
 }
-element-input-file i.icon.upload:before {
+element-input-file i.icon.upload::before {
 	content:'⬆';
 }
 element-input-file > input[type="file"] + .ui.icon.button {

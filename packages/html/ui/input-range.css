@@ -11,8 +11,8 @@ element-input-range.noUi-target .noUi-handle {
 	right:-10px !important;
 	top:0;
 }
-element-input-range.noUi-target .noUi-handle:before,
-element-input-range.noUi-target .noUi-handle:after {
+element-input-range.noUi-target .noUi-handle::before,
+element-input-range.noUi-target .noUi-handle::after {
 	content:none;
 }
 element-input-range.noUi-target.noUi-horizontal {
@@ -28,7 +28,7 @@ element-input-range.noUi-target.noUi-horizontal .noUi-base {
 	padding:8px 0;
 }
 element-input-range.noUi-target.noUi-horizontal .noUi-connects {
-	border:1px solid #AAA;
+	border:1px solid #aaa;
 	border-radius:2px;
 }
 element-input-range.noUi-target .noUi-handle-lower {

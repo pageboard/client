@@ -9,9 +9,9 @@ element-tabs {
 }
 element-tabs > .ui.tabular.menu + div[block-content="tabs"] > .segment {
 	border-top: none;
-	margin-left: 0px;
-	margin-top: 0px;
-	margin-right: 0px;
+	margin-left: 0;
+	margin-top: 0;
+	margin-right: 0;
 	margin-bottom:1rem;
 	width: 100%;
 }

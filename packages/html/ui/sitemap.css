@@ -3,7 +3,7 @@
 	position:relative;
 	display: block;
 }
-[block-type="sitemap"] .caret-icon:before {
+[block-type="sitemap"] .caret-icon::before {
 	right:auto;
 	left:-0.8em;
 }
@@ -14,10 +14,10 @@
 }
 
 [block-type="sitemap"] .list > .item > .content {
-	box-shadow: 0px 1px 1px 1px grey;
+	box-shadow: 0 1px 1px 1px grey;
 	padding-right: 0.5em;
 	padding-bottom:1px;
-	margin-bottom: 0px;
+	margin-bottom: 0;
 	min-height:1em;
 }
 

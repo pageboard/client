@@ -6,7 +6,7 @@ element-rating {
 	line-height:0.6;
 }
 element-rating:last-child {
-	margin-right: 0em;
+	margin-right: 0;
 }
 
 /* Icon */
@@ -14,7 +14,7 @@ element-rating .icon {
 	background: transparent;
 	padding:0;
 	padding-right: 0.1em;
-	margin: 0em;
+	margin: 0;
 	text-align: center;
 	font-weight: normal;
 	font-style: normal;
@@ -26,25 +26,16 @@ element-rating .icon {
 	backface-visibility: hidden;
 }
 element-rating .icon:last-child {
-	padding-right:0em;
+	padding-right:0;
 }
 
-element-rating .icon:before {
+element-rating .icon::before {
 	width: auto;
 	height: auto;
 	content: attr(data-char);
 }
 
-
-/*******************************
-						 Types
-*******************************/
-
-
-/*-------------------
-			Standard
---------------------*/
-
+/* Standard */
 
 /* Inactive Icon */
 element-rating .icon {
@@ -62,10 +53,7 @@ element-rating .icon.selected.active {
 	color: rgba(0, 0, 0, 0.87);
 }
 
-/*-------------------
-				Star
---------------------*/
-
+/* Star */
 
 /* Inactive */
 element-rating.star .icon {
@@ -75,7 +63,7 @@ element-rating.star .icon {
 
 /* Active Star */
 element-rating.star .active.icon {
-	color: #FFE623 !important;
+	color: #ffe623 !important;
 	text-shadow: 0px -1px 0px #DDC507, -1px 0px 0px #DDC507, 0px 1px 0px #DDC507, 1px 0px 0px #DDC507 !important;
 }
 
@@ -86,9 +74,7 @@ element-rating.star .icon.selected.active {
 	text-shadow: 0px -1px 0px #E6A200, -1px 0px 0px #E6A200, 0px 1px 0px #E6A200, 1px 0px 0px #E6A200 !important;
 }
 
-/*-------------------
-				Heart
---------------------*/
+/* Heart */
 
 element-rating.heart .icon {
 	color: rgba(0, 0, 0, 0.15);
@@ -108,33 +94,21 @@ element-rating.heart .icon.selected.active {
 	text-shadow: 0px -1px 0px #AA0101, -1px 0px 0px #AA0101, 0px 1px 0px #AA0101, 1px 0px 0px #AA0101 !important;
 }
 
-
-/*******************************
-						 States
-*******************************/
-
-
-/*-------------------
-			 Disabled
---------------------*/
-
+/* Disabled */
 
 /* disabled rating */
 element-rating.disabled .icon {
 	cursor: default;
 }
 
-/*-------------------
-	 User Interactive
---------------------*/
-
+/* User Interactive */
 
 /* Selected Rating */
 element-rating.selected .active.icon {
 	opacity: 1;
 }
-element-rating.selected .icon.selected,
-element-rating .icon.selected {
+element-rating .icon.selected,
+element-rating.selected .icon.selected {
 	opacity: 1;
 }
 

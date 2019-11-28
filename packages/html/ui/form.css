@@ -27,7 +27,7 @@ element-select {
 	z-index:1; /* or else dropdown menu goes under what's next */
 }
 
-form[data-authfield] button[type="submit"]:before {
+form[data-authfield] button[type="submit"]::before {
 	content:'🔒';
 }
 
