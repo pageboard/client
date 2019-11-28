@@ -160,4 +160,9 @@ element-menu.burger > .popup > .placer > .menu {
 	right:auto; /* disables the right:0 given by .popup > .placer > div */
 }
 
+@media screen and (max-width: 768px) {
+	.ui.menu [block-type="menu_item_text"] {
+		flex: 0 1 auto;
+	}
+}
 
