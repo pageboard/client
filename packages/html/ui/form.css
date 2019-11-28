@@ -31,12 +31,12 @@ form[data-authfield] button[type="submit"]::before {
 	content:'🔒';
 }
 
-[contenteditable] .ui.form .ui.message {
-	display:block;
-}
-
 [contenteditable] [block-type="fetch"] .ui.message {
 	display:block !important;
+}
+
+[contenteditable] .ui.form .ui.message {
+	display:block;
 }
 
 [contenteditable] .ui.form .field.hidden {

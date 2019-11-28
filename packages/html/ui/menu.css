@@ -26,11 +26,6 @@
 	bottom: 0;
 	left: 0;
 }
-.fixed.popup.item > .placer > div {
-	position:fixed;
-	max-width: 100%;
-	max-height: 100%;
-}
 .popup.item > .placer > div {
 	display:none;
 	position: absolute;
@@ -41,6 +36,26 @@
 	overflow-y: auto;
 	overflow-x: hidden;
 	min-width: min-content;
+	background-color:white;
+}
+.popup.item:focus > .placer > div,
+.popup.item:hover > .placer > div,
+.popup.item[block-focused] > .placer > div {
+	display: flex;
+	flex-direction: column;
+}
+.right.popup.item > .placer > div {
+	left:auto;
+	right:0;
+}
+.fixed.popup.item > .placer > div {
+	position:fixed;
+	max-width: 100%;
+	max-height: 100%;
+}
+.center.popup.item > .placer > div {
+	transform: translateX(-50%);
+	right:auto;
 }
 .center.fixed.popup.item > .placer > div {
 	left:50%;
@@ -50,31 +65,14 @@
 .justify.fixed.popup.item > .placer > div {
 	width:100%;
 }
-.center.popup.item:not(.fixed) > .placer {
-	left:50%;
-}
-.center.popup.item > .placer > div {
-	transform: translateX(-50%);
-	right:auto;
-}
 .right.popup.item > .placer {
 	right:0;
 }
-.right.popup.item > .placer > div {
-	left:auto;
-	right:0;
+.center.popup.item:not(.fixed) > .placer {
+	left:50%;
 }
 .popup.item > .placer > div > .grid:first-of-type {
 	margin: 0 !important;
-}
-.popup.item > .placer > div {
-	background-color:white;
-}
-.popup.item:focus > .placer > div,
-.popup.item:hover > .placer > div,
-.popup.item[block-focused] > .placer > div {
-	display: flex;
-	flex-direction: column;
 }
 
 /* menu_group */
@@ -89,6 +87,12 @@ element-menu {
 	margin-right: 0 !important; /* crucial for burger width calc */
 	margin-left: auto !important;
 }
+element-menu > .menu {
+	position: relative;
+}
+element-menu > [block-content="items"] {
+	display:flex;
+}
 element-menu.burger > [block-content="items"] {
 	position: fixed;
 	left:0;
@@ -97,17 +101,16 @@ element-menu.burger.right > [block-content="items"] {
 	left:auto;
 	right: 0;
 }
-element-menu > [block-content="items"] {
-	display:flex;
-}
+
 element-menu:not(.burger) > .item {
 	display:none !important;
 }
-element-menu > .menu {
-	position: relative;
-}
+
 element-menu.burger .placer .title {
 	width:100%;
+}
+element-menu.burger > .item .popup.item {
+	display:block;
 }
 element-menu.burger .placer .popup.active .title {
 	margin-bottom:0.5em;
@@ -115,7 +118,9 @@ element-menu.burger .placer .popup.active .title {
 element-menu.burger > [block-content="items"] > * {
 	visibility:hidden;
 }
-
+element-menu.burger .popup.item.active > .placer > div {
+	display:block;
+}
 element-menu.burger > .item .dropdown.item:hover > .menu,
 element-menu.burger > .item .popup.item:hover > .placer > div {
 	display:none !important;
@@ -126,9 +131,7 @@ element-menu.burger > .item .dropdown.item.active > .menu {
 	left:0 !important;
 	top: 0.5em !important;
 }
-element-menu.burger .popup.item.active > .placer > div {
-	display:block;
-}
+
 element-menu.burger > .item .popup.item.active > .placer > div {
 	display:block !important;
 	position:relative;
@@ -140,9 +143,7 @@ element-menu.burger > .item .placer .menu .ui.dropdown {
 	flex-direction:column;
 	align-items: flex-start;
 }
-element-menu.burger > .item .popup.item {
-	display:block;
-}
+
 element-menu.burger > .item .popup.item > .placer {
 	position:relative;
 }
