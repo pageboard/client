@@ -1,0 +1,12 @@
+{
+  "extends": "stylelint-config-standard",
+  "rules": {
+    "indentation": "tab",
+    "rule-empty-line-before": null,
+    "comment-empty-line-before": null,
+    "declaration-colon-space-after": null,
+    "selector-type-no-unknown": [true, {
+      "ignore": ["custom-elements"]
+    }]
+  }
+}
