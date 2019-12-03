@@ -479,8 +479,8 @@ Utils.prototype.canInsert = function($pos, nodeType, all, after) {
 	var found = false;
 	var ret = {};
 	for (var d = $pos.depth; d >= 0; d--) {
-		var index = after ? $pos.indexAfter(d) : $pos.index(d);
-		var to = index;
+		var from = after ? $pos.indexAfter(d) : $pos.index(d);
+		var to = from;
 		var node = $pos.node(d);
 		if (!found) {
 			if (d == $pos.depth) {
@@ -488,10 +488,10 @@ Utils.prototype.canInsert = function($pos, nodeType, all, after) {
 					to += 1;
 				}
 				if ($pos.nodeBefore && $pos.nodeBefore.type.name == "_") {
-					index -= 1;
+					from -= 1;
 				}
 			}
-			if (node.canReplaceWith(index, to, nodeType)) {
+			if (node.canReplaceWith(from, to, nodeType)) {
 				// check context
 				found = true;
 				ret.node = node;
