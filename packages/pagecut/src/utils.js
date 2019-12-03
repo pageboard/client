@@ -102,20 +102,22 @@ Utils.prototype.insertTr = function(tr, dom, sel) {
 	var to = sel.to;
 
 	var fromto = from;
+	if (sel.node && sel.node.type.name == "_") {
+		to = from;
+	}
 	if (slice.content.childCount == 1 && (from == to || sel.node)) {
 		var frag = this.fill(slice.content);
 		var node = frag.firstChild;
 		var atStart = !sel.node && sel.$from.parentOffset == 0;
 		var insertPos;
 		if (atStart) {
-			insertPos = this.insertPoint(tr, from+1, node.type, -1, true);
+			insertPos = this.nextInsertPoint(tr, from+1, node.type, -1, true);
 		}
 		if (insertPos == null) {
-			insertPos = this.insertPoint(tr, to-1, node.type, 1, true);
+			insertPos = this.nextInsertPoint(tr, to-1, node.type, 1, true);
 		}
 		if (insertPos != null) {
-			tr.insert(insertPos, node);
-			return insertPos;
+			return this.insertTrNode(tr, insertPos, node);
 		}
 		if (parent.isTextblock && !node.isInline) {
 			tr.split(from);
@@ -126,6 +128,16 @@ Utils.prototype.insertTr = function(tr, dom, sel) {
 	}
 	tr.replaceRange(from, to, slice);
 	return fromto;
+};
+
+Utils.prototype.insertTrNode = function(tr, pos, node) {
+	var $pos = tr.doc.resolve(pos);
+	var from = pos;
+	var to = pos;
+	if ($pos.nodeBefore && $pos.nodeBefore.type.name == "_") from = pos - 1;
+	if ($pos.nodeAfter && $pos.nodeAfter.type.name == "_") to = pos + 1;
+	tr.replaceWith(from, to, node);
+	return from;
 };
 
 Utils.prototype.fill = function(frag) {
@@ -496,6 +508,8 @@ Utils.prototype.canInsert = function($pos, nodeType, all, after) {
 				found = true;
 				ret.node = node;
 				ret.depth = d;
+				ret.from = from;
+				ret.to = to;
 				if (!context) {
 					contextOk = true;
 					break;
@@ -544,9 +558,9 @@ function checkContext(list, type, $pos, d) {
 	});
 }
 
-Utils.prototype.insertPoint = function(tr, from, nodeType, dir, around) {
+Utils.prototype.nextInsertPoint = function(tr, from, nodeType, dir, around) {
 	var cur = from + dir;
-	var depth;
+	var ret;
 	var $pos;
 	var doc = tr.doc;
 	var docSize = doc.content.size;
@@ -554,9 +568,16 @@ Utils.prototype.insertPoint = function(tr, from, nodeType, dir, around) {
 	var all = !around;
 	while (cur >= 0 && cur <= docSize) {
 		$pos = doc.resolve(cur);
-		depth = this.canInsert($pos, nodeType, all, dir > 0).depth;
-		if (depth != null && depth >= 0) {
-			npos = dir == 1 ? $pos.after(depth + 1) : $pos.before(depth + 1);
+		ret = this.canInsert($pos, nodeType, all, dir > 0);
+		if (ret.depth != null && ret.depth >= 0) {
+			npos = dir == 1 ? $pos.after(ret.depth + 1) : $pos.before(ret.depth + 1);
+			if (dir > 0 && $pos.nodeBefore && $pos.nodeBefore.type.name == "_"
+			|| dir < 0 && $pos.nodeAfter && $pos.nodeAfter.type.name == "_") {
+				// jumped over a placeholder
+				npos = null;
+				cur = cur + dir;
+				continue;
+			}
 		}
 		if (npos != null) break;
 		if (!around) {
@@ -588,29 +609,19 @@ Utils.prototype.move = function(tr, dir, jump, check) {
 	}
 	var pos = null, $pos = null;
 	while (pos == null) {
-		pos = this.insertPoint(tr, cur, node.type, dir, around);
+		pos = this.nextInsertPoint(tr, cur, node.type, dir, around);
 		if (pos == null) return;
 		$pos = tr.doc.resolve(pos);
-		if (compareNodesWithPlaceholder($cur.nodeBefore, $pos.nodeBefore) && compareNodesWithPlaceholder($cur.nodeAfter, $pos.nodeAfter)) {
-			cur = pos + dir;
-			pos = null;
-		}
 	}
 	if (check) return true;
 	node = node.cut(0);
-	tr.insert(pos, node);
+	pos = this.insertTrNode(tr, pos, node);
 	if (tr.doc.content.size > 0) {
 		$pos = tr.doc.resolve(pos);
 		if ($pos.nodeAfter) tr.setSelection(new State.NodeSelection($pos));
 	}
 	return tr;
 };
-
-function compareNodesWithPlaceholder(a, b) {
-	if (a && a.type.name == "_") a = null;
-	if (b && b.type.name == "_") b = null;
-	return a == b;
-}
 
 Utils.prototype.markActive = function(sel, nodeType) {
 	var state = this.view.state;
