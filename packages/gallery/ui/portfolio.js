@@ -1,4 +1,10 @@
 class HTMLElementPortfolio extends HTMLCustomElement {
+	static get defaults() {
+		return {
+			shape: null
+		};
+	}
+
 	init() {
 		this.options = {
 			masonry: {
@@ -12,12 +18,18 @@ class HTMLElementPortfolio extends HTMLCustomElement {
 		this.reload = Pageboard.debounce(this.reload, 100);
 	}
 
-	setup() {
+	setup(state) {
+		this._items = this.querySelector('[block-content="items"]');
+		if (!this.observer) this.observer = new MutationObserver((records) => {
+			this.reload();
+		});
+		this.observer.observe(this._items, {
+			childList: true
+		});
 		if (this._loading) return;
 		var gallery = this.closest('[block-type="gallery"]');
 		if (gallery && gallery.selectedMode != "portfolio") return;
 		if (this.widget) this.destroy();
-		this._items = this.querySelector('[block-content="items"]');
 		var mode = this._items.className;
 		if (!mode) mode = this._items.className = 'cells';
 		if (mode == "cells") {
@@ -40,6 +52,7 @@ class HTMLElementPortfolio extends HTMLCustomElement {
 	}
 
 	close(state) {
+		this.observer.disconnect();
 		this.destroy();
 	}
 
@@ -67,15 +80,15 @@ class HTMLElementPortfolio extends HTMLCustomElement {
 }
 
 class HTMLElementPortfolioItem extends HTMLCustomElement {
-	setup() {
-		this.reload();
+	static get defaults() {
+		return {
+			scaleWidth: (x) => parseInt(x) || 1,
+			scaleHeight: (x) => parseInt(x) || 1
+		};
 	}
-	close() {
-		this.reload();
-	}
-	reload() {
+	patch(state) {
 		var pf = this.closest('element-portfolio');
-		if (pf) pf.reload();
+		if (pf) pf.refresh();
 	}
 }
 
