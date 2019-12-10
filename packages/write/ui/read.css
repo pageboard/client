@@ -62,6 +62,9 @@ body[data-mode="code"] [block-type][element-type] {
 body[data-mode="code"] [block-type][element-type="block"] {
 	display: flex !important;
 	flex-flow: row wrap;
+	border-right: 2px solid #887 !important;
+	border-bottom: 2px solid #888 !important;
+	border-bottom-right-radius: 0 !important;
 }
 body[data-mode="code"] [block-type]::before {
 	content: attr(element-title);
