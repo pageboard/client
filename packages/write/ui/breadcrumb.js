@@ -82,7 +82,6 @@ Breadcrumb.prototype.item = function(parent) {
 	if (parent.block.id) node.dataset.id = parent.block.id;
 	var contentName = parent.contentName;
 	if (contentName) {
-		var el = this.editor.element(parent.type);
 		var def = el.contents.find(contentName);
 		var title = def.title;
 		if (title) {

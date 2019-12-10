@@ -3,7 +3,8 @@ body {
 	height: 100%;
 }
 
-.hidden, [hidden] {
+.hidden,
+[hidden] {
 	display:none !important;
 }
 
@@ -37,6 +38,12 @@ body {
 }
 body[data-mode="read"] #pageboard-write {
 	overflow:visible !important;
+	max-width:3rem;
+	min-width:0;
+	position:fixed;
+	right:0;
+	margin:0;
+	padding:0;
 }
 body[data-mode="read"] #pageboard-write > :not(#store) {
 	display:none;
@@ -62,26 +69,19 @@ body[data-mode="read"] #store {
 body[data-mode="read"] #store.wide {
 	margin:0 !important;
 }
-body[data-mode="read"] #pageboard-write {
-	max-width:3rem;
-	min-width:0;
-	position:fixed;
-	right:0;
-	margin:0;
-	padding:0;
-}
 body[data-mode="read"] #pageboard-read > iframe {
 	max-width:100vw;
 	width:100vw;
 }
-.notifications:empty {
-	display:none;
-}
+
 .notifications {
 	max-height:66%;
 	margin-bottom:0;
 	padding-left:0.1rem;
 	padding-right:0.1rem;
+}
+.notifications:empty {
+	display:none;
 }
 .notifications .message:nth-last-child(n+4) {
 	display:none;
@@ -139,8 +139,12 @@ body[data-mode="read"] #pageboard-read > iframe {
 	padding-top:0;
 	padding-bottom:0.5em;
 }
+#form .inline.field,
+#form .inline.fields {
+	justify-content:space-between;
+}
 #form fieldset > .inline.fields:last-child {
-	margin-bottom:0em;
+	margin-bottom:0;
 }
 #form .nullable.fieldset {
 	position:relative;
@@ -177,8 +181,9 @@ body[data-mode="read"] #pageboard-read > iframe {
 	/* width:auto; */
 }
 
-#form .inline.fields .field > .radio, #form .inline.fields .field > .toggle {
-	margin: 0em 0em 0em 0.85714286em;
+#form .inline.fields .field > .radio,
+#form .inline.fields .field > .toggle {
+	margin: 0 0 0 0.85714286em;
 	display: block;
 	text-align: left;
 }
@@ -195,10 +200,10 @@ body[data-mode="read"] #pageboard-read > iframe {
 	padding-left:0;
 }
 
-#form .inline.field,
-#form .inline.fields {
-	justify-content:space-between;
+#form .field > label {
+	margin-bottom:0;
 }
+
 #form .flex.field {
 	display:flex;
 	align-items:baseline;
@@ -231,9 +236,6 @@ body[data-mode="read"] #pageboard-read > iframe {
 	font-size:0.9em;
 }
 
-#form .field > label {
-	margin-bottom:0;
-}
 #form > form {
 	margin-top:1em;
 }
@@ -256,8 +258,8 @@ body[data-mode="read"] #pageboard-read > iframe {
 .ui.toggle.checkbox label:hover::before {
 	background-color: rgba(0, 0, 0, 0.4);
 }
-.ui.toggle.checkbox .box:before,
-.ui.toggle.checkbox label:before {
+.ui.toggle.checkbox .box::before,
+.ui.toggle.checkbox label::before {
 	background-color: rgba(0, 0, 0, 0.2);
 	top:0.25rem;
 	width:2.3rem;
@@ -277,15 +279,15 @@ body[data-mode="read"] #pageboard-read > iframe {
 	background-color: rgba(0, 0, 0, 0.2);
 }
 
-.ui.toggle.checkbox input ~ .box:after,
-.ui.toggle.checkbox input ~ label:after,
-.ui.toggle.checkbox input:checked ~ .box:after,
-.ui.toggle.checkbox input:checked ~ label:after {
-	box-shadow:rgba(34, 36, 38, 0.15) 0px 1px 2px 0px,
-		rgba(34, 36, 38, 0.15) 0px 0px 0px 1px inset;
+.ui.toggle.checkbox input ~ .box::after,
+.ui.toggle.checkbox input ~ label::after,
+.ui.toggle.checkbox input:checked ~ .box::after,
+.ui.toggle.checkbox input:checked ~ label::after {
+	box-shadow:rgba(34, 36, 38, 0.15) 0 1px 2px 0,
+		rgba(34, 36, 38, 0.15) 0 0 0 1px inset;
 }
-.ui.toggle.checkbox input:checked ~ .box:after,
-.ui.toggle.checkbox input:checked ~ label:after {
+.ui.toggle.checkbox input:checked ~ .box::after,
+.ui.toggle.checkbox input:checked ~ label::after {
 	left:0.8rem;
 }
 
@@ -295,7 +297,7 @@ body[data-mode="read"] #pageboard-read > iframe {
 }
 #share.standalone-no,
 #share.standalone-ancestor > .checkbox,
-#share.standalone-descendant  > .checkbox {
+#share.standalone-descendant > .checkbox {
 	display:none;
 }
 #share.standalone-ancestor > .ancestor,
@@ -309,7 +311,6 @@ body[data-mode="read"] #pageboard-read > iframe {
 	line-height: 1.3em;
 	width: 100%;
 }
-
 
 #form .inline.fields > .dropdown {
 	width: 50%;

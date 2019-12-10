@@ -27,10 +27,10 @@ Pageboard.Controls.Mode = class Mode {
 			if (com != "read") {
 				this.node.removeEventListener('click', this);
 			}
+			var elts = state.scope.$view.elements;
 			if (com == "code") {
 				state.data.$jsonContent = pruneNonRoot(Pageboard.editor.state.doc.toJSON(), null, Pageboard.editor.schema);
 				delete Pageboard.editor;
-				var elts = state.scope.$view.elements;
 				Pageboard.backupElements = Object.assign({}, elts);
 				Object.entries(elts).forEach(([name, elt]) => {
 					elt = elts[name] = elt.clone();
@@ -58,7 +58,6 @@ Pageboard.Controls.Mode = class Mode {
 				delete Pageboard.editor;
 			}
 			if (mode == "code") {
-				var elts = state.scope.$view.elements;
 				Object.entries(Pageboard.backupElements).forEach(([name, elt]) => {
 					if (elt.group == "page") {
 						delete elt.dom.querySelector('body').dataset.mode;

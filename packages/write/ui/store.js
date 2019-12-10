@@ -124,7 +124,7 @@ Store.prototype.key = function() {
 Store.prototype.setRoot = function(root) {
 	this.rootId = root.id;
 	this.initial = flattenBlock(root);
-}
+};
 
 Store.prototype.restore = function(blocks) {
 	try {

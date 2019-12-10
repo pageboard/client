@@ -3,11 +3,10 @@
 /* replaced elements cannot have pseudo elements,
  * that is why we must define is for both cases */
 .ProseMirror-selectednode {
-	outline: 1px solid #61A3E4 !important;
-	outline-offset: 0px !important;
+	outline: 1px solid #61a3e4 !important;
+	outline-offset: 0 !important;
 	cursor: pointer !important;
-	box-shadow: 0px 0px 0px 1px #61A3E4 !important;
-	cursor:pointer !important;
+	box-shadow: 0 0 0 1px #61a3e4 !important;
 }
 .ProseMirror-selectednode:not(img) {
 	min-width:1em;
@@ -27,7 +26,7 @@
 }
 
 ::selection {
-	background-color: #CCE2FF;
+	background-color: #cce2ff;
 }
 
 [contenteditable] .hidden[block-id] {
@@ -36,8 +35,9 @@
 }
 
 body[data-mode="code"] {
-	font-family: sans;
+	font-family: Sans-Serif;
 	font-size: 0.7em;
+	background-color:white;
 }
 
 body[data-mode="code"] * {
@@ -70,7 +70,7 @@ body[data-mode="code"] [block-type]::before {
 	content: attr(element-title);
 	position: relative;
 	font-size:1em !important;
-	font-family:sans !important;
+	font-family: Sans-Serif !important;
 	font-style:normal !important;
 	text-decoration:none !important;
 	z-index: 2;
@@ -78,13 +78,11 @@ body[data-mode="code"] [block-type]::before {
 	padding-left: 2px;
 	align-self: center;
 	padding-right: 2px;
-	box-shadow: 0px 0 0px 0px;
-	color: #4183C4;
+	box-shadow: 0;
+	color: #4183c4;
 	font-weight: bold;
 }
-body[data-mode="code"] [block-type][element-type="block"]::before {
-	
-}
+
 body[data-mode="code"] [element-content] {
 	border-radius: 3px !important;
 	margin:2px !important;
@@ -92,12 +90,10 @@ body[data-mode="code"] [element-content] {
 	color: black !important;
 	display: flex !important;
 	flex-flow: row wrap;
-	box-shadow: inset 0px 0px 1px 1px #0000001a;
+	box-shadow: inset 0 0 1px 1px #0000001a;
 	background-color:inherit;
 }
-body[data-mode="code"] {
-	background-color:white;
-}
+
 body[data-mode="code"] [block-type]:not([block-id]) {
 	flex-basis: 100%;
 }
@@ -109,6 +105,6 @@ body[data-mode="code"] [block-type="_"] {
 	display:none;
 }
 
-body[data-mode="code"] pagecut-placeholder:after {
+body[data-mode="code"] pagecut-placeholder::after {
 	padding:0;
 }

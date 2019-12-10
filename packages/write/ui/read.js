@@ -16,7 +16,6 @@ Page.patch(function(state) {
 		return Object.getPrototypeOf(this).push.call(this, obj, opts);
 	};
 	state.replace = function(url, opts) {
-		var active = it.editor && !it.editor.closed;
 		var obj = typeof url == "string" ? Page.parse(url) : url;
 		if (!obj.query) obj.query = {};
 		obj.query.develop = this.query.develop;
