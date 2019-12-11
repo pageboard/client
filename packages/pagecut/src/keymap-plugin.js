@@ -1,4 +1,4 @@
-const keymap = require("prosemirror-keymap").keymap;
+const {keymap} = require("prosemirror-keymap");
 const State = require("prosemirror-state");
 
 module.exports = function(editor, options) {
