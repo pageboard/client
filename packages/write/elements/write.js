@@ -74,7 +74,13 @@ exports.write = {
 			</div>
 		</div>
 		<div id="breadcrumb" class="ui breadcrumb">
-			No selection.
+			<ul>
+				<li>click to select,<br>ctrl-click to select blocks,<br>multiple times to select parents</li>
+				<li>use breadcrumb to select parent blocks</li>
+				<li>toolbar to replace or insert new blocks</li>
+				<li>keyboard to edit, delete text or blocks</li>
+				<li>keyboard arrows to move selected blocks,<br>ctrl-move to jump</li>
+			</ul>
 			<span>
 				<a class="section"></a>
 				<i class="right chevron icon divider"></i>

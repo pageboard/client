@@ -6,11 +6,8 @@ function Breadcrumb(editor, node) {
 	this.editor = editor;
 
 	if (!Breadcrumb.template) {
-		Breadcrumb.template = this.node.firstElementChild;
+		Breadcrumb.template = this.node.lastElementChild;
 		Breadcrumb.template.remove();
-		Breadcrumb.text = this.node.textContent;
-	} else {
-		this.node.textContent = Breadcrumb.text;
 	}
 	this.node.addEventListener('click', this);
 }
