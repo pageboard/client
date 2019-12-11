@@ -4,11 +4,25 @@ const State = require("prosemirror-state");
 module.exports = function(editor, options) {
 	return keymap({
 		Enter: breakCommand,
-		Delete: deleteCommand.bind(null, false),
-		Backspace: deleteCommand.bind(null, true)
+		Delete: deleteCommand.bind(this, false),
+		Backspace: deleteCommand.bind(this, true),
+		ArrowRight:moveCommand.bind(null, 1, false),
+		ArrowLeft: moveCommand.bind(null, -1, false),
+		"Mod-ArrowRight": moveCommand.bind(null, 1, true),
+		"Mod-ArrowLeft": moveCommand.bind(null, -1, true)
 	});
 };
 
+function moveCommand(dir, jump, state, dispatch, view) {
+	const tr = state.tr;
+	if (!tr.selection.node) return false;
+	if (view.utils.move(tr, dir, jump)) {
+		tr.setMeta('editor', true);
+		tr.scrollIntoView();
+		if (dispatch) dispatch(tr);
+	}
+	return true;
+}
 
 function breakCommand(state, dispatch, view) {
 	var tr = state.tr;
