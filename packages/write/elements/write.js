@@ -54,7 +54,6 @@ exports.write = {
 		<div id="move" class="ui inverted tiny icon menu hidden">
 			<a class="item" data-command="left-jump" title="Jump left"><i class="angle double left icon"></i></a>
 			<a class="item" data-command="left" title="Move left"><i class="angle left icon"></i></a>
-			<a class="item" data-command="delete" title="Delete"><i class="close icon"></i></a>
 			<a class="item" data-command="right" title="Move right"><i class="angle right icon"></i></a>
 			<a class="item" data-command="right-jump" title="Jump right"><i class="angle double right icon"></i></a>
 			<div class="right menu">
