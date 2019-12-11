@@ -60,7 +60,8 @@ function breakCommand(state, dispatch, view) {
 }
 
 function deleteCommand(back, state, dispatch, view) {
-	var sel = state.tr.selection;
+	var tr = state.tr;
+	var sel = tr.selection;
 	if (!sel.empty) return false;
 	if (!sel.$from.parent.isTextblock) return false;
 	// if selection is inside an empty paragraph, remove that paragraph
@@ -70,7 +71,7 @@ function deleteCommand(back, state, dispatch, view) {
 		if (dispatch) {
 			dispatch(
 				// .setMeta('addToHistory', true) doesn't work
-				state.tr.delete(sel.from + offFrom, sel.from + offTo).scrollIntoView()
+				tr.delete(sel.from + offFrom, sel.from + offTo).scrollIntoView()
 			);
 		}
 		return true;
@@ -78,7 +79,7 @@ function deleteCommand(back, state, dispatch, view) {
 		if (dispatch) {
 			dispatch(
 				// .setMeta('addToHistory', true) doesn't work
-				state.tr.delete(sel.$from.before(), sel.$from.after()).scrollIntoView()
+				tr.delete(sel.$from.before(), sel.$from.after()).scrollIntoView()
 			);
 		}
 		return true;
@@ -88,7 +89,7 @@ function deleteCommand(back, state, dispatch, view) {
 			var nextNode = $to.doc.resolve($to.after()).nodeAfter;
 			if (nextNode && nextNode.isTextblock) {
 				if (dispatch) {
-					dispatch(state.tr.join(sel.to + 1));
+					dispatch(tr.join(sel.to + 1));
 				}
 				return true;
 			}
@@ -99,7 +100,7 @@ function deleteCommand(back, state, dispatch, view) {
 			var prevNode = $from.doc.resolve($from.before()).nodeBefore;
 			if (prevNode && prevNode.isTextblock) {
 				if (dispatch) {
-					dispatch(state.tr.join(sel.from - 1));
+					dispatch(tr.join(sel.from - 1));
 				}
 				return true;
 			}
