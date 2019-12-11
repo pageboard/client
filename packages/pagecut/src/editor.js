@@ -11,7 +11,6 @@ const History = require("prosemirror-history");
 const OrderedMap = require("orderedmap");
 
 const baseSchema = require("prosemirror-schema-basic");
-// var tableSchema = require("prosemirror-schema-table");
 
 const IdPlugin = require("./id-plugin");
 const FocusPlugin = require("./focus-plugin");
