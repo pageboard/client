@@ -37,9 +37,7 @@ function breakCommand(state, dispatch, view) {
 		}
 		// ok let's handle the split ourselves
 		var elt = view.element(parent.type.name);
-		if (elt && !elt.inplace && !elt.inline) {
-			// elements with id cannot be split consistently
-			// instead an element with the same type must be added after
+		if (elt && !elt.inline) {
 			if (dispatch) {
 				var from = view.utils.splitTr(tr);
 				if (from != sel.from) {

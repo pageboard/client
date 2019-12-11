@@ -11,7 +11,6 @@ const History = require("prosemirror-history");
 const OrderedMap = require("orderedmap");
 
 const baseSchema = require("prosemirror-schema-basic");
-const listSchema = require("prosemirror-schema-list");
 // var tableSchema = require("prosemirror-schema-table");
 
 const IdPlugin = require("./id-plugin");
@@ -35,9 +34,7 @@ Editor.prototype = Object.create(View.EditorView.prototype);
 Object.assign(Editor.prototype, Viewer.prototype);
 
 Editor.defaults = {
-	nodes: listSchema.addListNodes(
-		OrderedMap.from(baseSchema.nodes), "paragraph block*", "block"
-	),
+	nodes: OrderedMap.from(baseSchema.nodes),
 	marks: OrderedMap.from(baseSchema.marks)
 };
 
