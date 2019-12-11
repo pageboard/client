@@ -8,6 +8,19 @@
 	cursor: pointer !important;
 	box-shadow: 0 0 0 1px #61a3e4 !important;
 }
+li.ProseMirror-selectednode {
+	outline: none !important;
+	box-shadow:none !important;
+}
+li.ProseMirror-selectednode::after {
+	outline: 1px solid #61a3e4 !important;
+	outline-offset: 0 !important;
+	border:none;
+	left: -2em;
+	right: 0;
+	top: 0;
+	bottom: 0;
+}
 .ProseMirror-selectednode:not(img) {
 	min-width:1em;
 }
