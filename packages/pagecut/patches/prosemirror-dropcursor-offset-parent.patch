@@ -1,5 +1,5 @@
---- dist/dropcursor.js	1985-10-26 09:15:00.000000000 +0100
-+++ dist/dropcursor.js.new	2019-11-17 22:34:56.333009128 +0100
+--- dist/index.js	1985-10-26 09:15:00.000000000 +0100
++++ dist/index.js.new	2019-11-17 22:34:56.333009128 +0100
 @@ -89,7 +89,7 @@
      rect = {left: coords.left - this.width / 2, right: coords.left + this.width / 2, top: coords.top, bottom: coords.bottom};
    }
