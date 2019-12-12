@@ -28,6 +28,9 @@ Move.prototype.click = function(e) {
 	case "right-jump":
 		if (!this.editor.utils.move(tr, 1, true)) return;
 		break;
+	case "delete":
+		if (!this.editor.utils.deleteTr(tr)) return;
+		break;
 	}
 	tr.setMeta('editor', true);
 	tr.scrollIntoView();
@@ -51,6 +54,8 @@ Move.prototype.update = function(parents, sel) {
 	.classList.toggle('disabled', !utils.move(state.tr, 1, false, true));
 	this.node.querySelector('[data-command="right-jump"]')
 	.classList.toggle('disabled', !utils.move(state.tr, 1, true, true));
+	this.node.querySelector('[data-command="delete"]')
+	.classList.toggle('disabled', !utils.deleteTr(state.tr));
 };
 
 })(window.Pageboard);
