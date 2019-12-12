@@ -131,6 +131,9 @@ function install(el, scope) {
 		} else if (el.fusable) {
 			if (!dom) throw new Error("Invalid element", el, "missing dom");
 			dom = dom.fuse(data, rscope);
+			if (dom.nodeType == Node.DOCUMENT_FRAGMENT_NODE && dom.children.length == 1) {
+				dom = dom.children[0];
+			}
 			if (dom) Array.from(dom.attributes || []).forEach(attr => {
 				if (!attr.name.startsWith('style-')) return;
 				var style = attr.name.split('-').slice(1).map((w, i) => {
