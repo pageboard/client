@@ -82,7 +82,14 @@ class HTMLElementTemplate extends HTMLCustomElement {
 			template.content.appendChild(template.dom(helper.textContent));
 			template.textContent = helper.textContent = '';
 		}
-		if (template.content) template = template.content;
+		if (template.content) {
+			template = template.content;
+		}
+		if (template.nodeType == Node.DOCUMENT_FRAGMENT_NODE) {
+			var offView = this.ownerDocument.createElement(view.nodeName);
+			offView.appendChild(template);
+			template = offView;
+		}
 		// remove all block-id from template - might be done in pagecut eventually
 		var rnode;
 		while ((rnode = template.querySelector('[block-id]'))) rnode.removeAttribute('block-id');
