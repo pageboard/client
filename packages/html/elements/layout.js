@@ -219,18 +219,6 @@ exports.layout = {
 		style-background-attachment="[background.attachment]"
 		style-background-position="[background.position]"
 	></div>`,
-	fuse: function(node, d, scope) {
-		node.fuse(d, scope);
-		Array.from(node.attributes).forEach(attr => {
-			if (!attr.name.startsWith('style-')) return;
-			var style = attr.name.split('-').slice(1).map((w, i) => {
-				if (i > 0) w = w[0].toUpperCase() + w.substr(1);
-				return w;
-			}).join("");
-			node.style[style] = attr.value;
-			node.removeAttribute(attr.name);
-		});
-	},
 	stylesheets: [
 		'../lib/components/container.css',
 		'../ui/layout.css'
