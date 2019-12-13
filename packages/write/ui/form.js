@@ -407,7 +407,7 @@ FormBlock.prototype.reset = function() {
 function pruneObj(obj, schema) {
 	var entries = Object.entries(obj).map(function([key, val]) {
 		var prop = schema.properties && schema.properties[key] || null;
-		if (prop.type == "object") {
+		if (prop && prop.type == "object") {
 			if (val != null) val = pruneObj(val, prop);
 			return [key, val];
 		} else if (val == null || val === "" || typeof val == "number" && isNaN(val)) {
