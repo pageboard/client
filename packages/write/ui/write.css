@@ -37,38 +37,35 @@ body {
 	display:none;
 }
 body[data-mode="read"] #pageboard-write {
-	overflow:visible !important;
-	max-width:3rem;
-	min-width:0;
-	position:fixed;
+	position: fixed;
+	min-width:auto;
+	width:auto;
 	right:0;
-	margin:0;
-	padding:0;
+	transition:transform 0.2s ease-in;
+	padding-bottom:0;
+	border-bottom-left-radius:0.5em;
+}
+body[data-mode="read"][data-scroll-over-top="false"] #pageboard-write {
+	transform: translateY(-100%);
+}
+body[data-mode="read"][data-scroll-over-top="true"] #pageboard-write {
+	transform: translateY(0);
 }
 body[data-mode="read"] #pageboard-write > :not(#store) {
 	display:none;
 }
-body[data-mode="read"] #store .item {
-	display:none;
+#store {
+	border-radius: 0;
 }
-body:not([data-mode="read"]) #mode .label[data-command="write"] {
-	display:none;
+body[data-mode="read"] #pageboard-write > #store {
+	margin-bottom:0;
 }
+body[data-mode="read"] #mode [data-command="read"],
 body[data-mode="code"] #mode [data-command="code"],
 body[data-mode="write"] #mode [data-command="write"] {
 	display:none !important;
 }
-#store {
-	border-radius: 0;
-}
-body[data-mode="read"] #store {
-	flex-wrap:nowrap;
-	background-color:white;
-	color:black;
-}
-body[data-mode="read"] #store.wide {
-	margin:0 !important;
-}
+
 body[data-mode="read"] #pageboard-read > iframe {
 	max-width:100vw;
 	width:100vw;

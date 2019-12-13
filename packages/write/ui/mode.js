@@ -2,10 +2,48 @@ Pageboard.Controls.Mode = class Mode {
 	constructor(editor, node) {
 		this.editor = editor;
 		this.win = editor.root.defaultView;
+		this.html = this.win.document.documentElement;
 		this.node = node;
+		this.hop();
+	}
+	hop() {
 		this.node.addEventListener('click', this);
+		if (document.body.dataset.mode == "read") {
+			this.raf(false);
+			this.win.addEventListener('scroll', this);
+		}
+	}
+	destroy() {
+		this.node.removeEventListener('click', this);
+		this.win.removeEventListener('scroll', this);
+		delete this.html.style.transform;
+		delete document.body.dataset.scrollOverTop;
 	}
 	handleEvent(e) {
+		if (this[e.type]) this[e.type](e);
+	}
+	scroll() {
+		var scrollTop = this.scrollTop;
+		this.scrollTop = this.html.scrollTop;
+		if (this.scrollTop == 0 && scrollTop == 1) this.raf(true);
+		else if (this.scrollTop >= 1) this.raf(false);
+	}
+	apply(overTop) {
+		document.body.dataset.scrollOverTop = !!overTop;
+		if (overTop) {
+			delete this.html.style.transform;
+		} else {
+			this.scrollTop = this.scrollTop || 1;
+			this.html.style.transform = "translateY(1px)";
+		}
+		this.html.scrollTop = this.scrollTop;
+	}
+	raf(overTop) {
+		if (document.body.dataset.scrollOverTop != overTop) {
+			window.requestAnimationFrame(() => this.apply(overTop));
+		}
+	}
+	click(e) {
 		var item = e.target.closest('[data-command]');
 		if (!item) return;
 		var com = item.dataset.command;
@@ -24,9 +62,6 @@ Pageboard.Controls.Mode = class Mode {
 				}
 			}
 			this.editor.close();
-			if (com != "read") {
-				this.node.removeEventListener('click', this);
-			}
 			var elts = state.scope.$view.elements;
 			if (com == "code") {
 				state.data.$jsonContent = pruneNonRoot(Pageboard.editor.state.doc.toJSON(), null, Pageboard.editor.schema);
@@ -68,6 +103,11 @@ Pageboard.Controls.Mode = class Mode {
 				delete Pageboard.backupElements;
 			}
 			document.body.dataset.mode = com;
+			if (com == "read") {
+				this.hop();
+			} else {
+				this.destroy();
+			}
 			state.replace(state, {vary: true});
 		});
 	}
