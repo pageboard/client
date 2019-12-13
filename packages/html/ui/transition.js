@@ -1,4 +1,5 @@
 Object.defineProperty(document, 'body', {
+	configurable: true,
 	get: function() {
 		return this.documentElement.querySelector('body:last-of-type');
 	}
