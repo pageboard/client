@@ -93,13 +93,14 @@ body[data-mode="read"] #pageboard-read > iframe {
 	margin-left:0 !important;
 	margin-right:0 !important;
 }
-#breadcrumb:empty {
-	display:none;
-}
 #breadcrumb {
 	line-height:1.4; /* prettier multiple lines */
 	margin: 0 0.5em;
 }
+#breadcrumb:empty {
+	display:none;
+}
+
 #breadcrumb > span:last-child > .divider {
 	display:none;
 }
@@ -154,18 +155,22 @@ body[data-mode="read"] #pageboard-read > iframe {
 #form .nullable.fieldset > fieldset > legend {
 	padding-left: 0.6em;
 }
-#form fieldset:disabled > :not(legend) {
-	display:none;
-}
+
 #form fieldset:disabled {
 	border-bottom:0;
 	border-right:0;
 	border-left:0;
 }
+#form fieldset:disabled > :not(legend) {
+	display:none;
+}
 
 #form .inline.fields .field {
 	padding:0;
 	text-align:right;
+}
+#form .field > label {
+	margin-bottom:0;
 }
 
 #form .inline.fields > label {
@@ -188,19 +193,6 @@ body[data-mode="read"] #pageboard-read > iframe {
 	display:inline-block;
 }
 
-#form .ui.radio.checkbox .box,
-#form .ui.radio.checkbox label {
-	padding-left:1.65714em;
-}
-
-#form .ui.icon.menu .ui.item.radio.checkbox label {
-	padding-left:0;
-}
-
-#form .field > label {
-	margin-bottom:0;
-}
-
 #form .flex.field {
 	display:flex;
 	align-items:baseline;
@@ -211,6 +203,14 @@ body[data-mode="read"] #pageboard-read > iframe {
 }
 #form .flex.field > .selection.dropdown {
 	width:auto;
+}
+#form .ui.radio.checkbox .box,
+#form .ui.radio.checkbox label {
+	padding-left:1.65714em;
+}
+
+#form .ui.icon.menu .ui.item.radio.checkbox label {
+	padding-left:0;
 }
 #form .table.compact td {
 	padding:0;
