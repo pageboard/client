@@ -87,7 +87,7 @@ class HTMLElementTemplate extends HTMLCustomElement {
 		}
 		if (template.nodeType == Node.DOCUMENT_FRAGMENT_NODE) {
 			var offView = this.ownerDocument.createElement(view.nodeName);
-			offView.appendChild(template);
+			offView.appendChild(template.cloneNode(true));
 			template = offView;
 		}
 		// remove all block-id from template - might be done in pagecut eventually
