@@ -11,7 +11,7 @@ Pageboard.Controls.Auth = class Auth {
 		Page.setup(function(state) {
 			if (com == "logout") {
 				return Pageboard.fetch("get", "/.api/logout").then(function() {
-					state.reload();
+					state.reload(true);
 				});
 			}
 		});
