@@ -32,19 +32,17 @@ function breakCommand(state, dispatch, view) {
 	var isRoot = parent.type.spec.typeName == "root";
 	var handled = false;
 	if (bef && bef.type.name == "hard_break" && isRoot && parent.isTextblock) {
-		if (dispatch) {
-			tr.delete(sel.$from.pos - bef.nodeSize, sel.$from.pos).scrollIntoView();
-		}
+		tr.delete(sel.$from.pos - bef.nodeSize, sel.$from.pos).scrollIntoView();
 		// ok let's handle the split ourselves
 		var elt = view.element(parent.type.name);
 		if (elt && !elt.inline) {
-			if (dispatch) {
-				var from = view.utils.splitTr(tr);
+			var from = view.utils.splitTr(tr, sel.to);
+			if (from != null) {
 				if (from != sel.from) {
 					tr.setSelection(State.Selection.near(tr.doc.resolve(from + 1)));
 				}
+				handled = true;
 			}
-			handled = true;
 		}
 	} else {
 		var hard_break = state.schema.nodes.hard_break;
