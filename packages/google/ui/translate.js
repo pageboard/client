@@ -14,7 +14,7 @@ class HTMLElementGoogleTranslate extends HTMLCustomElement {
 				if (mut.attributeName == "style") {
 					var s = mut.target.style;
 					var top = parseInt(s.top);
-					me.shown = !isNaN(top) && top != 0;
+					me.shown = !isNaN(top) && top > 10;
 					if (me.shown) me.style = {
 						minHeight: s.minHeight,
 						top: s.top,
