@@ -30,7 +30,7 @@ Pageboard.Controls.Mode = class Mode {
 	}
 	destroy() {
 		delete this.overTop;
-		delete this.html.style.transform;
+		delete this.html.style.marginTop;
 		delete document.body.dataset.scrollOverTop;
 	}
 	handleEvent(e) {
@@ -49,10 +49,10 @@ Pageboard.Controls.Mode = class Mode {
 	apply(overTop) {
 		document.body.dataset.scrollOverTop = !!overTop;
 		if (overTop) {
-			delete this.html.style.transform;
+			delete this.html.style.marginTop;
 		} else {
 			this.scrollTop = this.scrollTop || 1;
-			this.html.style.transform = "translateY(1px)";
+			this.html.style.marginTop = "1px";
 		}
 		this.html.scrollTop = this.scrollTop;
 	}
