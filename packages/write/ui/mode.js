@@ -1,21 +1,35 @@
 Pageboard.Controls.Mode = class Mode {
 	constructor(editor, node) {
-		this.editor = editor;
-		this.win = editor.root.defaultView;
-		this.html = this.win.document.documentElement;
-		this.node = node;
-		this.hop();
+		if (!Mode.singleton) Mode.singleton = this;
+		Mode.singleton.update(editor, node);
+		this.scroll = Pageboard.debounce(this.scroll, 50);
 	}
-	hop() {
-		this.node.addEventListener('click', this);
+	init() {
 		if (document.body.dataset.mode == "read") {
 			this.raf(false);
 			this.win.addEventListener('scroll', this);
 		}
 	}
+	update(editor, node) {
+		this.editor = editor;
+		if (this.win) this.win.removeEventListener('scroll', this);
+		this.win = editor.root.defaultView;
+		this.win.Page.setup(() => {
+			this.init();
+		});
+		this.win.Page.close(() => {
+			this.destroy();
+			this.win.Page.setup(() => {
+				this.init();
+			});
+		});
+		this.html = this.win.document.documentElement;
+		if (this.node) this.node.removeEventListener('click', this);
+		this.node = node;
+		this.node.addEventListener('click', this);
+	}
 	destroy() {
-		this.node.removeEventListener('click', this);
-		this.win.removeEventListener('scroll', this);
+		delete this.overTop;
 		delete this.html.style.transform;
 		delete document.body.dataset.scrollOverTop;
 	}
@@ -25,8 +39,12 @@ Pageboard.Controls.Mode = class Mode {
 	scroll() {
 		var scrollTop = this.scrollTop;
 		this.scrollTop = this.html.scrollTop;
-		if (this.scrollTop == 0 && scrollTop == 1) this.raf(true);
-		else if (this.scrollTop >= 1) this.raf(false);
+		if (this.scrollTop == 0) {
+			if (scrollTop == 1) this.raf(true);
+			else this.html.scrollTop = 1;
+		}	else if (this.scrollTop >= 1) {
+			this.raf(false);
+		}
 	}
 	apply(overTop) {
 		document.body.dataset.scrollOverTop = !!overTop;
@@ -39,7 +57,8 @@ Pageboard.Controls.Mode = class Mode {
 		this.html.scrollTop = this.scrollTop;
 	}
 	raf(overTop) {
-		if (document.body.dataset.scrollOverTop != overTop) {
+		if (this.overTop != overTop) {
+			this.overTop = overTop;
 			window.requestAnimationFrame(() => this.apply(overTop));
 		}
 	}
@@ -103,11 +122,6 @@ Pageboard.Controls.Mode = class Mode {
 				delete Pageboard.backupElements;
 			}
 			document.body.dataset.mode = com;
-			if (com == "read") {
-				this.hop();
-			} else {
-				this.destroy();
-			}
 			state.replace(state, {vary: true});
 		});
 	}
