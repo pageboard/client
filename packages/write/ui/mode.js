@@ -1,7 +1,7 @@
 Pageboard.Controls.Mode = class Mode {
 	constructor(editor, node) {
 		if (!Mode.singleton) Mode.singleton = this;
-		Mode.singleton.update(editor, node);
+		Mode.singleton.reset(editor, node);
 		this.scroll = Pageboard.debounce(this.scroll, 50);
 	}
 	init() {
@@ -10,7 +10,7 @@ Pageboard.Controls.Mode = class Mode {
 			this.win.addEventListener('scroll', this);
 		}
 	}
-	update(editor, node) {
+	reset(editor, node) {
 		this.editor = editor;
 		if (this.win) this.win.removeEventListener('scroll', this);
 		this.win = editor.root.defaultView;

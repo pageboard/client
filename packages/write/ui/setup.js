@@ -199,7 +199,7 @@ Pageboard.Editor = function Editor(win, state) {
 		var node = document.getElementById(lKey);
 		if (ControlClass.singleton) {
 			controls[key] = ControlClass.singleton;
-			ControlClass.singleton.update(editor, node);
+			ControlClass.singleton.reset(editor, node);
 		} else {
 			controls[lKey] = new ControlClass(editor, node);
 		}
