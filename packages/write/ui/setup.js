@@ -195,7 +195,14 @@ Pageboard.Editor = function Editor(win, state) {
 	var controls = {};
 	Object.keys(Pageboard.Controls).forEach(function(key) {
 		var lKey = key.toLowerCase();
-		controls[lKey] = new Pageboard.Controls[key](editor, document.getElementById(lKey));
+		var ControlClass = Pageboard.Controls[key];
+		var node = document.getElementById(lKey);
+		if (ControlClass.singleton) {
+			controls[key] = ControlClass.singleton;
+			ControlClass.singleton.update(editor, node);
+		} else {
+			controls[lKey] = new ControlClass(editor, node);
+		}
 	});
 	editor.controls = controls;
 	var $store = state.data.$store;
