@@ -227,10 +227,25 @@ Semafor.unflatten = function(map, obj) {
 	return obj;
 };
 
+function stubSchema(tree) {
+	var props = {};
+	if (typeof tree == "object") Object.entries(tree).forEach(([key, val]) => {
+		var schem;
+		if (val != null && typeof val == "object") schem = {
+			type: 'object',
+			properties: stubSchema(val)
+		};
+		else schem = {type: 'string'};
+		props[key] = schem;
+	});
+	return props;
+}
+
 Semafor.flatten = function(tree, obj, schema) {
 	if (!tree) return tree;
 	if (!obj) obj = {};
-	var props = schema && schema.properties || {};
+	var props = schema && schema.properties || stubSchema(tree);
+	if (schema === undefined && props) schema = {properties: props};
 	Object.entries(props).forEach(function([key, field]) {
 		var val = tree[key];
 		if (val == null) {
@@ -278,6 +293,8 @@ Semafor.flatten = function(tree, obj, schema) {
 					obj[key] = JSON.stringify(val);
 					return;
 				}
+			} else {
+				console.warn("no schema", key, val);
 			}
 			Object.entries(Semafor.flatten(val, {}, field)).forEach(function([k, kval]) {
 				obj[`${key}.${k}`] = kval;
