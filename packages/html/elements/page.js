@@ -12,6 +12,7 @@ exports.page.scripts = exports.page.scripts.concat([
 exports.page.properties.transition = {
 	title: 'Transition',
 	type: 'object',
+	nullable: true,
 	properties: {
 		close: {
 			title: 'Close',
