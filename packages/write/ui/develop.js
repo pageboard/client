@@ -1,8 +1,7 @@
 Pageboard.elements.develop = {
 	install: function(pscope) {
-		// FIXME do not redefine fuse each time this gets executed
+		if (pscope.$element.fuse && pscope.$element.fuse.develop) return;
 		var fuse = pscope.$element.fuse;
-		var self = this;
 		pscope.$element.fuse = function(node, d, scope) {
 			var $el = scope.$element;
 			var scripts = [];
@@ -39,5 +38,6 @@ Pageboard.elements.develop = {
 			head.prepend(frag);
 			return ret;
 		};
+		pscope.$element.fuse.develop = true;
 	}
 };
