@@ -6,10 +6,10 @@ module.exports = function(editor, options) {
 		Enter: breakCommand,
 		Delete: deleteCommand.bind(this, false),
 		Backspace: deleteCommand.bind(this, true),
-		ArrowRight: moveCommand.bind(null, 1, false),
-		ArrowLeft: moveCommand.bind(null, -1, false),
-		ArrowDown: moveCommand.bind(null, 1, true),
-		ArrowUp: moveCommand.bind(null, -1, true)
+		"Mod-ArrowRight": moveCommand.bind(null, 1, false),
+		"Mod-ArrowLeft": moveCommand.bind(null, -1, false),
+		"Mod-ArrowDown": moveCommand.bind(null, 1, true),
+		"Mod-ArrowUp": moveCommand.bind(null, -1, true)
 	});
 };
 

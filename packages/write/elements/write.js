@@ -74,7 +74,7 @@ exports.write = {
 				<li>use breadcrumb to select parent blocks</li>
 				<li>toolbar to replace or insert new blocks</li>
 				<li>keyboard to edit, delete text or blocks</li>
-				<li>keyboard arrows to move selected blocks,<br>ctrl-move to jump</li>
+				<li>ctrl-left, ctrl-right to move selected block,<br>ctrl-down, ctrl-up to jump (or ⌘)</li>
 			</ul>
 			<span>
 				<a class="section"></a>
