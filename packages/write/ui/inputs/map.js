@@ -3,6 +3,9 @@ class HTMLInputMap extends HTMLCustomElement {
 		this._changed = this._changed.bind(this);
 		this._focused = this._focused.bind(this);
 	}
+	get name() {
+		return this.getAttribute('name') || '';
+	}
 	get value() {
 		var obj;
 		if (this._proxy && this._proxy.value) try {
@@ -22,7 +25,7 @@ class HTMLInputMap extends HTMLCustomElement {
 	connectedCallback() {
 		if (this._proxy) return;
 		this._proxy = this.appendChild(
-			this.dom(`<input name="${this.getAttribute('name') || ''}" type="hidden" />`)
+			this.dom(`<input name="${this.name}" type="hidden" />`)
 		);
 		var renderer = Pageboard.debounce(this._render.bind(this), 10);
 		this._observer = new MutationObserver(function(mutations) {
@@ -53,7 +56,7 @@ class HTMLInputMap extends HTMLCustomElement {
 		var obj = Semafor.flatten(this.value || {});
 		var body = this._table.querySelector('tbody');
 		body.textContent = '';
-		var name = this.getAttribute('name') || '';
+		var name = this.name;
 		Object.keys(obj).concat([""]).forEach(function(key, i) {
 			var val = obj[key];
 			if (val === undefined || val === null) val = '';
