@@ -8,20 +8,22 @@ Pageboard.Controls.Mode = class Mode {
 		if (document.body.dataset.mode == "read") {
 			this.raf(false);
 			this.win.addEventListener('scroll', this);
+			this.win.document.body.style.overflow = 'auto';
 		}
 	}
 	reset(editor, node) {
 		this.editor = editor;
 		if (this.win) this.win.removeEventListener('scroll', this);
 		this.win = editor.root.defaultView;
-		this.win.Page.setup(() => {
-			this.init();
-		});
 		this.win.Page.close(() => {
 			this.destroy();
-			this.win.Page.setup(() => {
+			this.win.Page.patch(() => {
 				this.init();
 			});
+		});
+		this.win.Page.patch(() => {
+			this.destroy();
+			this.init();
 		});
 		this.html = this.win.document.documentElement;
 		if (this.node) this.node.removeEventListener('click', this);
@@ -66,7 +68,7 @@ Pageboard.Controls.Mode = class Mode {
 		var item = e.target.closest('[data-command]');
 		if (!item) return;
 		var com = item.dataset.command;
-		this.win.Page.setup((state) => {
+		this.win.Page.patch((state) => {
 			var mode = document.body.dataset.mode;
 			if (mode != "read") {
 				var store = this.editor.controls.store;
@@ -81,7 +83,7 @@ Pageboard.Controls.Mode = class Mode {
 				}
 			}
 			this.editor.close();
-			var elts = state.scope.$view.elements;
+			var elts = state.scope.$elements;
 			if (com == "code") {
 				state.data.$jsonContent = pruneNonRoot(Pageboard.editor.state.doc.toJSON(), null, Pageboard.editor.schema);
 				delete Pageboard.editor;
