@@ -10,6 +10,7 @@ body {
 
 body {
 	display:flex;
+	flex-direction: row;
 }
 
 #pageboard-read {
@@ -36,6 +37,12 @@ body {
 #pageboard-write.loading > [id] {
 	display:none;
 }
+body[data-mode="read"] {
+	flex-direction: column-reverse;
+}
+body[data-mode="read"] #pageboard-read {
+	flex: 1 1 auto;
+}
 body[data-mode="read"] #pageboard-write {
 	position: fixed;
 	min-width:auto;
@@ -43,7 +50,13 @@ body[data-mode="read"] #pageboard-write {
 	right:0;
 	transition:transform 0.2s ease-in;
 	padding-bottom:0;
-	border-bottom-left-radius:0.5em;
+}
+body[data-mode="read"] #pageboard-write {
+	position:relative;
+	top:0;
+	width: 100%;
+	flex: 0 1 auto;
+	margin-bottom: 0;
 }
 body[data-mode="read"][data-scroll-over-top="false"] #pageboard-write {
 	transform: translateY(-100%);

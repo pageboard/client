@@ -2,67 +2,17 @@ Pageboard.Controls.Mode = class Mode {
 	constructor(editor, node) {
 		if (!Mode.singleton) Mode.singleton = this;
 		Mode.singleton.reset(editor, node);
-		this.scroll = Pageboard.debounce(this.scroll, 50);
-	}
-	init() {
-		if (document.body.dataset.mode == "read") {
-			this.raf(false);
-			this.win.addEventListener('scroll', this);
-			this.win.document.body.style.overflow = 'auto';
-		}
 	}
 	reset(editor, node) {
 		this.editor = editor;
-		if (this.win) this.win.removeEventListener('scroll', this);
 		this.win = editor.root.defaultView;
-		this.win.Page.close(() => {
-			this.destroy();
-			this.win.Page.patch(() => {
-				this.init();
-			});
-		});
-		this.win.Page.patch(() => {
-			this.destroy();
-			this.init();
-		});
 		this.html = this.win.document.documentElement;
 		if (this.node) this.node.removeEventListener('click', this);
 		this.node = node;
 		this.node.addEventListener('click', this);
 	}
-	destroy() {
-		delete this.overTop;
-		delete this.html.style.marginTop;
-		delete document.body.dataset.scrollOverTop;
-	}
 	handleEvent(e) {
 		if (this[e.type]) this[e.type](e);
-	}
-	scroll() {
-		var scrollTop = this.scrollTop;
-		this.scrollTop = this.html.scrollTop;
-		if (this.scrollTop == 0) {
-			if (scrollTop == 1) this.raf(true);
-			else this.html.scrollTop = 1;
-		}	else if (this.scrollTop >= 1) {
-			this.raf(false);
-		}
-	}
-	apply(overTop) {
-		document.body.dataset.scrollOverTop = !!overTop;
-		if (overTop) {
-			delete this.html.style.marginTop;
-		} else {
-			this.scrollTop = this.scrollTop || 1;
-			this.html.style.marginTop = "1px";
-		}
-		this.html.scrollTop = this.scrollTop;
-	}
-	raf(overTop) {
-		if (this.overTop != overTop) {
-			this.overTop = overTop;
-			window.requestAnimationFrame(() => this.apply(overTop));
-		}
 	}
 	click(e) {
 		var item = e.target.closest('[data-command]');
