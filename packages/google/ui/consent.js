@@ -1,5 +1,7 @@
-Page.setup(function(state) {
+Page.ready((state) => {
 	state.userStorage = new UserStore();
+});
+Page.setup(function(state) {
 	HTMLCustomElement.define(`element-consent`, HTMLCustomConsentElement, 'form');
 });
 
