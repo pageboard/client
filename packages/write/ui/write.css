@@ -44,18 +44,12 @@ body[data-mode="read"] #pageboard-read {
 	flex: 1 1 auto;
 }
 body[data-mode="read"] #pageboard-write {
-	position: fixed;
-	min-width:auto;
-	width:auto;
-	right:0;
-	transition:transform 0.2s ease-in;
-	padding-bottom:0;
-}
-body[data-mode="read"] #pageboard-write {
 	position:relative;
 	top:0;
+	min-width:auto;
 	width: 100%;
 	flex: 0 1 auto;
+	padding-bottom:0;
 	margin-bottom: 0;
 }
 body[data-mode="read"][data-scroll-over-top="false"] #pageboard-write {
