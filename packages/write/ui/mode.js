@@ -1,7 +1,7 @@
 Pageboard.Controls.Mode = class Mode {
 	constructor(editor, node) {
 		if (!Mode.singleton) Mode.singleton = this;
-		Mode.singleton.reset(editor, node);
+		Mode.singleton.reset(editor, node.parentNode);
 	}
 	reset(editor, node) {
 		this.editor = editor;
@@ -18,6 +18,14 @@ Pageboard.Controls.Mode = class Mode {
 		var item = e.target.closest('[data-command]');
 		if (!item) return;
 		var com = item.dataset.command;
+		if (com == "logout") {
+			Page.setup(function(state) {
+				return Pageboard.fetch("get", "/.api/logout").then(function() {
+					state.reload(true);
+				});
+			});
+			return;
+		}
 		this.win.Page.patch((state) => {
 			var mode = document.body.dataset.mode;
 			if (mode != "read") {

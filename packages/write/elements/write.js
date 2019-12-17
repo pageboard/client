@@ -146,7 +146,6 @@ exports.write = {
 		"../ui/breadcrumb.js",
 		"../ui/store.js",
 		"../ui/share.js",
-		"../ui/auth.js",
 		"../ui/mode.js",
 		"../lib/perfect-scrollbar.js",
 		"../lib/infinite-scroll.js",

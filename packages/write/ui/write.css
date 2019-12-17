@@ -73,7 +73,7 @@ body[data-mode="read"] #pageboard-write > :not(#store) {
 body[data-mode="read"] #pageboard-write > #store {
 	margin-bottom:0;
 }
-body[data-mode="read"] #store > .icon.menu,
+body[data-mode="read"] #store > .icon.menu > :not(#auth),
 body[data-mode="read"] #mode [data-command="read"],
 body[data-mode="read"] #mode [data-command="code"],
 body[data-mode="code"] #mode [data-command="code"],
