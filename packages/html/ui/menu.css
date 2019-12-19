@@ -1,5 +1,6 @@
 /* semantic-ui fixes */
-.ui.menu:not(.vertical) .right.item.dropdown {
+.ui.menu:not(.vertical) .right.item.dropdown,
+.ui.menu:not(.vertical) .right.item.popup {
 	margin-left: 0 !important;
 }
 .dropdown.item > .menu > .item .ui.image {
