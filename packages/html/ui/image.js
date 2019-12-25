@@ -54,13 +54,15 @@ class HTMLElementImage extends HTMLCustomElement {
 			img = this.insertBefore(this.ownerDocument.createElement('img'), this.firstChild);
 		}
 		this.classList.remove('error', 'loading');
+		img.setAttribute('width', this.getAttribute('width'));
+		img.setAttribute('height', this.getAttribute('height'));
 		if (!this.currentSrc) this.placeholder();
 	}
 	reveal() {
 		var img = this.firstElementChild;
 		var z = this.zoom;
-		var w = parseInt(img.getAttribute('width'));
-		var h = parseInt(img.getAttribute('height'));
+		var w = parseInt(this.getAttribute('width'));
+		var h = parseInt(this.getAttribute('height'));
 		var zoom;
 		if (!isNaN(w) && !isNaN(h)) {
 			var rect = this.getBoundingClientRect();

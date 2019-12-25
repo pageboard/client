@@ -159,9 +159,8 @@ exports.image = {
 		data-loading="[loading]"
 		data-src="[url]"
 		alt="[src]"
-		zoom="[zoom]"
+		zoom="[zoom]" width="[width]" height="[height]"
 	>
-		<img width="[width]" height="[height]" />
 		<div block-content="legend"></div>
 	</element-image>`,
 	fuse: function(node, d, scope) {
