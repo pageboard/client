@@ -69,6 +69,7 @@ body[data-mode="read"] #pageboard-write > #store {
 }
 body[data-mode="read"] #store > .icon.menu > :not(#auth),
 body[data-mode="write"] #store > .text.menu,
+body[data-mode="code"] #store > .text.menu,
 body[data-mode="read"] #mode [data-command="read"],
 body[data-mode="read"] #mode [data-command="code"],
 body[data-mode="code"] #mode [data-command="code"],
