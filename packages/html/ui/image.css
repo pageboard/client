@@ -23,20 +23,6 @@ element-image > img {
 	flex:0 0 auto;
 	align-self:center; /* not stretch */
 }
-element-image.lazy > img {
-	opacity:0;
-}
-element-image.lqip > img {
-	filter: blur(6px);
-	filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='6'); /* old ie support */
-}
-element-image.lqip.reveal > img {
-	transition: 0.3s filter linear;
-}
-element-image.lazy.reveal > img {
-	transition: 0.1s opacity linear;
-	opacity:1;
-}
 
 @keyframes element-image-spinner {
 	to {
@@ -44,7 +30,7 @@ element-image.lazy.reveal > img {
 	}
 }
 
-element-image.lazy::after {
+element-image.loading::after {
 	content: '';
 	box-sizing: border-box;
 	position: absolute;
@@ -55,9 +41,9 @@ element-image.lazy::after {
 	margin-top: -15px;
 	margin-left: -15px;
 	border-radius: 50%;
-	border: 1px solid #ddd;
+	border: 3px solid #ddd;
 	border-top-color: #aaa;
-	animation: element-image-spinner 3s ease infinite;
+	animation: element-image-spinner 1s linear infinite;
 	opacity: 0.75;
 }
 
@@ -67,12 +53,12 @@ element-image.error::after {
 	position: absolute;
 	top: 50%;
 	left: 50%;
-	width: 6px;
-	height: 6px;
-	margin-top: -3px;
-	margin-left: -3px;
+	width: 30px;
+	height: 30px;
+	margin-top: -15px;
+	margin-left: -15px;
 	border-radius: 50%;
-	border: 1px solid #fdd;
+	border: 3px solid #faa;
 	opacity: 0.75;
 }
 
@@ -85,7 +71,7 @@ element-image.contain > img {
 element-image.cover,
 element-image.cover > img {
 	width:100%;
-	height:100%;
+	height: 100%;
 }
 element-image.contain > img {
 	object-fit: contain;

@@ -156,13 +156,14 @@ exports.image = {
 		nodes: "inline*"
 	},
 	html: `<element-image class="[fit] [position]"
-		lazyload="[lazy]"
-		url="[url]"
+		data-loading="[loading]"
+		data-src="[url]"
 		alt="[src]"
-		width="[width]"
-		height="[height]"
 		zoom="[zoom]"
-	><div block-content="legend"></div></element-image>`,
+	>
+		<img width="[width]" height="[height]" />
+		<div block-content="legend"></div>
+	</element-image>`,
 	fuse: function(node, d, scope) {
 		var obj = {
 			alt: d.alt
@@ -182,12 +183,13 @@ exports.image = {
 			if (zoom != 100) obj.zoom = zoom;
 			var isSvg = meta.mime == "image/svg+xml";
 			var isFit = obj.fit != "none";
+			if (isFit || !isSvg) {
+				obj.loading = "lazy";
+			}
 			if (!isSvg && !isFit) {
-				loc.query.q = 5;
-				obj.lazy = "lqip";
-				if (isFit) loc.query.rs = "w-320_h-320_max";
-			} else if (isFit || !isSvg) {
-				obj.lazy = "lazy";
+				// FIXME just put dimensions to this image and let it load normally
+				// loc.query.q = 5;
+				// obj.loading = "lqip";
 			}
 		} else if (d.url) {
 			console.warn("image has no meta", d.url);

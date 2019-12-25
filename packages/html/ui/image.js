@@ -1,37 +1,9 @@
 class HTMLElementImage extends HTMLCustomElement {
-	static get observedAttributes() {
-		return ['url', 'reveal'];
-	}
-	static init() {
-		var me = this;
-		if ("IntersectionObserver" in window) {
-			me.observer = new IntersectionObserver(function(entries, observer) {
-				entries.forEach(function(entry) {
-					var target = entry.target;
-					if (entry.isIntersecting || entry.intersectionRatio > 0) {
-						me.unobserve(target);
-						Page.setup(target);
-					}
-				});
-			}, {
-				threshold: 0
-			});
-		}
-	}
-	static observe(el) {
-		if (this.observer) {
-			if (!el.observed && !el.revealed) {
-				el.observed = true;
-				this.observer.observe(el);
-				return true;
-			}
-		}
-	}
-	static unobserve(el) {
-		if (this.observer) {
-			el.observed = false;
-			this.observer.unobserve(el);
-		}
+	static get defaults() {
+		return {
+			src: null,
+			loading: null
+		};
 	}
 	findClass(list) {
 		return list.find(function(name) {
@@ -54,32 +26,12 @@ class HTMLElementImage extends HTMLCustomElement {
 			if (val) this.classList.add(val);
 		}, this);
 	}
-	get width() {
-		return parseInt(this.getAttribute('width'));
-	}
-	get height() {
-		return parseInt(this.getAttribute('height'));
-	}
 	get zoom() {
 		var z = parseFloat(this.getAttribute('zoom'));
 		if (isNaN(z)) z = 100;
 		return z;
 	}
-	get lazyload() {
-		return this.getAttribute('lazyload');
-	}
-	get url() {
-		return this.getAttribute('url');
-	}
 
-	attributeChangedCallback(name, old, val) {
-		if (name == "url" && old != val) {
-			if (this.lazyload != "lazy" || this.revealed) this.show();
-		}
-	}
-	close() {
-		this.constructor.unobserve(this);
-	}
 	fix(img) {
 		if (!window.objectFitImages.supportsObjectFit) {
 			var style = "";
@@ -96,18 +48,22 @@ class HTMLElementImage extends HTMLCustomElement {
 			}
 		}
 	}
-	show() {
+	patch() {
 		var img = this.firstElementChild;
 		if (!img || !img.matches('img')) {
-			img = this.ownerDocument.createElement('img');
-			this.insertBefore(img, this.firstChild);
+			img = this.insertBefore(this.ownerDocument.createElement('img'), this.firstChild);
 		}
+		this.classList.remove('error', 'loading');
+		if (!this.currentSrc) this.placeholder();
+	}
+	reveal() {
+		var img = this.firstElementChild;
 		var z = this.zoom;
-		var w = this.width;
-		var h = this.height;
+		var w = parseInt(img.getAttribute('width'));
+		var h = parseInt(img.getAttribute('height'));
 		var zoom;
 		if (!isNaN(w) && !isNaN(h)) {
-			var rect = this.parentNode.getBoundingClientRect();
+			var rect = this.getBoundingClientRect();
 			var rw = rect.width;
 			var rh = rect.height;
 			if (rw == 0 && rh == 0) {
@@ -124,8 +80,7 @@ class HTMLElementImage extends HTMLCustomElement {
 				else if (z < zoom && zoom < z + 10) zoom = z;
 			}
 		}
-		this.revealed = Date.now();
-		var loc = Page.parse(this.url);
+		var loc = Page.parse(this.options.src);
 		delete loc.query.q;
 		if (!zoom) {
 			delete loc.query.rs;
@@ -133,39 +88,28 @@ class HTMLElementImage extends HTMLCustomElement {
 			zoom = Math.ceil(zoom / 10) * 10;
 			loc.query.rs = "z-" + zoom;
 		}
-		img.setAttribute('src', Page.format(loc));
-	}
-
-	patch() {
-		if (this.lazyload != "lazy" && !this.revealed) {
-			this.show();
-		}
-	}
-
-	setup() {
-		if (!this.constructor.observe(this)) {
-			this.show();
-		} else if (!this.revealed) {
-			this.classList.add(this.lazyload);
-			this.show();
-		}
+		var curSrc = this.currentSrc = Page.format(loc);
+		this.classList.add('loading');
+		img.setAttribute('src', curSrc);
 	}
 	captureLoad() {
-		var rev = this.revealed;
-		if (!rev) return;
-		var img = this.firstElementChild;
-		if (rev && Date.now() - rev > 500) {
-			this.classList.add('reveal');
-		}
-		this.classList.remove('lqip', 'lazy');
-		this.fix(img);
+		this.classList.remove('loading');
+		this.fix(this.firstElementChild);
 	}
 	captureError() {
-		this.classList.remove('lqip', 'lazy');
 		this.classList.add('error');
+		this.placeholder();
+	}
+	placeholder() {
+		var img = this.firstElementChild;
+		var w = img.getAttribute('width');
+		var h = img.getAttribute('height');
+		if (w && h) {
+			img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}"></svg>`);
+		}
 	}
 }
 
-Page.ready(function() {
-	HTMLCustomElement.define('element-image', HTMLElementImage);
-});
+
+HTMLCustomElement.define('element-image', HTMLElementImage);
+
