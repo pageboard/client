@@ -21,44 +21,66 @@ HTMLCustomElement.define = function(name, cla, is) {
 	var preset = window.customElements.get(name);
 	if (preset) return cla;
 
-	cla.prototype.connectedCallback = function() {
-		if (is && this.init && !this.initCalled) {
-			this.initCalled = true;
-			this.init();
+	Object.defineProperty(cla.prototype, 'connectedCallback', {
+		configurable: true,
+		value: function() {
+			if (is && this.init && !this.initCalled) {
+				this.initCalled = true;
+				this.init();
+			}
+			Page.connect(this);
 		}
-		Page.connect(this);
-	};
-	cla.prototype.disconnectedCallback = function() {
-		Page.disconnect(this);
-	};
+	});
+	Object.defineProperty(cla.prototype, 'disconnectedCallback', {
+		configurable: true,
+		value: function() {
+			Page.disconnect(this);
+		}
+	});
 
 	if (cla.defaults) {
 		if (!cla.observedAttributes) cla.observedAttributes = Object.keys(cla.defaults).map(function(x) {
 			return 'data-' + x.replace(/([A-Z])/g, (g) => `-${g[0].toLowerCase()}`);
 		});
-	}
-	window.customElements.define(name, cla, is ? {extends: is} : undefined);
-	if (cla.defaults) HTMLCustomElement.extend(name, class _NodeOptions {
-		patch(state) {
-			this.options = nodeOptions(this, cla.defaults, state);
-		}
-		setup(state) {
-			if (!this.options) {
+		monkeyPatchAll(cla.prototype, {
+			patch(state) {
 				this.options = nodeOptions(this, cla.defaults, state);
+				if (typeof this.reveal == "function" && this.currentSrc && this.options.src != this.currentSrc) {
+					this.reveal(state);
+				}
+			},
+			setup(state) {
+				if (!this.options) {
+					this.options = nodeOptions(this, cla.defaults, state);
+				}
+				if (typeof this.reveal == "function" && this.options.loading == "lazy" && !this.currentSrc) {
+					HTMLCustomElement.observer.observe(this);
+				}
+			},
+			close(state) {
+				if (typeof this.reveal == "function" && !this.currentSrc) {
+					HTMLCustomElement.observer.unobserve(this);
+				}
 			}
-		}
-	}, is);
+		});
+	}
+
+	window.customElements.define(name, cla, is ? {extends: is} : undefined);
 	return cla;
 };
 
 function monkeyPatch(proto, meth, cb) {
-	proto[meth] = (function(fn) {
-		return function(...args) {
-			var ret = cb.apply(this, args);
-			if (fn) ret = fn.apply(this, args);
-			return ret;
-		};
-	})(proto[meth]);
+	Object.defineProperty(proto, meth, {
+		configurable: true,
+		enumerable: true,
+		value: (function(fn) {
+			return function(...args) {
+				var ret = cb.apply(this, args);
+				if (fn) ret = fn.apply(this, args);
+				return ret;
+			};
+		})(proto[meth])
+	});
 }
 
 function nodeOptions(node, defaults, state) {
@@ -104,12 +126,16 @@ HTMLCustomElement.extend = function(name, Ext, is) {
 	if (!Ext.name) console.warn("Please name the extension of", name, Ext);
 	if (list[Ext.name]) return;
 	list[Ext.name] = true;
-	var ExtProto = Ext.prototype;
-	var ClaProto = Cla.prototype;
-	Object.getOwnPropertyNames(ExtProto).forEach(function(name) {
-		if (name != "constructor") monkeyPatch(ClaProto, name, ExtProto[name]);
-	});
+	monkeyPatchAll(Cla.prototype, Ext.prototype);
 };
+
+function monkeyPatchAll(ClaProto, ExtProto) {
+	Object.getOwnPropertyNames(ExtProto).forEach(function(meth) {
+		if (meth != "constructor") {
+			monkeyPatch(ClaProto, meth, ExtProto[meth]);
+		}
+	});
+}
 HTMLCustomElement.extend.cache = {};
 
 if (!NodeList.prototype.indexOf) NodeList.prototype.indexOf = function(node) {
@@ -120,3 +146,32 @@ if (!HTMLCollection.prototype.indexOf) HTMLCollection.prototype.indexOf = NodeLi
 
 module.exports = HTMLCustomElement;
 
+Page.setup(function() {
+	if (!window.IntersectionObserver) window.IntersectionObserver = class {
+		constructor(cb, opts) {
+			this.cb = cb;
+		}
+		observe(node) {
+			this.cb([{
+				target: node,
+				isIntersecting: true,
+				intersectionRatio: 100
+			}], this);
+		}
+		unobserve(node) {
+		}
+	};
+
+	HTMLCustomElement.observer = new IntersectionObserver((entries, observer) => {
+		entries.forEach((entry) => {
+			var target = entry.target;
+			if (entry.isIntersecting || entry.intersectionRatio > 0) {
+				observer.unobserve(target);
+				if (target.currentSrc) return;
+				target.reveal();
+			}
+		});
+	}, {
+		threshold: 0
+	});
+});
