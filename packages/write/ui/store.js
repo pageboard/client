@@ -48,7 +48,7 @@ Store.prototype.destroy = function() {
 Store.generatedBefore = {};
 Store.generated = {};
 
-Store.genId =  function(len) {
+Store.genId = function(len) {
 	if (!len) len = 8;
 	var arr = new Uint8Array(len);
 	window.crypto.getRandomValues(arr);
