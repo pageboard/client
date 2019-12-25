@@ -30,38 +30,6 @@ element-image > img {
 	}
 }
 
-element-image.loading::after {
-	content: '';
-	box-sizing: border-box;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	width: 30px;
-	height: 30px;
-	margin-top: -15px;
-	margin-left: -15px;
-	border-radius: 50%;
-	border: 3px solid #ddd;
-	border-top-color: #aaa;
-	animation: element-image-spinner 1s linear infinite;
-	opacity: 0.75;
-}
-
-element-image.error::after {
-	content: '';
-	box-sizing: border-box;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	width: 30px;
-	height: 30px;
-	margin-top: -15px;
-	margin-left: -15px;
-	border-radius: 50%;
-	border: 3px solid #faa;
-	opacity: 0.75;
-}
-
 element-image.contain,
 element-image.contain > img {
 	width:100%;

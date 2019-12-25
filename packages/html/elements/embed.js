@@ -28,6 +28,7 @@ exports.embed = {
 	html: `<element-embed class="ui embed" data-src="[url]" id="[name|id]" data-loading="lazy"></element-embed>`,
 	scripts: ['../ui/embed.js'],
 	stylesheets: [
+		'../ui/loading.css',
 		'../lib/components/embed.css',
 		'../ui/embed.css'
 	]

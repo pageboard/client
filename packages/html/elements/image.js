@@ -201,6 +201,7 @@ exports.image = {
 		empty: '../ui/empty.png'
 	},
 	stylesheets: [
+		'../ui/loading.css',
 		'../ui/image.css'
 	],
 	scripts: [
