@@ -8,7 +8,7 @@ class HTMLCustomElement extends HTMLElement {
 	init() {}
 	attributeChangedCallback(name, src, dst, ns) {
 		if (src !== dst && this.patch) {
-			if (!this.constructor.defaults || this.options) {
+			if (!Object.hasOwnProperty.call(this.constructor, 'defaults') || this.options) {
 				Page.patch(this);
 			}
 		}
