@@ -2,10 +2,11 @@ class HTMLElementEmbed extends HTMLCustomElement {
 	static get defaults() {
 		return {
 			src: null,
-			hash: null
+			hash: null,
+			loading: "lazy"
 		};
 	}
-	patch(state) {
+	reveal() {
 		var opts = this.options;
 		var src = opts.src;
 		if (opts.hash) {
@@ -13,6 +14,7 @@ class HTMLElementEmbed extends HTMLCustomElement {
 			obj.hash = opts.hash;
 			src = Page.format(obj);
 		}
+		this.currentSrc = src;
 		this.iframe = this.firstElementChild;
 		if (!this.iframe) {
 			this.innerHTML = `<iframe src="${src}" width="100%" height="100%" frameborder="0" scrolling="no" webkitAllowFullScreen mozallowfullscreen allowFullScreen allow="autoplay; fullscreen"></iframe>`;
