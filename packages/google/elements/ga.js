@@ -8,15 +8,13 @@ exports.site.properties.google_analytics = {
 exports.google_analytics = {
 	priority: 10,
 	group: "block",
-	html: `<script async src="https://www.googletagmanager.com/gtag/js?id=[id|url]"></script>`,
+	html: `<meta name="ga" content="[$site.google_analytics|magnet]">`,
 	install: function(scope) {
-		var id = scope.$site.google_analytics;
-		if (!id || scope.$site.env != "production") return;
-		scope.$element.dom.querySelector('head').append(this.dom.fuse({id: id}, scope));
+		if (scope.$site.env != "production") return;
+		scope.$element.dom.querySelector('head > meta').after(this.dom);
 	},
 	csp: {
-		script: ["https://www.googletagmanager.com", "https://www.google-analytics.com"],
-		img: ["https://www.googletagmanager.com", "https://www.google-analytics.com", "https://stats.g.doubleclick.net"]
+		connect: ["https://www.google-analytics.com/collect"]
 	},
 	scripts: [
 		'../ui/ga.js'

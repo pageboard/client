@@ -1,9 +1,9 @@
 window.dataLayer = window.dataLayer || [];
 Page.setup(function(state) {
-	state.chain('dnt', function(state) {
-		if (state.userStorage.get('dnt') != "no") {
+	state.chain('consent', function(state) {
+		if (state.scope.$consent == "no") {
 			window.dataLayer = [];
-			state.userStorage.clearCookies(/^_g/);
+			Page.storage.clearCookies(/^_g/);
 			return;
 		}
 		if (!window.dataLayer.length) window.dataLayer.push({

@@ -1,8 +1,15 @@
-Page.ready((state) => {
-	state.userStorage = new UserStore();
-});
 Page.setup(function(state) {
 	HTMLCustomElement.define(`element-consent`, HTMLCustomConsentElement, 'form');
+	// TODO move this to html
+	Page.storage = new UserStore();
+	var consent = Page.storage.get('consent');
+	if (consent === null && !document.body.querySelector('element-consent')) {
+		consent = "yes";
+	}
+	state.scope.$consent = consent;
+	if (consent !== null) {
+		state.runChain('consent');
+	}
 });
 
 class UserStore {
@@ -32,6 +39,19 @@ class UserStore {
 		}
 		if (!storage) {
 			this.setCookie(key, val);
+		}
+	}
+	del(key) {
+		var storage = window.localStorage;
+		if (storage) {
+			try {
+				storage.removeItem(key);
+			} catch(ex) {
+				storage = null;
+			}
+		}
+		if (!storage) {
+			this.clearCookie(key);
 		}
 	}
 	clearCookies(re) {
@@ -65,30 +85,22 @@ class HTMLCustomConsentElement extends HTMLFormElement {
 			transient: false
 		};
 	}
-	parseDnt(val) {
-		if (0 === parseInt(val) || 'no' == val) return 'no';
-		else if (1 === parseInt(val) || 'yes' == val) return 'yes';
-		else return null;
-	}
 	setup(state) {
-		var navDnt = this.parseDnt((navigator.doNotTrack !== undefined) ? navigator.doNotTrack
-			: (window.doNotTrack !== undefined) ? window.doNotTrack
-				: (navigator.msDoNotTrack !== undefined) ? navigator.msDoNotTrack
-					: null);
-		var userDnt = state.userStorage.get('dnt');
-		var dnt = userDnt !== null ? userDnt : navDnt;
-		window.HTMLCustomFormElement.prototype.fill.call(this, {dnt: dnt});
-		this.classList.toggle('visible', dnt === null && this.options.transient || this.isContentEditable);
-		state.runChain('dnt');
+		window.HTMLCustomFormElement.prototype.fill.call(this, {
+			consent: state.scope.$consent
+		});
+		this.classList.toggle('visible', state.scope.$consent === null && this.options.transient || this.isContentEditable);
+
 	}
 	handleSubmit(e, state) {
 		if (e.type == "submit") e.preventDefault();
 		if (this.isContentEditable) return;
-		var dnt = window.HTMLCustomFormElement.prototype.read.call(this).dnt;
-		if (dnt == null) return;
-		state.userStorage.set('dnt', dnt);
-		state.runChain('dnt');
-		this.classList.remove('visible');
+		var consent = window.HTMLCustomFormElement.prototype.read.call(this).consent;
+		if (consent == null) return;
+		Page.storage.set('consent', consent);
+		state.scope.$consent = consent;
+		state.runChain('consent');
+		if (this.options.transient) this.remove();
 	}
 	handleChange(e, state) {
 		this.handleSubmit(e, state);
