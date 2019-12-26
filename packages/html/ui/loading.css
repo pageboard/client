@@ -1,4 +1,4 @@
-.loading[data-loading="lazy"]::after {
+[data-loading="lazy"]::after {
 	content: '';
 	box-sizing: border-box;
 	position: absolute;
@@ -9,23 +9,24 @@
 	margin-top: -15px;
 	margin-left: -15px;
 	border-radius: 50%;
-	border: 3px solid #ddd;
+	text-align:center;
+}
+
+.loading[data-loading="lazy"]::after {
+	border: 3px solid #ccc;
 	border-top-color: #aaa;
 	animation: element-image-spinner 1s linear infinite;
-	opacity: 0.75;
 }
 
 .error[data-loading="lazy"]::after {
-	content: '';
-	box-sizing: border-box;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	width: 30px;
-	height: 30px;
-	margin-top: -15px;
-	margin-left: -15px;
-	border-radius: 50%;
 	border: 3px solid #faa;
-	opacity: 0.75;
 }
+
+.waiting[data-loading="lazy"]::after {
+	content: '?';
+}
+
+.denied[data-loading="lazy"]::after {
+	content: '!';
+}
+
