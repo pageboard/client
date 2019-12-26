@@ -54,12 +54,12 @@ HTMLCustomElement.define = function(name, cla, is) {
 					this.options = nodeOptions(this, cla.defaults, state);
 				}
 				if (typeof this.reveal == "function" && this.options.loading == "lazy" && !this.currentSrc) {
-					HTMLCustomElement.observer.observe(this);
+					state.observer.observe(this);
 				}
 			},
 			close(state) {
 				if (typeof this.reveal == "function" && !this.currentSrc) {
-					HTMLCustomElement.observer.unobserve(this);
+					state.observer.unobserve(this);
 				}
 			}
 		});
@@ -146,7 +146,7 @@ if (!HTMLCollection.prototype.indexOf) HTMLCollection.prototype.indexOf = NodeLi
 
 module.exports = HTMLCustomElement;
 
-Page.setup(function() {
+Page.setup(function(state) {
 	if (!window.IntersectionObserver) window.IntersectionObserver = class {
 		constructor(cb, opts) {
 			this.cb = cb;
@@ -162,16 +162,24 @@ Page.setup(function() {
 		}
 	};
 
-	HTMLCustomElement.observer = new IntersectionObserver((entries, observer) => {
+	state.observer = new IntersectionObserver((entries, observer) => {
 		entries.forEach((entry) => {
 			var target = entry.target;
 			if (entry.isIntersecting || entry.intersectionRatio > 0) {
 				observer.unobserve(target);
 				if (target.currentSrc) return;
-				target.reveal();
+				target.reveal(state);
 			}
 		});
 	}, {
 		threshold: 0
 	});
 });
+
+Page.close(function(state) {
+	if (state.observer) {
+		state.observer.disconnect();
+		delete state.observer;
+	}
+});
+
