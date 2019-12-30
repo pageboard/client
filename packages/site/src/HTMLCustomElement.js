@@ -53,8 +53,9 @@ HTMLCustomElement.define = function(name, cla, is) {
 				if (!this.options) {
 					this.options = nodeOptions(this, cla.defaults, state);
 				}
-				if (typeof this.reveal == "function" && this.options.loading == "lazy" && !this.currentSrc) {
-					state.observer.observe(this);
+				if (typeof this.reveal == "function" && !this.currentSrc) {
+					if (this.options.loading == "lazy") state.observer.observe(this);
+					else this.reveal(state);
 				}
 			},
 			close(state) {
