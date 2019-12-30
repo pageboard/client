@@ -87,7 +87,8 @@ class HTMLElementImage extends HTMLCustomElement {
 		if (!zoom) {
 			delete loc.query.rs;
 		} else {
-			zoom = Math.ceil(zoom / 10) * 10;
+			var zstep = zoom > 15 ? 10 : 5;
+			zoom = Math.ceil(zoom / zstep) * zstep;
 			loc.query.rs = "z-" + zoom;
 		}
 		var curSrc = this.currentSrc = Page.format(loc);
