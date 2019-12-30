@@ -140,7 +140,13 @@ exports.unset = function(obj, what, ...list) {
 };
 
 exports.set = function(obj, what, name, val) {
-	if (obj == null || typeof obj != "object") return obj;
+	if (obj == null) {
+		obj = {};
+	}
+	if (typeof obj != "object") {
+		if (val === undefined) val = obj;
+		else return obj;
+	}
 	obj = Object.assign({}, obj);
 	obj[name] = val;
 	return obj;
