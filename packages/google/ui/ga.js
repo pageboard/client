@@ -33,7 +33,7 @@ class GoogleAnalytics {
 		error,
 		fatal
 	}={}) {
-		if (!this.state || !this.cid) return;
+		if (!this.state || !this.cid || !this.gaid) return;
 		const data = {
 			v: '1',
 			ds: 'web',
@@ -60,7 +60,9 @@ class GoogleAnalytics {
 			exf: fatal === undefined  || fatal === false ? 0 : 1
 		};
 		var params = new FormData();
-		Object.keys(data).forEach((key) => params.append(key, data[key]));
+		Object.keys(data).forEach((key) => {
+			if (data[key] !== undefined) params.append(key, data[key]);
+		});
 		this.send('https://www.google-analytics.com/collect', params);
 	}
 	trackState(state) {

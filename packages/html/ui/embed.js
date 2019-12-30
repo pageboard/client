@@ -33,6 +33,9 @@ class HTMLElementEmbed extends HTMLCustomElement {
 			this.iframe.setAttribute('src', src);
 		});
 	}
+	captureClick() {
+		if (this.matches('.denied') && Page.consent) Page.consent();
+	}
 	captureLoad() {
 		this.classList.remove('loading');
 	}

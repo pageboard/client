@@ -26,7 +26,11 @@ exports.embed = {
 	},
 	tag: 'iframe,element-embed',
 	html: `<element-embed class="ui embed" data-src="[url]" id="[name|id]" data-loading="lazy"></element-embed>`,
-	scripts: ['../ui/embed.js'],
+	scripts: [
+		'../ui/storage.js',
+		'../ui/consent.js',
+		'../ui/embed.js'
+	],
 	stylesheets: [
 		'../ui/loading.css',
 		'../lib/components/embed.css',

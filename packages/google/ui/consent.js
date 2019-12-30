@@ -1,83 +1,10 @@
 Page.setup(function(state) {
 	HTMLCustomElement.define(`element-consent`, HTMLCustomConsentElement, 'form');
-	// TODO move this to html
-	Page.storage = new UserStore();
-	var consent = Page.storage.get('consent');
-	if (consent === null && !document.body.querySelector('element-consent')) {
-		consent = "yes";
-	}
-	state.scope.$consent = consent;
-	if (consent !== null) {
-		state.runChain('consent');
-	}
+	var consentForm = document.body.querySelector('[block-type="consent_form"]');
+	if (consentForm) Page.consent = function() {
+		consentForm.classList.add('visible');
+	};
 });
-
-class UserStore {
-	get(key) {
-		var storage = window.localStorage;
-		var val;
-		if (storage) {
-			try {
-				val = storage.getItem(key);
-			} catch(ex) {
-				storage = null;
-			}
-		}
-		if (!storage) {
-			val = this.getCookies()[key];
-		}
-		return val;
-	}
-	set(key, val) {
-		var storage = window.localStorage;
-		if (storage) {
-			try {
-				storage.setItem(key, val);
-			} catch(ex) {
-				storage = null;
-			}
-		}
-		if (!storage) {
-			this.setCookie(key, val);
-		}
-	}
-	del(key) {
-		var storage = window.localStorage;
-		if (storage) {
-			try {
-				storage.removeItem(key);
-			} catch(ex) {
-				storage = null;
-			}
-		}
-		if (!storage) {
-			this.clearCookie(key);
-		}
-	}
-	clearCookies(re) {
-		var cookies = this.getCookies();
-		for (var key in cookies) {
-			if (!re || re.test(key)) this.clearCookie(key);
-		}
-	}
-	clearCookie(key) {
-		document.cookie = `${key}=; expires = Thu, 01 Jan 1970 00:00:00 GMT`;
-	}
-	getCookies() {
-		return document.cookie.split(/; */).reduce((obj, str) => {
-			if (str === "") return obj;
-			const eq = str.indexOf('=');
-			const key = eq > 0 ? str.slice(0, eq) : str;
-			let val = eq > 0 ? str.slice(eq + 1) : null;
-			if (val != null) try { val = decodeURIComponent(val); } catch(ex) { /* pass */ }
-			obj[key] = val;
-			return obj;
-		}, {});
-	}
-	setCookie(key, val) {
-		document.cookie = `${key}=${encodeURIComponent(val)}; Path=/; Secure; SameSite=Strict; Max-Age: 3e9`;
-	}
-}
 
 class HTMLCustomConsentElement extends HTMLFormElement {
 	static get defaults() {
@@ -95,12 +22,19 @@ class HTMLCustomConsentElement extends HTMLFormElement {
 	handleSubmit(e, state) {
 		if (e.type == "submit") e.preventDefault();
 		if (this.isContentEditable) return;
-		var consent = window.HTMLCustomFormElement.prototype.read.call(this).consent;
-		if (consent == null) return;
+		var fd = window.HTMLCustomFormElement.prototype.read.call(this);
+		var consent = fd.consent;
+		if (consent == null) {
+			// temp backward compat with dnt
+			consent = fd.dnt;
+			if (consent == "no") consent = "yes";
+			else if (consent == "yes") consent = "no";
+			else return;
+		}
 		Page.storage.set('consent', consent);
 		state.scope.$consent = consent;
 		state.runChain('consent');
-		if (this.options.transient) this.remove();
+		if (this.options.transient) this.classList.remove('visible');
 	}
 	handleChange(e, state) {
 		this.handleSubmit(e, state);
