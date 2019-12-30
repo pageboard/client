@@ -55,7 +55,7 @@ Page.hash(function(state) {
 Page.setup(function(state) {
 	if (window.history && 'scrollRestoration' in window.history) {
 		window.history.scrollRestoration = 'manual';
- 		if (!state.hash) state.scroll(state.data.$scroll);
+		if (!state.hash) state.scroll(state.data.$scroll);
 	}
 });
 
