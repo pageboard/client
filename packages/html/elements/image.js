@@ -180,16 +180,7 @@ exports.image = {
 			obj.width = Math.round(meta.width * wf / 100);
 			obj.height = Math.round(meta.height * wh / 100);
 			if (zoom != 100) obj.zoom = zoom;
-			var isSvg = meta.mime == "image/svg+xml";
-			var isFit = obj.fit != "none";
-			if (isFit || !isSvg) {
-				obj.loading = "lazy";
-			}
-			if (!isSvg && !isFit) {
-				// FIXME just put dimensions to this image and let it load normally
-				// loc.query.q = 5;
-				// obj.loading = "lqip";
-			}
+			obj.loading = "lazy";
 		} else if (d.url) {
 			console.warn("image has no meta", d.url);
 		}
