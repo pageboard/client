@@ -36,7 +36,7 @@ ElementProperty.prototype.init = function(block) {
 	this.input.hidden = true;
 	var doc = this.input.ownerDocument;
 	var paths = asPaths(this.el, {}, this.el.name + '.');
-	var content = this.formBlock.content.form;
+	var content = el.contents.get(this.formBlock);
 	function getSelectOption(key) {
 		var prop = paths[key];
 		if (!prop.title) return;
