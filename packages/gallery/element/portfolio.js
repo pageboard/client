@@ -27,15 +27,9 @@ exports.portfolio = {
 		id: 'items',
 		nodes: "portfolio_item+"
 	},
-	html: `<element-portfolio data-shape="[shape]">
-		<div block-content="items"></div>
-	</element-portfolio>`,
+	html: `<div data-shape="[shape]" block-content="items"></div>`,
 	stylesheets: [
 		'../ui/portfolio.css'
-	],
-	scripts: [
-		'../lib/isotope.js',
-		'../ui/portfolio.js'
 	]
 };
 
@@ -77,10 +71,9 @@ exports.portfolio_item = {
 		nodes: "(block|itemlink)+",
 		title: "content"
 	}],
-	tag: 'element-portfolio-item',
-	html: `<element-portfolio-item data-scale-width="[scaleWidth]" data-scale-height="[scaleHeight]">
+	html: `<div data-scale-width="[scaleWidth]" data-scale-height="[scaleHeight]">
 		<div class="media" block-content="media"></div>
 		<div class="content" block-content="content"></div>
-	</element-portfolio-item>`
+	</div>`
 };
 

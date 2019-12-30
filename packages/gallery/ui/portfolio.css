@@ -1,181 +1,118 @@
-/*
-computeGutters is used once to get those numbers
-for n=4 gutter is 0.75, n=3 gutter is 1, n=2 gutter is 1.5
-square computeGutters(1.5, 1.5, 1, 4)
-tall   computeGutters(1.5, 1.5, 1.29897, 4)
-wide   computeGutters(1.5, 1.5, 0.62887, 3)
-
-p, q are initial x, y gutters for n=2
-	f is any h/w ratio one wants to impose on the grid cell
-
-function computeGutters(p, q, f, n) {
-	var s = 100*f - 2*f*p + q;
-	var t = 100 - p;
-	var u = 50 - p;
-	var a = s / u;
-	var b = f * u / t;
-	var c = s / t;
-	var P = (100 * (2*c - a)) / (n * (c - a));
-	var Q = (100 * (2*c*f - a*c)) / (n * (c - a));
-	var w = (100 / n) - P;
-	var h = f * w;
-	var W = 2*w + P;
-	var H = 2*h + Q;
-	var obj = {
-		gx: P,
-		gy: Q,
-		pw: w,
-		pW: W,
-		ph: h,
-		pH: H,
-		w: n*w,
-		W: n*W,
-		h: n*h,
-		H: n*H
-	};
-	for (var k in obj) obj[k] = Math.round(obj[k] * 10000) / 10000;
-	return obj;
-}
-*/
-element-portfolio {
-	display:block; /* mandatory for custom elements */
+div[block-type="portfolio"] {
+	display:flex;
 	position:relative;
-	margin-right:-0.75%;
-	margin-bottom:-0.75%;
-	overflow:hidden;
-	min-height:2em;
+	flex-flow: row wrap;
+	width: 100%;
+	margin-left:-8px;
 }
-element-portfolio > .cells {
-/*	height:auto !important;*/
-}
-element-portfolio-item {
-	display:block;
+
+div[block-type="portfolio"] > div {
 	position:relative;
 	overflow:hidden;
-	margin-right:0.75%;
-	margin-bottom:0.75%;
-	width:24.25%;
-	padding-bottom:24.25%;
-	background-color:#EEE; /* we need to see the item has the right dimensions */
+	background-color:#EEE;
+	flex:auto;
+	width:25%;
+	width:calc(25% - 8px);
+	margin: 0 0 8px 8px;
 }
-element-portfolio-item[data-scale-width="2"] {
-	width:49.25%;
-}
-element-portfolio-item[data-scale-height="2"] {
-	padding-bottom:49.25%;
-}
-
-element-portfolio[data-shape="tall"] element-portfolio-item {
-	padding-bottom:31.50%;
-}
-element-portfolio[data-shape="tall"] element-portfolio-item[data-scale-height="2"] {
-	padding-bottom:63.75%;
-}
-
-element-portfolio[data-shape="wide"] {
-	margin-right:-1%;
-	margin-bottom:-1%;
-}
-element-portfolio[data-shape="wide"] element-portfolio-item {
-	width:32.3333%;
-	padding-bottom:20.3333%;
-	margin-right:1%;
-	margin-bottom:1%;
-}
-element-portfolio[data-shape="wide"] element-portfolio-item[data-scale-width="2"] {
-	width:65.6666%;
-}
-element-portfolio[data-shape="wide"] element-portfolio-item[data-scale-height="2"] {
-	padding-bottom:41.6666%;
-}
-
-element-portfolio[data-shape="small"] {
-	margin-right:-0.375%;
-	margin-bottom:-0.375%;
-}
-element-portfolio[data-shape="small"] element-portfolio-item {
-	width:12.125%;
-	padding-bottom:12.125%;
-	margin-right:0.375%;
-	margin-bottom:0.375%;
-}
-element-portfolio[data-shape="small"] element-portfolio-item[data-scale-width="2"] {
-	width:24.625%;
-}
-element-portfolio[data-shape="small"] element-portfolio-item[data-scale-height="2"] {
-	padding-bottom:24.625%;
-}
-
 
 @media screen and (max-width: 768px) {
-	element-portfolio {
-		margin-right:-1%;
-		margin-bottom:-1%;
+	div[block-type="portfolio"] {
+		margin-left:-6px;
 	}
-	element-portfolio-item {
-		width:32.3333%;
-		padding-bottom:32.3333%;
-		margin-right:1%;
-		margin-bottom:1%;
-	}
-	element-portfolio-item[data-scale-width="2"] {
-		width:65.6666%;
-	}
-	element-portfolio-item[data-scale-height="2"] {
-		padding-bottom:65.6666%;
-	}
-	element-portfolio[data-shape="tall"] element-portfolio-item {
-		padding-bottom:42.00%;
-	}
-	element-portfolio[data-shape="tall"] element-portfolio-item[data-scale-height="2"] {
-		padding-bottom:85.00%;
-	}
-	element-portfolio[data-shape="small"] {
-		margin-right:-0.75%;
-		margin-bottom:-0.75%;
-	}
-	element-portfolio[data-shape="small"] element-portfolio-item {
-		width:24.25%;
-		padding-bottom:24.25%;
-		margin-right:0.75%;
-		margin-bottom:0.75%;
-	}
-	element-portfolio[data-shape="small"] element-portfolio-item[data-scale-width="2"] {
-		width:49.25%;
-	}
-	element-portfolio[data-shape="small"] element-portfolio-item[data-scale-height="2"] {
-		padding-bottom:49.25%;
+	div[block-type="portfolio"] > div {
+		width:33.33%;
+		width:calc(33.33% - 6px);
+		margin: 0 0 6px 6px;
 	}
 }
 
 @media screen and (max-width: 512px) {
-	element-portfolio-item,
-	element-portfolio[data-shape="wide"] element-portfolio-item {
-		width:100%;
-		padding-bottom: 66.6666%;
+	div[block-type="portfolio"] {
+		margin-left:-4px;
 	}
-	element-portfolio-item[data-scale-width="2"],
-	element-portfolio[data-shape="wide"] element-portfolio-item[data-scale-width="2"] {
-		width:100%;
-		padding-bottom: 66.6666%;
+	div[block-type="portfolio"] > div {
+		width:50%;
+		width:calc(50% - 4px);
+		margin: 0 0 4px 4px;
 	}
 }
 
 @media screen and (max-width: 320px) {
-	element-portfolio[data-shape="tall"] element-portfolio-item,
-	element-portfolio[data-shape="small"] element-portfolio-item {
-		width:100%;
-		padding-bottom: 66.6666%;
+	div[block-type="portfolio"] {
+		margin-left:0;
 	}
-	element-portfolio[data-shape="small"] element-portfolio-item[data-scale-width="2"],
-	element-portfolio[data-shape="tall"] element-portfolio-item[data-scale-width="2"] {
-		width:100%;
-		padding-bottom: 66.6666%;
+	div[block-type="portfolio"] > div {
+		margin: 0 0 4px 0;
 	}
 }
 
-element-portfolio-item > .media,
-element-portfolio-item > .content {
+@supports (display: grid) {
+	div[block-type="portfolio"] {
+		display: grid;
+		position:relative;
+		grid-gap: 8px;
+		grid-template-columns: repeat(4, 1fr);
+		grid-auto-flow: row dense;
+		margin-left:0;
+	}
+
+	div[block-type="portfolio"] > div {
+		flex:none;
+		margin: 0;
+		width:100%;
+		height:100%;
+	}
+
+	div[block-type="portfolio"] > div[data-scale-width="2"] {
+		grid-column-end: span 2;
+	}
+
+	div[block-type="portfolio"] > div[data-scale-height="2"] {
+		grid-row-end: span 2;
+	}
+
+	@media screen and (max-width: 768px) {
+		div[block-type="portfolio"] {
+			grid-gap: 6px;
+			grid-template-columns: repeat(3, 1fr);
+		}
+	}
+
+	@media screen and (max-width: 512px) {
+		div[block-type="portfolio"] {
+			grid-gap: 4px;
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	@media screen and (max-width: 320px) {
+		div[block-type="portfolio"] {
+			grid-gap: 4px 0;
+			grid-template-columns: repeat(1, 1fr);
+		}
+	}
+}
+
+
+
+div[block-type="portfolio_item"] > .media {
+	position:relative;
+	width:100%;
+	height:100%;
+}
+div[data-shape="tall"] > div[block-type="portfolio_item"]::after {
+	content: '';
+	margin-bottom: 33%;
+	display: block;
+}
+div[data-shape="wide"] > div[block-type="portfolio_item"]::after {
+	content: '';
+	margin-bottom: -33%;
+	display: block;
+}
+
+div[block-type="portfolio_item"] > .content {
 	position:absolute;
 	top:0;
 	bottom:0;
@@ -184,14 +121,14 @@ element-portfolio-item > .content {
 	overflow:hidden;
 }
 
-element-portfolio-item:hover > .content {
+div[block-type="portfolio_item"]:hover > .content {
 	background-color:rgba(0, 0, 0, 0.5);
 	color:white;
 }
 
-.ProseMirror element-portfolio-item > .content {
+.ProseMirror div[block-type="portfolio_item"] > .content {
 	pointer-events:none;
 }
-.ProseMirror element-portfolio-item > .content > * {
+.ProseMirror div[block-type="portfolio_item"] > .content > * {
 	pointer-events:auto;
 }
