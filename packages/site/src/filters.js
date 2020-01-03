@@ -144,8 +144,12 @@ exports.set = function(obj, what, name, val) {
 		obj = {};
 	}
 	if (typeof obj != "object") {
-		if (val === undefined) val = obj;
-		else return obj;
+		if (val === undefined) {
+			val = obj;
+			obj = null;
+		} else {
+			return obj;
+		}
 	}
 	obj = Object.assign({}, obj);
 	obj[name] = val;
