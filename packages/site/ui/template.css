@@ -24,4 +24,6 @@ element-template > [block-content="template"] {
 	letter-spacing:normal;
 	word-spacing:normal;
 }
-
+[contenteditable] div[block-type="content"] {
+	min-height:1rem;
+}
