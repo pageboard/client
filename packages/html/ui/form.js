@@ -50,12 +50,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			name = elem.name;
 			if (!name) continue;
 			count++;
-			`[${name}|native]`.fuse(values, { $filters: {
-				native: function(fval, what) {
-					val = fval;
-					if (val == null) val = '';
-				}
-			}});
+			val = `[${name}|or:]`.fuse(values);
 			switch (elem.type) {
 			case 'submit':
 				break;
