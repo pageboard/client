@@ -27,15 +27,15 @@ class HTMLElementQueryTags extends HTMLCustomElement {
 				if (control.value == null || control.value == "" || !label.innerText) return;
 				var prev = labels.querySelector(`[data-name="${name}"][data-value="${control.value}"]`);
 				if (prev) return;
-				labels.insertAdjacentHTML('beforeEnd', `<a class="ui label" data-name="${name}" data-value="${control.value}">
-					${label.innerText}
+				labels.insertAdjacentHTML('beforeEnd', `<a class="ui simple mini compact labeled icon button" data-name="${name}" data-value="${control.value}">
 					<i class="delete icon"></i>
+					${label.innerText}
 				</a>`);
 			}, this);
 		}
 	}
 	handleClick(e) {
-		this.remove(e.target.closest('.label'));
+		this.remove(e.target.closest('[data-name]'));
 	}
 	remove(label) {
 		if (!label) return;
