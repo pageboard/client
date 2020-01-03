@@ -14,7 +14,7 @@ exports.message.stylesheets.unshift(
 );
 
 exports.query_tags = {
-	priority: 10, // must be loaded after query
+	priority: 10, // after fetch
 	title: 'Tags',
 	icon: '<i class="tags icon"></i>',
 	menu: "form",
