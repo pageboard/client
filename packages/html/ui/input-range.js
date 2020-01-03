@@ -1,6 +1,6 @@
 class HTMLElementInputRange extends HTMLCustomElement {
 	// changing only one value, connected to the minimum value
-	connectedCallback() {
+	setup() {
 		this._input = this.querySelector('input');
 		if (!this._input) return;
 		var me = this;
@@ -27,13 +27,15 @@ class HTMLElementInputRange extends HTMLCustomElement {
 		this._input.rangeFill(this._input.value);
 	}
 
-	disconnectedCallback() {
+	close() {
 		if (this.noUiSlider) this.noUiSlider.destroy();
 	}
 }
 
 HTMLInputElement.prototype.rangeFill = function(val) {
-	this.value = val;
+	if (val == null) val = "";
+	else val = val.toString();
+	this.value = val.length ? val : this.dataset.default;
 	if (this.parentNode && this.parentNode.noUiSlider) this.parentNode.noUiSlider.set([null, val]);
 	if (!this.required && val == this.dataset.default) this.disabled = true;
 	else this.disabled = false;
