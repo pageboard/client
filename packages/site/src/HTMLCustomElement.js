@@ -54,13 +54,13 @@ HTMLCustomElement.define = function(name, cla, is) {
 					this.options = nodeOptions(this, cla.defaults, state);
 				}
 				if (typeof this.reveal == "function" && !this.currentSrc) {
-					if (this.options.loading == "lazy") state.observer.observe(this);
+					if (this.options.loading == "lazy") state.ui.observer.observe(this);
 					else this.reveal(state);
 				}
 			},
 			close(state) {
 				if (typeof this.reveal == "function" && !this.currentSrc) {
-					state.observer.unobserve(this);
+					state.ui.observer.unobserve(this);
 				}
 			}
 		});
@@ -163,7 +163,7 @@ Page.setup(function(state) {
 		}
 	};
 
-	state.observer = new IntersectionObserver((entries, observer) => {
+	state.ui.observer = new IntersectionObserver((entries, observer) => {
 		entries.forEach((entry) => {
 			var target = entry.target;
 			if (entry.isIntersecting || entry.intersectionRatio > 0) {
@@ -178,9 +178,9 @@ Page.setup(function(state) {
 });
 
 Page.close(function(state) {
-	if (state.observer) {
-		state.observer.disconnect();
-		delete state.observer;
+	if (state.ui.observer) {
+		state.ui.observer.disconnect();
+		delete state.ui.observer;
 	}
 });
 
