@@ -20,16 +20,32 @@ class HTMLElementTemplate extends HTMLCustomElement {
 				expr = {};
 			}
 			var missing = 0;
-			scope.$filters['||'] = function(val, what) {
-				var path = what.scope.path.slice();
-				if (path[0] == "$query") {
-					path = path.slice(1).join('.');
-					if (path.length) {
-						if (val !== undefined) vars[path] = val;
-						else missing++;
+			var filters = scope.$filters;
+			scope.$filters = Object.assign({}, filters, {
+				'|': function(val, what) {
+					var path = what.scope.path.slice();
+					if (path[0] == "$query") {
+						var name = path.slice(1).join('.');
+						if (name.length && state.query[name] !== undefined) {
+							val = state.query[name];
+						}
+					}
+					return val;
+				},
+				'||': function(val, what) {
+					var path = what.scope.path.slice();
+					if (path[0] == "$query") {
+						var name = path.slice(1).join('.');
+						if (name.length) {
+							if (val !== undefined) {
+								if (val != null) vars[name] = val;
+							} else {
+								missing++;
+							}
+						}
 					}
 				}
-			};
+			});
 			Pageboard.merge(expr, function(val) {
 				if (typeof val == "string") try {
 					return val.fuse({$query: state.query}, scope);
@@ -37,7 +53,7 @@ class HTMLElementTemplate extends HTMLCustomElement {
 					return val;
 				}
 			});
-			delete scope.$filters['||'];
+			scope.$filters = filters;
 			Object.keys(vars).forEach(function(key) {
 				state.vars[key] = true;
 			});
