@@ -17,22 +17,32 @@ class HTMLElementQueryTags extends HTMLCustomElement {
 		if (!labels) return;
 		labels.textContent = '';
 		var field, label;
-		for (var name in query) {
-			HTMLElementQueryTags.find(name, query[name]).forEach(function(control) {
-				if (control.type == "hidden") return;
-				field = control.closest('.field');
-				if (!field) return;
-				label = field.querySelector('label');
-				if (!label) return;
-				if (control.value == null || control.value == "" || !label.innerText) return;
-				var prev = labels.querySelector(`[data-name="${name}"][data-value="${control.value}"]`);
-				if (prev) return;
-				labels.insertAdjacentHTML('beforeEnd', `<a class="ui simple mini compact labeled icon button" data-name="${name}" data-value="${control.value}">
-					<i class="delete icon"></i>
-					${label.innerText}
-				</a>`);
-			}, this);
-		}
+		// must be called after query_form's patch
+		state.finish(() => {
+			for (var name in query) {
+				HTMLElementQueryTags.find(name, query[name]).forEach((control) => {
+					if (control.type == "hidden") return;
+					field = control.closest('.field');
+					if (!field) return;
+					label = field.querySelector('label');
+					if (!label) return;
+					if (control.value == null || control.value == "" || !label.innerText) return;
+					var prev = labels.querySelector(`[data-name="${name}"][data-value="${control.value}"]`);
+					if (prev) return;
+					var prefix = '';
+					var group = field.closest('.grouped.fields');
+					if (group && group.firstElementChild.matches('label')) {
+						prefix = group.firstElementChild.textContent + ' ';
+					}
+					var suffix = '';
+					if (control.type == "range") suffix = ' : ' + control.value;
+					labels.insertAdjacentHTML('beforeEnd', `<a class="ui simple mini compact labeled icon button" data-name="${name}" data-value="${control.value}">
+						<i class="delete icon"></i>
+						${prefix}${label.innerText}${suffix}
+					</a>`);
+				});
+			}
+		});
 	}
 	handleClick(e) {
 		this.remove(e.target.closest('[data-name]'));
