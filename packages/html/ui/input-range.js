@@ -1,13 +1,12 @@
 class HTMLElementInputRange extends HTMLCustomElement {
 	// changing only one value, connected to the minimum value
 	setup() {
-		this._input = this.querySelector('input');
-		if (!this._input) return;
-		var me = this;
-		var minimum = parseFloat(this._input.getAttribute('min'));
-		var start = parseFloat(this._input.value || this._input.dataset.default);
-		var step = parseFloat(this._input.getAttribute('step'));
-		var maximum = parseFloat(this._input.getAttribute('max'));
+		var node = this.querySelector('input');
+		if (!node) return;
+		var minimum = parseFloat(node.getAttribute('min'));
+		var start = parseFloat(node.value || node.dataset.default);
+		var step = parseFloat(node.getAttribute('step'));
+		var maximum = parseFloat(node.getAttribute('max'));
 		window.noUiSlider.create(this, {
 			start: [minimum, start],
 			step: step,
@@ -18,13 +17,13 @@ class HTMLElementInputRange extends HTMLCustomElement {
 			connect: true
 		}).on('change', function(values) {
 			var val = values[1];
-			me._input.rangeFill(val);
+			node.rangeFill(val);
 			var e = document.createEvent('HTMLEvents');
 			e.initEvent('change', true, true);
-			me._input.dispatchEvent(e);
+			node.dispatchEvent(e);
 		});
 		this.querySelector('.noUi-origin').setAttribute('disabled', 'true');
-		this._input.rangeFill(this._input.value);
+		node.rangeFill(node.value);
 	}
 
 	close() {
@@ -36,7 +35,9 @@ HTMLInputElement.prototype.rangeFill = function(val) {
 	if (val == null) val = "";
 	else val = val.toString();
 	this.value = val.length ? val : this.dataset.default;
-	if (this.parentNode && this.parentNode.noUiSlider) this.parentNode.noUiSlider.set([null, val]);
+	if (this.parentNode && this.parentNode.noUiSlider) {
+		this.parentNode.noUiSlider.set([null, parseFloat(val)]);
+	}
 	if (!this.required && val == this.dataset.default) this.disabled = true;
 	else this.disabled = false;
 };
