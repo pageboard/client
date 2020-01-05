@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "formdata-polyfill": "^3.0.19",
-    "nouislider": "^14.0.3",
+    "nouislider": "^14.1.1",
     "object-fit-images": "^3.2.4",
     "postinstall-browserify": "^0.6.0",
     "stickyfilljs": "^2.1.0"
