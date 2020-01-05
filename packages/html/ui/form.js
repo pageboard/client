@@ -197,7 +197,7 @@ HTMLFormElement.prototype.disable = function() {
 	}
 };
 
-Page.setup(function() {
+Page.ready(function() {
 	HTMLCustomElement.define(`element-form`, HTMLCustomFormElement, 'form');
 });
 
