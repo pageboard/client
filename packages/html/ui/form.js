@@ -7,7 +7,9 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		if (this.method != "get") return;
 		// do not fill form from current state if form does not submit to current pathname
 		if (!Page.samePathname(state, this.action)) return;
-		this.fill(state.query);
+		this.fill(state.query).forEach((name) => {
+			state.vars[name] = true;
+		});
 	}
 	read() {
 		var fd = new FormData(this);
@@ -43,13 +45,13 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		return query;
 	}
 	fill(values) {
-		var count = 0;
+		var vars = [];
 		var elem = null, name, val;
 		for (var i = 0; i < this.elements.length; i++) {
 			elem = this.elements[i];
 			name = elem.name;
 			if (!name) continue;
-			count++;
+			if (Object.prototype.hasOwnProperty.call(values, name) && !vars.includes(name)) vars.push(name);
 			val = values[name];
 			if (val == null) val = '';
 			switch (elem.type) {
@@ -79,7 +81,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 				break;
 			}
 		}
-		return count;
+		return vars;
 	}
 	handleSubmit(e, state) {
 		if (e.type == "submit") e.preventDefault();
