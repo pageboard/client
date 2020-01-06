@@ -111,9 +111,9 @@ Page.patch(function(state) {
 			console.warn("Unknown query parameters detected, rewriting location", extra);
 			exports.equivs({
 				Status: '302 Bad Parameters',
-				Location: Page.format({query: query})
+				Location: Page.format({pathname: state.pathname, query})
 			});
-			state.replace({query: query});
+			state.replace({pathname: state.pathname, query});
 		} else if (missing.length > 0) {
 			exports.equivs({
 				Status: '400 Missing Parameters'
