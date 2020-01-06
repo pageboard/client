@@ -95,6 +95,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		if (state.scope.$write) return;
 		this.classList.remove('error', 'warning', 'success');
 		if (this.matches('.loading')) return;
+		if (e.type != "submit" && this.querySelector('[type="submit"]')) return;
 		var fn = this[this.method + 'Method'];
 		if (e.type == "input" && (!e.target || !["radio", "checkbox"].includes(e.target.type))) {
 			fn = this[this.method + 'MethodLater'] || fn;
@@ -120,9 +121,6 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		Object.assign(loc.query, form.read());
 		if (Page.samePathname(loc, state)) {
 			loc.query = Object.assign({}, state.query, loc.query);
-		} else if (e.type != "submit") {
-			// do not automatically submit form if form pathname is not same as current pathname
-			return;
 		}
 		var status = 200;
 		return state.push(loc).catch(function(err) {
