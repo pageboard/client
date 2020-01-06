@@ -120,6 +120,7 @@ exports.input_property = {
 				content = content.lastElementChild;
 				listOf.forEach(function(item) {
 					content.appendChild(view.render({
+						id: scope.$id,
 						type: d.multiple ? 'input_checkbox' : 'input_radio',
 						data: {
 							name: name,
@@ -196,6 +197,7 @@ exports.input_property = {
 			}));
 		} else if (propType.type == "boolean") {
 			node.appendChild(view.render({
+				id: scope.$id,
 				type: 'input_checkbox',
 				data: {
 					name: name,
