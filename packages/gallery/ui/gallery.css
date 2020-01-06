@@ -3,14 +3,10 @@ element-gallery {
 	position:relative;
 }
 
-element-gallery > [block-type] {
+element-gallery:not([selected-mode="medialist"]) > [block-type="medialist"],
+element-gallery:not([selected-mode="portfolio"]) > [block-type="portfolio"],
+element-gallery:not([selected-mode="carousel"]) > [block-type="carousel"] {
 	display:none;
-}
-
-element-gallery[selected-mode="medialist"] > [block-type="medialist"],
-element-gallery[selected-mode="portfolio"] > [block-type="portfolio"],
-element-gallery[selected-mode="carousel"] > [block-type="carousel"] {
-	display:block;
 }
 
 a.itemlink {
