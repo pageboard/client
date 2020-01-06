@@ -118,7 +118,13 @@ function install(el, scope) {
 			if (typeof v == "string" && c != null) {
 				nv = v.fuse({$default: c}, { $filters: {
 					'||': function(val, what) {
-						if (!useDefault) useDefault = what.expr.path[0] == '$default';
+						var path = what.scope.path;
+						if (path[0] == '$default') {
+							useDefault = true;
+						} else if (path.length == 1) {
+							// do not drop undefined
+							what.cancel = true;
+						}
 						return val;
 					}
 				}});
