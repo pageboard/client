@@ -5,8 +5,6 @@ class HTMLCustomFormElement extends HTMLFormElement {
 	patch(state) {
 		if (state.scope.$write) return;
 		if (this.method != "get") return;
-		// do not fill form from current state if form does not submit to current pathname
-		if (!Page.samePathname(state, this.action)) return;
 		this.fill(state.query).forEach((name) => {
 			state.vars[name] = true;
 		});
