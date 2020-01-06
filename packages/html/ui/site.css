@@ -230,6 +230,8 @@ i.icon.delete::before,
 i.icon.close::before {
 	font-size:2em;
 	content:'×';
+	width:auto;
+	height:auto;
 }
 
 /*******************************
