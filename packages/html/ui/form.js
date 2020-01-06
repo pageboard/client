@@ -35,8 +35,17 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		}, this);
 		// checkbox fix
 		Array.from(this.elements).forEach(function(node) {
-			if (node.type != "checkbox") return;
-			if (node.name && node.value == "true" && !query[node.name]) query[node.name] = node.checked;
+			if (node.type == "checkbox") {
+				if (node.name && node.value == "true") {
+					if (query[node.name] === undefined) query[node.name] = node.checked;
+					if (query[node.name] == node.defaultChecked) delete query[node.name];
+				}
+			} else {
+				if (query[node.name] == node.defaultValue) delete query[node.name];
+			}
+			if (query[node.name] === undefined) {
+				query[node.name] = undefined;
+			}
 		});
 		var btn = document.activeElement;
 		if (btn && btn.type == "submit" && btn.name && query[btn.name] === undefined) {
