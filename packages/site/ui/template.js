@@ -151,7 +151,8 @@ class HTMLElementTemplate extends HTMLCustomElement {
 		while (node.firstChild) view.appendChild(node.firstChild);
 		if (usesQuery) state.scroll({
 			once: true,
-			node: view
+			node: this.parentNode,
+			behavior: 'smooth'
 		});
 	}
 }

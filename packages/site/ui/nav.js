@@ -8,7 +8,8 @@ Page.State.prototype.scroll = function(opts) {
 	}
 	var scrollOpts = {
 		top: opts.top || 0,
-		left: opts.left || 0
+		left: opts.left || 0,
+		behavior: opts.behavior || 'auto'
 	};
 	if (opts.node) {
 		var rect = opts.node.getBoundingClientRect();
