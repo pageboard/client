@@ -54,13 +54,13 @@ HTMLCustomElement.define = function(name, cla, is) {
 					this.options = nodeOptions(this, cla.defaults, state);
 				}
 				if (typeof this.reveal == "function" && !this.currentSrc) {
-					if (this.options.loading == "lazy") state.ui.observer.observe(this);
+					if (this.options.loading == "lazy" && state.ui.observer) state.ui.observer.observe(this);
 					else this.reveal(state);
 				}
 			},
 			close(state) {
 				if (typeof this.reveal == "function" && !this.currentSrc) {
-					state.ui.observer.unobserve(this);
+					if (state.ui.observer) state.ui.observer.unobserve(this);
 				}
 			}
 		});
@@ -148,33 +148,20 @@ if (!HTMLCollection.prototype.indexOf) HTMLCollection.prototype.indexOf = NodeLi
 module.exports = HTMLCustomElement;
 
 Page.setup(function(state) {
-	if (!window.IntersectionObserver) window.IntersectionObserver = class {
-		constructor(cb, opts) {
-			this.cb = cb;
-		}
-		observe(node) {
-			this.cb([{
-				target: node,
-				isIntersecting: true,
-				intersectionRatio: 100
-			}], this);
-		}
-		unobserve(node) {
-		}
-	};
-
-	state.ui.observer = new IntersectionObserver((entries, observer) => {
-		entries.forEach((entry) => {
-			var target = entry.target;
-			if (entry.isIntersecting || entry.intersectionRatio > 0) {
-				observer.unobserve(target);
-				if (target.currentSrc) return;
-				target.reveal(state);
-			}
+	if (window.IntersectionObserver) {
+		state.ui.observer = new IntersectionObserver((entries, observer) => {
+			entries.forEach((entry) => {
+				var target = entry.target;
+				if (entry.isIntersecting || entry.intersectionRatio > 0) {
+					observer.unobserve(target);
+					if (target.currentSrc) return;
+					target.reveal(state);
+				}
+			});
+		}, {
+			threshold: 0
 		});
-	}, {
-		threshold: 0
-	});
+	}
 });
 
 Page.close(function(state) {
