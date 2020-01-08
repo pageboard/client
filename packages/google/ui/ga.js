@@ -59,14 +59,16 @@ class GoogleAnalytics {
 			exd: error || undefined,
 			exf: fatal === undefined  || fatal === false ? 0 : 1
 		};
-		var params = new FormData();
+		var params = new URLSearchParams();
 		Object.keys(data).forEach((key) => {
 			if (data[key] !== undefined) params.append(key, data[key]);
 		});
 		this.send('https://www.google-analytics.com/collect', params);
 	}
 	trackState(state) {
+		var old = this.state;
 		this.state = state;
+		if (Page.samePath(old, state)) return;
 		this.track('pageview');
 	}
 	trackEvent(obj) {
@@ -78,10 +80,9 @@ class GoogleAnalytics {
 }
 
 Page.setup(function(state) {
-	/*if (state.scope.$element.type != "page") {
-		// FIXME that test is not working
+	if (document.body.getAttribute('block-type') != "page") {
 		return;
-	}*/
+	}
 	if (!Page.analytics) Page.analytics = new GoogleAnalytics();
 	var gaid = (document.querySelector('head > meta[name="ga"]') || {}).content;
 	if (gaid) Page.analytics.gaid = gaid;
