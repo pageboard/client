@@ -68,7 +68,7 @@ class GoogleAnalytics {
 	trackState(state) {
 		var old = this.state;
 		this.state = state;
-		if (Page.samePath(old, state)) return;
+		if (!old || Page.samePath(old, state)) return;
 		this.track('pageview');
 	}
 	trackEvent(obj) {
