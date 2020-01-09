@@ -71,6 +71,9 @@
 		grid-auto-flow: row dense;
 		margin-left:0;
 	}
+	[block-type="portfolio"][data-shape="small"] {
+		grid-template-columns: repeat(8, 1fr);
+	}
 
 	[block-type="portfolio"] > [block-type="portfolio_item"] {
 		flex:none;
@@ -102,6 +105,9 @@
 			grid-gap: 6px;
 			grid-template-columns: repeat(3, 1fr);
 		}
+		[block-type="portfolio"][data-shape="small"] {
+			grid-template-columns: repeat(6, 1fr);
+		}
 	}
 
 	@media screen and (max-width: 512px) {
@@ -109,12 +115,18 @@
 			grid-gap: 4px;
 			grid-template-columns: repeat(2, 1fr);
 		}
+		[block-type="portfolio"][data-shape="small"] {
+			grid-template-columns: repeat(4, 1fr);
+		}
 	}
 
 	@media screen and (max-width: 320px) {
 		[block-type="portfolio"] {
 			grid-gap: 4px 0;
 			grid-template-columns: repeat(1, 1fr);
+		}
+		[block-type="portfolio"][data-shape="small"] {
+			grid-template-columns: repeat(2, 1fr);
 		}
 	}
 }
