@@ -12,6 +12,13 @@ element-carousel .flickity-page-dots .dot {
 .inverted element-carousel .flickity-page-dots .dot {
 	background:#CCC;
 }
+element-carousel:not(.flickity-enabled) .flickity-slider {
+	position:relative;
+}
+element-carousel:not(.flickity-enabled) .flickity-slider > element-carousel-cell + element-carousel-cell {
+	display:none;
+}
+
 
 element-carousel-cell {
 	display:block;

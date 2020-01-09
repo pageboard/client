@@ -24,7 +24,6 @@ class HTMLElementCarousel extends HTMLCustomElement {
 	}
 
 	init() {
-		this.refresh = Pageboard.debounce(this.refresh, 10);
 		this.reload = Pageboard.debounce(this.reload, 100);
 		this.resetup = Pageboard.debounce(this.resetup, 100);
 	}
@@ -50,6 +49,7 @@ class HTMLElementCarousel extends HTMLCustomElement {
 	}
 
 	patch(state) {
+		this.updateCells();
 		Page.setup((state) => {
 			this.resetup(state);
 		});
@@ -57,6 +57,14 @@ class HTMLElementCarousel extends HTMLCustomElement {
 
 	setup(state) {
 		this.resetup(state);
+		if (!this.itemsObserver) {
+			this.itemsObserver = new MutationObserver((records) => {
+				records.forEach((record) => this.reload(record, state));
+			});
+			this.itemsObserver.observe(this.querySelector('[block-content="items"]'), {
+				childList: true
+			});
+		}
 	}
 
 	resetup(state) {
@@ -83,7 +91,6 @@ class HTMLElementCarousel extends HTMLCustomElement {
 		this.fullview(opts.fullview);
 		this.classList.toggle('fade', opts.fade);
 
-		this.updateCells();
 		this.widget = new window.Flickity(this, opts);
 		this.widget.on('select', (e) => {
 			if (opts.fullview) {
@@ -103,6 +110,10 @@ class HTMLElementCarousel extends HTMLCustomElement {
 
 	close(state) {
 		this.destroy();
+		if (this.itemsObserver) {
+			this.itemsObserver.disconnect();
+			delete this.itemsObserver;
+		}
 	}
 
 	updateCells() {
@@ -110,17 +121,13 @@ class HTMLElementCarousel extends HTMLCustomElement {
 		Array.prototype.forEach.call(
 			this.querySelectorAll('element-carousel-cell'),
 			function(cell) {
-				cell.dataset.width = opts.width;
-				cell.dataset.height = opts.height;
-				if (cell.update) cell.update();
+				Object.assign(cell.dataset, {
+					width: opts.width,
+					height: opts.height
+				});
 			},
 			this
 		);
-	}
-	refresh() {
-		if (this.widget) {
-			this.widget.resize();
-		}
 	}
 	reload() {
 		this.updateCells();
@@ -132,39 +139,21 @@ class HTMLElementCarousel extends HTMLCustomElement {
 }
 
 class HTMLElementCarouselCell extends HTMLCustomElement {
-	setup(state) {
-		this.update();
-		this.carousel = this.closest('element-carousel');
-		if (this.carousel) {
-			this.carousel.reload();
-		}
+	static get defaults() {
+		return {
+			width: (x) => parseFloat(x) || 0,
+			height: (x) => parseFloat(x) || 0
+		};
 	}
-
-	close(state) {
-		if (this.carousel) {
-			this.carousel.reload(state);
-			delete this.carousel;
-		}
-	}
-
-	captureLoad(state) {
-		if (this.carousel) this.carousel.refresh();
-	}
-
-	update() {
-		var width = parseFloat(this.dataset.width) || 0;
-		if (width) this.style.width = `${width}%`;
+	patch(state) {
+		if (this.options.width) this.style.width = `${this.options.width}%`;
 		else this.style.width = null;
-		var height = parseFloat(this.dataset.height) || 0;
-		if (height) this.style.height = `${height}vh`;
+		if (this.options.height) this.style.height = `${this.options.height}vh`;
 		else this.style.height = null;
 	}
 }
 
 Page.ready(function() {
+	HTMLCustomElement.define('element-carousel-cell', HTMLElementCarouselCell);
 	HTMLCustomElement.define('element-carousel', HTMLElementCarousel);
 });
-Page.setup(function() {
-	HTMLCustomElement.define('element-carousel-cell', HTMLElementCarouselCell);
-});
-
