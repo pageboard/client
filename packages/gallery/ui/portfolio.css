@@ -47,6 +47,21 @@
 	}
 }
 
+[block-type="portfolio_item"]::after {
+	content: '';
+	display: block;
+	height: 0;
+}
+[data-shape="square"] > [block-type="portfolio_item"]::after {
+	padding-bottom: 100%;
+}
+[data-shape="tall"] > [block-type="portfolio_item"]::after {
+	padding-bottom: 150%;
+}
+[data-shape="wide"] > [block-type="portfolio_item"]::after {
+	padding-bottom:66%;
+}
+
 @supports (display: grid) {
 	[block-type="portfolio"] {
 		display: grid;
@@ -70,6 +85,16 @@
 
 	[block-type="portfolio"] > [data-scale-height="2"] {
 		grid-row-end: span 2;
+	}
+	
+	[data-shape="square"] > [data-scale-width="2"][data-scale-height="1"]::after {
+		padding-bottom:50%;
+	}
+	[data-shape="tall"] > [data-scale-width="2"][data-scale-height="1"]::after {
+		padding-bottom:75%;
+	}
+	[data-shape="wide"] > [data-scale-width="2"][data-scale-height="1"]::after {
+		padding-bottom:33%;
 	}
 
 	@media screen and (max-width: 768px) {
@@ -101,18 +126,7 @@
 	width:100%;
 	height:100%;
 }
-[block-type="portfolio_item"]::after {
-	content: '';
-	padding-bottom:100%;
-	display: block;
-	height: 0;
-}
-[data-shape="tall"] > [block-type="portfolio_item"]::after {
-	padding-bottom: 150%;
-}
-[data-shape="wide"] > [block-type="portfolio_item"]::after {
-	padding-bottom:66%;
-}
+
 
 [block-type="portfolio_item"] > .content {
 	position:absolute;
