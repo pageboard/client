@@ -52,7 +52,7 @@
 	display: block;
 	height: 0;
 }
-[data-shape="square"] > [block-type="portfolio_item"]::after {
+[data-shape] > [block-type="portfolio_item"]::after {
 	padding-bottom: 100%;
 }
 [data-shape="tall"] > [block-type="portfolio_item"]::after {
@@ -87,7 +87,7 @@
 		grid-row-end: span 2;
 	}
 	
-	[data-shape="square"] > [data-scale-width="2"][data-scale-height="1"]::after {
+	[data-shape] > [data-scale-width="2"][data-scale-height="1"]::after {
 		padding-bottom:50%;
 	}
 	[data-shape="tall"] > [data-scale-width="2"][data-scale-height="1"]::after {
