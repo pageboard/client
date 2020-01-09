@@ -107,7 +107,17 @@ exports.content = {
 			title: 'Fill',
 			description: 'Fill with template expression',
 			type: 'string'
+		},
+		filter: {
+			title: 'Filter',
+			description: 'by CSS selector',
+			type: 'string',
+			nullable: true
 		}
 	},
-	html: '<div block-content="[name]">[fill|trim|split:%0A|join:%7C|pre:%5B|post:%5D]</div>'
+	html: '<element-content block-content="[name]" data-filter="[filter]">[fill|trim|split:%0A|join:%7C|pre:%5B|post:%5D]</element-content>',
+	scripts: [
+		'../ui/content.js'
+	]
 };
+
