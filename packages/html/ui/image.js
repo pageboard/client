@@ -11,7 +11,7 @@ class HTMLElementImage extends HTMLCustomElement {
 		}, this) || list[0];
 	}
 	get fit() {
-		return this.findClass(['none', 'natural', 'contain']);
+		return this.findClass(['none', 'contain', 'cover']);
 	}
 	get position() {
 		var h = this.findClass(['left', 'hcenter', 'right']);
