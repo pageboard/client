@@ -35,14 +35,14 @@ class HTMLElementInputFile extends HTMLCustomElement {
 		var self = this;
 		var field = this.closest('.field');
 		field.classList.remove('success', 'error');
-		field.classList.add('loading');
 		var label = this.querySelector('.label');
+		function track(num) {
+			label.innerText = num;
+		}
+		track(0);
+		field.classList.add('loading');
 		var p = new Promise(function(resolve, reject) {
-			function track(num) {
-				label.innerText = num;
-			}
 			function fail(err) {
-				track(-1);
 				console.error(err);
 				field.classList.add('error');
 				field.classList.remove('loading');
@@ -54,7 +54,6 @@ class HTMLElementInputFile extends HTMLCustomElement {
 				if (!obj.items || obj.items.length == 0) return fail(new Error("File rejected"));
 				var val = obj.items[0];
 				input.value = val;
-				track(-1);
 				field.classList.add('success');
 				field.classList.remove('loading');
 				delete self._xhr;
@@ -62,7 +61,7 @@ class HTMLElementInputFile extends HTMLCustomElement {
 				delete self._promise;
 			}
 			if (file.files.length == 0) return resolve(); // or reject ?
-			track(0);
+			
 			var fd = new FormData();
 			for (var i=0; i < file.files.length; i++) {
 				fd.append("files", file.files[i]);
