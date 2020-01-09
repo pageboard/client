@@ -17,7 +17,7 @@ class HTMLElementSticky extends HTMLCustomElement {
 		Page.connect({
 			handleScroll: this.listener,
 			handleResize: this.listener
-		}, window)
+		}, window);
 		// some stylesheets might target :not([data-mode="start"]) so it must be the initial value
 		this._sticky = this.constructor.stickyfill.addOne(this);
 		this.listener();
