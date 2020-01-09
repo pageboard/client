@@ -8,7 +8,6 @@ class HTMLElementInputFile extends HTMLCustomElement {
 				this._xhr.abort();
 				delete this._xhr;
 			}
-			input.setAttribute('value', '');
 			input.value = '';
 			var file = this.querySelector('input[type="file"]');
 			file.reset();
@@ -24,7 +23,6 @@ class HTMLElementInputFile extends HTMLCustomElement {
 		if (e.target.type == "file" && e.target.value) {
 			input.value = (e.target.value || "").split(/\/|\\/).pop();
 		}
-		input.setAttribute('value', input.value);
 		if (this.dataset.now != null) this.upload();
 	}
 
@@ -56,7 +54,6 @@ class HTMLElementInputFile extends HTMLCustomElement {
 				if (!obj.items || obj.items.length == 0) return fail(new Error("File rejected"));
 				var val = obj.items[0];
 				input.value = val;
-				input.setAttribute('value', val);
 				track(-1);
 				field.classList.add('success');
 				field.classList.remove('loading');
