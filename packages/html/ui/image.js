@@ -60,7 +60,6 @@ class HTMLElementImage extends HTMLCustomElement {
 	}
 	reveal() {
 		var img = this.firstElementChild;
-		var z = this.zoom;
 		var w = parseInt(this.getAttribute('width'));
 		var h = parseInt(this.getAttribute('height'));
 		var zoom;
@@ -79,14 +78,11 @@ class HTMLElementImage extends HTMLCustomElement {
 				zoom = Math.round((this.fit == "cover" ? Math.max : Math.min)(rw / w, rh / h) * 100);
 				// svg need to be resized to scale to its intrinsic dimension
 				if (zoom > 100) zoom = 100;
-				else if (z < zoom && zoom < z + 10) zoom = z;
 			}
 		}
 		var loc = Page.parse(this.options.src);
 		delete loc.query.q;
-		if (!zoom) {
-			delete loc.query.rs;
-		} else {
+		if (zoom) {
 			var zstep = zoom > 15 ? 10 : 5;
 			zoom = Math.ceil(zoom / zstep) * zstep;
 			loc.query.rs = "z-" + zoom;

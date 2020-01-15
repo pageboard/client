@@ -159,7 +159,7 @@ exports.image = {
 		data-loading="[loading]"
 		data-src="[url]"
 		alt="[src]"
-		zoom="[zoom]" width="[width]" height="[height]"
+		width="[width]" height="[height]"
 	>
 		<div block-content="legend"></div>
 	</element-image>`,
@@ -172,14 +172,12 @@ exports.image = {
 		obj.fit = display.fit || "none";
 		obj.position = `${display.horizontal} ${display.vertical}`;
 
-		var zoom = (d.crop || {}).zoom || 100;
 		var meta = (scope.$hrefs || {})[d.url];
 		if (meta && meta.width && meta.height) {
 			var wf = (d.crop || {}).width || 100;
 			var wh = (d.crop || {}).height || 100;
 			obj.width = Math.round(meta.width * wf / 100);
 			obj.height = Math.round(meta.height * wh / 100);
-			if (zoom != 100) obj.zoom = zoom;
 			obj.loading = "lazy";
 		} else if (d.url) {
 			console.warn("image has no meta", d.url);
