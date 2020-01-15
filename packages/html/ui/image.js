@@ -82,10 +82,10 @@ class HTMLElementImage extends HTMLCustomElement {
 		}
 		var loc = Page.parse(this.options.src);
 		delete loc.query.q;
-		var rz = 100;
+		var rz = 0;
 		if (loc.query.rs) {
 			rz = parseFloat(loc.query.rs.split("-")[1]);
-			if (isNaN(rz)) rz = 100;
+			if (isNaN(rz)) rz = 0;
 		}
 		if (zoom) {
 			if (zoom < rz) zoom = rz;
