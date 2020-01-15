@@ -62,24 +62,7 @@ class HTMLElementImage extends HTMLCustomElement {
 		var img = this.firstElementChild;
 		var w = parseInt(this.getAttribute('width'));
 		var h = parseInt(this.getAttribute('height'));
-		var zoom;
-		if (!isNaN(w) && !isNaN(h)) {
-			var rect = this.getBoundingClientRect();
-			var rw = rect.width;
-			var rh = rect.height;
-			if (rw == 0 && rh == 0) {
-				// don't show
-				return;
-			}
-
-			if (rw || rh) {
-				if (!rw) rw = rh * w / h;
-				if (!rh) rh = rw * h / w;
-				zoom = Math.ceil((this.fit == "cover" ? Math.max : Math.min)(rw / w, rh / h) * 100 * (window.devicePixelRatio || 1));
-				// svg need to be resized to scale to its intrinsic dimension
-				if (zoom > 100) zoom = 100;
-			}
-		}
+		var fit = this.fit;
 		var loc = Page.parse(this.options.src);
 		delete loc.query.q;
 		var rz = 0;
@@ -87,11 +70,29 @@ class HTMLElementImage extends HTMLCustomElement {
 			rz = parseFloat(loc.query.rs.split("-")[1]);
 			if (isNaN(rz)) rz = 0;
 		}
-		if (zoom) {
-			if (zoom < rz) zoom = rz;
-			var zstep = zoom > 15 ? 10 : 5;
-			zoom = Math.ceil(zoom / zstep) * zstep;
-			loc.query.rs = "z-" + zoom;
+
+		if (!isNaN(w) && !isNaN(h)) {
+			var zoom;
+			var rect = this.getBoundingClientRect();
+			var rw = rect.width;
+			var rh = rect.height;
+			if (rw == 0 && rh == 0) {
+				// don't show
+				return;
+			}
+			if (rw || rh) {
+				if (!rw) rw = rh * w / h;
+				if (!rh) rh = rw * h / w;
+				zoom = Math.ceil((fit == "contain" ? Math.min : Math.max)(rw / w, rh / h) * 100 * (window.devicePixelRatio || 1));
+				// svg need to be resized to scale to its intrinsic dimension
+				if (zoom > 100) zoom = 100;
+			}
+			if (zoom) {
+				if (zoom < rz) zoom = rz;
+				var zstep = zoom > 15 ? 10 : 5;
+				zoom = Math.ceil(zoom / zstep) * zstep;
+				loc.query.rs = "z-" + zoom;
+			}
 		}
 		var curSrc = this.currentSrc = Page.format(loc);
 		this.classList.add('loading');
