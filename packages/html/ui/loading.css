@@ -1,5 +1,4 @@
 [data-loading="lazy"]::after {
-	content: '';
 	box-sizing: border-box;
 	position: absolute;
 	top: 50%;
@@ -13,12 +12,14 @@
 }
 
 .loading[data-loading="lazy"]::after {
+	content: '';
 	border: 3px solid #ccc;
 	border-top-color: #aaa;
 	animation: element-image-spinner 1s linear infinite;
 }
 
 .error[data-loading="lazy"]::after {
+	content: '';
 	border: 3px solid #faa;
 }
 
