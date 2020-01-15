@@ -75,7 +75,7 @@ class HTMLElementImage extends HTMLCustomElement {
 			if (rw || rh) {
 				if (!rw) rw = rh * w / h;
 				if (!rh) rh = rw * h / w;
-				zoom = Math.round((this.fit == "cover" ? Math.max : Math.min)(rw / w, rh / h) * 100);
+				zoom = Math.round((this.fit == "cover" ? Math.max : Math.min)(rw / w, rh / h) * 100 * (window.devicePixelRatio || 1));
 				// svg need to be resized to scale to its intrinsic dimension
 				if (zoom > 100) zoom = 100;
 			}
