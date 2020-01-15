@@ -1,4 +1,5 @@
-element-template {
+element-template,
+element-content {
 	display:block;
 	position:relative;
 }
@@ -27,3 +28,4 @@ element-template > [block-content="template"] {
 [contenteditable] div[block-type="content"] {
 	min-height:1rem;
 }
+
