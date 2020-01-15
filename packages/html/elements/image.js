@@ -137,10 +137,10 @@ exports.image = {
 		var r = d.crop || {};
 		if (r.x != null && r.y != null && r.width != null && r.height != null &&
 			(r.x != 50 || r.y != 50 || r.width != 100 || r.height != 100)) {
-			if (r.x - r.width / 2 < 0 || r.x + r.width / 2 > 100) {
+			if (Math.round((r.x - r.width / 2)*100) < 0 || Math.round((r.x + r.width / 2)*100) > 10000) {
 				r.width = 2 * Math.min(r.x, 100 - r.x);
 			}
-			if (r.y - r.height / 2 < 0 || r.y + r.height / 2 > 100) {
+			if (Math.round((r.y - r.height / 2)*100) < 0 || Math.round((r.y + r.height / 2)*100) > 10000) {
 				r.height = 2 * Math.min(r.y, 100 - r.y);
 			}
 			loc.query.ex = `x-${r.x}_y-${r.y}_w-${r.width}_h-${r.height}`;
