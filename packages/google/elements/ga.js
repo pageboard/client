@@ -10,7 +10,7 @@ exports.google_analytics = {
 	group: "block",
 	html: `<meta name="ga" content="[$site.google_analytics|magnet]">`,
 	install: function(scope) {
-		if (scope.$site.env != "production") return;
+		if (!scope.$site || scope.$site.env != "production") return;
 		scope.$element.dom.querySelector('head > meta').after(this.dom);
 	},
 	csp: {

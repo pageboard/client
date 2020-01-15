@@ -10,6 +10,7 @@ exports.google_tag_manager = {
 	group: "block",
 	html: `<script async src="https://www.googletagmanager.com/gtm.js?id=[id|url]"></script>`,
 	install: function(scope) {
+		if (!scope.$site) return;
 		var id = scope.$site.google_tag_manager;
 		if (!id || scope.$site.env != "production") return;
 		scope.$element.dom.querySelector('head').append(this.dom.fuse({id: id}, scope));
