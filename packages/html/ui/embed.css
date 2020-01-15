@@ -1,5 +1,6 @@
 element-embed {
 	display:block;
+	width:100%;
 }
 
 [contenteditable] element-embed iframe {
