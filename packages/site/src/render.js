@@ -93,7 +93,9 @@ function install(el, scope) {
 		} else {
 			el.fusable = true;
 		}
-		if (el.install) el.install.call(el, scope);
+		if (el.install && scope.$element) {
+			el.install.call(el, scope);
+		}
 	} catch(err) {
 		console.error("Invalid element", el, err);
 		return;

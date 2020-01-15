@@ -32,11 +32,12 @@ function initState(res, state) {
 	if (res.grants) state.data.$grants = res.grants;
 	if (res.hrefs) Object.assign(state.data.$hrefs, res.hrefs);
 	scope.$hrefs = state.data.$hrefs; // backward compat FIXME get rid of this, data.$hrefs is good
-	if (res.meta && res.meta.group == "page") {
+	var pageMeta = (res.metas || res.meta && [res.meta] || []).find((meta) => meta.group == "page");
+	if (pageMeta) {
 		["grants", "links", "site", "lock", "granted"].forEach(function(k) {
 			if (res[k] !== undefined) scope[`$${k}`] = res[k];
 		});
-		scope.$element = res.item && scope.$elements[res.item.type];
+		scope.$element = scope.$elements[pageMeta.name];
 	}
 }
 
