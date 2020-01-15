@@ -94,9 +94,12 @@ class HTMLElementImage extends HTMLCustomElement {
 				loc.query.rs = "z-" + zoom;
 			}
 		}
-		var curSrc = this.currentSrc = Page.format(loc);
-		this.classList.add('loading');
-		img.setAttribute('src', curSrc);
+		var curSrc = Page.format(loc);
+		if (curSrc != this.currentSrc) {
+			this.currentSrc = curSrc;
+			this.classList.add('loading');
+			img.setAttribute('src', curSrc);
+		}
 	}
 	captureLoad() {
 		this.classList.remove('loading');

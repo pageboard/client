@@ -44,9 +44,8 @@ HTMLCustomElement.define = function(name, cla, is) {
 		});
 		monkeyPatchAll(cla.prototype, {
 			patch(state) {
-				var src = (this.options || {}).src;
 				this.options = nodeOptions(this, cla.defaults, state);
-				if (typeof this.reveal == "function" && this.currentSrc && this.options.src != src) {
+				if (typeof this.reveal == "function" && this.currentSrc) {
 					this.reveal(state);
 				}
 			},
