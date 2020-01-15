@@ -63,11 +63,3 @@ exports.feed = {
 	]
 };
 
-exports['.rss'] = {
-	prerender: {
-		mime: 'application/xml'
-	},
-	scripts: [
-		'../ui/rss.js'
-	]
-};

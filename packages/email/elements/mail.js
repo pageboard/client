@@ -37,26 +37,22 @@ exports.mail = {
 	</head>
 	<body block-content="body"></body>
 </html>`,
-	scripts: exports.page.scripts.slice(),
-	stylesheets: [
-		'../lib/foundation-emails.css',
-		'../ui/mail.css'
-	]
-};
-
-exports['.mail'] = {
-	prerender: {
-		mime: 'application/json',
-		display: false,
-		fonts: false,
-		medias: true
-	},
-	scripts: [
+	scripts: exports.page.scripts.concat([
 		'../lib/inlineresources.js',
 		'../lib/europa.js',
 		'../lib/juice.js',
 		'../ui/mail.js'
-	]
+	]),
+	stylesheets: [
+		'../lib/foundation-emails.css',
+		'../ui/mail.css'
+	],
+	output: {
+		mime: 'application/json',
+		display: false,
+		fonts: false,
+		medias: true
+	}
 };
 
 exports.mail_body = {

@@ -9,23 +9,17 @@ exports.pdf = Object.assign({}, exports.page, {
 	},
 	stylesheets: [
 		'../ui/pdf.css'
-	]
-});
-
-exports['.pdf'] = {
-	prerender: {
+	],
+	scripts: exports.page.scripts.concat([
+		'../ui/pdf.js'
+	]),
+	output: {
 		display: true,
 		fonts: true,
-		medias: true
-	},
-	print: {
-		paper: 'iso_a4',
-		margins: '0mm'
-	},
-	scripts: [
-		'../ui/pdf.js'
-	]
-};
+		medias: true,
+		pdf: true
+	}
+});
 
 exports.sitepdf = {
 	title: "PDF",

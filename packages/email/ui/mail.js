@@ -27,11 +27,14 @@ Page.serialize = function() {
 	absolut('img', 'src');
 	var md = (new window.Europa()).convert(doc.documentElement);
 	return window.inlineresources.loadAndInlineCssLinks(doc, {}).then(function(errors) {
-		return JSON.stringify({
-			errors,
-			title: doc.title,
-			text: md,
-			html: '<!DOCTYPE html>\n' + window.Juice(doc.documentElement.outerHTML)
-		});
+		return {
+			mime: "application/json",
+			body: JSON.stringify({
+				errors,
+				title: doc.title,
+				text: md,
+				html: '<!DOCTYPE html>\n' + window.Juice(doc.documentElement.outerHTML)
+			})
+		};
 	});
 };
