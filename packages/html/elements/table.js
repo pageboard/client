@@ -137,6 +137,20 @@ exports.table_cell = {
 			description: 'Use a link inside a selectable cell to make the hit box the entire cell area',
 			type: 'boolean',
 			default: false
+		},
+		rowspan: {
+			title: 'Row span',
+			type: 'integer',
+			minimum: 0,
+			maximum: 65534,
+			default: 1
+		},
+		colspan: {
+			title: 'Column span',
+			type: 'integer',
+			minimum: 1,
+			maximum: 1000,
+			default: 1
 		}
 	},
 	inplace: true,
@@ -149,7 +163,7 @@ exports.table_cell = {
 		if (dom.matches('.selectable')) d.selectable = true;
 		return d;
 	},
-	html: '<td class="[align|post: aligned] [selectable|?]"></td>'
+	html: '<td class="[align|post: aligned] [selectable|?]" rowspan="[rowspan]" colspan="[colspan]"></td>'
 };
 
 exports.table_head_cell = {
@@ -165,11 +179,25 @@ exports.table_head_cell = {
 			default: 0,
 			minimum: 0,
 			maximum: 16
+		},
+		rowspan: {
+			title: 'Row span',
+			type: 'integer',
+			minimum: 0,
+			maximum: 65534,
+			default: 1
+		},
+		colspan: {
+			title: 'Column span',
+			type: 'integer',
+			minimum: 1,
+			maximum: 1000,
+			default: 1
 		}
 	},
 	contents: "block+",
 	tag: 'th',
 	inplace: true,
-	html: '<th class="[align|post: aligned] [width|num: wide]"></th>'
+	html: '<th class="[align|post: aligned] [width|num: wide]" rowspan="[rowspan]" colspan="[colspan]"></th>'
 };
 
