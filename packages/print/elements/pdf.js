@@ -7,9 +7,9 @@ exports.pdf = Object.assign({}, exports.page, {
 		id: 'body',
 		nodes: 'block+'
 	},
-	stylesheets: [
+	stylesheets: exports.page.stylesheets.slice(0, 2).concat([
 		'../ui/pdf.css'
-	],
+	]),
 	scripts: exports.page.scripts.concat([
 		'../ui/pdf.js'
 	]),
