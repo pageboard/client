@@ -89,7 +89,7 @@
 	[block-type="portfolio"] > [data-scale-height="2"] {
 		grid-row-end: span 2;
 	}
-	
+
 	[data-shape] > [data-scale-width="2"][data-scale-height="1"]::after {
 		padding-bottom:50%;
 	}
