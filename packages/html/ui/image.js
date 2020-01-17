@@ -68,6 +68,8 @@ class HTMLElementImage extends HTMLCustomElement {
 			var meta = state.scope.$hrefs && state.scope.$hrefs[this.options.src] || {};
 			w = meta.width;
 			h = meta.height;
+			if (w) img.setAttribute('width', w);
+			if (h) img.setAttribute('height', h);
 		}
 		/* end */
 		var loc = Page.parse(this.options.src);
