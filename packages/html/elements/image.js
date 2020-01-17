@@ -180,7 +180,7 @@ exports.image = {
 			obj.width = Math.round(meta.width * wf / 100);
 			obj.height = Math.round(meta.height * wh / 100);
 			obj.loading = "lazy";
-		} else if (d.url) {
+		} else if (d.url && d.url.startsWith('/')) {
 			console.warn("image has no meta", d.url);
 		}
 		obj.url = Page.format(loc);
