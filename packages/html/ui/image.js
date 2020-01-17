@@ -65,7 +65,7 @@ class HTMLElementImage extends HTMLCustomElement {
 		var fit = this.fit;
 		/* workaround until templates blocks are merged on patch */
 		if (isNaN(w) && isNaN(h)) {
-			var meta = state.scope.$href && state.scope.$hrefs[this.options.src] || {};
+			var meta = state.scope.$hrefs && state.scope.$hrefs[this.options.src] || {};
 			w = meta.width;
 			h = meta.height;
 		}
