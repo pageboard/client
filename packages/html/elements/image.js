@@ -121,8 +121,9 @@ exports.image = {
 	group: "block media",
 	tag: 'element-image',
 	buildLoc: function(url, d) {
-		if (!url) return {
-			pathname: "",
+		// this subtly let unmerged expressions go through
+		if (!url || !url.startsWith('/')) return {
+			pathname: url,
 			query: {}
 		};
 		var loc = Page.parse(url);

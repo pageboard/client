@@ -58,11 +58,18 @@ class HTMLElementImage extends HTMLCustomElement {
 		img.setAttribute('height', this.getAttribute('height'));
 		if (!this.currentSrc) this.placeholder();
 	}
-	reveal() {
+	reveal(state) {
 		var img = this.firstElementChild;
 		var w = parseInt(this.getAttribute('width'));
 		var h = parseInt(this.getAttribute('height'));
 		var fit = this.fit;
+		/* workaround until templates blocks are merged on patch */
+		if (isNaN(w) && isNaN(h)) {
+			var meta = state.scope.$href && state.scope.$hrefs[this.options.src] || {};
+			w = meta.width;
+			h = meta.height;
+		}
+		/* end */
 		var loc = Page.parse(this.options.src);
 		delete loc.query.q;
 		var rz = 0;
