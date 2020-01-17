@@ -90,13 +90,9 @@ exports.schema = function(val, what, spath) {
 				return item.const === val; // null !== undefined
 			});
 			if (prop != null) schema = prop;
-		} else {
-			// pointless to return a schema piece when dealing with a value
-			spath = null;
 		}
 	}
-	if (spath == null) return val;
-	var sval = what.expr.get(schema, spath);
+	var sval = spath ? what.expr.get(schema, spath) : schema;
 	if (sval === undefined) {
 		console.warn("Cannot find path in schema", schema, spath);
 		sval = null;
