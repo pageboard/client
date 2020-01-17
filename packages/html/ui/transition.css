@@ -52,7 +52,8 @@ html.transition > body {
 	overflow:auto;
 	height:100%;
 }
-html.transition > body + body[data-transition-open],
+
+html.transition > body + body,
 html.transition > body[data-transition-close|="tr"]:first-of-type,
 html.transition > body[data-transition-close] + body {
 	position:absolute;
@@ -64,7 +65,12 @@ html.transition > body[data-transition-close] + body {
 }
 
 /* opening transitions */
+html.transition > body + body {
+	display:none;
+}
+
 html.transition > body + body[data-transition-open] {
+	display:block;
 	z-index:1;
 }
 
