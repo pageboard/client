@@ -96,7 +96,7 @@ class HTMLElementImage extends HTMLCustomElement {
 			}
 			if (zoom) {
 				if (zoom < rz) zoom = rz;
-				var zstep = zoom > 15 ? 10 : 5;
+				var zstep = 5;
 				zoom = Math.ceil(zoom / zstep) * zstep;
 				loc.query.rs = "z-" + zoom;
 			}
