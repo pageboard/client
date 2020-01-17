@@ -61,26 +61,6 @@ Page.setup(function(state) {
 });
 
 Page.setup(function(state) {
-	var scroll = state.data.$scroll;
-	if (scroll.left || scroll.top) return;
-	var ref = state.referrer;
-	if (state.hash || !Page.sameDomain(ref, state) || Page.samePathname(ref, state)) {
-		return;
-	}
-	var list = document.body.querySelectorAll(`a[href="${ref.pathname}"]`);
-	var anchor = Array.from(list).filter((item) => {
-		return item.closest('[block-type="nav"],nav') == null;
-	}).shift();
-	if (!anchor) return;
-	var parent = anchor.parentNode.closest('[block-type]');
-	if (!parent) return;
-	state.scroll({
-		node: parent
-	});
-});
-
-
-Page.setup(function(state) {
 	Page.connect({
 		handleScroll: state.debounce(function(e, state) {
 			if (state.transition) return;
