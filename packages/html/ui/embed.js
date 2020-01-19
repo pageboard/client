@@ -23,6 +23,7 @@ class HTMLElementEmbed extends HTMLCustomElement {
 				return;
 			}
 			if (src == this.currentSrc) return;
+			this.classList.remove('error');
 			this.currentSrc = src;
 			if (!this.iframe) {
 				this.innerHTML = `<iframe width="100%" height="100%" frameborder="0" scrolling="no" allow="autoplay; fullscreen; accelerometer; gyroscope"></iframe>`;
