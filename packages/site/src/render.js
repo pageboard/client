@@ -28,6 +28,7 @@ Node.prototype.fuse = function(obj, scope) {
 	return matchdom(this, obj, scope.$filters, {data: scope});
 };
 String.prototype.fuse = function(obj, scope) {
+	if (obj == null && scope == null) return reFuse.test(this.toString());
 	return matchdom(this.toString(), obj, scope ? scope.$filters : null, {data: scope});
 };
 
@@ -89,7 +90,7 @@ function install(el, scope) {
 	try {
 		if (el.html != null) {
 			el.dom = scope.$doc.dom(el.html);
-			el.fusable = reFuse.test(el.html);
+			el.fusable = el.html.fuse();
 		} else {
 			el.fusable = true;
 		}
