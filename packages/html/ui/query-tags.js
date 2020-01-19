@@ -15,10 +15,10 @@ class HTMLElementQueryTags extends HTMLCustomElement {
 		var query = state.query;
 		var labels = this.querySelector('.labels');
 		if (!labels) return;
-		labels.textContent = '';
 		var field, label;
 		// must be called after query_form's patch
 		state.finish(() => {
+			labels.textContent = '';
 			for (var name in query) {
 				HTMLElementQueryTags.find(name, query[name]).forEach((control) => {
 					if (control.type == "hidden") return;
