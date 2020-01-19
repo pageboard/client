@@ -2,6 +2,7 @@ class HTMLElementImage extends HTMLCustomElement {
 	static get defaults() {
 		return {
 			src: null,
+			crop: null
 		};
 	}
 	findClass(list) {
@@ -25,10 +26,24 @@ class HTMLElementImage extends HTMLCustomElement {
 			if (val) this.classList.add(val);
 		}, this);
 	}
-	get zoom() {
-		var z = parseFloat(this.getAttribute('zoom'));
+	get crop() {
+		var [x, y, w, h, z] = (this.dataset.crop || ";;;;").split(";").map((x) => parseFloat(x));
+		if (isNaN(x)) x = 50;
+		if (isNaN(y)) y = 50;
+		if (isNaN(w)) w = 100;
+		if (isNaN(h)) h = 100;
 		if (isNaN(z)) z = 100;
-		return z;
+		return {x, y, w, h, z};
+	}
+	set crop({x, y, w, h, z}) {
+		this.dataset.crop = [x, y, w, h, z].join(';');
+	}
+	get image() {
+		var img = this.firstElementChild;
+		if (!img || !img.matches('img')) {
+			img = this.insertBefore(this.ownerDocument.createElement('img'), this.firstChild);
+		}
+		return img;
 	}
 
 	fix(img) {
@@ -47,39 +62,46 @@ class HTMLElementImage extends HTMLCustomElement {
 			}
 		}
 	}
-	patch() {
-		var img = this.firstElementChild;
-		if (!img || !img.matches('img')) {
-			img = this.insertBefore(this.ownerDocument.createElement('img'), this.firstChild);
-		}
+	patch(state) {
 		this.classList.remove('error', 'loading');
-		img.setAttribute('width', this.getAttribute('width'));
-		img.setAttribute('height', this.getAttribute('height'));
+		var loc = Page.parse(this.options.src);
+		var meta = state.scope.$hrefs && state.scope.$hrefs[loc.pathname] || {};
+		if (!meta || !meta.width || !meta.height) return;
+		var crop = this.crop;
+		this.dataset.width = Math.round(meta.width * crop.z / 100 * crop.w / 100);
+		this.dataset.height = Math.round(meta.height * crop.z / 100 * crop.h / 100);
 		if (!this.currentSrc) this.placeholder();
 	}
 	reveal(state) {
-		var img = this.firstElementChild;
-		var w = parseInt(this.getAttribute('width'));
-		var h = parseInt(this.getAttribute('height'));
-		var fit = this.fit;
-		/* workaround until templates blocks are merged on patch */
-		if (isNaN(w) && isNaN(h)) {
-			var meta = state.scope.$hrefs && state.scope.$hrefs[this.options.src] || {};
-			w = meta.width;
-			h = meta.height;
-			if (w) img.setAttribute('width', w);
-			if (h) img.setAttribute('height', h);
-		}
-		/* end */
-		var loc = Page.parse(this.options.src);
-		delete loc.query.q;
-		var rz = 0;
-		if (loc.query.rs) {
-			rz = parseFloat(loc.query.rs.split("-")[1]);
-			if (isNaN(rz)) rz = 0;
-		}
+		var img = this.image;
+		var w = parseInt(this.dataset.width);
+		var h = parseInt(this.dataset.height);
 
-		if (!isNaN(w) && !isNaN(h)) {
+		var fit = this.fit;
+
+		var loc = Page.parse(this.options.src);
+
+		if (loc.hostname && loc.hostname != document.location.hostname) {
+			loc = {
+				pathname: "/.api/image",
+				query: {
+					url: this.options.src
+				}
+			};
+		}
+		var r = this.crop;
+		if (r.x != 50 || r.y != 50 || r.w != 100 || r.h != 100) {
+			if (Math.round((r.x - r.w / 2)*100) < 0 || Math.round((r.x + r.w / 2)*100) > 10000) {
+				r.w = 2 * Math.min(r.x, 100 - r.x);
+			}
+			if (Math.round((r.y - r.h / 2)*100) < 0 || Math.round((r.y + r.h / 2)*100) > 10000) {
+				r.h = 2 * Math.min(r.y, 100 - r.y);
+			}
+			loc.query.ex = `x-${r.x}_y-${r.y}_w-${r.w}_h-${r.h}`;
+		}
+		if (r.z != 100 && fit == "none") {
+			loc.query.rs = `z-${r.z}`;
+		} else if (!isNaN(w) && !isNaN(h)) {
 			var zoom;
 			var rect = this.getBoundingClientRect();
 			var rw = rect.width;
@@ -96,7 +118,6 @@ class HTMLElementImage extends HTMLCustomElement {
 				if (zoom > 100) zoom = 100;
 			}
 			if (zoom) {
-				if (zoom < rz) zoom = rz;
 				var zstep = 5;
 				zoom = Math.ceil(zoom / zstep) * zstep;
 				loc.query.rs = "z-" + zoom;
@@ -104,29 +125,67 @@ class HTMLElementImage extends HTMLCustomElement {
 		}
 		var curSrc = Page.format(loc);
 		if (curSrc != this.currentSrc) {
-			this.currentSrc = curSrc;
+			try {
+				this.currentSrc = curSrc;
+			} catch(e) {
+				// pass
+			}
 			this.classList.add('loading');
 			img.setAttribute('src', curSrc);
 		}
 	}
 	captureLoad() {
 		this.classList.remove('loading');
-		this.fix(this.firstElementChild);
+		this.fix(this.image);
 	}
 	captureError() {
+		try {
+			delete this.currentSrc;
+		} catch(e) {
+			// pass
+		}
+		this.classList.remove('loading');
 		this.classList.add('error');
 		this.placeholder();
 	}
 	placeholder() {
-		var img = this.firstElementChild;
-		var w = img.getAttribute('width');
-		var h = img.getAttribute('height');
+		var w = this.dataset.width;
+		var h = this.dataset.height;
 		if (w && h) {
-			img.src = "data:image/svg+xml," + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}"></svg>`);
+			this.image.src = "data:image/svg+xml," + encodeURIComponent(
+				`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}"></svg>`
+			);
 		}
 	}
 }
 
+class HTMLElementInlineImage extends HTMLImageElement {
+	get image() {
+		return this;
+	}
+	captureLoad() {
+		this.removeAttribute('width');
+		this.removeAttribute('height');
+		this.classList.remove('loading');
+		this.fix(this.image);
+	}
+	placeholder() {
+		var w = this.dataset.width;
+		var h = this.dataset.height;
+		if (w && h) {
+			this.width = w;
+			this.height = h;
+		}
+	}
+}
+HTMLElementInlineImage.defaults = HTMLElementImage.defaults;
+['patch', 'reveal', 'captureError', 'crop', 'position', 'fit', 'findClass', 'fix'].forEach(function(name) {
+	Object.defineProperty(
+		HTMLElementInlineImage.prototype,
+		name,
+		Object.getOwnPropertyDescriptor(HTMLElementImage.prototype, name)
+	);
+});
 
 HTMLCustomElement.define('element-image', HTMLElementImage);
-
+HTMLCustomElement.define(`element-img`, HTMLElementInlineImage, 'img');

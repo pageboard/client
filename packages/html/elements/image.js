@@ -120,71 +120,19 @@ exports.image = {
 	},
 	group: "block media",
 	tag: 'element-image',
-	buildLoc: function(url, d) {
-		// this subtly let unmerged expressions go through
-		if (!url || !url.startsWith('/')) return {
-			pathname: url,
-			query: {}
-		};
-		var loc = Page.parse(url);
-		if (loc.hostname && loc.hostname != document.location.hostname) {
-			loc = {
-				pathname: "/.api/image",
-				query: {
-					url: d.url
-				}
-			};
-		}
-		var r = d.crop || {};
-		if (r.x != null && r.y != null && r.width != null && r.height != null &&
-			(r.x != 50 || r.y != 50 || r.width != 100 || r.height != 100)) {
-			if (Math.round((r.x - r.width / 2)*100) < 0 || Math.round((r.x + r.width / 2)*100) > 10000) {
-				r.width = 2 * Math.min(r.x, 100 - r.x);
-			}
-			if (Math.round((r.y - r.height / 2)*100) < 0 || Math.round((r.y + r.height / 2)*100) > 10000) {
-				r.height = 2 * Math.min(r.y, 100 - r.y);
-			}
-			loc.query.ex = `x-${r.x}_y-${r.y}_w-${r.width}_h-${r.height}`;
-		}
-		if (r.zoom != null && r.zoom != 100) {
-			loc.query.rs = `z-${r.zoom}`;
-		}
-		return loc;
-	},
 	contents: {
 		id: 'legend',
 		title: 'legend',
 		nodes: "inline*"
 	},
-	html: `<element-image class="[fit] [position]"
-		data-src="[url]"
-		alt="[src]"
-		width="[width]" height="[height]"
+	html: `<element-image
+		class="[display.fit|or:none] [display.horizontal|or:] [display.vertical|or:]"
+		alt="[alt]"
+		data-src="[url|or:[$element.resources.empty]]"
+		data-crop="[crop.x];[crop.y];[crop.width];[crop.height];[crop.zoom]"
 	>
 		<div block-content="legend"></div>
 	</element-image>`,
-	fuse: function(node, d, scope) {
-		var obj = {
-			alt: d.alt
-		};
-		var loc = this.buildLoc(d.url || this.resources.empty, d);
-		var display = d.display || {};
-		obj.fit = display.fit || "none";
-		obj.position = `${display.horizontal} ${display.vertical}`;
-
-		var meta = (scope.$hrefs || {})[d.url];
-		if (meta && meta.width && meta.height) {
-			var wf = (d.crop || {}).width || 100;
-			var wh = (d.crop || {}).height || 100;
-			obj.width = Math.round(meta.width * wf / 100);
-			obj.height = Math.round(meta.height * wh / 100);
-			obj.loading = "lazy";
-		} else if (d.url && d.url.startsWith('/')) {
-			console.warn("image has no meta", d.url);
-		}
-		obj.url = Page.format(loc);
-		node.fuse(obj, scope);
-	},
 	resources: {
 		empty: '../ui/empty.png'
 	},
@@ -326,7 +274,9 @@ exports.inlineImage = {
 	inline: true,
 	group: "inline",
 	tag: "img",
-	html: `<img src="[src]"
+	html: `<img is="element-img"
+		data-src="[url|or:[$element.resources.empty]]"
+		data-crop="[crop.x];[crop.y];[crop.width];[crop.height];[crop.zoom]"
 		alt="" class="ui inline image
 		[display.avatar|?]
 		[display.rounded|?]
@@ -334,12 +284,6 @@ exports.inlineImage = {
 		[display.spaced|?]
 		[display.floated|pre:floated ]
 		[display.align|post: aligned]" />`,
-	fuse: function(node, d, scope) {
-		var loc = scope.$elements.image.buildLoc(d.url || this.resources.empty, d);
-		node.fuse(Object.assign({
-			src: Page.format(loc)
-		}, d), scope);
-	},
 	resources: {
 		empty: '../ui/empty.png'
 	},

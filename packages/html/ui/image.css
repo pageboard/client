@@ -1,3 +1,13 @@
+img.loading[data-src]::after {
+	content: none;
+}
+img.error::after {
+	width: 10px;
+	height: 10px;
+	margin-top: -5px;
+	margin-left: -5px;
+}
+
 element-image {
 	display:flex;
 	position:relative;
@@ -22,12 +32,6 @@ element-image > img {
 	display:block;
 	flex:0 0 auto;
 	align-self:center; /* not stretch */
-}
-
-@keyframes element-image-spinner {
-	to {
-		transform: rotate(360deg);
-	}
 }
 
 element-image.contain,
@@ -154,4 +158,3 @@ element-image.none.hcenter.bottom {
 element-image.none.hcenter.bottom > img {
 	align-self:flex-end;
 }
-
