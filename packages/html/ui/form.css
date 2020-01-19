@@ -19,8 +19,9 @@ input::selection {
 	color: rgba(0, 0, 0, 0.87);
 }
 
-.ui.checkbox input + label[for] {
-	cursor:pointer;
+label[for] {
+	cursor: pointer !important;
+	user-select: none;
 }
 
 element-select {
@@ -42,3 +43,4 @@ form[data-authfield] button[type="submit"]::before {
 [contenteditable] .ui.form .field.hidden {
 	display: block !important;
 }
+
