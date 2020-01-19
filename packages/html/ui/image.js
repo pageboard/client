@@ -68,8 +68,8 @@ class HTMLElementImage extends HTMLCustomElement {
 		var meta = state.scope.$hrefs && state.scope.$hrefs[loc.pathname] || {};
 		if (!meta || !meta.width || !meta.height) return;
 		var crop = this.crop;
-		this.dataset.width = Math.round(meta.width * crop.z / 100 * crop.w / 100);
-		this.dataset.height = Math.round(meta.height * crop.z / 100 * crop.h / 100);
+		this.dataset.width = meta.width;
+		this.dataset.height = meta.height;
 		if (!this.currentSrc) this.placeholder();
 	}
 	reveal(state) {
@@ -99,6 +99,8 @@ class HTMLElementImage extends HTMLCustomElement {
 			}
 			loc.query.ex = `x-${r.x}_y-${r.y}_w-${r.w}_h-${r.h}`;
 		}
+		w = w * r.w / 100;
+		h = h * r.h / 100;
 		if (r.z != 100 && fit == "none") {
 			loc.query.rs = `z-${r.z}`;
 		} else if (!isNaN(w) && !isNaN(h)) {
@@ -151,7 +153,10 @@ class HTMLElementImage extends HTMLCustomElement {
 	placeholder() {
 		var w = this.dataset.width;
 		var h = this.dataset.height;
+		var r = this.crop;
 		if (w && h) {
+			w = Math.round(w * r.w / 100);
+			h = Math.round(h * r.h / 100);
 			this.image.src = "data:image/svg+xml," + encodeURIComponent(
 				`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}"></svg>`
 			);
@@ -172,7 +177,10 @@ class HTMLElementInlineImage extends HTMLImageElement {
 	placeholder() {
 		var w = this.dataset.width;
 		var h = this.dataset.height;
+		var r = this.crop;
 		if (w && h) {
+			w = Math.round(w * r.w / 100);
+			h = Math.round(h * r.h / 100);
 			this.width = w;
 			this.height = h;
 		}
