@@ -2,7 +2,6 @@ class HTMLElementImage extends HTMLCustomElement {
 	static get defaults() {
 		return {
 			src: null,
-			loading: null
 		};
 	}
 	findClass(list) {

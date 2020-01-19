@@ -25,7 +25,7 @@ exports.embed = {
 		};
 	},
 	tag: 'iframe,element-embed',
-	html: `<element-embed class="ui embed" data-src="[url]" id="[name|id]" data-loading="lazy"></element-embed>`,
+	html: `<element-embed class="ui embed" data-src="[url]" id="[name|id]"></element-embed>`,
 	scripts: [
 		'../ui/storage.js',
 		'../ui/consent.js',

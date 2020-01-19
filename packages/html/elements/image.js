@@ -157,7 +157,6 @@ exports.image = {
 		nodes: "inline*"
 	},
 	html: `<element-image class="[fit] [position]"
-		data-loading="[loading]"
 		data-src="[url]"
 		alt="[src]"
 		width="[width]" height="[height]"

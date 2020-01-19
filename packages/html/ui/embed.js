@@ -2,8 +2,7 @@ class HTMLElementEmbed extends HTMLCustomElement {
 	static get defaults() {
 		return {
 			src: null,
-			hash: null,
-			loading: "lazy"
+			hash: null
 		};
 	}
 	reveal(state) {
