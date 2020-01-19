@@ -141,11 +141,6 @@ class HTMLElementImage extends HTMLCustomElement {
 		this.fix(this.image);
 	}
 	captureError() {
-		try {
-			delete this.currentSrc;
-		} catch(e) {
-			// pass
-		}
 		this.classList.remove('loading');
 		this.classList.add('error');
 		this.placeholder();
