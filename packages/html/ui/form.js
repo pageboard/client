@@ -14,7 +14,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		var query = {};
 		fd.forEach(function(val, key) {
 			if (val == null || val == "") {
-				var cur = this.querySelector(`[name="${key}"]`);
+				var cur = Array.from(this.querySelectorAll(`[name="${key}"]`)).pop();
 				if (cur.required == false && cur.type != "radio") {
 					val = undefined;
 				} else {
@@ -26,7 +26,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 				if (!Array.isArray(old)) {
 					query[key] = [old];
 				}
-				query[key].push(val);
+				if (val !== undefined) query[key].push(val);
 			} else {
 				query[key] = val;
 			}
