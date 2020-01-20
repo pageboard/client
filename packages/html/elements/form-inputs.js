@@ -424,3 +424,26 @@ exports.input_select_option = {
 		if (scope.$write) Pageboard.load.js(this.resources.helper, scope);
 	}
 };
+
+exports.input_array = {
+	title: 'Array',
+	menu: "form",
+	icon: '<b class="icon">...</b>',
+	group: "block",
+	context: 'form//',
+	contents: [{
+		id: 'legend',
+		nodes: 'inline*',
+		title: 'Legend'
+	}, {
+		id: 'inputs',
+		title: 'Inputs',
+		nodes: '(input_text|input_file)+'
+	}],
+	html: `<fieldset>
+		<legend block-content="legend">Legend</legend>
+		<element-input-array block-content="inputs"></element-input-array>
+	</fieldset>`,
+	scripts: ['../ui/input-array.js'],
+	stylesheets: ['../ui/input-array.css']
+};
