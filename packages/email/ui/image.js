@@ -1,4 +1,4 @@
-class HTMLElementMailImage extends HTMLCustomElement {
+class HTMLElementMailImage extends HTMLImageElement {
 	static get defaults() {
 		return {
 			src: null,
@@ -57,10 +57,6 @@ class HTMLElementMailImage extends HTMLCustomElement {
 			var rect = this.getBoundingClientRect();
 			var rw = rect.width;
 			var rh = rect.height;
-			if (rw == 0 && rh == 0) {
-				// don't show
-				return;
-			}
 			if (rw || rh) {
 				if (!rw) rw = rh * w / h;
 				if (!rh) rh = rw * h / w;
