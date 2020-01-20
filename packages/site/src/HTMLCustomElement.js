@@ -2,17 +2,10 @@
 class HTMLCustomElement extends HTMLElement {
 	constructor(...args) {
 		const self = super(...args);
-		self.init();
+		if (self.init) self.init();
 		return self;
 	}
 	init() {}
-	attributeChangedCallback(name, src, dst, ns) {
-		if (src !== dst && this.patch) {
-			if (!Object.hasOwnProperty.call(this.constructor, 'defaults') || this.options) {
-				Page.patch(this);
-			}
-		}
-	}
 }
 
 HTMLCustomElement.define = function(name, cla, is) {
@@ -20,7 +13,17 @@ HTMLCustomElement.define = function(name, cla, is) {
 
 	var preset = window.customElements.get(name);
 	if (preset) return cla;
-
+	
+	Object.defineProperty(cla.prototype, 'attributeChangedCallback', {
+		configurable: true,
+		value: function(name, src, dst, ns) {
+			if (src !== dst && this.patch) {
+				if (!Object.hasOwnProperty.call(this.constructor, 'defaults') || this.options) {
+					Page.patch(this);
+				}
+			}
+		}
+	});
 	Object.defineProperty(cla.prototype, 'connectedCallback', {
 		configurable: true,
 		value: function() {
