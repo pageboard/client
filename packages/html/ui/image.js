@@ -67,7 +67,6 @@ class HTMLElementImage extends HTMLCustomElement {
 		var loc = Page.parse(this.options.src);
 		var meta = state.scope.$hrefs && state.scope.$hrefs[loc.pathname] || {};
 		if (!meta || !meta.width || !meta.height) return;
-		var crop = this.crop;
 		this.dataset.width = meta.width;
 		this.dataset.height = meta.height;
 		if (!this.currentSrc) this.placeholder();
