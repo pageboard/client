@@ -26,6 +26,7 @@ Page.serialize = function() {
 	absolut('a', 'href');
 	Array.from(doc.querySelectorAll('img[is]')).forEach(function(node) {
 		var img = document.createElement('img');
+		img.srcset = node.srcset;
 		img.src = node.src;
 		img.alt = node.alt;
 		node.parentNode.replaceChild(img, node);
