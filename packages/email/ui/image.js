@@ -49,22 +49,16 @@ class HTMLElementMailImage extends HTMLImageElement {
 		}
 		w = w * r.w / 100;
 
-		var srcset = [];
+		var wz = r.z;
+		var wide = 580;
+		if (w > wide) {
+			wz = Math.ceil(100 * wide / w);
+		}
+		loc.query.rs = "z-" + wz;
 		var dloc = document.location;
 		var base = dloc.protocol + '//' + dloc.host;
-		[128, 256, 512, 1024].some((wide, i) => {
-			if (wide > w && i > 0) return true; // stop there
-			var wz = r.z;
-			if (wide < w) wz = Math.ceil(100 * wide / w);
-			loc.query.rs = "z-" + wz;
-			var url = (new URL(Page.format(loc), base)).href;
-			srcset.push({
-				src: `${url} ${wide}w`,
-				url: url
-			});
-		});
-		if (srcset.length > 1) img.setAttribute('srcset', srcset.map((x) => x.src).join(',\n'));
-		img.setAttribute('src', srcset.slice(0, 3).pop().url);
+		var url = (new URL(Page.format(loc), base)).href;
+		img.setAttribute('src', url);
 	}
 }
 

@@ -71,10 +71,11 @@ exports.mail_image = {
 		}
 	},
 	group: "mail_block",
-	html: `<img is="element-mail-img"
+	html: `<center><img is="element-mail-img"
+		class="float-center" align="center"
 		data-src="[url|or:[$element.resources.empty]]"
 		data-crop="[crop.x];[crop.y];[crop.width];[crop.height];[crop.zoom]"
-		alt="[alt]" />`,
+		alt="[alt]" /></center>`,
 	resources: {
 		empty: '../ui/empty.png'
 	},
