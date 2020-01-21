@@ -50,27 +50,21 @@ class HTMLElementMailImage extends HTMLImageElement {
 		}
 		w = w * r.w / 100;
 		h = h * r.h / 100;
-		if (r.z != 100) {
-			loc.query.rs = `z-${r.z}`;
-		} else if (!isNaN(w) && !isNaN(h)) {
-			var zoom;
-			var rect = this.getBoundingClientRect();
-			var rw = rect.width;
-			var rh = rect.height;
-			if (rw || rh) {
-				if (!rw) rw = rh * w / h;
-				if (!rh) rh = rw * h / w;
-				zoom = Math.ceil(Math.max(rw / w, rh / h) * 100 * (window.devicePixelRatio || 1));
-				// svg need to be resized to scale to its intrinsic dimension
-				if (zoom > 100) zoom = 100;
-			}
-			if (zoom) {
-				var zstep = 5;
-				zoom = Math.ceil(zoom / zstep) * zstep;
-				loc.query.rs = "z-" + zoom;
-			}
-		}
-		img.setAttribute('src', Page.format(loc));
+
+		var srcset = [];
+		[128, 256, 512, 1024].some((wide, i) => {
+			if (wide > w && i > 0) return true; // stop there
+			var wz = r.z;
+			if (wide < w) wz = Math.ceil(100 * wide / w);
+			loc.query.rs = "z-" + wz;
+			var url = Page.format(loc);
+			srcset.push({
+				src: `${url} ${wide}w`,
+				url: url
+			});
+		});
+		if (srcset.length > 1) img.setAttribute('srcset', srcset.map((x) => x.src).join(',\n'));
+		img.setAttribute('src', srcset.slice(0, 3).pop().url);
 	}
 }
 
