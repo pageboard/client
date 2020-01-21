@@ -25,13 +25,13 @@ Page.serialize = function() {
 	}
 	absolut('a', 'href');
 	Array.from(doc.querySelectorAll('img[is]')).forEach(function(node) {
-		var img = document.createElement('img');
+		var img = doc.createElement('img');
 		img.srcset = node.srcset;
 		img.src = node.src;
 		img.alt = node.alt;
 		node.parentNode.replaceChild(img, node);
 	});
-	absolut('img', 'src');
+
 	var md = (new window.Europa()).convert(doc.documentElement);
 	return window.inlineresources.loadAndInlineCssLinks(doc, {}).then(function(errors) {
 		return {
