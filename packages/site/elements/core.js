@@ -7,9 +7,16 @@ exports.user = {
 	$lock: true,
 	properties: {
 		email: {
+			title: 'Email',
 			type: 'string',
 			format: 'email',
 			transform: ['trim', 'toLowerCase']
+		},
+		name: {
+			title: 'Name',
+			type: 'string',
+			nullable: true,
+			format: 'singleline'
 		}
 	}
 };
