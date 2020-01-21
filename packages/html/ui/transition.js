@@ -84,7 +84,7 @@ Page.Transition = class {
 					this.root.classList.add('transitioning');
 				});
 				this.safe = setTimeout(() => {
-					console.warn("Transition timeout");
+					console.warn("Transition timeout from", this.from.dataset.transitionClose, "to", this.to.dataset.transitionOpen);
 					this.stop();
 				}, 4000);
 			}
