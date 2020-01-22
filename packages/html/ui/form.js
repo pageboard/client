@@ -9,7 +9,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			state.vars[name] = true;
 		});
 	}
-	read() {
+	read(withDefaults) {
 		var fd = new FormData(this);
 		var query = {};
 		fd.forEach(function(val, key) {
@@ -36,10 +36,14 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			if (node.type == "checkbox") {
 				if (node.name && node.value == "true") {
 					if (query[node.name] === undefined) query[node.name] = node.checked;
-					if (query[node.name] == node.defaultChecked) delete query[node.name];
+					if (!withDefaults && query[node.name] == node.defaultChecked) {
+						delete query[node.name];
+					}
 				}
 			} else {
-				if (query[node.name] == node.defaultValue) delete query[node.name];
+				if (!withDefaults && query[node.name] == node.defaultValue) {
+					delete query[node.name];
+				}
 			}
 			if (query[node.name] === undefined) {
 				query[node.name] = undefined;
@@ -118,7 +122,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		this.ignoreInputChange = false;
 		var form = this;
 		var loc = Page.parse(form.action);
-		Object.assign(loc.query, form.read());
+		Object.assign(loc.query, form.read(false));
 		if (Page.samePathname(loc, state)) {
 			loc.query = Object.assign({}, state.query, loc.query);
 		}
@@ -144,7 +148,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			return input.closest('element-input-file').upload();
 		})).then(function() {
 			data.$query = state.query;
-			data.$request = form.read();
+			data.$request = form.read(true);
 			form.disable();
 			return Pageboard.fetch(form.method, Page.format({
 				pathname: form.action,
