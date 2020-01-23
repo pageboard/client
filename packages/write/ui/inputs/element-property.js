@@ -27,7 +27,14 @@ ElementProperty.prototype.init = function(block) {
 	var formBlock = Pageboard.editor.blocks.get(formId);
 	if (!formBlock) throw new Error("Cannot find form block for " + formId);
 	this.formBlock = formBlock;
-	var type = (formBlock.expr || {}).type || (formBlock.data || {}).type;
+	var type = formBlock.data || {};
+	if (formBlock.type == "query_form") {
+		type = type.type;
+	} else if (formBlock.type == "api_form") {
+		type = ((type.action || {}).parameters || {}).type;
+	} else {
+		type = null;
+	}
 	if (!type) throw new Error("Please select a type to bind the form to");
 	var el = Pageboard.editor.element(type);
 	if (!el) throw new Error("Cannot map type to element " + type);
