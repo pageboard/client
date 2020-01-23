@@ -164,6 +164,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			if (statusClass) form.classList.add(statusClass);
 			form.enable();
 			if (res.status < 200 || res.status >= 400) return;
+			form.reset();
 			var redirect = form.getAttribute('redirection');
 			if (!redirect) return;
 			data.$response = res;
