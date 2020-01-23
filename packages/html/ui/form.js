@@ -166,7 +166,10 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			if (res.status < 200 || res.status >= 400) return;
 			form.reset();
 			var redirect = form.getAttribute('redirection');
-			if (!redirect) return;
+			if (!redirect) {
+				if (res.granted) redirect = Page.format(state);
+				else return;
+			}
 			data.$response = res;
 			data.$status = res.status;
 			var loc = Page.parse(redirect.fuse(data, state.scope));
