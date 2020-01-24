@@ -273,6 +273,8 @@ function propToMeta(schema) {
 		copy.type = 'object';
 		if (schema.properties) copy.properties = schema.properties;
 		else copy.description = 'object';
+	} else if (schema.type == "array") {
+		return schema;
 	} else if (schema.type || schema.anyOf || schema.oneOf) {
 		if (schema.type) {
 			hint = schema.type;
