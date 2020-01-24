@@ -56,6 +56,8 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		return query;
 	}
 	fill(values) {
+		// cheap flattening
+		values = Page.parse(Page.format({query:values})).query;
 		var vars = [];
 		var elem = null, name, val;
 		for (var i = 0; i < this.elements.length; i++) {
