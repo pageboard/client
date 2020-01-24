@@ -282,8 +282,14 @@ Page.ready(function(state) {
 		if (action == "toggle") {
 			action = val ? "enable" : "disable";
 		}
-		if (action == "enable") form.enable();
-		else if (action == "disable") form.disable();
+		if (action == "enable") {
+			form.enable();
+		} else if (action == "disable") {
+			form.disable();
+		} else if (action == "fill") {
+			if (val == null) form.reset();
+			else if (typeof val == "object" && val.id) form.fill(val.data);
+		}
 		return val;
 	};
 });
