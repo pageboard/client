@@ -285,12 +285,12 @@ Page.ready(function(state) {
 			action = val ? "enable" : "disable";
 		}
 		if (action == "enable") {
-			form.enable();
+			HTMLCustomFormElement.prototype.enable.call(form);
 		} else if (action == "disable") {
-			form.disable();
+			HTMLCustomFormElement.prototype.disable.call(form);
 		} else if (action == "fill") {
 			if (val == null) form.reset();
-			else if (typeof val == "object" && val.id) form.fill(val.data);
+			else if (typeof val == "object" && val.id) HTMLCustomFormElement.prototype.fill.call(form, val.data);
 		}
 		return val;
 	};
