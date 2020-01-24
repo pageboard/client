@@ -35,6 +35,12 @@
 	content: '!';
 }
 
+.error[data-src],
+.waiting[data-src],
+.denied[data-src] {
+	outline:#aaa solid 1px;
+}
+
 @keyframes dots {
     0% {
       content: '';
