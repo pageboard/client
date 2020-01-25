@@ -166,22 +166,24 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			if (statusClass) form.classList.add(statusClass);
 			form.enable();
 			if (res.status < 200 || res.status >= 400) return;
-			form.reset();
+			data.$response = res;
+			data.$status = res.status;
 			var redirect = form.getAttribute('redirection');
+			if (redirect) redirect = redirect.fuse(data, state.scope);
 			if (!redirect) {
 				if (res.granted) redirect = Page.format(state);
 				else return;
 			}
-			data.$response = res;
-			data.$status = res.status;
-			var loc = Page.parse(redirect.fuse(data, state.scope));
-			loc.data = state.data;
+			form.reset();
+			var loc = Page.parse(redirect);
 			var vary = false;
 			if (Page.samePathname(loc, state)) {
 				if (res.granted) {
 					vary = true;
 				} else {
 					vary = "patch";
+					// keep current query
+					// redirect can use |query|unset:name filter to set a query param to undefined
 					loc.query = Object.assign({}, state.query, loc.query);
 				}
 				state.data.$vary = vary;
