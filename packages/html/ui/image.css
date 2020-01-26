@@ -2,10 +2,7 @@ img.loading[data-src]::after {
 	content: none;
 }
 img.error::after {
-	width: 10px;
-	height: 10px;
-	margin-top: -5px;
-	margin-left: -5px;
+	width: 100%;
 }
 
 element-image {

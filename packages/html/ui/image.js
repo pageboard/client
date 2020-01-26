@@ -151,6 +151,10 @@ class HTMLElementImage extends HTMLCustomElement {
 		if (w && h) {
 			w = Math.round(w * r.w / 100);
 			h = Math.round(h * r.h / 100);
+			if (r.z != 100 && this.fit == "none") {
+				w = Math.round(w * r.z / 100);
+				h = Math.round(h * r.z / 100);
+			}
 			this.image.src = "data:image/svg+xml," + encodeURIComponent(
 				`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}"></svg>`
 			);
@@ -175,6 +179,10 @@ class HTMLElementInlineImage extends HTMLImageElement {
 		if (w && h) {
 			w = Math.round(w * r.w / 100);
 			h = Math.round(h * r.h / 100);
+			if (r.z != 100 && this.fit == "none") {
+				w = Math.round(w * r.z / 100);
+				h = Math.round(h * r.z / 100);
+			}
 			this.width = w;
 			this.height = h;
 		}
