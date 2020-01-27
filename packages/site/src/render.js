@@ -104,6 +104,7 @@ function install(el, scope) {
 
 	if (!el.dom) return;
 	el.render = function(block, bscope) {
+		var el = this;
 		if (!block) block = {};
 		var rscope = Object.assign({}, scope, bscope, {
 			$element: el
