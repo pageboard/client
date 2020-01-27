@@ -83,7 +83,7 @@ Pageboard.Controls.Mode = class Mode {
 				delete Pageboard.backupElements;
 			}
 			document.body.dataset.mode = com;
-			state.replace(state, {vary: true});
+			state.reload(true);
 		});
 	}
 };
