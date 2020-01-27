@@ -1,14 +1,14 @@
 Pageboard.Controls.Mode = class Mode {
 	constructor(editor, node) {
 		if (!Mode.singleton) Mode.singleton = this;
-		Mode.singleton.reset(editor, node.parentNode);
+		Mode.singleton.reset(editor, node);
 	}
 	reset(editor, node) {
 		this.editor = editor;
 		this.win = editor.root.defaultView;
 		this.html = this.win.document.documentElement;
 		if (this.node) this.node.removeEventListener('click', this);
-		this.node = node;
+		this.node = node.parentNode;
 		this.node.addEventListener('click', this);
 	}
 	handleEvent(e) {
