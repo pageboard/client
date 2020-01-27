@@ -26,6 +26,7 @@ Pageboard.Controls.Mode = class Mode {
 			});
 			return;
 		}
+		if (["code", "write", "read"].includes(com) == false) return;
 		this.win.Page.patch((state) => {
 			var mode = document.body.dataset.mode;
 			if (mode != "read") {
