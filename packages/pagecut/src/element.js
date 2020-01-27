@@ -21,7 +21,7 @@ module.exports = class Element {
 		return el;
 	}
 	get leaf() {
-		return this.contents.list.length == 0;
+		return this.contents.size == 0;
 	}
 };
 
@@ -31,7 +31,9 @@ class Contents {
 		else if (typeof list == "string") list = [{nodes: list}];
 		else if (!Array.isArray(list)) list = [list];
 		this.list = list;
-		if (this.list.length == 1 && this.list[0].id == null) this.unnamed = true;
+		this.size = this.list.length;
+		if (this.size == 1 && this.list[0].id == null) this.unnamed = true;
+		this.leaf = this.size == 0;
 	}
 	get(block, name) {
 		if (name == null && !this.unnamed) throw new Error("Missing name parameter");
@@ -69,10 +71,15 @@ class Contents {
 		});
 	}
 	get firstId() {
-		return this.list.length == 1 ? this.list[0].id : null;
+		return this.size == 1 ? this.list[0].id : null;
 	}
 	normalize(block) {
 		var content = block.content;
+		if (!content && this.size) {
+			block.content = {};
+		} else if (content && !this.size) {
+			delete block.content;
+		}
 		if (content && this.unnamed) {
 			var name = Object.keys(content)[0];
 			if (name) {
