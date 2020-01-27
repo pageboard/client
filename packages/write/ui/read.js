@@ -12,14 +12,12 @@ Page.patch(function(state) {
 		var obj = typeof url == "string" ? Page.parse(url) : url;
 		if (!obj.query) obj.query = {};
 		obj.query.develop = this.query.develop;
-		if (Page.samePathname(this, Page.format(obj))) obj.data = this.data;
 		return Object.getPrototypeOf(this).push.call(this, obj, opts);
 	};
 	state.replace = function(url, opts) {
 		var obj = typeof url == "string" ? Page.parse(url) : url;
 		if (!obj.query) obj.query = {};
 		obj.query.develop = this.query.develop;
-		if (Page.samePathname(this, Page.format(obj))) obj.data = this.data;
 		return Object.getPrototypeOf(this).replace.call(this, obj, opts);
 	};
 });
