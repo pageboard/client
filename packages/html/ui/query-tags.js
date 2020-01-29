@@ -26,16 +26,25 @@ class HTMLElementQueryTags extends HTMLCustomElement {
 					if (!field) return;
 					label = field.querySelector('label');
 					if (!label) return;
-					if (control.value == null || control.value == "" || !label.innerText) return;
-					var prev = labels.querySelector(`[data-name="${name}"][data-value="${control.value}"]`);
+					var val = control.value;
+					if (val == null || val == "" || !label.innerText) return;
+					var prev = labels.querySelector(`[data-name="${name}"][data-value="${val}"]`);
 					if (prev) return;
 					var prefix = '';
 					var group = field.closest('.grouped.fields');
 					if (group && group.firstElementChild.matches('label')) {
 						prefix = group.firstElementChild.textContent + ' ';
 					}
-					var suffix = '';
-					if (control.type == "range") suffix = ' : ' + control.value;
+					var suffix = '';					
+					if (control.type == "range") {
+						val = control.rangeValue;
+						if (val.length == 2) {
+							prefix = val[0] + ' ⩽ ';
+							suffix = ' ⩽ ' + val[1];
+						} else {
+							suffix = ' = ' + val[0];
+						}
+					}
 					labels.insertAdjacentHTML('beforeEnd', `<a class="ui simple mini compact labeled icon button" data-name="${name}" data-value="${control.value}">
 						<i class="delete icon"></i>
 						${prefix}${label.innerText}${suffix}

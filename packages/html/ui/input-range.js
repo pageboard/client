@@ -1,52 +1,83 @@
-class HTMLElementInputRange extends HTMLCustomElement {
-	// changing only one value, connected to the minimum value
+class HTMLElementInputRange extends HTMLInputElement {
+	static parse(x) {
+		return (x || '').split('~').map((n) => parseFloat(n));
+	}
+	static get defaults() {
+		return {
+			min: (x) => parseFloat(x) || 0,
+			max: (x) => parseFloat(x) || 100,
+			value: (x) => this.parse(x),
+			step: (x) => parseFloat(x) || 1,
+			multiple: false
+		};
+	}
+	get helper() {
+		var node = this.nextElementSibling;
+		if (!node) {
+			node = this.ownerDocument.createElement('div');
+			this.after(node);
+		}
+		return node;
+	}
+	get type() {
+		return 'range';
+	}
+	get rangeValue() {
+		return this.options.value;
+	}
+	rangeFill(str) {
+		var val = this.rangeNorm(Object.assign({}, this.options, {
+			value: this.constructor.parse(str)
+		}));
+		if (this.helper.noUiSlider) {
+			this.helper.noUiSlider.set(val);
+		}
+		if (this.options) this.options.value = val;
+		str = val.join('~');
+		this.value = str;
+	}
+	rangeReset() {
+		this.rangeFill(this.defaultValue);
+	}
+	patch(state) {
+		if (this.helper.noUiSlider) {
+			this.helper.noUiSlider.set(this.rangeNorm(this.options));
+		}
+	}
+	rangeNorm(opts) {
+		var [start, stop] = opts.value;
+		if (start == null || isNaN(start)) start = opts.min;
+		if (opts.multiple && (stop == null || isNaN(stop))) stop = opts.max;
+		return opts.multiple ? [start, stop] : [start];
+	}
 	setup() {
-		var node = this.querySelector('input');
-		if (!node) return;
-		var minimum = parseFloat(node.getAttribute('min'));
-		var start = parseFloat(node.value || node.dataset.default);
-		var step = parseFloat(node.getAttribute('step'));
-		var maximum = parseFloat(node.getAttribute('max'));
-		window.noUiSlider.create(this, {
-			start: [minimum, start],
-			step: step,
+		var opts = this.options;
+		window.noUiSlider.create(this.helper, {
+			start: this.rangeNorm(opts),
+			step: opts.step,
 			range: {
-				min: [minimum],
-				max: [maximum]
+				min: opts.min,
+				max: opts.max
 			},
 			connect: true
-		}).on('change', function(values) {
-			var val = values[1];
-			node.rangeFill(val);
+		}).on('change', (values) => {
+			var isInt = parseInt(opts.step) == opts.step;
+			this.rangeFill(values.map((n) => {
+				if (isInt) n = parseInt(n);
+				return n;
+			}).join('~'));
 			var e = document.createEvent('HTMLEvents');
 			e.initEvent('change', true, true);
-			node.dispatchEvent(e);
+			this.dispatchEvent(e);
 		});
-		this.querySelector('.noUi-origin').setAttribute('disabled', 'true');
-		node.rangeFill(node.value);
 	}
 
 	close() {
-		if (this.noUiSlider) this.noUiSlider.destroy();
+		if (this.helper.noUiSlider) this.helper.noUiSlider.destroy();
 	}
 }
 
-HTMLInputElement.prototype.rangeFill = function(val) {
-	if (val == null) val = "";
-	else val = val.toString();
-	this.value = val.length ? val : this.dataset.default;
-	if (this.parentNode && this.parentNode.noUiSlider) {
-		this.parentNode.noUiSlider.set([null, parseFloat(val)]);
-	}
-	if (!this.required && val == this.dataset.default) this.disabled = true;
-	else this.disabled = false;
-};
-
-HTMLInputElement.prototype.rangeReset = function() {
-	this.rangeFill(this.dataset.default);
-};
-
-
-Page.setup(function() {
-	HTMLCustomElement.define('element-input-range', HTMLElementInputRange);
+Page.ready(function() {
+	HTMLCustomElement.define('element-input-range', HTMLElementInputRange, 'input');
 });
+

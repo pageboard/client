@@ -182,8 +182,13 @@ exports.input_range = {
 			type: 'boolean',
 			default: false
 		},
+		multiple: {
+			title: 'multiple',
+			type: 'boolean',
+			default: false
+		},
 		value: {
-			title: "default value",
+			title: "value",
 			type: "number",
 			default: 50
 		},
@@ -209,15 +214,13 @@ exports.input_range = {
 	},
 	html: `<div class="field">
 		<label block-content="label">Label</label>
-		<element-input-range>
-			<input type="range" required="[required]" disabled="[disabled]"
-				value="[value]"
-				data-default="[value]"
-				name="[name]"
-				min="[min]"
-				max="[max]"
-				step="[step]" />
-		</element-input-range>
+		<input required="[required]" disabled="[disabled]" is="element-input-range"
+			value="[value]"
+			name="[name]"
+			min="[min]"
+			max="[max]"
+			step="[step]"
+			multiple="[multiple]" />
 	</div>`,
 	stylesheets: [
 		'../lib/nouislider.css',

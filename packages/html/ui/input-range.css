@@ -1,36 +1,31 @@
-element-input-range {
-	width:100%;
-}
-element-input-range.noUi-target > input {
+input[is="element-input-range"] {
 	display:none;
 }
-element-input-range.noUi-target .noUi-handle {
+input[is="element-input-range"] + .noUi-target .noUi-handle {
 	width:20px;
 	height:20px;
 	border-radius:100px;
 	right:-10px !important;
 	top:0;
 }
-element-input-range.noUi-target .noUi-handle::before,
-element-input-range.noUi-target .noUi-handle::after {
+input[is="element-input-range"] + .noUi-target .noUi-handle::before,
+input[is="element-input-range"] + .noUi-target .noUi-handle::after {
 	content:none;
 }
-element-input-range.noUi-target.noUi-horizontal {
+input[is="element-input-range"] + .noUi-target.noUi-horizontal {
 	height:20px;
 	border:none;
 	box-shadow:none;
 	background:none;
 }
-element-input-range.noUi-target.noUi-horizontal .noUi-base {
+input[is="element-input-range"] + .noUi-target.noUi-horizontal .noUi-base {
 	background: none;
 	border:none;
 	box-shadow: none;
 	padding:8px 0;
 }
-element-input-range.noUi-target.noUi-horizontal .noUi-connects {
+input[is="element-input-range"] + .noUi-target.noUi-horizontal .noUi-connects {
 	border:1px solid #aaa;
 	border-radius:2px;
 }
-element-input-range.noUi-target .noUi-handle-lower {
-	display:none;
-}
+
