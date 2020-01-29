@@ -36,7 +36,7 @@ class HTMLElementQueryTags extends HTMLCustomElement {
 						prefix = group.firstElementChild.textContent + ' ';
 					}
 					var suffix = '';					
-					if (control.type == "range") {
+					if (control.rangeValue) {
 						val = control.rangeValue;
 						if (val.length == 2) {
 							prefix = val[0] + ' ⩽ ';
