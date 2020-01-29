@@ -24,6 +24,7 @@ element-rating .icon {
 	height: auto;
 	transition: opacity 0.1s ease, background 0.1s ease, text-shadow 0.1s ease, color 0.1s ease;
 	backface-visibility: hidden;
+	color: rgba(0, 0, 0, 0.15);
 }
 element-rating .icon:last-child {
 	padding-right:0;
@@ -36,11 +37,6 @@ element-rating .icon::before {
 }
 
 /* Standard */
-
-/* Inactive Icon */
-element-rating .icon {
-	color: rgba(0, 0, 0, 0.15);
-}
 
 /* Active Icon */
 element-rating .active.icon {
