@@ -42,21 +42,24 @@ HTMLCustomElement.define = function(name, cla, is) {
 	});
 
 	if (cla.defaults) {
+		var defaults = {};
 		if (!cla.observedAttributes) {
 			cla.observedAttributes = Object.keys(cla.defaults).map(function(x) {
-				return (is ? '' : 'data-') + x.replace(/([A-Z])/g, (g) => `-${g[0].toLowerCase()}`);
+				x = (is ? '' : 'data-') + x.replace(/([A-Z])/g, (g) => `-${g[0].toLowerCase()}`);
+				defaults[x] = cla.defaults[x];
+				return x;
 			});
 		}
 		monkeyPatchAll(cla.prototype, {
 			patch(state) {
-				this.options = nodeOptions(this, cla.defaults, state, is);
+				this.options = nodeOptions(this, defaults, state, is);
 				if (typeof this.reveal == "function" && this.currentSrc) {
 					this.reveal(state);
 				}
 			},
 			setup(state) {
 				if (!this.options) {
-					this.options = nodeOptions(this, cla.defaults, state, is);
+					this.options = nodeOptions(this, defaults, state, is);
 				}
 				if (typeof this.reveal == "function" && !this.currentSrc) {
 					if (state.ui.observer) state.ui.observer.observe(this);
@@ -95,13 +98,15 @@ function nodeOptions(node, defaults, state, is) {
 	var opts = {};
 	list.forEach((key) => {
 		var def = defaults[key];
+		var isData = key.startsWith('data-');
+		if (isData) key = key.substring(5);
 		var val;
 		if (Object.hasOwnProperty.call(params, key)) {
 			val = params[key];
+		} else if (isData) {
+			val = node.dataset[key];
 		} else if (is && node[key] !== undefined) {
 			val = node[key];
-		} else if (node.dataset[key] !== undefined) {
-			val = node.dataset[key];
 		} else {
 			val = node.getAttribute(key);
 		}
@@ -127,7 +132,7 @@ function stateOptions(id, list, state) {
 	Object.keys(state.query).forEach(function(key) {
 		var [qid, name] = key.split('.');
 		if (name == null || qid != id) return;
-		if (list.includes(name)) {
+		if (list.includes('data-' + name)) {
 			opts[name] = state.query[key];
 			state.vars[key] = true;
 		}
