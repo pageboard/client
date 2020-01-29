@@ -1,8 +1,8 @@
 class HTMLElementMailImage extends HTMLImageElement {
 	static get defaults() {
 		return {
-			src: null,
-			crop: null
+			'data-src': null,
+			'data-crop': null
 		};
 	}
 	get crop() {
