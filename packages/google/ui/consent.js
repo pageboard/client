@@ -9,7 +9,7 @@ Page.setup(function(state) {
 class HTMLCustomConsentElement extends HTMLFormElement {
 	static get defaults() {
 		return {
-			transient: false
+			'data-transient': false
 		};
 	}
 	setup(state) {

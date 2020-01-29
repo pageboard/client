@@ -42,19 +42,21 @@ HTMLCustomElement.define = function(name, cla, is) {
 	});
 
 	if (cla.defaults) {
-		if (!cla.observedAttributes) cla.observedAttributes = Object.keys(cla.defaults).map(function(x) {
-			return 'data-' + x.replace(/([A-Z])/g, (g) => `-${g[0].toLowerCase()}`);
-		});
+		if (!cla.observedAttributes) {
+			cla.observedAttributes = Object.keys(cla.defaults).map(function(x) {
+				return (is ? '' : 'data-') + x.replace(/([A-Z])/g, (g) => `-${g[0].toLowerCase()}`);
+			});
+		}
 		monkeyPatchAll(cla.prototype, {
 			patch(state) {
-				this.options = nodeOptions(this, cla.defaults, state);
+				this.options = nodeOptions(this, cla.defaults, state, is);
 				if (typeof this.reveal == "function" && this.currentSrc) {
 					this.reveal(state);
 				}
 			},
 			setup(state) {
 				if (!this.options) {
-					this.options = nodeOptions(this, cla.defaults, state);
+					this.options = nodeOptions(this, cla.defaults, state, is);
 				}
 				if (typeof this.reveal == "function" && !this.currentSrc) {
 					if (state.ui.observer) state.ui.observer.observe(this);
@@ -87,21 +89,32 @@ function monkeyPatch(proto, meth, cb) {
 	});
 }
 
-function nodeOptions(node, defaults, state) {
+function nodeOptions(node, defaults, state, is) {
 	var list = Object.keys(defaults);
 	var params = stateOptions(node.id, list, state);
-	var data = Object.assign({}, node.dataset, params);
 	var opts = {};
 	list.forEach((key) => {
 		var def = defaults[key];
-		var val = data[key];
+		var val;
+		if (Object.hasOwnProperty.call(params, key)) {
+			val = params[key];
+		} else if (is) {
+			if (node[key] !== undefined) val = node[key];
+			else val = node.getAttribute(key);
+		} else {
+			val = node.dataset[key];
+		}
 		if (typeof def == "function") {
 			val = def(val);
 		}	else if (typeof def == "boolean") {
-			if (def === true) val = val != "false";
-			else val = val == "true";
+			if (typeof val != "boolean") {
+				if (def === true) val = val != "false";
+				else val = val == "true";
+			}
 		} else if (typeof def == "number") {
-			val = parseFloat(val);
+			if (typeof val != "number") {
+				val = parseFloat(val);
+			}
 		}
 		if (val != null) opts[key] = val;
 	});
