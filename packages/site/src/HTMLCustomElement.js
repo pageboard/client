@@ -98,11 +98,12 @@ function nodeOptions(node, defaults, state, is) {
 		var val;
 		if (Object.hasOwnProperty.call(params, key)) {
 			val = params[key];
-		} else if (is) {
-			if (node[key] !== undefined) val = node[key];
-			else val = node.getAttribute(key);
-		} else {
+		} else if (is && node[key] !== undefined) {
+			val = node[key];
+		} else if (node.dataset[key] !== undefined) {
 			val = node.dataset[key];
+		} else {
+			val = node.getAttribute(key);
 		}
 		if (typeof def == "function") {
 			val = def(val);
