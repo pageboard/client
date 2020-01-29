@@ -19,11 +19,13 @@ class HTMLElementInputRange extends HTMLInputElement {
 		}
 		return node;
 	}
-	get type() {
-		return 'range';
-	}
 	get rangeValue() {
-		return this.options.value;
+		return (this.options || {}).value;
+	}
+	set rangeValue(val) {
+		var str = val.join('~');
+		if (this.options) this.options.value = val;
+		this.value = str;
 	}
 	rangeFill(str) {
 		var val = this.rangeNorm(Object.assign({}, this.options, {
@@ -32,9 +34,7 @@ class HTMLElementInputRange extends HTMLInputElement {
 		if (this.helper.noUiSlider) {
 			this.helper.noUiSlider.set(val);
 		}
-		if (this.options) this.options.value = val;
-		str = val.join('~');
-		this.value = str;
+		this.rangeValue = val;
 	}
 	rangeReset() {
 		this.rangeFill(this.defaultValue);
