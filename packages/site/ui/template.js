@@ -136,7 +136,13 @@ class HTMLElementTemplate extends HTMLCustomElement {
 						for (key in state.query) state.vars[key] = true;
 					}
 				}
-			}
+			},
+			contents: Array.from(template.querySelectorAll('[block-content]')).map((node) => {
+				return {
+					id: node.getAttribute('block-content'),
+					nodes: 'block+'
+				};
+			})
 		};
 		Object.keys(state.data).forEach(function(key) {
 			if (key.startsWith('$') && scope[key] == null) scope[key] = state.data[key];
