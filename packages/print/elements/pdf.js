@@ -38,8 +38,14 @@ exports.sheet = {
 	group: 'block',
 	context: 'pdf//',
 	icon: '<i class="icon file outline"></i>',
-	contents: "block+",
-	html: '<div class="page-sheet"></div>'
+	contents: {
+		id: "page",
+		nodes: "block+"
+	},
+	upgrade: {
+		'content.' : 'content.page'
+	},
+	html: '<div class="page-sheet"><div block-content="page"></div></div>'
 };
 
 exports.break = {

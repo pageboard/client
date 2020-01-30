@@ -1,5 +1,16 @@
-html {
-	width: 1190px;  /* this is 21cm at 144dpi - DO NOT CHANGE, EVER */
+@media only screen {
+	body:not([contenteditable]) {
+		background: black;
+	}
+}
+@media only print {
+	body {
+		width:1190px;
+	}
+}
+
+body {
+	display: block;
 	margin: 0;
 }
 .page-break {
@@ -7,11 +18,28 @@ html {
 }
 .page-nobreak {
 	page-break-inside: avoid;
+	background:white;
 }
 .page-sheet {
-	-webkit-margin-collapse: separate;
 	page-break-inside: avoid;
-	height: calc(1683px - 0px); /* 1683 is 29.7cm at 144dpi */
+	position:relative;
+	/* width:100%; */
+	background:white;
 	margin:0;
 }
+.page-sheet:after {
+	display:block;
+	content:'';
+	padding-bottom: 141.42%; /* calc(100 * 29.7 / 21) */
+}
+.page-sheet > [block-content="page"] {
+	position:absolute;
+	top:0;
+	left:0;
+	right:0;
+	bottom:0;
+}
 
+body[contenteditable] {
+	width:auto;
+}
