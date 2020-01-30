@@ -40,14 +40,14 @@ HTMLCustomElement.define = function(name, cla, is) {
 			Page.disconnect(this);
 		}
 	});
-
-	if (cla.defaults) {
+	var claDefs = cla.defaults;
+	if (claDefs) {
 		var defaults = {};
 		if (!cla.observedAttributes) {
-			cla.observedAttributes = Object.keys(cla.defaults).map(function(x) {
-				x = (is ? '' : 'data-') + x.replace(/([A-Z])/g, (g) => `-${g[0].toLowerCase()}`);
-				defaults[x] = cla.defaults[x];
-				return x;
+			cla.observedAttributes = Object.keys(claDefs).map(function(x) {
+				var y = (is ? '' : 'data-') + x.replace(/([A-Z])/g, (g) => `-${g[0].toLowerCase()}`);
+				defaults[y] = claDefs[x];
+				return y;
 			});
 		}
 		monkeyPatchAll(cla.prototype, {
