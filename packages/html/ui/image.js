@@ -165,8 +165,8 @@ class HTMLElementImage extends HTMLCustomElement {
 class HTMLElementInlineImage extends HTMLImageElement {
 	static get defaults() {
 		return {
-			'data-src': null,
-			'data-crop': null
+			dataSrc: null,
+			dataCrop: null
 		};
 	}
 	get image() {

@@ -44,10 +44,20 @@ HTMLCustomElement.define = function(name, cla, is) {
 	if (claDefs) {
 		var defaults = {};
 		if (!cla.observedAttributes) {
-			cla.observedAttributes = Object.keys(claDefs).map(function(x) {
-				var y = (is ? '' : 'data-') + x.replace(/([A-Z])/g, (g) => `-${g[0].toLowerCase()}`);
-				defaults[y] = claDefs[x];
-				return y;
+			cla.observedAttributes = Object.keys(claDefs).map(function(camel) {
+				var attr = camel.replace(/([A-Z])/g, (g) => `-${g[0].toLowerCase()}`);
+				if (!is) attr = 'data-' + attr;
+				var isData = attr.startsWith('data-');
+				var name = camel;
+				if (isData && camel.startsWith('data')) {
+					name = name[4].toLowerCase() + name.substring(5);
+				}
+				defaults[name] = {
+					attr: attr,
+					isData: isData,
+					def: claDefs[camel]
+				};
+				return attr;
 			});
 		}
 		monkeyPatchAll(cla.prototype, {
@@ -93,22 +103,18 @@ function monkeyPatch(proto, meth, cb) {
 }
 
 function nodeOptions(node, defaults, state, is) {
-	var list = Object.keys(defaults);
-	var params = stateOptions(node.id, list, state);
+	var params = stateOptions(node.id, defaults, state);
 	var opts = {};
-	list.forEach((key) => {
-		var def = defaults[key];
-		var isData = key.startsWith('data-');
-		if (isData) key = key.substring(5);
+	Object.entries(defaults).forEach(([name, {attr, isData, def}]) => {
 		var val;
-		if (Object.hasOwnProperty.call(params, key)) {
-			val = params[key];
+		if (Object.hasOwnProperty.call(params, name)) {
+			val = params[name];
 		} else if (isData) {
-			val = node.dataset[key];
-		} else if (is && node[key] !== undefined) {
-			val = node[key];
+			val = node.dataset[name];
+		} else if (is && node[name] !== undefined) {
+			val = node[name];
 		} else {
-			val = node.getAttribute(key);
+			val = node.getAttribute(attr);
 		}
 		if (typeof def == "function") {
 			val = def(val);
@@ -122,17 +128,18 @@ function nodeOptions(node, defaults, state, is) {
 				val = parseFloat(val);
 			}
 		}
-		if (val != null) opts[key] = val;
+		if (val != null) opts[name] = val;
 	});
 	return opts;
 }
 
-function stateOptions(id, list, state) {
+function stateOptions(id, defaults, state) {
 	var opts = {};
 	Object.keys(state.query).forEach(function(key) {
 		var [qid, name] = key.split('.');
 		if (name == null || qid != id) return;
-		if (list.includes('data-' + name)) {
+		var {isData} = defaults[name];
+		if (isData) {
 			opts[name] = state.query[key];
 			state.vars[key] = true;
 		}
