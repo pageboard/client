@@ -90,6 +90,9 @@ exports.schema = function(val, what, spath) {
 				return item.const === val; // null !== undefined
 			});
 			if (prop != null) schema = prop;
+		} else {
+			spath = null;
+			schema = val;
 		}
 	}
 	var sval = spath ? what.expr.get(schema, spath) : schema;
