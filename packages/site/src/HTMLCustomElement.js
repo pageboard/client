@@ -181,14 +181,16 @@ Page.setup(function(state) {
 		state.ui.observer = new IntersectionObserver((entries, observer) => {
 			entries.forEach((entry) => {
 				var target = entry.target;
-				if (entry.isIntersecting || entry.intersectionRatio > 0) {
-					observer.unobserve(target);
-					if (target.currentSrc) return;
-					target.reveal(state);
-				}
+				var ratio = entry.intersectionRatio || 0;
+				if (ratio <= 0) return;
+				if (target.nodeName == "ELEMENT-EMBED" && ratio <= 0.2) return;
+				observer.unobserve(target);
+				if (target.currentSrc) return;
+				target.reveal(state);
 			});
 		}, {
-			threshold: 0
+			threshold: [0.0001, 0.2],
+			rootMargin: "30px"
 		});
 	}
 });
