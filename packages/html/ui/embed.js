@@ -5,7 +5,16 @@ class HTMLElementEmbed extends HTMLCustomElement {
 			hash: null
 		};
 	}
+	init() {
+		this.promise = Promise.resolve();
+		this.promise.done = function() {};
+	}
 	reveal(state) {
+		var done;
+		this.promise = new Promise(function(resolve) {
+			done = resolve;
+		});
+		this.promise.done = done;
 		this.classList.add('waiting');
 		state.chain('consent', (state) => {
 			this.classList.remove('waiting', 'denied');
@@ -20,27 +29,35 @@ class HTMLElementEmbed extends HTMLCustomElement {
 			if (state.scope.$consent == "no") {
 				this.classList.add('denied');
 				if (this.iframe) this.iframe.remove();
+				done();
 				return;
 			}
-			if (src == this.currentSrc) return;
-			this.classList.remove('error');
-			this.currentSrc = src;
-			if (!this.iframe) {
-				this.innerHTML = `<iframe width="100%" height="100%" frameborder="0" scrolling="no" allow="autoplay; fullscreen; accelerometer; gyroscope"></iframe>`;
-				this.iframe = this.firstElementChild;
-				if (!this.iframe.allow) this.iframe.allowFullscreen = true;
+			if (src != this.currentSrc) {
+				this.classList.remove('error');
+				this.currentSrc = src;
+				if (!this.iframe) {
+					this.innerHTML = `<iframe width="100%" height="100%" frameborder="0" scrolling="no" allow="autoplay; fullscreen; accelerometer; gyroscope"></iframe>`;
+					this.iframe = this.firstElementChild;
+					if (!this.iframe.allow) this.iframe.allowFullscreen = true;
+				}
+				this.classList.add('loading');
+
+				this.iframe.setAttribute('src', src);
+			} else {
+				done();
 			}
-			this.classList.add('loading');
-			this.iframe.setAttribute('src', src);
 		});
+		return this.promise;
 	}
 	captureClick() {
 		if (this.matches('.denied') && Page.consent) Page.consent();
 	}
 	captureLoad() {
+		this.promise.done();
 		this.classList.remove('loading');
 	}
 	captureError() {
+		this.promise.done();
 		this.classList.add('error');
 	}
 	close() {

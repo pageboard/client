@@ -5,6 +5,10 @@ class HTMLElementImage extends HTMLCustomElement {
 			crop: null
 		};
 	}
+	init() {
+		this.promise = Promise.resolve();
+		this.promise.done = function() {};
+	}
 	findClass(list) {
 		return list.find(function(name) {
 			return this.matches(`.${name}`);
@@ -109,7 +113,7 @@ class HTMLElementImage extends HTMLCustomElement {
 			var rh = rect.height;
 			if (rw == 0 && rh == 0 && fit != "none") {
 				// don't show
-				return;
+				return this.promise;
 			}
 			if (rw || rh) {
 				if (!rw) rw = rh * w / h;
@@ -132,14 +136,22 @@ class HTMLElementImage extends HTMLCustomElement {
 				// pass
 			}
 			this.classList.add('loading');
+			var done;
+			this.promise = new Promise(function(resolve) {
+				done = resolve;
+			});
+			this.promise.done = done;
 			img.setAttribute('src', curSrc);
 		}
+		return this.promise;
 	}
 	captureLoad() {
+		this.promise.done();
 		this.classList.remove('loading');
 		this.fix(this.image);
 	}
 	captureError() {
+		this.promise.done();
 		this.classList.remove('loading');
 		this.classList.add('error');
 		this.placeholder();
@@ -173,6 +185,7 @@ class HTMLElementInlineImage extends HTMLImageElement {
 		return this;
 	}
 	captureLoad() {
+		this.promise.done();
 		this.removeAttribute('width');
 		this.removeAttribute('height');
 		this.classList.remove('loading');

@@ -157,3 +157,34 @@ Page.ready(function() {
 	HTMLCustomElement.define('element-carousel-cell', HTMLElementCarouselCell);
 	HTMLCustomElement.define('element-carousel', HTMLElementCarousel);
 });
+
+Page.setup(function(state) {
+	function modabs(i, l) {
+		return ((i % l) + l) % l;
+	}
+	function flickLazy(i, isWrap, instant) {
+		if (this.options.wrapAround || isWrap ) {
+			i = modabs(i, this.slides.length);
+		}
+		var slide = this.slides[i];
+		if (!slide) return;
+		var lazies = [];
+		slide.cells.forEach((cell) => {
+			Array.from(cell.element.querySelectorAll("[data-src]")).forEach((node) => {
+				if (node.reveal && !node.currentSrc) {
+					lazies.push(node.reveal(state).catch(() => {}));
+				}
+			});
+		});
+
+		return Promise.all(lazies).then(() => {
+			this.select(i, isWrap, instant);
+		});
+	}
+	window.Flickity.prototype.next = function(isWrap, i) {
+		return flickLazy.call(this, this.selectedIndex + 1, isWrap, i);
+	};
+	window.Flickity.prototype.previous = function(isWrap, i) {
+		return flickLazy.call(this, this.selectedIndex - 1, isWrap, i);
+	};
+});
