@@ -3,7 +3,7 @@ exports.table = {
 	menu: 'widget',
 	icon: '<i class="table icon"></i>',
 	group: "block",
-	contents: "table_head? table_body table_foot?",
+	contents: "table_caption? table_head? table_body table_foot?",
 	properties: {
 		definition: {
 			title: 'Definition',
@@ -67,6 +67,14 @@ exports.table = {
 	]
 };
 
+exports.table_caption = {
+	title: "Caption",
+	menu: 'widget',
+	icon: '<b class="icon">caption</b>',
+	contents: "block+",
+	inplace: true,
+	html: '<caption></caption>'
+};
 
 exports.table_head = {
 	title: "Head",
