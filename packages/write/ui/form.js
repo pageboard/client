@@ -26,6 +26,7 @@ Form.prototype.destroy = function() {
 		form.destroy();
 	});
 	this.inlines = [];
+	this.mode = "data";
 };
 
 Form.prototype.update = function(parents, sel) {
@@ -49,12 +50,16 @@ Form.prototype.update = function(parents, sel) {
 		return;
 	}
 
+	var active = document.activeElement;
+	var selection = active ? {
+		name: active.name,
+		start: active.selectionStart,
+		end: active.selectionEnd,
+		dir: active.selectionDirection
+	} : null;
+
 	if (block != this.block) {
-		this.mode = "data";
-		if (this.main) {
-			this.main.destroy();
-			delete this.main;
-		}
+		this.destroy();
 		this.block = block;
 	}
 	var editor = this.editor;
@@ -114,6 +119,19 @@ Form.prototype.update = function(parents, sel) {
 		form.destroy();
 	});
 	this.inlines = inlines;
+
+	if (selection && selection.name) {
+		setTimeout(() => {
+			// give an instant for input mutations to propagate
+			var found = this.node.querySelector(`[name="${selection.name}"]`);
+			if (found && found != document.activeElement) {
+				if (found.setSelectionRange && selection.start != null && selection.end != null) {
+					found.setSelectionRange(selection.start, selection.end, selection.dir);
+				}
+				found.focus();
+			}
+		});
+	}
 };
 
 Form.prototype.handleToggleLocks = function(e) {
@@ -146,6 +164,8 @@ function FormBlock(editor, node, type) {
 }
 
 FormBlock.prototype.destroy = function() {
+	this.node.removeEventListener('change', this);
+	this.node.removeEventListener('input', this);
 	Object.values(this.helpers).forEach(function(inst) {
 		if (inst.destroy) inst.destroy();
 	});
@@ -157,8 +177,6 @@ FormBlock.prototype.destroy = function() {
 
 	this.form.destroy();
 	this.node.remove();
-	this.node.removeEventListener('change', this);
-	this.node.removeEventListener('input', this);
 };
 
 FormBlock.prototype.update = function(parents, block, mode) {
@@ -183,13 +201,6 @@ FormBlock.prototype.update = function(parents, block, mode) {
 
 	if (!sameData || !sameMode) {
 		var schema = Object.assign({}, this.el, {type: 'object'});
-		var active = document.activeElement;
-		var selection = active ? {
-			name: active.name,
-			start: active.selectionStart,
-			end: active.selectionEnd,
-			dir: active.selectionDirection
-		} : null;
 
 		var form = this.form;
 		if (!form) form = this.form = new window.Semafor(
@@ -207,19 +218,6 @@ FormBlock.prototype.update = function(parents, block, mode) {
 		Object.values(this.helpers).forEach(function(inst) {
 			if (inst.update) inst.update(this.block);
 		}, this);
-
-		if (selection && selection.name) {
-			setTimeout(function() {
-				// give an instant for input mutations to propagate
-				var found = form.node.querySelector(`[name="${selection.name}"]`);
-				if (found && found != document.activeElement) {
-					if (found.setSelectionRange && selection.start != null && selection.end != null) {
-						found.setSelectionRange(selection.start, selection.end, selection.dir);
-					}
-					found.focus();
-				}
-			});
-		}
 	}
 	this.node.addEventListener('change', this);
 	this.node.addEventListener('input', this);
