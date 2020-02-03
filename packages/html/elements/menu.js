@@ -111,6 +111,19 @@ exports.menu_item_text = {
 	html: '<div class="item">Text</div>'
 };
 
+exports.menu_item_block = {
+	priority: 11,
+	title: 'Block',
+	icon: '<b class="icon">Item</b>',
+	menu: "link",
+	context: "menu//",
+	contents: {
+		nodes: "block+"
+	},
+	group: 'menu_item',
+	html: '<div class="item"></div>'
+};
+
 exports.menu_item_dropdown = {
 	priority: 11,
 	title: "Dropdown",
