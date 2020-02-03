@@ -121,10 +121,8 @@ class HTMLElementCarousel extends HTMLCustomElement {
 		Array.prototype.forEach.call(
 			this.querySelectorAll('element-carousel-cell'),
 			function(cell) {
-				Object.assign(cell.dataset, {
-					width: opts.width,
-					height: opts.height
-				});
+				cell.dataset.width = this.options.width;
+				cell.dataset.height = this.options.height;
 			},
 			this
 		);
@@ -145,11 +143,14 @@ class HTMLElementCarouselCell extends HTMLCustomElement {
 			height: (x) => parseFloat(x) || 0
 		};
 	}
-	patch(state) {
+	updateStyle() {
 		if (this.options.width) this.style.width = `${this.options.width}%`;
 		else this.style.width = null;
 		if (this.options.height) this.style.height = `${this.options.height}vh`;
 		else this.style.height = null;
+	}
+	patch(state) {
+		this.updateStyle();
 	}
 }
 
