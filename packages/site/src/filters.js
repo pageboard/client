@@ -83,7 +83,13 @@ exports.schema = function(val, what, spath) {
 		console.warn("No schema for", schemaPath);
 		return;
 	}
-	if ((what.scope.iskey === undefined || what.scope.iskey === false) && val !== undefined) {
+	var iskey = spath.endsWith('+');
+	if (iskey) {
+		spath = spath.slice(0, -1);
+	} else {
+		iskey = what.scope.iskey !== undefined && what.scope.iskey !== false;
+	}
+	if (!iskey && val !== undefined) {
 		var listOf = schema.oneOf || schema.anyOf;
 		if (listOf) {
 			var prop = listOf.find(function(item) {
