@@ -153,7 +153,7 @@ FocusPlugin.prototype.focus = function(tr, sel) {
 			console.error(ex);
 		}
 	}
-	if (root && sel.node && sel.from === rootPos || sel.empty && !root.node.isTextblock) {
+	if (root && sel.node && sel.from === rootPos || sel.empty && !firstParent.container && !root.node.isTextblock) {
 		tr.setSelection(NodeSelection.create(tr.doc, rootPos));
 	}
 	return tr.setMeta('focus', true);
