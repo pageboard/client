@@ -5,6 +5,18 @@ class HTMLElementImage extends HTMLCustomElement {
 			crop: null
 		};
 	}
+	static getZoom({w, h, rw, rh, fit}) {
+		var z = 100;
+		if (!rw && !rh) return z;
+		if (!rw) rw = rh * w / h;
+		if (!rh) rh = rw * h / w;
+		z = Math.ceil((fit == "contain" ? Math.min : Math.max)(rw / w, rh / h) * 100 * (window.devicePixelRatio || 1));
+		// svg need to be resized to scale to its intrinsic dimension
+		if (z > 100) z = 100;
+		var zstep = 5;
+		z = Math.ceil(z / zstep) * zstep;
+		return z;
+	}
 	init() {
 		this.promise = Promise.resolve();
 		this.promise.done = function() {};
@@ -107,7 +119,6 @@ class HTMLElementImage extends HTMLCustomElement {
 		if (r.z != 100 && fit == "none") {
 			loc.query.rs = `z-${r.z}`;
 		} else if (!isNaN(w) && !isNaN(h)) {
-			var zoom;
 			var rect = this.getBoundingClientRect();
 			var rw = rect.width;
 			var rh = rect.height;
@@ -115,18 +126,7 @@ class HTMLElementImage extends HTMLCustomElement {
 				// don't show
 				return this.promise;
 			}
-			if (rw || rh) {
-				if (!rw) rw = rh * w / h;
-				if (!rh) rh = rw * h / w;
-				zoom = Math.ceil((fit == "contain" ? Math.min : Math.max)(rw / w, rh / h) * 100 * (window.devicePixelRatio || 1));
-				// svg need to be resized to scale to its intrinsic dimension
-				if (zoom > 100) zoom = 100;
-			}
-			if (zoom) {
-				var zstep = 5;
-				zoom = Math.ceil(zoom / zstep) * zstep;
-				loc.query.rs = "z-" + zoom;
-			}
+			loc.query.rs = "z-" + HTMLElementImage.getZoom({w, h, rw, rh, fit});
 		}
 		var curSrc = Page.format(loc);
 		if (curSrc != this.currentSrc) {
