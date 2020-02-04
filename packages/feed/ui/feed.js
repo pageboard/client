@@ -12,7 +12,7 @@ Page.patch(function(state) {
 				<meta property="og:type" content="article">
 				<meta property="og:title" content="[title]">
 				<meta property="og:description" content="[description|magnet:*]">
-				<meta property="og:image" content="[enclosure.url|magnet:*]">
+				<meta property="og:image" content="[image.url|magnet:*]">
 				<meta property="article:published_time" content="[date|magnet:*|isoDate]">
 				<meta property="article:tag" content="[topics|repeat:*|magnet:*]">
 			`).fuse(Pageboard.getFeedCard(feed, state), state.scope));
@@ -43,6 +43,8 @@ Pageboard.getFeedCard = function(node, state) {
 		var cur;
 		while ((cur = node.querySelector('[block-type]'))) {
 			cur.removeAttribute('block-type');
+			cur.removeAttribute('block-data');
+			cur.removeAttribute('class');
 		}
 		return node;
 	}
@@ -58,24 +60,38 @@ Pageboard.getFeedCard = function(node, state) {
 	var title = node.querySelector('[block-content="title"]');
 	if (title) card.title = title.innerText;
 	var desc = node.querySelector('[block-content="description"]');
-	if (desc) card.description = desc.innerText;
+	card.description = desc && desc.innerText || null;
 	var date = node.getAttribute('feed-publication') || node.getAttribute('pubdate');
 	if (date) card.date = new Date(date);
 	var preview = node.querySelector('[block-content="preview"] [block-type="image"]');
 	if (preview) {
-		var srcObj = new URL(preview.getAttribute('url'), document.baseURI);
-		var srcMeta = state.data.$hrefs[srcObj.pathname];
+		var srcObj = new URL(preview.dataset.src, document.baseURI);
+		var meta = state.data.$hrefs[srcObj.pathname];
 		srcObj.search = "";
-		card.enclosure = {
-			url: srcObj.href
-		};
-		if (srcMeta) {
-			card.enclosure.type = srcMeta.mime;
-			card.enclosure.length = srcMeta.size;
+		card.image = {};
+		if (meta) {
+			srcObj.search = "?rs=z-" + preview.constructor.getZoom({
+				w: meta.width, h: meta.height,
+				rw: 320, rh: 240,
+				fit: "cover"
+			});
+			card.image.width = 320;
+			card.image.height = 240;
 		}
+		card.image.url = srcObj.href;
 	}
-	var content = node.querySelector('[block-content="section"]');
-	if (content) card.content = stripBlock(content.cloneNode(true)).innerHTML;
+	if (!card.description) {
+		var content = node.querySelector('[block-content="section"]');
+		if (content) {
+			content = stripBlock(content.cloneNode(true));
+			var xmlDoc = document.implementation.createDocument('http://www.w3.org/1999/xhtml', 'html', null);
+
+			card.content = Array.from(content.childNodes).map((node) => {
+				return (new XMLSerializer()).serializeToString(xmlDoc.importNode(node, true));
+			}).join('');
+		}
+		if (!card.content) card.content = null;
+	}
 	return card;
 };
 
@@ -120,24 +136,23 @@ Page.serialize = function(state) {
 		<category>[categories|repeat:*]</category>
 		<atom:link href="[links.rss]" rel="self" type="application/rss+xml"/>
 		<item>
-			<title>[items.title|repeat:item:item|cdata]</title>
+			<title>[items.title|repeat:item:item]</title>
 			<link>[item.url]</link>
 			<guid>[item.id|magnet:*]</guid>
 			<pubDate>[item.date|toUTCString]</pubDate>
-			<description>[item.description|magnet|cdata]</description>
-			<content:encoded>[item.content|magnet|cdata]</content:encoded>
-			<enclosure url="[item.enclosure.url|magnet:*]" length="[item.enclosure.length|magnet]" type="[item.enclosure.type|magnet]" />
+			<description>
+				<img alt="" src="[item.image.url|magnet:*]" width="[item.image.width]" height="[item.image.height]" />
+				<p>[item.description|magnet:*]</p>
+				[item.content|magnet:*|html]
+			</description>
 		</item>
 	</channel>
 </rss>`;
 	var xml = (new DOMParser()).parseFromString(rssTemplate, "application/xml");
-	state.scope.$filters.cdata = function(val, what) {
-		what.mode = "html";
-		return '<![CDATA[' + val + ']]>';
-	};
 	return {
 		mime: 'application/xml',
 		body: (new XMLSerializer()).serializeToString(xml.fuse(feed, state.scope))
 	};
 };
 
+window.PageSerialize = Page.serialize;
