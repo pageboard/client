@@ -26,7 +26,7 @@ exports.link = {
 	contents: "text*",
 	inline: true,
 	group: "inline",
-	tag: 'a:not(.itemlink)',
+	tag: 'a:not([block-type]),a[block-type="link"]',
 	html: '<a href="[url|autolink]" class="[button|?:ui button]"></a>',
 	stylesheets: [
 		'../lib/components/button.css'
