@@ -168,3 +168,6 @@ element-menu.burger > .popup > .placer > .menu {
 	}
 }
 
+.ui.menu:not(.vertical) .labeled.item {
+	flex-direction: column;
+}

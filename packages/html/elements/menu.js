@@ -71,7 +71,7 @@ exports.menu_group = {
 
 exports.menu_item_link = {
 	priority: 10,
-	title: "Link Item",
+	title: "Inline",
 	icon: '<b class="icon">Link</b>',
 	menu: "link",
 	context: "menu//",
@@ -88,6 +88,12 @@ exports.menu_item_link = {
 					type: "link"
 				}
 			}
+		},
+		labeled: {
+			title: 'Labeled',
+			description: 'Vertical layout',
+			type: 'boolean',
+			nullable: true
 		}
 	},
 	contents: {
@@ -95,8 +101,17 @@ exports.menu_item_link = {
 		marks: "nolink"
 	},
 	group: 'menu_item',
-	html: '<a class="item" href="[url|autolink]">Link</a>'
+	html: '<a class="[labeled|?] item" href="[url|autolink]">Link</a>'
 };
+
+exports.menu_item_block = Object.assign({}, exports.menu_item_link, {
+	title: 'Block',
+	priority: 11,
+	contents: {
+		nodes: "block+",
+		marks: "nolink"
+	}
+});
 
 exports.menu_item_text = {
 	priority: 11,
@@ -104,24 +119,19 @@ exports.menu_item_text = {
 	icon: '<b class="icon">Item</b>',
 	menu: "link",
 	context: "menu//",
+	properties: {
+		labeled: {
+			title: 'Labeled',
+			description: 'Vertical layout',
+			type: 'boolean',
+			nullable: true
+		}
+	},
 	contents: {
 		nodes: "inline*"
 	},
 	group: 'menu_item',
-	html: '<div class="item">Text</div>'
-};
-
-exports.menu_item_block = {
-	priority: 11,
-	title: 'Block',
-	icon: '<b class="icon">Item</b>',
-	menu: "link",
-	context: "menu//",
-	contents: {
-		nodes: "block+"
-	},
-	group: 'menu_item',
-	html: '<div class="item"></div>'
+	html: '<div class="[labeled|?] item">Text</div>'
 };
 
 exports.menu_item_dropdown = {
