@@ -196,7 +196,7 @@ class HTMLElementInlineImage extends HTMLImageElement {
 	}
 }
 HTMLElementInlineImage.defaults = HTMLElementImage.defaults;
-['patch', 'reveal', 'captureError', 'crop', 'position', 'fit', 'findClass', 'fix'].forEach(function(name) {
+['patch', 'reveal', 'captureError', 'crop', 'dimensions', 'position', 'fit', 'findClass', 'fix'].forEach(function(name) {
 	Object.defineProperty(
 		HTMLElementInlineImage.prototype,
 		name,
