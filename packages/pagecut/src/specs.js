@@ -1074,10 +1074,11 @@ function attrsObj(atts) {
 
 function domSelector(dom) {
 	var sel = dom.nodeName.toLowerCase();
-	var className = dom.className;
-	// svg nodes have animatable objects
-	if (typeof className == "string") {
-		sel += className.split(' ').filter(function(str) {
+	var cn = dom.className;
+	// might be SVGAnimatedString
+	if (cn && cn.baseVal != null) cn = cn.baseVal;
+	if (cn) {
+		sel += cn.split(' ').filter(function(str) {
 			return !!str;
 		}).map(function(str) {
 			return '.' + str;
