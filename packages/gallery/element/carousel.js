@@ -28,12 +28,31 @@ exports.carousel = {
 			default: 100
 		},
 		height: {
-			title: 'Cell height',
-			description: 'in % of the vertical viewport, use 0 for auto',
+			title: 'Height',
+			description: 'use 0 for auto',
 			type: 'number',
 			minimum: 0,
-			maximum: 999,
 			default: 0
+		},
+		heightUnits: {
+			title: 'Height units',
+			default: 'em',
+			anyOf: [{
+				title: 'em',
+				const: 'em'
+			}, {
+				title: 'rem',
+				const: 'rem'
+			}, {
+				title: 'px',
+				const: 'px'
+			}, {
+				title: 'vh',
+				const: 'vh'
+			}, {
+				title: '%',
+				const: '%'
+			}]
 		},
 		pageDots: {
 			title: 'Page dots',
@@ -77,7 +96,7 @@ exports.carousel = {
 		nodes: "carousel_item+"
 	},
 	html: `<element-carousel id="[name|id]"
-		data-width="[width|or:auto]" data-height="[height|or:auto]"
+		data-width="[width|magnet]" data-height="[height|magnet][heightUnits]"
 		data-auto-play="[autoPlay]" data-page-dots="[pageDots]"
 		data-prev-next-buttons="[prevNextButtons]" data-fullview-button="[fullviewButton]" data-fullview="[fullview]"
 		data-group-cells="[groupCells]" data-wrap-around="[wrapAround]" data-fade="[fade]"

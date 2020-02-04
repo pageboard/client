@@ -8,8 +8,11 @@ class HTMLElementCarousel extends HTMLCustomElement {
 			draggable: true,
 			prevNextButtons: false,
 			index: (x) => parseInt(x) || 0,
-			width: null,
-			height: null,
+			width: (x) => (parseFloat(x) || null),
+			height: (str) => {
+				if ((parseFloat(str) || 0) == 0) return null;
+				else return str;
+			},
 			fullview: false,
 			fullviewButton: false,
 			fade: false
@@ -85,7 +88,7 @@ class HTMLElementCarousel extends HTMLCustomElement {
 			accessibility: false
 		}: {});
 		opts.initialIndex = opts.index;
-		opts.imagesLoaded = opts.width == "auto";
+		opts.imagesLoaded = opts.width == null;
 		if (opts.autoPlay) opts.wrapAround = true;
 
 		this.fullview(opts.fullview);
@@ -121,8 +124,10 @@ class HTMLElementCarousel extends HTMLCustomElement {
 		Array.prototype.forEach.call(
 			this.querySelectorAll('element-carousel-cell'),
 			function(cell) {
-				cell.dataset.width = this.options.width;
-				cell.dataset.height = this.options.height;
+				if (opts.width) cell.dataset.width = opts.width + '%';
+				else delete cell.dataset.width;
+				if (opts.height) cell.dataset.height = opts.height;
+				else delete cell.dataset.height;
 			},
 			this
 		);
@@ -139,15 +144,13 @@ class HTMLElementCarousel extends HTMLCustomElement {
 class HTMLElementCarouselCell extends HTMLCustomElement {
 	static get defaults() {
 		return {
-			width: (x) => parseFloat(x) || 0,
-			height: (x) => parseFloat(x) || 0
+			width: null,
+			height: null
 		};
 	}
 	updateStyle() {
-		if (this.options.width) this.style.width = `${this.options.width}%`;
-		else this.style.width = null;
-		if (this.options.height) this.style.height = `${this.options.height}vh`;
-		else this.style.height = null;
+		this.style.width = this.options.width;
+		this.style.height = this.options.height;
 	}
 	patch(state) {
 		this.updateStyle();
