@@ -83,3 +83,6 @@ exports.mail_container = {
 	</table>`
 };
 
+exports._ = {
+	group: "mail_block"
+};
