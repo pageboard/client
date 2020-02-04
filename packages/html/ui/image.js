@@ -118,6 +118,8 @@ class HTMLElementImage extends HTMLCustomElement {
 		h = h * r.h / 100;
 		if (fit == "none") {
 			loc.query.rs = `z-${r.z}`;
+			img.width = Math.round(w * r.z / 100);
+			img.height = Math.round(h * r.z / 100);
 		} else if (!isNaN(w) && !isNaN(h)) {
 			var rect = this.getBoundingClientRect();
 			var rw = rect.width;
