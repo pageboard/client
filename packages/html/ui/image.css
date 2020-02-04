@@ -49,6 +49,11 @@ element-image.cover > img {
 	object-fit: cover;
 }
 
+element-image.vcenter,
+element-image.bottom {
+	height:100%;
+}
+
 element-image.left.top {
 	/* empty */
 }
@@ -56,14 +61,14 @@ element-image.left.top > img {
 	object-position:left top;
 }
 element-image.left.vcenter {
-	height:100%;
+	
 }
 element-image.left.vcenter > img {
 	object-position:left center;
 	height:100%;
 }
 element-image.left.bottom {
-	height:100%;
+	
 }
 element-image.left.bottom > img {
 	object-position:left bottom;
@@ -73,14 +78,14 @@ element-image.hcenter.top > img {
 	object-position:center top;
 }
 element-image.hcenter.vcenter {
-	height:100%;
+	
 }
 element-image.hcenter.vcenter > img {
 	object-position:center center;
 	height:100%;
 }
 element-image.hcenter.bottom {
-	height:100%;
+	
 }
 element-image.hcenter.bottom > img {
 	object-position:center bottom;
@@ -90,65 +95,58 @@ element-image.right.top > img {
 	object-position:right top;
 }
 element-image.right.vcenter {
-	height:100%;
+	
 }
 element-image.right.vcenter > img {
 	height:100%;
 	object-position:right center;
 }
 element-image.right.bottom {
-	height:100%;
+	
 }
 element-image.right.bottom > img {
 	height:100%;
 	object-position:right bottom;
 }
 
-element-image.none,
-element-image.none.none > img {
+element-image.none, {
 	max-width:100%;
 	max-height:100%;
 }
-element-image.none.left.top {
+element-image.left.top:not(.cover) {
 	justify-content: flex-start;
 	vertical-align:top;
 }
-element-image.none.right.top {
+element-image.right.top:not(.cover) {
 	justify-content: flex-end;
 	vertical-align:top;
 }
-element-image.none.hcenter.top {
+element-image.hcenter.top:not(.cover) {
 	vertical-align:top;
 }
-element-image.none.left.vcenter {
+element-image.left.vcenter:not(.cover) {
 	justify-content: flex-start;
-	height:100%;
 }
-element-image.none.right.vcenter {
+element-image.right.vcenter:not(.cover) {
 	justify-content: flex-end;
 	vertical-align:middle;
-	height:100%;
 }
-element-image.none.hcenter.vcenter {
+element-image.hcenter.vcenter:not(.cover) {
 	vertical-align:middle;
-	height:100%;
 }
-element-image.none.left.bottom {
+element-image.left.bottom:not(.cover) {
 	justify-content: flex-start;
-	height:100%;
 }
 element-image.none.left.bottom > img {
 	align-self:flex-end;
 }
-element-image.none.right.bottom {
+element-image.right.bottom:not(.cover) {
 	justify-content: flex-end;
-	height:100%;
 }
 element-image.none.right.bottom > img {
 	align-self:flex-end;
 }
 element-image.none.hcenter.bottom {
-	height:100%;
 }
 element-image.none.hcenter.bottom > img {
 	align-self:flex-end;
