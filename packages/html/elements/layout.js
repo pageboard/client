@@ -212,16 +212,20 @@ exports.layout = {
 		[vertical|?]
 		[direction]
 		[invert|?:inverted]"
+		is="element-layout"
 		style-height="[height|eq:0:|not|magnet][heightUnits]"
-		style-background-image="url([background.image|magnet])"
-		style-background-size="[background.size]"
-		style-background-repeat="[background.repeat|?]"
-		style-background-attachment="[background.attachment]"
-		style-background-position="[background.position]"
+		data-src="[background.image]"
+		data-size="[background.size]"
+		data-repeat="[background.repeat|?]"
+		data-attachment="[background.attachment]"
+		data-position="[background.position]"
 	></div>`,
 	stylesheets: [
 		'../lib/components/container.css',
 		'../ui/layout.css'
+	],
+	scripts: [
+		'../ui/layout.js'
 	]
 };
 
