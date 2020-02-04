@@ -216,7 +216,9 @@ function toDOMOutputSpec(obj, node, inplace) {
 	var out = 0;
 	var dom = obj.contentDOM || obj.dom;
 	var attrs = Object.assign(attrsTo(node.attrs), tryJSON(node.attrs._json), domAttrsMap(obj.dom));
-	if (!inplace) delete attrs['block-data'];
+	if (!inplace) {
+		delete attrs['block-data'];
+	}
 	delete attrs['block-focused'];
 	var contentName;
 	while (dom) {
@@ -263,8 +265,35 @@ function createRootSpec(view, elt, obj) {
 			var attrs = {};
 			if (expr) attrs.expr = expr;
 			if (lock) attrs.lock = lock;
-			if (data) attrs.data = data;
-			else if (elt.parse) attrs.data = JSON.stringify(elt.parse.call(elt, dom));
+			if (data) {
+				attrs.data = data;
+			} else if (elt.parse) {
+				attrs.data = JSON.stringify(elt.parse.call(elt, dom));
+			} else if (elt.inplace && elt.properties) {
+				var dataObj = {};
+				Object.keys(elt.properties).forEach(function(key) {
+					var prop = elt.properties[key];
+					var attr = key.replace(/([A-Z])/g, (g) => `-${g[0].toLowerCase()}`);
+					var val = dom.getAttribute(attr);
+					if (val == null) {
+						val = dom.dataset && dom.dataset[key] || null;
+						if (val == null) return;
+					}
+					if (prop.type == "integer") {
+						val = parseInt(val);
+						if (!isNaN(val)) dataObj[key] = val;
+					} else if (prop.type == "number") {
+						val = parseFloat(val);
+						if (!isNaN(val)) dataObj[key] = val;
+					} else if (prop.type == "boolean") {
+						dataObj[key] = val == "true";
+					} else if (prop.type == "string") {
+						dataObj[key] = val;
+					}
+				});
+				attrs.data = JSON.stringify(dataObj);
+			}
+
 
 			if (elt.inplace) {
 				if (id) delete attrs.id;

@@ -76,8 +76,13 @@ Viewer.prototype.render = function(block, opts) {
 		else dom.removeAttribute('block-id');
 	} else {
 		dom.removeAttribute('block-id');
-		if (block.data && Object.keys(block.data).length) {
-			dom.setAttribute('block-data', JSON.stringify(block.data));
+		var data = Object.assign({}, block.data);
+		if (el.properties) Object.keys(el.properties).forEach((key) => {
+			var attr = key.replace(/([A-Z])/g, (g) => `-${g[0].toLowerCase()}`);
+			if (dom.getAttribute(attr) == data[key]) delete data[key];
+		});
+		if (data && Object.keys(data).length) {
+			dom.setAttribute('block-data', JSON.stringify(data));
 		} else {
 			dom.removeAttribute('block-data');
 		}
