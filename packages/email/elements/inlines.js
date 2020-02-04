@@ -1,9 +1,5 @@
-exports._ = {
-	group: "mail_block"
-};
-exports.text = {
-	group: "mail_inline"
-};
+exports.text.group +=  " mail_inline";
+
 exports.mail_strong = {
 	priority: 12,
 	title: "Strong",

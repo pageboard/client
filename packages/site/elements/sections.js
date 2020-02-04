@@ -1,3 +1,8 @@
+exports.text = {
+	inline: true,
+	group: 'inline'
+};
+
 exports.paragraph = {
 	priority: -10,
 	title: "Paragraph",
