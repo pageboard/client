@@ -17,6 +17,18 @@ class HTMLElementImage extends HTMLCustomElement {
 		z = Math.ceil(z / zstep) * zstep;
 		return z;
 	}
+	get dimensions() {
+		var w = parseInt(this.dataset.width);
+		var h = parseInt(this.dataset.height);
+		var r = this.crop;
+		w = Math.round(w * r.w / 100);
+		h = Math.round(h * r.h / 100);
+		if (r.z != 100 && this.fit == "none") {
+			w = Math.round(w * r.z / 100);
+			h = Math.round(h * r.z / 100);
+		}
+		return {w, h};
+	}
 	init() {
 		this.promise = Promise.resolve();
 		this.promise.done = function() {};
@@ -89,13 +101,10 @@ class HTMLElementImage extends HTMLCustomElement {
 	}
 	reveal(state) {
 		var img = this.image;
-		var w = parseInt(this.dataset.width);
-		var h = parseInt(this.dataset.height);
-
 		var fit = this.fit;
-
+		var r = this.crop;
+		
 		var loc = Page.parse(this.options.src);
-
 		if (loc.hostname && loc.hostname != document.location.hostname) {
 			loc = {
 				pathname: "/.api/image",
@@ -104,7 +113,7 @@ class HTMLElementImage extends HTMLCustomElement {
 				}
 			};
 		}
-		var r = this.crop;
+		
 		if (r.x != 50 || r.y != 50 || r.w != 100 || r.h != 100) {
 			if (Math.round((r.x - r.w / 2)*100) < 0 || Math.round((r.x + r.w / 2)*100) > 10000) {
 				r.w = 2 * Math.min(r.x, 100 - r.x);
@@ -114,12 +123,9 @@ class HTMLElementImage extends HTMLCustomElement {
 			}
 			loc.query.ex = `x-${r.x}_y-${r.y}_w-${r.w}_h-${r.h}`;
 		}
-		w = w * r.w / 100;
-		h = h * r.h / 100;
+		const {w, h} = this.dimensions;
 		if (fit == "none") {
 			loc.query.rs = `z-${r.z}`;
-			img.width = Math.round(w * r.z / 100);
-			img.height = Math.round(h * r.z / 100);
 		} else if (!isNaN(w) && !isNaN(h)) {
 			var rect = this.getBoundingClientRect();
 			var rw = rect.width;
@@ -159,20 +165,10 @@ class HTMLElementImage extends HTMLCustomElement {
 		this.placeholder();
 	}
 	placeholder() {
-		var w = this.dataset.width;
-		var h = this.dataset.height;
-		var r = this.crop;
-		if (w && h) {
-			w = Math.round(w * r.w / 100);
-			h = Math.round(h * r.h / 100);
-			if (r.z != 100 && this.fit == "none") {
-				w = Math.round(w * r.z / 100);
-				h = Math.round(h * r.z / 100);
-			}
-			this.image.src = "data:image/svg+xml," + encodeURIComponent(
-				`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}"></svg>`
-			);
-		}
+		const {w, h} = this.dimensions;
+		this.image.src = "data:image/svg+xml," + encodeURIComponent(
+			`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}"></svg>`
+		);
 	}
 }
 
@@ -194,19 +190,9 @@ class HTMLElementInlineImage extends HTMLImageElement {
 		this.fix(this.image);
 	}
 	placeholder() {
-		var w = this.dataset.width;
-		var h = this.dataset.height;
-		var r = this.crop;
-		if (w && h) {
-			w = Math.round(w * r.w / 100);
-			h = Math.round(h * r.h / 100);
-			if (r.z != 100 && this.fit == "none") {
-				w = Math.round(w * r.z / 100);
-				h = Math.round(h * r.z / 100);
-			}
-			this.width = w;
-			this.height = h;
-		}
+		const {w, h} = this.dimensions;
+		this.width = w;
+		this.height = h;
 	}
 }
 HTMLElementInlineImage.defaults = HTMLElementImage.defaults;
