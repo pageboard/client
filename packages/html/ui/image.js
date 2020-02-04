@@ -116,13 +116,13 @@ class HTMLElementImage extends HTMLCustomElement {
 		}
 		w = w * r.w / 100;
 		h = h * r.h / 100;
-		if (r.z != 100 && fit == "none") {
+		if (fit == "none") {
 			loc.query.rs = `z-${r.z}`;
 		} else if (!isNaN(w) && !isNaN(h)) {
 			var rect = this.getBoundingClientRect();
 			var rw = rect.width;
 			var rh = rect.height;
-			if (rw == 0 && rh == 0 && fit != "none") {
+			if (rw == 0 && rh == 0) {
 				// don't show
 				return this.promise;
 			}
