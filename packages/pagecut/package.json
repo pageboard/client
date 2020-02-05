@@ -31,7 +31,6 @@
   "devDependencies": {
     "@kapouer/common-ancestor": "^0.2.0",
     "diff-dom": "^4.1.6",
-    "domify": "^1.4.0",
     "fast-deep-equal": "^2.0.1",
     "orderedmap": "^1.1.0",
     "postinstall": "^0.7.0",

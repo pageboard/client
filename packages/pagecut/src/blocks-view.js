@@ -1,18 +1,17 @@
 module.exports = Blocks;
-var domify = require('domify');
-function htmlToFrag(str, doc) {
-	var node;
+
+const str2dom = require('./str2dom');
+
+function htmlToFrag(str, {doc, ns}) {
 	try {
-		node = domify(str, doc);
-	} catch(err) {
-		console.error(err);
+		return str2dom(str, {
+			doc: doc,
+			frag: true,
+			ns: ns
+		});
+	} catch(ex) {
+		console.error(ex);
 	}
-	if (node && node.nodeType != Node.DOCUMENT_FRAGMENT_NODE) {
-		var frag = doc.createDocumentFragment();
-		frag.appendChild(node);
-		node = frag;
-	}
-	return node;
 }
 
 function Blocks(view, opts) {
@@ -48,7 +47,7 @@ Blocks.prototype.mount = function(block, blocks, opts) {
 
 	el.contents.each(block, function(content, def) {
 		if (!(content instanceof Node)) {
-			el.contents.set(copy, def.id, htmlToFrag(content, doc));
+			el.contents.set(copy, def.id, htmlToFrag(content, {doc: doc, ns: el.ns}));
 		}
 	});
 	if (!el) {
