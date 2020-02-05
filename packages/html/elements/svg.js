@@ -18,7 +18,8 @@ exports.svg = {
 		}
 	},
 	contents: "svg_defs? svg_node+",
-	html: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="[viewBox]" width="[width]" height="[height]"></svg>`
+	ns: "svg",
+	html: `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="[viewBox]" width="[width]" height="[height]"></svg>`
 };
 
 exports.text.group += ' svg_inline';
@@ -42,6 +43,7 @@ exports.svg_text = {
 	},
 	contents: "svg_inline*",
 	inplace: true,
+	ns: "svg",
 	html: `<text x="[x]" y="[y]">Text</text>`
 };
 
@@ -55,6 +57,7 @@ exports.svg_tspan = {
 	contents: "text*",
 	inplace: true,
 	inline: true,
+	ns: "svg",
 	html: `<tspan></tspan>`
 };
 
@@ -64,6 +67,7 @@ exports.svg_defs = {
 	menu: 'svg',
 	contents: "svg_node+",
 	inplace: true,
+	ns: "svg",
 	html: `<defs></defs>`
 };
 
@@ -97,6 +101,7 @@ exports.svg_group = {
 	},
 	contents: "svg_node+",
 	inplace: true,
+	ns: "svg",
 	html: `<g id="[id]" fill="[fill]" stroke="[stroke]" transform="[transform]"></g>`
 };
 
@@ -113,6 +118,7 @@ exports.svg_path = {
 		}
 	},
 	inplace: true,
+	ns: "svg",
 	html: `<path d="[d]"></path>`
 };
 
@@ -144,6 +150,7 @@ exports.svg_line = {
 		}
 	},
 	inplace: true,
+	ns: "svg",
 	html: `<line x1="[x1]" y1="[y1]" x2="[x2]" y2="[y2]"></line>`
 };
 
@@ -163,12 +170,12 @@ exports.svg_rect = {
 			type: 'number',
 			nullable: true
 		},
-		w: {
+		width: {
 			title: 'width',
 			type: 'number',
 			nullable: true
 		},
-		h: {
+		height: {
 			title: 'height',
 			type: 'number',
 			nullable: true
@@ -185,7 +192,8 @@ exports.svg_rect = {
 		}
 	},
 	inplace: true,
-	html: `<rect x="[x]" y="[y]" w="[w]" h="[h]" rx="[rx]" ry="[ry]"></rect>`
+	ns: "svg",
+	html: `<rect x="[x]" y="[y]" width="[width]" height="[height]" rx="[rx]" ry="[ry]"></rect>`
 };
 
 exports.svg_circle = {
@@ -211,6 +219,7 @@ exports.svg_circle = {
 		}
 	},
 	inplace: true,
+	ns: "svg",
 	html: `<circle cx="[cx]" cy="[cy]" r="[r]"></circle>`
 };
 
@@ -242,6 +251,7 @@ exports.svg_ellipse = {
 		}
 	},
 	inplace: true,
+	ns: "svg",
 	html: `<ellipse cx="[cx]" cy="[cy]" rx="[rx]" ry="[ry]"></ellipse>`
 };
 
@@ -258,6 +268,7 @@ exports.svg_polygon = {
 		}
 	},
 	inplace: true,
+	ns: "svg",
 	html: `<polygon points="[points]"></polygon>`
 };
 
@@ -274,6 +285,7 @@ exports.svg_polyline = {
 		}
 	},
 	inplace: true,
+	ns: "svg",
 	html: `<polyline points="[points]"></polyline>`
 };
 
@@ -322,6 +334,7 @@ exports.svg_linearGradient = {
 	},
 	inplace: true,
 	contents: "svg_stop+",
+	ns: "svg",
 	html: `<linearGradient id="[id]" gradientUnits="[gradientUnits]" x1="[x1]" x2="[x2]" y1="[y1]" y2="[y2]"></linearGradient>`
 };
 
@@ -347,5 +360,6 @@ exports.svg_stop = {
 		}
 	},
 	inplace: true,
+	ns: "svg",
 	html: `<stop offset="[offset]" stop-color="[stopColor]" stop-opacity="[stopOpacity]"></stop>`
 };
