@@ -93,9 +93,10 @@ exports.schema = function(val, what, spath) {
 		var listOf = schema.oneOf || schema.anyOf;
 		if (listOf) {
 			var prop = listOf.find(function(item) {
-				return item.const === val; // null !== undefined
+				return item.const === val || item.type === "null" && val === null;
 			});
 			if (prop != null) schema = prop;
+			else return val;
 		} else {
 			spath = null;
 			schema = val;
