@@ -1,17 +1,13 @@
 var matchdom = require('matchdom');
-var domify = require('domify');
 var Viewer = require('@pageboard/pagecut/src/viewer.js');
+var str2dom = require('@pageboard/pagecut/src/str2dom.js');
 
 Object.assign(matchdom.filters, require('./filters'));
 
-var parser = new DOMParser();
-
 Document.prototype.dom = function(str) {
-	if (/^\s*<html[\s>]/.test(str)) {
-		var ndoc = parser.parseFromString(str, 'text/html');
-		return this.adoptNode(ndoc.documentElement);
-	}
-	return domify(Array.prototype.join.call(arguments, '\n'), this);
+	return str2dom(Array.prototype.join.call(arguments, '\n'), {
+		doc: this
+	});
 };
 
 Document.prototype.fuse = XMLDocument.prototype.fuse = function(obj, scope) {
@@ -20,7 +16,10 @@ Document.prototype.fuse = XMLDocument.prototype.fuse = function(obj, scope) {
 };
 
 Node.prototype.dom = function() {
-	return domify(Array.prototype.join.call(arguments, '\n'), this.ownerDocument);
+	return str2dom(Array.prototype.join.call(arguments, '\n'), {
+		doc: this.ownerDocument,
+		ns: this.namespaceURI
+	});
 };
 
 Node.prototype.fuse = function(obj, scope) {
@@ -89,7 +88,10 @@ function install(el, scope) {
 	el.$installed = true;
 	try {
 		if (el.html != null) {
-			el.dom = scope.$doc.dom(el.html);
+			el.dom = str2dom(el.html, {
+				doc: scope.$doc,
+				ns: el.ns
+			});
 			el.fusable = el.html.fuse();
 		} else {
 			el.fusable = true;
