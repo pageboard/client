@@ -29,3 +29,6 @@ input[is="element-input-range"] + .noUi-target.noUi-horizontal .noUi-connects {
 	border-radius:2px;
 }
 
+input[is="element-input-range"] + .noUi-target.indeterminate .noUi-handle {
+	visibility:hidden;
+}

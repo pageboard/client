@@ -162,7 +162,6 @@ exports.input_range = {
 	title: 'Range',
 	icon: '<i class="options icon"></i>',
 	menu: "form",
-	required: ["name"],
 	group: "block",
 	context: 'form//',
 	properties: {
@@ -190,7 +189,7 @@ exports.input_range = {
 		value: {
 			title: "value",
 			type: "number",
-			default: 50
+			nullable: true
 		},
 		min: {
 			title: 'minimum value',
@@ -206,6 +205,11 @@ exports.input_range = {
 			title: 'step',
 			type: "number",
 			default: 1
+		},
+		pips: {
+			title: 'pips',
+			type: 'boolean',
+			default: true
 		}
 	},
 	contents: {
@@ -219,7 +223,7 @@ exports.input_range = {
 			name="[name]"
 			min="[min]"
 			max="[max]"
-			step="[step]"
+			step="[step]" pips="[pips]"
 			multiple="[multiple]" />
 	</div>`,
 	stylesheets: [

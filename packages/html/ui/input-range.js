@@ -8,13 +8,15 @@ class HTMLElementInputRange extends HTMLInputElement {
 			max: (x) => parseFloat(x) || 100,
 			value: (x) => this.parse(x),
 			step: (x) => parseFloat(x) || 1,
-			multiple: false
+			multiple: true,
+			pips: true,
 		};
 	}
 	get helper() {
-		var node = this.nextElementSibling;
+		var node = this.parentNode.querySelector('.noUi-target');
 		if (!node) {
 			node = this.ownerDocument.createElement('div');
+			node.className = "noUi-target";
 			this.after(node);
 		}
 		return node;
@@ -28,40 +30,51 @@ class HTMLElementInputRange extends HTMLInputElement {
 		this.value = str;
 	}
 	rangeFill(str) {
-		var val = this.rangeNorm(Object.assign({}, this.options, {
+		var val = this.rangeNorm(Object.assign(this.options, {
 			value: this.constructor.parse(str)
 		}));
-		if (this.helper.noUiSlider) {
-			this.helper.noUiSlider.set(val);
-		}
-		this.rangeValue = val;
+		this.updateSlider(val);
+		this.rangeValue = str == null ? [] : val;
 	}
 	rangeReset() {
 		this.rangeFill(this.defaultValue);
 	}
-	patch(state) {
-		if (this.helper.noUiSlider) {
-			this.helper.noUiSlider.set(this.rangeNorm(this.options));
+	updateSlider(val) {
+		var helper = this.helper;
+		if (helper.noUiSlider) {
+			helper.noUiSlider.set(val);
+			helper.classList.toggle('indeterminate', this.options.value == null || isNaN(this.options.value[0]));
 		}
+	}
+	patch(state) {
+		this.updateSlider(this.rangeNorm(this.options));
 	}
 	rangeNorm(opts) {
 		var [start, stop] = opts.value;
-		if (start == null || isNaN(start)) start = opts.min;
-		if (opts.multiple && (stop == null || isNaN(stop))) stop = opts.max;
-		return opts.multiple ? [start, stop] : [start];
+		var vals = [isNaN(start) ? opts.min : start];
+		if (opts.multiple) {
+			vals.push(isNaN(stop) ? opts.max : stop);
+		}
+		return vals;
 	}
-	setup() {
+	setup(state) {
 		var opts = this.options;
-		window.noUiSlider.create(this.helper, {
-			start: this.rangeNorm(opts),
+		var helper = this.helper;
+		if (!helper.noUiSlider) window.noUiSlider.create(helper, {
+			start: opts.multiple ? [null, null] : [null],
 			step: opts.step,
 			range: {
 				min: opts.min,
 				max: opts.max
 			},
+			pips: opts.pips ? {
+				mode: 'steps',
+				density: 100
+			} : false,
 			connect: true
 		}).on('change', (values) => {
 			var isInt = parseInt(opts.step) == opts.step;
+			helper.classList.remove('indeterminate');
 			this.rangeFill(values.map((n) => {
 				if (isInt) n = parseInt(n);
 				return n;
@@ -70,10 +83,22 @@ class HTMLElementInputRange extends HTMLInputElement {
 			e.initEvent('change', true, true);
 			this.dispatchEvent(e);
 		});
+		helper.addEventListener('keydown', this, true);
+		this.patch(state);
+	}
+	handleEvent(e) {
+		if (e.keyCode == 8 || e.keyCode == 46) {
+			this.rangeFill();
+			var e = document.createEvent('HTMLEvents');
+			e.initEvent('change', true, true);
+			this.dispatchEvent(e);
+		}
 	}
 
 	close() {
-		if (this.helper.noUiSlider) this.helper.noUiSlider.destroy();
+		var helper = this.helper;
+		if (helper.noUiSlider) helper.noUiSlider.destroy();
+		helper.removeEventListener('keydown', this, true);
 	}
 }
 
