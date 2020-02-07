@@ -48,7 +48,7 @@ exports.fetch = {
 
 exports.binding = {
 	title: "Binding",
-	icon: '<b class="icon">[*]</b>',
+	icon: '<i class="asterisk icon"></i>',
 	properties: {
 		fill: {
 			title: 'Fill',
