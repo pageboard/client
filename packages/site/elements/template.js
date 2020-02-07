@@ -1,39 +1,17 @@
-exports.template = {
+exports.fetch = {
 	priority: 1,
-	title: 'Template',
-	// icon: '<b class="icon">[*]</b>',
+	title: "Fetch",
+	icon: '<i class="icons"><i class="search icon"></i><i class="corner asterisk icon"></i></i>',
 	menu: 'form',
 	group: 'block template',
+	expressions: true,
 	contents: {
 		id: 'template',
 		nodes: 'block+',
 		expressions: true
 	},
-	html: `<element-template id="[$id]">
-		<template block-content="template"></template>
-		<div class="view"></div>
-	</element-template>`,
-	fuse: function(node, d, scope) {
-		var dom = node.fuse(d, scope);
-		if (scope.$write) {
-			dom.firstElementChild.replaceWith(node.dom('<div block-content="template"></div>'));
-		}
-		return dom;
-	},
-	stylesheets: [
-		'../ui/template.css'
-	],
-	scripts: [
-		'../ui/template.js'
-	]
-};
-
-exports.fetch = Object.assign({}, exports.template, {
-	title: "Fetch",
-	icon: '<i class="search icon"></i>',
-	expressions: true,
-	html: `<element-template data-remote="[action.method|!!]" id="[$id]">
-		<template block-content="template"></template>
+	html: `<element-template data-action="/.api/query/[$id][action.method|bmagnet]">
+		<x[$write|?:div:template|fill] block-content="template"></x[$write|?:div:template|fill]>
 		<div class="view"></div>
 	</element-template>`,
 	properties: {
@@ -59,8 +37,14 @@ exports.fetch = Object.assign({}, exports.template, {
 			},
 			$helper: 'service'
 		}
-	}
-});
+	},
+	stylesheets: [
+		'../ui/template.css'
+	],
+	scripts: [
+		'../ui/template.js'
+	]
+};
 
 exports.binding = {
 	title: "Binding",
