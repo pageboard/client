@@ -35,9 +35,9 @@ class HTMLElementGallery extends HTMLCustomElement {
 		var item = e.target.closest('a');
 		if (item) {
 			if (item.dataset.mode != this.selectedMode) {
-				state.push({query: {
+				state.push({query: Object.assign({
 					[`${this.id}.mode`]: item.dataset.mode
-				}});
+				}, state.query)});
 			}
 			return;
 		}
@@ -53,10 +53,10 @@ class HTMLElementGallery extends HTMLCustomElement {
 		if (!carousel) return;
 		var position = 0;
 		while ((item=item.previousSibling)) position++;
-		state.push({query: {
+		state.push({query: Object.assign({
 			[`${this.id}.mode`]: 'carousel',
 			[`${carousel.id}.index`]: position
-		}});
+		}, state.query)});
 	}
 }
 HTMLCustomElement.define('element-gallery', HTMLElementGallery);
