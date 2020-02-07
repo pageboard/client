@@ -38,7 +38,7 @@ exports.write = {
 				<div class="header item">[$site.title|or:-]</div>
 				<div class="active item">[$site.env]</div>
 				<div class="item">[$site.module]</div>
-				<div class="item">[$site.version|or:latest]</div>
+				<div class="item">[$site.version|slice:0:12|or:latest]</div>
 			</div>
 			<div id="mode" class="right menu">
 				<a class="vertically fitted item" data-command="code" title="HTML Mode">
