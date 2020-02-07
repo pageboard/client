@@ -46,6 +46,32 @@ exports.fetch = {
 	]
 };
 
+exports.include = {
+	priority: 2,
+	title: "Include",
+	menu: 'form',
+	group: 'block template',
+	icon: '<i class="search icon"></i>',
+	expressions: true,
+	required: ['action'],
+	properties: exports.fetch.properties,
+	contents: [{
+		id: 'messages',
+		nodes: 'message+'
+	}, {
+		id: 'blocks',
+		nodes: "block+",
+		virtual: true
+	}],
+	html: `<element-include data-action="/.api/query/[$id]">
+		<div block-content="messages"></div>
+		<div block-content="blocks"></div>
+	</element-include>`,
+	scripts: [
+		'../ui/include.js'
+	]
+};
+
 exports.binding = {
 	title: "Binding",
 	icon: '<i class="asterisk icon"></i>',
