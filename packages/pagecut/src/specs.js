@@ -220,18 +220,20 @@ function toDOMOutputSpec(obj, node, inplace) {
 		delete attrs['block-data'];
 	}
 	delete attrs['block-focused'];
-	var contentName;
 	while (dom) {
-		if (!obj.contentDOM || node instanceof Model.Mark) return [dom.nodeName, attrs];
+		var contentName = dom.getAttribute('block-content') || undefined;
 		if (dom != obj.dom) {
-			contentName = dom.getAttribute('block-content');
 			out = [dom.nodeName, {
 				'class': dom.className || undefined,
-				'block-content': contentName || undefined
+				'block-content': contentName
 			}, out];
 		} else {
-			if (contentName) delete attrs['block-content'];
-			out = [dom.nodeName, attrs, out];
+			if (contentName) attrs['block-content'] = contentName;
+			if (!obj.contentDOM || node instanceof Model.Mark) {
+				out = [dom.nodeName, attrs];
+			} else {
+				out = [dom.nodeName, attrs, out];
+			}
 			break;
 		}
 		dom = dom.parentNode;
