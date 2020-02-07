@@ -269,6 +269,7 @@ function propToMeta(schema) {
 	var hint = '';
 	if (schema.properties || schema.type == "object") {
 		copy.type = 'object';
+		if (schema.nullable) copy.nullable = schema.nullable;
 		if (schema.properties) copy.properties = schema.properties;
 		else copy.description = 'object';
 	} else if (schema.type == "array") {

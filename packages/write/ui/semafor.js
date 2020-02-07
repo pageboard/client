@@ -81,7 +81,7 @@ function formGet(form) {
 	return query;
 }
 
-function formSet(form, values) {
+function formSet(form, values, obj) {
 	function asPaths(obj, ret, pre) {
 		if (!ret) ret = {};
 		Object.entries(obj).forEach(function([key, val]) {
@@ -101,12 +101,12 @@ function formSet(form, values) {
 		elem = form.elements[i];
 		if (!elem.name) continue;
 		if (elem.name.startsWith('$')) continue;
-		nullable = elem.closest('.fieldset.nullable');
-		if (nullable) {
-			nullable.lastElementChild.disabled = false;
-			nullable.firstElementChild.checked = true;
-		}
 		val = flats[elem.name];
+		if (elem.parentNode.matches('.fieldset.nullable')) {
+			var realVal = findPath(obj, elem.name);
+			elem.disabled = !realVal;
+			elem.previousElementSibling.checked = !!realVal;
+		}
 		switch (elem.type) {
 		case 'submit':
 			break;
@@ -184,7 +184,7 @@ Semafor.prototype.get = function() {
 
 Semafor.prototype.set = function(obj) {
 	var vals = Semafor.flatten(obj, {}, this.lastSchema);
-	formSet(this.$node[0], vals);
+	formSet(this.$node[0], vals, obj);
 };
 
 Semafor.prototype.clear = function() {
@@ -785,6 +785,15 @@ function getValStr(item) {
 		console.error("non-const/non-null oneOf/anyOf");
 	}
 	return item.const != null ? item.const : '';
+}
+
+function findPath(obj, path) {
+	var list = path.split('.');
+	var cur = obj;
+	while (cur != null && typeof cur == "object" && list.length) {
+		cur = cur[list.shift()];
+	}
+	return cur;
 }
 
 })();
