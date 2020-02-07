@@ -84,14 +84,15 @@ class HTMLElementInputRange extends HTMLInputElement {
 			this.dispatchEvent(e);
 		});
 		helper.addEventListener('keydown', this, true);
+		helper.addEventListener('dblclick', this, true);
 		this.patch(state);
 	}
 	handleEvent(e) {
-		if (e.keyCode == 8 || e.keyCode == 46) {
+		if (e.type == "dblclick" || e.keyCode == 8 || e.keyCode == 46) {
 			this.rangeFill();
-			var e = document.createEvent('HTMLEvents');
-			e.initEvent('change', true, true);
-			this.dispatchEvent(e);
+			var ne = document.createEvent('HTMLEvents');
+			ne.initEvent('change', true, true);
+			this.dispatchEvent(ne);
 		}
 	}
 
@@ -99,6 +100,7 @@ class HTMLElementInputRange extends HTMLInputElement {
 		var helper = this.helper;
 		if (helper.noUiSlider) helper.noUiSlider.destroy();
 		helper.removeEventListener('keydown', this, true);
+		helper.removeEventListener('dblclick', this, true);
 	}
 }
 
