@@ -1,4 +1,10 @@
 class HTMLCustomFormElement extends HTMLFormElement {
+	static get defaults() {
+		return {
+			action: null,
+			redirection: null
+		};
+	}
 	init() {
 		this.getMethodLater = Pageboard.debounce(this.getMethod, 300);
 	}
@@ -123,7 +129,8 @@ class HTMLCustomFormElement extends HTMLFormElement {
 	getMethod(e, state) {
 		this.ignoreInputChange = false;
 		var form = this;
-		var loc = Page.parse(form.action);
+		var redirect = this.options.redirection;
+		var loc = Page.parse(redirect);
 		Object.assign(loc.query, form.read(false));
 		if (Page.samePathname(loc, state)) {
 			loc.query = Object.assign({}, state.query, loc.query);
@@ -153,7 +160,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			data.$request = form.read(true);
 			form.disable();
 			return Pageboard.fetch(form.method, Page.format({
-				pathname: form.action,
+				pathname: form.options.action,
 				query: data.$query
 			}), data.$request);
 		}).catch(function(err) {
@@ -168,7 +175,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			if (res.status < 200 || res.status >= 400) return;
 			data.$response = res;
 			data.$status = res.status;
-			var redirect = form.getAttribute('redirection');
+			var redirect = form.options.redirection;
 			if (redirect) redirect = redirect.fuse(data, state.scope);
 			if (!redirect) {
 				if (res.granted) redirect = Page.format(state);

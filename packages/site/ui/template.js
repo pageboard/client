@@ -1,7 +1,7 @@
 class HTMLElementTemplate extends HTMLCustomElement {
 	static get defaults() {
 		return {
-			remote: false
+			action: null
 		};
 	}
 	patch(state) {
@@ -58,21 +58,21 @@ class HTMLElementTemplate extends HTMLCustomElement {
 				state.vars[key] = true;
 			});
 			if (missing) return;
-		} else if (!opts.remote) {
+		} else if (!opts.action) {
 			// non-remotes cannot know if they will need $query
 		}
 		var loader;
-		if (opts.remote) {
+		if (opts.action) {
 			var queryStr = Page.format({pathname: "", query: vars});
 			if (queryStr == this.dataset.query) return;
 			this.dataset.query = queryStr;
-			loader = Pageboard.fetch('get', `/.api/query/${this.id}`, vars);
+			loader = Pageboard.fetch('get', opts.action, vars);
 		} else {
 			loader = Promise.resolve();
 		}
 		this._refreshing = true;
 		this.classList.remove('error', 'warning', 'success');
-		if (opts.remote) this.classList.add('loading');
+		if (opts.action) this.classList.add('loading');
 
 		return Pageboard.bundle(loader, state).then((res) => {
 			this.render(res, state);
@@ -116,7 +116,7 @@ class HTMLElementTemplate extends HTMLCustomElement {
 		var usesQuery = false;
 
 		scope.$element = {
-			name: `template_element_${this.id}`,
+			name: 'template_element',
 			dom: template,
 			filters: {
 				'||': function(val, what) {

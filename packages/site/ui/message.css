@@ -1,8 +1,13 @@
-.message {
+
+[action] .message,
+[data-action] .message {
 	display:none;
 }
-.message.success,
-.message.warning,
-.message.error {
+[action].success .message.success,
+[data-action].success .message.success,
+[action].warning .message.warning,
+[data-action].warning .message.warning,
+[action].error .message.error
+[data-action].error .message.error {
 	display:block;
 }
