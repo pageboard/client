@@ -2,6 +2,13 @@
 
 var adv = false;
 
+Page.patch(function(state) {
+	// write mode accepts all params at the moment
+	Object.keys(state.query).forEach((key) => {
+		state.vars[key] = true;
+	});
+});
+
 Page.setup(function(state) {
 	var parentRead = document.getElementById('pageboard-read');
 	var iframe = Pageboard.read = document.createElement('iframe');
