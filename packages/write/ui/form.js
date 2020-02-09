@@ -224,7 +224,7 @@ FormBlock.prototype.update = function(parents, block, mode) {
 	this.ignoreEvents = false;
 };
 
-FormBlock.prototype.customHelper = function(key, prop, node) {
+FormBlock.prototype.customHelper = function(key, prop, node, parentProp) {
 	var editor = this.editor;
 	if (prop.context && this.parents && !this.parents.some(function(parent) {
 		return prop.context.split('|').some(function(tok) {
@@ -260,7 +260,7 @@ FormBlock.prototype.customHelper = function(key, prop, node) {
 	}
 	var inst = this.helpers[key];
 	if (inst && inst.destroy) inst.destroy();
-	inst = this.helpers[key] = new Helper(node.querySelector(`[name="${key}"]`), opts, prop);
+	inst = this.helpers[key] = new Helper(node.querySelector(`[name="${key}"]`), opts, prop, parentProp);
 	if (inst.init) prop = inst.init(this.block, prop);
 };
 

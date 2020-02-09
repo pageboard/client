@@ -1,18 +1,33 @@
 (function(Pageboard) {
 Pageboard.schemaHelpers.crop = Crop;
 
-function Crop(input, opts, props) {
+function Crop(input, opts, props, parentProp) {
 	this.input = input;
 	this.props = props;
+	this.prefix = input.name.split('.').slice(0, -1).join('.');
+	if (this.prefix) {
+		this.prefix += ".";
+	}
+	var urlProp = "url";
+	if (parentProp) {
+		urlProp = Object.keys(parentProp).find((key) => {
+			var pp = parentProp[key].$helper;
+			if (!pp) return;
+			if (pp.name == "href" && pp.filter && (pp.filter.type || []).includes('image')) {
+				return true;
+			}
+		});
+	}
+	this.urlProp = this.prefix + urlProp;
 }
 
 Crop.prototype.init = function(block) {
 	var input = this.input;
-	this.x = input.querySelector('[name="crop.x"]');
-	this.y = input.querySelector('[name="crop.y"]');
-	this.width = input.querySelector('[name="crop.width"]');
-	this.height = input.querySelector('[name="crop.height"]');
-	this.zoom = input.querySelector('[name="crop.zoom"]');
+	this.x = input.querySelector(`[name="${this.prefix}crop.x"]`);
+	this.y = input.querySelector(`[name="${this.prefix}crop.y"]`);
+	this.width = input.querySelector(`[name="${this.prefix}crop.width"]`);
+	this.height = input.querySelector(`[name="${this.prefix}crop.height"]`);
+	this.zoom = input.querySelector(`[name="${this.prefix}crop.zoom"]`);
 
 	input.classList.add('crop');
 
@@ -27,7 +42,7 @@ Crop.prototype.init = function(block) {
 	this.debouncedChange = Pageboard.debounce(this.change, 500);
 
 	this.container = input.appendChild(input.dom(`<div class="crop">
-		<img src="${this.thumbnail(block.data.url)}" />
+		<img src="${this.thumbnail(Semafor.findPath(block.data, this.urlProp))}" />
 	</div>`));
 
 	this.cropper = new window.Cropper(this.container.querySelector('img'), {
@@ -62,7 +77,7 @@ Crop.prototype.ready = function() {
 };
 
 Crop.prototype.formChange = function(e) {
-	if (!e.target.matches('[name="url"]')) return;
+	if (!e.target.matches(`[name="${this.urlProp}"]`)) return;
 	setTimeout(function() {
 		this.load();
 	}.bind(this));

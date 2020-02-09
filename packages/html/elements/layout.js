@@ -121,6 +121,50 @@ exports.layout = {
 						}
 					}
 				},
+				crop: {
+					title: 'Crop and scale',
+					type: "object",
+					properties: {
+						x: {
+							type: "number",
+							minimum: 0,
+							maximum: 100,
+							default: 50,
+							title: "Horizontal center"
+						},
+						y: {
+							type: "number",
+							minimum: 0,
+							maximum: 100,
+							default: 50,
+							title: "Vertical center"
+						},
+						width: {
+							type: "number",
+							minimum: 0,
+							maximum: 100,
+							default: 100,
+							title: "Width"
+						},
+						height: {
+							type: "number",
+							minimum: 0,
+							maximum: 100,
+							default: 100,
+							title: "Height"
+						},
+						zoom: {
+							type: "number",
+							minimum: 1,
+							maximum: 100,
+							default: 100,
+							title: "Zoom"
+						}
+					},
+					$helper: {
+						name: 'crop'
+					}
+				},
 				size: {
 					title: 'Size',
 					anyOf: [{

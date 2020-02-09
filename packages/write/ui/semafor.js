@@ -103,7 +103,7 @@ function formSet(form, values, obj) {
 		if (elem.name.startsWith('$')) continue;
 		val = flats[elem.name];
 		if (elem.parentNode.matches('.fieldset.nullable')) {
-			var realVal = findPath(obj, elem.name);
+			var realVal = Semafor.findPath(obj, elem.name);
 			elem.disabled = !realVal;
 			elem.previousElementSibling.checked = !!realVal;
 		}
@@ -403,9 +403,9 @@ function getNonNullType(type) {
 	if (type[1] == "null") return type[0];
 	return type;
 }
-Semafor.prototype.process = function(key, schema, node) {
+Semafor.prototype.process = function(key, schema, node, parent) {
 	if (this.filter) {
-		schema = this.filter(key, schema) || schema;
+		schema = this.filter(key, schema, parent) || schema;
 	}
 	var type = getNonNullType(schema.type);
 	var hasHelper = false;
@@ -445,7 +445,7 @@ Semafor.prototype.process = function(key, schema, node) {
 		console.warn(key, 'has no supported type in schema', schema);
 	}
 	if (key && this.helper && !hasHelper) {
-		schema = this.helper(key, schema, node) || schema;
+		schema = this.helper(key, schema, node, parent) || schema;
 	}
 	return schema;
 };
@@ -528,7 +528,7 @@ types.oneOf = function(key, schema, node, inst) {
 		oneOfType = {type: "string", format: 'singleline'}; // FIXME use an array of formats
 	}
 	if (oneOfType) {
-		inst.process(key, Object.assign({}, schema, oneOfType), node);
+		inst.process(key, Object.assign({}, schema, oneOfType), node, parent);
 		return true;
 	}
 
@@ -647,7 +647,7 @@ types.object = function(key, schema, node, inst) {
 	var prefix = key ? (key + '.') : '';
 	Object.keys(schema.properties).forEach(function(name) {
 		var propSchema = schema.properties[name];
-		props[name] = inst.process(prefix + name, propSchema, fieldset) || propSchema;
+		props[name] = inst.process(prefix + name, propSchema, fieldset, schema.properties) || propSchema;
 	});
 	schema.properties = props;
 };
@@ -674,7 +674,7 @@ types.array = function(key, schema, node, inst) {
 		var fieldset = node.dom(`<fieldset><legend>${schema.title}</legend></fieldset>`);
 		node.appendChild(fieldset);
 		schema.items.forEach(function(item, i) {
-			inst.process(`${key}.${i}`, item, fieldset);
+			inst.process(`${key}.${i}`, item, fieldset, schema);
 		});
 	} else if (schema.items.type == "string") {
 		types.string(key, schema, node, inst);
@@ -699,7 +699,7 @@ types.array = function(key, schema, node, inst) {
 		}
 	} else {
 		console.info("FIXME: array type supports only items: [schemas], or items.anyOf", schema);
-		return inst.process(key, Object.assign({}, schema.items, {title: schema.title}), node);
+		return inst.process(key, Object.assign({}, schema.items, {title: schema.title}), node, schema);
 	}
 };
 
@@ -787,7 +787,7 @@ function getValStr(item) {
 	return item.const != null ? item.const : '';
 }
 
-function findPath(obj, path) {
+Semafor.findPath = function(obj, path) {
 	var list = path.split('.');
 	var cur = obj;
 	while (cur != null && typeof cur == "object" && list.length) {
