@@ -31,16 +31,16 @@ exports.image = {
 			properties: {
 				fit: {
 					title: "Fit",
-					default: "none",
+					default: "contain",
 					anyOf: [{
-						title: "natural",
-						const: "none"
-					}, {
 						title: "contain",
 						const: "contain"
 					}, {
 						title: "cover",
 						const: "cover"
+					}, {
+						title: "natural",
+						const: "none"
 					}]
 				},
 				horizontal: {
