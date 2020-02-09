@@ -42,16 +42,18 @@
 }
 
 @keyframes dots {
-    0% {
-      content: '';
-    }
-    33% {
-      content: '⚫';
-    }
-    66% {
-      content: '⚫⚫';
-    }
-    100% {
-      content: '⚫⚫⚫';
-    }
+	0% {
+		opacity:0;
+		content: '⚫';
+	}
+	33% {
+		opacity:1;
+		content: '⚫';
+	}
+	66% {
+		content: '⚫⚫';
+	}
+	100% {
+		content: '⚫⚫⚫';
+	}
 }
