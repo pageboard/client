@@ -39,7 +39,11 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		}, this);
 		// checkbox fix
 		Array.from(this.elements).forEach(function(node) {
-			if (node.type == "checkbox") {
+			if (node.type == "radio") {
+				if (!withDefaults && node.checked == node.defaultChecked && query[node.name] == node.value) {
+					delete query[node.name];
+				}
+			} else if (node.type == "checkbox") {
 				if (node.name && node.value == "true") {
 					if (query[node.name] === undefined) query[node.name] = node.checked;
 					if (!withDefaults && query[node.name] == node.defaultChecked) {
