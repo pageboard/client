@@ -25,11 +25,7 @@ class HTMLCustomConsentElement extends HTMLFormElement {
 		var fd = window.HTMLCustomFormElement.prototype.read.call(this);
 		var consent = fd.consent;
 		if (consent == null) {
-			// temp backward compat with dnt
-			consent = fd.dnt;
-			if (consent == "no") consent = "yes";
-			else if (consent == "yes") consent = "no";
-			else return;
+			return;
 		}
 		Page.storage.set('consent', consent);
 		state.scope.$consent = consent;
