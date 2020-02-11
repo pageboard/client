@@ -1,11 +1,15 @@
 [data-src]::after {
 	display:none;
 	box-sizing: border-box;
-	position: absolute;
-	line-height:100%;
 	text-align:center;
 	color:#aaa;
-	font-size:1.4rem;
+	font-size: 2rem;
+	line-height: 1.6rem;
+	white-space: pre-wrap;
+	position:absolute;
+	width:100%;
+	top:50%;
+	margin-top:-1rem;
 }
 
 @keyframes spinner {
@@ -46,14 +50,17 @@
 		opacity:0;
 		content: '⚫';
 	}
-	33% {
+	25% {
 		opacity:1;
 		content: '⚫';
 	}
-	66% {
+	50% {
 		content: '⚫⚫';
 	}
+	75% {
+		content: '⚫⚫\A⚫';
+	}
 	100% {
-		content: '⚫⚫⚫';
+		content: '⚫⚫\A⚫⚫';
 	}
 }
