@@ -31,15 +31,18 @@ class HTMLElementGoogleTranslate extends HTMLCustomElement {
 		}
 	}
 	show(state) {
-		if (document.body.isContentEditable) return;
-		if (window.google && window.google.translate) delete window.google.translate;
-		this.id = `id${Date.now()}`;
-		var cb = `HTMLElementGoogleTranslate_${this.id}`;
-		window[cb] = this.cb.bind(this, state);
-		var script = document.createElement('script');
-		script.src = `https://translate.google.com/translate_a/element.js?cb=${cb}`;
-		this.script = script;
-		document.head.appendChild(script);
+		state.chain('consent', (state) => {
+			if (state.scope.$consent != "yes") return;
+			if (document.body.isContentEditable) return;
+			if (window.google && window.google.translate) delete window.google.translate;
+			this.id = `id${Date.now()}`;
+			var cb = `HTMLElementGoogleTranslate_${this.id}`;
+			window[cb] = this.cb.bind(this, state);
+			var script = document.createElement('script');
+			script.src = `https://translate.google.com/translate_a/element.js?cb=${cb}`;
+			this.script = script;
+			document.head.appendChild(script);
+		});
 	}
 	setClass() {
 		document.documentElement.classList.toggle('google-translate-shown', !!this.shown);
@@ -58,7 +61,8 @@ class HTMLElementGoogleTranslate extends HTMLCustomElement {
 	started() {
 		if (this.translate) {
 			this.translate = false; // once
-			var btn = document.body.firstElementChild.firstElementChild.contentDocument.body.querySelector('[id=":0.confirm"]');
+			var frame = document.body.querySelector('.goog-te-banner-frame');
+			var btn = frame.contentDocument.body.querySelector('[id=":0.confirm"]');
 			if (btn) btn.dispatchEvent(new MouseEvent("click"));
 		}
 	}
