@@ -11,7 +11,7 @@ exports.fetch = {
 		expressions: true
 	},
 	html: `<element-template data-action="/.api/query/[$id][action.method|bmagnet]">
-		<x[$write|?:div:template|fill] block-content="template"></x[$write|?:div:template|fill]>
+		<template block-content="template"></template>
 		<div class="view"></div>
 	</element-template>`,
 	properties: {

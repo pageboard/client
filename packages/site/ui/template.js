@@ -5,6 +5,20 @@ class HTMLElementTemplate extends HTMLCustomElement {
 		};
 	}
 	patch(state) {
+		var tmpl = this.firstElementChild;
+		if (!("content" in tmpl) && tmpl.matches('script[type="text/html"]')) {
+			var helper =  this.ownerDocument.createElement('div');
+			helper.innerHTML = tmpl.textContent;
+			tmpl.content = this.ownerDocument.createDocumentFragment();
+			tmpl.content.appendChild(tmpl.dom(helper.textContent));
+			tmpl.textContent = helper.textContent = '';
+		} else if (this.closest('[contenteditable]')) {
+			if (tmpl.content) {
+				tmpl.appendChild(tmpl.content);
+			}
+			return;
+		}
+
 		if (this._refreshing || this.closest('[block-content="template"]')) return;
 		// first find out if state.query has a key in this.keys
 		// what do we do if state.query has keys that are used by a form in this query template ?
@@ -87,17 +101,9 @@ class HTMLElementTemplate extends HTMLCustomElement {
 		});
 	}
 	render(data, state) {
-		if (this.closest('[contenteditable]')) return;
 		if (this.children.length != 2) return;
-		var view = this.lastElementChild;
 		var template = this.firstElementChild;
-		if (!("content" in template) && template.matches('script[type="text/html"]')) {
-			var helper =  this.ownerDocument.createElement('div');
-			helper.innerHTML = template.textContent;
-			template.content = this.ownerDocument.createDocumentFragment();
-			template.content.appendChild(template.dom(helper.textContent));
-			template.textContent = helper.textContent = '';
-		}
+		var view = this.lastElementChild;
 		if (template.content) {
 			template = template.content;
 		}
@@ -116,7 +122,7 @@ class HTMLElementTemplate extends HTMLCustomElement {
 		var usesQuery = false;
 
 		scope.$element = {
-			name: 'template_element',
+			name: 'template_element_' + (Math.round(Date.now() * Math.random()) + '').substr(-6),
 			dom: template,
 			filters: {
 				'||': function(val, what) {
@@ -137,12 +143,12 @@ class HTMLElementTemplate extends HTMLCustomElement {
 					}
 				}
 			},
-			contents: Array.from(template.querySelectorAll('[block-content]')).map((node) => {
-				return {
-					id: node.getAttribute('block-content'),
-					nodes: 'block+'
-				};
-			})
+			// contents: Array.from(template.querySelectorAll('[block-content]')).map((node) => {
+			// 	return {
+			// 		id: node.getAttribute('block-content'),
+			// 		nodes: 'block+'
+			// 	};
+			// })
 		};
 		Object.keys(state.data).forEach(function(key) {
 			if (key.startsWith('$') && scope[key] == null) scope[key] = state.data[key];
