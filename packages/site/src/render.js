@@ -50,20 +50,14 @@ module.exports = function(res, scope, el) {
 
 	var block = res.item || {};
 	var blocks = {};
-	if (el) {
-		if (!block.type) block.type = el.name;
-		if (res.items) {
-			if (block.standalone) {
-				block.children = res.items;
-			} else {
-				importBlocks(res.items, blocks);
-			}
-		}
-	} else if (block.type) {
+	if (!el && block.type) {
 		el = elts[block.type];
 	}
+	if (res.items) {
+		importBlocks(res.items, blocks);
+	}
 	return scope.$view.from(block, blocks, {
-		type: block.type,
+		type: el.name,
 		element: el,
 		scope: scope,
 		strip: !scope.$write

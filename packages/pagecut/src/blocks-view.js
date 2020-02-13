@@ -20,10 +20,7 @@ function Blocks(view, opts) {
 	if (opts.genId) this.genId = opts.genId;
 }
 
-Blocks.prototype.render = function(block, opts) {
-	var type = opts.type || block.type;
-	var el = this.view.element(type);
-	if (!el) throw new Error(`Unknown element type ${type}`);
+Blocks.prototype.render = function(el, block, opts) {
 	if (!opts) opts = {};
 	var scope = opts.scope || this.view.scope || {};
 	if (!scope.$doc) scope.$doc = this.view.doc;
@@ -33,13 +30,11 @@ Blocks.prototype.render = function(block, opts) {
 	block = Object.assign({}, block);
 	block.data = Blocks.fill(el, block.data);
 	var dom = el.render.call(el, block, scope);
-	if (dom && opts.merge !== false) this.merge(dom, block, el);
+	if (dom && opts.merge !== false) this.merge(el, dom, block);
 	return dom;
 };
 
-Blocks.prototype.mount = function(block, blocks, opts) {
-	var type = opts.type || block.type;
-	var el = this.view.element(type);
+Blocks.prototype.mount = function(el, block, blocks) {
 	if (!el) return;
 	el.contents.normalize(block);
 	var copy = this.copy(block);
@@ -50,11 +45,10 @@ Blocks.prototype.mount = function(block, blocks, opts) {
 			el.contents.set(copy, def.id, htmlToFrag(content, {doc: doc, ns: el.ns}));
 		}
 	});
-	if (!el) {
-		console.error("Cannot find element for block type", type);
-		return copy;
+	if (el.mount) {
+		console.warn("deprecated el.mount", el.name);
+		el.mount(copy, blocks);
 	}
-	if (el.mount) el.mount(copy, blocks, opts);
 	return copy;
 };
 
@@ -81,7 +75,7 @@ Blocks.prototype.copy = function(block) {
 	return copy;
 };
 
-Blocks.prototype.merge = function(dom, block, el) {
+Blocks.prototype.merge = function(el, dom, block) {
 	if (dom.nodeType != Node.ELEMENT_NODE) return;
 	if (el.inplace) return;
 	if (!block.content) return;
@@ -115,11 +109,11 @@ Blocks.prototype.from = function(block, blocks, opts) {
 };
 
 Blocks.prototype.renderFrom = function(block, blocks, store, opts) {
-	if (!block.type) return;
 	var view = this.view;
 	if (!blocks) blocks = {};
 	if (!opts) opts = {};
-	block = this.mount(block, blocks, opts);
+	var el = view.element(opts.element || opts.type || block.type);
+	block = this.mount(el, block, blocks);
 	if (!block) return;
 	if (block.id) {
 		// overwrite can happen when (re)loading virtual blocks
@@ -160,7 +154,10 @@ Blocks.prototype.renderFrom = function(block, blocks, store, opts) {
 				parent.replaceChild(node.ownerDocument.createTextNode('·'), node);
 				return;
 			}
-			var frag = this.renderFrom(child, blocks, store, Object.assign({}, opts, {type: type}));
+			var frag = this.renderFrom(child, blocks, store, Object.assign({}, opts, {
+				type: type,
+				element: null
+			}));
 			if (!frag) {
 				parent.removeChild(node);
 				return;

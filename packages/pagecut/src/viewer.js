@@ -42,9 +42,9 @@ Viewer.prototype.setElement = function(el) {
 Viewer.prototype.render = function(block, opts) {
 	var dom;
 	opts = opts || {};
-	var type = opts.type || block.type;
+	var el = this.element(opts.element || opts.type || block.type);
 	try {
-		dom = this.blocks.render(block, opts);
+		dom = this.blocks.render(el, block, opts);
 	} catch(ex) {
 		console.error(ex);
 	}
@@ -57,12 +57,11 @@ Viewer.prototype.render = function(block, opts) {
 		this.doc.appendChild(dom);
 		dom = dom.querySelector('body');
 		if (!dom) {
-			console.error(`${type} returns a document element but does not contain a body`);
+			console.error(`${block.type} returns a document element but does not contain a body`);
 		}
 	}
 	if (!dom || dom.nodeType != Node.ELEMENT_NODE) return dom;
 
-	var el = this.element(type);
 	dom.setAttribute('block-type', el.name);
 	if (block.expr && Object.keys(block.expr).length) {
 		dom.setAttribute('block-expr', JSON.stringify(block.expr));
