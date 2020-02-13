@@ -63,7 +63,7 @@ Viewer.prototype.render = function(block, opts) {
 	if (!dom || dom.nodeType != Node.ELEMENT_NODE) return dom;
 
 	var el = this.element(type);
-	dom.setAttribute('block-type', type);
+	dom.setAttribute('block-type', el.name);
 	if (block.expr && Object.keys(block.expr).length) {
 		dom.setAttribute('block-expr', JSON.stringify(block.expr));
 	} else {
