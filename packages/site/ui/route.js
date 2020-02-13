@@ -21,17 +21,3 @@ Page.route(function(state) {
 		return doc;
 	});
 });
-
-if (!Page.serialize) Page.serialize = function(state) {
-	var helper = document.createElement('div');
-	Array.from(document.querySelectorAll('template')).forEach((node) => {
-		var dest = node.dom(`<script type="text/html"></script>`);
-		helper.textContent = Array.from(node.content.childNodes).map(child => {
-			if (child.nodeType == Node.TEXT_NODE) return child.nodeValue;
-			else return child.outerHTML;
-		}).join('');
-		dest.textContent = helper.innerHTML;
-		node.replaceWith(dest);
-	});
-	return '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-};

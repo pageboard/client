@@ -4,22 +4,42 @@ class HTMLElementTemplate extends HTMLCustomElement {
 			action: null
 		};
 	}
-	patch(state) {
-		var tmpl = this.firstElementChild;
-		if (!("content" in tmpl) && tmpl.matches('script[type="text/html"]')) {
-			var helper =  this.ownerDocument.createElement('div');
-			helper.innerHTML = tmpl.textContent;
-			tmpl.content = this.ownerDocument.createDocumentFragment();
-			tmpl.content.appendChild(tmpl.dom(helper.textContent));
-			tmpl.textContent = helper.textContent = '';
-		} else if (this.closest('[contenteditable]')) {
-			if (tmpl.content) {
+	static prepareTemplate(node) {
+		var doc = node.ownerDocument;
+		var tmpl = node;
+		var helper;
+		if (node.matches('script[type="text/html"]')) {
+			helper = doc.createElement('div');
+			helper.innerHTML = node.textContent;
+			tmpl = doc.createElement('template');
+			if (!tmpl.content) tmpl.content = doc.createDocumentFragment();
+			tmpl.content.appendChild(node.dom(helper.textContent));
+			node.replaceWith(tmpl);
+			node.textContent = helper.textContent = '';
+		}
+		if (tmpl.isContentEditable) {
+			if (tmpl.content && tmpl.children.length == 0) {
+				tmpl.textContent = '';
 				tmpl.appendChild(tmpl.content);
 			}
-			return;
+		} else if (document.visibilityState == "prerender") {
+			var dest = tmpl.dom(`<script type="text/html"></script>`);
+			if (!helper) helper = doc.createElement('div');
+			helper.textContent = Array.from(tmpl.content.childNodes).map(child => {
+				if (child.nodeType == Node.TEXT_NODE) return child.nodeValue;
+				else return child.outerHTML;
+			}).join('');
+			dest.textContent = helper.innerHTML;
+			dest.content = tmpl.content;
+			tmpl.replaceWith(dest);
+			tmpl = dest;
 		}
+		return tmpl;
+	}
 
-		if (this._refreshing || this.closest('[block-content="template"]')) return;
+	patch(state) {
+		this.constructor.prepareTemplate(this.firstElementChild);
+		if (this.isContentEditable || this._refreshing || this.closest('[block-content="template"]')) return;
 		// first find out if state.query has a key in this.keys
 		// what do we do if state.query has keys that are used by a form in this query template ?
 		var expr = this.getAttribute('block-expr');
@@ -102,28 +122,20 @@ class HTMLElementTemplate extends HTMLCustomElement {
 	}
 	render(data, state) {
 		if (this.children.length != 2) return;
-		var template = this.firstElementChild;
+		var tmpl = this.firstElementChild.content.cloneNode(true);
 		var view = this.lastElementChild;
-		if (template.content) {
-			template = template.content;
-		}
-		if (template.nodeType == Node.DOCUMENT_FRAGMENT_NODE) {
-			var offView = this.ownerDocument.createElement(view.nodeName);
-			offView.appendChild(template.cloneNode(true));
-			template = offView;
-		}
 		// remove all block-id from template - might be done in pagecut eventually
 		var rnode;
-		while ((rnode = template.querySelector('[block-id]'))) rnode.removeAttribute('block-id');
+		while ((rnode = tmpl.querySelector('[block-id]'))) rnode.removeAttribute('block-id');
 		// pagecut merges block-expr into block-data - contrast with above patch() method
-		while ((rnode = template.querySelector('[block-expr]'))) rnode.removeAttribute('block-expr');
+		while ((rnode = tmpl.querySelector('[block-expr]'))) rnode.removeAttribute('block-expr');
 
 		var scope = Object.assign({}, state.scope);
 		var usesQuery = false;
 
-		scope.$element = {
-			name: 'template_element_' + (Math.round(Date.now() * Math.random()) + '').substr(-6),
-			dom: template,
+		var el = {
+			name: 'element_template_' + (Math.round(Date.now() * Math.random()) + '').substr(-6),
+			dom: tmpl,
 			filters: {
 				'||': function(val, what) {
 					var path = what.scope.path;
@@ -143,7 +155,7 @@ class HTMLElementTemplate extends HTMLCustomElement {
 					}
 				}
 			},
-			// contents: Array.from(template.querySelectorAll('[block-content]')).map((node) => {
+			// contents: Array.from(tmpl.querySelectorAll('[block-content]')).map((node) => {
 			// 	return {
 			// 		id: node.getAttribute('block-content'),
 			// 		nodes: 'block+'
@@ -157,10 +169,9 @@ class HTMLElementTemplate extends HTMLCustomElement {
 		scope.$query = state.query;
 		scope.$referrer = state.referrer.pathname || state.pathname;
 
-		var node = Pageboard.render(data, scope);
-
+		var node = Pageboard.render(data, scope, el);
 		view.textContent = '';
-		while (node.firstChild) view.appendChild(node.firstChild);
+		view.appendChild(node);
 		if (usesQuery) state.scroll({
 			once: true,
 			node: this.parentNode,
