@@ -1,7 +1,7 @@
 Page.setup(function(state) {
 	state.finish(() => {
 		var consent = Page.storage.get('consent');
-		if (consent === null && !Page.getConsent) {
+		if (consent === null && !Page.getConsent || state.scope.$write) {
 			consent = "yes";
 		}
 		state.scope.$consent = consent;

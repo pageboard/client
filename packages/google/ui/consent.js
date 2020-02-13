@@ -3,6 +3,7 @@ Page.ready(function(state) {
 });
 Page.getConsent = function(state) {
 	document.querySelectorAll('[block-type="consent_form"]').forEach((node) => {
+		if (!node.options) return;
 		if (node.options.transient) node.classList.add('visible');
 		HTMLCustomFormElement.prototype.fill.call(node, {
 			consent: state.scope.$consent

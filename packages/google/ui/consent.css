@@ -2,6 +2,7 @@
 	display:none;
 }
 
+[contenteditable] [block-type="consent_form"][data-transient="true"],
 [block-type="consent_form"][data-transient="true"] > template {
 	display:block;
 }
