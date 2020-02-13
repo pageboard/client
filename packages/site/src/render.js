@@ -54,7 +54,9 @@ module.exports = function(res, scope, el) {
 		el = elts[block.type];
 	}
 	if (res.items) {
-		importBlocks(res.items, blocks);
+		res.items.forEach((child) => {
+			blocks[child.id] = child;
+		});
 	}
 	return scope.$view.from(block, blocks, {
 		type: el.name,
@@ -65,16 +67,6 @@ module.exports = function(res, scope, el) {
 };
 
 module.exports.install = install;
-
-function importBlocks(children, blocks) {
-	children.forEach((child) => {
-		blocks[child.id] = child;
-		if (child.children) {
-			importBlocks(child.children, blocks);
-			delete child.children;
-		}
-	});
-}
 
 function install(el, scope) {
 	if (el.$installed) return;
