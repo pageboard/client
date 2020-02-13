@@ -3,7 +3,7 @@
 
 Pageboard.Controls.Menu = Menu;
 
-Menu.tabs = ["common", "widget", "link", "form"];
+Menu.tabs = ["section", "media", "widget", "link", "form"];
 
 function Menu(editor, node) {
 	this.editor = editor;
@@ -100,7 +100,7 @@ Menu.prototype.update = function(parents, sel) {
 				}
 			}
 		} else if (isBlockSelection) {
-			var menu = el.menu || 'common';
+			var menu = el.menu || 'section';
 			this.tab(menu).appendChild(dom);
 			if (!activeTab && dom.matches('.active')) activeTab = menu;
 		}
@@ -128,7 +128,7 @@ Menu.prototype.update = function(parents, sel) {
 				activeTab = Object.keys(this.tabs).find(name => {
 					var tab = this.tabs[name];
 					return tab.div.children.length > 0;
-				}) || 'common';
+				}) || 'section';
 			}
 		}
 		this.showTab(activeTab);
