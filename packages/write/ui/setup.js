@@ -126,11 +126,11 @@ function update() {
 	var editor = this;
 	var tr = editor.state.tr;
 	var sel = tr.selection;
-	if (this.selection && sel.eq(this.selection)) return;
-	this.selection = sel;
-	var parents = filterParents(editor, editor.utils.selectionParents(tr, sel));
 	var changed = editor.docChanged;
 	editor.docChanged = false;
+	if (!changed && this.selection && sel.eq(this.selection)) return;
+	this.selection = sel;
+	var parents = filterParents(editor, editor.utils.selectionParents(tr, sel));
 	if (!parents.length) return;
 	if (editor.controls) Object.keys(editor.controls).forEach(function(key) {
 		var c = editor.controls[key];
