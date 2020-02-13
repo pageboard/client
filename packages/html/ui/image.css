@@ -55,20 +55,20 @@ element-image.bottom {
 }
 
 element-image.left.top {
-	/* empty */
+	/* placeholder */
 }
 element-image.left.top > img {
 	object-position:left top;
 }
 element-image.left.vcenter {
-	
+	/* placeholder */
 }
 element-image.left.vcenter > img {
 	object-position:left center;
 	height:100%;
 }
 element-image.left.bottom {
-	
+	/* placeholder */
 }
 element-image.left.bottom > img {
 	object-position:left bottom;
@@ -78,14 +78,14 @@ element-image.hcenter.top > img {
 	object-position:center top;
 }
 element-image.hcenter.vcenter {
-	
+	/* placeholder */
 }
 element-image.hcenter.vcenter > img {
 	object-position:center center;
 	height:100%;
 }
 element-image.hcenter.bottom {
-	
+	/* placeholder */
 }
 element-image.hcenter.bottom > img {
 	object-position:center bottom;
@@ -95,14 +95,14 @@ element-image.right.top > img {
 	object-position:right top;
 }
 element-image.right.vcenter {
-	
+	/* placeholder */
 }
 element-image.right.vcenter > img {
 	height:100%;
 	object-position:right center;
 }
 element-image.right.bottom {
-	
+	/* placeholder */
 }
 element-image.right.bottom > img {
 	height:100%;
@@ -147,6 +147,7 @@ element-image.none.right.bottom > img {
 	align-self:flex-end;
 }
 element-image.none.hcenter.bottom {
+	/* placeholder */
 }
 element-image.none.hcenter.bottom > img {
 	align-self:flex-end;
