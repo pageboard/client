@@ -43,9 +43,6 @@ exports.audio = {
 	scripts: [
 		'../ui/audio.js'
 	],
-	stylesheets: [
-		'../ui/audio.css'
-	],
 	csp: {
 		media: ["'self'"]
 	}
