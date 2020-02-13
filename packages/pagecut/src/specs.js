@@ -24,6 +24,9 @@ function define(view, elt, schema, views) {
 		merge: false,
 		genId: false
 	});
+	if (dom && dom.nodeType == Node.DOCUMENT_FRAGMENT_NODE && dom.children.length == 1) {
+		dom = dom.children[0];
+	}
 	if (!dom || dom.nodeType != Node.ELEMENT_NODE) {
 		console.error(`ignoring ${elt.name} element - render does not return a DOM Node`);
 		return;
