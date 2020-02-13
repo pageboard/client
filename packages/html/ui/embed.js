@@ -49,8 +49,8 @@ class HTMLElementEmbed extends HTMLCustomElement {
 		});
 		return this.promise;
 	}
-	captureClick() {
-		if (this.matches('.denied') && Page.consent) Page.consent();
+	captureClick(e, state) {
+		if (this.matches('.denied') && Page.getConsent) Page.getConsent(state);
 	}
 	captureLoad() {
 		this.promise.done();
