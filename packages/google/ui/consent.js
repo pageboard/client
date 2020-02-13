@@ -1,10 +1,14 @@
-Page.setup(function(state) {
+Page.ready(function(state) {
 	HTMLCustomElement.define(`element-consent`, HTMLCustomConsentElement, 'form');
-	var consentForm = document.body.querySelector('[block-type="consent_form"]');
-	if (consentForm) Page.consent = function() {
-		consentForm.classList.add('visible');
-	};
 });
+Page.getConsent = function(state) {
+	document.querySelectorAll('[block-type="consent_form"]').forEach((node) => {
+		if (node.options.transient) node.classList.add('visible');
+		HTMLCustomFormElement.prototype.fill.call(node, {
+			consent: state.scope.$consent
+		});
+	});
+};
 
 class HTMLCustomConsentElement extends HTMLFormElement {
 	static get defaults() {
@@ -13,11 +17,10 @@ class HTMLCustomConsentElement extends HTMLFormElement {
 		};
 	}
 	setup(state) {
-		window.HTMLCustomFormElement.prototype.fill.call(this, {
-			consent: state.scope.$consent
-		});
-		this.classList.toggle('visible', state.scope.$consent === null && this.options.transient || this.isContentEditable);
-
+		var tmpl = window.customElements.get('element-template').prepareTemplate(this.firstElementChild);
+		if (tmpl.content && tmpl.children.length == 0) {
+			tmpl.appendChild(tmpl.content);
+		}
 	}
 	handleSubmit(e, state) {
 		if (e.type == "submit") e.preventDefault();
@@ -34,6 +37,11 @@ class HTMLCustomConsentElement extends HTMLFormElement {
 	}
 	handleChange(e, state) {
 		this.handleSubmit(e, state);
+	}
+	patch(state) {
+		if (this.options.transient) {
+			window.customElements.get('element-template').prepareTemplate(this.firstElementChild);
+		}
 	}
 }
 

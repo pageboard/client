@@ -12,8 +12,16 @@ exports.consent_form = {
 			default: false
 		}
 	},
-	contents: "block+",
-	html: '<form is="element-consent" class="ui form" data-transient="[transient]"></form>',
+	contents: {
+		id: "content",
+		nodes: "block+"
+	},
+	upgrade: {
+		'content.': 'content.content'
+	},
+	html: `<form is="element-consent" class="ui form" data-transient="[transient]">
+		<x[transient|?:template:div|fill] block-content="content"></x[transient|?:template:div|fill]>
+	</form>`,
 	scripts: ['../ui/consent.js'],
 	stylesheets: ['../ui/consent.css']
 };

@@ -2,3 +2,6 @@
 	display:none;
 }
 
+[block-type="consent_form"][data-transient="true"] > template {
+	display:block;
+}
