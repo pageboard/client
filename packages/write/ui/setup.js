@@ -217,8 +217,6 @@ Pageboard.Editor = function Editor(win, state) {
 	var $store = state.data.$store;
 	if ($store) {
 		controls.store.reset($store);
-	} else {
-		controls.store.setRoot(page);
 	}
 	controls.store.realUpdate();
 	return editor;
