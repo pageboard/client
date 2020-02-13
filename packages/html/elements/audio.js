@@ -38,7 +38,7 @@ exports.audio = {
 			default: false
 		}
 	},
-	html: `<audio is="element-audio"
+	html: `<audio is="element-audio" data-src="[url]"
 		preload="metadata" autoplay="[autoplay]" loop="[loop]" controls="[controls]"></audio>`,
 	scripts: [
 		'../ui/audio.js'
