@@ -1,7 +1,7 @@
 exports.svg = {
 	title: "svg",
 	icon: '<b class="icon">svg</b>',
-	menu: 'widget',
+	menu: 'media',
 	group: "block",
 	properties: {
 		viewBox: {
@@ -27,7 +27,7 @@ exports.text.group += ' svg_inline';
 exports.svg_text = {
 	title: "text",
 	icon: '<i class="icon font"></i>',
-	menu: 'svg',
+	menu: 'media',
 	group: "svg_node",
 	properties: {
 		x: {
@@ -50,7 +50,7 @@ exports.svg_text = {
 exports.svg_tspan = {
 	title: "span",
 	icon: '<i class="icon font"></i>',
-	menu: 'svg',
+	menu: 'media',
 	group: "svg_inline",
 	properties: {
 	},
@@ -64,7 +64,7 @@ exports.svg_tspan = {
 exports.svg_defs = {
 	title: "defs",
 	icon: '<b class="icon">defs</b>',
-	menu: 'svg',
+	menu: 'media',
 	contents: "svg_node+",
 	inplace: true,
 	ns: "svg",
@@ -74,7 +74,7 @@ exports.svg_defs = {
 exports.svg_group = {
 	title: "group",
 	icon: '<i class="clone outline icon"></i>',
-	menu: 'svg',
+	menu: 'media',
 	group: "svg_node",
 	properties: {
 		id: {
@@ -108,7 +108,7 @@ exports.svg_group = {
 exports.svg_path = {
 	title: "path",
 	icon: '<b class="icon">path</b>',
-	menu: 'svg',
+	menu: 'media',
 	group: "svg_node",
 	properties: {
 		d: {
@@ -125,7 +125,7 @@ exports.svg_path = {
 exports.svg_line = {
 	title: "line",
 	icon: '<b class="icon">line</b>',
-	menu: 'svg',
+	menu: 'media',
 	group: "svg_node",
 	properties: {
 		x1: {
@@ -157,7 +157,7 @@ exports.svg_line = {
 exports.svg_rect = {
 	title: "rect",
 	icon: '<i class="square outline icon"></i>',
-	menu: 'svg',
+	menu: 'media',
 	group: "svg_node",
 	properties: {
 		x: {
@@ -199,7 +199,7 @@ exports.svg_rect = {
 exports.svg_circle = {
 	title: "circle",
 	icon: '<i class="circle outline icon"></i>',
-	menu: 'svg',
+	menu: 'media',
 	group: "svg_node",
 	properties: {
 		cx: {
@@ -226,7 +226,7 @@ exports.svg_circle = {
 exports.svg_ellipse = {
 	title: "ellipse",
 	icon: '<i class="circle outline icon"></i>',
-	menu: 'svg',
+	menu: 'media',
 	group: "svg_node",
 	properties: {
 		cx: {
@@ -258,7 +258,7 @@ exports.svg_ellipse = {
 exports.svg_polygon = {
 	title: "polygon",
 	icon: '<b class="icon">pgon</b>',
-	menu: 'svg',
+	menu: 'media',
 	group: "svg_node",
 	properties: {
 		points: {
@@ -275,7 +275,7 @@ exports.svg_polygon = {
 exports.svg_polyline = {
 	title: "polyline",
 	icon: '<b class="icon">pline</b>',
-	menu: 'svg',
+	menu: 'media',
 	group: "svg_node",
 	properties: {
 		points: {
@@ -292,7 +292,7 @@ exports.svg_polyline = {
 exports.svg_linearGradient = {
 	title: "gradient",
 	icon: '<b class="icon">grad</b>',
-	menu: 'svg',
+	menu: 'media',
 	group: "svg_node",
 	properties: {
 		id: {
@@ -341,7 +341,7 @@ exports.svg_linearGradient = {
 exports.svg_stop = {
 	title: "stop",
 	icon: '<b class="icon">stop</b>',
-	menu: 'svg',
+	menu: 'media',
 	properties: {
 		offset: {
 			title: 'offset',

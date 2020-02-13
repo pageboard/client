@@ -1,7 +1,7 @@
 exports.embed = {
 	title: "Embed",
-	// icon: '<i class="external icon"></i>', // FIXME embeds are a hack
-	menu: "widget",
+	menu: "media",
+	icon: '<i class="external icon"></i>',
 	properties: {
 		url: {
 			title: 'Address',

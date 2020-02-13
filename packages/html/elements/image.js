@@ -1,5 +1,6 @@
 exports.image = {
 	title: "Image",
+	menu: 'media',
 	icon: '<i class="icon image"></i>',
 	properties: {
 		alt: {
