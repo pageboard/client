@@ -126,6 +126,8 @@ function update() {
 	var editor = this;
 	var tr = editor.state.tr;
 	var sel = tr.selection;
+	if (this.selection && sel.eq(this.selection)) return;
+	this.selection = sel;
 	var parents = filterParents(editor, editor.utils.selectionParents(tr, sel));
 	var changed = editor.docChanged;
 	editor.docChanged = false;
