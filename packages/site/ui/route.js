@@ -1,6 +1,6 @@
 Page.route(function(state) {
 	var loader;
-	if (state.data.$cache && !state.data.$vary) {
+	if (state.data.$cache) {
 		loader = Promise.resolve(state.data.$cache);
 	} else {
 		loader = Pageboard.fetch('get', '/.api/page', {
