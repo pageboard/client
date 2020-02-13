@@ -34,9 +34,8 @@ String.prototype.fuse = function(obj, scope) {
 var mSym = matchdom.Symbols;
 var reFuse = new RegExp(`\\${mSym.open}[^\\${mSym.open}\\${mSym.close}]+\\${mSym.close}`);
 
-module.exports = function(res, scope) {
+module.exports = function(res, scope, el) {
 	var elts = scope.$elements;
-	var elem = scope.$element;
 	if (!res) res = {};
 
 	if (!scope.$view) scope.$view = new Viewer({
@@ -44,16 +43,15 @@ module.exports = function(res, scope) {
 		doc: scope.$doc
 	});
 
-	if (elem) install(elem, scope);
+	if (el) install(el, scope);
 
 	scope = Object.assign({}, scope);
 	for (var k in res) scope[`$${k}`] = res[k];
 
 	var block = res.item || {};
 	var blocks = {};
-	if (elem) {
-		scope.$view.setElement(elem);
-		if (!block.type) block.type = elem.name;
+	if (el) {
+		if (!block.type) block.type = el.name;
 		if (res.items) {
 			if (block.standalone) {
 				block.children = res.items;
@@ -62,10 +60,11 @@ module.exports = function(res, scope) {
 			}
 		}
 	} else if (block.type) {
-		elem = elts[block.type];
+		el = elts[block.type];
 	}
 	return scope.$view.from(block, blocks, {
-		type: elem.name,
+		type: block.type,
+		element: el,
 		scope: scope,
 		strip: !scope.$write
 	});
