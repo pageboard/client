@@ -1,7 +1,7 @@
 exports.audio = {
 	title: "Audio",
 	menu: 'media',
-	icon: '<i class="icon audio"></i>',
+	icon: '<i class="icon music"></i>',
 	group: "block",
 	properties: {
 		url: {
