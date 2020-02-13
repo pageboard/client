@@ -144,17 +144,22 @@ function install(el, scope) {
 			if (!dom) throw new Error("Invalid element", el, "missing dom");
 			dom = dom.fuse(data, rscope);
 			if (!dom) return;
-			if (dom.nodeType == Node.DOCUMENT_FRAGMENT_NODE) {
-				dom = dom.children[0];
+			var list = dom;
+			if (dom.nodeType != Node.DOCUMENT_FRAGMENT_NODE) {
+				list = [dom];
+			} else {
+				list = Array.from(dom.children);
 			}
-			Array.from(dom.attributes).forEach(attr => {
-				if (!attr.name.startsWith('style-')) return;
-				var style = attr.name.split('-').slice(1).map((w, i) => {
-					if (i > 0) w = w[0].toUpperCase() + w.substr(1);
-					return w;
-				}).join("");
-				dom.style[style] = attr.value;
-				dom.removeAttribute(attr.name);
+			list.forEach((dom) => {
+				Array.from(dom.attributes).forEach(attr => {
+					if (!attr.name.startsWith('style-')) return;
+					var style = attr.name.split('-').slice(1).map((w, i) => {
+						if (i > 0) w = w[0].toUpperCase() + w.substr(1);
+						return w;
+					}).join("");
+					dom.style[style] = attr.value;
+					dom.removeAttribute(attr.name);
+				});
 			});
 		}
 		return dom;
