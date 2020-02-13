@@ -15,7 +15,7 @@ exports.elements = window.Pageboard && window.Pageboard.elements || {
 		</body></html>`
 	}
 };
-
+require('./polyfills');
 exports.cache = window.Pageboard && window.Pageboard.cache || {};
 exports.debounce = require('debounce');
 exports.fetch = require('./fetch');
