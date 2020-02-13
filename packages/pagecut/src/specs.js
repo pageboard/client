@@ -39,7 +39,7 @@ function define(view, elt, schema, views) {
 	var domContents = dom.querySelectorAll('[block-content]');
 
 	if (!contentsLen) {
-		// pass, this is a virtual element
+		// leaf
 	} else if (domContents.length > 1) {
 		if (contentsLen != domContents.length) {
 			console.error(`${elt.name} has ${contentsLen} contents but ${domContents.length} block-content`);
