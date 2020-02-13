@@ -28,10 +28,10 @@ Viewer.prototype.from = function(block, blocks, opts) {
 Viewer.prototype.element = function(type) {
 	if (!type) return;
 
-	var el = this.elements[type];
+	var el = typeof type == "string" ? this.elements[type] : type;
 	if (!el) return;
-	if (!(el instanceof Element)) this.setElement(el);
-	return this.elements[type];
+	if (!(el instanceof Element)) el = new Element(el);
+	return el;
 };
 
 Viewer.prototype.setElement = function(el) {
