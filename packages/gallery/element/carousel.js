@@ -122,7 +122,7 @@ exports.carousel_item = {
 	menu: "widget",
 	contents: [{
 		id: 'media',
-		nodes: "image",
+		nodes: "image|video",
 		title: "media"
 	}, {
 		id: 'content',

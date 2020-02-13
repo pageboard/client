@@ -95,10 +95,29 @@ class HTMLElementCarousel extends HTMLCustomElement {
 		this.classList.toggle('fade', opts.fade);
 
 		this.widget = new window.Flickity(this, opts);
-		this.widget.on('select', (e) => {
+		this.widget.on('change', (index) => {
+			var oldIndex = this.options.index;
+			var oldSlide = this.widget.slides[oldIndex];
+			if (oldSlide) {
+				oldSlide.cells.forEach((cell) => {
+					cell.element.querySelectorAll('video,audio').forEach((node) => {
+						if (node.pause) node.pause();
+					});
+				});
+			}
+			var newSlide = this.widget.slides[index];
+			if (newSlide) {
+				newSlide.cells.forEach((cell) => {
+					cell.element.querySelectorAll('video,audio').forEach((node) => {
+						if (node.play && node.options.autoplay) node.play();
+					});
+				});
+			}
 			if (opts.fullview) {
-				state.query[`${this.id}.index`] = this.widget.selectedIndex || undefined;
+				state.query[`${this.id}.index`] = index;
 				state.save();
+			} else {
+				this.options.index = index;
 			}
 		});
 	}
