@@ -86,9 +86,9 @@ class HTMLElementSelect extends HTMLCustomElement {
 	}
 	handleChange(e, state) {
 		if (!e.isTrusted) return;
-		var items = Array.from(this.querySelector('.menu').children);
-		Array.from(e.target.children).forEach(function(option, i) {
-			var item = items.children[i];
+		var items = this.querySelector('.menu').children;
+		e.target.children.forEach(function(option, i) {
+			var item = items[i];
 			if (option.selected) this._selectItem(item);
 		}, this);
 	}
