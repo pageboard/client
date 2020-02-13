@@ -274,8 +274,8 @@ function renderItem(item, view, name) {
 Menu.prototype.items = function() {
 	var list = [];
 	Object.values(this.editor.elements).sort(function(a, b) {
-		var ap = a.priority || 0;
-		var bp = b.priority || 0;
+		var ap = a.priority != null ? a.priority : Infinity;
+		var bp = b.priority != null ? b.priority : Infinity;
 		if (ap < bp) return -1;
 		else if (ap > bp) return 1;
 		else return a.name.localeCompare(b.name);

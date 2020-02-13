@@ -1,5 +1,6 @@
 exports.image = {
 	title: "Image",
+	priority: 0,
 	menu: 'media',
 	icon: '<i class="icon image"></i>',
 	properties: {

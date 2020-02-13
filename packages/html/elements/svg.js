@@ -1,6 +1,6 @@
 exports.svg = {
-	title: "svg",
-	icon: '<b class="icon">svg</b>',
+	title: "Svg",
+	icon: '<i class="object ungroup icon"></i>',
 	menu: 'media',
 	group: "block",
 	properties: {

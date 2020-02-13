@@ -1,7 +1,7 @@
 exports.embed = {
 	title: "Embed",
 	menu: "media",
-	icon: '<i class="external icon"></i>',
+	icon: '<i class="external square alternate icon"></i>',
 	properties: {
 		url: {
 			title: 'Address',
