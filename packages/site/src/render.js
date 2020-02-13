@@ -141,7 +141,7 @@ function install(el, scope) {
 			if (dom.nodeType != Node.DOCUMENT_FRAGMENT_NODE) {
 				list = [dom];
 			} else {
-				list = Array.from(dom.children);
+				list = dom.children;
 			}
 			list.forEach((dom) => {
 				Array.from(dom.attributes).forEach(attr => {

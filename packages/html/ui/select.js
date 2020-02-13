@@ -137,7 +137,7 @@ class HTMLElementSelect extends HTMLCustomElement {
 	_reset() {
 		var select = this.querySelector('select');
 		select.value = "";
-		Array.from(this.querySelectorAll('.ui.label')).forEach(function(node) {
+		this.querySelectorAll('.ui.label').forEach(function(node) {
 			node.remove();
 		});
 		this._setPlaceholder();

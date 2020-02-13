@@ -18,7 +18,7 @@ class HTMLElementInputArray extends HTMLCustomElement {
 		}
 	}
 	setup(state) {
-		Array.from(this.querySelectorAll('[name]')).forEach(function(node) {
+		this.querySelectorAll('[name]').forEach(function(node) {
 			node.setAttribute('autocomplete', 'nope');
 		});
 		var copy = document.createElement('div');

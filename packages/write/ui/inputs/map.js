@@ -95,7 +95,7 @@ class HTMLInputMap extends HTMLCustomElement {
 		var obj = {};
 		var removals = [];
 
-		Array.from(this._table.querySelector('tbody').children).forEach(function(tr) {
+		this._table.querySelector('tbody').children.forEach(function(tr) {
 			var key = tr.children[0].firstChild.value;
 			var val = obj[key];
 			var inputVal = tr.children[1].firstChild.value;

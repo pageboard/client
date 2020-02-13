@@ -279,7 +279,7 @@ Store.prototype.reset = function(to) {
 
 Store.prototype.discard = function(e) {
 	var doc = this.window.document;
-	var focused = Array.from(doc.querySelectorAll('[block-focused][block-id]')).map(function(node) {
+	var focused = doc.querySelectorAll('[block-focused][block-id]').map(function(node) {
 		return node.getAttribute('block-id');
 	}).reverse();
 	Store.generated = {};

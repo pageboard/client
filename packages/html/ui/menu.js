@@ -60,7 +60,7 @@ class HTMLElementMenu extends HTMLCustomElement {
 	}
 	toHelper(root) {
 		var frag = root.ownerDocument.createDocumentFragment();
-		Array.from(root.children).forEach((item) => {
+		root.children.forEach((item) => {
 			frag.append(item.cloneNode(true));
 		});
 		return frag;

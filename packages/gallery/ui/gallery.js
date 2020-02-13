@@ -20,7 +20,7 @@ class HTMLElementGallery extends HTMLCustomElement {
 
 	patch(state) {
 		var mode = this.options.mode;
-		Array.from(this.children).forEach((gal) => {
+		this.children.forEach((gal) => {
 			var type = gal.getAttribute('block-type');
 			if (!mode) mode = type;
 			if (mode == type) this.selectedMode = mode;

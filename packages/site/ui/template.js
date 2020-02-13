@@ -25,7 +25,7 @@ class HTMLElementTemplate extends HTMLCustomElement {
 		} else if (document.visibilityState == "prerender") {
 			var dest = tmpl.dom(`<script type="text/html"></script>`);
 			if (!helper) helper = doc.createElement('div');
-			helper.textContent = Array.from(tmpl.content.childNodes).map(child => {
+			helper.textContent = tmpl.content.childNodes.map(child => {
 				if (child.nodeType == Node.TEXT_NODE) return child.nodeValue;
 				else return child.outerHTML;
 			}).join('');
@@ -155,7 +155,7 @@ class HTMLElementTemplate extends HTMLCustomElement {
 					}
 				}
 			},
-			// contents: Array.from(tmpl.querySelectorAll('[block-content]')).map((node) => {
+			// contents: tmpl.querySelectorAll('[block-content]').map((node) => {
 			// 	return {
 			// 		id: node.getAttribute('block-content'),
 			// 		nodes: 'block+'

@@ -38,7 +38,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			}
 		}, this);
 		// checkbox fix
-		Array.from(this.elements).forEach(function(node) {
+		this.elements.forEach(function(node) {
 			if (node.type == "radio") {
 				if (!withDefaults && node.checked == node.defaultChecked && query[node.name] == node.value) {
 					delete query[node.name];
@@ -199,7 +199,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 				}
 				state.data.$vary = vary;
 			}
-			Array.from(document.querySelectorAll('element-template')).forEach(function(node) {
+			document.querySelectorAll('element-template').forEach(function(node) {
 				delete node.dataset.query;
 			});
 			return state.push(loc, {

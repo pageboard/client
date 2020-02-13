@@ -382,7 +382,7 @@ Href.prototype.renderList = function(list, container) {
 	var selected = this.input.value;
 	if (selected) selected = normUrl(selected);
 	if (list.rendered) {
-		Array.from(container.childNodes).forEach(function(child) {
+		container.childNodes.forEach(function(child) {
 			if (child.nodeType != Node.ELEMENT_NODE) return;
 			var href = child.getAttribute('href');
 			if (href == selected) child.classList.add('selected');

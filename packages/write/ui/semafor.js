@@ -61,7 +61,7 @@ function formGet(form) {
 			// skip
 			break;
 		case 'select-multiple':
-			Array.from(elem.selectedOptions).forEach(function(item, i) {
+			elem.selectedOptions.forEach(function(item, i) {
 				query[`${key}.${i}`] = item.value;
 			});
 			break;
@@ -140,7 +140,7 @@ function formSet(form, values, obj) {
 			}	else if (!Array.isArray(val)) {
 				val = [val];
 			}
-			Array.from(elem.options).forEach(function(item) {
+			elem.options.forEach(function(item) {
 				item.selected = val.includes(item.value);
 			});
 			$(elem.closest('.dropdown')).dropdown({placeholder: false});
@@ -157,7 +157,7 @@ function formSet(form, values, obj) {
 Semafor.prototype.destroy = function() {
 	this.$node.find('.dropdown').dropdown('hide').dropdown('destroy');
 	this.$node.find('.checkbox').checkbox('destroy');
-	Array.from(this.node.querySelectorAll('.nullable.fieldset > .nullable')).forEach((node) => {
+	this.node.querySelectorAll('.nullable.fieldset > .nullable').forEach((node) => {
 		node.removeEventListener('change', this);
 	});
 	this.$node.form('destroy');

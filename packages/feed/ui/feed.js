@@ -100,7 +100,7 @@ Page.serialize = function(state) {
 
 	var categories = [];
 	var latestDate;
-	var items = Array.from(doc.querySelectorAll('[block-type="feed"]')).map((node) => {
+	var items = doc.querySelectorAll('[block-type="feed"]').map((node) => {
 		var card = Pageboard.getFeedCard(node, state);
 		if (!card.title || !card.date) return;
 		card.topics.forEach((topic) => {

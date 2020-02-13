@@ -75,7 +75,7 @@ ElementProperty.prototype.toInput = function() {
 };
 
 ElementProperty.prototype.updateOptions = function(prev, cur) {
-	Array.from(this.select.options).forEach(function(opt) {
+	this.select.options.forEach(function(opt) {
 		if (opt.value == prev) opt.disabled = false;
 		if (opt.value == cur) opt.disabled = true;
 	});

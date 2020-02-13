@@ -174,7 +174,7 @@ Page.setup(function(state) {
 		if (!slide) return;
 		var lazies = [];
 		slide.cells.forEach((cell) => {
-			Array.from(cell.element.querySelectorAll("[data-src]")).forEach((node) => {
+			cell.element.querySelectorAll("[data-src]").forEach((node) => {
 				if (node.reveal && !node.currentSrc) {
 					lazies.push(node.reveal(state).catch(() => {}));
 				}

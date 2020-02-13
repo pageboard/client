@@ -1,9 +1,9 @@
 Page.serialize = function() {
 	var doc = document;
-	Array.from(doc.querySelectorAll('script')).forEach(function(node) {
+	doc.querySelectorAll('script').forEach(function(node) {
 		node.remove();
 	});
-	Array.from(doc.querySelectorAll('element-template')).forEach(function(node) {
+	doc.querySelectorAll('element-template').forEach(function(node) {
 		var template = node.firstElementChild;
 		var view = node.lastElementChild;
 		template.remove();
@@ -13,18 +13,15 @@ Page.serialize = function() {
 	var dloc = doc.location;
 	var base = dloc.protocol + '//' + dloc.host;
 	function absolut(selector, att) {
-		var list = doc.querySelectorAll(selector);
-		var node;
-		for (var i=0; i < list.length; i++) {
-			node = list.item(i);
+		doc.querySelectorAll(selector).forEach((node) => {
 			var item = node.attributes.getNamedItem(att);
-			if (!item) continue;
+			if (!item) return;
 			var uloc = new URL(item.nodeValue, base);
 			item.nodeValue = uloc.href;
-		}
+		});
 	}
 	absolut('a', 'href');
-	Array.from(doc.querySelectorAll('img[is]')).forEach(function(node) {
+	doc.querySelectorAll('img[is]').forEach(function(node) {
 		var img = doc.createElement('img');
 		img.srcset = node.srcset;
 		img.src = node.src;

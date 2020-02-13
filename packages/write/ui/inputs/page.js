@@ -253,7 +253,7 @@ PageHelper.prototype.renderList = function(list, container) {
 	if (!container) container = this.container;
 	var selected = this.input.value;
 	if (list.rendered) {
-		Array.from(container.childNodes).forEach(function(child) {
+		container.childNodes.forEach(function(child) {
 			if (child.nodeType != Node.ELEMENT_NODE) return;
 			var href = child.getAttribute('href');
 			if (href == selected) child.classList.add('selected');
