@@ -9,11 +9,16 @@ function Breadcrumb(editor, node) {
 		Breadcrumb.template = this.node.lastElementChild;
 		Breadcrumb.template.remove();
 	}
+	if (!Breadcrumb.help) {
+		Breadcrumb.help = this.node.firstElementChild;
+	}
 	this.node.addEventListener('click', this);
 }
 
 Breadcrumb.prototype.destroy = function() {
 	this.node.removeEventListener('click', this);
+	this.node.textContent = '';
+	this.node.appendChild(Breadcrumb.help.cloneNode(true));
 };
 
 Breadcrumb.prototype.update = function(parents, selection) {
