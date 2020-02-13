@@ -33,7 +33,7 @@ Blocks.prototype.render = function(block, opts) {
 	block = Object.assign({}, block);
 	block.data = Blocks.fill(el, block.data);
 	var dom = el.render.call(el, block, scope);
-	if (dom && opts.merge !== false) this.merge(dom, block, type);
+	if (dom && opts.merge !== false) this.merge(dom, block, el);
 	return dom;
 };
 
@@ -81,9 +81,8 @@ Blocks.prototype.copy = function(block) {
 	return copy;
 };
 
-Blocks.prototype.merge = function(dom, block, overrideType) {
+Blocks.prototype.merge = function(dom, block, el) {
 	if (dom.nodeType != Node.ELEMENT_NODE) return;
-	var el = this.view.element(overrideType || block.type);
 	if (el.inplace) return;
 	if (!block.content) return;
 	el.contents.each(block, function(content, def) {
