@@ -259,6 +259,7 @@ exports.layout = {
 		is="element-layout"
 		style-height="[height|eq:0:|not|magnet][heightUnits]"
 		data-src="[background.image]"
+		data-crop="[background.crop.x];[background.crop.y];[background.crop.width];[background.crop.height];[background.crop.zoom]"
 		data-size="[background.size]"
 		data-repeat="[background.repeat|?]"
 		data-attachment="[background.attachment]"
