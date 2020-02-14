@@ -709,6 +709,14 @@ RootNodeView.prototype.ignoreMutation = function(record) {
 				for (var k in newClass) if (newClass[k] && !oldClass[k]) diffClass[k] = true;
 				obj[name] = Object.keys(diffClass).join(' ');
 			}
+		} else if (name == "style") {
+			if (record.oldValue != val) {
+				var oldStyle = mapOfStyle(record.oldValue);
+				var newStyle = mapOfStyle(dom.style);
+				var diffStyle = [];
+				for (var j in newStyle) if (newStyle[j] && !oldStyle[j]) diffStyle.push(j + ':' + newStyle[j] + ';');
+				obj[name] = diffStyle.join('');
+			}
 		} else {
 			obj[name] = val;
 		}
@@ -971,6 +979,23 @@ function mapOfClass(att) {
 	return map;
 }
 
+const styleHelper = document.createElement('div');
+function mapOfStyle(style) {
+	var map = {};
+	if (!style) return map;
+	if (typeof style == "string") {
+		styleHelper.setAttribute('style', style);
+		style = styleHelper.style;
+	}
+	var name, val;
+	for (var k = 0; k < style.length; k++) {
+		name = style.item(k);
+		val = style[name];
+		if (val != null && val != "") map[name] = val;
+	}
+	return map;
+}
+
 function applyDiffClass(a, b) {
 	return Object.keys(Object.assign(mapOfClass(a), mapOfClass(b))).join(' ');
 }
@@ -1009,9 +1034,10 @@ function restoreDomAttrs(srcAtts, dom) {
 		if (name == "contenteditable") continue;
 		dstVal = dom.getAttribute(name);
 		srcVal = srcAtts[name];
-		// TODO style using dom.style map
 		if (name == "class") {
 			dom.setAttribute(name, applyDiffClass(srcVal, uiAtts[name]));
+		} else if (name == "style") {
+			Object.assign(dom.style, mapOfStyle(srcVal), mapOfStyle(uiAtts[name]));
 		} else if (srcVal != dstVal) {
 			dom.setAttribute(name, srcVal);
 		}
