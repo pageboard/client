@@ -5,7 +5,6 @@ class HTMLElementInclude extends HTMLCustomElement {
 		};
 	}
 	patch(state) {
-		this.constructor.prepareTemplate(this.firstElementChild);
 		if (this._refreshing) return;
 		return this.fetch(state);
 	}
