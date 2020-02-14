@@ -38,7 +38,7 @@ class HTMLElementTemplate extends HTMLCustomElement {
 	}
 
 	patch(state) {
-		this.constructor.prepareTemplate(this.firstElementChild);
+		HTMLElementTemplate.prepareTemplate(this.firstElementChild);
 		if (this.isContentEditable || this._refreshing || this.closest('[block-content="template"]')) return;
 		// first find out if state.query has a key in this.keys
 		// what do we do if state.query has keys that are used by a form in this query template ?
