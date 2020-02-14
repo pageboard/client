@@ -53,7 +53,7 @@ exports.mail = {
 		medias: true
 	}
 };
-if (exports.sitemap) exports.sitemail = exports.sitemap.itemModel(exports.mail, true);
+if (exports.sitemap) exports.sitemail = exports.sitemap.itemModel('mail', true);
 
 exports.mail_body = {
 	title: "Body",

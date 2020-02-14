@@ -24,7 +24,8 @@ exports.sitemap = {
 	install: function(scope) {
 		if (scope.$write) Pageboard.load.js(this.resources.helper, scope);
 	},
-	itemModel: function(schema, leaf) {
+	itemModel: function(name, leaf) {
+		var schema = exports[name];
 		return {
 			title: schema.title,
 			icon: schema.icon,
@@ -42,7 +43,7 @@ exports.sitemap = {
 				nodes: "sitemap_item*",
 				virtual: true
 			},
-			alias: schema.name,
+			alias: name,
 			context: 'sitemap/ | sitepage/',
 			html: `<element-sitepage class="item [leaf|!?:fold]" data-url="[url]" data-index="[index]">
 				<div class="title [leaf|!?:caret-icon]">
@@ -55,5 +56,5 @@ exports.sitemap = {
 	}
 };
 
-exports.sitepage = exports.sitemap.itemModel(exports.page, false);
+exports.sitepage = exports.sitemap.itemModel('page', false);
 

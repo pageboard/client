@@ -40,7 +40,7 @@ exports.pdf = Object.assign({}, exports.page, {
 		pdf: true
 	}
 });
-if (exports.sitemap) exports.sitepdf = exports.sitemap.itemModel(exports.pdf, true);
+if (exports.sitemap) exports.sitepdf = exports.sitemap.itemModel('pdf', true);
 
 exports.sheet = {
 	title: 'Sheet',
