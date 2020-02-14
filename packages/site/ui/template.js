@@ -38,8 +38,11 @@ class HTMLElementTemplate extends HTMLCustomElement {
 	}
 
 	patch(state) {
-		HTMLElementTemplate.prepareTemplate(this.firstElementChild);
+		this.constructor.prepareTemplate(this.firstElementChild);
 		if (this.isContentEditable || this._refreshing || this.closest('[block-content="template"]')) return;
+		return this.fetch(state);
+	}
+	fetch(state) {
 		// first find out if state.query has a key in this.keys
 		// what do we do if state.query has keys that are used by a form in this query template ?
 		var expr = this.getAttribute('block-expr');

@@ -4,8 +4,12 @@ class HTMLElementInclude extends HTMLCustomElement {
 			action: null
 		};
 	}
+	patch(state) {
+		this.constructor.prepareTemplate(this.firstElementChild);
+		if (this._refreshing) return;
+		return this.fetch(state);
+	}
 	render(res, state) {
-		delete state.scope.$element;
 		var node = Pageboard.render(res, state.scope);
 		var virtualContent = this.querySelector('[block-content="blocks"]');
 		virtualContent.textContent = '';
@@ -13,7 +17,9 @@ class HTMLElementInclude extends HTMLCustomElement {
 	}
 }
 Page.ready(function() {
-	HTMLElementInclude.prototype.patch = window.customElements.get('element-template').prototype.patch;
+	const Cla = window.customElements.get('element-template');
+	HTMLElementInclude.prepareTemplate = Cla.prepareTemplate;
+	HTMLElementInclude.prototype.fetch = Cla.prototype.fetch;
 	HTMLCustomElement.define('element-include', HTMLElementInclude);
 });
 
