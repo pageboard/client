@@ -1,6 +1,8 @@
 class HTMLElementSitemap extends HTMLCustomElement {
 	static makeTree(tree, parent) {
-		if (!parent) parent = {};
+		if (!parent) parent = {
+			type: 'sitemap'
+		};
 		if (!parent.children) parent.children = [];
 		if (!parent.content) parent.content = {};
 		if (!parent.content.children) parent.content.children = '';
