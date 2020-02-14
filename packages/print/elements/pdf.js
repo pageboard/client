@@ -2,7 +2,27 @@
 // extend page
 exports.pdf = Object.assign({}, exports.page, {
 	title: 'PDF',
-	properties: Object.assign({}, exports.page.properties),
+	icon: '<i class="icon file pdf outline"></i>',
+	properties: {
+		title: {
+			title: 'Title',
+			nullable: true,
+			type: "string",
+			format: "singleline",
+			$helper: 'pageTitle'
+		},
+		url: {
+			title: 'Address',
+			type: "string",
+			pattern: "^(/[a-zA-Z0-9-]*)+$",
+			$helper: 'pageUrl'
+		},
+		index: {
+			type: "integer",
+			default: 0,
+			minimum: 0
+		}
+	},
 	contents: {
 		id: 'body',
 		nodes: 'block+'
@@ -20,17 +40,7 @@ exports.pdf = Object.assign({}, exports.page, {
 		pdf: true
 	}
 });
-
-exports.sitepdf = {
-	title: "PDF",
-	menu: "link",
-	alias: 'pdf',
-	group: 'sitemap_item',
-	properties: Pageboard.elements.pdf.properties,
-	icon: '<i class="icon file pdf outline"></i>',
-	context: Pageboard.elements.sitemail.context,
-	render: Pageboard.elements.sitemail.render
-};
+if (exports.sitemap) exports.sitepdf = exports.sitemap.itemModel(exports.pdf, true);
 
 exports.sheet = {
 	title: 'Sheet',

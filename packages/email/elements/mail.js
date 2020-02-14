@@ -15,8 +15,7 @@ exports.mail = {
 			title: 'Address',
 			type: "string",
 			pattern: "^(/[a-zA-Z0-9-]*)+$",
-			$helper: 'pageUrl' // works with sitemap editor to update pages url in a coherent manner
-			// see also page.save: the href updater will only change input.name == "href".
+			$helper: 'pageUrl'
 		},
 		index: {
 			type: "integer",
@@ -54,6 +53,7 @@ exports.mail = {
 		medias: true
 	}
 };
+if (exports.sitemap) exports.sitemail = exports.sitemap.itemModel(exports.mail, true);
 
 exports.mail_body = {
 	title: "Body",
