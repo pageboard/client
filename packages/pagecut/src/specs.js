@@ -230,6 +230,7 @@ function toDOMOutputSpec(obj, node, inplace) {
 				'class': dom.className || undefined,
 				'block-content': contentName
 			}, out];
+			delete attrs['block-content'];
 		} else {
 			if (contentName) attrs['block-content'] = contentName;
 			if (!obj.contentDOM || node instanceof Model.Mark) {
