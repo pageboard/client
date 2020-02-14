@@ -377,6 +377,9 @@ function createRootSpec(view, elt, obj) {
 			else block.focused = node.attrs.focused;
 
 			var dom = view.render(block, {type: node.attrs.type, merge: false});
+			if (dom && dom.nodeType == Node.DOCUMENT_FRAGMENT_NODE && dom.children.length == 1) {
+				dom = dom.children[0];
+			}
 			if (!dom) {
 				console.error("Rendering", block, "with", node.attrs.type, "returns no dom");
 				return "";
@@ -639,6 +642,9 @@ RootNodeView.prototype.update = function(node, decorations) {
 		else delete block.focused;
 
 		var dom = view.render(block, {type: node.attrs.type, merge: false});
+		if (dom && dom.nodeType == Node.DOCUMENT_FRAGMENT_NODE && dom.children.length == 1) {
+			dom = dom.children[0];
+		}
 		var tr = view.state.tr;
 		mutateAttributes(this.dom, dom);
 		if (!sameData) {
