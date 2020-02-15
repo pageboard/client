@@ -16,7 +16,7 @@ class HTMLElementEmbed extends HTMLCustomElement {
 		});
 		this.promise.done = done;
 		this.classList.add('waiting');
-		state.chain('consent', (state) => {
+		state.consent((agreed) => {
 			this.classList.remove('waiting', 'denied');
 			var opts = this.options;
 			var src = opts.src;
@@ -26,7 +26,7 @@ class HTMLElementEmbed extends HTMLCustomElement {
 				src = Page.format(obj);
 			}
 			this.iframe = this.firstElementChild;
-			if (state.scope.$consent == "no") {
+			if (!agreed) {
 				this.classList.add('denied');
 				if (this.iframe) this.iframe.remove();
 				done();
@@ -50,7 +50,7 @@ class HTMLElementEmbed extends HTMLCustomElement {
 		return this.promise;
 	}
 	captureClick(e, state) {
-		if (this.matches('.denied') && Page.getConsent) Page.getConsent(state);
+		if (this.matches('.denied')) Page.getConsent(state);
 	}
 	captureLoad() {
 		this.promise.done();

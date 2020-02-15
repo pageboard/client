@@ -85,9 +85,10 @@ Page.setup(function(state) {
 	}
 	if (!Page.analytics) Page.analytics = new GoogleAnalytics();
 	var gaid = (document.querySelector('head > meta[name="ga"]') || {}).content;
-	if (gaid) Page.analytics.gaid = gaid;
-	state.chain('consent', function(state) {
-		if (state.scope.$consent == "yes") {
+	if (!gaid) return;
+	Page.analytics.gaid = gaid;
+	state.consent(function(agreed) {
+		if (agreed) {
 			Page.analytics.start();
 		} else {
 			Page.analytics.stop();

@@ -31,9 +31,12 @@ class HTMLElementGoogleTranslate extends HTMLCustomElement {
 		}
 	}
 	show(state) {
-		state.chain('consent', (state) => {
-			if (state.scope.$consent != "yes") return;
+		state.consent((agreed) => {
 			if (document.body.isContentEditable) return;
+			if (!agreed) {
+				Page.getConsent(state);
+				return;
+			}
 			if (window.google && window.google.translate) delete window.google.translate;
 			this.id = `id${Date.now()}`;
 			var cb = `HTMLElementGoogleTranslate_${this.id}`;

@@ -8,7 +8,7 @@ exports.site.properties.google_tag_manager = {
 exports.google_tag_manager = {
 	priority: 10,
 	group: "block",
-	html: `<script async src="https://www.googletagmanager.com/gtm.js?id=[id|url]"></script>`,
+	html: `<script id="gtm" async src="https://www.googletagmanager.com/gtm.js?id=[id|url]"></script>`,
 	install: function(scope) {
 		if (!scope.$site) return;
 		var id = scope.$site.google_tag_manager;
