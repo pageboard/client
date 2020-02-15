@@ -49,15 +49,16 @@
 	0% {
 		opacity:0;
 		content: '⚫';
+		transition:opacity;
 	}
-	25% {
+	40% {
 		opacity:1;
 		content: '⚫';
 	}
-	50% {
+	60% {
 		content: '⚫⚫';
 	}
-	75% {
+	80% {
 		content: '⚫⚫\A⚫';
 	}
 	100% {
