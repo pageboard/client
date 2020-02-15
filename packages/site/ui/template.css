@@ -30,3 +30,7 @@ element-template > [block-content="template"] {
 	min-height:1rem;
 }
 
+html:not([data-prerender]) > body {
+	/* initial page load does not need to be shown */
+	display:none;
+}
