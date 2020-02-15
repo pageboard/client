@@ -158,12 +158,12 @@ class HTMLElementTemplate extends HTMLCustomElement {
 					}
 				}
 			},
-			// contents: tmpl.querySelectorAll('[block-content]').map((node) => {
-			// 	return {
-			// 		id: node.getAttribute('block-content'),
-			// 		nodes: 'block+'
-			// 	};
-			// })
+			contents: tmpl.querySelectorAll('[block-content]').map((node) => {
+				return {
+					id: node.getAttribute('block-content'),
+					nodes: 'block+'
+				};
+			})
 		};
 		Object.keys(state.data).forEach(function(key) {
 			if (key.startsWith('$') && scope[key] == null) scope[key] = state.data[key];
