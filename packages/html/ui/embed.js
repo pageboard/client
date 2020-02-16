@@ -9,6 +9,9 @@ class HTMLElementEmbed extends HTMLCustomElement {
 		this.promise = Promise.resolve();
 		this.promise.done = function() {};
 	}
+	setup(state) {
+		state.consent();
+	}
 	reveal(state) {
 		var done;
 		this.promise = new Promise(function(resolve) {
@@ -50,7 +53,7 @@ class HTMLElementEmbed extends HTMLCustomElement {
 		return this.promise;
 	}
 	captureClick(e, state) {
-		if (this.matches('.denied')) Page.getConsent(state);
+		if (this.matches('.denied')) state.consent.get();
 	}
 	captureLoad() {
 		this.promise.done();

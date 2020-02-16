@@ -2,19 +2,37 @@ Page.ready(function(state) {
 	HTMLCustomElement.define(`element-consent`, HTMLCustomConsentElement, 'form');
 });
 Page.init(function(state) {
-	state.consent = function(fn, internal) {
-		if (!internal) this.consent.count++;
-		this.chain('consent', (state) => {
+	state.consent = function(fn) {
+		if (fn) this.chain('consent', (state) => {
 			return fn(state.scope.$consent == "yes");
 		});
+		this.consent.ask = true;
 	};
-	state.consent.count = 0;
+	state.consent.get = function() {
+		var tacit = true;
+		document.querySelectorAll('[block-type="consent_form"]').forEach((node) => {
+			node.classList.add('visible');
+			tacit = false;
+		});
+		return tacit;
+	};
 });
-Page.getConsent = function(state) {
-	document.querySelectorAll('[block-type="consent_form"]').forEach((node) => {
-		node.classList.add('visible');
+Page.setup(function(state) {
+	state.finish(function() {
+		if (!state.consent.ask) return;
+		var consent = Page.storage.get('consent');
+		var tacit = consent === null;
+		if (tacit) tacit = state.consent.get();
+		if (tacit) {
+			console.warn("Got tacit consent, please add a Form Consent to this page");
+			consent = "yes";
+		}
+		if (consent !== null) {
+			state.scope.$consent = consent;
+			state.runChain('consent');
+		}
 	});
-};
+});
 
 class HTMLCustomConsentElement extends HTMLFormElement {
 	static get defaults() {
@@ -27,11 +45,11 @@ class HTMLCustomConsentElement extends HTMLFormElement {
 		if (tmpl.content && tmpl.children.length == 0) {
 			tmpl.appendChild(tmpl.content);
 		}
-		state.consent((agreed) => {
+		state.chain('consent', (state) => {
 			window.HTMLCustomFormElement.prototype.fill.call(this, {
 				consent: state.scope.$consent
 			});
-		}, true);
+		});
 	}
 	handleSubmit(e, state) {
 		if (e.type == "submit") e.preventDefault();
@@ -42,6 +60,7 @@ class HTMLCustomConsentElement extends HTMLFormElement {
 			return;
 		}
 		state.scope.$consent = consent;
+		Page.storage.set('consent', consent);
 		state.runChain('consent');
 		if (this.options.transient) this.classList.remove('visible');
 	}
@@ -54,22 +73,3 @@ class HTMLCustomConsentElement extends HTMLFormElement {
 		}
 	}
 }
-
-Page.setup(function(state) {
-	state.consent((agreed) => {
-		Page.storage.set('consent', state.scope.$consent);
-	}, true);
-	state.finish(() => {
-		var consent = Page.storage.get('consent');
-		if (consent === null && state.scope.$write) {
-			consent = "yes";
-		}
-		state.scope.$consent = consent;
-		if (consent !== null) {
-			state.runChain('consent');
-		} else if (state.consent.count) {
-			Page.getConsent(state);
-		}
-	});
-});
-

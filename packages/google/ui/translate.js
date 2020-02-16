@@ -34,7 +34,7 @@ class HTMLElementGoogleTranslate extends HTMLCustomElement {
 		state.consent((agreed) => {
 			if (document.body.isContentEditable) return;
 			if (!agreed) {
-				Page.getConsent(state);
+				state.consent.get();
 				return;
 			}
 			if (window.google && window.google.translate) delete window.google.translate;
