@@ -167,7 +167,7 @@ class HTMLElementImage extends HTMLCustomElement {
 	placeholder() {
 		const {w, h} = this.dimensions;
 		this.image.src = "data:image/svg+xml," + encodeURIComponent(
-			`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}"></svg>`
+			`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"></svg>`
 		);
 	}
 }
