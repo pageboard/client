@@ -60,7 +60,7 @@ Pageboard.getFeedCard = function(node, state) {
 	var title = node.querySelector('[block-content="title"]');
 	if (title) card.title = title.innerText;
 	var desc = node.querySelector('[block-content="description"]');
-	card.description = desc && desc.innerText || null;
+	card.description = desc && desc.innerText ? desc.innerText.trim() : null;
 	var date = node.getAttribute('feed-publication') || node.getAttribute('pubdate');
 	if (date) card.date = new Date(date);
 	var preview = node.querySelector('[block-content="preview"] [block-type="image"]');
@@ -143,7 +143,7 @@ Page.serialize = function(state) {
 			<description>
 				<img alt="" src="[item.image.url|magnet:*]" width="[item.image.width]" height="[item.image.height]" />
 				<p>[item.description|magnet:*]</p>
-				[item.content|magnet:*|html]
+				[item.content|or:|html]
 			</description>
 		</item>
 	</channel>
