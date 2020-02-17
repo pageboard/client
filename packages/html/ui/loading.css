@@ -49,19 +49,13 @@
 	0% {
 		opacity:0;
 		content: '⚫';
-		transition:opacity;
 	}
-	40% {
+	50% {
 		opacity:1;
 		content: '⚫';
 	}
-	60% {
-		content: '⚫⚫';
-	}
-	80% {
-		content: '⚫⚫\A⚫';
-	}
 	100% {
-		content: '⚫⚫\A⚫⚫';
+		opacity:0;
+		content: '⚫';
 	}
 }
