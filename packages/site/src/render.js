@@ -56,6 +56,13 @@ module.exports = function(res, scope, el) {
 	if (res.items) {
 		res.items.forEach((child) => {
 			blocks[child.id] = child;
+			// this case should actually be res.item.children (like blocks.search api)
+			// but page.get api returns res.item/res.items and we can't change it in a compatible way.
+			if (child.children && !res.item) {
+				child.children.forEach((child) => {
+					blocks[child.id] = child;
+				});
+			}
 		});
 	}
 	return scope.$view.from(block, blocks, {
