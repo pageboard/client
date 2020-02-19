@@ -149,14 +149,19 @@ function getImmediateContents(root, list) {
 
 function findContent(elt, dom, type) {
 	if (elt.leaf) return;
+	var node;
 	if (elt.inline || elt.contents.unnamed) {
-		if (type == "root") return dom;
-		else return;
+		if (type == "root") node = dom;
+	} else {
+		var list = [];
+		getImmediateContents(dom, list);
+		if (!list.length) return;
+		node = commonAncestor.apply(null, list);
 	}
-	var list = [];
-	getImmediateContents(dom, list);
-	if (!list.length) return;
-	return commonAncestor.apply(null, list);
+	if (node && node.nodeName == "TEMPLATE" && node.content.childNodes.length && node.childNodes.length == 0) {
+		node.appendChild(node.content);
+	}
+	return node;
 }
 
 function flagDom(elt, dom, iterate, parent) {
