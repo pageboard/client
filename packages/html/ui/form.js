@@ -9,7 +9,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		this.getMethodLater = Pageboard.debounce(this.getMethod, 300);
 	}
 	patch(state) {
-		if (state.scope.$write) return;
+		if (this.isContentEditable) return;
 		if (this.method != "get") return;
 		this.fill(state.query).forEach((name) => {
 			state.vars[name] = true;
@@ -108,7 +108,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 	}
 	handleSubmit(e, state) {
 		if (e.type == "submit") e.preventDefault();
-		if (state.scope.$write) return;
+		if (this.isContentEditable) return;
 		this.classList.remove('error', 'warning', 'success');
 		if (this.matches('.loading')) return;
 		if (e.type != "submit" && this.querySelector('[type="submit"]')) return;
