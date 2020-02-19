@@ -66,11 +66,27 @@ Blocks.prototype.toAttrs = function(block) {
 
 Blocks.prototype.serializeTo = function(parent, el, ancestor) {
 	if (!el || typeof el == "string") el = this.view.element(el || parent.type);
-	if (ancestor && parent.id) ancestor.blocks[parent.id] = parent;
-	if ((el.standalone || parent.standalone) && !parent.virtual) {
-		ancestor = parent;
+
+	/*
+	1. parent is the direct parent
+	2. ancestor is the parent to relate to
+	3. virtual block does not relate to ancestor
+	4. standalone is ancestor to all its descendants
+	Result: a virtual block need to be descendant of a standalone block,
+	or else serialization cannot tell to which ancestor it must relate to
+	(especially for new blocks - existing blocks are already related)
+	*/
+
+	if (parent.virtual && !parent.standalone) {
+		throw new Error("A virtual block must be standalone");
+	}
+	if (ancestor && parent.id) {
+		ancestor.blocks[parent.id] = parent;
 	}
 
+	if (el.standalone || parent.standalone) {
+		ancestor = parent;
+	}
 	if (parent == ancestor) {
 		parent.blocks = {};
 	}
