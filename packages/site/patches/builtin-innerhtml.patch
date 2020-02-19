@@ -1,0 +1,24 @@
+--- index.js	1985-10-26 09:15:00.000000000 +0100
++++ index.js	2020-02-19 11:44:22.503779558 +0100
+@@ -105,12 +105,20 @@
+           }
+         }
+       );
++      var ElementClass = Element;
+       var innerHTML = Object.getOwnPropertyDescriptor(
+         Element.prototype,
+         'innerHTML'
+       );
++      if (!innerHTML) {
++        ElementClass = HTMLElement;
++        innerHTML = Object.getOwnPropertyDescriptor(
++          HTMLElement.prototype,
++          'innerHTML'
++        );
++      }
+       defineProperties(
+-        Element.prototype,
++        ElementClass.prototype,
+         {
+           innerHTML: {
+             get: innerHTML.get,
