@@ -27,7 +27,8 @@ exports.cards = {
 			}, {
 				title: 'Doubling',
 				const: 'doubling'
-			}]
+			}],
+			default: 'stackable'
 		}
 	},
 	html: '<div class="ui [columns|num] [responsive] cards"></div>',

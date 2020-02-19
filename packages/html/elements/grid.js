@@ -27,7 +27,8 @@ exports.grid = {
 			}, {
 				title: 'Doubling',
 				const: 'doubling'
-			}]
+			}],
+			default: 'stackable'
 		},
 		columns: {
 			title: 'Columns Count',
@@ -79,7 +80,8 @@ exports.grid_row = {
 			}, {
 				title: 'Doubling',
 				const: 'doubling'
-			}]
+			}],
+			default: 'stackable'
 		},
 		columns: {
 			title: 'Columns Count',
