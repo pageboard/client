@@ -114,11 +114,10 @@ Blocks.prototype.serializeTo = function(parent, el, ancestor) {
 				div.removeAttribute('block-type');
 				div.removeAttribute('block-focused');
 			}
-
+			if (def.virtual) {
+				block.virtual = true;
+			}
 			if (!id || this.serializeTo(block, blockEl, ancestor)) {
-				if (def.virtual) {
-					block.virtual = true;
-				}
 				if (id && type == block.type) type = null;
 				list.push({node: div, id: id, type: type});
 			} else {
