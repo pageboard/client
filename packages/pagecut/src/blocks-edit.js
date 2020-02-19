@@ -132,7 +132,7 @@ Blocks.prototype.serializeTo = function(parent, el, ancestor) {
 				item.node.setAttribute('block-type', item.type);
 			}
 		});
-		if (!def.virtual) el.contents.set(parent, def.id, this.view.utils.serializeHTML(content, true));
+		el.contents.set(parent, def.id, this.view.utils.serializeHTML(content, true));
 	});
 	if (Object.keys(parent.content).length == 0) delete parent.content;
 
