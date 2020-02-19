@@ -206,16 +206,6 @@ function Editor(opts) {
 		dispatchTransaction: function(tr) {
 			editor.updateState(editor.state.apply(tr));
 		},
-		clipboardTextParser: function(str, $pos) {
-			var type = $pos.parent && $pos.parent.type.name || '';
-			if (type.startsWith('svg')) {
-				var dom = (new DOMParser()).parseFromString(str, "image/svg+xml");
-				return editor.clipboardParser.parseSlice(dom, {
-					preserveWhitespace: false,
-					context: $pos
-				});
-			}
-		},
 		nodeViews: views
 	});
 }

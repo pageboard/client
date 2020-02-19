@@ -58,16 +58,20 @@ InputPlugin.prototype.transformPasted = function(slice) {
 	return slice;
 };
 
-InputPlugin.prototype.clipboardTextParser = function(str, $context) {
+InputPlugin.prototype.clipboardTextParser = function(str, $pos) {
 	if (str instanceof Model.Slice) {
 		return str;
 	}
-	var dom = this.view.utils.parseHTML(str);
+	var type = $pos.parent && $pos.parent.type.name || '';
+	var dom;
+	if (type.startsWith('svg')) {
+		dom = (new DOMParser()).parseFromString(str, "image/svg+xml");
+	} else {
+		dom = this.view.utils.parseHTML(str);
+	}
 	return this.view.someProp("clipboardParser").parseSlice(dom, {
 		preserveWhitespace: true,
-		context: $context
+		context: $pos
 	});
 };
-
-
 
