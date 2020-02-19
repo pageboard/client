@@ -5,6 +5,7 @@ class HTMLElementTemplate extends HTMLCustomElement {
 		};
 	}
 	static prepareTemplate(node) {
+		if (node.isContentEditable) return node;
 		var doc = node.ownerDocument;
 		var tmpl = node;
 		var helper;
@@ -12,16 +13,14 @@ class HTMLElementTemplate extends HTMLCustomElement {
 			helper = doc.createElement('div');
 			helper.innerHTML = node.textContent;
 			tmpl = doc.createElement('template');
-			if (!tmpl.content) tmpl.content = doc.createDocumentFragment();
-			tmpl.content.appendChild(node.dom(helper.textContent));
+			if (!tmpl.content) {
+				tmpl.content = doc.createDocumentFragment();
+				tmpl.content.appendChild(node.dom(helper.textContent));
+			} else {
+				tmpl.innerHTML = helper.textContent;
+			}
 			node.replaceWith(tmpl);
 			node.textContent = helper.textContent = '';
-		}
-		if (tmpl.isContentEditable) {
-			if (tmpl.content && tmpl.children.length == 0) {
-				tmpl.textContent = '';
-				tmpl.appendChild(tmpl.content);
-			}
 		} else if (document.visibilityState == "prerender") {
 			var dest = tmpl.dom(`<script type="text/html"></script>`);
 			if (!helper) helper = doc.createElement('div');
