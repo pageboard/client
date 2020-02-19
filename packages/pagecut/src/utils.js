@@ -687,6 +687,9 @@ Utils.prototype.serializeHTML = function(dom, children) {
 
 Utils.wrapMap = {
 	thead: ["table"],
+	tbody: ["table"],
+	tfoot: ["table"],
+	caption: ["table"],
 	colgroup: ["table"],
 	col: ["table", "colgroup"],
 	tr: ["table", "tbody"],
@@ -718,6 +721,7 @@ Utils.prototype.parseHTML = function(html) {
 	for (var i = 0; i < depth; i++) {
 		elt = elt.firstChild;
 	}
+
 	return elt;
 };
 
