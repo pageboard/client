@@ -63,7 +63,8 @@
 	transform: translateX(-50%);
 	right:auto;
 }
-.justify.fixed.popup.item > .placer > div {
+.justify.popup.item > .placer,
+.justify.popup.item > .placer > div {
 	width:100%;
 }
 .right.popup.item > .placer {
