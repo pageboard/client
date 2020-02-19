@@ -134,6 +134,14 @@ function Editor(opts) {
 		if (node.attrs.standalone) attrs['block-standalone'] = 'true';
 		delete attrs['block-focused'];
 	});
+	this.clipboardSerializer.serializeFragment = (function(meth) {
+		return function(frag, opts, top) {
+			var tmpl = top && top.nodeName == "TEMPLATE";
+			var ret = meth.call(this, frag, opts, tmpl ? top.content : top);
+			if (tmpl) return top;
+			else return ret;
+		};
+	})(this.clipboardSerializer.serializeFragment);
 
 	this.clipboardParser = Model.DOMParser.fromSchema(this.schema);
 

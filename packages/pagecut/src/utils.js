@@ -677,6 +677,10 @@ Utils.prototype.serializeHTML = function(dom, children) {
 				else html += child.outerHTML;
 			}
 		} else {
+			if (dom.nodeName == "TEMPLATE" && dom.content.childNodes.length && dom.childNode.length == 0) {
+				dom = dom.cloneNode(true);
+				dom.appendChild(dom.content);
+			}
 			html = dom.outerHTML;
 		}
 	} else {
