@@ -24,9 +24,8 @@ exports.meta = function(meta) {
 	if (meta.elements) Object.entries(meta.elements).forEach(function([name, el]) {
 		if (!Pageboard.elements[name]) Pageboard.elements[name] = el;
 	});
-	if (!meta.bundle) return pr;
-	if (!Pageboard.cache[meta.bundle]) {
-		Pageboard.cache[meta.bundle] = Pageboard.load.js(meta.bundle);
+	if (meta.bundle && !Pageboard.cache[meta.bundle]) {
+		pr = Pageboard.cache[meta.bundle] = Pageboard.load.js(meta.bundle);
 	}
 
 	// additional resources - elements in group page usually do not have those
@@ -41,9 +40,7 @@ exports.meta = function(meta) {
 		}));
 	});
 
-	return Pageboard.cache[meta.bundle].then(function() {
-		return pr;
-	});
+	return pr;
 };
 
 function getHead(doc) {

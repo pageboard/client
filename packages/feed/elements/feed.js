@@ -2,6 +2,7 @@ exports.feed = {
 	title: 'Feed',
 	menu: "widget",
 	standalone: true,
+	bundle: true,
 	group: "block",
 	icon: '<i class="newspaper outline icon"></i>',
 	properties: {

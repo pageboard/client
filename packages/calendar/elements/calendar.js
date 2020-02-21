@@ -5,17 +5,11 @@ exports.settings.properties.grants.items.anyOf.push({
 	description: 'Events, dates, reservations'
 });
 
-exports.calendar = {
-	scripts: ['../ui/calendar.js'],
-	bundle: true,
-	contents: 'calendar'
-};
-
 exports.event = {
 	priority: 2, // must install scripts after query element scripts
 	title: 'Event',
 	menu: "Calendar",
-	group: 'calendar',
+	bundle: true,
 	standalone: true,
 	required: ['title'],
 	properties: {
@@ -90,13 +84,15 @@ exports.event = {
 			title: 'Label',
 			type: 'string'
 		}
-	}
+	},
+	scripts: ['../ui/calendar.js']
 };
+
 
 exports.event_date = {
 	title: 'Date',
 	menu: "Calendar",
-	group: 'calendar',
+	bundle: 'calendar',
 	properties: {
 		groupsOnly: {
 			title: 'For groups only',
@@ -166,7 +162,7 @@ exports.event_date = {
 exports.event_reservation = {
 	title: 'Reservation',
 	menu: "Calendar",
-	group: 'calendar',
+	bundle: 'calendar',
 	required: ['seats', 'name'],
 	properties: {
 		seats: {

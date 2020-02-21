@@ -1,5 +1,6 @@
 exports.svg = {
 	title: "Svg",
+	bundle: true,
 	icon: '<i class="object ungroup icon"></i>',
 	menu: 'media',
 	group: "block",

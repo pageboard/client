@@ -2,7 +2,6 @@ exports.user = {
 	title: 'User',
 	priority: -10,
 	bundle: true,
-	group: 'user',
 	required: ['email'],
 	$lock: true,
 	properties: {
@@ -66,7 +65,7 @@ exports.priv = {
 exports.settings = {
 	title: 'Settings',
 	priority: -10,
-	group: 'user',
+	bundle: 'user',
 	properties: {
 		consents: {
 			title: 'User Consents',

@@ -32,6 +32,7 @@ function initState(res, state) {
 	if (res.grants) state.data.$grants = res.grants;
 	if (res.hrefs) Object.assign(state.data.$hrefs, res.hrefs);
 	scope.$hrefs = state.data.$hrefs; // backward compat FIXME get rid of this, data.$hrefs is good
+
 	if (res.meta && res.meta.group == "page") {
 		["grants", "links", "site", "lock", "granted"].forEach(function(k) {
 			if (res[k] !== undefined) scope[`$${k}`] = res[k];
@@ -44,7 +45,9 @@ exports.bundle = function(loader, state) {
 	var scope = state.scope;
 	return loader.then(function(res) {
 		if (!res) return Promise.resolve();
-		var metas = res.metas || res.meta && [res.meta] || [];
+		var metas = [];
+		if (res.meta) metas.push(res.meta);
+		if (res.metas) metas = metas.concat(res.metas);
 		return Promise.all(metas.map(function(meta) {
 			return exports.load.meta(meta);
 		})).then(function() {
@@ -70,6 +73,7 @@ exports.bundle = function(loader, state) {
 		var elts = scope.$elements;
 		Object.keys(elts).forEach(function(name) {
 			var el = elts[name];
+			if (!el.name) el.name = name;
 			exports.render.install(el, scope);
 		});
 		return res;
