@@ -19,13 +19,13 @@ Page.init(function(state) {
 });
 Page.setup(function(state) {
 	state.finish(function() {
-		if (!state.consent.ask) return;
 		var consent = Page.storage.get('consent');
 		var tacit = consent === null;
 		if (tacit) tacit = state.consent.get();
 		if (tacit) {
 			console.warn("Got tacit consent, please add a Form Consent to this page");
 			consent = "yes";
+			if (!state.consent.ask) return;
 		}
 		if (consent !== null) {
 			state.scope.$consent = consent;
