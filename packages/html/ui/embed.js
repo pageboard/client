@@ -9,9 +9,6 @@ class HTMLElementEmbed extends HTMLCustomElement {
 		this.promise = Promise.resolve();
 		this.promise.done = function() {};
 	}
-	setup(state) {
-		state.consent();
-	}
 	reveal(state) {
 		var done;
 		this.promise = new Promise(function(resolve) {
@@ -19,6 +16,7 @@ class HTMLElementEmbed extends HTMLCustomElement {
 		});
 		this.promise.done = done;
 		this.classList.add('waiting');
+
 		state.consent((agreed) => {
 			this.classList.remove('waiting', 'denied');
 			var opts = this.options;
@@ -53,7 +51,7 @@ class HTMLElementEmbed extends HTMLCustomElement {
 		return this.promise;
 	}
 	captureClick(e, state) {
-		if (this.matches('.denied')) state.consent.get();
+		if (this.matches('.denied')) state.reconsent();
 	}
 	captureLoad() {
 		this.promise.done();
