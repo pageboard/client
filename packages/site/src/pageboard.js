@@ -113,7 +113,14 @@ Page.patch(function(state) {
 				Status: '302 Bad Parameters',
 				Location: Page.format({pathname: state.pathname, query})
 			});
-			state.replace({pathname: state.pathname, query});
+			Page.setup(function(state) {
+				state.replace({
+					query: query,
+					pathname: state.pathname
+				}, {
+					data: state.data
+				});
+			});
 		} else if (missing.length > 0) {
 			exports.equivs({
 				Status: '400 Missing Parameters'
