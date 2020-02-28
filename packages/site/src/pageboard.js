@@ -118,6 +118,7 @@ Page.patch(function(state) {
 					query: query,
 					pathname: state.pathname
 				}, {
+					// no need to get the data again, though
 					data: state.data
 				});
 			});
