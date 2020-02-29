@@ -1,9 +1,18 @@
 Page.patch(function(state) {
-	state.finish(function(state) {
-		var feeds = document.body.querySelectorAll('[block-type="feed"]');
-		if (state.pathname.endsWith('.rss')) {
-			return;
+	var version = state.scope.$site.version || undefined;
+	if (state.pathname.endsWith('.rss')) {
+		if (version != null) state.vars.version = true;
+		if (state.query.version != version) {
+			Pageboard.equivs({
+				Status: '301 Moved Permanently',
+				Location: Page.format({
+					pathname: state.pathname,
+					query: Object.assign({}, state.query, {version: version})
+				})
+			});
 		}
+	} else state.finish(function(state) {
+		var feeds = document.body.querySelectorAll('[block-type="feed"]');
 		delete Page.serialize;
 		if (feeds.length == 1) {
 			var meta = Array.from(document.head.querySelectorAll('meta')).pop();
@@ -19,7 +28,7 @@ Page.patch(function(state) {
 		} else if (feeds.length > 1) {
 			var link = Page.format({
 				pathname: state.pathname + '.rss',
-				query: state.query
+				query: Object.assign({}, state.query, {version: version})
 			});
 			var node = document.head.querySelector('link[rel="alternate"][type="application/rss+xml"]');
 			if (!node) {
