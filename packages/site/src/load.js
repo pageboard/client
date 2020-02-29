@@ -60,7 +60,7 @@ exports.js = function(url, doc) {
 	}
 	var node = doc.createElement('script');
 	node.src = url;
-	node.defer = true;
+	node.async = false;
 	return load(node, head);
 };
 
