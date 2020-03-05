@@ -67,6 +67,11 @@ HTMLCustomElement.define = function(name, cla, is) {
 					this.reveal(state);
 				}
 			},
+			paint(state) {
+				if (!this.options) {
+					this.options = nodeOptions(this, defaults, state, is);
+				}
+			},
 			setup(state) {
 				if (!this.options) {
 					this.options = nodeOptions(this, defaults, state, is);
