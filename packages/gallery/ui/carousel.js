@@ -28,7 +28,7 @@ class HTMLElementCarousel extends HTMLCustomElement {
 
 	init() {
 		this.reload = Pageboard.debounce(this.reload, 100);
-		this.resetup = Pageboard.debounce(this.resetup, 100);
+		this.paint = Pageboard.debounce(this.paint, 100);
 	}
 
 	handleClick(e, state) {

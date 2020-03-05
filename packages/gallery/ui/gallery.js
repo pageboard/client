@@ -6,25 +6,21 @@ class HTMLElementGallery extends HTMLCustomElement {
 	}
 
 	get selectedMode() {
-		return this.getAttribute('selected-mode');
+		return this.getAttribute('selected-mode') || this.options.mode;
 	}
-	set selectedMode(val) {
-		this.setAttribute('selected-mode', val);
-	}
-	get activeGallery() {
-		if (!this.selectedMode) return null;
-		return Array.from(this.children).find((node) => {
-			return node.getAttribute('block-type') == this.selectedMode;
-		});
+
+	set selectedMode(str) {
+		this.setAttribute('selected-mode', str);
 	}
 
 	patch(state) {
 		var mode = this.options.mode;
-		this.children.forEach((gal) => {
-			var type = gal.getAttribute('block-type');
-			if (!mode) mode = type;
-			if (mode == type) this.selectedMode = mode;
-		});
+		if (!mode) mode = this.children[0].getAttribute('block-type');
+		this.selectedMode = mode;
+	}
+
+	paint() {
+		/* needed for gallery-helper */
 	}
 
 	handleClick(e, state) {
@@ -43,7 +39,7 @@ class HTMLElementGallery extends HTMLCustomElement {
 			// only allow click on medialist's media
 			return;
 		}
-		var carousel = Array.from(this.children).find(function(gal) {
+		var carousel = this.children.find(function(gal) {
 			return gal.getAttribute('block-type') == "carousel";
 		});
 		if (!carousel) return;
@@ -55,4 +51,5 @@ class HTMLElementGallery extends HTMLCustomElement {
 		}, state.query)});
 	}
 }
+
 HTMLCustomElement.define('element-gallery', HTMLElementGallery);
