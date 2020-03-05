@@ -25,6 +25,8 @@ class HTMLElementGoogleTranslate extends HTMLCustomElement {
 			});
 		});
 		this.observer.observe(document.body, {attributes: true});
+	}
+	paint(state) {
 		this.translate = Page.storage.getCookies().googtrans;
 		if (this.translate) {
 			this.show(state);
