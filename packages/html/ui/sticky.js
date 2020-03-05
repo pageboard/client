@@ -11,13 +11,15 @@ class HTMLElementSticky extends HTMLCustomElement {
 			raf = window.requestAnimationFrame(listener);
 		};
 	}
+	handleAllScroll(e, state) {
+		this.listener();
+	}
+	handleAllResize(e, state) {
+		this.listener();
+	}
 	setup() {
 		this.dataset.mode = "start";
 		if (this._sticky || !this.parentNode) return;
-		Page.connect({
-			handleScroll: this.listener,
-			handleResize: this.listener
-		}, window);
 		// some stylesheets might target :not([data-mode="start"]) so it must be the initial value
 		this._sticky = this.constructor.stickyfill.addOne(this);
 		this.listener();
