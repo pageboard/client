@@ -113,20 +113,22 @@ Page.patch(function(state) {
 				Status: '302 Bad Parameters',
 				Location: Page.format({pathname: state.pathname, query})
 			});
-			Page.setup(function(state) {
-				state.replace({
-					query: query,
-					pathname: state.pathname
-				}, {
-					// no need to get the data again, though
-					data: state.data
-				});
-			});
+			state.requery = query;
 		} else if (missing.length > 0) {
 			exports.equivs({
 				Status: '400 Missing Parameters'
 			});
 		}
+	});
+});
+
+Page.paint(function(state) {
+	if (state.requery) state.replace({
+		query: state.requery,
+		pathname: state.pathname
+	}, {
+		// no need to get the data again, though
+		data: state.data
 	});
 });
 
