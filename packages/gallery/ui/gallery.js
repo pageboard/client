@@ -25,10 +25,6 @@ class HTMLElementGallery extends HTMLCustomElement {
 			if (!mode) mode = type;
 			if (mode == type) this.selectedMode = mode;
 		});
-		var gal = this.activeGallery;
-		if (gal.widget == null && gal.setup) Page.setup((state) => {
-			gal.setup(state);	
-		});
 	}
 
 	handleClick(e, state) {

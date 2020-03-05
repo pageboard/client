@@ -53,13 +53,9 @@ class HTMLElementCarousel extends HTMLCustomElement {
 
 	patch(state) {
 		this.updateCells();
-		Page.setup((state) => {
-			this.resetup(state);
-		});
 	}
 
 	setup(state) {
-		this.resetup(state);
 		if (!this.itemsObserver) {
 			this.itemsObserver = new MutationObserver((records) => {
 				records.forEach((record) => this.reload(record, state));
@@ -70,7 +66,7 @@ class HTMLElementCarousel extends HTMLCustomElement {
 		}
 	}
 
-	resetup(state) {
+	paint(state) {
 		if (this.widget) this.destroy();
 		var gallery = this.closest('[block-type="gallery"]');
 		if (gallery && gallery.selectedMode != "carousel") return;

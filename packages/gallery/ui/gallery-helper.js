@@ -2,11 +2,8 @@ Page.setup(function() {
 	HTMLCustomElement.extend('element-gallery', class GalleryHelper {
 		patch(state) {
 			if (!state.scope.$write) return;
-			Page.setup((state) => {
-				this.setup(state);
-			});
 		}
-		setup(state) {
+		paint(state) {
 			if (!state.scope.$write) return;
 			if (!this.itemsObserver) this.itemsObserver = new MutationObserver((records) => {
 				setTimeout(() => {
