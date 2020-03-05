@@ -37,15 +37,16 @@ class HTMLElementCarousel extends HTMLCustomElement {
 			e.stopImmediatePropagation();
 			var query = Object.assign({}, state.query);
 			var keyFv = `${this.id}.fullview`;
-			if (this.options.fullview) {
-				delete query[keyFv];
-			} else {
-				query[keyFv] = true;
-			}
 			var gallery = this.closest('[block-type="gallery"]');
 			if (gallery) {
 				// leaving current mode
 				delete query[`${gallery.id}.mode`];
+				delete query[`${this.id}.index`];
+				delete query[keyFv];
+			} else if (this.options.fullview) {
+				delete query[keyFv];
+			} else {
+				query[keyFv] = true;
 			}
 			state.push({query: query});
 		}
@@ -109,7 +110,7 @@ class HTMLElementCarousel extends HTMLCustomElement {
 					});
 				});
 			}
-			if (opts.fullview) {
+			if (opts.fullview || gallery) {
 				state.query[`${this.id}.index`] = index;
 				state.save();
 			} else {
