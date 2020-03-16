@@ -353,6 +353,7 @@ function parentList(obj, block) {
 }
 
 Store.prototype.changes = function() {
+	var els = this.editor.elements;
 	var kids = this.editor.blocks.initial;
 	var initial = this.initial;
 	var unsaved = this.unsaved;
@@ -418,6 +419,11 @@ Store.prototype.changes = function() {
 			// compare content, not parent
 			block = Object.assign({}, block);
 			iblock = Object.assign({}, iblock);
+			var contents = els[block.type].contents;
+			block.content = contents.prune(block);
+			if (block.content == null) delete block.content;
+			iblock.content = contents.prune(iblock);
+			if (iblock.content == null) delete iblock.content;
 			delete block.parent;
 			delete iblock.parent;
 			delete block.virtual;
@@ -452,6 +458,8 @@ Store.prototype.changes = function() {
 	changes.remove = Object.keys(changes.remove);
 
 	changes.add.forEach(function(block) {
+		block.content = els[block.type].contents.prune(block);
+		if (block.content == null) delete block.content;
 		delete block.virtual;
 		delete block.parent;
 	});

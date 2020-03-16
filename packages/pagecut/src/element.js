@@ -93,4 +93,16 @@ class Contents {
 	clone() {
 		return new Contents(this.list.slice().map((obj) => Object.assign({}, obj)));
 	}
+	prune(block) {
+		var copy = {};
+		var content = block.content;
+		this.list.forEach((def) => {
+			if (!def.virtual) {
+				var cont = content[def.id || ""];
+				if (cont !== undefined) copy[def.id || ""] = cont;
+			}
+		});
+		if (block.virtual && Object.keys(copy).length == 0) return;
+		else return copy;
+	}
 }
