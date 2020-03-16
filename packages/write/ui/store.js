@@ -121,6 +121,11 @@ Store.prototype.key = function() {
 	return "pageboard-store-" + document.location.toString();
 };
 
+Store.prototype.setRoot = function(root) {
+	this.rootId = root.id;
+	this.initial = flattenBlock(root);
+};
+
 Store.prototype.restore = function(blocks) {
 	try {
 		var frag = this.editor.from(blocks[this.rootId], blocks);
@@ -165,8 +170,6 @@ Store.prototype.realUpdate = function() {
 		this.uiUpdate();
 		return;
 	}
-
-	this.rootId = root.id;
 
 	this.importStandalones(root);
 
