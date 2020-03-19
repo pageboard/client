@@ -4,3 +4,8 @@ const Arr = Array.prototype;
 	if (!HTMLCollection.prototype[name]) HTMLCollection.prototype[name] = Arr[name];
 });
 
+Node.prototype.queryClosest = function(sel) {
+	if (this.matches(sel)) return this;
+	else return this.querySelector(sel);
+};
+
