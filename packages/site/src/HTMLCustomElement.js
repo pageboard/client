@@ -93,14 +93,16 @@ HTMLCustomElement.define = function(name, cla, is) {
 	return cla;
 };
 
-function monkeyPatch(proto, meth, cb) {
+function monkeyPatch(proto, meth, cb, after) {
 	Object.defineProperty(proto, meth, {
 		configurable: true,
 		enumerable: true,
 		value: (function(fn) {
 			return function(...args) {
-				var ret = cb.apply(this, args);
-				if (fn) ret = fn.apply(this, args);
+				var ret;
+				if (after && fn) ret = fn.apply(this, args);
+				ret = cb.apply(this, args);
+				if (!after && fn) ret = fn.apply(this, args);
 				return ret;
 			};
 		})(proto[meth])
@@ -161,13 +163,14 @@ HTMLCustomElement.extend = function(name, Ext, is) {
 	if (!Ext.name) console.warn("Please name the extension of", name, Ext);
 	if (list[Ext.name]) return;
 	list[Ext.name] = true;
-	monkeyPatchAll(Cla.prototype, Ext.prototype);
+	// extend appends Ext.prototype, not prepend
+	monkeyPatchAll(Cla.prototype, Ext.prototype, true);
 };
 
-function monkeyPatchAll(ClaProto, ExtProto) {
+function monkeyPatchAll(ClaProto, ExtProto, after) {
 	Object.getOwnPropertyNames(ExtProto).forEach(function(meth) {
 		if (meth != "constructor") {
-			monkeyPatch(ClaProto, meth, ExtProto[meth]);
+			monkeyPatch(ClaProto, meth, ExtProto[meth], after);
 		}
 	});
 }
