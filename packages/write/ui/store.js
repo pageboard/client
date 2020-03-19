@@ -225,13 +225,14 @@ Store.prototype.save = function(e) {
 	if (this.saving) return;
 	this.flush();
 	if (this.unsaved == null) return;
-	var autoChanges = this.changes(this.stored, this.initial);
 	var changes = this.changes(this.initial, this.unsaved);
-	autoChanges.update.forEach((auto) => {
-		if (changes.update.some((block) => {
-			return block.id == auto.id;
-		}) == false) changes.update.unshift(auto);
-	});
+	if (this.stored) {
+		this.changes(this.stored, this.initial).update.forEach((auto) => {
+			if (changes.update.some((block) => {
+				return block.id == auto.id;
+			}) == false) changes.update.unshift(auto);
+		});
+	}
 	if (e && e.shiftKey) {
 		console.warn("Pageboard.test - saving disabled");
 		console.log(changes);
