@@ -34,7 +34,7 @@ HTMLCustomElement.extend('element-gallery', class GalleryHelper {
 				if (node.nodeType != Node.ELEMENT_NODE) return;
 				var pos = target.children.indexOf(node);
 				gals.forEach((gal) => {
-					var items = gal.querySelector('[block-content="items"]');
+					var items = gal.queryClosest('[block-content="items"]');
 					var item = ed.render({
 						type: `${gal.getAttribute('block-type')}_item`
 					});
@@ -48,7 +48,7 @@ HTMLCustomElement.extend('element-gallery', class GalleryHelper {
 				if (node.nodeType != Node.ELEMENT_NODE) return;
 				var pos = target.childNodes.indexOf(record.previousSibling) + 1 + i;
 				gals.forEach((gal) => {
-					var items = gal.querySelector('[block-content="items"]');
+					var items = gal.queryClosest('[block-content="items"]');
 					var child = items.childNodes[pos];
 					if (child) child.remove();
 				});
@@ -66,7 +66,7 @@ HTMLCustomElement.extend('element-gallery', class GalleryHelper {
 				return;
 			}
 			gals.forEach((gal) => {
-				var items = gal.querySelector('[block-content="items"]');
+				var items = gal.queryClosest('[block-content="items"]');
 				var child = items.children[pos];
 				if (!child) {
 					console.warn("Cannot synchronize", gal, "at pos", pos);
