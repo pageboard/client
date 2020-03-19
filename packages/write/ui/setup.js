@@ -218,7 +218,7 @@ Pageboard.Editor = function Editor(win, state) {
 	if ($store) {
 		controls.store.reset($store);
 	} else {
-		controls.store.setRoot(page);
+		controls.store.initialize(page, state.data.$cache.items);
 	}
 	controls.store.realUpdate();
 	return editor;

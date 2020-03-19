@@ -121,11 +121,6 @@ Store.prototype.key = function() {
 	return "pageboard-store-" + document.location.toString();
 };
 
-Store.prototype.setRoot = function(root) {
-	this.rootId = root.id;
-	this.initial = flattenBlock(root);
-};
-
 Store.prototype.restore = function(blocks) {
 	try {
 		var frag = this.editor.from(blocks[this.rootId], blocks);
@@ -157,6 +152,22 @@ Store.prototype.flush = function() {
 	}
 };
 
+Store.prototype.initialize = function(item, items) {
+	// initialize solves the problem that blocks automatically inserted by editor
+	// are otherwise part of this.initial and thus can't be diffed
+	// - while it's easy to track added blocks, it's not easy to track the
+	// how their parent content has changed
+	// however blocks added by the page scripts (fetch) will end up being in this.unsaved
+	// so won't be restored
+	// this.stored  -> "pure from db"
+	// this.initial -> "built"
+	// this.unsaved -> "built and changed"
+	// this.unstored -> "debuilt and changed" (meaning no virtual content)
+	var root = Object.assign({}, item, {children: items});
+	this.importStandalones(root);
+	this.stored = flattenBlock(root);
+};
+
 Store.prototype.realUpdate = function() {
 	this.debounceWaiting = false;
 	if (!this.editor) return;
@@ -170,6 +181,8 @@ Store.prototype.realUpdate = function() {
 		this.uiUpdate();
 		return;
 	}
+
+	this.rootId = root.id;
 
 	this.importStandalones(root);
 
@@ -212,7 +225,13 @@ Store.prototype.save = function(e) {
 	if (this.saving) return;
 	this.flush();
 	if (this.unsaved == null) return;
-	var changes = this.changes();
+	var autoChanges = this.changes(this.stored, this.initial);
+	var changes = this.changes(this.initial, this.unsaved);
+	autoChanges.update.forEach((auto) => {
+		if (changes.update.some((block) => {
+			return block.id == auto.id;
+		}) == false) changes.update.unshift(auto);
+	});
 	if (e && e.shiftKey) {
 		console.warn("Pageboard.test - saving disabled");
 		console.log(changes);
@@ -244,6 +263,7 @@ Store.prototype.save = function(e) {
 		var unsaved = this.unsaved;
 		this.reset();
 		this.initial = unsaved;
+		delete this.stored;
 		this.uiUpdate();
 		this.pageUpdate();
 		this.editor.update();
@@ -355,11 +375,9 @@ function parentList(obj, block) {
 	list.push(block.id);
 }
 
-Store.prototype.changes = function() {
+Store.prototype.changes = function(initial, unsaved) {
 	var els = this.editor.elements;
 	var kids = this.editor.blocks.initial;
-	var initial = this.initial;
-	var unsaved = this.unsaved;
 	Object.keys(this.fakeInitials).forEach(function(id) {
 		var news = flattenBlock(this.fakeInitials[id]);
 		Object.keys(news).forEach(function(id) {
