@@ -9,8 +9,12 @@ Page.State.prototype.consent = function(fn) {
 	});
 	var consent = this.scope.$consent;
 	if (consent === undefined) {
-		// setup not finished yet
-		HTMLCustomConsentElement.waiting = true;
+		if (this.stage == "patch") {
+			fn(true);
+		} else {
+			// setup not finished yet
+			HTMLCustomConsentElement.waiting = true;
+		}
 	} else if (consent === null) {
 		// setup finished but no consent is done yet, ask consent
 		this.reconsent();
