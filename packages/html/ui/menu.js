@@ -41,10 +41,12 @@ class HTMLElementMenu extends HTMLCustomElement {
 			this.active.classList.toggle('active', false);
 		}
 		var tosser = this.lastElementChild;
+		tosser.classList.remove('inactive');
 		let item = tosser.contains(e.target) && !e.target.closest('a') && e.target.closest('.item');
 		if (item == tosser) {
 			if (tosser.classList.contains('active')) {
 				this.active = item = null;
+				tosser.classList.add('inactive');
 				tosser.blur();
 			} else {
 				var padding = this.offsetTop + this.offsetHeight;
