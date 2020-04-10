@@ -127,7 +127,8 @@ exports.heading = {
 		},
 		id: {
 			nullable: true,
-			type: 'string'
+			type: 'string',
+			format: 'id'
 		}
 	},
 	contents: {
