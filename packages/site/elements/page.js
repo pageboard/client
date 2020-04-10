@@ -97,61 +97,6 @@ exports.page = {
 		`Intl.~locale.[$site.lang|or:en]`,
 		'smoothscroll'
 	],
-	filters: {
-		polyfills: function($elements, what) {
-			var map = {};
-			Object.keys($elements).forEach(function(key) {
-				var list = $elements[key].polyfills;
-				if (!list) return;
-				if (typeof list == "string") list = [list];
-				list.forEach(function(item) {
-					// what.scope from matchdom is not like scope from pageboard
-					item = item.fuse({}, what.scope.data);
-					map[item] = true;
-				});
-			});
-			return Object.keys(map).join(',');
-		},
-		csp: function($elements, what) {
-			var csp = {};
-			Object.keys($elements).forEach(function(key) {
-				var el = $elements[key];
-				if (el.scripts) el.scripts.forEach(function(src) {
-					var origin = /(^https?:\/\/[.-\w]+)/.exec(src);
-					if (origin) {
-						if (!el.csp) el.csp = {};
-						if (!el.csp.script) el.csp.script;
-						el.csp.script.push(origin[0]);
-					}
-				});
-				if (el.stylesheets) el.stylesheets.forEach(function(src) {
-					var origin = /(^https?:\/\/[.-\w]+)/.exec(src);
-					if (origin) {
-						if (!el.csp) el.csp = {};
-						if (!el.csp.style) el.csp.style;
-						el.csp.style.push(origin[0]);
-					}
-				});
-				if (!el.csp) return;
-				Object.keys(el.csp).forEach(function(src) {
-					var gcsp = csp[src];
-					if (!gcsp) csp[src] = gcsp = [];
-					var list = el.csp[src];
-					if (!list) return;
-					if (typeof list == "string") list = [list];
-					list.forEach(function(val) {
-						if (gcsp.includes(val) == false) gcsp.push(val);
-					});
-				});
-			});
-			return Object.keys(csp).filter(function(src) {
-				return csp[src].length > 0;
-			}).map(function(src) {
-				var key = src.indexOf('-') > 0 ? src : `${src}-src`;
-				return `${key} ${csp[src].join(' ')}`.trim();
-			}).join('; ');
-		}
-	},
 	csp: {
 		default: ["'none'"],
 		'block-all-mixed-content': [""],
