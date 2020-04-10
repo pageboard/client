@@ -13,8 +13,8 @@ PageTitle.prototype.checkHandler = function(e) {
 };
 
 PageTitle.prototype.check = function(only) {
-	var url = this.block.data.url || "";
-	var nameUrl = url.split("/").pop();
+	const url = this.block.data.url || "";
+	const nameUrl = url.split("/").pop();
 	if (Pageboard.slug(this.input.value) == nameUrl) {
 		this.tracking = true;
 	} else if (!only) {
@@ -24,11 +24,14 @@ PageTitle.prototype.check = function(only) {
 
 PageTitle.prototype.change = function() {
 	if (!this.tracking) return;
-	var val = this.input.value;
-	var slug = Pageboard.slug(val);
-	var list = (this.block.data.url || '/').split('/');
+	const node = Pageboard.editor.blocks.domQuery(this.block.id, {focused: true});
+	const parentUrl = node && node.parentNode.closest('[block-id]').dataset.url || '';
+	let url = this.block.data.url || (parentUrl + '/');
+	let val = this.input.value;
+	const slug = Pageboard.slug(val);
+	const list = url.split('/');
 	list[list.length - 1] = slug;
-	var inputUrl = this.form.querySelector('[name="url"]');
+	const inputUrl = this.form.querySelector('[name="url"]');
 	inputUrl.value = list.join('/');
 	Pageboard.trigger(inputUrl, 'input');
 };
@@ -36,7 +39,7 @@ PageTitle.prototype.change = function() {
 PageTitle.prototype.init = PageTitle.prototype.update = function(block) {
 	this.block = block;
 	this.input.addEventListener('input', this.change);
-// 	this.form.addEventListener('input', this.checkHandler);
+	// this.form.addEventListener('input', this.checkHandler);
 	this.check();
 };
 
