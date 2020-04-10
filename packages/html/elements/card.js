@@ -15,6 +15,22 @@ exports.cards = {
 			minimum: 0,
 			default: 0
 		},
+		shape: {
+			title: 'Shape',
+			anyOf: [{
+				type: 'null',
+				title: 'Default',
+			}, {
+				const: "square",
+				title: "Square",
+			}, {
+				const: "tall",
+				title: "Tall"
+			}, {
+				const: "wide",
+				title: "Wide"
+			}]
+		},
 		responsive: {
 			title: 'Responsive',
 			nullable: true,
@@ -31,9 +47,10 @@ exports.cards = {
 			default: 'stackable'
 		}
 	},
-	html: '<div class="ui [columns|num] [responsive] cards"></div>',
+	html: '<div class="ui [columns|num] [shape] [responsive] cards"></div>',
 	stylesheets: [
-		'../lib/components/card.css'
+		'../lib/components/card.css',
+		'../ui/card.css'
 	]
 };
 

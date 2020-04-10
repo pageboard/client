@@ -1,0 +1,32 @@
+.ui.square.cards > .card > .image > *,
+.ui.tall.cards > .card > .image > *,
+.ui.wide.cards > .card > .image > * {
+	position:absolute;
+	max-height:100%;
+	max-width:100%;
+}
+.ui.square.cards > .card > .image::after {
+	content: '';
+	display: block;
+	height: 0;
+	padding-bottom: 100%;
+}
+.ui.tall.cards > .card > .image::after {
+	content: '';
+	display: block;
+	height: 0;
+	padding-bottom: 150%;
+}
+.ui.wide.cards > .card > .image::after {
+	content: '';
+	display: block;
+	height: 0;
+	padding-bottom:50%;
+}
+
+.ui.cards a.card:hover, .ui.link.cards .card:hover, a.ui.card:hover, .ui.link.card:hover {
+	transform:none;
+	box-shadow:none;
+	-webkit-box-shadow:none;
+}
+
