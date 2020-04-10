@@ -434,6 +434,7 @@ Store.prototype.changes = function(initial, unsaved) {
 				}
 			}
 		} else {
+			if (block.ignore) return;
 			if (block.parent != iblock.parent) {
 				if (iblock.parent) parentList(changes.unrelate, iblock);
 				if (block.parent) parentList(changes.relate, block);
@@ -460,7 +461,7 @@ Store.prototype.changes = function(initial, unsaved) {
 	if (kids) Object.keys(kids).forEach(function(id) {
 		if (changes.remove[id] || initial[id]) return; // already dealt
 		var kblock = kids[id];
-		if (!unsaved[id] && !kblock.standalone && !Store.generated[id] && !kblock.virtual) {
+		if (!unsaved[id] && !kblock.standalone && !Store.generated[id] && !kblock.virtual && !kblock.ignore) {
 			var el = this.editor.element(kblock.type);
 			if (el && !el.render) {
 				// we are not going to remove this relation because

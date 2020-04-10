@@ -105,25 +105,25 @@ Blocks.prototype.serializeTo = function(parent, el, ancestor) {
 		content = content.cloneNode(true);
 		var node, div, id, type, block, parentNode;
 		var list = [], blockEl;
-		while ((node = content.querySelector('[block-type]'))) {
+		while ((node = content.querySelector('[block-type],[block-id]'))) {
 			type = node.getAttribute('block-type');
 			parentNode = node.parentNode;
 			blockEl = this.view.element(type);
 			id = node.getAttribute('block-id');
 			if (id) {
 				block = this.store[id];
-				if (!block) {
-					parentNode.removeChild(node);
-					console.warn("block", type, "not found", id, "while serializing");
-					continue;
-				}
-				block = this.copy(block);
-				if (blockEl.unmount) {
-					blockEl.unmount(block, node, this.view);
-				}
 				div = content.ownerDocument.createElement(node.nodeName);
 				parentNode.replaceChild(div, node);
-				reassignContent(block, blockEl, node);
+				if (!block) {
+					// parentNode.removeChild(node);
+					// console.warn("block", type, "not found", id, "while serializing");
+				} else {
+					block = this.copy(block);
+					if (blockEl.unmount) {
+						blockEl.unmount(block, node, this.view);
+					}
+					reassignContent(block, blockEl, node);
+				}
 			} else {
 				block = {type: type};
 				div = node;
@@ -133,8 +133,14 @@ Blocks.prototype.serializeTo = function(parent, el, ancestor) {
 			if (def.virtual) {
 				block.virtual = true;
 			}
-			if (!id || this.serializeTo(block, blockEl, ancestor)) {
-				if (id && type == block.type) type = null;
+			if (!id || !block || this.serializeTo(block, blockEl, ancestor)) {
+				if (id) {
+					if (block) {
+						if (block.type == type) type = null;
+					} else {
+						parent.blocks[id] = {id: id, ignore: true};
+					}
+				}
 				list.push({node: div, id: id, type: type});
 			} else {
 				parentNode.removeChild(div);
