@@ -59,10 +59,10 @@ exports.page = {
 			nullable: true
 		}
 	},
-	contents: {
+	contents: [{
 		nodes: 'header? main+ footer?',
 		id: 'body'
-	},
+	}],
 	html: `<html lang="[$site.lang|ornull]">
 	<head>
 		<title>[title][$site.title|pre: - |or:]</title>
