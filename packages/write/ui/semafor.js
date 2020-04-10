@@ -27,20 +27,20 @@ function Semafor(schema, node, filter, helper) {
 }
 
 function formGet(form) {
-	var query = {};
-	var old, key, val, elem, fieldset;
-	for (var i = 0; i < form.elements.length; i++) {
-		elem = form.elements[i];
-		key = elem.name;
+	const query = {};
+	for (let i = 0; i < form.elements.length; i++) {
+		const elem = form.elements[i];
+		const key = elem.name;
 		if (!key) continue;
 		if (key.startsWith('$')) continue;
 		if (elem.disabled) {
 			query[key] = null;
 		} else {
-			fieldset = elem.closest('fieldset');
+			const fieldset = elem.closest('fieldset');
 			if (fieldset && fieldset.disabled) continue;
 		}
-		old = query[key];
+		let old = query[key];
+		let val;
 		switch (elem.type) {
 		case 'submit':
 			break;
@@ -85,7 +85,7 @@ function formSet(form, values, obj) {
 	function asPaths(obj, ret, pre) {
 		if (!ret) ret = {};
 		Object.entries(obj).forEach(function([key, val]) {
-			var cur = `${pre || ""}${key}`;
+			const cur = `${pre || ""}${key}`;
 			if (val == null || typeof val != "object") {
 				ret[cur] = val;
 			} else if (typeof val == "object") {
@@ -94,16 +94,15 @@ function formSet(form, values, obj) {
 		});
 		return ret;
 	}
-	var elem = null, val, nullable;
-	var flats = asPaths(values, {});
+	const flats = asPaths(values, {});
 
-	for (var i = 0; i < form.elements.length; i++) {
-		elem = form.elements[i];
+	for (let i = 0; i < form.elements.length; i++) {
+		const elem = form.elements[i];
 		if (!elem.name) continue;
 		if (elem.name.startsWith('$')) continue;
-		val = flats[elem.name];
+		let val = flats[elem.name];
 		if (elem.parentNode.matches('.fieldset.nullable')) {
-			var realVal = Semafor.findPath(obj, elem.name);
+			const realVal = Semafor.findPath(obj, elem.name);
 			elem.disabled = !realVal;
 			elem.previousElementSibling.checked = !!realVal;
 		}
@@ -127,10 +126,10 @@ function formSet(form, values, obj) {
 			}
 			break;
 		case 'select-multiple':
-			var k = 0;
 			if (val === undefined) {
 				val = [];
-				var subval;
+				let subval;
+				let k = 0;
 				do {
 					subval = flats[elem.name + '.' + k++];
 					if (subval !== undefined) val.push(subval);
@@ -177,13 +176,13 @@ Semafor.prototype.update = function(newSchema) {
 };
 
 Semafor.prototype.get = function() {
-	var vals = formGet(this.$node[0]);
-	var formVals = Semafor.unflatten(vals);
+	const vals = formGet(this.$node[0]);
+	const formVals = Semafor.unflatten(vals);
 	return this.convert(formVals, this.lastSchema);
 };
 
 Semafor.prototype.set = function(obj) {
-	var vals = Semafor.flatten(obj, {}, this.lastSchema);
+	const vals = Semafor.flatten(obj, {}, this.lastSchema);
 	formSet(this.$node[0], vals, obj);
 };
 
@@ -191,15 +190,15 @@ Semafor.prototype.clear = function() {
 	this.$node[0].reset();
 };
 
-var types = Semafor.types = {
+const types = Semafor.types = {
 	// json schema does not allow custom types - do not modify
 };
 
-var formats = Semafor.formats = {
+const formats = Semafor.formats = {
 	// json schema allows custom formats
 };
 
-var keywords = Semafor.keywords = {
+const keywords = Semafor.keywords = {
 	// json schema allows custom keywords
 };
 
@@ -207,11 +206,11 @@ Semafor.unflatten = function(map, obj) {
 	if (!map) return map;
 	if (!obj) obj = {};
 	Object.keys(map).forEach(function(key) {
-		var list = key.split('.');
-		var val = obj;
-		var prev = val;
+		const list = key.split('.');
+		let val = obj;
+		let prev = val;
 		list.forEach(function(sub, i) {
-			var num = parseInt(sub);
+			const num = parseInt(sub);
 			if (!isNaN(num) && sub == num && !Array.isArray(val)) {
 				val = [];
 				prev[list[i-1]] = val = [];
@@ -228,9 +227,9 @@ Semafor.unflatten = function(map, obj) {
 };
 
 function stubSchema(tree) {
-	var props = {};
+	const props = {};
 	if (typeof tree == "object") Object.entries(tree).forEach(([key, val]) => {
-		var schem;
+		let schem;
 		if (val != null && typeof val == "object") schem = {
 			type: 'object',
 			properties: stubSchema(val)
@@ -244,10 +243,10 @@ function stubSchema(tree) {
 Semafor.flatten = function(tree, obj, schema) {
 	if (!tree) return tree;
 	if (!obj) obj = {};
-	var props = schema && schema.properties || stubSchema(tree);
+	const props = schema && schema.properties || stubSchema(tree);
 	if (schema === undefined && props) schema = {properties: props};
 	Object.entries(props).forEach(function([key, field]) {
-		var val = tree[key];
+		let val = tree[key];
 		if (val == null) {
 			if (field.default && field.anyOf) {
 				// we want defaults to be checked
@@ -258,7 +257,7 @@ Semafor.flatten = function(tree, obj, schema) {
 		}
 		if (val != null && typeof val == "object") {
 			if (field && !field.properties && (field.oneOf || field.anyOf)) {
-				var listNoNull = (field.oneOf || field.anyOf).filter(function(item) {
+				const listNoNull = (field.oneOf || field.anyOf).filter(function(item) {
 					return item.type != "null";
 				});
 				if (listNoNull.length == 1 && listNoNull[0].properties) {
@@ -267,7 +266,7 @@ Semafor.flatten = function(tree, obj, schema) {
 			}
 			if (schema !== undefined) {
 				if (field && field.type == "array") {
-					var allStrings = false;
+					let allStrings = false;
 					if (field.items && field.items.anyOf) {
 						allStrings = field.items.anyOf.every(function(item) {
 							return item.type == "string";
@@ -307,22 +306,21 @@ Semafor.flatten = function(tree, obj, schema) {
 };
 
 Semafor.prototype.convert = function(vals, field) {
-	var obj = {};
-	var val;
-	var schema = field.properties;
-	for (var name in vals) {
+	const obj = {};
+	const schema = field.properties;
+	for (let name in vals) {
 		field = schema[name];
-		val = vals[name];
+		let val = vals[name];
 		if (field) {
-			var type = field.type;
-			var listOf = Array.isArray(type) && type
+			let type = field.type;
+			const listOf = Array.isArray(type) && type
 				|| Array.isArray(field.oneOf) && field.oneOf
 				|| Array.isArray(field.anyOf) && field.anyOf
 				|| null;
-			var nullable = false;
+			let nullable = false;
 			if (listOf && !field.properties) {
 				// we support promotion to null and that's it
-				var listOfNo = listOf.filter(function(item) {
+				const listOfNo = listOf.filter(function(item) {
 					if (typeof item == "string") {
 						return item != "null";
 					} else {
@@ -361,7 +359,7 @@ Semafor.prototype.convert = function(vals, field) {
 				break;
 			case "object":
 				if (!field.properties && (field.oneOf || field.anyOf)) {
-					var listNoNull = (field.oneOf || field.anyOf).filter(function(item) {
+					const listNoNull = (field.oneOf || field.anyOf).filter(function(item) {
 						return item.type != "null";
 					});
 					if (listNoNull.length == 1 && listNoNull[0].properties) {
@@ -407,8 +405,8 @@ Semafor.prototype.process = function(key, schema, node, parent) {
 	if (this.filter) {
 		schema = this.filter(key, schema, parent) || schema;
 	}
-	var type = getNonNullType(schema.type);
-	var hasHelper = false;
+	const type = getNonNullType(schema.type);
+	let hasHelper = false;
 	if (type && types[type]) {
 		if (type == 'object') {
 			types.object(key, schema, node, this);
@@ -417,7 +415,7 @@ Semafor.prototype.process = function(key, schema, node, parent) {
 		} else if (!key) {
 			console.error('Properties of type', type, 'must have a name');
 		} else {
-			var field = this.fields[key] = {};
+			const field = this.fields[key] = {};
 			field.identifier = key; // TODO check if really needed
 			field.rules = [];
 			if (schema.format && formats[schema.format]) {
@@ -453,7 +451,7 @@ Semafor.prototype.process = function(key, schema, node, parent) {
 Semafor.prototype.handleEvent = function(e) {
 	if (e.type == "change") {
 		if (e.target.matches('.nullable')) {
-			var fieldset = e.target.nextElementSibling;
+			const fieldset = e.target.nextElementSibling;
 			if (!fieldset) return;
 			fieldset.disabled = !e.target.checked;
 		}
@@ -461,8 +459,8 @@ Semafor.prototype.handleEvent = function(e) {
 };
 
 types.string = function(key, schema, node, inst) {
-	var multiline = !schema.pattern && !schema.format;
-	var short = schema.maxLength != null && schema.maxLength <= 10;
+	const multiline = !schema.pattern && !schema.format;
+	const short = schema.maxLength != null && schema.maxLength <= 10;
 	if (multiline && !short) {
 		node.appendChild(node.dom(`<div class="field">
 			<label>${schema.title || key}</label>
@@ -479,7 +477,7 @@ types.string = function(key, schema, node, inst) {
 			</div>
 		</div>`));
 	} else {
-		var input = node.appendChild(node.dom(`<div class="field">
+		const input = node.appendChild(node.dom(`<div class="field">
 			<label>${schema.title || key}</label>
 			<input type="text" name="${key}"
 				placeholder="${schema.placeholder || schema.default || ''}"
@@ -497,11 +495,10 @@ types.string = function(key, schema, node, inst) {
 };
 
 types.oneOf = function(key, schema, node, inst) {
-	var field;
-	var listOf = schema.oneOf || schema.anyOf;
-	var nullable = schema.nullable;
-	var hasNullOption = false;
-	var alts = listOf.filter(function(item) {
+	let listOf = schema.oneOf || schema.anyOf;
+	let nullable = schema.nullable;
+	let hasNullOption = false;
+	const alts = listOf.filter(function(item) {
 		if (item.type == "null") {
 			nullable = true;
 			hasNullOption = true;
@@ -510,8 +507,8 @@ types.oneOf = function(key, schema, node, inst) {
 			return true;
 		}
 	});
-	var oneOfType;
-	var icons = false;
+	let oneOfType;
+	let icons = false;
 	if (alts.length == 1 && alts[0].const === undefined) {
 		oneOfType = alts[0];
 	} else if (alts.every(function(item) {
@@ -532,7 +529,7 @@ types.oneOf = function(key, schema, node, inst) {
 		return true;
 	}
 
-	var def = schema.default;
+	let def = schema.default;
 	if (def === null) def = "";
 
 	if (nullable && !hasNullOption) {
@@ -552,7 +549,7 @@ types.oneOf = function(key, schema, node, inst) {
 	}
 
 	if (icons) {
-		field = node.dom(`<div class="inline fields">
+		const field = node.dom(`<div class="inline fields">
 			<label for="${key}">${schema.title || key}</label>
 			<div class="ui compact icon menu">
 				${alts.map(item => getIconOption(item, key)).join('\n')}
@@ -561,7 +558,7 @@ types.oneOf = function(key, schema, node, inst) {
 		node.appendChild(field);
 		$(field).find('.radio.checkbox').checkbox();
 	} else if (listOf.length <= 4) {
-		field = node.dom(`<div class="inline fields">
+		const field = node.dom(`<div class="inline fields">
 			<label for="${key}">${schema.title || key}</label>
 			<div class="${listOf.length <= 2 ? 'inline' : ''} field">
 				${listOf.map(item => getRadioOption(item, key)).join('\n')}
@@ -573,7 +570,7 @@ types.oneOf = function(key, schema, node, inst) {
 		}
 		$(field).find('.toggle.checkbox').checkbox();
 	} else {
-		field = node.dom(`<div class="inline fields" title="${schema.description || ''}">
+		const field = node.dom(`<div class="inline fields" title="${schema.description || ''}">
 			<label>${schema.title || key}</label>
 			<select name="${key}" class="ui compact dropdown">
 				${listOf.map(item => getSelectOption(item, key)).join('\n')}
@@ -610,7 +607,7 @@ types.number = function(key, schema, node, inst) {
 };
 
 types.object = function(key, schema, node, inst) {
-	var fieldset = node;
+	let fieldset = node;
 	if (schema.title) {
 		if (schema.properties && key && schema.title) {
 			if (schema.nullable) {
@@ -643,17 +640,17 @@ types.object = function(key, schema, node, inst) {
 		}
 	}
 	if (!schema.properties) return;
-	var props = {};
-	var prefix = key ? (key + '.') : '';
+	const props = {};
+	const prefix = key ? (key + '.') : '';
 	Object.keys(schema.properties).forEach(function(name) {
-		var propSchema = schema.properties[name];
+		const propSchema = schema.properties[name];
 		props[name] = inst.process(prefix + name, propSchema, fieldset, schema.properties) || propSchema;
 	});
 	schema.properties = props;
 };
 
 types.boolean = function(key, schema, node, inst) {
-	var field = node.dom(`<div class="inline fields">
+	const field = node.dom(`<div class="inline fields">
 		<label>${schema.title || key}</label>
 		<div class="field">
 			<div class="ui toggle checkbox" title="${schema.description || ''}">
@@ -671,7 +668,7 @@ types.null = function(key, schema, node, inst) {
 
 types.array = function(key, schema, node, inst) {
 	if (Array.isArray(schema.items)) {
-		var fieldset = node.dom(`<fieldset><legend>${schema.title}</legend></fieldset>`);
+		const fieldset = node.dom(`<fieldset><legend>${schema.title}</legend></fieldset>`);
 		node.appendChild(fieldset);
 		schema.items.forEach(function(item, i) {
 			inst.process(`${key}.${i}`, item, fieldset, schema);
@@ -679,13 +676,13 @@ types.array = function(key, schema, node, inst) {
 	} else if (schema.items.type == "string") {
 		types.string(key, schema, node, inst);
 	} else if (schema.items.anyOf) {
-		var allStrings = schema.items.anyOf.every(function(item) {
+		const allStrings = schema.items.anyOf.every(function(item) {
 			return item.type == "string";
 		});
 		if (allStrings) {
 			types.string(key, schema, node, inst);
 		} else {
-			var field = node.dom(`<div class="field" title="${schema.description || ''}">
+			const field = node.dom(`<div class="field" title="${schema.description || ''}">
 				<label>${schema.title || key}</label>
 				<select name="${key}" class="ui dropdown" multiple>
 					${schema.items.anyOf.map(item => getSelectOption(item, key)).join('\n')}
@@ -709,8 +706,8 @@ types.const = function(key, schema, node, inst) {
 	schema.placeholder = schema.const;
 	if (schema.title) schema.title = `> ${schema.title}`;
 	types.string(key, schema, node, inst);
-	var last = node.lastElementChild;
-	var input = last.querySelector('input');
+	const last = node.lastElementChild;
+	const input = last.querySelector('input');
 	if (!schema.title) last.classList.add('hidden');
 	else input.hidden = true;
 	input.setAttribute('value', schema.const);
@@ -788,12 +785,12 @@ function getValStr(item) {
 }
 
 Semafor.findPath = function(obj, path) {
-	var list = path.split('.');
-	var cur = obj;
+	const list = path.split('.');
+	let cur = obj;
 	while (cur != null && typeof cur == "object" && list.length) {
 		cur = cur[list.shift()];
 	}
 	return cur;
-}
+};
 
 })();
