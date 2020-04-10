@@ -8,6 +8,8 @@ Pageboard.Controls.Mode = class Mode {
 		this.win = editor.root.defaultView;
 		this.html = this.win.document.documentElement;
 		if (this.node) this.node.removeEventListener('click', this);
+		const loading = node.querySelector('.loading');
+		if (loading) loading.classList.remove('loading');
 		this.node = node.parentNode;
 		this.node.addEventListener('click', this);
 	}

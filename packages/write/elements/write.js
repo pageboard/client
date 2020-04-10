@@ -48,7 +48,7 @@ exports.write = {
 					<i class="unhide large icon"></i>
 				</a>
 				<a class="vertically fitted item" data-command="write" title="Write Mode">
-					<i class="write large icon"></i>
+					<i class="write large loading icon"></i>
 				</a>
 			</div>
 		</div>
