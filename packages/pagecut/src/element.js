@@ -80,7 +80,7 @@ class Contents {
 		} else if (content && !this.size) {
 			delete block.content;
 		}
-		if (content && this.unnamed) {
+		if (content && this.unnamed && !this.list[0].virtual) {
 			var name = Object.keys(content)[0];
 			if (name) {
 				content[""] = content[name];
