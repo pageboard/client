@@ -1,4 +1,5 @@
 Page.patch(function(state) {
+	if (!state.scope.$site) return;
 	var version = state.scope.$site.version || undefined;
 	if (state.pathname.endsWith('.rss')) {
 		if (version != null) state.vars.version = true;
@@ -10,10 +11,11 @@ Page.patch(function(state) {
 					query: Object.assign({}, state.query, {version: version})
 				})
 			});
+		} else {
+			Page.serialize = Page.rss;
 		}
 	} else state.finish(function(state) {
 		var feeds = document.body.querySelectorAll('[block-type="feed"]');
-		delete Page.serialize;
 		if (feeds.length == 1) {
 			var meta = Array.from(document.head.querySelectorAll('meta')).pop();
 			var feed = feeds[0];
@@ -43,7 +45,7 @@ Page.patch(function(state) {
 	});
 });
 
-Pageboard.getFeedCard = function(node, state) {
+function getFeedCard(node, state) {
 	state.scope.$filters.toUTCString = function(val) {
 		if (!val) return val;
 		return val.toUTCString();
@@ -102,15 +104,15 @@ Pageboard.getFeedCard = function(node, state) {
 		if (!card.content) card.content = null;
 	}
 	return card;
-};
+}
 
-Page.serialize = function(state) {
+Page.rss = function(state) {
 	var doc = document;
 
 	var categories = [];
 	var latestDate;
 	var items = doc.querySelectorAll('[block-type="feed"]').map((node) => {
-		var card = Pageboard.getFeedCard(node, state);
+		var card = getFeedCard(node, state);
 		if (!card.title || !card.date) return;
 		card.topics.forEach((topic) => {
 			topic = topic.trim();
@@ -164,4 +166,3 @@ Page.serialize = function(state) {
 	};
 };
 
-window.PageSerialize = Page.serialize;
