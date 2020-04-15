@@ -447,10 +447,18 @@ Store.prototype.changes = function(initial, unsaved) {
 			if (block.content == null) delete block.content;
 			iblock.content = contents.prune(iblock);
 			if (iblock.content == null) delete iblock.content;
+
+			['lock', 'expr', 'updated_at'].forEach((key) => {
+				if (block[key] == null && iblock[key] != null) block[key] = iblock[key];
+			});
+
+			if (!block.standalone) block.standalone = false;
+			if (!iblock.standalone) iblock.standalone = false;
 			delete block.parent;
 			delete iblock.parent;
 			delete block.virtual;
 			delete iblock.virtual;
+
 			if (!this.editor.utils.equal(iblock, block)) {
 				changes.update.push(block);
 			}
