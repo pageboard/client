@@ -96,7 +96,7 @@ class Contents {
 	prune(block) {
 		var copy = {};
 		var content = block.content;
-		this.list.forEach((def) => {
+		if (content) this.list.forEach((def) => {
 			if (!def.virtual) {
 				var cont = content[def.id || ""];
 				if (cont !== undefined) copy[def.id || ""] = cont;
