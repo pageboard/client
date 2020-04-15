@@ -128,8 +128,7 @@ exports.heading = {
 		id: {
 			nullable: true,
 			type: 'string',
-			format: 'id',
-			coerce: true
+			format: 'id'
 		}
 	},
 	contents: {
