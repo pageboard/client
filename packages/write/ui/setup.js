@@ -214,11 +214,10 @@ Pageboard.Editor = function Editor(win, state) {
 		}
 	});
 	editor.controls = controls;
+	controls.store.preinitial = editor.blocks.initial = view.blocks.initial;
 	var $store = state.data.$store;
 	if ($store) {
 		controls.store.reset($store);
-	} else {
-		controls.store.initialize(page, state.data.$cache.items);
 	}
 	controls.store.realUpdate();
 	return editor;

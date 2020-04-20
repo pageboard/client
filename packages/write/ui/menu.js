@@ -181,8 +181,6 @@ Menu.prototype.item = function(el) {
 				} else {
 					var blocks = {};
 					var fragment = editor.blocks.renderFrom(block, blocks, null, {type: el.name});
-					// NOT SURE importVirtuals is meaningful here
-					editor.controls.store.importVirtuals(blocks);
 					var pos = editor.utils.insertTr(tr, fragment, sel);
 					if (pos != null) {
 						sel = editor.utils.selectTr(tr, pos);
