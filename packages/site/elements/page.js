@@ -3,6 +3,7 @@ exports.page = {
 	title: 'Page',
 	icon: '<i class="icon file outline"></i>',
 	group: 'page',
+	required: ['url'],
 	properties: {
 		title: {
 			title: 'Title',
@@ -117,6 +118,7 @@ exports.redirection = {
 	title: 'Redirection',
 	icon: '<i class="icon random"></i>',
 	group: 'page',
+	required: ['url'],
 	properties: {
 		url: {
 			title: 'Address',
