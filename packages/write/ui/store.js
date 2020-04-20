@@ -190,6 +190,7 @@ Store.prototype.save = function(e) {
 		return;
 	}
 	this.saving = true;
+	changes.recursive = true;
 
 	var p = Pageboard.fetch('put', '/.api/page', changes)
 	.then((result) => {
