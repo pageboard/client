@@ -412,6 +412,7 @@ Semafor.prototype.process = function(key, schema, node, parent) {
 			types.object(key, schema, node, this);
 		} else if (!schema.title) {
 			hasHelper = true;
+			types.hidden(key, schema, node, this);
 		} else if (!key) {
 			console.error('Properties of type', type, 'must have a name');
 		} else {
@@ -456,6 +457,10 @@ Semafor.prototype.handleEvent = function(e) {
 			fieldset.disabled = !e.target.checked;
 		}
 	}
+};
+
+types.hidden = function(key, schema, node, inst) {
+	node.appendChild(node.dom(`<input name="${key}" type="hidden" />`));
 };
 
 types.string = function(key, schema, node, inst) {
