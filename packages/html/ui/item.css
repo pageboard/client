@@ -1,0 +1,448 @@
+.ui.items.medialist {
+	margin:0;
+}
+.ui.items.medialist > .ui {
+	min-height:4em;
+}
+.medialist > .ui > .image > .image {
+	position: absolute;
+	overflow: hidden;
+	max-height: 100%;
+	max-width: 100%;
+}
+
+
+.ui.items > .ui {
+	display: flex;
+	margin: 1em 0em;
+	width: 100%;
+	min-height: 0px;
+	background: transparent;
+	padding: 0em;
+	border: none;
+	border-radius: 0rem;
+	box-shadow: none;
+	transition: box-shadow 0.1s ease;
+	z-index: '';
+	font-size: 1em;
+}
+.ui.items > .ui a {
+	cursor: pointer;
+}
+
+/*--------------
+		  Items
+---------------*/
+
+.ui.items {
+	margin: 1.5em 0em;
+}
+.ui.items:first-child {
+	margin-top: 0em !important;
+}
+.ui.items:last-child {
+	margin-bottom: 0em !important;
+}
+
+/*--------------
+		  Item
+---------------*/
+
+.ui.items > .ui:after {
+	display: block;
+	content: ' ';
+	height: 0px;
+	clear: both;
+	overflow: hidden;
+	visibility: hidden;
+}
+.ui.items > .ui:first-child {
+	margin-top: 0em;
+}
+.ui.items > .ui:last-child {
+	margin-bottom: 0em;
+}
+
+/*--------------
+		 Images
+---------------*/
+
+.ui.items > .ui > .image {
+	position: relative;
+	flex: 0 0 auto;
+	display: block;
+	float: none;
+	margin: 0em;
+	padding: 0em;
+	max-height: '';
+	align-self: top;
+	width:175px;
+}
+.ui.items > .ui > .image > img {
+	display: block;
+	width: 100%;
+	height: auto;
+	border-radius: 0.125rem;
+	border: none;
+}
+.ui.items > .ui > .image:only-child > img {
+	border-radius: 0rem;
+}
+
+/*--------------
+		 Content
+---------------*/
+
+.ui.items > .ui > .content {
+	display: block;
+	flex: 1 1 auto;
+	background: none;
+	margin: 0em;
+	padding: 0em;
+	box-shadow: none;
+	font-size: 1em;
+	border: none;
+	border-radius: 0em;
+}
+.ui.items > .ui > .content:after {
+	display: block;
+	content: ' ';
+	height: 0px;
+	clear: both;
+	overflow: hidden;
+	visibility: hidden;
+}
+.ui.items > .ui > .image + .content {
+	min-width: 0;
+	width: auto;
+	display: block;
+	margin-left: 0em;
+	align-self: top;
+	padding-left: 1.5em;
+}
+.ui.items > .ui > .content > .header {
+	display: inline-block;
+	margin: -0.21425em 0em 0em;
+	font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	color: rgba(0, 0, 0, 0.85);
+}
+
+/* Default Header Size */
+.ui.items > .ui > .content > .header:not(.ui) {
+	font-size: 1.28571429em;
+}
+
+/*--------------
+		 Floated
+---------------*/
+
+.ui.items > .ui [class*="left floated"] {
+	float: left;
+}
+.ui.items > .ui [class*="right floated"] {
+	float: right;
+}
+
+/*--------------
+	Content Image
+---------------*/
+
+.ui.items > .ui .content img {
+	align-self: middle;
+	width: '';
+}
+.ui.items > .ui img.avatar,
+.ui.items > .ui .avatar img {
+	width: '';
+	height: '';
+	border-radius: 500rem;
+}
+
+/*--------------
+	 Description
+---------------*/
+
+.ui.items > .ui > .content > .description {
+	margin-top: 0.6em;
+	max-width: auto;
+	font-size: 1em;
+	line-height: 1.4285em;
+	color: rgba(0, 0, 0, 0.87);
+}
+
+/*--------------
+		Paragraph
+---------------*/
+
+.ui.items > .ui > .content p {
+	margin: 0em 0em 0.5em;
+}
+.ui.items > .ui > .content p:last-child {
+	margin-bottom: 0em;
+}
+
+/*--------------
+		  Meta
+---------------*/
+
+.ui.items > .ui .meta {
+	margin: 0.5em 0em 0.5em;
+	font-size: 1em;
+	line-height: 1em;
+	color: rgba(0, 0, 0, 0.6);
+}
+.ui.items > .ui .meta * {
+	margin-right: 0.3em;
+}
+.ui.items > .ui .meta :last-child {
+	margin-right: 0em;
+}
+.ui.items > .ui .meta [class*="right floated"] {
+	margin-right: 0em;
+	margin-left: 0.3em;
+}
+
+/*--------------
+		  Links
+---------------*/
+
+
+/* Generic */
+.ui.items > .ui > .content a:not(.ui) {
+	color: '';
+	transition: color 0.1s ease;
+}
+.ui.items > .ui > .content a:not(.ui):hover {
+	color: '';
+}
+
+/* Header */
+.ui.items > .ui > .content > a.header {
+	color: rgba(0, 0, 0, 0.85);
+}
+.ui.items > .ui > .content > a.header:hover {
+	color: #1e70bf;
+}
+
+/* Meta */
+.ui.items > .ui .meta > a:not(.ui) {
+	color: rgba(0, 0, 0, 0.4);
+}
+.ui.items > .ui .meta > a:not(.ui):hover {
+	color: rgba(0, 0, 0, 0.87);
+}
+
+/*--------------
+		 Labels
+---------------*/
+
+
+/*-----Star----- */
+
+
+/* Icon */
+.ui.items > .ui > .content .favorite.icon {
+	cursor: pointer;
+	opacity: 0.75;
+	transition: color 0.1s ease;
+}
+.ui.items > .ui > .content .favorite.icon:hover {
+	opacity: 1;
+	color: #FFB70A;
+}
+.ui.items > .ui > .content .active.favorite.icon {
+	color: #FFE623;
+}
+
+/*-----Like----- */
+
+
+/* Icon */
+.ui.items > .ui > .content .like.icon {
+	cursor: pointer;
+	opacity: 0.75;
+	transition: color 0.1s ease;
+}
+.ui.items > .ui > .content .like.icon:hover {
+	opacity: 1;
+	color: #FF2733;
+}
+.ui.items > .ui > .content .active.like.icon {
+	color: #FF2733;
+}
+
+/*----------------
+	Extra Content
+-----------------*/
+
+.ui.items > .ui .extra {
+	display: block;
+	position: relative;
+	background: none;
+	margin: 0.5rem 0em 0em;
+	width: 100%;
+	padding: 0em 0em 0em;
+	top: 0em;
+	left: 0em;
+	color: rgba(0, 0, 0, 0.4);
+	box-shadow: none;
+	transition: color 0.1s ease;
+	border-top: none;
+}
+.ui.items > .ui .extra > * {
+	margin: 0.25rem 0.5rem 0.25rem 0em;
+}
+.ui.items > .ui .extra > [class*="right floated"] {
+	margin: 0.25rem 0em 0.25rem 0.5rem;
+}
+.ui.items > .ui .extra:after {
+	display: block;
+	content: ' ';
+	height: 0px;
+	clear: both;
+	overflow: hidden;
+	visibility: hidden;
+}
+
+
+/*******************************
+		      Responsive
+*******************************/
+
+
+.ui.one.items > .ui > .image {
+	width: 100%;
+}
+.ui.two.items > .ui > .image {
+	width: calc(50% - 1em);
+	margin-right: 1em;
+}
+.ui.three.items > .ui > .image {
+	width: calc(33.33333333% - 1em);
+	margin-right: 1em;
+}
+.ui.four.items > .ui > .image {
+	width: calc(25% - 0.75em);
+	margin-right: 0.75em;
+}
+.ui.five.items > .ui > .image {
+	width: calc(20% - 0.75em);
+	margin-right: 0.75em;
+}
+.ui.six.items > .ui > .image {
+	width: calc(16.66666667% - 0.75em);
+	margin-right: 0.75em;
+}
+.ui.seven.items > .ui > .image {
+	width: calc(14.28571429% - 0.5em);
+	margin-right: 0.5em;
+}
+
+/* Tablet Only */
+@media only screen and (min-width: 512px) and (max-width: 991px) {
+	.ui.items > .ui {
+		margin: 1em 0em;
+	}
+	.ui.items > .ui > .image + .content {
+		display: block;
+		padding: 0em 0em 0em 1em;
+	}
+}
+
+/* Mobile Only */
+@media only screen and (max-width: 511px) {
+	.ui.items.stackable > .ui {
+		flex-direction: column;
+		margin: 2em 0em;
+	}
+	.ui.items.stackable > .ui > .image {
+		display: block;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	.ui.items.stackable > .ui > .image,
+	.ui.items.stackable > .ui > .image > img {
+		max-width: 100% !important;
+		width: 100% !important;
+		max-height: 250px !important;
+	}
+	.ui.items.stackable > .ui > .image + .content {
+		display: block;
+		padding: 1.5em 0em 0em;
+	}
+}
+
+
+/*******************************
+		       Variations
+*******************************/
+
+
+/*-------------------
+		   Aligned
+--------------------*/
+
+.ui.items > .ui > .image + [class*="top aligned"].content {
+	align-self: flex-start;
+}
+.ui.items > .ui > .image + [class*="middle aligned"].content {
+	align-self: center;
+}
+.ui.items > .ui > .image + [class*="bottom aligned"].content {
+	align-self: flex-end;
+}
+
+/*--------------
+		 Relaxed
+---------------*/
+
+.ui.relaxed.items > .ui {
+	margin: 1.5em 0em;
+}
+.ui[class*="very relaxed"].items > .ui {
+	margin: 2em 0em;
+}
+
+/*-------------------
+		  Divided
+--------------------*/
+
+.ui.divided.items > .ui {
+	border-top: 1px solid rgba(34, 36, 38, 0.15);
+	margin: 0em;
+	padding: 1em 0em;
+}
+.ui.divided.items > .ui:first-child {
+	border-top: none;
+	margin-top: 0em !important;
+	padding-top: 0em !important;
+}
+.ui.divided.items > .ui:last-child {
+	margin-bottom: 0em !important;
+	padding-bottom: 0em !important;
+}
+
+/* Relaxed Divided */
+.ui.relaxed.divided.items > .ui {
+	margin: 0em;
+	padding: 1.5em 0em;
+}
+.ui[class*="very relaxed"].divided.items > .ui {
+	margin: 0em;
+	padding: 2em 0em;
+}
+
+/*-------------------
+		    Link
+--------------------*/
+
+.ui.items a.ui:hover,
+.ui.link.items > .ui:hover {
+	cursor: pointer;
+}
+.ui.items a.ui:hover .content .header,
+.ui.link.items > .ui:hover .content .header {
+	color: #1e70bf;
+}
+

@@ -49,7 +49,6 @@ exports.cards = {
 	},
 	html: '<div class="ui [columns|num] [shape] [responsive] cards"></div>',
 	stylesheets: [
-		'../lib/components/card.css',
 		'../ui/card.css'
 	]
 };

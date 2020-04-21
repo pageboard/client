@@ -1,32 +1,692 @@
-.ui.square.cards > .card > .image > *,
-.ui.tall.cards > .card > .image > *,
-.ui.wide.cards > .card > .image > * {
+.ui.square > .ui > .image > *,
+.ui.tall > .ui > .image > *,
+.ui.wide > .ui > .image > * {
 	position:absolute;
 	max-height:100%;
 	max-width:100%;
 }
-.ui.square.cards > .card > .image::after {
+.ui.square > .ui > .image::after {
 	content: '';
 	display: block;
 	height: 0;
 	padding-bottom: 100%;
 }
-.ui.tall.cards > .card > .image::after {
+.ui.tall > .ui > .image::after {
 	content: '';
 	display: block;
 	height: 0;
 	padding-bottom: 150%;
 }
-.ui.wide.cards > .card > .image::after {
+.ui.wide > .ui > .image::after {
 	content: '';
 	display: block;
 	height: 0;
 	padding-bottom:50%;
 }
 
-.ui.cards a.card:hover, .ui.link.cards .card:hover, a.ui.card:hover, .ui.link.card:hover {
-	transform:none;
-	box-shadow:none;
-	-webkit-box-shadow:none;
+.ui.cards > .ui {
+	max-width: 100%;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	width: 290px;
+	min-height: 0px;
+	background: #FFFFFF;
+	padding: 0em;
+	border: none;
+	border-radius: 0.28571429rem;
+	box-shadow: 0px 1px 3px 0px #D4D4D5, 0px 0px 0px 1px #D4D4D5;
+	transition: box-shadow 0.1s ease, transform 0.1s ease;
+	z-index: '';
+	margin: 0.875em 0.5em;
+	float: none;
+	font-size: 1em;
+}
+
+.ui.cards > .ui a {
+	cursor: pointer;
+}
+.ui.cards:first-child {
+	margin-top: 0em;
+}
+.ui.cards:last-child {
+	margin-bottom: 0em;
+}
+
+/*--------------
+			Cards
+---------------*/
+
+.ui.cards {
+	display: flex;
+	margin: -0.875em -0.5em;
+	flex-wrap: wrap;
+}
+
+/* Clearing */
+.ui.cards:after,
+.ui.cards > .ui:after {
+	display: block;
+	content: ' ';
+	height: 0px;
+	clear: both;
+	overflow: hidden;
+	visibility: hidden;
+}
+
+/* Consecutive Card Groups Preserve Row Spacing */
+.ui.cards ~ .ui.cards {
+	margin-top: 0.875em;
+}
+
+/*--------------
+	Rounded Edges
+---------------*/
+
+.ui.cards > .ui > :first-child {
+	border-radius: 0.28571429rem 0.28571429rem 0em 0em !important;
+	border-top: none !important;
+}
+.ui.cards > .ui > :last-child {
+	border-radius: 0em 0em 0.28571429rem 0.28571429rem !important;
+}
+.ui.cards > .ui > :only-child {
+	border-radius: 0.28571429rem !important;
+}
+
+/*--------------
+		 Images
+---------------*/
+
+.ui.cards > .ui > .image {
+	position: relative;
+	display: block;
+	flex: 0 0 auto;
+	padding: 0em;
+	background: rgba(0, 0, 0, 0.05);
+	overflow: hidden;
+}
+.ui.cards > .ui > .image > img {
+	display: block;
+	width: 100%;
+	height: auto;
+	border-radius: inherit;
+}
+.ui.cards > .ui > .image:not(.ui) > img {
+	border: none;
+}
+
+/*--------------
+		 Content
+---------------*/
+
+.ui.cards > .ui > .content {
+	flex-grow: 1;
+	border: none;
+	border-top: 1px solid rgba(34, 36, 38, 0.1);
+	background: none;
+	margin: 0em;
+	padding: 1em 1em;
+	box-shadow: none;
+	font-size: 1em;
+	border-radius: 0em;
+}
+.ui.cards > .ui > .content:after {
+	display: block;
+	content: ' ';
+	height: 0px;
+	clear: both;
+	overflow: hidden;
+	visibility: hidden;
+}
+.ui.cards > .ui > .content > .header {
+	display: block;
+	margin: '';
+	font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+	color: rgba(0, 0, 0, 0.85);
+}
+
+/* Default Header Size */
+.ui.cards > .ui > .content > .header:not(.ui) {
+	font-weight: bold;
+	font-size: 1.28571429em;
+	margin-top: -0.21425em;
+	line-height: 1.28571429em;
+}
+.ui.cards > .ui > .content > .meta + .description,
+.ui.cards > .ui > .content > .header + .description {
+	margin-top: 0.5em;
+}
+
+/*----------------
+ Floated Content
+-----------------*/
+
+.ui.cards > .ui [class*="left floated"] {
+	float: left;
+}
+.ui.cards > .ui [class*="right floated"] {
+	float: right;
+}
+
+/*--------------
+		 Aligned
+---------------*/
+
+.ui.cards > .ui [class*="left aligned"] {
+	text-align: left;
+}
+.ui.cards > .ui [class*="center aligned"] {
+	text-align: center;
+}
+.ui.cards > .ui [class*="right aligned"] {
+	text-align: right;
+}
+
+/*--------------
+	Content Image
+---------------*/
+
+.ui.cards > .ui .content img {
+	display: inline-block;
+	vertical-align: middle;
+	width: '';
+}
+.ui.cards > .ui img.avatar,
+.ui.cards > .ui .avatar img {
+	width: 2em;
+	height: 2em;
+	border-radius: 500rem;
+}
+
+/*--------------
+	 Description
+---------------*/
+
+.ui.cards > .ui > .content > .description {
+	clear: both;
+	color: rgba(0, 0, 0, 0.68);
+}
+
+/*--------------
+		Paragraph
+---------------*/
+
+.ui.cards > .ui > .content p {
+	margin: 0em 0em 0.5em;
+}
+.ui.cards > .ui > .content p:last-child {
+	margin-bottom: 0em;
+}
+
+/*--------------
+			Meta
+---------------*/
+
+.ui.cards > .ui .meta {
+	font-size: 1em;
+	color: rgba(0, 0, 0, 0.4);
+}
+.ui.cards > .ui .meta * {
+	margin-right: 0.3em;
+}
+.ui.cards > .ui .meta :last-child {
+	margin-right: 0em;
+}
+.ui.cards > .ui .meta [class*="right floated"] {
+	margin-right: 0em;
+	margin-left: 0.3em;
+}
+
+/*--------------
+			Links
+---------------*/
+
+
+/* Generic */
+.ui.cards > .ui > .content a:not(.ui) {
+	color: '';
+	transition: color 0.1s ease;
+}
+.ui.cards > .ui > .content a:not(.ui):hover {
+	color: '';
+}
+
+/* Header */
+.ui.cards > .ui > .content > a.header {
+	color: rgba(0, 0, 0, 0.85);
+}
+.ui.cards > .ui > .content > a.header:hover {
+	color: #1e70bf;
+}
+
+/* Meta */
+.ui.cards > .ui .meta > a:not(.ui) {
+	color: rgba(0, 0, 0, 0.4);
+}
+.ui.cards > .ui .meta > a:not(.ui):hover {
+	color: rgba(0, 0, 0, 0.87);
+}
+
+/*--------------
+		 Buttons
+---------------*/
+
+.ui.cards > .ui > .buttons,
+.ui.cards > .ui > .button {
+	margin: 0px -1px;
+	width: calc(100% + 2px);
+}
+
+/*--------------
+			Dimmer
+---------------*/
+
+.ui.cards > .ui .dimmer {
+	background-color: '';
+	z-index: 10;
+}
+
+/*--------------
+		 Labels
+---------------*/
+
+
+/*-----Star----- */
+
+
+/* Icon */
+.ui.cards > .ui > .content .star.icon {
+	cursor: pointer;
+	opacity: 0.75;
+	transition: color 0.1s ease;
+}
+.ui.cards > .ui > .content .star.icon:hover {
+	opacity: 1;
+	color: #FFB70A;
+}
+.ui.cards > .ui > .content .active.star.icon {
+	color: #FFE623;
+}
+
+/*-----Like----- */
+
+
+/* Icon */
+.ui.cards > .ui > .content .like.icon {
+	cursor: pointer;
+	opacity: 0.75;
+	transition: color 0.1s ease;
+}
+.ui.cards > .ui > .content .like.icon:hover {
+	opacity: 1;
+	color: #FF2733;
+}
+.ui.cards > .ui > .content .active.like.icon {
+	color: #FF2733;
+}
+
+/*----------------
+	Extra Content
+-----------------*/
+
+.ui.cards > .ui > .extra {
+	max-width: 100%;
+	min-height: 0em !important;
+	flex-grow: 0;
+	border-top: 1px solid rgba(0, 0, 0, 0.05) !important;
+	position: static;
+	background: none;
+	width: auto;
+	margin: 0em 0em;
+	padding: 0.75em 1em;
+	top: 0em;
+	left: 0em;
+	color: rgba(0, 0, 0, 0.4);
+	box-shadow: none;
+	transition: color 0.1s ease;
+}
+.ui.cards > .ui > .extra a:not(.ui) {
+	color: rgba(0, 0, 0, 0.4);
+}
+.ui.cards > .ui > .extra a:not(.ui):hover {
+	color: #1e70bf;
+}
+
+
+/*******************************
+					 Variations
+*******************************/
+
+
+/*-------------------
+			 Raised
+--------------------*/
+
+.ui.raised.cards > .ui {
+	box-shadow: 0px 0px 0px 1px #D4D4D5, 0px 2px 4px 0px rgba(34, 36, 38, 0.12), 0px 2px 10px 0px rgba(34, 36, 38, 0.15);
+}
+.ui.raised.cards > a.ui:hover,
+.ui.link.cards > .raised.ui:hover {
+	box-shadow: 0px 0px 0px 1px #D4D4D5, 0px 2px 4px 0px rgba(34, 36, 38, 0.15), 0px 2px 10px 0px rgba(34, 36, 38, 0.25);
+}
+
+/*-------------------
+			 Centered
+--------------------*/
+
+.ui.centered.cards {
+	justify-content: center;
+}
+.ui.cards > .ui.centered {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/*-------------------
+				Fluid
+--------------------*/
+
+.ui.cards > .ui.fluid {
+	width: 100%;
+	max-width: 9999px;
+}
+
+/*-------------------
+				Link
+--------------------*/
+
+.ui.cards > a,
+.ui.link.cards > .ui {
+	transform: none;
+}
+.ui.cards > a:hover,
+.ui.link.cards > .ui:hover {
+	cursor: pointer;
+	z-index: 5;
+	background: #FFFFFF;
+	border: none;
+}
+
+
+/*--------------
+	 Card Count
+---------------*/
+
+.ui.one.cards {
+	margin-left: 0em;
+	margin-right: 0em;
+}
+.ui.one.cards > .ui {
+	width: 100%;
+}
+.ui.two.cards {
+	margin-left: -1em;
+	margin-right: -1em;
+}
+.ui.two.cards > .ui {
+	width: calc(50% - 2em);
+	margin-left: 1em;
+	margin-right: 1em;
+}
+.ui.three.cards {
+	margin-left: -1em;
+	margin-right: -1em;
+}
+.ui.three.cards > .ui {
+	width: calc(33.33333333% - 2em);
+	margin-left: 1em;
+	margin-right: 1em;
+}
+.ui.four.cards {
+	margin-left: -0.75em;
+	margin-right: -0.75em;
+}
+.ui.four.cards > .ui {
+	width: calc(25% - 1.5em);
+	margin-left: 0.75em;
+	margin-right: 0.75em;
+}
+.ui.five.cards {
+	margin-left: -0.75em;
+	margin-right: -0.75em;
+}
+.ui.five.cards > .ui {
+	width: calc(20% - 1.5em);
+	margin-left: 0.75em;
+	margin-right: 0.75em;
+}
+.ui.six.cards {
+	margin-left: -0.75em;
+	margin-right: -0.75em;
+}
+.ui.six.cards > .ui {
+	width: calc(16.66666667% - 1.5em);
+	margin-left: 0.75em;
+	margin-right: 0.75em;
+}
+.ui.seven.cards {
+	margin-left: -0.5em;
+	margin-right: -0.5em;
+}
+.ui.seven.cards > .ui {
+	width: calc(14.28571429% - 1em);
+	margin-left: 0.5em;
+	margin-right: 0.5em;
+}
+.ui.eight.cards {
+	margin-left: -0.5em;
+	margin-right: -0.5em;
+}
+.ui.eight.cards > .ui {
+	width: calc(12.5% - 1em);
+	margin-left: 0.5em;
+	margin-right: 0.5em;
+	font-size: 11px;
+}
+.ui.nine.cards {
+	margin-left: -0.5em;
+	margin-right: -0.5em;
+}
+.ui.nine.cards > .ui {
+	width: calc(11.11111111% - 1em);
+	margin-left: 0.5em;
+	margin-right: 0.5em;
+	font-size: 10px;
+}
+.ui.ten.cards {
+	margin-left: -0.5em;
+	margin-right: -0.5em;
+}
+.ui.ten.cards > .ui {
+	width: calc(10% - 1em);
+	margin-left: 0.5em;
+	margin-right: 0.5em;
+}
+
+/*-------------------
+			Doubling
+--------------------*/
+
+
+/* Mobile Only */
+@media only screen and (max-width: 767px) {
+	.ui.two.doubling.cards {
+		margin-left: 0em;
+		margin-right: 0em;
+	}
+	.ui.two.doubling.cards > .ui {
+		width: 100%;
+		margin-left: 0em;
+		margin-right: 0em;
+	}
+	.ui.three.doubling.cards {
+		margin-left: -1em;
+		margin-right: -1em;
+	}
+	.ui.three.doubling.cards > .ui {
+		width: calc(50% - 2em);
+		margin-left: 1em;
+		margin-right: 1em;
+	}
+	.ui.four.doubling.cards {
+		margin-left: -1em;
+		margin-right: -1em;
+	}
+	.ui.four.doubling.cards > .ui {
+		width: calc(50% - 2em);
+		margin-left: 1em;
+		margin-right: 1em;
+	}
+	.ui.five.doubling.cards {
+		margin-left: -1em;
+		margin-right: -1em;
+	}
+	.ui.five.doubling.cards > .ui {
+		width: calc(50% - 2em);
+		margin-left: 1em;
+		margin-right: 1em;
+	}
+	.ui.six.doubling.cards {
+		margin-left: -1em;
+		margin-right: -1em;
+	}
+	.ui.six.doubling.cards > .ui {
+		width: calc(50% - 2em);
+		margin-left: 1em;
+		margin-right: 1em;
+	}
+	.ui.seven.doubling.cards {
+		margin-left: -1em;
+		margin-right: -1em;
+	}
+	.ui.seven.doubling.cards > .ui {
+		width: calc(33.33333333% - 2em);
+		margin-left: 1em;
+		margin-right: 1em;
+	}
+	.ui.eight.doubling.cards {
+		margin-left: -1em;
+		margin-right: -1em;
+	}
+	.ui.eight.doubling.cards > .ui {
+		width: calc(33.33333333% - 2em);
+		margin-left: 1em;
+		margin-right: 1em;
+	}
+	.ui.nine.doubling.cards {
+		margin-left: -1em;
+		margin-right: -1em;
+	}
+	.ui.nine.doubling.cards > .ui {
+		width: calc(33.33333333% - 2em);
+		margin-left: 1em;
+		margin-right: 1em;
+	}
+	.ui.ten.doubling.cards {
+		margin-left: -1em;
+		margin-right: -1em;
+	}
+	.ui.ten.doubling.cards > .ui {
+		width: calc(33.33333333% - 2em);
+		margin-left: 1em;
+		margin-right: 1em;
+	}
+}
+
+/* Tablet Only */
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+	.ui.two.doubling.cards {
+		margin-left: 0em;
+		margin-right: 0em;
+	}
+	.ui.two.doubling.cards > .ui {
+		width: 100%;
+		margin-left: 0em;
+		margin-right: 0em;
+	}
+	.ui.three.doubling.cards {
+		margin-left: -1em;
+		margin-right: -1em;
+	}
+	.ui.three.doubling.cards > .ui {
+		width: calc(50% - 2em);
+		margin-left: 1em;
+		margin-right: 1em;
+	}
+	.ui.four.doubling.cards {
+		margin-left: -1em;
+		margin-right: -1em;
+	}
+	.ui.four.doubling.cards > .ui {
+		width: calc(50% - 2em);
+		margin-left: 1em;
+		margin-right: 1em;
+	}
+	.ui.five.doubling.cards {
+		margin-left: -1em;
+		margin-right: -1em;
+	}
+	.ui.five.doubling.cards > .ui {
+		width: calc(33.33333333% - 2em);
+		margin-left: 1em;
+		margin-right: 1em;
+	}
+	.ui.six.doubling.cards {
+		margin-left: -1em;
+		margin-right: -1em;
+	}
+	.ui.six.doubling.cards > .ui {
+		width: calc(33.33333333% - 2em);
+		margin-left: 1em;
+		margin-right: 1em;
+	}
+	.ui.eight.doubling.cards {
+		margin-left: -0.75em;
+		margin-right: -0.75em;
+	}
+	.ui.eight.doubling.cards > .ui {
+		width: calc(25% - 1.5em);
+		margin-left: 0.75em;
+		margin-right: 0.75em;
+	}
+	.ui.nine.doubling.cards {
+		margin-left: -0.75em;
+		margin-right: -0.75em;
+	}
+	.ui.nine.doubling.cards > .ui {
+		width: calc(25% - 1.5em);
+		margin-left: 0.75em;
+		margin-right: 0.75em;
+	}
+	.ui.ten.doubling.cards {
+		margin-left: -0.75em;
+		margin-right: -0.75em;
+	}
+	.ui.ten.doubling.cards > .ui {
+		width: calc(20% - 1.5em);
+		margin-left: 0.75em;
+		margin-right: 0.75em;
+	}
+}
+
+/*-------------------
+			Stackable
+--------------------*/
+
+@media only screen and (max-width: 767px) {
+	.ui.stackable.cards {
+		display: block !important;
+	}
+	.ui.stackable.cards .ui:first-child {
+		margin-top: 0em !important;
+	}
+	.ui.stackable.cards > .ui {
+		display: block !important;
+		height: auto !important;
+		margin: 1em 1em;
+		padding: 0 !important;
+		width: calc(100% - 2em) !important;
+	}
 }
 

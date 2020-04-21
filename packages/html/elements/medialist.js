@@ -7,8 +7,7 @@ exports.medialist = {
 	contents: "medialist_item+",
 	html: '<div class="ui items unstackable medialist"></div>',
 	stylesheets: [
-		'../lib/components/item.css',
-		'../ui/medialist.css',
+		'../ui/item.css',
 	]
 };
 
