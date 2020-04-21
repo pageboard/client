@@ -227,7 +227,10 @@ Utils.prototype.refreshTr = function(tr, dom, block) {
 		// block.focused cannot be stored here since it is inplace
 		attrs.focused = node.attrs.focused;
 	}
-	if (attrs.id && attrs.id != node.attrs.id) return tr;
+	if (attrs.id && attrs.id != node.attrs.id) {
+		console.warn("Cannot refresh, node id do not match", attrs.id, node.attrs.id);
+		return tr;
+	}
 	var selectedNode = sel.from === pos && sel.node;
 	try {
 		tr.setNodeMarkup(pos, null, attrs);
