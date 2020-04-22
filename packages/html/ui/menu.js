@@ -1,18 +1,23 @@
 Page.patch(function(state) {
+	function isSameOrParent(loc, state) {
+		if (!Page.sameDomain(loc, state)) {
+			return false;
+		} else if (Page.samePathname(loc, state)) {
+			if (Page.sameQuery(loc, {query:{}})) return true;
+			loc.query.develop = state.query.develop;
+			if (Page.sameQuery(loc, state)) return true;
+		} else {
+			return state.pathname.startsWith(loc.pathname + '/');
+		}
+	}
 	state.finish(function() {
-		Array.prototype.forEach.call(
-			document.querySelectorAll('.ui.menu [href]'),
-			function(item) {
-				var loc = item.getAttribute('href');
-				if (loc) {
-					loc = Page.parse(loc);
-					loc.query.develop = state.query.develop;
-					if (Page.samePath(loc, state)) {
-						item.classList.add('active');
-					}
-				}
+		document.querySelectorAll('.menu [href]').forEach((item) => {
+			let loc = item.getAttribute('href');
+			if (!loc) return;
+			if (isSameOrParent(Page.parse(loc), state)) {
+				item.classList.add('active');
 			}
-		);
+		});
 	});
 });
 
