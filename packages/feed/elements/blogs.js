@@ -19,10 +19,7 @@ exports.blog = Object.assign({}, exports.page, {
 			items: {
 				type: 'string'
 			},
-			nullable: true,
-			$helper: {
-				name: 'distinct'
-			}
+			nullable: true
 		}
 	})
 });
