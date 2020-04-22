@@ -3,12 +3,26 @@ exports.share = {
 	menu: "widget",
 	inline: true,
 	group: "inline",
+	contents: "inlineImage",
 	icon: '<i class="share alternate icon"></i>',
-	html: `<element-share></element-share>`,
-	scripts: [
-		'../ui/share.js'
-	],
-	stylesheets: [
-		'../ui/share.css'
-	]
+	properties: {
+		network: {
+			title: 'Network',
+			anyOf: [{
+				const: "facebook",
+				title: 'Facebook'
+			}, {
+				const: "twitter",
+				title: 'Twitter'
+			}, {
+				const: "linkedin",
+				title: 'LinkedIn'
+			}, {
+				const: "pinterest",
+				title: 'Pinterest'
+			}]
+		}
+	},
+	html: `<a is="element-share" data-network="[network]"></a>`,
+	scripts: ['../ui/share.js']
 };
