@@ -104,6 +104,9 @@ input-map {
 	background-color: white;
 	margin: 0;
 }
+.fieldset.href ~ .fieldset:not(last-child) {
+	display:none;
+}
 .field.href .items > .item > .content > .meta > .line {
 	display:inline-block;
 	font-family:sans-serif;
