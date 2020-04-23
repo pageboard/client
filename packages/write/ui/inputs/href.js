@@ -419,20 +419,18 @@ Href.prototype.renderItem = function(obj) {
 		</div>
 	</a>`);
 	var content = item.firstElementChild;
-	if (display != "icon") {
-		content.appendChild(item.dom(`<div class="left floated meta">
-			${obj.mime.split(';').shift()}<em>${tplSize(obj.meta.size)}</em><br>
-			${dims ? dims + '<br>' : ''}
-			${Pageboard.utils.Duration(obj.updated_at)}
-			${obj.type == 'link' ? ('<br><span class="line">' + obj.url + '</span>') : ''}
-		</div>
-		${tplPreview(obj.preview)}`));
-		if (obj.icon) {
-			content.appendChild(item.dom(`<img src="${obj.icon}" class="ui avatar icon image" />`));
-		}
-	} else {
-		content.appendChild(item.dom(`<img class="ui tiny centered image" src="${obj.url}" />`));
+	
+	content.appendChild(item.dom(`<div class="left floated meta">
+		${obj.mime.split(';').shift()}<em>${tplSize(obj.meta.size)}</em><br>
+		${dims ? dims + '<br>' : ''}
+		${Pageboard.utils.Duration(obj.updated_at)}
+		${obj.type == 'link' ? ('<br><span class="line">' + obj.url + '</span>') : ''}
+	</div>
+	${tplPreview(obj.preview)}`));
+	if (obj.icon) {
+		content.appendChild(item.dom(`<img src="${obj.icon}" class="ui avatar icon image" />`));
 	}
+	
 	if (!obj.visible || this.opts.readOnly) {
 		item.querySelector('[data-action="remove"]').remove();
 	}

@@ -94,13 +94,15 @@ input-map {
 }
 
 .field.href .items > .item > .content > .meta {
-	margin-top:0.15em;
-	margin-bottom:0.15em;
+	padding-top: 0.15em;
+	padding-bottom: 0.15em;
 	padding-left:0.5em;
 	/* let div.meta grow with its content */
 	position:relative;
 	overflow:hidden;
 	padding-right:75px;
+	background-color: white;
+	margin: 0;
 }
 .field.href .items > .item > .content > .meta > .line {
 	display:inline-block;
