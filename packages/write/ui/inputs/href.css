@@ -107,6 +107,9 @@ input-map {
 .fieldset.href ~ .fieldset:not(last-child) {
 	display:none;
 }
+.fieldset.href .field.href .icon.items > .item > .content > .meta {
+	visibility:hidden;
+}
 .field.href .items > .item > .content > .meta > .line {
 	display:inline-block;
 	font-family:sans-serif;
