@@ -153,16 +153,9 @@ Href.prototype.cache = function(result) {
 Href.prototype.searchStart = function() {
 	var me = this;
 	this.initialValue = this.input.value;
+	this.uiInput.value = '';
 	this.uiInput.focus();
 	this.lastPageIndex = Infinity;
-
-	Pageboard.write.classList.add('href');
-	var parent = this.input.parentNode;
-	while (parent) {
-		parent = parent.parentNode.closest('.field,.fieldset');
-		if (parent) parent.classList.add('href');
-	}
-	
 	var first = true;
 	this.infinite = new window.InfiniteScroll(this.container, {
 		path: function() {
@@ -202,7 +195,12 @@ Href.prototype.searchStart = function() {
 		me.renderList(data, node);
 		this.appendItems(Array.from(node.children));
 	});
-	
+	Pageboard.write.classList.add('href');
+	var parent = this.input.parentNode;
+	while (parent) {
+		parent = parent.parentNode.closest('.field,.fieldset');
+		if (parent) parent.classList.add('href');
+	}
 	return this.searchUpdate();
 };
 
