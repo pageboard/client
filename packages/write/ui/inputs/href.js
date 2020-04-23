@@ -155,9 +155,18 @@ Href.prototype.searchStart = function() {
 	this.initialValue = this.input.value;
 	this.uiInput.focus();
 	this.lastPageIndex = Infinity;
+
+	Pageboard.write.classList.add('href');
+	var parent = this.input.parentNode;
+	while (parent) {
+		parent = parent.parentNode.closest('.field,.fieldset');
+		if (parent) parent.classList.add('href');
+	}
+	
+	var first = true;
 	this.infinite = new window.InfiniteScroll(this.container, {
 		path: function() {
-			var text = me.uiInput.value;
+			var text = first ? '' : me.uiInput.value;
 			var url;
 			if (text.startsWith('#') || text.startsWith('/')) {
 				url = normUrl(text);
@@ -184,6 +193,7 @@ Href.prototype.searchStart = function() {
 		debug: false
 	});
 	this.infinite.on('load', function(response) {
+		first = false;
 		response = JSON.parse(response);
 		var data = response.data;
 		if (data.length == 0) this.lastPageIndex = this.pageIndex;
@@ -192,12 +202,7 @@ Href.prototype.searchStart = function() {
 		me.renderList(data, node);
 		this.appendItems(Array.from(node.children));
 	});
-	Pageboard.write.classList.add('href');
-	var parent = this.input.parentNode;
-	while (parent) {
-		parent = parent.parentNode.closest('.field,.fieldset');
-		if (parent) parent.classList.add('href');
-	}
+	
 	return this.searchUpdate();
 };
 
