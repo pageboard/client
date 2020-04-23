@@ -113,10 +113,10 @@ input-map {
 }
 
 .field.href .items > a.item > .content > .header {
-	color: #555;
+	color: #444;
 	background-color: #EEE;
 	padding-right: 1.7em;
-	border-bottom: 1px solid #ddd;
+	border-top: 1px solid #ccc;
 }
 
 .field.href .items > .item > .content > .thumbnail {
