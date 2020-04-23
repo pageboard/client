@@ -206,20 +206,25 @@ Utils.prototype.refreshTr = function(tr, dom, block) {
 	var node;
 	if (parent.inline) {
 		node = parent.inline.node;
-		if (sel.empty || sel.node) node.marks.forEach(function(mark) {
-			if (attrs.id && attrs.id != mark.attrs.id) return;
-			var markType = mark.attrs.type;
-			if (!markType || type != markType) return;
-			if (mark.attrs.focused) {
-				// block.focused cannot be stored here since it is inplace
-				attrs.focused = mark.attrs.focused;
-			}
-			let [exFrom, exTo] = this.extendUpdateMark(tr, sel.from, sel.to, mark, attrs);
-			tr.setSelection(State.TextSelection.create(tr.doc, exFrom, exTo));
-		}, this);
-		else {
+		if (sel.empty || sel.node) {
+			if (node.marks.some((mark) => {
+				if (attrs.id && attrs.id != mark.attrs.id) return;
+				var markType = mark.attrs.type;
+				if (!markType || type != markType) return;
+				if (mark.attrs.focused) {
+					// block.focused cannot be stored here since it is inplace
+					attrs.focused = mark.attrs.focused;
+				}
+				let [exFrom, exTo] = this.extendUpdateMark(tr, sel.from, sel.to, mark, attrs);
+				tr.setSelection(State.TextSelection.create(tr.doc, exFrom, exTo));
+				return true;
+			})) return tr;
+		}	else {
 			var markType = this.view.schema.marks[type];
-			if (markType) tr.addMark(sel.from, sel.to, markType.create(attrs));
+			if (markType) {
+				tr.addMark(sel.from, sel.to, markType.create(attrs));
+				return tr;
+			}
 		}
 	}
 	node = parent.root.node;
@@ -630,14 +635,14 @@ Utils.prototype.toggleMark = function(type, attrs) {
 
 Utils.prototype.extendUpdateMark = function(tr, from, to, mark, attrs) {
 	var hadIt = false;
-	if (from != to && tr.doc.rangeHasMark(from, to, mark.type)) {
+	if (from != to && tr.doc.rangeHasMark(from, to, mark)) {
 		hadIt = true;
 	}
-	while (tr.doc.rangeHasMark(from - 1, from, mark.type)) {
+	while (tr.doc.rangeHasMark(from - 1, from, mark)) {
 		hadIt = true;
 		from--;
 	}
-	while (tr.doc.rangeHasMark(to, to + 1, mark.type)) {
+	while (tr.doc.rangeHasMark(to, to + 1, mark)) {
 		hadIt = true;
 		to++;
 	}
