@@ -25,7 +25,8 @@ PageTitle.prototype.check = function(only) {
 PageTitle.prototype.change = function() {
 	if (!this.tracking) return;
 	const node = Pageboard.editor.blocks.domQuery(this.block.id, {focused: true});
-	const parentUrl = node && node.parentNode.closest('[block-id]').dataset.url || '';
+	const parentNode = node && node.parentNode.closest('[block-id]');
+	const parentUrl = parentNode && parentNode.dataset.url || '';
 	let url = this.block.data.url || (parentUrl + '/');
 	let val = this.input.value;
 	const slug = Pageboard.slug(val);
