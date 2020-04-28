@@ -146,7 +146,7 @@ Blocks.prototype.renderFrom = function(block, blocks, store, opts) {
 	// }
 	if (!fragment || !fragment.querySelectorAll) return;
 
-	var fragments = [fragment];
+	var fragments = [fragment.nodeName == "BODY" ? fragment.parentNode : fragment];
 	Array.prototype.forEach.call(fragment.querySelectorAll('template'), (node) => {
 		fragments.push(node.content);
 	});
