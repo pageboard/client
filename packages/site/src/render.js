@@ -84,6 +84,14 @@ function install(el, scope) {
 				doc: scope.$doc,
 				ns: el.ns
 			});
+			if (el.fragments) el.fragments.forEach((obj) => {
+				let node = el.dom.querySelector(obj.path);
+				if (node) {
+					node.insertAdjacentHTML(obj.position || 'afterend', obj.html);
+				} else {
+					console.warn("path not found", obj.path, "in", el.name, el.html);
+				}
+			});
 			el.fusable = el.html.fuse();
 		} else {
 			el.fusable = true;
