@@ -93,7 +93,7 @@ Blocks.prototype.merge = function(el, dom, block) {
 		} else if (content.nodeType == Node.DOCUMENT_FRAGMENT_NODE) {
 			content = node.ownerDocument.importNode(content, true);
 		} else if (content.nodeType == Node.ELEMENT_NODE) {
-			console.log("already merged", content == node);
+			console.warn("already merged", content == node);
 			return;
 		} else {
 			console.warn("cannot merge content", content);
