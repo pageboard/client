@@ -50,6 +50,8 @@ class HTMLCustomFormElement extends HTMLFormElement {
 						delete query[node.name];
 					}
 				}
+			} else if (node.type == "hidden") {
+				// always include them
 			} else {
 				if (!withDefaults && query[node.name] == node.defaultValue) {
 					delete query[node.name];
