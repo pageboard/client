@@ -121,7 +121,7 @@ Blocks.prototype.serializeTo = function(parent, el, ancestor, blocks, parentDef=
 				if (!block) {
 					// parentNode.removeChild(node);
 					// console.warn("block", type, "not found", id, "while serializing");
-				} else {
+				} else if (blockEl) {
 					let copy = blocks[id];
 					if (!copy) {
 						copy = blocks[id] = this.copy(block);
@@ -131,6 +131,8 @@ Blocks.prototype.serializeTo = function(parent, el, ancestor, blocks, parentDef=
 						blockEl.unmount(block, node, this.view);
 					}
 					reassignContent(block, blockEl, node); // not sure why this is necessary
+				} else {
+					console.warn("No element for", block);
 				}
 			} else {
 				block = {type: type};
