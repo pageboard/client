@@ -4,7 +4,6 @@ exports.feed = {
 	standalone: true,
 	bundle: true,
 	group: "block",
-	icon: '<i class="newspaper outline icon"></i>',
 	properties: {
 		topics: {
 			title: 'Topics',
@@ -58,9 +57,6 @@ exports.feed = {
 		<div class="row">
 			<div class="column" block-content="extra"><p>Extra content</p></div>
 		</div>
-	</article>`,
-	scripts: [
-		'../ui/feed.js'
-	]
+	</article>`
 };
 
