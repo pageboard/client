@@ -6,6 +6,10 @@ exports.blog = Object.assign({}, exports.page, {
 		id: 'preview',
 		title: 'Preview',
 		nodes: 'image'
+	}, {
+		id: 'description',
+		title: 'Description',
+		nodes: "inline*"
 	}]),
 	properties: Object.assign({}, exports.page.properties, {
 		publication: {
@@ -28,7 +32,7 @@ exports.blog = Object.assign({}, exports.page, {
 		position: 'afterend',
 		html: `<meta property="og:type" content="article">
 			<meta property="og:title" content="[title]">
-			<meta property="og:description" content="[description|magnet:*]">
+			<meta property="og:description" block-content="description" />
 			<meta property="og:image" block-content="preview" />
 			<meta property="article:published_time" content="[publication|magnet:*|isoDate]">
 			<meta property="article:tag" content="[topics|repeat:*|magnet:*]">`
@@ -45,7 +49,7 @@ exports.itemblog = Object.assign({}, exports.siteblog, {
 		<div class="content">
 			<div class="meta">[publication|magnet|formatDate:D:M:Y]</div>
 			<div class="header">[title]</div>
-			<div class="description">[description]</div>
+			<div class="description" block-content="description"></div>
 		</div>
 	</a>`
 });
