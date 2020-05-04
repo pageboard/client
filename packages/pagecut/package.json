@@ -50,6 +50,7 @@
     "prosemirror-view": "^1.14.5"
   },
   "prepare": {
+    "diff-dom": "patch patches/diff-dom-virtual-issue-98.patch",
     "prosemirror-model": "patch patches/prosemirror-model-pr-39.patch",
     "prosemirror-view": [
       "patch patches/prosemirror-view-css-checked.patch",
