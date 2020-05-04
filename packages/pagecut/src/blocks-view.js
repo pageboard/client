@@ -151,6 +151,9 @@ Blocks.prototype.renderFrom = function(block, blocks, store, opts) {
 		fragments.push(node.content);
 	});
 	fragments.forEach((fragment) => {
+		if (opts.strip) Array.prototype.forEach.call(fragment.querySelectorAll('[block-data]'), (node) => {
+			node.removeAttribute('block-data');
+		});
 		Array.prototype.forEach.call(fragment.querySelectorAll('[block-id]'), (node) => {
 			var id = node.getAttribute('block-id');
 			if (id === block.id) return;
