@@ -4,7 +4,20 @@ const {DiffDOM} = require('diff-dom');
 
 const differ = new DiffDOM({
 	preDiffApply: function(info) {
-		if (/Attribute$/.test(info.diff.action) && info.diff.name == "block-focused") {
+		if (info.diff.action.endsWith("Attribute") && info.diff.name == "block-focused") {
+			return true;
+		}
+	}
+});
+
+const innerDiff = new DiffDOM({
+	filterOuterDiff: function(a, b, diffs) {
+		if (a.attributes && a.attributes['block-content']) {
+			a.innerDone = true;
+		}
+	},
+	preDiffApply: function(info) {
+		if (info.diff.action.endsWith("Attribute") && info.diff.name.startsWith("block-")) {
 			return true;
 		}
 	}
@@ -414,6 +427,7 @@ function createWrapSpec(view, elt, obj) {
 	var defaultAttrs = attrsFrom(obj.dom);
 	defaultAttrs._json = null;
 	defaultAttrs._id = null;
+	defaultAttrs._html = null;
 	var defaultSpecAttrs = specAttrs(defaultAttrs);
 	var wrapTag = domSelector(obj.dom);
 	if (wrapTag == "div") console.warn(elt.name, "should define a class on wrapper tag", obj.dom.outerHTML);
@@ -460,7 +474,7 @@ function createConstSpec(view, elt, obj) {
 		context: `${elt.name}//`,
 		getAttrs: function(dom) {
 			var attrs = {}; //attrsFrom(dom);
-			attrs._html = dom.innerHTML;
+			attrs._html = dom.outerHTML;
 			attrs._json = saveDomAttrs(dom);
 			var root = dom.closest('[block-id]');
 			if (root) attrs._id = root.getAttribute('block-id');
@@ -490,6 +504,7 @@ function createContainerSpec(view, elt, obj) {
 	}
 	defaultAttrs._json = null;
 	defaultAttrs._id = null;
+	defaultAttrs._html = null;
 	var defaultSpecAttrs = specAttrs(defaultAttrs);
 	var tag;
 	if (obj.dom == obj.contentDOM) {
@@ -504,6 +519,7 @@ function createContainerSpec(view, elt, obj) {
 			var attrs = attrsFrom(dom);
 			var json = saveDomAttrs(dom);
 			if (json) attrs._json = json;
+			attrs._html = staticHtml(dom);
 			var root = dom.closest('[block-id]');
 			if (root) attrs._id = root.getAttribute('block-id');
 			return attrs;
@@ -524,6 +540,13 @@ function createContainerSpec(view, elt, obj) {
 		nodeView: ContainerNodeView
 	};
 	return spec;
+}
+
+function staticHtml(dom) {
+	const copy = dom.cloneNode(true);
+	const content = copy.hasAttribute('block-content') ? copy : copy.querySelector('[block-content]');
+	if (content) content.textContent = '';
+	return copy.outerHTML;
 }
 
 function setupView(me, node) {
@@ -794,9 +817,7 @@ ConstNodeView.prototype.update = function(node, decorations) {
 	if (this.view.explicit) {
 		this.dom.innerHTML = '';
 	} else {
-		var prevHtml = this.dom.innerHTML;
-		var curHtml = node.attrs._html;
-		if (curHtml != prevHtml) this.dom.innerHTML = curHtml != null ? curHtml : "";
+		innerDiff.apply(this.dom, innerDiff.diff(this.dom, node.attrs._html));
 	}
 	return true;
 };
@@ -827,6 +848,9 @@ ContainerNodeView.prototype.update = function(node, decorations) {
 
 	if (this.view.explicit) {
 		this.contentDOM.setAttribute('element-content', 'true');
+	} else if (node.attrs._html) {
+		const diffs = innerDiff.diff(this.dom, node.attrs._html);
+		innerDiff.apply(this.dom, diffs);
 	}
 	if (node.isTextblock) {
 		this.contentDOM.setAttribute('block-text', 'true');
@@ -893,16 +917,15 @@ function mutateNodeView(tr, pos, pmNode, obj, nobj) {
 				if (pmNode.attrs.id) {
 					newAttrs._id = pmNode.attrs.id;
 				}
-				if (type == "const") {
-					// TODO extend to container, wrap...
-					newAttrs._html = objChild.dom.innerHTML;
+				if (type == "const" || type == "container") {
+					newAttrs._html = staticHtml(objChild.dom);
 				}
 			}
 			if (!isNaN(curpos)) {
 				// updates that are incompatible with schema might happen (e.g. popup(title + content))
 				tr.setNodeMarkup(curpos, null, newAttrs);
 				// however, this transaction is going to happen right now,
-				// before all rooNodeView children have been updated with *old* state
+				// before all rootNodeView children have been updated with *old* state
 				pmChild.attrs = newAttrs; // so we must change pmNode right now !
 				if (objChild.children.length)  {
 					var domChild = obj.contentDOM && obj.contentDOM.children[i];
