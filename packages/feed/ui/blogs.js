@@ -64,6 +64,16 @@ class HTMLElementBlogs extends HTMLCustomElement {
 			}
 		}
 	}
+	strip(node) {
+		node = node.cloneNode(true);
+		var cur;
+		while ((cur = node.querySelector('[block-type]'))) {
+			cur.removeAttribute('block-type');
+			cur.removeAttribute('block-data');
+			cur.removeAttribute('class');
+		}
+		return node;
+	}
 	rss(state) {
 		const doc = document;
 		// state.scope.$elements.blogs.properties.topics
@@ -73,6 +83,9 @@ class HTMLElementBlogs extends HTMLCustomElement {
 			if (item.date > cur) return item.date;
 		}, new Date());
 
+		const xmlDoc = document.implementation.createDocument('http://www.w3.org/1999/xhtml', 'html', null);
+		const xmlSer = new XMLSerializer();
+
 		this.blogs.forEach((item, i) => {
 			const node = this.children[i];
 			const image = node.querySelector('[block-content="preview"] > element-image');
@@ -81,6 +94,13 @@ class HTMLElementBlogs extends HTMLCustomElement {
 				width: image.dataset.width,
 				height: image.dataset.height
 			} : {};
+			let desc = node.querySelector('[block-content="description"]');
+			if (desc) {
+				desc = this.strip(desc);
+				item.description = desc.childNodes.map(node => {
+					return xmlSer.serializeToString(xmlDoc.importNode(node, true));
+				}).join('');
+			}
 		});
 
 		const url = doc.location.toString();
@@ -113,8 +133,7 @@ class HTMLElementBlogs extends HTMLCustomElement {
 				<pubDate>[item.date|toUTCString]</pubDate>
 				<description>
 					<img alt="" src="[$loc.origin][item.preview.url|magnet:*]" width="[item.preview.width|magnet]" height="[item.preview.height|magnet]" />
-					<p>[item.data.description|magnet:*]</p>
-					[item.text|or:|html]
+					<p>[item.description|html|magnet:*]</p>
 				</description>
 			</item>
 		</channel>
