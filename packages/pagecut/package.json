@@ -47,7 +47,7 @@
     "prosemirror-schema-basic": "^1.1.2",
     "prosemirror-state": "^1.3.3",
     "prosemirror-transform": "^1.2.5",
-    "prosemirror-view": "^1.14.5"
+    "prosemirror-view": "^1.14.8"
   },
   "prepare": {
     "diff-dom": "patch patches/diff-dom-virtual-issue-98.patch",
