@@ -1,7 +1,7 @@
 exports.blog = Object.assign({}, exports.page, {
 	title: 'Blog',
 	bundle: 'page',
-	icon: '<i class="icons"><i class="newspaper outline icon"></i><i class="corner red tag icon"></i></i>',
+	icon: '<i class="newspaper outline icon"></i>',
 	contents: exports.page.contents.concat([{
 		id: 'preview',
 		title: 'Preview',
