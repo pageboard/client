@@ -5,7 +5,7 @@ Page.patch(function(state) {
 		if (image) {
 			const obj = Page.parse(image.dataset.src);
 			obj.query = {rs: 'w-800_h-450_max'};
-			ogImage.setAttribute('content', Page.format(obj));
+			ogImage.setAttribute('content', document.location.origin + Page.format(obj));
 			ogImage.removeAttribute('block-content');
 			ogImage.innerText = '';
 		}
