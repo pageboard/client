@@ -5,6 +5,7 @@ exports.share = {
 	bundle: 'feed',
 	group: "inline",
 	contents: "inlineImage",
+	context: "blog//",
 	icon: '<i class="share alternate icon"></i>',
 	properties: {
 		network: {
