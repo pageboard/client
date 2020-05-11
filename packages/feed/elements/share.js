@@ -4,6 +4,7 @@ exports.share = {
 	inline: true,
 	group: "inline",
 	contents: "inlineImage",
+	context: "blog//",
 	icon: '<i class="share alternate icon"></i>',
 	properties: {
 		network: {
