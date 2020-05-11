@@ -469,12 +469,23 @@ Utils.prototype.selectionParents = function(tr, sel) {
 };
 
 Utils.prototype.canMark = function(sel, nodeType) {
-	var state = this.view.state;
-	var can = sel.$from.depth == 0 ? state.doc.type.allowsMarkType(nodeType) : false;
+	const state = this.view.state;
+	const context = parseContext(nodeType.spec.element && nodeType.spec.element.context);
+	let can = sel.$from.depth == 0 ? state.doc.type.allowsMarkType(nodeType) : false;
 	try {
-		state.doc.nodesBetween(sel.from, sel.to, function(node) {
+		state.doc.nodesBetween(sel.from, sel.to, function(node, pos) {
 			if (can) return false;
-			can = node.inlineContent && node.type.allowsMarkType(nodeType);
+			if (node.inlineContent && node.type.allowsMarkType(nodeType)) {
+				if (context) {
+					const $pos = state.doc.resolve(pos);
+					for (let d = $pos.depth; d >= 0; d--) {
+						can = checkContext(context, $pos.node(d).type, d >= $pos.depth - 1);
+						if (can) break;
+					}
+				} else {
+					can = true;
+				}
+			}
 		});
 	} catch(ex) {
 		// can fail in some circumstances
@@ -483,14 +494,14 @@ Utils.prototype.canMark = function(sel, nodeType) {
 };
 
 Utils.prototype.canInsert = function($pos, nodeType, all, after) {
-	var context = parseContext(nodeType.spec.element && nodeType.spec.element.context);
-	var contextOk = !context;
-	var found = false;
-	var ret = {};
-	for (var d = $pos.depth; d >= 0; d--) {
-		var from = after ? $pos.indexAfter(d) : $pos.index(d);
-		var to = from;
-		var node = $pos.node(d);
+	const context = parseContext(nodeType.spec.element && nodeType.spec.element.context);
+	let contextOk = !context;
+	let found = false;
+	const ret = {};
+	for (let d = $pos.depth; d >= 0; d--) {
+		let from = after ? $pos.indexAfter(d) : $pos.index(d);
+		let to = from;
+		const node = $pos.node(d);
 		if (!found) {
 			if (d == $pos.depth) {
 				if ($pos.nodeAfter && $pos.nodeAfter.type.name == "_") {
@@ -516,7 +527,7 @@ Utils.prototype.canInsert = function($pos, nodeType, all, after) {
 			}
 		}
 		if (found && context) {
-			if (checkContext(context, node.type, $pos, d)) {
+			if (checkContext(context, node.type, d >= $pos.depth - 1)) {
 				contextOk = true;
 				break;
 			}
@@ -536,7 +547,7 @@ function parseContext(context) {
 	return list;
 }
 
-function checkContext(list, type, $pos, d) {
+function checkContext(list, type, last) {
 	// does not check nested contexts
 	var cands = type.spec.group ? type.spec.group.split(' ') : [];
 	cands.push(type.name);
@@ -549,7 +560,7 @@ function checkContext(list, type, $pos, d) {
 				return false;
 			}
 		} else {
-			if (cands.includes(last) && d >= $pos.depth - 1) return true;
+			if (cands.includes(last) && last) return true;
 			else return false;
 		}
 	});
