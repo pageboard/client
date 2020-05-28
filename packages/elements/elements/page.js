@@ -143,7 +143,6 @@ exports.page = {
 		default: ["'none'"],
 		'block-all-mixed-content': [""],
 		'form-action': ["'self'"],
-		'base-uri': ["'self'"],
 		connect: ["'self'"],
 		object: ["'none'"],
 		script: ["'self'", "https://cdn.polyfill.io"],
