@@ -31,10 +31,12 @@ class HTMLElementMenu extends HTMLCustomElement {
 			handleClick: (e, state) => this.anyClick(e, state)
 		}, document);
 		this.observer = new ResizeObserver((entries, observer) => {
-			var styles = window.getComputedStyle(this);
-			var parentWidth = parseFloat(styles.marginLeft) + parseFloat(styles.marginRight) + this.offsetWidth;
-			var menuWidth = menu.offsetWidth;
-			this.classList.toggle('burger', parentWidth <= menuWidth);
+			window.requestAnimationFrame(() => {
+				var styles = window.getComputedStyle(this);
+				var parentWidth = parseFloat(styles.marginLeft) + parseFloat(styles.marginRight) + this.offsetWidth;
+				var menuWidth = menu.offsetWidth;
+				this.classList.toggle('burger', parentWidth <= menuWidth);
+			});
 		});
 		this.observer.observe(this.parentNode);
 	}

@@ -103,7 +103,9 @@ class Sticky {
 
 		this._node = node;
 		this._observer = new ResizeObserver((entries, observer) => {
-			this._fastCheck();
+			window.requestAnimationFrame(() => {
+				this._fastCheck();
+			});
 		});
 		this._stickyMode = null;
 		this._active = false;
