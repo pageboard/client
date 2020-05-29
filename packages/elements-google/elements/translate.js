@@ -16,7 +16,11 @@ exports.google_translate = {
 		'../ui/translate.js'
 	],
 	csp: {
-		script: ["https://translate.googleapis.com", "https://translate.google.com"],
+		script: [
+			"https://translate.googleapis.com",
+			"https://translate.google.com",
+			"'sha256-NNiElek2Ktxo4OLn2zGTHHeUR6b91/P618EXWJXzl3s='"
+		],
 		style: ["https://translate.googleapis.com"],
 		img: ["https://translate.googleapis.com", "https://www.gstatic.com", "https://www.google.com"],
 		connect: ["https://translate.googleapis.com"]
