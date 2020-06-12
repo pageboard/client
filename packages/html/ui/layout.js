@@ -43,10 +43,10 @@ class HTMLElementLayout extends HTMLDivElement {
 		}
 
 		if (r.x != 50 || r.y != 50 || r.w != 100 || r.h != 100) {
-			if (Math.round((r.x - r.w / 2)*100) < 0 || Math.round((r.x + r.w / 2)*100) > 10000) {
+			if (Math.round((r.x - r.w / 2) * 100) < 0 || Math.round((r.x + r.w / 2) * 100) > 10000) {
 				r.w = 2 * Math.min(r.x, 100 - r.x);
 			}
-			if (Math.round((r.y - r.h / 2)*100) < 0 || Math.round((r.y + r.h / 2)*100) > 10000) {
+			if (Math.round((r.y - r.h / 2) * 100) < 0 || Math.round((r.y + r.h / 2) * 100) > 10000) {
 				r.h = 2 * Math.min(r.y, 100 - r.y);
 			}
 			loc.query.ex = `x-${r.x}_y-${r.y}_w-${r.w}_h-${r.h}`;
