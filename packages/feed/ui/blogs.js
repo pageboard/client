@@ -81,7 +81,8 @@ class HTMLElementBlogs extends HTMLCustomElement {
 		const topics = this.options.topics;
 		const latestDate = this.blogs.reduce((cur, item) => {
 			item.date = new Date(item.data.publication || item.created_at || null);
-			if (item.date > cur) return item.date;
+			if (item.date > cur) cur = item.date;
+			return cur;
 		}, new Date());
 
 		const xmlDoc = document.implementation.createDocument('http://www.w3.org/1999/xhtml', 'html', null);
