@@ -131,7 +131,7 @@ class HTMLElementBlogs extends HTMLCustomElement {
 			<item>
 				<title>[items.data.title|repeat:item:item]</title>
 				<link>[$loc.origin][item.data.url]</link>
-				<guid>[item.id|magnet:*]</guid>
+				<guid isPermaLink="false">[item.id|magnet:*]</guid>
 				<pubDate>[item.date|toUTCString]</pubDate>
 				<media:content url="[$loc.origin][item.preview.url|magnet:*]" medium="image" width="[item.preview.width|magnet]" height="[item.preview.height|magnet]" />
 				<content:encoded>
