@@ -102,6 +102,8 @@ class HTMLElementBlogs extends HTMLCustomElement {
 					return xmlSer.serializeToString(xmlDoc.importNode(node, true));
 				}).join('').trim();
 				if (item.content === "") item.content = null;
+				item.description = desc.textContent;
+				if (item.description === "") item.description = null;
 			}
 		});
 
@@ -134,6 +136,7 @@ class HTMLElementBlogs extends HTMLCustomElement {
 				<guid isPermaLink="false">[item.id|magnet:*]</guid>
 				<pubDate>[item.date|toUTCString]</pubDate>
 				<media:content url="[$loc.origin][item.preview.url|magnet:*]" medium="image" width="[item.preview.width|magnet]" height="[item.preview.height|magnet]" />
+				<description>[item.description|text|magnet]</description>
 				<content:encoded>
 					<img alt="" src="[$loc.origin][item.preview.url|magnet:*]" width="[item.preview.width|magnet]" height="[item.preview.height|magnet]" />
 					<p>[item.content|html|magnet]</p>
