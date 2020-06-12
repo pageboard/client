@@ -76,7 +76,8 @@ class HTMLElementBlogs extends HTMLCustomElement {
 	}
 	rss(state) {
 		const doc = document;
-		// state.scope.$elements.blogs.properties.topics
+		const scope = state.scope;
+		// scope.$elements.blogs.properties.topics
 		const topics = this.options.topics;
 		const latestDate = this.blogs.reduce((cur, item) => {
 			item.date = new Date(item.data.publication || item.created_at || null);
@@ -106,8 +107,8 @@ class HTMLElementBlogs extends HTMLCustomElement {
 
 		const url = doc.location.toString();
 		const feed = {
-			title: state.scope.$page.data.title,
-			description: state.scope.$site.title,
+			title: scope.$page.data.title,
+			description: scope.$site.title,
 			url: url.replace('.rss', ''),
 			categories: topics,
 			date: latestDate,
@@ -141,7 +142,11 @@ class HTMLElementBlogs extends HTMLCustomElement {
 		</channel>
 	</rss>`;
 		const rssDoc = (new DOMParser()).parseFromString(rssTemplate, "application/xml");
-		const rss = rssDoc.fuse(feed, state.scope);
+		if (!scope.$filters.toUTCString) scope.$filters.toUTCString = function(val) {
+			if (!val) return val;
+			return val.toUTCString();
+		};
+		const rss = rssDoc.fuse(feed, scope);
 		rss.querySelectorAll('encoded').forEach((node) => {
 			const frag = rssDoc.createDocumentFragment();
 			while (node.firstChild) frag.appendChild(node.firstChild);
