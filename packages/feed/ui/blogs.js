@@ -97,9 +97,10 @@ class HTMLElementBlogs extends HTMLCustomElement {
 			let desc = node.querySelector('[block-content="description"]');
 			if (desc) {
 				desc = this.strip(desc);
-				item.description = desc.childNodes.map(node => {
+				item.content = desc.childNodes.map(node => {
 					return xmlSer.serializeToString(xmlDoc.importNode(node, true));
-				}).join('');
+				}).join('').trim();
+				if (item.content === "") item.content = null;
 			}
 		});
 
@@ -116,7 +117,7 @@ class HTMLElementBlogs extends HTMLCustomElement {
 			items: this.blogs
 		};
 		const rssTemplate = `<?xml version="1.0" encoding="utf-8"?>
-	<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom">
+	<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">
 		<channel>
 			<title>[title]</title>
 			<link>[url]</link>
@@ -131,17 +132,29 @@ class HTMLElementBlogs extends HTMLCustomElement {
 				<link>[$loc.origin][item.data.url]</link>
 				<guid>[item.id|magnet:*]</guid>
 				<pubDate>[item.date|toUTCString]</pubDate>
-				<description>
+				<media:content url="[$loc.origin][item.preview.url|magnet:*]" medium="image" width="[item.preview.width|magnet]" height="[item.preview.height|magnet]" />
+				<content:encoded>
 					<img alt="" src="[$loc.origin][item.preview.url|magnet:*]" width="[item.preview.width|magnet]" height="[item.preview.height|magnet]" />
-					<p>[item.description|html|magnet:*]</p>
-				</description>
+					<p>[item.content|html|magnet]</p>
+				</content:encoded>
 			</item>
 		</channel>
 	</rss>`;
-		var xml = (new DOMParser()).parseFromString(rssTemplate, "application/xml");
+		const rssDoc = (new DOMParser()).parseFromString(rssTemplate, "application/xml");
+		const rss = rssDoc.fuse(feed, state.scope);
+		rss.querySelectorAll('encoded').forEach((node) => {
+			const frag = rssDoc.createDocumentFragment();
+			while (node.firstChild) frag.appendChild(node.firstChild);
+			const fragStr = (new XMLSerializer()).serializeToString(frag).trim();
+			if (!fragStr) {
+				node.remove();
+			} else {
+				node.appendChild(rssDoc.createCDATASection(fragStr));
+			}
+		});
 		return {
 			mime: 'application/xml',
-			body: (new XMLSerializer()).serializeToString(xml.fuse(feed, state.scope))
+			body: (new XMLSerializer()).serializeToString(rss)
 		};
 	}
 }
