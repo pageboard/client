@@ -26,7 +26,7 @@ Page.patch(function(state) {
 				<meta property="og:image" content="[image.url|magnet:*]">
 				<meta property="article:published_time" content="[date|magnet:*|isoDate]">
 				<meta property="article:tag" content="[topics|repeat:*|magnet:*]">
-			`).fuse(Pageboard.getFeedCard(feed, state), state.scope));
+			`).fuse(getFeedCard(feed, state), state.scope));
 		} else if (feeds.length > 1) {
 			var link = Page.format({
 				pathname: state.pathname + '.rss',
