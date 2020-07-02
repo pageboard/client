@@ -62,16 +62,16 @@ function getFeedCard(node, state) {
 	var topics = node.getAttribute('feed-topics');
 	if (!topics) {
 		topics = node.querySelector('.topics');
-		if (topics) topics = topics.innerText;
+		if (topics) topics = topics.textContent;
 	}
 	var card = {
 		url: (new URL(node.getAttribute('feed-url') || "", document.baseURI)).href,
 		topics: topics ? topics.split(' - ') : []
 	};
 	var title = node.querySelector('[block-content="title"]');
-	if (title) card.title = title.innerText;
+	if (title) card.title = title.textContent;
 	var desc = node.querySelector('[block-content="description"]');
-	card.description = desc && desc.innerText ? desc.innerText.trim() : null;
+	card.description = desc && desc.textContent ? desc.textContent.trim() : null;
 	var date = node.getAttribute('feed-publication') || node.getAttribute('pubdate');
 	if (date) card.date = new Date(date);
 	var preview = node.querySelector('[block-content="preview"] [block-type="image"]');
@@ -91,23 +91,21 @@ function getFeedCard(node, state) {
 		}
 		card.image.url = srcObj.href;
 	}
-	if (!card.description) {
-		var content = node.querySelector('[block-content="section"]');
-		if (content) {
-			content = stripBlock(content.cloneNode(true));
-			var xmlDoc = document.implementation.createDocument('http://www.w3.org/1999/xhtml', 'html', null);
-
-			card.content = Array.from(content.childNodes).map((node) => {
-				return (new XMLSerializer()).serializeToString(xmlDoc.importNode(node, true));
-			}).join('');
-		}
-		if (!card.content) card.content = null;
+	var content = node.querySelector('[block-content="section"]');
+	if (content) {
+		content = stripBlock(content.cloneNode(true));
+		var xmlDoc = document.implementation.createDocument('http://www.w3.org/1999/xhtml', 'html', null);
+		card.content = Array.from(content.childNodes).map((node) => {
+			if (node.childNodes && node.childNodes.length == 0) return "";
+			return (new XMLSerializer()).serializeToString(xmlDoc.importNode(node, true));
+		}).join('').trim() || null;
 	}
 	return card;
 }
 
 Page.rss = function(state) {
 	var doc = document;
+	const scope = state.scope;
 
 	var categories = [];
 	var latestDate;
@@ -125,8 +123,8 @@ Page.rss = function(state) {
 	}).filter((item) => !!item);
 	var url = doc.location.toString();
 	var feed = {
-		title: state.scope.$page.data.title,
-		description: state.scope.$site.title,
+		title: scope.$page.data.title,
+		description: scope.$site.title,
 		url: url.replace('.rss', ''),
 		categories: categories,
 		date: latestDate || new Date(),
@@ -136,7 +134,7 @@ Page.rss = function(state) {
 		items: items
 	};
 	const rssTemplate = `<?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">
 	<channel>
 		<title>[title]</title>
 		<link>[url]</link>
@@ -149,20 +147,36 @@ Page.rss = function(state) {
 		<item>
 			<title>[items.title|repeat:item:item]</title>
 			<link>[item.url]</link>
-			<guid>[item.id|magnet:*]</guid>
+			<guid isPermaLink="false">[item.id|magnet:*]</guid>
 			<pubDate>[item.date|toUTCString]</pubDate>
-			<description>
+			<media:content url="[item.image.url|magnet:*]" medium="image" width="[item.image.width]" height="[item.image.height]" />
+			<description>[item.description|text|magnet]</description>
+			<content:encoded>
 				<img alt="" src="[item.image.url|magnet:*]" width="[item.image.width]" height="[item.image.height]" />
-				<p>[item.description|magnet:*]</p>
-				[item.content|or:|html]
-			</description>
+				[item.content|magnet:*|html]
+			</content:encoded>
 		</item>
 	</channel>
 </rss>`;
-	var xml = (new DOMParser()).parseFromString(rssTemplate, "application/xml");
+	const rssDoc = (new DOMParser()).parseFromString(rssTemplate, "application/xml");
+	if (!scope.$filters.toUTCString) scope.$filters.toUTCString = function(val) {
+		if (!val) return val;
+		return val.toUTCString();
+	};
+	const rss = rssDoc.fuse(feed, scope);
+	rss.querySelectorAll('encoded').forEach((node) => {
+		const frag = rssDoc.createDocumentFragment();
+		while (node.firstChild) frag.appendChild(node.firstChild);
+		const fragStr = (new XMLSerializer()).serializeToString(frag).trim();
+		if (!fragStr) {
+			node.remove();
+		} else {
+			node.appendChild(rssDoc.createCDATASection(fragStr));
+		}
+	});
 	return {
 		mime: 'application/xml',
-		body: (new XMLSerializer()).serializeToString(xml.fuse(feed, state.scope))
+		body: (new XMLSerializer()).serializeToString(rss)
 	};
 };
 
