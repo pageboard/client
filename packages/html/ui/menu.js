@@ -11,7 +11,7 @@ Page.patch(function(state) {
 		}
 	}
 	state.finish(function() {
-		document.querySelectorAll('.menu [href]').forEach((item) => {
+		document.querySelectorAll('[block-type="menu"] [href]').forEach((item) => {
 			let loc = item.getAttribute('href');
 			if (!loc) return;
 			if (isSameOrParent(Page.parse(loc), state)) {
