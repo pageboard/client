@@ -32,7 +32,7 @@ class GoogleAnalytics {
 		value,
 		error,
 		fatal
-	}={}) {
+	} = {}) {
 		if (!this.state || !this.cid || !this.gaid) return;
 		const data = {
 			v: '1',
@@ -57,7 +57,7 @@ class GoogleAnalytics {
 			el: label || undefined,
 			ev: value || undefined,
 			exd: error || undefined,
-			exf: fatal === undefined  || fatal === false ? 0 : 1
+			exf: fatal === undefined || fatal === false ? 0 : 1
 		};
 		var params = new URLSearchParams();
 		Object.keys(data).forEach((key) => {
