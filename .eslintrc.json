@@ -12,8 +12,7 @@
   "env": {
     "browser": true,
     "commonjs": true,
-    "es6": true,
-    "es7": true
+    "es6": true
   },
   "extends": "eslint:recommended",
   "globals": {
