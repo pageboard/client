@@ -113,7 +113,7 @@ function install(el, scope) {
 		});
 		["id", "parent", "child", "parents", "children", "updated_at", "created_at", "lock"].forEach(function(name) {
 			var val = block[name];
-			if (val !== undefined) rscope['$'+name] = val;
+			if (val !== undefined) rscope['$' + name] = val;
 		});
 
 		if (el.filters) rscope.$filters = Object.assign({}, rscope.$filters, el.filters);
