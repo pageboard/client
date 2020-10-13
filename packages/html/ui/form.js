@@ -304,8 +304,15 @@ Page.ready(function(state) {
 		} else if (action == "disable") {
 			HTMLCustomFormElement.prototype.disable.call(form);
 		} else if (action == "fill") {
-			if (val == null) form.reset();
-			else if (typeof val == "object" && val.id) HTMLCustomFormElement.prototype.fill.call(form, val.data);
+			if (val == null) {
+				form.reset();
+			} else if (typeof val == "object" && val.id) {
+				var meta = Object.assign({}, val.data);
+				Object.keys(val).forEach((key) => {
+					if (key != "data") meta['$' + key] = val[key];
+				});
+				HTMLCustomFormElement.prototype.fill.call(form, meta);
+			}
 		}
 		return val;
 	};
