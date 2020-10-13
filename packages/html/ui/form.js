@@ -262,7 +262,7 @@ Page.setup(function(state) {
 		},
 		captureFocus: function(e, state) {
 			var el = e.target;
-			if (!el.matches('input,textarea,select')) return;
+			if (!el.matches || !el.matches('input,textarea,select')) return;
 			if (e.relatedTarget && e.relatedTarget.type == "submit") return;
 			updateClass(el.closest('.field') || el, el.validity, true);
 		},
@@ -282,7 +282,7 @@ Page.setup(function(state) {
 	}
 	function blurHandler(e, checked) {
 		var el = e.target;
-		if (!e.target.matches('input,textarea,select')) return;
+		if (!el.matches || !el.matches('input,textarea,select')) return;
 		if (!checked) el.checkValidity();
 		updateClass(el.closest('.field') || el, el.validity);
 	}
