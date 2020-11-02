@@ -1,7 +1,7 @@
 {
   "extends": "stylelint-config-standard",
   "rules": {
-    "block-closing-brace-empty-line-before": ["always-multi-line", {"severity": "warning"}],
+    "block-closing-brace-empty-line-before": ["never", {"severity": "warning"}],
     "at-rule-empty-line-before": ["always", {"severity": "warning"}],
     "number-leading-zero": ["always", {"severity": "warning"}],
     "selector-descendant-combinator-no-non-space": [true, {"severity": "warning"}],
