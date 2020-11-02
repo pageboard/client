@@ -67,12 +67,8 @@ else if ('webkitHidden' in document) {
 /*
  * 3. Utility functions
  */
-function extend (targetObj, sourceObject) {
-	for (var key in sourceObject) {
-		if (Object.prototype.hasOwnProperty.call(sourceObject, key)) {
-			targetObj[key] = sourceObject[key];
-		}
-	}
+function extend(targetObj, sourceObject) {
+	Object.assign(targetObj, sourceObject);
 }
 
 function parseNumeric (val) {
