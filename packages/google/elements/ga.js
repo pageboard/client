@@ -2,7 +2,7 @@ exports.site.properties.google_analytics = {
 	title: 'Google Analytics ID',
 	nullable: true,
 	type: 'string',
-	pattern: '^UA-\\w+-\\d$'
+	pattern: '^(UA-\\w+-\\d|G-\\w+)$'
 };
 
 exports.google_analytics = {
