@@ -137,7 +137,7 @@ class Sticky {
 		 * 2. Check if the node can be activated
 		 */
 		if (
-			isNaN(parseFloat(nodeComputedProps.top)) ||
+			Number.isNaN(parseFloat(nodeComputedProps.top)) ||
 			nodeComputedProps.display == 'table-cell' ||
 			nodeComputedProps.display == 'none'
 		) return;
@@ -176,7 +176,7 @@ class Sticky {
 		this._offsetToParent = {
 			top: nodeWinOffset.top - parentWinOffset.top - parseNumeric(parentComputedStyle.borderTopWidth),
 			left: nodeWinOffset.left - parentWinOffset.left - parseNumeric(parentComputedStyle.borderLeftWidth),
-			right: -nodeWinOffset.right + parentWinOffset.right - parseNumeric(parentComputedStyle.borderRightWidth)
+			right: -nodeWinOffset.right + parentWinOffset.right - parseNumeric(parentComputedStyle.borderRightWidth) - parentNode.offsetWidth + parentNode.clientWidth
 		};
 		this._styles = {
 			position: originalPosition,
@@ -261,7 +261,7 @@ class Sticky {
 	_recalcPosition () {
 		if (!this._active || this._removed) return;
 
-		const stickyMode = scroll.top <= this._limits.start? 'start': scroll.top >= this._limits.end? 'end': 'middle';
+		const stickyMode = scroll.top <= this._limits.start ? 'start': scroll.top >= this._limits.end? 'end': 'middle';
 
 		if (this._stickyMode == stickyMode) return;
 
