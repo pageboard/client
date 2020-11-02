@@ -20,7 +20,7 @@ Page.State.prototype.scroll = function(opts) {
 			while ((section = section.previousElementSibling)) {
 				if (["static", "relative"].includes(window.getComputedStyle(section).position) == false) {
 					scrollOpts.top -= section.getBoundingClientRect().height;
-				}				
+				}
 			}
 		} else {
 			return;
