@@ -29,7 +29,10 @@ class HTMLElementSticky extends HTMLCustomElement {
 		var mode = this._sticky._stickyMode || 'start';
 		if (this.dataset.mode != mode) {
 			this.dataset.mode = mode;
-			this._sticky._recalcClone();
+			if (this.ownerDocument.documentElement.classList.contains('transition') == false) {
+				// avoid jump
+				this._sticky._recalcClone();
+			}
 		}
 	}
 	close() {
