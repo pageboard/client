@@ -58,7 +58,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 				}
 			}
 			if (query[node.name] === undefined) {
-				query[node.name] = undefined;
+				if (withDefaults) query[node.name] = null;
 			}
 		});
 		var btn = document.activeElement;
