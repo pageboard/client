@@ -5,3 +5,6 @@ html.google-translate-shown > body {
 	top:0px !important;
 	padding-top:40px !important;
 }
+html.transition .skiptranslate {
+	display:none !important;
+}
