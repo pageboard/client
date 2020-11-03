@@ -37,7 +37,7 @@ Page.setup(function(state) {
 				return state.transition.start();
 			});
 		} else {
-			state.transition.destroy();
+			state.transition.end();
 		}
 	}
 });
