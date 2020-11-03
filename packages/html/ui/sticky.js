@@ -4,11 +4,12 @@ class HTMLElementSticky extends HTMLCustomElement {
 		this.stickyfill.forceSticky();
 	}
 	init() {
-		var listener = this.listener.bind(this);
 		var raf;
-		this.listener = function() {
+		this.listener = () => {
 			window.cancelAnimationFrame(raf);
-			raf = window.requestAnimationFrame(listener);
+			raf = window.requestAnimationFrame(() => {
+				this.layout();
+			});
 		};
 	}
 	handleAllScroll(e, state) {
@@ -24,15 +25,12 @@ class HTMLElementSticky extends HTMLCustomElement {
 		this._sticky = this.constructor.stickyfill.addOne(this);
 		this.listener();
 	}
-	listener(e) {
+	layout() {
 		if (!this._sticky) return;
 		var mode = this._sticky._stickyMode || 'start';
 		if (this.dataset.mode != mode) {
 			this.dataset.mode = mode;
-			if (this.ownerDocument.documentElement.classList.contains('transition') == false) {
-				// avoid jump
-				this._sticky._recalcClone();
-			}
+			this._sticky._recalcClone();
 		}
 	}
 	close() {

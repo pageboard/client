@@ -157,7 +157,7 @@ class Sticky {
 		 * 4. Get necessary node parameters
 		 */
 		const referenceNode = node.parentNode;
-		const parentNode = shadowRootExists && referenceNode instanceof ShadowRoot? referenceNode.host: referenceNode;
+		const parentNode = shadowRootExists && referenceNode instanceof ShadowRoot ? referenceNode.host: referenceNode;
 		const nodeWinOffset = node.getBoundingClientRect();
 		const parentWinOffset = parentNode.getBoundingClientRect();
 		const parentComputedStyle = getComputedStyle(parentNode);
@@ -239,10 +239,11 @@ class Sticky {
 			borderSpacing: 0,
 			fontSize: '1em',
 			position: 'static',
-			flex: 'none'
+			flex: 'none',
+			width: nodeWinOffset.right - nodeWinOffset.left + 'px',
+			height: nodeWinOffset.bottom - nodeWinOffset.top + 'px'
 		});
 
-		this._recalcClone(nodeWinOffset);
 
 		if (!clone.node.parentNode) referenceNode.insertBefore(clone.node, node);
 		clone.docOffsetTop = getDocOffsetTop(clone.node);
@@ -261,7 +262,7 @@ class Sticky {
 	_recalcPosition () {
 		if (!this._active || this._removed) return;
 
-		const stickyMode = scroll.top <= this._limits.start ? 'start': scroll.top >= this._limits.end? 'end': 'middle';
+		const stickyMode = scroll.top <= this._limits.start ? 'start' : scroll.top >= this._limits.end? 'end': 'middle';
 
 		if (this._stickyMode == stickyMode) return;
 
