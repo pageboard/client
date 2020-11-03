@@ -20,7 +20,9 @@ Page.init(function(state) {
 });
 
 Page.State.prototype.mergeBody = function(body, corpse) {
-	if (this.referrer.transition) this.referrer.transition.stop();
+	if (this.referrer.transition) {
+		this.referrer.transition.end();
+	}
 	if (body.isContentEditable || body.getAttribute('block-type') != corpse.getAttribute('block-type')) {
 		corpse.replaceWith(body);
 	} else {
@@ -30,10 +32,13 @@ Page.State.prototype.mergeBody = function(body, corpse) {
 
 Page.setup(function(state) {
 	if (state.transition) {
-		if (state.transition.ok) state.finish(function() {
-			return state.transition.start();
-		});
-		else state.transition.cleanup();
+		if (state.transition.ok) {
+			state.finish(function() {
+				return state.transition.start();
+			});
+		} else {
+			state.transition.destroy();
+		}
 	}
 });
 
@@ -77,22 +82,35 @@ Page.Transition = class {
 		return new Promise((resolve) => {
 			this.resolve = resolve;
 			if (!this.ok) {
-				this.cleanup();
+				this.destroy();
 			} else {
 				setTimeout(() => {
 					this.root.addEventListener(this.event, this);
 					this.root.classList.add('transitioning');
 				});
 				this.safe = setTimeout(() => {
-					console.warn("Transition timeout from", this.from.dataset.transitionClose, "to", this.to.dataset.transitionOpen);
-					this.stop();
+					console.warn("Transition timeout");
+					this.end();
 				}, 4000);
 			}
 		});
 	}
-	stop() {
+	cancel() {
 		this.ok = false;
-		this.handleEvent();
+		this.root.classList.remove('transitioning');
+		if (this.resolve) {
+			this.resolve();
+			delete this.resolve;
+		}
+	}
+	end() {
+		this.ok = false;
+		this.from.remove();
+		this.destroy();
+		if (this.resolve) {
+			this.resolve();
+			delete this.resolve;
+		}
 	}
 	scrollTo(obj) {
 		this.to.scrollTop = obj.top;
@@ -100,25 +118,25 @@ Page.Transition = class {
 	}
 	handleEvent(e, state) {
 		// only transitions of body children are considered
-		if (e) {
-			if (this.to.dataset.transitionOpen) {
-				if (e.target != this.to) return;
-			} else if (this.from.dataset.transitionClose) {
-				if (e.target != this.from) return;
-			} else {
-				console.warn("Transition event without transition");
-			}
+		if (!this.to || !this.from) {
+			return;
 		}
+		if (this.to.dataset.transitionOpen) {
+			if (e.target != this.to) return;
+		} else if (this.from.dataset.transitionClose) {
+			if (e.target != this.from) return;
+		} else {
+			console.warn("Transition event without transition");
+		}
+		
+		this.end();
+	}
+	destroy() {
+		this.root.removeEventListener(this.event, this);
 		if (this.safe) {
 			clearTimeout(this.safe);
 			delete this.safe;
 		}
-		this.root.removeEventListener(this.event, this);
-		if (e) setTimeout(() => this.cleanup());
-		else this.cleanup();
-	}
-	cleanup() {
-		this.from.remove();
 		var top = this.to.scrollTop;
 		var left = this.to.scrollLeft;
 		this.root.classList.remove('transition', 'transitioning');
@@ -128,7 +146,6 @@ Page.Transition = class {
 		delete this.to;
 		delete this.state.transition;
 		delete this.state;
-		if (this.resolve) this.resolve();
 	}
 };
 

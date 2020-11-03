@@ -91,3 +91,8 @@ Page.setup(function navigate(state) {
 	}
 });
 
+var statePush = Page.State.prototype.push;
+Page.State.prototype.push = function (...args) {
+	if (this.transition) this.transition.cancel();
+	return statePush.apply(this, args);
+};
