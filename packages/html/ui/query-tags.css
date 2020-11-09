@@ -3,4 +3,5 @@ element-query-tags {
 }
 element-query-tags > div {
 	display:inline-block;
+	line-height: 100%;
 }
