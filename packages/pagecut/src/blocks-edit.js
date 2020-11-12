@@ -31,6 +31,23 @@ Blocks.prototype.mutate = function(node, data) {
 	view.dispatch(tr);
 };
 
+Blocks.prototype.setStandalone = function (block, val) {
+	if (val == block.standalone) return;
+	if (!val) {
+		// force new id for this block and its descendants by id-plugin
+		var copy = this.copy(block);
+		copy.focused = block.focused;
+		block = copy;
+	}
+	block.standalone = val;
+	var nodes = this.domQuery(block.id, { all: true });
+	var tr = this.view.state.tr;
+	nodes.forEach((node) => {
+		this.view.utils.refreshTr(tr, node, block);
+	});
+	this.view.dispatch(tr);
+};
+
 Blocks.prototype.create = function(type) {
 	return this.view.element(type).create();
 };

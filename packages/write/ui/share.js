@@ -41,26 +41,7 @@ Share.prototype.update = function(parents) {
 Share.prototype.change = function() {
 	if (!this.block || this.disabled) return;
 	var newVal = this.toggle.checkbox('is checked');
-	if (newVal == this.standalone) return; // do nothing
-
-	var editor = this.editor;
-	var node = editor.blocks.domQuery(this.block.id, {focused: true});
-	if (!node) {
-		console.warn("No dom node found for this block", this.block);
-		return;
-	}
-	var tr = editor.state.tr;
-	var block = this.block;
-	if (!newVal) {
-		// will force attribution of new id for this block and its descendants by pagecut id-plugin
-		block = editor.blocks.copy(block);
-		block.focused = this.block.focused; // because copy removes focus status
-		this.block = block;
-	}
-	block.standalone = newVal;
-	editor.utils.refreshTr(tr, node, block);
-	// TODO restore selection ?
-	editor.dispatch(tr);
+	this.editor.blocks.setStandalone(this.block, newVal);
 };
 
 })(window.Pageboard, window.Pagecut);
