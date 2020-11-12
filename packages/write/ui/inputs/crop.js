@@ -132,11 +132,11 @@ Crop.prototype.valueChange = function() {
 	var crop = {};
 	var fail = false;
 	var arr = txt.split(/\s+/);
-	for (var i=0; i < arr.length; i++) {
+	for (var i = 0; i < arr.length; i++) {
 		var parts = arr[i].split(':');
 		var key = parts[0];
 		var val = parseFloat(parts[1]);
-		if (isNaN(val)) {
+		if (Number.isNaN(val)) {
 			fail = true;
 			break;
 		}
