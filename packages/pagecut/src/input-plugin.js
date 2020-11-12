@@ -11,6 +11,7 @@ function InputPlugin(view, options) {
 	this.clipboardTextParser = this.clipboardTextParser.bind(this);
 	this.transformPasted = this.transformPasted.bind(this);
 	this.handlePaste = this.handlePaste.bind(this);
+
 	this.view = view;
 }
 

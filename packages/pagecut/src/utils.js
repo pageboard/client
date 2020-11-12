@@ -241,10 +241,11 @@ Utils.prototype.refreshTr = function(tr, dom, block) {
 		tr.setNodeMarkup(pos, null, attrs);
 	} catch(ex) {
 		// ignore
+		console.warn(ex);
 		selectedNode = false;
 	}
 	if (selectedNode) {
-		tr.setSelection(new State.NodeSelection(tr.doc.resolve(pos)));
+		tr.setSelection(State.NodeSelection.create(tr.doc, pos));
 	}
 	return tr;
 };

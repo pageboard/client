@@ -293,7 +293,7 @@ function propToMeta(schema) {
 	} else {
 		return schema;
 	}
-	
+
 	if (schema.default !== undefined) hint += ` (default: ${schema.default})`;
 	copy.placeholder = hint;
 	copy.title = schema.title;
@@ -348,7 +348,7 @@ FormBlock.prototype.customFilter = function(key, prop) {
 FormBlock.prototype.handleEvent = function(e) {
 	if (!this.block || this.ignoreEvents || !this.form) return;
 	if (e && e.target) {
-		if (!e.target.matches('.nullable') && !e.target.name || e.target.name.startsWith('$')) return;	
+		if (!e.target.matches('.nullable') && !e.target.name || e.target.name.startsWith('$')) return;
 		if (e.type == "input" && ["checkbox", "radio", "select"].includes(e.target.type)) return; // change events only
 	}
 	var editor = this.editor;
@@ -411,7 +411,7 @@ function pruneObj(obj, schema) {
 		if (prop && prop.type == "object") {
 			if (val != null) val = pruneObj(val, prop);
 			return [key, val];
-		} else if (val == null || val === "" || typeof val == "number" && isNaN(val)) {
+		} else if (val == null || val === "" || typeof val == "number" && Number.isNaN(val)) {
 			return null;
 		}
 		return [key, val];
