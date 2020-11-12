@@ -362,7 +362,7 @@ Store.prototype.changes = function(initial, unsaved) {
 			} else if (block.standalone) {
 				parentList(changes.relate, block);
 			} else if (!unsaved[block.parent].standalone) {
-				console.error("unsaved non-standalone block in non-standalone parent is not generated")
+				console.error("unsaved non-standalone block in non-standalone parent is not generated");
 			}
 		}
 	});
@@ -370,7 +370,7 @@ Store.prototype.changes = function(initial, unsaved) {
 	const unrelated = {};
 	Object.keys(initial).forEach((id) => {
 		let block = unsaved[id];
-		let iblock = initial[id];		
+		let iblock = initial[id];
 		if (!block) {
 			if (!Store.generated[id]) { // not sure it must be kept
 				let iparent = iblock.virtual || iblock.parent;
