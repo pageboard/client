@@ -195,6 +195,20 @@ Store.prototype.save = function(e) {
 	var p = Pageboard.fetch('put', '/.api/page', changes)
 	.then((result) => {
 		if (!result) return;
+		if (result.status == 404 && result.blocks) {
+			var allStandalones = true;
+			result.blocks.forEach((id) => {
+				var block = this.editor.blocks.get(id);
+				if (block && block.standalone) {
+					this.editor.blocks.setStandalone(block, false);
+				} else {
+					allStandalones = false;
+				}
+			});
+			if (allStandalones) {
+				throw new Error("Unknown standalone block - Please save again");
+			}
+		}
 		if (result.status != 200) {
 			throw result;
 		}
