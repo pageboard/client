@@ -37,8 +37,9 @@ class HTMLCustomFormElement extends HTMLFormElement {
 				query[key] = val;
 			}
 		}, this);
-		// checkbox fix
+
 		this.elements.forEach(function(node) {
+			if (node.name == null || node.name == "") return;
 			if (node.type == "radio") {
 				if (!withDefaults && node.checked == node.defaultChecked && query[node.name] == node.value) {
 					delete query[node.name];
@@ -57,8 +58,8 @@ class HTMLCustomFormElement extends HTMLFormElement {
 					delete query[node.name];
 				}
 			}
-			if (query[node.name] === undefined) {
-				if (withDefaults) query[node.name] = null;
+			if (query[node.name] === undefined && withDefaults) {
+				query[node.name] = null;
 			}
 		});
 		var btn = document.activeElement;
