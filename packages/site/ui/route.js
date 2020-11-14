@@ -12,6 +12,11 @@ Page.route(function(state) {
 	return Pageboard.bundle(loader, state).then(function(res) {
 		state.data.$cache = res;
 		state.scope.$page = res.item;
+		var ext = state.pathname.split('/').pop().split('.');
+		if (ext.length == 2 && res.item && res.item.type != ext[1]) {
+			res.status = 400;
+			res.statusText = "Invalid extension";
+		}
 		var node = Pageboard.render(res, state.scope);
 		if (!node || node.nodeName != "BODY") {
 			throw new Error("page render should return a body element");
