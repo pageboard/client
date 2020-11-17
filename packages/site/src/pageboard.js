@@ -45,7 +45,12 @@ exports.bundle = function(loader, state) {
 	return loader.then(function(res) {
 		if (!res) return Promise.resolve();
 		var metas = res.metas || res.meta && [res.meta] || [];
-		return Promise.all(metas.map(function(meta) {
+		return Promise.all(metas.map(function (meta) {
+			if (meta.group == "page" && !res.meta) {
+				// restores an asymmetry between route bundle load
+				// and navigational bundle load
+				res.meta = meta;
+			}
 			return exports.load.meta(meta);
 		})).then(function() {
 			return res;
