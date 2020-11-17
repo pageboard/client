@@ -84,9 +84,12 @@ Page.setup(function navigate(state) {
 		}
 	}, document);
 
-	if (!document.body.isContentEditable && document.body.dataset.redirect) {
-		setTimeout(function() {
-			state.replace(document.body.dataset.redirect);
+	var redir = document.body.dataset.redirect;
+	if (redir && !document.body.isContentEditable) {
+		if (Page.samePath(redir, state)) {
+			console.warn("Useless redirection");
+		} else setTimeout(function() {
+			state.replace(redir);
 		}, 10);
 	}
 });
