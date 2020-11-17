@@ -58,7 +58,7 @@ class HTMLCustomConsentElement extends HTMLFormElement {
 		}
 		state.consent(this);
 	}
-	handleConsent(state) {
+	chainConsent(state) {
 		window.HTMLCustomFormElement.prototype.fill.call(this, {
 			consent: state.scope.$consent
 		});
