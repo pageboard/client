@@ -84,18 +84,26 @@ function install(el, scope) {
 				doc: scope.$doc,
 				ns: el.ns
 			});
-			if (el.fragments) el.fragments.forEach((obj) => {
-				let node = el.dom.querySelector(obj.path);
+			el.fusable = el.html.fuse();
+		} else {
+			el.fusable = true;
+		}
+		if (el.fragments) el.fragments.forEach((obj) => {
+			let target;
+			if (obj.type === 'doc') target = scope.$element;
+			else if (obj.type) target = scope.$elements[obj.type] || {};
+			else target = el;
+			if (!target.dom) {
+				console.warn("dom not found for fragment", obj.type, el.name);
+			} else {
+				let node = target.dom.querySelector(obj.path);
 				if (node) {
 					node.insertAdjacentHTML(obj.position || 'afterend', obj.html);
 				} else {
 					console.warn("path not found", obj.path, "in", el.name, el.html);
 				}
-			});
-			el.fusable = el.html.fuse();
-		} else {
-			el.fusable = true;
-		}
+			}
+		});
 		if (el.install && scope.$element) {
 			el.install.call(el, scope);
 		}
