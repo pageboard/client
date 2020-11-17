@@ -46,11 +46,14 @@ class UserStore {
 	clearCookies(re) {
 		var cookies = this.getCookies();
 		for (var key in cookies) {
-			if (!re || re.test(key)) this.clearCookie(key);
+			if (!re || re.test(key)) this.clearCookie(key, cookies[key]);
 		}
 	}
-	clearCookie(key) {
-		document.cookie = `${key}=; expires = Thu, 01 Jan 1970 00:00:00 GMT`;
+	clearCookie(key, opts) {
+		var str = `${key}=; expires = Thu, 01 Jan 1970 00:00:00 GMT`;
+		if (opts.Path) str += '; Path=' + opts.Path;
+		if (opts.Domain) str += '; Domain=' + opts.Domain;
+		document.cookie = str;
 	}
 	getCookies() {
 		return document.cookie.split(/; */).reduce((obj, str) => {
