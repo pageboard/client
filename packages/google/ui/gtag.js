@@ -1,6 +1,4 @@
 window.dataLayer = window.dataLayer || [];
-function gtag() { window.dataLayer.push(arguments); }
-
 Page.connect(new class {
 	constructor() {
 		const node = document.head.querySelector('script[src^="https://www.googletagmanager.com"]');
@@ -20,7 +18,7 @@ Page.connect(new class {
 			Page.storage.clearCookies(/^_g/);
 		} else if (!this.started) {
 			this.started = true;
-			gtag({
+			this.push({
 				'gtm.start': new Date().getTime(),
 				event: 'gtm.js',
 				anonymize_ip: true
@@ -35,12 +33,15 @@ Page.connect(new class {
 		};
 		if (!this.started) {
 			this.started = true;
-			gtag('consent', 'default', opts);
-			gtag('js', new Date());
+			this.push(['consent', 'default', opts]);
+			this.push(['js', new Date()]);
 		} else {
-			gtag('consent', 'update', opts);
+			this.push(['consent', 'update', opts]);
 		}
-		gtag('config', this.id, { page_path: state.toString() });
+		this.push(['config', this.id, { page_path: state.toString() }]);
+	}
+	push(args) {
+		window.dataLayer.push(args);
 	}
 	paint(state) {
 		if (this.id) state.consent(this);
