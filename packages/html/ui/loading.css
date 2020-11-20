@@ -3,13 +3,9 @@
 	box-sizing: border-box;
 	text-align:center;
 	color:#aaa;
-	font-size: 2rem;
-	line-height: 1.6rem;
+	font-size: 200%;
 	white-space: pre-wrap;
 	position:absolute;
-	width:100%;
-	top:50%;
-	margin-top:-1rem;
 }
 
 @keyframes spinner {
@@ -18,15 +14,33 @@
 	}
 }
 
+@keyframes scanner {
+	0% {
+		width:0%;
+		opacity:0.3;
+	}
+	50% {
+		width:20px;
+		opacity:1;
+	}
+	100% {
+		width:0%;
+		opacity:0.3;
+	}
+}
+
 .loading[data-src]::after {
-	display:block;
-	animation: dots 5s linear infinite;
-	content:'';
+	display: block;
+	animation: scanner 6s steps(3, end) infinite;
+	content: '';
+	width: 10%;
+	height: 0;
+	border-top: 4px dotted #aaa;
 }
 
 .error[data-src]::after {
 	display: block;
-	content: '❌';
+	content: '∅';
 }
 
 .waiting[data-src]::after {
@@ -36,26 +50,11 @@
 
 .denied[data-src]::after {
 	display:block;
-	content: '!';
+	content: '🛇';
 }
 
 .error[data-src],
 .waiting[data-src],
 .denied[data-src] {
 	outline:#aaa solid 1px;
-}
-
-@keyframes dots {
-	0% {
-		opacity:0;
-		content: '⚫';
-	}
-	50% {
-		opacity:1;
-		content: '⚫';
-	}
-	100% {
-		opacity:0;
-		content: '⚫';
-	}
 }
