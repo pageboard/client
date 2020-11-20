@@ -21,7 +21,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		fd.forEach(function(val, key) {
 			if (val == null || val == "") {
 				var cur = Array.from(this.querySelectorAll(`[name="${key}"]`)).pop();
-				if (cur.required == false && cur.type != "radio") {
+				if (cur.required == false) {
 					val = undefined;
 				} else {
 					val = null;
@@ -40,22 +40,23 @@ class HTMLCustomFormElement extends HTMLFormElement {
 
 		this.elements.forEach(function(node) {
 			if (node.name == null || node.name == "") return;
+			var val = node.value;
+			if (val == "") val = null;
 			if (node.type == "radio") {
-				if (!withDefaults && node.checked == node.defaultChecked && query[node.name] == node.value) {
-					delete query[node.name];
+				if (!withDefaults && node.checked == node.defaultChecked && query[node.name] == val) {
+					query[node.name] = undefined;
 				}
 			} else if (node.type == "checkbox") {
-				if (node.name && node.value == "true") {
-					if (query[node.name] === undefined) query[node.name] = node.checked;
-					if (!withDefaults && query[node.name] == node.defaultChecked) {
-						delete query[node.name];
-					}
+				if (!(node.name in query)) {
+					if (!withDefaults) query[node.name] = undefined;
 				}
 			} else if (node.type == "hidden") {
 				// always include them
 			} else {
-				if (!withDefaults && query[node.name] == node.defaultValue) {
-					delete query[node.name];
+				var defVal = node.defaultValue;
+				if (defVal == "") defVal = null;
+				if (!withDefaults && query[node.name] == defVal) {
+					query[node.name] = undefined;
 				}
 			}
 			if (query[node.name] === undefined && withDefaults) {
@@ -108,6 +109,16 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			}
 		}
 		return vars;
+	}
+	save() {
+		this.elements.forEach(function(node) {
+			if (node.save) node.save();
+		});
+	}
+	reset() {
+		this.elements.forEach(function(node) {
+			if (node.reset) node.reset();
+		});
 	}
 	handleSubmit(e, state) {
 		if (e.type == "submit") e.preventDefault();
@@ -180,6 +191,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			if (statusClass) form.classList.add(statusClass);
 			form.enable();
 			if (res.status < 200 || res.status >= 400) return;
+			form.save();
 			data.$response = res;
 			data.$status = res.status;
 			var redirect = form.options.redirection;
@@ -188,7 +200,6 @@ class HTMLCustomFormElement extends HTMLFormElement {
 				if (res.granted) redirect = Page.format(state);
 				else return;
 			}
-			form.reset();
 			var loc = Page.parse(redirect);
 			var vary = false;
 			if (Page.samePathname(loc, state)) {
@@ -243,17 +254,50 @@ HTMLSelectElement.prototype.fill = function(values) {
 	}
 };
 
-HTMLInputElement.prototype.fill = function(val) {
-	var subFill = this[this.type + 'Fill'];
-	if (subFill) return subFill.call(this, val);
-	else this.value = val;
+HTMLInputElement.prototype.fill = function (val) {
+	if (val == null) val = "";
+	if (this.type == "radio" || this.type == "checkbox") {
+		this.checked = val;
+	} else {
+		this.value = val;
+	}
 };
 
-HTMLInputElement.prototype.reset = function() {
-	var subReset = this[this.type + 'Reset'];
-	if (subReset) return subReset.call(this);
-	else this.value = "";
+HTMLInputElement.prototype.reset = function () {
+	if (this.type == "radio" || this.type == "checkbox") {
+		this.fill(this.defaultChecked);
+	} else {
+		this.fill(this.defaultValue);
+	}
 };
+
+HTMLInputElement.prototype.save = function () {
+	if (this.type == "radio" || this.type == "checkbox") {
+		this.defaultChecked = this.checked;
+	} else {
+		this.defaultValue = this.value;
+	}
+};
+
+HTMLTextAreaElement.prototype.reset = function() {
+	this.value = this.defaultValue;
+};
+
+HTMLTextAreaElement.prototype.save = function() {
+	this.defaultValue = this.value;
+};
+
+Object.defineProperty(HTMLInputElement.prototype, 'defaultValue', {
+	configurable: true,
+	enumerable: true,
+	get: function() {
+		if (this.form.method == "get") return '';
+		else return this.getAttribute('value');
+	},
+	set: function(val) {
+		this.setAttribute('value', val);
+	}
+});
 
 Page.setup(function(state) {
 	// https://daverupert.com/2017/11/happier-html5-forms/
