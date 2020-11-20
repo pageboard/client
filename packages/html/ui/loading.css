@@ -3,9 +3,12 @@
 	box-sizing: border-box;
 	text-align:center;
 	color:#aaa;
-	font-size: 200%;
+	font-size: 2rem;
 	white-space: pre-wrap;
 	position:absolute;
+	width: 100%;
+	top: 50%;
+	margin-top: -0.5rem;
 }
 
 @keyframes spinner {
@@ -57,4 +60,11 @@
 .waiting[data-src],
 .denied[data-src] {
 	outline:#aaa solid 1px;
+}
+
+img::after {
+	content: none !important;
+}
+img.error {
+	outline:none !important;
 }
