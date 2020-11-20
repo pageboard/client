@@ -20,14 +20,17 @@
 @keyframes scanner {
 	0% {
 		width:0%;
+		margin-left:0px;
 		opacity:0.3;
 	}
 	50% {
 		width:20px;
+		margin-left:-10px;
 		opacity:1;
 	}
 	100% {
 		width:0%;
+		margin-left:0px;
 		opacity:0.3;
 	}
 }
@@ -36,9 +39,11 @@
 	display: block;
 	animation: scanner 6s steps(3, end) infinite;
 	content: '';
-	width: 10%;
+	width: 20px;
 	height: 0;
 	border-top: 4px dotted #aaa;
+	left: 50%;
+	margin-left:-10px;
 }
 
 .error[data-src]::after {
