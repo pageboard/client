@@ -171,7 +171,7 @@ exports.input_property = {
 							name: name,
 							min: propType.minimum,
 							max: propType.maximum,
-							value: d.multiple ? `${propType.minimum}~${propType.maximum}` : propType.default,
+							value: d.multiple ? `${propType.minimum}⩽${propType.maximum}` : propType.default,
 							disabled: d.disabled,
 							required: required,
 							multiple: d.multiple,
