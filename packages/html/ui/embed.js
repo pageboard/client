@@ -21,8 +21,9 @@ class HTMLElementEmbed extends HTMLCustomElement {
 		return this.promise;
 	}
 	consent(state) {
-		var agreed = state.scope.$consent == "yes";
-		this.classList.remove('waiting', 'denied');
+		var consent = state.scope.$consent;
+		this.classList.toggle('denied', consent == "no");
+		this.classList.toggle('waiting', consent == null);
 		var opts = this.options;
 		var src = opts.src;
 		if (opts.hash) {
@@ -31,8 +32,7 @@ class HTMLElementEmbed extends HTMLCustomElement {
 			src = Page.format(obj);
 		}
 		this.iframe = this.firstElementChild;
-		if (!agreed) {
-			this.classList.add('denied');
+		if (consent != "yes") {
 			if (this.iframe) this.iframe.remove();
 			this.promise.done();
 			return;
