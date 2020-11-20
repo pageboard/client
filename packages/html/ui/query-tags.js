@@ -38,12 +38,14 @@ class HTMLElementQueryTags extends HTMLCustomElement {
 					var suffix = '';					
 					if (control.rangeValue) {
 						val = control.rangeValue;
-						if (val.length == 2) {
+						if (val[0] == val[1]) {
+							suffix = ' ＝ ' + val[0];
+						} else {
 							prefix = val[0] + ' ⩽ ';
 							suffix = ' ⩽ ' + val[1];
-						} else {
-							suffix = ' = ' + val[0];
 						}
+					} else if (control.type == "text") {
+						suffix = ': "' + control.value + '"';
 					}
 					labels.insertAdjacentHTML('beforeEnd', `<a class="ui simple mini compact labeled icon button" data-name="${name}" data-value="${control.value}">
 						<i class="delete icon"></i>

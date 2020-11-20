@@ -1,7 +1,11 @@
 element-query-tags {
-	display:block;
+	display: flex;
 }
 element-query-tags > div {
 	display:inline-block;
 	line-height: 100%;
+}
+element-query-tags > div[block-content="title"] {
+	white-space:nowrap;
+	padding-right:0.5em;
 }
