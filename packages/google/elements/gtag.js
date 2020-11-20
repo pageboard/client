@@ -19,12 +19,12 @@ exports.google_tag = {
 		type: 'doc',
 		path: 'html > head',
 		position: 'beforeend',
-		html: `<script id="gtag" async src="https://www.googletagmanager.com/gtag/js?id=[$site.google_analytics|url|magnet:*]">[$site.env|eq:production|bmagnet:*]</script>`
+		html: `<script async src="https://www.googletagmanager.com/gtag/js?id=[$site.google_analytics|url|magnet:*]">[$site.env|eq:production|bmagnet:*]</script>`
 	}, {
 		type: 'doc',
 		path: 'html > head',
 		position: 'beforeend',
-		html: `<script id="gtag" async src="https://www.googletagmanager.com/gtm.js?id=[$site.google_tag_manager|url|magnet:*]">[$site.env|eq:production|bmagnet:*]</script>`
+		html: `<script async src="https://www.googletagmanager.com/gtm.js?id=[$site.google_tag_manager|url|magnet:*]">[$site.env|eq:development|bmagnet:*]</script>`
 	}],
 	csp: {
 		connect: ["https://www.google-analytics.com"],

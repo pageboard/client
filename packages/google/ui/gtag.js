@@ -1,9 +1,9 @@
 window.dataLayer = window.dataLayer || [];
-function gtag() { dataLayer.push(arguments); }
+function gtag() { window.dataLayer.push(arguments); }
 
 Page.connect(new class {
 	constructor() {
-		const node = document.head.querySelector('#gtag');
+		const node = document.head.querySelector('script[src^="https://www.googletagmanager.com"]');
 		if (!node) return;
 		var obj = Page.parse(node.src);
 		this.type = obj.pathname.startsWith('/gtm') ? 'gtm' : 'gtag';
