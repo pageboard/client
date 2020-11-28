@@ -103,7 +103,7 @@ class HTMLElementImage extends VirtualHTMLElement {
 		var img = this.image;
 		var fit = this.fit;
 		var r = this.crop;
-		
+
 		var loc = Page.parse(this.options.src);
 		if (loc.hostname && loc.hostname != document.location.hostname) {
 			loc = {
@@ -113,7 +113,7 @@ class HTMLElementImage extends VirtualHTMLElement {
 				}
 			};
 		}
-		
+
 		if (r.x != 50 || r.y != 50 || r.w != 100 || r.h != 100) {
 			if (Math.round((r.x - r.w / 2)*100) < 0 || Math.round((r.x + r.w / 2)*100) > 10000) {
 				r.w = 2 * Math.min(r.x, 100 - r.x);

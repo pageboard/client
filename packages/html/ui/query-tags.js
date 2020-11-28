@@ -35,7 +35,7 @@ class HTMLElementQueryTags extends VirtualHTMLElement {
 					if (group && group.firstElementChild.matches('label')) {
 						prefix = group.firstElementChild.textContent + ' ';
 					}
-					var suffix = '';					
+					var suffix = '';
 					if (control.rangeValue) {
 						val = control.rangeValue;
 						if (val[0] == val[1]) {

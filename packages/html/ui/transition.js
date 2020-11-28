@@ -128,7 +128,7 @@ Page.Transition = class {
 		} else {
 			console.warn("Transition event without transition");
 		}
-		
+
 		this.end();
 	}
 	destroy() {

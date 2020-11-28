@@ -61,7 +61,7 @@ class HTMLElementInputFile extends VirtualHTMLElement {
 				delete self._promise;
 			}
 			if (file.files.length == 0) return resolve(); // or reject ?
-			
+
 			var fd = new FormData();
 			for (var i=0; i < file.files.length; i++) {
 				fd.append("files", file.files[i]);
