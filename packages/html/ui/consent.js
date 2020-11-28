@@ -1,5 +1,5 @@
 Page.ready(function(state) {
-	HTMLCustomElement.define(`element-consent`, HTMLCustomConsentElement, 'form');
+	VirtualHTMLElement.define(`element-consent`, HTMLCustomConsentElement, 'form');
 });
 
 Page.State.prototype.consent = function (fn) {

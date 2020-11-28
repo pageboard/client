@@ -1,4 +1,4 @@
-class HTMLElementGallery extends HTMLCustomElement {
+class HTMLElementGallery extends VirtualHTMLElement {
 	static get defaults() {
 		return {
 			mode: null
@@ -52,4 +52,4 @@ class HTMLElementGallery extends HTMLCustomElement {
 	}
 }
 
-HTMLCustomElement.define('element-gallery', HTMLElementGallery);
+VirtualHTMLElement.define('element-gallery', HTMLElementGallery);

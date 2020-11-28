@@ -1,4 +1,4 @@
-class HTMLElementContent extends HTMLCustomElement {
+class HTMLElementContent extends VirtualHTMLElement {
 	static get defaults() {
 		return {
 			filter: null
@@ -21,6 +21,6 @@ class HTMLElementContent extends HTMLCustomElement {
 	}
 }
 Page.ready(function() {
-	HTMLCustomElement.define('element-content', HTMLElementContent);
+	VirtualHTMLElement.define('element-content', HTMLElementContent);
 });
 

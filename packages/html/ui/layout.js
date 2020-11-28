@@ -90,4 +90,4 @@ HTMLElementLayout.getZoom = HTMLElementImage.getZoom;
 });
 })(window.customElements.get('element-image'));
 
-HTMLCustomElement.define(`element-layout`, HTMLElementLayout, 'div');
+VirtualHTMLElement.define(`element-layout`, HTMLElementLayout, 'div');

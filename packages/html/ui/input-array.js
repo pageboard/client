@@ -1,8 +1,8 @@
-class HTMLElementInputArray extends HTMLCustomElement {
+class HTMLElementInputArray extends VirtualHTMLElement {
 	captureBlur(e, state) {
 		var parent = e.target.closest('[block-type]');
 		if (!parent || !parent.matches('[block-type^="input_"]')) return;
-		
+
 		if (this.children.length > 1 && e.target.value == "" && parent != this.lastElementChild) {
 			parent.remove();
 		} else if (e.target.value != "" && parent == this.lastElementChild) {
@@ -31,5 +31,5 @@ class HTMLElementInputArray extends HTMLCustomElement {
 }
 
 Page.setup(function(state) {
-	if (!state.scope.$write) HTMLCustomElement.define('element-input-array', HTMLElementInputArray);
+	if (!state.scope.$write) VirtualHTMLElement.define('element-input-array', HTMLElementInputArray);
 });

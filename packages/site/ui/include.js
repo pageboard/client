@@ -1,4 +1,4 @@
-class HTMLElementInclude extends HTMLCustomElement {
+class HTMLElementInclude extends VirtualHTMLElement {
 	static get defaults() {
 		return {
 			action: null
@@ -19,6 +19,6 @@ Page.ready(function() {
 	const Cla = window.customElements.get('element-template');
 	HTMLElementInclude.prepareTemplate = Cla.prepareTemplate;
 	HTMLElementInclude.prototype.fetch = Cla.prototype.fetch;
-	HTMLCustomElement.define('element-include', HTMLElementInclude);
+	VirtualHTMLElement.define('element-include', HTMLElementInclude);
 });
 

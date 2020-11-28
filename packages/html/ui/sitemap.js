@@ -1,4 +1,4 @@
-class HTMLElementSitemap extends HTMLCustomElement {
+class HTMLElementSitemap extends VirtualHTMLElement {
 	static makeTree(tree, parent) {
 		if (!parent) parent = {
 			type: 'sitemap'
@@ -63,6 +63,6 @@ class HTMLElementSitemap extends HTMLCustomElement {
 }
 
 Page.ready(function() {
-	HTMLCustomElement.define('element-sitemap', HTMLElementSitemap);
+	VirtualHTMLElement.define('element-sitemap', HTMLElementSitemap);
 });
 

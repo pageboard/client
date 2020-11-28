@@ -56,5 +56,5 @@ class HTMLElementAudio extends HTMLAudioElement {
 }
 Object.assign(HTMLElementAudio.prototype, MixinMedia);
 
-HTMLCustomElement.define('element-video', HTMLElementVideo, 'video');
-HTMLCustomElement.define('element-audio', HTMLElementAudio, 'audio');
+VirtualHTMLElement.define('element-video', HTMLElementVideo, 'video');
+VirtualHTMLElement.define('element-audio', HTMLElementAudio, 'audio');

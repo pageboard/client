@@ -1,4 +1,4 @@
-class HTMLElementGoogleTranslate extends HTMLCustomElement {
+class HTMLElementGoogleTranslate extends VirtualHTMLElement {
 	setup(state) {
 		if (this.style) {
 			Object.assign(document.body.style, this.style);
@@ -83,6 +83,6 @@ class HTMLElementGoogleTranslate extends HTMLCustomElement {
 }
 
 Page.setup(function() {
-	HTMLCustomElement.define('element-google-translate', HTMLElementGoogleTranslate);
+	VirtualHTMLElement.define('element-google-translate', HTMLElementGoogleTranslate);
 });
 

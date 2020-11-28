@@ -1,4 +1,4 @@
-class HTMLElementCarousel extends HTMLCustomElement {
+class HTMLElementCarousel extends VirtualHTMLElement {
 	static get defaults() {
 		return {
 			wrapAround: false,
@@ -157,7 +157,7 @@ class HTMLElementCarousel extends HTMLCustomElement {
 	}
 }
 
-class HTMLElementCarouselCell extends HTMLCustomElement {
+class HTMLElementCarouselCell extends VirtualHTMLElement {
 	static get defaults() {
 		return {
 			width: null,
@@ -174,8 +174,8 @@ class HTMLElementCarouselCell extends HTMLCustomElement {
 }
 
 Page.ready(function() {
-	HTMLCustomElement.define('element-carousel-cell', HTMLElementCarouselCell);
-	HTMLCustomElement.define('element-carousel', HTMLElementCarousel);
+	VirtualHTMLElement.define('element-carousel-cell', HTMLElementCarouselCell);
+	VirtualHTMLElement.define('element-carousel', HTMLElementCarousel);
 });
 
 Page.setup(function(state) {

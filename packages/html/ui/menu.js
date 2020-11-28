@@ -21,7 +21,7 @@ Page.patch(function(state) {
 	});
 });
 
-class HTMLElementMenu extends HTMLCustomElement {
+class HTMLElementMenu extends VirtualHTMLElement {
 	setup(state) {
 		if (this.isContentEditable || this.matches('.vertical')) return;
 		const menu = this.firstElementChild;
@@ -77,5 +77,5 @@ class HTMLElementMenu extends HTMLCustomElement {
 }
 
 Page.setup(function() {
-	HTMLCustomElement.define('element-menu', HTMLElementMenu);
+	VirtualHTMLElement.define('element-menu', HTMLElementMenu);
 });

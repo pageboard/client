@@ -81,7 +81,7 @@ exports.bundle = function(loader, state) {
 	});
 };
 
-window.HTMLCustomElement = require('./HTMLCustomElement');
+window.VirtualHTMLElement = require('./VirtualHTMLElement');
 
 Page.init(function(state) {
 	state.vars = {};

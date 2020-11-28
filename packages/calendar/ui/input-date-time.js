@@ -1,4 +1,4 @@
-class HTMLElementInputDateTime extends HTMLCustomElement {
+class HTMLElementInputDateTime extends VirtualHTMLElement {
 	static get observedAttributes() {
 		return ['value', 'format', 'time-zone'];
 	}
@@ -116,5 +116,5 @@ class HTMLElementInputDateTime extends HTMLCustomElement {
 
 
 
-HTMLCustomElement.define('element-input-date-time', HTMLElementInputDateTime);
+VirtualHTMLElement.define('element-input-date-time', HTMLElementInputDateTime);
 

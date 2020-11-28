@@ -25,6 +25,6 @@
   "globals": {
     "Page": true,
     "Pageboard": true,
-    "HTMLCustomElement": true
+    "VirtualHTMLElement": true
   }
 }

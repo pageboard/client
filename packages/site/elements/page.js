@@ -84,8 +84,7 @@ exports.page = {
 	</head>
 	<body block-content="body"></body></html>`,
 	scripts: [
-		'../lib/custom-elements.js',
-		'../lib/custom-elements-builtin.js',
+		'../lib/custom-elements.js'
 	].concat(exports.site.scripts).concat([
 		'../ui/nav.js'
 	]),

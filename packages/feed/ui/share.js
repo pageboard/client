@@ -1,4 +1,4 @@
-class HTMLElementShare extends HTMLCustomElement {
+class HTMLElementShare extends VirtualHTMLElement {
 	static get links() {
 		return [{
 			name: 'twitter',
@@ -46,6 +46,6 @@ class HTMLElementShare extends HTMLCustomElement {
 }
 
 Page.init(function() {
-	HTMLCustomElement.define('element-share', HTMLElementShare);
+	VirtualHTMLElement.define('element-share', HTMLElementShare);
 });
 

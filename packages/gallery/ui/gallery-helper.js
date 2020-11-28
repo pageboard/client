@@ -1,4 +1,4 @@
-HTMLCustomElement.extend('element-gallery', class GalleryHelper {
+VirtualHTMLElement.extend('element-gallery', class GalleryHelper {
 	paint(state) {
 		if (!state.scope.$write) return;
 		if (!this.itemsObserver) this.itemsObserver = new MutationObserver((records) => {

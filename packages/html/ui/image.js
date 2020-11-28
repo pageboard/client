@@ -1,4 +1,4 @@
-class HTMLElementImage extends HTMLCustomElement {
+class HTMLElementImage extends VirtualHTMLElement {
 	static get defaults() {
 		return {
 			src: null,
@@ -204,5 +204,5 @@ HTMLElementInlineImage.defaults = HTMLElementImage.defaults;
 	);
 });
 
-HTMLCustomElement.define('element-image', HTMLElementImage);
-HTMLCustomElement.define(`element-img`, HTMLElementInlineImage, 'img');
+VirtualHTMLElement.define('element-image', HTMLElementImage);
+VirtualHTMLElement.define(`element-img`, HTMLElementInlineImage, 'img');

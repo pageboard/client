@@ -1,4 +1,4 @@
-class HTMLElementEmbed extends HTMLCustomElement {
+class HTMLElementEmbed extends VirtualHTMLElement {
 	static get defaults() {
 		return {
 			src: null,
@@ -72,5 +72,5 @@ class HTMLElementEmbed extends HTMLCustomElement {
 }
 
 Page.ready(function() {
-	HTMLCustomElement.define('element-embed', HTMLElementEmbed);
+	VirtualHTMLElement.define('element-embed', HTMLElementEmbed);
 });

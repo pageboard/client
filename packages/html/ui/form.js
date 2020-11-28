@@ -242,7 +242,7 @@ HTMLFormElement.prototype.disable = function() {
 };
 
 Page.ready(function() {
-	HTMLCustomElement.define(`element-form`, HTMLCustomFormElement, 'form');
+	VirtualHTMLElement.define(`element-form`, HTMLCustomFormElement, 'form');
 });
 
 

@@ -1,4 +1,4 @@
-class HTMLElementRating extends HTMLCustomElement {
+class HTMLElementRating extends VirtualHTMLElement {
 	static get defaults() {
 		return {
 			maximum: 4,
@@ -22,5 +22,5 @@ class HTMLElementRating extends HTMLCustomElement {
 	}
 }
 
-HTMLCustomElement.define('element-rating', HTMLElementRating);
+VirtualHTMLElement.define('element-rating', HTMLElementRating);
 

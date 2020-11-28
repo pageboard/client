@@ -1,4 +1,4 @@
-class HTMLElementQueryTags extends HTMLCustomElement {
+class HTMLElementQueryTags extends VirtualHTMLElement {
 	static find(name, value) {
 		var nodes = document.querySelectorAll(`form [name="${name}"]`);
 		return Array.prototype.filter.call(nodes, function(node) {
@@ -74,6 +74,6 @@ class HTMLElementQueryTags extends HTMLCustomElement {
 }
 
 Page.ready(function() {
-	HTMLCustomElement.define('element-query-tags', HTMLElementQueryTags);
+	VirtualHTMLElement.define('element-query-tags', HTMLElementQueryTags);
 });
 

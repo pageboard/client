@@ -1,4 +1,4 @@
-class HTMLElementSticky extends HTMLCustomElement {
+class HTMLElementSticky extends VirtualHTMLElement {
 	static init() {
 		this.stickyfill = window.Stickyfill;
 		this.stickyfill.forceSticky();
@@ -41,5 +41,5 @@ class HTMLElementSticky extends HTMLCustomElement {
 }
 
 Page.setup(function() {
-	HTMLCustomElement.define('element-sticky', HTMLElementSticky);
+	VirtualHTMLElement.define('element-sticky', HTMLElementSticky);
 });

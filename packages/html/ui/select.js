@@ -1,4 +1,4 @@
-class HTMLElementSelect extends HTMLCustomElement {
+class HTMLElementSelect extends VirtualHTMLElement {
 	static get observedAttributes() {
 		return ['data-placeholder', 'data-name', 'data-multiple'];
 	}
@@ -169,5 +169,5 @@ class HTMLElementSelect extends HTMLCustomElement {
 }
 
 Page.setup(function() {
-	HTMLCustomElement.define('element-select', HTMLElementSelect);
+	VirtualHTMLElement.define('element-select', HTMLElementSelect);
 });

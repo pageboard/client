@@ -1,4 +1,4 @@
-class HTMLElementInputFile extends HTMLCustomElement {
+class HTMLElementInputFile extends VirtualHTMLElement {
 	captureClick(e, state) {
 		var input = this.querySelector('input[type="text"]');
 		if (!input) return;
@@ -108,5 +108,5 @@ class HTMLElementInputFile extends HTMLCustomElement {
 }
 
 Page.setup(function() {
-	HTMLCustomElement.define('element-input-file', HTMLElementInputFile);
+	VirtualHTMLElement.define('element-input-file', HTMLElementInputFile);
 });
