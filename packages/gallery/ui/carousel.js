@@ -19,6 +19,11 @@ class HTMLElementCarousel extends VirtualHTMLElement {
 		};
 	}
 
+	init() {
+		this.reload = Pageboard.debounce(this.reload, 100);
+		this.paint = Pageboard.debounce(this.paint, 100);
+	}
+
 	fullview(val) {
 		this.classList.toggle('fullview', !!val);
 		var body = this.ownerDocument.body;
@@ -26,10 +31,7 @@ class HTMLElementCarousel extends VirtualHTMLElement {
 		body.classList.toggle('fullview', len >= 1);
 	}
 
-	init() {
-		this.reload = Pageboard.debounce(this.reload, 100);
-		this.paint = Pageboard.debounce(this.paint, 100);
-	}
+
 
 	handleClick(e, state) {
 		var node = e.target.closest('a.fullview');
