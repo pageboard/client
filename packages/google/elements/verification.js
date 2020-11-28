@@ -7,9 +7,10 @@ exports.site.properties.google_site_verification = {
 
 exports.google_site_verification = {
 	group: "block",
-	html: '<meta name="google-site-verification" content="[$site.google_site_verification|magnet:*][$page.data.url|eq:%2F|bmagnet:*]">',
-	install: function(scope) {
-		scope.$element.dom.querySelector('head > meta').after(this.dom);
-	}
+	fragments: [{
+		type: 'doc',
+		path: 'html > head > meta',
+		position: 'afterend',
+		html: `<meta name="google-site-verification" content="[$site.google_site_verification|magnet:*][$page.data.url|eq:%2F|bmagnet:*]">`
+	}]
 };
-
