@@ -1,4 +1,4 @@
-class HTMLElementSitepage extends HTMLCustomElement {
+class HTMLElementSitepage extends VirtualHTMLElement {
 	static get defaults() {
 		return {
 			url: null,
@@ -60,6 +60,6 @@ class HTMLElementSitepage extends HTMLCustomElement {
 }
 
 Page.setup(function() {
-	HTMLCustomElement.define('element-sitepage', HTMLElementSitepage);
-	HTMLCustomElement.extend('element-sitemap', HTMLElementSitepage);
+	VirtualHTMLElement.define('element-sitepage', HTMLElementSitepage);
+	VirtualHTMLElement.extend('element-sitemap', HTMLElementSitepage);
 });

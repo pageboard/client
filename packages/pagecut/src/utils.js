@@ -206,20 +206,25 @@ Utils.prototype.refreshTr = function(tr, dom, block) {
 	var node;
 	if (parent.inline) {
 		node = parent.inline.node;
-		if (sel.empty || sel.node) node.marks.forEach(function(mark) {
-			if (attrs.id && attrs.id != mark.attrs.id) return;
-			var markType = mark.attrs.type;
-			if (!markType || type != markType) return;
-			if (mark.attrs.focused) {
-				// block.focused cannot be stored here since it is inplace
-				attrs.focused = mark.attrs.focused;
-			}
-			let [exFrom, exTo] = this.extendUpdateMark(tr, sel.from, sel.to, mark, attrs);
-			tr.setSelection(State.TextSelection.create(tr.doc, exFrom, exTo));
-		}, this);
-		else {
+		if (sel.empty || sel.node) {
+			if (node.marks.some((mark) => {
+				if (attrs.id && attrs.id != mark.attrs.id) return;
+				var markType = mark.attrs.type;
+				if (!markType || type != markType) return;
+				if (mark.attrs.focused) {
+					// block.focused cannot be stored here since it is inplace
+					attrs.focused = mark.attrs.focused;
+				}
+				let [exFrom, exTo] = this.extendUpdateMark(tr, sel.from, sel.to, mark, attrs);
+				tr.setSelection(State.TextSelection.create(tr.doc, exFrom, exTo));
+				return true;
+			})) return tr;
+		}	else {
 			var markType = this.view.schema.marks[type];
-			if (markType) tr.addMark(sel.from, sel.to, markType.create(attrs));
+			if (markType) {
+				tr.addMark(sel.from, sel.to, markType.create(attrs));
+				return tr;
+			}
 		}
 	}
 	node = parent.root.node;
@@ -227,16 +232,20 @@ Utils.prototype.refreshTr = function(tr, dom, block) {
 		// block.focused cannot be stored here since it is inplace
 		attrs.focused = node.attrs.focused;
 	}
-	if (attrs.id && attrs.id != node.attrs.id) return tr;
+	if (attrs.id && attrs.id != node.attrs.id) {
+		console.warn("Cannot refresh, node id do not match", attrs.id, node.attrs.id);
+		return tr;
+	}
 	var selectedNode = sel.from === pos && sel.node;
 	try {
 		tr.setNodeMarkup(pos, null, attrs);
 	} catch(ex) {
 		// ignore
+		console.warn(ex);
 		selectedNode = false;
 	}
 	if (selectedNode) {
-		tr.setSelection(new State.NodeSelection(tr.doc.resolve(pos)));
+		tr.setSelection(State.NodeSelection.create(tr.doc, pos));
 	}
 	return tr;
 };
@@ -461,12 +470,23 @@ Utils.prototype.selectionParents = function(tr, sel) {
 };
 
 Utils.prototype.canMark = function(sel, nodeType) {
-	var state = this.view.state;
-	var can = sel.$from.depth == 0 ? state.doc.type.allowsMarkType(nodeType) : false;
+	const state = this.view.state;
+	const context = parseContext(nodeType.spec.element && nodeType.spec.element.context);
+	let can = sel.$from.depth == 0 ? state.doc.type.allowsMarkType(nodeType) : false;
 	try {
-		state.doc.nodesBetween(sel.from, sel.to, function(node) {
+		state.doc.nodesBetween(sel.from, sel.to, function(node, pos) {
 			if (can) return false;
-			can = node.inlineContent && node.type.allowsMarkType(nodeType);
+			if (node.inlineContent && node.type.allowsMarkType(nodeType)) {
+				if (context) {
+					const $pos = state.doc.resolve(pos);
+					for (let d = $pos.depth; d >= 0; d--) {
+						can = checkContext(context, $pos.node(d).type, d >= $pos.depth - 1);
+						if (can) break;
+					}
+				} else {
+					can = true;
+				}
+			}
 		});
 	} catch(ex) {
 		// can fail in some circumstances
@@ -475,14 +495,14 @@ Utils.prototype.canMark = function(sel, nodeType) {
 };
 
 Utils.prototype.canInsert = function($pos, nodeType, all, after) {
-	var context = parseContext(nodeType.spec.element && nodeType.spec.element.context);
-	var contextOk = !context;
-	var found = false;
-	var ret = {};
-	for (var d = $pos.depth; d >= 0; d--) {
-		var from = after ? $pos.indexAfter(d) : $pos.index(d);
-		var to = from;
-		var node = $pos.node(d);
+	const context = parseContext(nodeType.spec.element && nodeType.spec.element.context);
+	let contextOk = !context;
+	let found = false;
+	const ret = {};
+	for (let d = $pos.depth; d >= 0; d--) {
+		let from = after ? $pos.indexAfter(d) : $pos.index(d);
+		let to = from;
+		const node = $pos.node(d);
 		if (!found) {
 			if (d == $pos.depth) {
 				if ($pos.nodeAfter && $pos.nodeAfter.type.name == "_") {
@@ -508,7 +528,7 @@ Utils.prototype.canInsert = function($pos, nodeType, all, after) {
 			}
 		}
 		if (found && context) {
-			if (checkContext(context, node.type, $pos, d)) {
+			if (checkContext(context, node.type, d >= $pos.depth - 1)) {
 				contextOk = true;
 				break;
 			}
@@ -528,7 +548,7 @@ function parseContext(context) {
 	return list;
 }
 
-function checkContext(list, type, $pos, d) {
+function checkContext(list, type, last) {
 	// does not check nested contexts
 	var cands = type.spec.group ? type.spec.group.split(' ') : [];
 	cands.push(type.name);
@@ -541,7 +561,7 @@ function checkContext(list, type, $pos, d) {
 				return false;
 			}
 		} else {
-			if (cands.includes(last) && d >= $pos.depth - 1) return true;
+			if (cands.includes(last) && last) return true;
 			else return false;
 		}
 	});
@@ -627,14 +647,14 @@ Utils.prototype.toggleMark = function(type, attrs) {
 
 Utils.prototype.extendUpdateMark = function(tr, from, to, mark, attrs) {
 	var hadIt = false;
-	if (from != to && tr.doc.rangeHasMark(from, to, mark.type)) {
+	if (from != to && tr.doc.rangeHasMark(from, to, mark)) {
 		hadIt = true;
 	}
-	while (tr.doc.rangeHasMark(from - 1, from, mark.type)) {
+	while (tr.doc.rangeHasMark(from - 1, from, mark)) {
 		hadIt = true;
 		from--;
 	}
-	while (tr.doc.rangeHasMark(to, to + 1, mark.type)) {
+	while (tr.doc.rangeHasMark(to, to + 1, mark)) {
 		hadIt = true;
 		to++;
 	}
@@ -645,25 +665,6 @@ Utils.prototype.extendUpdateMark = function(tr, from, to, mark, attrs) {
 	}
 	return [from, to];
 };
-
-Utils.prototype.fragmentApply = fragmentApply;
-
-function fragmentApply(frag, fun) {
-	var list = [];
-	frag.forEach(function(child) {
-		var copy;
-		if (child.isText) {
-			copy = child.copy(child.text.slice());
-		} else {
-			copy = child.copy(fragmentApply(child.content, fun));
-		}
-		var added = fun(copy, list);
-		if (!added) {
-			list.push(copy);
-		}
-	});
-	return Model.Fragment.fromArray(list);
-}
 
 Utils.prototype.serializeHTML = function(dom, children) {
 	var html;

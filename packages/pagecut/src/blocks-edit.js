@@ -31,6 +31,23 @@ Blocks.prototype.mutate = function(node, data) {
 	view.dispatch(tr);
 };
 
+Blocks.prototype.setStandalone = function (block, val) {
+	if (val == block.standalone) return;
+	if (!val) {
+		// force new id for this block and its descendants by id-plugin
+		var copy = this.copy(block);
+		copy.focused = block.focused;
+		block = copy;
+	}
+	block.standalone = val;
+	var nodes = this.domQuery(block.id, { all: true });
+	var tr = this.view.state.tr;
+	nodes.forEach((node) => {
+		this.view.utils.refreshTr(tr, node, block);
+	});
+	this.view.dispatch(tr);
+};
+
 Blocks.prototype.create = function(type) {
 	return this.view.element(type).create();
 };
@@ -64,7 +81,7 @@ Blocks.prototype.toAttrs = function(block) {
 	return attrs;
 };
 
-Blocks.prototype.serializeTo = function(parent, el, ancestor) {
+Blocks.prototype.serializeTo = function(parent, el, ancestor, blocks, parentDef={}) {
 	if (!el || typeof el == "string") el = this.view.element(el || parent.type);
 
 	/*
@@ -80,22 +97,26 @@ Blocks.prototype.serializeTo = function(parent, el, ancestor) {
 	if (parent.virtual && !parent.standalone) {
 		throw new Error("A virtual block must be standalone");
 	}
-	if (ancestor && parent.id) {
+
+	if (ancestor && ancestor.blocks && parent.id && parent.id != ancestor.id) {
 		ancestor.blocks[parent.id] = parent;
 	}
 
 	if (el.standalone || parent.standalone) {
 		ancestor = parent;
 	}
-	if (parent == ancestor) {
+
+	if (parent == ancestor && !parent.blocks) {
 		parent.blocks = {};
 	}
 
 	var contents = parent.content;
-	parent.content = {};
+	if (!contents) contents = parent.content = {};
 
 	el.contents.each({content: contents}, (content, def) => {
-		if (!content || typeof content == "string") {
+		if (!content) return;
+		if (typeof content == "string") {
+			el.contents.set(parent, def.id, content);
 			return;
 		}
 		if (parent.standalone && Array.isArray(content)) {
@@ -105,25 +126,33 @@ Blocks.prototype.serializeTo = function(parent, el, ancestor) {
 		content = content.cloneNode(true);
 		var node, div, id, type, block, parentNode;
 		var list = [], blockEl;
-		while ((node = content.querySelector('[block-type]'))) {
+		while ((node = content.querySelector('[block-type],[block-id]'))) {
 			type = node.getAttribute('block-type');
 			parentNode = node.parentNode;
 			blockEl = this.view.element(type);
 			id = node.getAttribute('block-id');
 			if (id) {
-				block = this.store[id];
-				if (!block) {
-					parentNode.removeChild(node);
-					console.warn("block", type, "not found", id, "while serializing");
-					continue;
-				}
-				block = this.copy(block);
-				if (blockEl.unmount) {
-					blockEl.unmount(block, node, this.view);
-				}
 				div = content.ownerDocument.createElement(node.nodeName);
 				parentNode.replaceChild(div, node);
-				reassignContent(block, blockEl, node);
+				block = this.store[id];
+				if (!block) {
+					// parentNode.removeChild(node);
+					// console.warn("block", type, "not found", id, "while serializing");
+				} else {
+					let copy = blocks[id];
+					if (!copy) {
+						copy = blocks[id] = this.copy(block);
+					}
+					block = copy;
+					if (blockEl) {
+						if (blockEl.unmount) {
+							blockEl.unmount(block, node, this.view);
+						}
+						reassignContent(block, blockEl, node); // not sure why this is necessary
+					} else {
+						// these are not mounted, ignore them
+					}
+				}
 			} else {
 				block = {type: type};
 				div = node;
@@ -131,10 +160,16 @@ Blocks.prototype.serializeTo = function(parent, el, ancestor) {
 				div.removeAttribute('block-focused');
 			}
 			if (def.virtual) {
-				block.virtual = true;
+				block.virtual = parent.id;
 			}
-			if (!id || this.serializeTo(block, blockEl, ancestor)) {
-				if (id && type == block.type) type = null;
+			if (!id || !block || this.serializeTo(block, blockEl, ancestor, blocks, def)) {
+				if (id) {
+					if (block) {
+						if (block.type == type) type = null;
+					} else {
+						parent.blocks[id] = {id: id, ignore: true};
+					}
+				}
 				list.push({node: div, id: id, type: type});
 			} else {
 				parentNode.removeChild(div);
@@ -150,16 +185,11 @@ Blocks.prototype.serializeTo = function(parent, el, ancestor) {
 		});
 		el.contents.set(parent, def.id, this.view.utils.serializeHTML(content, true));
 	});
-	if (Object.keys(parent.content).length == 0) delete parent.content;
+
+	if (Object.keys(contents).length == 0) delete parent.content;
 
 	if (el.inline && !el.leaf) {
 		if (!el.contents.get(parent)) return; // TODO find the meaning of this
-	}
-	if (parent == ancestor) {
-		parent.children = Object.keys(parent.blocks).map(function(kid) {
-			return parent.blocks[kid];
-		});
-		delete parent.blocks;
 	}
 	return parent;
 };
@@ -184,13 +214,15 @@ function reassignContent(block, elt, dom) {
 }
 
 Blocks.prototype.to = function() {
-	var view = this.view;
-	var id = view.dom.getAttribute('block-id');
-	var contentName = view.dom.getAttribute("block-content");
-	var copy = this.copy(this.store[id]);
+	const view = this.view;
+	const id = view.dom.getAttribute('block-id');
+	const contentName = view.dom.getAttribute("block-content");
+	const copies = {};
+	const copy = this.copy(this.store[id]);
+	copies[id] = copy;
 	var el = view.element(copy.type);
 	if (contentName) el.contents.set(copy, contentName, view.utils.getDom());
-	return this.serializeTo(copy, view.dom.getAttribute('block-type'));
+	return this.serializeTo(copy, view.dom.getAttribute('block-type'), null, copies);
 };
 
 

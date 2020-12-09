@@ -6,7 +6,7 @@
     "linebreak-style": [2, "unix"],
     "semi": [2, "always"],
     "no-console": 0,
-    "no-unused-vars": ["error", { "args": "none" }]
+    "no-unused-vars": 1
   },
   "env": {
     "browser": true,
@@ -17,6 +17,6 @@
   "globals": {
     "Page": true,
     "Pageboard": true,
-    "HTMLCustomElement": true
+    "VirtualHTMLElement": true
   }
 }

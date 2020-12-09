@@ -16,6 +16,7 @@ function htmlToFrag(str, {doc, ns}) {
 
 function Blocks(view, opts) {
 	this.view = view;
+	this.initial = {};
 	this.store = opts.store || {};
 	if (opts.genId) this.genId = opts.genId;
 }
@@ -77,8 +78,6 @@ Blocks.prototype.copy = function(block) {
 
 Blocks.prototype.merge = function(el, dom, block) {
 	if (dom.nodeType != Node.ELEMENT_NODE) return;
-	if (el.inplace) return;
-	if (!block.content) return;
 	el.contents.each(block, function(content, def) {
 		if (!content) return;
 		var node;
@@ -93,6 +92,9 @@ Blocks.prototype.merge = function(el, dom, block) {
 			content = node.ownerDocument.createTextNode(content);
 		} else if (content.nodeType == Node.DOCUMENT_FRAGMENT_NODE) {
 			content = node.ownerDocument.importNode(content, true);
+		} else if (content.nodeType == Node.ELEMENT_NODE) {
+			console.warn("already merged", content == node);
+			return;
 		} else {
 			console.warn("cannot merge content", content);
 			return;
@@ -113,6 +115,9 @@ Blocks.prototype.renderFrom = function(block, blocks, store, opts) {
 	if (!blocks) blocks = {};
 	if (!opts) opts = {};
 	var el = view.element(opts.element || opts.type || block.type);
+	if (block.id) {
+		this.initial[block.id] = block;
+	}
 	block = this.mount(el, block, blocks);
 	if (!block) return;
 	if (block.id) {
@@ -136,19 +141,26 @@ Blocks.prototype.renderFrom = function(block, blocks, store, opts) {
 		});
 		delete block.children;
 	}
+	// if (block.blocks) {
+	// 	Object.assign(blocks, block.blocks);
+	// }
 	if (!fragment || !fragment.querySelectorAll) return;
 
-	var fragments = [fragment];
-	Array.prototype.forEach.call(fragment.querySelectorAll('template'), function(node) {
+	var fragments = [fragment.nodeName == "BODY" ? fragment.parentNode : fragment];
+	Array.prototype.forEach.call(fragment.querySelectorAll('template'), (node) => {
 		fragments.push(node.content);
-	}, this);
-	fragments.forEach(function(fragment) {
-		Array.prototype.forEach.call(fragment.querySelectorAll('[block-id]'), function(node) {
+	});
+	fragments.forEach((fragment) => {
+		if (opts.strip) Array.prototype.forEach.call(fragment.querySelectorAll('[block-data]'), (node) => {
+			node.removeAttribute('block-data');
+		});
+		Array.prototype.forEach.call(fragment.querySelectorAll('[block-id]'), (node) => {
 			var id = node.getAttribute('block-id');
 			if (id === block.id) return;
 			var type = node.getAttribute('block-type');
 			var parent = node.parentNode;
 			var child = blocks[id];
+
 			if (!child) {
 				console.warn("missing block for", parent.nodeName, '>', node.nodeName, id);
 				parent.replaceChild(node.ownerDocument.createTextNode('·'), node);
@@ -169,8 +181,8 @@ Blocks.prototype.renderFrom = function(block, blocks, store, opts) {
 				}
 			}
 			parent.replaceChild(frag, node);
-		}, this);
-	}, this);
+		});
+	});
 	return fragment;
 };
 

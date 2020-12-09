@@ -19,18 +19,15 @@
   "homepage": "https://github.com/pageboard/client#readme",
   "devDependencies": {
     "@pageboard/pagecut": "^0.8.30",
-    "@ungap/custom-elements-builtin": "^0.2.10",
+    "@webreflection/custom-elements": "^0.2.9",
     "debounce": "^1.1.0",
-    "document-register-element": "^1.14.3",
     "matchdom": "^5.10.1",
     "postinstall-browserify": "^0.6.0",
     "postinstall-patch": "^0.7.1",
-    "window-page": "^10.4.1"
+    "window-page": "^10.8.1"
   },
   "prepare": {
-    "@ungap/custom-elements-builtin": "patch patches/builtin-innerhtml.patch",
-    "document-register-element/build/document-register-element.max.js": "copy lib/custom-elements.js",
-    "@ungap/custom-elements-builtin/index.js": "copy lib/custom-elements-builtin.js",
+    "@webreflection/custom-elements/index.js": "copy lib/custom-elements.js",
     "window-page/window-page.js": "copy lib/",
     "./src/pageboard.js": "browserify --standalone=Pageboard lib/"
   },

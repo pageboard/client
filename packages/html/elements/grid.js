@@ -19,9 +19,6 @@ exports.grid = {
 			title: 'Responsive',
 			nullable: true,
 			anyOf: [{
-				title: 'Disable',
-				const: null
-			}, {
 				title: 'Stackable',
 				const: 'stackable'
 			}, {

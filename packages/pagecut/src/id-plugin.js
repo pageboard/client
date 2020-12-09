@@ -1,3 +1,5 @@
+const { State } = require("./editor");
+
 module.exports = function(view) {
 	var count = 0;
 	setInterval(function() {
@@ -27,6 +29,7 @@ module.exports = function(view) {
 		var modified = false;
 		var ids = {};
 		var lastMark;
+		var sel = tr.selection;
 		root.descendants(function(node, pos, parent) {
 			pos += offset;
 			if (node.type.name == "_" && parent.childCount > 1) {
@@ -126,6 +129,14 @@ module.exports = function(view) {
 				return false;
 			}
 		});
+		if (modified) {
+			if (sel.node) {
+				sel = State.NodeSelection.create(tr.doc, sel.from);
+			} else {
+				sel = State.TextSelection.create(tr.doc, sel.from, sel.to);
+			}
+			tr.setSelection(sel);
+		}
 		return modified;
 	}
 };

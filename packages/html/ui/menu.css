@@ -40,7 +40,7 @@
 	background-color:white;
 }
 .popup.item:focus > .placer > div,
-.popup.item:hover > .placer > div,
+.popup.item:hover:not(.inactive) > .placer > div,
 .popup.item[block-focused] > .placer > div {
 	display: flex;
 	flex-direction: column;

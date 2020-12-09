@@ -1,4 +1,4 @@
-class HTMLElementInputFile extends HTMLCustomElement {
+class HTMLElementInputFile extends VirtualHTMLElement {
 	captureClick(e, state) {
 		var input = this.querySelector('input[type="text"]');
 		if (!input) return;
@@ -61,7 +61,7 @@ class HTMLElementInputFile extends HTMLCustomElement {
 				delete self._promise;
 			}
 			if (file.files.length == 0) return resolve(); // or reject ?
-			
+
 			var fd = new FormData();
 			for (var i=0; i < file.files.length; i++) {
 				fd.append("files", file.files[i]);
@@ -108,5 +108,5 @@ class HTMLElementInputFile extends HTMLCustomElement {
 }
 
 Page.setup(function() {
-	HTMLCustomElement.define('element-input-file', HTMLElementInputFile);
+	VirtualHTMLElement.define('element-input-file', HTMLElementInputFile);
 });

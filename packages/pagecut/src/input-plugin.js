@@ -11,6 +11,7 @@ function InputPlugin(view, options) {
 	this.clipboardTextParser = this.clipboardTextParser.bind(this);
 	this.transformPasted = this.transformPasted.bind(this);
 	this.handlePaste = this.handlePaste.bind(this);
+
 	this.view = view;
 }
 
@@ -43,18 +44,26 @@ InputPlugin.prototype.handleTextInput = function(view, from, to, text) {
 
 InputPlugin.prototype.transformPasted = function(slice) {
 	var view = this.view;
-	view.utils.fragmentApply(slice.content, function(node) {
+	var sParent;
+	// TODO can't paste standalone from another site
+	slice.content.descendants(function (node, pos, parent) {
 		var focusable = node.type.defaultAttrs.focused === null;
 		if (focusable) node.attrs.focused = null;
+		var sa = node.attrs.standalone;
+		if (sa) sParent = parent;
+		else if (sParent && sParent == parent) sParent = null;
 		var id = node.attrs.id;
-		if (!id) return; // keep id so standalones children can keep their id
-		var block = view.blocks.get(id);
-		if (block && focusable) {
-			delete block.focused;
+		if (id) {
+			var block = view.blocks.get(id);
+			if (!block && !sa && !sParent) {
+				// not a standalone or not a child of one
+				delete node.attrs.id;
+			}
+			if (block && focusable) {
+				delete block.focused;
+			}
 		}
 	});
-	// disabled because slice is already badly parsed
-	// slice.content = view.utils.fill(slice.content);
 	return slice;
 };
 

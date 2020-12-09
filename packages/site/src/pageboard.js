@@ -49,6 +49,11 @@ exports.bundle = function(loader, state) {
 		if (res.meta) metas.push(res.meta);
 		if (res.metas) metas = metas.concat(res.metas);
 		return Promise.all(metas.map(function(meta) {
+			if (meta.group == "page" && !res.meta) {
+				// restores an asymmetry between route bundle load
+				// and navigational bundle load
+				res.meta = meta;
+			}
 			return exports.load.meta(meta);
 		})).then(function() {
 			return res;
@@ -80,7 +85,7 @@ exports.bundle = function(loader, state) {
 	});
 };
 
-window.HTMLCustomElement = require('./HTMLCustomElement');
+window.VirtualHTMLElement = require('./VirtualHTMLElement');
 
 Page.init(function(state) {
 	state.vars = {};
@@ -117,12 +122,22 @@ Page.patch(function(state) {
 				Status: '302 Bad Parameters',
 				Location: Page.format({pathname: state.pathname, query})
 			});
-			state.replace({pathname: state.pathname, query});
+			state.requery = query;
 		} else if (missing.length > 0) {
 			exports.equivs({
 				Status: '400 Missing Parameters'
 			});
 		}
+	});
+});
+
+Page.paint(function(state) {
+	if (state.requery) state.replace({
+		query: state.requery,
+		pathname: state.pathname
+	}, {
+		// no need to get the data again, though
+		data: state.data
 	});
 });
 

@@ -1,4 +1,4 @@
-class HTMLElementGoogleTranslate extends HTMLCustomElement {
+class HTMLElementGoogleTranslate extends VirtualHTMLElement {
 	setup(state) {
 		if (this.style) {
 			Object.assign(document.body.style, this.style);
@@ -9,7 +9,7 @@ class HTMLElementGoogleTranslate extends HTMLCustomElement {
 				if (mut.attributeName == "style") {
 					var s = mut.target.style;
 					var top = parseInt(s.top);
-					this.shown = !isNaN(top) && top > 10;
+					this.shown = !Number.isNaN(top) && top > 10;
 					if (this.shown) {
 						this.style = {
 							minHeight: s.minHeight,
@@ -25,27 +25,24 @@ class HTMLElementGoogleTranslate extends HTMLCustomElement {
 			});
 		});
 		this.observer.observe(document.body, {attributes: true});
+	}
+	paint(state) {
 		this.translate = Page.storage.getCookies().googtrans;
 		if (this.translate) {
-			this.show(state);
+			state.consent(this);
 		}
 	}
-	show(state) {
-		state.consent((agreed) => {
-			if (document.body.isContentEditable) return;
-			if (!agreed) {
-				state.consent.get();
-				return;
-			}
-			if (window.google && window.google.translate) delete window.google.translate;
-			this.id = `id${Date.now()}`;
-			var cb = `HTMLElementGoogleTranslate_${this.id}`;
-			window[cb] = this.cb.bind(this, state);
-			var script = document.createElement('script');
-			script.src = `https://translate.google.com/translate_a/element.js?cb=${cb}`;
-			this.script = script;
-			document.head.appendChild(script);
-		});
+	consent(state) {
+		const agreed = state.scope.$consent == "yes";
+		if (!agreed || document.body.isContentEditable) return;
+		if (window.google && window.google.translate) delete window.google.translate;
+		this.id = `id${Date.now()}`;
+		var cb = `HTMLElementGoogleTranslate_${this.id}`;
+		window[cb] = this.cb.bind(this, state);
+		var script = document.createElement('script');
+		script.src = `https://translate.google.com/translate_a/element.js?cb=${cb}`;
+		this.script = script;
+		document.head.appendChild(script);
 	}
 	setClass() {
 		document.documentElement.classList.toggle('google-translate-shown', !!this.shown);
@@ -80,12 +77,12 @@ class HTMLElementGoogleTranslate extends HTMLCustomElement {
 	handleClick(e, state) {
 		e.stopPropagation();
 		e.preventDefault();
-		this.show(state);
+		state.reconsent(this);
 		window.scrollTo({top: 0});
 	}
 }
 
 Page.setup(function() {
-	HTMLCustomElement.define('element-google-translate', HTMLElementGoogleTranslate);
+	VirtualHTMLElement.define('element-google-translate', HTMLElementGoogleTranslate);
 });
 

@@ -1,4 +1,4 @@
-class HTMLElementSelectOption extends HTMLCustomElement {
+class HTMLElementSelectOption extends VirtualHTMLElement {
 	update() {
 		var el = this.closest('element-select');
 		if (el) {
@@ -9,5 +9,5 @@ class HTMLElementSelectOption extends HTMLCustomElement {
 }
 
 Page.setup(function() {
-	// HTMLCustomElement.define('element-select-option', HTMLElementSelectOption);
+	// VirtualHTMLElement.define('element-select-option', HTMLElementSelectOption);
 });

@@ -29,6 +29,7 @@ exports.sitemap = {
 		return {
 			title: schema.title,
 			icon: schema.icon,
+			standalone: true,
 			properties: Object.assign({
 				leaf: {
 					type: 'boolean',

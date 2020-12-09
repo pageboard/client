@@ -1,13 +1,20 @@
 {
   "rules": {
-    "indent": [2, "tab", {
-      "MemberExpression": 0,
-      "outerIIFEBody": 0
+    "indent": ["error", "tab", {
+      "MemberExpression": "off",
+      "outerIIFEBody": "off"
     }],
-    "linebreak-style": [2, "unix"],
-    "semi": [2, "always"],
-    "no-console": 0,
-    "no-unused-vars": ["warn", { "args": "none" }]
+    "linebreak-style": ["error", "unix"],
+    "semi": ["error", "always"],
+    "no-multi-spaces": "warn",
+    "space-infix-ops": "warn",
+    "no-console": "warn",
+    "no-empty": "warn",
+    "no-unused-vars": ["warn", { "args": "none" }],
+    "no-restricted-globals": ["error", {
+      "name": "isNaN",
+      "message": "Use Number.isNaN"
+    }]
   },
   "env": {
     "browser": true,
@@ -18,6 +25,6 @@
   "globals": {
     "Page": true,
     "Pageboard": true,
-    "HTMLCustomElement": true
+    "VirtualHTMLElement": true
   }
 }

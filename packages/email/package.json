@@ -32,8 +32,8 @@
     "europa": "^4.0.0",
     "foundation-emails": "^2.2.1",
     "inlineresources": "^1.0.0",
-    "juice": "^5.0.1",
-    "postinstall": "^0.6.0",
+    "juice": "^6.0.0",
+    "postinstall": "^0.7.0",
     "postinstall-browserify": "^0.6.0"
   },
   "prepare": {

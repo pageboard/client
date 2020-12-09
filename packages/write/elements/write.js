@@ -20,7 +20,7 @@ exports.write = {
 		<div class="ui bound bottom sticky wide notifications"></div>
 	</div>
 	<div id="pageboard-write" class="ui basic segment">
-		<div id="store" class="ui inverted wide mini menu">
+		<div id="store" class="ui inverted wide mini menu waiting">
 			<div class="icon menu">
 				<a class="item" data-command="save">
 					<i class="checkmark icon"></i>

@@ -1,4 +1,4 @@
-class HTMLElementAccordion extends HTMLCustomElement {
+class HTMLElementAccordion extends VirtualHTMLElement {
 	handleClick(e) {
 		var title = e.target.closest('.title');
 		if (!title) return;
@@ -35,7 +35,7 @@ class HTMLElementAccordion extends HTMLCustomElement {
 HTMLElementAccordion.folds = {};
 
 Page.setup(function(state) {
-	HTMLCustomElement.define('element-accordion', HTMLElementAccordion);
+	VirtualHTMLElement.define('element-accordion', HTMLElementAccordion);
 	HTMLElementAccordion.refreshAll();
 });
 

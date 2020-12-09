@@ -88,6 +88,22 @@ function install(el, scope) {
 		} else {
 			el.fusable = true;
 		}
+		if (el.fragments) el.fragments.forEach((obj) => {
+			let target;
+			if (obj.type === 'doc') target = scope.$element;
+			else if (obj.type) target = scope.$elements[obj.type] || {};
+			else target = el;
+			if (!target.dom) {
+				console.warn("dom not found for fragment", obj.type, el.name);
+			} else {
+				let node = target.dom.querySelector(obj.path);
+				if (node) {
+					node.insertAdjacentHTML(obj.position || 'afterend', obj.html);
+				} else {
+					console.warn("path not found", obj.path, "in", el.name, el.html);
+				}
+			}
+		});
 		if (el.install && scope.$element) {
 			el.install.call(el, scope);
 		}
@@ -105,7 +121,7 @@ function install(el, scope) {
 		});
 		["id", "parent", "child", "parents", "children", "updated_at", "created_at", "lock"].forEach(function(name) {
 			var val = block[name];
-			if (val !== undefined) rscope['$'+name] = val;
+			if (val !== undefined) rscope['$' + name] = val;
 		});
 
 		if (el.filters) rscope.$filters = Object.assign({}, rscope.$filters, el.filters);

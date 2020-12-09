@@ -80,7 +80,7 @@ class Contents {
 		} else if (content && !this.size) {
 			delete block.content;
 		}
-		if (content && this.unnamed) {
+		if (content && this.unnamed && !this.list[0].virtual) {
 			var name = Object.keys(content)[0];
 			if (name) {
 				content[""] = content[name];
@@ -92,5 +92,17 @@ class Contents {
 	}
 	clone() {
 		return new Contents(this.list.slice().map((obj) => Object.assign({}, obj)));
+	}
+	prune(block) {
+		var copy = {};
+		var content = block.content;
+		if (content) this.list.forEach((def) => {
+			if (!def.virtual) {
+				var cont = content[def.id || ""];
+				if (cont !== undefined) copy[def.id || ""] = cont;
+			}
+		});
+		if (block.virtual && Object.keys(copy).length == 0) return;
+		else return copy;
 	}
 }

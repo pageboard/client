@@ -48,7 +48,7 @@ exports.segment = {
 		attached: {
 			title: 'Attached',
 			anyOf: [{
-				type: 'null',
+				const: null,
 				title: 'no',
 			}, {
 				const: 'top',
@@ -60,24 +60,28 @@ exports.segment = {
 				const: 'bottom',
 				title: 'bottom'
 			}]
-		}
+		},
+		align: {
+			title: 'Align',
+			anyOf: [{
+				const: null,
+				title: "left",
+				icon: '<i class="icon align left"></i>'
+			}, {
+				const: "center",
+				title: "center",
+				icon: '<i class="icon align center"></i>'
+			}, {
+				const: "right",
+				title: "right",
+				icon: '<i class="icon align right"></i>'
+			}]
+		},
 	},
 	contents: "block+",
 	group: "block",
 	icon: '<b class="icon">Seg</b>',
-	html: '<div class="ui segment"></div>',
-	fuse: function(node, d) {
-		Object.keys(d).forEach(function(key) {
-			if (this.properties[key].type == 'boolean' && d[key]) {
-				node.classList.add(key);
-			}
-		}, this);
-		if (d.attached) {
-			if (d.attached != "both")	node.classList.add(d.attached);
-			node.classList.add('attached');
-		}
-		return node;
-	},
+	html: '<div class="ui [raised|?] [disabled|?] [inverted|?] [padded|?] [compact|?] [circular|?] [basic|?] [attached|eq:both:%20|post:%20attached] [align|post:%20aligned] segment"></div>',
 	stylesheets: [
 		'../lib/components/segment.css'
 	]
@@ -123,7 +127,8 @@ exports.heading = {
 		},
 		id: {
 			nullable: true,
-			type: 'string'
+			type: 'string',
+			format: 'id'
 		}
 	},
 	contents: {

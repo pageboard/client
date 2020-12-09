@@ -67,12 +67,8 @@ else if ('webkitHidden' in document) {
 /*
  * 3. Utility functions
  */
-function extend (targetObj, sourceObject) {
-	for (var key in sourceObject) {
-		if (Object.prototype.hasOwnProperty.call(sourceObject, key)) {
-			targetObj[key] = sourceObject[key];
-		}
-	}
+function extend(targetObj, sourceObject) {
+	Object.assign(targetObj, sourceObject);
 }
 
 function parseNumeric (val) {
@@ -103,7 +99,9 @@ class Sticky {
 
 		this._node = node;
 		this._observer = new ResizeObserver((entries, observer) => {
-			this._fastCheck();
+			window.requestAnimationFrame(() => {
+				this._fastCheck();
+			});
 		});
 		this._stickyMode = null;
 		this._active = false;
@@ -139,7 +137,7 @@ class Sticky {
 		 * 2. Check if the node can be activated
 		 */
 		if (
-			isNaN(parseFloat(nodeComputedProps.top)) ||
+			Number.isNaN(parseFloat(nodeComputedProps.top)) ||
 			nodeComputedProps.display == 'table-cell' ||
 			nodeComputedProps.display == 'none'
 		) return;
@@ -159,7 +157,7 @@ class Sticky {
 		 * 4. Get necessary node parameters
 		 */
 		const referenceNode = node.parentNode;
-		const parentNode = shadowRootExists && referenceNode instanceof ShadowRoot? referenceNode.host: referenceNode;
+		const parentNode = shadowRootExists && referenceNode instanceof ShadowRoot ? referenceNode.host: referenceNode;
 		const nodeWinOffset = node.getBoundingClientRect();
 		const parentWinOffset = parentNode.getBoundingClientRect();
 		const parentComputedStyle = getComputedStyle(parentNode);
@@ -178,7 +176,7 @@ class Sticky {
 		this._offsetToParent = {
 			top: nodeWinOffset.top - parentWinOffset.top - parseNumeric(parentComputedStyle.borderTopWidth),
 			left: nodeWinOffset.left - parentWinOffset.left - parseNumeric(parentComputedStyle.borderLeftWidth),
-			right: -nodeWinOffset.right + parentWinOffset.right - parseNumeric(parentComputedStyle.borderRightWidth)
+			right: -nodeWinOffset.right + parentWinOffset.right - parseNumeric(parentComputedStyle.borderRightWidth) - parentNode.offsetWidth + parentNode.clientWidth
 		};
 		this._styles = {
 			position: originalPosition,
@@ -241,10 +239,11 @@ class Sticky {
 			borderSpacing: 0,
 			fontSize: '1em',
 			position: 'static',
-			flex: 'none'
+			flex: 'none',
+			width: nodeWinOffset.right - nodeWinOffset.left + 'px',
+			height: nodeWinOffset.bottom - nodeWinOffset.top + 'px'
 		});
 
-		this._recalcClone(nodeWinOffset);
 
 		if (!clone.node.parentNode) referenceNode.insertBefore(clone.node, node);
 		clone.docOffsetTop = getDocOffsetTop(clone.node);
@@ -263,7 +262,7 @@ class Sticky {
 	_recalcPosition () {
 		if (!this._active || this._removed) return;
 
-		const stickyMode = scroll.top <= this._limits.start? 'start': scroll.top >= this._limits.end? 'end': 'middle';
+		const stickyMode = scroll.top <= this._limits.start ? 'start' : scroll.top >= this._limits.end? 'end': 'middle';
 
 		if (this._stickyMode == stickyMode) return;
 

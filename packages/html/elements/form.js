@@ -38,7 +38,7 @@ exports.query_form = {
 	},
 	contents: 'block+',
 	tag: 'form[method="get"]',
-	html: `<form is="element-form" method="get"
+	html: `<form is="element-form" method="get" autocomplete="off"
 		redirection="[redirection.url][redirection.parameters|query|url]"
 		class="ui form"></form>`,
 	stylesheets: [

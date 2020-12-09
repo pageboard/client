@@ -86,7 +86,7 @@ function updatePage(state) {
 	if (this.closed) return;
 	var store = this.controls.store;
 	if (!store) return;
-	var page = store.unsaved || store.initial;
+	var page = (store.unsaved || store.initial)[store.rootId];
 	if (!page || !page.data) return;
 	var title = (page.data.title || "") + (store.unsaved ? '*' : '');
 	var path = page.data.url;
@@ -214,6 +214,7 @@ Pageboard.Editor = function Editor(win, state) {
 		}
 	});
 	editor.controls = controls;
+	controls.store.preinitial = editor.blocks.initial = view.blocks.initial;
 	var $store = state.data.$store;
 	if ($store) {
 		controls.store.reset($store);

@@ -1,6 +1,11 @@
 class HTMLElementInputRange extends HTMLInputElement {
 	static parse(x) {
-		return (x || '').split('~').map((n) => parseFloat(n));
+		return (x == null ? '' : x)
+			.split('⩽')
+			.map((n) => {
+				n = parseFloat(n);
+				return Number.isNaN(n) ? null : n;
+			});
 	}
 	static get defaults() {
 		return {
@@ -25,37 +30,31 @@ class HTMLElementInputRange extends HTMLInputElement {
 		return (this.options || {}).value;
 	}
 	set rangeValue(val) {
-		var str = val.join('~');
 		if (this.options) this.options.value = val;
+		var str = '';
+		if (val.length) str = val[0];
+		if (val.length == 2 && val[1] !== val[0]) str += '⩽' + val[1];
 		this.value = str;
 	}
-	rangeFill(str) {
-		var val = this.rangeNorm(Object.assign(this.options, {
-			value: this.constructor.parse(str)
-		}));
-		this.updateSlider(val);
-		this.rangeValue = str == null ? [] : val;
+	fill(str) {
+		this.rangeValue = this.constructor.parse(str);
+		this.updateSlider();
 	}
-	rangeReset() {
-		this.rangeFill(this.defaultValue);
-	}
-	updateSlider(val) {
+	updateSlider() {
 		var helper = this.helper;
-		if (helper.noUiSlider) {
-			helper.noUiSlider.set(val);
-			helper.classList.toggle('indeterminate', this.options.value == null || isNaN(this.options.value[0]));
+		if (!helper.noUiSlider) return;
+		var [start, stop] = this.options.value || [];
+		var indet = false;
+		if (start == null) {
+			start = this.options.min;
+			indet = true;
 		}
+		if (stop == null) stop = this.options.max;
+		helper.noUiSlider.set([start, stop]);
+		helper.classList.toggle('indeterminate', indet);
 	}
 	patch(state) {
-		this.updateSlider(this.rangeNorm(this.options));
-	}
-	rangeNorm(opts) {
-		var [start, stop] = opts.value;
-		var vals = [isNaN(start) ? opts.min : start];
-		if (opts.multiple) {
-			vals.push(isNaN(stop) ? opts.max : stop);
-		}
-		return vals;
+		this.updateSlider();
 	}
 	setup(state) {
 		var opts = this.options;
@@ -75,10 +74,8 @@ class HTMLElementInputRange extends HTMLInputElement {
 		}).on('change', (values) => {
 			var isInt = parseInt(opts.step) == opts.step;
 			helper.classList.remove('indeterminate');
-			this.rangeFill(values.map((n) => {
-				if (isInt) n = parseInt(n);
-				return n;
-			}).join('~'));
+			if (isInt) values = values.map((n) => parseInt(n));
+			this.rangeValue = values;
 			var e = document.createEvent('HTMLEvents');
 			e.initEvent('change', true, true);
 			this.dispatchEvent(e);
@@ -89,7 +86,7 @@ class HTMLElementInputRange extends HTMLInputElement {
 	}
 	handleEvent(e) {
 		if (e.type == "dblclick" || e.keyCode == 8 || e.keyCode == 46) {
-			this.rangeFill();
+			this.fill();
 			var ne = document.createEvent('HTMLEvents');
 			ne.initEvent('change', true, true);
 			this.dispatchEvent(ne);
@@ -105,6 +102,6 @@ class HTMLElementInputRange extends HTMLInputElement {
 }
 
 Page.ready(function() {
-	HTMLCustomElement.define('element-input-range', HTMLElementInputRange, 'input');
+	VirtualHTMLElement.define('element-input-range', HTMLElementInputRange, 'input');
 });
 

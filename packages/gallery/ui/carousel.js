@@ -1,4 +1,4 @@
-class HTMLElementCarousel extends HTMLCustomElement {
+class HTMLElementCarousel extends VirtualHTMLElement {
 	static get defaults() {
 		return {
 			wrapAround: false,
@@ -19,6 +19,11 @@ class HTMLElementCarousel extends HTMLCustomElement {
 		};
 	}
 
+	init() {
+		this.reload = Pageboard.debounce(this.reload, 100);
+		this.paint = Pageboard.debounce(this.paint, 100);
+	}
+
 	fullview(val) {
 		this.classList.toggle('fullview', !!val);
 		var body = this.ownerDocument.body;
@@ -26,10 +31,7 @@ class HTMLElementCarousel extends HTMLCustomElement {
 		body.classList.toggle('fullview', len >= 1);
 	}
 
-	init() {
-		this.reload = Pageboard.debounce(this.reload, 100);
-		this.resetup = Pageboard.debounce(this.resetup, 100);
-	}
+
 
 	handleClick(e, state) {
 		var node = e.target.closest('a.fullview');
@@ -37,15 +39,16 @@ class HTMLElementCarousel extends HTMLCustomElement {
 			e.stopImmediatePropagation();
 			var query = Object.assign({}, state.query);
 			var keyFv = `${this.id}.fullview`;
-			if (this.options.fullview) {
-				delete query[keyFv];
-			} else {
-				query[keyFv] = true;
-			}
 			var gallery = this.closest('[block-type="gallery"]');
 			if (gallery) {
 				// leaving current mode
 				delete query[`${gallery.id}.mode`];
+				delete query[`${this.id}.index`];
+				delete query[keyFv];
+			} else if (this.options.fullview) {
+				delete query[keyFv];
+			} else {
+				query[keyFv] = true;
 			}
 			state.push({query: query});
 		}
@@ -53,13 +56,9 @@ class HTMLElementCarousel extends HTMLCustomElement {
 
 	patch(state) {
 		this.updateCells();
-		Page.setup((state) => {
-			this.resetup(state);
-		});
 	}
 
 	setup(state) {
-		this.resetup(state);
 		if (!this.itemsObserver) {
 			this.itemsObserver = new MutationObserver((records) => {
 				records.forEach((record) => this.reload(record, state));
@@ -70,7 +69,7 @@ class HTMLElementCarousel extends HTMLCustomElement {
 		}
 	}
 
-	resetup(state) {
+	paint(state) {
 		if (this.widget) this.destroy();
 		var gallery = this.closest('[block-type="gallery"]');
 		if (gallery && gallery.selectedMode != "carousel") return;
@@ -113,7 +112,7 @@ class HTMLElementCarousel extends HTMLCustomElement {
 					});
 				});
 			}
-			if (opts.fullview) {
+			if (opts.fullview || gallery) {
 				state.query[`${this.id}.index`] = index;
 				state.save();
 			} else {
@@ -160,7 +159,7 @@ class HTMLElementCarousel extends HTMLCustomElement {
 	}
 }
 
-class HTMLElementCarouselCell extends HTMLCustomElement {
+class HTMLElementCarouselCell extends VirtualHTMLElement {
 	static get defaults() {
 		return {
 			width: null,
@@ -177,8 +176,8 @@ class HTMLElementCarouselCell extends HTMLCustomElement {
 }
 
 Page.ready(function() {
-	HTMLCustomElement.define('element-carousel-cell', HTMLElementCarouselCell);
-	HTMLCustomElement.define('element-carousel', HTMLElementCarousel);
+	VirtualHTMLElement.define('element-carousel-cell', HTMLElementCarouselCell);
+	VirtualHTMLElement.define('element-carousel', HTMLElementCarousel);
 });
 
 Page.setup(function(state) {

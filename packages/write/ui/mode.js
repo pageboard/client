@@ -9,6 +9,7 @@ Pageboard.Controls.Mode = class Mode {
 		this.html = this.win.document.documentElement;
 		if (this.node) this.node.removeEventListener('click', this);
 		this.node = node.parentNode;
+		this.node.classList.remove('waiting');
 		this.node.addEventListener('click', this);
 	}
 	handleEvent(e) {

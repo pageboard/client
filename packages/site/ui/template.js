@@ -1,4 +1,4 @@
-class HTMLElementTemplate extends HTMLCustomElement {
+class HTMLElementTemplate extends VirtualHTMLElement {
 	static get defaults() {
 		return {
 			action: null
@@ -182,6 +182,6 @@ class HTMLElementTemplate extends HTMLCustomElement {
 	}
 }
 Page.ready(function() {
-	HTMLCustomElement.define('element-template', HTMLElementTemplate);
+	VirtualHTMLElement.define('element-template', HTMLElementTemplate);
 });
 

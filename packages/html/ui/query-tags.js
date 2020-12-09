@@ -1,4 +1,4 @@
-class HTMLElementQueryTags extends HTMLCustomElement {
+class HTMLElementQueryTags extends VirtualHTMLElement {
 	static find(name, value) {
 		var nodes = document.querySelectorAll(`form [name="${name}"]`);
 		return Array.prototype.filter.call(nodes, function(node) {
@@ -35,15 +35,17 @@ class HTMLElementQueryTags extends HTMLCustomElement {
 					if (group && group.firstElementChild.matches('label')) {
 						prefix = group.firstElementChild.textContent + ' ';
 					}
-					var suffix = '';					
+					var suffix = '';
 					if (control.rangeValue) {
 						val = control.rangeValue;
-						if (val.length == 2) {
+						if (val[0] == val[1]) {
+							suffix = ' ＝ ' + val[0];
+						} else {
 							prefix = val[0] + ' ⩽ ';
 							suffix = ' ⩽ ' + val[1];
-						} else {
-							suffix = ' = ' + val[0];
 						}
+					} else if (control.type == "text") {
+						suffix = ': "' + control.value + '"';
 					}
 					labels.insertAdjacentHTML('beforeEnd', `<a class="ui simple mini compact labeled icon button" data-name="${name}" data-value="${control.value}">
 						<i class="delete icon"></i>
@@ -72,6 +74,6 @@ class HTMLElementQueryTags extends HTMLCustomElement {
 }
 
 Page.ready(function() {
-	HTMLCustomElement.define('element-query-tags', HTMLElementQueryTags);
+	VirtualHTMLElement.define('element-query-tags', HTMLElementQueryTags);
 });
 

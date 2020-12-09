@@ -1,4 +1,4 @@
-class HTMLElementInputDateSlot extends HTMLCustomElement {
+class HTMLElementInputDateSlot extends VirtualHTMLElement {
 	static get observedAttributes() {
 		return ['start', 'end', 'time-zone'];
 	}
@@ -75,5 +75,5 @@ class HTMLElementInputDateSlot extends HTMLCustomElement {
 	}
 }
 
-HTMLCustomElement.define('element-input-date-slot', HTMLElementInputDateSlot);
+VirtualHTMLElement.define('element-input-date-slot', HTMLElementInputDateSlot);
 

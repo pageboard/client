@@ -94,13 +94,21 @@ input-map {
 }
 
 .field.href .items > .item > .content > .meta {
-	margin-top:0.15em;
-	margin-bottom:0.15em;
+	padding-top: 0.15em;
+	padding-bottom: 0.15em;
 	padding-left:0.5em;
 	/* let div.meta grow with its content */
 	position:relative;
 	overflow:hidden;
 	padding-right:75px;
+	background-color: white;
+	margin: 0;
+}
+.fieldset.href ~ .fieldset:not(last-child) {
+	display:none;
+}
+.fieldset.href .field.href .icon.items > .item > .content > .meta {
+	visibility:hidden;
 }
 .field.href .items > .item > .content > .meta > .line {
 	display:inline-block;
@@ -111,10 +119,10 @@ input-map {
 }
 
 .field.href .items > a.item > .content > .header {
-	color: #555;
+	color: #444;
 	background-color: #EEE;
 	padding-right: 1.7em;
-	border-bottom: 1px solid #ddd;
+	border-top: 1px solid #ccc;
 }
 
 .field.href .items > .item > .content > .thumbnail {

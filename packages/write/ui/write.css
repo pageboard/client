@@ -328,3 +328,15 @@ body[data-mode="read"] #pageboard-read > iframe {
 	font-size: 0.8em;
 	padding-left: 3.2em;
 }
+#store .item {
+	transition: color 0.1s linear;
+}
+#store.waiting .item {
+	color:grey !important;
+}
+#store [data-command="write"] i.icon {
+	transition:transform 1s linear;
+}
+#store.waiting [data-command="write"] i.icon {
+	transform: rotate(-45deg);
+}

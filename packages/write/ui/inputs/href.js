@@ -153,11 +153,13 @@ Href.prototype.cache = function(result) {
 Href.prototype.searchStart = function() {
 	var me = this;
 	this.initialValue = this.input.value;
+	this.uiInput.value = '';
 	this.uiInput.focus();
 	this.lastPageIndex = Infinity;
+	var first = true;
 	this.infinite = new window.InfiniteScroll(this.container, {
 		path: function() {
-			var text = me.uiInput.value;
+			var text = first ? '' : me.uiInput.value;
 			var url;
 			if (text.startsWith('#') || text.startsWith('/')) {
 				url = normUrl(text);
@@ -184,6 +186,7 @@ Href.prototype.searchStart = function() {
 		debug: false
 	});
 	this.infinite.on('load', function(response) {
+		first = false;
 		response = JSON.parse(response);
 		var data = response.data;
 		if (data.length == 0) this.lastPageIndex = this.pageIndex;
@@ -419,20 +422,18 @@ Href.prototype.renderItem = function(obj) {
 		</div>
 	</a>`);
 	var content = item.firstElementChild;
-	if (display != "icon") {
-		content.appendChild(item.dom(`<div class="left floated meta">
-			${obj.mime.split(';').shift()}<em>${tplSize(obj.meta.size)}</em><br>
-			${dims ? dims + '<br>' : ''}
-			${Pageboard.utils.Duration(obj.updated_at)}
-			${obj.type == 'link' ? ('<br><span class="line">' + obj.url + '</span>') : ''}
-		</div>
-		${tplPreview(obj.preview)}`));
-		if (obj.icon) {
-			content.appendChild(item.dom(`<img src="${obj.icon}" class="ui avatar icon image" />`));
-		}
-	} else {
-		content.appendChild(item.dom(`<img class="ui tiny centered image" src="${obj.url}" />`));
+	
+	content.appendChild(item.dom(`<div class="left floated meta">
+		${obj.mime.split(';').shift()}<em>${tplSize(obj.meta.size)}</em><br>
+		${dims ? dims + '<br>' : ''}
+		${Pageboard.utils.Duration(obj.updated_at)}
+		${obj.type == 'link' ? ('<br><span class="line">' + obj.url + '</span>') : ''}
+	</div>
+	${tplPreview(obj.preview)}`));
+	if (obj.icon) {
+		content.appendChild(item.dom(`<img src="${obj.icon}" class="ui avatar icon image" />`));
 	}
+	
 	if (!obj.visible || this.opts.readOnly) {
 		item.querySelector('[data-action="remove"]').remove();
 	}

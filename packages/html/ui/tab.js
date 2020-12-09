@@ -1,4 +1,4 @@
-class HTMLElementTabs extends HTMLCustomElement {
+class HTMLElementTabs extends VirtualHTMLElement {
 	static get defaults() {
 		return {
 			index: (x) => parseInt(x) || 0
@@ -31,5 +31,5 @@ class HTMLElementTabs extends HTMLCustomElement {
 }
 
 Page.ready(function() {
-	HTMLCustomElement.define('element-tabs', HTMLElementTabs);
+	VirtualHTMLElement.define('element-tabs', HTMLElementTabs);
 });

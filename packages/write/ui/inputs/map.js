@@ -1,4 +1,4 @@
-class HTMLInputMap extends HTMLCustomElement {
+class HTMLInputMap extends VirtualHTMLElement {
 	init() {
 		this._changed = this._changed.bind(this);
 		this._focused = this._focused.bind(this);

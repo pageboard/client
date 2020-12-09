@@ -20,7 +20,7 @@ Page.State.prototype.scroll = function(opts) {
 			while ((section = section.previousElementSibling)) {
 				if (["static", "relative"].includes(window.getComputedStyle(section).position) == false) {
 					scrollOpts.top -= section.getBoundingClientRect().height;
-				}				
+				}
 			}
 		} else {
 			return;
@@ -84,10 +84,18 @@ Page.setup(function navigate(state) {
 		}
 	}, document);
 
-	if (!document.body.isContentEditable && document.body.dataset.redirect) {
-		setTimeout(function() {
-			state.replace(document.body.dataset.redirect);
+	var redir = document.body.dataset.redirect;
+	if (redir && !document.body.isContentEditable) {
+		if (Page.samePath(redir, state)) {
+			console.warn("Useless redirection");
+		} else setTimeout(function() {
+			state.replace(redir);
 		}, 10);
 	}
 });
 
+var statePush = Page.State.prototype.push;
+Page.State.prototype.push = function (...args) {
+	if (this.transition) this.transition.cancel();
+	return statePush.apply(this, args);
+};

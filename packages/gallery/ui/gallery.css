@@ -1,6 +1,7 @@
 element-gallery {
 	display:block;
 	position:relative;
+	width:100%;
 }
 
 element-gallery:not([selected-mode="medialist"]) > [block-type="medialist"],

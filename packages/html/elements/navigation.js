@@ -36,6 +36,32 @@ exports.nav = {
 	}
 };
 
+exports.scrollLink = {
+	title: 'Scroll',
+	icon: '<i class="arrows alternate vertical icon"></i>',
+	menu: 'link',
+	description: 'Scroll Home/End',
+	properties: {
+		to: {
+			title: 'To',
+			anyOf: [{
+				const: 'home',
+				title: 'Home'
+			}, {
+				const: 'end',
+				title: 'End'
+			}]
+		}
+	},
+	group: 'block',
+	contents: {
+		nodes: "inline*",
+		marks: "nolink"
+	},
+	html: `<a data-to="[to]" is="element-scroll-link"></a>`,
+	scripts: ['../ui/scroll-link.js']
+};
+
 exports.breadcrumb = {
 	title: "Breadcrumb",
 	icon: '<b class="icon">&gt;&gt;&gt;</b>',

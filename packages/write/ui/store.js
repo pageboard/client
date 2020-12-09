@@ -24,7 +24,6 @@ function Store(editor, node) {
 	this.window = editor.root.defaultView;
 	this.window.addEventListener('keydown', this.keydown, false);
 
-	this.fakeInitials = {};
 	this.unsaved = this.get();
 
 	if (this.unsaved) {
@@ -60,12 +59,6 @@ Store.genId = function(len) {
 	}
 	Store.generated[str] = true;
 	return str;
-};
-
-Store.prototype.importVirtuals = function(blocks) {
-	for (var id in blocks) {
-		this.fakeInitials[id] = this.editor.blocks.serializeTo(blocks[id]);
-	}
 };
 
 Store.prototype.checkUrl = function(rootId, url) {
@@ -168,8 +161,6 @@ Store.prototype.realUpdate = function() {
 
 	this.rootId = root.id;
 
-	this.importStandalones(root);
-
 	root = flattenBlock(root);
 
 	if (!this.initial) {
@@ -188,45 +179,42 @@ Store.prototype.realUpdate = function() {
 	this.pageUpdate();
 };
 
-Store.prototype.importStandalones = function(root, ancestor) {
-	// all standalones that have not been generated in this page must be initial
-	if (!root.id) return console.error("importStandalones should run on a block with id", root);
-	if (root.id != this.rootId && !Store.generated[root.id]) {
-		if (root.standalone || ancestor) {
-			var copy = Object.assign({}, root);
-			delete copy.children;
-			if (!root.standalone) copy.parent = ancestor;
-			ancestor = root.id;
-			if (!this.fakeInitials[root.id]) this.fakeInitials[root.id] = copy;
-		}
-	}
-	if (root.children) root.children.forEach(function(child) {
-		this.importStandalones(child, ancestor);
-	}, this);
-};
-
 Store.prototype.save = function(e) {
 	if (this.saving) return;
 	this.flush();
 	if (this.unsaved == null) return;
-	var changes = this.changes();
+	var changes = this.changes(this.initial, this.unsaved);
 	if (e && e.shiftKey) {
 		console.warn("Pageboard.test - saving disabled");
 		console.log(changes);
 		return;
 	}
 	this.saving = true;
+	changes.recursive = true;
 
 	var p = Pageboard.fetch('put', '/.api/page', changes)
 	.then((result) => {
 		if (!result) return;
+		if (result.status == 404 && result.blocks) {
+			var allStandalones = true;
+			result.blocks.forEach((id) => {
+				var block = this.editor.blocks.get(id);
+				if (block && block.standalone) {
+					this.editor.blocks.setStandalone(block, false);
+				} else {
+					allStandalones = false;
+				}
+			});
+			if (allStandalones) {
+				throw new Error("Unknown standalone block - Please save again");
+			}
+		}
 		if (result.status != 200) {
 			throw result;
 		}
 		if (!result.update) return;
 		result.update.forEach((obj, i) => {
 			var block = this.editor.blocks.get(obj.id);
-			delete this.fakeInitials[obj.id];
 			var val = obj.updated_at;
 			if (block) block.updated_at = val;
 			else Pageboard.notify("Cannot update editor with modified block");
@@ -314,12 +302,12 @@ Store.prototype.pageUpdate = function() {
 
 function flattenBlock(root, ancestorId, blocks) {
 	if (!blocks) blocks = {};
-	var shallowCopy = Object.assign({}, root);
-	if (ancestorId && ancestorId != root.id && !root.virtual) {
+	const shallowCopy = Object.assign({}, root);
+	if (ancestorId && ancestorId != root.id) {
 		shallowCopy.parent = ancestorId;
 	}
 	if (blocks[root.id]) {
-		if (root.virtual) {
+		if (root.standalone) {
 			// do nothing, that's ok !
 		} else {
 			// that's a cataclysmic event
@@ -328,11 +316,13 @@ function flattenBlock(root, ancestorId, blocks) {
 	} else {
 		blocks[root.id] = shallowCopy;
 	}
-	if (root.children) {
-		root.children.forEach(function(child) {
+	let children = root.children || root.blocks && Object.values(root.blocks);
+	if (children) {
+		children.forEach(function(child) {
 			flattenBlock(child, root.id, blocks);
 		});
-		delete shallowCopy.children;
+		if (root.children) delete shallowCopy.children;
+		if (root.blocks) delete shallowCopy.blocks;
 	}
 	// just remove page.links
 	if (root.links) delete shallowCopy.links;
@@ -347,29 +337,24 @@ function parentList(obj, block) {
 		console.warn("Cannot change relation without a parent", block.id);
 		return;
 	}
-	var list = obj[block.parent];
+	let list = obj[block.parent];
 	if (!list) list = obj[block.parent] = [];
 	list.push(block.id);
 }
 
-Store.prototype.changes = function() {
-	var kids = this.editor.blocks.initial;
-	var initial = this.initial;
-	var unsaved = this.unsaved;
-	Object.keys(this.fakeInitials).forEach(function(id) {
-		var news = flattenBlock(this.fakeInitials[id]);
-		Object.keys(news).forEach(function(id) {
-			if (!initial[id]) {
-				initial[id] = news[id];
-			}
-		});
-	}, this);
-	var rootId = this.rootId;
-	for (var id in Store.generatedBefore) {
+Store.prototype.changes = function(initial, unsaved) {
+	const els = this.editor.elements;
+	const preinitial = this.preinitial;
+	const pre = {};
+	Object.keys(preinitial).forEach(function(id) {
+		Object.assign(pre, flattenBlock(preinitial[id]));
+	});
+
+	for (let id in Store.generatedBefore) {
 		delete initial[id];
 	}
 
-	var changes = {
+	const changes = {
 		// blocks removed from their standalone parent (grouped by parent)
 		unrelate: {},
 		// non-standalone blocks unrelated from site and deleted
@@ -382,76 +367,95 @@ Store.prototype.changes = function() {
 		relate: {}
 	};
 
-	Object.keys(unsaved).forEach(function(id) {
-		var block = unsaved[id];
-		if (!initial[id]) {
+	Object.keys(unsaved).forEach((id) => {
+		const block = unsaved[id];
+		if (!initial[id] && !pre[id]) {
 			if (Store.generated[id]) {
 				changes.add.push(Object.assign({}, block));
 				parentList(changes.relate, block);
-			} else {
-				console.error("Ignoring ungenerated new block", block);
+			} else if (block.standalone) {
+				parentList(changes.relate, block);
+			} else if (!unsaved[block.parent].standalone) {
+				console.error("unsaved non-standalone block in non-standalone parent is not generated");
 			}
-		} // else is dealt below
-	}, this);
-
-	Object.keys(initial).forEach(function(id) {
-		var block = unsaved[id];
-		var iblock = initial[id];
+		}
+	});
+	const dropped = {};
+	const unrelated = {};
+	Object.keys(initial).forEach((id) => {
+		let block = unsaved[id];
+		let iblock = initial[id];
 		if (!block) {
-			if (iblock.virtual) {
-				// do not remove it
-			} else if (!Store.generated[id]) {
-				if (iblock.parent) {
-					var iparent = initial[iblock.parent];
-					if (iparent && iparent.standalone && !unsaved[iblock.parent]) return;
+			if (!Store.generated[id]) { // not sure it must be kept
+				let iparent = iblock.virtual || iblock.parent;
+				let parentBlock = getParentBlock(iparent, initial, pre);
+				if (parentBlock.standalone) {
+					if (!dropped[iparent] && !unrelated[iparent]) {
+						parentList(changes.unrelate, iblock);
+						unrelated[id] = true;
+						if (!iblock.standalone && !changes.remove[iparent]) {
+							changes.remove[id] = true;
+						}
+					}
+				} else {
+					if (!iblock.standalone) {
+						if (!dropped[iparent]) {
+							parentList(changes.unrelate, iblock);
+							unrelated[id] = true;
+							changes.remove[id] = true;
+						}
+					} else if (unsaved[iparent]) {
+						changes.remove[id] = true;
+					} else {
+						dropped[id] = true;
+					}
 				}
-				parentList(changes.unrelate, iblock);
-				if (!iblock.standalone) {
-					changes.remove[id] = true;
-				}
+			} else {
+				console.info("ignoring removed generated block", iblock);
 			}
 		} else {
+			if (block.ignore) return;
+			block = Object.assign({}, block);
+			iblock = Object.assign({}, iblock);
+
 			if (block.parent != iblock.parent) {
 				if (iblock.parent) parentList(changes.unrelate, iblock);
 				if (block.parent) parentList(changes.relate, block);
 			}
 			// compare content, not parent
-			block = Object.assign({}, block);
-			iblock = Object.assign({}, iblock);
+			let pblock = pre[id];
+			if (pblock && pblock.content) {
+				// any difference in content is generated by prosemirror
+				iblock.content = pblock.content;
+			}
+			const contents = els[block.type].contents;
+			block.content = contents.prune(block);
+			if (block.content == null) delete block.content;
+			iblock.content = contents.prune(iblock);
+			if (iblock.content == null) delete iblock.content;
+
+			['lock', 'expr', 'updated_at'].forEach((key) => {
+				if (block[key] == null && iblock[key] != null) block[key] = iblock[key];
+			});
+
+			if (!block.standalone) block.standalone = false;
+			if (!iblock.standalone) iblock.standalone = false;
 			delete block.parent;
 			delete iblock.parent;
 			delete block.virtual;
 			delete iblock.virtual;
+
 			if (!this.editor.utils.equal(iblock, block)) {
 				changes.update.push(block);
 			}
 		}
-	}, this);
-
-	// fail-safe: compare to initial children list
-	if (kids) Object.keys(kids).forEach(function(id) {
-		if (changes.remove[id] || initial[id]) return; // already dealt
-		var kblock = kids[id];
-		if (!unsaved[id] && !kblock.standalone && !Store.generated[id] && !kblock.virtual) {
-			var el = this.editor.element(kblock.type);
-			if (el && !el.render) {
-				// we are not going to remove this relation because
-				// it is not a mistake coming from html editor, which
-				// cannot insert non-rendering elements.
-				return;
-			}
-			changes.remove[id] = true;
-			parentList(changes.unrelate, {
-				id: id,
-				parent: kblock.parent || rootId
-			});
-			console.warn("removing unused block", kblock.type, kblock.id);
-		}
-	}, this);
+	});
 
 	changes.remove = Object.keys(changes.remove);
 
 	changes.add.forEach(function(block) {
+		block.content = els[block.type].contents.prune(block);
+		if (block.content == null) delete block.content;
 		delete block.virtual;
 		delete block.parent;
 	});
@@ -463,6 +467,13 @@ Store.prototype.changes = function() {
 
 	return changes;
 };
+
+function getParentBlock(id, initial, pre) {
+	let parent = initial[id] || pre[id];
+	if (!parent) return;
+	else if (parent.virtual) return getParentBlock(parent.virtual, initial, pre);
+	else return parent;
+}
 
 })(window.Pageboard);
 

@@ -1,4 +1,4 @@
-// HTMLCustomElement replaces it by a stub that calls back immediately
+// VirtualHTMLElement replaces it by a stub that calls back immediately
 window.IntersectionObserver = null;
 Page.patch(function(state) {
 	state.vars['pdf.quality'] = true;
