@@ -2,7 +2,6 @@ exports.share = {
 	title: 'Share',
 	menu: "widget",
 	inline: true,
-	bundle: 'feed',
 	group: "inline",
 	contents: "inlineImage",
 	context: "blog//",
