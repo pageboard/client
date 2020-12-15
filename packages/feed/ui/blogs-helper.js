@@ -33,5 +33,5 @@ class HTMLElementBlogsHelper {
 }
 
 Page.setup(function() {
-	HTMLCustomElement.extend('element-blogs', HTMLElementBlogsHelper);
+	VirtualHTMLElement.extend('element-blogs', HTMLElementBlogsHelper);
 });

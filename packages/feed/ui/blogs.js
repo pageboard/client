@@ -1,4 +1,4 @@
-class HTMLElementBlogs extends HTMLCustomElement {
+class HTMLElementBlogs extends VirtualHTMLElement {
 	static get defaults() {
 		return {
 			topics: (x) => (x || '').split(',').filter((x) => !!x)
@@ -169,6 +169,6 @@ class HTMLElementBlogs extends HTMLCustomElement {
 }
 
 Page.ready(function() {
-	HTMLCustomElement.define('element-blogs', HTMLElementBlogs);
+	VirtualHTMLElement.define('element-blogs', HTMLElementBlogs);
 });
 
