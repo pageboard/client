@@ -1,4 +1,8 @@
 class HTMLElementMailImage extends HTMLImageElement {
+	constructor() {
+		super();
+		if (this.init) this.init();
+	}
 	static get defaults() {
 		return {
 			dataSrc: null,

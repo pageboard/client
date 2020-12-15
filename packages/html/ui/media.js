@@ -39,6 +39,10 @@ const MixinMedia = {
 };
 
 class HTMLElementVideo extends HTMLVideoElement {
+	constructor() {
+		super();
+		if (this.init) this.init();
+	}
 	static get defaults() {
 		return {
 			dataSrc: null
@@ -48,6 +52,10 @@ class HTMLElementVideo extends HTMLVideoElement {
 Object.assign(HTMLElementVideo.prototype, MixinMedia);
 
 class HTMLElementAudio extends HTMLAudioElement {
+	constructor() {
+		super();
+		if (this.init) this.init();
+	}
 	static get defaults() {
 		return {
 			dataSrc: null

@@ -1,4 +1,8 @@
 class HTMLScrollLinkElement extends HTMLAnchorElement {
+	constructor() {
+		super();
+		if (this.init) this.init();
+	}
 	static get defaults() {
 		return {
 			dataTo: (x) => ["home", "end"].includes(x) ? x : "end"

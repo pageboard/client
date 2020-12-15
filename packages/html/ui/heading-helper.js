@@ -1,4 +1,8 @@
 class HTMLElementHeadingHelper extends HTMLHeadingElement {
+	constructor() {
+		super();
+		if (this.init) this.init();
+	}
 	init() {
 		this.willSync = Pageboard.debounce(this.sync, 100);
 		this.observer = new MutationObserver((records) => {

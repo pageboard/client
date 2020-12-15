@@ -173,6 +173,10 @@ class HTMLElementImage extends VirtualHTMLElement {
 }
 
 class HTMLElementInlineImage extends HTMLImageElement {
+	constructor() {
+		super();
+		if (this.init) this.init();
+	}
 	static get defaults() {
 		return {
 			dataSrc: null,

@@ -37,6 +37,10 @@ Page.setup(function(state) {
 });
 
 class HTMLCustomConsentElement extends HTMLFormElement {
+	constructor() {
+		super();
+		if (this.init) this.init();
+	}
 	static get defaults() {
 		return {
 			dataTransient: false

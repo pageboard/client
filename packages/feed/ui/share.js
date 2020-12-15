@@ -1,4 +1,8 @@
 class HTMLShareAnchorElement extends HTMLAnchorElement {
+	constructor() {
+		super();
+		if (this.init) this.init();
+	}
 	static get defaults() {
 		return {
 			dataNetwork: ""

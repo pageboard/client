@@ -1,4 +1,8 @@
 class HTMLElementLayout extends HTMLDivElement {
+	constructor() {
+		super();
+		if (this.init) this.init();
+	}
 	static get defaults() {
 		return {
 			dataSrc: null,
