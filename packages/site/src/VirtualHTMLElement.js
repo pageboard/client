@@ -56,7 +56,7 @@ class VirtualHTMLElement extends HTMLElement {
 			}
 			monkeyPatchAll(cla.prototype, {
 				init() {
-					if (is) this.setAttribute('is', is);
+					if (is) this.setAttribute('is', name);
 				},
 				patch(state) {
 					this.options = nodeOptions(this, defaults, state, is);
