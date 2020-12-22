@@ -5,6 +5,11 @@ Page.connect(new class {
 		if (!node) return;
 		var obj = Page.parse(node.src);
 		this.type = obj.pathname.startsWith('/gtm') ? 'gtm' : 'gtag';
+		if (this.type == "gtag") {
+			window.gtag = window.gtag || function gtag() {
+				window.dataLayer.push(arguments);
+			};
+		}
 		this.id = obj.query.id;
 	}
 	consent(state) {
@@ -38,10 +43,16 @@ Page.connect(new class {
 		} else {
 			this.push(['consent', 'update', opts]);
 		}
-		this.push(['config', this.id, { page_path: state.toString() }]);
+		this.push(['config', this.id, {
+			page_path: state.toString()
+		}]);
 	}
 	push(args) {
-		window.dataLayer.push(args);
+		if (this.type == "gtm") {
+			window.dataLayer.push(args);
+		} else {
+			window.gtag.apply(null, args);
+		}
 	}
 	paint(state) {
 		if (this.id) state.consent(this);
