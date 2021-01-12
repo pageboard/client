@@ -384,7 +384,7 @@ function createRootSpec(view, elt, obj) {
 		parseDOM: [parseRule],
 		toDOM: function(node) {
 			var id = node.attrs.id;
-			if (!id && node.marks && node.marks[0]) {
+			if (!id && node.marks && node.marks[0] && !elt.contents.leaf) {
 				id = node.marks[0].attrs.id;
 				console.warn("Probably unsupported case of id from in node.marks", elt.inline, node);
 			}
