@@ -3,6 +3,14 @@ exports.text = {
 	group: 'inline'
 };
 
+exports.hard_break = {
+	inline: true,
+	inplace: true,
+	group: 'inline',
+	tag: 'br',
+	html: '<br />'
+};
+
 exports.paragraph = {
 	priority: -10,
 	title: "Paragraph",

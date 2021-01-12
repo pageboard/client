@@ -62,7 +62,9 @@ Viewer.prototype.render = function(block, opts) {
 	}
 	if (!dom || dom.nodeType != Node.ELEMENT_NODE) return dom;
 
-	dom.setAttribute('block-type', el.name);
+	if (["BR", "HR", "WBR"].includes(dom.nodeName) == false) {
+		dom.setAttribute('block-type', el.name);
+	}
 	if (block.expr && Object.keys(block.expr).length) {
 		dom.setAttribute('block-expr', JSON.stringify(block.expr));
 	} else {
