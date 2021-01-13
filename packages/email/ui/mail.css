@@ -1,1 +1,4 @@
-/* placeholder for now */
+/* hide gmail download button */
+[block-type="mail_image"] > div {
+	display:none !important;
+}

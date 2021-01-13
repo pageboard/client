@@ -75,7 +75,7 @@ exports.mail_image = {
 		class="float-center" align="center"
 		data-src="[url|or:[$element.resources.empty]]"
 		data-crop="[crop.x];[crop.y];[crop.width];[crop.height];[crop.zoom]"
-		alt="[alt]" /></center>`,
+		alt="[alt]" /><div></div></center>`,
 	resources: {
 		empty: '../ui/empty.png'
 	},
