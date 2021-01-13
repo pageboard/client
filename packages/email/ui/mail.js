@@ -37,7 +37,9 @@ Page.serialize = function() {
 				errors,
 				title: doc.title,
 				text: md,
-				html: '<!DOCTYPE html>\n' + window.Juice(doc.documentElement.outerHTML)
+				html: '<!DOCTYPE html>\n' + window.Juice(doc.documentElement.outerHTML, {
+					extraCss: '[block-type="mail_image"] > div { display:none; }' // get rid of gmail download button
+				})
 			})
 		};
 	});
