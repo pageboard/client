@@ -38,7 +38,7 @@ Page.serialize = function() {
 				title: doc.title,
 				text: md,
 				html: '<!DOCTYPE html>\n' + window.Juice(doc.documentElement.outerHTML, {
-					extraCss: '[block-type="mail_image"] > div { display:none; }' // get rid of gmail download button
+					extraCss: '.center > img + div { display:none; }' // get rid of gmail download button
 				})
 			})
 		};
