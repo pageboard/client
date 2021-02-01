@@ -119,7 +119,7 @@ Page.patch(function(state) {
 		if (extra.length > 0) {
 			console.warn("Unknown query parameters detected, rewriting location", extra);
 			exports.equivs({
-				Status: '302 Bad Parameters',
+				Status: '301 Wrong Query Parameters',
 				Location: Page.format({pathname: state.pathname, query})
 			});
 			state.requery = query;
