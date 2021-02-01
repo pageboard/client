@@ -39,7 +39,7 @@ class HTMLElementBlogs extends VirtualHTMLElement {
 			if (version != null) state.vars.version = true;
 			if (state.query.version != version) {
 				Pageboard.equivs({
-					Status: '301 Moved Permanently',
+					Status: '302 Found Version',
 					Location: Page.format({
 						pathname: state.pathname,
 						query: Object.assign({}, state.query, {version: version})
