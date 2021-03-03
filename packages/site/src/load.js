@@ -56,8 +56,9 @@ exports.js = function(url, doc) {
 		return Promise.resolve();
 	}
 	var node = doc.createElement('script');
-	node.src = url;
 	node.async = false;
+	node.defer = true;
+	node.src = url;
 	return load(node, head);
 };
 
