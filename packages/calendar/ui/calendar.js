@@ -24,7 +24,7 @@ Page.ready(function(state) {
 		var aday = 1000 * 60 * 60 * 24;
 		data.forEach(function(item) {
 			var time = (new Date(what.expr.get(item, datapath))).getTime();
-			if (isNaN(time)) {
+			if (Number.isNaN(time)) {
 				console.warn("byWeek filter cannot find a valid date at", datapath, "in", item);
 				return;
 			}

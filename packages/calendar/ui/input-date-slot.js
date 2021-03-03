@@ -44,8 +44,8 @@ class HTMLElementInputDateSlot extends VirtualHTMLElement {
 		var end = new Date(this._els[2].value);
 		var startTime = start.getTime();
 		var endTime = end.getTime();
-		if (isNaN(endTime)) endTime = startTime;
-		if (isNaN(startTime)) return;
+		if (Number.isNaN(endTime)) endTime = startTime;
+		if (Number.isNaN(startTime)) return;
 		// keep start and end on the same day
 		if (endTime >= startTime) return;
 		if (start.getDate() > end.getDate()) {
