@@ -82,7 +82,7 @@ exports.event = {
 		},
 		label: {
 			title: 'Label',
-			type: 'string'
+			anyOf: [{const: 'default', title: 'Default'}]
 		}
 	},
 	scripts: ['../ui/calendar.js']
