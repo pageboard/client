@@ -19,7 +19,7 @@ exports.google_translate = {
 		script: [
 			"https://translate.googleapis.com",
 			"https://translate.google.com",
-			"'sha256-iJzZc68vmFUdQcHFENrt71ytPNej1jN9vfbHsHeC3EY='"
+			"'sha256-MllbaXjKDb8zmCId86PfKk5mI7On1rtSLhAdwB5ydag='"
 		],
 		style: ["https://translate.googleapis.com"],
 		img: ["https://translate.googleapis.com", "https://www.gstatic.com", "https://www.google.com"],
