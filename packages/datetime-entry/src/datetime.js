@@ -2,25 +2,25 @@
  * Created by Serge Balykov (ua9msn@mail.ru) on 2/1/17.
  */
 
-(function(window, document, undefined){
+(function (window, document) {
 
 /* eslint-disable no-unused-vars */
-const KEY_TAB	   = 9,
-	KEY_ENTER	 = 13,
+const KEY_TAB = 9,
+	KEY_ENTER	= 13,
 	KEY_BACKSPACE = 8,
-	KEY_DELETE	= 46,
-	KEY_ESCAPE	= 27,
-	KEY_SPACE	 = 32,
-	KEY_DOWN	  = 40,
-	KEY_UP		= 38,
-	KEY_LEFT	  = 37,
-	KEY_RIGHT	 = 39,
-	KEY_A		 = 65,
-	KEY_C		 = 67,
-	KEY_V		 = 86,
-	KEY_D		 = 68,
-	KEY_F2		= 113,
-	KEY_INSERT	= 45;
+	KEY_DELETE = 46,
+	KEY_ESCAPE = 27,
+	KEY_SPACE = 32,
+	KEY_DOWN = 40,
+	KEY_UP = 38,
+	KEY_LEFT = 37,
+	KEY_RIGHT = 39,
+	KEY_A = 65,
+	KEY_C = 67,
+	KEY_V = 86,
+	KEY_D = 68,
+	KEY_F2 = 113,
+	KEY_INSERT = 45;
 /* eslint-enable no-unused-vars */
 
 const DAYLEN = 86400000;
@@ -68,7 +68,7 @@ function Plugin(element, props){
 	const _props = Object.assign({}, defaultProps, props);
 
 	if (typeof element == 'string') element = document.querySelector(element);
-	this.element  = element;
+	this.element = element;
 
 	this.state = {
 		type:	 undefined,
@@ -79,7 +79,7 @@ function Plugin(element, props){
 
 	this._handleFocus = this._handleFocus.bind(this);
 	this._handleMouseDown = this._handleMouseDown.bind(this);
-	this._handleKeydown   = this._handleKeydown.bind(this);
+	this._handleKeydown = this._handleKeydown.bind(this);
 	this._handleMousewheel = this._handleMousewheel.bind(this);
 
 	this.element.setSelectionRange(0, 0);
@@ -135,7 +135,7 @@ Plugin.prototype = {
 
 		this.props.minTime = ( mT % DAYLEN + DAYLEN ) % DAYLEN; // NaN, number [0...86400000 - 1]
 		this.props.maxTime = ( MT % DAYLEN + DAYLEN ) % DAYLEN;
-		this.props.minDate = isNaN(mT) ? mD : mD - mD % DAYLEN;  // NaN, number
+		this.props.minDate = isNaN(mT) ? mD : mD - mD % DAYLEN; // NaN, number
 		this.props.maxDate = isNaN(MT) ? MD : MD - MD % DAYLEN;
 
 		if(!isNaN(this.props.minTime)) {
@@ -222,10 +222,10 @@ Plugin.prototype = {
 
 		try {
 			parts = this.dtFormatter.formatToParts(datetime);
-			type  = this.state.type || parts.find(p => p.type !== 'literal').type;
+			type = this.state.type || parts.find(p => p.type !== 'literal').type;
 		} catch(E) {
 			parts = [];
-			type  = undefined;
+			type = undefined;
 		}
 
 		return({datetime, parts, type, step: this.state.step});
@@ -265,7 +265,7 @@ Plugin.prototype = {
 		}
 
 		const parts = this.state.parts;
-		let ss	  = 0,
+		let ss = 0,
 			se	= 0,
 			cp	= e.target.selectionStart;
 
@@ -275,8 +275,8 @@ Plugin.prototype = {
 
 			if(c.type !== 'literal' && cp >= ss && cp <= se) {
 				p.type = c.type;
-				p.ss   = ss;
-				p.se   = se;
+				p.ss = ss;
+				p.se = se;
 			}
 
 			return p;
@@ -416,7 +416,7 @@ Plugin.prototype = {
 
 		if(!part || type === 'literal') return proxyTime;
 
-		let fnName   = (this.props.useUTC ? 'UTC' : '' ) + hashTypeFn[type],
+		let fnName = (this.props.useUTC ? 'UTC' : '' ) + hashTypeFn[type],
 			newValue = proxyTime['get' + fnName]();
 
 		if(part.type === 'dayperiod' || part.type === 'dayPeriod') {
@@ -461,8 +461,8 @@ Plugin.prototype = {
 
 	_getMaxFieldValueAtDate(date, fieldName){
 
-		const fy = this.props.useUTC ? date.getUTCFullYear(): date.getFullYear();
-		const m  = this.props.useUTC ? date.getUTCMonth()   : date.getMonth();
+		const fy = this.props.useUTC ? date.getUTCFullYear() : date.getFullYear();
+		const m = this.props.useUTC ? date.getUTCMonth() : date.getMonth();
 
 		switch(fieldName) {
 			case 'year':
@@ -533,7 +533,7 @@ Plugin.prototype = {
 			let isFieldValid		= true;
 			const maxDateFieldValue = ( new Date(this.props.maxDate) )[getFN]();
 			const minDateFieldValue = ( new Date(this.props.minDate) )[getFN]();
-			const minTimeFieldValue = ( new Date(this.props.minTime) )[getFN]();  //NaN, number
+			const minTimeFieldValue = ( new Date(this.props.minTime) )[getFN](); //NaN, number
 			const maxTimeFieldValue = ( new Date(this.props.maxTime) )[getFN]();
 			const thisValue		 = proxyTime[getFN]();
 
@@ -566,8 +566,8 @@ Plugin.prototype = {
 	_validate(datetime){
 
 		const timestamp = datetime.getTime();
-		const timePart  = (timestamp % DAYLEN + DAYLEN) % DAYLEN;
-		const datePart  = timestamp - timePart;
+		const timePart = (timestamp % DAYLEN + DAYLEN) % DAYLEN;
+		const datePart = timestamp - timePart;
 
 		let validTime = true,
 			validDate = true;
