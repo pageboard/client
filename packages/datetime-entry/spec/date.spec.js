@@ -4,20 +4,20 @@
 
 'use strict';
 
-describe('Date suite', function(){
+describe('Date suite', function () {
 
     let $input,
         plug;
 
-    const format =  {
-        hour12:  true,
-        hour:    '2-digit',
-        minute:  '2-digit',
-        second:  '2-digit',
+    const format = {
+        hour12: true,
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
         weekday: 'long',
-        year:    'numeric',
-        month:   'long',
-        day:     'numeric'
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
     };
 
 
@@ -30,7 +30,7 @@ describe('Date suite', function(){
         setFixtures('<input id="dt" type="text" />');
         plug = DateTimeEntry('#dt', {
             locale: 'ru',
-            format:  format,
+            format: format,
             minDate: new Date('01/01/2017 12:00:00 UTC'),
             maxDate: new Date('01/10/2017 00:00:00 UTC')
         });
@@ -38,24 +38,24 @@ describe('Date suite', function(){
 
     });
 
-    it('date - in range', function(){
+    it('date - in range', function () {
         const dt = new Date('01/05/2017 01:02:03 UTC');
         const result = plug._validate(dt);
-        expect( result ).toEqual( true );
+        expect(result).toEqual(true);
 
     });
 
-    it('date - less than limits', function(){
+    it('date - less than limits', function () {
         const dt = new Date('01/01/2015 01:02:03 UTC');
         const result = plug._validate(dt);
-        expect( result ).toEqual( false );
+        expect(result).toEqual(false);
 
     });
 
-    it('date - bigger than limits', function(){
+    it('date - bigger than limits', function () {
         const dt = new Date('01/01/2018 01:02:03 UTC');
         const result = plug._validate(dt);
-        expect( result ).toEqual( false );
+        expect(result).toEqual(false);
 
     });
 

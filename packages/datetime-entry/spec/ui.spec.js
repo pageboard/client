@@ -4,20 +4,20 @@
 
 'use strict';
 
-describe('UI suite', function(){
+describe('UI suite', function () {
 
     let $input,
         plug;
 
-    const format =  {
-        hour12:  true,
-        hour:    '2-digit',
-        minute:  '2-digit',
-        second:  '2-digit',
+    const format = {
+        hour12: true,
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
         weekday: 'long',
-        year:    'numeric',
-        month:   'long',
-        day:     'numeric'
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
     };
 
     //jasmine.getFixtures().fixturesPath = 'base/spec/javascripts/fixtures';
@@ -26,18 +26,18 @@ describe('UI suite', function(){
         setFixtures('<input id="dt" type="text" />');
         plug = DateTimeEntry('#dt', {
             locale: 'en',
-            format:  format
+            format: format
         });
         $input = $(plug.element);
 
     });
 
-    it('12 a.m. means midnight', function(){
+    it('12 a.m. means midnight', function () {
         const dt = new Date('01/05/2017 00:00:00 UTC');
         plug.setOptions({
-            format:    {
+            format: {
                 hour12: true,
-                hour:   '2-digit',
+                hour: '2-digit',
                 minute: '2-digit',
             }
         });
@@ -47,22 +47,22 @@ describe('UI suite', function(){
 
     });
 
-    it('zero unix time', function(){
+    it('zero unix time', function () {
         const dt = new Date(0);
         plug.setTime(dt);
 
-        $input[0].setSelectionRange(0,0);
+        $input[0].setSelectionRange(0, 0);
 
         let fakeEvent = {
-            preventDefault: function(){},
-            stopPropagation: function(){},
+            preventDefault: function () { },
+            stopPropagation: function () { },
             target: $input[0],
             which: 38 // key up
         };
 
         plug._handleKeydown(fakeEvent);
 
-        const d =  plug.getTime();
+        const d = plug.getTime();
 
         expect(d.getTime()).toEqual(86400000);
 

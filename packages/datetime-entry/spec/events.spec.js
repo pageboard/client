@@ -4,19 +4,19 @@
 
 'use strict';
 
-describe('Events suite', function(){
+describe('Events suite', function () {
 
     let $input,
         plug;
 
-    const format =  {
-        hour12:  false,
-        hour:    '2-digit',
-        minute:  '2-digit',
-        second:  '2-digit',
-        year:    'numeric',
-        month:   'long',
-        day:     'numeric'
+    const format = {
+        hour12: false,
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
     };
 
     // Since I've got the problem with running tests both with karma and test runner,
@@ -28,7 +28,7 @@ describe('Events suite', function(){
         setFixtures('<input id="dt" type="text" />');
         plug = DateTimeEntry('#dt', {
             locale: 'ru',
-            format:  format,
+            format: format,
             datetime: new Date(1487136412359) // 15 февраля 2017 05:26:52
         });
         $input = $(plug.element);
@@ -37,17 +37,17 @@ describe('Events suite', function(){
 
 
 
-    it('For 15 февраля 2017 05:26:52 click between ф and е should select 3, 10 ', function(){
+    it('For 15 февраля 2017 05:26:52 click between ф and е should select 3, 10 ', function () {
 
         let fakeEvent = {
-            preventDefault: function(){},
-            stopPropagation: function(){},
+            preventDefault: function () { },
+            stopPropagation: function () { },
             target: $input[0]
         };
 
         $input[0].focus();
 
-        $input[0].setSelectionRange(4,4);
+        $input[0].setSelectionRange(4, 4);
 
         plug._handleMouseDown(fakeEvent);
 

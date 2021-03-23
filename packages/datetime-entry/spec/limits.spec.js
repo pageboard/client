@@ -4,20 +4,20 @@
 
 'use strict';
 
-describe('Fit', function(){
+describe('Fit', function () {
 
     let $input,
         plug;
 
-    const format =  {
-        hour12:  true,
-        hour:    '2-digit',
-        minute:  '2-digit',
-        second:  '2-digit',
+    const format = {
+        hour12: true,
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
         weekday: 'long',
-        year:    'numeric',
-        month:   'long',
-        day:     'numeric'
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
     };
 
 
@@ -30,14 +30,14 @@ describe('Fit', function(){
         setFixtures('<input id="dt" type="text" />');
         plug = DateTimeEntry('#dt', {
             locale: 'ru',
-            format:  format,
+            format: format,
             datetime: new Date(1487136412359) // 15 февраля 2017 05:26:52
         });
         $input = $(plug.element);
 
     });
 
-    it('validation date - in range', function(){
+    it('validation date - in range', function () {
 
         const dt = new Date('01/02/2015 01:02:03 UTC');
         const options = {
@@ -48,13 +48,13 @@ describe('Fit', function(){
 
         };
 
-        plug.setOptions( options ) ;
+        plug.setOptions(options);
         const result = plug._validate(dt);
-        expect( result ).toEqual( true );
+        expect(result).toEqual(true);
 
     });
 
-    it('validation date - date less than limit', function(){
+    it('validation date - date less than limit', function () {
 
         const dt = new Date('01/01/2015 00:00:00 UTC');
         const options = {
@@ -65,13 +65,13 @@ describe('Fit', function(){
 
         };
 
-        plug.setOptions( options ) ;
+        plug.setOptions(options);
         const result = plug._validate(dt);
-        expect( result ).toEqual( false );
+        expect(result).toEqual(false);
 
     });
 
-    it('validation date - date bigger than limit', function(){
+    it('validation date - date bigger than limit', function () {
 
         const dt = new Date('01/05/2015 00:00:00 UTC');
         const options = {
@@ -82,13 +82,13 @@ describe('Fit', function(){
 
         };
 
-        plug.setOptions( options ) ;
+        plug.setOptions(options);
         const result = plug._validate(dt);
-        expect( result ).toEqual( false );
+        expect(result).toEqual(false);
 
     });
 
-    it('validation date - date bigger than limit', function(){
+    it('validation date - date bigger than limit', function () {
 
         const dt = new Date('01/05/2015 00:00:00 UTC');
         const options = {
@@ -99,16 +99,16 @@ describe('Fit', function(){
 
         };
 
-        plug.setOptions( options ) ;
+        plug.setOptions(options);
         const result = plug._validate(dt);
-        expect( result ).toEqual( false );
+        expect(result).toEqual(false);
 
     });
 
 
 
 
-    it('maxDate > input && input > minDate', function(){
+    it('maxDate > input && input > minDate', function () {
 
         const dt = new Date('Thu Jan 01 1970 01:00:00 UTC');
         const options = {
@@ -119,13 +119,13 @@ describe('Fit', function(){
 
         };
 
-        plug.setOptions( options ) ;
+        plug.setOptions(options);
         const resultDT = plug._fitToLimits(dt);
-        expect( resultDT ).toEqual( dt );
+        expect(resultDT).toEqual(dt);
 
     });
 
-    it('maxDate > input && minDate > input', function(){
+    it('maxDate > input && minDate > input', function () {
 
         const dt = new Date('Jan 01 1969 02:00:00 UTC');
         const options = {
@@ -136,13 +136,13 @@ describe('Fit', function(){
 
         };
 
-        plug.setOptions( options ) ;
+        plug.setOptions(options);
         const resultDT = plug._fitToLimits(dt);
-        expect( resultDT ).toEqual( options.minDate );
+        expect(resultDT).toEqual(options.minDate);
 
     });
 
-    it('input > maxDate && input > minDate', function(){
+    it('input > maxDate && input > minDate', function () {
 
         const dt = new Date('Jan 01 1989 02:00:00 UTC');
         const options = {
@@ -153,13 +153,13 @@ describe('Fit', function(){
 
         };
 
-        plug.setOptions( options ) ;
+        plug.setOptions(options);
         const resultDT = plug._fitToLimits(dt);
-        expect( resultDT ).toEqual( options.maxDate );
+        expect(resultDT).toEqual(options.maxDate);
 
     });
 
-    it('Nightmare range valid time', function(){
+    it('Nightmare range valid time', function () {
 
         const dt = new Date('Jan 01 2017 02:00:00 UTC');
         const options = {
@@ -170,13 +170,13 @@ describe('Fit', function(){
 
         };
 
-        plug.setOptions( options ) ;
+        plug.setOptions(options);
         const resultDT = plug._fitToLimits(dt);
-        expect( resultDT ).toEqual( dt );
+        expect(resultDT).toEqual(dt);
 
     });
 
-    it('Nightmare range invalid time', function(){
+    it('Nightmare range invalid time', function () {
 
         const dt = new Date('Jan 01 2017 22:00:00 UTC');
         const options = {
@@ -187,9 +187,9 @@ describe('Fit', function(){
 
         };
 
-        plug.setOptions( options ) ;
+        plug.setOptions(options);
         const resultDT = plug._fitToLimits(dt);
-        expect( resultDT ).toEqual( new Date('Jan 01 2017 23:00:00 UTC') );
+        expect(resultDT).toEqual(new Date('Jan 01 2017 23:00:00 UTC'));
 
     });
 

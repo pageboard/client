@@ -4,20 +4,20 @@
 
 'use strict';
 
-describe('empty option suite', function(){
+describe('empty option suite', function () {
 
     var $input,
         plug;
 
-    const format =  {
-        hour12:  true,
-        hour:    '2-digit',
-        minute:  '2-digit',
-        second:  '2-digit',
+    const format = {
+        hour12: true,
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
         weekday: 'long',
-        year:    'numeric',
-        month:   'long',
-        day:     'numeric'
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
     };
 
     // Since I've got the problem with running tests both with karma and test runner,
@@ -34,19 +34,19 @@ describe('empty option suite', function(){
 
 
 
-    it('$ should be defined', function(){
+    it('$ should be defined', function () {
         expect($).not.toBeNull();
     });
 
-    it('$input should be empty without any options', function(){
+    it('$input should be empty without any options', function () {
         expect($input.val()).toEqual('');
     });
 
-    it('expect Invalid Date as result of getTime if input is empty', function(){
+    it('expect Invalid Date as result of getTime if input is empty', function () {
         expect(plug.getTime().getTime()).toBeNaN();
     });
 
-    it('setTime(0) must be 1 jan 1970 00:00:00', function(){
+    it('setTime(0) must be 1 jan 1970 00:00:00', function () {
 
         plug.setTime(0);
         let timestamp = plug.getTime().getTime();
@@ -55,8 +55,8 @@ describe('empty option suite', function(){
 
     });
 
-    it('DEL should clear value and set Invalid Date', function(){
-        $input.trigger({type: 'keypress', which: 46, keyCode: 46});
+    it('DEL should clear value and set Invalid Date', function () {
+        $input.trigger({ type: 'keypress', which: 46, keyCode: 46 });
         let timestamp = plug.getTime().getTime();
         expect(timestamp).toBeNaN();
         expect($input.val()).toEqual('');
