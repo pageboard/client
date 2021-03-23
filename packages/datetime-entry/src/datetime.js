@@ -161,7 +161,7 @@ Plugin.prototype = {
 
 	setTime: function(date){
 		const newState = this._setDateTime(date);
-		this.setState(newState);
+		this.setState(newState, this._notify);
 	},
 
 	destroy(){
