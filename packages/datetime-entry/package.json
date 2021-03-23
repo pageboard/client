@@ -1,6 +1,6 @@
 {
   "name": "@pageboard/datetime-entry",
-  "version": "3.3.1",
+  "version": "3.3.2",
   "description": "Enter formatted date and time without pickers - jquery-less edition",
   "main": "dist/datetime.min.js",
   "scripts": {
