@@ -69,6 +69,7 @@ class HTMLElementInputDateTime extends VirtualHTMLElement {
 			useUTC: !!tz,
 			onChange: function(val) {
 				this.value = val.toISOString();
+				if (this._input.value != this.value) this._input.value = this.value;
 			}.bind(this)
 		});
 	}
