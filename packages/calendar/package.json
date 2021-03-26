@@ -1,6 +1,6 @@
 {
   "name": "@pageboard/calendar",
-  "version": "0.9.2",
+  "version": "0.9.3",
   "description": "Manage calendar/events in pageboard",
   "main": "index.js",
   "scripts": {
