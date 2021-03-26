@@ -107,9 +107,9 @@ exports.event_date = {
 			default: false
 		},
 		details: {
-			title: 'Details about the date',
-			nullable: true,
-			type: 'string'
+			title: 'Custom details',
+			type: 'object',
+			default: {}
 		},
 		seats: {
 			title: 'Available seats for this date',
