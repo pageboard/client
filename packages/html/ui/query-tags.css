@@ -7,5 +7,5 @@ element-query-tags > div {
 }
 element-query-tags > div[block-content="title"] {
 	white-space:nowrap;
-	padding-right:0.5em;
+	padding-right: 0.5em;
 }

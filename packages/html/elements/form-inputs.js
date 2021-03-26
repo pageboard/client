@@ -387,7 +387,7 @@ exports.input_select = {
 	}, {
 		id: 'options',
 		title: 'Options',
-		nodes: 'input_select_option+'	
+		nodes: 'input_select_option+'
 	}],
 	html: `<div class="field">
 		<label block-content="label">Label</label>
