@@ -432,25 +432,30 @@ exports.input_select_option = {
 	}
 };
 
-exports.input_array = {
-	title: 'Array',
+exports.fieldset_list = {
+	title: 'List',
 	menu: "form",
 	icon: '<b class="icon">...</b>',
 	group: "block",
 	context: 'form//',
+	priority: 0,
+	properties: {
+		prefix: {
+			title: "prefix",
+			description: "Use this to add <prefix>.<index> before all inputs names in this fieldset",
+			type: "string",
+			format: "singleline"
+		}
+	},
 	contents: [{
-		id: 'legend',
-		nodes: 'inline*',
-		title: 'Legend'
-	}, {
-		id: 'inputs',
-		title: 'Inputs',
-		nodes: '(input_text|input_file)+'
+		id: 'template',
+		nodes: 'block+'
 	}],
-	html: `<fieldset>
-		<legend block-content="legend">Legend</legend>
-		<element-input-array block-content="inputs"></element-input-array>
-	</fieldset>`,
-	scripts: ['../ui/input-array.js'],
-	stylesheets: ['../ui/input-array.css']
+	html: `<element-fieldset-list prefix="[prefix]">
+		<div class="item" block-content="template" data-html="[|fieldset_list]"></div>
+		<button type="button" data-action="del">-</button>
+		<button type="button" data-action="add">+</button>
+	</element-fieldset-list>`,
+	scripts: ['../ui/fieldset-list.js'],
+	stylesheets: ['../ui/fieldset-list.css']
 };
