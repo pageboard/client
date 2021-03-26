@@ -295,7 +295,7 @@ Object.defineProperty(HTMLInputElement.prototype, 'defaultValue', {
 	configurable: true,
 	enumerable: true,
 	get: function() {
-		if (this.form.method == "get") return '';
+		if (this.form && this.form.method == "get") return '';
 		else return this.getAttribute('value');
 	},
 	set: function(val) {
