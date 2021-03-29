@@ -1,17 +1,6 @@
 /* global $ */
 (function() {
 
-// References
-// https://github.com/json-schema-org/json-schema-spec/issues/67
-
-// addons for semantic ui
-// slider
-// https://github.com/tyleryasaka/semantic-ui-range
-
-// html5 validation
-// https://css-tricks.com/form-validation-part-1-constraint-validation-html/
-// https://github.com/cferdinandi/validate
-
 window.Semafor = Semafor;
 
 function Semafor(schema, node, filter, helper) {
