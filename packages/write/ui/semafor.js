@@ -200,9 +200,9 @@ Semafor.unflatten = function(map, obj) {
 		let prev = val;
 		list.forEach(function(sub, i) {
 			const num = parseInt(sub);
-			if (!isNaN(num) && sub == num && !Array.isArray(val)) {
+			if (!Number.isNaN(num) && sub == num && !Array.isArray(val)) {
 				val = [];
-				prev[list[i-1]] = val = [];
+				prev[list[i - 1]] = val = [];
 			}
 			if (!val[sub]) {
 				if (i < list.length - 1) val[sub] = {};
@@ -336,11 +336,11 @@ Semafor.prototype.convert = function(vals, field) {
 			switch(type) {
 			case "integer":
 				val = parseInt(val);
-				if (isNaN(val) && nullable) val = null;
+				if (Number.isNaN(val) && nullable) val = null;
 				break;
 			case "number":
 				val = parseFloat(val);
-				if (isNaN(val) && nullable) val = null;
+				if (Number.isNaN(val) && nullable) val = null;
 				break;
 			case "boolean":
 				if (val === "" && nullable) val = null; // not really useful
@@ -620,7 +620,7 @@ types.object = function(key, schema, node, inst) {
 				</fieldset>`);
 				node.appendChild(fieldset);
 			}
-			
+
 			if (schema.description) {
 				fieldset.appendChild(node.dom(`<label>${schema.description}</label>`));
 			}
