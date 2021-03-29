@@ -137,8 +137,8 @@ exports.input_date_slot = {
 	html: `<div class="field">
 		<label block-content="label">Label</label>
 		<element-input-date-slot start="[valueStart]" end="[valueEnd]" time-zone="[timeZone]">
-			<element-input-date-time><input type="text" name="[nameStart]" /></element-input-date-time>
-			<element-input-date-time><input type="text" name="[nameEnd]" /></element-input-date-time>
+			<element-input-date-time><input name="[nameStart]" step="[step]" /></element-input-date-time>
+			<element-input-date-time><input name="[nameEnd]" step="[step]" /></element-input-date-time>
 		</element-input-date-slot>
 	</div>`,
 	scripts: [

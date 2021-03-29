@@ -64,6 +64,7 @@ class HTMLElementInputDateTime extends VirtualHTMLElement {
 		if (!input.value && view.value) input.value = view.value;
 		var tz = this.timeZone;
 		this._dt = window.DateTimeEntry(this._view, {
+			step: input.getAttribute('step'),
 			locale: document.documentElement.lang || window.navigator.language,
 			format: this._formatOptions(this.format, tz),
 			useUTC: !!tz,
