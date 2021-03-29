@@ -9,17 +9,20 @@ exports.input_date_time = {
 		name: {
 			title: "name",
 			description: "The form object key",
-			type: "string"
+			type: "string",
+			format: "singleline"
 		},
 		value: {
 			title: "default value",
 			nullable: true,
-			type: "string"
+			type: "string",
+			format: "singleline"
 		},
 		placeholder: {
 			title: "placeholder",
 			nullable: true,
-			type: "string"
+			type: "string",
+			format: "singleline"
 		},
 		required: {
 			title: 'required',
@@ -47,14 +50,34 @@ exports.input_date_time = {
 		},
 		step: {
 			title: 'step',
-			description: 'increments in seconds',
+			description: 'rounding/increment in seconds',
 			type: 'integer',
-			default: 0
+			nullable: true,
+			anyOf: [{
+				const: 60 * 5,
+				title: '5 minutes'
+			}, {
+				const: 60 * 15,
+				title: '15 minutes'
+			}, {
+				const: 60 * 30,
+				title: '30 minutes'
+			}, {
+				const: 60 * 60,
+				title: '1 hour'
+			}, {
+				const: 60 * 60 * 12,
+				title: '12 hours'
+			}, {
+				const: 60 * 60 * 24,
+				title: '1 day'
+			}]
 		},
 		timeZone: {
 			title: 'Time Zone',
 			description: 'Sets a time zone name from https://www.iana.org/time-zones',
-			type: 'string'
+			type: 'string',
+			format: "singleline"
 		}
 	},
 	contents: {
@@ -64,11 +87,12 @@ exports.input_date_time = {
 	html: `<div class="field">
 		<label block-content="label">Label</label>
 		<element-input-date-time
-			format="[format]"
-			time-zone="[timeZone]"
-			value="[value]"
+			data-format="[format]"
+			data-time-zone="[timeZone]"
+			data-value="[value]"
+			data-step="[step|magnet:]"
 		><input name="[name]" disabled="[disabled]" placeholder="[placeholder]"
-			required="[required]" step="[step]"
+			required="[required]"
 		/></element-input-date-time>
 	</div>`,
 	stylesheets: [
@@ -91,22 +115,26 @@ exports.input_date_slot = {
 		nameStart: {
 			title: "name for start date",
 			description: "The form object key",
-			type: "string"
+			type: "string",
+			format: "singleline"
 		},
 		nameEnd: {
 			title: "name for end date",
 			description: "The form object key",
-			type: "string"
+			type: "string",
+			format: "singleline"
 		},
 		valueStart: {
 			title: 'Start time',
 			nullable: true,
-			type: "string"
+			type: "string",
+			format: "singleline"
 		},
 		valueEnd: {
 			title: 'End time',
 			nullable: true,
-			type: "string"
+			type: "string",
+			format: "singleline"
 		},
 		required: {
 			title: 'required',
@@ -118,17 +146,8 @@ exports.input_date_slot = {
 			type: 'boolean',
 			default: false
 		},
-		step: {
-			title: 'step',
-			description: 'increments in seconds for start/end times',
-			type: 'integer',
-			default: 0
-		},
-		timeZone: {
-			title: 'Time Zone',
-			description: 'Sets a time zone name from https://www.iana.org/time-zones',
-			type: 'string'
-		}
+		step: exports.input_date_time.properties.step,
+		timeZone: exports.input_date_time.properties.timeZone
 	},
 	contents: {
 		id: 'label',
@@ -136,9 +155,9 @@ exports.input_date_slot = {
 	},
 	html: `<div class="field">
 		<label block-content="label">Label</label>
-		<element-input-date-slot start="[valueStart]" end="[valueEnd]" time-zone="[timeZone]">
-			<element-input-date-time><input name="[nameStart]" step="[step]" /></element-input-date-time>
-			<element-input-date-time><input name="[nameEnd]" step="[step]" /></element-input-date-time>
+		<element-input-date-slot data-start="[valueStart]" data-end="[valueEnd]" data-time-zone="[timeZone]" data-step="[step|magnet:]">
+			<element-input-date-time><input name="[nameStart]" /></element-input-date-time>
+			<element-input-date-time><input name="[nameEnd]" /></element-input-date-time>
 		</element-input-date-slot>
 	</div>`,
 	scripts: [

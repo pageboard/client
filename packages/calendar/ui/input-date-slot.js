@@ -1,77 +1,92 @@
 class HTMLElementInputDateSlot extends VirtualHTMLElement {
-	static get observedAttributes() {
-		return ['start', 'end', 'time-zone'];
-	}
-
-	setup(state) {
-		var els = Array.from(this.querySelectorAll('element-input-date-time'));
-		if (els.length == 0) return;
-		if (els.length == 2) {
-			els.unshift(this.ownerDocument.createElement('element-input-date-time'));
-			this.insertBefore(els[0], els[1]);
-		}
-		if (els.length != 3) {
-			throw new Error("Expected three element-input-date-time");
-		}
-		this._els = els;
-		var tz = this.getAttribute('time-zone');
-		els[0].timeZone = tz;
-		els[1].timeZone = tz;
-		els[2].timeZone = tz;
-		els[0].format = "date";
-		els[1].format = "time";
-		els[2].format = "time";
-		els[0].value = els[1].value = this.getAttribute('start');
-		els[2].value = this.getAttribute('end');
+	static get defaults() {
+		return {
+			start: null,
+			end: null,
+			timeZone: null,
+			range: null,
+			step: 0
+		};
 	}
 
 	handleChange(e, state) {
-		if (e.target.closest('element-input-date-time') == this._els[0]) this.dateChange(e);
+		var els = this.inputs;
+		if (els.length == 3 && e.target.closest('element-input-date-time') == els[0]) {
+			this.dateChange(e);
+		}
 		this.timeChange(e);
 	}
 
 	dateChange(e) {
 		var date = e.target.parentNode.value || (new Date()).toISOString();
-		var startEl = this._els[1];
-		var time = (startEl.value || date).split('T').pop();
-		if (!date) return;
-		var startVal = date.split('T').shift() + 'T' + time;
-		startEl.value = startVal;
+		var els = this.inputs;
+		els[1].setDate(date);
+		els[2].setDate(date);
 	}
 
 	timeChange(e) {
-		var start = new Date(this._els[1].value);
-		var end = new Date(this._els[2].value);
+		var els = this.inputs;
+		var startEl = els[els.length - 2];
+		var endEl = els[els.length - 1];
+		var isStart = e.target.parentNode == startEl;
+		var start = new Date(startEl.options.value);
+		var end = new Date(endEl.options.value);
 		var startTime = start.getTime();
 		var endTime = end.getTime();
 		if (Number.isNaN(endTime)) endTime = startTime;
 		if (Number.isNaN(startTime)) return;
-		// keep start and end on the same day
 		if (endTime >= startTime) return;
-		if (start.getDate() > end.getDate()) {
-			end.setDate(start.getDate());
+		var startPart, endPart, changed = false;
+		for (var Part of ['FullYear', 'Month', 'Date', 'Hours', 'Minutes', 'Seconds']) {
+			startPart = start[`get${Part}`]();
+			endPart = end[`get${Part}`]();
+			if (startPart > endPart) {
+				changed = true;
+				if (isStart) {
+					end[`set${Part}`](startPart);
+				} else {
+					start[`set${Part}`](endPart);
+				}
+			}
+		}
+		if (changed) {
+			if (isStart) {
+				endEl.dataset.value = end.toISOString();
+			} else {
+				startEl.dataset.value = start.toISOString();
+			}
+		}
+	}
+	get inputs() {
+		return Array.from(this.querySelectorAll('element-input-date-time'));
+	}
+
+	patch(state) {
+		var els = this.inputs;
+		var dayRange = this.options.step < 60 * 60 * 24;
+		if (els.length == 2 && dayRange) {
+			els.unshift(this.ownerDocument.createElement('element-input-date-time'));
+			this.insertBefore(els[0], els[1]);
+		}
+		var dts = els.map(el => el.dataset);
+
+		var tz = this.options.timeZone;
+		if (tz) dts.forEach(dt => { dt.timeZone = tz; } );
+		else dts.forEach(dt => { delete dt.timeZone; } );
+
+
+		if (dayRange) {
+			dts[0].format = "date";
+			dts[1].step = dts[2].step = this.options.step;
+			dts[1].format = dts[2].format = "time";
+			dts[1].value = dts[0].value = this.options.start || "";
+			dts[2].value = this.options.end || "";
 		} else {
-			end = start;
+			dts[0].format = "date";
+			dts[1].format = "date";
+			dts[0].value = this.options.start || "";
+			dts[1].value = this.options.end || "";
 		}
-		this._els[2].value = end.toISOString();
-	}
-
-	attributeChangedCallback(name, old, val) {
-		if (!this._els) return;
-		if (name == "start") {
-			this._els[0].value = val;
-			this._els[1].value = val;
-		} else if (name == "end") {
-			this._els[2].value = val;
-		} else if (name == "time-zone") {
-			this._els[0].timeZone = val;
-			this._els[1].timeZone = val;
-			this._els[2].timeZone = val;
-		}
-	}
-
-	close() {
-		if (this._els) delete this._els;
 	}
 }
 

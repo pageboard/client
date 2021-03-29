@@ -1,27 +1,14 @@
 class HTMLElementInputDateTime extends VirtualHTMLElement {
-	static get observedAttributes() {
-		return ['value', 'format', 'time-zone'];
-	}
-	get format() {
-		return this.getAttribute('format') || 'datetime';
-	}
-	set format(f) {
-		if (f) this.setAttribute('format', f);
-		else this.removeAttribute('format');
-	}
-	get timeZone() {
-		return this.getAttribute('time-zone');
-	}
-	set timeZone(f) {
-		if (f) this.setAttribute('time-zone', f);
-		else this.removeAttribute('time-zone');
-	}
-	get value() {
-		return this.getAttribute('value');
-	}
-	set value(v) {
-		if (v) this.setAttribute('value', v);
-		else this.removeAttribute('value');
+	static get defaults() {
+		return {
+			value: null,
+			format: (str) => {
+				if (['date', 'time', 'datetime'].includes(str)) return str;
+				else return 'datetime';
+			},
+			timeZone: null,
+			step: 0
+		};
 	}
 
 	handleClick(e, state) {
@@ -60,52 +47,55 @@ class HTMLElementInputDateTime extends VirtualHTMLElement {
 		if (!this.querySelector('.controls')) {
 			this.insertAdjacentHTML('beforeEnd', '<div class="controls"><span class="incr"></span><span class="decr"></span></div>');
 		}
-		view.value = this.getAttribute('value') || input.value;
+		view.value = this.options.value;
 		if (!input.value && view.value) input.value = view.value;
-		var tz = this.timeZone;
+
 		this._dt = window.DateTimeEntry(this._view, {
-			step: input.getAttribute('step'),
+			step: this.options.step || null,
 			locale: document.documentElement.lang || window.navigator.language,
-			format: this._formatOptions(this.format, tz),
-			useUTC: !!tz,
+			format: this.formatFromOptions(),
+			useUTC: !!this.options.timeZone,
 			onChange: function(val) {
-				this.value = val.toISOString();
-				if (this._input.value != this.value) this._input.value = this.value;
+				this.dataset.value = val.toISOString();
 			}.bind(this)
 		});
 	}
 
-	attributeChangedCallback(name, old, val) {
-		if (old == val || !this._dt) return;
-		if (name == "format" || name == "time-zone") {
-			var props = this._dt.props;
-			var tz = this.timeZone;
-			props.format = this._formatOptions(val || 'datetime', tz);
-			props.useUTC = !!tz;
-			this._dt.setOptions(props);
-		} else if (name == "value") {
-			this._input.value = val;
-			this._dt.setTime(val);
-		}
+	patch(state) {
+		if (!this._dt) return;
+		this._dt.setOptions(Object.assign(this._dt.props, {
+			format: this.formatFromOptions(),
+			useUTC: !!this.options.timeZone,
+			step: this.options.step || null
+		}));
+		this._input.value = this.options.value || "";
+		this._dt.setTime(this.options.value);
 	}
 
-	_formatOptions(format, tz) {
+	setDate(date) {
+		var time = (this.options.value || date).split('T').pop();
+		this.dataset.value = date.split('T').shift() + 'T' + time;
+	}
+
+	formatFromOptions() {
+		var obj = {};
 		var l = 'long';
 		var n = 'numeric';
 		var d = '2-digit';
-		var fmt = {};
-		if (format.startsWith('date')) Object.assign(fmt, {
+		var format = this.options.format;
+		if (this.options.step == 60 * 60 * 24) format = 'date';
+		if (format.startsWith('date')) Object.assign(obj, {
 			year: n,
 			month: l,
 			day: n
 		});
-		if (format.endsWith("time")) Object.assign(fmt, {
+		if (format.endsWith("time")) Object.assign(obj, {
 			hour12: false,
 			hour: d,
 			minute: d
 		});
-		if (tz) fmt.timeZone = tz;
-		return fmt;
+		if (this.options.timeZone) obj.timeZone = this.options.timeZone;
+		return obj;
 	}
 
 	close() {
