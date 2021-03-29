@@ -396,7 +396,9 @@ Semafor.prototype.process = function(key, schema, node, parent) {
 	}
 	const type = getNonNullType(schema.type);
 	let hasHelper = false;
-	if (type && types[type]) {
+	if (schema.oneOf || schema.anyOf) {
+		hasHelper = !!types.oneOf(key, schema, node, this);
+	} else if (type && types[type]) {
 		if (type == 'object') {
 			types.object(key, schema, node, this);
 		} else if (!schema.title) {
@@ -421,8 +423,6 @@ Semafor.prototype.process = function(key, schema, node, parent) {
 			});
 			types[type](key, schema, node, this);
 		}
-	} else if (!type && (schema.oneOf || schema.anyOf)) {
-		hasHelper = !!types.oneOf(key, schema, node, this);
 	} else if (Array.isArray(type)) {
 		type.forEach(function(type) {
 			types[type](key, schema, node, this);
