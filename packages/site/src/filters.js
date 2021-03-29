@@ -107,7 +107,7 @@ exports.sum = function(obj, what, ...list) {
 		var val = what.expr.get(obj, str);
 		if (val == null) return;
 		if (typeof val == "string") val = parseFloat(val);
-		if (isNaN(val)) return;
+		if (Number.isNaN(val)) return;
 		sum += sign * val;
 	});
 	return sum;
@@ -120,7 +120,7 @@ exports.schema = function(val, what, spath) {
 	var path = what.scope.path;
 	var data = (path[0] && path[0].startsWith('$')) ? what.scope.data : what.data;
 	var blocks = [];
-	for (var i=0; i < path.length; i++) {
+	for (var i = 0; i < path.length; i++) {
 		if (!data) break;
 		if (data.id && data.type) blocks.push({
 			index: i + 1, // add one because path will be block.data and schema is block.data schema
@@ -239,7 +239,7 @@ exports.query = function(obj, what) {
 
 exports.isoDate = function(val, what) {
 	var d = exports.parseDate(val);
-	if (isNaN(d.getTime())) return null;
+	if (Number.isNaN(d.getTime())) return null;
 	else return d.toISOString();
 };
 
@@ -285,7 +285,7 @@ exports.toDate = function(val, what, unit) {
 exports.setDate = function(val, what, amount, unit) {
 	var d = exports.parseDate(val);
 	amount = parseInt(amount);
-	if (!isNaN(amount)) {
+	if (!Number.isNaN(amount)) {
 		if (!unit) unit = 'day';
 		else unit = unit.toLowerCase();
 		if (unit.endsWith('s')) unit = unit.slice(0, -1);
