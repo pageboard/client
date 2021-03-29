@@ -519,7 +519,9 @@ types.oneOf = function(key, schema, node, inst) {
 		oneOfType = {type: "string", format: 'singleline'}; // FIXME use an array of formats
 	}
 	if (oneOfType) {
-		inst.process(key, Object.assign({}, schema, oneOfType), node, parent);
+		inst.process(key, Object.assign(
+			{}, schema, { oneOf: null, anyOf: null }, oneOfType
+		), node, parent);
 		return true;
 	}
 
