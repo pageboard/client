@@ -17,6 +17,15 @@ exports.event = {
 			title: 'Event title',
 			type: "string"
 		},
+		url: {
+			title: 'Event page',
+			type: "string",
+			format: "pathname",
+			$helper: {
+				name: 'page',
+				type: 'page'
+			}
+		},
 		groupsOnly: {
 			title: 'For groups only',
 			type: 'boolean',
