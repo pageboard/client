@@ -68,8 +68,13 @@ class HTMLElementInputDateTime extends VirtualHTMLElement {
 			useUTC: !!this.options.timeZone,
 			step: this.options.step || null
 		}));
-		this._input.value = this.options.value || "";
-		this._dt.setTime(this.options.value);
+		var date = new Date(this.options.value);
+		if (Number.isNaN(date.getTime())) {
+			this.options.value = "";
+			date = null;
+		}
+		this._input.value = this.options.value;
+		if (date) this._dt.setTime(date);
 	}
 
 	setDate(date) {
