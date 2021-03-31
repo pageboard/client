@@ -139,7 +139,7 @@
 				this.#props.minTime = Number.isNaN(this.#props.minTime) ? 0 : this.#props.minTime;
 			}
 
-			const state = this._setDateTime(!Number.isNaN(props.datetime) ? props.datetime : this.#state.datetime);
+			const state = this.#setDateTime(!Number.isNaN(props.datetime) ? props.datetime : this.#state.datetime);
 
 			this.#setState(state);
 
@@ -152,8 +152,8 @@
 		}
 
 		setTime(date) {
-			const newState = this._setDateTime(date);
-			this.#setState(newState, this._notify);
+			const newState = this.#setDateTime(date);
+			this.#setState(newState, this.#notify);
 		}
 
 		destroy() {
@@ -195,7 +195,7 @@
 			this.element.setSelectionRange(ss, se);
 		}
 
-		_setDateTime(datetime) {
+		#setDateTime(datetime) {
 
 			let parts, type;
 
@@ -322,8 +322,8 @@
 
 				case KEY_DELETE: {
 					e.preventDefault();
-					const newState = this._setDateTime(new Date(NaN));
-					this.#setState(newState, this._notify);
+					const newState = this.#setDateTime(new Date(NaN));
+					this.#setState(newState, this.#notify);
 
 					break;
 				}
@@ -400,8 +400,8 @@
 
 		step(sign) {
 			const newDatetime = this.#crement(sign, this.#state);
-			const newState = this._setDateTime(newDatetime);
-			this.#setState(newState, this._notify);
+			const newState = this.#setDateTime(newDatetime);
+			this.#setState(newState, this.#notify);
 		}
 
 		#crement(operator, state) {
@@ -441,25 +441,17 @@
 
 		#modify(input, type) {
 
-			const maxValue = this._getMaxFieldValueAtDate(this.#state.datetime, type);
+			const maxValue = this.#getMaxFieldValueAtDate(this.#state.datetime, type);
 
-			const newDatetime = this._calculateNextValue(input, type, maxValue);
+			const newDatetime = this.#calculateNextValue(input, type, maxValue);
 
-			const newState = this._setDateTime(newDatetime);
+			const newState = this.#setDateTime(newDatetime);
 
-			this.#setState(newState, this._notify);
+			this.#setState(newState, this.#notify);
 
-			// if(result !== this.#state.datetime) {
-			//
-			//	 this.#setState({
-			//		 datetime: result,
-			//		 spares : this._disassembleTimestamp(result, this.#state.locale, this.#state.format)
-			//	 }, this._notify)
-			//
-			// }
 		}
 
-		_getMaxFieldValueAtDate(date, fieldName) {
+		#getMaxFieldValueAtDate(date, fieldName) {
 
 			const fy = this.#props.useUTC ? date.getUTCFullYear() : date.getFullYear();
 			const m = this.#props.useUTC ? date.getUTCMonth() : date.getMonth();
@@ -484,7 +476,7 @@
 
 		}
 
-		_calculateNextValue(input, type, max) {
+		#calculateNextValue(input, type, max) {
 
 			const getFN = 'get' + (this.#props.useUTC ? 'UTC' : '') + hashTypeFn[type];
 			const setFN = 'set' + (this.#props.useUTC ? 'UTC' : '') + hashTypeFn[type];
@@ -650,7 +642,7 @@
 
 		}
 
-		_notify() {
+		#notify() {
 			this.#props.onChange(this.#state.datetime);
 			var e;
 			if (document.createEvent) {
