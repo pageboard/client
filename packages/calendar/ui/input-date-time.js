@@ -50,31 +50,26 @@ class HTMLElementInputDateTime extends VirtualHTMLElement {
 		view.value = this.options.value;
 		if (!input.value && view.value) input.value = view.value;
 
-		this._dt = window.DateTimeEntry(this._view, {
+		this._dt = new window.DateTimeEntry(this._view, {
 			step: this.options.step || null,
 			locale: document.documentElement.lang || window.navigator.language,
 			format: this.formatFromOptions(),
 			useUTC: !!this.options.timeZone,
 			onChange: function(val) {
-				this.dataset.value = val.toISOString();
+				this.dataset.value = Number.isNaN(val.getTime()) ? "" : val.toISOString();
 			}.bind(this)
 		});
 	}
 
 	patch(state) {
 		if (!this._dt) return;
-		this._dt.setOptions(Object.assign(this._dt.props, {
+		this._dt.setOptions({
 			format: this.formatFromOptions(),
 			useUTC: !!this.options.timeZone,
 			step: this.options.step || null
-		}));
-		var date = new Date(this.options.value);
-		if (Number.isNaN(date.getTime())) {
-			this.options.value = "";
-			date = null;
-		}
+		});
 		this._input.value = this.options.value;
-		if (date) this._dt.setTime(date);
+		this._dt.setTime(this.options.value);
 	}
 
 	setDate(date) {
