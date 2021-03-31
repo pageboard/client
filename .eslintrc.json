@@ -1,8 +1,8 @@
 {
   "rules": {
     "indent": ["error", "tab", {
-      "MemberExpression": "off",
-      "outerIIFEBody": "off"
+      "MemberExpression": 0,
+      "outerIIFEBody": 0
     }],
     "linebreak-style": ["error", "unix"],
     "semi": ["error", "always"],
