@@ -1,36 +1,13 @@
 {
   "presets": [
-    [
-      "env",
-      {
-        "targets": {
-          "browsers": [
-            "last 2 versions"
-          ]
-        },
-        "production": {
-          "presets": ["babili"]
-        }
-      }
-    ]
-  ],
-  "plugins": ["transform-object-rest-spread"]
-}
-
-/*
-
-{
-  "presets": [
-    ["latest", {
-      "es2015": {
-        "modules": "umd"
-      }
+    ["@babel/preset-env", {
+      "targets": "defaults"
     }]
   ],
+  "plugins": ["@babel/plugin-syntax-class-properties"],
   "env": {
-    "production": {
-      "presets": ["babili"]
+    "production" : {
+      "presets": ["minify"]
     }
-  },
-
-}*/
+  }
+}
