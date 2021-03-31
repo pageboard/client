@@ -123,18 +123,18 @@
 
 			this.props.minTime = (mT % DAYLEN + DAYLEN) % DAYLEN; // NaN, number [0...86400000 - 1]
 			this.props.maxTime = (MT % DAYLEN + DAYLEN) % DAYLEN;
-			this.props.minDate = isNaN(mT) ? mD : mD - mD % DAYLEN; // NaN, number
-			this.props.maxDate = isNaN(MT) ? MD : MD - MD % DAYLEN;
+			this.props.minDate = Number.isNaN(mT) ? mD : mD - mD % DAYLEN; // NaN, number
+			this.props.maxDate = Number.isNaN(MT) ? MD : MD - MD % DAYLEN;
 
-			if (!isNaN(this.props.minTime)) {
-				this.props.maxTime = isNaN(this.props.maxTime) ? DAYLEN : this.props.maxTime;
+			if (!Number.isNaN(this.props.minTime)) {
+				this.props.maxTime = Number.isNaN(this.props.maxTime) ? DAYLEN : this.props.maxTime;
 			}
 
-			if (!isNaN(this.props.maxTime)) {
-				this.props.minTime = isNaN(this.props.minTime) ? 0 : this.props.minTime;
+			if (!Number.isNaN(this.props.maxTime)) {
+				this.props.minTime = Number.isNaN(this.props.minTime) ? 0 : this.props.minTime;
 			}
 
-			const state = this._setDateTime(!isNaN(props.datetime) ? props.datetime : this.state.datetime);
+			const state = this._setDateTime(!Number.isNaN(props.datetime) ? props.datetime : this.state.datetime);
 
 			state.step = this.props.step;
 
@@ -203,7 +203,7 @@
 
 			datetime = new Date(datetime);
 
-			if (!isNaN(step)) {
+			if (!Number.isNaN(step)) {
 				step = step * 1000;
 				datetime = new Date(Math.floor(datetime.getTime() / step) * step);
 			}
@@ -249,7 +249,7 @@
 
 			e.preventDefault();
 
-			if (isNaN(this.state.datetime)) {
+			if (Number.isNaN(this.state.datetime)) {
 
 				const dt = new Date();
 
@@ -406,7 +406,7 @@
 			const type = state.type;
 			const part = this.state.parts.find(p => p.type === type);
 
-			const dt = (!isNaN(this.state.datetime) && this.state.datetime) || this.props.preset || Date.now();
+			const dt = (!Number.isNaN(this.state.datetime) && this.state.datetime) || this.props.preset || Date.now();
 
 			let proxyTime = new Date(dt);
 			const stamp = proxyTime.getTime();
@@ -427,7 +427,7 @@
 			proxyTime['set' + fnName](newValue);
 			let newstamp = proxyTime.getTime();
 			const step = state.step;
-			if (!isNaN(step) && Math.abs(newstamp - stamp) < step * 1000) {
+			if (!Number.isNaN(step) && Math.abs(newstamp - stamp) < step * 1000) {
 				newstamp = stamp + operator * step * 1000;
 				proxyTime = new Date(newstamp);
 			}
@@ -603,14 +603,14 @@
 
 		fitToLimits(datetime) {
 
-			if (isNaN(datetime)) return datetime;
+			if (Number.isNaN(datetime)) return datetime;
 
 			const timestamp = datetime.getTime();
 
 			let timePart = (timestamp % DAYLEN + DAYLEN) % DAYLEN; //this is trick for negative timestamps
 			let datePart = timestamp - timePart;
 
-			if (!isNaN(this.props.minTime) && !isNaN(this.props.maxTime)) {
+			if (!Number.isNaN(this.props.minTime) && !Number.isNaN(this.props.maxTime)) {
 
 				if (this.props.maxTime > this.props.minTime) {
 					timePart = Math.max(this.props.minTime, Math.min(this.props.maxTime, timePart));
@@ -621,11 +621,11 @@
 					timePart = timePart > this.props.minTime || timePart < this.props.maxTime ? timePart : nearestLimit;
 				}
 
-				if (!isNaN(this.props.minDate)) {
+				if (!Number.isNaN(this.props.minDate)) {
 					datePart = Math.max(datePart, this.props.minDate);
 				}
 
-				if (!isNaN(this.props.maxDate)) {
+				if (!Number.isNaN(this.props.maxDate)) {
 					datePart = Math.min(datePart, this.props.maxDate);
 				}
 
@@ -633,12 +633,12 @@
 
 				timePart = 0;
 
-				let mD = isNaN(this.props.minDate) ? -Infinity : this.props.minDate;
-				let MD = isNaN(this.props.maxDate) ? Infinity : this.props.maxDate;
+				let mD = Number.isNaN(this.props.minDate) ? -Infinity : this.props.minDate;
+				let MD = Number.isNaN(this.props.maxDate) ? Infinity : this.props.maxDate;
 
 				datePart = Math.max(mD, Math.min(MD, timestamp));
 
-				if (isNaN(datePart)) {
+				if (Number.isNaN(datePart)) {
 					datePart = timestamp;
 				}
 			}
