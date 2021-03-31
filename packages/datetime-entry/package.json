@@ -1,7 +1,7 @@
 {
   "name": "@pageboard/datetime-entry",
   "version": "3.3.2-1",
-  "description": "Enter formatted date and time without pickers - jquery-less edition",
+  "description": "Enter formatted date and time using native date api and without pickers",
   "main": "dist/datetime.min.js",
   "scripts": {
     "test": "karma start --singleRun --browsers Firefox",
