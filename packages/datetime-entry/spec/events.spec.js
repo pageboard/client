@@ -42,7 +42,7 @@ describe('Events suite', function () {
             preventDefault: function () { },
             stopPropagation: function () { },
             target: input,
-            type: 'mousedown'
+            type: 'mouseup'
         };
 
         input.focus();
