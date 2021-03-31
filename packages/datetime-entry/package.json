@@ -16,7 +16,7 @@
     "Serge Balykov (ua9msn@gmail.com)",
     "Jérémy Lal <kapouer@melix.org>"
   ],
-  "homepage": "https://github.com/pageboard/datetime",
+  "homepage": "https://github.com/pageboard/client",
   "keywords": [
     "datetime",
     "date-time",
@@ -26,7 +26,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/pageboard/datetime"
+    "url": "https://github.com/pageboard/client"
   },
   "devDependencies": {
     "@babel/cli": "^7.13.14",
