@@ -4,7 +4,7 @@
       "targets": "defaults"
     }]
   ],
-  "plugins": ["@babel/plugin-syntax-class-properties"],
+  "plugins": ["@babel/plugin-proposal-class-properties", "@babel/plugin-proposal-private-methods"],
   "env": {
     "production" : {
       "presets": ["minify"]
