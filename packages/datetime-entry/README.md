@@ -37,7 +37,7 @@ which is the system timezone.
 ## Usage
 
 ```js
-let inst = new window.DateTimeEntry(selectorOrElement, options);
+let inst = new window.DateTimeEntry(domElement, options);
 ```
 
 ## What is inside
