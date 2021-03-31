@@ -27,7 +27,7 @@ describe('empty option suite', function () {
 
     beforeEach(function () {
         setFixtures('<input id="dt" type="text" />');
-        plug = DateTimeEntry('#dt');
+        plug = new DateTimeEntry('#dt');
         $input = $(plug.element);
 
     });

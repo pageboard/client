@@ -27,7 +27,7 @@ describe('Night suite', function () {
 
     beforeEach(function () {
         setFixtures('<input id="dt" type="text" />');
-        plug = DateTimeEntry('#dt', {
+        plug = new DateTimeEntry('#dt', {
             locale: 'ru',
             format: format,
             minTime: new Date('01/01/2017 17:00:00 UTC'),

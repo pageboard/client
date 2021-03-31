@@ -22,7 +22,7 @@ describe('Time suite', function () {
 
     beforeEach(function () {
         setFixtures('<input id="dt" type="text" />');
-        plug = DateTimeEntry('#dt', {
+        plug = new DateTimeEntry('#dt', {
             useUTC: true,
             locale: 'en',
             format: format,

@@ -28,7 +28,7 @@ describe('Date suite', function () {
 
     beforeEach(function () {
         setFixtures('<input id="dt" type="text" />');
-        plug = DateTimeEntry('#dt', {
+        plug = new DateTimeEntry('#dt', {
             locale: 'ru',
             format: format,
             minDate: new Date('01/01/2017 12:00:00 UTC'),
