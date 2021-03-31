@@ -57,45 +57,40 @@
 		maxDate: NaN,
 		minTime: NaN,
 		maxTime: NaN,
+		step: NaN,
 		onChange: () => { }
 	};
 
-	window.DateTimeEntry = Plugin;
+	window.DateTimeEntry = class DateTimeEntry {
+		constructor(element, props) {
+			const _props = Object.assign({}, defaultProps, props);
 
-	function Plugin(element, props) {
-		if (!(this instanceof Plugin)) return new Plugin(element, props);
+			if (typeof element == 'string') element = document.querySelector(element);
+			this.element = element;
 
-		const _props = Object.assign({}, defaultProps, props);
+			this._handleFocus = this._handleFocus.bind(this);
+			this._handleMouseDown = this._handleMouseDown.bind(this);
+			this._handleKeydown = this._handleKeydown.bind(this);
+			this._handleMousewheel = this._handleMousewheel.bind(this);
 
-		if (typeof element == 'string') element = document.querySelector(element);
-		this.element = element;
+			this.element.setSelectionRange(0, 0);
 
-		this.state = {
-			type: undefined,
-			parts: [],
-			datetime: _props.datetime || element.value,
-			step: _props.step || parseInt(element.getAttribute('step'))
-		};
+			// this.element.addEventListener('select', this.handleSelection.bind(this));
+			this.element.addEventListener('focus', this._handleFocus);
+			this.element.addEventListener('mouseup', this._handleMouseDown);
+			this.element.addEventListener('keydown', this._handleKeydown);
+			this.element.addEventListener('mousewheel', this._handleMousewheel);
 
-		this._handleFocus = this._handleFocus.bind(this);
-		this._handleMouseDown = this._handleMouseDown.bind(this);
-		this._handleKeydown = this._handleKeydown.bind(this);
-		this._handleMousewheel = this._handleMousewheel.bind(this);
+			this.state = {
+				type: undefined,
+				parts: [],
+				datetime: _props.datetime || element.value,
+				step: _props.step || parseInt(element.getAttribute('step'))
+			};
+			this.setOptions(_props);
+		}
 
-		this.element.setSelectionRange(0, 0);
-
-		// this.element.addEventListener('select', this.handleSelection.bind(this));
-		this.element.addEventListener('focus', this._handleFocus);
-		this.element.addEventListener('mouseup', this._handleMouseDown);
-		this.element.addEventListener('keydown', this._handleKeydown);
-		this.element.addEventListener('mousewheel', this._handleMousewheel);
-
-		this.setOptions(_props);
-	}
-
-	Plugin.prototype = {
-
-		setState: function (newPartialState, callback) {
+		setState(newPartialState, callback) {
 
 			this.state = Object.assign({}, this.state, newPartialState);
 
@@ -105,10 +100,9 @@
 				callback.call(this);
 			}
 
-		},
+		}
 
-		setOptions: function (props) {
-
+		setOptions(props) {
 			this.props = Object.assign({}, this.props, props);
 
 			const format = Object.assign({}, this.props.format);
@@ -148,21 +142,23 @@
 
 			const state = this._setDateTime(!isNaN(props.datetime) ? props.datetime : this.state.datetime);
 
+			state.step = this.props.step;
+
 			this.setState(state);
 
 
 			this._render();
 
-		},
+		}
 
-		getTime: function () {
+		getTime() {
 			return this.state.datetime;
-		},
+		}
 
-		setTime: function (date) {
+		setTime(date) {
 			const newState = this._setDateTime(date);
 			this.setState(newState, this._notify);
-		},
+		}
 
 		destroy() {
 
@@ -170,9 +166,9 @@
 			this.element.removeEventListener('mouseup', this._handleMouseDown);
 			this.element.removeEventListener('keydown', this._handleKeydown);
 			this.element.removeEventListener('mousewheel', this._handleMousewheel);
-		},
+		}
 
-		_render: function () {
+		_render() {
 
 			let string;
 
@@ -186,7 +182,8 @@
 
 			this.element.setSelectionRange(0, 0);
 
-			if (document.activeElement !== this.element) return; //avoid selection on element without focus (Firefox)
+			//avoid selection on element without focus (Firefox)
+			if (document.activeElement !== this.element) return;
 
 			const type = this.state.type || '';
 
@@ -201,7 +198,7 @@
 			const se = ss + this.state.parts[partIndex].value.length;
 
 			this.element.setSelectionRange(ss, se);
-		},
+		}
 
 		_setDateTime(datetime) {
 
@@ -238,7 +235,7 @@
 			//	 this.props.onChange(datetime);
 			// });
 
-		},
+		}
 
 		_handleFocus(e) {
 			if (e.target.selectionStart != e.target.selectionEnd) {
@@ -246,7 +243,7 @@
 				e.target.focus();
 				this._handleMouseDown(e);
 			}
-		},
+		}
 
 		_handleMouseDown(e) {
 
@@ -289,7 +286,7 @@
 
 			this._render();
 
-		},
+		}
 
 		_handleKeydown(e) {
 
@@ -363,9 +360,9 @@
 				}
 			}
 
-		},
+		}
 
-		_handleMousewheel: function (e) {
+		_handleMousewheel(e) {
 			e.preventDefault();
 			e.stopPropagation();
 
@@ -375,7 +372,7 @@
 
 			this._render();
 
-		},
+		}
 
 		_getNextTypeInDirection(direction) {
 			direction = Math.sign(direction);
@@ -396,13 +393,13 @@
 			}
 
 			return (ono ? this.state.parts[index] : {}).type;
-		},
+		}
 
 		step(sign) {
 			const newDatetime = this._crement(sign, this.state);
 			const newState = this._setDateTime(newDatetime);
 			this.setState(newState, this._notify);
-		},
+		}
 
 		_crement(operator, state) {
 
@@ -437,7 +434,7 @@
 
 			return this._fitToLimits(proxyTime);
 
-		},
+		}
 
 		_modify(input, type) {
 
@@ -457,7 +454,7 @@
 			//	 }, this._notify)
 			//
 			// }
-		},
+		}
 
 		_getMaxFieldValueAtDate(date, fieldName) {
 
@@ -482,7 +479,7 @@
 
 			}
 
-		},
+		}
 
 		_calculateNextValue(input, type, max) {
 
@@ -561,7 +558,7 @@
 
 			}
 
-		},
+		}
 
 		_validate(datetime) {
 
@@ -602,7 +599,7 @@
 
 			return validDate && validTime;
 
-		},
+		}
 
 		_fitToLimits(datetime) {
 
@@ -648,7 +645,7 @@
 
 			return new Date(datePart + timePart);
 
-		},
+		}
 
 		_notify() {
 			this.props.onChange(this.state.datetime);
