@@ -20,16 +20,23 @@
   },
   "homepage": "https://github.com/pageboard/client#readme",
   "dependencies": {
-    "@pageboard/pagecut": "file:./packages/pagecut",
-    "@pageboard/site": "file:./packages/site",
     "@pageboard/calendar": "file:./packages/calendar",
+    "@pageboard/email": "file:./packages/email",
+    "@pageboard/feed": "file:./packages/feed",
     "@pageboard/gallery": "file:./packages/gallery",
     "@pageboard/google": "file:./packages/google",
-    "@pageboard/email": "file:./packages/email",
-    "@pageboard/print": "file:./packages/print",
-    "@pageboard/feed": "file:./packages/feed",
     "@pageboard/html": "file:./packages/html",
+    "@pageboard/pagecut": "file:./packages/pagecut",
+    "@pageboard/print": "file:./packages/print",
+    "@pageboard/site": "file:./packages/site",
     "@pageboard/write": "file:./packages/write"
   },
-  "pageboard": true
+  "pageboard": true,
+  "devDependencies": {
+    "@babel/eslint-parser": "^7.13.14",
+    "@babel/plugin-proposal-class-properties": "^7.13.0",
+    "@babel/plugin-proposal-private-methods": "^7.13.0",
+    "@kapouer/eslint-config": "^1.2.1",
+    "eslint": "^7.23.0"
+  }
 }
