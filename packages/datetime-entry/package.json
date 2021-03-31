@@ -37,12 +37,10 @@
     "babel-preset-minify": "^0.6.0-alpha.9",
     "jasmine": "^2.8.0",
     "jasmine-core": "^2.8.0",
-    "jquery": "*",
     "karma": "^1.7.1",
     "karma-chrome-launcher": "^2.2.0",
     "karma-coverage": "^1.1.1",
     "karma-firefox-launcher": "^1.0.1",
-    "karma-jasmine": "^1.1.0",
-    "karma-jasmine-jquery": "^0.1.1"
+    "karma-jasmine": "^1.1.0"
   }
 }

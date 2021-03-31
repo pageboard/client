@@ -25,8 +25,8 @@ describe('Events suite', function () {
     //jasmine.getFixtures().fixturesPath = 'base/spec/javascripts/fixtures';
 
     beforeEach(function () {
-        setFixtures('<input id="dt" type="text" />');
-        input = document.getElementById('dt');
+        document.body.innerHTML = '<input id="dt" type="text" />';
+        input = document.body.firstElementChild;
         plug = new DateTimeEntry(input, {
             locale: 'ru',
             format: format,
