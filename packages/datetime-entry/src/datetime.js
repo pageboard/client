@@ -65,21 +65,15 @@
 		constructor(element, props) {
 			const _props = Object.assign({}, defaultProps, props);
 
-			if (typeof element == 'string') element = document.querySelector(element);
 			this.element = element;
-
-			this._handleFocus = this._handleFocus.bind(this);
-			this._handleMouseDown = this._handleMouseDown.bind(this);
-			this._handleKeydown = this._handleKeydown.bind(this);
-			this._handleMousewheel = this._handleMousewheel.bind(this);
 
 			this.element.setSelectionRange(0, 0);
 
-			// this.element.addEventListener('select', this.handleSelection.bind(this));
-			this.element.addEventListener('focus', this._handleFocus);
-			this.element.addEventListener('mouseup', this._handleMouseDown);
-			this.element.addEventListener('keydown', this._handleKeydown);
-			this.element.addEventListener('mousewheel', this._handleMousewheel);
+			// this.element.addEventListener('select', this);
+			this.element.addEventListener('focus', this);
+			this.element.addEventListener('mouseup', this);
+			this.element.addEventListener('keydown', this);
+			this.element.addEventListener('mousewheel', this);
 
 			this.state = {
 				type: undefined,
@@ -90,11 +84,11 @@
 			this.setOptions(_props);
 		}
 
-		setState(newPartialState, callback) {
+		#setState(newPartialState, callback) {
 
 			this.state = Object.assign({}, this.state, newPartialState);
 
-			this._render();
+			this.#render();
 
 			if (callback) {
 				callback.call(this);
@@ -144,10 +138,10 @@
 
 			state.step = this.props.step;
 
-			this.setState(state);
+			this.#setState(state);
 
 
-			this._render();
+			this.#render();
 
 		}
 
@@ -157,18 +151,17 @@
 
 		setTime(date) {
 			const newState = this._setDateTime(date);
-			this.setState(newState, this._notify);
+			this.#setState(newState, this._notify);
 		}
 
 		destroy() {
-
-			this.element.removeEventListener('focus', this._handleFocus);
-			this.element.removeEventListener('mouseup', this._handleMouseDown);
-			this.element.removeEventListener('keydown', this._handleKeydown);
-			this.element.removeEventListener('mousewheel', this._handleMousewheel);
+			this.element.removeEventListener('focus', this);
+			this.element.removeEventListener('mouseup', this);
+			this.element.removeEventListener('keydown', this);
+			this.element.removeEventListener('mousewheel', this);
 		}
 
-		_render() {
+		#render() {
 
 			let string;
 
@@ -215,7 +208,7 @@
 				datetime = new Date(Math.floor(datetime.getTime() / step) * step);
 			}
 
-			datetime = this._fitToLimits(datetime);
+			datetime = this.fitToLimits(datetime);
 
 			try {
 				parts = this.dtFormatter.formatToParts(datetime);
@@ -227,7 +220,7 @@
 
 			return ({ datetime, parts, type, step: this.state.step });
 
-			// this.setState({
+			// this.#setState({
 			//	 type,
 			//	 datetime,
 			//	 parts,
@@ -237,7 +230,14 @@
 
 		}
 
-		_handleFocus(e) {
+		handleEvent(e) {
+			if (e.type == "focus") this.#focus(e);
+			else if (e.type == "mousedown") this.#mousedown(e);
+			else if (e.type == "keydown") this.#keydown(e);
+			else if (e.type == "mousewheel") this.#mousewheel(e);
+		}
+
+		#focus(e) {
 			if (e.target.selectionStart != e.target.selectionEnd) {
 				e.preventDefault();
 				e.target.focus();
@@ -245,7 +245,7 @@
 			}
 		}
 
-		_handleMouseDown(e) {
+		#mousedown(e) {
 
 			e.preventDefault();
 
@@ -284,52 +284,52 @@
 			// this.state.ss = selection.ss ;
 			// this.state.se = selection.se ;
 
-			this._render();
+			this.#render();
 
 		}
 
-		_handleKeydown(e) {
+		#keydown(e) {
 
 			switch (e.which) {
 
 				case KEY_LEFT: {
 					e.preventDefault();
-					const type = this._getNextTypeInDirection(-1);
-					if (type) this.setState({ type });
+					const type = this.#getNextTypeInDirection(-1);
+					if (type) this.#setState({ type });
 					break;
 				}
 
 				case KEY_RIGHT: {
 					e.preventDefault();
-					const type = this._getNextTypeInDirection(1);
-					if (type) this.setState({ type });
+					const type = this.#getNextTypeInDirection(1);
+					if (type) this.#setState({ type });
 					break;
 				}
 
 				case KEY_UP: {
 					e.preventDefault();
-					this.step(1);
+					this.#step(1);
 					break;
 				}
 				case KEY_DOWN: {
 					e.preventDefault();
-					this.step(-1);
+					this.#step(-1);
 					break;
 				}
 
 				case KEY_DELETE: {
 					e.preventDefault();
 					const newState = this._setDateTime(new Date(NaN));
-					this.setState(newState, this._notify);
+					this.#setState(newState, this._notify);
 
 					break;
 				}
 
 				case KEY_TAB: {
-					const type = this._getNextTypeInDirection(e.shiftKey ? -1 : 1);
+					const type = this.#getNextTypeInDirection(e.shiftKey ? -1 : 1);
 					if (type) {
 						e.preventDefault();
-						this.setState({ type });
+						this.#setState({ type });
 					}
 					break;
 				}
@@ -353,7 +353,7 @@
 					// ignore Weekday
 					if (this.state.type === 'weekday') return;
 
-					this._modify(+e.key, this.state.type);
+					this.#modify(+e.key, this.state.type);
 
 					break;
 
@@ -362,19 +362,19 @@
 
 		}
 
-		_handleMousewheel(e) {
+		#mousewheel(e) {
 			e.preventDefault();
 			e.stopPropagation();
 
 			const direction = Math.sign(e.wheelDelta);
 
-			this.step(direction);
+			this.#step(direction);
 
-			this._render();
+			this.#render();
 
 		}
 
-		_getNextTypeInDirection(direction) {
+		#getNextTypeInDirection(direction) {
 			direction = Math.sign(direction);
 
 			if (!this.state.parts || !this.state.parts.length) return;
@@ -395,13 +395,13 @@
 			return (ono ? this.state.parts[index] : {}).type;
 		}
 
-		step(sign) {
-			const newDatetime = this._crement(sign, this.state);
+		#step(sign) {
+			const newDatetime = this.#crement(sign, this.state);
 			const newState = this._setDateTime(newDatetime);
-			this.setState(newState, this._notify);
+			this.#setState(newState, this._notify);
 		}
 
-		_crement(operator, state) {
+		#crement(operator, state) {
 
 			const type = state.type;
 			const part = this.state.parts.find(p => p.type === type);
@@ -432,11 +432,11 @@
 				proxyTime = new Date(newstamp);
 			}
 
-			return this._fitToLimits(proxyTime);
+			return this.fitToLimits(proxyTime);
 
 		}
 
-		_modify(input, type) {
+		#modify(input, type) {
 
 			const maxValue = this._getMaxFieldValueAtDate(this.state.datetime, type);
 
@@ -444,11 +444,11 @@
 
 			const newState = this._setDateTime(newDatetime);
 
-			this.setState(newState, this._notify);
+			this.#setState(newState, this._notify);
 
 			// if(result !== this.state.datetime) {
 			//
-			//	 this.setState({
+			//	 this.#setState({
 			//		 datetime: result,
 			//		 spares : this._disassembleTimestamp(result, this.state.locale, this.state.format)
 			//	 }, this._notify)
@@ -521,7 +521,7 @@
 
 			proxyTime[setFN](mm);
 
-			const isValid = this._validate(proxyTime);
+			const isValid = this.validate(proxyTime);
 
 			if (isValid) {
 				return proxyTime;
@@ -548,7 +548,7 @@
 				}
 
 				if (isFieldValid) {
-					proxyTime = this._fitToLimits(proxyTime);
+					proxyTime = this.fitToLimits(proxyTime);
 					return proxyTime;
 				}
 
@@ -560,7 +560,7 @@
 
 		}
 
-		_validate(datetime) {
+		validate(datetime) {
 
 			const timestamp = datetime.getTime();
 			const timePart = (timestamp % DAYLEN + DAYLEN) % DAYLEN;
@@ -601,7 +601,7 @@
 
 		}
 
-		_fitToLimits(datetime) {
+		fitToLimits(datetime) {
 
 			if (isNaN(datetime)) return datetime;
 

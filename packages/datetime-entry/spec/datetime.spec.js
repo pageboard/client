@@ -6,7 +6,7 @@
 
 describe('DateTime suite', function () {
 
-    let $input,
+    let input,
         plug;
 
     const format = {
@@ -27,7 +27,8 @@ describe('DateTime suite', function () {
 
     beforeEach(function () {
         setFixtures('<input id="dt" type="text" />');
-        plug = new DateTimeEntry('#dt', {
+        input = document.getElementById('dt');
+        plug = new DateTimeEntry(input, {
             locale: 'ru',
             format: format,
             minDate: new Date('01/05/2017 00:00:00 UTC'),
@@ -36,41 +37,39 @@ describe('DateTime suite', function () {
             maxTime: new Date('01/01/2017 17:00:00 UTC')
 
         });
-        $input = $(plug.element);
-
     });
 
     it('datetime - in range', function () {
         const dt = new Date('01/07/2017 11:02:03 UTC');
-        const result = plug._validate(dt);
+        const result = plug.validate(dt);
         expect(result).toEqual(true);
 
     });
 
     it('datetime - out of time', function () {
         const dt = new Date('01/07/2015 01:02:03 UTC');
-        const result = plug._validate(dt);
+        const result = plug.validate(dt);
         expect(result).toEqual(false);
 
     });
 
     it('datetime - out of time', function () {
         const dt = new Date('01/07/2018 18:02:03 UTC');
-        const result = plug._validate(dt);
+        const result = plug.validate(dt);
         expect(result).toEqual(false);
 
     });
 
     it('datetime - in time, out of date', function () {
         const dt = new Date('01/01/2018 10:02:03 UTC');
-        const result = plug._validate(dt);
+        const result = plug.validate(dt);
         expect(result).toEqual(false);
 
     });
 
     it('datetime - in time, out of date', function () {
         const dt = new Date('11/01/2018 10:02:03 UTC');
-        const result = plug._validate(dt);
+        const result = plug.validate(dt);
         expect(result).toEqual(false);
 
     });

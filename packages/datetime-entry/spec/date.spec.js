@@ -6,7 +6,7 @@
 
 describe('Date suite', function () {
 
-    let $input,
+    let input,
         plug;
 
     const format = {
@@ -28,33 +28,32 @@ describe('Date suite', function () {
 
     beforeEach(function () {
         setFixtures('<input id="dt" type="text" />');
-        plug = new DateTimeEntry('#dt', {
+        input = document.getElementById('dt');
+        plug = new DateTimeEntry(input, {
             locale: 'ru',
             format: format,
             minDate: new Date('01/01/2017 12:00:00 UTC'),
             maxDate: new Date('01/10/2017 00:00:00 UTC')
         });
-        $input = $(plug.element);
-
     });
 
     it('date - in range', function () {
         const dt = new Date('01/05/2017 01:02:03 UTC');
-        const result = plug._validate(dt);
+        const result = plug.validate(dt);
         expect(result).toEqual(true);
 
     });
 
     it('date - less than limits', function () {
         const dt = new Date('01/01/2015 01:02:03 UTC');
-        const result = plug._validate(dt);
+        const result = plug.validate(dt);
         expect(result).toEqual(false);
 
     });
 
     it('date - bigger than limits', function () {
         const dt = new Date('01/01/2018 01:02:03 UTC');
-        const result = plug._validate(dt);
+        const result = plug.validate(dt);
         expect(result).toEqual(false);
 
     });

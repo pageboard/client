@@ -6,7 +6,7 @@
 
 describe('empty option suite', function () {
 
-    var $input,
+    let input,
         plug;
 
     const format = {
@@ -27,19 +27,13 @@ describe('empty option suite', function () {
 
     beforeEach(function () {
         setFixtures('<input id="dt" type="text" />');
-        plug = new DateTimeEntry('#dt');
-        $input = $(plug.element);
-
+        input = document.getElementById('dt');
+        plug = new DateTimeEntry(input);
     });
 
 
-
-    it('$ should be defined', function () {
-        expect($).not.toBeNull();
-    });
-
-    it('$input should be empty without any options', function () {
-        expect($input.val()).toEqual('');
+    it('input should be empty without any options', function () {
+        expect(input.value).toEqual('');
     });
 
     it('expect Invalid Date as result of getTime if input is empty', function () {
@@ -52,15 +46,13 @@ describe('empty option suite', function () {
         let timestamp = plug.getTime().getTime();
 
         expect(timestamp).toEqual(0);
-
     });
 
     it('DEL should clear value and set Invalid Date', function () {
-        $input.trigger({ type: 'keypress', which: 46, keyCode: 46 });
+        input.dispatchEvent(new Event({ type: 'keypress', which: 46, keyCode: 46 }));
         let timestamp = plug.getTime().getTime();
         expect(timestamp).toBeNaN();
-        expect($input.val()).toEqual('');
-
+        expect(input.value).toEqual('');
     });
 
 

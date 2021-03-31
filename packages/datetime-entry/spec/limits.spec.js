@@ -6,7 +6,7 @@
 
 describe('Fit', function () {
 
-    let $input,
+    let input,
         plug;
 
     const format = {
@@ -28,13 +28,12 @@ describe('Fit', function () {
 
     beforeEach(function () {
         setFixtures('<input id="dt" type="text" />');
-        plug = new DateTimeEntry('#dt', {
+        input = document.getElementById('dt');
+        plug = new DateTimeEntry(input, {
             locale: 'ru',
             format: format,
             datetime: new Date(1487136412359) // 15 февраля 2017 05:26:52
         });
-        $input = $(plug.element);
-
     });
 
     it('validation date - in range', function () {
@@ -49,9 +48,8 @@ describe('Fit', function () {
         };
 
         plug.setOptions(options);
-        const result = plug._validate(dt);
+        const result = plug.validate(dt);
         expect(result).toEqual(true);
-
     });
 
     it('validation date - date less than limit', function () {
@@ -66,9 +64,8 @@ describe('Fit', function () {
         };
 
         plug.setOptions(options);
-        const result = plug._validate(dt);
+        const result = plug.validate(dt);
         expect(result).toEqual(false);
-
     });
 
     it('validation date - date bigger than limit', function () {
@@ -79,13 +76,11 @@ describe('Fit', function () {
             //maxTime: 17 * 60 * 60 * 1000 + 34 * 60 * 1000,
             minDate: new Date('01/01/2015 01:02:03 UTC'),
             maxDate: new Date('01/03/2015 01:02:03 UTC')
-
         };
 
         plug.setOptions(options);
-        const result = plug._validate(dt);
+        const result = plug.validate(dt);
         expect(result).toEqual(false);
-
     });
 
     it('validation date - date bigger than limit', function () {
@@ -96,13 +91,11 @@ describe('Fit', function () {
             maxTime: new Date('01/01/2015 01:02:03 UTC'),
             //minDate: new Date('01/01/2015 01:02:03 UTC'),
             //maxDate: new Date('01/03/2015 01:02:03 UTC')
-
         };
 
         plug.setOptions(options);
-        const result = plug._validate(dt);
+        const result = plug.validate(dt);
         expect(result).toEqual(false);
-
     });
 
 
@@ -116,13 +109,11 @@ describe('Fit', function () {
             //maxTime: 17 * 60 * 60 * 1000 + 34 * 60 * 1000,
             minDate: new Date('Thu Jan 01 1970 00:00:00 UTC'),
             maxDate: new Date('Thu Jan 02 1970 00:00:00 UTC')
-
         };
 
         plug.setOptions(options);
-        const resultDT = plug._fitToLimits(dt);
+        const resultDT = plug.fitToLimits(dt);
         expect(resultDT).toEqual(dt);
-
     });
 
     it('maxDate > input && minDate > input', function () {
@@ -133,13 +124,11 @@ describe('Fit', function () {
             //maxTime: 17 * 60 * 60 * 1000 + 34 * 60 * 1000,
             minDate: new Date('Thu Jan 01 1970 09:00:00 UTC'),
             maxDate: new Date('Thu Jan 02 1970 17:00:00 UTC')
-
         };
 
         plug.setOptions(options);
-        const resultDT = plug._fitToLimits(dt);
+        const resultDT = plug.fitToLimits(dt);
         expect(resultDT).toEqual(options.minDate);
-
     });
 
     it('input > maxDate && input > minDate', function () {
@@ -150,13 +139,11 @@ describe('Fit', function () {
             //maxTime: 17 * 60 * 60 * 1000 + 34 * 60 * 1000,
             minDate: new Date('Thu Jan 01 1970 00:00:00 UTC'),
             maxDate: new Date('Thu Jan 02 1970 00:00:00 UTC')
-
         };
 
         plug.setOptions(options);
-        const resultDT = plug._fitToLimits(dt);
+        const resultDT = plug.fitToLimits(dt);
         expect(resultDT).toEqual(options.maxDate);
-
     });
 
     it('Nightmare range valid time', function () {
@@ -167,13 +154,11 @@ describe('Fit', function () {
             maxTime: new Date('Jan 01 2017 03:00:00 UTC'),
             //minDate: new Date('Thu Jan 01 1970 00:00:00 UTC'),
             //maxDate: new Date('Thu Jan 02 1970 00:00:00 UTC')
-
         };
 
         plug.setOptions(options);
-        const resultDT = plug._fitToLimits(dt);
+        const resultDT = plug.fitToLimits(dt);
         expect(resultDT).toEqual(dt);
-
     });
 
     it('Nightmare range invalid time', function () {
@@ -184,15 +169,11 @@ describe('Fit', function () {
             maxTime: new Date('Jan 01 2017 03:00:00 UTC'),
             //minDate: new Date('Thu Jan 01 1970 00:00:00 UTC'),
             //maxDate: new Date('Thu Jan 02 1970 00:00:00 UTC')
-
         };
 
         plug.setOptions(options);
-        const resultDT = plug._fitToLimits(dt);
+        const resultDT = plug.fitToLimits(dt);
         expect(resultDT).toEqual(new Date('Jan 01 2017 23:00:00 UTC'));
-
     });
-
-
 
 });

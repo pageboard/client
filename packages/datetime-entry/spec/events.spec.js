@@ -6,7 +6,7 @@
 
 describe('Events suite', function () {
 
-    let $input,
+    let input,
         plug;
 
     const format = {
@@ -26,13 +26,12 @@ describe('Events suite', function () {
 
     beforeEach(function () {
         setFixtures('<input id="dt" type="text" />');
-        plug = new DateTimeEntry('#dt', {
+        input = document.getElementById('dt');
+        plug = new DateTimeEntry(input, {
             locale: 'ru',
             format: format,
             datetime: new Date(1487136412359) // 15 февраля 2017 05:26:52
         });
-        $input = $(plug.element);
-
     });
 
 
@@ -42,17 +41,18 @@ describe('Events suite', function () {
         let fakeEvent = {
             preventDefault: function () { },
             stopPropagation: function () { },
-            target: $input[0]
+            target: input,
+            type: 'mousedown'
         };
 
-        $input[0].focus();
+        input.focus();
 
-        $input[0].setSelectionRange(4, 4);
+        input.setSelectionRange(4, 4);
 
-        plug._handleMouseDown(fakeEvent);
+        plug.handleEvent(fakeEvent);
 
-        expect($input[0].selectionStart).toEqual(3);
-        expect($input[0].selectionEnd).toEqual(10);
+        expect(input.selectionStart).toEqual(3);
+        expect(input.selectionEnd).toEqual(10);
 
 
     });

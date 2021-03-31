@@ -6,7 +6,7 @@
 
 describe('UI suite', function () {
 
-    let $input,
+    let input,
         plug;
 
     const format = {
@@ -24,11 +24,12 @@ describe('UI suite', function () {
 
     beforeEach(function () {
         setFixtures('<input id="dt" type="text" />');
-        plug = new DateTimeEntry('#dt', {
+        input = document.getElementById("dt");
+
+        plug = new DateTimeEntry(input, {
             locale: 'en',
             format: format
         });
-        $input = $(plug.element);
 
     });
 
@@ -42,7 +43,7 @@ describe('UI suite', function () {
             }
         });
         plug.setTime(dt);
-        const val = $input.val();
+        const val = input.value;
         expect(val).toEqual('12:00 AM');
 
     });
@@ -51,16 +52,17 @@ describe('UI suite', function () {
         const dt = new Date(0);
         plug.setTime(dt);
 
-        $input[0].setSelectionRange(0, 0);
+        input.setSelectionRange(0, 0);
 
         let fakeEvent = {
             preventDefault: function () { },
             stopPropagation: function () { },
-            target: $input[0],
+            target: input,
+            type: 'keydown',
             which: 38 // key up
         };
 
-        plug._handleKeydown(fakeEvent);
+        plug.handleEvent(fakeEvent);
 
         const d = plug.getTime();
 
