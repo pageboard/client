@@ -136,7 +136,7 @@
 
 			const state = this._setDateTime(!Number.isNaN(props.datetime) ? props.datetime : this.state.datetime);
 
-			state.step = this.props.step;
+			state.step = parseInt(this.props.step);
 
 			this.#setState(state);
 
@@ -426,7 +426,7 @@
 
 			proxyTime['set' + fnName](newValue);
 			let newstamp = proxyTime.getTime();
-			const step = state.step;
+			const step = state.step || NaN;
 			if (!Number.isNaN(step) && Math.abs(newstamp - stamp) < step * 1000) {
 				newstamp = stamp + operator * step * 1000;
 				proxyTime = new Date(newstamp);
