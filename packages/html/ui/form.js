@@ -43,7 +43,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		}, this);
 
 		this.elements.forEach(function (node) {
-			if (node.name == null || node.name == "") return;
+			if (node.name == null || node.name == "" || node.type == "button") return;
 			var val = node.value;
 			if (val == "") val = null;
 			if (node.type == "radio") {

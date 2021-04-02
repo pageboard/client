@@ -5,7 +5,7 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 		else prefix = "";
 		this.children.forEach((node, i) => {
 			node.querySelectorAll('[name]').forEach(function (node) {
-				if (node.name && !node.name.startsWith(prefix)) {
+				if (node.type != "button" && node.name && !node.name.startsWith(prefix)) {
 					node.name = `${prefix}${i}.${node.name}`;
 				}
 			});
