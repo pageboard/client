@@ -1,173 +1,181 @@
 class HTMLElementSelect extends VirtualHTMLElement {
-	static get observedAttributes() {
-		return ['data-placeholder', 'data-name', 'data-multiple'];
+	_observer
+
+	static get defaults() {
+		return {
+			placeholder: null,
+			name: null,
+			value: null,
+			multiple: false,
+			disabled: false,
+			required: false
+		};
 	}
+	_child(sel) {
+		return this.children.find(node => node.matches(sel));
+	}
+	get _menu() {
+		return this._child('.menu');
+	}
+	get _text() {
+		return this._child('.text');
+	}
+	get _select() {
+		return this._child('select');
+	}
+
 	handleClick(e, state) {
-		var me = e.target.closest('element-select');
-		if (me != this) {
-			this._selectSelf(true);
-			return;
-		}
-		var item = e.target.closest('element-select .item');
+		const node = e.target;
+		const item = node.closest('element-select .item');
 		if (item) {
-			this._selectItem(item);
-			this._selectSelf(true);
-		} else if (e.target.matches('.delete')) {
-			var label = e.target.closest('.label');
-			var val = label.dataset.value;
-			this._deselectItem(val);
-		} else {
-			this._selectSelf(false);
-		}
-	}
-	_selectSelf(close) {
-		// toggle menu
-		var menu = this.querySelector('.menu');
-		if (menu.style.display != "block" && !close) menu.style.display = 'block';
-		else menu.style.display = 'none';
-	}
-	_selectItem(item) {
-		var text = item.innerText.trim();
-		var val = item.dataset.value;
-		var html = item.innerHTML;
-		var wasSelected = false;
-		var select = this.querySelector('select');
-		if (!select) return;
-		var option = select.querySelector(`option[value="${val}"]`);
-		if (option) {
-			if (option.selected) wasSelected = true;
-			option.selected = true;
-		}
-		if (this.dataset.multiple) {
-			if (!wasSelected) {
-				this._setText("").insertAdjacentHTML('beforeBegin', `<a class="ui label" data-value="${val}">${html}<i class="delete icon"></i></a>`);
+			const opt = this._selectOption(item.dataset.value);
+			if (opt) {
+				opt.selected = true;
+				opt.dispatchEvent(new Event('change', {
+					bubbles: true,
+					cancelable: true
+				}));
+				this._toggleMenu(false);
+			}
+		} else if (node.matches('.delete')) {
+			const label = node.closest('.label');
+			const opt = this._selectOption(label.dataset.value);
+			if (opt) {
+				opt.selected = false;
+				opt.dispatchEvent(new Event('change', {
+					bubbles: true,
+					cancelable: true
+				}));
 			}
 		} else {
-			this._setText(text);
+			this._toggleMenu();
+		}
+	}
+	handleChange(e, state) {
+		const opt = e.target;
+		if (opt.selected) {
+			this._selectItem(opt.value);
+		} else {
+			this._deselectItem(opt.value);
+		}
+	}
+	_toggleMenu(show) {
+		const style = this._menu.style;
+		if (show === undefined) show = !style.display;
+		style.display = show ? "block" : null;
+	}
+	_selectItem(val) {
+		const select = this._select;
+		const item = this._menuOption(val);
+
+		if (this.options.multiple) {
+			if (this._child(`.label[data-value="${val}"]`) == null) {
+				this._setText("").insertAdjacentHTML(
+					'beforeBegin',
+					`<a class="ui label" data-value="${val}">${item.innerHTML}<i class="delete icon"></i></a>`
+				);
+			}
+		} else {
+			this._setText(item.innerText.trim());
 		}
 
-		var defaultOption = select.querySelector(`option[value=""]`);
+		const defaultOption = select.querySelector(`option[value=""]`);
 		if (defaultOption && val) defaultOption.selected = false;
-		if (!wasSelected && val != this.getAttribute('value')) {
-			this.setAttribute('value', val);
-			select.dispatchEvent(new Event('change', {
-				cancelable: true,
-				bubbles: true
-			}));
+
+		if (val != this.value) {
+			this.dataset.value = val;
 		}
 	}
 	_deselectItem(val) {
-		if (this.dataset.multiple) {
-			this.querySelector(`[data-value="${val}"]`).remove();
+		if (this.options.multiple) {
+			this._menuOption(val).remove();
 		}
-		if (!this.dataset.multiple || this.querySelector('.label[data-value]') == null) {
+		if (!this._select.value) {
 			this._setPlaceholder();
 		}
-		var option = this.querySelector(`select > option[value="${val}"]`);
-		if (option) option.selected = false;
-		// FIXME dispatchEvent
 	}
 	_setText(str) {
-		var text = this.querySelector('.text');
-		if (!text) return;
+		const text = this._text;
 		text.textContent = str;
 		text.classList.remove('default');
 		return text;
 	}
 	_setPlaceholder(str) {
-		var text = this.querySelector('.text');
-		text.textContent = "";
-		if (!str) str = this.dataset.placeholder;
-		text.appendChild(document.createTextNode(str || ''));
+		const text = this._text;
+		text.textContent = str || this.options.placeholder;
 		text.classList.add('default');
 
-		var select = this.querySelector('select');
-		select.querySelector('option[value=""]').innerHTML = str || "-";
+		const defaultOption = this._select.querySelector('option[value=""]');
+		if (defaultOption) defaultOption.innerHTML = str || "-";
 	}
-	handleChange(e, state) {
-		if (!e.isTrusted) return;
-		var items = this.querySelector('.menu').children;
-		e.target.children.forEach(function(option, i) {
-			var item = items[i];
-			if (option.selected) this._selectItem(item);
-		}, this);
-	}
-	_optionItem(item) {
-		var node = item.ownerDocument.createElement('option');
-		node.value = item.dataset.value || item.innerText.trim();
-		node.innerHTML = item.innerHTML;
-		return node;
-	}
-	setup(state) {
-		if (!this.querySelector('.icon')) {
-			this.insertAdjacentHTML('afterBegin', '<i class="dropdown icon"></i>');
-		}
-		var menu = this.querySelector('.menu');
-		var select = this.querySelector('select');
-		if (!select) {
-			select = this.insertBefore(this.ownerDocument.createElement('select'), menu);
-			select.name = this.dataset.name;
-			this._update();
-		}
-		if (this.dataset.disabled) select.disabled = true;
-		if (this.dataset.required) select.required = true;
-		if (this.dataset.multiple) select.multiple = true;
 
-		select.insertAdjacentHTML('beforeBegin', `<div class="text"></div>`);
-		this._setPlaceholder();
-		this._observer = new MutationObserver(function(mutations) {
-			this._update();
-		}.bind(this));
-		this._observer.observe(menu, {
-			childList: true
-		});
-
-		var initialValue = this.getAttribute('value');
-		this.attributeChangedCallback("value", null, initialValue);
+	_menuOption(val) {
+		return this.querySelector(`element-select-option[data-value="${val}"]`);
 	}
-	_update() {
-		var select = this.querySelector('select');
-		var menu = this.querySelector('.menu');
-		select.textContent = "";
-		select.insertAdjacentHTML('afterBegin', '<option selected value="">-</option>');
-		Array.prototype.forEach.call(menu.children, function(item) {
-			select.appendChild(this._optionItem(item));
-		}, this);
+	_selectOption(val) {
+		return this.querySelector(`select > option[value="${val}"]`);
 	}
-	_reset() {
-		var select = this.querySelector('select');
-		select.value = "";
-		this.querySelectorAll('.ui.label').forEach(function(node) {
-			node.remove();
-		});
+	reset() {
+		this._select.reset();
+		this.querySelectorAll('.ui.label').forEach(node => node.remove());
 		this._setPlaceholder();
 	}
 	close() {
 		if (this._observer) {
 			this._observer.disconnect();
-			delete this._observer;
+			this._observer = null;
 		}
 	}
-	attributeChangedCallback(attributeName, oldValue, newValue, namespace) {
-		var select = this.querySelector('select');
+	_buildSelect() {
+		const select = this._select;
 		if (!select) return;
-		if (attributeName == "data-placeholder" && !select.value) {
-			this._setPlaceholder(newValue);
+		const menu = this._menu;
+		select.innerHTML = '<option selected value="">-</option>';
+		menu.children.forEach(item => select.insertAdjacentHTML(
+			'beforeEnd',
+			`<option value="${item.dataset.value || item.innerText.trim()}">${item.innerHTML}</option>`
+		));
+	}
+	setup(state) {
+		this._observer = new MutationObserver((mutations) => this._buildSelect());
+		this._observer.observe(this._menu, {
+			childList: true
+		});
+	}
+	patch(state) {
+		let init = false;
+		if (this.children.length == 1) {
+			init = true;
+			this.insertAdjacentHTML(
+				'afterBegin',
+				'<i class="dropdown icon"></i><div class="text"></div><select></select>'
+			);
 		}
-		if (attributeName == "data-name") {
-			select.name = newValue;
-		} else if (attributeName == "data-multiple") {
-			select.multiple = !!newValue;
-			if (oldValue != newValue) {
-				this._reset();
-			}
-		} else if (attributeName == "value") {
-			var item = this.querySelector(`element-select-option[data-value="${newValue}"]`);
-			if (item) this._selectItem(item);
+		const select = this._select;
+
+		select.disabled = this.options.disabled;
+		select.required = this.options.required;
+		const multiple = select.multiple;
+		select.multiple = this.options.multiple;
+		if (multiple != select.multiple) this.reset();
+		select.name = this.options.name;
+
+		if (!select.value) {
+			this._setPlaceholder();
 		}
+		if (this.isContentEditable) return; // write mode stop there
+		if (init) this._buildSelect();
+		state.finish(() => {
+			// synchronize after form has filled select
+			select.children.forEach((opt) => {
+				if (opt.value) {
+					if (opt.selected) this._selectItem(opt.value);
+					else this._deselectItem(opt.value);
+				}
+			});
+		});
 	}
 }
 
-Page.setup(function() {
-	VirtualHTMLElement.define('element-select', HTMLElementSelect);
-});
+VirtualHTMLElement.define('element-select', HTMLElementSelect);
+

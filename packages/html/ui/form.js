@@ -252,6 +252,7 @@ Page.ready(function() {
 
 HTMLSelectElement.prototype.fill = function(values) {
 	var opt;
+	if (!Array.isArray(values)) values = [values];
 	for (var i = 0; i < this.options.length; i++) {
 		opt = this.options[i];
 		opt.selected = values.indexOf(opt.value) > -1;

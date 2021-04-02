@@ -394,7 +394,7 @@ exports.input_select = {
 		<element-select class="ui selection dropdown [multiple|?]"
 			data-name="[name]" data-disabled="[disabled]" data-required="[required]"
 			data-multiple="[multiple]" data-placeholder="[placeholder]"
-			value="[value]"
+			data-value="[value]"
 		>
 			<div class="menu" block-content="options"></div>
 		</element-select>
@@ -423,13 +423,7 @@ exports.input_select_option = {
 	},
 	contents: 'inline*',
 	html: `<element-select-option class="item" data-value="[value|or:]"
-	></element-select-option>`,
-	resources: {
-		helper: '../ui/select-helper.js'
-	},
-	install: function(scope) {
-		if (scope.$write) Pageboard.load.js(this.resources.helper, scope);
-	}
+	></element-select-option>`
 };
 
 exports.fieldset_list = {
