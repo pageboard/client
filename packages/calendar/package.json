@@ -22,7 +22,7 @@
     "postinstall": "^0.7.0"
   },
   "prepare": {
-    "@pageboard/datetime-entry/src/datetime.js": "copy lib/"
+    "@pageboard/datetime-entry/dist/datetime.js": "copy lib/"
   },
   "pageboard": {
     "directories": [
