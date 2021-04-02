@@ -11,6 +11,26 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 			});
 		});
 	}
+	build(state) {
+		if (state.scope.$write) return;
+		const tpl = this.firstElementChild;
+		tpl.remove();
+		const node = this;
+		tpl.removeAttribute('block-content');
+		const prefix = node.getAttribute('prefix');
+		let data = {};
+		if (prefix) {
+			let iter = data;
+			prefix.split('.').forEach((key, i, list) => {
+				if (i < list.length - 1) iter = iter[key] = {};
+				else iter[key] = [{}];
+			});
+		} else {
+			data = [];
+		}
+		tpl.fuse(data, state.scope);
+		node.dataset.html = tpl.outerHTML;
+	}
 	patch(state) {
 		this.update();
 	}
@@ -23,15 +43,17 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 	}
 	delItem(item) {
 		item.remove();
+		if (this.children.length == 0) this.addItem();
 		this.update();
 	}
 	handleClick(e) {
-		const name = e.target.name;
-		if (["add", "del"].includes(name) == false) return;
-		const item = this.children.find(item => item.contains(e.target));
-		if (name == "add") {
+		const btn = e.target.closest('button[type="button"][name]');
+		if (!btn) return;
+		if (["add", "del"].includes(btn.name) == false) return;
+		const item = this.children.find(item => item.contains(btn));
+		if (btn.name == "add") {
 			this.addItem(item);
-		} else if (name == "del" && item) {
+		} else if (btn.name == "del" && item) {
 			this.delItem(item);
 		}
 	}
@@ -42,27 +64,6 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 
 Page.init(function (state) {
 	if (!state.scope.$write) {
-		state.scope.$filters.fieldset_list = function (val, what) {
-			const tpl = what.parent;
-			const node = tpl.parentNode;
-			tpl.removeAttribute('data-html');
-			tpl.removeAttribute('block-content');
-			const copy = tpl.cloneNode(true);
-			const prefix = node.getAttribute('prefix');
-			let data = {};
-			if (prefix) {
-				let iter = data;
-				prefix.split('.').forEach((key, i, list) => {
-					if (i < list.length - 1) iter = iter[key] = {};
-					else iter[key] = [{}];
-				});
-			} else {
-				data = [];
-			}
-			copy.fuse(data, what.scope);
-			node.dataset.html = copy.outerHTML;
-			return null;
-		};
 		VirtualHTMLElement.define('element-fieldset-list', HTMLElementFieldsetList);
 	}
 });

@@ -449,7 +449,7 @@ exports.fieldset_list = {
 		nodes: 'block+'
 	}],
 	html: `<element-fieldset-list prefix="[prefix]">
-		<div class="item" block-content="template" data-html="[|fieldset_list]"></div>
+		<div class="item" block-content="template"></div>
 	</element-fieldset-list>`,
 	scripts: ['../ui/fieldset-list.js'],
 	stylesheets: ['../ui/fieldset-list.css']
