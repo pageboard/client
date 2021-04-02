@@ -44,6 +44,9 @@ exports.input_button = {
 			}, {
 				title: 'Cancel',
 				const: 'cancel'
+			}, {
+				title: 'Button',
+				const: 'button'
 			}]
 		},
 		name: {
@@ -447,9 +450,8 @@ exports.fieldset_list = {
 	}],
 	html: `<element-fieldset-list prefix="[prefix]">
 		<div class="item" block-content="template" data-html="[|fieldset_list]"></div>
-		<button type="button" data-action="del">-</button>
-		<button type="button" data-action="add">+</button>
 	</element-fieldset-list>`,
 	scripts: ['../ui/fieldset-list.js'],
 	stylesheets: ['../ui/fieldset-list.css']
 };
+
