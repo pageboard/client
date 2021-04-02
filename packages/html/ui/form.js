@@ -22,7 +22,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 	read(withDefaults) {
 		var fd = new FormData(this);
 		var query = {};
-		fd.forEach(function(val, key) {
+		fd.forEach(function (val, key) {
 			if (val == null || val == "") {
 				var cur = Array.from(this.querySelectorAll(`[name="${key}"]`)).pop();
 				if (cur.required == false) {
@@ -42,7 +42,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			}
 		}, this);
 
-		this.elements.forEach(function(node) {
+		this.elements.forEach(function (node) {
 			if (node.name == null || node.name == "") return;
 			var val = node.value;
 			if (val == "") val = null;
@@ -75,7 +75,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 	}
 	fill(values) {
 		// cheap flattening
-		values = Page.parse(Page.format({query:values})).query;
+		values = Page.parse(Page.format({ query: values })).query;
 		var vars = [];
 		var elem = null, name, val;
 		for (var i = 0; i < this.elements.length; i++) {
@@ -86,41 +86,41 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			val = values[name];
 			if (val == null) val = '';
 			switch (elem.type) {
-			case 'submit':
-				break;
-			case 'radio':
-			case 'checkbox':
-				if (!Array.isArray(val)) val = [val];
-				elem.checked = val.some(function(str) {
-					return str.toString() == elem.value;
-				});
-				break;
-			case 'select-multiple':
-				elem.fill(val);
-				break;
-			case 'textarea':
-				elem.innerText = val;
-				break;
-			case 'hidden':
-				break;
-			default:
-				if (elem.fill) {
+				case 'submit':
+					break;
+				case 'radio':
+				case 'checkbox':
+					if (!Array.isArray(val)) val = [val];
+					elem.checked = val.some(function (str) {
+						return str.toString() == elem.value;
+					});
+					break;
+				case 'select-multiple':
 					elem.fill(val);
-				} else {
-					elem.value = val;
-				}
-				break;
+					break;
+				case 'textarea':
+					elem.innerText = val;
+					break;
+				case 'hidden':
+					break;
+				default:
+					if (elem.fill) {
+						elem.fill(val);
+					} else {
+						elem.value = val;
+					}
+					break;
 			}
 		}
 		return vars;
 	}
 	save() {
-		this.elements.forEach(function(node) {
+		this.elements.forEach(function (node) {
 			if (node.save) node.save();
 		});
 	}
 	reset() {
-		this.elements.forEach(function(node) {
+		this.elements.forEach(function (node) {
 			if (node.reset) node.reset();
 		});
 	}
@@ -158,11 +158,11 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			loc.query = Object.assign({}, state.query, loc.query);
 		}
 		var status = 200;
-		return state.push(loc).catch(function(err) {
+		return state.push(loc).catch(function (err) {
 			if (err.status != null) status = err.status;
 			else status = 0;
-		}).then(function() {
-			var statusClass = `[n|statusClass]`.fuse({n: status});
+		}).then(function () {
+			var statusClass = `[n|statusClass]`.fuse({ n: status });
 			if (statusClass) form.classList.add(statusClass);
 		});
 	}
@@ -173,11 +173,11 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		var data = {
 			$query: state.query
 		};
-		return Promise.all(Array.prototype.filter.call(form.elements, function(node) {
+		return Promise.all(Array.prototype.filter.call(form.elements, function (node) {
 			return node.type == "file";
-		}).map(function(input) {
+		}).map(function (input) {
 			return input.closest('element-input-file').upload();
-		})).then(function() {
+		})).then(function () {
 			data.$query = state.query;
 			data.$request = form.read(true);
 			form.disable();
@@ -185,13 +185,13 @@ class HTMLCustomFormElement extends HTMLFormElement {
 				pathname: form.options.action,
 				query: data.$query
 			}), data.$request);
-		}).catch(function(err) {
+		}).catch(function (err) {
 			return err;
-		}).then(function(res) {
+		}).then(function (res) {
 			if (res && res.grants) state.data.$grants = res.grants;
 			state.scope.$response = res;
 			form.classList.remove('loading');
-			var statusClass = `[n|statusClass]`.fuse({n: res.status});
+			var statusClass = `[n|statusClass]`.fuse({ n: res.status });
 			if (statusClass) form.classList.add(statusClass);
 			form.enable();
 			if (res.status < 200 || res.status >= 400) return;
@@ -217,7 +217,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 				}
 				state.data.$vary = vary;
 			}
-			document.querySelectorAll('element-template').forEach(function(node) {
+			document.querySelectorAll('element-template').forEach(function (node) {
 				delete node.dataset.query;
 			});
 			return state.push(loc, {
@@ -229,7 +229,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 window.HTMLCustomFormElement = HTMLCustomFormElement;
 
 /* these methods must be available even on non-upgraded elements */
-HTMLFormElement.prototype.enable = function() {
+HTMLFormElement.prototype.enable = function () {
 	var elem = null;
 	for (var i = 0; i < this.elements.length; i++) {
 		elem = this.elements[i];
@@ -237,7 +237,7 @@ HTMLFormElement.prototype.enable = function() {
 		if (elem.hasAttribute('disabled')) elem.removeAttribute('disabled');
 	}
 };
-HTMLFormElement.prototype.disable = function() {
+HTMLFormElement.prototype.disable = function () {
 	var elem = null;
 	for (var i = 0; i < this.elements.length; i++) {
 		elem = this.elements[i];
@@ -245,12 +245,12 @@ HTMLFormElement.prototype.disable = function() {
 	}
 };
 
-Page.ready(function() {
+Page.ready(function () {
 	VirtualHTMLElement.define(`element-form`, HTMLCustomFormElement, 'form');
 });
 
 
-HTMLSelectElement.prototype.fill = function(values) {
+HTMLSelectElement.prototype.fill = function (values) {
 	var opt;
 	if (!Array.isArray(values)) values = [values];
 	for (var i = 0; i < this.options.length; i++) {
@@ -284,39 +284,39 @@ HTMLInputElement.prototype.save = function () {
 	}
 };
 
-HTMLTextAreaElement.prototype.reset = function() {
+HTMLTextAreaElement.prototype.reset = function () {
 	this.value = this.defaultValue;
 };
 
-HTMLTextAreaElement.prototype.save = function() {
+HTMLTextAreaElement.prototype.save = function () {
 	this.defaultValue = this.value;
 };
 
 Object.defineProperty(HTMLInputElement.prototype, 'defaultValue', {
 	configurable: true,
 	enumerable: true,
-	get: function() {
+	get: function () {
 		if (this.form && this.form.method == "get") return '';
 		else return this.getAttribute('value');
 	},
-	set: function(val) {
+	set: function (val) {
 		this.setAttribute('value', val);
 	}
 });
 
-Page.setup(function(state) {
+Page.setup(function (state) {
 	// https://daverupert.com/2017/11/happier-html5-forms/
 	Page.connect({
-		captureBlur: function(e, state) {
+		captureBlur: function (e, state) {
 			blurHandler(e, false);
 		},
-		captureFocus: function(e, state) {
+		captureFocus: function (e, state) {
 			var el = e.target;
 			if (!el.matches || !el.matches('input,textarea,select')) return;
 			if (e.relatedTarget && e.relatedTarget.type == "submit") return;
 			updateClass(el.closest('.field') || el, el.validity, true);
 		},
-		captureInvalid: function(e, state) {
+		captureInvalid: function (e, state) {
 			// e.preventDefault(); // show native ui
 			blurHandler(e, true);
 		}
@@ -338,9 +338,9 @@ Page.setup(function(state) {
 	}
 });
 
-Page.ready(function(state) {
+Page.ready(function (state) {
 	var filters = state.scope.$filters;
-	filters.form = function(val, what, action) {
+	filters.form = function (val, what, action) {
 		var form = what.parent.closest('form');
 		if (!form) {
 			console.warn("No parent form found");
