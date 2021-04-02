@@ -258,6 +258,9 @@ HTMLSelectElement.prototype.fill = function (values) {
 		opt.selected = values.indexOf(opt.value) > -1;
 	}
 };
+HTMLSelectElement.prototype.reset = function () {
+	for (var i = 0; i < this.options.length; i++) this.options[i].selected = false;
+};
 
 HTMLInputElement.prototype.fill = function (val) {
 	if (val == null) val = "";
