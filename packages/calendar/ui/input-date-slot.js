@@ -18,7 +18,7 @@ class HTMLElementInputDateSlot extends VirtualHTMLElement {
 	}
 
 	dateChange(e) {
-		var date = e.target.parentNode.value || (new Date()).toISOString();
+		var date = e.target.parentNode.dataset.value || (new Date()).toISOString();
 		var els = this.inputs;
 		els[1].setDate(date);
 		els[2].setDate(date);
