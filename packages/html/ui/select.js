@@ -37,8 +37,10 @@ class HTMLElementSelect extends VirtualHTMLElement {
 				}));
 				this._toggleMenu(false);
 			}
-		} else if (node.matches('.delete')) {
-			const label = node.closest('.label');
+			return;
+		}
+		const label = node.closest('.label');
+		if (label) {
 			const opt = this._selectOption(label.dataset.value);
 			if (opt) {
 				opt.selected = false;
@@ -47,9 +49,9 @@ class HTMLElementSelect extends VirtualHTMLElement {
 					cancelable: true
 				}));
 			}
-		} else {
-			this._toggleMenu();
+			return;
 		}
+		this._toggleMenu();
 	}
 	handleChange(e, state) {
 		const opt = e.target;
@@ -81,14 +83,11 @@ class HTMLElementSelect extends VirtualHTMLElement {
 
 		const defaultOption = select.querySelector(`option[value=""]`);
 		if (defaultOption && val) defaultOption.selected = false;
-
-		if (val != this.value) {
-			this.dataset.value = val;
-		}
 	}
 	_deselectItem(val) {
 		if (this.options.multiple) {
-			this._menuOption(val).remove();
+			const item = this._child(`.label[data-value="${val}"]`);
+			if (item) item.remove();
 		}
 		if (!this._select.value) {
 			this._setPlaceholder();
@@ -115,11 +114,7 @@ class HTMLElementSelect extends VirtualHTMLElement {
 	_selectOption(val) {
 		return this.querySelector(`select > option[value="${val}"]`);
 	}
-	reset() {
-		this._select.reset();
-		this.querySelectorAll('.ui.label').forEach(node => node.remove());
-		this._setPlaceholder();
-	}
+
 	close() {
 		if (this._observer) {
 			this._observer.disconnect();
@@ -155,9 +150,10 @@ class HTMLElementSelect extends VirtualHTMLElement {
 
 		select.disabled = this.options.disabled;
 		select.required = this.options.required;
-		const multiple = select.multiple;
 		select.multiple = this.options.multiple;
-		if (multiple != select.multiple) this.reset();
+		if (!select.multiple) {
+			this.querySelectorAll('.ui.label').forEach(node => node.remove());
+		}
 		select.name = this.options.name;
 
 		if (!select.value) {
