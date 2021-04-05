@@ -12,28 +12,22 @@ class VirtualHTMLElement extends HTMLElement {
 		var preset = window.customElements.get(name);
 		if (preset) return cla;
 
-		Object.defineProperty(cla.prototype, 'attributeChangedCallback', {
-			configurable: true,
-			value: function (name, src, dst, ns) {
+		monkeyPatchAll(cla.prototype, {
+			attributeChangedCallback(name, src, dst, ns) {
 				if (src !== dst && this.patch) {
 					if (!Object.hasOwnProperty.call(this.constructor, 'defaults') || this.options) {
 						Page.patch(this);
 					}
 				}
-			}
-		});
-		Object.defineProperty(cla.prototype, 'connectedCallback', {
-			configurable: true,
-			value: function () {
+			},
+			connectedCallback() {
 				Page.connect(this);
-			}
-		});
-		Object.defineProperty(cla.prototype, 'disconnectedCallback', {
-			configurable: true,
-			value: function () {
+			},
+			disconnectedCallback() {
 				Page.disconnect(this);
 			}
 		});
+
 		var claDefs = cla.defaults;
 		if (claDefs) {
 			var defaults = {};
