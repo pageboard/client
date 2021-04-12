@@ -12,11 +12,15 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 		});
 	}
 	patch(state) {
-		state.scope.$filters['|'] = function (val, what) {
-			what.expr.filters.length = 0;
-			return null;
-		};
-		this.firstElementChild.content.fuse({} ,state.scope);
+		const copy = Object.assign({}, state.scope);
+		copy.$filters = Object.assign({}, copy.$filters, {
+			"|": function (val, what) {
+				what.expr.filters.length = 0;
+				return null;
+			}
+		});
+		this.firstElementChild.content.fuse({}, copy);
+
 		this.update();
 	}
 	setup(state) {
