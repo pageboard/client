@@ -432,14 +432,20 @@ exports.input_select_option = {
 exports.fieldset_list = {
 	title: 'List',
 	menu: "form",
-	icon: '<b class="icon">...</b>',
+	icon: '<i class="icons"><i class="folder outline icon"></i><i class="corner add icon"></i></i>',
 	group: "block",
 	context: 'form//',
 	priority: 0,
 	properties: {
 		prefix: {
 			title: "prefix",
-			description: "Use this to add <prefix>.<index> before all inputs names in this fieldset",
+			description: "Prefix inputs names with <prefix>.<index>",
+			type: "string",
+			format: "singleline"
+		},
+		selector: {
+			title: "selector",
+			description: "Select parent node using a css query",
 			type: "string",
 			format: "singleline"
 		}
@@ -448,10 +454,10 @@ exports.fieldset_list = {
 		id: 'template',
 		nodes: 'block+'
 	}],
-	html: `<element-fieldset-list prefix="[prefix]">
-		<div class="item" block-content="template"></div>
+	html: `<element-fieldset-list prefix="[prefix]" selector="[selector]">
+		<template block-content="template"></template>
+		<div class="view"></div>
 	</element-fieldset-list>`,
 	scripts: ['../ui/fieldset-list.js'],
 	stylesheets: ['../ui/fieldset-list.css']
 };
-
