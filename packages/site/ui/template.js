@@ -123,6 +123,16 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 		if (this.children.length != 2) return;
 		var tmpl = this.firstElementChild.content.cloneNode(true);
 		var view = this.lastElementChild;
+		// allow sub-templates to merge current data
+		tmpl.querySelectorAll('template').forEach(tpl => {
+			if (tpl.parentNode.nodeName == this.nodeName || !tpl.content) return;
+			let rnode;
+			while ((rnode = tpl.content.querySelector('[block-expr]'))) rnode.removeAttribute('block-expr');
+			const view = tpl.nextElementSibling;
+			if (view.matches('.view') && !view.hasAttribute('block-content')) {
+				view.appendChild(tpl.content.cloneNode(true));
+			}
+		});
 		// remove all block-id from template - might be done in pagecut eventually
 		var rnode;
 		while ((rnode = tmpl.querySelector('[block-id]'))) rnode.removeAttribute('block-id');
@@ -161,6 +171,7 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 				};
 			})
 		};
+
 		Object.keys(state.data).forEach(function(key) {
 			if (key.startsWith('$') && scope[key] == null) scope[key] = state.data[key];
 		});
@@ -169,6 +180,7 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 		scope.$referrer = state.referrer.pathname || state.pathname;
 
 		var node = Pageboard.render(data, scope, el);
+
 		view.textContent = '';
 		view.appendChild(node);
 		if (usesQuery) state.scroll({
