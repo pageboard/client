@@ -24,10 +24,7 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 		} else if (document.visibilityState == "prerender") {
 			var dest = tmpl.dom(`<script type="text/html"></script>`);
 			if (!helper) helper = doc.createElement('div');
-			helper.textContent = tmpl.content.childNodes.map(child => {
-				if (child.nodeType == Node.TEXT_NODE) return child.nodeValue;
-				else return child.outerHTML;
-			}).join('');
+			helper.textContent = tmpl.content.innerHTML;
 			dest.textContent = helper.innerHTML;
 			dest.content = tmpl.content;
 			tmpl.replaceWith(dest);
@@ -181,7 +178,16 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 		});
 	}
 }
-Page.ready(function() {
+Page.ready(function () {
+	Object.defineProperty(DocumentFragment.prototype, 'innerHTML', {
+		configurable: true,
+		get() {
+			return this.childNodes.map(child => {
+				if (child.nodeType == Node.TEXT_NODE) return child.nodeValue;
+				else return child.outerHTML;
+			}).join('');
+		}
+	});
 	VirtualHTMLElement.define('element-template', HTMLElementTemplate);
 });
 
