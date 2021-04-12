@@ -162,6 +162,9 @@ Blocks.prototype.renderFrom = function(block, blocks, store, opts) {
 			var child = blocks[id];
 
 			if (!child) {
+				if (store[id]) {
+					return;
+				}
 				console.warn("missing block for", parent.nodeName, '>', node.nodeName, id);
 				parent.replaceChild(node.ownerDocument.createTextNode('·'), node);
 				return;
