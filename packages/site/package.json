@@ -19,7 +19,7 @@
   "homepage": "https://github.com/pageboard/client#readme",
   "devDependencies": {
     "@pageboard/pagecut": "^0.9.0",
-    "@webreflection/custom-elements": "^0.2.10",
+    "@ungap/custom-elements": "^0.1.15",
     "debounce": "^1.1.0",
     "matchdom": "^5.10.1",
     "postinstall-browserify": "^0.7.0",
@@ -27,7 +27,7 @@
     "window-page": "^10.8.1"
   },
   "prepare": {
-    "@webreflection/custom-elements/index.js": "copy lib/custom-elements.js",
+    "@ungap/custom-elements/index.js": "copy lib/custom-elements.js",
     "window-page/window-page.js": "copy lib/",
     "./src/pageboard.js": "browserify --standalone=Pageboard lib/"
   },
