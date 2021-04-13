@@ -121,7 +121,7 @@ class HTMLElementSelect extends VirtualHTMLElement {
 			this._observer = null;
 		}
 	}
-	_buildSelect() {
+	_fillSelect() {
 		const select = this._select;
 		if (!select) return;
 		const menu = this._menu;
@@ -132,15 +132,14 @@ class HTMLElementSelect extends VirtualHTMLElement {
 		));
 	}
 	setup(state) {
-		this._observer = new MutationObserver((mutations) => this._buildSelect());
+		this._observer = new MutationObserver((mutations) => this._fillSelect());
 		this._observer.observe(this._menu, {
 			childList: true
 		});
 	}
-	patch(state) {
-		let init = false;
+
+	build(state) {
 		if (this.children.length == 1) {
-			init = true;
 			this.insertAdjacentHTML(
 				'afterBegin',
 				'<i class="dropdown icon"></i><div class="text"></div><select></select>'
@@ -155,15 +154,15 @@ class HTMLElementSelect extends VirtualHTMLElement {
 			this.querySelectorAll('.ui.label').forEach(node => node.remove());
 		}
 		select.name = this.options.name;
+		this._fillSelect();
+	}
 
-		if (!select.value) {
-			this._setPlaceholder();
-		}
+	patch(state) {
 		if (this.isContentEditable) return; // write mode stop there
-		if (init) this._buildSelect();
+
 		state.finish(() => {
 			// synchronize after form has filled select
-			select.children.forEach((opt) => {
+			this._select.children.forEach((opt) => {
 				if (opt.value) {
 					if (opt.selected) this._selectItem(opt.value);
 					else this._deselectItem(opt.value);
