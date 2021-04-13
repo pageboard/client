@@ -52,6 +52,9 @@ class VirtualHTMLElement extends HTMLElement {
 				init() {
 					if (is) this.setAttribute('is', name);
 				},
+				build(state) {
+					this.options = nodeOptions(this, defaults, state, is);
+				},
 				patch(state) {
 					this.options = nodeOptions(this, defaults, state, is);
 					if (typeof this.reveal == "function" && this.currentSrc) {
