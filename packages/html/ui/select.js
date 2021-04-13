@@ -139,6 +139,7 @@ class HTMLElementSelect extends VirtualHTMLElement {
 	}
 
 	build(state) {
+		if (this.isContentEditable) return;
 		if (this.children.length == 1) {
 			this.insertAdjacentHTML(
 				'afterBegin',
@@ -159,6 +160,7 @@ class HTMLElementSelect extends VirtualHTMLElement {
 
 	patch(state) {
 		if (this.isContentEditable) return; // write mode stop there
+		if (this.children.length == 1) this.build(state);
 
 		state.finish(() => {
 			// synchronize after form has filled select
