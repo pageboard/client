@@ -90,7 +90,7 @@ exports.page = {
 	]),
 	polyfills: [
 		'default',
-		'dataset',
+		'Element.prototype.dataset',
 		'fetch',
 		'es2015', 'es2016', 'es2017', 'es2018',
 		'URL',
