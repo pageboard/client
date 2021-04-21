@@ -123,12 +123,14 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 		if (this.children.length != 2) return;
 		var tmpl = this.firstElementChild.content.cloneNode(true);
 		var view = this.lastElementChild;
+		var scope = Object.assign({}, state.scope);
 		// allow sub-templates to merge current data
 		tmpl.querySelectorAll('template').forEach(tpl => {
 			if (tpl.parentNode.nodeName == this.nodeName || !tpl.content) return;
-			let rnode;
-			while ((rnode = tpl.content.querySelector('[block-expr]'))) rnode.removeAttribute('block-expr');
 			const view = tpl.nextElementSibling;
+			tpl.content.fuse(data, {
+				$filters: Object.assign({}, scope.$filters, { repeat() { } })
+			}); // fuse single values, avoid repeat bug
 			if (view.matches('.view') && !view.hasAttribute('block-content')) {
 				view.appendChild(tpl.content.cloneNode(true));
 			}
@@ -139,7 +141,6 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 		// pagecut merges block-expr into block-data - contrast with above patch() method
 		while ((rnode = tmpl.querySelector('[block-expr]'))) rnode.removeAttribute('block-expr');
 
-		var scope = Object.assign({}, state.scope);
 		var usesQuery = false;
 
 		var el = {
