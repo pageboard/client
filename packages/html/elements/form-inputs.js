@@ -437,24 +437,18 @@ exports.fieldset_list = {
 	context: 'form//',
 	priority: 0,
 	properties: {
-		prefix: {
-			title: "prefix",
-			description: "Prefix inputs names with <prefix>.<index>",
-			type: "string",
-			format: "singleline"
-		},
-		selector: {
-			title: "selector",
-			description: "Select parent node using a css query",
-			type: "string",
-			format: "singleline"
+		required: {
+			title: 'Required',
+			description: 'At least one item is shows',
+			type: "boolean",
+			default: true
 		}
 	},
 	contents: [{
 		id: 'template',
 		nodes: 'block+'
 	}],
-	html: `<element-fieldset-list prefix="[prefix]" selector="[selector]">
+	html: `<element-fieldset-list required="[required]">
 		<template block-content="template"></template>
 		<div class="view"></div>
 	</element-fieldset-list>`,

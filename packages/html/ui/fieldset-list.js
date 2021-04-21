@@ -1,70 +1,124 @@
 class HTMLElementFieldsetList extends VirtualHTMLElement {
-	update() {
-		let prefix = this.getAttribute('prefix');
-		if (prefix) prefix += ".";
-		else prefix = "";
-		this.container.children.forEach((node, i) => {
-			node.querySelectorAll('[name]').forEach(function (node) {
-				if (node.type == "button" || !node.name) return;
-				if (!node.dataset.name) node.dataset.name = node.name;
-				node.name = `${prefix}${i}.${node.dataset.name}`;
-			});
-		});
-	}
-	patch(state) {
-		const copy = Object.assign({}, state.scope);
-		copy.$filters = Object.assign({}, copy.$filters, {
-			"|": function (val, what) {
-				what.expr.filters.length = 0;
-				return null;
-			}
-		});
-		this.firstElementChild.content.fuse({}, copy);
 
-		this.update();
-	}
 	setup(state) {
-		if (this.container.children.length == 0) this.addItem();
-	}
-	addItem(item) {
-		const tpl = this.firstElementChild.content;
-		const sel = this.getAttribute('selector');
-		let sub;
-		if (sel) {
-			sub = tpl.querySelector(sel);
-			if (sub) sub = sub.firstElementChild;
+		const [data, list, model] = this.listData;
+		if (list.length == 0 && this.hasAttribute('required')) {
+			list.push(model);
+			this.listRender(data, state.scope);
 		}
-		if (!sub) sub = tpl;
-		this.container.insertBefore(
-			sub.cloneNode(true),
-			item && item.nextElementSibling || null
-		);
-		this.update();
 	}
-	delItem(item) {
-		item.remove();
-		if (this.container.children.length == 0) this.addItem();
-		this.update();
+
+	listRender(data, scope) {
+		const view = this.listView;
+		view.textContent = '';
+		view.appendChild(this.listTpl.cloneNode(true).fuse(data, scope));
 	}
-	handleClick(e) {
+
+	handleClick(e, state) {
 		const btn = e.target.closest('button[type="button"][name]');
 		if (!btn) return;
 		if (["add", "del"].includes(btn.name) == false) return;
-		const cont = this.container;
-		let child = e.target;
-		while (child.parentNode != cont) {
-			child = child.parentNode;
-		}
+		const index = parseInt(btn.value);
+		if (Number.isNaN(index)) throw new Error("Missing index on button: " + btn.outerHTML);
+		const [data, list, model] = this.listData;
 		if (btn.name == "add") {
-			this.addItem(child);
-		} else if (btn.name == "del" && child) {
-			this.delItem(child);
+			list.splice(index + 1, 0, model);
+		} else if (btn.name == "del") {
+			list.splice(index, 1);
+			if (list.length == 0 && this.getAttribute('required') == "true") list.push(model);
 		}
+		this.listRender(data, state.scope);
 	}
-	get container() {
-		const view = this.lastElementChild;
-		const sel = this.getAttribute('selector');
-		return sel && view.querySelector(sel) || view;
+
+	get listData() {
+		const query = {};
+		let listPrefix, inputPrefix;
+		const model = {};
+		this.listTpl.cloneNode(true).fuse({}, {
+			$filters: {
+				"|": function (val, what) {
+					if (listPrefix == null) {
+						const iterMark = what.expr.path.findIndex(str => str.endsWith('+'));
+						if (iterMark >= 0) listPrefix = what.expr.path.slice(0, iterMark + 1).join('.').slice(0, -1);
+						if (what.expr.get(what.data, listPrefix) == null) {
+							const list = listPrefix.split('.');
+							let curData = what.data;
+							list.forEach((it, i, arr) => {
+								if (curData[it] == null) {
+									if (arr.length == i + 1) {
+										curData = curData[it] = [{}];
+									} else {
+										curData = curData[it] = {};
+									}
+								}
+							});
+						}
+					}
+
+					if (what.expr.path[what.expr.path.length - 1] == "key") {
+						// this is probably the index
+						if (what.index < what.hits.length - 1) {
+							const valKey = what.hits[what.index + 1];
+							if (inputPrefix == null && what.hits.length > 1) inputPrefix = what.hits[0].slice(0, -1);
+							model[valKey.substring(1)] = "";
+						}
+					}
+				}
+			}
+		});
+		if (listPrefix == null) throw new Error("Template must have prefixed inputs");
+		let listInputPrefix = "";
+		if (listPrefix.endsWith(inputPrefix)) {
+			listInputPrefix = listPrefix.slice(0, -inputPrefix.length);
+		}
+		const list = query[listPrefix] = [];
+
+		this.listView.querySelectorAll(`[name^="${inputPrefix}."]`).forEach(node => {
+			const val = node.value;
+			const name = listInputPrefix + node.name;
+			switch (node.type) {
+				case "radio":
+					if (node.checked) query[name] = val;
+					break;
+				case "checkbox":
+					if (node.checked) {
+						if (query[name] == null) query[name] = [];
+						query[name].push(val);
+					}
+					break;
+				case "select-multiple":
+					query[name] = Array.prototype.map.call(node.selectedOptions, x => {
+						if (x.value == null) return x.innerText;
+						else return x.value;
+					});
+					break;
+				default:
+					query[name] = val;
+			}
+		});
+		// unflatten
+		const data = this.unflatten(query);
+		return [data, list, this.unflatten(model)];
+	}
+	unflatten(query) {
+		const data = {};
+		Object.keys(query).forEach(acc => {
+			let obj = data;
+			acc.split('.').forEach((key, i, arr) => {
+				if (obj[key] == null) {
+					if (i == arr.length - 1) obj[key] = query[acc];
+					else obj[key] = {};
+				}
+				obj = obj[key];
+			});
+		});
+		return data;
+	}
+	get listTpl() {
+		return this.firstElementChild.content;
+	}
+	get listView() {
+		return this.lastElementChild;
 	}
 }
 
