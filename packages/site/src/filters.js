@@ -1,10 +1,10 @@
-exports.polyfills = function($elements, what) {
+exports.polyfills = function ($elements, what) {
 	var map = {};
-	Object.keys($elements).forEach(function(key) {
+	Object.keys($elements).forEach(function (key) {
 		var list = $elements[key].polyfills;
 		if (!list) return;
 		if (typeof list == "string") list = [list];
-		list.forEach(function(item) {
+		list.forEach(function (item) {
 			// what.scope from matchdom is not like scope from pageboard
 			item = item.fuse({}, what.scope.data);
 			map[item] = true;
@@ -13,11 +13,11 @@ exports.polyfills = function($elements, what) {
 	return Object.keys(map).join(',');
 };
 
-exports.csp = function($elements, what) {
+exports.csp = function ($elements, what) {
 	var csp = {};
-	Object.keys($elements).forEach(function(key) {
+	Object.keys($elements).forEach(function (key) {
 		var el = $elements[key];
-		if (el.scripts) el.scripts.forEach(function(src) {
+		if (el.scripts) el.scripts.forEach(function (src) {
 			var origin = /(^https?:\/\/[.-\w]+)/.exec(src);
 			if (origin) {
 				if (!el.csp) el.csp = {};
@@ -25,7 +25,7 @@ exports.csp = function($elements, what) {
 				el.csp.script.push(origin[0]);
 			}
 		});
-		if (el.stylesheets) el.stylesheets.forEach(function(src) {
+		if (el.stylesheets) el.stylesheets.forEach(function (src) {
 			var origin = /(^https?:\/\/[.-\w]+)/.exec(src);
 			if (origin) {
 				if (!el.csp) el.csp = {};
@@ -34,33 +34,33 @@ exports.csp = function($elements, what) {
 			}
 		});
 		if (!el.csp) return;
-		Object.keys(el.csp).forEach(function(src) {
+		Object.keys(el.csp).forEach(function (src) {
 			var gcsp = csp[src];
 			if (!gcsp) csp[src] = gcsp = [];
 			var list = el.csp[src];
 			if (!list) return;
 			if (typeof list == "string") list = [list];
-			list.forEach(function(val) {
+			list.forEach(function (val) {
 				if (gcsp.includes(val) == false) gcsp.push(val);
 			});
 		});
 	});
-	return Object.keys(csp).filter(function(src) {
+	return Object.keys(csp).filter(function (src) {
 		return csp[src].length > 0;
-	}).map(function(src) {
+	}).map(function (src) {
 		var key = src.indexOf('-') > 0 ? src : `${src}-src`;
 		return `${key} ${csp[src].join(' ')}`.trim();
 	}).join('; ');
 };
 
 
-exports.id = function(id, what) {
+exports.id = function (id, what) {
 	if (id) return id;
 	id = what.scope.data.$id;
 	if (!id) return id;
 	return 'x' + id.slice(0, 4);
 };
-exports.num = function(val, what, str) {
+exports.num = function (val, what, str) {
 	if (!val) return '';
 	return what.filters.post(exports.num.map[val] || '', what, str);
 };
@@ -84,21 +84,21 @@ exports.num.map = {
 	16: 'sixteen'
 };
 
-exports.checked = function(val, what, selector) {
+exports.checked = function (val, what, selector) {
 	var ret = what.filters.attr(val === true ? 'checked' : null, what, 'checked', selector);
 	if (val !== true) delete what.attr;
 	return ret;
 };
 
-exports.includes = function(val, what, str) {
+exports.includes = function (val, what, str) {
 	if (Array.isArray(val)) return val.includes(str);
 	else if (typeof val == "string") return val == str;
 };
 
-exports.sum = function(obj, what, ...list) {
+exports.sum = function (obj, what, ...list) {
 	var sum = 0;
 	if (obj == null) return sum;
-	list.forEach(function(str) {
+	list.forEach(function (str) {
 		var sign = 1;
 		if (str.startsWith('-')) {
 			sign = -1;
@@ -113,7 +113,7 @@ exports.sum = function(obj, what, ...list) {
 	return sum;
 };
 
-exports.schema = function(val, what, spath) {
+exports.schema = function (val, what, spath) {
 	// return schema of repeated key, schema of anyOf/listOf const value
 	if (val === undefined) return;
 
@@ -148,7 +148,7 @@ exports.schema = function(val, what, spath) {
 	if (!iskey && val !== undefined) {
 		var listOf = schema.oneOf || schema.anyOf;
 		if (listOf) {
-			var prop = listOf.find(function(item) {
+			var prop = listOf.find(function (item) {
 				return item.const === val || item.type === "null" && val === null;
 			});
 			if (prop != null) schema = prop;
@@ -166,14 +166,14 @@ exports.schema = function(val, what, spath) {
 	return sval;
 };
 
-exports.statusClass = function(val) {
+exports.statusClass = function (val) {
 	val = parseInt(val);
 	if (val >= 200 && val < 300) return "success";
 	else if (val >= 400 && val < 500) return "warning";
 	else if (val || val === 0) return "error";
 };
 
-exports.autolink = function(val, what) {
+exports.autolink = function (val, what) {
 	var hrefs = what.scope.data.$hrefs;
 	var a = what.parent;
 	var obj = Page.parse(val);
@@ -191,17 +191,17 @@ exports.autolink = function(val, what) {
 	}
 };
 
-exports.unset = function(obj, what, ...list) {
+exports.unset = function (obj, what, ...list) {
 	if (obj == null || typeof obj != "object") return obj;
 	obj = Object.assign({}, obj);
 	if (!list.length) list = Object.keys(obj);
-	list.forEach(function(name) {
+	list.forEach(function (name) {
 		obj[name] = undefined;
 	});
 	return obj;
 };
 
-exports.set = function(obj, what, name, val) {
+exports.set = function (obj, what, name, val) {
 	if (obj == null) {
 		obj = {};
 	}
@@ -218,15 +218,15 @@ exports.set = function(obj, what, name, val) {
 	return obj;
 };
 
-exports.enc = function(str) {
+exports.enc = function (str) {
 	if (str == null || typeof str != "string") return str;
 	return encodeURIComponent(str);
 };
 
-exports.query = function(obj, what) {
+exports.query = function (obj, what) {
 	if (obj == null || typeof obj != "object") return null;
 	var list = [];
-	Object.keys(obj).forEach(function(key) {
+	Object.keys(obj).forEach(function (key) {
 		var val = obj[key];
 		if (val === undefined) return;
 		if (val === null) list.push(key);
@@ -237,13 +237,13 @@ exports.query = function(obj, what) {
 	else return '';
 };
 
-exports.isoDate = function(val, what) {
+exports.isoDate = function (val, what) {
 	var d = exports.parseDate(val);
 	if (Number.isNaN(d.getTime())) return null;
 	else return d.toISOString();
 };
 
-exports.parseDate = function(val) {
+exports.parseDate = function (val) {
 	var d;
 	if (val instanceof Date) {
 		d = val;
@@ -257,17 +257,17 @@ exports.parseDate = function(val) {
 	return d;
 };
 
-exports.orNow = exports.now = function(val, what) {
+exports.orNow = exports.now = function (val, what) {
 	if (val == null) return Date.now();
 	else return val;
 };
 
-exports.toTime = function(val) {
+exports.toTime = function (val) {
 	if (!val) return val;
 	return exports.parseDate(val).toISOString().split('T').pop().split('.').shift();
 };
 
-exports.toDate = function(val, what, unit) {
+exports.toDate = function (val, what, unit) {
 	if (!val) return val;
 
 	var date = exports.parseDate(val).toISOString().split('T');
@@ -282,7 +282,7 @@ exports.toDate = function(val, what, unit) {
 	return date;
 };
 
-exports.setDate = function(val, what, amount, unit) {
+exports.setDate = function (val, what, amount, unit) {
 	var d = exports.parseDate(val);
 	amount = parseInt(amount);
 	if (!Number.isNaN(amount)) {
@@ -303,7 +303,7 @@ exports.setDate = function(val, what, amount, unit) {
 	return d;
 };
 
-exports.formatDate = function(val, what, ...list) {
+exports.formatDate = function (val, what, ...list) {
 	if (/^\d\d:\d\d(:\d\d)?$/.test(val)) {
 		val = '1970-01-01T' + val + 'Z';
 	}
@@ -314,39 +314,39 @@ exports.formatDate = function(val, what, ...list) {
 	const l = 'long';
 	const num = 'numeric';
 	const dig = '2-digit';
-	list.forEach(function(tok) {
-		switch(tok) {
-		case 'd': p.weekday = n; break;
-		case 'da': p.weekday = s; break;
-		case 'day': p.weekday = l; break;
-		case 'Y': p.year = num; break;
-		case 'YY': p.year = dig; break;
-		case 'mo': p.month = n; break;
-		case 'mon': p.month = s; break;
-		case 'month': p.month = l; break;
-		case 'M': p.month = num; break;
-		case 'MM': p.month = dig; break;
-		case 'D': p.day = num; break;
-		case 'DD': p.day = dig; break;
-		case 'H': p.hour = num; break;
-		case 'HH': p.hour = dig; break;
-		case 'm': p.minute = num; break;
-		case 'mm': p.minute = dig; break;
-		case 's': p.second = num; break;
-		case 'ss': p.second = dig; break;
-		case 'tz': p.timeZoneName = s; break;
-		case 'timezone': p.timeZoneName = l; break;
-		default:
-			if (/\w+\/\w+/.test(tok)) p.timeZone = tok;
-			else console.warn("Unrecognized date format option", tok);
-			break;
+	list.forEach(function (tok) {
+		switch (tok) {
+			case 'd': p.weekday = n; break;
+			case 'da': p.weekday = s; break;
+			case 'day': p.weekday = l; break;
+			case 'Y': p.year = num; break;
+			case 'YY': p.year = dig; break;
+			case 'mo': p.month = n; break;
+			case 'mon': p.month = s; break;
+			case 'month': p.month = l; break;
+			case 'M': p.month = num; break;
+			case 'MM': p.month = dig; break;
+			case 'D': p.day = num; break;
+			case 'DD': p.day = dig; break;
+			case 'H': p.hour = num; break;
+			case 'HH': p.hour = dig; break;
+			case 'm': p.minute = num; break;
+			case 'mm': p.minute = dig; break;
+			case 's': p.second = num; break;
+			case 'ss': p.second = dig; break;
+			case 'tz': p.timeZoneName = s; break;
+			case 'timezone': p.timeZoneName = l; break;
+			default:
+				if (/\w+\/\w+/.test(tok)) p.timeZone = tok;
+				else console.warn("Unrecognized date format option", tok);
+				break;
 		}
 	});
 	var lang = document.documentElement.lang || 'en';
 	var str;
 	try {
 		str = d.toLocaleString(lang, p);
-	} catch(err) {
+	} catch (err) {
 		if (p.timeZone && p.timeZone != "UTC") {
 			p.timeZone = "UTC";
 			str = d.toLocaleString(lang, p) + " UTC";
