@@ -25,7 +25,7 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 			list.splice(index + 1, 0, model);
 		} else if (btn.name == "del") {
 			list.splice(index, 1);
-			if (list.length == 0 && this.getAttribute('required') == "true") list.push(model);
+			if (list.length == 0 && this.hasAttribute('required')) list.push(model);
 		}
 		this.listRender(data, state.scope);
 	}
