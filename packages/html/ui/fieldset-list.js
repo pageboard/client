@@ -39,19 +39,21 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 				"|": function (val, what) {
 					if (listPrefix == null) {
 						const iterMark = what.expr.path.findIndex(str => str.endsWith('+'));
-						if (iterMark >= 0) listPrefix = what.expr.path.slice(0, iterMark + 1).join('.').slice(0, -1);
-						if (what.expr.get(what.data, listPrefix) == null) {
-							const list = listPrefix.split('.');
-							let curData = what.data;
-							list.forEach((it, i, arr) => {
-								if (curData[it] == null) {
-									if (arr.length == i + 1) {
-										curData = curData[it] = [{}];
-									} else {
-										curData = curData[it] = {};
+						if (iterMark >= 0) {
+							listPrefix = what.expr.path.slice(0, iterMark + 1).join('.').slice(0, -1);
+							if (what.expr.get(what.data, listPrefix) == null) {
+								const list = listPrefix.split('.');
+								let curData = what.data;
+								list.forEach((it, i, arr) => {
+									if (curData[it] == null) {
+										if (arr.length == i + 1) {
+											curData = curData[it] = [{}];
+										} else {
+											curData = curData[it] = {};
+										}
 									}
-								}
-							});
+								});
+							}
 						}
 					}
 
