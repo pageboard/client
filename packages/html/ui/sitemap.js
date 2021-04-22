@@ -36,6 +36,10 @@ class HTMLElementSitemap extends VirtualHTMLElement {
 		var tree = {};
 		pages.forEach(function(page) {
 			if (!page.data.url) return;
+			if (page.content) {
+				delete page.content.children;
+				delete page.children;
+			}
 			var branch = tree;
 			var arr = page.data.url.substring(1).split('/');
 			arr.forEach(function(name, i) {
