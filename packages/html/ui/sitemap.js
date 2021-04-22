@@ -54,14 +54,15 @@ class HTMLElementSitemap extends VirtualHTMLElement {
 	build(state) {
 		return Pageboard.bundle(Pageboard.fetch('get', `/.api/pages`), state).then(res => {
 			state.scope.$element = state.scope.$elements.sitemap;
+			const tree = this.constructor.transformResponse(res);
 			var node = Pageboard.render({
-				item: this.constructor.transformResponse(res)
+				item: tree
 			}, state.scope);
-			var content = this.firstElementChild;
-			content.textContent = '';
-			Array.from(node.children).forEach(function(node) {
-				content.appendChild(node);
-			}, this);
+			// only change block content
+			const src = node.firstElementChild;
+			const dst = this.firstElementChild;
+			dst.textContent = '';
+			while (src.firstChild) dst.appendChild(src.firstChild);
 		});
 	}
 }
