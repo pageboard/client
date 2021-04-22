@@ -166,7 +166,7 @@ Blocks.prototype.renderFrom = function(block, blocks, store, opts) {
 					return;
 				}
 				console.warn("missing block for", parent.nodeName, '>', node.nodeName, id);
-				parent.replaceChild(node.ownerDocument.createTextNode('·'), node);
+				parent.replaceChild(node.ownerDocument.createTextNode('⌧'), node);
 				return;
 			}
 			var frag = this.renderFrom(child, blocks, store, Object.assign({}, opts, {
