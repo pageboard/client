@@ -34,7 +34,7 @@
     "inlineresources": "^1.0.1",
     "juice": "^7.0.0",
     "postinstall": "^0.7.0",
-    "postinstall-browserify": "^0.6.0"
+    "postinstall-browserify": "^0.7.0"
   },
   "prepare": {
     "inlineresources/dist/inlineresources.allinone.js": "copy lib/inlineresources.js",

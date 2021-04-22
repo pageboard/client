@@ -30,9 +30,9 @@
   "homepage": "https://github.com/pageboard/pagecut#readme",
   "devDependencies": {
     "@kapouer/common-ancestor": "^0.2.0",
-    "diff-dom": "^4.2.0",
+    "diff-dom": "^4.2.2",
     "fast-deep-equal": "^2.0.1",
-    "orderedmap": "^1.1.0",
+    "orderedmap": "^1.1.1",
     "postinstall": "^0.7.0",
     "postinstall-patch": "^0.7.1",
     "prosemirror-commands": "^1.1.7",

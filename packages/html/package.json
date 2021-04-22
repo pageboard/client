@@ -23,8 +23,8 @@
     "semantic-ui-css": "^2.3.2"
   },
   "devDependencies": {
-    "formdata-polyfill": "^3.0.19",
-    "nouislider": "^14.6.3",
+    "formdata-polyfill": "^3.0.20",
+    "nouislider": "^14.7.0",
     "object-fit-images": "^3.2.4",
     "postinstall-browserify": "^0.7.0",
     "stickyfilljs": "^2.1.0"
