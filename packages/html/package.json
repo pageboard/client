@@ -1,6 +1,6 @@
 {
   "name": "@pageboard/html",
-  "version": "0.9.7",
+  "version": "0.9.8",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -20,7 +20,7 @@
   "homepage": "https://github.com/pageboard/client#readme",
   "dependencies": {
     "postinstall": "^0.7.0",
-    "semantic-ui-css": "^2.3.2"
+    "semantic-ui-css": "^2.4.1"
   },
   "devDependencies": {
     "formdata-polyfill": "^3.0.20",
