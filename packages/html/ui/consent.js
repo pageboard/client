@@ -26,7 +26,7 @@ Page.State.prototype.reconsent = function (fn) {
 	return asking;
 };
 
-Page.setup(function(state) {
+Page.paint(function(state) {
 	state.finish(function() {
 		var run = true;
 		if (HTMLCustomConsentElement.waiting) {
