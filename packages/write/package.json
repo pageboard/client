@@ -32,6 +32,9 @@
     "perfect-scrollbar": "^1.5.0",
     "postinstall-browserify": "^0.7.0",
     "pretty-bytes": "^5.6.0",
+    "prosemirror-dev-tools": "^3.0.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "speakingurl": "^14.0.1"
   },
   "postinstall": {
@@ -49,6 +52,7 @@
     "@pageboard/pagecut/src/editor.js": "browserify --standalone=Pagecut lib/pagecut/",
     "@pageboard/pagecut/src/menubar.js": "browserify --standalone=Pagecut.Menubar lib/pagecut/menu.js",
     "@pageboard/pagecut/src/*.css": "copy lib/pagecut/",
+    "prosemirror-dev-tools/dist/cjs/index.js": "browserify --standalone=ProseMirrorDevTools lib/prosemirror-dev-tools.js",
     "./src/pageboard.js": "browserify --standalone=Pageboard.utils lib/"
   },
   "pageboard": {
