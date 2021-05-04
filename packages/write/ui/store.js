@@ -192,8 +192,7 @@ Store.prototype.save = function(e) {
 	this.saving = true;
 	changes.recursive = true;
 
-	var p = Pageboard.fetch('put', '/.api/page', changes)
-	.then((result) => {
+	var p = Pageboard.fetch('put', '/.api/page', changes).then((result) => {
 		if (!result) return;
 		if (result.status == 404 && result.blocks) {
 			var allStandalones = true;
