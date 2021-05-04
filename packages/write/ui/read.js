@@ -5,7 +5,6 @@ Page.setup(function(state) {
 		it.adopt(window, state);
 	});
 });
-});
 
 Page.patch(function(state) {
 	var it = window.parent.Pageboard;
