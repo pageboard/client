@@ -105,10 +105,29 @@ function monkeyPatch(proto, meth, cb, after) {
 		enumerable: true,
 		value: (function(fn) {
 			return function(...args) {
+				var isP = false;
 				var ret;
-				if (after && fn) ret = fn.apply(this, args);
-				ret = cb.apply(this, args);
-				if (!after && fn) ret = fn.apply(this, args);
+				if (after && fn) {
+					ret = fn.apply(this, args);
+					isP = Promise.resolve(ret) == ret;
+				}
+				if (isP) {
+					ret = ret.then(() => {
+						return cb.apply(this, args);
+					});
+				} else {
+					ret = cb.apply(this, args);
+					isP = Promise.resolve(ret) == ret;
+				}
+				if (!after && fn) {
+					if (isP) {
+						ret = ret.then(() => {
+							return fn.apply(this, args);
+						});
+					} else {
+						ret = fn.apply(this, args);
+					}
+				}
 				return ret;
 			};
 		})(proto[meth])
