@@ -1,15 +1,15 @@
 class HTMLElementSitemap extends VirtualHTMLElement {
 	static makeTree(tree, parent) {
-		if (!parent) parent = {
-			type: 'sitemap'
-		};
-		if (!parent.children) parent.children = [];
-		if (!parent.content) parent.content = {};
-		if (!parent.content.children) parent.content.children = '';
 		var page = tree._;
 		if (page) {
-			parent.children.push(page);
-			parent.content.children += `<div block-id="${page.id}" block-type="site${page.type}"></div>`;
+			if (!parent.children) parent.children = [];
+			var old = parent.children.find(item => item.id == page.id);
+			if (!old) parent.children.push(page);
+			if (parent.content == null) parent.content = {};
+			if (parent.content.children == null) parent.content.children = "";
+			if (typeof parent.content.children == "string") {
+				parent.content.children += `<div block-id="${page.id}" block-type="site${page.type}"></div>`;
+			}
 			delete tree._;
 		} else {
 			page = parent;
@@ -25,7 +25,7 @@ class HTMLElementSitemap extends VirtualHTMLElement {
 			if (indexA == indexB) return 0;
 			else if (indexA < indexB) return -1;
 			else if (indexA > indexB) return 1;
-		}).forEach(function(name) {
+		}).forEach(function (name) {
 			this.makeTree(tree[name], page);
 		}, this);
 		return parent;
@@ -34,12 +34,9 @@ class HTMLElementSitemap extends VirtualHTMLElement {
 	static transformResponse(res) {
 		var pages = res.items;
 		var tree = {};
-		pages.forEach(function(page) {
+
+		pages.forEach(function (page) {
 			if (!page.data.url) return;
-			if (page.content) {
-				delete page.content.children;
-				delete page.children;
-			}
 			var branch = tree;
 			var arr = page.data.url.substring(1).split('/');
 			arr.forEach(function(name, i) {
@@ -48,10 +45,18 @@ class HTMLElementSitemap extends VirtualHTMLElement {
 				if (i == arr.length - 1) branch._ = page;
 			});
 		});
-		return this.makeTree(tree);
+		return this.makeTree(tree, {
+			type: 'sitemap',
+			content: { children: '' },
+			children: []
+		});
 	}
 
 	build(state) {
+		if (this.firstElementChild.children.length > 0 && this.isContentEditable) {
+			// workaround... build is called a second time with pagecut-placeholder set
+			return;
+		}
 		return Pageboard.bundle(Pageboard.fetch('get', `/.api/pages`), state).then(res => {
 			state.scope.$element = state.scope.$elements.sitemap;
 			const tree = this.constructor.transformResponse(res);

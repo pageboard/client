@@ -55,7 +55,8 @@ class HTMLElementSitepage extends VirtualHTMLElement {
 			Object.assign(block.data, data);
 			editor.dispatch(editor.utils.refreshTr(editor.state.tr, this, block));
 			this.updateChildren();
-		}
+		} else this.updateChildren();
+		
 	}
 }
 
