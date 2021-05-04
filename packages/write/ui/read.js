@@ -1,7 +1,10 @@
 Page.setup(function(state) {
 	var it = window.parent.Pageboard;
 	if (!it || !it.adopt || !state.data.$cache) return;
-	it.adopt(window, state);
+	state.finish(() => {
+		it.adopt(window, state);
+	});
+});
 });
 
 Page.patch(function(state) {
