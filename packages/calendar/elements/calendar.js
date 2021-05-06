@@ -209,7 +209,7 @@ exports.event_reservation = {
 					const: 'settings'
 				},
 				id: {
-					title: 'user settings id',
+					title: 'User Settings',
 					type: 'string',
 					format: 'id'
 				}
@@ -221,7 +221,7 @@ exports.event_reservation = {
 					const: 'event_date'
 				},
 				id: {
-					title: 'event date id',
+					title: 'Event Date',
 					type: 'string',
 					format: 'id'
 				}
