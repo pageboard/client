@@ -1,6 +1,7 @@
 class HTMLElementFieldsetList extends VirtualHTMLElement {
 
 	setup(state) {
+		if (this.isContentEditable) return;
 		const [data, list, model] = this.listData;
 		if (list.length == 0 && this.hasAttribute('required')) {
 			list.push(model);
@@ -15,6 +16,7 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 	}
 
 	handleClick(e, state) {
+		if (this.isContentEditable) return;
 		const btn = e.target.closest('button[type="button"][name]');
 		if (!btn) return;
 		if (["add", "del"].includes(btn.name) == false) return;
@@ -124,9 +126,8 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 	}
 }
 
-Page.init((state) => {
-	if (state.scope.$write) return;
-	VirtualHTMLElement.define('element-fieldset-list', HTMLElementFieldsetList);
-});
+
+VirtualHTMLElement.define('element-fieldset-list', HTMLElementFieldsetList);
+
 
 
