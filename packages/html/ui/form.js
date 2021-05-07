@@ -13,6 +13,17 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			state.vars[name] = true;
 		});
 	}
+	paint(state) {
+		// ?submit=<name> for auto-submit
+		var name = state.query.submit;
+		if (!name || name != this.name) return;
+		state.vars.submit = true;
+		state.finish(() => {
+			var e = document.createEvent('HTMLEvents');
+			e.initEvent('submit', true, true);
+			this.dispatchEvent(e);
+		});
+	}
 	read(withDefaults) {
 		var fd = new FormData(this);
 		var query = {};

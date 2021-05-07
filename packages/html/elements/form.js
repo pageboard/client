@@ -69,6 +69,13 @@ exports.api_form = {
 			default: false,
 			context: 'template'
 		},
+		name: {
+			title: 'Name',
+			description: 'Use with form.submit=name to autosubmit',
+			type: 'string',
+			format: 'id',
+			nullable: true
+		},
 		action: {
 			title: 'Action',
 			type: 'object',
