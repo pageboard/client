@@ -93,7 +93,7 @@ exports.api_form = {
 			$helper: 'service',
 		},
 		redirection: {
-			title: 'Redirection',
+			title: 'Success',
 			type: 'object',
 			properties: {
 				url: {
@@ -108,14 +108,51 @@ exports.api_form = {
 					nullable: true,
 					type: "object"
 				}
-			}
+			},
+			nullable: true
+		},
+		badrequest: {
+			title: 'Bad request',
+			type: 'object',
+			properties: {
+				parameters: {
+					title: 'Parameters',
+					type: "object"
+				}
+			},
+			nullable: true
+		},
+		unauthorized: {
+			title: 'Unauthorized request',
+			type: 'object',
+			properties: {
+				parameters: {
+					title: 'Parameters',
+					type: "object"
+				}
+			},
+			nullable: true
+		},
+		notfound: {
+			title: 'Request not found',
+			type: 'object',
+			properties: {
+				parameters: {
+					title: 'Parameters',
+					type: "object"
+				}
+			},
+			nullable: true
 		}
 	},
 	contents: 'block+',
 	tag: 'form[method="post"]',
-	html: `<form is="element-form" method="post"
+	html: `<form is="element-form" method="post" name="[name]"
 		action="/.api/form/[$id]"
-		redirection="[redirection.url][redirection.parameters|query]"
+		success="[redirection.url][redirection.parameters|query]"
+		badrequest="[badrequest.parameters|query]"
+		unauthorized="[unauthorized.parameters|query]"
+		notfound="[notfound.parameters|query]"
 		class="ui form [hidden|?]"></form>`,
 	stylesheets: [
 		'../lib/components/form.css',

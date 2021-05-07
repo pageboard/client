@@ -3,12 +3,6 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		super();
 		if (this.init) this.init();
 	}
-	static get defaults() {
-		return {
-			action: null,
-			redirection: null
-		};
-	}
 	init() {
 		this.getMethodLater = Pageboard.debounce(this.getMethod, 300);
 	}
@@ -151,7 +145,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 	getMethod(e, state) {
 		this.ignoreInputChange = false;
 		var form = this;
-		var redirect = this.options.redirection;
+		var redirect = this.getAttribute('redirection');
 		var loc = Page.parse(redirect);
 		Object.assign(loc.query, form.read(false));
 		if (Page.samePathname(loc, state)) {
@@ -182,7 +176,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			data.$request = form.read(true);
 			form.disable();
 			return Pageboard.fetch(form.method, Page.format({
-				pathname: form.options.action,
+				pathname: form.getAttribute('action'),
 				query: data.$query
 			}), data.$request);
 		}).catch(function (err) {
@@ -190,16 +184,21 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		}).then(function (res) {
 			if (res && res.grants) state.data.$grants = res.grants;
 			state.scope.$response = res;
+			form.enable();
+
 			form.classList.remove('loading');
+			const statusName = HTMLCustomFormElement.statusName(res.status);
+			if (statusName == "success") form.save();
+			// messages shown inside form, no navigation
 			var statusClass = `[n|statusClass]`.fuse({ n: res.status });
 			if (statusClass) form.classList.add(statusClass);
-			form.enable();
-			if (res.status < 200 || res.status >= 400) return;
-			form.save();
+
+			let redirect = form.getAttribute(statusName);
+			if (!redirect) return;
+
 			data.$response = res;
 			data.$status = res.status;
-			var redirect = form.options.redirection;
-			if (redirect) redirect = redirect.fuse(data, state.scope);
+			redirect = redirect.fuse(data, state.scope);
 			if (!redirect) {
 				if (res.granted) redirect = Page.format(state);
 				else return;
@@ -227,6 +226,14 @@ class HTMLCustomFormElement extends HTMLFormElement {
 	}
 }
 window.HTMLCustomFormElement = HTMLCustomFormElement;
+
+HTMLCustomFormElement.statusName = function (code) {
+	if (code >= 200 && code < 400) return 'success';
+	else if (code == 404) return 'notfound';
+	else if (code == 401 || code == 403) return 'unauthorized';
+	else if (code == 400) return 'badrequest';
+	else return 'error';
+};
 
 /* these methods must be available even on non-upgraded elements */
 HTMLFormElement.prototype.enable = function () {
