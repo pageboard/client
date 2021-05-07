@@ -188,19 +188,12 @@ PageHelper.prototype.searchStart = function(same) {
 			});
 		},
 		responseType: 'text',
+		domParseResponse: false,
 		scrollThreshold: 400,
 		elementScroll: Pageboard.write,
 		loadOnScroll: true,
 		history: false,
 		debug: false
-	});
-	this.infinite.on('load', function(response) {
-		response = JSON.parse(response);
-		var data = response.items;
-		var node = me.container.ownerDocument.createElement('div');
-		me.cache(data);
-		me.renderList(data, node);
-		this.appendItems(Array.from(node.children));
 	});
 	Pageboard.write.classList.add('href');
 	this.input.closest('form').classList.add('href');
@@ -214,7 +207,13 @@ PageHelper.prototype.searchStart = function(same) {
 PageHelper.prototype.searchUpdate = function() {
 	this.container.textContent = "";
 	this.infinite.pageIndex = 1;
-	this.infinite.loadNextPage();
+	this.infinite.loadNextPage().then(({ body }) => {
+		var data = JSON.parse(body).items;
+		var node = this.container.ownerDocument.createElement('div');
+		this.cache(data);
+		this.renderList(data, node);
+		this.infinite.appendItems(Array.from(node.children));
+	});
 };
 
 PageHelper.prototype.searchStop = function() {

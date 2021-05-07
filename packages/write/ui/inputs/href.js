@@ -156,10 +156,10 @@ Href.prototype.searchStart = function() {
 	this.uiInput.value = '';
 	this.uiInput.focus();
 	this.lastPageIndex = Infinity;
-	var first = true;
+	this.first = true;
 	this.infinite = new window.InfiniteScroll(this.container, {
 		path: function() {
-			var text = first ? '' : me.uiInput.value;
+			var text = me.first ? '' : me.uiInput.value;
 			var url;
 			if (text.startsWith('#') || text.startsWith('/')) {
 				url = normUrl(text);
@@ -171,7 +171,7 @@ Href.prototype.searchStart = function() {
 				url: url
 			}, me.opts.filter);
 			filter.limit = 10;
-			if (this.lastPageIndex < this.pageIndex) return;
+			if (me.lastPageIndex < this.pageIndex) return;
 			filter.offset = (this.pageIndex - 1) * filter.limit;
 			return Page.format({
 				pathname: '/.api/hrefs',
@@ -179,22 +179,14 @@ Href.prototype.searchStart = function() {
 			});
 		},
 		responseType: 'text',
+		domParseResponse: false,
 		scrollThreshold: 400,
 		elementScroll: Pageboard.write,
 		loadOnScroll: true,
 		history: false,
 		debug: false
 	});
-	this.infinite.on('load', function(response) {
-		first = false;
-		response = JSON.parse(response);
-		var data = response.data;
-		if (data.length == 0) this.lastPageIndex = this.pageIndex;
-		var node = me.container.ownerDocument.createElement('div');
-		me.cache(data);
-		me.renderList(data, node);
-		this.appendItems(Array.from(node.children));
-	});
+
 	Pageboard.write.classList.add('href');
 	var parent = this.input.parentNode;
 	while (parent) {
@@ -207,10 +199,16 @@ Href.prototype.searchStart = function() {
 Href.prototype.searchUpdate = function() {
 	if (!this.infinite) return this.searchStart();
 	this.container.textContent = "";
-	if (this.infinite) {
-		this.infinite.pageIndex = 1;
-		this.infinite.loadNextPage();
-	}
+	this.infinite.pageIndex = 1;
+	this.infinite.loadNextPage().then(({ body }) => {
+		this.first = false;
+		var data = JSON.parse(body).data;
+		if (data.length == 0) this.lastPageIndex = this.infinite.pageIndex;
+		var node = this.container.ownerDocument.createElement('div');
+		this.cache(data);
+		this.renderList(data, node);
+		this.infinite.appendItems(Array.from(node.children));
+	});
 };
 
 Href.prototype.searchStop = function(cancel) {
@@ -422,7 +420,7 @@ Href.prototype.renderItem = function(obj) {
 		</div>
 	</a>`);
 	var content = item.firstElementChild;
-	
+
 	content.appendChild(item.dom(`<div class="left floated meta">
 		${obj.mime.split(';').shift()}<em>${tplSize(obj.meta.size)}</em><br>
 		${dims ? dims + '<br>' : ''}
@@ -433,7 +431,7 @@ Href.prototype.renderItem = function(obj) {
 	if (obj.icon) {
 		content.appendChild(item.dom(`<img src="${obj.icon}" class="ui avatar icon image" />`));
 	}
-	
+
 	if (!obj.visible || this.opts.readOnly) {
 		item.querySelector('[data-action="remove"]').remove();
 	}
