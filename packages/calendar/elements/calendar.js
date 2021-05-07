@@ -178,7 +178,7 @@ exports.event_reservation = {
 	title: 'Reservation',
 	menu: "Calendar",
 	bundle: 'event',
-	required: ['seats', 'name'],
+	required: ['seats'],
 	properties: {
 		seats: {
 			title: 'Number of reserved seats',
