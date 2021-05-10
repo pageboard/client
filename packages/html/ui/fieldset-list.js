@@ -1,6 +1,6 @@
 class HTMLElementFieldsetList extends VirtualHTMLElement {
 
-	setup(state) {
+	paint(state) {
 		if (this.isContentEditable) return;
 		const [data, list, model] = this.listData;
 		if (list.length == 0 && this.hasAttribute('required')) {
