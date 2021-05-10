@@ -18,11 +18,11 @@
   },
   "homepage": "https://github.com/pageboard/client#readme",
   "devDependencies": {
-    "@pageboard/pagecut": "^0.9.0",
-    "@ungap/custom-elements": "^0.1.15",
-    "debounce": "^1.1.0",
-    "matchdom": "^5.10.1",
-    "postinstall-browserify": "^0.7.0",
+    "@pageboard/pagecut": "^0.9.1",
+    "@ungap/custom-elements": "^1.0.0",
+    "debounce": "^1.2.1",
+    "matchdom": "^5.10.5",
+    "postinstall-browserify": "^0.7.1",
     "postinstall-patch": "^0.7.1",
     "window-page": "^10.8.1"
   },
