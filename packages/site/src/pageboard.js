@@ -117,6 +117,7 @@ Page.patch(function(state) {
 			if (state.vars[key] === false) missing.push(key);
 		});
 		if (extra.length > 0) {
+			// eslint-disable-next-line no-console
 			console.warn("Unknown query parameters detected, rewriting location", extra);
 			exports.equivs({
 				Status: '301 Wrong Query Parameters',
@@ -151,6 +152,7 @@ Page.setup(function(state) {
 	exports.adv = true;
 	state.finish(function() {
 		if (window.parent == window) {
+			// eslint-disable-next-line no-console
 			console.info("Powered by https://pageboard.fr");
 		}
 	});

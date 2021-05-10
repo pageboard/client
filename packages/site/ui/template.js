@@ -49,6 +49,7 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 			try {
 				expr = JSON.parse(expr);
 			} catch(ex) {
+				// eslint-disable-next-line no-console
 				console.warn("block-expr attribute should contain JSON");
 				expr = {};
 			}
@@ -111,6 +112,7 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 			this.render(res, state);
 		}).catch(function(err) {
 			state.scope.$status = -1;
+			// eslint-disable-next-line no-console
 			console.error("Error building", err);
 		}).then(() => {
 			var name = '[$status|statusClass]'.fuse(state.scope);
@@ -157,7 +159,10 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 						key = path.slice(1).join('.');
 						var undef = val === undefined;
 						if (!state.vars[key]) {
-							if (undef) console.info("$query." + key, "is undefined");
+							if (undef) {
+								// eslint-disable-next-line no-console
+								console.info("$query." + key, "is undefined");
+							}
 							state.vars[key] = !undef;
 						}
 					} else {

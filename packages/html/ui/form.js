@@ -139,8 +139,12 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		if (e.type == "input" && (!e.target || !["radio", "checkbox"].includes(e.target.type))) {
 			fn = this[this.method + 'MethodLater'] || fn;
 		}
-		if (fn) fn.call(this, e, state);
-		else console.error("Unsupported form method", this.method);
+		if (fn) {
+			fn.call(this, e, state);
+		} else {
+			// eslint-disable-next-line no-console
+			console.error("Unsupported form method", this.method);
+		}
 	}
 	handleInput(e, state) {
 		if (e.type == "input") {
@@ -364,6 +368,7 @@ Page.ready(function (state) {
 	filters.form = function (val, what, action) {
 		var form = what.parent.closest('form');
 		if (!form) {
+			// eslint-disable-next-line no-console
 			console.warn("No parent form found");
 			return val;
 		}
