@@ -8,8 +8,9 @@ class HTMLCustomFormElement extends HTMLFormElement {
 	}
 	patch(state) {
 		if (this.isContentEditable) return;
-		if (this.method != "get") return;
-		this.fill(state.query).forEach((name) => {
+		if (this.method != "get") {
+			this.restore();
+		} else this.fill(state.query).forEach((name) => {
 			state.vars[name] = true;
 		});
 	}
@@ -129,6 +130,19 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			if (node.reset) node.reset();
 		});
 	}
+	backup() {
+		window.sessionStorage.setItem(this.action, JSON.stringify(this.read(true)));
+	}
+	restore() {
+		try {
+			this.fill(JSON.parse(window.sessionStorage.getItem(this.action)));
+		} catch (err) {
+			// ignore
+		}
+	}
+	forget() {
+		window.sessionStorage.removeItem(this.action);
+	}
 	handleSubmit(e, state) {
 		if (e.type == "submit") e.preventDefault();
 		if (this.isContentEditable) return;
@@ -203,7 +217,11 @@ class HTMLCustomFormElement extends HTMLFormElement {
 
 			form.classList.remove('loading');
 			const statusName = HTMLCustomFormElement.statusName(res.status);
-			if (statusName == "success") form.save();
+			if (statusName == "success") {
+				form.forget();
+				form.save();
+			}
+
 			// messages shown inside form, no navigation
 			var statusClass = `[n|statusClass]`.fuse({ n: res.status });
 			if (statusClass) form.classList.add(statusClass);
@@ -217,6 +235,9 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			if (!redirect) {
 				if (res.granted) redirect = Page.format(state);
 				else return;
+			}
+			if (redirect && statusName != "success") {
+				form.backup();
 			}
 			var loc = Page.parse(redirect);
 			var vary = false;
