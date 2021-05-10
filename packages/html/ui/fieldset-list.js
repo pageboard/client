@@ -5,8 +5,8 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 		const [data, list, model] = this.listData;
 		if (list.length == 0 && this.hasAttribute('required')) {
 			list.push(model);
-			this.listRender(data, state.scope);
 		}
+		this.listRender(data, state.scope);
 	}
 
 	listRender(data, scope) {
