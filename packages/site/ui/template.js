@@ -97,13 +97,11 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 		}
 		var loader;
 		if (opts.action) {
-			var queryStr = Page.format({pathname: "", query: vars});
-			if (queryStr == this.dataset.query) return;
-			this.dataset.query = queryStr;
 			loader = Pageboard.fetch('get', opts.action, vars);
 		} else {
 			loader = Promise.resolve();
 		}
+
 		this._refreshing = true;
 		this.classList.remove('error', 'warning', 'success');
 		if (opts.action) this.classList.add('loading');
