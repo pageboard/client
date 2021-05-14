@@ -127,13 +127,9 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 		// allow sub-templates to merge current data
 		tmpl.querySelectorAll('template').forEach(tpl => {
 			if (tpl.parentNode.nodeName == this.nodeName || !tpl.content) return;
-			const view = tpl.nextElementSibling;
 			tpl.content.fuse(data, {
 				$filters: Object.assign({}, scope.$filters, { repeat() { } })
-			}); // fuse single values, avoid repeat bug
-			if (view.matches('.view') && !view.hasAttribute('block-content')) {
-				view.appendChild(tpl.content.cloneNode(true));
-			}
+			});
 		});
 		// remove all block-id from template - might be done in pagecut eventually
 		var rnode;
