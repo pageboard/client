@@ -1,4 +1,3 @@
-const commonAncestor = require('@kapouer/common-ancestor');
 const Model = require('prosemirror-model');
 const {DiffDOM} = require('diff-dom');
 
@@ -169,7 +168,7 @@ function findContent(elt, dom, type) {
 		var list = [];
 		getImmediateContents(dom, list);
 		if (!list.length) return;
-		node = commonAncestor.apply(null, list);
+		node = list.ancestor();
 	}
 	if (node && node.nodeName == "TEMPLATE" && node.content.childNodes.length && node.childNodes.length == 0) {
 		node.appendChild(node.content);

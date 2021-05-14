@@ -29,7 +29,6 @@
   },
   "homepage": "https://github.com/pageboard/pagecut#readme",
   "devDependencies": {
-    "@kapouer/common-ancestor": "^0.2.0",
     "diff-dom": "^4.2.2",
     "fast-deep-equal": "^2.0.1",
     "orderedmap": "^1.1.1",
