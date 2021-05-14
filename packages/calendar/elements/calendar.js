@@ -178,13 +178,28 @@ exports.event_reservation = {
 	title: 'Reservation',
 	menu: "Calendar",
 	bundle: 'event',
-	required: ['seats'],
+	required: [],
 	properties: {
 		seats: {
 			title: 'Number of reserved seats',
 			type: 'integer',
 			default: 1,
 			minimum: 0
+		},
+		attendees: {
+			title: 'Attendees',
+			type: 'array',
+			items: {
+				type: 'object',
+				additionalProperties: true,
+				properties: {
+					name: {
+						title: 'Name',
+						type: 'string'
+					}
+				}
+			},
+			nullable: true
 		},
 		comment: {
 			title: 'Comment',
