@@ -176,6 +176,7 @@ function findContent(elt, dom, type) {
 	return node;
 }
 
+
 function flagDom(elt, dom, iterate, parent) {
 	if (!dom) return;
 	if (dom.nodeType == Node.TEXT_NODE) {
@@ -304,10 +305,10 @@ function createRootSpec(view, elt, obj) {
 					}
 					if (prop.type == "integer") {
 						val = parseInt(val);
-						if (!isNaN(val)) dataObj[key] = val;
+						if (!Number.isNaN(val)) dataObj[key] = val;
 					} else if (prop.type == "number") {
 						val = parseFloat(val);
-						if (!isNaN(val)) dataObj[key] = val;
+						if (!Number.isNaN(val)) dataObj[key] = val;
 					} else if (prop.type == "boolean") {
 						dataObj[key] = val == "true";
 					} else if (prop.type == "string") {
@@ -920,13 +921,13 @@ function mutateNodeView(tr, pos, pmNode, obj, nobj) {
 					newAttrs._html = staticHtml(objChild.dom);
 				}
 			}
-			if (!isNaN(curpos)) {
+			if (!Number.isNaN(curpos)) {
 				// updates that are incompatible with schema might happen (e.g. popup(title + content))
 				tr.setNodeMarkup(curpos, null, newAttrs);
 				// however, this transaction is going to happen right now,
 				// before all rootNodeView children have been updated with *old* state
 				pmChild.attrs = newAttrs; // so we must change pmNode right now !
-				if (objChild.children.length)  {
+				if (objChild.children.length) {
 					var domChild = obj.contentDOM && obj.contentDOM.children[i];
 					var desc = domChild && domChild.pmViewDesc || {};
 					mutateNodeView(tr, curpos, pmChild, desc, objChild);
@@ -1076,7 +1077,7 @@ function restoreDomAttrs(srcAtts, dom) {
 		}
 	}
 
-	for (var j=0; j < dstAtts.length; j++) {
+	for (var j = 0; j < dstAtts.length; j++) {
 		attr = dstAtts[j];
 		name = attr.name;
 		if (name == "block-content" || name == "contenteditable") continue;
@@ -1091,7 +1092,7 @@ function domAttrsMap(dom) {
 	var map = {};
 	var atts = dom.attributes;
 	var att;
-	for (var k=0; k < atts.length; k++) {
+	for (var k = 0; k < atts.length; k++) {
 		att = atts[k];
 		if (att.value && !att.name.startsWith('block-')) map[att.name] = att.value;
 	}
@@ -1109,7 +1110,7 @@ function attrsTo(attrs) {
 function attrsFrom(dom) {
 	var domAttrs = dom.attributes;
 	var att, attrs = {};
-	for (var i=0; i < domAttrs.length; i++) {
+	for (var i = 0; i < domAttrs.length; i++) {
 		att = domAttrs[i];
 		if (att.name.startsWith('block-')) {
 			attrs[att.name.substring(6)] = att.value;
@@ -1131,7 +1132,7 @@ function specAttrs(atts) {
 
 function attrsObj(atts) {
 	var obj = {};
-	for (var k=0; k < atts.length; k++) {
+	for (var k = 0; k < atts.length; k++) {
 		obj[atts[k].name] = atts[k].value;
 	}
 	return obj;
