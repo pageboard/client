@@ -7,10 +7,10 @@ class VirtualHTMLElement extends HTMLElement {
 		if (this.init) this.init();
 	}
 	static define(name, cla, is) {
-		if (cla.init) cla.init();
-
 		var preset = window.customElements.get(name);
-		if (preset) return cla;
+		if (preset) return preset;
+
+		if (cla.init) cla.init();
 
 		monkeyPatchAll(cla.prototype, {
 			attributeChangedCallback(name, src, dst, ns) {
