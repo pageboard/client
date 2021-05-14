@@ -430,25 +430,32 @@ exports.input_select_option = {
 };
 
 exports.fieldset_list = {
-	title: 'List',
+	title: 'FieldList',
 	menu: "form",
 	icon: '<i class="icons"><i class="folder outline icon"></i><i class="corner add icon"></i></i>',
 	group: "block",
 	context: 'form//',
 	priority: 0,
 	properties: {
-		required: {
-			title: 'Required',
-			description: 'At least one item is shows',
-			type: "boolean",
-			default: true
+		size: {
+			title: 'Minimum size',
+			type: "integer",
+			minimum: 0,
+			default: 1
+		},
+		prefix: {
+			title: 'Prefix',
+			description: '',
+			type: "string",
+			format: 'singleline',
+			nullable: true
 		}
 	},
 	contents: [{
 		id: 'template',
 		nodes: 'block+'
 	}],
-	html: `<element-fieldset-list required="[required]">
+	html: `<element-fieldset-list data-size="[size]" data-prefix="[prefix]">
 		<template block-content="template"></template>
 		<div class="view"></div>
 	</element-fieldset-list>`,

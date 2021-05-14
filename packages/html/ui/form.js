@@ -9,10 +9,12 @@ class HTMLCustomFormElement extends HTMLFormElement {
 	patch(state) {
 		if (this.isContentEditable) return;
 		if (this.method != "get") {
-			this.restore();
-		} else this.fill(state.query).forEach((name) => {
-			state.vars[name] = true;
-		});
+			this.restore(state.scope);
+		} else {
+			this.fill(state.query, state).forEach((name) => {
+				state.vars[name] = true;
+			});
+		}
 	}
 	paint(state) {
 		// ?submit=<name> for auto-submit
@@ -79,17 +81,20 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		}
 		return query;
 	}
-	fill(values) {
-		// cheap flattening
-		values = Page.parse(Page.format({ query: values })).query;
-		var vars = [];
-		var elem = null, name, val;
-		for (var i = 0; i < this.elements.length; i++) {
-			elem = this.elements[i];
-			name = elem.name;
-			if (!name) continue;
-			if (Object.prototype.hasOwnProperty.call(values, name) && !vars.includes(name)) vars.push(name);
-			val = values[name];
+	fill(query, scope) {
+		// workaround for merging arrays
+		const tagList = "element-fieldset-list";
+		const FieldSet = VirtualHTMLElement.define(tagList);
+		this.querySelectorAll(tagList).forEach((node) => {
+			if (!node.fill) Object.setPrototypeOf(node, FieldSet.prototype);
+			node.fill(query, scope);
+		});
+		const vars = [];
+		this.elements.forEach(function (elem) {
+			var name = elem.name;
+			if (!name) return;
+			if (Object.prototype.hasOwnProperty.call(query, name) && !vars.includes(name)) vars.push(name);
+			let val = query[name];
 			if (val == null) val = '';
 			switch (elem.type) {
 				case 'submit':
@@ -109,6 +114,8 @@ class HTMLCustomFormElement extends HTMLFormElement {
 					break;
 				case 'hidden':
 					break;
+				case 'button':
+					break;
 				default:
 					if (elem.fill) {
 						elem.fill(val);
@@ -117,7 +124,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 					}
 					break;
 			}
-		}
+		});
 		return vars;
 	}
 	save() {
@@ -131,16 +138,26 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		});
 	}
 	backup() {
-		window.sessionStorage.setItem(this.action, JSON.stringify(this.read(true)));
+		if (!this.action) return;
+		window.sessionStorage.setItem(
+			this.action,
+			JSON.stringify(this.read(true))
+		);
 	}
-	restore() {
+	restore(scope) {
+		if (!this.action) return;
+		const str = window.sessionStorage.getItem(this.action);
+		if (str == null) return;
 		try {
-			this.fill(JSON.parse(window.sessionStorage.getItem(this.action)));
+			this.fill(JSON.parse(str), scope);
 		} catch (err) {
-			// ignore
+			// eslint-disable-next-line no-console
+			console.warn(err);
+			this.forget();
 		}
 	}
 	forget() {
+		if (!this.action) return;
 		window.sessionStorage.removeItem(this.action);
 	}
 	handleSubmit(e, state) {
@@ -386,6 +403,18 @@ Page.setup(function (state) {
 
 Page.ready(function (state) {
 	var filters = state.scope.$filters;
+
+	function linearizeValues(query, obj = {}, prefix) {
+		Object.keys(query).forEach(function(key) {
+			const val = query[key];
+			if (prefix) key = prefix + '.' + key;
+			if (val === undefined) return;
+			if (val == null) obj[key] = val;
+			else if (typeof val == "object") linearizeValues(val, obj, key);
+			else obj[key] = val;
+		});
+		return obj;
+	}
 	filters.form = function (val, what, action) {
 		var form = what.parent.closest('form');
 		if (!form) {
@@ -403,12 +432,18 @@ Page.ready(function (state) {
 		} else if (action == "fill") {
 			if (val == null) {
 				form.reset();
-			} else if (typeof val == "object" && val.id) {
-				var meta = Object.assign({}, val.data);
-				Object.keys(val).forEach((key) => {
-					if (key != "data") meta['$' + key] = val[key];
-				});
-				HTMLCustomFormElement.prototype.fill.call(form, meta);
+			} else if (typeof val == "object") {
+				var values = val;
+				if (val.id && val.data) {
+					// old way
+					values = Object.assign({}, val.data);
+					Object.keys(val).forEach((key) => {
+						if (key != "data") values['$' + key] = val[key];
+					});
+				} else {
+					// new way
+				}
+				HTMLCustomFormElement.prototype.fill.call(form, linearizeValues(values), state.scope);
 			}
 		}
 		return val;
