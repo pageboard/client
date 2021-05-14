@@ -12,7 +12,7 @@ exports.message = {
 				title: "Success"
 			}, {
 				const: "warning",
-				title: "Not found"
+				title: "Warning"
 			}, {
 				const: "error",
 				title: "Error"
