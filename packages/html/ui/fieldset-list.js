@@ -6,16 +6,12 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 
 	patch(state) {
 		if (this.isContentEditable) return;
-		this.resize(0, state.scope);
-	}
-
-	get size() {
-		return this._size || Number(this.dataset.size) || 0;
+		if (!this._size) this.resize(0, state.scope);
 	}
 
 	resize(size, scope) {
-		const len = Math.max(this.size, size);
-		if (this._size >= len) return;
+		const len = Math.max(Number(this.dataset.size) || 0, size);
+		if (this._size == len) return;
 		this._size = len;
 
 		const tpl = this.listTpl.cloneNode(true);
