@@ -1,8 +1,6 @@
 class HTMLElementInputDateSlot extends VirtualHTMLElement {
 	static get defaults() {
 		return {
-			start: null,
-			end: null,
 			timeZone: null,
 			range: null,
 			step: 0
@@ -18,7 +16,7 @@ class HTMLElementInputDateSlot extends VirtualHTMLElement {
 	}
 
 	dateChange(e) {
-		var date = e.target.parentNode.dataset.value || (new Date()).toISOString();
+		var date = e.target.parentNode.value || (new Date()).toISOString();
 		var els = this.inputs;
 		els[1].setDate(date);
 		els[2].setDate(date);
@@ -29,8 +27,8 @@ class HTMLElementInputDateSlot extends VirtualHTMLElement {
 		var startEl = els[els.length - 2];
 		var endEl = els[els.length - 1];
 		var isStart = e.target.parentNode == startEl;
-		var start = new Date(startEl.options.value);
-		var end = new Date(endEl.options.value);
+		var start = new Date(startEl.value);
+		var end = new Date(endEl.value);
 		var startTime = start.getTime();
 		var endTime = end.getTime();
 		if (Number.isNaN(endTime)) endTime = startTime;
@@ -51,9 +49,9 @@ class HTMLElementInputDateSlot extends VirtualHTMLElement {
 		}
 		if (changed) {
 			if (isStart) {
-				endEl.dataset.value = end.toISOString();
+				endEl.value = end.toISOString();
 			} else {
-				startEl.dataset.value = start.toISOString();
+				startEl.value = start.toISOString();
 			}
 		}
 	}
@@ -66,6 +64,7 @@ class HTMLElementInputDateSlot extends VirtualHTMLElement {
 		var dayRange = this.options.step < 60 * 60 * 24;
 		if (els.length == 2 && dayRange) {
 			els.unshift(this.ownerDocument.createElement('element-input-date-time'));
+			els[0].innerHTML = '<input name="" type="hidden">';
 			this.insertBefore(els[0], els[1]);
 		}
 		var dts = els.map(el => el.dataset);
@@ -79,13 +78,10 @@ class HTMLElementInputDateSlot extends VirtualHTMLElement {
 			dts[0].format = "date";
 			dts[1].step = dts[2].step = this.options.step;
 			dts[1].format = dts[2].format = "time";
-			dts[1].value = dts[0].value = this.options.start || "";
-			dts[2].value = this.options.end || "";
+			els[0].value = els[1].value || "";
 		} else {
 			dts[0].format = "date";
 			dts[1].format = "date";
-			dts[0].value = this.options.start || "";
-			dts[1].value = this.options.end || "";
 		}
 	}
 }

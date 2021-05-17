@@ -91,36 +91,36 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		});
 		const vars = [];
 		this.elements.forEach(function (elem) {
-			var name = elem.name;
+			const name = elem.name;
 			if (!name) return;
 			if (Object.prototype.hasOwnProperty.call(query, name) && !vars.includes(name)) vars.push(name);
-			let val = query[name];
-			if (val == null) val = '';
+			const val = query[name];
+			const str = val == null ? "" : (typeof val == "object" ? val : val.toString());
 			switch (elem.type) {
 				case 'submit':
 					break;
 				case 'radio':
 				case 'checkbox':
-					if (!Array.isArray(val)) val = [val];
-					elem.checked = val.some(function (str) {
+					elem.checked = (Array.isArray(val) ? val : [str]).some(function (str) {
 						return str.toString() == elem.value;
 					});
 					break;
 				case 'select-multiple':
-					elem.fill(val);
+					elem.fill(str);
 					break;
 				case 'textarea':
-					elem.innerText = val;
+					elem.innerText = str;
 					break;
 				case 'hidden':
+					if (val !== undefined) elem.value = str;
 					break;
 				case 'button':
 					break;
 				default:
 					if (elem.fill) {
-						elem.fill(val);
+						elem.fill(str);
 					} else {
-						elem.value = val;
+						elem.value = str;
 					}
 					break;
 			}

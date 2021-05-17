@@ -1,7 +1,6 @@
 class HTMLElementInputDateTime extends VirtualHTMLElement {
 	static get defaults() {
 		return {
-			value: null,
 			format: (str) => {
 				if (['date', 'time', 'datetime'].includes(str)) return str;
 				else return 'datetime';
@@ -9,6 +8,14 @@ class HTMLElementInputDateTime extends VirtualHTMLElement {
 			timeZone: null,
 			step: 0
 		};
+	}
+
+	get value() {
+		return this.querySelector('input').value;
+	}
+
+	set value(val) {
+		this.querySelector('input').value = val;
 	}
 
 	handleClick(e, state) {
@@ -26,37 +33,24 @@ class HTMLElementInputDateTime extends VirtualHTMLElement {
 	}
 
 	setup(state) {
-		var input = this.querySelector('input[type="hidden"]');
-		var view = this.querySelector('input:not([type="hidden"])');
-		if (!view && !input) {
-			input = this.ownerDocument.createElement('input');
-			input.setAttribute('type', 'hidden');
-			this.appendChild(input);
-		}
-		if (view && !input) {
-			input = view;
-			input.setAttribute('type', 'hidden');
-			view = null;
-		}
+		var view = this.querySelector('input:not([name])');
 		if (!view) {
 			view = this.ownerDocument.createElement('input');
-			this.insertBefore(view, input);
+			this.appendChild(view);
 		}
-		this._view = view;
-		this._input = input;
 		if (!this.querySelector('.controls')) {
 			this.insertAdjacentHTML('beforeEnd', '<div class="controls"><span class="incr"></span><span class="decr"></span></div>');
 		}
-		view.value = this.options.value;
-		if (!input.value && view.value) input.value = view.value;
 
-		this._dt = new window.DateTimeEntry(this._view, {
+		view.value = this.value;
+
+		this._dt = new window.DateTimeEntry(view, {
 			step: this.options.step || null,
 			locale: document.documentElement.lang || window.navigator.language,
 			format: this.formatFromOptions(),
 			useUTC: !!this.options.timeZone,
 			onChange: function(val) {
-				this.dataset.value = Number.isNaN(val.getTime()) ? "" : val.toISOString();
+				this.value = Number.isNaN(val.getTime()) ? "" : val.toISOString();
 			}.bind(this)
 		});
 	}
@@ -68,13 +62,12 @@ class HTMLElementInputDateTime extends VirtualHTMLElement {
 			useUTC: !!this.options.timeZone,
 			step: this.options.step || null
 		});
-		this._input.value = this.options.value;
-		this._dt.setTime(this.options.value);
+		this._dt.setTime(this.value);
 	}
 
 	setDate(date) {
-		var time = (this.options.value || date).split('T').pop();
-		this.dataset.value = date.split('T').shift() + 'T' + time;
+		var time = (this.value || date).split('T').pop();
+		this.value = date.split('T').shift() + 'T' + time;
 	}
 
 	formatFromOptions() {
