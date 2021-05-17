@@ -233,17 +233,20 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			form.enable();
 
 			form.classList.remove('loading');
-			const statusName = HTMLCustomFormElement.statusName(res.status);
-			if (statusName == "success") {
-				form.forget();
-				form.save();
-			}
-
 			// messages shown inside form, no navigation
 			var statusClass = `[n|statusClass]`.fuse({ n: res.status });
 			if (statusClass) form.classList.add(statusClass);
 
+			const statusName = HTMLCustomFormElement.statusName(res.status);
 			let redirect = form.getAttribute(statusName);
+			if (statusName == "success") {
+				form.forget();
+				form.save();
+				if (!redirect && form.closest('element-template')) {
+					redirect = Page.format(state);
+				}
+			}
+
 			if (!redirect) return;
 
 			data.$response = res;
