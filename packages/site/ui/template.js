@@ -99,8 +99,10 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 		const data = { $query };
 
 		return Pageboard.bundle(loader, state).then((res) => {
-			data.$response = res;
-			state.scope.$status = res.status;
+			if (res) {
+				data.$response = res;
+				state.scope.$status = res.status;
+			}
 			this.render(res, state);
 		}).catch(function(err) {
 			state.scope.$status = -1;
@@ -108,10 +110,10 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 			console.error("Error building", err);
 		}).then(() => {
 			this.classList.remove('loading');
+			this._refreshing = false;
+			if (state.scope.$status == null) return;
 			const name = '[$status|statusClass]'.fuse(data, state.scope);
 			if (name) this.classList.add(name);
-			this._refreshing = false;
-
 			const statusName = `[$status|statusName]`.fuse(data, state.scope);
 			const redirect = this.getAttribute(statusName);
 			if (!redirect) return;
