@@ -18,30 +18,30 @@ class HTMLCustomFormElement extends HTMLFormElement {
 	}
 	paint(state) {
 		// ?submit=<name> for auto-submit
-		var name = state.query.submit;
+		const name = state.query.submit;
 		if (!name || name != this.name) return;
 		state.vars.submit = true;
 		// make sure to not resubmit in case of self-redirection
 		delete state.query.submit;
 		state.finish(() => {
-			var e = document.createEvent('HTMLEvents');
+			const e = document.createEvent('HTMLEvents');
 			e.initEvent('submit', true, true);
 			this.dispatchEvent(e);
 		});
 	}
 	read(withDefaults) {
-		var fd = new FormData(this);
-		var query = {};
+		const fd = new FormData(this);
+		const query = {};
 		fd.forEach(function (val, key) {
 			if (val == null || val == "") {
-				var cur = Array.from(this.querySelectorAll(`[name="${key}"]`)).pop();
+				const cur = Array.from(this.querySelectorAll(`[name="${key}"]`)).pop();
 				if (cur.required == false) {
 					val = undefined;
 				} else {
 					val = null;
 				}
 			}
-			var old = query[key];
+			const old = query[key];
 			if (old !== undefined) {
 				if (!Array.isArray(old)) {
 					query[key] = [old];
@@ -54,7 +54,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 
 		this.elements.forEach(function (node) {
 			if (node.name == null || node.name == "" || node.type == "button") return;
-			var val = node.value;
+			let val = node.value;
 			if (val == "") val = null;
 			if (node.type == "radio") {
 				if (!withDefaults && node.checked == node.defaultChecked && query[node.name] == val) {
@@ -67,7 +67,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			} else if (node.type == "hidden") {
 				// always include them
 			} else {
-				var defVal = node.defaultValue;
+				let defVal = node.defaultValue;
 				if (defVal == "") defVal = null;
 				if (!withDefaults && query[node.name] == defVal) {
 					query[node.name] = undefined;
@@ -77,7 +77,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 				query[node.name] = null;
 			}
 		});
-		var btn = document.activeElement;
+		const btn = document.activeElement;
 		if (btn && btn.type == "submit" && btn.name && query[btn.name] === undefined) {
 			query[btn.name] = btn.value;
 		}
@@ -168,7 +168,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		this.classList.remove('error', 'warning', 'success');
 		if (this.matches('.loading')) return;
 		if (e.type != "submit" && this.querySelector('[type="submit"]')) return;
-		var fn = this[this.method + 'Method'];
+		let fn = this[this.method + 'Method'];
 		if (e.type == "input" && (!e.target || !["radio", "checkbox"].includes(e.target.type))) {
 			fn = this[this.method + 'MethodLater'] || fn;
 		}
@@ -192,27 +192,27 @@ class HTMLCustomFormElement extends HTMLFormElement {
 	}
 	getMethod(e, state) {
 		this.ignoreInputChange = false;
-		var form = this;
-		var redirect = this.getAttribute('redirection');
-		var loc = Page.parse(redirect);
+		const form = this;
+		const redirect = this.getAttribute('redirection');
+		const loc = Page.parse(redirect);
 		Object.assign(loc.query, form.read(false));
 		if (Page.samePathname(loc, state)) {
 			loc.query = Object.assign({}, state.query, loc.query);
 		}
-		var status = 200;
+		let status = 200;
 		return state.push(loc).catch(function (err) {
 			if (err.status != null) status = err.status;
 			else status = 0;
 		}).then(function () {
-			var statusClass = `[n|statusClass]`.fuse({ n: status });
+			const statusClass = `[n|statusClass]`.fuse({ n: status });
 			if (statusClass) form.classList.add(statusClass);
 		});
 	}
 	postMethod(e, state) {
 		if (e.type != "submit") return;
-		var form = this;
+		const form = this;
 		form.classList.add('loading');
-		var data = {
+		const data = {
 			$query: state.query
 		};
 		return Promise.all(Array.prototype.filter.call(form.elements, function (node) {
@@ -236,7 +236,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 
 			form.classList.remove('loading');
 			// messages shown inside form, no navigation
-			var statusClass = `[status|statusClass]`.fuse(res);
+			const statusClass = `[status|statusClass]`.fuse(res);
 			if (statusClass) form.classList.add(statusClass);
 
 			const statusName = `[status|statusName]`.fuse(res);
@@ -289,17 +289,15 @@ window.HTMLCustomFormElement = HTMLCustomFormElement;
 
 /* these methods must be available even on non-upgraded elements */
 HTMLFormElement.prototype.enable = function () {
-	var elem = null;
-	for (var i = 0; i < this.elements.length; i++) {
-		elem = this.elements[i];
+	for (let i = 0; i < this.elements.length; i++) {
+		let elem = this.elements[i];
 		elem.disabled = false;
 		if (elem.hasAttribute('disabled')) elem.removeAttribute('disabled');
 	}
 };
 HTMLFormElement.prototype.disable = function () {
-	var elem = null;
-	for (var i = 0; i < this.elements.length; i++) {
-		elem = this.elements[i];
+	for (let i = 0; i < this.elements.length; i++) {
+		let elem = this.elements[i];
 		elem.disabled = true;
 	}
 };
@@ -310,15 +308,14 @@ Page.ready(function () {
 
 
 HTMLSelectElement.prototype.fill = function (values) {
-	var opt;
 	if (!Array.isArray(values)) values = [values];
-	for (var i = 0; i < this.options.length; i++) {
-		opt = this.options[i];
+	for (let i = 0; i < this.options.length; i++) {
+		let opt = this.options[i];
 		opt.selected = values.indexOf(opt.value) > -1;
 	}
 };
 HTMLSelectElement.prototype.reset = function () {
-	for (var i = 0; i < this.options.length; i++) this.options[i].selected = false;
+	for (let i = 0; i < this.options.length; i++) this.options[i].selected = false;
 };
 
 HTMLInputElement.prototype.fill = function (val) {
@@ -373,7 +370,7 @@ Page.setup(function (state) {
 			blurHandler(e, false);
 		},
 		captureFocus: function (e, state) {
-			var el = e.target;
+			const el = e.target;
 			if (!el.matches || !el.matches('input,textarea,select')) return;
 			if (e.relatedTarget && e.relatedTarget.type == "submit") return;
 			updateClass(el.closest('.field') || el, el.validity, true);
@@ -385,15 +382,15 @@ Page.setup(function (state) {
 	}, document);
 
 	function updateClass(field, validity, remove) {
-		for (var key in validity) {
+		for (let key in validity) {
 			if (key == "valid") continue;
-			var has = validity[key];
+			const has = validity[key];
 			field.classList.toggle(key, !remove && has);
 		}
 		field.classList.toggle('error', !remove && !validity.valid);
 	}
 	function blurHandler(e, checked) {
-		var el = e.target;
+		const el = e.target;
 		if (!el.matches || !el.matches('input,textarea,select')) return;
 		if (!checked) el.checkValidity();
 		updateClass(el.closest('.field') || el, el.validity);
@@ -401,7 +398,7 @@ Page.setup(function (state) {
 });
 
 Page.ready(function (state) {
-	var filters = state.scope.$filters;
+	const filters = state.scope.$filters;
 
 	function linearizeValues(query, obj = {}, prefix) {
 		Object.keys(query).forEach(function(key) {
@@ -415,7 +412,7 @@ Page.ready(function (state) {
 		return obj;
 	}
 	filters.form = function (val, what, action) {
-		var form = what.parent.closest('form');
+		const form = what.parent.closest('form');
 		if (!form) {
 			// eslint-disable-next-line no-console
 			console.warn("No parent form found");
@@ -432,7 +429,7 @@ Page.ready(function (state) {
 			if (val == null) {
 				form.reset();
 			} else if (typeof val == "object") {
-				var values = val;
+				let values = val;
 				if (val.id && val.data) {
 					// old way
 					values = Object.assign({}, val.data);
