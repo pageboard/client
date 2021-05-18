@@ -198,7 +198,7 @@ PageHelper.prototype.searchStart = function(same) {
 	Pageboard.write.classList.add('href');
 	this.input.closest('form').classList.add('href');
 	var parent = this.input;
-	while ((parent=parent.parentNode.closest('fieldset'))) {
+	while ((parent=parent.parentNode.closest('fieldset,.fieldset'))) {
 		parent.classList.add('href');
 	}
 	return this.searchUpdate();
@@ -225,7 +225,7 @@ PageHelper.prototype.searchStop = function() {
 	Pageboard.write.classList.remove('href');
 	this.input.closest('form').classList.remove('href');
 	var parent = this.input;
-	while ((parent=parent.parentNode.closest('fieldset'))) {
+	while ((parent=parent.parentNode.closest('fieldset,.fieldset'))) {
 		parent.classList.remove('href');
 	}
 	Pageboard.scrollbar.update();
