@@ -268,9 +268,6 @@ class HTMLCustomFormElement extends HTMLFormElement {
 					vary = true;
 				} else {
 					vary = "patch";
-					// keep current query
-					// redirect can use |query|unset:name filter to set a query param to undefined
-					loc.query = Object.assign({}, state.query, loc.query);
 				}
 				state.data.$vary = vary;
 			}
