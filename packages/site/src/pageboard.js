@@ -106,6 +106,7 @@ Page.patch(function(state) {
 		var query = {};
 		var extra = [];
 		var missing = [];
+		state.status = 200;
 		Object.keys(state.query).forEach(function(key) {
 			if (state.vars[key] === undefined) {
 				extra.push(key);
@@ -119,12 +120,14 @@ Page.patch(function(state) {
 		if (extra.length > 0) {
 			// eslint-disable-next-line no-console
 			console.warn("Unknown query parameters detected, rewriting location", extra);
+			state.status = 301;
 			exports.equivs({
 				Status: '301 Wrong Query Parameters',
 				Location: Page.format({pathname: state.pathname, query})
 			});
 			state.requery = query;
 		} else if (missing.length > 0) {
+			state.status = 400;
 			exports.equivs({
 				Status: '400 Missing Parameters'
 			});

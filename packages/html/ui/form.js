@@ -9,6 +9,11 @@ class HTMLCustomFormElement extends HTMLFormElement {
 	patch(state) {
 		if (this.isContentEditable) return;
 		if (this.method != "get") {
+			// ?submit=<name> for auto-submit
+			const name = state.query.submit;
+			if (name && name == this.name) {
+				state.vars.submit = true;
+			}
 			this.restore(state.scope);
 		} else {
 			this.fill(state.query, state).forEach((name) => {
@@ -20,10 +25,10 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		// ?submit=<name> for auto-submit
 		const name = state.query.submit;
 		if (!name || name != this.name) return;
-		state.vars.submit = true;
 		// make sure to not resubmit in case of self-redirection
 		delete state.query.submit;
 		state.finish(() => {
+			if (state.status != 200) return;
 			const e = document.createEvent('HTMLEvents');
 			e.initEvent('submit', true, true);
 			this.dispatchEvent(e);
