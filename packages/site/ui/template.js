@@ -100,6 +100,7 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 
 		return Pageboard.bundle(loader, state).then((res) => {
 			data.$response = res;
+			state.scope.$status = res.status;
 			this.render(res, state);
 		}).catch(function(err) {
 			state.scope.$status = -1;
