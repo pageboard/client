@@ -113,9 +113,25 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 
 			const statusName = `[$status|statusName]`.fuse(data, state.scope);
 			const redirect = this.getAttribute(statusName);
-			if (redirect) {
-				return state.push(Page.parse(redirect.fuse(data, state.scope)));
+			if (!redirect) return;
+			// redirections must work when prerendered too
+			const message = {
+				notfound: 'Not Found',
+				unauthorized: 'Unauthorized',
+				error: 'Error',
+				badrequest: 'Bad Request',
+				success: 'Moved Permanently'
+			}[statusName];
+			const loc = redirect.fuse(data, state.scope);
+			Pageboard.equivs({
+				Status: `301 ${message}`,
+				Location: loc
+			});
+			const obj = Page.parse(loc);
+			if (state.query.develop !== undefined) {
+				obj.query.develop = state.query.develop;
 			}
+			state.push(obj);
 		});
 	}
 	render(data, state) {

@@ -13,9 +13,9 @@ exports.fetch = {
 	html: `<element-template
 		action="/.api/query/[$id][action.method|bmagnet]"
 		success="[redirection.url][redirection.parameters|query]"
-		badrequest="[badrequest.parameters|query]"
-		unauthorized="[unauthorized.parameters|query]"
-		notfound="[notfound.parameters|query]"
+		badrequest="[badrequest.url][badrequest.parameters|query]"
+		unauthorized="[unauthorized.url][unauthorized.parameters|query]"
+		notfound="[notfound.url][notfound.parameters|query]"
 	>
 		<template block-content="template"></template>
 		<div class="view"></div>
@@ -67,8 +67,16 @@ exports.fetch = {
 			title: 'Bad request',
 			type: 'object',
 			properties: {
+				url: {
+					title: 'Page',
+					nullable: true,
+					type: "string",
+					format: "pathname",
+					$helper: "page"
+				},
 				parameters: {
 					title: 'Parameters',
+					nullable: true,
 					type: "object"
 				}
 			},
@@ -78,8 +86,16 @@ exports.fetch = {
 			title: 'Unauthorized request',
 			type: 'object',
 			properties: {
+				url: {
+					title: 'Page',
+					nullable: true,
+					type: "string",
+					format: "pathname",
+					$helper: "page"
+				},
 				parameters: {
 					title: 'Parameters',
+					nullable: true,
 					type: "object"
 				}
 			},
@@ -89,8 +105,16 @@ exports.fetch = {
 			title: 'Request not found',
 			type: 'object',
 			properties: {
+				url: {
+					title: 'Page',
+					nullable: true,
+					type: "string",
+					format: "pathname",
+					$helper: "page"
+				},
 				parameters: {
 					title: 'Parameters',
+					nullable: true,
 					type: "object"
 				}
 			},
