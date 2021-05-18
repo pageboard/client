@@ -249,7 +249,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			if (statusName == "success") {
 				form.forget();
 				form.save();
-				if (!redirect && form.closest('element-template')) {
+				if (!redirect && form.closest('element-template') && !form.querySelector('.message.success')) {
 					redirect = Page.format(state);
 				}
 			}
