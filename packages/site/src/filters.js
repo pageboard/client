@@ -167,10 +167,19 @@ exports.schema = function (val, what, spath) {
 };
 
 exports.statusClass = function (val) {
-	val = parseInt(val);
-	if (val >= 200 && val < 300) return "success";
-	else if (val >= 400 && val < 500) return "warning";
-	else if (val || val === 0) return "error";
+	const n = Number(val);
+	if (n >= 200 && n < 300) return "success";
+	else if (n >= 400 && n < 500) return "warning";
+	else if (n || n === 0) return "error";
+};
+
+exports.statusName = function (val) {
+	const n = Number(val);
+	if (n >= 200 && n < 400) return 'success';
+	else if (n == 404) return 'notfound';
+	else if (n == 401 || n == 403) return 'unauthorized';
+	else if (n == 400) return 'badrequest';
+	else return 'error';
 };
 
 exports.autolink = function (val, what) {

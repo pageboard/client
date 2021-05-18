@@ -234,10 +234,10 @@ class HTMLCustomFormElement extends HTMLFormElement {
 
 			form.classList.remove('loading');
 			// messages shown inside form, no navigation
-			var statusClass = `[n|statusClass]`.fuse({ n: res.status });
+			var statusClass = `[status|statusClass]`.fuse(res);
 			if (statusClass) form.classList.add(statusClass);
 
-			const statusName = HTMLCustomFormElement.statusName(res.status);
+			const statusName = `[status|statusName]`.fuse(res);
 			let redirect = form.getAttribute(statusName);
 			if (statusName == "success") {
 				form.forget();
@@ -282,14 +282,6 @@ class HTMLCustomFormElement extends HTMLFormElement {
 	}
 }
 window.HTMLCustomFormElement = HTMLCustomFormElement;
-
-HTMLCustomFormElement.statusName = function (code) {
-	if (code >= 200 && code < 400) return 'success';
-	else if (code == 404) return 'notfound';
-	else if (code == 401 || code == 403) return 'unauthorized';
-	else if (code == 400) return 'badrequest';
-	else return 'error';
-};
 
 /* these methods must be available even on non-upgraded elements */
 HTMLFormElement.prototype.enable = function () {

@@ -10,7 +10,13 @@ exports.fetch = {
 		nodes: 'block+',
 		expressions: true
 	},
-	html: `<element-template data-action="/.api/query/[$id][action.method|bmagnet]">
+	html: `<element-template
+		action="/.api/query/[$id][action.method|bmagnet]"
+		success="[redirection.url][redirection.parameters|query]"
+		badrequest="[badrequest.parameters|query]"
+		unauthorized="[unauthorized.parameters|query]"
+		notfound="[notfound.parameters|query]"
+	>
 		<template block-content="template"></template>
 		<div class="view"></div>
 	</element-template>`,
@@ -31,11 +37,64 @@ exports.fetch = {
 					type: "object"
 				}
 			},
+			nullable: true,
 			$filter: {
 				name: 'service',
 				action: "read"
 			},
 			$helper: 'service'
+		},
+		redirection: {
+			title: 'Success',
+			type: 'object',
+			properties: {
+				url: {
+					title: 'Page',
+					nullable: true,
+					type: "string",
+					format: "pathname",
+					$helper: "page"
+				},
+				parameters: {
+					title: 'Parameters',
+					nullable: true,
+					type: "object"
+				}
+			},
+			nullable: true
+		},
+		badrequest: {
+			title: 'Bad request',
+			type: 'object',
+			properties: {
+				parameters: {
+					title: 'Parameters',
+					type: "object"
+				}
+			},
+			nullable: true
+		},
+		unauthorized: {
+			title: 'Unauthorized request',
+			type: 'object',
+			properties: {
+				parameters: {
+					title: 'Parameters',
+					type: "object"
+				}
+			},
+			nullable: true
+		},
+		notfound: {
+			title: 'Request not found',
+			type: 'object',
+			properties: {
+				parameters: {
+					title: 'Parameters',
+					type: "object"
+				}
+			},
+			nullable: true
 		}
 	},
 	stylesheets: [

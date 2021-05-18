@@ -1,14 +1,9 @@
 class HTMLElementTemplate extends VirtualHTMLElement {
-	static get defaults() {
-		return {
-			action: null
-		};
-	}
 	static prepareTemplate(node) {
 		if (node.isContentEditable) return node;
-		var doc = node.ownerDocument;
-		var tmpl = node;
-		var helper;
+		const doc = node.ownerDocument;
+		let tmpl = node;
+		let helper;
 		if (node.matches('script[type="text/html"]')) {
 			helper = doc.createElement('div');
 			helper.innerHTML = node.textContent;
@@ -22,7 +17,7 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 			node.replaceWith(tmpl);
 			node.textContent = helper.textContent = '';
 		} else if (document.visibilityState == "prerender") {
-			var dest = tmpl.dom(`<script type="text/html"></script>`);
+			const dest = tmpl.dom(`<script type="text/html"></script>`);
 			if (!helper) helper = doc.createElement('div');
 			helper.textContent = tmpl.content.innerHTML;
 			dest.textContent = helper.innerHTML;
@@ -41,10 +36,10 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 	fetch(state) {
 		// first find out if state.query has a key in this.keys
 		// what do we do if state.query has keys that are used by a form in this query template ?
-		var expr = this.getAttribute('block-expr');
-		var vars = {};
-		var opts = this.options;
-		var scope = state.scope;
+		let expr = this.getAttribute('block-expr');
+		const action = this.getAttribute('action');
+		const $query = {};
+		const scope = state.scope;
 		if (expr) {
 			try {
 				expr = JSON.parse(expr);
@@ -53,13 +48,13 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 				console.warn("block-expr attribute should contain JSON");
 				expr = {};
 			}
-			var missing = 0;
-			var filters = scope.$filters;
+			let missing = 0;
+			const filters = scope.$filters;
 			scope.$filters = Object.assign({}, filters, {
 				'|': function(val, what) {
-					var path = what.scope.path.slice();
+					const path = what.scope.path.slice();
 					if (path[0] == "$query") {
-						var name = path.slice(1).join('.');
+						const name = path.slice(1).join('.');
 						if (name.length && state.query[name] !== undefined) {
 							val = state.query[name];
 						}
@@ -67,12 +62,12 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 					return val;
 				},
 				'||': function(val, what) {
-					var path = what.scope.path.slice();
+					const path = what.scope.path.slice();
 					if (path[0] == "$query") {
-						var name = path.slice(1).join('.');
+						const name = path.slice(1).join('.');
 						if (name.length) {
 							if (val !== undefined) {
-								if (val != null) vars[name] = val;
+								if (val != null) $query[name] = val;
 							} else {
 								missing++;
 							}
@@ -88,42 +83,46 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 				}
 			});
 			scope.$filters = filters;
-			Object.keys(vars).forEach(function(key) {
+			Object.keys($query).forEach(function(key) {
 				state.vars[key] = true;
 			});
 			if (missing) return;
-		} else if (!opts.action) {
+		} else if (!action) {
 			// non-remotes cannot know if they will need $query
 		}
-		var loader;
-		if (opts.action) {
-			loader = Pageboard.fetch('get', opts.action, vars);
-		} else {
-			loader = Promise.resolve();
-		}
+		const loader = action ? Pageboard.fetch('get', action, $query) : Promise.resolve();
 
 		this._refreshing = true;
 		this.classList.remove('error', 'warning', 'success');
-		if (opts.action) this.classList.add('loading');
+		if (action) this.classList.add('loading');
+
+		const data = { $query };
 
 		return Pageboard.bundle(loader, state).then((res) => {
+			data.$response = res;
 			this.render(res, state);
 		}).catch(function(err) {
 			state.scope.$status = -1;
 			// eslint-disable-next-line no-console
 			console.error("Error building", err);
 		}).then(() => {
-			var name = '[$status|statusClass]'.fuse(state.scope);
-			if (name) this.classList.add(name);
 			this.classList.remove('loading');
+			const name = '[$status|statusClass]'.fuse(data, state.scope);
+			if (name) this.classList.add(name);
 			this._refreshing = false;
+
+			const statusName = `[$status|statusName]`.fuse(data, state.scope);
+			const redirect = this.getAttribute(statusName);
+			if (redirect) {
+				return state.push(Page.parse(redirect.fuse(data, state.scope)));
+			}
 		});
 	}
 	render(data, state) {
 		if (this.children.length != 2) return;
-		var tmpl = this.firstElementChild.content.cloneNode(true);
-		var view = this.lastElementChild;
-		var scope = Object.assign({}, state.scope);
+		const tmpl = this.firstElementChild.content.cloneNode(true);
+		const view = this.lastElementChild;
+		const scope = Object.assign({}, state.scope);
 		// allow sub-templates to merge current data
 		tmpl.querySelectorAll('template').forEach(tpl => {
 			if (tpl.parentNode.nodeName == this.nodeName || !tpl.content) return;
@@ -132,26 +131,26 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 			});
 		});
 		// remove all block-id from template - might be done in pagecut eventually
-		var rnode;
+		let rnode;
 		while ((rnode = tmpl.querySelector('[block-id]'))) rnode.removeAttribute('block-id');
 		// pagecut merges block-expr into block-data - contrast with above patch() method
 		while ((rnode = tmpl.querySelector('[block-expr]'))) rnode.removeAttribute('block-expr');
 
-		var usesQuery = false;
+		let usesQuery = false;
 
-		var el = {
+		const el = {
 			name: 'element_template_' + (Math.round(Date.now() * Math.random()) + '').substr(-6),
 			dom: tmpl,
 			filters: {
 				'||': function(val, what) {
-					var path = what.scope.path;
+					const path = what.scope.path;
 					if (path[0] != "$query") return;
 					usesQuery = true;
-					var key;
+					let key;
 					if (path.length > 1) {
 						// (b)magnet sets val to null so optional values are not undefined
 						key = path.slice(1).join('.');
-						var undef = val === undefined;
+						const undef = val === undefined;
 						if (!state.vars[key]) {
 							if (undef) {
 								// eslint-disable-next-line no-console
@@ -179,7 +178,7 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 		scope.$query = state.query;
 		scope.$referrer = state.referrer.pathname || state.pathname;
 
-		var node = Pageboard.render(data, scope, el);
+		const node = Pageboard.render(data, scope, el);
 
 		view.textContent = '';
 		view.appendChild(node);
