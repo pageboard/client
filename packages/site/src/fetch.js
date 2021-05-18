@@ -1,8 +1,8 @@
-var pendings = {};
+const pendings = {};
 
 module.exports = function(method, url, data) {
 	method = method.toLowerCase();
-	var fetchOpts = {
+	const fetchOpts = {
 		method: method,
 		headers: {
 			'Accept': 'application/json'
@@ -11,7 +11,7 @@ module.exports = function(method, url, data) {
 	};
 	if (method == "get" || method == "delete") {
 		url = Page.format(Object.assign(Page.parse(url), {query: data}));
-		var pending = pendings[url];
+		const pending = pendings[url];
 		if (pending) {
 			return pending;
 		}
@@ -20,12 +20,12 @@ module.exports = function(method, url, data) {
 		fetchOpts.body = JSON.stringify(data);
 	}
 
-	var p = fetch(url, fetchOpts).then(function(res) {
-		var type = res.headers.get('Content-Type') || "";
+	const p = fetch(url, fetchOpts).then(function(res) {
+		const type = res.headers.get('Content-Type') || "";
 		if (res.status == 204 || !type.startsWith('application/json')) {
 			return res.text().then(function(text) {
 				if (res.status >= 400) {
-					var err = new Error(res.statusText);
+					const err = new Error(res.statusText);
 					err.status = res.status;
 					err.body = text;
 					throw err;
