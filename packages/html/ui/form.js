@@ -253,7 +253,6 @@ class HTMLCustomFormElement extends HTMLFormElement {
 
 			data.$response = res;
 			data.$status = res.status;
-			redirect = redirect.fuse(data, state.scope);
 			if (!redirect) {
 				if (res.granted) redirect = Page.format(state);
 				else return;
@@ -262,8 +261,16 @@ class HTMLCustomFormElement extends HTMLFormElement {
 				form.backup();
 			}
 
-			var loc = Page.parse(redirect);
-			var vary = false;
+			const loc = Page.parse(redirect);
+			loc.pathname = loc.pathname.fuse(data, state.scope);
+			for (let key in loc.query) {
+				let val = loc.query[key];
+				if (typeof val == "string") {
+					val = val.fuse(data, state.scope);
+				}
+				loc.query[key] = val;
+			}
+			let vary = false;
 			if (Page.samePathname(loc, state)) {
 				if (res.granted) {
 					vary = true;

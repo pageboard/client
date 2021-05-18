@@ -246,6 +246,13 @@ exports.query = function (obj, what) {
 	else return '';
 };
 
+exports.urlQuery = function (obj, what) {
+	if (obj.url == null && obj.parameters == null) return null;
+	const url = Page.parse(obj.url || "?");
+	Object.assign(url.query, obj.parameters || {});
+	return Page.format(url);
+};
+
 exports.isoDate = function (val, what) {
 	var d = exports.parseDate(val);
 	if (Number.isNaN(d.getTime())) return null;

@@ -156,10 +156,10 @@ exports.api_form = {
 	tag: 'form[method="post"]',
 	html: `<form is="element-form" method="post" name="[name]"
 		action="/.api/form/[$id]"
-		success="[redirection.url][redirection.parameters|query]"
-		badrequest="[badrequest.parameters|query]"
-		unauthorized="[unauthorized.parameters|query]"
-		notfound="[notfound.parameters|query]"
+		success="[redirection|urlQuery]"
+		badrequest="[badrequest|urlQuery]"
+		unauthorized="[unauthorized|urlQuery]"
+		notfound="[notfound|urlQuery]"
 		class="ui form [hidden|?]"></form>`,
 	stylesheets: [
 		'../lib/components/form.css',
