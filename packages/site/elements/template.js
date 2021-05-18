@@ -12,10 +12,10 @@ exports.fetch = {
 	},
 	html: `<element-template
 		action="/.api/query/[$id][action.method|bmagnet]"
-		success="[redirection.url][redirection.parameters|query]"
-		badrequest="[badrequest.url][badrequest.parameters|query]"
-		unauthorized="[unauthorized.url][unauthorized.parameters|query]"
-		notfound="[notfound.url][notfound.parameters|query]"
+		success="[redirection|urlQuery]"
+		badrequest="[badrequest|urlQuery]"
+		unauthorized="[unauthorized|urlQuery]"
+		notfound="[notfound|urlQuery]"
 	>
 		<template block-content="template"></template>
 		<div class="view"></div>

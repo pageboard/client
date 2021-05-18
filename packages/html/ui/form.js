@@ -266,15 +266,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 				form.backup();
 			}
 
-			const loc = Page.parse(redirect);
-			loc.pathname = loc.pathname.fuse(data, state.scope);
-			for (let key in loc.query) {
-				let val = loc.query[key];
-				if (typeof val == "string") {
-					val = val.fuse(data, state.scope);
-				}
-				loc.query[key] = val;
-			}
+			const loc = Page.parse(redirect).fuse(data, state.scope);
 			let vary = false;
 			if (Page.samePathname(loc, state)) {
 				if (res.granted) {

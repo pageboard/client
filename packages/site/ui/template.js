@@ -123,16 +123,12 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 				badrequest: 'Bad Request',
 				success: 'Moved Permanently'
 			}[statusName];
-			const loc = redirect.fuse(data, state.scope);
+			const loc = Page.parse(redirect).fuse(data, state.scope);
 			Pageboard.equivs({
 				Status: `301 ${message}`,
-				Location: loc
+				Location: Page.format(loc)
 			});
-			const obj = Page.parse(loc);
-			if (state.query.develop !== undefined) {
-				obj.query.develop = state.query.develop;
-			}
-			state.push(obj);
+			state.push(loc);
 		});
 	}
 	render(data, state) {
@@ -219,3 +215,15 @@ Page.ready(function () {
 	VirtualHTMLElement.define('element-template', HTMLElementTemplate);
 });
 
+Page.State.prototype.fuse = function (data, scope) {
+	this.pathname = this.pathname.fuse(data, scope);
+	const q = this.query;
+	for (let key in q) {
+		let val = q[key];
+		if (typeof val == "string") {
+			val = val.fuse(data, scope);
+		}
+		q[key] = val;
+	}
+	return this;
+};
