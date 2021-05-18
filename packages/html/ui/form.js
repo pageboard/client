@@ -21,6 +21,8 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		var name = state.query.submit;
 		if (!name || name != this.name) return;
 		state.vars.submit = true;
+		// make sure to not resubmit in case of self-redirection
+		delete state.query.submit;
 		state.finish(() => {
 			var e = document.createEvent('HTMLEvents');
 			e.initEvent('submit', true, true);
