@@ -261,6 +261,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			if (redirect && statusName != "success") {
 				form.backup();
 			}
+
 			var loc = Page.parse(redirect);
 			var vary = false;
 			if (Page.samePathname(loc, state)) {
@@ -271,9 +272,6 @@ class HTMLCustomFormElement extends HTMLFormElement {
 				}
 				state.data.$vary = vary;
 			}
-			document.querySelectorAll('element-template').forEach(function (node) {
-				delete node.dataset.query;
-			});
 			return state.push(loc, {
 				vary: vary
 			});
