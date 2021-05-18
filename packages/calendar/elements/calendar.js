@@ -191,10 +191,13 @@ exports.event_reservation = {
 			type: 'array',
 			items: {
 				type: 'object',
-				additionalProperties: true,
 				properties: {
 					name: {
 						title: 'Name',
+						type: 'string'
+					},
+					surname: {
+						title: 'Surname',
 						type: 'string'
 					}
 				}
