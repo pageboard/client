@@ -1,9 +1,13 @@
 module.exports = function(obj) {
-	var head = document.head;
+	const head = document.head;
+	let meta = document.head.querySelector('meta');
 	Object.entries(obj).forEach(([name, content]) => {
-		var node = head.querySelector(`meta[http-equiv="${name}"]`);
-		head.appendChild(head.dom(
-			`<meta http-equiv="${name}" content="${content}">`
-		));
+		let node = head.querySelector(`meta[http-equiv="${name}"]`);
+		if (!node) {
+			node = head.dom(`<meta http-equiv="${name}">`);
+			head.insertBefore(node, meta ? meta.nextElementSibling : null);
+		}
+		meta = node;
+		node.content = content;
 	});
 };
