@@ -16,7 +16,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			}
 			this.restore(state.scope);
 		} else {
-			this.fill(state.query, state).forEach((name) => {
+			this.fill(state.query, state.scope).forEach((name) => {
 				state.vars[name] = true;
 			});
 		}
