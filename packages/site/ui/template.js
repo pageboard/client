@@ -34,61 +34,15 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 		return this.fetch(state);
 	}
 	fetch(state) {
-		// first find out if state.query has a key in this.keys
-		// what do we do if state.query has keys that are used by a form in this query template ?
-		let expr = this.getAttribute('block-expr');
 		const action = this.getAttribute('action');
-		const $query = {};
-		const scope = state.scope;
+		const expr = this.getAttribute('block-expr');
+		let $query = {};
 		if (expr) {
-			try {
-				expr = JSON.parse(expr);
-			} catch(ex) {
-				// eslint-disable-next-line no-console
-				console.warn("block-expr attribute should contain JSON");
-				expr = {};
-			}
-			let missing = 0;
-			const filters = scope.$filters;
-			scope.$filters = Object.assign({}, filters, {
-				'|': function(val, what) {
-					const path = what.scope.path.slice();
-					if (path[0] == "$query") {
-						const name = path.slice(1).join('.');
-						if (name.length && state.query[name] !== undefined) {
-							val = state.query[name];
-						}
-					}
-					return val;
-				},
-				'||': function(val, what) {
-					const path = what.scope.path.slice();
-					if (path[0] == "$query") {
-						const name = path.slice(1).join('.');
-						if (name.length) {
-							if (val !== undefined) {
-								if (val != null) $query[name] = val;
-							} else {
-								missing++;
-							}
-						}
-					}
-				}
-			});
-			Pageboard.merge(expr, function(val) {
-				if (typeof val == "string") try {
-					return val.fuse({$query: state.query}, scope);
-				} catch(ex) {
-					return val;
-				}
-			});
-			scope.$filters = filters;
-			Object.keys($query).forEach(function(key) {
-				state.vars[key] = true;
-			});
-			if (missing) return;
-		} else if (!action) {
-			// non-remotes cannot know if they will need $query
+			const collector = state.collector($query);
+			const filters = state.scope.$filters;
+			state.scope.$filters = collector.filters;
+			expr.fuse({ $query: state.query }, state.scope);
+			state.scope.$filters = filters;
 		}
 		const loader = action ? Pageboard.fetch('get', action, $query) : Promise.resolve();
 
@@ -96,7 +50,7 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 		this.classList.remove('error', 'warning', 'success');
 		if (action) this.classList.add('loading');
 
-		const data = { $query };
+		const data = { $query }; // redirections are only allowed to use collected query params
 
 		return Pageboard.bundle(loader, state).then((res) => {
 			if (res) {
@@ -125,6 +79,7 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 				badrequest: 'Bad Request',
 				success: 'Moved Permanently'
 			}[statusName];
+
 			const loc = Page.parse(redirect).fuse(data, state.scope);
 			Pageboard.equivs({
 				Status: `301 ${message}`,
@@ -135,9 +90,10 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 	}
 	render(data, state) {
 		if (this.children.length != 2) return;
-		const tmpl = this.firstElementChild.content.cloneNode(true);
 		const view = this.lastElementChild;
 		const scope = Object.assign({}, state.scope);
+		const tmpl = this.firstElementChild.content.cloneNode(true);
+
 		// allow sub-templates to merge current data
 		tmpl.querySelectorAll('template').forEach(tpl => {
 			if (tpl.parentNode.nodeName == this.nodeName || !tpl.content) return;
@@ -145,39 +101,13 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 				$filters: Object.assign({}, scope.$filters, { repeat() { } })
 			});
 		});
-		// remove all block-id from template - might be done in pagecut eventually
-		let rnode;
-		while ((rnode = tmpl.querySelector('[block-id]'))) rnode.removeAttribute('block-id');
-		// pagecut merges block-expr into block-data - contrast with above patch() method
-		while ((rnode = tmpl.querySelector('[block-expr]'))) rnode.removeAttribute('block-expr');
 
-		let usesQuery = false;
+		const collector = state.collector();
 
 		const el = {
 			name: 'element_template_' + (Math.round(Date.now() * Math.random()) + '').substr(-6),
 			dom: tmpl,
-			filters: {
-				'||': function(val, what) {
-					const path = what.scope.path;
-					if (path[0] != "$query") return;
-					usesQuery = true;
-					let key;
-					if (path.length > 1) {
-						// (b)magnet sets val to null so optional values are not undefined
-						key = path.slice(1).join('.');
-						const undef = val === undefined;
-						if (!state.vars[key]) {
-							if (undef) {
-								// eslint-disable-next-line no-console
-								console.info("$query." + key, "is undefined");
-							}
-							state.vars[key] = !undef;
-						}
-					} else {
-						for (key in state.query) state.vars[key] = true;
-					}
-				}
-			},
+			filters: { '|': collector.ignore },
 			contents: tmpl.querySelectorAll('[block-content]').map((node) => {
 				return {
 					id: node.getAttribute('block-content'),
@@ -195,15 +125,34 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 
 		const node = Pageboard.render(data, scope, el);
 
+		// drop merged inner block-expr
+		const filters = state.scope.$filters;
+		state.scope.$filters = Object.assign({}, filters, {
+			"||": (v, w) => collector.filter(v, w)
+		});
+		node.querySelectorAll('[block-expr]').forEach(node => {
+			const expr = node.getAttribute('block-expr');
+			if (expr) expr.fuse({ $query: state.query }, state.scope);
+			node.removeAttribute('block-expr');
+		});
+		state.scope.$filters = filters;
+
+		if (collector.missings.length) {
+			console.error("Missing query parameters", collector.missings);
+			state.scope.$status = 400;
+			return;
+		}
+
 		view.textContent = '';
 		view.appendChild(node);
-		if (usesQuery) state.scroll({
+		if (collector.used) state.scroll({
 			once: true,
 			node: this.parentNode,
 			behavior: 'smooth'
 		});
 	}
 }
+
 Page.ready(function () {
 	Object.defineProperty(DocumentFragment.prototype, 'innerHTML', {
 		configurable: true,
@@ -228,4 +177,46 @@ Page.State.prototype.fuse = function (data, scope) {
 		q[key] = val;
 	}
 	return this;
+};
+
+
+class QueryCollectorFilter {
+	constructor(state, query = {}) {
+		this.used = false;
+		this.missings = [];
+		this.query = query;
+		this.state = state;
+	}
+	ignore(val, what) {
+		if (what.attr == "block-expr") {
+			what.cancel = true;
+			what.expr.filters.length = 0;
+		}
+	}
+	filter(val, what) {
+		const path = what.scope.path;
+		if (path[0] != "$query") return val;
+		this.used = true;
+		let key;
+		const { query, vars } = this.state;
+		if (path.length > 1) {
+			// (b)magnet sets val to null so optional values are not undefined
+			key = path.slice(1).join('.');
+			const undef = val === undefined;
+			if (!vars[key]) {
+				if (undef) {
+					if (!this.missings.includes(key)) this.missings.push(key);
+				}
+				vars[key] = !undef;
+			}
+			this.query[key] = val;
+		} else {
+			for (key in query) vars[key] = true;
+		}
+		return val;
+	}
+}
+
+Page.State.prototype.collector = function (query) {
+	return new QueryCollectorFilter(this, query);
 };
