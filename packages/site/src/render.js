@@ -119,7 +119,7 @@ function install(el, scope) {
 		var rscope = Object.assign({}, scope, bscope, {
 			$element: el
 		});
-		["id", "parent", "child", "parents", "children", "updated_at", "created_at", "lock"].forEach(function(name) {
+		["id", "parent", "child", "parents", "children", "updated_at", "created_at"].forEach(function(name) {
 			var val = block[name];
 			if (val != null) rscope['$' + name] = val;
 		});
