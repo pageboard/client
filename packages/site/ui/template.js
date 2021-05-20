@@ -192,6 +192,7 @@ class QueryCollectorFilter {
 			what.cancel = true;
 			what.expr.filters.length = 0;
 		}
+		return val;
 	}
 	filter(val, what) {
 		if (what.attr == "block-expr") {
