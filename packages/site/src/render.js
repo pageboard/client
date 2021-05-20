@@ -121,29 +121,34 @@ function install(el, scope) {
 		});
 		["id", "parent", "child", "parents", "children", "updated_at", "created_at", "lock"].forEach(function(name) {
 			var val = block[name];
-			if (val !== undefined) rscope['$' + name] = val;
+			if (val != null) rscope['$' + name] = val;
 		});
 
 		if (el.filters) rscope.$filters = Object.assign({}, rscope.$filters, el.filters);
 
-		var data = Pageboard.merge(block.data, block.expr, function(c, v) {
-			var useDefault = false;
-			var nv;
-			if (typeof v == "string" && c != null) {
-				nv = v.fuse({$default: c}, { $filters: {
-					'||': function(val, what) {
-						var path = what.scope.path;
-						if (path[0] == '$default') {
-							useDefault = true;
-						} else if (path.length == 1) {
-							// do not drop undefined
+		var data = Pageboard.merge(block.data, block.expr, function (c, v) {
+			if (typeof v != "string") return;
+			let used = false;
+			const limited = {
+				$default: c,
+				$lock: bscope.$lock,
+				$pathname: scope.$loc.pathname,
+				$query: scope.$loc.query
+			};
+			const nv = v.fuse(limited, {
+				$filters: {
+					'||': function (val, what) {
+						if (what.scope.path[0] in limited && !what.expr.filters.some(filter => ["magnet", "bmagnet"].includes(filter.name))) {
+							used = true;
+						} else {
+							// FIXME it might be better to force-merge expr
 							what.cancel = true;
 						}
 						return val;
 					}
-				}});
-			}
-			if (useDefault) return nv;
+				}
+			});
+			if (used) return nv;
 		});
 		var dom = el.dom && el.dom.cloneNode(true);
 		if (el.fuse) {

@@ -194,6 +194,10 @@ class QueryCollectorFilter {
 		}
 	}
 	filter(val, what) {
+		if (what.attr == "block-expr") {
+			what.cancel = true;
+			what.expr.filters.length = 0;
+		}
 		const path = what.scope.path;
 		if (path[0] != "$query") return val;
 		this.used = true;

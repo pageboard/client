@@ -28,6 +28,8 @@ function initState(res, state) {
 	if (!scope.$doc) scope.$doc = document.cloneNode();
 	scope.$loc = new URL(state.toString(), document.location);
 	scope.$loc.searchParams.delete('develop');
+	scope.$loc.query = state.query;
+	delete scope.$loc.query.develop;
 	if (!res) return;
 	if (res.grants) state.data.$grants = res.grants;
 	if (res.hrefs) Object.assign(state.data.$hrefs, res.hrefs);
