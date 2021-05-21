@@ -34,7 +34,11 @@
 }
 element-sitepage {
 	display:block;
+	position: relative;
 }
 element-sitepage .title.caret-icon.active {
 	padding-bottom:0 !important;
+}
+element-sitepage > .title > .label {
+	float:right;
 }
