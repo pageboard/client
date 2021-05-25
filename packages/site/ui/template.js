@@ -38,14 +38,21 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 		const params = this.getAttribute('parameters') || '';
 		const $query = {};
 		const scope = Object.assign({}, state.scope);
+		let missings = 0;
 		scope.$filters = Object.assign({}, scope.$filters, {
 			'||': function (val, what) {
 				const key = what.expr.path.slice(1).join('.');
-				state.vars[key] = val !== undefined;
-				$query[key] = val;
+				if (val === undefined) {
+					state.vars[key] = false;
+					missings++;
+				} else {
+					state.vars[key] = true;
+					if (val != null) $query[key] = val;
+				}
 			}
 		});
-		params.fuse({$query: state.query}, scope);
+		params.fuse({ $query: state.query }, scope);
+		if (missings > 0) return;
 
 		const loader = action ? Pageboard.fetch('get', action, $query) : Promise.resolve();
 
