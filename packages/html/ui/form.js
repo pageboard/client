@@ -201,7 +201,10 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			loc.query = Object.assign({}, state.query, loc.query);
 		}
 		let status = 200;
-		return state.push(loc).catch((err) => {
+		const p = this.ignoreInputChange
+			? state.replace(loc)
+			: state.push(loc);
+		return p.catch((err) => {
 			if (err.status != null) status = err.status;
 			else status = 0;
 		}).then(() => {
