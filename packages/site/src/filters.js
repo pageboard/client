@@ -238,8 +238,15 @@ exports.query = function (obj, what) {
 	Object.keys(obj).forEach(function (key) {
 		var val = obj[key];
 		if (val === undefined) return;
-		if (val === null) list.push(key);
-		else list.push(key + "=" + val);
+		if (val === null) {
+			list.push(key);
+		} else if (Array.isArray(val)) {
+			val.forEach(val => {
+				list.push(key + "=" + val);
+			});
+		} else {
+			list.push(key + "=" + val);
+		}
 	});
 	var str = list.join('&');
 	if (str) return '?' + str;
