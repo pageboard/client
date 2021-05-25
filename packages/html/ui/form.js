@@ -185,18 +185,15 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		}
 	}
 	handleInput(e, state) {
-		if (e.type == "input") {
-			this.ignoreInputChange = true;
-		} else if (e.target && e.target.matches('input') && this.ignoreInputChange) {
-			return;
-		}
+		if (e.target.type != "text") return;
+		this.ignoreInputChange = true;
 		this.handleSubmit(e, state);
 	}
 	handleChange(e, state) {
-		this.handleInput(e, state);
+		if (e.target.type == "text" && this.ignoreInputChange) return;
+		this.handleSubmit(e, state);
 	}
 	getMethod(e, state) {
-		this.ignoreInputChange = false;
 		const redirect = this.getAttribute('redirection');
 		const loc = Page.parse(redirect);
 		Object.assign(loc.query, this.read(false));
