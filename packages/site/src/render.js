@@ -132,6 +132,12 @@ function install(el, scope) {
 				$default: c
 			}, {
 				$filters: {
+					magnet: function (val) {
+						return val;
+					},
+					bmagnet: function (val) {
+						return;
+					},
 					'||': function (val, what) {
 						if (what.expr.path[0] != "$default") {
 							what.cancel = true;
