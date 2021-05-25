@@ -65,11 +65,7 @@ Viewer.prototype.render = function(block, opts) {
 	if (["BR", "HR", "WBR"].includes(dom.nodeName) == false) {
 		dom.setAttribute('block-type', el.name);
 	}
-	if (block.expr && Object.keys(block.expr).length) {
-		dom.setAttribute('block-expr', JSON.stringify(block.expr));
-	} else {
-		dom.removeAttribute('block-expr');
-	}
+
 	if (opts.strip) return dom;
 	if (!el.inplace) {
 		if (block.id == null && this.blocks.set && opts.genId !== false) this.blocks.set(block);

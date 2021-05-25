@@ -182,8 +182,8 @@ function merge(obj, extra, fn) {
 			copy[key] = single ? merge(val, fn) : merge(copy[key], val, fn);
 		} else {
 			if (fn) {
-				var fval = single ? fn(val) : fn(copy[key], val);
-				if (fval !== undefined) val = fval;
+				val = single ? fn(val) : fn(copy[key], val);
+				if (!single) extra[key] = val;
 			}
 			copy[key] = val;
 		}

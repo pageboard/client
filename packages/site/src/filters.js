@@ -253,6 +253,26 @@ exports.urlQuery = function (obj, what) {
 	return Page.format(url);
 };
 
+exports.templates = function (val, what, prefix) {
+	if (!val) return val;
+	const obj = {};
+	JSON.stringify(val).fuse({ [prefix]: {} }, {
+		$filters: {
+			'||'(val, what) {
+				if (what.expr.path[0] != prefix) return val;
+				const key = what.expr.path.slice(1).join('.');
+				const expr = what.expr.toString();
+				if (obj[key] !== undefined && obj[key] !== expr) {
+					console.error(`templates:${prefix} has incompatible values (${obj[key]} != ${expr})`);
+				} else {
+					obj[key] = expr;
+				}
+			}
+		}
+	});
+	return Object.keys(obj).map(key => `[${obj[key]}]`).join('');
+};
+
 exports.isoDate = function (val, what) {
 	var d = exports.parseDate(val);
 	if (Number.isNaN(d.getTime())) return null;

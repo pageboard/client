@@ -35,15 +35,18 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 	}
 	fetch(state) {
 		const action = this.getAttribute('action');
-		const expr = this.getAttribute('block-expr');
-		let $query = {};
-		if (expr) {
-			const collector = state.collector($query);
-			const filters = state.scope.$filters;
-			state.scope.$filters = collector.filters;
-			expr.fuse({ $query: state.query }, state.scope);
-			state.scope.$filters = filters;
-		}
+		const params = this.getAttribute('parameters') || '';
+		const $query = {};
+		const scope = Object.assign({}, state.scope);
+		scope.$filters = Object.assign({}, scope.$filters, {
+			'||': function (val, what) {
+				const key = what.expr.path.slice(1).join('.');
+				state.vars[key] = val !== undefined;
+				$query[key] = val;
+			}
+		});
+		params.fuse({$query: state.query}, scope);
+
 		const loader = action ? Pageboard.fetch('get', action, $query) : Promise.resolve();
 
 		this._refreshing = true;
@@ -107,7 +110,7 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 		const el = {
 			name: 'element_template_' + (Math.round(Date.now() * Math.random()) + '').substr(-6),
 			dom: tmpl,
-			filters: { '|': collector.ignore },
+			filters: { '||': (v, w) => collector.filter(v, w) },
 			contents: tmpl.querySelectorAll('[block-content]').map((node) => {
 				return {
 					id: node.getAttribute('block-content'),
@@ -124,18 +127,6 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 		scope.$referrer = state.referrer.pathname || state.pathname;
 
 		const node = Pageboard.render(data, scope, el);
-
-		// drop merged inner block-expr
-		const filters = state.scope.$filters;
-		state.scope.$filters = Object.assign({}, filters, {
-			"||": (v, w) => collector.filter(v, w)
-		});
-		node.querySelectorAll('[block-expr]').forEach(node => {
-			const expr = node.getAttribute('block-expr');
-			if (expr) expr.fuse({ $query: state.query }, state.scope);
-			node.removeAttribute('block-expr');
-		});
-		state.scope.$filters = filters;
 
 		if (collector.missings.length) {
 			console.error("Missing query parameters", collector.missings);
@@ -187,25 +178,13 @@ class QueryCollectorFilter {
 		this.query = query;
 		this.state = state;
 	}
-	ignore(val, what) {
-		if (what.attr == "block-expr") {
-			what.cancel = true;
-			what.expr.filters.length = 0;
-		}
-		return val;
-	}
 	filter(val, what) {
-		if (what.attr == "block-expr") {
-			what.cancel = true;
-			what.expr.filters.length = 0;
-		}
 		const path = what.scope.path;
 		if (path[0] != "$query") return val;
 		this.used = true;
 		let key;
 		const { query, vars } = this.state;
 		if (path.length > 1) {
-			// (b)magnet sets val to null so optional values are not undefined
 			key = path.slice(1).join('.');
 			const undef = val === undefined;
 			if (!vars[key]) {

@@ -128,27 +128,18 @@ function install(el, scope) {
 
 		var data = Pageboard.merge(block.data, block.expr, function (c, v) {
 			if (typeof v != "string") return;
-			let used = false;
-			const limited = {
-				$default: c,
-				$lock: bscope.$lock,
-				$pathname: scope.$loc.pathname,
-				$query: scope.$loc.query
-			};
-			const nv = v.fuse(limited, {
+			return v.fuse({
+				$default: c
+			}, {
 				$filters: {
 					'||': function (val, what) {
-						if (what.scope.path[0] in limited && !what.expr.filters.some(filter => ["magnet", "bmagnet"].includes(filter.name))) {
-							used = true;
-						} else {
-							// FIXME it might be better to force-merge expr
+						if (what.expr.path[0] != "$default") {
 							what.cancel = true;
 						}
 						return val;
 					}
 				}
 			});
-			if (used) return nv;
 		});
 		var dom = el.dom && el.dom.cloneNode(true);
 		if (el.fuse) {

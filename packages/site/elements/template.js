@@ -12,6 +12,7 @@ exports.fetch = {
 	},
 	html: `<element-template
 		action="/.api/query/[$id][action.method|bmagnet]"
+		parameters="[$expr.action.parameters|templates:$query]"
 		success="[redirection|urlQuery]"
 		badrequest="[badrequest|urlQuery]"
 		unauthorized="[unauthorized|urlQuery]"
