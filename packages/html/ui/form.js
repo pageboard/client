@@ -197,20 +197,19 @@ class HTMLCustomFormElement extends HTMLFormElement {
 	}
 	getMethod(e, state) {
 		this.ignoreInputChange = false;
-		const form = this;
 		const redirect = this.getAttribute('redirection');
 		const loc = Page.parse(redirect);
-		Object.assign(loc.query, form.read(false));
+		Object.assign(loc.query, this.read(false));
 		if (Page.samePathname(loc, state)) {
 			loc.query = Object.assign({}, state.query, loc.query);
 		}
 		let status = 200;
-		return state.push(loc).catch(function (err) {
+		return state.push(loc).catch((err) => {
 			if (err.status != null) status = err.status;
 			else status = 0;
-		}).then(function () {
+		}).then(() => {
 			const statusClass = `[n|statusClass]`.fuse({ n: status });
-			if (statusClass) form.classList.add(statusClass);
+			if (statusClass) this.classList.add(statusClass);
 		});
 	}
 	postMethod(e, state) {
