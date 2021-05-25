@@ -404,8 +404,10 @@ Page.ready(function (state) {
 		});
 		return obj;
 	}
-	filters.form = function (val, what, action) {
-		const form = what.parent.closest('form');
+	filters.form = function (val, what, action, name) {
+		const form = name
+			? document.querySelector(`form[name="${name}"]`)
+			: what.parent.closest('form');
 		if (!form) {
 			// eslint-disable-next-line no-console
 			console.warn("No parent form found");
@@ -434,6 +436,12 @@ Page.ready(function (state) {
 				}
 				HTMLCustomFormElement.prototype.fill.call(form, linearizeValues(values), state.scope);
 			}
+		} else if (action == "read") {
+			const obj = {};
+			for (let key in val) {
+				if (form.querySelector(`[name="${key}"]`)) obj[key] = val[key];
+			}
+			return obj;
 		}
 		return val;
 	};
