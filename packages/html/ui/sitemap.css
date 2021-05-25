@@ -41,4 +41,8 @@ element-sitepage .title.caret-icon.active {
 }
 element-sitepage > .title > .label {
 	float:right;
+	display:none;
+}
+[contenteditable] element-sitepage > .title > .label {
+	display:block;
 }
