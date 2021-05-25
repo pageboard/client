@@ -41,7 +41,7 @@ module.exports = function(method, url, data) {
 			return res.json().then(function(obj) {
 				obj.status = res.status;
 				obj.statusText = res.statusText;
-				obj.lock = (res.headers.get('X-Upcache-Lock') || "").split(', ').shift() || null;
+				obj.locked = (res.headers.get('X-Upcache-Lock') || "").split(', ').shift() || null;
 				obj.granted = res.headers.get('X-Granted') ? true : false;
 				return obj;
 			});
