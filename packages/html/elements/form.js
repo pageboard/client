@@ -5,6 +5,13 @@ exports.query_form = {
 	group: 'block form',
 	menu: "form",
 	properties: {
+		name: {
+			title: 'Name',
+			description: 'Useful for query tags',
+			type: 'string',
+			format: 'id',
+			nullable: true
+		},
 		type: {
 			title: 'Bind to element',
 			description: 'Checks schema and helps adding form controls',
@@ -38,9 +45,9 @@ exports.query_form = {
 	},
 	contents: 'block+',
 	tag: 'form[method="get"]',
-	html: `<form is="element-form" method="get" autocomplete="off"
+	html: `<form is="element-form" method="get" name="[name]"
 		redirection="[redirection.url][redirection.parameters|query|url]"
-		class="ui form"></form>`,
+		autocomplete="off" class="ui form"></form>`,
 	stylesheets: [
 		'../lib/components/form.css',
 		'../ui/form.css'

@@ -1,6 +1,19 @@
 class HTMLElementQueryTags extends VirtualHTMLElement {
-	static find(name, value) {
-		var nodes = document.querySelectorAll(`form [name="${name}"]`);
+	find(name, value) {
+		let nodes;
+		const formName = this.getAttribute('for');
+		let sel = 'form[block-type="query_form"]';
+		if (formName) {
+			sel += `[name="${formName}"]`;
+		}
+		const parentForm = this.closest(sel);
+		sel += ` [name="${name}"]`;
+		if (parentForm) {
+			nodes = parentForm.querySelectorAll(sel);
+		} else {
+			nodes = document.querySelectorAll(sel);
+		}
+
 		return Array.prototype.filter.call(nodes, function(node) {
 			if (Array.isArray(value)) {
 				if (value.indexOf(node.value) < 0) return;
@@ -11,48 +24,54 @@ class HTMLElementQueryTags extends VirtualHTMLElement {
 		});
 	}
 	patch(state) {
-		if (this.closest('[block-content="template"]')) return;
-		var query = state.query;
-		var labels = this.querySelector('.labels');
-		if (!labels) return;
-		var field, label;
-		// must be called after query_form's patch
+		const query = state.query;
 		state.finish(() => {
-			labels.textContent = '';
-			for (var name in query) {
-				HTMLElementQueryTags.find(name, query[name]).forEach((control) => {
-					if (control.type == "hidden") return;
-					field = control.closest('.field');
-					if (!field) return;
-					label = field.querySelector('label');
-					if (!label) return;
-					var val = control.value;
-					if (val == null || val == "" || !label.innerText) return;
-					var prev = labels.querySelector(`[data-name="${name}"][data-value="${val}"]`);
-					if (prev) return;
-					var prefix = '';
-					var group = field.closest('.grouped.fields');
-					if (group && group.firstElementChild.matches('label')) {
-						prefix = group.firstElementChild.textContent + ' ';
-					}
-					var suffix = '';
-					if (control.rangeValue) {
-						val = control.rangeValue;
-						if (val[0] == val[1]) {
-							suffix = ' ＝ ' + val[0];
-						} else {
-							prefix = val[0] + ' ⩽ ';
-							suffix = ' ⩽ ' + val[1];
-						}
-					} else if (control.type == "text") {
-						suffix = ': "' + control.value + '"';
-					}
-					labels.insertAdjacentHTML('beforeEnd', `<a class="ui simple mini compact labeled icon button" data-name="${name}" data-value="${control.value}">
-						<i class="delete icon"></i>
-						${prefix}${label.innerText}${suffix}
-					</a>`);
-				});
+			this.labels.textContent = '';
+			if (this.isContentEditable) this.insertLabel('', '', 'Auto');
+			else for (var name in query) {
+				this.add(name, query[name]);
 			}
+		});
+	}
+	insertLabel(name, value, title) {
+		this.labels.insertAdjacentHTML(
+			'beforeEnd',
+			`<a class="ui simple mini compact labeled icon button"
+			data-name="${name}" data-value="${value}"
+			><i class="delete icon"></i>
+				${title}
+			</a>`);
+	}
+	add(name, value) {
+		const labels = this.labels;
+		this.find(name, value).forEach((control) => {
+			if (control.type == "hidden") return;
+			let field = control.closest('.field');
+			if (!field) return;
+			let label = field.querySelector('label');
+			if (!label) return;
+			var val = control.value;
+			if (val == null || val == "" || !label.innerText) return;
+			var prev = labels.querySelector(`[data-name="${name}"][data-value="${val}"]`);
+			if (prev) return;
+			var prefix = '';
+			var group = field.closest('.grouped.fields');
+			if (group && group.firstElementChild.matches('label')) {
+				prefix = group.firstElementChild.textContent + ' ';
+			}
+			var suffix = '';
+			if (control.rangeValue) {
+				val = control.rangeValue;
+				if (val[0] == val[1]) {
+					suffix = ' ＝ ' + val[0];
+				} else {
+					prefix = val[0] + ' ⩽ ';
+					suffix = ' ⩽ ' + val[1];
+				}
+			} else if (control.type == "text") {
+				suffix = ': "' + control.value + '"';
+			}
+			this.insertLabel(name, control.value, `${prefix}${label.innerText}${suffix}`);
 		});
 	}
 	handleClick(e) {
@@ -60,7 +79,7 @@ class HTMLElementQueryTags extends VirtualHTMLElement {
 	}
 	remove(label) {
 		if (!label) return;
-		HTMLElementQueryTags.find(label.dataset.name, label.dataset.value).forEach(function(control) {
+		this.find(label.dataset.name, label.dataset.value).forEach(function(control) {
 			if (control.type == "hidden") return;
 			if (control.checked) control.checked = false;
 			else if (control.reset) control.reset();
@@ -70,6 +89,9 @@ class HTMLElementQueryTags extends VirtualHTMLElement {
 			control.form.dispatchEvent(e);
 		}, this);
 		label.remove();
+	}
+	get labels() {
+		return this.querySelector('.labels');
 	}
 }
 

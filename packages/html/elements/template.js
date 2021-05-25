@@ -19,11 +19,19 @@ exports.query_tags = {
 	icon: '<i class="tags icon"></i>',
 	menu: "form",
 	group: "block",
+	properties: {
+		form: {
+			title: 'Form name',
+			type: 'string',
+			format: 'id',
+			nullable: true
+		}
+	},
 	contents: {
 		id: 'title',
 		nodes: 'inline*'
 	},
-	html: `<element-query-tags>
+	html: `<element-query-tags for="[form]">
 		<div block-content="title">Filters:</div>
 		<div class="ui labels"></div>
 	</element-query-tags>`,
