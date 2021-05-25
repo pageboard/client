@@ -84,11 +84,16 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 			}[statusName];
 
 			const loc = Page.parse(redirect).fuse(data, state.scope);
+			const locStr = Page.format(loc);
 			Pageboard.equivs({
 				Status: `301 ${message}`,
-				Location: Page.format(loc)
+				Location: locStr
 			});
-			state.push(loc);
+			if (state.scope.$write) {
+				console.info("redirects to", locStr);
+			} else {
+				state.push(loc);
+			}
 		});
 	}
 	render(data, state) {
