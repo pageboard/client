@@ -140,8 +140,8 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 
 		const node = Pageboard.render(data, scope, el);
 
-		if (collector.missings.length) {
-			console.error("Missing query parameters", collector.missings);
+		if (Object.keys(collector.missings).length) {
+			console.error("Missing query parameters", Object.keys(collector.missings));
 			state.scope.$status = 400;
 			return;
 		}
@@ -186,7 +186,7 @@ Page.State.prototype.fuse = function (data, scope) {
 class QueryCollectorFilter {
 	constructor(state, query = {}) {
 		this.used = false;
-		this.missings = [];
+		this.missings = {};
 		this.query = query;
 		this.state = state;
 	}
@@ -199,12 +199,12 @@ class QueryCollectorFilter {
 		if (path.length > 1) {
 			key = path.slice(1).join('.');
 			const undef = val === undefined;
-			if (!vars[key]) {
-				if (undef) {
-					if (!this.missings.includes(key)) this.missings.push(key);
-				}
-				vars[key] = !undef;
+			if (undef) {
+				this.missings[key] = true;
+			} else {
+				delete this.missings[key];
 			}
+			if (!vars[key]) vars[key] = !undef;
 			this.query[key] = val;
 		} else {
 			for (key in query) vars[key] = true;
