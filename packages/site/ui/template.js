@@ -222,8 +222,12 @@ class QueryCollectorFilter {
 			}
 			if (!vars[key]) vars[key] = !undef;
 			this.query[key] = val;
-		} else {
-			for (key in query) vars[key] = true;
+		} else if (typeof val == "string") {
+			const obj = Page.parse(val).query;
+			for (key in obj) {
+				if (query[key] === obj[key]) vars[key] = true;
+				this.query[key] = obj[key];
+			}
 		}
 		return val;
 	}
