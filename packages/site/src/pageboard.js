@@ -60,7 +60,7 @@ exports.bundle = function(loader, state) {
 		})).then(function() {
 			return res;
 		});
-	}).catch(function(err) {
+	}).catch(function (err) {
 		return {
 			meta: {
 				group: 'page'
@@ -103,12 +103,14 @@ Page.init(function(state) {
 	scope.$write = dev == "write";
 });
 
-Page.patch(function(state) {
+Page.patch(function (state) {
+	state.status = 200;
 	state.finish(function() {
-		state.status = 200;
 		const query = {};
 		const extra = [];
 		const missing = [];
+		let status = 200;
+		let equivs;
 		Object.keys(state.query).forEach(function(key) {
 			if (state.vars[key] === undefined) {
 				extra.push(key);
@@ -122,16 +124,24 @@ Page.patch(function(state) {
 		if (extra.length > 0) {
 			// eslint-disable-next-line no-console
 			console.warn("Unknown query parameters detected, rewriting location", extra);
-			state.status = 301;
-			exports.equivs({
+			status = 301;
+			equivs = {
 				Status: '301 Wrong Query Parameters',
-				Location: Page.format({pathname: state.pathname, query})
-			});
+				Location: Page.format({ pathname: state.pathname, query })
+			};
 			state.requery = query;
 		} else if (missing.length > 0) {
-			state.status = 400;
-			exports.equivs({
+			status = 400;
+			equivs = {
 				Status: '400 Missing Parameters'
+			};
+		}
+		if (status > state.status) {
+			state.status = status;
+			exports.equivs(equivs);
+		} else if (state.status != 200) {
+			exports.equivs({
+				Status: `${state.status} ${state.statusText}`.trim()
 			});
 		}
 	});

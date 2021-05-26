@@ -15,12 +15,12 @@ Page.patch(function(state) {
 	if (Object.keys(ratios).includes(quality)) {
 		window.devicePixelRatio = ratios[quality];
 	} else {
-		state.statusCode = 400;
+		state.status = 400;
 	}
 
 	var paper = state.query['pdf.paper'] || 'iso_a4';
 	if (['iso_a4'].includes(paper) == false) {
-		state.statusCode = 400;
+		state.status = 400;
 	}
 	if (state.pathname.endsWith('.pdf') == false) {
 		delete Page.serialize;
@@ -28,9 +28,9 @@ Page.patch(function(state) {
 });
 
 Page.serialize = function(state) {
-	if (state.statusCode) {
+	if (state.status >= 400) {
 		var err = new Error("Bad Parameters");
-		err.statusCode = state.statusCode;
+		err.statusCode = state.status;
 		throw err;
 	}
 	return {

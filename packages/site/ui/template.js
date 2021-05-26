@@ -59,6 +59,7 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 			this.classList.remove('error', 'warning', 'success');
 			if (missings > 0) {
 				data.$status = 400;
+				data.$statusText = 'Missing query parameters';
 			} else {
 				const loader = action
 					? Pageboard.fetch('get', action, $query)
@@ -69,6 +70,7 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 					if (res) {
 						data.$response = res;
 						data.$status = res.status;
+						data.$statusText = res.statusText;
 					}
 					this.render(res, state);
 				});
@@ -81,14 +83,21 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 			this.classList.remove('loading');
 			this._refreshing = false;
 			if (data.$status == null) return;
-			const name = '[$status|statusClass]'.fuse(data, state.scope);
-			if (name) this.classList.add(name);
 			const statusName = `[$status|statusName]`.fuse(data, state.scope);
 			const redirect = this.getAttribute(statusName);
 			if (!redirect) {
+				const name = '[$status|statusClass]'.fuse(data, state.scope);
+				if (name && this.lastElementChild.querySelector(`.${name}[block-type="message"]`)) {
+					this.classList.add(name);
+					// report statusCode because it is meant to be shown
+					if (data.$status > state.status || 0) {
+						state.status = data.$status;
+						state.statusText = data.$statusText;
+					}
+				}
 				return;
 			}
-			// redirections must work when prerendered too
+
 			const message = {
 				notfound: 'Not Found',
 				unauthorized: 'Unauthorized',
@@ -99,6 +108,7 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 
 			const loc = Page.parse(redirect).fuse(data, state.scope);
 			const locStr = Page.format(loc);
+			// prerendering tricks
 			Pageboard.equivs({
 				Status: `301 ${message}`,
 				Location: locStr
@@ -150,7 +160,7 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 		if (Object.keys(collector.missings).length) {
 			// eslint-disable-next-line no-console
 			console.error("Missing query parameters", Object.keys(collector.missings));
-			state.scope.$status = 400;
+			state.status = 400;
 		} else {
 			view.appendChild(node);
 			if (collector.used) state.scroll({
