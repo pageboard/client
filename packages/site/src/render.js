@@ -138,6 +138,9 @@ function install(el, scope) {
 					bmagnet: function (val) {
 						return;
 					},
+					attr: function (val) {
+						return val;
+					},
 					'||': function (val, what) {
 						if (what.expr.path[0] != "$default") {
 							what.cancel = true;
