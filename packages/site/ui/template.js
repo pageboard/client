@@ -43,7 +43,7 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 			'||': function (val, what) {
 				const key = what.expr.path.slice(1).join('.');
 				if (val === undefined) {
-					state.vars[key] = false;
+					// it is the duty of the fetch block to redirect 400 if needed
 					missings++;
 				} else {
 					state.vars[key] = true;
@@ -52,35 +52,42 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 			}
 		});
 		params.fuse({ $query: state.query }, scope);
-		if (missings > 0) return;
 
-		const loader = action ? Pageboard.fetch('get', action, $query) : Promise.resolve();
-
-		this._refreshing = true;
-		this.classList.remove('error', 'warning', 'success');
-		if (action) this.classList.add('loading');
-
-		const data = { $query }; // redirections are only allowed to use collected query params
-
-		return Pageboard.bundle(loader, state).then((res) => {
-			if (res) {
-				data.$response = res;
-				state.scope.$status = res.status;
+		// redirections are only allowed to use collected query params
+		const data = { $query };
+		return Promise.resolve().then(() => {
+			this.classList.remove('error', 'warning', 'success');
+			if (missings > 0) {
+				data.$status = 400;
+			} else {
+				const loader = action
+					? Pageboard.fetch('get', action, $query)
+					: Promise.resolve();
+				this._refreshing = true;
+				if (action) this.classList.add('loading');
+				return Pageboard.bundle(loader, state).then((res) => {
+					if (res) {
+						data.$response = res;
+						data.$status = res.status;
+					}
+					this.render(res, state);
+				});
 			}
-			this.render(res, state);
 		}).catch(function(err) {
-			state.scope.$status = -1;
+			data.$status = -1;
 			// eslint-disable-next-line no-console
 			console.error("Error building", err);
 		}).then(() => {
 			this.classList.remove('loading');
 			this._refreshing = false;
-			if (state.scope.$status == null) return;
+			if (data.$status == null) return;
 			const name = '[$status|statusClass]'.fuse(data, state.scope);
 			if (name) this.classList.add(name);
 			const statusName = `[$status|statusName]`.fuse(data, state.scope);
 			const redirect = this.getAttribute(statusName);
-			if (!redirect) return;
+			if (!redirect) {
+				return;
+			}
 			// redirections must work when prerendered too
 			const message = {
 				notfound: 'Not Found',
@@ -139,20 +146,19 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 		scope.$referrer = state.referrer.pathname || state.pathname;
 
 		const node = Pageboard.render(data, scope, el);
-
+		view.textContent = '';
 		if (Object.keys(collector.missings).length) {
+			// eslint-disable-next-line no-console
 			console.error("Missing query parameters", Object.keys(collector.missings));
 			state.scope.$status = 400;
-			return;
+		} else {
+			view.appendChild(node);
+			if (collector.used) state.scroll({
+				once: true,
+				node: this.parentNode,
+				behavior: 'smooth'
+			});
 		}
-
-		view.textContent = '';
-		view.appendChild(node);
-		if (collector.used) state.scroll({
-			once: true,
-			node: this.parentNode,
-			behavior: 'smooth'
-		});
 	}
 }
 
