@@ -136,6 +136,7 @@ exports.schema = function (val, what, spath) {
 
 	var schema = what.expr.get(what.scope.data.$elements, schemaPath);
 	if (!schema) {
+		// eslint-disable-next-line no-console
 		console.warn("No schema for", schemaPath);
 		return;
 	}
@@ -160,6 +161,7 @@ exports.schema = function (val, what, spath) {
 	}
 	var sval = spath ? what.expr.get(schema, spath) : schema;
 	if (sval === undefined) {
+		// eslint-disable-next-line no-console
 		console.warn("Cannot find path in schema", schema, spath);
 		sval = null;
 	}
@@ -257,6 +259,7 @@ exports.templates = function (val, what, prefix) {
 				const key = what.expr.path.slice(1).join('.');
 				const expr = what.expr.toString();
 				if (obj[key] !== undefined && obj[key] !== expr) {
+					// eslint-disable-next-line no-console
 					console.error(`templates:${prefix} has incompatible values (${obj[key]} != ${expr})`);
 				} else {
 					obj[key] = expr;
@@ -368,6 +371,7 @@ exports.formatDate = function (val, what, ...list) {
 			case 'timezone': p.timeZoneName = l; break;
 			default:
 				if (/\w+\/\w+/.test(tok)) p.timeZone = tok;
+				// eslint-disable-next-line no-console
 				else console.warn("Unrecognized date format option", tok);
 				break;
 		}

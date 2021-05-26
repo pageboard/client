@@ -91,7 +91,10 @@ class VirtualHTMLElement extends HTMLElement {
 		if (is) name += "_" + is;
 		var list = extendCache[name];
 		if (!list) list = extendCache[name] = {};
-		if (!Ext.name) console.warn("Please name the extension of", name, Ext);
+		if (!Ext.name) {
+			// eslint-disable-next-line no-console
+			console.warn("Please name the extension of", name, Ext);
+		}
 		if (list[Ext.name]) return;
 		list[Ext.name] = true;
 		// extend appends Ext.prototype, not prepend

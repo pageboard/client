@@ -23,6 +23,7 @@ Node.prototype.dom = function() {
 };
 
 Node.prototype.fuse = function(obj, scope) {
+	// eslint-disable-next-line no-console
 	if (!scope) console.warn("Missing scope param");
 	return matchdom(this, obj, scope.$filters, {data: scope});
 };
@@ -94,12 +95,14 @@ function install(el, scope) {
 			else if (obj.type) target = scope.$elements[obj.type] || {};
 			else target = el;
 			if (!target.dom) {
+				// eslint-disable-next-line no-console
 				console.warn("dom not found for fragment", obj.type, el.name);
 			} else {
 				let node = target.dom.querySelector(obj.path);
 				if (node) {
 					node.insertAdjacentHTML(obj.position || 'afterend', obj.html);
 				} else {
+					// eslint-disable-next-line no-console
 					console.warn("path not found", obj.path, "in", el.name, el.html);
 				}
 			}
@@ -108,6 +111,7 @@ function install(el, scope) {
 			el.install.call(el, scope);
 		}
 	} catch(err) {
+		// eslint-disable-next-line no-console
 		console.error("Invalid element", el, err);
 		return;
 	}

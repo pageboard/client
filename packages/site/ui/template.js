@@ -114,6 +114,7 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 				Location: locStr
 			});
 			if (state.scope.$write) {
+				// eslint-disable-next-line no-console
 				console.info("redirects to", locStr);
 			} else {
 				state.push(loc);
