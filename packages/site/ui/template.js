@@ -159,9 +159,10 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 		const node = Pageboard.render(data, scope, el);
 		view.textContent = '';
 		if (Object.keys(collector.missings).length) {
-			// eslint-disable-next-line no-console
-			console.error("Missing query parameters", Object.keys(collector.missings));
+			state.statusText = `Missing query parameters`;
 			state.status = 400;
+			// eslint-disable-next-line no-console
+			console.warn(state.statusText, Object.keys(collector.missings).join(', '));
 		} else {
 			view.appendChild(node);
 			if (collector.used) state.scroll({
