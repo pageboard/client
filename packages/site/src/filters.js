@@ -234,23 +234,10 @@ exports.enc = function (str) {
 
 exports.query = function (obj, what) {
 	if (obj == null || typeof obj != "object") return null;
-	var list = [];
-	Object.keys(obj).forEach(function (key) {
-		var val = obj[key];
-		if (val === undefined) return;
-		if (val === null) {
-			list.push(key);
-		} else if (Array.isArray(val)) {
-			val.forEach(val => {
-				list.push(key + "=" + val);
-			});
-		} else {
-			list.push(key + "=" + val);
-		}
+	return Page.format({
+		pathname: "",
+		query: obj
 	});
-	var str = list.join('&');
-	if (str) return '?' + str;
-	else return '';
 };
 
 exports.urlQuery = function (obj, what) {
