@@ -24,7 +24,7 @@ exports.render = require('./render');
 exports.equivs = require('./equivs');
 
 function initState(res, state) {
-	var scope = state.scope;
+	const scope = state.scope;
 	if (!scope.$doc) scope.$doc = document.cloneNode();
 	scope.$loc = new URL(state.toString(), document.location);
 	scope.$loc.searchParams.delete('develop');
@@ -44,12 +44,12 @@ function initState(res, state) {
 }
 
 exports.bundle = function(loader, state) {
-	var scope = state.scope;
+	const scope = state.scope;
 	return loader.then(function(res) {
 		if (!res) return Promise.resolve();
-		var metas = [];
+		const metas = [];
 		if (res.meta) metas.push(res.meta);
-		if (res.metas) metas = metas.concat(res.metas);
+		if (res.metas) metas.push(...res.metas);
 		return Promise.all(metas.map(function(meta) {
 			if (meta.group == "page" && !res.meta) {
 				// restores an asymmetry between route bundle load
@@ -77,9 +77,9 @@ exports.bundle = function(loader, state) {
 		};
 	}).then(function(res) {
 		initState(res, state);
-		var elts = scope.$elements;
+		const elts = scope.$elements;
 		Object.keys(elts).forEach(function(name) {
-			var el = elts[name];
+			const el = elts[name];
 			if (!el.name) el.name = name;
 			exports.render.install(el, scope);
 		});
@@ -92,9 +92,9 @@ window.VirtualHTMLElement = require('./VirtualHTMLElement');
 Page.init(function(state) {
 	state.vars = {};
 	state.data.$hrefs = {};
-	var dev = state.query.develop;
+	const dev = state.query.develop;
 	if (dev === "" || dev === "write") state.vars.develop = true;
-	var scope = state.scope;
+	let scope = state.scope;
 	if (!scope) scope = state.scope = {
 		$elements: exports.elements,
 		$filters: {}
@@ -105,10 +105,10 @@ Page.init(function(state) {
 
 Page.patch(function(state) {
 	state.finish(function() {
-		var query = {};
-		var extra = [];
-		var missing = [];
 		state.status = 200;
+		const query = {};
+		const extra = [];
+		const missing = [];
 		Object.keys(state.query).forEach(function(key) {
 			if (state.vars[key] === undefined) {
 				extra.push(key);
@@ -166,16 +166,16 @@ Page.setup(function(state) {
 exports.merge = merge;
 
 function merge(obj, extra, fn) {
-	var single = arguments.length == 2;
+	const single = arguments.length == 2;
 	if ((fn == null || single) && typeof extra == "function") {
 		fn = extra;
 		extra = obj;
 		obj = {};
 	}
 	if (!extra) return obj;
-	var copy = Object.assign({}, obj);
+	const copy = Object.assign({}, obj);
 	Object.keys(extra).forEach(function(key) {
-		var val = extra[key];
+		let val = extra[key];
 		if (val == null) {
 			return;
 		} else if (typeof val == "object") {
