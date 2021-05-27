@@ -38,8 +38,8 @@ exports.input_radio_yes = {
 	},
 	html: `<div class="field">
 		<div class="ui radio checkbox">
-			<input type="radio" name="consent" value="yes" id="[$id|slice:0:4|pre:for]" />
-			<label block-content="label" for="[$id|slice:0:4|pre:for]">Yes</label>
+			<input type="radio" name="consent" value="yes" id="for-consent-yes" />
+			<label block-content="label" for="for-consent-yes">Yes</label>
 		</div>
 	</div>`
 };
@@ -56,8 +56,8 @@ exports.input_radio_no = {
 	},
 	html: `<div class="field">
 		<div class="ui radio checkbox">
-			<input type="radio" name="consent" value="no" id="[$id|slice:0:4|pre:for]" />
-			<label block-content="label" for="[$id|slice:0:4|pre:for]">No</label>
+			<input type="radio" name="consent" value="no" id="for-consent-no" />
+			<label block-content="label" for="for-consent-no">No</label>
 		</div>
 	</div>`
 };
