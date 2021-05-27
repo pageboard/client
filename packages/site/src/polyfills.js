@@ -28,3 +28,14 @@ Node.prototype.queryClosest = function(sel) {
 	if (this.matches(sel)) return this;
 	else return this.querySelector(sel);
 };
+
+Object.defineProperty(DocumentFragment.prototype, 'innerHTML', {
+	configurable: true,
+	get() {
+		return this.childNodes.map(child => {
+			if (child.nodeType == Node.TEXT_NODE) return child.nodeValue;
+			else return child.outerHTML;
+		}).join('');
+	}
+});
+

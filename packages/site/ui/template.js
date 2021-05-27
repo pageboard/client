@@ -174,18 +174,7 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 	}
 }
 
-Page.ready(function () {
-	Object.defineProperty(DocumentFragment.prototype, 'innerHTML', {
-		configurable: true,
-		get() {
-			return this.childNodes.map(child => {
-				if (child.nodeType == Node.TEXT_NODE) return child.nodeValue;
-				else return child.outerHTML;
-			}).join('');
-		}
-	});
-	VirtualHTMLElement.define('element-template', HTMLElementTemplate);
-});
+VirtualHTMLElement.define('element-template', HTMLElementTemplate);
 
 Page.State.prototype.fuse = function (data, scope) {
 	this.pathname = this.pathname.fuse(data, scope);
