@@ -234,19 +234,33 @@ exports.enc = function (str) {
 	return encodeURIComponent(str);
 };
 
-exports.query = function (obj, what) {
-	if (obj == null || typeof obj != "object") return null;
-	return Page.format({
-		pathname: "",
-		query: obj
-	});
+exports.query = function (query, what) {
+	return exports.urltpl({ query }, what);
 };
 
-exports.urlQuery = function (obj, what) {
-	if (obj.url == null && obj.parameters == null) return null;
-	const url = Page.parse(obj.url || "?");
-	Object.assign(url.query, obj.parameters || {});
-	return Page.format(url);
+exports.urltpl = function (obj, what, pName = 'pathname', qName = 'query') {
+	const pathname = obj[pName];
+	const query = obj[qName];
+	if (pathname == null && query == null) return null;
+	const url = Page.parse(pathname || "?");
+	Object.assign(url.query, query || {});
+	const fakes = [];
+	Object.entries(url.query).forEach(([key, val]) => {
+		if (typeof val == "string" && val.fuse()) {
+			delete url.query[key];
+			fakes.push([key, val]);
+		}
+	});
+	let str = Page.format(url);
+	if (fakes.length) {
+		if (Object.keys(url.query).length == 0) str += '?';
+		else str += '&';
+		str += fakes.map(([key, val]) => {
+			if (val == null) return key;
+			else return `${key}=${val}`;
+		}).join('&');
+	}
+	return str;
 };
 
 exports.templates = function (val, what, prefix) {

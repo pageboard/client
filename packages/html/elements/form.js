@@ -164,10 +164,10 @@ exports.api_form = {
 	html: `<form is="element-form" method="post" name="[name]"
 		action="/.api/form/[$id]"
 		parameters="[$expr.action.parameters|ornull|templates:$query]"
-		success="[redirection|urlQuery]"
-		badrequest="[badrequest|urlQuery]"
-		unauthorized="[unauthorized|urlQuery]"
-		notfound="[notfound|urlQuery]"
+		success="[redirection|urltpl:url:parameters]"
+		badrequest="[badrequest|urltpl:url:parameters]"
+		unauthorized="[unauthorized|urltpl:url:parameters]"
+		notfound="[notfound|urltpl:url:parameters]"
 		class="ui form [hidden|?]"></form>`,
 	stylesheets: [
 		'../lib/components/form.css',
