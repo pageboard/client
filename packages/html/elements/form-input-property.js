@@ -40,14 +40,14 @@ exports.input_property = {
 	},
 	html: '<div><code>select property name</code></div>',
 	fuse: function(node, d, scope) {
-		var view = scope.$view;
-		var doc = scope.$doc;
-		var name = d.name;
+		const view = scope.$view;
+		const doc = scope.$doc;
+		let name = d.name;
 		if (!name) {
 			return node;
 		}
-		var list = name.split('.');
-		var el = scope.$elements[list[0]];
+		const list = name.split('.');
+		const el = scope.$elements[list[0]];
 		if (!el) {
 			return node;
 		}
@@ -55,10 +55,10 @@ exports.input_property = {
 		// /.api/form wraps it into block.data
 		list.shift();
 		name = list.join('.');
-		var prop = el;
-		var propKey;
-		var required = false;
-		for (var i = 0; i < list.length; i++) {
+		let prop = el;
+		let propKey;
+		let required = false;
+		for (let i = 0; i < list.length; i++) {
 			propKey = list[i];
 			required = prop.required && prop.required.indexOf(propKey) >= 0;
 			prop = prop.properties && prop.properties[propKey] || null;
@@ -69,10 +69,10 @@ exports.input_property = {
 		}
 		node.textContent = "";
 		if (prop.nullable) required = false;
-		var listOf = prop.anyOf || prop.oneOf;
-		var propType;
+		let listOf = prop.anyOf || prop.oneOf;
+		let propType;
 		if (listOf) {
-			var listOfNo = listOf.filter(function(item) {
+			const listOfNo = listOf.filter(function(item) {
 				return item.type != "null";
 			});
 			if (listOfNo.length != listOf.length) {
@@ -104,7 +104,7 @@ exports.input_property = {
 
 		if (listOf) {
 			if (listOf.length <= d.radios) {
-				var content;
+				let content;
 				if (d.foldable) {
 					content = doc.dom(`<element-accordion class="grouped fields">
 						<label for="${name}" class="title active caret-icon">${prop.title}</label>
@@ -132,9 +132,9 @@ exports.input_property = {
 					}));
 				});
 			} else {
-				var frag = doc.createDocumentFragment();
+				const frag = doc.createDocumentFragment();
 				listOf.forEach(function(item) {
-					var option = view.render({
+					frag.appendChild(view.render({
 						type: 'input_select_option',
 						data: {
 							value: item.type == "null" ? null : item.const
@@ -142,10 +142,9 @@ exports.input_property = {
 						content: {
 							label: item.title
 						}
-					});
-					frag.appendChild(option);
+					}));
 				});
-				var select = view.render({
+				node.appendChild(view.render({
 					type: 'input_select',
 					data: {
 						name: name,
@@ -158,8 +157,7 @@ exports.input_property = {
 						label: prop.title,
 						options: frag
 					}
-				});
-				node.appendChild(select);
+				}));
 			}
 		} else if (propType.type == "integer") {
 			if (propType.minimum != null && propType.maximum != null) {
@@ -239,7 +237,7 @@ exports.input_property = {
 				}
 			}));
 		} else {
-			var input = view.render({
+			node.appendChild(view.render({
 				type: 'input_text',
 				data: {
 					name: name,
@@ -251,8 +249,7 @@ exports.input_property = {
 				content: {
 					label: prop.title
 				}
-			});
-			node.appendChild(input);
+			}));
 		}
 		return node;
 	},
