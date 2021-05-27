@@ -7,14 +7,14 @@ class HTMLElementQueryTags extends VirtualHTMLElement {
 			sel += `[name="${formName}"]`;
 		}
 		const parentForm = this.closest(sel);
-		sel += ` [name="${name}"]`;
+		sel = `${sel} [name="${name}"]:not(select),${sel} select[name="${name}"] > option`;
 		if (parentForm) {
 			nodes = parentForm.querySelectorAll(sel);
 		} else {
 			nodes = document.querySelectorAll(sel);
 		}
 
-		return Array.prototype.filter.call(nodes, function(node) {
+		return nodes.filter(node => {
 			if (Array.isArray(value)) {
 				if (value.indexOf(node.value) < 0) return;
 			} else {
@@ -54,6 +54,7 @@ class HTMLElementQueryTags extends VirtualHTMLElement {
 			if (val == null || val == "" || !label.innerText) return;
 			var prev = labels.querySelector(`[data-name="${name}"][data-value="${val}"]`);
 			if (prev) return;
+			var txt = label.innerText;
 			var prefix = '';
 			var group = field.closest('.grouped.fields');
 			if (group && group.firstElementChild.matches('label')) {
@@ -69,9 +70,13 @@ class HTMLElementQueryTags extends VirtualHTMLElement {
 					suffix = ' ⩽ ' + val[1];
 				}
 			} else if (control.type == "text") {
-				suffix = ': "' + control.value + '"';
+				suffix = ': ' + control.value;
+			} else if (control.matches('option')) {
+				txt = control.innerText;
+			} else if (control.type == "checkbox" || control.type == "radio") {
+				prefix = "";
 			}
-			this.insertLabel(name, control.value, `${prefix}${label.innerText}${suffix}`);
+			this.insertLabel(name, control.value, `${prefix}${txt}${suffix}`);
 		});
 	}
 	handleClick(e) {
@@ -82,6 +87,7 @@ class HTMLElementQueryTags extends VirtualHTMLElement {
 		this.find(label.dataset.name, label.dataset.value).forEach(function(control) {
 			if (control.type == "hidden") return;
 			if (control.checked) control.checked = false;
+			else if (control.selected) control.selected = false;
 			else if (control.reset) control.reset();
 			else if (control.value) control.value = "";
 			var e = document.createEvent('HTMLEvents');
