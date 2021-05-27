@@ -58,7 +58,7 @@ exports.input_property = {
 		var prop = el;
 		var propKey;
 		var required = false;
-		for (var i=0; i < list.length; i++) {
+		for (var i = 0; i < list.length; i++) {
 			propKey = list[i];
 			required = prop.required && prop.required.indexOf(propKey) >= 0;
 			prop = prop.properties && prop.properties[propKey] || null;
