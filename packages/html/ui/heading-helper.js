@@ -22,21 +22,23 @@ class HTMLElementHeadingHelper extends HTMLHeadingElement {
 		if (this.observer) this.observer.disconnect();
 	}
 	sync() {
-		var Pb = window.parent.Pageboard;
+		const Pb = window.parent.Pageboard;
 		if (!Pb.slug || !Pb.editor) return;
-		var txt = Pb.slug(this.textContent);
-		var id = txt.length <= 64 ? txt : null;
+		const txt = Pb.slug(this.textContent);
+		const id = txt.length <= 64 ? txt : null;
 		if (id != this.id) {
-			Pb.editor.blocks.mutate(this, {
-				id: id
-			});
+			Pb.editor.blocks.mutate(this, { id });
 		}
 	}
 }
 
 Page.setup(function() {
-	for (var i=1; i <= 6; i++) {
-		VirtualHTMLElement.define(`h${i}-helper`, class extends HTMLElementHeadingHelper {}, `h${i}`);
+	for (let i = 1; i <= 6; i++) {
+		VirtualHTMLElement.define(
+			`h${i}-helper`,
+			class extends HTMLElementHeadingHelper { },
+			`h${i}`
+		);
 	}
 });
 
