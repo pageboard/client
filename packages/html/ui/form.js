@@ -14,6 +14,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			if (name && name == this.name) {
 				state.vars.submit = true;
 			}
+			Object.assign(this.dataset, state.templatesQuery(this));
 			this.restore(state.scope);
 		} else {
 			this.fill(state.query, state.scope).forEach((name) => {
@@ -215,10 +216,11 @@ class HTMLCustomFormElement extends HTMLFormElement {
 	postMethod(e, state) {
 		if (e.type != "submit") return;
 		const form = this;
+		const $query = this.dataset;
+
 		form.classList.add('loading');
-		const data = {
-			$query: state.query
-		};
+
+		const data = { $query	};
 		return Promise.all(Array.prototype.filter.call(form.elements, function (node) {
 			return node.type == "file";
 		}).map(function (input) {

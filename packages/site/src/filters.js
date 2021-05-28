@@ -235,13 +235,22 @@ exports.enc = function (str) {
 };
 
 exports.query = function (query, what) {
-	return exports.urltpl({ query }, what);
+	const str = exports.urltpl({
+		pathname: "/",
+		query
+	}, what).substring(1);
+	const nextFilter = what.expr.filters[what.expr.filter];
+	if (nextFilter && nextFilter.name == "enc") {
+		if (str && str.startsWith('?')) return str.slice(1);
+	}
+	return str;
 };
 
 exports.urltpl = function (obj, what, pName = 'pathname', qName = 'query') {
 	const pathname = obj[pName];
 	const query = obj[qName];
 	if (pathname == null && query == null) return null;
+	if (pathname && pathname.fuse()) return pathname;
 	const url = Page.parse(pathname || "?");
 	Object.assign(url.query, query || {});
 	const fakes = [];
@@ -256,8 +265,7 @@ exports.urltpl = function (obj, what, pName = 'pathname', qName = 'query') {
 		if (Object.keys(url.query).length == 0) str += '?';
 		else str += '&';
 		str += fakes.map(([key, val]) => {
-			if (val == null) return key;
-			else return `${key}=${val}`;
+			return (val == null ? key : `${key}=${val}`);
 		}).join('&');
 	}
 	return str;
@@ -281,7 +289,7 @@ exports.templates = function (val, what, prefix) {
 			}
 		}
 	});
-	return Object.keys(obj).map(key => `[${obj[key]}]`).join('');
+	return Object.keys(obj).map(key => obj[key]).join(' ') || null;
 };
 
 exports.isoDate = function (val, what) {

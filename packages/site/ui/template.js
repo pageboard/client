@@ -35,29 +35,15 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 	}
 	fetch(state) {
 		const action = this.getAttribute('action');
-		const params = this.getAttribute('parameters') || '';
-		const $query = {};
-		const scope = Object.assign({}, state.scope);
-		let missings = 0;
-		scope.$filters = Object.assign({}, scope.$filters, {
-			'||': function (val, what) {
-				const key = what.expr.path.slice(1).join('.');
-				if (val === undefined) {
-					// it is the duty of the fetch block to redirect 400 if needed
-					missings++;
-				} else {
-					state.vars[key] = true;
-					if (val != null) $query[key] = val;
-				}
-			}
-		});
-		params.fuse({ $query: state.query }, scope);
+
+		const $query = state.templatesQuery(this);
+		const missings = $query == null;
 
 		// redirections are only allowed to use collected query params
 		const data = { $query };
 		return Promise.resolve().then(() => {
 			this.classList.remove('error', 'warning', 'success');
-			if (missings > 0) {
+			if (missings) {
 				data.$status = 400;
 				data.$statusText = 'Missing query parameters';
 			} else {
@@ -75,7 +61,7 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 					this.render(res, state);
 				});
 			}
-		}).catch(function(err) {
+		}).catch(function (err) {
 			data.$status = -1;
 			// eslint-disable-next-line no-console
 			console.error("Error building", err);
@@ -149,7 +135,7 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 			})
 		};
 
-		Object.keys(state.data).forEach(function(key) {
+		Object.keys(state.data).forEach(function (key) {
 			if (key.startsWith('$') && scope[key] == null) scope[key] = state.data[key];
 		});
 		scope.$pathname = state.pathname;
@@ -214,7 +200,8 @@ class QueryCollectorFilter {
 			if (!vars[key]) vars[key] = !undef;
 			this.query[key] = val;
 		} else if (typeof val == "string") {
-			const obj = Page.parse(val).query;
+			const isEnc = (what.expr.filters[what.expr.filters.length - 1] || {}).name == "enc";
+			const obj = Page.parse(isEnc ? '?' + decodeURIComponent(val) : val).query;
 			for (key in obj) {
 				if (query[key] === obj[key]) vars[key] = true;
 				this.query[key] = obj[key];
@@ -226,4 +213,29 @@ class QueryCollectorFilter {
 
 Page.State.prototype.collector = function (query) {
 	return new QueryCollectorFilter(this, query);
+};
+
+Page.State.prototype.templatesQuery = function (node) {
+	const state = this;
+	const params = node.getAttribute('parameters') || '';
+	const $query = {};
+	const scope = Object.assign({}, state.scope);
+	let missings = 0;
+	scope.$filters = Object.assign({}, scope.$filters, {
+		'||': function (val, what) {
+			const key = what.expr.path.slice(1).join('.');
+			if (val === undefined) {
+				// it is the duty of the fetch block to redirect 400 if needed
+				missings++;
+			} else {
+				state.vars[key] = true;
+				if (val != null) $query[key] = val;
+			}
+		}
+	});
+	params.split(' ').map(str => {
+		return `[${str}]`;
+	}).join('').fuse({ $query: state.query }, scope);
+	if (missings > 0) return null;
+	else return $query;
 };
