@@ -112,6 +112,8 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 		const view = this.lastElementChild;
 		const scope = Object.assign({}, state.scope);
 		const tmpl = this.firstElementChild.content.cloneNode(true);
+		tmpl.querySelectorAll('[block-id]')
+			.forEach(node => node.removeAttribute('block-id'));
 
 		// allow sub-templates to merge current data
 		tmpl.querySelectorAll('template').forEach(tpl => {
@@ -119,6 +121,10 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 			tpl.content.fuse(data, {
 				$filters: Object.assign({}, scope.$filters, { repeat() { } })
 			});
+			// get rid of block-id in those templates to avoid
+			// pagecut from dying on them
+			tpl.content.querySelectorAll('[block-id]')
+				.forEach(node => node.removeAttribute('block-id'));
 		});
 
 		const collector = state.collector();

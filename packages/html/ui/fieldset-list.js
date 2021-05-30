@@ -15,6 +15,8 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 		this._size = len;
 
 		const tpl = this.listTpl.cloneNode(true);
+		tpl.querySelectorAll('[block-id]')
+			.forEach(node => node.removeAttribute('block-id'));
 		const anc = tpl.querySelectorAll('[name]:not(button)').ancestor();
 
 		for (let i = len - 1; i >= 1; i--) {
