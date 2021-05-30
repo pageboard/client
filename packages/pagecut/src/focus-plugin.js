@@ -17,7 +17,7 @@ FocusPlugin.prototype.appendTransaction = function(transactions, oldState, newSt
 	// focus once per transaction
 	var itr;
 	var editorUpdate = false;
-	for (var i=0; i < transactions.length; i++) {
+	for (var i = 0; i < transactions.length; i++) {
 		itr = transactions[i];
 		if (itr.getMeta('focus')) {
 			return;
@@ -133,7 +133,7 @@ FocusPlugin.prototype.focus = function(tr, sel) {
 			return;
 		}
 		var changed = false;
-		for (var i=0; i < changes.length; i++) {
+		for (var i = 0; i < changes.length; i++) {
 			if (node == changes[i].node) {
 				changed = true;
 				break;
@@ -145,7 +145,7 @@ FocusPlugin.prototype.focus = function(tr, sel) {
 	tr.doc.descendants(hasChanged);
 
 	var change;
-	for (var j=0; j < changes.length; j++) {
+	for (var j = 0; j < changes.length; j++) {
 		change = changes[j];
 		try {
 			me.focusRoot(tr, change.pos, change.node, change.focus);

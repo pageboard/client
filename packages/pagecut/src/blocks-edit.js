@@ -81,7 +81,7 @@ Blocks.prototype.toAttrs = function(block) {
 	return attrs;
 };
 
-Blocks.prototype.serializeTo = function(parent, el, ancestor, blocks, parentDef={}) {
+Blocks.prototype.serializeTo = function(parent, el, ancestor, blocks, parentDef = {}) {
 	if (!el || typeof el == "string") el = this.view.element(el || parent.type);
 
 	/*

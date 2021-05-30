@@ -101,10 +101,10 @@ Utils.prototype.insertTr = function(tr, dom, sel) {
 		var atStart = !sel.node && sel.$from.parentOffset == 0;
 		var insertPos;
 		if (atStart) {
-			insertPos = this.nextInsertPoint(tr, from+1, node.type, -1, true);
+			insertPos = this.nextInsertPoint(tr, from + 1, node.type, -1, true);
 		}
 		if (insertPos == null) {
-			insertPos = this.nextInsertPoint(tr, to-1, node.type, 1, true);
+			insertPos = this.nextInsertPoint(tr, to - 1, node.type, 1, true);
 		}
 		if (insertPos != null) {
 			return this.insertTrNode(tr, insertPos, node);
@@ -672,7 +672,7 @@ Utils.prototype.serializeHTML = function(dom, children) {
 		if (children || dom instanceof DocumentFragment) {
 			html = "";
 			var child;
-			for (var i=0; i < dom.childNodes.length; i++) {
+			for (var i = 0; i < dom.childNodes.length; i++) {
 				child = dom.childNodes[i];
 				if (child.nodeType == Node.TEXT_NODE) html += child.nodeValue;
 				else html += child.outerHTML;

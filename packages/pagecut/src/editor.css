@@ -1,4 +1,5 @@
 @import './prosemirror.css';
+
 @import './prosemirror-gapcursor.css';
 
 .ProseMirror {
@@ -61,5 +62,5 @@ pagecut-placeholder.ProseMirror-selectednode:after {
 }
 
 .ProseMirror-dropcursor {
-	z-index: 2147483647; /* max z-index everywhere but Safari <= 3
+	z-index: 2147483647; /* max z-index everywhere but Safari <= 3 */
 }
