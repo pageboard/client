@@ -85,7 +85,7 @@ Page.setup(function navigate(state) {
 	}, document);
 
 	var redir = document.body.dataset.redirect;
-	if (redir && !document.body.isContentEditable) {
+	if (redir && !state.scope.$write) {
 		if (Page.samePath(redir, state)) {
 			// eslint-disable-next-line no-console
 			console.warn("Useless redirection");
