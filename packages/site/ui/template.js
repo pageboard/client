@@ -12,9 +12,11 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 
 		// redirections are only allowed to use collected query params
 		const data = { $query };
+
 		return Promise.resolve().then(() => {
 			this.classList.remove('error', 'warning', 'success');
 			if (missings) {
+				this.ownView.textContent = '';
 				data.$status = 400;
 				data.$statusText = 'Missing query parameters';
 			} else {
