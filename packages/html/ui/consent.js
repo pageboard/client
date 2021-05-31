@@ -3,7 +3,7 @@ Page.ready(function(state) {
 });
 
 Page.State.prototype.consent = function (fn) {
-	var consent = this.scope.$consent = Page.storage.get('consent');
+	const consent = this.scope.$consent = Page.storage.get('consent');
 	this.chain('consent', fn);
 	if (consent === undefined) {
 		HTMLCustomConsentElement.waiting = true;
@@ -15,8 +15,8 @@ Page.State.prototype.consent = function (fn) {
 
 Page.State.prototype.reconsent = function (fn) {
 	if (fn) this.consent(fn);
-	var consent = this.scope.$consent;
-	var asking = false;
+	const consent = this.scope.$consent;
+	let asking = false;
 	if (consent != "yes") {
 		asking = HTMLCustomConsentElement.ask();
 	}
@@ -28,7 +28,7 @@ Page.State.prototype.reconsent = function (fn) {
 
 Page.paint(function(state) {
 	state.finish(function() {
-		var run = true;
+		let run = true;
 		if (HTMLCustomConsentElement.waiting) {
 			if (state.reconsent()) run = false;
 		}
@@ -48,7 +48,7 @@ class HTMLCustomConsentElement extends HTMLFormElement {
 	}
 	static ask() {
 		this.waiting = false;
-		var tacit = true;
+		let tacit = true;
 		document.querySelectorAll('[block-type="consent_form"]').forEach((node) => {
 			node.classList.add('visible');
 			tacit = false;
@@ -73,8 +73,8 @@ class HTMLCustomConsentElement extends HTMLFormElement {
 	handleSubmit(e, state) {
 		if (e.type == "submit") e.preventDefault();
 		if (this.isContentEditable) return;
-		var fd = window.HTMLCustomFormElement.prototype.read.call(this);
-		var consent = fd.consent;
+		const fd = window.HTMLCustomFormElement.prototype.read.call(this);
+		const consent = fd.consent;
 		if (consent == null) {
 			return;
 		}
