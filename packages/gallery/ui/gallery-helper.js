@@ -8,7 +8,7 @@ VirtualHTMLElement.extend('element-gallery', class GalleryHelper {
 		});
 		this.itemsObserver.disconnect();
 		var mode = this.selectedMode;
-		var gal = this.children.find((node) => node.getAttribute('block-type') == mode);
+		var gal = this.children.find((node) => !mode || node.getAttribute('block-type') == mode);
 		this.itemsObserver.observe(gal, {
 			childList: true,
 			subtree: true,
