@@ -255,7 +255,9 @@ exports.urltpl = function (obj, what, pName = 'pathname', qName = 'query') {
 	Object.assign(url.query, query || {});
 	const fakes = [];
 	Object.entries(url.query).forEach(([key, val]) => {
-		if (typeof val == "string" && val.fuse()) {
+		if (val === undefined) {
+			delete url.query[key];
+		} else if (typeof val == "string" && val.fuse()) {
 			delete url.query[key];
 			fakes.push([key, val]);
 		}
