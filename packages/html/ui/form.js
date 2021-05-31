@@ -172,7 +172,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 	handleSubmit(e, state) {
 		if (e.type == "submit") e.preventDefault();
 		if (this.isContentEditable) return;
-		this.classList.remove('error', 'warning', 'success');
+		this.toggleMessages();
 		if (this.matches('.loading')) return;
 		if (e.type != "submit" && this.querySelector('[type="submit"]')) return;
 		let fn = this[this.method + 'Method'];
@@ -242,16 +242,17 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			form.enable();
 
 			form.classList.remove('loading');
+
 			// messages shown inside form, no navigation
 			const statusClass = `[status|statusClass]`.fuse(res);
-			if (statusClass) form.classList.add(statusClass);
+			const hasMsg = statusClass && form.toggleMessages(statusClass);
 
 			const statusName = `[status|statusName]`.fuse(res);
 			let redirect = form.getAttribute(statusName);
 			if (statusName == "success") {
 				form.forget();
 				form.save();
-				if (!redirect && form.closest('element-template') && !form.querySelector('.message.success')) {
+				if (!redirect && form.closest('element-template') && !hasMsg) {
 					redirect = Page.format(state);
 				}
 			}
@@ -302,6 +303,11 @@ HTMLFormElement.prototype.disable = function () {
 };
 
 Page.ready(function () {
+	const Cla = window.customElements.get('element-template');
+	HTMLCustomFormElement.prototype.toggleMessages = function (name) {
+		return Cla.prototype.toggleMessages(name, this);
+	};
+
 	VirtualHTMLElement.define(`element-form`, HTMLCustomFormElement, 'form');
 });
 

@@ -2,11 +2,7 @@
 [action] .message {
 	display:none;
 }
-[action].success .message.success,
-[action].warning .message.warning,
-[action].error .message.error {
-	display:block;
-}
+
 [contenteditable] [action] .ui.message {
 	display:block;
 }

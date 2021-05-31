@@ -14,7 +14,7 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 		const data = { $query };
 
 		return Promise.resolve().then(() => {
-			this.classList.remove('error', 'warning', 'success');
+			this.toggleMessages();
 			if (missings) {
 				this.ownView.textContent = '';
 				data.$status = 400;
@@ -45,9 +45,8 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 			const statusName = `[$status|statusName]`.fuse(data, state.scope);
 			const redirect = this.getAttribute(statusName);
 			if (!redirect) {
-				const name = '[$status|statusClass]'.fuse(data, state.scope);
-				if (name && this.hasMessage(name)) {
-					this.classList.add(name);
+				const statusClass = '[$status|statusClass]'.fuse(data, state.scope);
+				if (statusClass && this.toggleMessages(statusClass)) {
 					// report statusCode because it is meant to be shown
 					if (data.$status > state.status || 0) {
 						state.status = data.$status;
@@ -80,8 +79,18 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 			}
 		});
 	}
-	hasMessage(name) {
-		return this.ownView.querySelector(`.${name}[block-type="message"]`);
+	toggleMessages(name = null, parent = this.ownView) {
+		let found = false;
+		parent.querySelectorAll(`[block-type="message"]`).forEach(node => {
+			if (node.closest('[action]') != this) return;
+			if (name && node.classList.contains(name)) {
+				found = true;
+				node.classList.add('visible');
+			} else {
+				node.classList.remove('visible');
+			}
+		});
+		return found;
 	}
 	render(data, state) {
 		const view = this.ownView;

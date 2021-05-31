@@ -9,17 +9,18 @@ class HTMLElementInclude extends VirtualHTMLElement {
 		view.textContent = '';
 		view.appendChild(node);
 	}
-	hasMessage(name) {
-		return this.children.find(
-			node => node.matches('[block-content="messages"]')
-		).querySelector('.' + name);
-	}
 	get ownView() {
 		return this.children.find(node => node.matches('[block-content="blocks"]'));
 	}
 }
 Page.ready(function() {
 	const Cla = window.customElements.get('element-template');
+	HTMLElementInclude.prototype.toggleMessages = function (name) {
+		const parent = this.children.find(
+			node => node.matches('[block-content="messages"]')
+		);
+		return Cla.prototype.toggleMessages(name, parent);
+	};
 	HTMLElementInclude.prototype.fetch = Cla.prototype.fetch;
 	VirtualHTMLElement.define('element-include', HTMLElementInclude);
 });
