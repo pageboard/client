@@ -90,4 +90,12 @@ class HTMLCustomConsentElement extends HTMLFormElement {
 			this.ownTpl.prerender();
 		}
 	}
+	get ownTpl() {
+		return this.children.find(
+			node => node.matches('template,script[type="text/html"]')
+		);
+	}
+	get ownView() {
+		return this.children.find(node => node.matches('.view'));
+	}
 }

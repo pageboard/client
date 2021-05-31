@@ -9,10 +9,12 @@ class HTMLElementInclude extends VirtualHTMLElement {
 		return this.fetch(state);
 	}
 	render(res, state) {
-		var node = Pageboard.render(res, state.scope);
-		var virtualContent = this.querySelector('[block-content="blocks"]');
-		virtualContent.textContent = '';
-		virtualContent.appendChild(node);
+		const node = Pageboard.render(res, state.scope);
+		const view = this.ownView;
+		view.textContent = '';
+		view.appendChild(node);
+	get ownView() {
+		return this.children.find(node => node.matches('[block-content="blocks"]'));
 	}
 }
 Page.ready(function() {

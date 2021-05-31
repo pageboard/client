@@ -80,9 +80,9 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 	}
 	render(data, state) {
 		if (this.children.length != 2) return;
-		const view = this.lastElementChild;
+		const view = this.ownView;
 		const scope = Object.assign({}, state.scope);
-		const tmpl = this.firstElementChild.content.cloneNode(true);
+		const tmpl = this.ownTpl.content.cloneNode(true);
 		tmpl.querySelectorAll('[block-id]')
 			.forEach(node => node.removeAttribute('block-id'));
 
@@ -134,6 +134,14 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 				behavior: 'smooth'
 			});
 		}
+	}
+	get ownTpl() {
+		return this.children.find(
+			node => node.matches('template,script[type="text/html"]')
+		);
+	}
+	get ownView() {
+		return this.children.find(node => node.matches('.view'));
 	}
 }
 HTMLTemplateElement.prototype.prerender = function () {

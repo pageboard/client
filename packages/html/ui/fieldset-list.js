@@ -19,7 +19,7 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 		if (this._size == len) return;
 		this._size = len;
 
-		const tpl = this.listTpl.cloneNode(true);
+		const tpl = this.ownTpl.content.cloneNode(true);
 		tpl.querySelectorAll('[block-id]')
 			.forEach(node => node.removeAttribute('block-id'));
 		const anc = tpl.querySelectorAll('[name]:not(button)').ancestor();
@@ -32,7 +32,7 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 		this.updateAncestor(anc, 0);
 		anc.fuse({ $fieldset: { index: 0 } }, scope);
 		tpl.fuse({ $fieldset: { count: len } }, scope);
-		const view = this.listView;
+		const view = this.ownView;
 		view.textContent = '';
 		view.appendChild(tpl);
 	}
@@ -47,7 +47,7 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 
 	modelFromTemplate() {
 		const obj = {};
-		this.listTpl.querySelectorAll('[name]:not(button)').forEach(node => {
+		this.ownTpl.content.querySelectorAll('[name]:not(button)').forEach(node => {
 			obj[node.name] = null;
 		});
 		return obj;
@@ -103,11 +103,13 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 		form.fill(values, state.scope);
 	}
 
-	get listTpl() {
-		return this.firstElementChild.content;
+	get ownTpl() {
+		return this.children.find(
+			node => node.matches('template,script[type="text/html"]')
+		);
 	}
-	get listView() {
-		return this.lastElementChild;
+	get ownView() {
+		return this.children.find(node => node.matches('.view'));
 	}
 	get prefix() {
 		const prefix = this.dataset.prefix;
