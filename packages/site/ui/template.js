@@ -131,7 +131,7 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 		scope.$pathname = state.pathname;
 		scope.$query = state.query;
 		scope.$referrer = state.referrer.pathname || state.pathname;
-
+		const prevHtml = view.innerHTML;
 		view.textContent = '';
 		const node = Pageboard.render(data, scope, el);
 
@@ -142,7 +142,7 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 			console.warn(state.statusText, Object.keys(collector.missings).join(', '));
 		} else {
 			view.appendChild(node);
-			if (collector.used) state.scroll({
+			if (collector.used && view.innerHTML != prevHtml) state.scroll({
 				once: true,
 				node: this.parentNode,
 				behavior: 'smooth'
