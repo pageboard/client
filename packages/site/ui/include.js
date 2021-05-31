@@ -13,6 +13,12 @@ class HTMLElementInclude extends VirtualHTMLElement {
 		const view = this.ownView;
 		view.textContent = '';
 		view.appendChild(node);
+	}
+	hasMessage(name) {
+		return this.children.find(
+			node => node.matches('[block-content="messages"]')
+		).querySelector('.' + name);
+	}
 	get ownView() {
 		return this.children.find(node => node.matches('[block-content="blocks"]'));
 	}

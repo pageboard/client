@@ -46,7 +46,7 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 			const redirect = this.getAttribute(statusName);
 			if (!redirect) {
 				const name = '[$status|statusClass]'.fuse(data, state.scope);
-				if (name && this.lastElementChild.querySelector(`.${name}[block-type="message"]`)) {
+				if (name && this.hasMessage(name)) {
 					this.classList.add(name);
 					// report statusCode because it is meant to be shown
 					if (data.$status > state.status || 0) {
@@ -79,6 +79,9 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 				state.push(loc);
 			}
 		});
+	}
+	hasMessage(name) {
+		return this.ownView.querySelector(`.${name}[block-type="message"]`);
 	}
 	render(data, state) {
 		if (this.children.length != 2) return;
