@@ -147,7 +147,10 @@ exports.include = {
 		nodes: "block+",
 		virtual: true
 	}],
-	html: `<element-include data-action="/.api/query/[$id]">
+	html: `<element-include
+		action="/.api/query/[$id]"
+		parameters="[$expr.action.parameters|ornull|templates:$query]"
+	>
 		<div block-content="messages"></div>
 		<div block-content="blocks"></div>
 	</element-include>`,

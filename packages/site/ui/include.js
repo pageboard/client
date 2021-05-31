@@ -1,9 +1,4 @@
 class HTMLElementInclude extends VirtualHTMLElement {
-	static get defaults() {
-		return {
-			action: null
-		};
-	}
 	patch(state) {
 		if (this._refreshing) return;
 		return this.fetch(state);
@@ -28,4 +23,3 @@ Page.ready(function() {
 	HTMLElementInclude.prototype.fetch = Cla.prototype.fetch;
 	VirtualHTMLElement.define('element-include', HTMLElementInclude);
 });
-
