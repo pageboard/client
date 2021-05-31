@@ -17,7 +17,6 @@ class HTMLElementInclude extends VirtualHTMLElement {
 }
 Page.ready(function() {
 	const Cla = window.customElements.get('element-template');
-	HTMLElementInclude.prepareTemplate = Cla.prepareTemplate;
 	HTMLElementInclude.prototype.fetch = Cla.prototype.fetch;
 	VirtualHTMLElement.define('element-include', HTMLElementInclude);
 });

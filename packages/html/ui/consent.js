@@ -56,9 +56,11 @@ class HTMLCustomConsentElement extends HTMLFormElement {
 		return !tacit;
 	}
 	setup(state) {
-		var tmpl = window.customElements.get('element-template').prepareTemplate(this.firstElementChild);
-		if (tmpl.content && tmpl.children.length == 0) {
-			tmpl.appendChild(tmpl.content);
+		if (this.options.transient) {
+			const tmpl = this.ownTpl.prerender();
+			if (tmpl.content && tmpl.children.length == 0) {
+				tmpl.appendChild(tmpl.content);
+			}
 		}
 		state.consent(this);
 	}
@@ -85,7 +87,7 @@ class HTMLCustomConsentElement extends HTMLFormElement {
 	}
 	patch(state) {
 		if (this.options.transient) {
-			window.customElements.get('element-template').prepareTemplate(this.firstElementChild);
+			this.ownTpl.prerender();
 		}
 	}
 }

@@ -5,8 +5,13 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 	}
 
 	patch(state) {
+		this.ownTpl.prerender();
 		if (this.isContentEditable) return;
 		if (!this._size) this.resize(0, state.scope);
+	}
+
+	setup(state) {
+		this.ownTpl.prerender();
 	}
 
 	resize(size, scope) {

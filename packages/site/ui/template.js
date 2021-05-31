@@ -1,35 +1,6 @@
 class HTMLElementTemplate extends VirtualHTMLElement {
-	static prepareTemplate(node) {
-		if (node.isContentEditable) return node;
-		const doc = node.ownerDocument;
-		let tmpl = node;
-		let helper;
-		if (node.matches('script[type="text/html"]')) {
-			helper = doc.createElement('div');
-			helper.innerHTML = node.textContent;
-			tmpl = doc.createElement('template');
-			if (!tmpl.content) {
-				tmpl.content = doc.createDocumentFragment();
-				tmpl.content.appendChild(node.dom(helper.textContent));
-			} else {
-				tmpl.innerHTML = helper.textContent;
-			}
-			node.replaceWith(tmpl);
-			node.textContent = helper.textContent = '';
-		} else if (document.visibilityState == "prerender") {
-			const dest = tmpl.dom(`<script type="text/html"></script>`);
-			if (!helper) helper = doc.createElement('div');
-			helper.textContent = tmpl.content.innerHTML;
-			dest.textContent = helper.innerHTML;
-			dest.content = tmpl.content;
-			tmpl.replaceWith(dest);
-			tmpl = dest;
-		}
-		return tmpl;
-	}
-
 	patch(state) {
-		this.constructor.prepareTemplate(this.firstElementChild);
+		this.ownTpl.prerender();
 		if (this.isContentEditable || this._refreshing || this.closest('[block-content="template"]')) return;
 		return this.fetch(state);
 	}
@@ -165,6 +136,36 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 		}
 	}
 }
+HTMLTemplateElement.prototype.prerender = function () {
+	if (this.isContentEditable || document.visibilityState != "prerender") return this;
+	const doc = this.ownerDocument;
+	let tmpl = this;
+	const dest = doc.createElement('script');
+	dest.type = "text/html";
+	const helper = doc.createElement('div');
+	helper.textContent = tmpl.content.innerHTML;
+	dest.textContent = helper.innerHTML;
+	dest.content = tmpl.content;
+	tmpl.replaceWith(dest);
+	tmpl = dest;
+	return tmpl;
+};
+
+HTMLScriptElement.prototype.prerender = function () {
+	const doc = this.ownerDocument;
+	const helper = doc.createElement('div');
+	helper.innerHTML = this.textContent;
+	const tmpl = doc.createElement('template');
+	if (!tmpl.content) {
+		tmpl.content = doc.createDocumentFragment();
+		tmpl.content.appendChild(this.dom(helper.textContent));
+	} else {
+		tmpl.innerHTML = helper.textContent;
+	}
+	this.replaceWith(tmpl);
+	this.textContent = helper.textContent = '';
+	return tmpl;
+};
 
 VirtualHTMLElement.define('element-template', HTMLElementTemplate);
 
