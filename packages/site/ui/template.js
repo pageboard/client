@@ -84,7 +84,6 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 		return this.ownView.querySelector(`.${name}[block-type="message"]`);
 	}
 	render(data, state) {
-		if (this.children.length != 2) return;
 		const view = this.ownView;
 		const scope = Object.assign({}, state.scope);
 		const tmpl = this.ownTpl.content.cloneNode(true);
@@ -124,8 +123,9 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 		scope.$query = state.query;
 		scope.$referrer = state.referrer.pathname || state.pathname;
 
-		const node = Pageboard.render(data, scope, el);
 		view.textContent = '';
+		const node = Pageboard.render(data, scope, el);
+
 		if (Object.keys(collector.missings).length) {
 			state.statusText = `Missing query parameters`;
 			state.status = 400;
