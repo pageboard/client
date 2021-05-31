@@ -28,19 +28,6 @@ element-select {
 	z-index:1; /* or else dropdown menu goes under what's next */
 }
 
-form[data-authfield] button[type="submit"]::before {
-	content:'🔒';
-}
-
-[contenteditable] [block-type="fetch"] .ui.message {
-	display:block !important;
-}
-
-[contenteditable] .ui.form .ui.message {
-	display:block;
-}
-
 [contenteditable] .ui.form .field.hidden {
 	display: block !important;
 }
-
