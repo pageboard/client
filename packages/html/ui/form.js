@@ -305,7 +305,7 @@ HTMLFormElement.prototype.disable = function () {
 Page.ready(function () {
 	const Cla = window.customElements.get('element-template');
 	HTMLCustomFormElement.prototype.toggleMessages = function (name) {
-		return Cla.prototype.toggleMessages(name, this);
+		return Cla.prototype.toggleMessages.call(this, name, this);
 	};
 
 	VirtualHTMLElement.define(`element-form`, HTMLCustomFormElement, 'form');

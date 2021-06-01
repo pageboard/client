@@ -19,7 +19,7 @@ Page.ready(function() {
 		const parent = this.children.find(
 			node => node.matches('[block-content="messages"]')
 		);
-		return Cla.prototype.toggleMessages(name, parent);
+		return Cla.prototype.toggleMessages.call(this, name, parent);
 	};
 	HTMLElementInclude.prototype.fetch = Cla.prototype.fetch;
 	VirtualHTMLElement.define('element-include', HTMLElementInclude);
