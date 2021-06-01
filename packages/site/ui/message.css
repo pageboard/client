@@ -4,5 +4,5 @@
 }
 
 [contenteditable] [action] .ui.message {
-	display:block;
+	display:block !important;
 }
