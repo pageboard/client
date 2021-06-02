@@ -18,7 +18,7 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 			if (missings) {
 				this.ownView.textContent = '';
 				data.$status = 400;
-				data.$statusText = 'Missing query parameters';
+				data.$statusText = 'Missing Query Parameters';
 			} else {
 				const loader = action
 					? Pageboard.fetch('get', action, $query)
@@ -126,7 +126,7 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 		const node = Pageboard.render(data, scope, el);
 
 		if (Object.keys(collector.missings).length) {
-			state.statusText = `Missing query parameters`;
+			state.statusText = `Missing Query Parameters`;
 			state.status = 400;
 			// eslint-disable-next-line no-console
 			console.warn(state.statusText, Object.keys(collector.missings).join(', '));
