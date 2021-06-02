@@ -56,27 +56,17 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 				return;
 			}
 
-			const message = {
+			const loc = Page.parse(redirect).fuse(data, state.scope);
+			const locStr = Page.format(loc);
+			state.status = 301;
+			state.statusText = {
 				notfound: 'Not Found',
 				unauthorized: 'Unauthorized',
 				error: 'Error',
 				badrequest: 'Bad Request',
 				success: 'Moved Permanently'
 			}[statusName];
-
-			const loc = Page.parse(redirect).fuse(data, state.scope);
-			const locStr = Page.format(loc);
-			// prerendering tricks
-			Pageboard.equivs({
-				Status: `301 ${message}`,
-				Location: locStr
-			});
-			if (state.scope.$write) {
-				// eslint-disable-next-line no-console
-				console.info("redirects to", locStr);
-			} else {
-				state.push(loc);
-			}
+			state.location = locStr;
 		});
 	}
 	toggleMessages(name = null, parent = this.ownView) {

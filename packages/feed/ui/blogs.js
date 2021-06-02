@@ -38,12 +38,11 @@ class HTMLElementBlogs extends VirtualHTMLElement {
 		if (state.pathname.endsWith('.rss')) {
 			if (version != null) state.vars.version = true;
 			if (state.query.version != version) {
-				Pageboard.equivs({
-					Status: '302 Found Version',
-					Location: Page.format({
-						pathname: state.pathname,
-						query: Object.assign({}, state.query, {version: version})
-					})
+				state.status = 302;
+				state.statusText = 'Found Version';
+				state.location = Page.format({
+					pathname: state.pathname,
+					query: Object.assign({}, state.query, { version: version })
 				});
 			} else {
 				Page.serialize = (state) => this.rss(state);

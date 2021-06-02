@@ -109,8 +109,8 @@ Page.patch(function (state) {
 		const query = {};
 		const extra = [];
 		const missing = [];
-		let status = 200;
-		let equivs;
+		let status = 200, statusText = "OK", location;
+
 		Object.keys(state.query).forEach(function(key) {
 			if (state.vars[key] === undefined) {
 				extra.push(key);
@@ -123,38 +123,40 @@ Page.patch(function (state) {
 		});
 		if (extra.length > 0) {
 			// eslint-disable-next-line no-console
-			console.warn("Unknown query parameters detected, rewriting location", extra);
+			console.warn("Removing extra query parameters", extra);
 			status = 301;
-			equivs = {
-				Status: '301 Wrong Query Parameters',
-				Location: Page.format({ pathname: state.pathname, query })
-			};
-			state.requery = query;
+			statusText = 'Extra Query Parameters';
+			location = Page.format({ pathname: state.pathname, query });
 		} else if (missing.length > 0) {
 			status = 400;
-			equivs = {
-				Status: '400 Missing Parameters'
-			};
+			statusText = 'Missing Query Parameters';
 		}
+
 		if (status > state.status) {
 			state.status = status;
-			exports.equivs(equivs);
-		} else if (state.status != 200) {
-			exports.equivs({
-				Status: `${state.status} ${state.statusText}`.trim()
-			});
+			state.statusText = statusText;
+			if (location) state.location = location;
 		}
+		exports.equivs.write({
+			Status: `${state.status} ${state.statusText}`.trim(),
+			Location: state.location
+		});
 	});
 });
 
-Page.paint(function(state) {
-	if (state.requery) state.replace({
-		query: state.requery,
-		pathname: state.pathname
-	}, {
-		// no need to get the data again, though
-		data: state.data
-	});
+Page.paint(function (state) {
+	if (state.scope.$write) return;
+	const equivs = exports.equivs.read();
+	if (!equivs.Location) return;
+	const loc = Page.parse(equivs.location);
+	if (Page.samePathname(loc, state)) {
+		// if loc.query is a subset of state.query, keep state.data and replace
+		if (Object.keys(loc.query).every(key => loc.query[key] === state.query[key])) {
+			state.replace(loc, { data: state.data });
+			return;
+		}
+	}
+	state.push(loc);
 });
 
 Page.setup(function(state) {
