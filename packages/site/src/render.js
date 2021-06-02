@@ -98,9 +98,14 @@ function install(el, scope) {
 				// eslint-disable-next-line no-console
 				console.warn("dom not found for fragment", obj.type, el.name);
 			} else {
-				let node = target.dom.querySelector(obj.path);
+				let node = obj.path ? target.dom.querySelector(obj.path) : target.dom;
 				if (node) {
-					node.insertAdjacentHTML(obj.position || 'afterend', obj.html);
+					if (obj.html) {
+						node.insertAdjacentHTML(obj.position || 'afterend', obj.html);
+					}
+					if (obj.attributes) Object.keys(obj.attributes).forEach(key => {
+						node.setAttribute(key, obj.attributes[key]);
+					});
 				} else {
 					// eslint-disable-next-line no-console
 					console.warn("path not found", obj.path, "in", el.name, el.html);
