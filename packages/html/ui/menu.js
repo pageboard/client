@@ -25,11 +25,8 @@ class HTMLElementMenu extends VirtualHTMLElement {
 	setup(state) {
 		if (this.isContentEditable || this.matches('.vertical')) return;
 		const menu = this.firstElementChild;
-		const helper =  this.lastElementChild;
+		const helper = this.lastElementChild;
 		helper.lastElementChild.lastElementChild.appendChild(this.toHelper(menu));
-		Page.connect({
-			handleClick: (e, state) => this.anyClick(e, state)
-		}, document);
 		this.observer = new ResizeObserver((entries, observer) => {
 			window.requestAnimationFrame(() => {
 				var styles = window.getComputedStyle(this);
@@ -43,7 +40,7 @@ class HTMLElementMenu extends VirtualHTMLElement {
 	close(state) {
 		if (this.observer) this.observer.disconnect();
 	}
-	anyClick(e, state) {
+	handleAllClick(e, state) {
 		if (this.active) {
 			this.active.classList.toggle('active', false);
 		}
