@@ -104,7 +104,7 @@ Page.init(function(state) {
 });
 
 Page.patch(function (state) {
-	state.status = 200;
+	state.status = 0;
 	state.finish(function() {
 		const query = {};
 		const extra = [];
@@ -146,17 +146,29 @@ Page.patch(function (state) {
 
 Page.paint(function (state) {
 	if (state.scope.$write) return;
-	const equivs = exports.equivs.read();
-	if (!equivs.Location) return;
-	const loc = Page.parse(equivs.location);
-	if (Page.samePathname(loc, state)) {
-		// if loc.query is a subset of state.query, keep state.data and replace
-		if (Object.keys(loc.query).every(key => loc.query[key] === state.query[key])) {
-			state.replace(loc, { data: state.data });
-			return;
+	state.finish(() => {
+		const equivs = exports.equivs.read();
+		if (!equivs.Location) return;
+		const loc = Page.parse(equivs.Location);
+		let same = true;
+
+		if (Page.samePathname(loc, state)) {
+			if (Page.sameQuery(loc, state)) {
+				// do nothing
+			} else if (Object.keys(loc.query).every(key => loc.query[key] === state.query[key])) {
+				// different but handled here - keep same data
+				state.replace(loc, { data: state.data });
+			} else {
+				// handled below
+				same = false;
+			}
+		} else {
+			same = false;
 		}
-	}
-	state.push(loc);
+		if (!same) {
+			state.push(loc);
+		}
+	});
 });
 
 Page.setup(function(state) {
