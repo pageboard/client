@@ -48,7 +48,7 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 				const statusClass = '[$status|statusClass]'.fuse(data, state.scope);
 				if (statusClass && this.toggleMessages(statusClass)) {
 					// report statusCode because it is meant to be shown
-					if (data.$status > state.status || 0) {
+					if (data.$status > (state.status || 0)) {
 						state.status = data.$status;
 						state.statusText = data.$statusText;
 					}
