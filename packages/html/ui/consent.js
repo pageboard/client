@@ -56,6 +56,7 @@ class HTMLCustomConsentElement extends HTMLFormElement {
 		return !tacit;
 	}
 	setup(state) {
+		if (this.isContentEditable) return;
 		if (this.options.transient) {
 			const tmpl = this.ownTpl.prerender();
 			if (tmpl.content && tmpl.children.length == 0) {
@@ -86,6 +87,7 @@ class HTMLCustomConsentElement extends HTMLFormElement {
 		this.handleSubmit(e, state);
 	}
 	patch(state) {
+		if (this.isContentEditable) return;
 		if (this.options.transient) {
 			this.ownTpl.prerender();
 		}
