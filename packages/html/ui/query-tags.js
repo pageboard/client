@@ -63,7 +63,7 @@ class HTMLElementQueryTags extends VirtualHTMLElement {
 			var suffix = '';
 			if (control.rangeValue) {
 				val = control.rangeValue;
-				if (val[0] == val[1]) {
+				if (val.length == 1) {
 					suffix = ' ＝ ' + val[0];
 				} else {
 					prefix = val[0] + ' ⩽ ';
