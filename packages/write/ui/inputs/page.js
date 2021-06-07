@@ -181,7 +181,7 @@ PageHelper.prototype.searchStart = function(same) {
 			};
 			var text = me.fakeInput.value;
 			if (text && !text.startsWith('/')) filter.text = text;
-			else filter.url = text || '/';
+			else filter.url = (text || '/').replace(/\s+/g, '-');
 			return Page.format({
 				pathname: '/.api/pages',
 				query: filter
@@ -207,8 +207,11 @@ PageHelper.prototype.searchStart = function(same) {
 PageHelper.prototype.searchUpdate = function() {
 	this.container.textContent = "";
 	this.infinite.pageIndex = 1;
-	this.infinite.loadNextPage().then(({ body }) => {
-		var data = JSON.parse(body).items;
+	const p = this.infinite.loadNextPage();
+	if (!p) return;
+	p.then(res => {
+		if (!res || !res.body) return;
+		var data = JSON.parse(res.body).items;
 		var node = this.container.ownerDocument.createElement('div');
 		this.cache(data);
 		this.renderList(data, node);
