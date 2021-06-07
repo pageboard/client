@@ -4,15 +4,17 @@ exports.write = function(obj) {
 	Object.entries(obj).forEach(([name, content]) => {
 		let node = head.querySelector(`meta[http-equiv="${name}"]`);
 		if (content == null) {
-			if (node) node.remove();
-			return;
+			if (node) {
+				node.remove();
+			}
+		} else {
+			if (!node) {
+				node = head.dom(`<meta http-equiv="${name}">`);
+				head.insertBefore(node, meta ? meta.nextElementSibling : null);
+			}
+			meta = node;
+			node.content = content;
 		}
-		if (!node) {
-			node = head.dom(`<meta http-equiv="${name}">`);
-			head.insertBefore(node, meta ? meta.nextElementSibling : null);
-		}
-		meta = node;
-		node.content = content;
 	});
 };
 

@@ -83,16 +83,6 @@ Page.setup(function navigate(state) {
 			state.push(href);
 		}
 	}, document);
-
-	var redir = document.body.dataset.redirect;
-	if (redir && !state.scope.$write) {
-		if (Page.samePath(redir, state)) {
-			// eslint-disable-next-line no-console
-			console.warn("Useless redirection");
-		} else setTimeout(function() {
-			state.replace(redir);
-		}, 10);
-	}
 });
 
 var statePush = Page.State.prototype.push;

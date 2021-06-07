@@ -104,12 +104,18 @@ Page.init(function(state) {
 });
 
 Page.patch(function (state) {
-	state.status = 0;
+	const equivs = exports.equivs.read();
+	if (equivs.Status) {
+		state.status = parseInt(equivs.Status);
+		state.statusText = equivs.Status.substring(status.toString().length).trim();
+	}
+
 	state.finish(function() {
 		const query = {};
 		const extra = [];
 		const missing = [];
-		let status = 200, statusText = "OK", location;
+		let status = 200, statusText = "OK";
+		let location;
 
 		Object.keys(state.query).forEach(function(key) {
 			if (state.vars[key] === undefined) {
@@ -131,16 +137,20 @@ Page.patch(function (state) {
 			status = 400;
 			statusText = 'Missing Query Parameters';
 		}
-
 		if (status > state.status) {
 			state.status = status;
 			state.statusText = statusText;
 			if (location) state.location = location;
 		}
-		exports.equivs.write({
-			Status: `${state.status} ${state.statusText}`.trim(),
-			Location: state.location
-		});
+
+		if (state.status) {
+			equivs.Status = `${state.status} ${state.statusText || ""}`.trim();
+		}
+		if (state.location) {
+			equivs.Location = state.location;
+		}
+
+		exports.equivs.write(equivs);
 	});
 });
 
@@ -157,7 +167,7 @@ Page.paint(function (state) {
 				// do nothing
 			} else if (Object.keys(loc.query).every(key => loc.query[key] === state.query[key])) {
 				// different but handled here - keep same data
-				state.replace(loc, { data: state.data });
+				setTimeout(() => state.replace(loc, { data: state.data }));
 			} else {
 				// handled below
 				same = false;
@@ -166,7 +176,7 @@ Page.paint(function (state) {
 			same = false;
 		}
 		if (!same) {
-			state.push(loc);
+			setTimeout(() => state.push(loc));
 		}
 	});
 });
