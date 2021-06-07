@@ -251,7 +251,7 @@ exports.urltpl = function (obj, what, pName = 'pathname', qName = 'query') {
 	const query = obj[qName];
 	if (pathname == null && query == null) return null;
 	if (pathname && pathname.fuse()) return pathname;
-	const url = Page.parse(pathname || "?");
+	const url = Page.parse(pathname || what.scope.data.$loc.pathname);
 	Object.assign(url.query, query || {});
 	const fakes = [];
 	Object.entries(url.query).forEach(([key, val]) => {
