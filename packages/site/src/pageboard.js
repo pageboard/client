@@ -116,6 +116,7 @@ Page.patch(function (state) {
 		const missing = [];
 		let status = 200, statusText = "OK";
 		let location;
+		if (!state.status) state.status = 200;
 
 		Object.keys(state.query).forEach(function(key) {
 			if (state.vars[key] === undefined) {
