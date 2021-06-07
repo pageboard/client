@@ -63,12 +63,10 @@ exports.page.properties.transition = {
 	}
 };
 
-exports.page.fuse = function(node, d, scope) {
-	node.fuse(d, scope);
-	var body = node.querySelector('body');
-	var tr = d.transition;
-	if (tr && tr.close) body.dataset.transitionClose = tr.close;
-	if (tr && tr.open) body.dataset.transitionOpen = tr.open;
-	if (d.redirect) body.dataset.redirect = d.redirect;
-};
-
+exports.page.fragments.push({
+	path: 'body',
+	attributes: {
+		"data-transition-close": "[transition.close|ornull]",
+		"data-transition-open": "[transition.open|ornull]",
+	}
+});
