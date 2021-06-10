@@ -222,18 +222,24 @@ exports.event_reservation = {
 			},
 			nullable: true
 		},
+		contact: {
+			title: 'Contact',
+			type: 'object',
+			properties: {
+				name: {
+					title: 'Name',
+					type: 'string'
+				},
+				phone: {
+					title: 'Phone',
+					type: 'string',
+					pattern: '^(\\(\\d+\\))? *\\d+([ .\\-]?\\d+)*$'
+				}
+			}
+		},
 		comment: {
 			title: 'Comment',
 			type: 'string'
-		},
-		name: {
-			title: 'Name',
-			type: 'string'
-		},
-		phone: {
-			title: 'Phone',
-			type: 'string',
-			pattern: '^(\\(\\d+\\))? *\\d+([ .\\-]?\\d+)*$'
 		}
 	},
 	parents: {
