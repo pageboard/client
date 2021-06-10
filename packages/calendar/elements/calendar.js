@@ -192,17 +192,33 @@ exports.event_reservation = {
 	bundle: 'event',
 	required: [],
 	properties: {
-		price: {
-			title: 'Total price without taxes',
-			type: 'number',
-			minimum: 0,
-			default: 0
-		},
 		seats: {
 			title: 'Number of reserved seats',
 			type: 'integer',
 			default: 1,
 			minimum: 0
+		},
+		payment: {
+			title: 'Payment',
+			type: 'object',
+			properties: {
+				due: {
+					title: 'Amount due',
+					type: 'number',
+					minimum: 0,
+					default: 0
+				},
+				paid: {
+					title: 'Amount paid',
+					type: 'number',
+					minimum: 0,
+					default: 0
+				},
+				method: {
+					title: 'Payment method',
+					type: 'string'
+				}
+			}
 		},
 		attendees: {
 			title: 'Attendees',
