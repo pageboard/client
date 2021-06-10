@@ -61,6 +61,12 @@ exports.event = {
 			type: 'boolean',
 			default: false
 		},
+		price: {
+			title: 'Seat price',
+			type: 'number',
+			default: 0,
+			minimum: 0
+		},
 		seats: {
 			title: 'Available seats',
 			type: 'integer',
@@ -121,6 +127,12 @@ exports.event_date = {
 			type: 'object',
 			default: {}
 		},
+		price: {
+			title: 'Seat price for this date',
+			nullable: true,
+			type: 'number',
+			minimum: 0
+		},
 		seats: {
 			title: 'Available seats for this date',
 			nullable: true,
@@ -180,6 +192,12 @@ exports.event_reservation = {
 	bundle: 'event',
 	required: [],
 	properties: {
+		price: {
+			title: 'Total price without taxes',
+			type: 'number',
+			minimum: 0,
+			default: 0
+		},
 		seats: {
 			title: 'Number of reserved seats',
 			type: 'integer',
