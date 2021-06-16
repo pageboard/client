@@ -201,6 +201,7 @@ exports.event_reservation = {
 		payment: {
 			title: 'Payment',
 			type: 'object',
+			required: [],
 			properties: {
 				due: {
 					title: 'Amount due',
