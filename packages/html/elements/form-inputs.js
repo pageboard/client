@@ -104,6 +104,11 @@ exports.input_text = {
 			type: 'boolean',
 			default: false
 		},
+		readonly: {
+			title: 'read only',
+			type: 'boolean',
+			default: false
+		},
 		type: {
 			title: 'format',
 			default: "text",
@@ -146,12 +151,14 @@ exports.input_text = {
 		<label block-content="label">Label</label>
 		<textarea
 			name="[name]"
-			required="[required|not]"
-			disabled="[disabled|not]"
+			required="[required]"
+			readonly="[readonly]"
+			disabled="[disabled]"
 			placeholder="[placeholder]"
 		>[value|br]</textarea>[type|eq:textarea|bmagnet:+*]
 		<input name="[name]"
 			required="[required]"
+			readonly="[readonly]"
 			disabled="[disabled]"
 			placeholder="[placeholder]"
 			type="[type|eq:new-password:password]"
