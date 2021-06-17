@@ -60,9 +60,14 @@ exports.input_button = {
 			nullable: true,
 			type: "string",
 			format: "singleline"
+		},
+		disabled: {
+			title: 'disabled',
+			type: 'boolean',
+			default: false
 		}
 	},
-	html: '<button type="[type]" class="ui button" name="[name]" value="[value]">[type|schema:title]</button>',
+	html: '<button type="[type]" disabled="[disabled]" class="ui button" name="[name]" value="[value]">[type|schema:title]</button>',
 	stylesheets: [
 		'../lib/components/button.css',
 	]
