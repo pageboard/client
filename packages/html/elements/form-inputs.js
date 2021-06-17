@@ -65,9 +65,14 @@ exports.input_button = {
 			title: 'disabled',
 			type: 'boolean',
 			default: false
+		},
+		full: {
+			title: 'full width',
+			type: 'boolean',
+			default: false
 		}
 	},
-	html: '<button type="[type]" disabled="[disabled]" class="ui button" name="[name]" value="[value]">[type|schema:title]</button>',
+	html: '<button type="[type]" disabled="[disabled]" class="ui [full|?:fluid:] button" name="[name]" value="[value]">[type|schema:title]</button>',
 	stylesheets: [
 		'../lib/components/button.css',
 	]
