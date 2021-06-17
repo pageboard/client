@@ -1,3 +1,15 @@
+exports.alias = function (val, what, name) {
+	if (!name) return val;
+	const list = name.split('.');
+	const obj = {};
+	let cur = obj;
+	list.forEach((item, i) => {
+		if (i == list.length - 1) cur[item] = val;
+		else cur = cur[item] = {};
+	});
+	return obj;
+};
+
 exports.polyfills = function ($elements, what) {
 	var map = {};
 	Object.keys($elements).forEach(function (key) {
