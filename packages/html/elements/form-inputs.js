@@ -78,6 +78,23 @@ exports.input_button = {
 	]
 };
 
+exports.input_fields = {
+	title: 'Input Fields',
+	icon: '<i class="icon columns"></i>',
+	menu: "form",
+	group: "block",
+	context: "form//",
+	properties: {
+		inline: {
+			title: "inline",
+			type: 'boolean',
+			default: false
+		}
+	},
+	contents: "(input_text|input_range|input_checkbox|input_radio|input_select|input_button)+",
+	html: `<div class="[inline|?] fields"></div>`
+};
+
 exports.input_text = {
 	title: 'Input',
 	icon: '<i class="text cursor icon"></i>',
