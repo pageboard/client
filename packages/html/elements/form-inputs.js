@@ -147,6 +147,14 @@ exports.input_text = {
 				const: "new-password",
 				title: "new password"
 			}]
+		},
+		width: {
+			title: 'Width',
+			description: 'Between 1 and 16, set to 0 for auto',
+			type: "integer",
+			default: 0,
+			minimum: 0,
+			maximum: 16
 		}
 	},
 	contents: {
@@ -157,7 +165,7 @@ exports.input_text = {
 		tel: '^(\\(\\d+\\))? *\\d+([ .\\-]?\\d+)*$',
 		email: '^[\\w.!#$%&\'*+\\/=?^`{|}~-]+@\\w(?:[\\w-]{0,61}\\w)?(?:\\.\\w(?:[\\w-]{0,61}\\w)?)*$'
 	},
-	html: `<div class="field [type|eq:hidden:hidden:]">
+	html: `<div class="[width|num: wide] field [type|eq:hidden:hidden:]">
 		<label block-content="label">Label</label>
 		<textarea
 			name="[name]"
