@@ -38,8 +38,6 @@ class HTMLCustomFormElement extends HTMLFormElement {
 	}
 	read(withDefaults) {
 		const fd = new FormData(this);
-		const submitBtn = this.querySelector('[type="submit"][name][value]');
-		if (submitBtn) fd.append(submitBtn.name, submitBtn.value);
 		const query = {};
 		fd.forEach(function (val, key) {
 			if (val == null || val == "") {
@@ -87,7 +85,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			}
 		});
 		const btn = document.activeElement;
-		if (btn && btn.type == "submit" && btn.name && query[btn.name] === undefined) {
+		if (btn && btn.type == "submit" && btn.name && btn.value) {
 			query[btn.name] = btn.value;
 		}
 		return query;
