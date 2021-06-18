@@ -33,7 +33,7 @@ class HTMLElementInputDateTime extends VirtualHTMLElement {
 	}
 
 	setup(state) {
-		var view = this.querySelector('input:not([name])');
+		let view = this.querySelector('input:not([name])');
 		if (!view) {
 			view = this.ownerDocument.createElement('input');
 			this.appendChild(view);
@@ -66,17 +66,16 @@ class HTMLElementInputDateTime extends VirtualHTMLElement {
 	}
 
 	setDate(date) {
-		var time = (this.value || date).split('T').pop();
+		const time = (this.value || date).split('T').pop();
 		this.value = date.split('T').shift() + 'T' + time;
 	}
 
 	formatFromOptions() {
-		var obj = {};
-		var l = 'long';
-		var n = 'numeric';
-		var d = '2-digit';
-		var format = this.options.format;
-		if (this.options.step == 60 * 60 * 24) format = 'date';
+		const obj = {};
+		const l = 'long';
+		const n = 'numeric';
+		const d = '2-digit';
+		const format = this.options.step == 60 * 60 * 24 ? 'date' : this.options.format;
 		if (format.startsWith('date')) Object.assign(obj, {
 			year: n,
 			month: l,

@@ -8,7 +8,7 @@ class HTMLElementInputDateSlot extends VirtualHTMLElement {
 	}
 
 	handleChange(e, state) {
-		var els = this.inputs;
+		const els = this.inputs;
 		if (els.length == 3 && e.target.closest('element-input-date-time') == els[0]) {
 			this.dateChange(e);
 		}
@@ -16,26 +16,26 @@ class HTMLElementInputDateSlot extends VirtualHTMLElement {
 	}
 
 	dateChange(e) {
-		var date = e.target.parentNode.value || (new Date()).toISOString();
-		var els = this.inputs;
+		const date = e.target.parentNode.value || (new Date()).toISOString();
+		const els = this.inputs;
 		els[1].setDate(date);
 		els[2].setDate(date);
 	}
 
 	timeChange(e) {
-		var els = this.inputs;
-		var startEl = els[els.length - 2];
-		var endEl = els[els.length - 1];
-		var isStart = e.target.parentNode == startEl;
-		var start = new Date(startEl.value);
-		var end = new Date(endEl.value);
-		var startTime = start.getTime();
-		var endTime = end.getTime();
+		const els = this.inputs;
+		const startEl = els[els.length - 2];
+		const endEl = els[els.length - 1];
+		const isStart = e.target.parentNode == startEl;
+		const start = new Date(startEl.value);
+		const end = new Date(endEl.value);
+		const startTime = start.getTime();
+		let endTime = end.getTime();
 		if (Number.isNaN(endTime)) endTime = startTime;
 		if (Number.isNaN(startTime)) return;
 		if (endTime >= startTime) return;
-		var startPart, endPart, changed = false;
-		for (var Part of ['FullYear', 'Month', 'Date', 'Hours', 'Minutes', 'Seconds']) {
+		let startPart, endPart, changed = false;
+		for (const Part of ['FullYear', 'Month', 'Date', 'Hours', 'Minutes', 'Seconds']) {
 			startPart = start[`get${Part}`]();
 			endPart = end[`get${Part}`]();
 			if (startPart > endPart) {
@@ -60,16 +60,16 @@ class HTMLElementInputDateSlot extends VirtualHTMLElement {
 	}
 
 	patch(state) {
-		var els = this.inputs;
-		var dayRange = this.options.step < 60 * 60 * 24;
+		const els = this.inputs;
+		const dayRange = this.options.step < 60 * 60 * 24;
 		if (els.length == 2 && dayRange) {
 			els.unshift(this.ownerDocument.createElement('element-input-date-time'));
 			els[0].innerHTML = '<input name="" type="hidden">';
 			this.insertBefore(els[0], els[1]);
 		}
-		var dts = els.map(el => el.dataset);
+		const dts = els.map(el => el.dataset);
 
-		var tz = this.options.timeZone;
+		const tz = this.options.timeZone;
 		if (tz) dts.forEach(dt => { dt.timeZone = tz; } );
 		else dts.forEach(dt => { delete dt.timeZone; } );
 
