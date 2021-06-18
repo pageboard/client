@@ -15,7 +15,8 @@ class HTMLElementInputDateTime extends VirtualHTMLElement {
 	}
 
 	set value(val) {
-		this.querySelector('input').value = val;
+		if (this._dt) this._dt.setTime(val);
+		else this.querySelector('input').value = val;
 	}
 
 	handleClick(e, state) {
@@ -50,7 +51,7 @@ class HTMLElementInputDateTime extends VirtualHTMLElement {
 			format: this.formatFromOptions(),
 			useUTC: !!this.options.timeZone,
 			onChange: function(val) {
-				this.value = Number.isNaN(val.getTime()) ? "" : val.toISOString();
+				this.querySelector('input').value = Number.isNaN(val.getTime()) ? "" : val.toISOString();
 			}.bind(this)
 		});
 	}
