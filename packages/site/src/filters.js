@@ -180,22 +180,6 @@ exports.schema = function (val, what, spath) {
 	return sval;
 };
 
-exports.statusClass = function (val) {
-	const n = Number(val);
-	if (n >= 200 && n < 300) return "success";
-	else if (n >= 400 && n < 500) return "warning";
-	else if (n || n === 0) return "error";
-};
-
-exports.statusName = function (val) {
-	const n = Number(val);
-	if (n >= 200 && n < 400) return 'success';
-	else if (n == 404) return 'notfound';
-	else if (n == 401 || n == 403) return 'unauthorized';
-	else if (n == 400) return 'badrequest';
-	else return 'error';
-};
-
 exports.autolink = function (val, what) {
 	var hrefs = what.scope.data.$hrefs;
 	var a = what.parent;

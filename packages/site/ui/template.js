@@ -4,6 +4,7 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 		if (this.isContentEditable || this._refreshing || this.closest('[block-content="template"]')) return;
 		return this.fetch(state);
 	}
+
 	fetch(state) {
 		const action = this.getAttribute('action');
 
@@ -42,11 +43,9 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 			this.classList.remove('loading');
 			this._refreshing = false;
 			if (data.$status == null) return;
-			const statusName = `[$status|statusName]`.fuse(data, state.scope);
-			const redirect = this.getAttribute(statusName);
+			const redirect = this.getRedirect(data.$status);
 			if (!redirect) {
-				const statusClass = '[$status|statusClass]'.fuse(data, state.scope);
-				if (statusClass && this.toggleMessages(statusClass)) {
+				if (this.toggleMessages(data.$status)) {
 					// report statusCode because it is meant to be shown
 					if (data.$status > (state.status || 0)) {
 						state.status = data.$status;
@@ -59,29 +58,41 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 			const loc = Page.parse(redirect).fuse(data, state.scope);
 			const locStr = Page.format(loc);
 			state.status = 301;
-			state.statusText = {
-				notfound: 'Not Found',
-				unauthorized: 'Unauthorized',
-				error: 'Error',
-				badrequest: 'Bad Request',
-				success: 'Moved Permanently'
-			}[statusName];
+			state.statusText = `Form Redirection ${data.$status}`;
 			state.location = locStr;
 		});
 	}
-	toggleMessages(name = null, parent = this.ownView) {
+
+	getRedirect(status) {
+		const name = ((n) => {
+			if (n >= 200 && n < 400) return 'success';
+			else if (n == 404) return 'notfound';
+			else if (n == 401 || n == 403) return 'unauthorized';
+			else if (n == 400) return 'badrequest';
+			else return 'error';
+		})(status);
+		return this.getAttribute(name);
+	}
+
+	toggleMessages(status = null, parent = this.ownView) {
+		const name = ((n) => {
+			if (n >= 200 && n < 300) return "success";
+			else if (n >= 400 && n < 500) return "warning";
+			else if (n || n === 0) return "error";
+		})(status);
 		let found = false;
 		parent.querySelectorAll(`[block-type="message"]`).forEach(node => {
 			if (node.closest('[action]') != this) return;
-			if (name && node.classList.contains(name)) {
-				found = true;
-				node.classList.add('visible');
-			} else {
-				node.classList.remove('visible');
-			}
+			let show = false;
+			if (name && node.classList.contains(name)) show = true;
+			const nstatus = node.dataset.status;
+			if (nstatus && nstatus == status) show = true;
+			if (show) found = true;
+			node.classList.toggle('visible', show);
 		});
 		return found;
 	}
+
 	render(data, state) {
 		const view = this.ownView;
 		const scope = Object.assign({}, state.scope);
@@ -139,11 +150,13 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 			});
 		}
 	}
+
 	get ownTpl() {
 		return this.children.find(
 			node => node.matches('template,script[type="text/html"]')
 		);
 	}
+
 	get ownView() {
 		return this.children.find(node => node.matches('.view'));
 	}

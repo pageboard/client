@@ -210,8 +210,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			if (err.status != null) status = err.status;
 			else status = 0;
 		}).then(() => {
-			const statusClass = `[n|statusClass]`.fuse({ n: status });
-			if (statusClass) this.classList.add(statusClass);
+			this.toggleMessages(status);
 		});
 	}
 	postMethod(e, state) {
@@ -244,12 +243,11 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			form.classList.remove('loading');
 
 			// messages shown inside form, no navigation
-			const statusClass = `[status|statusClass]`.fuse(res);
-			const hasMsg = statusClass && form.toggleMessages(statusClass);
+			const hasMsg = form.toggleMessages(res.status);
+			const ok = res.status >= 200 && res.status < 300;
+			let redirect = form.getRedirect(res.status);
 
-			const statusName = `[status|statusName]`.fuse(res);
-			let redirect = form.getAttribute(statusName);
-			if (statusName == "success") {
+			if (ok) {
 				form.forget();
 				form.save();
 				if (!redirect && form.closest('element-template') && !hasMsg) {
@@ -265,7 +263,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 				if (res.granted) redirect = Page.format(state);
 				else return;
 			}
-			if (redirect && statusName != "success") {
+			if (redirect && !ok) {
 				form.backup();
 			}
 
@@ -304,8 +302,11 @@ HTMLFormElement.prototype.disable = function () {
 
 Page.ready(function () {
 	const Cla = window.customElements.get('element-template');
-	HTMLCustomFormElement.prototype.toggleMessages = function (name) {
-		return Cla.prototype.toggleMessages.call(this, name, this);
+	HTMLCustomFormElement.prototype.toggleMessages = function (status) {
+		return Cla.prototype.toggleMessages.call(this, status, this);
+	};
+	HTMLCustomFormElement.prototype.getRedirect = function (status) {
+		return Cla.prototype.getRedirect.call(this, status, this);
 	};
 
 	VirtualHTMLElement.define(`element-form`, HTMLCustomFormElement, 'form');
