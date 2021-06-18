@@ -1,6 +1,6 @@
 {
   "name": "@pageboard/datetime-entry",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "Enter formatted date and time using native date api and without pickers",
   "main": "dist/datetime.min.js",
   "scripts": {
