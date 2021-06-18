@@ -100,8 +100,7 @@ exports.event = {
 			title: 'Label',
 			anyOf: [{const: 'default', title: 'Default'}]
 		}
-	},
-	scripts: ['../ui/calendar.js']
+	}
 };
 
 
