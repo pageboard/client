@@ -76,7 +76,6 @@
 			this.element.addEventListener('focus', this);
 			this.element.addEventListener('mouseup', this);
 			this.element.addEventListener('keydown', this);
-			this.element.addEventListener('mousewheel', this);
 
 			this.#state = {
 				type: undefined,
@@ -159,8 +158,7 @@
 		destroy() {
 			this.element.removeEventListener('focus', this);
 			this.element.removeEventListener('mouseup', this);
-			this.element.removeEventListener('keydown', this);
-			this.element.removeEventListener('mousewheel', this);
+			this.element.removeEventListener('keydown', this)
 		}
 
 		#render() {
@@ -237,7 +235,6 @@
 			if (e.type == "focus") this.#focus(e);
 			else if (e.type == "mouseup") this.#mouseup(e);
 			else if (e.type == "keydown") this.#keydown(e);
-			else if (e.type == "mousewheel") this.#mousewheel(e);
 		}
 
 		#focus(e) {
@@ -362,18 +359,6 @@
 
 				}
 			}
-
-		}
-
-		#mousewheel(e) {
-			e.preventDefault();
-			e.stopPropagation();
-
-			const direction = Math.sign(e.wheelDelta);
-
-			this.step(direction);
-
-			this.#render();
 
 		}
 
