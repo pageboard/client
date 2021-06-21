@@ -21,25 +21,28 @@ exports.message = {
 		status: {
 			title: 'status',
 			description: 'Match form response http status code',
-			nullable: true,
 			anyOf: [
 				{
-					const: 400,
+					const: null,
+					title: 'Any status'
+				},
+				{
+					const: '400',
 					title: 'Bad Request'
 				}, {
-					const: 401,
+					const: '401',
 					title: 'Unauthorized'
 				}, {
-					const: 402,
+					const: '402',
 					title: 'Payment Required'
 				}, {
-					const: 403,
+					const: '403',
 					title: 'Forbidden'
 				}, {
-					const: 404,
+					const: '404',
 					title: 'Not Found'
 				}, {
-					const: 409,
+					const: '409',
 					title: 'Conflict'
 				}
 			]
