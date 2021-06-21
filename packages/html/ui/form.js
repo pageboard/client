@@ -110,7 +110,9 @@ class HTMLCustomFormElement extends HTMLFormElement {
 					break;
 				case 'radio':
 				case 'checkbox':
-					elem.checked = (Array.isArray(val) ? val : [str]).some(function (str) {
+					if (Array.isArray(val) && val.length == 0 && elem.value == "") {
+						elem.checked = true;
+					} else elem.checked = (Array.isArray(val) ? val : [str]).some(function (str) {
 						return str.toString() == elem.value;
 					});
 					break;
@@ -407,7 +409,12 @@ Page.ready(function (state) {
 	const filters = state.scope.$filters;
 
 	function linearizeValues(query, obj = {}, prefix) {
-		Object.keys(query).forEach(function(key) {
+		if (Array.isArray(query) && query.every(val => {
+			return val == null || typeof val != "object";
+		})) {
+			// do not linearize array-as-value
+			obj[prefix] = query;
+		}	else Object.keys(query).forEach(function(key) {
 			const val = query[key];
 			if (prefix) key = prefix + '.' + key;
 			if (val === undefined) return;
