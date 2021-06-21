@@ -81,13 +81,22 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 			else if (n || n === 0) return "error";
 		})(status);
 		let found = false;
+		const statusMsg = parent.querySelector(
+			`[block-type="message"][data-status="${status}"]`
+		);
+		if (statusMsg) {
+			found = true;
+			statusMsg.classList.toggle('visible', true);
+		}
 		parent.querySelectorAll(`[block-type="message"]`).forEach(node => {
 			if (node.closest('[action]') != this) return;
 			let show = false;
-			if (name && node.classList.contains(name)) show = true;
-			const nstatus = node.dataset.status;
-			if (nstatus && nstatus == status) show = true;
-			if (show) found = true;
+			if (!found) {
+				if (name && node.classList.contains(name)) show = true;
+				const nstatus = node.dataset.status;
+				if (nstatus && nstatus == status) show = true;
+				if (show) found = true;
+			}
 			node.classList.toggle('visible', show);
 		});
 		return found;
