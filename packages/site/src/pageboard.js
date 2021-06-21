@@ -218,7 +218,6 @@ function merge(obj, extra, fn) {
 		} else {
 			if (fn) {
 				val = single ? fn(val) : fn(copy[key], val);
-				if (!single) extra[key] = val;
 			}
 			copy[key] = val;
 		}
