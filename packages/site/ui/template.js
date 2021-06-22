@@ -80,22 +80,20 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 			else if (n >= 400 && n < 500) return "warning";
 			else if (n || n === 0) return "error";
 		})(status);
-		let found = false;
 		const statusMsg = parent.querySelector(
 			`[block-type="message"][data-status="${status}"]`
 		);
 		parent.querySelectorAll(`[block-type="message"]`).forEach(node => {
 			if (node.closest('[action]') != this) return;
 			let show = node == statusMsg;
-			if (!show) {
+			if (!show && !statusMsg) {
 				if (name && node.classList.contains(name)) show = true;
 				const nstatus = node.dataset.status;
 				if (nstatus && nstatus == status) show = true;
 			}
-			if (show) found = true;
 			node.classList.toggle('visible', show);
 		});
-		return found;
+		return statusMsg != null;
 	}
 
 	render(data, state) {
