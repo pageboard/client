@@ -83,6 +83,7 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 		const statusMsg = parent.querySelector(
 			`[block-type="message"][data-status="${status}"]`
 		);
+		let found = false;
 		parent.querySelectorAll(`[block-type="message"]`).forEach(node => {
 			if (node.closest('[action]') != this) return;
 			let show = node == statusMsg;
@@ -91,9 +92,10 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 				const nstatus = node.dataset.status;
 				if (nstatus && nstatus == status) show = true;
 			}
+			if (show) found = true;
 			node.classList.toggle('visible', show);
 		});
-		return statusMsg != null;
+		return found;
 	}
 
 	render(data, state) {
