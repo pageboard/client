@@ -1,12 +1,17 @@
 class HTMLElementTemplate extends VirtualHTMLElement {
 	patch(state) {
 		this.ownTpl.prerender();
-		if (this.isContentEditable || this._refreshing || this.closest('[block-content="template"]')) return;
+		if (this.isContentEditable || this._refreshing || this.closest('[block-content="template"]')) {
+			return;
+		}
 		return this.fetch(state);
 	}
 
 	fetch(state) {
-		const action = this.getAttribute('action');
+		const disabled = (this.getAttribute('disabled') || '').fuse({
+			$query: state.query
+		}, state.scope);
+		const action = disabled ? null : this.getAttribute('action');
 
 		const $query = state.templatesQuery(this);
 		const missings = $query == null;

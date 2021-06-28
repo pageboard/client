@@ -11,6 +11,7 @@ exports.fetch = {
 		expressions: true
 	},
 	html: `<element-template
+		disabled="[disabled]"
 		action="/.api/query/[$id][action.method|bmagnet]"
 		parameters="[$expr.action.parameters|ornull|templates:$query]"
 		success="[redirection|urltpl:url:parameters]"
@@ -22,6 +23,12 @@ exports.fetch = {
 		<div class="view"></div>
 	</element-template>`,
 	properties: {
+		disabled: {
+			title: 'Disabled',
+			description: 'Disable action using template expression',
+			type: 'boolean',
+			default: false
+		},
 		action: {
 			title: 'Action',
 			type: 'object',
