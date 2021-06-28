@@ -148,7 +148,11 @@ Page.patch(function (state) {
 			equivs.Status = `${state.status} ${state.statusText || ""}`.trim();
 		}
 		if (state.location) {
-			equivs.Location = state.location;
+			if (state.location != state.toString()) {
+				equivs.Location = state.location;
+			} else {
+				console.warn("Not redirecting to same url", state.location);
+			}
 		}
 
 		exports.equivs.write(equivs);
