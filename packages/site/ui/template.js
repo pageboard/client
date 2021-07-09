@@ -153,11 +153,6 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 			console.warn(state.statusText, Object.keys(collector.missings).join(', '));
 		} else {
 			view.appendChild(node);
-			if (collector.used && view.innerHTML != prevHtml) state.scroll({
-				once: true,
-				node: this.parentNode,
-				behavior: 'smooth'
-			});
 		}
 	}
 
