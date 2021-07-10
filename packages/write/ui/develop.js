@@ -1,5 +1,5 @@
 Pageboard.elements.develop = {
-	install: function(pscope) {
+	install(pscope) {
 		if (pscope.$element.fuse && pscope.$element.fuse.develop) return;
 		const fuse = pscope.$element.fuse;
 		pscope.$element.fuse = function(node, d, scope) {

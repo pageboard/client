@@ -1,9 +1,9 @@
-(function (Pageboard) {
-	Pageboard.Controls.Store = Store;
+Pageboard.Controls.Store = class Store {
+	static IsMac = /Mac/.test(navigator.platform);
+	static generatedBefore = {};
+	static generated = {};
 
-	const IsMac = /Mac/.test(navigator.platform);
-
-	function Store(editor, node) {
+	constructor(editor, node) {
 		this.debounceUpdate = Pageboard.debounce(this.realUpdate, 500);
 		this.node = node;
 		this.editor = editor;
@@ -34,7 +34,7 @@
 		}
 	}
 
-	Store.prototype.destroy = function () {
+	destroy() {
 		this.flush();
 		delete this.editor;
 		this.uiSave.removeEventListener('click', this.save);
@@ -42,12 +42,9 @@
 		window.removeEventListener('beforeunload', this.flush, false);
 		window.removeEventListener('keydown', this.keydown, false);
 		this.window.removeEventListener('keydown', this.keydown, false);
-	};
+	}
 
-	Store.generatedBefore = {};
-	Store.generated = {};
-
-	Store.genId = function (len) {
+	static genId(len) {
 		if (!len) len = 8;
 		const arr = new Uint8Array(len);
 		window.crypto.getRandomValues(arr);
@@ -59,9 +56,9 @@
 		}
 		Store.generated[str] = true;
 		return str;
-	};
+	}
 
-	Store.prototype.checkUrl = function (rootId, url) {
+	checkUrl(rootId, url) {
 		// TODO use similar approach to update links when a pageUrl changes ?
 		const editor = this.editor;
 		const blocks = editor.blocks.store;
@@ -72,21 +69,21 @@
 			}
 		});
 		return blocks[id];
-	};
+	}
 
-	Store.prototype.keydown = function (e) {
-		if ((e.ctrlKey && !e.altKey || IsMac && e.metaKey) && e.key == "s") {
+	keydown(e) {
+		if ((e.ctrlKey && !e.altKey || Store.IsMac && e.metaKey) && e.key == "s") {
 			e.preventDefault();
 			this.save();
 		}
-	};
+	}
 
-	Store.prototype.uiUpdate = function () {
+	uiUpdate() {
 		this.uiSave.classList.toggle('disabled', !this.unsaved);
 		this.uiDiscard.classList.toggle('disabled', !this.unsaved);
-	};
+	}
 
-	Store.prototype.get = function () {
+	get() {
 		if (!Pageboard.enableLocalStorage) return;
 		const json = window.sessionStorage.getItem(this.key());
 		let root;
@@ -97,24 +94,24 @@
 			this.clear();
 		}
 		return root;
-	};
+	}
 
-	Store.prototype.set = function (obj) {
+	set(obj) {
 		if (!Pageboard.enableLocalStorage) return;
 		const json = JSON.stringify(obj, null, " ");
 		window.sessionStorage.setItem(this.key(), json);
-	};
+	}
 
-	Store.prototype.clear = function () {
+	clear() {
 		if (!Pageboard.enableLocalStorage) return;
 		window.sessionStorage.removeItem(this.key());
-	};
+	}
 
-	Store.prototype.key = function () {
+	key() {
 		return "pageboard-store-" + document.location.toString();
-	};
+	}
 
-	Store.prototype.restore = function (blocks) {
+	restore(blocks) {
 		try {
 			const frag = this.editor.from(blocks[this.rootId], blocks);
 			this.ignoreNext = true;
@@ -125,9 +122,9 @@
 		}
 		this.uiUpdate();
 		this.pageUpdate();
-	};
+	}
 
-	Store.prototype.update = function (parents, sel, changed) {
+	update(parents, sel, changed) {
 		if (this.ignoreNext) {
 			delete this.ignoreNext;
 			return;
@@ -135,17 +132,17 @@
 		// if (!changed) return; // not quite ready yet...
 		this.debounceWaiting = true;
 		this.debounceUpdate();
-	};
+	}
 
-	Store.prototype.flush = function () {
+	flush() {
 		if (this.debounceWaiting) {
 			this.debounceWaiting = false;
 			this.debounceUpdate.clear();
 			this.realUpdate();
 		}
-	};
+	}
 
-	Store.prototype.realUpdate = function () {
+	realUpdate() {
 		this.debounceWaiting = false;
 		if (!this.editor) return;
 		let root;
@@ -161,7 +158,7 @@
 
 		this.rootId = root.id;
 
-		root = flattenBlock(root);
+		root = Store.flattenBlock(root);
 
 		if (!this.initial) {
 			this.initial = root;
@@ -177,9 +174,9 @@
 		}
 		this.uiUpdate();
 		this.pageUpdate();
-	};
+	}
 
-	Store.prototype.save = function (e) {
+	save(e) {
 		if (this.saving) return;
 		this.flush();
 		if (this.unsaved == null) return;
@@ -235,9 +232,9 @@
 			this.saving = false;
 		});
 		return Pageboard.uiLoad(this.uiSave, p);
-	};
+	}
 
-	Store.prototype.reset = function (to) {
+	reset(to) {
 		if (to) {
 			if (to.generated) Store.generated = to.generated;
 			this.rootId = to.rootId;
@@ -259,9 +256,9 @@
 			delete this.initial;
 		}
 		return to;
-	};
+	}
 
-	Store.prototype.discard = function (e) {
+	discard(e) {
 		const doc = this.window.document;
 		const focused = doc.querySelectorAll('[block-focused][block-id]').map(function (node) {
 			return node.getAttribute('block-id');
@@ -289,17 +286,17 @@
 				return true;
 			});
 		});
-	};
+	}
 
-	Store.prototype.pageUpdate = function () {
+	pageUpdate() {
 		const root = (this.unsaved || this.initial)[this.rootId];
 		const el = this.editor.element(root.type);
 		if (el.group == "page") {
 			this.editor.updatePage();
 		}
-	};
+	}
 
-	function flattenBlock(root, ancestorId, blocks) {
+	static flattenBlock(root, ancestorId, blocks) {
 		if (!blocks) blocks = {};
 		const shallowCopy = Object.assign({}, root);
 		if (ancestorId && ancestorId != root.id) {
@@ -318,7 +315,7 @@
 		let children = root.children || root.blocks && Object.values(root.blocks);
 		if (children) {
 			children.forEach(function (child) {
-				flattenBlock(child, root.id, blocks);
+				Store.flattenBlock(child, root.id, blocks);
 			});
 			if (root.children) delete shallowCopy.children;
 			if (root.blocks) delete shallowCopy.blocks;
@@ -328,7 +325,7 @@
 		return blocks;
 	}
 
-	function parentList(obj, block) {
+	static parentList(obj, block) {
 		if (block.virtual) {
 			return;
 		}
@@ -341,12 +338,12 @@
 		list.push(block.id);
 	}
 
-	Store.prototype.changes = function (initial, unsaved) {
+	changes(initial, unsaved) {
 		const els = this.editor.elements;
 		const preinitial = this.preinitial;
 		const pre = {};
 		Object.keys(preinitial).forEach(function (id) {
-			Object.assign(pre, flattenBlock(preinitial[id]));
+			Object.assign(pre, Store.flattenBlock(preinitial[id]));
 		});
 
 		for (let id in Store.generatedBefore) {
@@ -371,9 +368,9 @@
 			if (!initial[id] && !pre[id]) {
 				if (Store.generated[id]) {
 					changes.add.push(Object.assign({}, block));
-					parentList(changes.relate, block);
+					Store.parentList(changes.relate, block);
 				} else if (block.standalone) {
-					parentList(changes.relate, block);
+					Store.parentList(changes.relate, block);
 				} else if (!unsaved[block.parent].standalone) {
 					console.error("unsaved non-standalone block in non-standalone parent is not generated");
 				}
@@ -387,10 +384,10 @@
 			if (!block) {
 				if (!Store.generated[id]) { // not sure it must be kept
 					let iparent = iblock.virtual || iblock.parent;
-					let parentBlock = getParentBlock(iparent, initial, pre);
+					let parentBlock = Store.getParentBlock(iparent, initial, pre);
 					if (parentBlock.standalone) {
 						if (!dropped[iparent] && !unrelated[iparent]) {
-							parentList(changes.unrelate, iblock);
+							Store.parentList(changes.unrelate, iblock);
 							unrelated[id] = true;
 							if (!iblock.standalone && !changes.remove[iparent]) {
 								changes.remove[id] = true;
@@ -399,7 +396,7 @@
 					} else {
 						if (!iblock.standalone) {
 							if (!dropped[iparent]) {
-								parentList(changes.unrelate, iblock);
+								Store.parentList(changes.unrelate, iblock);
 								unrelated[id] = true;
 								changes.remove[id] = true;
 							}
@@ -418,8 +415,8 @@
 				iblock = Object.assign({}, iblock);
 
 				if (block.parent != iblock.parent) {
-					if (iblock.parent) parentList(changes.unrelate, iblock);
-					if (block.parent) parentList(changes.relate, block);
+					if (iblock.parent) Store.parentList(changes.unrelate, iblock);
+					if (block.parent) Store.parentList(changes.relate, block);
 				}
 				// compare content, not parent
 				let pblock = pre[id];
@@ -465,14 +462,14 @@
 		});
 
 		return changes;
-	};
+	}
 
-	function getParentBlock(id, initial, pre) {
+	static getParentBlock(id, initial, pre) {
 		let parent = initial[id] || pre[id];
 		if (!parent) return;
-		else if (parent.virtual) return getParentBlock(parent.virtual, initial, pre);
+		else if (parent.virtual) return this.getParentBlock(parent.virtual, initial, pre);
 		else return parent;
 	}
 
-})(window.Pageboard);
+};
 

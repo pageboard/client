@@ -1,4 +1,20 @@
 Pageboard.Controls.Mode = class Mode {
+	static pruneNonRoot(obj, parent, schema) {
+		const nodeType = schema.nodes[obj.type];
+		if (!nodeType) return obj;
+		const tn = nodeType.spec.typeName;
+		if (tn == null) return obj;
+		const list = obj.content || [];
+		let childList = [];
+		list.forEach((item) => {
+			const list = this.pruneNonRoot(item, obj, schema);
+			if (Array.isArray(list)) childList = childList.concat(list);
+			else if (list != null) childList.push(list);
+		});
+		if (childList.length) obj.content = childList;
+		if (tn == "wrap") return list;
+		else return obj;
+	}
 	constructor(editor, node) {
 		if (!Mode.singleton) Mode.singleton = this;
 		Mode.singleton.reset(editor, node);
@@ -45,7 +61,7 @@ Pageboard.Controls.Mode = class Mode {
 			this.editor.close();
 			const elts = state.scope.$elements;
 			if (com == "code") {
-				state.data.$jsonContent = pruneNonRoot(Pageboard.editor.state.doc.toJSON(), null, Pageboard.editor.schema);
+				state.data.$jsonContent = Mode.pruneNonRoot(Pageboard.editor.state.doc.toJSON(), null, Pageboard.editor.schema);
 				delete Pageboard.editor;
 				Pageboard.backupElements = Object.assign({}, elts);
 				Object.entries(elts).forEach(([name, elt]) => {
@@ -91,20 +107,3 @@ Pageboard.Controls.Mode = class Mode {
 		});
 	}
 };
-
-function pruneNonRoot(obj, parent, schema) {
-	const nodeType = schema.nodes[obj.type];
-	if (!nodeType) return obj;
-	const tn = nodeType.spec.typeName;
-	if (tn == null) return obj;
-	const list = obj.content || [];
-	let childList = [];
-	list.forEach((item) => {
-		const list = pruneNonRoot(item, obj, schema);
-		if (Array.isArray(list)) childList = childList.concat(list);
-		else if (list != null) childList.push(list);
-	});
-	if (childList.length) obj.content = childList;
-	if (tn == "wrap") return list;
-	else return obj;
-}
