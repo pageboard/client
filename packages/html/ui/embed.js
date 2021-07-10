@@ -3,6 +3,7 @@ class HTMLElementEmbed extends VirtualHTMLElement {
 		src: null,
 		hash: null
 	};
+	static revealRatio = 0.2;
 	init() {
 		this.promise = Promise.resolve();
 		this.promise.done = function() {};
