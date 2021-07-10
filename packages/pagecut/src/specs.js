@@ -577,309 +577,313 @@ function setupView(me, node) {
 	});
 }
 
-function RootNodeView(node, view, getPos, decorations) {
-	if (!(this instanceof RootNodeView)) {
-		return new RootNodeView(node, view, getPos, decorations);
-	}
-	this.view = view;
-	this.element = node.type.spec.element;
-	this.domModel = node.type.spec.domModel;
-	this.getPos = typeof getPos == "function" ? getPos : null;
-	this.id = node.attrs.id;
-	if (!this.id && node.type.name == view.state.doc.type.name) {
-		this.id = node.attrs.id = view.dom.getAttribute('block-id');
+class RootNodeView {
+	constructor(node, view, getPos, decorations) {
+		if (!(this instanceof RootNodeView)) {
+			return new RootNodeView(node, view, getPos, decorations);
+		}
+		this.view = view;
+		this.element = node.type.spec.element;
+		this.domModel = node.type.spec.domModel;
+		this.getPos = typeof getPos == "function" ? getPos : null;
+		this.id = node.attrs.id;
+		if (!this.id && node.type.name == view.state.doc.type.name) {
+			this.id = node.attrs.id = view.dom.getAttribute('block-id');
+		}
+
+		let block;
+		if (this.id) {
+			if (this.element.inplace) {
+				delete node.attrs.id;
+				delete this.id;
+			} else {
+				block = view.blocks.get(this.id);
+			}
+		}
+		if (!block) {
+			if (node.attrs.id) {
+				delete node.attrs.id;
+				delete this.id;
+			}
+			block = view.blocks.fromAttrs(node.attrs);
+		}
+		if (!this.element.inplace && !this.id) {
+			view.blocks.set(block);
+			this.id = node.attrs.id = block.id;
+		}
+
+		if (block.focused) delete block.focused;
+
+		setupView(this, node);
+		this.update(node);
 	}
 
-	let block;
-	if (this.id) {
+	selectNode() {
+		this.selected = true;
+		this.dom.classList.add('ProseMirror-selectednode');
+	}
+
+	deselectNode() {
+		this.selected = false;
+		this.dom.classList.remove('ProseMirror-selectednode');
+	}
+
+	update(node, decorations) {
+		if (this.element.name != node.attrs.type) {
+			return false;
+		}
+		const oldBlock = this.oldBlock;
+		// TODO update instances of other standalone blocks !
+		if (node.attrs.id != this.id) {
+			return false;
+		}
+		const view = this.view;
+		const uBlock = view.blocks.fromAttrs(node.attrs);
+		let block;
 		if (this.element.inplace) {
-			delete node.attrs.id;
-			delete this.id;
+			block = uBlock;
 		} else {
 			block = view.blocks.get(this.id);
-		}
-	}
-	if (!block) {
-		if (node.attrs.id) {
-			delete node.attrs.id;
-			delete this.id;
-		}
-		block = view.blocks.fromAttrs(node.attrs);
-	}
-	if (!this.element.inplace && !this.id) {
-		view.blocks.set(block);
-		this.id = node.attrs.id = block.id;
-	}
-
-	if (block.focused) delete block.focused;
-
-	setupView(this, node);
-	this.update(node);
-}
-
-RootNodeView.prototype.selectNode = function() {
-	this.selected = true;
-	this.dom.classList.add('ProseMirror-selectednode');
-};
-
-RootNodeView.prototype.deselectNode = function() {
-	this.selected = false;
-	this.dom.classList.remove('ProseMirror-selectednode');
-};
-
-RootNodeView.prototype.update = function(node, decorations) {
-	if (this.element.name != node.attrs.type) {
-		return false;
-	}
-	const oldBlock = this.oldBlock;
-	// TODO update instances of other standalone blocks !
-	if (node.attrs.id != this.id) {
-		return false;
-	}
-	const view = this.view;
-	const uBlock = view.blocks.fromAttrs(node.attrs);
-	let block;
-	if (this.element.inplace) {
-		block = uBlock;
-	} else {
-		block = view.blocks.get(this.id);
-		if (!block) {
-			console.warn("block should exist", node);
-			return true;
-		}
-	}
-	if (uBlock.data) block.data = uBlock.data;
-	if (uBlock.expr) block.expr = uBlock.expr;
-	if (uBlock.lock) block.lock = uBlock.lock;
-
-	// consider it's the same data when it's initializing
-	let sameData = false;
-	if (oldBlock) {
-		sameData = view.utils.equal(oldBlock.data || {}, block.data || {});
-		if (sameData && block.expr) {
-			sameData = view.utils.equal(oldBlock.expr || {}, block.expr || {});
-		}
-	}
-	const sameFocus = oldBlock && oldBlock.focused == node.attrs.focused || false;
-
-	if (!sameData || !sameFocus) {
-		this.oldBlock = view.blocks.copy(block);
-		this.oldBlock.focused = node.attrs.focused;
-
-		if (node.attrs.focused) block.focused = node.attrs.focused;
-		else delete block.focused;
-
-		let dom = view.render(block, {type: node.attrs.type, merge: false});
-		if (dom && dom.nodeType == Node.DOCUMENT_FRAGMENT_NODE && dom.children.length == 1) {
-			dom = dom.children[0];
-		}
-		const tr = view.state.tr;
-		mutateAttributes(this.dom, dom);
-		if (!sameData) {
-			const nobj = flagDom(this.element, dom);
-			try {
-				mutateNodeView(tr, this.getPos ? this.getPos() : null, node, this, nobj);
-			} catch(ex) {
+			if (!block) {
+				console.warn("block should exist", node);
 				return true;
 			}
 		}
-		// pay attention to the risk of looping over and over
-		if (oldBlock && this.getPos && tr.docChanged) {
-			view.dispatch(tr);
+		if (uBlock.data) block.data = uBlock.data;
+		if (uBlock.expr) block.expr = uBlock.expr;
+		if (uBlock.lock) block.lock = uBlock.lock;
+
+		// consider it's the same data when it's initializing
+		let sameData = false;
+		if (oldBlock) {
+			sameData = view.utils.equal(oldBlock.data || {}, block.data || {});
+			if (sameData && block.expr) {
+				sameData = view.utils.equal(oldBlock.expr || {}, block.expr || {});
+			}
 		}
-		if (view.explicit && !node.type.spec.wrapper && this.contentDOM && !this.element.inline) {
+		const sameFocus = oldBlock && oldBlock.focused == node.attrs.focused || false;
+
+		if (!sameData || !sameFocus) {
+			this.oldBlock = view.blocks.copy(block);
+			this.oldBlock.focused = node.attrs.focused;
+
+			if (node.attrs.focused) block.focused = node.attrs.focused;
+			else delete block.focused;
+
+			let dom = view.render(block, { type: node.attrs.type, merge: false });
+			if (dom && dom.nodeType == Node.DOCUMENT_FRAGMENT_NODE && dom.children.length == 1) {
+				dom = dom.children[0];
+			}
+			const tr = view.state.tr;
+			mutateAttributes(this.dom, dom);
+			if (!sameData) {
+				const nobj = flagDom(this.element, dom);
+				try {
+					mutateNodeView(tr, this.getPos ? this.getPos() : null, node, this, nobj);
+				} catch (ex) {
+					return true;
+				}
+			}
+			// pay attention to the risk of looping over and over
+			if (oldBlock && this.getPos && tr.docChanged) {
+				view.dispatch(tr);
+			}
+			if (view.explicit && !node.type.spec.wrapper && this.contentDOM && !this.element.inline) {
+				this.contentDOM.setAttribute('element-content', 'true');
+			}
+			if (this.contentDOM && node.isTextblock) {
+				this.contentDOM.setAttribute('block-text', 'true');
+			}
+			if (this.selected) {
+				this.selectNode();
+			}
+		} else {
+			// no point in calling render
+		}
+
+		const cname = node.type.spec.contentName;
+		if (cname != null) {
+			const cdom = this.contentDOM;
+			if (!block.content) block.content = {};
+			if (block.standalone && oldBlock) {
+				if (!Array.isArray(block.content[cname])) {
+					block.content[cname] = [];
+				}
+				let found = false;
+				block.content[cname].forEach(function (idom) {
+					if (idom == cdom) {
+						found = true;
+					} else {
+						differ.apply(idom, differ.diff(idom, cdom));
+					}
+				});
+				if (!found) {
+					block.content[cname].push(cdom);
+				}
+			} else {
+				if (block.content[cname] != cdom) {
+					block.content[cname] = cdom;
+				}
+			}
+		}
+		return !(this.virtualContent && node.childCount == 0 && this.dom.isConnected);
+	}
+
+	ignoreMutation(record) {
+		if (record.type == "attributes") {
+			const dom = record.target;
+			let obj = dom.pcUiAttrs;
+			if (!obj) obj = dom.pcUiAttrs = {};
+			const name = record.attributeName;
+			const val = dom.getAttribute(name);
+			if (name == "class") {
+				if (record.oldValue != val) {
+					const oldClass = mapOfClass(record.oldValue);
+					const newClass = mapOfClass(val);
+					const diffClass = {};
+					for (const k in newClass) if (newClass[k] && !oldClass[k]) diffClass[k] = true;
+					obj[name] = Object.keys(diffClass).join(' ');
+				}
+			} else if (name == "style") {
+				if (record.oldValue != val) {
+					const oldStyle = mapOfStyle(record.oldValue);
+					const newStyle = mapOfStyle(dom.style);
+					const diffStyle = [];
+					for (const j in newStyle) if (newStyle[j] && !oldStyle[j]) diffStyle.push(j + ':' + newStyle[j] + ';');
+					obj[name] = diffStyle.join('');
+				}
+			} else {
+				obj[name] = val;
+			}
+			return true;
+		} else if (record.type == "childList" && record.addedNodes.length > 0 && !Array.prototype.some.call(record.addedNodes, function (node) {
+			if (node.nodeType != Node.ELEMENT_NODE) return true;
+			return node.getAttribute('contenteditable') != "false";
+		})) {
+			return true;
+		} else if (record.target == this.contentDOM && record.type == "childList") {
+			return false;
+		} else if (record.type != "selection") {
+			return true;
+		}
+	}
+}
+class WrapNodeView {
+	constructor(node, view, getPos, decorations) {
+		if (!(this instanceof WrapNodeView)) {
+			return new WrapNodeView(node, view, getPos, decorations);
+		}
+		this.view = view;
+		this.getPos = typeof getPos == "function" ? getPos : null;
+		this.element = node.type.spec.element;
+		this.domModel = node.type.spec.domModel;
+		setupView(this, node);
+		this.update(node);
+	}
+
+	update(node, decorations) {
+		if (!this.id) {
+			this.id = node.attrs._id;
+		} else if (this.id != node.attrs._id) {
+			return false;
+		}
+		restoreDomAttrs(tryJSON(node.attrs._json), this.dom);
+		return true;
+	}
+
+	ignoreMutation(record) {
+		// always ignore mutation
+		if (record.type != "selection") return true;
+	}
+}
+class ConstNodeView {
+	constructor(node, view, getPos, decorations) {
+		if (!(this instanceof ConstNodeView)) {
+			return new ConstNodeView(node, view, getPos, decorations);
+		}
+		this.view = view;
+		this.getPos = typeof getPos == "function" ? getPos : null;
+		this.element = node.type.spec.element;
+		this.domModel = node.type.spec.domModel;
+		setupView(this, node);
+		this.dom.setAttribute("contenteditable", "false");
+		this.update(node);
+	}
+
+	update(node, decorations) {
+		if (!this.id) {
+			this.id = node.attrs._id;
+		} else if (this.id != node.attrs._id) {
+			return false;
+		}
+		restoreDomAttrs(tryJSON(node.attrs._json), this.dom);
+		if (this.view.explicit) {
+			this.dom.innerHTML = '';
+		} else {
+			innerDiff.apply(this.dom, innerDiff.diff(this.dom, node.attrs._html));
+		}
+		return true;
+	}
+
+	ignoreMutation(record) {
+		// always ignore mutation, even selection
+		return true;
+	}
+}
+class ContainerNodeView {
+	constructor(node, view, getPos, decorations) {
+		if (!(this instanceof ContainerNodeView)) {
+			return new ContainerNodeView(node, view, getPos, decorations);
+		}
+		this.view = view;
+		this.element = node.type.spec.element;
+		this.domModel = node.type.spec.domModel;
+
+		setupView(this, node);
+		this.update(node);
+	}
+
+	update(node, decorations) {
+		const contentName = node.type.spec.contentName;
+		if (contentName != this.contentName) {
+			return false;
+		}
+		restoreDomAttrs(tryJSON(node.attrs._json), this.dom);
+
+		if (this.view.explicit) {
 			this.contentDOM.setAttribute('element-content', 'true');
+		} else if (node.attrs._html) {
+			const diffs = innerDiff.diff(this.dom, node.attrs._html);
+			innerDiff.apply(this.dom, diffs);
 		}
-		if (this.contentDOM && node.isTextblock) {
+		if (node.isTextblock) {
 			this.contentDOM.setAttribute('block-text', 'true');
 		}
-		if (this.selected) {
-			this.selectNode();
-		}
-	} else {
-		// no point in calling render
-	}
 
-	const cname = node.type.spec.contentName;
-	if (cname != null) {
-		const cdom = this.contentDOM;
+		if (!this.id) this.id = node.attrs._id;
+		else if (this.id != node.attrs._id) return false;
+
+		const block = this.view.blocks.get(this.id);
+		if (!block) {
+			console.warn("container has no root node id", this, node);
+			return false;
+		}
+
 		if (!block.content) block.content = {};
-		if (block.standalone && oldBlock) {
-			if (!Array.isArray(block.content[cname])) {
-				block.content[cname] = [];
-			}
-			let found = false;
-			block.content[cname].forEach(function(idom) {
-				if (idom == cdom) {
-					found = true;
-				} else {
-					differ.apply(idom, differ.diff(idom, cdom));
-				}
-			});
-			if (!found) {
-				block.content[cname].push(cdom);
-			}
-		} else {
-			if (block.content[cname] != cdom) {
-				block.content[cname] = cdom;
-			}
+		if (block.content[contentName] != this.contentDOM) {
+			block.content[contentName] = this.contentDOM;
+		}
+		return !(this.virtualContent && node.childCount == 0 && this.dom.isConnected);
+	}
+
+	ignoreMutation(record) {
+		if (record.target == this.contentDOM && record.type == "childList") {
+			return false;
+		} else if (record.type != "selection") {
+			return true;
 		}
 	}
-	return !(this.virtualContent && node.childCount == 0 && this.dom.isConnected);
-};
-
-RootNodeView.prototype.ignoreMutation = function(record) {
-	if (record.type == "attributes") {
-		const dom = record.target;
-		let obj = dom.pcUiAttrs;
-		if (!obj) obj = dom.pcUiAttrs = {};
-		const name = record.attributeName;
-		const val = dom.getAttribute(name);
-		if (name == "class") {
-			if (record.oldValue != val) {
-				const oldClass = mapOfClass(record.oldValue);
-				const newClass = mapOfClass(val);
-				const diffClass = {};
-				for (const k in newClass) if (newClass[k] && !oldClass[k]) diffClass[k] = true;
-				obj[name] = Object.keys(diffClass).join(' ');
-			}
-		} else if (name == "style") {
-			if (record.oldValue != val) {
-				const oldStyle = mapOfStyle(record.oldValue);
-				const newStyle = mapOfStyle(dom.style);
-				const diffStyle = [];
-				for (const j in newStyle) if (newStyle[j] && !oldStyle[j]) diffStyle.push(j + ':' + newStyle[j] + ';');
-				obj[name] = diffStyle.join('');
-			}
-		} else {
-			obj[name] = val;
-		}
-		return true;
-	}	else if (record.type == "childList" && record.addedNodes.length > 0 && !Array.prototype.some.call(record.addedNodes, function(node) {
-		if (node.nodeType != Node.ELEMENT_NODE) return true;
-		return node.getAttribute('contenteditable') != "false";
-	})) {
-		return true;
-	} else if (record.target == this.contentDOM && record.type == "childList") {
-		return false;
-	} else if (record.type != "selection") {
-		return true;
-	}
-};
-
-function WrapNodeView(node, view, getPos, decorations) {
-	if (!(this instanceof WrapNodeView)) {
-		return new WrapNodeView(node, view, getPos, decorations);
-	}
-	this.view = view;
-	this.getPos = typeof getPos == "function" ? getPos : null;
-	this.element = node.type.spec.element;
-	this.domModel = node.type.spec.domModel;
-	setupView(this, node);
-	this.update(node);
 }
-
-WrapNodeView.prototype.update = function(node, decorations) {
-	if (!this.id) {
-		this.id = node.attrs._id;
-	} else if (this.id != node.attrs._id) {
-		return false;
-	}
-	restoreDomAttrs(tryJSON(node.attrs._json), this.dom);
-	return true;
-};
-
-WrapNodeView.prototype.ignoreMutation = function(record) {
-	// always ignore mutation
-	if (record.type != "selection") return true;
-};
-
-function ConstNodeView(node, view, getPos, decorations) {
-	if (!(this instanceof ConstNodeView)) {
-		return new ConstNodeView(node, view, getPos, decorations);
-	}
-	this.view = view;
-	this.getPos = typeof getPos == "function" ? getPos : null;
-	this.element = node.type.spec.element;
-	this.domModel = node.type.spec.domModel;
-	setupView(this, node);
-	this.dom.setAttribute("contenteditable", "false");
-	this.update(node);
-}
-
-ConstNodeView.prototype.update = function(node, decorations) {
-	if (!this.id) {
-		this.id = node.attrs._id;
-	} else if (this.id != node.attrs._id) {
-		return false;
-	}
-	restoreDomAttrs(tryJSON(node.attrs._json), this.dom);
-	if (this.view.explicit) {
-		this.dom.innerHTML = '';
-	} else {
-		innerDiff.apply(this.dom, innerDiff.diff(this.dom, node.attrs._html));
-	}
-	return true;
-};
-
-ConstNodeView.prototype.ignoreMutation = function(record) {
-	// always ignore mutation, even selection
-	return true;
-};
-
-function ContainerNodeView(node, view, getPos, decorations) {
-	if (!(this instanceof ContainerNodeView)) {
-		return new ContainerNodeView(node, view, getPos, decorations);
-	}
-	this.view = view;
-	this.element = node.type.spec.element;
-	this.domModel = node.type.spec.domModel;
-
-	setupView(this, node);
-	this.update(node);
-}
-
-ContainerNodeView.prototype.update = function(node, decorations) {
-	const contentName = node.type.spec.contentName;
-	if (contentName != this.contentName) {
-		return false;
-	}
-	restoreDomAttrs(tryJSON(node.attrs._json), this.dom);
-
-	if (this.view.explicit) {
-		this.contentDOM.setAttribute('element-content', 'true');
-	} else if (node.attrs._html) {
-		const diffs = innerDiff.diff(this.dom, node.attrs._html);
-		innerDiff.apply(this.dom, diffs);
-	}
-	if (node.isTextblock) {
-		this.contentDOM.setAttribute('block-text', 'true');
-	}
-
-	if (!this.id) this.id = node.attrs._id;
-	else if (this.id != node.attrs._id) return false;
-
-	const block = this.view.blocks.get(this.id);
-	if (!block) {
-		console.warn("container has no root node id", this, node);
-		return false;
-	}
-
-	if (!block.content) block.content = {};
-	if (block.content[contentName] != this.contentDOM) {
-		block.content[contentName] = this.contentDOM;
-	}
-	return !(this.virtualContent && node.childCount == 0 && this.dom.isConnected);
-};
-
-ContainerNodeView.prototype.ignoreMutation = function(record) {
-	if (record.target == this.contentDOM && record.type == "childList") {
-		return false;
-	} else if (record.type != "selection") {
-		return true;
-	}
-};
-
 /*
 Nota Bene: nodes between obj.dom and obj.contentDOM (included) can be modified
 by front-end. So when applying a new rendered DOM, one only wants to apply
