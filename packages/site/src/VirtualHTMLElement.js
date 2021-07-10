@@ -199,13 +199,17 @@ Page.setup(function(state) {
 				const target = entry.target;
 				const ratio = entry.intersectionRatio || 0;
 				if (ratio <= 0) return;
-				if (target.nodeName == "ELEMENT-EMBED" && ratio <= 0.2) return;
+				if ((target.constructor.revealRatio || 0) > ratio) return;
 				observer.unobserve(target);
 				if (target.currentSrc) return;
 				target.reveal(state);
 			});
 		}, {
-			threshold: [0.0001, 0.2],
+			threshold: [
+				0.001,	// images
+				0.2,		// embeds
+				1				// headings
+			],
 			rootMargin: "30px"
 		});
 	}
