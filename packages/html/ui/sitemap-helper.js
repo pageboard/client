@@ -1,10 +1,9 @@
 class HTMLElementSitepage extends VirtualHTMLElement {
-	static get defaults() {
-		return {
-			url: null,
-			index: (x) => parseInt(x) || 0
-		};
-	}
+	static defaults = {
+		url: null,
+		index: (x) => parseInt(x) || 0
+	};
+
 	patch(state) {
 		if (this.isConnected) this.syncBlock();
 	}
@@ -56,7 +55,7 @@ class HTMLElementSitepage extends VirtualHTMLElement {
 			editor.dispatch(editor.utils.refreshTr(editor.state.tr, this, block));
 			this.updateChildren();
 		} else this.updateChildren();
-		
+
 	}
 }
 

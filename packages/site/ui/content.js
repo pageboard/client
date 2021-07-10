@@ -1,9 +1,8 @@
 class HTMLElementContent extends VirtualHTMLElement {
-	static get defaults() {
-		return {
-			filter: null
-		};
-	}
+	static defaults = {
+		filter: null
+	};
+
 	patch(state) {
 		if (this.isContentEditable) return;
 		var filter = this.options.filter;

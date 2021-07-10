@@ -3,11 +3,10 @@ class HTMLShareAnchorElement extends HTMLAnchorElement {
 		super();
 		if (this.init) this.init();
 	}
-	static get defaults() {
-		return {
-			dataNetwork: ""
-		};
-	}
+	static defaults = {
+		dataNetwork: ""
+	};
+
 	patch(state) {
 		const href = document.location.origin + Page.format({
 			pathname: state.pathname,

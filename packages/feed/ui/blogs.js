@@ -1,9 +1,7 @@
 class HTMLElementBlogs extends VirtualHTMLElement {
-	static get defaults() {
-		return {
-			topics: (x) => (x || '').split(',').filter((x) => !!x)
-		};
-	}
+	static defaults = {
+		topics: (x) => (x || '').split(',').filter((x) => !!x)
+	};
 
 	patch(state) {
 		const blogPath = state.pathname.replace(/\.rss$/, '');

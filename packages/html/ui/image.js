@@ -1,10 +1,9 @@
 class HTMLElementImage extends VirtualHTMLElement {
-	static get defaults() {
-		return {
-			src: null,
-			crop: null
-		};
-	}
+	static defaults = {
+		src: null,
+		crop: null
+	};
+
 	static getZoom({w, h, rw, rh, fit}) {
 		var z = 100;
 		if (!rw && !rh) return z;
@@ -177,12 +176,11 @@ class HTMLElementInlineImage extends HTMLImageElement {
 		super();
 		if (this.init) this.init();
 	}
-	static get defaults() {
-		return {
-			dataSrc: null,
-			dataCrop: null
-		};
-	}
+	static  defaults = {
+		dataSrc: null,
+		dataCrop: null
+	};
+
 	get image() {
 		return this;
 	}

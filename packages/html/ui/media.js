@@ -43,11 +43,9 @@ class HTMLElementVideo extends HTMLVideoElement {
 		super();
 		if (this.init) this.init();
 	}
-	static get defaults() {
-		return {
-			dataSrc: null
-		};
-	}
+	static defaults = {
+		dataSrc: null
+	};
 }
 Object.assign(HTMLElementVideo.prototype, MixinMedia);
 
@@ -56,11 +54,9 @@ class HTMLElementAudio extends HTMLAudioElement {
 		super();
 		if (this.init) this.init();
 	}
-	static get defaults() {
-		return {
-			dataSrc: null
-		};
-	}
+	static defaults = {
+		dataSrc: null
+	};
 }
 Object.assign(HTMLElementAudio.prototype, MixinMedia);
 

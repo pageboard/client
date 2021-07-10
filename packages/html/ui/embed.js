@@ -1,10 +1,8 @@
 class HTMLElementEmbed extends VirtualHTMLElement {
-	static get defaults() {
-		return {
-			src: null,
-			hash: null
-		};
-	}
+	static defaults = {
+		src: null,
+		hash: null
+	};
 	init() {
 		this.promise = Promise.resolve();
 		this.promise.done = function() {};

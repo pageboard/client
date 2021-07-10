@@ -1,16 +1,15 @@
 class HTMLElementSelect extends VirtualHTMLElement {
 	_observer
 
-	static get defaults() {
-		return {
-			placeholder: null,
-			name: null,
-			value: null,
-			multiple: false,
-			disabled: false,
-			required: false
-		};
-	}
+	static defaults = {
+		placeholder: null,
+		name: null,
+		value: null,
+		multiple: false,
+		disabled: false,
+		required: false
+	};
+
 	_child(sel) {
 		return this.children.find(node => node.matches(sel));
 	}

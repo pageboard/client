@@ -1,9 +1,7 @@
 class HTMLElementGallery extends VirtualHTMLElement {
-	static get defaults() {
-		return {
-			mode: null
-		};
-	}
+	static defaults = {
+		mode: null
+	};
 
 	get selectedMode() {
 		return this.getAttribute('selected-mode') || this.options.mode;

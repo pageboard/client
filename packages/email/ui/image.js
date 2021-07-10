@@ -3,12 +3,10 @@ class HTMLElementMailImage extends HTMLImageElement {
 		super();
 		if (this.init) this.init();
 	}
-	static get defaults() {
-		return {
-			dataSrc: null,
-			dataCrop: null
-		};
-	}
+	static defaults = {
+		dataSrc: null,
+		dataCrop: null
+	};
 	get crop() {
 		var [x, y, w, h, z] = (this.dataset.crop || ";;;;").split(";").map((x) => parseFloat(x));
 		if (isNaN(x)) x = 50;

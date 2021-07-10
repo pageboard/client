@@ -1,14 +1,12 @@
 class HTMLElementInputDateTime extends VirtualHTMLElement {
-	static get defaults() {
-		return {
-			format: (str) => {
-				if (['date', 'time', 'datetime'].includes(str)) return str;
-				else return 'datetime';
-			},
-			timeZone: null,
-			step: 0
-		};
-	}
+	static defaults = {
+		format: (str) => {
+			if (['date', 'time', 'datetime'].includes(str)) return str;
+			else return 'datetime';
+		},
+		timeZone: null,
+		step: 0
+	};
 
 	get value() {
 		return this.querySelector('input').value;

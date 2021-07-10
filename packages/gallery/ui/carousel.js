@@ -1,23 +1,21 @@
 class HTMLElementCarousel extends VirtualHTMLElement {
-	static get defaults() {
-		return {
-			wrapAround: false,
-			groupCells: false,
-			pageDots: false,
-			autoPlay: (x) => (parseFloat(x) || 0) * 1000,
-			draggable: true,
-			prevNextButtons: false,
-			index: (x) => parseInt(x) || 0,
-			width: (x) => (parseFloat(x) || null),
-			height: (str) => {
-				if ((parseFloat(str) || 0) == 0) return null;
-				else return str;
-			},
-			fullview: false,
-			fullviewButton: false,
-			fade: false
-		};
-	}
+	static defaults = {
+		wrapAround: false,
+		groupCells: false,
+		pageDots: false,
+		autoPlay: (x) => (parseFloat(x) || 0) * 1000,
+		draggable: true,
+		prevNextButtons: false,
+		index: (x) => parseInt(x) || 0,
+		width: (x) => (parseFloat(x) || null),
+		height: (str) => {
+			if ((parseFloat(str) || 0) == 0) return null;
+			else return str;
+		},
+		fullview: false,
+		fullviewButton: false,
+		fade: false
+	};
 
 	init() {
 		this.reload = Pageboard.debounce(this.reload, 100);
@@ -160,12 +158,11 @@ class HTMLElementCarousel extends VirtualHTMLElement {
 }
 
 class HTMLElementCarouselCell extends VirtualHTMLElement {
-	static get defaults() {
-		return {
-			width: null,
-			height: null
-		};
-	}
+	static defaults = {
+		width: null,
+		height: null
+	};
+
 	updateStyle() {
 		this.style.width = this.options.width;
 		this.style.height = this.options.height;

@@ -1,9 +1,8 @@
 class HTMLElementTabs extends VirtualHTMLElement {
-	static get defaults() {
-		return {
-			index: (x) => parseInt(x) || 0
-		};
-	}
+	static defaults = {
+		index: (x) => parseInt(x) || 0
+	};
+
 	get items() {
 		return this.querySelector('[block-content="items"]');
 	}

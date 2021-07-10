@@ -11,16 +11,15 @@ class HTMLElementInputRange extends HTMLInputElement {
 				return Number.isNaN(n) ? null : n;
 			});
 	}
-	static get defaults() {
-		return {
-			min: (x) => parseFloat(x) || 0,
-			max: (x) => parseFloat(x) || 100,
-			value: (x) => this.parse(x),
-			step: (x) => parseFloat(x) || 1,
-			multiple: true,
-			pips: true,
-		};
-	}
+	static defaults = {
+		min: (x) => parseFloat(x) || 0,
+		max: (x) => parseFloat(x) || 100,
+		value: (x) => this.parse(x),
+		step: (x) => parseFloat(x) || 1,
+		multiple: true,
+		pips: true,
+	};
+
 	get helper() {
 		var node = this.parentNode.querySelector('.noUi-target');
 		if (!node) {

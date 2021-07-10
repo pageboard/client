@@ -41,11 +41,10 @@ class HTMLCustomConsentElement extends HTMLFormElement {
 		super();
 		if (this.init) this.init();
 	}
-	static get defaults() {
-		return {
-			dataTransient: false
-		};
-	}
+	static defaults = {
+		dataTransient: false
+	};
+
 	static ask() {
 		this.waiting = false;
 		let tacit = true;

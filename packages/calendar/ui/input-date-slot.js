@@ -1,11 +1,9 @@
 class HTMLElementInputDateSlot extends VirtualHTMLElement {
-	static get defaults() {
-		return {
-			timeZone: null,
-			range: null,
-			step: 0
-		};
-	}
+	static defaults = {
+		timeZone: null,
+		range: null,
+		step: 0
+	};
 
 	handleChange(e, state) {
 		const els = this.inputs;

@@ -3,16 +3,15 @@ class HTMLElementLayout extends HTMLDivElement {
 		super();
 		if (this.init) this.init();
 	}
-	static get defaults() {
-		return {
-			dataSrc: null,
-			dataCrop: null,
-			dataRepeat: null,
-			dataSize: null,
-			dataAttachment: null,
-			dataPosition:null
-		};
-	}
+	static defaults = {
+		dataSrc: null,
+		dataCrop: null,
+		dataRepeat: null,
+		dataSize: null,
+		dataAttachment: null,
+		dataPosition:null
+	};
+
 	get fit() {
 		return this.options.size || 'none';
 	}

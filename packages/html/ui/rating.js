@@ -1,11 +1,9 @@
 class HTMLElementRating extends VirtualHTMLElement {
-	static get defaults() {
-		return {
-			maximum: 4,
-			value: (x) => parseFloat(x) || 0,
-			char: '⭐'
-		};
-	}
+	static defaults = {
+		maximum: 4,
+		value: (x) => parseFloat(x) || 0,
+		char: '⭐'
+	};
 
 	patch(state) {
 		var opts = this.options;

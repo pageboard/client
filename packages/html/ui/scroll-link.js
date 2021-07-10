@@ -3,11 +3,10 @@ class HTMLScrollLinkElement extends HTMLAnchorElement {
 		super();
 		if (this.init) this.init();
 	}
-	static get defaults() {
-		return {
-			dataTo: (x) => ["home", "end"].includes(x) ? x : "end"
-		};
-	}
+	static defaults = {
+		dataTo: (x) => ["home", "end"].includes(x) ? x : "end"
+	};
+
 	handleClick(e, state) {
 		if (this.isContentEditable) return;
 		if (this.options.to == "home") {
