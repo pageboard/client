@@ -8,10 +8,10 @@ function Viewer(opts) {
 	this.blocks = new BlocksView(this, opts);
 
 	this.doc = opts.document || document.cloneNode();
-	var elts = this.elements = opts.elements || {};
+	const elts = this.elements = opts.elements || {};
 
-	var el;
-	for (var name in elts) {
+	let el;
+	for (const name in elts) {
 		el = elts[name];
 		el.name = name;
 		this.setElement(el);
@@ -28,7 +28,7 @@ Viewer.prototype.from = function(block, blocks, opts) {
 Viewer.prototype.element = function(type) {
 	if (!type) return;
 
-	var el = typeof type == "string" ? this.elements[type] : type;
+	let el = typeof type == "string" ? this.elements[type] : type;
 	if (!el) return;
 	if (!(el instanceof Element)) el = new Element(el);
 	return el;
@@ -40,9 +40,9 @@ Viewer.prototype.setElement = function(el) {
 };
 
 Viewer.prototype.render = function(block, opts) {
-	var dom;
+	let dom;
 	opts = opts || {};
-	var el = this.element(opts.element || opts.type || block.type);
+	const el = this.element(opts.element || opts.type || block.type);
 	try {
 		dom = this.blocks.render(el, block, opts);
 	} catch(ex) {
@@ -73,9 +73,9 @@ Viewer.prototype.render = function(block, opts) {
 		else dom.removeAttribute('block-id');
 	} else {
 		dom.removeAttribute('block-id');
-		var data = Object.assign({}, block.data);
+		const data = Object.assign({}, block.data);
 		if (el.properties) Object.keys(el.properties).forEach((key) => {
-			var attr = key.replace(/([A-Z])/g, (g) => `-${g[0].toLowerCase()}`);
+			const attr = key.replace(/([A-Z])/g, (g) => `-${g[0].toLowerCase()}`);
 			if (dom.getAttribute(attr) == data[key]) delete data[key];
 		});
 		if (data && Object.keys(data).length) {

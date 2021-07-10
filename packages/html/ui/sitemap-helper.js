@@ -8,7 +8,7 @@ class HTMLElementSitepage extends VirtualHTMLElement {
 		if (this.isConnected) this.syncBlock();
 	}
 	setup(state) {
-		var content = this.querySelector('[block-content="children"]');
+		const content = this.querySelector('[block-content="children"]');
 		if (!content) return;
 		this.observer = new MutationObserver((mutations) => this.updateChildren());
 		this.observer.observe(content, {
@@ -23,19 +23,19 @@ class HTMLElementSitepage extends VirtualHTMLElement {
 
 	updateChildren() {
 		if (this.updating) return;
-		var content = this.querySelector('[block-content="children"]');
+		const content = this.querySelector('[block-content="children"]');
 		if (!content) return;
 		this.updating = true;
-		var parentUrl = this.dataset.url || "";
+		const parentUrl = this.dataset.url || "";
 		Array.prototype.forEach.call(content.children, function(child, index) {
 			if (!child.matches('element-sitepage')) return; // cursor
-			var childUrl = child.dataset.url || '';
+			const childUrl = child.dataset.url || '';
 			if (childUrl.startsWith('/.')) return;
-			var newUrl = parentUrl + "/" + childUrl.split('/').pop();
+			const newUrl = parentUrl + "/" + childUrl.split('/').pop();
 			if (childUrl != newUrl) {
 				child.setAttribute('data-url', newUrl);
 			}
-			var curIndex = parseInt(child.dataset.index);
+			const curIndex = parseInt(child.dataset.index);
 			if (curIndex != index) {
 				child.setAttribute('data-index', index);
 			}
@@ -45,11 +45,11 @@ class HTMLElementSitepage extends VirtualHTMLElement {
 
 	syncBlock() {
 		if (!this.parentNode || this.matches('element-sitemap')) return;
-		var editor = window.parent.Pageboard.editor;
+		const editor = window.parent.Pageboard.editor;
 		if (!editor || editor.closed) return;
-		var block = editor.blocks.get(this.getAttribute('block-id'));
+		const block = editor.blocks.get(this.getAttribute('block-id'));
 		if (!block.data) block.data = {};
-		var data = this.options;
+		const data = this.options;
 		if (Object.keys(data).some((key) => data[key] != block.data[key])) {
 			Object.assign(block.data, data);
 			editor.dispatch(editor.utils.refreshTr(editor.state.tr, this, block));

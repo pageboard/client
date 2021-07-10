@@ -28,7 +28,7 @@ class HTMLElementQueryTags extends VirtualHTMLElement {
 		state.finish(() => {
 			this.labels.textContent = '';
 			if (this.isContentEditable) this.insertLabel('', '', 'Auto');
-			else for (var name in query) {
+			else for (const name in query) {
 				this.add(name, query[name]);
 			}
 		});
@@ -50,17 +50,17 @@ class HTMLElementQueryTags extends VirtualHTMLElement {
 			if (!field) return;
 			let label = field.querySelector('label');
 			if (!label) return;
-			var val = control.value;
+			let val = control.value;
 			if (val == null || val == "" || !label.innerText) return;
-			var prev = labels.querySelector(`[data-name="${name}"][data-value="${val}"]`);
+			const prev = labels.querySelector(`[data-name="${name}"][data-value="${val}"]`);
 			if (prev) return;
-			var txt = label.innerText;
-			var prefix = '';
-			var group = field.closest('.grouped.fields');
+			let txt = label.innerText;
+			let prefix = '';
+			const group = field.closest('.grouped.fields');
 			if (group && group.firstElementChild.matches('label')) {
 				prefix = group.firstElementChild.textContent + ' ';
 			}
-			var suffix = '';
+			let suffix = '';
 			if (control.rangeValue) {
 				val = control.rangeValue;
 				if (val.length == 1) {
@@ -90,7 +90,7 @@ class HTMLElementQueryTags extends VirtualHTMLElement {
 			else if (control.selected) control.selected = false;
 			else if (control.reset) control.reset();
 			else if (control.value) control.value = "";
-			var e = document.createEvent('HTMLEvents');
+			const e = document.createEvent('HTMLEvents');
 			e.initEvent('submit', true, true);
 			control.form.dispatchEvent(e);
 		}, this);

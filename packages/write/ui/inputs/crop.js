@@ -8,10 +8,10 @@ function Crop(input, opts, props, parentProp) {
 	if (this.prefix) {
 		this.prefix += ".";
 	}
-	var urlProp = "url";
+	let urlProp = "url";
 	if (parentProp) {
 		urlProp = Object.keys(parentProp).find((key) => {
-			var pp = parentProp[key].$helper;
+			const pp = parentProp[key].$helper;
 			if (!pp) return;
 			if (pp.name == "href" && pp.filter && (pp.filter.type || []).includes('image')) {
 				return true;
@@ -22,7 +22,7 @@ function Crop(input, opts, props, parentProp) {
 }
 
 Crop.prototype.init = function(block) {
-	var input = this.input;
+	const input = this.input;
 	this.x = input.querySelector(`[name="${this.prefix}crop.x"]`);
 	this.y = input.querySelector(`[name="${this.prefix}crop.y"]`);
 	this.width = input.querySelector(`[name="${this.prefix}crop.width"]`);
@@ -96,9 +96,9 @@ Crop.prototype.zoomOut = function() {
 };
 
 Crop.prototype.initControls = function() {
-	var doc = this.input.ownerDocument;
+	const doc = this.input.ownerDocument;
 
-	var btnCont = this.container.appendChild(doc.dom(`<div class="bottom-buttons"></div>`));
+	const btnCont = this.container.appendChild(doc.dom(`<div class="bottom-buttons"></div>`));
 	this.resetButton = btnCont.appendChild(doc.dom(`<div class="mini ui basic inverted circular icon button">
 		<i class="arrows alternate icon"></i>
 	</div>`));
@@ -113,7 +113,7 @@ Crop.prototype.initControls = function() {
 	this.zoomOutButton.addEventListener('click', this.zoomOut, false);
 	this.zoomInButton.addEventListener('click', this.zoomIn, false);
 
-	var zoomProp = this.props.properties.zoom;
+	const zoomProp = this.props.properties.zoom;
 
 	this.slider = this.container.appendChild(doc.dom(`<div class="slider">
 		<input type="range" step="0.0001" min="${zoomProp.minimum / 100}" max="${zoomProp.maximum / 100}">
@@ -126,16 +126,16 @@ Crop.prototype.initControls = function() {
 };
 
 Crop.prototype.valueChange = function() {
-	var txt = this.sliderValue.value;
+	const txt = this.sliderValue.value;
 	// try to parse this
 	if (!txt) return;
-	var crop = {};
-	var fail = false;
-	var arr = txt.split(/\s+/);
-	for (var i = 0; i < arr.length; i++) {
-		var parts = arr[i].split(':');
-		var key = parts[0];
-		var val = parseFloat(parts[1]);
+	const crop = {};
+	let fail = false;
+	const arr = txt.split(/\s+/);
+	for (let i = 0; i < arr.length; i++) {
+		const parts = arr[i].split(':');
+		const key = parts[0];
+		const val = parseFloat(parts[1]);
 		if (Number.isNaN(val)) {
 			fail = true;
 			break;
@@ -164,7 +164,7 @@ Crop.prototype.valueFocus = function() {
 
 Crop.prototype.updateCrop = function(obj) {
 	if (!this.cropper) return;
-	var crop = this.to(obj);
+	const crop = this.to(obj);
 	this.sliderValue.value = `x:${crop.x} y:${crop.y} w:${crop.width} h:${crop.height} z:${crop.zoom}`;
 	this.slider.querySelector('input').value = obj.scaleX;
 };
@@ -178,31 +178,31 @@ Crop.prototype.round = function(num) {
 };
 
 Crop.prototype.to = function(obj) {
-	var imgData = this.cropper.getImageData();
-	var W = imgData.naturalWidth * obj.scaleX;
-	var H = imgData.naturalHeight * obj.scaleY;
-	var crop = {};
+	const imgData = this.cropper.getImageData();
+	const W = imgData.naturalWidth * obj.scaleX;
+	const H = imgData.naturalHeight * obj.scaleY;
+	const crop = {};
 
-	var x = 100 * (obj.x + obj.width / 2) / W;
-	if (!isNaN(x)) crop.x = this.round(x);
+	const x = 100 * (obj.x + obj.width / 2) / W;
+	if (!Number.isNaN(x)) crop.x = this.round(x);
 
-	var y = 100 * (obj.y + obj.height / 2) / H;
-	if (!isNaN(y)) crop.y = this.round(y);
+	const y = 100 * (obj.y + obj.height / 2) / H;
+	if (!Number.isNaN(y)) crop.y = this.round(y);
 
-	var w = 100 * obj.width / W;
-	if (!isNaN(w)) crop.width = this.round(w);
+	const w = 100 * obj.width / W;
+	if (!Number.isNaN(w)) crop.width = this.round(w);
 
-	var h = 100 * obj.height / H;
-	if (!isNaN(h)) crop.height = this.round(h);
+	const h = 100 * obj.height / H;
+	if (!Number.isNaN(h)) crop.height = this.round(h);
 
-	var z = 100 * obj.scaleX;
-	if (!isNaN(z)) crop.zoom = this.round(z);
+	const z = 100 * obj.scaleX;
+	if (!Number.isNaN(z)) crop.zoom = this.round(z);
 	return crop;
 };
 
 Crop.prototype.change = function(obj) {
 	if (!this.cropper || !obj) return;
-	var crop = this.to(obj);
+	const crop = this.to(obj);
 	Object.keys(crop).forEach(function(key) {
 		this[key].value = crop[key];
 	}, this);
@@ -211,7 +211,7 @@ Crop.prototype.change = function(obj) {
 };
 
 Crop.prototype.load = function() {
-	var url = this.block.data.url;
+	const url = this.block.data.url;
 	if (url == this.lastUrl) return this.cropper && this.cropper.cropped;
 	this.lastUrl = url;
 
@@ -226,10 +226,10 @@ Crop.prototype.thumbnail = function(url) {
 };
 
 Crop.prototype.from = function(crop) {
-	var imgData = this.cropper.getImageData();
-	var ratio = (crop.zoom || 100) / 100;
-	var W = imgData.naturalWidth * ratio;
-	var H = imgData.naturalHeight * ratio;
+	const imgData = this.cropper.getImageData();
+	const ratio = (crop.zoom || 100) / 100;
+	const W = imgData.naturalWidth * ratio;
+	const H = imgData.naturalHeight * ratio;
 	return {
 		x: (crop.x - crop.width / 2) * W / 100,
 		y: (crop.y - crop.height / 2) * H / 100,
@@ -241,7 +241,7 @@ Crop.prototype.from = function(crop) {
 };
 
 Crop.prototype.updateData = function() {
-	var data = this.block.data.crop || {};
+	const data = this.block.data.crop || {};
 	this.cropper.setData(this.from(data));
 };
 
@@ -258,7 +258,7 @@ Crop.prototype.destroy = function() {
 	this.slider.removeEventListener('input', this.zoomChange, false);
 	this.sliderValue.removeEventListener('input', this.valueChange, false);
 	this.sliderValue.removeEventListener('focus', this.valueFocus, false);
-	var form = this.input.closest('#form');
+	const form = this.input.closest('#form');
 	if (form) form.removeEventListener('change', this.formChange, false);
 	this.resetButton.removeEventListener('click', this.reset, false);
 	this.zoomOutButton.removeEventListener('click', this.zoomOut, false);

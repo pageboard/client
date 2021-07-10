@@ -74,16 +74,16 @@ Editor.prototype.to = function(blocks) {
 };
 
 function Editor(opts) {
-	var editor = this;
+	const editor = this;
 	if (opts.scope) editor.scope = opts.scope;
 	if (opts.explicit) editor.explicit = true;
 
 	this.utils = new Utils(this);
-	var defaultElts = Editor.defaults.elements;
+	const defaultElts = Editor.defaults.elements;
 
 	opts = Object.assign({}, Editor.defaults, opts);
 
-	for (var name in defaultElts) {
+	for (const name in defaultElts) {
 		opts.elements[name] = Object.assign({}, defaultElts[name], opts.elements[name]);
 	}
 
@@ -98,25 +98,25 @@ function Editor(opts) {
 		return View.__parseFromClipboard(this, null, html, null, $pos);
 	};
 
-	var BlocksViewProto = Object.getPrototypeOf(this.blocks);
+	const BlocksViewProto = Object.getPrototypeOf(this.blocks);
 	Object.assign(BlocksViewProto.constructor, BlocksEdit);
 	Object.assign(BlocksViewProto, BlocksEdit.prototype);
 
-	var plugins = opts.plugins || [];
+	let plugins = opts.plugins || [];
 
-	var spec = {
+	const spec = {
 		nodes: opts.topNode ? opts.nodes.remove('doc') : opts.nodes,
 		marks: opts.marks,
 		topNode: opts.topNode
 	};
-	var views = {};
+	const views = {};
 
-	var elements = this.elements;
-	var elemsList = Object.values(elements).sort(function(a, b) {
+	const elements = this.elements;
+	const elemsList = Object.values(elements).sort(function(a, b) {
 		return (a.priority || 0) - (b.priority || 0);
 	});
 
-	for (var i = elemsList.length - 1; i >= 0; i--) {
+	for (let i = elemsList.length - 1; i >= 0; i--) {
 		Specs.define(editor, elemsList[i], spec, views);
 	}
 
@@ -127,7 +127,7 @@ function Editor(opts) {
 
 	this.clipboardSerializer = filteredSerializer(spec, (node, out) => {
 		if (node.type.name == "_") return "";
-		var attrs = out[1];
+		const attrs = out[1];
 		if (node.attrs.data) attrs['block-data'] = node.attrs.data;
 		if (node.attrs.expr) attrs['block-expr'] = node.attrs.expr;
 		if (node.attrs.lock) attrs['block-lock'] = node.attrs.lock;
@@ -136,8 +136,8 @@ function Editor(opts) {
 	});
 	this.clipboardSerializer.serializeFragment = (function(meth) {
 		return function(frag, opts, top) {
-			var tmpl = top && top.nodeName == "TEMPLATE";
-			var ret = meth.call(this, frag, opts, tmpl ? top.content : top);
+			const tmpl = top && top.nodeName == "TEMPLATE";
+			const ret = meth.call(this, frag, opts, tmpl ? top.content : top);
 			if (tmpl) return top;
 			else return ret;
 		};
@@ -147,7 +147,7 @@ function Editor(opts) {
 
 	this.viewSerializer = filteredSerializer(spec, function(node, out) {
 		if (node.type.name == "_") return "";
-		var obj = out[1];
+		const obj = out[1];
 		if (typeof obj != "object") return;
 		// delete obj['block-root_id'];
 	});
@@ -176,7 +176,7 @@ function Editor(opts) {
 		})
 	);
 
-	var pluginKeys = {};
+	const pluginKeys = {};
 
 	plugins = plugins.map(function(plugin) {
 		if (plugin instanceof State.Plugin) return plugin;
@@ -196,9 +196,9 @@ function Editor(opts) {
 	});
 	this.plugins = pluginKeys;
 
-	var place = typeof opts.place == "string" ? document.querySelector(opts.place) : opts.place;
+	const place = typeof opts.place == "string" ? document.querySelector(opts.place) : opts.place;
 
-	var stateDoc;
+	let stateDoc;
 	if (opts.jsonContent) stateDoc = this.schema.nodeFromJSON(opts.jsonContent);
 	else if (opts.content) stateDoc = this.parser.parse(opts.content);
 
@@ -227,11 +227,11 @@ Editor.prototype.getPlugin = function(key) {
 
 function filteredSerializer(spec, obj) {
 	if (typeof obj == "function") obj = {filter: obj};
-	var ser = Model.DOMSerializer.fromSchema(new Model.Schema(spec));
+	const ser = Model.DOMSerializer.fromSchema(new Model.Schema(spec));
 	function replaceOutputSpec(fun) {
 		return function(node) {
-			var out = fun(node);
-			var mod = obj.filter(node, out);
+			let out = fun(node);
+			const mod = obj.filter(node, out);
 			if (mod !== undefined) out = mod;
 			return out;
 		};

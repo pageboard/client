@@ -6,16 +6,16 @@ Page.State.prototype.scroll = function(opts) {
 			return false;
 		}
 	}
-	var scrollOpts = {
+	const scrollOpts = {
 		top: opts.top || 0,
 		left: opts.left || 0,
 		behavior: opts.behavior || 'auto'
 	};
 	if (opts.node) {
-		var rect = opts.node.getBoundingClientRect();
+		const rect = opts.node.getBoundingClientRect();
 		scrollOpts.top = window.pageYOffset + rect.top;
 		scrollOpts.left = window.pageXOffset + rect.left;
-		var section = opts.node.closest('body > [block-type="main"]');
+		let section = opts.node.closest('body > [block-type="main"]');
 		if (section) {
 			while ((section = section.previousElementSibling)) {
 				if (["static", "relative"].includes(window.getComputedStyle(section).position) == false) {
@@ -34,7 +34,7 @@ Page.State.prototype.scroll = function(opts) {
 };
 
 Page.State.prototype.debounce = function(fn, to) {
-	var db = Pageboard.debounce(function(...args) {
+	const db = Pageboard.debounce(function(...args) {
 		fn(...args);
 	}, to);
 	this.chain('close', db.clear);
@@ -46,9 +46,9 @@ Page.init(function(state) {
 });
 
 Page.hash(function(state) {
-	var hash = state.hash;
+	const hash = state.hash;
 	if (!hash) return;
-	var node = document.getElementById(hash);
+	const node = document.getElementById(hash);
 	if (!node) return;
 	state.scroll({node: node});
 });
@@ -76,8 +76,8 @@ Page.setup(function(state) {
 Page.setup(function navigate(state) {
 	Page.connect({
 		handleClick: (e, state) => {
-			var a = e.target.closest('a');
-			var href = a && a.getAttribute('href');
+			const a = e.target.closest('a');
+			const href = a && a.getAttribute('href');
 			if (!href || e.defaultPrevented || a.target) return;
 			e.preventDefault();
 			state.push(href);
@@ -85,7 +85,7 @@ Page.setup(function navigate(state) {
 	}, document);
 });
 
-var statePush = Page.State.prototype.push;
+const statePush = Page.State.prototype.push;
 Page.State.prototype.push = function (...args) {
 	if (this.transition) this.transition.cancel();
 	return statePush.apply(this, args);

@@ -20,9 +20,9 @@ function Menu(editor, node) {
 	this.menu = new Pagecut.Menubar({
 		items: this.items()
 	});
-	var me = this;
+	const me = this;
 	this.tabMenu.addEventListener('click', function(e) {
-		var item = e.target.closest('.item');
+		const item = e.target.closest('.item');
 		if (!item || item.matches('.disabled')) return;
 		me.showTab(item.dataset.tab);
 	});
@@ -40,14 +40,14 @@ Menu.prototype.showTab = function(name) {
 	this.lastTab = name;
 	this.hideTabs();
 	this.tabMenu.removeAttribute('hidden');
-	var tab = this.tabs[name];
+	const tab = this.tabs[name];
 	tab.menu.classList.add('active');
 	tab.div.classList.add('active');
 };
 
 Menu.prototype.hideTabs = function() {
 	this.tabMenu.setAttribute('hidden', '');
-	for (var k in this.tabs) {
+	for (const k in this.tabs) {
 		this.tabs[k].menu.classList.remove('active');
 		this.tabs[k].div.classList.remove('active');
 	}
@@ -60,9 +60,9 @@ Menu.prototype.update = function(parents, sel) {
 		tab.div.textContent = '';
 	});
 	this.inlines.textContent = "";
-	var isBlockSelection = false;
+	let isBlockSelection = false;
 	if (sel) {
-		var node = sel.node;
+		let node = sel.node;
 		if (!node) {
 			// show block elements if there is empty block content
 			// that should not happen anymore, thanks to placeholder
@@ -74,16 +74,16 @@ Menu.prototype.update = function(parents, sel) {
 			isBlockSelection = node.isBlock;
 		}
 	}
-	var isRootSelection = this.parents.length == 1;
-	var activeTab;
-	var inlineBlocks = [];
-	var inlineSpans = [];
-	var inlineSpansActive = false;
+	const isRootSelection = this.parents.length == 1;
+	let activeTab;
+	const inlineBlocks = [];
+	const inlineSpans = [];
+	let inlineSpansActive = false;
 
 	if (sel) this.menu.items.forEach((item) => {
-		var dom = renderItem(item, this.editor, sel.node && sel.node.type.name || null);
+		const dom = renderItem(item, this.editor, sel.node && sel.node.type.name || null);
 		if (!dom) return;
-		var el = item.spec.element;
+		const el = item.spec.element;
 		if (isRootSelection) {
 			// do nothing
 		} else if (el.inline) {
@@ -96,11 +96,11 @@ Menu.prototype.update = function(parents, sel) {
 						this.inlines.appendChild(dom);
 					}
 				} else {
-					inlineBlocks.push(dom);	
+					inlineBlocks.push(dom);
 				}
 			}
 		} else if (isBlockSelection) {
-			var menu = el.menu || 'section';
+			const menu = el.menu || 'section';
 			this.tab(menu).appendChild(dom);
 			if (!activeTab && dom.matches('.active')) activeTab = menu;
 		}
@@ -109,14 +109,14 @@ Menu.prototype.update = function(parents, sel) {
 		this.inlines.appendChild(this.inlines.dom(`<div class="item ${inlineSpansActive ? 'has-active' : ''}">
 			<i class="large dropdown icon" style="margin:0"></i>
 		</div>`));
-		var inlinesMenu = this.inlines.dom(`<div class="popup">
+		const inlinesMenu = this.inlines.dom(`<div class="popup">
 			<div class="ui icon menu"></div>
 		</div>`);
 		this.inlines.appendChild(inlinesMenu);
 		inlineSpans.forEach((dom) => inlinesMenu.firstElementChild.append(dom));
 	}
 	if (inlineBlocks.length) {
-		var inlineBlocksMenu = this.inlines.dom(`<div class="right menu"></div>`);
+		const inlineBlocksMenu = this.inlines.dom(`<div class="right menu"></div>`);
 		this.inlines.appendChild(inlineBlocksMenu);
 		inlineBlocks.forEach((dom) => inlineBlocksMenu.appendChild(dom));
 	}
@@ -126,7 +126,7 @@ Menu.prototype.update = function(parents, sel) {
 				activeTab = this.lastTab;
 			} else {
 				activeTab = Object.keys(this.tabs).find(name => {
-					var tab = this.tabs[name];
+					const tab = this.tabs[name];
 					return tab.div.children.length > 0;
 				}) || 'section';
 			}
@@ -141,7 +141,7 @@ Menu.prototype.update = function(parents, sel) {
 };
 
 Menu.prototype.tab = function(name) {
-	var tab = this.tabs[name];
+	let tab = this.tabs[name];
 	if (!tab) {
 		this.tabs[name] = tab = {
 			menu: this.node.dom(`<a class="item" data-tab="${name}">${name}</a>`),
@@ -154,24 +154,24 @@ Menu.prototype.tab = function(name) {
 };
 
 Menu.prototype.item = function(el) {
-	var editor = this.editor;
-	var schema = editor.state.schema;
-	var nodeType = schema.nodes[el.name] || schema.marks[el.name];
+	const editor = this.editor;
+	const schema = editor.state.schema;
+	const nodeType = schema.nodes[el.name] || schema.marks[el.name];
 	if (!nodeType || !el.icon) return;
 
-	var self = this;
+	const self = this;
 
-	var item = {
+	const item = {
 		element: el,
 		run: function(state, dispatch, view) {
 			try {
-				var tr = state.tr;
-				var sel = self.selection;
-				var block = editor.blocks.create(el.alias || el.name);
+				let tr = state.tr;
+				let sel = self.selection;
+				const block = editor.blocks.create(el.alias || el.name);
 				if (el.inline) {
 					if (el.leaf) {
 						tr.replaceSelectionWith(nodeType.create(editor.blocks.toAttrs(block)));
-						var resel = sel ? editor.utils.selectTr(tr, sel) : null;
+						const resel = sel ? editor.utils.selectTr(tr, sel) : null;
 						if (resel) tr.setSelection(resel);
 					} else {
 						editor.utils.toggleMark(nodeType, editor.blocks.toAttrs(block))(state, function(atr) {
@@ -179,9 +179,9 @@ Menu.prototype.item = function(el) {
 						});
 					}
 				} else {
-					var blocks = {};
-					var fragment = editor.blocks.renderFrom(block, blocks, null, {type: el.name});
-					var pos = editor.utils.insertTr(tr, fragment, sel);
+					const blocks = {};
+					const fragment = editor.blocks.renderFrom(block, blocks, null, {type: el.name});
+					const pos = editor.utils.insertTr(tr, fragment, sel);
 					if (pos != null) {
 						sel = editor.utils.selectTr(tr, pos);
 						if (sel) tr.setSelection(sel);
@@ -195,11 +195,11 @@ Menu.prototype.item = function(el) {
 			}
 		},
 		select: function(state) {
-			var can;
+			let can;
 			if (el.inline && !nodeType.isAtom) {
 				can = editor.utils.canMark(self.selection, nodeType);
 			} else {
-				var sel = self.selection;
+				const sel = self.selection;
 				can = !!editor.utils.canInsert(sel.$to, nodeType, false, false).node;
 				if (!can && sel.node) {
 					can = !!editor.utils.canInsert(sel.$from, nodeType, false, true).node;
@@ -208,9 +208,9 @@ Menu.prototype.item = function(el) {
 			return can;
 		},
 		active: function(state) {
-			var active;
+			let active;
 			if (!el.inline || el.leaf) {
-				var parent = self.parents.length && self.parents[0];
+				const parent = self.parents.length && self.parents[0];
 				active = parent && parent.node.type.name == el.name;
 			} else {
 				active = editor.utils.markActive(state.tr.selection, nodeType);
@@ -223,8 +223,8 @@ Menu.prototype.item = function(el) {
 
 
 function renderItem(item, view, name) {
-	var disabled = false;
-	var spec = item.spec;
+	let disabled = false;
+	const spec = item.spec;
 	if (spec.select && !spec.select(view.state)) {
 		if (spec.onDeselected == "disable" || spec.element.name == name) {
 			disabled = true;
@@ -232,12 +232,12 @@ function renderItem(item, view, name) {
 			return null;
 		}
 	}
-	var active = spec.active && !disabled && spec.active(view.state);
+	const active = spec.active && !disabled && spec.active(view.state);
 
-	var dom = document.createElement('a');
+	const dom = document.createElement('a');
 	dom.className = "item";
 
-	var icon = spec.element.icon;
+	const icon = spec.element.icon;
 	if (icon) {
 		// can be a string formatted as SVG, or an URL
 		if (/<svg/i.test(icon)) {
@@ -270,15 +270,15 @@ function renderItem(item, view, name) {
 }
 
 Menu.prototype.items = function() {
-	var list = [];
+	const list = [];
 	Object.values(this.editor.elements).sort(function(a, b) {
-		var ap = a.priority != null ? a.priority : Infinity;
-		var bp = b.priority != null ? b.priority : Infinity;
+		const ap = a.priority != null ? a.priority : Infinity;
+		const bp = b.priority != null ? b.priority : Infinity;
 		if (ap < bp) return -1;
 		else if (ap > bp) return 1;
 		else return a.name.localeCompare(b.name);
 	}).forEach(function(el) {
-		var itemSpec = this.item(el);
+		const itemSpec = this.item(el);
 		if (!itemSpec) return;
 		list.push(new Pagecut.Menubar.Menu.MenuItem(itemSpec));
 	}, this);

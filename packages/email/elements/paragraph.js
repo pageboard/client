@@ -24,13 +24,10 @@ exports.mail_paragraph = {
 		}
 	},
 	parse: function(dom) {
-		var align = "text-left";
-		var prop = Pageboard.elements.mail_paragraph.properties.align;
-		align = prop.anyOf.find(function(item) {
+		const prop = Pageboard.elements.mail_paragraph.properties.align;
+		const align = (prop.anyOf.find(function (item) {
 			return dom.classList.contains(item.const);
-		});
-		if (!align) align = prop.default;
-		else align = align.const;
+		}) || { const: prop.default }).const;
 		return {align: align};
 	},
 	contents: "mail_inline*",
@@ -75,8 +72,7 @@ exports.mail_heading = {
 	tag: 'h1,h2,h3,h4,h5,h6',
 	html: '<h[level] class="[align|or:left]">Heading</hn>',
 	parse: function(dom) {
-		var level = parseInt(dom.nodeName.substring(1));
-		return {level: level};
+		return { level: parseInt(dom.nodeName.substring(1)) };
 	}
 };
 

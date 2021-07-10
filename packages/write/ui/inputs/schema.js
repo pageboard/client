@@ -17,15 +17,15 @@ SchemaFilter.prototype.update = function(block, schema) {
 		console.warn("$filter schema is missing path option");
 		return;
 	}
-	var schemaPath = this.opts.path.split('.');
-	var otherSchema = schemaPath.reduce(function(obj, name) {
+	const schemaPath = this.opts.path.split('.');
+	const otherSchema = schemaPath.reduce(function(obj, name) {
 		return obj[name] || null;
 	}, Pageboard.editor.elements[schemaPath.shift()]);
 	if (!otherSchema) {
 		console.warn('$filter schema does not find', this.opts.path);
 		return;
 	}
-	var copy = {
+	const copy = {
 		title: schema.title,
 		description: schema.description,
 		nullable: schema.nullable

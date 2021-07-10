@@ -15,20 +15,20 @@ Move.prototype.handleEvent = function(e) {
 };
 
 Move.prototype.click = function(e) {
-	var item = e.target.closest('[data-command]');
+	const item = e.target.closest('[data-command]');
 	if (!item || item.matches('.disabled')) return;
-	var command = item.dataset.command;
-	var tr = this.editor.state.tr;
+	const command = item.dataset.command;
+	const tr = this.editor.state.tr;
 	switch (command) {
-	case "left":
-		if (!this.editor.utils.move(tr, -1, false)) return;
-		break;
-	case "right":
-		if (!this.editor.utils.move(tr, 1, false)) return;
-		break;
-	case "delete":
-		if (!this.editor.utils.deleteTr(tr)) return;
-		break;
+		case "left":
+			if (!this.editor.utils.move(tr, -1, false)) return;
+			break;
+		case "right":
+			if (!this.editor.utils.move(tr, 1, false)) return;
+			break;
+		case "delete":
+			if (!this.editor.utils.deleteTr(tr)) return;
+			break;
 	}
 	tr.setMeta('editor', true);
 	tr.scrollIntoView();
@@ -42,14 +42,14 @@ Move.prototype.destroy = function() {
 
 Move.prototype.update = function(parents, sel) {
 	this.node.classList.toggle('hidden', !sel || !sel.node);
-	var state = this.editor.state;
-	var utils = this.editor.utils;
+	const state = this.editor.state;
+	const utils = this.editor.utils;
 	this.node.querySelector('[data-command="left"]')
-	.classList.toggle('disabled', !utils.move(state.tr, -1, false, true));
+		.classList.toggle('disabled', !utils.move(state.tr, -1, false, true));
 	this.node.querySelector('[data-command="right"]')
-	.classList.toggle('disabled', !utils.move(state.tr, 1, false, true));
+		.classList.toggle('disabled', !utils.move(state.tr, 1, false, true));
 	this.node.querySelector('[data-command="delete"]')
-	.classList.toggle('disabled', !utils.deleteTr(state.tr));
+		.classList.toggle('disabled', !utils.deleteTr(state.tr));
 };
 
 })(window.Pageboard);

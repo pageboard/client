@@ -12,27 +12,27 @@ Utils.prototype.equal = require("fast-deep-equal");
 
 Utils.prototype.setDom = function(dom) {
 	if (dom.nodeType != Node.DOCUMENT_FRAGMENT_NODE) {
-		var frag = dom.ownerDocument.createDocumentFragment();
+		const frag = dom.ownerDocument.createDocumentFragment();
 		while (dom.firstChild) {
 			frag.appendChild(dom.firstChild);
 		}
 		dom = frag;
 	}
-	var state = this.view.state;
-	var tr = state.tr;
+	const state = this.view.state;
+	const tr = state.tr;
 	this.insertTr(tr, dom, new State.AllSelection(tr.doc));
 	if (!tr) {
 		console.error("Cannot insert", dom);
 		return;
 	}
-	var sel = tr.selection;
+	const sel = tr.selection;
 	if (!sel.empty) tr.setSelection(State.Selection.atStart(tr.doc));
 	tr.setMeta('addToHistory', false);
 	this.view.dispatch(tr);
 
 	// TODO find a better place to set this
-	var id = this.view.dom.getAttribute('block-id');
-	var block = this.view.blocks.get(id);
+	const id = this.view.dom.getAttribute('block-id');
+	const block = this.view.blocks.get(id);
 	if (!id) {
 		console.error("Missing block-id attribute on", this.view.dom);
 		return;
@@ -45,7 +45,7 @@ Utils.prototype.setDom = function(dom) {
 		console.warn("unsupported case: setting a block dom node that has no content");
 		return;
 	}
-	var el = this.view.element(block.type);
+	const el = this.view.element(block.type);
 	el.contents.set(block, this.view.dom);
 };
 
@@ -57,16 +57,16 @@ Utils.prototype.getDom = function() {
 };
 
 Utils.prototype.insert = function(dom, sel) {
-	var tr = this.view.state.tr;
+	const tr = this.view.state.tr;
 	if (this.insertTr(tr, dom, sel) != null) {
 		this.view.dispatch(tr);
 	}
 };
 
 Utils.prototype.splitTr = function(tr, pos) {
-	var cur;
-	var depth = 1;
-	var maxDepth = tr.doc.resolve(pos).depth;
+	let cur;
+	let depth = 1;
+	const maxDepth = tr.doc.resolve(pos).depth;
 	while (cur == null && depth <= maxDepth) {
 		try {
 			tr.split(pos - 1, depth);
@@ -83,23 +83,23 @@ Utils.prototype.insertTr = function(tr, dom, sel) {
 	if (!dom.ownerDocument) {
 		dom = this.view.render(dom);
 	}
-	var parent = sel.$from.parent;
+	const parent = sel.$from.parent;
 	// when replacing current selection, parse sel.$from
 	// when appending after selection, parse sel.$to
-	var slice = this.parse(dom, sel.node ? sel.$to : sel.$from);
+	let slice = this.parse(dom, sel.node ? sel.$to : sel.$from);
 
-	var from = sel.from;
-	var to = sel.to;
+	let from = sel.from;
+	let to = sel.to;
 
-	var fromto = from;
+	let fromto = from;
 	if (sel.node && sel.node.type.name == "_") {
 		to = from;
 	}
 	if (slice.content.childCount == 1 && (from == to || sel.node)) {
-		var frag = this.fill(slice.content);
-		var node = frag.firstChild;
-		var atStart = !sel.node && sel.$from.parentOffset == 0;
-		var insertPos;
+		const frag = this.fill(slice.content);
+		const node = frag.firstChild;
+		const atStart = !sel.node && sel.$from.parentOffset == 0;
+		let insertPos;
 		if (atStart) {
 			insertPos = this.nextInsertPoint(tr, from + 1, node.type, -1, true);
 		}
@@ -121,9 +121,9 @@ Utils.prototype.insertTr = function(tr, dom, sel) {
 };
 
 Utils.prototype.insertTrNode = function(tr, pos, node) {
-	var $pos = tr.doc.resolve(pos);
-	var from = pos;
-	var to = pos;
+	const $pos = tr.doc.resolve(pos);
+	let from = pos;
+	let to = pos;
 	if ($pos.nodeBefore && $pos.nodeBefore.type.name == "_") from = pos - 1;
 	if ($pos.nodeAfter && $pos.nodeAfter.type.name == "_") to = pos + 1;
 	tr.replaceWith(from, to, node);
@@ -132,18 +132,18 @@ Utils.prototype.insertTrNode = function(tr, pos, node) {
 
 Utils.prototype.fill = function(frag) {
 	if (!(frag instanceof Model.Fragment)) frag = Model.Fragment.from(frag);
-	var list = [];
+	const list = [];
 	frag.forEach((node) => {
-		var content = node.content;
+		let content = node.content;
 		if (content.size) {
-			var before = node.type.contentMatch.fillBefore(content);
+			const before = node.type.contentMatch.fillBefore(content);
 			if (before) {
 				content = before.append(content);
 			}
 		}
-		var match = node.type.contentMatch.matchFragment(content);
+		const match = node.type.contentMatch.matchFragment(content);
 		if (match) {
-			var after = match.fillBefore(Model.Fragment.empty, true);
+			const after = match.fillBefore(Model.Fragment.empty, true);
 			if (after) content = content.append(after);
 		}
 		list.push(node.copy(this.fill(content)));
@@ -152,7 +152,7 @@ Utils.prototype.fill = function(frag) {
 };
 
 Utils.prototype.delete = function(sel) {
-	var tr = this.view.state.tr;
+	const tr = this.view.state.tr;
 	this.deleteTr(tr, sel);
 	this.view.dispatch(tr);
 };
@@ -161,8 +161,8 @@ Utils.prototype.deleteTr = function(tr, sel) {
 	if (!sel) sel = tr.selection;
 	if (sel.empty) return;
 	if (sel.node && sel.node.type.name == "_") return;
-	var start = sel.anchor !== undefined ? sel.anchor : sel.from;
-	var end = sel.head !== undefined ? sel.head : sel.to;
+	const start = sel.anchor !== undefined ? sel.anchor : sel.from;
+	const end = sel.head !== undefined ? sel.head : sel.to;
 	tr.delete(start, end);
 	return true;
 };
@@ -172,13 +172,13 @@ Utils.prototype.parse = function(dom, $pos) {
 };
 
 Utils.prototype.refresh = function(dom, block) {
-	var tr = this.refreshTr(this.view.state.tr, dom, block);
+	const tr = this.refreshTr(this.view.state.tr, dom, block);
 	if (!tr) console.error("Cannot refresh", dom);
 	else this.view.dispatch(tr);
 };
 
 Utils.prototype.refreshTr = function(tr, dom, block) {
-	var pos;
+	let pos;
 	if (dom instanceof Model.ResolvedPos) {
 		pos = dom.pos;
 		dom = null;
@@ -186,30 +186,30 @@ Utils.prototype.refreshTr = function(tr, dom, block) {
 		pos = this.posFromDOM(dom);
 	}
 	if (pos === false) return;
-	var parent = this.parents(tr, pos);
+	const parent = this.parents(tr, pos);
 	if (!parent) return;
-	var root = parent.root;
+	const root = parent.root;
 	if (!block) {
-		var id = (parent.inline && parent.inline.node.marks.find(function(mark) {
+		const id = (parent.inline && parent.inline.node.marks.find(function(mark) {
 			return mark.attrs.id != null;
 		}) || root.node).attrs.id;
 		if (!id) return;
 		block = this.view.blocks.get(id);
 		if (!block) return; // nothing to refresh
 	}
-	var attrs = this.view.blocks.toAttrs(block);
-	var type = dom && dom.getAttribute('block-type');
+	const attrs = this.view.blocks.toAttrs(block);
+	let type = dom && dom.getAttribute('block-type');
 	if (type) attrs.type = type; // dom can override block.type
 	else type = block.type;
 
-	var sel = tr.selection;
-	var node;
+	const sel = tr.selection;
+	let node;
 	if (parent.inline) {
 		node = parent.inline.node;
 		if (sel.empty || sel.node) {
 			if (node.marks.some((mark) => {
 				if (attrs.id && attrs.id != mark.attrs.id) return;
-				var markType = mark.attrs.type;
+				const markType = mark.attrs.type;
 				if (!markType || type != markType) return;
 				if (mark.attrs.focused) {
 					// block.focused cannot be stored here since it is inplace
@@ -220,7 +220,7 @@ Utils.prototype.refreshTr = function(tr, dom, block) {
 				return true;
 			})) return tr;
 		}	else {
-			var markType = this.view.schema.marks[type];
+			const markType = this.view.schema.marks[type];
 			if (markType) {
 				tr.addMark(sel.from, sel.to, markType.create(attrs));
 				return tr;
@@ -236,7 +236,7 @@ Utils.prototype.refreshTr = function(tr, dom, block) {
 		console.warn("Cannot refresh, node id do not match", attrs.id, node.attrs.id);
 		return tr;
 	}
-	var selectedNode = sel.from === pos && sel.node;
+	let selectedNode = sel.from === pos && sel.node;
 	try {
 		tr.setNodeMarkup(pos, null, attrs);
 	} catch(ex) {
@@ -251,10 +251,10 @@ Utils.prototype.refreshTr = function(tr, dom, block) {
 };
 
 Utils.prototype.selectDom = function(node, textSelection) {
-	var pos = this.posFromDOM(node);
-	var tr = this.view.state.tr;
-	var $pos = tr.doc.resolve(pos);
-	var sel;
+	const pos = this.posFromDOM(node);
+	const tr = this.view.state.tr;
+	const $pos = tr.doc.resolve(pos);
+	let sel;
 	if (node.nodeType != Node.ELEMENT_NODE || textSelection) {
 		sel = new State.TextSelection($pos);
 	} else {
@@ -273,7 +273,7 @@ Utils.prototype.select = function(obj, textSelection) {
 };
 
 Utils.prototype.selectTr = function(tr, obj, textSelection) {
-	var parent, pos;
+	let parent, pos;
 	if (obj.root && obj.root.rpos) {
 		parent = obj;
 	} else if (obj instanceof State.Selection) {
@@ -304,23 +304,23 @@ Utils.prototype.selectTr = function(tr, obj, textSelection) {
 	if (!parent) {
 		return false;
 	}
-	var root = parent.root;
+	const root = parent.root;
 	if (!root) {
 		return false;
 	}
-	var $pos = root.rpos;
-	var $rootPos = root.level ? tr.doc.resolve(root.rpos.before(root.level)) : root.rpos;
+	const $pos = root.rpos;
+	const $rootPos = root.level ? tr.doc.resolve(root.rpos.before(root.level)) : root.rpos;
 
 	if (!$pos.nodeAfter) textSelection = true;
 	if (parent.inline && !parent.inline.node.isLeaf) {
-		var nodeBefore = root.rpos.nodeBefore;
-		var nodeAfter = root.rpos.nodeAfter;
+		const nodeBefore = root.rpos.nodeBefore;
+		const nodeAfter = root.rpos.nodeAfter;
 
-		var start = root.rpos.pos;
+		let start = root.rpos.pos;
 		if (nodeBefore && Model.Mark.sameSet(nodeBefore.marks, parent.inline.node.marks)) {
 			start = start - root.rpos.nodeBefore.nodeSize;
 		}
-		var end = root.rpos.pos;
+		let end = root.rpos.pos;
 		if (nodeAfter && Model.Mark.sameSet(nodeAfter.marks, parent.inline.node.marks)) {
 			end = end + root.rpos.nodeAfter.nodeSize;
 		}
@@ -341,7 +341,7 @@ Utils.prototype.selectTr = function(tr, obj, textSelection) {
 };
 
 Utils.prototype.replace = function(by, sel) {
-	var tr = this.replaceTr(this.view.state.tr, by, sel);
+	const tr = this.replaceTr(this.view.state.tr, by, sel);
 	if (!tr) console.error("Cannot replace", sel);
 	else this.view.dispatch(tr);
 };
@@ -354,21 +354,21 @@ Utils.prototype.replaceTr = function(tr, by, sel, textSelection) {
 };
 
 Utils.prototype.remove = function(src) {
-	var tr = this.removeTr(this.view.state.tr, src);
+	const tr = this.removeTr(this.view.state.tr, src);
 	if (!tr) console.error("Cannot remove", src);
 	else this.view.dispatch(tr);
 };
 
 Utils.prototype.removeTr = function(tr, src) {
-	var sel = this.selectTr(tr, src);
+	const sel = this.selectTr(tr, src);
 	if (!sel) return false;
 	return this.deleteTr(tr, sel);
 };
 
 Utils.prototype.posFromDOM = function(dom) {
-	var offset = 0;
+	let offset = 0;
 	if (dom != this.view.dom) {
-		var sib = dom;
+		let sib = dom;
 		while ((sib = sib.previousSibling)) {
 			offset++;
 		}
@@ -378,7 +378,7 @@ Utils.prototype.posFromDOM = function(dom) {
 		console.warn("FIXME", "cannot find posFromDOM of a dom node without parent", dom);
 		return false;
 	}
-	var pos;
+	let pos;
 	try {
 		pos = this.view.posAtDOM(dom, offset, 0);
 	} catch(ex) {
@@ -398,9 +398,10 @@ Utils.prototype.posToDOM = function(pos) {
 };
 
 Utils.prototype.parents = function(tr, pos, all, before) {
-	var rpos = tr.doc.resolve(pos);
-	var depth = rpos.depth + 1;
-	var node, type, obj, level = depth, ret = [];
+	const rpos = tr.doc.resolve(pos);
+	const depth = rpos.depth + 1;
+	const ret = [];
+	let node, type, obj, level = depth;
 	while (level >= 0) {
 		if (!obj) obj = {};
 		if (level == depth) {
@@ -432,7 +433,7 @@ Utils.prototype.parents = function(tr, pos, all, before) {
 				obj.container.name = node.attrs.content;
 			}
 			if (type == "root") {
-				var el = node.type.spec.element;
+				const el = node.type.spec.element;
 				if (!el.inline && el.contents.firstId) {
 					if (!obj.container) obj.container = obj.root || {};
 					obj.container.name = el.contents.firstId;
@@ -455,12 +456,12 @@ Utils.prototype.selectionParents = function(tr, sel) {
 	if (sel instanceof State.AllSelection) {
 		return [{root: {node: tr.doc}}];
 	}
-	var fromParents = this.parents(tr, sel.from, true, false);
+	const fromParents = this.parents(tr, sel.from, true, false);
 	if (sel.empty) return fromParents;
-	var toParents = this.parents(tr, sel.to, true, true);
-	var parents = [];
-	var from, to;
-	for (var i = 1; i <= fromParents.length && i <= toParents.length; i++) {
+	const toParents = this.parents(tr, sel.to, true, true);
+	const parents = [];
+	let from, to;
+	for (let i = 1; i <= fromParents.length && i <= toParents.length; i++) {
 		from = fromParents[fromParents.length - i];
 		to = toParents[toParents.length - i];
 		if (from.root.node == to.root.node) parents.unshift(from);
@@ -540,8 +541,8 @@ Utils.prototype.canInsert = function($pos, nodeType, all, after) {
 
 function parseContext(context) {
 	if (!context) return;
-	var list = context.split('|').map(function(str) {
-		var pc = str.trim().split('/');
+	const list = context.split('|').map(function(str) {
+		const pc = str.trim().split('/');
 		pc.pop();
 		return pc;
 	});
@@ -550,10 +551,10 @@ function parseContext(context) {
 
 function checkContext(list, type, last) {
 	// does not check nested contexts
-	var cands = type.spec.group ? type.spec.group.split(' ') : [];
+	const cands = type.spec.group ? type.spec.group.split(' ') : [];
 	cands.push(type.name);
 	return list.some(function(pc) {
-		var last = pc[pc.length - 1];
+		const last = pc[pc.length - 1];
 		if (!last) {
 			if (pc.length == 2 && cands.includes(pc[0])) {
 				return true;
@@ -568,13 +569,13 @@ function checkContext(list, type, last) {
 }
 
 Utils.prototype.nextInsertPoint = function(tr, from, nodeType, dir, around) {
-	var cur = from + dir;
-	var ret;
-	var $pos;
-	var doc = tr.doc;
-	var docSize = doc.content.size;
-	var npos = null;
-	var all = !around;
+	let cur = from + dir;
+	let ret;
+	let $pos;
+	const doc = tr.doc;
+	const docSize = doc.content.size;
+	let npos = null;
+	const all = !around;
 	while (cur >= 0 && cur <= docSize) {
 		$pos = doc.resolve(cur);
 		ret = this.canInsert($pos, nodeType, all, dir > 0);
@@ -599,14 +600,14 @@ Utils.prototype.nextInsertPoint = function(tr, from, nodeType, dir, around) {
 };
 
 Utils.prototype.move = function(tr, dir, jump, check) {
-	var sel = tr.selection;
-	var node = sel.node;
+	const sel = tr.selection;
+	let node = sel.node;
 	if (!node) return;
 	if (node.type.name == "_") return;
 	tr.delete(sel.from, sel.to);
-	var cur = sel.from;
-	var $cur = tr.doc.resolve(cur);
-	var around = true;
+	let cur = sel.from;
+	const $cur = tr.doc.resolve(cur);
+	let around = true;
 	if (jump) {
 		if (dir > 0 && $cur.nodeAfter) {
 			cur += $cur.nodeAfter.nodeSize - 1;
@@ -616,7 +617,7 @@ Utils.prototype.move = function(tr, dir, jump, check) {
 			around = false;
 		}
 	}
-	var pos = null, $pos = null;
+	let pos = null, $pos = null;
 	while (pos == null) {
 		pos = this.nextInsertPoint(tr, cur, node.type, dir, around);
 		if (pos == null) return;
@@ -633,7 +634,7 @@ Utils.prototype.move = function(tr, dir, jump, check) {
 };
 
 Utils.prototype.markActive = function(sel, nodeType) {
-	var state = this.view.state;
+	const state = this.view.state;
 	if (sel.empty) {
 		return nodeType.isInSet(state.storedMarks || sel.$from.marks());
 	}	else {
@@ -646,7 +647,7 @@ Utils.prototype.toggleMark = function(type, attrs) {
 };
 
 Utils.prototype.extendUpdateMark = function(tr, from, to, mark, attrs) {
-	var hadIt = false;
+	let hadIt = false;
 	if (from != to && tr.doc.rangeHasMark(from, to, mark)) {
 		hadIt = true;
 	}
@@ -667,12 +668,12 @@ Utils.prototype.extendUpdateMark = function(tr, from, to, mark, attrs) {
 };
 
 Utils.prototype.serializeHTML = function(dom, children) {
-	var html;
+	let html;
 	if (dom instanceof Node) {
 		if (children || dom instanceof DocumentFragment) {
 			html = "";
-			var child;
-			for (var i = 0; i < dom.childNodes.length; i++) {
+			let child;
+			for (let i = 0; i < dom.childNodes.length; i++) {
 				child = dom.childNodes[i];
 				if (child.nodeType == Node.TEXT_NODE) html += child.nodeValue;
 				else html += child.outerHTML;
@@ -705,14 +706,14 @@ Utils.wrapMap = {
 Utils.offdoc = document.cloneNode(false);
 
 Utils.prototype.parseHTML = function(html) {
-	var metas = /(\s*<meta [^>]*>)*/.exec(html);
+	const metas = /(\s*<meta [^>]*>)*/.exec(html);
 	if (metas) {
 		html = html.slice(metas[0].length);
 	}
-	var firstTag = /(?:<meta [^>]*>)*<([a-z][^>\s]+)/i.exec(html);
-	var elt = Utils.offdoc.createElement("div");
-	var wrap;
-	var depth = 0;
+	const firstTag = /(?:<meta [^>]*>)*<([a-z][^>\s]+)/i.exec(html);
+	let elt = Utils.offdoc.createElement("div");
+	let wrap;
+	let depth = 0;
 
 	if ((wrap = firstTag && Utils.wrapMap[firstTag[1].toLowerCase()])) {
 		html = wrap.map(function(n) {
@@ -723,7 +724,7 @@ Utils.prototype.parseHTML = function(html) {
 		depth = wrap.length;
 	}
 	elt.innerHTML = html;
-	for (var i = 0; i < depth; i++) {
+	for (let i = 0; i < depth; i++) {
 		elt = elt.firstChild;
 	}
 

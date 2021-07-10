@@ -23,9 +23,9 @@ class HTMLElementBlogsHelper {
 	}
 
 	syncBlock(node) {
-		var editor = window.parent.Pageboard.editor;
+		const editor = window.parent.Pageboard.editor;
 		if (!editor || editor.closed) return;
-		var block = editor.blocks.get(node.getAttribute('block-id'));
+		const block = editor.blocks.get(node.getAttribute('block-id'));
 		if (!block.data) block.data = {};
 		block.data.index = parseInt(node.dataset.index) || 0;
 		editor.dispatch(editor.utils.refreshTr(editor.state.tr, node, block));

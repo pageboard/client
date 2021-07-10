@@ -32,7 +32,7 @@ function define(view, elt, schema, views) {
 		return;
 	}
 	if (!elt.render) return; // some elements are not meant to be rendered
-	var dom = view.render(view.blocks.create(elt.name), {
+	let dom = view.render(view.blocks.create(elt.name), {
 		merge: false,
 		genId: false
 	});
@@ -44,11 +44,11 @@ function define(view, elt, schema, views) {
 		return;
 	}
 	if (dom.parentNode) dom = dom.cloneNode(true);
-	var index = 0;
+	let index = 0;
 
-	var contents = elt.contents;
-	var contentsLen = contents.list.length;
-	var domContents = dom.querySelectorAll('[block-content]');
+	const contents = elt.contents;
+	const contentsLen = contents.list.length;
+	const domContents = dom.querySelectorAll('[block-content]');
 
 	if (!contentsLen) {
 		// leaf
@@ -58,7 +58,7 @@ function define(view, elt, schema, views) {
 			return;
 		}
 	} else if (domContents.length == 1) {
-		var contentName = domContents[0].getAttribute('block-content');
+		const contentName = domContents[0].getAttribute('block-content');
 		if (contents.unnamed && contentName) {
 			console.error(`${elt.name}.contents.id = ${contentName} is missing`);
 			return;
@@ -69,8 +69,8 @@ function define(view, elt, schema, views) {
 	}
 
 	flagDom(elt, dom, function(obj) {
-		var spec;
-		var type = obj.type;
+		let spec;
+		const type = obj.type;
 		if (type == "root") {
 			spec = createRootSpec(view, elt, obj);
 			obj.name = elt.name; // wrap and container are set further
@@ -91,9 +91,9 @@ function define(view, elt, schema, views) {
 				return child.name + (child.type == "const" ? "?" : "");
 			}).join(" ");
 		} else if (["root", "container"].includes(type) && !elt.leaf) {
-			var def = contents.find(obj.contentDOM.getAttribute('block-content'));
+			const def = contents.find(obj.contentDOM.getAttribute('block-content'));
 			if (def) {
-				var nodes = def.nodes;
+				const nodes = def.nodes;
 				if (nodes) {
 					spec.content = nodes;
 					if (nodes != "text*" && !nodes.endsWith("inline*") && nodes.indexOf(' ') < 0) {
@@ -113,12 +113,12 @@ function define(view, elt, schema, views) {
 			obj.name = `${elt.name}_${type}_${spec.contentName || index++}`;
 		}
 
-		var parseTag = spec.parseDOM && spec.parseDOM[0].tag;
+		const parseTag = spec.parseDOM && spec.parseDOM[0].tag;
 		if (parseTag) {
-			var parseTagKey = spec.typeName == "root" ? parseTag : `${elt.name} ${parseTag}`;
+			let parseTagKey = spec.typeName == "root" ? parseTag : `${elt.name} ${parseTag}`;
 			if (elt.context) parseTagKey += " " + elt.context;
 			if (elt.group) parseTagKey += " " + elt.group;
-			var oldName = view.tags[parseTagKey];
+			const oldName = view.tags[parseTagKey];
 			if (oldName) {
 				console.info(`Two elements with same tag "${parseTag}" - ${oldName} and ${obj.name}`);
 			} else {
@@ -127,7 +127,7 @@ function define(view, elt, schema, views) {
 		}
 
 		if (type == "root") {
-			var existingName = elt.replaces || elt.name;
+			const existingName = elt.replaces || elt.name;
 			if (elt.inline && spec.content) {
 				if (schema.marks.get(existingName)) {
 					schema.marks = schema.marks.remove(existingName);
@@ -161,11 +161,11 @@ function getImmediateContents(root, list) {
 
 function findContent(elt, dom, type) {
 	if (elt.leaf) return;
-	var node;
+	let node;
 	if (elt.inline || elt.contents.unnamed) {
 		if (type == "root") node = dom;
 	} else {
-		var list = [];
+		const list = [];
 		getImmediateContents(dom, list);
 		if (!list.length) return;
 		node = list.ancestor();
@@ -184,11 +184,11 @@ function flagDom(elt, dom, iterate, parent) {
 	}
 	if (dom.nodeType != Node.ELEMENT_NODE) return;
 	if (!parent) parent = {};
-	var type;
+	let type;
 	if (!parent.type) type = "root";
 	else if (parent.type == "root") type = ["container", "wrap"];
 	else if (parent.type == "wrap") type = "container";
-	var obj = {
+	const obj = {
 		dom: dom,
 		contentDOM: findContent(elt, dom, type)
 	};
@@ -208,9 +208,9 @@ function flagDom(elt, dom, iterate, parent) {
 		obj.type = 'const';
 	}
 	if (obj.contentDOM) {
-		var contentDOM = obj.contentDOM.cloneNode(false);
+		const contentDOM = obj.contentDOM.cloneNode(false);
 		Array.prototype.forEach.call(obj.contentDOM.childNodes, function(node) {
-			var child = flagDom(elt, node, iterate, obj);
+			const child = flagDom(elt, node, iterate, obj);
 			if (!child) return;
 			if (["wrap", "container", "const"].includes(child.type)) {
 				obj.children.push(child);
@@ -234,15 +234,15 @@ function flagDom(elt, dom, iterate, parent) {
 }
 
 function toDOMOutputSpec(obj, node, inplace) {
-	var out = 0;
-	var dom = obj.contentDOM || obj.dom;
-	var attrs = Object.assign(attrsTo(node.attrs), tryJSON(node.attrs._json), domAttrsMap(obj.dom));
+	let out = 0;
+	let dom = obj.contentDOM || obj.dom;
+	const attrs = Object.assign(attrsTo(node.attrs), tryJSON(node.attrs._json), domAttrsMap(obj.dom));
 	if (!inplace) {
 		delete attrs['block-data'];
 	}
 	delete attrs['block-focused'];
 	while (dom) {
-		var contentName = dom.getAttribute('block-content') || undefined;
+		const contentName = dom.getAttribute('block-content') || undefined;
 		if (dom != obj.dom) {
 			out = [dom.nodeName, {
 				'class': dom.className || undefined,
@@ -264,7 +264,7 @@ function toDOMOutputSpec(obj, node, inplace) {
 }
 
 function createRootSpec(view, elt, obj) {
-	var defaultAttrs = {
+	const defaultAttrs = {
 		id: null,
 		focused: null,
 		data: null,
@@ -274,19 +274,19 @@ function createRootSpec(view, elt, obj) {
 		standalone: elt.standalone ? "true" : null
 	};
 
-	var defaultSpecAttrs = specAttrs(defaultAttrs);
+	const defaultSpecAttrs = specAttrs(defaultAttrs);
 	if (elt.inline && elt.contents.list.length == 1) obj.contentDOM = obj.dom;
 
-	var parseRule = {
+	const parseRule = {
 		priority: 1000 - (elt.priority || 0),
 		getAttrs: function(dom) {
-			var type = dom.getAttribute('block-type') || elt.name;
-			var id = dom.getAttribute('block-id');
-			var standalone = dom.getAttribute('block-standalone') == "true";
-			var data = dom.getAttribute('block-data');
-			var expr = dom.getAttribute('block-expr');
-			var lock = dom.getAttribute('block-lock');
-			var attrs = {};
+			const type = dom.getAttribute('block-type') || elt.name;
+			const id = dom.getAttribute('block-id');
+			const standalone = dom.getAttribute('block-standalone') == "true";
+			const data = dom.getAttribute('block-data');
+			const expr = dom.getAttribute('block-expr');
+			const lock = dom.getAttribute('block-lock');
+			const attrs = {};
 			if (expr) attrs.expr = expr;
 			if (lock) attrs.lock = lock;
 			if (data) {
@@ -294,11 +294,11 @@ function createRootSpec(view, elt, obj) {
 			} else if (elt.parse) {
 				attrs.data = JSON.stringify(elt.parse.call(elt, dom));
 			} else if (elt.inplace && elt.properties) {
-				var dataObj = {};
+				const dataObj = {};
 				Object.keys(elt.properties).forEach(function(key) {
-					var prop = elt.properties[key];
-					var attr = key.replace(/([A-Z])/g, (g) => `-${g[0].toLowerCase()}`);
-					var val = dom.getAttribute(attr);
+					const prop = elt.properties[key];
+					const attr = key.replace(/([A-Z])/g, (g) => `-${g[0].toLowerCase()}`);
+					let val = dom.getAttribute(attr);
 					if (val == null) {
 						val = dom.dataset && dom.dataset[key] || null;
 						if (val == null) return;
@@ -324,9 +324,9 @@ function createRootSpec(view, elt, obj) {
 				attrs.type = type;
 				return attrs;
 			}
-			var block = view.blocks.fromAttrs(attrs);
+			let block = view.blocks.fromAttrs(attrs);
 			if (id) {
-				var oldBlock = view.blocks.get(id);
+				const oldBlock = view.blocks.get(id);
 				if (oldBlock) {
 					// update the stored block and keep default data
 					block.data = Object.assign(oldBlock.data || {}, block.data);
@@ -346,9 +346,9 @@ function createRootSpec(view, elt, obj) {
 			}
 			if (!block.type) block.type = type;
 			view.blocks.set(block);
-			attrs = view.blocks.toAttrs(block);
-			attrs.type = type;
-			return attrs;
+			const ret = view.blocks.toAttrs(block);
+			ret.type = type;
+			return ret;
 		},
 		contentElement: function(dom) { return findContent(elt, dom, "root"); }
 	};
@@ -373,7 +373,7 @@ function createRootSpec(view, elt, obj) {
 
 	if (elt.preserveWhitespace) parseRule.preserveWhitespace = elt.preserveWhitespace;
 
-	var spec = {
+	const spec = {
 		typeName: "root",
 		element: elt,
 		domModel: obj.dom,
@@ -383,18 +383,18 @@ function createRootSpec(view, elt, obj) {
 		attrs: Object.assign({}, defaultSpecAttrs),
 		parseDOM: [parseRule],
 		toDOM: function(node) {
-			var id = node.attrs.id;
+			let id = node.attrs.id;
 			if (!id && node.marks && node.marks[0] && !elt.contents.leaf) {
 				id = node.marks[0].attrs.id;
 				console.warn("Probably unsupported case of id from in node.marks", elt.inline, node);
 			}
-			var block;
+			let block;
 			if (id) block = view.blocks.get(id);
 
 			if (!block) block = view.blocks.fromAttrs(node.attrs);
 			else block.focused = node.attrs.focused;
 
-			var dom = view.render(block, {type: node.attrs.type, merge: false});
+			let dom = view.render(block, {type: node.attrs.type, merge: false});
 			if (dom && dom.nodeType == Node.DOCUMENT_FRAGMENT_NODE && dom.children.length == 1) {
 				dom = dom.children[0];
 			}
@@ -402,8 +402,8 @@ function createRootSpec(view, elt, obj) {
 				console.error("Rendering", block, "with", node.attrs.type, "returns no dom");
 				return "";
 			}
-			var uView = flagDom(elt, dom);
-			var out = toDOMOutputSpec(uView, node, elt.inplace);
+			const uView = flagDom(elt, dom);
+			const out = toDOMOutputSpec(uView, node, elt.inplace);
 			return out;
 		}
 	};
@@ -424,29 +424,29 @@ function createRootSpec(view, elt, obj) {
 }
 
 function createWrapSpec(view, elt, obj) {
-	var defaultAttrs = attrsFrom(obj.dom);
+	const defaultAttrs = attrsFrom(obj.dom);
 	defaultAttrs._json = null;
 	defaultAttrs._id = null;
 	defaultAttrs._html = null;
-	var defaultSpecAttrs = specAttrs(defaultAttrs);
-	var wrapTag = domSelector(obj.dom);
+	const defaultSpecAttrs = specAttrs(defaultAttrs);
+	const wrapTag = domSelector(obj.dom);
 	if (wrapTag == "div") console.warn(elt.name, "should define a class on wrapper tag", obj.dom.outerHTML);
 
-	var parseRule = {
+	const parseRule = {
 		tag: wrapTag + ':not([block-type])',
 		context: `${elt.name}//`, // FIXME context should be more precise but flagDom works bottom to top
 		getAttrs: function(dom) {
-			var attrs = attrsFrom(dom);
-			var json = saveDomAttrs(dom);
+			const attrs = attrsFrom(dom);
+			const json = saveDomAttrs(dom);
 			if (json) attrs._json = json;
-			var root = dom.closest('[block-id]');
+			const root = dom.closest('[block-id]');
 			if (root) attrs._id = root.getAttribute('block-id');
 			return attrs;
 		},
 		contentElement: function(dom) { return findContent(elt, dom, 'wrap'); }
 	};
 
-	var spec = {
+	const spec = {
 		typeName: "wrap",
 		element: elt,
 		domModel: obj.dom,
@@ -462,27 +462,27 @@ function createWrapSpec(view, elt, obj) {
 }
 
 function createConstSpec(view, elt, obj) {
-	var defaultAttrs = attrsFrom(obj.dom);
+	const defaultAttrs = attrsFrom(obj.dom);
 	defaultAttrs._id = null;
 	defaultAttrs._json = null;
 	defaultAttrs._html = null;
-	var defaultSpecAttrs = specAttrs(defaultAttrs);
-	var wrapTag = domSelector(obj.dom);
+	const defaultSpecAttrs = specAttrs(defaultAttrs);
+	const wrapTag = domSelector(obj.dom);
 
-	var parseRule = {
+	const parseRule = {
 		tag: wrapTag + ':not([block-type])',
 		context: `${elt.name}//`,
 		getAttrs: function(dom) {
-			var attrs = {}; //attrsFrom(dom);
+			const attrs = {}; //attrsFrom(dom);
 			attrs._html = dom.outerHTML;
 			attrs._json = saveDomAttrs(dom);
-			var root = dom.closest('[block-id]');
+			const root = dom.closest('[block-id]');
 			if (root) attrs._id = root.getAttribute('block-id');
 			return attrs;
 		}
 	};
 
-	var spec = {
+	const spec = {
 		typeName: "const",
 		element: elt,
 		atom: true,
@@ -498,36 +498,36 @@ function createConstSpec(view, elt, obj) {
 }
 
 function createContainerSpec(view, elt, obj) {
-	var defaultAttrs = attrsFrom(obj.dom);
+	const defaultAttrs = attrsFrom(obj.dom);
 	if (obj.contentDOM != obj.dom) {
 		defaultAttrs.content = obj.contentDOM.getAttribute("block-content");
 	}
 	defaultAttrs._json = null;
 	defaultAttrs._id = null;
 	defaultAttrs._html = null;
-	var defaultSpecAttrs = specAttrs(defaultAttrs);
-	var tag;
+	const defaultSpecAttrs = specAttrs(defaultAttrs);
+	let tag;
 	if (obj.dom == obj.contentDOM) {
 		tag = `${obj.dom.nodeName.toLowerCase()}[block-content="${defaultAttrs.content}"]`;
 	} else {
 		tag = domSelector(obj.dom) + `:not([block-content])`;
 	}
-	var parseRule = {
+	const parseRule = {
 		tag: tag + ':not([block-type])',
 		context: `${elt.name}//`, // FIXME context should be more precise but flagDom works bottom to top
 		getAttrs: function(dom) {
-			var attrs = attrsFrom(dom);
-			var json = saveDomAttrs(dom);
+			const attrs = attrsFrom(dom);
+			const json = saveDomAttrs(dom);
 			if (json) attrs._json = json;
 			attrs._html = staticHtml(dom);
-			var root = dom.closest('[block-id]');
+			const root = dom.closest('[block-id]');
 			if (root) attrs._id = root.getAttribute('block-id');
 			return attrs;
 		},
 		contentElement: function(dom) { return findContent(elt, dom, 'container'); }
 	};
 
-	var spec = {
+	const spec = {
 		typeName: "container",
 		element: elt,
 		domModel: obj.dom,
@@ -557,7 +557,7 @@ function setupView(me, node) {
 		me.contentDOM = findContent(me.element, me.dom, node.type.spec.typeName);
 	}
 	me.contentName = node.type.spec.contentName;
-	var def = me.element.contents.find(me.contentName);
+	const def = me.element.contents.find(me.contentName);
 	me.virtualContent = def && def.virtual;
 
 	if (!me.contentDOM || me.contentDOM == me.dom) return;
@@ -590,7 +590,7 @@ function RootNodeView(node, view, getPos, decorations) {
 		this.id = node.attrs.id = view.dom.getAttribute('block-id');
 	}
 
-	var block;
+	let block;
 	if (this.id) {
 		if (this.element.inplace) {
 			delete node.attrs.id;
@@ -631,14 +631,14 @@ RootNodeView.prototype.update = function(node, decorations) {
 	if (this.element.name != node.attrs.type) {
 		return false;
 	}
-	var oldBlock = this.oldBlock;
+	const oldBlock = this.oldBlock;
 	// TODO update instances of other standalone blocks !
 	if (node.attrs.id != this.id) {
 		return false;
 	}
-	var view = this.view;
-	var uBlock = view.blocks.fromAttrs(node.attrs);
-	var block;
+	const view = this.view;
+	const uBlock = view.blocks.fromAttrs(node.attrs);
+	let block;
 	if (this.element.inplace) {
 		block = uBlock;
 	} else {
@@ -653,14 +653,14 @@ RootNodeView.prototype.update = function(node, decorations) {
 	if (uBlock.lock) block.lock = uBlock.lock;
 
 	// consider it's the same data when it's initializing
-	var sameData = false;
+	let sameData = false;
 	if (oldBlock) {
 		sameData = view.utils.equal(oldBlock.data || {}, block.data || {});
 		if (sameData && block.expr) {
 			sameData = view.utils.equal(oldBlock.expr || {}, block.expr || {});
 		}
 	}
-	var sameFocus = oldBlock && oldBlock.focused == node.attrs.focused || false;
+	const sameFocus = oldBlock && oldBlock.focused == node.attrs.focused || false;
 
 	if (!sameData || !sameFocus) {
 		this.oldBlock = view.blocks.copy(block);
@@ -669,14 +669,14 @@ RootNodeView.prototype.update = function(node, decorations) {
 		if (node.attrs.focused) block.focused = node.attrs.focused;
 		else delete block.focused;
 
-		var dom = view.render(block, {type: node.attrs.type, merge: false});
+		let dom = view.render(block, {type: node.attrs.type, merge: false});
 		if (dom && dom.nodeType == Node.DOCUMENT_FRAGMENT_NODE && dom.children.length == 1) {
 			dom = dom.children[0];
 		}
-		var tr = view.state.tr;
+		const tr = view.state.tr;
 		mutateAttributes(this.dom, dom);
 		if (!sameData) {
-			var nobj = flagDom(this.element, dom);
+			const nobj = flagDom(this.element, dom);
 			try {
 				mutateNodeView(tr, this.getPos ? this.getPos() : null, node, this, nobj);
 			} catch(ex) {
@@ -700,15 +700,15 @@ RootNodeView.prototype.update = function(node, decorations) {
 		// no point in calling render
 	}
 
-	var cname = node.type.spec.contentName;
+	const cname = node.type.spec.contentName;
 	if (cname != null) {
-		var cdom = this.contentDOM;
+		const cdom = this.contentDOM;
 		if (!block.content) block.content = {};
 		if (block.standalone && oldBlock) {
 			if (!Array.isArray(block.content[cname])) {
 				block.content[cname] = [];
 			}
-			var found = false;
+			let found = false;
 			block.content[cname].forEach(function(idom) {
 				if (idom == cdom) {
 					found = true;
@@ -730,25 +730,25 @@ RootNodeView.prototype.update = function(node, decorations) {
 
 RootNodeView.prototype.ignoreMutation = function(record) {
 	if (record.type == "attributes") {
-		var dom = record.target;
-		var obj = dom.pcUiAttrs;
+		const dom = record.target;
+		let obj = dom.pcUiAttrs;
 		if (!obj) obj = dom.pcUiAttrs = {};
-		var name = record.attributeName;
-		var val = dom.getAttribute(name);
+		const name = record.attributeName;
+		const val = dom.getAttribute(name);
 		if (name == "class") {
 			if (record.oldValue != val) {
-				var oldClass = mapOfClass(record.oldValue);
-				var newClass = mapOfClass(val);
-				var diffClass = {};
-				for (var k in newClass) if (newClass[k] && !oldClass[k]) diffClass[k] = true;
+				const oldClass = mapOfClass(record.oldValue);
+				const newClass = mapOfClass(val);
+				const diffClass = {};
+				for (const k in newClass) if (newClass[k] && !oldClass[k]) diffClass[k] = true;
 				obj[name] = Object.keys(diffClass).join(' ');
 			}
 		} else if (name == "style") {
 			if (record.oldValue != val) {
-				var oldStyle = mapOfStyle(record.oldValue);
-				var newStyle = mapOfStyle(dom.style);
-				var diffStyle = [];
-				for (var j in newStyle) if (newStyle[j] && !oldStyle[j]) diffStyle.push(j + ':' + newStyle[j] + ';');
+				const oldStyle = mapOfStyle(record.oldValue);
+				const newStyle = mapOfStyle(dom.style);
+				const diffStyle = [];
+				for (const j in newStyle) if (newStyle[j] && !oldStyle[j]) diffStyle.push(j + ':' + newStyle[j] + ';');
 				obj[name] = diffStyle.join('');
 			}
 		} else {
@@ -840,7 +840,7 @@ function ContainerNodeView(node, view, getPos, decorations) {
 }
 
 ContainerNodeView.prototype.update = function(node, decorations) {
-	var contentName = node.type.spec.contentName;
+	const contentName = node.type.spec.contentName;
 	if (contentName != this.contentName) {
 		return false;
 	}
@@ -859,7 +859,7 @@ ContainerNodeView.prototype.update = function(node, decorations) {
 	if (!this.id) this.id = node.attrs._id;
 	else if (this.id != node.attrs._id) return false;
 
-	var block = this.view.blocks.get(this.id);
+	const block = this.view.blocks.get(this.id);
 	if (!block) {
 		console.warn("container has no root node id", this, node);
 		return false;
@@ -888,15 +888,15 @@ untouched.
 */
 
 function mutateNodeView(tr, pos, pmNode, obj, nobj) {
-	var dom = obj.dom;
-	var initial = !obj._pcinit;
+	const dom = obj.dom;
+	const initial = !obj._pcinit;
 	if (initial) obj._pcinit = true;
 	if (dom && nobj.dom.nodeName != dom.nodeName) {
-		var emptyDom = nobj.dom.cloneNode(false);
-		var sameContentDOM = obj.contentDOM == obj.dom;
+		const emptyDom = nobj.dom.cloneNode(false);
+		const sameContentDOM = obj.contentDOM == obj.dom;
 		if (dom.parentNode) {
 			// workaround: nodeView cannot change their dom node
-			var desc = emptyDom.pmViewDesc = dom.pmViewDesc;
+			const desc = emptyDom.pmViewDesc = dom.pmViewDesc;
 			desc.nodeDOM = desc.contentDOM = desc.dom = emptyDom;
 			dom.parentNode.replaceChild(emptyDom, dom);
 		}
@@ -906,13 +906,13 @@ function mutateNodeView(tr, pos, pmNode, obj, nobj) {
 	}
 	if (nobj.children.length) {
 		// pmNode's contentDOM.children may be wrap, container, const
-		var curpos = pos + 1;
+		let curpos = pos + 1;
 		nobj.children.forEach(function(objChild, i) {
-			var pmChild = pmNode.child(i);
-			var newAttrs = Object.assign({}, pmChild.attrs, {
+			const pmChild = pmNode.child(i);
+			const newAttrs = Object.assign({}, pmChild.attrs, {
 				_json: saveDomAttrs(objChild.dom)
 			});
-			var type = pmChild.type.spec.typeName;
+			const type = pmChild.type.spec.typeName;
 			if (type != "root") {
 				if (pmNode.attrs.id) {
 					newAttrs._id = pmNode.attrs.id;
@@ -928,8 +928,8 @@ function mutateNodeView(tr, pos, pmNode, obj, nobj) {
 				// before all rootNodeView children have been updated with *old* state
 				pmChild.attrs = newAttrs; // so we must change pmNode right now !
 				if (objChild.children.length) {
-					var domChild = obj.contentDOM && obj.contentDOM.children[i];
-					var desc = domChild && domChild.pmViewDesc || {};
+					const domChild = obj.contentDOM && obj.contentDOM.children[i];
+					const desc = domChild && domChild.pmViewDesc || {};
 					mutateNodeView(tr, curpos, pmChild, desc, objChild);
 				}
 				curpos += pmChild.nodeSize;
@@ -940,12 +940,12 @@ function mutateNodeView(tr, pos, pmNode, obj, nobj) {
 	// first upgrade attributes
 	mutateAttributes(obj.dom, nobj.dom);
 	// then upgrade descendants
-	var parent, node;
+	let parent, node;
 	if (!obj.contentDOM) {
 		// remove all _pcElt
 		parent = obj.dom;
 		node = parent.firstChild;
-		var cur;
+		let cur;
 		while (node) {
 			if (node._pcElt || initial) {
 				cur = node;
@@ -968,8 +968,8 @@ function mutateNodeView(tr, pos, pmNode, obj, nobj) {
 		return;
 	}
 	// there is something between dom and contentDOM
-	var cont = obj.contentDOM;
-	var ncont = nobj.contentDOM;
+	let cont = obj.contentDOM;
+	let ncont = nobj.contentDOM;
 
 	while (cont != obj.dom) {
 		mutateAttributes(cont, ncont);
@@ -1005,7 +1005,7 @@ function mutateNodeView(tr, pos, pmNode, obj, nobj) {
 }
 
 function mapOfClass(att) {
-	var map = {};
+	const map = {};
 	(att || '').split(' ').forEach(function(str) {
 		str = str.trim();
 		if (str) map[str] = true;
@@ -1015,14 +1015,14 @@ function mapOfClass(att) {
 
 const styleHelper = document.createElement('div');
 function mapOfStyle(style) {
-	var map = {};
+	const map = {};
 	if (!style) return map;
 	if (typeof style == "string") {
 		styleHelper.setAttribute('style', style);
 		style = styleHelper.style;
 	}
-	var name, val;
-	for (var k = 0; k < style.length; k++) {
+	let name, val;
+	for (let k = 0; k < style.length; k++) {
 		name = style.item(k);
 		val = style[name];
 		if (val != null && val != "") map[name] = val;
@@ -1039,14 +1039,14 @@ function mutateAttributes(dom, ndom) {
 }
 
 function saveDomAttrs(dom) {
-	var map = domAttrsMap(dom);
+	const map = domAttrsMap(dom);
 	if (Object.keys(map).length == 0) return;
 	return JSON.stringify(map);
 }
 
 function tryJSON(str) {
 	if (!str) return;
-	var obj;
+	let obj;
 	try {
 		obj = JSON.parse(str);
 	} catch(ex) {
@@ -1057,9 +1057,9 @@ function tryJSON(str) {
 
 function restoreDomAttrs(srcAtts, dom) {
 	if (!srcAtts || !dom) return;
-	var attr, name, dstVal, srcVal;
-	var dstAtts = dom.attributes;
-	var uiAtts = dom.pcUiAttrs;
+	let attr, name, dstVal, srcVal;
+	const dstAtts = dom.attributes;
+	let uiAtts = dom.pcUiAttrs;
 	if (!uiAtts) {
 		uiAtts = dom.pcUiAttrs = {};
 	}
@@ -1077,7 +1077,7 @@ function restoreDomAttrs(srcAtts, dom) {
 		}
 	}
 
-	for (var j = 0; j < dstAtts.length; j++) {
+	for (let j = 0; j < dstAtts.length; j++) {
 		attr = dstAtts[j];
 		name = attr.name;
 		if (name == "block-content" || name == "contenteditable") continue;
@@ -1089,10 +1089,10 @@ function restoreDomAttrs(srcAtts, dom) {
 }
 
 function domAttrsMap(dom) {
-	var map = {};
-	var atts = dom.attributes;
-	var att;
-	for (var k = 0; k < atts.length; k++) {
+	const map = {};
+	const atts = dom.attributes;
+	let att;
+	for (let k = 0; k < atts.length; k++) {
 		att = atts[k];
 		if (att.value && !att.name.startsWith('block-')) map[att.name] = att.value;
 	}
@@ -1100,17 +1100,18 @@ function domAttrsMap(dom) {
 }
 
 function attrsTo(attrs) {
-	var domAttrs = {};
-	for (var k in attrs) {
+	const domAttrs = {};
+	for (const k in attrs) {
 		if (!k.startsWith('_') && attrs[k] != null && attrs[k] != '{}') domAttrs['block-' + k] = attrs[k];
 	}
 	return domAttrs;
 }
 
 function attrsFrom(dom) {
-	var domAttrs = dom.attributes;
-	var att, attrs = {};
-	for (var i = 0; i < domAttrs.length; i++) {
+	const domAttrs = dom.attributes;
+	const attrs = {};
+	let att;
+	for (let i = 0; i < domAttrs.length; i++) {
 		att = domAttrs[i];
 		if (att.name.startsWith('block-')) {
 			attrs[att.name.substring(6)] = att.value;
@@ -1120,9 +1121,9 @@ function attrsFrom(dom) {
 }
 
 function specAttrs(atts) {
-	var obj = {};
-	var val;
-	for (var k in atts) {
+	const obj = {};
+	let val;
+	for (const k in atts) {
 		val = atts[k];
 		obj[k] = {};
 		obj[k].default = val && val.default || val;
@@ -1131,16 +1132,16 @@ function specAttrs(atts) {
 }
 
 function attrsObj(atts) {
-	var obj = {};
-	for (var k = 0; k < atts.length; k++) {
+	const obj = {};
+	for (let k = 0; k < atts.length; k++) {
 		obj[atts[k].name] = atts[k].value;
 	}
 	return obj;
 }
 
 function domSelector(dom) {
-	var sel = dom.nodeName.toLowerCase();
-	var cn = dom.className;
+	let sel = dom.nodeName.toLowerCase();
+	let cn = dom.className;
 	// might be SVGAnimatedString
 	if (cn && cn.baseVal != null) cn = cn.baseVal;
 	if (cn) {

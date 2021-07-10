@@ -4,7 +4,7 @@ class HTMLElementSticky extends VirtualHTMLElement {
 		this.stickyfill.forceSticky();
 	}
 	init() {
-		var raf;
+		let raf;
 		this.listener = () => {
 			window.cancelAnimationFrame(raf);
 			raf = window.requestAnimationFrame(() => {
@@ -27,7 +27,7 @@ class HTMLElementSticky extends VirtualHTMLElement {
 	}
 	layout() {
 		if (!this._sticky) return;
-		var mode = this._sticky._stickyMode || 'start';
+		const mode = this._sticky._stickyMode || 'start';
 		if (this.dataset.mode != mode) {
 			this.dataset.mode = mode;
 			this._sticky._recalcClone();

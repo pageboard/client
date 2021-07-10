@@ -1,7 +1,7 @@
 module.exports = parse;
 
-var innerHTMLBug = false;
-var bugTestDiv;
+let innerHTMLBug = false;
+let bugTestDiv;
 if (typeof document !== 'undefined') {
 	bugTestDiv = document.createElement('div');
 	// Setup
@@ -12,7 +12,7 @@ if (typeof document !== 'undefined') {
 	bugTestDiv = undefined;
 }
 
-var map = {
+const map = {
 	legend: [1, '<fieldset>', '</fieldset>'],
 	tr: [2, '<table><tbody>', '</tbody></table>'],
 	col: [2, '<table><tbody></tbody><colgroup>', '</colgroup></table>'],
@@ -45,14 +45,14 @@ map.tfoot = [1, '<table>', '</table>'];
  * @api private
  */
 
-var nsuris = {
+const nsuris = {
 	xml: 'http://www.w3.org/XML/1998/namespace',
 	svg: 'http://www.w3.org/2000/svg',
 	xlink: 'http://www.w3.org/1999/xlink',
 	html: 'http://www.w3.org/1999/xhtml',
 	mathml: 'http://www.w3.org/1998/Math/MathML'
 };
-var domParser;
+let domParser;
 
 function parse(html, {doc, ns, frag}) {
 	if ('string' != typeof html) throw new TypeError('String expected');
@@ -61,15 +61,15 @@ function parse(html, {doc, ns, frag}) {
 	if (!doc) doc = document;
 
 	// tag name
-	var m = /<([\w:]+)/.exec(html);
+	const m = /<([\w:]+)/.exec(html);
 	if (!m) {
 		return resultStr(html, doc, frag);
 	}
 
 	html = html.replace(/^\s+|\s+$/g, ''); // Remove leading/trailing whitespace
 
-	var tag = m[1];
-	var el;
+	const tag = m[1];
+	let el;
 	if (tag == "html") {
 		if (!domParser) domParser = new DOMParser();
 		el = domParser.parseFromString(html, 'text/html');
@@ -81,10 +81,10 @@ function parse(html, {doc, ns, frag}) {
 	}
 
 	// wrap map
-	var wrap = map[tag] || map._default;
-	var depth = wrap[0];
-	var prefix = wrap[1];
-	var suffix = wrap[2];
+	const wrap = map[tag] || map._default;
+	let depth = wrap[0];
+	const prefix = wrap[1];
+	const suffix = wrap[2];
 
 	if (ns) {
 		el = doc.createElementNS(nsuris[ns] || ns, 'div');
@@ -98,7 +98,7 @@ function parse(html, {doc, ns, frag}) {
 }
 
 function result(el, doc, frag) {
-	var ret;
+	let ret;
 	if (!frag && el.firstChild == el.lastChild) {
 		// one element
 		ret = el.removeChild(el.firstChild);
@@ -112,8 +112,8 @@ function result(el, doc, frag) {
 	return ret;
 }
 function resultStr(str, doc, frag) {
-	var el = doc.createTextNode(str);
-	var ret = el;
+	const el = doc.createTextNode(str);
+	let ret = el;
 	if (frag) {
 		ret = doc.createDocumentFragment();
 		ret.appendChild(el);

@@ -9,7 +9,7 @@ class HTMLElementEmbed extends VirtualHTMLElement {
 		this.promise.done = function() {};
 	}
 	reveal(state) {
-		var done;
+		let done;
 		this.promise = new Promise(function(resolve) {
 			done = resolve;
 		});
@@ -20,7 +20,7 @@ class HTMLElementEmbed extends VirtualHTMLElement {
 		return this.promise;
 	}
 	consent(state) {
-		var consent = state.scope.$consent;
+		const consent = state.scope.$consent;
 		this.classList.toggle('denied', consent == "no");
 		this.classList.toggle('waiting', consent == null);
 
@@ -36,9 +36,9 @@ class HTMLElementEmbed extends VirtualHTMLElement {
 		}
 		if (!this.iframe.allow) this.iframe.allowFullscreen = true;
 
-		var opts = this.options;
-		var prev = Page.parse(this.currentSrc || this.iframe.src || "about:blank");
-		var cur = Page.parse(opts.src || "about:blank");
+		const opts = this.options;
+		const prev = Page.parse(this.currentSrc || this.iframe.src || "about:blank");
+		const cur = Page.parse(opts.src || "about:blank");
 		cur.hash = opts.hash;
 		this.currentSrc = Page.format(cur);
 

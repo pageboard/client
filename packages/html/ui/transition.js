@@ -5,7 +5,7 @@ Object.defineProperty(document, 'body', {
 	}
 });
 Page.init(function(state) {
-	var root = document.documentElement;
+	const root = document.documentElement;
 	function dtr(state) {
 		root.dataset.stage = state.stage;
 		if (state.stage == "setup" || state.stage == "patch") setTimeout(function() {
@@ -44,9 +44,9 @@ Page.setup(function(state) {
 
 Page.Transition = class {
 	static event(name) {
-		var low = name.toLowerCase();
-		var caps = name[0].toUpperCase() + low.substring(1);
-		var transitions = {
+		const low = name.toLowerCase();
+		const caps = name[0].toUpperCase() + low.substring(1);
+		const transitions = {
 			transition: "transition" + low,
 			OTransition: 'oTransition' + caps,
 			MozTransition: "transition" + low,
@@ -54,8 +54,8 @@ Page.Transition = class {
 			WebkitTransition: 'webkitTransition' + caps
 		};
 
-		var st = document.body.style;
-		for (var t in transitions) {
+		const st = document.body.style;
+		for (const t in transitions) {
 			if (st[t] !== undefined) {
 				return transitions[t];
 			}
@@ -70,8 +70,8 @@ Page.Transition = class {
 		this.ok = this.event
 			&& (from.dataset.transitionClose || to.dataset.transitionOpen);
 		// transition applies scroll from documentElement to body
-		var top = this.root.scrollTop;
-		var left = this.root.scrollLeft;
+		const top = this.root.scrollTop;
+		const left = this.root.scrollLeft;
 		this.root.classList.add('transition');
 		this.from.scrollTop = top;
 		this.from.scrollLeft = left;
@@ -137,8 +137,8 @@ Page.Transition = class {
 			clearTimeout(this.safe);
 			delete this.safe;
 		}
-		var top = this.to.scrollTop;
-		var left = this.to.scrollLeft;
+		const top = this.to.scrollTop;
+		const left = this.to.scrollLeft;
 		this.root.classList.remove('transition', 'transitioning');
 		this.root.scrollTop = top;
 		this.root.scrollLeft = left;

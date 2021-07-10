@@ -3,8 +3,8 @@ Page.setup(function(state) {
 });
 class UserStore {
 	get(key) {
-		var storage = window.localStorage;
-		var val;
+		let storage = window.localStorage;
+		let val;
 		if (storage) {
 			try {
 				val = storage.getItem(key);
@@ -18,7 +18,7 @@ class UserStore {
 		return val;
 	}
 	set(key, val) {
-		var storage = window.localStorage;
+		let storage = window.localStorage;
 		if (storage) {
 			try {
 				storage.setItem(key, val);
@@ -31,7 +31,7 @@ class UserStore {
 		}
 	}
 	del(key) {
-		var storage = window.localStorage;
+		let storage = window.localStorage;
 		if (storage) {
 			try {
 				storage.removeItem(key);
@@ -44,13 +44,13 @@ class UserStore {
 		}
 	}
 	clearCookies(re) {
-		var cookies = this.getCookies();
-		for (var key in cookies) {
+		const cookies = this.getCookies();
+		for (const key in cookies) {
 			if (!re || re.test(key)) this.clearCookie(key, cookies[key]);
 		}
 	}
 	clearCookie(key, opts) {
-		var str = `${key}=; expires = Thu, 01 Jan 1970 00:00:00 GMT`;
+		let str = `${key}=; expires = Thu, 01 Jan 1970 00:00:00 GMT`;
 		if (opts.Path) str += '; Path=' + opts.Path;
 		if (opts.Domain) str += '; Domain=' + opts.Domain;
 		document.cookie = str;

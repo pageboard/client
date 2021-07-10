@@ -7,8 +7,8 @@ class HTMLElementGoogleTranslate extends VirtualHTMLElement {
 		this.observer = new MutationObserver((list) => {
 			list.forEach((mut) => {
 				if (mut.attributeName == "style") {
-					var s = mut.target.style;
-					var top = parseInt(s.top);
+					const s = mut.target.style;
+					const top = parseInt(s.top);
 					this.shown = !Number.isNaN(top) && top > 10;
 					if (this.shown) {
 						this.style = {
@@ -37,9 +37,9 @@ class HTMLElementGoogleTranslate extends VirtualHTMLElement {
 		if (!agreed || document.body.isContentEditable) return;
 		if (window.google && window.google.translate) delete window.google.translate;
 		this.id = `id${Date.now()}`;
-		var cb = `HTMLElementGoogleTranslate_${this.id}`;
+		const cb = `HTMLElementGoogleTranslate_${this.id}`;
 		window[cb] = this.cb.bind(this, state);
-		var script = document.createElement('script');
+		const script = document.createElement('script');
 		script.src = `https://translate.google.com/translate_a/element.js?cb=${cb}`;
 		this.script = script;
 		document.head.appendChild(script);
@@ -50,7 +50,7 @@ class HTMLElementGoogleTranslate extends VirtualHTMLElement {
 	cb(state) {
 		if (this.shown) return;
 		this.script.remove();
-		var TE = window.google.translate.TranslateElement;
+		const TE = window.google.translate.TranslateElement;
 		if (!this.inst) this.inst = new TE({
 			pageLanguage: document.documentElement.lang,
 			layout: TE.InlineLayout.SIMPLE,
@@ -61,8 +61,8 @@ class HTMLElementGoogleTranslate extends VirtualHTMLElement {
 	started() {
 		if (this.translate) {
 			this.translate = false; // once
-			var frame = document.body.querySelector('.goog-te-banner-frame');
-			var btn = frame.contentDocument.body.querySelector('[id=":0.confirm"]');
+			const frame = document.body.querySelector('.goog-te-banner-frame');
+			const btn = frame.contentDocument.body.querySelector('[id=":0.confirm"]');
 			if (btn) btn.dispatchEvent(new MouseEvent("click"));
 		}
 	}

@@ -23,11 +23,12 @@ Breadcrumb.prototype.destroy = function() {
 
 Breadcrumb.prototype.update = function(parents, selection) {
 	if (!this.parents) this.node.textContent = "";
-	var elders = this.parents || [];
+	const elders = this.parents || [];
 	this.parents = parents = parents.slice().reverse();
-	var parent, elder, item, cut = false;
-	var children = this.node.children;
-	for (var i = 0, j = 0; i < parents.length; i++,j++) {
+	let parent, elder, item, cut = false;
+	const children = this.node.children;
+	let i, j;
+	for (i = 0, j = 0; i < parents.length; i++,j++) {
 		parent = parents[i];
 		elder = elders[j];
 		if (!elder || parent.block.id !== elder.block.id || parent.block.id == null || parent.contentName && parent.contentName !== elder.contentName) {
@@ -44,7 +45,7 @@ Breadcrumb.prototype.update = function(parents, selection) {
 		}
 	}
 
-	if (!cut) for (j=i; j < elders.length; j++) {
+	if (!cut) for (j = i; j < elders.length; j++) {
 		item = children[j];
 		if (!item || item.children.length == 0) break;
 		parents.push(elders[j]);
@@ -58,14 +59,14 @@ Breadcrumb.prototype.update = function(parents, selection) {
 	}
 	if (cut) while (children[j]) children[j].remove();
 
-	var last = this.node.lastElementChild;
+	const last = this.node.lastElementChild;
 	if (!cut && last.children.length && last.dataset.content != parents[i - 1].contentName) {
 		delete last.dataset.content;
 		while (last.firstElementChild && last.firstElementChild.nextSibling.nodeType == Node.TEXT_NODE) {
 			last.firstElementChild.nextSibling.remove();
 		}
 	}
-	var lastIsText = last && last.children.length == 0;
+	const lastIsText = last && last.children.length == 0;
 	if (!selection.node && parents.length > 1) {
 		if (!lastIsText && !last.dataset.content) {
 			this.node.insertAdjacentHTML("beforeEnd", `<span>${parent.contentName || 'text'}</span>`);
@@ -76,16 +77,16 @@ Breadcrumb.prototype.update = function(parents, selection) {
 };
 
 Breadcrumb.prototype.item = function(parent) {
-	var node = Breadcrumb.template.cloneNode(true);
-	var item = node.querySelector('.section');
-	var el = this.editor.element(parent.type);
+	const node = Breadcrumb.template.cloneNode(true);
+	const item = node.querySelector('.section');
+	const el = this.editor.element(parent.type);
 	item.textContent = el.title;
 	node.dataset.selector = `[block-type="${parent.type}"]`;
 	if (parent.block.id) node.dataset.id = parent.block.id;
-	var contentName = parent.contentName;
+	const contentName = parent.contentName;
 	if (contentName) {
-		var def = el.contents.find(contentName);
-		var title = def.title;
+		const def = el.contents.find(contentName);
+		const title = def.title;
 		if (title) {
 			node.dataset.content = contentName;
 			node.insertBefore(node.ownerDocument.createTextNode(title), node.lastElementChild);
@@ -96,26 +97,26 @@ Breadcrumb.prototype.item = function(parent) {
 
 Breadcrumb.prototype.handleEvent = function(e) {
 	if (e.type != "click") return;
-	var editor = this.editor;
-	var selectors = [];
-	var items = Array.from(this.node.children);
-	var target = e.target.closest('span');
-	var subFocused = false;
+	const editor = this.editor;
+	const selectors = [];
+	const items = Array.from(this.node.children);
+	const target = e.target.closest('span');
+	let subFocused = false;
 	items.some(function(item, i) {
-		var id = item.dataset.id;
-		var sel = item.dataset.selector;
+		const id = item.dataset.id;
+		let sel = item.dataset.selector;
 		if (id) sel += `[block-id="${id}"]`;
 		if (!subFocused) sel += '[block-focused]';
 		if (item.dataset.focused == "last") subFocused = true;
 		selectors.push(sel);
 		if (item == target) return true;
 	});
-	var selector = selectors.join(' ');
-	var node = editor.root.querySelector(selector);
+	const selector = selectors.join(' ');
+	const node = editor.root.querySelector(selector);
 	if (!node) {
 		throw new Error(`No node found with selector ${selector}`);
 	}
-	var sel = editor.utils.select(node);
+	const sel = editor.utils.select(node);
 	if (sel) {
 		editor.focus();
 		editor.dispatch(editor.state.tr.setSelection(sel));

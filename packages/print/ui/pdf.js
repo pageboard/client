@@ -4,21 +4,21 @@ Page.patch(function(state) {
 	state.vars['pdf.quality'] = true;
 	state.vars['pdf.paper'] = true;
 
-	var ratios = {
+	const ratios = {
 		default: 1,
 		screen: 1,
 		ebook: 2,
 		prepress: 4,
 		printer: 4
 	};
-	var quality = state.query['pdf.quality'] || 'default';
+	const quality = state.query['pdf.quality'] || 'default';
 	if (Object.keys(ratios).includes(quality)) {
 		window.devicePixelRatio = ratios[quality];
 	} else {
 		state.status = 400;
 	}
 
-	var paper = state.query['pdf.paper'] || 'iso_a4';
+	const paper = state.query['pdf.paper'] || 'iso_a4';
 	if (['iso_a4'].includes(paper) == false) {
 		state.status = 400;
 	}
@@ -29,7 +29,7 @@ Page.patch(function(state) {
 
 Page.serialize = function(state) {
 	if (state.status >= 400) {
-		var err = new Error("Bad Parameters");
+		const err = new Error("Bad Parameters");
 		err.statusCode = state.status;
 		throw err;
 	}

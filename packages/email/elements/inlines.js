@@ -120,8 +120,8 @@ exports.mail_color = {
 		}
 	},
 	parse: function(dom) {
-		var prop = this.properties.color;
-		var color = prop.anyOf.find(function(item) {
+		const prop = this.properties.color;
+		let color = prop.anyOf.find(function(item) {
 			return item.const && dom.classList.contains(item.const);
 		});
 		if (color) color = color.const;

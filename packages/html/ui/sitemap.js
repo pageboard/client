@@ -1,9 +1,9 @@
 class HTMLElementSitemap extends VirtualHTMLElement {
 	static makeTree(tree, parent) {
-		var page = tree._;
+		let page = tree._;
 		if (page) {
 			if (!parent.children) parent.children = [];
-			var old = parent.children.find(item => item.id == page.id);
+			const old = parent.children.find(item => item.id == page.id);
 			if (!old) parent.children.push(page);
 			if (parent.content == null) parent.content = {};
 			if (parent.content.children == null) parent.content.children = "";
@@ -15,12 +15,12 @@ class HTMLElementSitemap extends VirtualHTMLElement {
 			page = parent;
 		}
 		Object.keys(tree).sort(function(a, b) {
-			var pageA = tree[a]._;
-			var pageB = tree[b]._;
+			const pageA = tree[a]._;
+			const pageB = tree[b]._;
 			if (!pageA || !pageB) return 0;
-			var indexA = pageA.data.index;
+			let indexA = pageA.data.index;
 			if (indexA == null) indexA = Infinity;
-			var indexB = pageB.data.index;
+			let indexB = pageB.data.index;
 			if (indexB == null) indexB = Infinity;
 			if (indexA == indexB) return 0;
 			else if (indexA < indexB) return -1;
@@ -32,13 +32,13 @@ class HTMLElementSitemap extends VirtualHTMLElement {
 	}
 
 	static transformResponse(res) {
-		var pages = res.items;
-		var tree = {};
+		const pages = res.items;
+		const tree = {};
 
 		pages.forEach(function (page) {
 			if (!page.data.url) return;
-			var branch = tree;
-			var arr = page.data.url.substring(1).split('/');
+			let branch = tree;
+			const arr = page.data.url.substring(1).split('/');
 			arr.forEach(function(name, i) {
 				if (!branch[name]) branch[name] = {};
 				branch = branch[name];
@@ -60,7 +60,7 @@ class HTMLElementSitemap extends VirtualHTMLElement {
 		return Pageboard.bundle(Pageboard.fetch('get', `/.api/pages`), state).then(res => {
 			state.scope.$element = state.scope.$elements.sitemap;
 			const tree = this.constructor.transformResponse(res);
-			var node = Pageboard.render({
+			const node = Pageboard.render({
 				item: tree
 			}, state.scope);
 			// only change block content

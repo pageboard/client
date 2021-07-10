@@ -5,13 +5,13 @@ class HTMLElementContent extends VirtualHTMLElement {
 
 	patch(state) {
 		if (this.isContentEditable) return;
-		var filter = this.options.filter;
+		let filter = this.options.filter;
 		if (filter) {
 			filter = filter.split('\n');
-			var selector = filter[0];
+			const selector = filter[0];
 			if (filter.length > 1) filter[0] = '';
 			else filter = [];
-			var list = `[dom${filter.join('|')}]`.fuse({
+			const list = `[dom${filter.join('|')}]`.fuse({
 				dom: Array.from(this.querySelectorAll(selector))
 			});
 			this.textContent = '';

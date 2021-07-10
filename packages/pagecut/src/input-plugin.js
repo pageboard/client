@@ -20,12 +20,12 @@ InputPlugin.prototype.handlePaste = function(view, e, slice) {
 };
 
 InputPlugin.prototype.handleTextInput = function(view, from, to, text) {
-	var tr = view.state.tr;
+	const tr = view.state.tr;
 	// return true to disable default insertion
-	var parents = view.utils.selectionParents(tr, {from: from, to: to});
+	const parents = view.utils.selectionParents(tr, {from: from, to: to});
 	if (!parents.length) return true;
-	var parent = parents[0];
-	var root = parent.container || parent.root;
+	const parent = parents[0];
+	const root = parent.container || parent.root;
 	if (tr.selection.node && tr.selection.node.isTextblock) {
 		// change selection to be inside that node
 		view.dispatch(
@@ -43,18 +43,18 @@ InputPlugin.prototype.handleTextInput = function(view, from, to, text) {
 };
 
 InputPlugin.prototype.transformPasted = function(slice) {
-	var view = this.view;
-	var sParent;
+	const view = this.view;
+	let sParent;
 	// TODO can't paste standalone from another site
 	slice.content.descendants(function (node, pos, parent) {
-		var focusable = node.type.defaultAttrs.focused === null;
+		const focusable = node.type.defaultAttrs.focused === null;
 		if (focusable) node.attrs.focused = null;
-		var sa = node.attrs.standalone;
+		const sa = node.attrs.standalone;
 		if (sa) sParent = parent;
 		else if (sParent && sParent == parent) sParent = null;
-		var id = node.attrs.id;
+		const id = node.attrs.id;
 		if (id) {
-			var block = view.blocks.get(id);
+			const block = view.blocks.get(id);
 			if (!block && !sa && !sParent) {
 				// not a standalone or not a child of one
 				delete node.attrs.id;
@@ -71,8 +71,8 @@ InputPlugin.prototype.clipboardTextParser = function(str, $pos) {
 	if (str instanceof Model.Slice) {
 		return str;
 	}
-	var type = $pos.parent && $pos.parent.type.name || '';
-	var dom;
+	const type = $pos.parent && $pos.parent.type.name || '';
+	let dom;
 	if (type.startsWith('svg')) {
 		dom = (new DOMParser()).parseFromString(str, "image/svg+xml");
 	} else {

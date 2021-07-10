@@ -10,11 +10,11 @@ class HTMLElementTabs extends VirtualHTMLElement {
 		return this.querySelector('[block-content="tabs"]');
 	}
 	patch(state) {
-		var pos = this.options.index;
-		var id = this.id;
+		const pos = this.options.index;
+		const id = this.id;
 		Array.prototype.forEach.call(this.items.children, function(item, i) {
-			var query = Object.assign({}, state.query);
-			var key = `${id}.index`;
+			const query = Object.assign({}, state.query);
+			const key = `${id}.index`;
 			if (i == 0) delete query[key];
 			else query[key] = i;
 			item.setAttribute('href', Page.format({

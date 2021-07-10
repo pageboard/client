@@ -17,8 +17,8 @@ class HTMLElementLayout extends HTMLDivElement {
 	}
 	patch(state) {
 		if (!this.options.src) return;
-		var loc = Page.parse(this.options.src);
-		var meta = state.scope.$hrefs && state.scope.$hrefs[loc.pathname] || {};
+		const loc = Page.parse(this.options.src);
+		const meta = state.scope.$hrefs && state.scope.$hrefs[loc.pathname] || {};
 		if (!meta || !meta.width || !meta.height) return;
 		this.dataset.width = meta.width;
 		this.dataset.height = meta.height;
@@ -32,10 +32,10 @@ class HTMLElementLayout extends HTMLDivElement {
 			this.style.backgroundImage = '';
 			return;
 		}
-		var fit = this.fit;
-		var r = this.crop;
+		const fit = this.fit;
+		const r = this.crop;
 
-		var loc = Page.parse(this.options.src);
+		let loc = Page.parse(this.options.src);
 		if (loc.hostname && loc.hostname != document.location.hostname) {
 			loc = {
 				pathname: "/.api/image",
@@ -57,17 +57,17 @@ class HTMLElementLayout extends HTMLDivElement {
 		const {w, h} = this.dimensions;
 		if (fit == "none") {
 			loc.query.rs = `z-${r.z}`;
-		} else if (!isNaN(w) && !isNaN(h)) {
-			var rect = this.getBoundingClientRect();
-			var rw = rect.width;
-			var rh = rect.height;
+		} else if (!Number.isNaN(w) && !Number.isNaN(h)) {
+			const rect = this.getBoundingClientRect();
+			const rw = rect.width;
+			const rh = rect.height;
 			if (rw == 0 && rh == 0) {
 				// don't show
 				return;
 			}
 			loc.query.rs = "z-" + HTMLElementLayout.getZoom({w, h, rw, rh, fit});
 		}
-		var curSrc = Page.format(loc);
+		const curSrc = Page.format(loc);
 		if (curSrc != this.currentSrc) {
 			try {
 				this.currentSrc = curSrc;

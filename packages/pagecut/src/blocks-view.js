@@ -23,14 +23,14 @@ function Blocks(view, opts) {
 
 Blocks.prototype.render = function(el, block, opts) {
 	if (!opts) opts = {};
-	var scope = opts.scope || this.view.scope || {};
+	const scope = opts.scope || this.view.scope || {};
 	if (!scope.$doc) scope.$doc = this.view.doc;
 	if (!scope.$elements) scope.$elements = this.view.elements;
 	if (!scope.$element) scope.$element = el;
 
 	block = Object.assign({}, block);
 	block.data = Blocks.fill(el, block.data);
-	var dom = el.render.call(el, block, scope);
+	const dom = el.render.call(el, block, scope);
 	if (dom && opts.merge !== false) this.merge(el, dom, block);
 	return dom;
 };
@@ -38,8 +38,8 @@ Blocks.prototype.render = function(el, block, opts) {
 Blocks.prototype.mount = function(el, block, blocks) {
 	if (!el) return;
 	el.contents.normalize(block);
-	var copy = this.copy(block);
-	var doc = this.view.doc;
+	const copy = this.copy(block);
+	const doc = this.view.doc;
 
 	el.contents.each(block, function(content, def) {
 		if (!(content instanceof Node)) {
@@ -59,7 +59,7 @@ Blocks.fill = function(schema, data) {
 	if (data === undefined || typeof data == "string") data = {};
 	else data = Object.assign({}, data);
 	Object.keys(schema.properties).forEach(function(key) {
-		var prop = schema.properties[key];
+		const prop = schema.properties[key];
 		if (prop.default !== undefined && data[key] === undefined) data[key] = prop.default;
 		if (prop.properties) data[key] = Blocks.fill(prop, data[key]);
 	});
@@ -67,7 +67,7 @@ Blocks.fill = function(schema, data) {
 };
 
 Blocks.prototype.copy = function(block) {
-	var copy = Object.assign({}, block);
+	const copy = Object.assign({}, block);
 	copy.data = Object.assign({}, block.data);
 	if (block.expr) copy.expr = Object.assign({}, block.expr);
 	if (block.lock) copy.lock = Object.assign({}, block.lock);
@@ -80,7 +80,7 @@ Blocks.prototype.merge = function(el, dom, block) {
 	if (dom.nodeType != Node.ELEMENT_NODE) return;
 	el.contents.each(block, function(content, def) {
 		if (!content) return;
-		var node;
+		let node;
 		if (!def.id || def.id == dom.getAttribute('block-content') || el.inline) {
 			node = dom;
 		} else {
@@ -111,10 +111,10 @@ Blocks.prototype.from = function(block, blocks, opts) {
 };
 
 Blocks.prototype.renderFrom = function(block, blocks, store, opts) {
-	var view = this.view;
+	const view = this.view;
 	if (!blocks) blocks = {};
 	if (!opts) opts = {};
-	var el = view.element(opts.element || opts.type || block.type);
+	const el = view.element(opts.element || opts.type || block.type);
 	if (block.id) {
 		this.initial[block.id] = block;
 	}
@@ -122,10 +122,10 @@ Blocks.prototype.renderFrom = function(block, blocks, store, opts) {
 	if (!block) return;
 	if (block.id) {
 		// overwrite can happen when (re)loading virtual blocks
-		var oldBlock = store[block.id];
+		const oldBlock = store[block.id];
 		if (!oldBlock || oldBlock.type == block.type) store[block.id] = block;
 	}
-	var fragment;
+	let fragment;
 	try {
 		fragment = view.render(block, opts);
 	} catch(ex) {
@@ -146,7 +146,7 @@ Blocks.prototype.renderFrom = function(block, blocks, store, opts) {
 	// }
 	if (!fragment || !fragment.querySelectorAll) return;
 
-	var fragments = [fragment.nodeName == "BODY" ? fragment.parentNode : fragment];
+	const fragments = [fragment.nodeName == "BODY" ? fragment.parentNode : fragment];
 	Array.prototype.forEach.call(fragment.querySelectorAll('template'), (node) => {
 		fragments.push(node.content);
 	});
@@ -155,11 +155,11 @@ Blocks.prototype.renderFrom = function(block, blocks, store, opts) {
 			node.removeAttribute('block-data');
 		});
 		Array.prototype.forEach.call(fragment.querySelectorAll('[block-id]'), (node) => {
-			var id = node.getAttribute('block-id');
+			const id = node.getAttribute('block-id');
 			if (id === block.id) return;
-			var type = node.getAttribute('block-type');
-			var parent = node.parentNode;
-			var child = blocks[id];
+			const type = node.getAttribute('block-type');
+			const parent = node.parentNode;
+			const child = blocks[id];
 
 			if (!child) {
 				if (store[id]) {
@@ -169,7 +169,7 @@ Blocks.prototype.renderFrom = function(block, blocks, store, opts) {
 				parent.replaceChild(node.ownerDocument.createTextNode('∅'), node);
 				return;
 			}
-			var frag = this.renderFrom(child, blocks, store, Object.assign({}, opts, {
+			const frag = this.renderFrom(child, blocks, store, Object.assign({}, opts, {
 				type: type,
 				element: null
 			}));
@@ -178,7 +178,7 @@ Blocks.prototype.renderFrom = function(block, blocks, store, opts) {
 				return;
 			}
 			if (frag.attributes) {
-				for (var i = 0, att; i < node.attributes.length, att = node.attributes[i]; i++) {
+				for (let i = 0, att; i < node.attributes.length, att = node.attributes[i]; i++) {
 					if (opts.strip && att.name == "block-id") continue;
 					if (!frag.hasAttribute(att.name)) frag.setAttribute(att.name, att.value);
 				}

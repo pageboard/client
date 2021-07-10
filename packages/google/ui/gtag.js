@@ -3,7 +3,7 @@ Page.connect(new class {
 	constructor() {
 		const node = document.head.querySelector('script[src^="https://www.googletagmanager.com"]');
 		if (!node) return;
-		var obj = Page.parse(node.src);
+		const obj = Page.parse(node.src);
 		this.type = obj.pathname.startsWith('/gtm') ? 'gtm' : 'gtag';
 		if (this.type == "gtag") {
 			window.gtag = window.gtag || function gtag() {
@@ -14,7 +14,7 @@ Page.connect(new class {
 	}
 	consent(state) {
 		if (!this.id) return;
-		var agreed = state.scope.$consent == "yes";
+		const agreed = state.scope.$consent == "yes";
 		window['ga-disable-' + this.id] = !agreed;
 		this[this.type](agreed, state);
 	}
@@ -31,8 +31,8 @@ Page.connect(new class {
 		}
 	}
 	gtag(agreed, state) {
-		var val = agreed ? 'granted' : 'denied';
-		var opts = {
+		const val = agreed ? 'granted' : 'denied';
+		const opts = {
 			ad_storage: val,
 			analytics_storage: val
 		};

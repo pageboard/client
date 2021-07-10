@@ -158,7 +158,7 @@
 		destroy() {
 			this.element.removeEventListener('focus', this);
 			this.element.removeEventListener('mouseup', this);
-			this.element.removeEventListener('keydown', this)
+			this.element.removeEventListener('keydown', this);
 		}
 
 		#render() {
@@ -629,7 +629,7 @@
 
 		#notify() {
 			this.#props.onChange(this.#state.datetime);
-			var e;
+			let e;
 			if (document.createEvent) {
 				e = document.createEvent('HTMLEvents');
 				e.initEvent('change', true, true);

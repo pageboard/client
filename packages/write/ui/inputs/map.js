@@ -7,7 +7,7 @@ class HTMLInputMap extends VirtualHTMLElement {
 		return this.getAttribute('name') || '';
 	}
 	get value() {
-		var obj;
+		let obj;
 		if (this._proxy && this._proxy.value) try {
 			obj = JSON.parse(this._proxy.value);
 		} catch(ex) {
@@ -17,7 +17,7 @@ class HTMLInputMap extends VirtualHTMLElement {
 	}
 	set value(obj) {
 		if (!this._proxy) return;
-		var val = JSON.stringify(obj);
+		const val = JSON.stringify(obj);
 		if (this._proxy.value == val) return;
 		this._proxy.value = val;
 		Pageboard.trigger(this._proxy, 'change');
@@ -27,7 +27,7 @@ class HTMLInputMap extends VirtualHTMLElement {
 		this._proxy = this.appendChild(
 			this.dom(`<input name="${this.name}" type="hidden" />`)
 		);
-		var renderer = Pageboard.debounce(this._render.bind(this), 10);
+		const renderer = Pageboard.debounce(this._render.bind(this), 10);
 		this._observer = new MutationObserver(function(mutations) {
 			renderer();
 		});
@@ -53,12 +53,12 @@ class HTMLInputMap extends VirtualHTMLElement {
 		this._table.removeEventListener('change', this._changed, false);
 	}
 	_render() {
-		var obj = Semafor.flatten(this.value || {});
-		var body = this._table.querySelector('tbody');
+		const obj = Semafor.flatten(this.value || {});
+		const body = this._table.querySelector('tbody');
 		body.textContent = '';
-		var name = this.name;
+		const name = this.name;
 		Object.keys(obj).concat([""]).forEach(function(key, i) {
-			var val = obj[key];
+			let val = obj[key];
 			if (val === undefined || val === null) val = '';
 			if (!Array.isArray(val)) val = [val];
 			val.forEach(function(val, j) {
@@ -84,21 +84,21 @@ class HTMLInputMap extends VirtualHTMLElement {
 		};
 	}
 	_restoreSel() {
-		var sel = this._selection;
+		const sel = this._selection;
 		if (!sel) return;
-		var node = this._table.querySelector(`[name="${sel.name}"]`);
+		const node = this._table.querySelector(`[name="${sel.name}"]`);
 		if (!node) return;
 		node.focus();
 		if (node.setSelectionRange) node.setSelectionRange(sel.start, sel.end, sel.dir);
 	}
 	_changed(e) {
-		var obj = {};
-		var removals = [];
+		const obj = {};
+		const removals = [];
 
 		this._table.querySelector('tbody').children.forEach(function(tr) {
-			var key = tr.children[0].firstChild.value;
-			var val = obj[key];
-			var inputVal = tr.children[1].firstChild.value;
+			const key = tr.children[0].firstChild.value;
+			let val = obj[key];
+			const inputVal = tr.children[1].firstChild.value;
 			if (key) {
 				if (val != null) {
 					if (!Array.isArray(val)) {

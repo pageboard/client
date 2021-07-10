@@ -6,7 +6,7 @@ class HTMLElementRating extends VirtualHTMLElement {
 	};
 
 	patch(state) {
-		var opts = this.options;
+		const opts = this.options;
 		while (this.children.length > opts.maximum) {
 			this.firstElementChild.remove();
 		}

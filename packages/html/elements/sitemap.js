@@ -25,7 +25,7 @@ exports.sitemap = {
 		if (scope.$write) Pageboard.load.js(this.resources.helper, scope);
 	},
 	itemModel: function(name, leaf) {
-		var schema = exports[name];
+		const schema = exports[name];
 		return {
 			title: schema.title,
 			icon: schema.icon,

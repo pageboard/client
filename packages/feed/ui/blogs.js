@@ -63,7 +63,7 @@ class HTMLElementBlogs extends VirtualHTMLElement {
 	}
 	strip(node) {
 		node = node.cloneNode(true);
-		var cur;
+		let cur;
 		while ((cur = node.querySelector('[block-type]'))) {
 			cur.removeAttribute('block-type');
 			cur.removeAttribute('block-data');

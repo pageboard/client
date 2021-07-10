@@ -21,7 +21,7 @@ class HTMLElementInputRange extends HTMLInputElement {
 	};
 
 	get helper() {
-		var node = this.parentNode.querySelector('.noUi-target');
+		let node = this.parentNode.querySelector('.noUi-target');
 		if (!node) {
 			node = this.ownerDocument.createElement('div');
 			node.className = "noUi-target";
@@ -34,7 +34,7 @@ class HTMLElementInputRange extends HTMLInputElement {
 	}
 	set rangeValue(val) {
 		if (this.options) this.options.value = val;
-		var str = '';
+		let str = '';
 		if (val.length) str = val[0];
 		if (val.length == 2 && val[1] !== val[0]) str += '⩽' + val[1];
 		this.value = str;
@@ -44,10 +44,10 @@ class HTMLElementInputRange extends HTMLInputElement {
 		this.updateSlider();
 	}
 	updateSlider() {
-		var helper = this.helper;
+		const helper = this.helper;
 		if (!helper.noUiSlider) return;
-		var [start, stop] = this.options.value || [];
-		var indet = false;
+		let [start, stop] = this.options.value || [];
+		let indet = false;
 		if (start == null) {
 			start = this.options.min;
 			indet = true;
@@ -60,8 +60,8 @@ class HTMLElementInputRange extends HTMLInputElement {
 		this.updateSlider();
 	}
 	setup(state) {
-		var opts = this.options;
-		var helper = this.helper;
+		const opts = this.options;
+		const helper = this.helper;
 		if (!helper.noUiSlider) window.noUiSlider.create(helper, {
 			start: opts.multiple ? [null, null] : [null],
 			step: opts.step,
@@ -75,11 +75,11 @@ class HTMLElementInputRange extends HTMLInputElement {
 			} : false,
 			connect: true
 		}).on('change', (values) => {
-			var isInt = parseInt(opts.step) == opts.step;
+			const isInt = parseInt(opts.step) == opts.step;
 			helper.classList.remove('indeterminate');
 			if (isInt) values = values.map((n) => parseInt(n));
 			this.rangeValue = values;
-			var e = document.createEvent('HTMLEvents');
+			const e = document.createEvent('HTMLEvents');
 			e.initEvent('change', true, true);
 			this.dispatchEvent(e);
 		});
@@ -90,14 +90,14 @@ class HTMLElementInputRange extends HTMLInputElement {
 	handleEvent(e) {
 		if (e.type == "dblclick" || e.keyCode == 8 || e.keyCode == 46) {
 			this.fill();
-			var ne = document.createEvent('HTMLEvents');
+			const ne = document.createEvent('HTMLEvents');
 			ne.initEvent('change', true, true);
 			this.dispatchEvent(ne);
 		}
 	}
 
 	close() {
-		var helper = this.helper;
+		const helper = this.helper;
 		if (helper.noUiSlider) helper.noUiSlider.destroy();
 		helper.removeEventListener('keydown', this, true);
 		helper.removeEventListener('dblclick', this, true);

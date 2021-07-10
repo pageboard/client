@@ -1,17 +1,17 @@
 class HTMLElementAccordion extends VirtualHTMLElement {
 	handleClick(e) {
-		var title = e.target.closest('.title');
+		const title = e.target.closest('.title');
 		if (!title) return;
-		var fold = title.parentNode;
+		const fold = title.parentNode;
 		if (!fold || !fold.matches('.fold,element-accordion')) return;
-		var owner = fold.closest('element-accordion');
+		const owner = fold.closest('element-accordion');
 		if (owner != this) return;
 		if (e.target.closest("a[href]") == null) e.preventDefault();
 		HTMLElementAccordion.toggle(title);
 	}
 	static toggle(title) {
-		var id = title.parentNode.id;
-		var content = title.nextElementSibling;
+		const id = title.parentNode.id;
+		const content = title.nextElementSibling;
 		if (title.matches('.active')) {
 			if (id) delete HTMLElementAccordion.folds[id];
 			title.classList.remove('active');
@@ -24,9 +24,9 @@ class HTMLElementAccordion extends VirtualHTMLElement {
 	}
 	static refreshAll() {
 		Object.keys(HTMLElementAccordion.folds).forEach(function(id) {
-			var node = document.getElementById(id);
+			const node = document.getElementById(id);
 			if (!node) delete HTMLElementAccordion.folds[id];
-			var title = node.querySelector('.title');
+			const title = node.querySelector('.title');
 			HTMLElementAccordion.toggle(title);
 		});
 	}

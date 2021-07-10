@@ -5,14 +5,14 @@ const MixinMedia = {
 	},
 	patch(state) {
 		this.classList.remove('error', 'loading');
-		var loc = Page.parse(this.options.src);
-		var meta = state.scope.$hrefs && state.scope.$hrefs[loc.pathname] || {};
+		const loc = Page.parse(this.options.src);
+		const meta = state.scope.$hrefs && state.scope.$hrefs[loc.pathname] || {};
 		if (!meta || !meta.width || !meta.height) return;
 		this.width = meta.width;
 		this.height = meta.height;
 	},
 	reveal(state) {
-		var curSrc = this.options.src;
+		const curSrc = this.options.src;
 		if (curSrc != this.currentSrc) {
 			try {
 				this.currentSrc = curSrc;

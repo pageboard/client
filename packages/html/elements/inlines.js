@@ -167,13 +167,11 @@ exports.color = {
 		}
 	},
 	parse: function(dom) {
-		var prop = this.properties.color;
-		var color = prop.anyOf.find(function(item) {
+		const prop = this.properties.color;
+		const color = (prop.anyOf.find(function(item) {
 			return item.const && dom.classList.contains(item.const);
-		});
-		if (color) color = color.const;
-		else color = prop.default;
-		return {color: color};
+		}) || { const: prop.default }).const;
+		return { color: color };
 	},
 	contents: "text*",
 	inline: true,

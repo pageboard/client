@@ -3,7 +3,7 @@ module.exports = Blocks;
 function Blocks() {}
 
 Blocks.prototype.mutate = function(node, data) {
-	var nodes = [], block, id;
+	let nodes = [], block, id;
 	if (typeof node != "string") {
 		id = node.getAttribute('block-id');
 	} else {
@@ -23,8 +23,8 @@ Blocks.prototype.mutate = function(node, data) {
 		block.data = Object.assign(block.data || {}, data);
 		nodes = this.domQuery(id, {all: true});
 	}
-	var view = this.view;
-	var tr = view.state.tr;
+	const view = this.view;
+	const tr = view.state.tr;
 	nodes.forEach(function(node) {
 		view.utils.refreshTr(tr, node, block);
 	});
@@ -35,13 +35,13 @@ Blocks.prototype.setStandalone = function (block, val) {
 	if (val == block.standalone) return;
 	if (!val) {
 		// force new id for this block and its descendants by id-plugin
-		var copy = this.copy(block);
+		const copy = this.copy(block);
 		copy.focused = block.focused;
 		block = copy;
 	}
 	block.standalone = val;
-	var nodes = this.domQuery(block.id, { all: true });
-	var tr = this.view.state.tr;
+	const nodes = this.domQuery(block.id, { all: true });
+	const tr = this.view.state.tr;
 	nodes.forEach((node) => {
 		this.view.utils.refreshTr(tr, node, block);
 	});
@@ -53,8 +53,8 @@ Blocks.prototype.create = function(type) {
 };
 
 Blocks.prototype.fromAttrs = function(attrs) {
-	var block = {};
-	for (var name in attrs) {
+	const block = {};
+	for (const name in attrs) {
 		if (!name.startsWith("_") && name != "content") {
 			block[name] = attrs[name];
 		}
@@ -69,7 +69,7 @@ Blocks.prototype.fromAttrs = function(attrs) {
 };
 
 Blocks.prototype.toAttrs = function(block) {
-	var attrs = {};
+	const attrs = {};
 	if (!block) return attrs;
 	if (block.id != null) attrs.id = block.id;
 	if (block.type != null) attrs.type = block.type;
@@ -110,7 +110,7 @@ Blocks.prototype.serializeTo = function(parent, el, ancestor, blocks, parentDef 
 		parent.blocks = {};
 	}
 
-	var contents = parent.content;
+	let contents = parent.content;
 	if (!contents) contents = parent.content = {};
 
 	el.contents.each({content: contents}, (content, def) => {
@@ -124,8 +124,8 @@ Blocks.prototype.serializeTo = function(parent, el, ancestor, blocks, parentDef 
 			content = content[0];
 		}
 		content = content.cloneNode(true);
-		var node, div, id, type, block, parentNode;
-		var list = [], blockEl;
+		let node, div, id, type, block, parentNode, blockEl;
+		const list = [];
 		while ((node = content.querySelector('[block-type],[block-id]'))) {
 			type = node.getAttribute('block-type');
 			parentNode = node.parentNode;
@@ -203,7 +203,7 @@ function reassignContent(block, elt, dom) {
 		if (!def.id || def.id == dom.getAttribute('block-content') || elt.inline) {
 			elt.contents.set(block, def.id, dom);
 		} else {
-			var node = dom.querySelector(`[block-content="${def.id}"]`);
+			const node = dom.querySelector(`[block-content="${def.id}"]`);
 			if (node && node.closest('[block-id]') == dom) {
 				elt.contents.set(block, def.id, node);
 			} else {
@@ -220,7 +220,7 @@ Blocks.prototype.to = function() {
 	const copies = {};
 	const copy = this.copy(this.store[id]);
 	copies[id] = copy;
-	var el = view.element(copy.type);
+	const el = view.element(copy.type);
 	if (contentName) el.contents.set(copy, contentName, view.utils.getDom());
 	return this.serializeTo(copy, view.dom.getAttribute('block-type'), null, copies);
 };
@@ -249,7 +249,7 @@ Blocks.prototype.get = function(id) {
 
 Blocks.prototype.set = function(data) {
 	if (!Array.isArray(data)) data = [data];
-	for (var i = 0, cur; i < data.length; i++) {
+	for (let i = 0, cur; i < data.length; i++) {
 		cur = data[i];
 		if (cur.id == null) {
 			cur.id = this.genId();
@@ -267,8 +267,8 @@ Blocks.prototype.genId = function(len) {
 
 Blocks.prototype.domQuery = function(id, opts) {
 	if (!opts) opts = {};
-	var rootDom = this.view.dom;
-	var sel;
+	const rootDom = this.view.dom;
+	let sel;
 	if (id) {
 		sel = `[block-id="${id}"]`;
 	} else {
@@ -283,7 +283,7 @@ Blocks.prototype.domQuery = function(id, opts) {
 	} else if (!id) {
 		throw new Error("domQuery expects at least id or opts.focused to be set " + id);
 	}
-	var nodes = Array.from(rootDom.querySelectorAll(sel));
+	const nodes = Array.from(rootDom.querySelectorAll(sel));
 	if (opts.all) return nodes;
 	if (rootDom.getAttribute('block-id') == id) {
 		// root is always focused, but another node having actual focus and representing
@@ -291,7 +291,7 @@ Blocks.prototype.domQuery = function(id, opts) {
 		nodes.push(rootDom);
 	}
 	if (nodes.length == 0) return;
-	var node = nodes[0];
+	const node = nodes[0];
 
 	if (opts.content) {
 		if (node.getAttribute('block-content') == opts.content) {

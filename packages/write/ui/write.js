@@ -5,12 +5,12 @@ Object.assign(window.Pageboard, {
 	schemaHelpers: {},
 	schemaFilters: {},
 	trigger: function trigger(node, event, detail) {
-		var opts = {
+		const opts = {
 			view: window,
 			bubbles: true,
 			cancelable: true
 		};
-		var e;
+		let e;
 		if (detail) {
 			opts.detail = detail;
 			e = new CustomEvent(event, opts);
@@ -20,8 +20,8 @@ Object.assign(window.Pageboard, {
 		node.dispatchEvent(e);
 	},
 	uiLoad: function uiLoad(what, p) {
-		var icon = what.querySelector('.icon');
-		var classes;
+		const icon = what.querySelector('.icon');
+		let classes;
 		if (icon) {
 			classes = icon.className;
 			icon.className = "ui spinner icon loading";

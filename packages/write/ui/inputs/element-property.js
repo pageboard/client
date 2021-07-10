@@ -8,11 +8,11 @@ function ElementProperty(input, opts, props) {
 
 function asPaths(obj, ret, pre) {
 	if (!ret) ret = {};
-	var props = obj.properties;
+	const props = obj.properties;
 	if (!props) return ret;
 	Object.keys(props).forEach(function(key) {
-		var val = props[key];
-		var cur = `${pre || ""}${key}`;
+		const val = props[key];
+		const cur = `${pre || ""}${key}`;
 		ret[cur] = val;
 		asPaths(val, ret, cur + '.');
 	});
@@ -20,14 +20,14 @@ function asPaths(obj, ret, pre) {
 }
 
 ElementProperty.prototype.init = function(block) {
-	var dom = Pageboard.editor.blocks.domQuery(block.id);
+	const dom = Pageboard.editor.blocks.domQuery(block.id);
 	if (!dom) throw new Error("Cannot create input, DOM node not found for block " + block.id);
-	var form = dom.closest('form');
-	var formId = form.getAttribute('block-id');
-	var formBlock = Pageboard.editor.blocks.get(formId);
+	const form = dom.closest('form');
+	const formId = form.getAttribute('block-id');
+	const formBlock = Pageboard.editor.blocks.get(formId);
 	if (!formBlock) throw new Error("Cannot find form block for " + formId);
 	this.formBlock = formBlock;
-	var type = formBlock.data || {};
+	let type = formBlock.data || {};
 	if (formBlock.type == "query_form") {
 		type = type.type;
 	} else if (formBlock.type == "api_form") {
@@ -36,23 +36,23 @@ ElementProperty.prototype.init = function(block) {
 		type = null;
 	}
 	if (!type) throw new Error("Please select a type to bind the form to");
-	var el = Pageboard.editor.element(type);
+	const el = Pageboard.editor.element(type);
 	if (!el) throw new Error("Cannot map type to element " + type);
 	this.el = el;
 
 	this.input.hidden = true;
-	var doc = this.input.ownerDocument;
-	var paths = asPaths(this.el, {}, this.el.name + '.');
-	var content = Pageboard.editor.element(form.getAttribute('block-type')).contents.get(this.formBlock);
+	const doc = this.input.ownerDocument;
+	const paths = asPaths(this.el, {}, this.el.name + '.');
+	const content = Pageboard.editor.element(form.getAttribute('block-type')).contents.get(this.formBlock);
 	function getSelectOption(key) {
-		var prop = paths[key];
+		const prop = paths[key];
 		if (!prop.title) return;
-		var node;
+		let node;
 		if (prop.type == "object") {
 			node = doc.dom(`<optgroup label="${prop.title}"></optgroup>`);
 		} else {
 			node = doc.dom(`<option value="${key}">${prop.title}</option>`);
-			var pkey = key.split('.').slice(1).join('.');
+			const pkey = key.split('.').slice(1).join('.');
 			node.disabled = !!content.querySelector(`[name="${pkey}"]`);
 		}
 		return node.outerHTML;
@@ -67,7 +67,7 @@ ElementProperty.prototype.init = function(block) {
 };
 
 ElementProperty.prototype.toInput = function() {
-	var cur = this.select.value;
+	const cur = this.select.value;
 	this.updateOptions(this.input.value, cur);
 	this.input.value = cur;
 	// not sure it's useful to trigger something here
@@ -82,7 +82,7 @@ ElementProperty.prototype.updateOptions = function(prev, cur) {
 };
 
 ElementProperty.prototype.update = function(block) {
-	var cur = block.data.name || "";
+	const cur = block.data.name || "";
 	this.updateOptions(this.select.value, cur);
 	this.select.value = cur;
 };

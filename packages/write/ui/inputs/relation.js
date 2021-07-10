@@ -7,15 +7,15 @@ function RelationFilter(key, opts) {
 }
 
 RelationFilter.prototype.update = function(block, schema) {
-	var type, el;
-	var path = this.key.split('.');
+	let type, el;
+	const path = this.key.split('.');
 	if (this.opts.from == "service") {
 		path.splice(-2, 2, 'method');
 		type = path.reduce(function(obj, name) {
 			return obj[name] || null;
 		}, block.data);
 		if (!type) return;
-		var parts = type.split('.');
+		const parts = type.split('.');
 		if (parts.length == 2) {
 			el = (Pageboard.services[parts[0]] || {})[parts[1]] || {};
 		}
@@ -27,8 +27,7 @@ RelationFilter.prototype.update = function(block, schema) {
 		if (!type) return;
 		el = Pageboard.editor.elements[type];
 	}
-	var parents = el && el.parents;
-	if (!parents) parents = {type: "null"};
+	const parents = el && el.parents || { type: "null" };
 	return Object.assign({}, schema, parents);
 };
 

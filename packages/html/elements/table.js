@@ -165,7 +165,7 @@ exports.table_cell = {
 	contents: "block+",
 	tag: 'td',
 	parse: function(dom) {
-		var d = {};
+		const d = {};
 		if (dom.matches('.center')) d.align = 'center';
 		else if (dom.matches('.right')) d.align = 'right';
 		if (dom.matches('.selectable')) d.selectable = true;

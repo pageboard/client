@@ -15,9 +15,9 @@ function FocusPlugin(view, options) {
 
 FocusPlugin.prototype.appendTransaction = function(transactions, oldState, newState) {
 	// focus once per transaction
-	var itr;
-	var editorUpdate = false;
-	for (var i = 0; i < transactions.length; i++) {
+	let itr;
+	let editorUpdate = false;
+	for (let i = 0; i < transactions.length; i++) {
 		itr = transactions[i];
 		if (itr.getMeta('focus')) {
 			return;
@@ -26,18 +26,18 @@ FocusPlugin.prototype.appendTransaction = function(transactions, oldState, newSt
 			editorUpdate = true;
 		}
 	}
-	var tr = newState.tr;
+	const tr = newState.tr;
 	if (this.action(tr, editorUpdate)) {
 		return tr;
 	}
 };
 
 FocusPlugin.prototype.click = function(view, pos, e) {
-	var tr = view.state.tr;
-	var sel = TextSelection.create(tr.doc, pos);
-	var custom = false;
+	const tr = view.state.tr;
+	let sel = TextSelection.create(tr.doc, pos);
+	let custom = false;
 	if (!e.ctrlKey) {
-		var dom = e.target;
+		let dom = e.target;
 		if (dom.pmViewDesc && dom.pmViewDesc.node && dom.pmViewDesc.node.isLeaf) {
 			custom = true; // prevents falling on the right side of the leaf node
 		} else if (dom.children.length == 1 && dom.firstElementChild.matches('pagecut-placeholder')) {
@@ -60,15 +60,15 @@ FocusPlugin.prototype.click = function(view, pos, e) {
 };
 
 FocusPlugin.prototype.action = function(tr, editorUpdate) {
-	var sel = tr.selection;
+	const sel = tr.selection;
 	// avoid unneeded changes
 	if (this.editor.state.tr.selection.eq(sel) && !editorUpdate) return false;
 	return this.focus(tr, sel);
 };
 
 FocusPlugin.prototype.focusRoot = function(tr, pos, node, focus) {
-	var attrs = Object.assign({}, node.attrs);
-	var prev = attrs.focused;
+	const attrs = Object.assign({}, node.attrs);
+	const prev = attrs.focused;
 	if (prev == focus) {
 		return;
 	}
@@ -79,7 +79,7 @@ FocusPlugin.prototype.focusRoot = function(tr, pos, node, focus) {
 	if (node.type.name == tr.doc.type.name) {
 		tr.docAttr('focused', attrs.focused);
 	} else if (node.type.spec.inline && !node.type.spec.element.leaf) {
-		var sel = this.editor.utils.selectTr(tr, pos);
+		const sel = this.editor.utils.selectTr(tr, pos);
 		tr.removeMark(sel.from, sel.to, node.type);
 		tr.addMark(sel.from, sel.to, node.type.create(attrs));
 	} else {
@@ -93,14 +93,14 @@ FocusPlugin.prototype.focus = function(tr, sel) {
 		this.focusRoot(tr, 0, tr.doc, false);
 		return;
 	}
-	var parents = this.editor.utils.selectionParents(tr, sel);
-	var firstParent = parents.length && parents[0];
-	var root = firstParent.root;
-	var rootPos = root && root.level && root.rpos.before(root.level);
+	const parents = this.editor.utils.selectionParents(tr, sel);
+	const firstParent = parents.length && parents[0];
+	const root = firstParent.root;
+	const rootPos = root && root.level && root.rpos.before(root.level);
 
-	var me = this;
+	const me = this;
 
-	var changes = [{
+	const changes = [{
 		pos: 0,
 		node: tr.doc,
 		focus: 'first'
@@ -112,8 +112,8 @@ FocusPlugin.prototype.focus = function(tr, sel) {
 			node: root.node,
 			focus: "last"
 		});
-		var parent, cur;
-		for (var i = 1; i < parents.length; i++) {
+		let parent, cur;
+		for (let i = 1; i < parents.length; i++) {
 			parent = parents[i];
 			cur = parent.root;
 			if (!cur.level) continue;
@@ -132,8 +132,8 @@ FocusPlugin.prototype.focus = function(tr, sel) {
 		} else {
 			return;
 		}
-		var changed = false;
-		for (var i = 0; i < changes.length; i++) {
+		let changed = false;
+		for (let i = 0; i < changes.length; i++) {
 			if (node == changes[i].node) {
 				changed = true;
 				break;
@@ -144,8 +144,8 @@ FocusPlugin.prototype.focus = function(tr, sel) {
 	hasChanged(tr.doc);
 	tr.doc.descendants(hasChanged);
 
-	var change;
-	for (var j = 0; j < changes.length; j++) {
+	let change;
+	for (let j = 0; j < changes.length; j++) {
 		change = changes[j];
 		try {
 			me.focusRoot(tr, change.pos, change.node, change.focus);

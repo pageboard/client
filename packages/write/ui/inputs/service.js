@@ -3,12 +3,12 @@ Pageboard.schemaFilters.service = ServiceFilter;
 Pageboard.schemaHelpers.service = ServiceHelper;
 
 function ServiceFilter(key, opts, schema) {
-	var list = [];
+	const list = [];
 	this.key = key;
-	var services = Pageboard.services;
+	const services = Pageboard.services;
 	Object.keys(services).forEach(function(group) {
 		Object.keys(services[group]).forEach(function(key) {
-			var it = services[group][key];
+			const it = services[group][key];
 			if (opts.action == it.$action || opts.action == "write" && it.$action != "read") {
 				list.push({
 					const: `${group}.${key}`,
@@ -26,7 +26,7 @@ function ServiceFilter(key, opts, schema) {
 
 ServiceFilter.prototype.update = function(block, schema) {
 	schema = Object.assign({}, schema);
-	var props = schema.properties = Object.assign({}, schema.properties);
+	const props = schema.properties = Object.assign({}, schema.properties);
 	props.method = Object.assign({}, props.method, {anyOf: this.list});
 	delete props.method.type;
 	setServiceParameters(this.key, block, props);
@@ -40,20 +40,20 @@ function ServiceHelper(node, opts) {
 
 ServiceHelper.prototype.update = function(block, schema) {
 	schema = Object.assign({}, schema);
-	var props = schema.properties = Object.assign({}, schema.properties);
+	const props = schema.properties = Object.assign({}, schema.properties);
 	setServiceParameters(this.key, block, props);
 	return schema;
 };
 
 function setServiceParameters(key, block, props) {
-	var val = block.data;
+	let val = block.data;
 	if (key) key.split('.').some(function(str) {
 		val = val[str];
 		if (val == null) return true;
 	});
-	var service = {};
-	var method = (val || {}).method;
-	var parts = (method || "").split('.');
+	let service = {};
+	const method = (val || {}).method;
+	const parts = (method || "").split('.');
 	if (parts.length == 2) {
 		service = (Pageboard.services[parts[0]] || {})[parts[1]] || {};
 	}

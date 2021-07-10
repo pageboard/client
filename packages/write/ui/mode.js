@@ -16,9 +16,9 @@ Pageboard.Controls.Mode = class Mode {
 		if (this[e.type]) this[e.type](e);
 	}
 	click(e) {
-		var item = e.target.closest('[data-command]');
+		const item = e.target.closest('[data-command]');
 		if (!item) return;
-		var com = item.dataset.command;
+		const com = item.dataset.command;
 		if (com == "logout") {
 			Page.setup(function(state) {
 				return Pageboard.fetch("get", "/.api/logout").then(function() {
@@ -29,13 +29,13 @@ Pageboard.Controls.Mode = class Mode {
 		}
 		if (["code", "write", "read"].includes(com) == false) return;
 		this.win.Page.patch((state) => {
-			var mode = document.body.dataset.mode;
+			const mode = document.body.dataset.mode;
 			if (mode != "read") {
-				var store = this.editor.controls.store;
+				const store = this.editor.controls.store;
 				if (state.data.$cache) {
 					delete state.data.$cache.items;
 					store.flush();
-					var backup = store.reset();
+					const backup = store.reset();
 					state.data.$cache.item = (backup.unsaved || backup.initial)[store.rootId];
 					state.data.$cache.items = Object.values(backup.unsaved || backup.initial);
 					state.data.$store = backup;
@@ -43,7 +43,7 @@ Pageboard.Controls.Mode = class Mode {
 				}
 			}
 			this.editor.close();
-			var elts = state.scope.$elements;
+			const elts = state.scope.$elements;
 			if (com == "code") {
 				state.data.$jsonContent = pruneNonRoot(Pageboard.editor.state.doc.toJSON(), null, Pageboard.editor.schema);
 				delete Pageboard.editor;
@@ -93,14 +93,14 @@ Pageboard.Controls.Mode = class Mode {
 };
 
 function pruneNonRoot(obj, parent, schema) {
-	var nodeType = schema.nodes[obj.type];
+	const nodeType = schema.nodes[obj.type];
 	if (!nodeType) return obj;
-	var tn = nodeType.spec.typeName;
+	const tn = nodeType.spec.typeName;
 	if (tn == null) return obj;
-	var list = obj.content || [];
-	var childList = [];
-	list.forEach((item) => { 
-		var list = pruneNonRoot(item, obj, schema);
+	const list = obj.content || [];
+	let childList = [];
+	list.forEach((item) => {
+		const list = pruneNonRoot(item, obj, schema);
 		if (Array.isArray(list)) childList = childList.concat(list);
 		else if (list != null) childList.push(list);
 	});

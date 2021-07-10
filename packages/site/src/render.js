@@ -1,6 +1,6 @@
-var matchdom = require('matchdom');
-var Viewer = require('@pageboard/pagecut/src/viewer.js');
-var str2dom = require('@pageboard/pagecut/src/str2dom.js');
+const matchdom = require('matchdom');
+const Viewer = require('@pageboard/pagecut/src/viewer.js');
+const str2dom = require('@pageboard/pagecut/src/str2dom.js');
 
 Object.assign(matchdom.filters, require('./filters'));
 
@@ -32,11 +32,11 @@ String.prototype.fuse = function(obj, scope) {
 	return matchdom(this.toString(), obj, scope ? scope.$filters : null, {data: scope});
 };
 
-var mSym = matchdom.Symbols;
-var reFuse = new RegExp(`\\${mSym.open}[^\\${mSym.open}\\${mSym.close}]+\\${mSym.close}`);
+const mSym = matchdom.Symbols;
+const reFuse = new RegExp(`\\${mSym.open}[^\\${mSym.open}\\${mSym.close}]+\\${mSym.close}`);
 
 module.exports = function(res, scope, el) {
-	var elts = scope.$elements;
+	const elts = scope.$elements;
 	if (!res) res = {};
 
 	if (!scope.$view) scope.$view = new Viewer({
@@ -47,10 +47,10 @@ module.exports = function(res, scope, el) {
 	if (el) install(el, scope);
 
 	scope = Object.assign({}, scope);
-	for (var k in res) scope[`$${k}`] = res[k];
+	for (const k in res) scope[`$${k}`] = res[k];
 
-	var block = res.item || {};
-	var blocks = {};
+	const block = res.item || {};
+	const blocks = {};
 	if (!el && block.type) {
 		el = elts[block.type];
 	}
@@ -123,19 +123,19 @@ function install(el, scope) {
 
 	if (!el.dom) return;
 	el.render = function(block, bscope) {
-		var el = this;
+		const el = this;
 		if (!block) block = {};
-		var rscope = Object.assign({}, scope, bscope, {
+		const rscope = Object.assign({}, scope, bscope, {
 			$element: el
 		});
 		["id", "type", "parent", "child", "parents", "children", "updated_at", "created_at", "lock", "expr"].forEach(function(name) {
-			var val = block[name];
+			const val = block[name];
 			if (val != null) rscope['$' + name] = val;
 		});
 
 		if (el.filters) rscope.$filters = Object.assign({}, rscope.$filters, el.filters);
 
-		var data = Pageboard.merge(block.data, block.expr, function (c, v) {
+		const data = Pageboard.merge(block.data, block.expr, function (c, v) {
 			if (typeof v != "string") return;
 			return v.fuse({
 				$default: c
@@ -159,14 +159,14 @@ function install(el, scope) {
 				}
 			});
 		});
-		var dom = el.dom && el.dom.cloneNode(true);
+		let dom = el.dom && el.dom.cloneNode(true);
 		if (el.fuse) {
 			dom = el.fuse.call(el, dom, data, rscope) || dom;
 		} else if (el.fusable) {
 			if (!dom) throw new Error("Invalid element", el, "missing dom");
 			dom = dom.fuse(data, rscope);
 			if (!dom) return;
-			var list = dom;
+			let list = dom;
 			if (dom.nodeType != Node.DOCUMENT_FRAGMENT_NODE) {
 				list = [dom];
 			} else {
@@ -175,7 +175,7 @@ function install(el, scope) {
 			list.forEach((dom) => {
 				Array.from(dom.attributes).forEach(attr => {
 					if (!attr.name.startsWith('style-')) return;
-					var style = attr.name.split('-').slice(1).map((w, i) => {
+					const style = attr.name.split('-').slice(1).map((w, i) => {
 						if (i > 0) w = w[0].toUpperCase() + w.substr(1);
 						return w;
 					}).join("");

@@ -1,8 +1,8 @@
 /*!
-  * Stickyfill – `position: sticky` polyfill
-  * v. 2.1.0 | https://github.com/wilddeer/stickyfill
-  * MIT License
-  */
+	* Stickyfill – `position: sticky` polyfill
+	* v. 2.1.0 | https://github.com/wilddeer/stickyfill
+	* MIT License
+	*/
 
 'use strict';
 
@@ -26,7 +26,7 @@ else {
 			try {
 				testNode.style.position = prefix + 'sticky';
 			}
-			catch(e) { /* pass */ }
+			catch (e) { /* pass */ }
 
 			return testNode.style.position != '';
 		})
@@ -71,12 +71,12 @@ function extend(targetObj, sourceObject) {
 	Object.assign(targetObj, sourceObject);
 }
 
-function parseNumeric (val) {
+function parseNumeric(val) {
 	return parseFloat(val) || 0;
 }
 
-function getDocOffsetTop (node) {
-	var docOffsetTop = 0;
+function getDocOffsetTop(node) {
+	let docOffsetTop = 0;
 
 	while (node) {
 		docOffsetTop += node.offsetTop;
@@ -91,7 +91,7 @@ function getDocOffsetTop (node) {
  * 4. Sticky class
  */
 class Sticky {
-	constructor (node) {
+	constructor(node) {
 		if (!(node instanceof HTMLElement))
 			throw new Error('First argument must be HTMLElement');
 		if (stickies.some(sticky => sticky._node === node))
@@ -111,7 +111,7 @@ class Sticky {
 		this.refresh();
 	}
 
-	refresh () {
+	refresh() {
 		if (seppuku || this._removed) return;
 		if (this._active) this._deactivate();
 
@@ -157,7 +157,7 @@ class Sticky {
 		 * 4. Get necessary node parameters
 		 */
 		const referenceNode = node.parentNode;
-		const parentNode = shadowRootExists && referenceNode instanceof ShadowRoot ? referenceNode.host: referenceNode;
+		const parentNode = shadowRootExists && referenceNode instanceof ShadowRoot ? referenceNode.host : referenceNode;
 		const nodeWinOffset = node.getBoundingClientRect();
 		const parentWinOffset = parentNode.getBoundingClientRect();
 		const parentComputedStyle = getComputedStyle(parentNode);
@@ -250,7 +250,7 @@ class Sticky {
 	}
 
 	_recalcClone(nodeWinOffset) {
-		var clone = this._clone;
+		const clone = this._clone;
 		if (!clone) return;
 		if (!nodeWinOffset) nodeWinOffset = this._node.getBoundingClientRect();
 		extend(clone.node.style, {
@@ -259,60 +259,60 @@ class Sticky {
 		});
 	}
 
-	_recalcPosition () {
+	_recalcPosition() {
 		if (!this._active || this._removed) return;
 
-		const stickyMode = scroll.top <= this._limits.start ? 'start' : scroll.top >= this._limits.end? 'end': 'middle';
+		const stickyMode = scroll.top <= this._limits.start ? 'start' : scroll.top >= this._limits.end ? 'end' : 'middle';
 
 		if (this._stickyMode == stickyMode) return;
 
 		switch (stickyMode) {
-		case 'start':
-			extend(this._node.style, {
-				position: 'absolute',
-				left: this._offsetToParent.left + 'px',
-				right: this._offsetToParent.right + 'px',
-				top: this._offsetToParent.top + 'px',
-				bottom: 'auto',
-				width: 'auto',
-				marginLeft: 0,
-				marginRight: 0,
-				marginTop: 0
-			});
-			break;
+			case 'start':
+				extend(this._node.style, {
+					position: 'absolute',
+					left: this._offsetToParent.left + 'px',
+					right: this._offsetToParent.right + 'px',
+					top: this._offsetToParent.top + 'px',
+					bottom: 'auto',
+					width: 'auto',
+					marginLeft: 0,
+					marginRight: 0,
+					marginTop: 0
+				});
+				break;
 
-		case 'middle':
-			extend(this._node.style, {
-				position: 'fixed',
-				left: this._offsetToWindow.left + 'px',
-				right: this._offsetToWindow.right + 'px',
-				top: this._styles.top,
-				bottom: 'auto',
-				width: 'auto',
-				marginLeft: 0,
-				marginRight: 0,
-				marginTop: 0
-			});
-			break;
+			case 'middle':
+				extend(this._node.style, {
+					position: 'fixed',
+					left: this._offsetToWindow.left + 'px',
+					right: this._offsetToWindow.right + 'px',
+					top: this._styles.top,
+					bottom: 'auto',
+					width: 'auto',
+					marginLeft: 0,
+					marginRight: 0,
+					marginTop: 0
+				});
+				break;
 
-		case 'end':
-			extend(this._node.style, {
-				position: 'absolute',
-				left: this._offsetToParent.left + 'px',
-				right: this._offsetToParent.right + 'px',
-				top: 'auto',
-				bottom: 0,
-				width: 'auto',
-				marginLeft: 0,
-				marginRight: 0
-			});
-			break;
+			case 'end':
+				extend(this._node.style, {
+					position: 'absolute',
+					left: this._offsetToParent.left + 'px',
+					right: this._offsetToParent.right + 'px',
+					top: 'auto',
+					bottom: 0,
+					width: 'auto',
+					marginLeft: 0,
+					marginRight: 0
+				});
+				break;
 		}
 
 		this._stickyMode = stickyMode;
 	}
 
-	_fastCheck () {
+	_fastCheck() {
 		if (!this._active || this._removed || !this._clone) return;
 
 		if (
@@ -322,11 +322,11 @@ class Sticky {
 		) this.refresh();
 	}
 
-	_deactivate (reset) {
+	_deactivate(reset) {
 		if (!this._active || this._removed || !this._clone) return;
 		this._observer.disconnect();
 
-		var clone = this._clone.node;
+		const clone = this._clone.node;
 		if (reset) {
 			if (clone.parentNode) clone.parentNode.removeChild(clone);
 			delete this._clone;
@@ -352,7 +352,7 @@ class Sticky {
 		delete this._limits;
 	}
 
-	remove () {
+	remove() {
 		this._deactivate(true);
 
 		stickies.some((sticky, index) => {
@@ -374,14 +374,14 @@ const Stickyfill = {
 	stickies,
 	Sticky,
 
-	forceSticky () {
+	forceSticky() {
 		seppuku = false;
 		init();
 
 		this.refreshAll();
 	},
 
-	destroy () {
+	destroy() {
 		if (!isInitialized) return;
 		Stickyfill.removeAll();
 		isInitialized = false;
@@ -393,7 +393,7 @@ const Stickyfill = {
 		}
 	},
 
-	addOne (node) {
+	addOne(node) {
 		// Check whether it’s a node
 		if (!(node instanceof HTMLElement)) {
 			// Maybe it’s a node list of some sort?
@@ -404,7 +404,7 @@ const Stickyfill = {
 
 		// Check if Stickyfill is already applied to the node
 		// and return existing sticky
-		for (var i = 0; i < stickies.length; i++) {
+		for (let i = 0; i < stickies.length; i++) {
 			if (stickies[i]._node === node) return stickies[i];
 		}
 
@@ -412,7 +412,7 @@ const Stickyfill = {
 		return new Sticky(node);
 	},
 
-	add (nodeList) {
+	add(nodeList) {
 		// If it’s a node make an array of one node
 		if (nodeList instanceof HTMLElement) nodeList = [nodeList];
 		// Check if the argument is an iterable of some sort
@@ -447,11 +447,11 @@ const Stickyfill = {
 		return addedStickies;
 	},
 
-	refreshAll () {
+	refreshAll() {
 		stickies.forEach(sticky => sticky.refresh());
 	},
 
-	removeOne (node) {
+	removeOne(node) {
 		// Check whether it’s a node
 		if (!(node instanceof HTMLElement)) {
 			// Maybe it’s a node list of some sort?
@@ -469,7 +469,7 @@ const Stickyfill = {
 		});
 	},
 
-	remove (nodeList) {
+	remove(nodeList) {
 		// If it’s a node make an array of one node
 		if (nodeList instanceof HTMLElement) nodeList = [nodeList];
 		// Check if the argument is an iterable of some sort
@@ -488,14 +488,14 @@ const Stickyfill = {
 		}
 	},
 
-	removeAll () {
+	removeAll() {
 		while (stickies.length) stickies[0].remove();
 	}
 };
 
 
 // Watch for scroll position changes and trigger recalc/refresh if needed
-function checkScroll () {
+function checkScroll() {
 	if (window.pageXOffset != scroll.left) {
 		scroll.top = window.pageYOffset;
 		scroll.left = window.pageXOffset;
@@ -516,13 +516,13 @@ function checkScroll () {
 //Fast dirty check for layout changes every 500ms
 let fastCheckTimer;
 
-function startFastCheckTimer () {
+function startFastCheckTimer() {
 	fastCheckTimer = setInterval(function () {
 		stickies.forEach(sticky => sticky._fastCheck());
 	}, 500);
 }
 
-function stopFastCheckTimer () {
+function stopFastCheckTimer() {
 	clearInterval(fastCheckTimer);
 }
 
@@ -538,7 +538,7 @@ function toggleTimer() {
 /*
  * 6. Setup events (unless the polyfill was disabled)
  */
-function init () {
+function init() {
 	if (isInitialized) {
 		return;
 	}

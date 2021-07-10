@@ -14,21 +14,21 @@ See pageboard documentation (when it's available...).
 Objects
 -------
 
-* Viewer  
+* Viewer
   renders blocks to DOM using elements and modifiers.
 
-* Editor  
+* Editor
   parse DOM into blocks using resolvers, render blocks into DOM (edit version),
   parse that DOM into an internal editor object model, which is in turn used
   by prosemirror to render that internal model into a DOM view.
 
-* Elements  
-  Blocks are instances of elements.  
-  An element comes in two parts:  
+* Elements
+  Blocks are instances of elements.
+  An element comes in two parts:
   - its definition (name, group, contents, and json schema properties)
   - its edit and view methods, with signatures (document, block).
 
-* Blocks  
+* Blocks
   The core data structure for holding elements instances, and persisting content.
   A block has an type, content, data, and an optional id.
 
@@ -47,9 +47,9 @@ Bunbled files are available as
 A basic editor setup without anything interesting:
 
 ```
-var pagecut = new Pagecut.Editor({
+const pagecut = new Pagecut.Editor({
 	place: '#editable',
-	content: document.querySelector('.some.selector')	
+	content: document.querySelector('.some.selector')
 });
 ```
 
@@ -63,43 +63,43 @@ An element is a simple object with properties and methods, and must be added
 to the `elements` array, mapping types to elements.
 
 Mandatory property:
-- name  
+- name
   the element type name
 
 Properties for the editor:
-- group (optional)  
+- group (optional)
   the group as defined by the prosemirror editor
-- contents  
+- contents
   an object matching contents names to an object having a 'spec' property being
-  a [prosemirror content expression](http://prosemirror.net/guide/schema.html).  
+  a [prosemirror content expression](http://prosemirror.net/guide/schema.html).
   Or, `contents` can be a string, meaning content is not labelled.
   ```
     { id: "<id>", nodes: "<spec>", marks: "<marks>"}
     <div class="parent"><div block-content="<id>"><p>Default Content</p></div></div>
   ```
-  
-- inplace  
+
+- inplace
   A boolean indicating the block is not stored, implying it is entirely defined
   by its DOM representation.
-- inline  
+- inline
   A boolean indicating the block has only one content (what's inside its tag),
   and that this content is stored in place, not in the block. The attributes
   are still kept in the block.
 
 Properties for content management:
-- properties  
+- properties
   a json schema object defining the format of block's data object,
   but can actually only hold strings (empty string being the default value).
-- required or other json-schema keywords  
+- required or other json-schema keywords
   anything being optional here
 
 Mandatory viewing method:
-- view(document, block)  
+- view(document, block)
   renders a block to DOM
 
 Methods for editing:
-- edit(document, block)  
-  optional, defaults to view().  
+- edit(document, block)
+  optional, defaults to view().
   renders a block to editable DOM.
 
 The `edit` method must return a DOM with `block-content` attributes placed on
@@ -157,10 +157,10 @@ modules: Menu, Commands, State, Transform, Model, Pos (from dompos), keymap.
 
 
 Pagecut.Editor options:
-- update(main, transaction): called upon each transaction  
-  if it returns true, the transaction is not applied to the editor view.  
+- update(main, transaction): called upon each transaction
+  if it returns true, the transaction is not applied to the editor view.
   This gives a way to override underlying editor dispatchTransaction event.
-- change(main, block): called when a block has changed  
+- change(main, block): called when a block has changed
   the ancestor block, if any, in which the current action is applied.
 
 Pagecut.Editor.defaults holds some default options values:
@@ -184,13 +184,13 @@ A separate instance can be created using `new Pagecut.Viewer(opts)` where opts:
 - document: a DOM Document (a new one is created if none is given)
 
 
-* render(block, edition) returns a DOM node  
+* render(block, edition) returns a DOM node
   Calls the element edit or view function, and modifiers.
   Merges content. Not recursive.
 
 A default `fragment` type is available to be able to render a fragment of html:
 ```
-var domWrapper = pagecut.render({
+const domWrapper = pagecut.render({
 	type: 'fragment',
 	content: {fragment: 'some html <p>string</p>'}
 });
@@ -224,7 +224,7 @@ in a shared cache,
   a promise, then replaces each block with its rendered DOM.
   The async resolver allows one to fetch remote data during initial rendering
   of the view. It's similar (but different in the details and applications) to
-  the editor's resolvers functions.  
-  It's up to the custom resolver to store fetched blocks in the id module cache.  
+  the editor's resolvers functions.
+  It's up to the custom resolver to store fetched blocks in the id module cache.
   Returns a promise that resolves to a DOM node.
 

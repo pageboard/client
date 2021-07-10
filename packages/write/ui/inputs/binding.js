@@ -8,7 +8,7 @@ function Binding(input, opts, props) {
 
 Binding.prototype.init = function(block) {
 	this.input.hidden = true;
-	var doc = this.input.ownerDocument;
+	const doc = this.input.ownerDocument;
 	function getSelectOption(name) {
 		return `<option value="${name}">${Pageboard.bindings[name].title}</option>`;
 	}
@@ -28,9 +28,9 @@ Binding.prototype.toInput = function() {
 };
 
 Binding.prototype.update = function(block) {
-	var list = this.input.name.split('.');
-	var val = block.data;
-	for (var i=0; i < list.length; i++) {
+	const list = this.input.name.split('.');
+	let val = block.data;
+	for (let i = 0; i < list.length; i++) {
 		val = val[list[i]];
 		if (val == null) break;
 	}

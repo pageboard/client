@@ -24,20 +24,20 @@ class HTMLElementCarousel extends VirtualHTMLElement {
 
 	fullview(val) {
 		this.classList.toggle('fullview', !!val);
-		var body = this.ownerDocument.body;
-		var len = body.querySelectorAll('element-carousel.fullview').length;
+		const body = this.ownerDocument.body;
+		const len = body.querySelectorAll('element-carousel.fullview').length;
 		body.classList.toggle('fullview', len >= 1);
 	}
 
 
 
 	handleClick(e, state) {
-		var node = e.target.closest('a.fullview');
+		const node = e.target.closest('a.fullview');
 		if (node) {
 			e.stopImmediatePropagation();
-			var query = Object.assign({}, state.query);
-			var keyFv = `${this.id}.fullview`;
-			var gallery = this.closest('[block-type="gallery"]');
+			const query = Object.assign({}, state.query);
+			const keyFv = `${this.id}.fullview`;
+			const gallery = this.closest('[block-type="gallery"]');
 			if (gallery) {
 				// leaving current mode
 				delete query[`${gallery.id}.mode`];
@@ -48,7 +48,7 @@ class HTMLElementCarousel extends VirtualHTMLElement {
 			} else {
 				query[keyFv] = true;
 			}
-			state.push({query: query});
+			state.push({ query: query });
 		}
 	}
 
@@ -69,9 +69,9 @@ class HTMLElementCarousel extends VirtualHTMLElement {
 
 	paint(state) {
 		if (this.widget) this.destroy();
-		var gallery = this.closest('[block-type="gallery"]');
+		const gallery = this.closest('[block-type="gallery"]');
 		if (gallery && gallery.selectedMode != "carousel") return;
-		var opts = Object.assign({}, this.options, {
+		const opts = Object.assign({}, this.options, {
 			noDomMod: true,
 			lazyLoad: false, // unless element-image populates the right attribute for carousel
 			cellSelector: 'element-carousel-cell',
@@ -83,7 +83,7 @@ class HTMLElementCarousel extends VirtualHTMLElement {
 			draggable: false,
 			wrapAround: false,
 			accessibility: false
-		}: {});
+		} : {});
 		opts.initialIndex = opts.index;
 		opts.imagesLoaded = opts.width == null;
 		if (opts.autoPlay) opts.wrapAround = true;
@@ -93,8 +93,8 @@ class HTMLElementCarousel extends VirtualHTMLElement {
 
 		this.widget = new window.Flickity(this, opts);
 		this.widget.on('change', (index) => {
-			var oldIndex = this.options.index;
-			var oldSlide = this.widget.slides[oldIndex];
+			const oldIndex = this.options.index;
+			const oldSlide = this.widget.slides[oldIndex];
 			if (oldSlide) {
 				oldSlide.cells.forEach((cell) => {
 					cell.element.querySelectorAll('video,audio').forEach((node) => {
@@ -102,7 +102,7 @@ class HTMLElementCarousel extends VirtualHTMLElement {
 					});
 				});
 			}
-			var newSlide = this.widget.slides[index];
+			const newSlide = this.widget.slides[index];
 			if (newSlide) {
 				newSlide.cells.forEach((cell) => {
 					cell.element.querySelectorAll('video,audio').forEach((node) => {
@@ -136,10 +136,10 @@ class HTMLElementCarousel extends VirtualHTMLElement {
 	}
 
 	updateCells() {
-		var opts = this.options;
+		const opts = this.options;
 		Array.prototype.forEach.call(
 			this.querySelectorAll('element-carousel-cell'),
-			function(cell) {
+			function (cell) {
 				if (opts.width) cell.dataset.width = opts.width + '%';
 				else delete cell.dataset.width;
 				if (opts.height) cell.dataset.height = opts.height;
@@ -172,26 +172,26 @@ class HTMLElementCarouselCell extends VirtualHTMLElement {
 	}
 }
 
-Page.ready(function() {
+Page.ready(function () {
 	VirtualHTMLElement.define('element-carousel-cell', HTMLElementCarouselCell);
 	VirtualHTMLElement.define('element-carousel', HTMLElementCarousel);
 });
 
-Page.setup(function(state) {
+Page.setup(function (state) {
 	function modabs(i, l) {
 		return ((i % l) + l) % l;
 	}
 	function flickLazy(i, isWrap, instant) {
-		if (this.options.wrapAround || isWrap ) {
+		if (this.options.wrapAround || isWrap) {
 			i = modabs(i, this.slides.length);
 		}
-		var slide = this.slides[i];
+		const slide = this.slides[i];
 		if (!slide) return;
-		var lazies = [];
+		const lazies = [];
 		slide.cells.forEach((cell) => {
 			cell.element.querySelectorAll("[data-src]").forEach((node) => {
 				if (node.reveal && !node.currentSrc) {
-					lazies.push(node.reveal(state).catch(() => {}));
+					lazies.push(node.reveal(state).catch(() => { }));
 				}
 			});
 		});
@@ -200,10 +200,10 @@ Page.setup(function(state) {
 			this.select(i, isWrap, instant);
 		});
 	}
-	window.Flickity.prototype.next = function(isWrap, i) {
+	window.Flickity.prototype.next = function (isWrap, i) {
 		return flickLazy.call(this, this.selectedIndex + 1, isWrap, i);
 	};
-	window.Flickity.prototype.previous = function(isWrap, i) {
+	window.Flickity.prototype.previous = function (isWrap, i) {
 		return flickLazy.call(this, this.selectedIndex - 1, isWrap, i);
 	};
 });

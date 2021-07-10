@@ -67,8 +67,8 @@ exports.list = {
 	icon: '<i class="list ol icon"></i>',
 	tag: 'ul,ol',
 	parse: function(dom) {
-		var marker = null;
-		var style = dom.style.listStyleType;
+		let marker = null;
+		const style = dom.style.listStyleType;
 		if (style && this.properties.marker.anyOf.some((item) => item.const == style)) {
 			marker = style;
 		} else if (dom.nodeName == "OL") {

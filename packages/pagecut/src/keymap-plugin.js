@@ -25,18 +25,18 @@ function moveCommand(dir, jump, state, dispatch, view) {
 }
 
 function breakCommand(state, dispatch, view) {
-	var tr = state.tr;
-	var sel = tr.selection;
-	var bef = sel.$from.nodeBefore;
-	var parent = sel.$from.parent;
-	var isRoot = parent.type.spec.typeName == "root";
-	var handled = false;
+	const tr = state.tr;
+	const sel = tr.selection;
+	const bef = sel.$from.nodeBefore;
+	const parent = sel.$from.parent;
+	const isRoot = parent.type.spec.typeName == "root";
+	let handled = false;
 	if (bef && bef.type.name == "hard_break" && isRoot && parent.isTextblock) {
 		tr.delete(sel.$from.pos - bef.nodeSize, sel.$from.pos).scrollIntoView();
 		// ok let's handle the split ourselves
-		var elt = view.element(parent.type.name);
+		const elt = view.element(parent.type.name);
 		if (elt && !elt.inline) {
-			var from = view.utils.splitTr(tr, sel.to);
+			const from = view.utils.splitTr(tr, sel.to);
 			if (from != null) {
 				if (from != sel.from) {
 					tr.setSelection(State.Selection.near(tr.doc.resolve(from + 1)));
@@ -45,7 +45,7 @@ function breakCommand(state, dispatch, view) {
 			}
 		}
 	} else {
-		var hard_break = state.schema.nodes.hard_break;
+		const hard_break = state.schema.nodes.hard_break;
 		handled = true;
 		if (view.utils.canInsert(sel.$from, hard_break).node && dispatch) {
 			tr.replaceSelectionWith(hard_break.create()).scrollIntoView();
@@ -56,13 +56,13 @@ function breakCommand(state, dispatch, view) {
 }
 
 function deleteCommand(back, state, dispatch, view) {
-	var tr = state.tr;
-	var sel = tr.selection;
+	const tr = state.tr;
+	const sel = tr.selection;
 	if (!sel.empty) return false;
 	if (!sel.$from.parent.isTextblock) return false;
 	// if selection is inside an empty paragraph, remove that paragraph
-	var offFrom = back ? -1 : 0;
-	var offTo = back ? 0 : 1;
+	const offFrom = back ? -1 : 0;
+	const offTo = back ? 0 : 1;
 	if (sel.$from.parent.childCount == 1 && sel.$from.parent.firstChild.nodeSize == 1) {
 		if (dispatch) {
 			dispatch(
@@ -80,9 +80,9 @@ function deleteCommand(back, state, dispatch, view) {
 		}
 		return true;
 	} else if (!back) {
-		var $to = sel.$to;
+		const $to = sel.$to;
 		if ($to.parentOffset == $to.parent.nodeSize - 2) {
-			var nextNode = $to.doc.resolve($to.after()).nodeAfter;
+			const nextNode = $to.doc.resolve($to.after()).nodeAfter;
 			if (nextNode && nextNode.isTextblock) {
 				if (dispatch) {
 					dispatch(tr.join(sel.to + 1));
@@ -91,9 +91,9 @@ function deleteCommand(back, state, dispatch, view) {
 			}
 		}
 	} else {
-		var $from = sel.$from;
+		const $from = sel.$from;
 		if ($from.parentOffset == 0) {
-			var prevNode = $from.doc.resolve($from.before()).nodeBefore;
+			const prevNode = $from.doc.resolve($from.before()).nodeBefore;
 			if (prevNode && prevNode.isTextblock) {
 				if (dispatch) {
 					dispatch(tr.join(sel.from - 1));

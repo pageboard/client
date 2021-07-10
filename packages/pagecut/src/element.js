@@ -12,9 +12,9 @@ module.exports = class Element {
 		return obj;
 	}
 	clone() {
-		var el = new Element(this);
+		const el = new Element(this);
 		Object.keys(this).forEach((key) => {
-			var val = this[key];
+			const val = this[key];
 			if (Array.isArray(val)) el[key] = val.slice();
 		});
 		el.contents = el.contents.clone();
@@ -61,7 +61,7 @@ class Contents {
 	}
 	each(block, fn) {
 		this.list.forEach((def) => {
-			var content = this.get(block, def.id);
+			const content = this.get(block, def.id);
 			if (content != null) fn(content, def);
 		});
 	}
@@ -74,14 +74,14 @@ class Contents {
 		return this.size == 1 ? this.list[0].id : null;
 	}
 	normalize(block) {
-		var content = block.content;
+		const content = block.content;
 		if (!content && this.size) {
 			block.content = {};
 		} else if (content && !this.size) {
 			delete block.content;
 		}
 		if (content && this.unnamed && !this.list[0].virtual) {
-			var name = Object.keys(content)[0];
+			const name = Object.keys(content)[0];
 			if (name) {
 				content[""] = content[name];
 				delete content[name];
@@ -94,11 +94,11 @@ class Contents {
 		return new Contents(this.list.slice().map((obj) => Object.assign({}, obj)));
 	}
 	prune(block) {
-		var copy = {};
-		var content = block.content;
+		const copy = {};
+		const content = block.content;
 		if (content) this.list.forEach((def) => {
 			if (!def.virtual) {
-				var cont = content[def.id || ""];
+				const cont = content[def.id || ""];
 				if (cont !== undefined) copy[def.id || ""] = cont;
 			}
 		});

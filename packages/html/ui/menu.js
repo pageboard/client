@@ -29,9 +29,9 @@ class HTMLElementMenu extends VirtualHTMLElement {
 		helper.lastElementChild.lastElementChild.appendChild(this.toHelper(menu));
 		this.observer = new ResizeObserver((entries, observer) => {
 			window.requestAnimationFrame(() => {
-				var styles = window.getComputedStyle(this);
-				var parentWidth = parseFloat(styles.marginLeft) + parseFloat(styles.marginRight) + this.offsetWidth;
-				var menuWidth = menu.offsetWidth;
+				const styles = window.getComputedStyle(this);
+				const parentWidth = parseFloat(styles.marginLeft) + parseFloat(styles.marginRight) + this.offsetWidth;
+				const menuWidth = menu.offsetWidth;
 				this.classList.toggle('burger', parentWidth <= menuWidth);
 			});
 		});
@@ -44,7 +44,7 @@ class HTMLElementMenu extends VirtualHTMLElement {
 		if (this.active) {
 			this.active.classList.toggle('active', false);
 		}
-		var tosser = this.lastElementChild;
+		const tosser = this.lastElementChild;
 		tosser.classList.remove('inactive');
 		let item = tosser.contains(e.target) && !e.target.closest('a') && e.target.closest('.item');
 		if (item == tosser) {
@@ -53,8 +53,8 @@ class HTMLElementMenu extends VirtualHTMLElement {
 				tosser.classList.add('inactive');
 				tosser.blur();
 			} else {
-				var padding = this.offsetTop + this.offsetHeight;
-				var menu = tosser.lastElementChild.lastElementChild;
+				const padding = this.offsetTop + this.offsetHeight;
+				const menu = tosser.lastElementChild.lastElementChild;
 				menu.style.maxHeight = `calc(100% - ${padding}px)`;
 			}
 		} else if (item) {
@@ -65,7 +65,7 @@ class HTMLElementMenu extends VirtualHTMLElement {
 		tosser.classList.toggle('active', !!item);
 	}
 	toHelper(root) {
-		var frag = root.ownerDocument.createDocumentFragment();
+		const frag = root.ownerDocument.createDocumentFragment();
 		root.children.forEach((item) => {
 			frag.append(item.cloneNode(true));
 		});

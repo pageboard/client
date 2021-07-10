@@ -15,7 +15,7 @@ function Href(input, opts, props) {
 }
 
 Href.prototype.realTrigger = function() {
-	var input = this.node.querySelector('input');
+	const input = this.node.querySelector('input');
 	if (input.value != this.input.value) {
 		this.input.value = input.value;
 		Pageboard.trigger(this.input, 'change');
@@ -26,7 +26,7 @@ Href.prototype.realTrigger = function() {
 };
 
 Href.prototype.init = function(block) {
-	var input = this.input;
+	const input = this.input;
 	input.parentNode.classList.add('href');
 
 	input.insertAdjacentHTML('afterEnd', `<div class="ui input">
@@ -54,7 +54,7 @@ Href.prototype.init = function(block) {
 	});
 
 	this.node.addEventListener('paste', (e) => {
-		var val = e.clipboardData.getData('text/plain');
+		const val = e.clipboardData.getData('text/plain');
 		if (!val) return;
 		if (val.startsWith('/') || /^(http:|https:)?\/\//.test(val)) {
 			e.preventDefault();
@@ -74,7 +74,7 @@ Href.prototype.init = function(block) {
 	});
 
 	this.node.addEventListener('click', (e) => {
-		var actioner = e.target.closest('[data-action]');
+		const actioner = e.target.closest('[data-action]');
 		if (!actioner) return;
 		if (actioner.dataset.action == "upload") this.uploadStart();
 		else if (actioner.dataset.action == "stop") this.searchStop(true);
@@ -82,13 +82,13 @@ Href.prototype.init = function(block) {
 
 	this.container.addEventListener('click', (e) => {
 		e.preventDefault();
-		var item = e.target.closest('.item');
+		const item = e.target.closest('.item');
 		if (!item) {
 			e.stopPropagation();
 			return;
 		}
-		var href = item.getAttribute('href');
-		var remove = e.target.closest('[data-action="remove"]');
+		const href = item.getAttribute('href');
+		const remove = e.target.closest('[data-action="remove"]');
 		if (remove) {
 			e.stopPropagation();
 			return Pageboard.uiLoad(remove, this.remove(Href.cache[href].url)).then(() => {
@@ -100,7 +100,7 @@ Href.prototype.init = function(block) {
 				this.searchStop();
 			} else {
 				input.value = href;
-				var data = Href.cache[href];
+				const data = Href.cache[href];
 				if (data && !Pageboard.hrefs[href]) {
 					Pageboard.hrefs[href] = Object.assign({
 						mime: data.mime
@@ -119,7 +119,7 @@ Href.prototype.destroy = function() {
 Href.prototype.update = function() {
 	if (!this.list) this.list = [];
 	this.node.querySelector(`[data-action="upload"]`).classList.toggle('hidden', !!this.opts.readOnly);
-	var val = this.input.value;
+	const val = this.input.value;
 	if (val && !this.uiInput.value) {
 		this.uiInput.value = val;
 	}
@@ -133,13 +133,13 @@ Href.prototype.update = function() {
 };
 
 Href.prototype.cache = function(result) {
-	var map = Href.cache;
-	var hrefs = Pageboard.hrefs;
-	var list = result;
+	const map = Href.cache;
+	const hrefs = Pageboard.hrefs;
+	let list = result;
 	if (list == null) return;
 	if (!Array.isArray(list)) list = [list];
 	list.forEach((obj) => {
-		var href = normUrl(obj.url);
+		const href = normUrl(obj.url);
 		map[href] = obj;
 		if (!hrefs[href]) {
 			hrefs[href] = Object.assign({
@@ -151,7 +151,7 @@ Href.prototype.cache = function(result) {
 };
 
 Href.prototype.searchStart = function() {
-	var me = this;
+	const me = this;
 	this.initialValue = this.input.value;
 	this.uiInput.value = '';
 	this.uiInput.focus();
@@ -159,14 +159,14 @@ Href.prototype.searchStart = function() {
 	this.first = true;
 	this.infinite = new window.InfiniteScroll(this.container, {
 		path: function() {
-			var text = me.first ? '' : me.uiInput.value;
-			var url;
+			let text = me.first ? '' : me.uiInput.value;
+			let url;
 			if (text.startsWith('#') || text.startsWith('/')) {
 				url = normUrl(text);
 				if (text.endsWith('#')) url = url + '#';
 				text = null;
 			}
-			var filter = Object.assign({
+			const filter = Object.assign({
 				text: text,
 				url: url
 			}, me.opts.filter);
@@ -188,7 +188,7 @@ Href.prototype.searchStart = function() {
 	});
 
 	Pageboard.write.classList.add('href');
-	var parent = this.input.parentNode;
+	let parent = this.input.parentNode;
 	while (parent) {
 		parent = parent.parentNode.closest('.field,.fieldset');
 		if (parent) parent.classList.add('href');
@@ -202,9 +202,9 @@ Href.prototype.searchUpdate = function() {
 	this.infinite.pageIndex = 1;
 	this.infinite.loadNextPage().then(({ body }) => {
 		this.first = false;
-		var data = JSON.parse(body).data;
+		const data = JSON.parse(body).data;
 		if (data.length == 0) this.lastPageIndex = this.infinite.pageIndex;
-		var node = this.container.ownerDocument.createElement('div');
+		const node = this.container.ownerDocument.createElement('div');
 		this.cache(data);
 		this.renderList(data, node);
 		this.infinite.appendItems(Array.from(node.children));
@@ -217,7 +217,7 @@ Href.prototype.searchStop = function(cancel) {
 		delete this.infinite;
 	}
 	Pageboard.write.classList.remove('href');
-	var parent = this.input.parentNode;
+	let parent = this.input.parentNode;
 	while (parent) {
 		parent = parent.parentNode.closest('.field,.fieldset');
 		if (parent) parent.classList.remove('href');
@@ -247,26 +247,26 @@ Href.prototype.set = function(str) {
 Href.prototype.uploadStart = function() {
 	// TODO is it possible to upload multiple files in separate steps
 	// to avoid reaching the max body server upload limit ?
-	var input = document.createElement('input');
+	const input = document.createElement('input');
 	input.type = "file";
 	input.multiple = true;
-	var me = this;
+	const me = this;
 	return new Promise(function(resolve, reject) {
 		input.addEventListener('change', function() {
-			var fd = new FormData();
+			const fd = new FormData();
 			if (input.files.length == 0) return resolve();
-			for (var i=0; i < input.files.length; i++) {
+			for (let i = 0; i < input.files.length; i++) {
 				fd.append("files", input.files[i]);
 			}
-			var xhr = new XMLHttpRequest();
+			const xhr = new XMLHttpRequest();
 			xhr.open("POST", "/.api/upload", true);
 			xhr.setRequestHeader('Accept', "application/json; q=1.0");
-			var tracker = me.uploading();
+			const tracker = me.uploading();
 			tracker(0);
 
 			xhr.upload.addEventListener("progress", function(e) {
 				if (e.lengthComputable) {
-					var percent = Math.round((e.loaded * 100) / e.total);
+					let percent = Math.round((e.loaded * 100) / e.total);
 					if (percent >= 100) percent = 99; // only load event can reach 100
 					tracker(percent);
 				}
@@ -274,7 +274,7 @@ Href.prototype.uploadStart = function() {
 
 			xhr.addEventListener('load', function() {
 				tracker(100);
-				var response;
+				let response;
 				try {
 					response = JSON.parse(xhr.responseText);
 				} catch(ex) {
@@ -286,8 +286,8 @@ Href.prototype.uploadStart = function() {
 
 			xhr.addEventListener('error', function(e) {
 				if (xhr.status == 0) return tracker("Connection error");
-				var msg = xhr.statusText || "Connection error";
-				var err = new Error(msg);
+				const msg = xhr.statusText || "Connection error";
+				const err = new Error(msg);
 				err.statusCode = xhr.status;
 				tracker(msg + '(' + xhr.status + ')');
 				reject(err);
@@ -298,8 +298,8 @@ Href.prototype.uploadStart = function() {
 		input.value = null;
 		input.click();
 	}).then(function(obj) {
-		var files = Array.isArray(obj) ? obj : (obj && obj.items || []);
-		var p = Promise.resolve();
+		const files = Array.isArray(obj) ? obj : (obj && obj.items || []);
+		let p = Promise.resolve();
 		files.forEach(function(file) {
 			p = p.then(function() {
 				return me.insert(file);
@@ -314,14 +314,14 @@ Href.prototype.uploadStart = function() {
 Href.prototype.uploadStop = function() {};
 
 Href.prototype.uploading = function() {
-	var root = Pageboard.notify.dom();
-	var progress = root.dom(`<div class="ui blue attached progress"><div class="bar"></div></div>`);
+	const root = Pageboard.notify.dom();
+	const progress = root.dom(`<div class="ui blue attached progress"><div class="bar"></div></div>`);
 	root.appendChild(progress);
-	var $node = $(progress).progress({
+	const $node = $(progress).progress({
 		percent: 0
 	});
 
-	var finished = false;
+	const finished = false;
 	return function(percent) {
 		if (finished) return;
 		if (typeof percent == "number") {
@@ -338,7 +338,7 @@ Href.prototype.uploading = function() {
 };
 
 Href.prototype.remove = function(href) {
-	var me = this;
+	const me = this;
 	return Pageboard.uiLoad(this.node, Pageboard.fetch('delete', '/.api/href', {
 		url: href
 	})).then(function(obj) {
@@ -350,7 +350,7 @@ Href.prototype.remove = function(href) {
 };
 
 Href.prototype.get = function(href) {
-	var obj = Href.cache[normUrl(href)];
+	const obj = Href.cache[normUrl(href)];
 	if (obj) return Promise.resolve(obj);
 	return Pageboard.uiLoad(this.node, Pageboard.fetch('get', '/.api/hrefs', {
 		url: href
@@ -380,12 +380,12 @@ Href.prototype.renderList = function(list, container) {
 	else list = this.list;
 	if (!list) throw new Error("Need a list to render");
 	if (!container) container = this.container;
-	var selected = this.input.value;
+	let selected = this.input.value;
 	if (selected) selected = normUrl(selected);
 	if (list.rendered) {
 		container.childNodes.forEach(function(child) {
 			if (child.nodeType != Node.ELEMENT_NODE) return;
-			var href = child.getAttribute('href');
+			const href = child.getAttribute('href');
 			if (href == selected) child.classList.add('selected');
 			else child.classList.remove('selected');
 		});
@@ -394,7 +394,7 @@ Href.prototype.renderList = function(list, container) {
 	list.rendered = true;
 	container.textContent = ' ';
 	list.forEach(function(obj) {
-		var item = this.renderItem(obj);
+		const item = this.renderItem(obj);
 		if (selected && item.getAttribute('href') == selected) {
 			item.classList.add('selected');
 			container.insertBefore(item, container.firstChild);
@@ -406,10 +406,10 @@ Href.prototype.renderList = function(list, container) {
 };
 
 Href.prototype.renderItem = function(obj) {
-	var dims = tplDims(obj);
-	var display = this.opts.display;
+	const dims = tplDims(obj);
+	const display = this.opts.display;
 
-	var item = document.dom(`<a href="${normUrl(obj.url)}" class="item">
+	const item = document.dom(`<a href="${normUrl(obj.url)}" class="item">
 		<div class="content">
 			<div class="ui tiny header">
 				${obj.title || '-'}
@@ -419,7 +419,7 @@ Href.prototype.renderItem = function(obj) {
 			</div>
 		</div>
 	</a>`);
-	var content = item.firstElementChild;
+	const content = item.firstElementChild;
 
 	content.appendChild(item.dom(`<div class="left floated meta">
 		${obj.mime.split(';').shift()}<em>${tplSize(obj.meta.size)}</em><br>
@@ -444,7 +444,7 @@ function tplSize(size) {
 }
 
 function tplDims(obj) {
-	var str = "";
+	let str = "";
 	if (obj.type == "video" || obj.type == "image") {
 		if (obj.meta.width) {
 			str += `width ${obj.meta.width}px`;

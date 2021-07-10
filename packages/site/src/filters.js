@@ -11,9 +11,9 @@ exports.alias = function (val, what, name) {
 };
 
 exports.polyfills = function ($elements, what) {
-	var map = {};
+	const map = {};
 	Object.keys($elements).forEach(function (key) {
-		var list = $elements[key].polyfills;
+		let list = $elements[key].polyfills;
 		if (!list) return;
 		if (typeof list == "string") list = [list];
 		list.forEach(function (item) {
@@ -26,11 +26,11 @@ exports.polyfills = function ($elements, what) {
 };
 
 exports.csp = function ($elements, what) {
-	var csp = {};
+	const csp = {};
 	Object.keys($elements).forEach(function (key) {
-		var el = $elements[key];
+		const el = $elements[key];
 		if (el.scripts) el.scripts.forEach(function (src) {
-			var origin = /(^https?:\/\/[.-\w]+)/.exec(src);
+			const origin = /(^https?:\/\/[.-\w]+)/.exec(src);
 			if (origin) {
 				if (!el.csp) el.csp = {};
 				if (!el.csp.script) el.csp.script;
@@ -38,7 +38,7 @@ exports.csp = function ($elements, what) {
 			}
 		});
 		if (el.stylesheets) el.stylesheets.forEach(function (src) {
-			var origin = /(^https?:\/\/[.-\w]+)/.exec(src);
+			const origin = /(^https?:\/\/[.-\w]+)/.exec(src);
 			if (origin) {
 				if (!el.csp) el.csp = {};
 				if (!el.csp.style) el.csp.style;
@@ -47,9 +47,9 @@ exports.csp = function ($elements, what) {
 		});
 		if (!el.csp) return;
 		Object.keys(el.csp).forEach(function (src) {
-			var gcsp = csp[src];
+			let gcsp = csp[src];
 			if (!gcsp) csp[src] = gcsp = [];
-			var list = el.csp[src];
+			let list = el.csp[src];
 			if (!list) return;
 			if (typeof list == "string") list = [list];
 			list.forEach(function (val) {
@@ -60,7 +60,7 @@ exports.csp = function ($elements, what) {
 	return Object.keys(csp).filter(function (src) {
 		return csp[src].length > 0;
 	}).map(function (src) {
-		var key = src.indexOf('-') > 0 ? src : `${src}-src`;
+		const key = src.indexOf('-') > 0 ? src : `${src}-src`;
 		return `${key} ${csp[src].join(' ')}`.trim();
 	}).join('; ');
 };
@@ -97,7 +97,7 @@ exports.num.map = {
 };
 
 exports.checked = function (val, what, selector) {
-	var ret = what.filters.attr(val === true ? 'checked' : null, what, 'checked', selector);
+	const ret = what.filters.attr(val === true ? 'checked' : null, what, 'checked', selector);
 	if (val !== true) delete what.attr;
 	return ret;
 };
@@ -108,15 +108,15 @@ exports.includes = function (val, what, str) {
 };
 
 exports.sum = function (obj, what, ...list) {
-	var sum = 0;
+	let sum = 0;
 	if (obj == null) return sum;
 	list.forEach(function (str) {
-		var sign = 1;
+		let sign = 1;
 		if (str.startsWith('-')) {
 			sign = -1;
 			str = str.substring(1);
 		}
-		var val = what.expr.get(obj, str);
+		let val = what.expr.get(obj, str);
 		if (val == null) return;
 		if (typeof val == "string") val = parseFloat(val);
 		if (Number.isNaN(val)) return;
@@ -129,10 +129,10 @@ exports.schema = function (val, what, spath) {
 	// return schema of repeated key, schema of anyOf/listOf const value
 	if (val === undefined) return;
 
-	var path = what.scope.path;
-	var data = (path[0] && path[0].startsWith('$')) ? what.scope.data : what.data;
-	var blocks = [];
-	for (var i = 0; i < path.length; i++) {
+	const path = what.scope.path;
+	let data = (path[0] && path[0].startsWith('$')) ? what.scope.data : what.data;
+	const blocks = [];
+	for (let i = 0; i < path.length; i++) {
 		if (!data) break;
 		if (data.id && data.type) blocks.push({
 			index: i + 1, // add one because path will be block.data and schema is block.data schema
@@ -140,28 +140,28 @@ exports.schema = function (val, what, spath) {
 		});
 		data = data[path[i]];
 	}
-	var item = blocks.pop();
+	const item = blocks.pop();
 	if (!item) return;
 
-	var schemaPath = item.block.type + '.properties.'
+	const schemaPath = item.block.type + '.properties.'
 		+ path.slice(item.index).join('.properties.');
 
-	var schema = what.expr.get(what.scope.data.$elements, schemaPath);
+	let schema = what.expr.get(what.scope.data.$elements, schemaPath);
 	if (!schema) {
 		// eslint-disable-next-line no-console
 		console.warn("No schema for", schemaPath);
 		return;
 	}
-	var iskey = spath.endsWith('+');
+	let iskey = spath.endsWith('+');
 	if (iskey) {
 		spath = spath.slice(0, -1);
 	} else {
 		iskey = what.scope.iskey !== undefined && what.scope.iskey !== false;
 	}
 	if (!iskey && val !== undefined) {
-		var listOf = schema.oneOf || schema.anyOf;
+		const listOf = schema.oneOf || schema.anyOf;
 		if (listOf) {
-			var prop = listOf.find(function (item) {
+			const prop = listOf.find(function (item) {
 				return item.const === val || item.type === "null" && val === null;
 			});
 			if (prop != null) schema = prop;
@@ -171,7 +171,7 @@ exports.schema = function (val, what, spath) {
 			schema = val;
 		}
 	}
-	var sval = spath ? what.expr.get(schema, spath) : schema;
+	let sval = spath ? what.expr.get(schema, spath) : schema;
 	if (sval === undefined) {
 		// eslint-disable-next-line no-console
 		console.warn("Cannot find path in schema", schema, spath);
@@ -181,17 +181,17 @@ exports.schema = function (val, what, spath) {
 };
 
 exports.autolink = function (val, what) {
-	var hrefs = what.scope.data.$hrefs;
-	var a = what.parent;
-	var obj = Page.parse(val);
+	const hrefs = what.scope.data.$hrefs;
+	const a = what.parent;
+	const obj = Page.parse(val);
 	if (obj.hostname && obj.hostname != document.location.hostname) {
 		a.target = "_blank";
 		a.rel = "noopener";
 	} else if (obj.pathname && (obj.pathname.startsWith('/.') || /\.\w+$/.test(obj.pathname))) {
 		a.target = "_blank";
 	} else if (val) {
-		var href = val.split('?')[0];
-		var meta = (hrefs || {})[href];
+		const href = val.split('?')[0];
+		const meta = (hrefs || {})[href];
 		if (meta && meta.mime && meta.mime.startsWith("text/html") == false) {
 			a.target = "_blank";
 		}
@@ -276,7 +276,9 @@ exports.templates = function (val, what, prefix) {
 		$filters: {
 			'||'(val, what) {
 				if (what.expr.path[0] != prefix) return val;
-				const key = what.expr.path.slice(1).join('.');
+				const key = what.expr.path.slice(1).map(
+					k => k.replace(/\\./g, '%5C')
+				).join('.');
 				const expr = what.expr.toString();
 				if (obj[key] !== undefined && obj[key] !== expr) {
 					// eslint-disable-next-line no-console
@@ -291,13 +293,13 @@ exports.templates = function (val, what, prefix) {
 };
 
 exports.isoDate = function (val, what) {
-	var d = exports.parseDate(val);
+	const d = exports.parseDate(val);
 	if (Number.isNaN(d.getTime())) return null;
 	else return d.toISOString();
 };
 
 exports.parseDate = function (val) {
-	var d;
+	let d;
 	if (val instanceof Date) {
 		d = val;
 	} else {
@@ -323,11 +325,11 @@ exports.toTime = function (val) {
 exports.toDate = function (val, what, unit) {
 	if (!val) return val;
 
-	var date = exports.parseDate(val).toISOString().split('T');
-	var time = date.pop().split('.')[0];
+	let date = exports.parseDate(val).toISOString().split('T');
+	const time = date.pop().split('.')[0];
 	date = date[0];
 	if (!unit) return date;
-	var parts = date.split('-');
+	const parts = date.split('-');
 	if (unit == "year") date = parts[0];
 	else if (unit == "month") date = parts[0] + "-" + parts[1];
 	else if (unit == "time") date = time;
@@ -336,13 +338,13 @@ exports.toDate = function (val, what, unit) {
 };
 
 exports.setDate = function (val, what, amount, unit) {
-	var d = exports.parseDate(val);
+	const d = exports.parseDate(val);
 	amount = parseInt(amount);
 	if (!Number.isNaN(amount)) {
 		if (!unit) unit = 'day';
 		else unit = unit.toLowerCase();
 		if (unit.endsWith('s')) unit = unit.slice(0, -1);
-		var name = {
+		const name = {
 			day: 'Date',
 			month: 'Month',
 			year: 'FullYear',
@@ -360,8 +362,8 @@ exports.formatDate = function (val, what, ...list) {
 	if (/^\d\d:\d\d(:\d\d)?$/.test(val)) {
 		val = '1970-01-01T' + val + 'Z';
 	}
-	var d = new Date(val);
-	var p = {};
+	const d = new Date(val);
+	const p = {};
 	const n = 'narrow';
 	const s = 'short';
 	const l = 'long';
@@ -396,8 +398,8 @@ exports.formatDate = function (val, what, ...list) {
 				break;
 		}
 	});
-	var lang = document.documentElement.lang || 'en';
-	var str;
+	const lang = document.documentElement.lang || 'en';
+	let str;
 	try {
 		str = d.toLocaleString(lang, p);
 	} catch (err) {
