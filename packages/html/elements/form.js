@@ -25,7 +25,7 @@ exports.query_form = {
 			}
 		},
 		redirection: {
-			title: 'Redirection',
+			title: 'Target Address',
 			type: 'object',
 			properties: {
 				url: {
@@ -46,7 +46,7 @@ exports.query_form = {
 	contents: 'block+',
 	tag: 'form[method="get"]',
 	html: `<form is="element-form" method="get" name="[name]"
-		redirection="[redirection.url][redirection.parameters|query|url]"
+		action="[redirection.url][redirection.parameters|query|url]"
 		autocomplete="off" class="ui form"></form>`,
 	stylesheets: [
 		'../lib/components/form.css',

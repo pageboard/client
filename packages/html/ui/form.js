@@ -198,7 +198,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		this.handleSubmit(e, state);
 	}
 	getMethod(e, state) {
-		const redirect = this.getAttribute('redirection');
+		const redirect = this.getAttribute('action');
 		const loc = Page.parse(redirect);
 		Object.assign(loc.query, this.read(false));
 		if (Page.samePathname(loc, state)) {
