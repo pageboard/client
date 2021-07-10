@@ -7,7 +7,7 @@ class VirtualHTMLElement extends HTMLElement {
 		if (this.init) this.init();
 	}
 	static define(name, cla, is) {
-		var preset = window.customElements.get(name);
+		let preset = window.customElements.get(name);
 		if (preset) return preset;
 
 		if (cla.init) cla.init();
@@ -28,15 +28,15 @@ class VirtualHTMLElement extends HTMLElement {
 			}
 		});
 
-		var claDefs = cla.defaults;
+		const claDefs = cla.defaults;
 		if (claDefs) {
-			var defaults = {};
+			const defaults = {};
 			if (!cla.observedAttributes) {
 				cla.observedAttributes = Object.keys(claDefs).map(function (camel) {
-					var attr = camel.replace(/([A-Z])/g, (g) => `-${g[0].toLowerCase()}`);
+					let attr = camel.replace(/([A-Z])/g, (g) => `-${g[0].toLowerCase()}`);
 					if (!is) attr = 'data-' + attr;
-					var isData = attr.startsWith('data-');
-					var name = camel;
+					const isData = attr.startsWith('data-');
+					let name = camel;
 					if (isData && camel.startsWith('data')) {
 						name = name[4].toLowerCase() + name.substring(5);
 					}
@@ -87,9 +87,9 @@ class VirtualHTMLElement extends HTMLElement {
 		return cla;
 	}
 	static extend(name, Ext, is) {
-		var Cla = window.customElements.get(name);
+		const Cla = window.customElements.get(name);
 		if (is) name += "_" + is;
-		var list = extendCache[name];
+		let list = extendCache[name];
 		if (!list) list = extendCache[name] = {};
 		if (!Ext.name) {
 			// eslint-disable-next-line no-console
@@ -108,8 +108,8 @@ function monkeyPatch(proto, meth, cb, after) {
 		enumerable: true,
 		value: (function(fn) {
 			return function(...args) {
-				var isP = false;
-				var ret;
+				let isP = false;
+				let ret;
 				if (after && fn) {
 					ret = fn.apply(this, args);
 					isP = Promise.resolve(ret) == ret;
@@ -138,10 +138,10 @@ function monkeyPatch(proto, meth, cb, after) {
 }
 
 function nodeOptions(node, defaults, state, is) {
-	var params = stateOptions(node.id, defaults, state);
-	var opts = {};
+	const params = stateOptions(node.id, defaults, state);
+	const opts = {};
 	Object.entries(defaults).forEach(([name, {attr, isData, def}]) => {
-		var val;
+		let val;
 		if (Object.hasOwnProperty.call(params, name)) {
 			val = params[name];
 		} else if (isData) {
@@ -169,11 +169,11 @@ function nodeOptions(node, defaults, state, is) {
 }
 
 function stateOptions(id, defaults, state) {
-	var opts = {};
+	const opts = {};
 	Object.keys(state.query).forEach(function(key) {
-		var [qid, name] = key.split('.');
+		const [qid, name] = key.split('.');
 		if (name == null || qid != id) return;
-		var {isData} = defaults[name];
+		const { isData } = defaults[name];
 		if (isData) {
 			opts[name] = state.query[key];
 			state.vars[key] = true;
@@ -196,8 +196,8 @@ Page.setup(function(state) {
 	if (window.IntersectionObserver) {
 		state.ui.observer = new IntersectionObserver((entries, observer) => {
 			entries.forEach((entry) => {
-				var target = entry.target;
-				var ratio = entry.intersectionRatio || 0;
+				const target = entry.target;
+				const ratio = entry.intersectionRatio || 0;
 				if (ratio <= 0) return;
 				if (target.nodeName == "ELEMENT-EMBED" && ratio <= 0.2) return;
 				observer.unobserve(target);
