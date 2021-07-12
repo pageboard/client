@@ -142,7 +142,6 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 		scope.$pathname = state.pathname;
 		scope.$query = state.query;
 		scope.$referrer = state.referrer.pathname || state.pathname;
-		const prevHtml = view.innerHTML;
 		view.textContent = '';
 		const node = Pageboard.render(data, scope, el);
 
