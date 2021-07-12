@@ -2,11 +2,11 @@ const State = require("prosemirror-state");
 const Transform = require("prosemirror-transform");
 const View = require("prosemirror-view");
 const Model = require("prosemirror-model");
-const keymap = require("prosemirror-keymap").keymap;
+const { keymap } = require("prosemirror-keymap");
 const Commands = require("prosemirror-commands");
 const Setup = require("prosemirror-example-setup");
-const DropCursor = require("prosemirror-dropcursor").dropCursor;
-const GapCursor = require("prosemirror-gapcursor").gapCursor;
+const { dropCursor } = require("prosemirror-dropcursor");
+const { gapCursor } = require("prosemirror-gapcursor");
 const History = require("prosemirror-history");
 const OrderedMap = require("orderedmap");
 
@@ -21,229 +21,211 @@ const Utils = require("./utils");
 const Specs = require("./specs");
 const BlocksEdit = require('./blocks-edit');
 const SetDocAttr = require("./SetDocAttr");
-
-
 const Viewer = global.Pagecut && global.Pagecut.Viewer || require("./viewer");
+Viewer.Blocks = BlocksEdit;
 
 Transform.Transform.prototype.docAttr = function(key, value) {
 	return this.step(new SetDocAttr(key, value));
 };
 
-Editor.prototype = Object.create(View.EditorView.prototype);
-Object.assign(Editor.prototype, Viewer.prototype);
-
-Editor.defaults = {
-	nodes: OrderedMap.from(baseSchema.nodes),
-	marks: OrderedMap.from(baseSchema.marks)
-};
-
 const mac = typeof navigator != "undefined" ? /Mac/.test(navigator.platform) : false;
 
-Editor.defaults.mapKeys = {
-	"Mod-z": History.undo,
-	"Shift-Mod-z": History.redo
-};
-if (!mac) Editor.defaults.mapKeys["Mod-y"] = History.redo;
-
-Editor.defaults.elements = {
-	_: {
-		priority: -Infinity,
-		title: "Empty",
-		group: "block",
-		inplace: true,
-		draggable: false,
-		render: function(block, scope) {
-			return scope.$doc.createElement('pagecut-placeholder');
+class Editor extends View.EditorView {
+	static defaults = {
+		nodes: OrderedMap.from(baseSchema.nodes),
+		marks: OrderedMap.from(baseSchema.marks),
+		mapKeys: {
+			"Mod-z": History.undo,
+			"Shift-Mod-z": History.redo,
+			"Mod-y": !mac && History.redo || null
+		},
+		elements: {
+			_: {
+				priority: -Infinity,
+				title: "Empty",
+				group: "block",
+				inplace: true,
+				draggable: false,
+				render: function(block, scope) {
+					return scope.$doc.createElement('pagecut-placeholder');
+				}
+			}
 		}
 	}
-};
 
-module.exports = {
-	Editor: Editor,
-	View: View,
-	Model: Model,
-	State: State,
-	Transform: Transform,
-	Commands: Commands,
-	keymap: keymap,
-	Viewer: Viewer
-};
-
-Editor.prototype.to = function(blocks) {
-	return this.blocks.to(blocks);
-};
-
-function Editor(opts) {
-	const editor = this;
-	if (opts.scope) editor.scope = opts.scope;
-	if (opts.explicit) editor.explicit = true;
-
-	this.utils = new Utils(this);
-	const defaultElts = Editor.defaults.elements;
-
-	opts = Object.assign({}, Editor.defaults, opts);
-
-	for (const name in defaultElts) {
-		opts.elements[name] = Object.assign({}, defaultElts[name], opts.elements[name]);
+	static filteredSerializer(spec, obj) {
+		if (typeof obj == "function") obj = {filter: obj};
+		const ser = Model.DOMSerializer.fromSchema(new Model.Schema(spec));
+		function replaceOutputSpec(fun) {
+			return function(node) {
+				let out = fun(node);
+				const mod = obj.filter(node, out);
+				if (mod !== undefined) out = mod;
+				return out;
+			};
+		}
+		Object.keys(ser.nodes).forEach(function(name) {
+			if (spec.nodes.get(name).typeName == null) return;
+			ser.nodes[name] = replaceOutputSpec(ser.nodes[name]);
+		});
+		Object.keys(ser.marks).forEach(function(name) {
+			if (spec.marks.get(name).typeName == null) return;
+			ser.marks[name] = replaceOutputSpec(ser.marks[name]);
+		});
+		return ser;
 	}
 
-	Viewer.call(this, opts);
+	static configure({ elements, topNode, jsonContent, content, plugins }) {
+		const Defs = Editor.defaults;
+		for (const name in Defs.elements) {
+			elements[name] = Object.assign({}, Defs.elements[name], elements[name]);
+		}
+		const viewer = new Viewer({elements});
+		elements = viewer.elements;
 
-	this.cssChecked = true;
+		const spec = {
+			topNode,
+			nodes: Defs.nodes.remove(topNode ? 'doc' : null),
+			marks: Defs.marks
+		};
 
-	this.parseFromClipboard = (html, $pos) => {
+		const nodeViews = {};
+		const elemsList = Object.values(elements).sort(function(a, b) {
+			return (a.priority || 0) - (b.priority || 0);
+		});
+		for (let i = elemsList.length - 1; i >= 0; i--) {
+			Specs.define(viewer, elemsList[i], spec, nodeViews);
+		}
+		const schema = new Model.Schema(spec);
+		const domParser = Model.DOMParser.fromSchema(schema);
+
+		const doc =
+			jsonContent && schema.nodeFromJSON(jsonContent)
+			|| content && domParser.parse(content);
+
+		const clipboardSerializer = this.filteredSerializer(spec, (node, out) => {
+			if (node.type.name == "_") return "";
+			const attrs = out[1];
+			if (node.attrs.data) attrs['block-data'] = node.attrs.data;
+			if (node.attrs.expr) attrs['block-expr'] = node.attrs.expr;
+			if (node.attrs.lock) attrs['block-lock'] = node.attrs.lock;
+			if (node.attrs.standalone) attrs['block-standalone'] = 'true';
+			delete attrs['block-focused'];
+		});
+		clipboardSerializer.serializeFragment = (function(meth) {
+			return function(frag, opts, top) {
+				const tmpl = top && top.nodeName == "TEMPLATE";
+				const ret = meth.call(this, frag, opts, tmpl ? top.content : top);
+				if (tmpl) return top;
+				else return ret;
+			};
+		})(clipboardSerializer.serializeFragment);
+
+		const clipboardParser = Model.DOMParser.fromSchema(schema);
+
+		const viewSerializer = this.filteredSerializer(spec, function(node, out) {
+			if (node.type.name == "_") return "";
+			const obj = out[1];
+			if (typeof obj != "object") return;
+			// delete obj['block-root_id'];
+		});
+
+		const pluginKeys = {};
+		plugins = [IdPlugin,
+			KeymapPlugin,
+			FocusPlugin,
+			InputPlugin,
+			Setup.buildInputRules(schema),
+			keymap(Editor.defaults.mapKeys),
+			keymap(Commands.baseKeymap),
+			History.history({
+				preserveItems: true // or else cancel does not keep selected node
+			}),
+			gapCursor(),
+			dropCursor({
+				width: 2,
+				class: 'ProseMirror-dropcursor'
+			})
+		].concat(plugins).map(plugin => {
+			if (plugin instanceof State.Plugin) return plugin;
+			if (plugin.prototype) plugin = new plugin();
+			if (plugin.update || plugin.destroy ) {
+				plugin = {
+					view: function (editor) {
+						this.editor = editor;
+						return this;
+					}.bind(plugin)
+				};
+			}
+			if (plugin.key && typeof plugin.key == "string") {
+				plugin.key = pluginKeys[plugin.key] = new State.PluginKey(plugin.key);
+			}
+			return new State.Plugin(plugin);
+		});
+
+		return {
+			state: State.EditorState.create({
+				schema, plugins, doc
+			}),
+			domParser,
+			clipboardParser,
+			clipboardSerializer,
+			viewSerializer,
+			nodeViews,
+			viewer,
+			dispatchTransaction: function (tr) {
+				this.updateState(this.state.apply(tr));
+			}
+		};
+	}
+
+	constructor(opts) {
+		super({
+			mount: typeof opts.place == "string" ?
+				document.querySelector(opts.place) :
+				opts.place
+		}, Editor.configure(opts));
+
+		if (opts.scope) this.scope = opts.scope;
+		if (opts.explicit) this.explicit = true;
+		this.cssChecked = true;
+	}
+	get blocks() {
+		if (!this.elements) {
+			// this is a trick to do post-super initializing
+			this.utils = new Utils(this);
+			const viewer = this.props.viewer;
+			viewer.blocks.view = this;
+			Object.defineProperty(this, 'blocks', {
+				writable: true,
+				value: viewer.blocks
+			});
+			Object.assign(this, viewer);
+		}
+		return this.blocks;
+	}
+	parseFromClipboard(html, $pos) {
 		if (typeof html != "string") {
 			html = this.utils.serializeHTML(html);
 		}
 		return View.__parseFromClipboard(this, null, html, null, $pos);
-	};
-
-	const BlocksViewProto = Object.getPrototypeOf(this.blocks);
-	Object.assign(BlocksViewProto.constructor, BlocksEdit);
-	Object.assign(BlocksViewProto, BlocksEdit.prototype);
-
-	let plugins = opts.plugins || [];
-
-	const spec = {
-		nodes: opts.topNode ? opts.nodes.remove('doc') : opts.nodes,
-		marks: opts.marks,
-		topNode: opts.topNode
-	};
-	const views = {};
-
-	const elements = this.elements;
-	const elemsList = Object.values(elements).sort(function(a, b) {
-		return (a.priority || 0) - (b.priority || 0);
-	});
-
-	for (let i = elemsList.length - 1; i >= 0; i--) {
-		Specs.define(editor, elemsList[i], spec, views);
 	}
-
-	this.schema = new Model.Schema(spec);
-
-	this.serializer = Model.DOMSerializer.fromSchema(this.schema);
-	this.parser = Model.DOMParser.fromSchema(this.schema);
-
-	this.clipboardSerializer = filteredSerializer(spec, (node, out) => {
-		if (node.type.name == "_") return "";
-		const attrs = out[1];
-		if (node.attrs.data) attrs['block-data'] = node.attrs.data;
-		if (node.attrs.expr) attrs['block-expr'] = node.attrs.expr;
-		if (node.attrs.lock) attrs['block-lock'] = node.attrs.lock;
-		if (node.attrs.standalone) attrs['block-standalone'] = 'true';
-		delete attrs['block-focused'];
-	});
-	this.clipboardSerializer.serializeFragment = (function(meth) {
-		return function(frag, opts, top) {
-			const tmpl = top && top.nodeName == "TEMPLATE";
-			const ret = meth.call(this, frag, opts, tmpl ? top.content : top);
-			if (tmpl) return top;
-			else return ret;
-		};
-	})(this.clipboardSerializer.serializeFragment);
-
-	this.clipboardParser = Model.DOMParser.fromSchema(this.schema);
-
-	this.viewSerializer = filteredSerializer(spec, function(node, out) {
-		if (node.type.name == "_") return "";
-		const obj = out[1];
-		if (typeof obj != "object") return;
-		// delete obj['block-root_id'];
-	});
-
-	plugins.unshift(
-		IdPlugin,
-		KeymapPlugin,
-		FocusPlugin,
-		InputPlugin,
-		function(editor) {
-			return Setup.buildInputRules(editor.schema);
-		},
-		function(editor, opts) {
-			return keymap(opts.mapKeys);
-		}, function(editor) {
-			return keymap(Commands.baseKeymap);
-		}, function() {
-			return History.history({
-				preserveItems: true // or else cancel does not keep selected node
-			});
-		},
-		GapCursor(),
-		DropCursor({
-			width: 2,
-			class: 'ProseMirror-dropcursor'
-		})
+	to(blocks) {
+		return this.blocks.to(blocks);
+	}
+	getPlugin(key) {
+		return new State.PluginKey(key).get(this.state);
+	}
+}
+['render', 'element', 'from'].forEach(name => {
+	Object.defineProperty(
+		Editor.prototype,
+		name,
+		Object.getOwnPropertyDescriptor(Viewer.prototype, name)
 	);
+});
 
-	const pluginKeys = {};
-
-	plugins = plugins.map(function(plugin) {
-		if (plugin instanceof State.Plugin) return plugin;
-		if (typeof plugin == "function") {
-			plugin = plugin(editor, opts);
-		}
-		if (plugin instanceof State.Plugin) return plugin;
-		if (plugin.update || plugin.destroy) {
-			plugin = {view: function() {
-				return this;
-			}.bind(plugin)};
-		}
-		if (plugin.key && typeof plugin.key == "string") {
-			plugin.key = pluginKeys[plugin.key] = new State.PluginKey(plugin.key);
-		}
-		return new State.Plugin(plugin);
-	});
-	this.plugins = pluginKeys;
-
-	const place = typeof opts.place == "string" ? document.querySelector(opts.place) : opts.place;
-
-	let stateDoc;
-	if (opts.jsonContent) stateDoc = this.schema.nodeFromJSON(opts.jsonContent);
-	else if (opts.content) stateDoc = this.parser.parse(opts.content);
-
-	View.EditorView.call(this, {mount: place}, {
-		state: State.EditorState.create({
-			schema: this.schema,
-			plugins: plugins,
-			doc: stateDoc
-		}),
-		domParser: this.parser,
-		clipboardParser: this.clipboardParser,
-		clipboardSerializer: this.clipboardSerializer,
-		dispatchTransaction: function(tr) {
-			editor.updateState(editor.state.apply(tr));
-		},
-		nodeViews: views
-	});
-}
-
-Object.assign(Editor.prototype, Viewer.prototype, View.EditorView);
-
-
-Editor.prototype.getPlugin = function(key) {
-	return new State.PluginKey(key).get(this.state);
+module.exports = {
+	Editor, View, Model, State, Transform, Commands, keymap, Viewer
 };
-
-function filteredSerializer(spec, obj) {
-	if (typeof obj == "function") obj = {filter: obj};
-	const ser = Model.DOMSerializer.fromSchema(new Model.Schema(spec));
-	function replaceOutputSpec(fun) {
-		return function(node) {
-			let out = fun(node);
-			const mod = obj.filter(node, out);
-			if (mod !== undefined) out = mod;
-			return out;
-		};
-	}
-	Object.keys(ser.nodes).forEach(function(name) {
-		if (spec.nodes.get(name).typeName == null) return;
-		ser.nodes[name] = replaceOutputSpec(ser.nodes[name]);
-	});
-	Object.keys(ser.marks).forEach(function(name) {
-		if (spec.marks.get(name).typeName == null) return;
-		ser.marks[name] = replaceOutputSpec(ser.marks[name]);
-	});
-	return ser;
-}
 

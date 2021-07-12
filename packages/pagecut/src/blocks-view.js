@@ -1,5 +1,3 @@
-module.exports = Blocks;
-
 const str2dom = require('./str2dom');
 
 function htmlToFrag(str, {doc, ns}) {
@@ -14,7 +12,7 @@ function htmlToFrag(str, {doc, ns}) {
 	}
 }
 
-class Blocks {
+module.exports = class Blocks {
 	constructor(view, opts) {
 		this.view = view;
 		this.initial = {};
@@ -189,4 +187,4 @@ class Blocks {
 		});
 		return fragment;
 	}
-}
+};

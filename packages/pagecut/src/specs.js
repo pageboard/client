@@ -1,8 +1,8 @@
 const Model = require('prosemirror-model');
-const {DiffDOM} = require('diff-dom');
+const { DiffDOM } = require('diff-dom');
 
 const differ = new DiffDOM({
-	preDiffApply: function(info) {
+	preDiffApply(info) {
 		if (info.diff.action.endsWith("Attribute") && info.diff.name == "block-focused") {
 			return true;
 		}
@@ -10,12 +10,12 @@ const differ = new DiffDOM({
 });
 
 const innerDiff = new DiffDOM({
-	filterOuterDiff: function(a, b, diffs) {
+	filterOuterDiff(a, b, diffs) {
 		if (a.attributes && a.attributes['block-content']) {
 			a.innerDone = true;
 		}
 	},
-	preDiffApply: function(info) {
+	preDiffApply(info) {
 		if (info.diff.action.endsWith("Attribute") && info.diff.name.startsWith("block-")) {
 			return true;
 		}
@@ -24,15 +24,15 @@ const innerDiff = new DiffDOM({
 
 exports.define = define;
 
-function define(view, elt, schema, views) {
-	if (!view.tags) view.tags = {};
+function define(viewer, elt, schema, nodeViews) {
+	if (!viewer.tags) viewer.tags = {};
 	if (elt.name == "text") {
 		schema.nodes = schema.nodes.remove(elt.name);
 		schema.nodes = schema.nodes.addToStart(elt.name, elt);
 		return;
 	}
 	if (!elt.render) return; // some elements are not meant to be rendered
-	let dom = view.render(view.blocks.create(elt.name), {
+	let dom = viewer.render(viewer.blocks.create(elt.name), {
 		merge: false,
 		genId: false
 	});
@@ -72,14 +72,14 @@ function define(view, elt, schema, views) {
 		let spec;
 		const type = obj.type;
 		if (type == "root") {
-			spec = createRootSpec(view, elt, obj);
+			spec = createRootSpec(elt, obj, viewer);
 			obj.name = elt.name; // wrap and container are set further
 		} else if (type == "wrap") {
-			spec = createWrapSpec(view, elt, obj);
+			spec = createWrapSpec(elt, obj);
 		} else if (type == "container") {
-			spec = createContainerSpec(view, elt, obj);
+			spec = createContainerSpec(elt, obj);
 		} else if (type == "const") {
-			spec = createConstSpec(view, elt, obj);
+			spec = createConstSpec(elt, obj);
 		} else {
 			throw new Error("Missing type in flagDom iterator", type, obj);
 		}
@@ -118,11 +118,11 @@ function define(view, elt, schema, views) {
 			let parseTagKey = spec.typeName == "root" ? parseTag : `${elt.name} ${parseTag}`;
 			if (elt.context) parseTagKey += " " + elt.context;
 			if (elt.group) parseTagKey += " " + elt.group;
-			const oldName = view.tags[parseTagKey];
+			const oldName = viewer.tags[parseTagKey];
 			if (oldName) {
 				console.info(`Two elements with same tag "${parseTag}" - ${oldName} and ${obj.name}`);
 			} else {
-				view.tags[parseTagKey] = obj.name;
+				viewer.tags[parseTagKey] = obj.name;
 			}
 		}
 
@@ -144,7 +144,7 @@ function define(view, elt, schema, views) {
 			schema.nodes = schema.nodes.addToStart(obj.name, spec);
 		}
 		if (spec.nodeView) {
-			views[obj.name] = spec.nodeView;
+			nodeViews[obj.name] = spec.nodeView;
 		}
 	});
 }
@@ -263,7 +263,7 @@ function toDOMOutputSpec(obj, node, inplace) {
 	return out;
 }
 
-function createRootSpec(view, elt, obj) {
+function createRootSpec(elt, obj, viewer) {
 	const defaultAttrs = {
 		id: null,
 		focused: null,
@@ -324,9 +324,9 @@ function createRootSpec(view, elt, obj) {
 				attrs.type = type;
 				return attrs;
 			}
-			let block = view.blocks.fromAttrs(attrs);
+			let block = viewer.blocks.fromAttrs(attrs);
 			if (id) {
-				const oldBlock = view.blocks.get(id);
+				const oldBlock = viewer.blocks.get(id);
 				if (oldBlock) {
 					// update the stored block and keep default data
 					block.data = Object.assign(oldBlock.data || {}, block.data);
@@ -345,8 +345,8 @@ function createRootSpec(view, elt, obj) {
 				block.id = id;
 			}
 			if (!block.type) block.type = type;
-			view.blocks.set(block);
-			const ret = view.blocks.toAttrs(block);
+			viewer.blocks.set(block);
+			const ret = viewer.blocks.toAttrs(block);
 			ret.type = type;
 			return ret;
 		},
@@ -389,12 +389,12 @@ function createRootSpec(view, elt, obj) {
 				console.warn("Probably unsupported case of id from in node.marks", elt.inline, node);
 			}
 			let block;
-			if (id) block = view.blocks.get(id);
+			if (id) block = viewer.blocks.get(id);
 
-			if (!block) block = view.blocks.fromAttrs(node.attrs);
+			if (!block) block = viewer.blocks.fromAttrs(node.attrs);
 			else block.focused = node.attrs.focused;
 
-			let dom = view.render(block, {type: node.attrs.type, merge: false});
+			let dom = viewer.render(block, {type: node.attrs.type, merge: false});
 			if (dom && dom.nodeType == Node.DOCUMENT_FRAGMENT_NODE && dom.children.length == 1) {
 				dom = dom.children[0];
 			}
@@ -409,7 +409,7 @@ function createRootSpec(view, elt, obj) {
 	};
 	if (elt.code) spec.code = elt.code;
 	if (elt.marks) spec.marks = elt.marks;
-	spec.nodeView = RootNodeView;
+	spec.nodeView = (...args) => new RootNodeView(...args);
 
 	// explicitely allow dragging for nodes without contentDOM
 	if (elt.draggable !== undefined) {
@@ -423,7 +423,7 @@ function createRootSpec(view, elt, obj) {
 	return spec;
 }
 
-function createWrapSpec(view, elt, obj) {
+function createWrapSpec(elt, obj) {
 	const defaultAttrs = attrsFrom(obj.dom);
 	defaultAttrs._json = null;
 	defaultAttrs._id = null;
@@ -456,12 +456,12 @@ function createWrapSpec(view, elt, obj) {
 		toDOM: function(node) {
 			return toDOMOutputSpec(obj, node);
 		},
-		nodeView: WrapNodeView
+		nodeView: (...args) => new WrapNodeView(...args)
 	};
 	return spec;
 }
 
-function createConstSpec(view, elt, obj) {
+function createConstSpec(elt, obj) {
 	const defaultAttrs = attrsFrom(obj.dom);
 	defaultAttrs._id = null;
 	defaultAttrs._json = null;
@@ -492,12 +492,12 @@ function createConstSpec(view, elt, obj) {
 		toDOM: function(node) {
 			return toDOMOutputSpec(obj, node);
 		},
-		nodeView: ConstNodeView
+		nodeView: (...args) => new ConstNodeView(...args)
 	};
 	return spec;
 }
 
-function createContainerSpec(view, elt, obj) {
+function createContainerSpec(elt, obj) {
 	const defaultAttrs = attrsFrom(obj.dom);
 	if (obj.contentDOM != obj.dom) {
 		defaultAttrs.content = obj.contentDOM.getAttribute("block-content");
@@ -537,7 +537,7 @@ function createContainerSpec(view, elt, obj) {
 		toDOM: function(node) {
 			return toDOMOutputSpec(obj, node);
 		},
-		nodeView: ContainerNodeView
+		nodeView: (...args) => new ContainerNodeView(...args)
 	};
 	return spec;
 }
@@ -579,9 +579,6 @@ function setupView(me, node) {
 
 class RootNodeView {
 	constructor(node, view, getPos, decorations) {
-		if (!(this instanceof RootNodeView)) {
-			return new RootNodeView(node, view, getPos, decorations);
-		}
 		this.view = view;
 		this.element = node.type.spec.element;
 		this.domModel = node.type.spec.domModel;
@@ -661,7 +658,8 @@ class RootNodeView {
 				sameData = view.utils.equal(oldBlock.expr || {}, block.expr || {});
 			}
 		}
-		const sameFocus = oldBlock && oldBlock.focused == node.attrs.focused || false;
+		const sameFocus =
+			(oldBlock && oldBlock.focused || false) == (node.attrs.focused || false);
 
 		if (!sameData || !sameFocus) {
 			this.oldBlock = view.blocks.copy(block);
@@ -770,9 +768,6 @@ class RootNodeView {
 }
 class WrapNodeView {
 	constructor(node, view, getPos, decorations) {
-		if (!(this instanceof WrapNodeView)) {
-			return new WrapNodeView(node, view, getPos, decorations);
-		}
 		this.view = view;
 		this.getPos = typeof getPos == "function" ? getPos : null;
 		this.element = node.type.spec.element;
@@ -798,9 +793,6 @@ class WrapNodeView {
 }
 class ConstNodeView {
 	constructor(node, view, getPos, decorations) {
-		if (!(this instanceof ConstNodeView)) {
-			return new ConstNodeView(node, view, getPos, decorations);
-		}
 		this.view = view;
 		this.getPos = typeof getPos == "function" ? getPos : null;
 		this.element = node.type.spec.element;
@@ -832,9 +824,6 @@ class ConstNodeView {
 }
 class ContainerNodeView {
 	constructor(node, view, getPos, decorations) {
-		if (!(this instanceof ContainerNodeView)) {
-			return new ContainerNodeView(node, view, getPos, decorations);
-		}
 		this.view = view;
 		this.element = node.type.spec.element;
 		this.domModel = node.type.spec.domModel;

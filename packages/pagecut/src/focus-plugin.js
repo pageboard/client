@@ -1,17 +1,17 @@
 const { NodeSelection, TextSelection } = require("prosemirror-state");
 
-module.exports = function(view, options) {
-	return new FocusPlugin(view, options);
-};
-
-class FocusPlugin {
-	constructor(view, options) {
-		this.editor = view;
+module.exports = class FocusPlugin {
+	constructor() {
 		this.click = this.click.bind(this);
 		this.appendTransaction = this.appendTransaction.bind(this);
 		this.props = {
 			handleClick: this.click
 		};
+	}
+
+	view(editor) {
+		this.editor = editor;
+		return {};
 	}
 
 	appendTransaction(transactions, oldState, newState) {
@@ -48,7 +48,7 @@ class FocusPlugin {
 				custom = true;
 			}
 			if (custom && dom) {
-				pos = this.editor.utils.posFromDOM(dom);
+				pos = view.utils.posFromDOM(dom);
 				sel = NodeSelection.create(tr.doc, pos);
 			} else {
 				custom = false;
@@ -159,4 +159,4 @@ class FocusPlugin {
 		}
 		return tr.setMeta('focus', true);
 	}
-}
+};

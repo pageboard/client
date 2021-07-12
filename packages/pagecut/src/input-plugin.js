@@ -1,21 +1,17 @@
 const State = require("prosemirror-state");
 const Model = require("prosemirror-model");
 
-module.exports = function(view, options) {
-	return {
-		props: new InputPlugin(view, options)
-	};
-};
-
-class InputPlugin {
-	constructor(view, options) {
+module.exports = class InputPlugin {
+	constructor() {
 		this.clipboardTextParser = this.clipboardTextParser.bind(this);
 		this.transformPasted = this.transformPasted.bind(this);
 		this.handlePaste = this.handlePaste.bind(this);
-
-		this.view = view;
 	}
 
+	view(editor) {
+		this.editor = editor;
+		return {};
+	}
 	handlePaste(view, e, slice) {
 		// TODO find insert point using e.
 	}
@@ -44,10 +40,9 @@ class InputPlugin {
 	}
 
 	transformPasted(slice) {
-		const view = this.view;
 		let sParent;
 		// TODO can't paste standalone from another site
-		slice.content.descendants(function (node, pos, parent) {
+		slice.content.descendants((node, pos, parent) => {
 			const focusable = node.type.defaultAttrs.focused === null;
 			if (focusable) node.attrs.focused = null;
 			const sa = node.attrs.standalone;
@@ -55,7 +50,7 @@ class InputPlugin {
 			else if (sParent && sParent == parent) sParent = null;
 			const id = node.attrs.id;
 			if (id) {
-				const block = view.blocks.get(id);
+				const block = this.editor.blocks.get(id);
 				if (!block && !sa && !sParent) {
 					// not a standalone or not a child of one
 					delete node.attrs.id;
@@ -77,11 +72,11 @@ class InputPlugin {
 		if (type.startsWith('svg')) {
 			dom = (new DOMParser()).parseFromString(str, "image/svg+xml");
 		} else {
-			dom = this.view.utils.parseHTML(str);
+			dom = this.editor.utils.parseHTML(str);
 		}
-		return this.view.someProp("clipboardParser").parseSlice(dom, {
+		return this.editor.someProp("clipboardParser").parseSlice(dom, {
 			preserveWhitespace: true,
 			context: $pos
 		});
 	}
-}
+};

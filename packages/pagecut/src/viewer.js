@@ -1,19 +1,21 @@
-module.exports = Viewer;
-
 const BlocksView = require('./blocks-view');
 const Element = require('./element');
 
-class Viewer {
+module.exports = class Viewer {
+	static Blocks = BlocksView;
+
 	constructor(opts) {
+		this.init(opts);
+	}
+
+	init(opts) {
 		if (!opts) opts = {};
-		this.blocks = new BlocksView(this, opts);
+		this.blocks = new Viewer.Blocks(this, opts);
 
 		this.doc = opts.document || document.cloneNode();
 		const elts = this.elements = opts.elements || {};
-
-		let el;
 		for (const name in elts) {
-			el = elts[name];
+			const el = elts[name];
 			el.name = name;
 			this.setElement(el);
 		}
@@ -90,4 +92,4 @@ class Viewer {
 
 		return dom;
 	}
-}
+};

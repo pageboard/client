@@ -1,17 +1,15 @@
-const {keymap} = require("prosemirror-keymap");
+const { keymap } = require("prosemirror-keymap");
 const State = require("prosemirror-state");
 
-module.exports = function(editor, options) {
-	return keymap({
-		Enter: breakCommand,
-		Delete: deleteCommand.bind(this, false),
-		Backspace: deleteCommand.bind(this, true),
-		"Mod-ArrowRight": moveCommand.bind(null, 1, false),
-		"Mod-ArrowLeft": moveCommand.bind(null, -1, false),
-		"Mod-ArrowDown": moveCommand.bind(null, 1, true),
-		"Mod-ArrowUp": moveCommand.bind(null, -1, true)
-	});
-};
+module.exports = keymap({
+	Enter: breakCommand,
+	Delete: deleteCommand.bind(this, false),
+	Backspace: deleteCommand.bind(this, true),
+	"Mod-ArrowRight": moveCommand.bind(null, 1, false),
+	"Mod-ArrowLeft": moveCommand.bind(null, -1, false),
+	"Mod-ArrowDown": moveCommand.bind(null, 1, true),
+	"Mod-ArrowUp": moveCommand.bind(null, -1, true)
+});
 
 function moveCommand(dir, jump, state, dispatch, view) {
 	const tr = state.tr;

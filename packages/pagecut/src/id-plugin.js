@@ -1,36 +1,40 @@
 const { State } = require("./editor");
 
-module.exports = function(view) {
-	let count = 0;
-	setInterval(function() {
-		count = 0;
-	}, 2000);
+module.exports = class IdPlugin {
+	constructor() {
+		this.count = 0;
+		setInterval(() => {
+			this.count = 0;
+		}, 2000);
+		this.appendTransaction = this.appendTransaction.bind(this);
+	}
 
-	return {
-		view: function(view) {
-			const tr = view.state.tr;
-			if (processStandalone(tr, view.state.doc, 0, false)) {
-				view.dispatch(tr);
-			}
-			return {};
-		},
-		appendTransaction: function(trs, oldState, newState) {
-			const tr = newState.tr;
-			if (count++ > 500) {
-				console.error("Loop in appendTransaction for id-plugin");
-				return;
-			}
-			if (trs.some(x => x.docChanged) && processStandalone(tr, newState.doc, 0, false)) {
-				return tr;
-			}
+	view(editor) {
+		this.editor = editor;
+		// FIXME is this really needed here ?
+		// const tr = editor.state.tr;
+		// if (this.processStandalone(tr, editor.state.doc, 0, false)) {
+		// 	editor.dispatch(tr);
+		// }
+		return {};
+	}
+	appendTransaction(trs, oldState, newState) {
+		const tr = newState.tr;
+		if (this.count++ > 500) {
+			console.error("Loop in appendTransaction for id-plugin");
+			return;
 		}
-	};
-	function processStandalone(tr, root, offset, regen) {
+		if (trs.some(x => x.docChanged) && this.processStandalone(tr, newState.doc, 0, false)) {
+			return tr;
+		}
+	}
+	processStandalone(tr, root, offset, regen) {
 		let modified = false;
 		const ids = {};
 		let lastMark;
 		let sel = tr.selection;
-		root.descendants(function(node, pos, parent) {
+		const view = this.editor;
+		root.descendants((node, pos, parent) => {
 			pos += offset;
 			if (node.type.name == "_" && parent.childCount > 1) {
 				tr.delete(pos, pos + 1);
@@ -38,7 +42,7 @@ module.exports = function(view) {
 				modified = true;
 				return false;
 			}
-			node.marks.forEach(function(mark) {
+			node.marks.forEach(mark => {
 				if (lastMark && (mark.attrs.id == lastMark.attrs.id || mark.eq(lastMark))) {
 					return;
 				}
@@ -123,7 +127,7 @@ module.exports = function(view) {
 				ids[id] = true;
 			}
 			if (node.childCount && (standalone || forceGen)) {
-				if (processStandalone(tr, node, pos + 1, forceGen)) {
+				if (this.processStandalone(tr, node, pos + 1, forceGen)) {
 					modified = true;
 				}
 				return false;

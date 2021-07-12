@@ -1,7 +1,8 @@
-module.exports = Blocks;
-
-class Blocks {
-
+const BlockView = require('./blocks-view');
+module.exports = class Blocks extends BlockView {
+	constructor(view, opts) {
+		super(view, opts);
+	}
 	mutate(node, data) {
 		let nodes = [], block, id;
 		if (typeof node != "string") {
@@ -308,4 +309,4 @@ class Blocks {
 		this.view.focus();
 		this.view.utils.selectDom(node);
 	}
-}
+};

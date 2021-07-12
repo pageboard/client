@@ -3,9 +3,7 @@ const Model = require("prosemirror-model");
 const Commands = require("prosemirror-commands");
 const DeepEqual = require("fast-deep-equal");
 
-module.exports = Utils;
-
-class Utils {
+module.exports = class Utils {
 	constructor(view) {
 		this.view = view;
 	}
@@ -54,7 +52,7 @@ class Utils {
 
 	getDom() {
 		// in an offline document
-		return this.view.viewSerializer.serializeFragment(this.view.state.doc.content, {
+		return this.view.someProp("viewSerializer").serializeFragment(this.view.state.doc.content, {
 			document: this.view.doc.cloneNode(false) // offline
 		});
 	}
@@ -223,7 +221,7 @@ class Utils {
 					return true;
 				})) return tr;
 			} else {
-				const markType = this.view.schema.marks[type];
+				const markType = this.view.state.schema.marks[type];
 				if (markType) {
 					tr.addMark(sel.from, sel.to, markType.create(attrs));
 					return tr;
@@ -733,4 +731,4 @@ class Utils {
 
 		return elt;
 	}
-}
+};
