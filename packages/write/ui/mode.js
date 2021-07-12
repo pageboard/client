@@ -61,7 +61,7 @@ Pageboard.Controls.Mode = class Mode {
 			this.editor.close();
 			const elts = state.scope.$elements;
 			if (com == "code") {
-				state.data.$jsonContent = Mode.pruneNonRoot(Pageboard.editor.state.doc.toJSON(), null, Pageboard.editor.schema);
+				state.data.$jsonContent = Mode.pruneNonRoot(Pageboard.editor.state.doc.toJSON(), null, Pageboard.editor.state.schema);
 				delete Pageboard.editor;
 				Pageboard.backupElements = Object.assign({}, elts);
 				Object.entries(elts).forEach(([name, elt]) => {
