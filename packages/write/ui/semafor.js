@@ -784,5 +784,4 @@ Semafor.getValStr = function (item) {
 	return item.const != null ? item.const : '';
 };
 
-window.Semafor = Semafor;
-
+Pageboard.Semafor = Semafor;

@@ -53,7 +53,7 @@ class HTMLInputMap extends VirtualHTMLElement {
 		this._table.removeEventListener('change', this._changed, false);
 	}
 	_render() {
-		const obj = Semafor.flatten(this.value || {});
+		const obj = Pageboard.Semafor.flatten(this.value || {});
 		const body = this._table.querySelector('tbody');
 		body.textContent = '';
 		const name = this.name;
@@ -112,7 +112,7 @@ class HTMLInputMap extends VirtualHTMLElement {
 				removals.push(tr);
 			}
 		}, this);
-		this.value = Semafor.unflatten(obj);
+		this.value = Pageboard.Semafor.unflatten(obj);
 		removals.forEach(function(node) {
 			node.remove();
 		});

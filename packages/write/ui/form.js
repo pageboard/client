@@ -264,7 +264,7 @@ class FormBlock {
 			const schema = Object.assign({}, this.el, { type: 'object' });
 
 			let form = this.form;
-			if (!form) form = this.form = new window.Semafor(
+			if (!form) form = this.form = new Pageboard.Semafor(
 				schema,
 				this.node,
 				this.customFilter.bind(this),

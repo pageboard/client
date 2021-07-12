@@ -39,7 +39,7 @@ Pageboard.schemaHelpers.crop = class Crop {
 		this.debouncedChange = Pageboard.debounce((obj) => this.change(obj), 500);
 
 		this.container = input.appendChild(input.dom(`<div class="crop">
-			<img src="${this.thumbnail(Semafor.findPath(block.data, this.urlProp))}" />
+			<img src="${this.thumbnail(Pageboard.Semafor.findPath(block.data, this.urlProp))}" />
 		</div>`));
 
 		this.cropper = new window.Cropper(this.container.querySelector('img'), {
