@@ -54,12 +54,23 @@
     },
     "ignorePatterns": [
       "/packages/*/lib/*",
+      "/packages/datetime-entry/spec/**",
+      "/packages/datetime-entry/docs/**",
+      "/packages/datetime-entry/dist/**",
+      "/packages/datetime-entry/coverage/**",
       "/node_modules/**"
     ],
     "parser": "@babel/eslint-parser",
     "plugins": [
       "@babel"
     ],
+    "overrides": [{
+      "files": [
+        "packages/src/**",
+        "packages/ui/**",
+        "packages/elements/**"
+      ]
+    }],
     "parserOptions": {
       "requireConfigFile": false,
       "babelOptions": {
