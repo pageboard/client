@@ -36,7 +36,7 @@ Pageboard.schemaHelpers.crop = class Crop {
 		this.valueChange = this.valueChange.bind(this);
 		this.valueFocus = this.valueFocus.bind(this);
 
-		this.debouncedChange = Pageboard.debounce(this.change, 500);
+		this.debouncedChange = Pageboard.debounce((obj) => this.change(obj), 500);
 
 		this.container = input.appendChild(input.dom(`<div class="crop">
 			<img src="${this.thumbnail(Semafor.findPath(block.data, this.urlProp))}" />
@@ -55,12 +55,14 @@ Pageboard.schemaHelpers.crop = class Crop {
 			checkOrientation: false,
 			checkCrossOrigin: false,
 			toggleDragModeOnDblclick: false,
-			ready: this.ready.bind(this),
-			crop: function (e) {
+			ready: () => {
+				this.ready();
+			},
+			crop: (e) => {
 				if (!e.detail) return;
 				this.updateCrop(e.detail);
 				this.debouncedChange(e.detail);
-			}.bind(this)
+			}
 		});
 
 		this.initControls();
@@ -74,9 +76,7 @@ Pageboard.schemaHelpers.crop = class Crop {
 
 	formChange(e) {
 		if (!e.target.matches(`[name="${this.urlProp}"]`)) return;
-		setTimeout(function () {
-			this.load();
-		}.bind(this));
+		setTimeout(() => this.load());
 	}
 
 	reset() {
