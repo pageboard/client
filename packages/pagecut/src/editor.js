@@ -75,18 +75,12 @@ class Editor extends View.EditorView {
 		return ser;
 	}
 
-	static configure({ elements, topNode, jsonContent, content, plugins }) {
-		const Defs = Editor.defaults;
-		for (const name in Defs.elements) {
-			elements[name] = Object.assign({}, Defs.elements[name], elements[name]);
-		}
-		const viewer = new Viewer({elements});
-		elements = viewer.elements;
-
+	static configure(viewer, { topNode, jsonContent, content, plugins }) {
+		const elements = viewer.elements;
 		const spec = {
 			topNode,
-			nodes: Defs.nodes.remove(topNode ? 'doc' : null),
-			marks: Defs.marks
+			nodes: Editor.defaults.nodes.remove(topNode ? 'doc' : null),
+			marks: Editor.defaults.marks
 		};
 
 		const nodeViews = {};
@@ -180,11 +174,16 @@ class Editor extends View.EditorView {
 	}
 
 	constructor(opts) {
+		const elts = opts.elements;
+		for (const [name, elt] of Object.entries(Editor.defaults.elements)) {
+			elts[name] = Object.assign({}, elt, elts[name]);
+		}
+		const viewer = new Viewer(opts);
 		super({
 			mount: typeof opts.place == "string" ?
 				document.querySelector(opts.place) :
 				opts.place
-		}, Editor.configure(opts));
+		}, Editor.configure(viewer, opts));
 
 		if (opts.scope) this.scope = opts.scope;
 		if (opts.explicit) this.explicit = true;
