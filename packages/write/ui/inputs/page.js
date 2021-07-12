@@ -206,8 +206,7 @@ Pageboard.schemaHelpers.page = class PageHelper {
 		this.container.textContent = "";
 		this.infinite.pageIndex = 1;
 		const p = this.infinite.loadNextPage();
-		if (!p) return;
-		p.then(res => {
+		if (p) p.then(res => {
 			if (!res || !res.body) return;
 			const data = JSON.parse(res.body).items;
 			const node = this.container.ownerDocument.createElement('div');

@@ -236,7 +236,8 @@ Pageboard.schemaHelpers.href = class Href {
 		if (!this.infinite) return this.searchStart();
 		this.container.textContent = "";
 		this.infinite.pageIndex = 1;
-		this.infinite.loadNextPage().then(({ body }) => {
+		const p = this.infinite.loadNextPage();
+		if (p) p.then(({ body }) => {
 			this.first = false;
 			const data = JSON.parse(body).data;
 			if (data.length == 0) this.lastPageIndex = this.infinite.pageIndex;
