@@ -460,7 +460,7 @@ Pageboard.schemaHelpers.href = class Href {
 		content.appendChild(item.dom(`<div class="left floated meta">
 			${obj.mime.split(';').shift()}<em>${Href.tplSize(obj.meta.size)}</em><br>
 			${dims ? dims + '<br>' : ''}
-			${Pageboard.utils.Duration(obj.updated_at)}
+			${Pageboard.utils.durationFormat(obj.updated_at)}
 			${obj.type == 'link' ? ('<br><span class="line">' + obj.url + '</span>') : ''}
 		</div>
 		${Href.tplPreview(obj.preview)}`));

@@ -280,7 +280,7 @@ Pageboard.schemaHelpers.page = class PageHelper {
 				${block.data.title}
 			</div>
 			<div class="left floated meta">
-				${Pageboard.utils.Duration(block.updated_at || block.data.updated_at)}
+				${Pageboard.utils.durationFormat(block.updated_at || block.data.updated_at)}
 				<br><span class="line">${block.data.url}</span>
 			</div>
 		</div>
