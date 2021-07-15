@@ -167,6 +167,9 @@ exports.write = {
 		readScript: "../ui/read.js",
 		readStyle: "../ui/read.css",
 		reset: "../lib/components/reset.css",
-	}
+	},
+	polyfills: [
+		'Element.prototype.animate'
+	]
 };
 

@@ -1,4 +1,3 @@
-/* global $ */
 (function(Pageboard) {
 
 const roots = {};
@@ -64,9 +63,11 @@ Pageboard.notify = function(title, obj) {
 	if (obj.timeout) {
 		item.node = msg;
 		setTimeout(function() {
-			if (msg.parentNode) $(msg).transition('fade down', function() {
+			if (msg.parentNode) msg.animate(
+				[{ opacity: 1.0 }, { opacity: 0 }], { duration: 1000 }
+			).onfinish = () => {
 				msg.remove();
-			});
+			};
 		}, obj.timeout * 1000);
 	}
 
