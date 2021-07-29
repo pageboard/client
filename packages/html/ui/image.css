@@ -109,7 +109,7 @@ element-image.right.bottom > img {
 	object-position:right bottom;
 }
 
-element-image.none, {
+element-image.none {
 	max-width:100%;
 	max-height:100%;
 }
