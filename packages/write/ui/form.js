@@ -1,149 +1,3 @@
-Pageboard.Controls.Form = class Form {
-	constructor(editor, node) {
-		this.editor = editor;
-
-		this.node = node;
-		this.inlines = [];
-
-		this.mode = "data";
-
-		this.toggleExpr = document.querySelector('#toggle-expr');
-		this.toggleExpr.addEventListener('click', this.handleToggleExpr.bind(this));
-
-		this.toggleLocks = document.querySelector('#toggle-lock');
-		this.toggleLocks.addEventListener('click', this.handleToggleLocks.bind(this));
-	}
-
-	destroy() {
-		if (this.main) {
-			this.main.destroy();
-			delete this.main;
-		}
-		this.inlines.forEach(function (form) {
-			form.destroy();
-		});
-		this.inlines = [];
-		this.mode = "data";
-	}
-
-	update(parents, sel) {
-		if (this.ignoreNext) {
-			this.ignoreNext = false;
-			return;
-		}
-		if (!parents.length) {
-			this.destroy();
-			return;
-		}
-		this.selection = sel;
-		const parent = parents[0];
-		this.parents = parents;
-		const showBlocks = sel.jsonID == "all" || sel.node && (sel.node.isBlock || sel.node.isLeaf);
-		const showInlines = sel.jsonID != "all" && (!sel.node || sel.node && sel.node.isLeaf);
-
-		const block = parent.block;
-		if (!block) {
-			this.destroy();
-			return;
-		}
-
-		const active = document.activeElement;
-		const selection = active ? {
-			name: active.name,
-			start: active.selectionStart,
-			end: active.selectionEnd,
-			dir: active.selectionDirection
-		} : null;
-
-		if (block != this.block) {
-			this.destroy();
-			this.block = block;
-		}
-		const editor = this.editor;
-
-		const showExpressions = parents.find(function (item, i) {
-			const el = editor.element(item.block.type);
-			if (!el) return false;
-			if (el.expressions && !i) return true;
-			const def = item.contentName && el.contents.find(item.contentName);
-			return def && def.expressions || false;
-		});
-
-		if (!this.main) this.main = new FormBlock(editor, this.node, parent.type);
-		this.main.update(parents, block, this.mode);
-
-		let canShowExpressions = this.main.el.properties;
-		this.main.node.classList.toggle('hidden', !showBlocks);
-
-		let curInlines = this.inlines;
-		const inlines = (showInlines && parent.inline && parent.inline.blocks || []).map(function (block) {
-			let curForm;
-			curInlines = curInlines.filter(function (form) {
-				if (form.block.type == block.type) {
-					curForm = form;
-					return false;
-				} else {
-					return true;
-				}
-			});
-			if (!curForm) {
-				curForm = new FormBlock(editor, this.node, block.type);
-			} else {
-				curForm.node.parentNode.appendChild(curForm.node);
-				curForm.reset();
-			}
-			curForm.update(parents, block, this.mode);
-			canShowExpressions = canShowExpressions || curForm.el.properties;
-			return curForm;
-		}, this);
-		this.toggleExpr.classList.toggle('hidden', !showExpressions);
-		this.toggleExpr.classList.toggle('disabled', !canShowExpressions);
-		this.toggleExpr.classList.toggle('active', this.mode == "expr");
-		this.toggleExpr.firstElementChild.classList.toggle('yellow', this.block.expr && Object.keys(this.block.expr).length && true || false);
-
-		const lock = this.block.lock;
-		let unlocked = true;
-		if (lock) {
-			if (lock.read && lock.read.length) unlocked = false;
-			else if (lock.write && lock.write.length) unlocked = false;
-		}
-		this.toggleLocks.firstElementChild.classList.toggle('lock', !unlocked);
-		this.toggleLocks.firstElementChild.classList.toggle('red', !unlocked);
-		this.toggleLocks.firstElementChild.classList.toggle('unlock', unlocked);
-		this.toggleLocks.classList.toggle('active', this.mode == "lock");
-
-		curInlines.forEach(function (form) {
-			form.destroy();
-		});
-		this.inlines = inlines;
-
-		if (selection && selection.name) {
-			setTimeout(() => {
-				// give an instant for input mutations to propagate
-				const found = this.node.querySelector(`[name="${selection.name}"]`);
-				if (found && found != document.activeElement) {
-					if (found.setSelectionRange && selection.start != null && selection.end != null) {
-						found.setSelectionRange(selection.start, selection.end, selection.dir);
-					}
-					found.focus();
-				}
-			});
-		}
-	}
-
-	handleToggleLocks(e) {
-		this.mode = this.mode == "lock" ? "data" : "lock";
-		this.toggleLocks.classList.toggle('active', this.mode == "lock");
-		this.update(this.parents, this.selection);
-	}
-
-	handleToggleExpr(e) {
-		this.mode = this.mode == "expr" ? "data" : "expr";
-		this.toggleExpr.classList.toggle('active', this.mode == "expr");
-		this.update(this.parents, this.selection);
-	}
-};
-
 class FormBlock {
 	static propToMeta(schema) {
 		const copy = {};
@@ -429,3 +283,150 @@ class FormBlock {
 		this.form.clear();
 	}
 }
+
+Pageboard.Controls.Form = class Form {
+	constructor(editor, node) {
+		this.editor = editor;
+
+		this.node = node;
+		this.inlines = [];
+
+		this.mode = "data";
+
+		this.toggleExpr = document.querySelector('#toggle-expr');
+		this.toggleExpr.addEventListener('click', this.handleToggleExpr.bind(this));
+
+		this.toggleLocks = document.querySelector('#toggle-lock');
+		this.toggleLocks.addEventListener('click', this.handleToggleLocks.bind(this));
+	}
+
+	destroy() {
+		if (this.main) {
+			this.main.destroy();
+			delete this.main;
+		}
+		this.inlines.forEach(function (form) {
+			form.destroy();
+		});
+		this.inlines = [];
+		this.mode = "data";
+	}
+
+	update(parents, sel) {
+		if (this.ignoreNext) {
+			this.ignoreNext = false;
+			return;
+		}
+		if (!parents.length) {
+			this.destroy();
+			return;
+		}
+		this.selection = sel;
+		const parent = parents[0];
+		this.parents = parents;
+		const showBlocks = sel.jsonID == "all" || sel.node && (sel.node.isBlock || sel.node.isLeaf);
+		const showInlines = sel.jsonID != "all" && (!sel.node || sel.node && sel.node.isLeaf);
+
+		const block = parent.block;
+		if (!block) {
+			this.destroy();
+			return;
+		}
+
+		const active = document.activeElement;
+		const selection = active ? {
+			name: active.name,
+			start: active.selectionStart,
+			end: active.selectionEnd,
+			dir: active.selectionDirection
+		} : null;
+
+		if (block != this.block) {
+			this.destroy();
+			this.block = block;
+		}
+		const editor = this.editor;
+
+		const showExpressions = parents.find(function (item, i) {
+			const el = editor.element(item.block.type);
+			if (!el) return false;
+			if (el.expressions && !i) return true;
+			const def = item.contentName && el.contents.find(item.contentName);
+			return def && def.expressions || false;
+		});
+
+		if (!this.main) this.main = new FormBlock(editor, this.node, parent.type);
+		this.main.update(parents, block, this.mode);
+
+		let canShowExpressions = this.main.el.properties;
+		this.main.node.classList.toggle('hidden', !showBlocks);
+
+		let curInlines = this.inlines;
+		const inlines = (showInlines && parent.inline && parent.inline.blocks || []).map(function (block) {
+			let curForm;
+			curInlines = curInlines.filter(function (form) {
+				if (form.block.type == block.type) {
+					curForm = form;
+					return false;
+				} else {
+					return true;
+				}
+			});
+			if (!curForm) {
+				curForm = new FormBlock(editor, this.node, block.type);
+			} else {
+				curForm.node.parentNode.appendChild(curForm.node);
+				curForm.reset();
+			}
+			curForm.update(parents, block, this.mode);
+			canShowExpressions = canShowExpressions || curForm.el.properties;
+			return curForm;
+		}, this);
+		this.toggleExpr.classList.toggle('hidden', !showExpressions);
+		this.toggleExpr.classList.toggle('disabled', !canShowExpressions);
+		this.toggleExpr.classList.toggle('active', this.mode == "expr");
+		this.toggleExpr.firstElementChild.classList.toggle('yellow', this.block.expr && Object.keys(this.block.expr).length && true || false);
+
+		const lock = this.block.lock;
+		let unlocked = true;
+		if (lock) {
+			if (lock.read && lock.read.length) unlocked = false;
+			else if (lock.write && lock.write.length) unlocked = false;
+		}
+		this.toggleLocks.firstElementChild.classList.toggle('lock', !unlocked);
+		this.toggleLocks.firstElementChild.classList.toggle('red', !unlocked);
+		this.toggleLocks.firstElementChild.classList.toggle('unlock', unlocked);
+		this.toggleLocks.classList.toggle('active', this.mode == "lock");
+
+		curInlines.forEach(function (form) {
+			form.destroy();
+		});
+		this.inlines = inlines;
+
+		if (selection && selection.name) {
+			setTimeout(() => {
+				// give an instant for input mutations to propagate
+				const found = this.node.querySelector(`[name="${selection.name}"]`);
+				if (found && found != document.activeElement) {
+					if (found.setSelectionRange && selection.start != null && selection.end != null) {
+						found.setSelectionRange(selection.start, selection.end, selection.dir);
+					}
+					found.focus();
+				}
+			});
+		}
+	}
+
+	handleToggleLocks(e) {
+		this.mode = this.mode == "lock" ? "data" : "lock";
+		this.toggleLocks.classList.toggle('active', this.mode == "lock");
+		this.update(this.parents, this.selection);
+	}
+
+	handleToggleExpr(e) {
+		this.mode = this.mode == "expr" ? "data" : "expr";
+		this.toggleExpr.classList.toggle('active', this.mode == "expr");
+		this.update(this.parents, this.selection);
+	}
+};
+

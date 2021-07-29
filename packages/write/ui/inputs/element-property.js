@@ -51,7 +51,7 @@ Pageboard.schemaHelpers['element-property'] = class ElementProperty {
 			} else {
 				node = doc.dom(`<option value="${key}">${prop.title}</option>`);
 				const pkey = key.split('.').slice(1).join('.');
-				node.disabled = !!content.querySelector(`[name="${pkey}"]`);
+				node.disabled = Boolean(content.querySelector(`[name="${pkey}"]`));
 			}
 			return node.outerHTML;
 		}

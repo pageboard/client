@@ -1,41 +1,3 @@
-Page.ready(function(state) {
-	VirtualHTMLElement.define(`element-consent`, HTMLCustomConsentElement, 'form');
-});
-
-Page.State.prototype.consent = function (fn) {
-	const consent = this.scope.$consent = Page.storage.get('consent');
-	this.chain('consent', fn);
-	if (consent === undefined) {
-		HTMLCustomConsentElement.waiting = true;
-	} else if (consent === null) {
-		// setup finished but no consent is done yet, ask consent
-		this.reconsent();
-	}
-};
-
-Page.State.prototype.reconsent = function (fn) {
-	if (fn) this.consent(fn);
-	const consent = this.scope.$consent;
-	let asking = false;
-	if (consent != "yes") {
-		asking = HTMLCustomConsentElement.ask();
-	}
-	if (!asking) {
-		if (consent == null) this.scope.$consent = "yes";
-	}
-	return asking;
-};
-
-Page.paint(function(state) {
-	state.finish(function() {
-		let run = true;
-		if (HTMLCustomConsentElement.waiting) {
-			if (state.reconsent()) run = false;
-		}
-		if (run) state.runChain('consent');
-	});
-});
-
 class HTMLCustomConsentElement extends HTMLFormElement {
 	constructor() {
 		super();
@@ -100,3 +62,41 @@ class HTMLCustomConsentElement extends HTMLFormElement {
 		return this.children.find(node => node.matches('.view'));
 	}
 }
+
+Page.ready(function(state) {
+	VirtualHTMLElement.define(`element-consent`, HTMLCustomConsentElement, 'form');
+});
+
+Page.State.prototype.consent = function (fn) {
+	const consent = this.scope.$consent = Page.storage.get('consent');
+	this.chain('consent', fn);
+	if (consent === undefined) {
+		HTMLCustomConsentElement.waiting = true;
+	} else if (consent === null) {
+		// setup finished but no consent is done yet, ask consent
+		this.reconsent();
+	}
+};
+
+Page.State.prototype.reconsent = function (fn) {
+	if (fn) this.consent(fn);
+	const consent = this.scope.$consent;
+	let asking = false;
+	if (consent != "yes") {
+		asking = HTMLCustomConsentElement.ask();
+	}
+	if (!asking) {
+		if (consent == null) this.scope.$consent = "yes";
+	}
+	return asking;
+};
+
+Page.paint(function(state) {
+	state.finish(function() {
+		let run = true;
+		if (HTMLCustomConsentElement.waiting) {
+			if (state.reconsent()) run = false;
+		}
+		if (run) state.runChain('consent');
+	});
+});

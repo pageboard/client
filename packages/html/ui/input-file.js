@@ -43,7 +43,6 @@ class HTMLElementInputFile extends VirtualHTMLElement {
 		field.classList.add('loading');
 		const p = new Promise(function (resolve, reject) {
 			function fail(err) {
-				console.error(err);
 				field.classList.add('error');
 				field.classList.remove('loading');
 				delete self._xhr;

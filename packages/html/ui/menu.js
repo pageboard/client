@@ -12,7 +12,7 @@ Page.patch(function(state) {
 	}
 	state.finish(function() {
 		document.querySelectorAll('[block-type="menu"] [href]').forEach((item) => {
-			let loc = item.getAttribute('href');
+			const loc = item.getAttribute('href');
 			if (!loc) return;
 			if (isSameOrParent(Page.parse(loc), state)) {
 				item.classList.add('active');
@@ -59,10 +59,10 @@ class HTMLElementMenu extends VirtualHTMLElement {
 			}
 		} else if (item) {
 			this.active = item != this.active ? item : null;
-			item.classList.toggle('active', !!this.active);
+			item.classList.toggle('active', Boolean(this.active));
 			if (!this.active) item.blur();
 		}
-		tosser.classList.toggle('active', !!item);
+		tosser.classList.toggle('active', Boolean(item));
 	}
 	toHelper(root) {
 		const frag = root.ownerDocument.createDocumentFragment();

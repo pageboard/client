@@ -23,7 +23,7 @@ class HTMLElementCarousel extends VirtualHTMLElement {
 	}
 
 	fullview(val) {
-		this.classList.toggle('fullview', !!val);
+		this.classList.toggle('fullview', Boolean(val));
 		const body = this.ownerDocument.body;
 		const len = body.querySelectorAll('element-carousel.fullview').length;
 		body.classList.toggle('fullview', len >= 1);

@@ -45,7 +45,7 @@ class HTMLElementGoogleTranslate extends VirtualHTMLElement {
 		document.head.appendChild(script);
 	}
 	setClass() {
-		document.documentElement.classList.toggle('google-translate-shown', !!this.shown);
+		document.documentElement.classList.toggle('google-translate-shown', Boolean(this.shown));
 	}
 	cb(state) {
 		if (this.shown) return;

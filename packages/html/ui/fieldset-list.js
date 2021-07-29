@@ -75,7 +75,7 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 		const prefix = this.prefix;
 		for (let i = 0; i < list.length; i++) {
 			const obj = list[i];
-			for (let key in obj) {
+			for (const key in obj) {
 				values[`${prefix}${i}.${key}`] = obj[key];
 			}
 		}

@@ -2,7 +2,7 @@ class HTMLElementInputDateTime extends VirtualHTMLElement {
 	static defaults = {
 		format: (str) => {
 			if (['date', 'time', 'datetime'].includes(str)) return str;
-			else return 'datetime';
+			return 'datetime';
 		},
 		timeZone: null,
 		step: 0
@@ -47,7 +47,7 @@ class HTMLElementInputDateTime extends VirtualHTMLElement {
 			step: this.options.step || null,
 			locale: document.documentElement.lang || window.navigator.language,
 			format: this.formatFromOptions(),
-			useUTC: !!this.options.timeZone,
+			useUTC: Boolean(this.options.timeZone),
 			onChange: function(val) {
 				this.querySelector('input').value = Number.isNaN(val.getTime()) ? "" : val.toISOString();
 			}.bind(this)
@@ -58,7 +58,7 @@ class HTMLElementInputDateTime extends VirtualHTMLElement {
 		if (!this._dt) return;
 		this._dt.setOptions({
 			format: this.formatFromOptions(),
-			useUTC: !!this.options.timeZone,
+			useUTC: Boolean(this.options.timeZone),
 			step: this.options.step || null
 		});
 		this._dt.setTime(this.value);

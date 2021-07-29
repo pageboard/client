@@ -1,12 +1,12 @@
 class HTMLElementBlogs extends VirtualHTMLElement {
 	static defaults = {
-		topics: (x) => (x || '').split(',').filter((x) => !!x)
+		topics: (x) => (x || '').split(',').filter((x) => Boolean(x))
 	};
 
 	patch(state) {
 		const blogPath = state.pathname.replace(/\.rss$/, '');
 		this.dataset.url = blogPath; // see write's page-title input helper
-		let topics = this.options.topics;
+		const topics = this.options.topics;
 		// if (topics && !Array.isArray(topics)) topics = [topics];
 		return Pageboard.bundle(Pageboard.fetch('get', '/.api/blocks', {
 			type: 'blog',

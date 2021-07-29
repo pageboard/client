@@ -244,9 +244,9 @@ Pageboard.Controls.Menu = class Menu {
 					can = editor.utils.canMark(self.selection, nodeType);
 				} else {
 					const sel = self.selection;
-					can = !!editor.utils.canInsert(sel.$to, nodeType, false, false).node;
+					can = Boolean(editor.utils.canInsert(sel.$to, nodeType, false, false).node);
 					if (!can && sel.node) {
-						can = !!editor.utils.canInsert(sel.$from, nodeType, false, true).node;
+						can = Boolean(editor.utils.canInsert(sel.$from, nodeType, false, true).node);
 					}
 				}
 				return can;

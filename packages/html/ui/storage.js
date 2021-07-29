@@ -1,6 +1,3 @@
-Page.setup(function(state) {
-	Page.storage = new UserStore();
-});
 class UserStore {
 	get(key) {
 		let storage = window.localStorage;
@@ -70,4 +67,8 @@ class UserStore {
 		document.cookie = `${key}=${encodeURIComponent(val)}; Path=/; Secure; SameSite=Strict; Max-Age: 3e9`;
 	}
 }
+
+Page.setup(function(state) {
+	Page.storage = new UserStore();
+});
 

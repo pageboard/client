@@ -202,9 +202,7 @@ Page.setup(function(state) {
 	});
 });
 
-exports.merge = merge;
-
-function merge(obj, extra, fn) {
+exports.merge = function merge(obj, extra, fn) {
 	const single = arguments.length == 2;
 	if ((fn == null || single) && typeof extra == "function") {
 		fn = extra;
@@ -213,7 +211,7 @@ function merge(obj, extra, fn) {
 	}
 	if (!extra) return obj;
 	const copy = Object.assign({}, obj);
-	Object.keys(extra).forEach(function(key) {
+	Object.keys(extra).forEach(function (key) {
 		let val = extra[key];
 		if (val == null) {
 			return;
@@ -227,5 +225,4 @@ function merge(obj, extra, fn) {
 		}
 	});
 	return copy;
-}
-
+};

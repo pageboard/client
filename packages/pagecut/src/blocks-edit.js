@@ -263,7 +263,7 @@ module.exports = class Blocks extends BlockView {
 	genId(len) {
 		if (!len) len = 8;
 		// weak and simple unique id generator
-		return (Date.now() * Math.round(Math.random() * 1e4) + '').substring(0, len);
+		return String(Date.now() * Math.round(Math.random() * 1e4)).substring(0, len);
 	}
 
 	domQuery(id, opts) {

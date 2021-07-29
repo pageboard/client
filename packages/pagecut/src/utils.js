@@ -216,7 +216,7 @@ module.exports = class Utils {
 						// block.focused cannot be stored here since it is inplace
 						attrs.focused = mark.attrs.focused;
 					}
-					let [exFrom, exTo] = this.extendUpdateMark(tr, sel.from, sel.to, mark, attrs);
+					const [exFrom, exTo] = this.extendUpdateMark(tr, sel.from, sel.to, mark, attrs);
 					tr.setSelection(State.TextSelection.create(tr.doc, exFrom, exTo));
 					return true;
 				})) return tr;
@@ -383,6 +383,7 @@ module.exports = class Utils {
 		try {
 			pos = this.view.posAtDOM(dom, offset, 0);
 		} catch (ex) {
+			// eslint-disable-next-line no-console
 			console.info(ex);
 			pos = false;
 		}

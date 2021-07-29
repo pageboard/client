@@ -148,6 +148,7 @@ Pageboard.Editor = function Editor(win, state) {
 	const page = state.data.$cache.item;
 	if (!adv) {
 		adv = true;
+		// eslint-disable-next-line no-console
 		console.info("Use top.Pageboard.dev() to debug prosemirror");
 	}
 	if (!page || page.type == "error") {

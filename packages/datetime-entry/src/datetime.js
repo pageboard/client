@@ -100,7 +100,7 @@
 
 		setOptions(props) {
 			this.#props = Object.assign({}, this.#props, props);
-			let step = this.#props.step;
+			const step = this.#props.step;
 			if (typeof step != "number") this.#props.step = parseInt(step);
 
 			const format = Object.assign({}, this.#props.format);
@@ -120,10 +120,10 @@
 				}
 			}
 
-			let mD = new Date(this.#props.minDate).getTime();
-			let MD = new Date(this.#props.maxDate).getTime();
-			let mT = new Date(this.#props.minTime).getTime();
-			let MT = new Date(this.#props.maxTime).getTime();
+			const mD = new Date(this.#props.minDate).getTime();
+			const MD = new Date(this.#props.maxDate).getTime();
+			const mT = new Date(this.#props.minTime).getTime();
+			const MT = new Date(this.#props.maxTime).getTime();
 
 			this.#props.minTime = (mT % DAYLEN + DAYLEN) % DAYLEN; // NaN, number [0...86400000 - 1]
 			this.#props.maxTime = (MT % DAYLEN + DAYLEN) % DAYLEN;
@@ -263,8 +263,8 @@
 
 			const parts = this.#state.parts;
 			let ss = 0,
-				se = 0,
-				cp = e.target.selectionStart;
+				se = 0;
+			const cp = e.target.selectionStart;
 
 			const selection = parts.reduce((p, c) => {
 				ss = se;
@@ -353,7 +353,7 @@
 					// ignore Weekday
 					if (this.#state.type === 'weekday') return;
 
-					this.#modify(+e.key, this.#state.type);
+					this.#modify(Number(e.key), this.#state.type);
 
 					break;
 
@@ -401,8 +401,8 @@
 
 			if (!part || type === 'literal') return proxyTime;
 
-			let fnName = (this.#props.useUTC ? 'UTC' : '') + hashTypeFn[type],
-				newValue = proxyTime['get' + fnName]();
+			const fnName = (this.#props.useUTC ? 'UTC' : '') + hashTypeFn[type];
+			let newValue = proxyTime['get' + fnName]();
 
 			if (part.type === 'dayperiod' || part.type === 'dayPeriod') {
 				newValue += operator * 12;
@@ -503,40 +503,36 @@
 
 			const isValid = this.validate(proxyTime);
 
-			if (isValid) {
-				return proxyTime;
-			} else {
+			if (isValid) return proxyTime;
 
-				let isFieldValid = true;
-				const maxDateFieldValue = (new Date(this.#props.maxDate))[getFN]();
-				const minDateFieldValue = (new Date(this.#props.minDate))[getFN]();
-				const minTimeFieldValue = (new Date(this.#props.minTime))[getFN](); //NaN, number
-				const maxTimeFieldValue = (new Date(this.#props.maxTime))[getFN]();
-				const thisValue = proxyTime[getFN]();
+			let isFieldValid = true;
+			const maxDateFieldValue = (new Date(this.#props.maxDate))[getFN]();
+			const minDateFieldValue = (new Date(this.#props.minDate))[getFN]();
+			const minTimeFieldValue = (new Date(this.#props.minTime))[getFN](); //NaN, number
+			const maxTimeFieldValue = (new Date(this.#props.maxTime))[getFN]();
+			const thisValue = proxyTime[getFN]();
 
-				if (type === 'year' || type === 'month' || type === 'day') {
-					isFieldValid = !(maxDateFieldValue < thisValue) && !(thisValue < minDateFieldValue);
-				}
-
-				if (type === 'hour' || type === 'minute' || type === 'second') {
-
-					if (maxTimeFieldValue > minTimeFieldValue) {
-						isFieldValid = !((maxDateFieldValue || maxTimeFieldValue) < thisValue) && !(thisValue < (minTimeFieldValue || minDateFieldValue));
-					} else {
-						isFieldValid = !((maxDateFieldValue || maxTimeFieldValue) > thisValue) && !(thisValue > (minTimeFieldValue || minDateFieldValue));
-					}
-				}
-
-				if (isFieldValid) {
-					proxyTime = this.fitToLimits(proxyTime);
-					return proxyTime;
-				}
-
-				// spare.buffer = (spare.buffer || 0) * 10 + input;
-
-				return this.#state.datetime;
-
+			if (type === 'year' || type === 'month' || type === 'day') {
+				isFieldValid = !(maxDateFieldValue < thisValue) && !(thisValue < minDateFieldValue);
 			}
+
+			if (type === 'hour' || type === 'minute' || type === 'second') {
+
+				if (maxTimeFieldValue > minTimeFieldValue) {
+					isFieldValid = !((maxDateFieldValue || maxTimeFieldValue) < thisValue) && !(thisValue < (minTimeFieldValue || minDateFieldValue));
+				} else {
+					isFieldValid = !((maxDateFieldValue || maxTimeFieldValue) > thisValue) && !(thisValue > (minTimeFieldValue || minDateFieldValue));
+				}
+			}
+
+			if (isFieldValid) {
+				proxyTime = this.fitToLimits(proxyTime);
+				return proxyTime;
+			}
+
+			// spare.buffer = (spare.buffer || 0) * 10 + input;
+
+			return this.#state.datetime;
 
 		}
 
@@ -595,7 +591,7 @@
 				if (this.#props.maxTime > this.#props.minTime) {
 					timePart = Math.max(this.#props.minTime, Math.min(this.#props.maxTime, timePart));
 				} else {
-					let nearestLimit = Math.abs(timePart - this.#props.maxTime) < Math.abs(timePart - this.#props.minTime)
+					const nearestLimit = Math.abs(timePart - this.#props.maxTime) < Math.abs(timePart - this.#props.minTime)
 						? this.#props.maxTime
 						: this.#props.minTime;
 					timePart = timePart > this.#props.minTime || timePart < this.#props.maxTime ? timePart : nearestLimit;
@@ -613,8 +609,8 @@
 
 				timePart = 0;
 
-				let mD = Number.isNaN(this.#props.minDate) ? -Infinity : this.#props.minDate;
-				let MD = Number.isNaN(this.#props.maxDate) ? Infinity : this.#props.maxDate;
+				const mD = Number.isNaN(this.#props.minDate) ? -Infinity : this.#props.minDate;
+				const MD = Number.isNaN(this.#props.maxDate) ? Infinity : this.#props.maxDate;
 
 				datePart = Math.max(mD, Math.min(MD, timestamp));
 

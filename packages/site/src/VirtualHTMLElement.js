@@ -7,7 +7,7 @@ class VirtualHTMLElement extends HTMLElement {
 		if (this.init) this.init();
 	}
 	static define(name, cla, is) {
-		let preset = window.customElements.get(name);
+		const preset = window.customElements.get(name);
 		if (preset) return preset;
 
 		if (cla.init) cla.init();

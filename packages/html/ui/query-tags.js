@@ -46,9 +46,9 @@ class HTMLElementQueryTags extends VirtualHTMLElement {
 		const labels = this.labels;
 		this.find(name, value).forEach((control) => {
 			if (control.type == "hidden") return;
-			let field = control.closest('.field');
+			const field = control.closest('.field');
 			if (!field) return;
-			let label = field.querySelector('label');
+			const label = field.querySelector('label');
 			if (!label) return;
 			let val = control.value;
 			if (val == null || val == "" || !label.innerText) return;

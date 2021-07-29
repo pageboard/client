@@ -15,7 +15,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 				state.vars.submit = true;
 			}
 			const vars = state.templatesQuery(this);
-			for (let key in vars) this.setAttribute('data-' + key, vars[key]);
+			for (const key in vars) this.setAttribute('data-' + key, vars[key]);
 			this.restore(state.scope);
 		} else {
 			this.fill(state.query, state.scope).forEach((name) => {
@@ -290,14 +290,14 @@ window.HTMLCustomFormElement = HTMLCustomFormElement;
 /* these methods must be available even on non-upgraded elements */
 HTMLFormElement.prototype.enable = function () {
 	for (let i = 0; i < this.elements.length; i++) {
-		let elem = this.elements[i];
+		const elem = this.elements[i];
 		elem.disabled = false;
 		if (elem.hasAttribute('disabled')) elem.removeAttribute('disabled');
 	}
 };
 HTMLFormElement.prototype.disable = function () {
 	for (let i = 0; i < this.elements.length; i++) {
-		let elem = this.elements[i];
+		const elem = this.elements[i];
 		elem.disabled = true;
 	}
 };
@@ -318,7 +318,7 @@ Page.ready(function () {
 HTMLSelectElement.prototype.fill = function (values) {
 	if (!Array.isArray(values)) values = [values];
 	for (let i = 0; i < this.options.length; i++) {
-		let opt = this.options[i];
+		const opt = this.options[i];
 		opt.selected = values.indexOf(opt.value) > -1;
 	}
 };
@@ -458,7 +458,7 @@ Page.ready(function (state) {
 			}
 		} else if (action == "read") {
 			const obj = {};
-			for (let key in val) {
+			for (const key in val) {
 				if (form.querySelector(`[name="${key}"]`)) obj[key] = val[key];
 			}
 			return obj;

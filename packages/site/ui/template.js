@@ -125,7 +125,7 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 		const collector = state.collector();
 
 		const el = {
-			name: 'element_template_' + (Math.round(Date.now() * Math.random()) + '').substr(-6),
+			name: 'element_template_' + String(Math.round(Date.now() * Math.random())).substr(-6),
 			dom: tmpl,
 			filters: { '||': (v, w) => collector.filter(v, w) },
 			contents: tmpl.querySelectorAll('[block-content]').map((node) => {
@@ -201,7 +201,7 @@ VirtualHTMLElement.define('element-template', HTMLElementTemplate);
 Page.State.prototype.fuse = function (data, scope) {
 	this.pathname = this.pathname.fuse(data, scope);
 	const q = this.query;
-	for (let key in q) {
+	for (const key in q) {
 		let val = q[key];
 		if (typeof val == "string") {
 			val = val.fuse(data, scope);

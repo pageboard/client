@@ -77,7 +77,7 @@ class Semafor {
 			if (elem.parentNode.matches('.fieldset.nullable')) {
 				const realVal = Semafor.findPath(obj, elem.name);
 				elem.disabled = !realVal;
-				elem.previousElementSibling.checked = !!realVal;
+				elem.previousElementSibling.checked = Boolean(realVal);
 			}
 			switch (elem.type) {
 				case 'submit':
@@ -290,7 +290,7 @@ class Semafor {
 	convert(vals, field) {
 		const obj = {};
 		const schema = field.properties;
-		for (let name in vals) {
+		for (const name in vals) {
 			field = schema[name];
 			let val = vals[name];
 			if (field) {
@@ -382,7 +382,7 @@ class Semafor {
 		const type = getNonNullType(schema.type);
 		let hasHelper = false;
 		if (schema.oneOf || schema.anyOf) {
-			hasHelper = !!Semafor.types.oneOf(key, schema, node, this);
+			hasHelper = Boolean(Semafor.types.oneOf(key, schema, node, this));
 		} else if (type && Semafor.types[type]) {
 			if (type == 'object') {
 				Semafor.types.object(key, schema, node, this);
@@ -510,7 +510,7 @@ Semafor.types.oneOf = function (key, schema, node, inst) {
 	if (alts.length == 1 && alts[0].const === undefined) {
 		oneOfType = alts[0];
 	} else if (alts.every(function (item) {
-		return !!item.icon;
+		return Boolean(item.icon);
 	})) {
 		icons = true;
 	} else if (alts.every(function (item) {
@@ -695,7 +695,7 @@ Semafor.types.array = function (key, schema, node, inst) {
 			$(field).find('.dropdown').dropdown({ placeholder: false });
 		}
 	} else {
-		console.info("FIXME: array type supports only items: [schemas], or items.anyOf", schema);
+		console.warn("FIXME: array type supports only items: [schemas], or items.anyOf", schema);
 		return inst.process(key, Object.assign({}, schema.items, { title: schema.title }), node, schema);
 	}
 };

@@ -33,7 +33,7 @@ exports.sitemap = {
 			properties: Object.assign({
 				leaf: {
 					type: 'boolean',
-					default: !!leaf
+					default: Boolean(leaf)
 				}
 			}, schema.properties),
 			menu: "link",

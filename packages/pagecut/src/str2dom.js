@@ -55,7 +55,7 @@ const nsuris = {
 let domParser;
 
 function parse(html, {doc, ns, frag}) {
-	if ('string' != typeof html) throw new TypeError('String expected');
+	if (typeof html != 'string') throw new TypeError('String expected');
 
 	// default to the global `document` object
 	if (!doc) doc = document;

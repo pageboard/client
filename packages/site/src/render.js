@@ -22,6 +22,9 @@ Node.prototype.dom = function() {
 	});
 };
 
+const mSym = matchdom.Symbols;
+const reFuse = new RegExp(`\\${mSym.open}[^\\${mSym.open}\\${mSym.close}]+\\${mSym.close}`);
+
 Node.prototype.fuse = function(obj, scope) {
 	// eslint-disable-next-line no-console
 	if (!scope) console.warn("Missing scope param");
@@ -32,8 +35,7 @@ String.prototype.fuse = function(obj, scope) {
 	return matchdom(this.toString(), obj, scope ? scope.$filters : null, {data: scope});
 };
 
-const mSym = matchdom.Symbols;
-const reFuse = new RegExp(`\\${mSym.open}[^\\${mSym.open}\\${mSym.close}]+\\${mSym.close}`);
+
 
 module.exports = function(res, scope, el) {
 	const elts = scope.$elements;
@@ -98,7 +100,7 @@ function install(el, scope) {
 				// eslint-disable-next-line no-console
 				console.warn("dom not found for fragment", obj.type, el.name);
 			} else {
-				let node = obj.path ? target.dom.querySelector(obj.path) : target.dom;
+				const node = obj.path ? target.dom.querySelector(obj.path) : target.dom;
 				if (node) {
 					if (obj.html) {
 						node.insertAdjacentHTML(obj.position || 'afterend', obj.html);
