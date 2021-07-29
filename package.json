@@ -33,7 +33,7 @@
   },
   "pageboard": true,
   "devDependencies": {
-    "@kapouer/eslint-config": "^1.4.0"
+    "@kapouer/eslint-config": "^1.4.1"
   },
   "eslintConfig": {
     "extends": "@kapouer/eslint-config",
@@ -44,7 +44,7 @@
     },
     "ignorePatterns": [
       "/packages/*/lib/*",
-      "/node_modules/**",
+      "node_modules/",
       "/packages/*/*",
       "!/packages/*/src",
       "!/packages/*/ui",
