@@ -36,11 +36,6 @@
     "@kapouer/eslint-config": "^1.4.0"
   },
   "eslintConfig": {
-    "env": {
-      "browser": true,
-      "commonjs": true,
-      "es6": true
-    },
     "extends": "@kapouer/eslint-config",
     "globals": {
       "Page": true,
@@ -49,30 +44,11 @@
     },
     "ignorePatterns": [
       "/packages/*/lib/*",
-      "/packages/datetime-entry/spec/**",
-      "/packages/datetime-entry/docs/**",
-      "/packages/datetime-entry/dist/**",
-      "/packages/datetime-entry/coverage/**",
-      "/node_modules/**"
-    ],
-    "parser": "@babel/eslint-parser",
-    "plugins": [
-      "@babel"
-    ],
-    "overrides": [{
-      "files": [
-        "packages/src/**",
-        "packages/ui/**",
-        "packages/elements/**"
-      ]
-    }],
-    "parserOptions": {
-      "requireConfigFile": false,
-      "babelOptions": {
-        "plugins": [
-          "@babel/plugin-proposal-class-properties"
-        ]
-      }
-    }
+      "/node_modules/**",
+      "/packages/*/*",
+      "!/packages/*/src",
+      "!/packages/*/ui",
+      "!/packages/*/elements"
+    ]
   }
 }
