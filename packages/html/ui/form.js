@@ -390,7 +390,7 @@ Page.setup(function (state) {
 	}, document);
 
 	function updateClass(field, validity, remove) {
-		for (let key in validity) {
+		for (const key in validity) {
 			if (key == "valid") continue;
 			const has = validity[key];
 			field.classList.toggle(key, !remove && has);
