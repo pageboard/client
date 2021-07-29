@@ -197,7 +197,7 @@ class HTMLElementInlineImage extends HTMLImageElement {
 		this.height = h;
 	}
 }
-HTMLElementInlineImage.defaults = HTMLElementImage.defaults;
+
 ['patch', 'reveal', 'captureError', 'crop', 'dimensions', 'position', 'fit', 'findClass', 'fix'].forEach(function (name) {
 	Object.defineProperty(
 		HTMLElementInlineImage.prototype,
