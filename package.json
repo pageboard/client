@@ -33,12 +33,7 @@
   },
   "pageboard": true,
   "devDependencies": {
-    "@babel/core": "^7.14.0",
-    "@babel/eslint-parser": "^7.13.14",
-    "@babel/eslint-plugin": "^7.13.16",
-    "@babel/plugin-proposal-class-properties": "^7.13.0",
-    "@kapouer/eslint-config": "^1.2.1",
-    "eslint": "^7.26.0"
+    "@kapouer/eslint-config": "^1.4.0"
   },
   "eslintConfig": {
     "env": {
