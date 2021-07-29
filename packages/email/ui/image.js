@@ -23,12 +23,16 @@ class HTMLElementMailImage extends HTMLImageElement {
 		return this;
 	}
 	patch(state) {
+		const img = this.image;
+		if (!this.options.src) {
+			img.removeAttribute('src');
+			return;
+		}
 		let loc = Page.parse(this.options.src);
 		const meta = state.scope.$hrefs && state.scope.$hrefs[loc.pathname] || {};
 		if (!meta || !meta.width || !meta.height) return;
 		if (meta.mime == "image/svg+xml") loc.query.format = 'png';
 
-		const img = this.image;
 		let w = meta.width;
 
 		if (loc.hostname && loc.hostname != document.location.hostname) {

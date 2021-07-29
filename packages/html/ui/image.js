@@ -91,6 +91,7 @@ class HTMLElementImage extends VirtualHTMLElement {
 	}
 	patch(state) {
 		this.classList.remove('error', 'loading');
+		if (!this.options.src) return;
 		const loc = Page.parse(this.options.src);
 		const meta = state.scope.$hrefs && state.scope.$hrefs[loc.pathname] || {};
 		if (!meta || !meta.width || !meta.height) return;
@@ -100,6 +101,10 @@ class HTMLElementImage extends VirtualHTMLElement {
 	}
 	reveal(state) {
 		const img = this.image;
+		if (!this.options.src) {
+			img.removeAttribute('src');
+			return;
+		}
 		const fit = this.fit;
 		const r = this.crop;
 

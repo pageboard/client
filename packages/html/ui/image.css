@@ -152,3 +152,7 @@ element-image.none.hcenter.bottom {
 element-image.none.hcenter.bottom > img {
 	align-self:flex-end;
 }
+
+img:not([src]) {
+	visibility: hidden;
+}

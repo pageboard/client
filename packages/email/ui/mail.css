@@ -1,1 +1,3 @@
-/* placeholder for now */
+img:not([src]) {
+	visibility: hidden;
+}
