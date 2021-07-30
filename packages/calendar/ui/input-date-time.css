@@ -24,10 +24,10 @@ element-input-date-time .controls > *:hover {
 	background:black;
 	color:white;
 }
-element-input-date-time .controls > .incr:after {
+element-input-date-time .controls > .incr::after {
 	content: '+';
 }
-element-input-date-time .controls > .decr:after {
+element-input-date-time .controls > .decr::after {
 	content: '-';
 }
 

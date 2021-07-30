@@ -160,7 +160,7 @@ i.icon {
 	text-align:center;
 	speak:none;
 }
-i.icon:before {
+i.icon::before {
 	display:block;
 	width:1.18em;
 	height:1em;

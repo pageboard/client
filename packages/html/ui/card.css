@@ -64,8 +64,8 @@
 }
 
 /* Clearing */
-.ui.cards:after,
-.ui.cards > .ui:after {
+.ui.cards::after,
+.ui.cards > .ui::after {
 	display: block;
 	content: ' ';
 	height: 0px;
@@ -131,7 +131,7 @@
 	font-size: 1em;
 	border-radius: 0em;
 }
-.ui.cards > .ui > .content:after {
+.ui.cards > .ui > .content::after {
 	display: block;
 	content: ' ';
 	height: 0px;

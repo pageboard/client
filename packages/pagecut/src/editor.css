@@ -30,7 +30,7 @@ pagecut-placeholder {
 	display:none;
 	position:relative;
 }
-pagecut-placeholder:after {
+pagecut-placeholder::after {
 	content:'+';
 	color:black;
 	text-shadow: -1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white, 1px 1px 0 white;
@@ -56,7 +56,7 @@ pagecut-placeholder.ProseMirror-selectednode {
 	outline:none !important;
 	box-shadow:none !important;
 }
-pagecut-placeholder.ProseMirror-selectednode:after {
+pagecut-placeholder.ProseMirror-selectednode::after {
 	color:white;
 	text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
 }

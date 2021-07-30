@@ -61,11 +61,9 @@
 /*************************************/
 
 input[type="range"] {
-	-webkit-appearance: none;
-/*removes default webkit styles*/
-	/*border: 1px solid white; *//*fix for FF unable to apply focus style bug */
+	-webkit-appearance: none; /* removes default webkit styles */
 	width: 100%;
-/*required for proper track sizing in FF*/
+	/* required for proper track sizing in FF */
 	max-width: 100%;
 	padding-top: 0.8em;
 	padding-bottom: 0.3em;
@@ -125,11 +123,13 @@ input[type="range"]:-moz-focusring {
 input[type="range"]::-ms-track {
 	width: 100%;
 	height: 5px;
+	/* using ms-fill-lower and ms-fill-upper below */
 	background: transparent;
-/*remove bg colour from the track, we'll use ms-fill-lower and ms-fill-upper instead */
-	border-color: transparent;/*leave room for the larger thumb to overflow with a transparent border */
+	/* leave room for the larger thumb to overflow with a transparent border */
+	border-color: transparent;
 	border-width: 6px 0;
-	color: transparent;/*remove default tick marks*/
+	/* remove default tick marks */
+	color: transparent;
 }
 input[type="range"]::-ms-fill-lower {
 	background: rgba(0, 0, 0, 0.5);

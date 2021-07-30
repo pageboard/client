@@ -28,7 +28,7 @@ body {
 	background:white;
 	margin:0;
 }
-.page-sheet:after {
+.page-sheet::after {
 	display:block;
 	content:'';
 	padding-bottom: 141.42%; /* calc(100 * 29.7 / 21) */

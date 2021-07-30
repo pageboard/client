@@ -63,7 +63,7 @@
 #menu .item > img:not(.ui) {
 	width:1.5em;
 }
-#menu .item:before {
+#menu .item::before {
 	display:none;
 }
 #menu .divider {
@@ -78,8 +78,8 @@
 }
 
 .ui.icon.menu > .item.radio.checkbox > input,
-.ui.icon.menu > .item.radio.checkbox > label:before,
-.ui.icon.menu > .item.radio.checkbox > label:after {
+.ui.icon.menu > .item.radio.checkbox > label::before,
+.ui.icon.menu > .item.radio.checkbox > label::after {
 	display:none;
 }
 .ui.icon.menu > .item.radio.checkbox > label {
