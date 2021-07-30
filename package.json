@@ -33,7 +33,8 @@
   },
   "pageboard": true,
   "devDependencies": {
-    "@kapouer/eslint-config": "^1.4.1"
+    "@kapouer/eslint-config": "^1.4.1",
+    "@kapouer/stylelint-config": "^1.0.1"
   },
   "eslintConfig": {
     "extends": "@kapouer/eslint-config",
@@ -50,5 +51,8 @@
       "!/packages/*/ui",
       "!/packages/*/elements"
     ]
+  },
+  "stylelint": {
+    "extends": "@kapouer/stylelint-config"
   }
 }
