@@ -1,0 +1,6 @@
+**/*.*
+!**/*.css
+node_modules/
+/packages/*/*
+!/packages/*/ui
+!/packages/*/src
