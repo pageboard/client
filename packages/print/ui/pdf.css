@@ -3,6 +3,7 @@
 		background: black;
 	}
 }
+
 @media only print {
 	body {
 		width:1190px;

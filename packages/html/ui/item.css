@@ -339,8 +339,8 @@
 	margin-right: 0.5em;
 }
 
-/* Tablet Only */
 @media only screen and (min-width: 512px) and (max-width: 991px) {
+	/* Tablet Only */
 	.ui.items > .ui {
 		margin: 1em 0em;
 	}
@@ -350,8 +350,8 @@
 	}
 }
 
-/* Mobile Only */
 @media only screen and (max-width: 511px) {
+	/* Mobile Only */
 	.ui.items.stackable > .ui {
 		flex-direction: column;
 		margin: 2em 0em;

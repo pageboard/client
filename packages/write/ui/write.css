@@ -190,9 +190,6 @@ body[data-mode="read"] #pageboard-read > iframe {
 #form .inline.fields > .field {
 	width: 50%;
 }
-#form .inline.fields > .inline.field {
-	/* width:auto; */
-}
 
 #form .inline.fields .field > .radio,
 #form .inline.fields .field > .toggle {
@@ -291,7 +288,8 @@ body[data-mode="read"] #pageboard-read > iframe {
 .ui.toggle.checkbox input ~ label::after,
 .ui.toggle.checkbox input:checked ~ .box::after,
 .ui.toggle.checkbox input:checked ~ label::after {
-	box-shadow:rgba(34, 36, 38, 0.15) 0 1px 2px 0,
+	box-shadow:
+		rgba(34, 36, 38, 0.15) 0 1px 2px 0,
 		rgba(34, 36, 38, 0.15) 0 0 0 1px inset;
 }
 .ui.toggle.checkbox input:checked ~ .box::after,

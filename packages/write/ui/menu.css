@@ -7,7 +7,7 @@
 	margin-bottom: 1em;
 }
 #menu .ui.icon.menu .active.item {
-	background-color: rgba(129,165,255,0.3);
+	background-color: rgba(129, 165, 255, 0.3);
 }
 #menu .ui.menu .item.has-active {
 	background-color: rgba(129, 165, 255, 0.2);

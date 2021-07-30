@@ -54,22 +54,16 @@ element-image.bottom {
 	height:100%;
 }
 
-element-image.left.top {
-	/* placeholder */
-}
+/* element-image.left.top {} */
 element-image.left.top > img {
 	object-position:left top;
 }
-element-image.left.vcenter {
-	/* placeholder */
-}
+/* element-image.left.vcenter {} */
 element-image.left.vcenter > img {
 	object-position:left center;
 	height:100%;
 }
-element-image.left.bottom {
-	/* placeholder */
-}
+/* element-image.left.bottom {} */
 element-image.left.bottom > img {
 	object-position:left bottom;
 	height:100%;
@@ -77,16 +71,12 @@ element-image.left.bottom > img {
 element-image.hcenter.top > img {
 	object-position:center top;
 }
-element-image.hcenter.vcenter {
-	/* placeholder */
-}
+/* element-image.hcenter.vcenter {} */
 element-image.hcenter.vcenter > img {
 	object-position:center center;
 	height:100%;
 }
-element-image.hcenter.bottom {
-	/* placeholder */
-}
+/* element-image.hcenter.bottom {} */
 element-image.hcenter.bottom > img {
 	object-position:center bottom;
 	height:100%;
@@ -94,16 +84,12 @@ element-image.hcenter.bottom > img {
 element-image.right.top > img {
 	object-position:right top;
 }
-element-image.right.vcenter {
-	/* placeholder */
-}
+/* element-image.right.vcenter {} */
 element-image.right.vcenter > img {
 	height:100%;
 	object-position:right center;
 }
-element-image.right.bottom {
-	/* placeholder */
-}
+/* element-image.right.bottom {} */
 element-image.right.bottom > img {
 	height:100%;
 	object-position:right bottom;
@@ -146,9 +132,7 @@ element-image.right.bottom:not(.cover) {
 element-image.none.right.bottom > img {
 	align-self:flex-end;
 }
-element-image.none.hcenter.bottom {
-	/* placeholder */
-}
+/* element-image.none.hcenter.bottom {} */
 element-image.none.hcenter.bottom > img {
 	align-self:flex-end;
 }
