@@ -12,7 +12,7 @@ function htmlToFrag(str, {doc, ns}) {
 	}
 }
 
-module.exports = class Blocks {
+module.exports = class BlocksView {
 	constructor(view, opts) {
 		this.view = view;
 		this.initial = {};
@@ -28,7 +28,7 @@ module.exports = class Blocks {
 		if (!scope.$element) scope.$element = el;
 
 		block = Object.assign({}, block);
-		block.data = Blocks.fill(el, block.data);
+		block.data = BlocksView.fill(el, block.data);
 		const dom = el.render.call(el, block, scope);
 		if (dom && opts.merge !== false) this.merge(el, dom, block);
 		return dom;
@@ -60,7 +60,7 @@ module.exports = class Blocks {
 		Object.keys(schema.properties).forEach(function (key) {
 			const prop = schema.properties[key];
 			if (prop.default !== undefined && data[key] === undefined) data[key] = prop.default;
-			if (prop.properties) data[key] = Blocks.fill(prop, data[key]);
+			if (prop.properties) data[key] = BlocksView.fill(prop, data[key]);
 		});
 		return data;
 	}

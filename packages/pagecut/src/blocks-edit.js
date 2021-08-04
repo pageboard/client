@@ -1,5 +1,5 @@
-const BlockView = require('./blocks-view');
-module.exports = class Blocks extends BlockView {
+const BlocksView = require('./blocks-view');
+module.exports = class Blocks extends BlocksView {
 	constructor(view, opts) {
 		super(view, opts);
 	}
