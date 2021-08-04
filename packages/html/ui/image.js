@@ -170,8 +170,10 @@ class HTMLElementImage extends VirtualHTMLElement {
 	}
 	placeholder() {
 		const { w, h } = this.dimensions;
+		this.image.width = w;
+		this.image.height = h;
 		this.image.src = "data:image/svg+xml," + encodeURIComponent(
-			`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"></svg>`
+			`<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 ${w} ${h}"></svg>`
 		);
 	}
 }
@@ -191,8 +193,6 @@ class HTMLElementInlineImage extends HTMLImageElement {
 	}
 	captureLoad() {
 		this.promise.done();
-		this.removeAttribute('width');
-		this.removeAttribute('height');
 		this.classList.remove('loading');
 		this.fix(this.image);
 	}
