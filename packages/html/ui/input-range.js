@@ -50,9 +50,11 @@ class HTMLElementInputRange extends HTMLInputElement {
 		let indet = false;
 		if (start == null) {
 			start = this.options.min;
+			if (stop == null) stop = this.options.max;
 			indet = true;
 		}
-		if (stop == null) stop = this.options.max;
+		if (stop == null) stop = start;
+
 		helper.noUiSlider.set([start, stop]);
 		helper.classList.toggle('indeterminate', indet);
 	}
