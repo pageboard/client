@@ -28,27 +28,24 @@ class HTMLElementCarousel extends VirtualHTMLElement {
 		body.classList.toggle('fullview', len >= 1);
 	}
 
-
-
 	handleClick(e, state) {
 		const node = e.target.closest('a.fullview');
-		if (node) {
-			e.stopImmediatePropagation();
-			const query = Object.assign({}, state.query);
-			const keyFv = `${this.id}.fullview`;
-			const gallery = this.closest('[block-type="gallery"]');
-			if (gallery) {
-				// leaving current mode
-				delete query[`${gallery.id}.mode`];
-				delete query[`${this.id}.index`];
-				delete query[keyFv];
-			} else if (this.options.fullview) {
-				delete query[keyFv];
-			} else {
-				query[keyFv] = true;
-			}
-			state.push({ query: query });
+		if (!node) return;
+		e.stopImmediatePropagation();
+		const query = Object.assign({}, state.query);
+		const keyFv = `${this.id}.fullview`;
+		const gallery = this.closest('[block-type="gallery"]');
+		if (gallery) {
+			// leaving current mode
+			delete query[`${gallery.id}.mode`];
+			delete query[`${this.id}.index`];
+			delete query[keyFv];
+		} else if (this.options.fullview) {
+			delete query[keyFv];
+		} else {
+			query[keyFv] = true;
 		}
+		state.push({ query: query });
 	}
 
 	patch(state) {
