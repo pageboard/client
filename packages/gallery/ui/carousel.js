@@ -19,7 +19,6 @@ class HTMLElementCarousel extends VirtualHTMLElement {
 
 	init() {
 		this.reload = Pageboard.debounce(this.reload, 100);
-		this.paint = Pageboard.debounce(this.paint, 100);
 	}
 
 	fullview(val) {
