@@ -24,7 +24,6 @@ class VirtualHTMLElement extends HTMLElement {
 				Page.connect(this);
 			},
 			disconnectedCallback() {
-				Page.close(this);
 				Page.disconnect(this);
 			}
 		});
