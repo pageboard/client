@@ -29,6 +29,8 @@ element-image > img {
 	display:block;
 	flex:0 0 auto;
 	align-self:center; /* not stretch */
+	width:auto;
+	height:auto;
 }
 
 element-image.contain,
