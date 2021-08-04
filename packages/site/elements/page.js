@@ -78,6 +78,7 @@ exports.page = {
 		<meta name="description" content="[description|magnet:*]">
 		<base href="[$loc.protocol]//[$loc.host]">
 		<link rel="canonical" href="[$loc.pathname][$loc.search][noindex|!|bmagnet:*]">
+		<link rel="icon" href="[$site.favicon|post:?format=ico|or:data%3A,]">
 		<link rel="stylesheet" href="[$element.stylesheets|repeat]">
 		<script crossorigin="anonymous" defer src="https://cdn.polyfill.io/v3/polyfill.min.js?flags=gated&unknown=polyfill&features=[$elements|polyfills|url|magnet:*]"></script>
 		<script defer src="[$element.scripts|repeat]"></script>
