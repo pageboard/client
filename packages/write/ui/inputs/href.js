@@ -152,7 +152,7 @@ Pageboard.schemaHelpers.href = class Href {
 
 	update() {
 		if (!this.list) this.list = [];
-		this.node.querySelector(`[data-action="upload"]`).classList.toggle('hidden', !!this.opts.readOnly);
+		this.node.querySelector(`[data-action="upload"]`).classList.toggle('hidden', Boolean(this.opts.readOnly));
 		const val = this.input.value;
 		if (val && !this.uiInput.value) {
 			this.uiInput.value = val;
