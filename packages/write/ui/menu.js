@@ -1,4 +1,4 @@
-/* global $, Pagecut */
+/* global Pagecut */
 Pageboard.Controls.Menu = class Menu {
 	static tabs = ["section", "media", "widget", "link", "form"];
 
@@ -64,20 +64,21 @@ Pageboard.Controls.Menu = class Menu {
 		this.menu = new Pagecut.Menubar({
 			items: this.items()
 		});
-		const me = this;
-		this.tabMenu.addEventListener('click', function (e) {
-			const item = e.target.closest('.item');
-			if (!item || item.matches('.disabled')) return;
-			me.showTab(item.dataset.tab);
-		});
+		this.tabMenu.addEventListener('click', this, false);
 		this.inlines = this.node.dom(`<div class="ui icon menu"></div>`);
 		this.node.appendChild(this.inlines);
 		this.update();
 	}
 
 	destroy() {
-		$(this.tabMenu).off('click');
+		this.tabMenu.removeEventListener('click', this, false);
 		this.node.textContent = "";
+	}
+
+	handleEvent(e) {
+		const item = e.target.closest('.item');
+		if (!item || item.matches('.disabled')) return;
+		this.showTab(item.dataset.tab);
 	}
 
 	showTab(name) {
