@@ -23,7 +23,7 @@ input-map {
 .field.href .items .pinned.right {
 	position:absolute;
 	right:2px;
-	top:1px;
+	top: 2px;
 	margin-right:0;
 }
 
