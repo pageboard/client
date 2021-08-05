@@ -66,11 +66,11 @@ html.transition > body[data-transition-close] + body {
 
 /* opening transitions */
 html.transition > body + body {
-	display:none;
+	visibility:hidden;
 }
 
 html.transition > body + body[data-transition-open] {
-	display:block;
+	visibility:initial;
 	z-index:1;
 }
 

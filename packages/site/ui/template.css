@@ -32,5 +32,5 @@ element-template > [block-content="template"] {
 
 html:not([data-prerender]) > body {
 	/* initial page load does not need to be shown */
-	display:none;
+	visibility:hidden;
 }
