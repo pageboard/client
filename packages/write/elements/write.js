@@ -125,8 +125,6 @@ exports.write = {
 	],
 	scripts: exports.page.scripts.slice().concat([
 		"../lib/components/form.js",
-		"../lib/components/progress.js",
-		"../lib/components/transition.js",
 		"../ui/write.js",
 		"../lib/pageboard.js",
 		"../ui/semafor.js",

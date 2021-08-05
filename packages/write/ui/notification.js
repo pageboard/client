@@ -66,9 +66,7 @@ Pageboard.notify = function(title, obj) {
 		setTimeout(function() {
 			if (msg.parentNode) msg.animate(
 				[{ opacity: 1.0 }, { opacity: 0 }], { duration: 1000 }
-			).onfinish = () => {
-				msg.remove();
-			};
+			).onfinish = () => msg.remove();
 		}, obj.timeout * 1000);
 	}
 

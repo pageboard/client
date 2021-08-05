@@ -1,5 +1,3 @@
-/* global $ */
-
 Pageboard.schemaHelpers.href = class Href {
 	static cache = {};
 
@@ -354,15 +352,13 @@ Pageboard.schemaHelpers.href = class Href {
 		const root = Pageboard.notify.dom();
 		const progress = root.dom(`<div class="ui blue attached progress"><div class="bar"></div></div>`);
 		root.appendChild(progress);
-		const $node = $(progress).progress({
-			percent: 0
-		});
+		progress.animate([{width:0}], { duration: 0 });
 
 		const finished = false;
 		return function(percent) {
 			if (finished) return;
 			if (typeof percent == "number") {
-				$node.progress({percent: percent});
+				progress.animate([{width: percent + '%'}], { duration: 500 });
 				if (percent < 100) return;
 			} else {
 				Pageboard.notify("Upload failed", {
