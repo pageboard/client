@@ -1,4 +1,3 @@
-/* global $ */
 class Semafor {
 	static formGet(form) {
 		const query = {};
@@ -127,8 +126,6 @@ class Semafor {
 		this.helper = helper;
 		// a json schema
 		this.schema = schema;
-		// a jquery node selector
-		this.$node = $(node);
 		this.node = node;
 		this.node.classList.add('fieldset');
 		this.fields = {};
@@ -138,7 +135,6 @@ class Semafor {
 		this.node.querySelectorAll('.nullable.fieldset > .nullable').forEach((node) => {
 			node.removeEventListener('change', this);
 		});
-		this.$node.form('destroy');
 		this.fields = {};
 		this.node.textContent = '';
 	}
@@ -147,11 +143,6 @@ class Semafor {
 		this.destroy();
 		this.lastSchema = this.process(null, newSchema || this.schema, this.node);
 
-		this.$node.form({
-			on: 'blur',
-			fields: this.fields,
-			keyboardShortcuts: false
-		});
 	}
 
 	get() {
