@@ -1,0 +1,90 @@
+label.checkbox {
+	cursor: pointer;
+}
+label.checkbox > input {
+	position: absolute;
+	width:1em;
+	height:1em;
+	opacity: 0;
+	cursor:inherit;
+}
+label.checkbox > input + *::before {
+	content: "";
+	display: inline-block;
+	vertical-align: middle;
+	width: 1em;
+	height: 1em;
+	border: 1px solid currentColor;
+	margin-right: 0.3em;
+	background-repeat:no-repeat;
+	background-position: center center;
+}
+label.checkbox > input[type="checkbox"] + *::before {
+	margin-top: -0.15em;
+}
+label.checkbox > input[type="radio"] + *::before {
+	border-radius: 50%;
+}
+label.checkbox.item > input + *::before {
+	content: none;
+}
+
+label.checkbox.item > input:checked + * {
+	background-color:#7BF;
+}
+
+label.checkbox > input[type="radio"]:checked + *::before {
+	background-image: radial-gradient(currentColor 0%, currentColor 30%, transparent 40%, transparent);
+}
+
+label.checkbox > input[type="checkbox"]:checked + *::before {
+	background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M1.73 12.91l6.37 6.37L22.79 4.59" fill="none" stroke="currentColor" stroke-width="3"/></svg>');
+}
+label.checkbox > input[type="checkbox"]:indeterminate + *::before {
+	background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M2 12L22 12" fill="none" stroke="currentColor" stroke-width="3"/></svg>');
+}
+
+label.checkbox > input:focus + *::before {
+	border-width: 2px;
+}
+label.checkbox > input:disabled + *::before,
+label.checkbox > input:disabled + * {
+	opacity:0.5;
+}
+
+label.checkbox.toggle > input + * {
+	position: relative;
+	background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 2"><path d="M1,1 h2" stroke-linecap="round" stroke="%23CCC" /></svg>');
+	background-position: 0px center;
+	background-repeat: no-repeat;
+	padding-left:2.4em;
+}
+label.checkbox.toggle > input:checked + * {
+	background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 2"><path d="M1,1 h2" stroke-linecap="round" stroke="%234183C4" /></svg>');
+}
+
+label.checkbox.toggle > input + *::before {
+	position: absolute;
+	content: "";
+	height: 1.2em;
+	width: 1.2em;
+	left: 0;
+	top: 0.5em;
+	margin-top:-0.5em;
+	background-color: #EEE;
+	transition: 0.4s;
+	border-radius:1em;
+	border-color: gray;
+}
+label.checkbox.toggle > input:focus + *::before {
+	border-color:currentColor;
+}
+
+label.checkbox.toggle > input:checked + *::before {
+	transform: translateX(1.1em);
+	border-color:#2185D0;
+	background-image:none;
+}
+label.checkbox.toggle > input:indeterminate + *::before {
+	background-image:none;
+}

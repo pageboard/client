@@ -99,7 +99,12 @@
 }
 
 .ui.compact.icon.menu > .ui.radio.checkbox.item {
-	padding: 0em 0.7em;
+	padding: 0;
+}
+.ui.compact.icon.menu > .ui.radio.checkbox.item > span {
+	padding: 0.7em 0.7em;
+	display: inline-block;
+	height: 100%;
 }
 
 #move > .right.menu > .item {

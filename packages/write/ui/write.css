@@ -146,11 +146,12 @@ body[data-mode="read"] #pageboard-read > iframe {
 	margin-top:0.5em;
 	margin-bottom:0.5em;
 	padding-top:0;
-	padding-bottom:0.5em;
+	padding-bottom:0;
 }
 #form .inline.field,
 #form .inline.fields {
 	justify-content:space-between;
+	margin-bottom: 0.5em;
 }
 #form fieldset > .inline.fields:last-child {
 	margin-bottom:0;
@@ -164,7 +165,7 @@ body[data-mode="read"] #pageboard-read > iframe {
 	z-index: 1;
 }
 #form .nullable.fieldset > fieldset > legend {
-	padding-left: 0.6em;
+	margin-left: -0.9em;
 }
 
 #form fieldset:disabled {
@@ -187,13 +188,13 @@ body[data-mode="read"] #pageboard-read > iframe {
 #form .inline.fields > label {
 	width: 50%;
 }
-#form .inline.fields > .field {
+#form .inline.fields > label + .field {
 	width: 50%;
 }
 
 #form .inline.fields .field > .radio,
 #form .inline.fields .field > .toggle {
-	margin: 0 0 0 0.85714286em;
+	margin: 0 0 0 0.2em;
 	display: block;
 	text-align: left;
 }
@@ -228,6 +229,7 @@ body[data-mode="read"] #pageboard-read > iframe {
 }
 #form .ui.dropdown {
 	font-size:0.9rem;
+	padding:0.4em;
 }
 #form .ui.dropdown .menu > .item {
 	font-size:0.9rem;

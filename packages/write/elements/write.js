@@ -59,9 +59,10 @@ exports.write = {
 			<a class="item" data-command="right" title="Move right - Arrow down to jump"><i class="angle right icon"></i></a>
 			<div class="right menu">
 				<div class="item" id="share">
-					<div class="ui inverted toggle checkbox checked" title="Toggle shared status">
-						<input type="checkbox" name="standalone" class="hidden" value="true" tabindex="0"><label>shared</label>
-					</div>
+					<label class="inverted toggle checkbox" title="Toggle shared status">
+						<input type="checkbox" name="standalone" value="true" />
+						<span>shared</span>
+					</label>
 					<div class="ancestor">shared<br>ancestor</div>
 					<div class="descendant">shared<br>descendant</div>
 				</div>
@@ -100,7 +101,6 @@ exports.write = {
 		"../lib/components/segment.css",
 		"../lib/components/loader.css",
 		"../lib/components/form.css",
-		"../lib/components/dropdown.css",
 		"../lib/components/input.css",
 		"../lib/components/button.css",
 		"../lib/components/item.css",
@@ -113,23 +113,20 @@ exports.write = {
 		"../lib/components/message.css",
 		"../lib/components/breadcrumb.css",
 		"../lib/components/sticky.css",
-		"../lib/components/checkbox.css",
 		"../lib/components/tab.css",
 		"../lib/components/table.css",
 		"../lib/perfect-scrollbar.css",
 		"../ui/write.css",
 		"../ui/menu.css",
+		"../ui/checkbox.css",
 		"../ui/inputs/href.css",
 		"../lib/cropper.css",
 		"../ui/inputs/crop.css"
 	],
 	scripts: exports.page.scripts.slice().concat([
-		"../lib/jquery.js",
 		"../lib/components/form.js",
 		"../lib/components/progress.js",
-		"../lib/components/dropdown.js",
 		"../lib/components/transition.js",
-		"../lib/components/checkbox.js",
 		"../ui/write.js",
 		"../lib/pageboard.js",
 		"../ui/semafor.js",

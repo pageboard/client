@@ -77,7 +77,7 @@ class Semafor {
 			if (elem.parentNode.matches('.fieldset.nullable')) {
 				const realVal = Semafor.findPath(obj, elem.name);
 				elem.disabled = !realVal;
-				elem.previousElementSibling.checked = Boolean(realVal);
+				elem.querySelector('input:not([name])').checked = Boolean(realVal);
 			}
 			switch (elem.type) {
 				case 'submit':
@@ -89,13 +89,10 @@ class Semafor {
 					elem.checked = val.some(function (val) {
 						return val.toString() == elem.value;
 					});
-					// TODO it's preferable if this line is not needed
-					elem.parentNode.classList.toggle('checked', elem.checked);
 					break;
 				case 'select-one':
 					if (val) {
 						elem.value = val;
-						$(elem.closest('.dropdown')).dropdown({ placeholder: false });
 					}
 					break;
 				case 'select-multiple':
@@ -115,7 +112,6 @@ class Semafor {
 					elem.options.forEach(function (item) {
 						item.selected = val.includes(item.value);
 					});
-					$(elem.closest('.dropdown')).dropdown({ placeholder: false });
 					break;
 				case 'file':
 					if (val) elem.setAttribute("value", val);
@@ -125,6 +121,7 @@ class Semafor {
 			}
 		}
 	}
+
 	constructor(schema, node, filter, helper) {
 		this.filter = filter;
 		this.helper = helper;
@@ -138,8 +135,6 @@ class Semafor {
 	}
 
 	destroy() {
-		this.$node.find('.dropdown').dropdown('hide').dropdown('destroy');
-		this.$node.find('.checkbox').checkbox('destroy');
 		this.node.querySelectorAll('.nullable.fieldset > .nullable').forEach((node) => {
 			node.removeEventListener('change', this);
 		});
@@ -160,18 +155,18 @@ class Semafor {
 	}
 
 	get() {
-		const vals = Semafor.formGet(this.$node[0]);
+		const vals = Semafor.formGet(this.node);
 		const formVals = Semafor.unflatten(vals);
 		return this.convert(formVals, this.lastSchema);
 	}
 
 	set(obj) {
 		const vals = Semafor.flatten(obj, {}, this.lastSchema);
-		Semafor.formSet(this.$node[0], vals, obj);
+		Semafor.formSet(this.node, vals, obj);
 	}
 
 	clear() {
-		this.$node[0].reset();
+		this.node.reset();
 	}
 
 	static types = {
@@ -423,13 +418,12 @@ class Semafor {
 		return schema;
 	}
 	handleEvent(e) {
-		if (e.type == "change") {
-			if (e.target.matches('.nullable')) {
-				const fieldset = e.target.nextElementSibling;
-				if (!fieldset) return;
-				fieldset.disabled = !e.target.checked;
-			}
-		}
+		if (e.type != "change") return;
+		const legend = e.target.closest('fieldset > legend');
+		if (!legend) return;
+		const fieldset = legend.parentNode;
+		if (!fieldset) return;
+		fieldset.disabled = !e.target.checked;
 	}
 	static findPath(obj, path) {
 		const list = path.split('.');
@@ -556,7 +550,6 @@ Semafor.types.oneOf = function (key, schema, node, inst) {
 			</div>
 		</div>`);
 		node.appendChild(field);
-		$(field).find('.radio.checkbox').checkbox();
 	} else if (listOf.length <= 4) {
 		const field = node.dom(`<div class="inline fields">
 			<label for="${key}">${schema.title || key}</label>
@@ -566,9 +559,8 @@ Semafor.types.oneOf = function (key, schema, node, inst) {
 		</div>`);
 		node.appendChild(field);
 		if (def !== undefined) {
-			$(field).find(`[name="${key}"][value="${def}"]`).prop('checked', true);
+			field.querySelector(`[name="${key}"][value="${def}"]`).checked = true;
 		}
-		$(field).find('.toggle.checkbox').checkbox();
 	} else {
 		const field = node.dom(`<div class="inline fields" title="${schema.description || ''}">
 			<label>${schema.title || key}</label>
@@ -578,9 +570,8 @@ Semafor.types.oneOf = function (key, schema, node, inst) {
 		</div>`);
 		node.appendChild(field);
 		if (def !== undefined) {
-			$(field).find(`[value="${def}"]`).prop('selected', true);
+			(field.querySelector(`option[value="${def}"]`) || {}).selected = true;
 		}
-		$(field).find('.dropdown').dropdown({ placeholder: false });
 	}
 };
 
@@ -612,14 +603,18 @@ Semafor.types.object = function (key, schema, node, inst) {
 		if (schema.properties && key && schema.title) {
 			if (schema.nullable) {
 				fieldset = node.dom(`<div class="nullable fieldset">
-					<input type="checkbox" class="ui nullable checkbox">
 					<fieldset name="${key}" class="field" disabled>
-						<legend>${schema.title}</legend>
+						<legend>
+							<label class="checkbox">
+								<input type="checkbox">
+								<span>${schema.title}</span>
+							</label>
+						</legend>
 					</fieldset>
 				</div>`);
 				node.appendChild(fieldset);
 				fieldset = fieldset.lastElementChild;
-				fieldset.previousElementSibling.addEventListener('change', inst);
+				fieldset.querySelector('input:not([name])').addEventListener('change', inst);
 			} else {
 				fieldset = node.dom(`<fieldset name="${key}" class="field">
 					<legend>${schema.title}</legend>
@@ -651,15 +646,15 @@ Semafor.types.object = function (key, schema, node, inst) {
 
 Semafor.types.boolean = function (key, schema, node, inst) {
 	const field = node.dom(`<div class="inline fields">
-		<label>${schema.title || key}</label>
 		<div class="field">
-			<div class="ui toggle checkbox" title="${schema.description || ''}">
-				<input type="checkbox" name="${key}" class="hidden" value="true" />
-			</div>
+			<label class="toggle checkbox" title="${schema.description || ''}">
+				<input type="checkbox" name="${key}" value="true" />
+				<span>${schema.title || key}</span>
+			</label>
 		</div>
 	</div>`);
 	node.appendChild(field);
-	$(field).find('.checkbox').checkbox(schema.default ? 'check' : 'uncheck');
+	field.querySelector('input[type="checkbox"]').checked = schema.default;
 };
 
 Semafor.types.null = function (key, schema, node, inst) {
@@ -682,17 +677,27 @@ Semafor.types.array = function (key, schema, node, inst) {
 		if (allStrings) {
 			Semafor.types.string(key, schema, node, inst);
 		} else {
-			const field = node.dom(`<div class="field" title="${schema.description || ''}">
-				<label>${schema.title || key}</label>
-				<select name="${key}" class="ui dropdown" multiple>
-					${schema.items.anyOf.map(item => Semafor.getSelectOption(item, key)).join('\n')}
-				</select>
-			</div>`);
-			node.appendChild(field);
-			// if (def !== undefined) {
-			// 	$(field).find(`[value="${def}"]`).prop('selected', true);
-			// }
-			$(field).find('.dropdown').dropdown({ placeholder: false });
+			const fieldset = node.dom(`<fieldset>
+				<legend title="[schema.description]">[schema.title|or:[key]]</legend>
+				<div class="inline field">
+					<label class="ui checkbox">
+						<input type="checkbox"
+							name="[key]" value="[schema.items.anyOf|repeat:.field:item|itemVal]" tabindex="0" />
+						<span>[item.title]</span>
+					</label>
+				</div>
+			</fieldset>`)
+				.fuse({
+					schema, key
+				}, {
+					$filters: {
+						itemVal: val => {
+							if (val == null) return val;
+							return Semafor.getValStr(val);
+						}
+					}
+				});
+			node.appendChild(fieldset);
 		}
 	} else {
 		console.warn("FIXME: array type supports only items: [schemas], or items.anyOf", schema);
@@ -760,17 +765,17 @@ Semafor.keywords.pattern = function (value) {
 };
 
 Semafor.getIconOption = function (item, key) {
-	return `<div class="ui radio checkbox item" title="${item.title}">
-		<input type="radio" name="${key}" value="${Semafor.getValStr(item)}" tabindex="0" class="hidden">
-		<label>${item.icon}</label>
-	</div>`;
+	return `<label class="ui radio checkbox item" title="${item.title}">
+		<input type="radio" name="${key}" value="${Semafor.getValStr(item)}" tabindex="0">
+		<span>${item.icon}</span>
+	</label>`;
 };
 
 Semafor.getRadioOption = function (item, key) {
-	return `<div class="ui toggle checkbox">
-			<input type="radio" name="${key}" value="${Semafor.getValStr(item)}" tabindex="0" class="hidden">
-			<label>${item.title}</label>
-		</div>`;
+	return `<label class="ui radio checkbox">
+		<input type="radio" name="${key}" value="${Semafor.getValStr(item)}" tabindex="0">
+		<span>${item.title}</span>
+	</label>`;
 };
 
 Semafor.getSelectOption = function (item) {
