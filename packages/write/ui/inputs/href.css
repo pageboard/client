@@ -157,6 +157,16 @@ input-map {
 .field.href .items:empty {
 	display:none;
 }
+.field.href .items + .pager {
+	display:none;
+}
+.field.href .items + .pager.active {
+	display: block;
+	width: 100%;
+	border-top: 5px solid #DDD;
+	margin-top: -0.8em;
+	padding-bottom: 0.5em;
+}
 
 .field.href .search + .buttons > .button:first-child {
 	margin-right:0;

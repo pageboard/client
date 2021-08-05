@@ -1,3 +1,41 @@
+class InfiniteScroll {
+	constructor(node) {
+		this.node = node;
+		this.page = 0;
+		this.observer = new IntersectionObserver((entries, observer) => {
+			entries.forEach((entry) => {
+				const ratio = entry.intersectionRatio || 0;
+				if (ratio == 0 || !this.active) return;
+				this.queue = this.queue.then(() => {
+					return this.load(this.page).then((stop) => {
+						if (!stop) this.page += 1;
+					});
+				});
+			});
+		}, {
+			threshold: [0, 1]
+		});
+	}
+	start() {
+		this.active = true;
+		this.node.classList.toggle('active', true);
+		this.page = 0;
+		this.queue = Promise.resolve();
+		this.observer.observe(this.node);
+	}
+	stop() {
+		this.active = false;
+		this.node.classList.toggle('active', false);
+		delete this.queue;
+		this.observer.unobserve(this.node);
+	}
+	destroy() {
+		this.stop();
+		this.observer.disconnect();
+		delete this.observer;
+	}
+}
+
 Pageboard.schemaHelpers.href = class Href {
 	static cache = {};
 
@@ -53,7 +91,7 @@ Pageboard.schemaHelpers.href = class Href {
 		if (input.value != this.input.value) {
 			this.input.value = input.value;
 			Pageboard.trigger(this.input, 'change');
-			setTimeout(function() {
+			setTimeout(function () {
 				input.focus();
 			});
 		}
@@ -74,14 +112,44 @@ Pageboard.schemaHelpers.href = class Href {
 				</div>
 			</div>
 		</div>
-		<div class="ui items"></div>`);
+		<div class="ui items"></div>
+		<div class="pager"></div>`);
 
 		this.node = input.nextElementSibling;
 		this.uiInput = this.node.querySelector('input');
 		this.container = this.node.nextElementSibling;
-		this.container.addEventListener('click', function(e) {
+		this.container.addEventListener('click', function (e) {
 			if (e.target.closest('a')) e.preventDefault();
 		}, true);
+
+		const me = this;
+		this.infinite = new (class extends InfiniteScroll {
+			load(page) {
+				let text = me.uiInput.value;
+				let url;
+				if (text.startsWith('#') || text.startsWith('/')) {
+					url = Href.normUrl(text);
+					if (text.endsWith('#')) url = url + '#';
+					text = null;
+				}
+				const filter = Object.assign({
+					text: text,
+					url: url
+				}, me.opts.filter);
+				filter.limit = 10;
+				filter.offset = page * filter.limit;
+				return Pageboard.uiLoad(
+					this.node,
+					Pageboard.fetch('get', '/.api/hrefs', filter)
+				).then(({ data }) => {
+					if (!data || data.length == 0) return true;
+					const node = me.container.ownerDocument.createElement('div');
+					me.cache(data);
+					me.renderList(data, node);
+					me.container.append(...node.children);
+				});
+			}
+		})(this.container.nextElementSibling);
 
 		this.node.addEventListener('input', (e) => {
 			this.searchUpdate();
@@ -157,7 +225,7 @@ Pageboard.schemaHelpers.href = class Href {
 		if (val && !this.uiInput.value) {
 			this.uiInput.value = val;
 		}
-		if (val && !this.infinite) {
+		if (val && !this.infinite.active) {
 			this.get(val).then(this.cache).then((list) => {
 				this.set(val);
 			});
@@ -185,42 +253,10 @@ Pageboard.schemaHelpers.href = class Href {
 	}
 
 	searchStart() {
-		const me = this;
 		this.initialValue = this.input.value;
 		this.uiInput.value = '';
 		this.uiInput.focus();
-		this.lastPageIndex = Infinity;
-		this.first = true;
-		this.infinite = new window.InfiniteScroll(this.container, {
-			path: function() {
-				let text = me.first ? '' : me.uiInput.value;
-				let url;
-				if (text.startsWith('#') || text.startsWith('/')) {
-					url = Href.normUrl(text);
-					if (text.endsWith('#')) url = url + '#';
-					text = null;
-				}
-				const filter = Object.assign({
-					text: text,
-					url: url
-				}, me.opts.filter);
-				filter.limit = 10;
-				if (me.lastPageIndex < this.pageIndex) return;
-				filter.offset = (this.pageIndex - 1) * filter.limit;
-				return Page.format({
-					pathname: '/.api/hrefs',
-					query: filter
-				});
-			},
-			responseType: 'text',
-			domParseResponse: false,
-			scrollThreshold: 400,
-			elementScroll: Pageboard.write,
-			loadOnScroll: true,
-			history: false,
-			debug: false
-		});
-
+		this.infinite.start();
 		Pageboard.write.classList.add('href');
 		let parent = this.input.parentNode;
 		while (parent) {
@@ -231,26 +267,17 @@ Pageboard.schemaHelpers.href = class Href {
 	}
 
 	searchUpdate() {
-		if (!this.infinite) return this.searchStart();
-		this.container.textContent = "";
-		this.infinite.pageIndex = 1;
-		const p = this.infinite.loadNextPage();
-		if (p) p.then(({ body }) => {
-			this.first = false;
-			const data = JSON.parse(body).data;
-			if (data.length == 0) this.lastPageIndex = this.infinite.pageIndex;
-			const node = this.container.ownerDocument.createElement('div');
-			this.cache(data);
-			this.renderList(data, node);
-			this.infinite.appendItems(Array.from(node.children));
-		});
+		if (!this.infinite.active) {
+			this.searchStart();
+		} else {
+			this.infinite.stop();
+			this.container.textContent = "";
+			this.infinite.start();
+		}
 	}
 
 	searchStop(cancel) {
-		if (this.infinite) {
-			this.infinite.destroy();
-			delete this.infinite;
-		}
+		this.infinite.stop();
 		Pageboard.write.classList.remove('href');
 		let parent = this.input.parentNode;
 		while (parent) {
@@ -286,8 +313,8 @@ Pageboard.schemaHelpers.href = class Href {
 		input.type = "file";
 		input.multiple = true;
 		const me = this;
-		return new Promise(function(resolve, reject) {
-			input.addEventListener('change', function() {
+		return new Promise(function (resolve, reject) {
+			input.addEventListener('change', function () {
 				const fd = new FormData();
 				if (input.files.length == 0) return resolve();
 				for (let i = 0; i < input.files.length; i++) {
@@ -299,7 +326,7 @@ Pageboard.schemaHelpers.href = class Href {
 				const tracker = me.uploading();
 				tracker(0);
 
-				xhr.upload.addEventListener("progress", function(e) {
+				xhr.upload.addEventListener("progress", function (e) {
 					if (e.lengthComputable) {
 						let percent = Math.round((e.loaded * 100) / e.total);
 						if (percent >= 100) percent = 99; // only load event can reach 100
@@ -307,19 +334,19 @@ Pageboard.schemaHelpers.href = class Href {
 					}
 				});
 
-				xhr.addEventListener('load', function() {
+				xhr.addEventListener('load', function () {
 					tracker(100);
 					let response;
 					try {
 						response = JSON.parse(xhr.responseText);
-					} catch(ex) {
+					} catch (ex) {
 						reject(ex);
 						return;
 					}
 					resolve(response);
 				});
 
-				xhr.addEventListener('error', function(e) {
+				xhr.addEventListener('error', function (e) {
 					if (xhr.status == 0) return tracker("Connection error");
 					const msg = xhr.statusText || "Connection error";
 					const err = new Error(msg);
@@ -332,33 +359,33 @@ Pageboard.schemaHelpers.href = class Href {
 			});
 			input.value = null;
 			input.click();
-		}).then(function(obj) {
+		}).then(function (obj) {
 			const files = Array.isArray(obj) ? obj : (obj && obj.items || []);
 			let p = Promise.resolve();
-			files.forEach(function(file) {
-				p = p.then(function() {
+			files.forEach(function (file) {
+				p = p.then(function () {
 					return me.insert(file);
 				});
 			});
-			return p.then(function() {
+			return p.then(function () {
 				if (files.length == 1) Pageboard.trigger(me.input, 'change');
 			});
 		});
 	}
 
-	uploadStop() {}
+	uploadStop() { }
 
 	uploading() {
 		const root = Pageboard.notify.dom();
 		const progress = root.dom(`<div class="ui blue attached progress"><div class="bar"></div></div>`);
 		root.appendChild(progress);
-		progress.animate([{width:0}], { duration: 0 });
+		progress.animate([{ width: 0 }], { duration: 0 });
 
 		const finished = false;
-		return function(percent) {
+		return function (percent) {
 			if (finished) return;
 			if (typeof percent == "number") {
-				progress.animate([{width: percent + '%'}], { duration: 500 });
+				progress.animate([{ width: percent + '%' }], { duration: 500 });
 				if (percent < 100) return;
 			} else {
 				Pageboard.notify("Upload failed", {
@@ -374,9 +401,9 @@ Pageboard.schemaHelpers.href = class Href {
 		const me = this;
 		return Pageboard.uiLoad(this.node, Pageboard.fetch('delete', '/.api/href', {
 			url: href
-		})).then(function(obj) {
+		})).then(function (obj) {
 			me.cache([obj]);
-			me.list = me.list.filter(function(obj) {
+			me.list = me.list.filter(function (obj) {
 				return obj.url != href;
 			});
 		});
@@ -387,7 +414,7 @@ Pageboard.schemaHelpers.href = class Href {
 		if (obj) return Promise.resolve(obj);
 		return Pageboard.uiLoad(this.node, Pageboard.fetch('get', '/.api/hrefs', {
 			url: href
-		})).then(function(obj) {
+		})).then(function (obj) {
 			return obj.data;
 		});
 	}
@@ -416,7 +443,7 @@ Pageboard.schemaHelpers.href = class Href {
 		let selected = this.input.value;
 		if (selected) selected = Href.normUrl(selected);
 		if (list.rendered) {
-			container.childNodes.forEach(function(child) {
+			container.childNodes.forEach(function (child) {
 				if (child.nodeType != Node.ELEMENT_NODE) return;
 				const href = child.getAttribute('href');
 				if (href == selected) child.classList.add('selected');
@@ -426,7 +453,7 @@ Pageboard.schemaHelpers.href = class Href {
 		}
 		list.rendered = true;
 		container.textContent = ' ';
-		list.forEach(function(obj) {
+		list.forEach(function (obj) {
 			const item = this.renderItem(obj);
 			if (selected && item.getAttribute('href') == selected) {
 				item.classList.add('selected');
