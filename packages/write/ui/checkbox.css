@@ -54,13 +54,13 @@ label.checkbox > input:disabled + * {
 
 label.checkbox.toggle > input + * {
 	position: relative;
-	background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 2"><path d="M1,1 h2" stroke-linecap="round" stroke="%23CCC" /></svg>');
+	background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 2"><path d="M0.5,1 h2.5" stroke-linecap="round" stroke="%23CCC" /></svg>');
 	background-position: 0px center;
 	background-repeat: no-repeat;
-	padding-left:2.4em;
+	padding-left: 2.4em;
 }
 label.checkbox.toggle > input:checked + * {
-	background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 2"><path d="M1,1 h2" stroke-linecap="round" stroke="%234183C4" /></svg>');
+	background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 2"><path d="M0.5,1 h2.5" stroke-linecap="round" stroke="%234183C4" /></svg>');
 }
 
 label.checkbox.toggle > input + *::before {
@@ -68,9 +68,9 @@ label.checkbox.toggle > input + *::before {
 	content: "";
 	height: 1.2em;
 	width: 1.2em;
-	left: 0;
-	top: 0.5em;
-	margin-top:-0.5em;
+	left: -0.1em;
+	top: 50%;
+	margin-top: -0.6em;
 	background-color: #EEE;
 	transition: 0.4s;
 	border-radius:1em;
@@ -81,7 +81,7 @@ label.checkbox.toggle > input:focus + *::before {
 }
 
 label.checkbox.toggle > input:checked + *::before {
-	transform: translateX(1.1em);
+	transform: translateX(1em);
 	border-color:#2185D0;
 	background-image:none;
 }
