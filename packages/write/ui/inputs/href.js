@@ -209,7 +209,6 @@ Pageboard.schemaHelpers.href = class Href {
 				e.stopPropagation();
 				return Pageboard.uiLoad(remove, this.remove(Href.cache[href].url)).then(() => {
 					this.renderList();
-					Pageboard.scrollbar.update();
 				});
 			} else {
 				if (href == input.value) {
@@ -286,7 +285,6 @@ Pageboard.schemaHelpers.href = class Href {
 		} else {
 			this.infinite.stop();
 			this.container.textContent = "";
-			Pageboard.scrollbar.update();
 			this.infinite.start();
 		}
 	}
@@ -304,7 +302,6 @@ Pageboard.schemaHelpers.href = class Href {
 		}
 		delete this.initialValue;
 		this.set(this.input.value);
-		Pageboard.scrollbar.update();
 		Pageboard.trigger(this.input, 'change');
 	}
 

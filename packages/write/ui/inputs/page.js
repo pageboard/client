@@ -228,7 +228,6 @@ Pageboard.schemaHelpers.page = class PageHelper {
 		while ((parent = parent.parentNode.closest('fieldset,.fieldset'))) {
 			parent.classList.remove('href');
 		}
-		Pageboard.scrollbar.update();
 		this.write();
 		Pageboard.trigger(this.input, 'change');
 	}

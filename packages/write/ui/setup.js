@@ -14,7 +14,6 @@ Page.setup(function(state) {
 	const iframe = Pageboard.read = document.createElement('iframe');
 	parentRead.insertBefore(iframe, parentRead.lastElementChild);
 	Pageboard.write = document.getElementById('pageboard-write');
-	Pageboard.scrollbar = new window.PerfectScrollbar(Pageboard.write);
 	document.body.addEventListener('submit', function(e) {
 		e.preventDefault();
 	});
@@ -47,7 +46,6 @@ Pageboard.adopt = function(win, readState) {
 			Pageboard.hrefs = readState.scope.$hrefs || {};
 			const editor = Pageboard.editor;
 			if (editor && editor.closed) return;
-			Pageboard.scrollbar.update();
 			if (!Pageboard.modeControl) {
 				Pageboard.modeControl = new Pageboard.Controls.Mode({
 					root: { defaultView: win },
@@ -140,7 +138,6 @@ function update() {
 			Pageboard.notify(`control.${key}`, err);
 		}
 	});
-	Pageboard.scrollbar.update();
 	editor.updatePage();
 }
 
