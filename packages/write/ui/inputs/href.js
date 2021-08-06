@@ -2,32 +2,46 @@ class InfiniteScroll {
 	constructor(node) {
 		this.node = node;
 		this.page = 0;
-		this.observer = new IntersectionObserver((entries, observer) => {
+		this.observer = new IntersectionObserver((entries) => {
 			entries.forEach((entry) => {
-				const ratio = entry.intersectionRatio || 0;
-				if (ratio == 0 || !this.active) return;
-				this.queue = this.queue.then(() => {
-					return this.load(this.page).then((stop) => {
-						if (!stop) this.page += 1;
-					});
-				});
+				this.visible = (entry.intersectionRatio || 0) !== 0;
+				this.fetch();
 			});
 		}, {
 			threshold: [0, 1]
 		});
 	}
+	fetch() {
+		if (!this.queue) return;
+		this.queue = this.queue.then(() => {
+			if (this.visible && this.active) return this.load(this.page).then((stop) => {
+				if (stop) return;
+				this.page += 1;
+				return this.waitRepaint().then(() => {
+					if (this.visible) this.fetch();
+				});
+			});
+		});
+	}
+	waitRepaint() {
+		return new Promise(function (resolve) {
+			window.requestAnimationFrame(() => {
+				setTimeout(resolve, 0);
+			});
+		});
+	}
 	start() {
 		this.active = true;
-		this.node.classList.toggle('active', true);
 		this.page = 0;
 		this.queue = Promise.resolve();
 		this.observer.observe(this.node);
+		this.node.classList.toggle('active', true);
 	}
 	stop() {
 		this.active = false;
-		this.node.classList.toggle('active', false);
 		delete this.queue;
 		this.observer.unobserve(this.node);
+		this.node.classList.toggle('active', false);
 	}
 	destroy() {
 		this.stop();
@@ -272,6 +286,7 @@ Pageboard.schemaHelpers.href = class Href {
 		} else {
 			this.infinite.stop();
 			this.container.textContent = "";
+			Pageboard.scrollbar.update();
 			this.infinite.start();
 		}
 	}

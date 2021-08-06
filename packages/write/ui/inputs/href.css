@@ -192,10 +192,6 @@ input-map {
 fieldset.href > :not(.href):not(legend) {
 	display:none !important;
 }
-.href > .form {
-	height:100%;
-}
-
 
 .field.href > .items.icon .content img {
 	height: auto;
