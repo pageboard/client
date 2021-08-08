@@ -38,8 +38,10 @@ Pageboard.schemaHelpers.crop = class Crop {
 
 		this.debouncedChange = Pageboard.debounce((obj) => this.change(obj), 500);
 
+		this.block = block;
+
 		this.container = input.appendChild(input.dom(`<div class="crop">
-			<img src="${this.thumbnail(Pageboard.Semafor.findPath(block.data, this.urlProp))}" />
+			<img src="${this.thumbnail(this.getField(this.urlProp))}" />
 		</div>`));
 
 		this.cropper = new window.Cropper(this.container.querySelector('img'), {
@@ -207,12 +209,11 @@ Pageboard.schemaHelpers.crop = class Crop {
 	}
 
 	load() {
-		const url = this.block.data.url;
-		if (url == this.lastUrl) return this.cropper && this.cropper.cropped;
-		this.lastUrl = url;
-
-		this.cropper.replace(this.thumbnail(url));
-		return false;
+		const url = this.getField(this.urlProp);
+		this.container.parentNode.hidden = !url;
+		const thumb = this.thumbnail(url);
+		// FIXME first call won't properly be shown see below if (this.cropper.url != thumb)
+		this.cropper.replace(thumb);
 	}
 
 	thumbnail(url) {
@@ -223,6 +224,7 @@ Pageboard.schemaHelpers.crop = class Crop {
 
 	from(crop) {
 		const imgData = this.cropper.getImageData();
+		if (!imgData || !imgData.naturalWidth || !imgData.naturalHeight) return;
 		const ratio = (crop.zoom || 100) / 100;
 		const W = imgData.naturalWidth * ratio;
 		const H = imgData.naturalHeight * ratio;
@@ -236,16 +238,20 @@ Pageboard.schemaHelpers.crop = class Crop {
 		};
 	}
 
+	getField(prop) {
+		return Pageboard.Semafor.findPath(this.block.data, prop);
+	}
+
 	updateData() {
-		const data = this.block.data.crop || {};
-		this.cropper.setData(this.from(data));
+		const data = this.from(this.getField(this.prefix + 'crop') || {});
+		if (data) this.cropper.setData(data);
 	}
 
 	update(block) {
+		// FIXME cropperjs does not support being called without being visible
+		// however update(block) is called once.
 		this.block = block;
-		if (this.load()) {
-			this.updateData();
-		}
+		this.load();
 	}
 
 	destroy() {
