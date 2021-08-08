@@ -1,5 +1,6 @@
 label.checkbox {
 	cursor: pointer;
+	line-height: 1.47em;
 }
 label.checkbox > input {
 	position: absolute;
