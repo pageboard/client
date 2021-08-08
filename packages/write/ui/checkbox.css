@@ -69,12 +69,11 @@ label.checkbox.toggle > input + *::before {
 	height: 1.2em;
 	width: 1.2em;
 	left: -0.1em;
-	top: 50%;
-	margin-top: -0.6em;
 	background-color: #EEE;
 	transition: 0.4s;
 	border-radius:1em;
 	border-color: gray;
+	margin-top: 0.16em;
 }
 label.checkbox.toggle > input:focus + *::before {
 	border-color:currentColor;

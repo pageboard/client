@@ -450,14 +450,12 @@ Semafor.types.string = function (key, schema, node, inst) {
 			<textarea name="${key}"	title="${schema.description || ''}" placeholder="${schema.placeholder || schema.default || ''}"></textarea>
 		</div>`));
 	} else if (short) {
-		node.appendChild(node.dom(`<div class="inline fields">
+		node.appendChild(node.dom(`<div class="inline field">
 			<label>${schema.title || key}</label>
-			<div class="field">
-				<input type="text" name="${key}"
-					placeholder="${schema.placeholder || schema.default || ''}"
-					title="${schema.description || ''}"
-				/>
-			</div>
+			<input type="text" name="${key}"
+				placeholder="${schema.placeholder || schema.default || ''}"
+				title="${schema.description || ''}"
+			/>
 		</div>`));
 	} else {
 		const input = node.appendChild(node.dom(`<div class="field">
@@ -553,7 +551,7 @@ Semafor.types.oneOf = function (key, schema, node, inst) {
 			field.querySelector(`[name="${key}"][value="${def}"]`).checked = true;
 		}
 	} else {
-		const field = node.dom(`<div class="inline fields" title="${schema.description || ''}">
+		const field = node.dom(`<div class="inline field" title="${schema.description || ''}">
 			<label>${schema.title || key}</label>
 			<select name="${key}" class="ui compact dropdown">
 				${listOf.map(item => Semafor.getSelectOption(item, key)).join('\n')}
@@ -574,15 +572,15 @@ Semafor.types.integer = function (key, schema, node, inst) {
 };
 
 Semafor.types.number = function (key, schema, node, inst) {
-	node.appendChild(node.dom(`<div class="inline fields">
+	node.appendChild(node.dom(`<div class="inline field">
 		<label>${schema.title || key}</label>
-		<div class="field"><input type="number" name="${key}"
+		<input type="number" name="${key}"
 			placeholder="${schema.default !== undefined ? schema.default : ''}"
 			title="${schema.description || ''}"
 			min="${schema.minimum != null ? schema.minimum : ''}"
 			max="${schema.maximum != null ? schema.maximum : ''}"
 			step="${schema.multipleOf != null ? schema.multipleOf : ''}"
-		/></div>
+		/>
 	</div>`));
 
 	inst.fields[key].type = 'number';
@@ -636,15 +634,20 @@ Semafor.types.object = function (key, schema, node, inst) {
 };
 
 Semafor.types.boolean = function (key, schema, node, inst) {
-	const field = node.dom(`<div class="inline fields">
-		<div class="field">
-			<label class="toggle checkbox" title="${schema.description || ''}">
-				<input type="checkbox" name="${key}" value="true" />
-				<span>${schema.title || key}</span>
-			</label>
-		</div>
+	const field = node.dom(`<div class="field">
+		<label class="toggle checkbox" title="${schema.description || ''}">
+			<input type="checkbox" name="${key}" value="true" />
+			<span>${schema.title || key}</span>
+		</label>
 	</div>`);
-	node.appendChild(field);
+	let wrap = node.lastElementChild;
+	if (!wrap || !wrap.matches('.inline.fields') || !wrap.querySelector('.toggle')) {
+		wrap = node.dom('<div class="inline fields"></div>');
+		node.appendChild(wrap);
+	} else {
+		wrap.classList.add('two');
+	}
+	wrap.appendChild(field);
 	field.querySelector('input[type="checkbox"]').checked = schema.default;
 };
 

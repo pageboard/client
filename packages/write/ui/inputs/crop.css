@@ -1,7 +1,7 @@
 #form fieldset.crop {
 	position:relative;
 }
-#form fieldset.crop > .fields {
+#form fieldset.crop > .field {
 	display:none !important;
 }
 #form fieldset.crop > .crop {

@@ -31,8 +31,8 @@ body {
 	min-width:300px;
 	margin-top:0 !important;
 	padding-top:0 !important;
-	overflow:auto;
 	user-select: none;
+	overflow-y: auto;
 }
 #pageboard-write.loading > [id] {
 	display:none;
@@ -142,16 +142,13 @@ body[data-mode="read"] #pageboard-read > iframe {
 	padding: 0.67857143em 1em; /* this is the padding value of .field */
 }
 
-#form fieldset {
-	margin-top:0.5em;
-	margin-bottom:0.5em;
-	padding-top:0;
-	padding-bottom:0;
-}
-#form .inline.field,
-#form .inline.fields {
+.inline.field,
+.inline.fields {
+	display:flex;
 	justify-content:space-between;
-	margin-bottom: 0.5em;
+	flex-wrap: wrap;
+	align-items: baseline;
+	margin:0;
 }
 #form fieldset > .inline.fields:last-child {
 	margin-bottom:0;
@@ -179,7 +176,6 @@ body[data-mode="read"] #pageboard-read > iframe {
 
 #form .inline.fields .field {
 	padding:0;
-	text-align:right;
 }
 #form .field > label {
 	margin-bottom:0;
@@ -187,6 +183,7 @@ body[data-mode="read"] #pageboard-read > iframe {
 
 #form .inline.fields > label {
 	width: 50%;
+	margin-right: 0;
 }
 #form .inline.fields > label + .field {
 	width: 50%;
@@ -227,9 +224,10 @@ body[data-mode="read"] #pageboard-read > iframe {
 #form .table.compact td input {
 	border: 0;
 }
-#form .ui.dropdown {
+#form .field > select {
 	font-size:0.9rem;
 	padding:0.4em;
+	width:50%;
 }
 #form .ui.dropdown .menu > .item {
 	font-size:0.9rem;
@@ -319,8 +317,7 @@ body[data-mode="read"] #pageboard-read > iframe {
 	line-height: 1.3em;
 	width: 100%;
 }
-
-#form .inline.fields > .dropdown {
+#form input[type="number"] {
 	width: 50%;
 }
 

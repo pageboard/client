@@ -4,7 +4,7 @@ class InfiniteScroll {
 		this.page = 0;
 		this.observer = new IntersectionObserver((entries) => {
 			entries.forEach((entry) => {
-				this.visible = (entry.intersectionRatio || 0) !== 0;
+				this.visible = this.node.offsetParent && (entry.intersectionRatio || 0) !== 0;
 				this.fetch();
 			});
 		}, {
