@@ -91,29 +91,40 @@ function install(el, scope) {
 		} else {
 			el.fusable = true;
 		}
-		if (el.fragments) el.fragments.forEach((obj) => {
-			let target;
-			if (obj.type === 'doc') target = scope.$element;
-			else if (obj.type) target = scope.$elements[obj.type] || {};
-			else target = el;
-			if (!target.dom) {
-				// eslint-disable-next-line no-console
-				console.warn("dom not found for fragment", obj.type, el.name);
-			} else {
-				const node = obj.path ? target.dom.querySelector(obj.path) : target.dom;
-				if (node) {
-					if (obj.html) {
-						node.insertAdjacentHTML(obj.position || 'afterend', obj.html);
-					}
-					if (obj.attributes) Object.keys(obj.attributes).forEach(key => {
-						node.setAttribute(key, obj.attributes[key]);
-					});
-				} else {
+		if (el.fragments) {
+			let reparse = false;
+			el.fragments.forEach((obj) => {
+				let target;
+				if (obj.type === 'doc') target = scope.$element;
+				else if (obj.type) target = scope.$elements[obj.type] || {};
+				else target = el;
+				if (!target.dom) {
 					// eslint-disable-next-line no-console
-					console.warn("path not found", obj.path, "in", el.name, el.html);
+					console.warn("dom not found for fragment", obj.type, el.name);
+				} else {
+					const node = obj.path ? target.dom.querySelector(obj.path) : target.dom;
+					if (node) {
+						if (obj.html) {
+							node.insertAdjacentHTML(obj.position || 'afterend', obj.html);
+							if (obj.html.fuse()) el.fusable = true;
+						}
+						if (obj.attributes) Object.keys(obj.attributes).forEach(key => {
+							const attr = obj.attributes[key];
+							if (key == "is" && attr) reparse = true;
+							node.setAttribute(key, attr);
+							if (attr.fuse()) el.fusable = true;
+						});
+					} else {
+						// eslint-disable-next-line no-console
+						console.warn("path not found", obj.path, "in", el.name, el.html);
+					}
 				}
-			}
-		});
+			});
+			if (reparse) el.dom = str2dom(el.dom.outerHTML, {
+				doc: scope.$doc,
+				ns: el.ns
+			});
+		}
 		if (el.install && scope.$element) {
 			el.install.call(el, scope);
 		}
