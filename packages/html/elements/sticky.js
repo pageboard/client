@@ -1,7 +1,5 @@
 exports.sticky = {
-	title: "Sticky",
-	icon: '<i class="icon pin"></i>',
-	menu: "widget",
+	title: "Old Sticky",
 	group: "block",
 	properties: {
 		position: {
@@ -26,13 +24,6 @@ exports.sticky = {
 	html: '<element-sticky data-collapsed="[collapsed|magnet]" data-position="[position]"></element-sticky>',
 	stylesheets: [
 		'../ui/sticky.css'
-	],
-	scripts: [
-		'../ui/stickyfill.js',
-		'../ui/sticky.js'
-	],
-	polyfills: [
-		'ResizeObserver'
 	]
 };
 
@@ -42,12 +33,18 @@ exports.header.properties.collapsed = {
 	default: false,
 	type: "boolean"
 };
-exports.header.tag += ',[block-type="header"]';
-exports.header.html = `<element-sticky class="header" data-collapsed="[collapsed|magnet]">
-	<header block-content="content"></header>
-</element-sticky>`;
-exports.header.scripts = exports.sticky.scripts.slice();
-exports.header.stylesheets = exports.sticky.stylesheets.concat(['../ui/layout.css']);
-exports.header.polyfills = exports.sticky.polyfills;
+exports.header.properties.autohide = {
+	title: "Auto-hide",
+	description: "Hide on scroll down",
+	default: false,
+	type: "boolean"
+};
 
-
+exports.header.fragments.push({
+	attributes: {
+		"is": "element-sticky-nav",
+		"class": "[collapsed|?] [autohide|?]"
+	}
+});
+exports.header.stylesheets.push('../ui/sticky.css');
+exports.header.scripts.push('../ui/sticky.js');

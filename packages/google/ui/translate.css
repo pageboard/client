@@ -8,3 +8,6 @@ html.google-translate-shown > body {
 html.transition .skiptranslate {
 	display:none !important;
 }
+html.google-translate-shown > body > element-sticky.header {
+	top:40px;
+}

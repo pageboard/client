@@ -27,14 +27,12 @@
     "nouislider": "^14.7.0",
     "object-fit-images": "^3.2.4",
     "postinstall-browserify": "^0.7.0",
-    "stickyfilljs": "^2.1.0"
   },
   "postinstall": {
     "semantic-ui-css/components": "link lib/components",
     "semantic-ui-css/themes": "link lib/themes"
   },
   "prepare": {
-    "stickyfilljs/dist/stickyfill.js": "copy lib/",
     "object-fit-images/dist/ofi.common-js.js": "browserify --standalone=objectFitImages lib/object-fit-images.js",
     "formdata-polyfill/formdata.min.js": "copy lib/formdata.js",
     "nouislider/distribute/nouislider.js": "copy lib/",

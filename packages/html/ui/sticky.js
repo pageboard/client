@@ -1,45 +1,36 @@
-class HTMLElementSticky extends VirtualHTMLElement {
-	static init() {
-		this.stickyfill = window.Stickyfill;
-		this.stickyfill.forceSticky();
+class HTMLElementStickyNav extends HTMLElement {
+	constructor() {
+		super();
+		if (this.init) this.init();
 	}
-	init() {
-		let raf;
-		this.listener = () => {
-			window.cancelAnimationFrame(raf);
-			raf = window.requestAnimationFrame(() => {
-				this.layout();
-			});
-		};
+	#lastScroll
+	#currentScroll() {
+		return document.documentElement.scrollTop;
+	}
+	listener() {
+		if (this.raf) window.cancelAnimationFrame(this.raf);
+		this.raf = window.requestAnimationFrame(() => {
+			this.layout();
+		});
 	}
 	handleAllScroll(e, state) {
 		this.listener();
 	}
-	handleAllResize(e, state) {
-		this.listener();
-	}
 	setup() {
 		this.dataset.mode = "start";
-		if (this._sticky || !this.parentNode) return;
-		// some stylesheets might target :not([data-mode="start"]) so it must be the initial value
-		this._sticky = this.constructor.stickyfill.addOne(this);
+		this.#lastScroll = this.#currentScroll();
 		this.listener();
 	}
 	layout() {
-		if (!this._sticky) return;
-		const mode = this._sticky._stickyMode || 'start';
-		if (this.dataset.mode != mode) {
-			this.dataset.mode = mode;
-			this._sticky._recalcClone();
-		}
-	}
-	close() {
-		if (!this._sticky) return;
-		delete this._sticky;
-		this.constructor.stickyfill.removeOne(this);
+		const val = this.#currentScroll();
+		let mode;
+		if (val == 0) mode = "start";
+		else if (this.#lastScroll < val) mode = "down";
+		else mode = "up";
+
+		this.#lastScroll = val;
+		this.dataset.mode = mode;
 	}
 }
 
-Page.setup(function() {
-	VirtualHTMLElement.define('element-sticky', HTMLElementSticky);
-});
+VirtualHTMLElement.define('element-sticky-nav', HTMLElementStickyNav, 'header');

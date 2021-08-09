@@ -1,19 +1,32 @@
-body {
-	position:relative;
-}
-element-sticky {
+element-sticky,
+header {
 	display:block;
 	z-index:1000;
-	position:sticky;
+	position: sticky;
+	transition-duration: 0.4s;
+}
+element-sticky[data-position="top"],
+header {
 	top:0;
+}
+element-sticky[data-position="bottom"] {
+	bottom:0;
 }
 element-sticky[data-collapsed="true"] {
 	height:0;
 }
-
-element-sticky.header {
-	z-index:1001; /* above other sticky elements */
+header.collapsed {
+	position:fixed;
+	width:100%;
 }
-html.google-translate-shown > body > element-sticky.header {
-	top:40px;
+header.autohide:not([data-mode="start"]) {
+	transition-property: transform;
+}
+header.autohide[data-mode="up"] {
+	transition-delay: 0.1s;
+	transform: translateY(0);
+}
+header.autohide[data-mode="down"] {
+	transition-delay: 0.2s;
+	transform: translateY(-100%);
 }
