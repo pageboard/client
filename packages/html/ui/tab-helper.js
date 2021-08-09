@@ -9,7 +9,7 @@ Page.setup(function(state) {
 			});
 		}
 		close() {
-			this.observer.disconnect();
+			if (this.observer) this.observer.disconnect();
 		}
 		mutate(record, state) {
 			const items = this.items;
