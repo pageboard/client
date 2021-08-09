@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "formdata-polyfill": "^3.0.20",
-    "nouislider": "^14.7.0",
+    "nouislider": "^15.2.0",
     "object-fit-images": "^3.2.4",
     "postinstall-browserify": "^0.7.0",
   },
@@ -35,8 +35,8 @@
   "prepare": {
     "object-fit-images/dist/ofi.common-js.js": "browserify --standalone=objectFitImages lib/object-fit-images.js",
     "formdata-polyfill/formdata.min.js": "copy lib/formdata.js",
-    "nouislider/distribute/nouislider.js": "copy lib/",
-    "nouislider/distribute/nouislider.css": "copy lib/"
+    "nouislider/dist/nouislider.js": "copy lib/",
+    "nouislider/dist/nouislider.css": "copy lib/"
   },
   "pageboard": {
     "priority": -1,
