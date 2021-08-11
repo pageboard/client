@@ -35,7 +35,7 @@ class HTMLElementGoogleTranslate extends VirtualHTMLElement {
 	consent(state) {
 		const agreed = state.scope.$consent == "yes";
 		if (!agreed || document.body.isContentEditable) return;
-		if (window.google && window.google.translate) delete window.google.translate;
+		delete window.google?.translate;
 		this.id = `id${Date.now()}`;
 		const cb = `HTMLElementGoogleTranslate_${this.id}`;
 		window[cb] = this.cb.bind(this, state);

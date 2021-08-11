@@ -93,7 +93,7 @@ module.exports = class Utils {
 		let to = sel.to;
 
 		let fromto = from;
-		if (sel.node && sel.node.type.name == "_") {
+		if (sel.node?.type.name == "_") {
 			to = from;
 		}
 		if (slice.content.childCount == 1 && (from == to || sel.node)) {
@@ -125,8 +125,8 @@ module.exports = class Utils {
 		const $pos = tr.doc.resolve(pos);
 		let from = pos;
 		let to = pos;
-		if ($pos.nodeBefore && $pos.nodeBefore.type.name == "_") from = pos - 1;
-		if ($pos.nodeAfter && $pos.nodeAfter.type.name == "_") to = pos + 1;
+		if ($pos.nodeBefore?.type.name == "_") from = pos - 1;
+		if ($pos.nodeAfter?.type.name == "_") to = pos + 1;
 		tr.replaceWith(from, to, node);
 		return from;
 	}
@@ -161,7 +161,7 @@ module.exports = class Utils {
 	deleteTr(tr, sel) {
 		if (!sel) sel = tr.selection;
 		if (sel.empty) return;
-		if (sel.node && sel.node.type.name == "_") return;
+		if (sel.node?.type.name == "_") return;
 		const start = sel.anchor !== undefined ? sel.anchor : sel.from;
 		const end = sel.head !== undefined ? sel.head : sel.to;
 		tr.delete(start, end);
@@ -191,15 +191,15 @@ module.exports = class Utils {
 		if (!parent) return;
 		const root = parent.root;
 		if (!block) {
-			const id = (parent.inline && parent.inline.node.marks.find(function (mark) {
+			const id = (parent.inline?.node.marks.find(function (mark) {
 				return mark.attrs.id != null;
-			}) || root.node).attrs.id;
+			}) ?? root.node).attrs.id;
 			if (!id) return;
 			block = this.view.blocks.get(id);
 			if (!block) return; // nothing to refresh
 		}
 		const attrs = this.view.blocks.toAttrs(block);
-		let type = dom && dom.getAttribute('block-type');
+		let type = dom?.getAttribute('block-type');
 		if (type) attrs.type = type; // dom can override block.type
 		else type = block.type;
 
@@ -275,7 +275,7 @@ module.exports = class Utils {
 
 	selectTr(tr, obj, textSelection) {
 		let parent, pos;
-		if (obj.root && obj.root.rpos) {
+		if (obj.root?.rpos) {
 			parent = obj;
 		} else if (obj instanceof State.Selection) {
 			parent = this.selectionParents(tr, obj).shift();
@@ -415,16 +415,16 @@ module.exports = class Utils {
 						node = rpos.nodeAfter;
 					}
 				}
-				type = node && node.type.spec.typeName;
+				type = node?.type.spec.typeName;
 			} else {
 				node = rpos.node(level);
-				type = node.type && node.type.spec.typeName;
+				type = node.type?.spec.typeName;
 			}
 			if (type && type != "const") {
 				obj[type] = { rpos: rpos, level: level, node: node };
 			}
 			if (node) {
-				if (node.marks && node.marks.length) {
+				if (node.marks?.length) {
 					obj.inline = {
 						node: node,
 						rpos: rpos
@@ -474,7 +474,7 @@ module.exports = class Utils {
 
 	canMark(sel, nodeType) {
 		const state = this.view.state;
-		const context = Utils.parseContext(nodeType.spec.element && nodeType.spec.element.context);
+		const context = Utils.parseContext(nodeType.spec.element?.context);
 		let can = sel.$from.depth == 0 ? state.doc.type.allowsMarkType(nodeType) : false;
 		try {
 			state.doc.nodesBetween(sel.from, sel.to, function (node, pos) {
@@ -498,7 +498,7 @@ module.exports = class Utils {
 	}
 
 	canInsert($pos, nodeType, all, after) {
-		const context = Utils.parseContext(nodeType.spec.element && nodeType.spec.element.context);
+		const context = Utils.parseContext(nodeType.spec.element?.context);
 		let contextOk = !context;
 		let found = false;
 		const ret = {};
@@ -508,10 +508,10 @@ module.exports = class Utils {
 			const node = $pos.node(d);
 			if (!found) {
 				if (d == $pos.depth) {
-					if ($pos.nodeAfter && $pos.nodeAfter.type.name == "_") {
+					if ($pos.nodeAfter?.type.name == "_") {
 						to += 1;
 					}
-					if ($pos.nodeBefore && $pos.nodeBefore.type.name == "_") {
+					if ($pos.nodeBefore?.type.name == "_") {
 						from -= 1;
 					}
 				}
@@ -583,8 +583,8 @@ module.exports = class Utils {
 			ret = this.canInsert($pos, nodeType, all, dir > 0);
 			if (ret.depth != null && ret.depth >= 0) {
 				npos = dir == 1 ? $pos.after(ret.depth + 1) : $pos.before(ret.depth + 1);
-				if (dir > 0 && $pos.nodeBefore && $pos.nodeBefore.type.name == "_"
-					|| dir < 0 && $pos.nodeAfter && $pos.nodeAfter.type.name == "_") {
+				if (dir > 0 && $pos.nodeBefore?.type.name == "_"
+					|| dir < 0 && $pos.nodeAfter?.type.name == "_") {
 					// jumped over a placeholder
 					npos = null;
 					cur = cur + dir;

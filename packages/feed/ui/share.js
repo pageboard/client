@@ -17,7 +17,7 @@ class HTMLShareAnchorElement extends HTMLAnchorElement {
 		};
 		['title', 'description', 'image'].forEach(name => {
 			const node = document.head.querySelector(`meta[property="og:${name}"]`);
-			if (node && node.content) card[name] = node.content;
+			if (node?.content) card[name] = node.content;
 		});
 
 		const obj = {

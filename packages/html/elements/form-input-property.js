@@ -61,7 +61,7 @@ exports.input_property = {
 		for (let i = 0; i < list.length; i++) {
 			propKey = list[i];
 			required = prop.required && prop.required.indexOf(propKey) >= 0;
-			prop = prop.properties && prop.properties[propKey] || null;
+			prop = prop?.properties?.[propKey];
 			if (prop == null) break;
 		}
 		if (!prop) {

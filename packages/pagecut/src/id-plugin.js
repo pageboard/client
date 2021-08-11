@@ -94,7 +94,7 @@ module.exports = class IdPlugin {
 			let forceGen = regen;
 			const knownBlock = view.blocks.get(id);
 			// Important: RootSpec parser.getAttrs works in combination with id-plugin
-			if (!standalone && knownBlock && knownBlock.standalone) {
+			if (!standalone && knownBlock?.standalone) {
 				// user changes a block to become not standalone
 				forceGen = true;
 			}

@@ -238,7 +238,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		}).catch(function (err) {
 			return err;
 		}).then(function (res) {
-			if (res && res.grants) state.data.$grants = res.grants;
+			if (res?.grants) state.data.$grants = res.grants;
 			state.scope.$response = res;
 			form.enable();
 
@@ -363,7 +363,7 @@ Object.defineProperty(HTMLInputElement.prototype, 'defaultValue', {
 	configurable: true,
 	enumerable: true,
 	get: function () {
-		if (this.form && this.form.method == "get") return '';
+		if (this.form?.method == "get") return '';
 		else return this.getAttribute('value');
 	},
 	set: function (val) {
@@ -380,7 +380,7 @@ Page.setup(function (state) {
 		captureFocus: function (e, state) {
 			const el = e.target;
 			if (!el.matches || !el.matches('input,textarea,select')) return;
-			if (e.relatedTarget && e.relatedTarget.type == "submit") return;
+			if (e.relatedTarget?.type == "submit") return;
 			updateClass(el.closest('.field') || el, el.validity, true);
 		},
 		captureInvalid: function (e, state) {

@@ -12,7 +12,7 @@ Pageboard.Controls.Menu = class Menu {
 				return null;
 			}
 		}
-		const active = spec.active && !disabled && spec.active(view.state);
+		const active = !disabled && spec.active?.(view.state);
 
 		const dom = document.createElement('a');
 		dom.className = "item";
@@ -112,7 +112,7 @@ Pageboard.Controls.Menu = class Menu {
 				// show block elements if there is empty block content
 				// that should not happen anymore, thanks to placeholder
 				node = sel.$to.parent;
-				if (node && node.type.spec.typeName && !node.content.size && node.isBlock && !node.isTextblock) {
+				if (node?.type.spec.typeName && !node.content.size && node.isBlock && !node.isTextblock) {
 					isBlockSelection = true;
 				}
 			} else {
@@ -126,7 +126,7 @@ Pageboard.Controls.Menu = class Menu {
 		let inlineSpansActive = false;
 
 		if (sel) this.menu.items.forEach((item) => {
-			const dom = Menu.renderItem(item, this.editor, sel.node && sel.node.type.name || null);
+			const dom = Menu.renderItem(item, this.editor, sel.node?.type.name);
 			if (!dom) return;
 			const el = item.spec.element;
 			if (isRootSelection) {
@@ -255,8 +255,7 @@ Pageboard.Controls.Menu = class Menu {
 			active: function (state) {
 				let active;
 				if (!el.inline || el.leaf) {
-					const parent = self.parents.length && self.parents[0];
-					active = parent && parent.node.type.name == el.name;
+					active = self.parents?.[0]?.node.type.name == el.name;
 				} else {
 					active = editor.utils.markActive(state.tr.selection, nodeType);
 				}

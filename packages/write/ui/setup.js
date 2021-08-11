@@ -44,8 +44,7 @@ Pageboard.adopt = function(win, readState) {
 			writeState.save();
 
 			Pageboard.hrefs = readState.scope.$hrefs || {};
-			const editor = Pageboard.editor;
-			if (editor && editor.closed) return;
+			if (Pageboard.editor?.closed) return;
 			if (!Pageboard.modeControl) {
 				Pageboard.modeControl = new Pageboard.Controls.Mode({
 					root: { defaultView: win },
@@ -175,7 +174,7 @@ Pageboard.Editor = function Editor(win, state) {
 		scope: state.scope,
 		plugins: [{
 			filterTransaction: function(tr) {
-				if (tr && tr.docChanged && editor) editor.docChanged = true;
+				if (tr?.docChanged && editor) editor.docChanged = true;
 				return true;
 			},
 			view: function() {

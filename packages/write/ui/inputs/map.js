@@ -8,7 +8,7 @@ class HTMLInputMap extends VirtualHTMLElement {
 	}
 	get value() {
 		let obj;
-		if (this._proxy && this._proxy.value) try {
+		if (this._proxy?.value) try {
 			obj = JSON.parse(this._proxy.value);
 		} catch(ex) {
 			console.error(ex);

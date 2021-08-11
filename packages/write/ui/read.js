@@ -9,8 +9,7 @@ Page.setup(function(state) {
 Page.patch(function(state) {
 	const it = window.parent.Pageboard;
 	state.push = function(url, opts) {
-		const active = it.editor && !it.editor.closed;
-		if (active) return Promise.resolve();
+		if (!it.editor?.closed) return Promise.resolve();
 		const obj = typeof url == "string" ? Page.parse(url) : url;
 		if (!obj.query) obj.query = {};
 		obj.query.develop = this.query.develop;

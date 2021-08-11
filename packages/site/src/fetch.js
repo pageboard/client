@@ -41,8 +41,8 @@ module.exports = function(method, url, data) {
 			return res.json().then(function(obj) {
 				obj.status = res.status;
 				let text;
-				if (obj.item && obj.item.type == "error") {
-					text = obj.item.data && obj.item.data.message || "";
+				if (obj.item?.type == "error") {
+					text = obj.item.data?.message ?? "";
 				}
 				obj.statusText = text || res.statusText;
 				obj.locked = (res.headers.get('X-Upcache-Lock') || "").split(', ').shift() || null;

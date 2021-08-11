@@ -88,7 +88,7 @@ class HTMLElementBlogs extends VirtualHTMLElement {
 		this.blogs.forEach((item, i) => {
 			const node = this.children[i];
 			const image = node.querySelector('[block-content="preview"] > element-image');
-			item.preview = image && image.dataset.width ? {
+			item.preview = image.dataset?.width ? {
 				url: image.dataset.src,
 				width: image.dataset.width,
 				height: image.dataset.height

@@ -297,7 +297,7 @@ Pageboard.schemaHelpers.page = class PageHelper {
 	}
 
 	write() {
-		this.input.value = this.format(this.fakeInput.value, this.inputMap && this.inputMap.value);
+		this.input.value = this.format(this.fakeInput.value, this.inputMap?.value);
 	}
 
 	format(pathname, query) {

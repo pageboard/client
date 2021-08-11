@@ -1,13 +1,13 @@
 Pageboard.elements.develop = {
 	install(pscope) {
-		if (pscope.$element.fuse && pscope.$element.fuse.develop) return;
+		if (pscope.$element.fuse?.develop) return;
 		const fuse = pscope.$element.fuse;
 		pscope.$element.fuse = function(node, d, scope) {
 			const $el = scope.$element;
 			let scripts = [];
 			let stylesheets = [];
 			const meta = scope.$meta;
-			if (meta && meta.writes) {
+			if (meta?.writes) {
 				scripts = meta.writes.scripts;
 				stylesheets = meta.writes.stylesheets;
 			}

@@ -77,7 +77,7 @@ class VirtualHTMLElement extends HTMLElement {
 				},
 				close(state) {
 					if (typeof this.reveal == "function" && !this.currentSrc) {
-						if (state.ui.observer) state.ui.observer.unobserve(this);
+						state.ui.observer?.unobserve(this);
 					}
 				}
 			});

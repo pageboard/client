@@ -57,7 +57,7 @@ class HTMLElementQueryTags extends VirtualHTMLElement {
 			let txt = label.innerText;
 			let prefix = '';
 			const group = field.closest('.grouped.fields');
-			if (group && group.firstElementChild.matches('label')) {
+			if (group?.firstElementChild.matches('label')) {
 				prefix = group.firstElementChild.textContent + ' ';
 			}
 			let suffix = '';

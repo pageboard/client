@@ -39,11 +39,11 @@ module.exports = class FocusPlugin {
 		let custom = false;
 		if (!e.ctrlKey) {
 			let dom = e.target;
-			if (dom.pmViewDesc && dom.pmViewDesc.node && dom.pmViewDesc.node.isLeaf) {
+			if (dom.pmViewDesc?.node?.isLeaf) {
 				custom = true; // prevents falling on the right side of the leaf node
 			} else if (dom.children.length == 1 && dom.firstElementChild.matches('pagecut-placeholder')) {
 				custom = true;
-			} else while ((!dom.pmViewDesc || dom.pmViewDesc.node && dom.pmViewDesc.node.type.spec.typeName == "const") && !dom._pcAttrs && !dom.hasAttribute('block-content') && !dom.hasAttribute('block-type')) {
+			} else while ((!dom.pmViewDesc || dom.pmViewDesc.node?.type.spec.typeName == "const") && !dom._pcAttrs && !dom.hasAttribute('block-content') && !dom.hasAttribute('block-type')) {
 				dom = dom.closest('[block-type]');
 				custom = true;
 			}
@@ -97,7 +97,7 @@ module.exports = class FocusPlugin {
 		const parents = this.editor.utils.selectionParents(tr, sel);
 		const firstParent = parents.length && parents[0];
 		const root = firstParent.root;
-		const rootPos = root && root.level && root.rpos.before(root.level);
+		const rootPos = root?.level && root.rpos.before(root.level);
 
 		const me = this;
 

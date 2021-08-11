@@ -29,7 +29,7 @@ class HTMLElementMailImage extends HTMLImageElement {
 			return;
 		}
 		let loc = Page.parse(this.options.src);
-		const meta = state.scope.$hrefs && state.scope.$hrefs[loc.pathname] || {};
+		const meta = state.scope.$hrefs?.[loc.pathname] ?? {};
 		if (!meta || !meta.width || !meta.height) return;
 		if (meta.mime == "image/svg+xml") loc.query.format = 'png';
 

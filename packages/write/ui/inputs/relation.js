@@ -21,12 +21,11 @@ Pageboard.schemaFilters.relation = class RelationFilter {
 		} else {
 			path.splice(-1, 1, 'type');
 			type = path.reduce(function (obj, name) {
-				return obj && obj[name] || null;
+				return obj?.[name];
 			}, block.data);
 			if (!type) return;
 			el = Pageboard.editor.elements[type];
 		}
-		const parents = el && el.parents || { type: "null" };
-		return Object.assign({}, schema, parents);
+		return Object.assign({}, schema, el?.parents ?? { type: "null" });
 	}
 };

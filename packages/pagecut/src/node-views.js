@@ -10,7 +10,7 @@ const differ = new DiffDOM({
 
 const innerDiff = new DiffDOM({
 	filterOuterDiff(a, b, diffs) {
-		if (a.attributes && a.attributes['block-content']) {
+		if (a.attributes?.['block-content']) {
 			a.innerDone = true;
 		}
 	},
@@ -107,8 +107,7 @@ exports.RootNodeView = class RootNodeView {
 				sameData = view.utils.equal(oldBlock.expr || {}, block.expr || {});
 			}
 		}
-		const sameFocus =
-			(oldBlock && oldBlock.focused || false) == (node.attrs.focused || false);
+		const sameFocus = Boolean(oldBlock?.focused) == Boolean(node.attrs.focused);
 
 		if (!sameData || !sameFocus) {
 			this.oldBlock = view.blocks.copy(block);
@@ -118,7 +117,7 @@ exports.RootNodeView = class RootNodeView {
 			else delete block.focused;
 
 			let dom = view.render(block, { type: node.attrs.type, merge: false });
-			if (dom && dom.nodeType == Node.DOCUMENT_FRAGMENT_NODE && dom.children.length == 1) {
+			if (dom?.nodeType == Node.DOCUMENT_FRAGMENT_NODE && dom?.children.length == 1) {
 				dom = dom.children[0];
 			}
 			const tr = view.state.tr;
@@ -374,8 +373,8 @@ function mutateNodeView(tr, pos, pmNode, obj, nobj) {
 				// before all rootNodeView children have been updated with *old* state
 				pmChild.attrs = newAttrs; // so we must change pmNode right now !
 				if (objChild.children.length) {
-					const domChild = obj.contentDOM && obj.contentDOM.children[i];
-					const desc = domChild && domChild.pmViewDesc || {};
+					const domChild = obj.contentDOM?.children[i];
+					const desc = domChild?.pmViewDesc ?? {};
 					mutateNodeView(tr, curpos, pmChild, desc, objChild);
 				}
 				curpos += pmChild.nodeSize;
@@ -575,9 +574,7 @@ function flagDom(elt, dom, iterate, parent) {
 		obj.contentDOM = contentDOM;
 	}
 
-	if (iterate && obj.type) {
-		iterate(obj);
-	}
+	if (obj.type) iterate?.(obj);
 	return obj;
 }
 
@@ -602,7 +599,7 @@ function findContent(elt, dom, type) {
 		if (!list.length) return;
 		node = list.ancestor();
 	}
-	if (node && node.nodeName == "TEMPLATE" && node.content.childNodes.length && node.childNodes.length == 0) {
+	if (node?.nodeName == "TEMPLATE" && node?.content.childNodes.length && node?.childNodes.length == 0) {
 		node.appendChild(node.content);
 	}
 	return node;
@@ -617,7 +614,7 @@ function setupView(me, node) {
 	}
 	me.contentName = node.type.spec.contentName;
 	const def = me.element.contents.find(me.contentName);
-	me.virtualContent = def && def.virtual;
+	me.virtualContent = def?.virtual;
 
 	if (!me.contentDOM || me.contentDOM == me.dom) return;
 	if (['span'].indexOf(me.contentDOM.nodeName.toLowerCase()) < 0) return;

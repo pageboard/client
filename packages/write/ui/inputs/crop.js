@@ -11,7 +11,7 @@ Pageboard.schemaHelpers.crop = class Crop {
 			urlProp = Object.keys(parentProp).find((key) => {
 				const pp = parentProp[key].$helper;
 				if (!pp) return;
-				if (pp.name == "href" && pp.filter && (pp.filter.type || []).includes('image')) {
+				if (pp.name == "href" && (pp.filter?.type ?? []).includes('image')) {
 					return true;
 				}
 			});

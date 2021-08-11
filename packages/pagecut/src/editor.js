@@ -21,7 +21,7 @@ const Utils = require("./utils");
 const Specs = require("./specs");
 const BlocksEdit = require('./blocks-edit');
 const SetDocAttr = require("./SetDocAttr");
-const Viewer = global.Pagecut && global.Pagecut.Viewer || require("./viewer");
+const Viewer = global.Pagecut?.Viewer ?? require("./viewer");
 Viewer.Blocks = BlocksEdit;
 
 Transform.Transform.prototype.docAttr = function(key, value) {
@@ -108,7 +108,7 @@ class Editor extends View.EditorView {
 		});
 		clipboardSerializer.serializeFragment = (function(meth) {
 			return function(frag, opts, top) {
-				const tmpl = top && top.nodeName == "TEMPLATE";
+				const tmpl = top?.nodeName == "TEMPLATE";
 				const ret = meth.call(this, frag, opts, tmpl ? top.content : top);
 				if (tmpl) return top;
 				else return ret;
@@ -151,7 +151,7 @@ class Editor extends View.EditorView {
 					}.bind(plugin)
 				};
 			}
-			if (plugin.key && typeof plugin.key == "string") {
+			if (typeof plugin?.key == "string") {
 				plugin.key = pluginKeys[plugin.key] = new State.PluginKey(plugin.key);
 			}
 			return new State.Plugin(plugin);

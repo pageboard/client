@@ -93,7 +93,7 @@ class HTMLElementImage extends VirtualHTMLElement {
 		this.classList.remove('error', 'loading');
 		if (!this.options.src) return;
 		const loc = Page.parse(this.options.src);
-		const meta = state.scope.$hrefs && state.scope.$hrefs[loc.pathname] || {};
+		const meta = state.scope.$hrefs?.[loc.pathname] ?? {};
 		if (!meta || !meta.width || !meta.height) return;
 		this.dataset.width = meta.width;
 		this.dataset.height = meta.height;

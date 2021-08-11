@@ -372,7 +372,7 @@ Pageboard.schemaHelpers.href = class Href {
 			input.value = null;
 			input.click();
 		}).then(function (obj) {
-			const files = Array.isArray(obj) ? obj : (obj && obj.items || []);
+			const files = Array.isArray(obj) ? obj : obj?.items ?? [];
 			let p = Promise.resolve();
 			files.forEach(function (file) {
 				p = p.then(function () {

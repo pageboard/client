@@ -99,7 +99,7 @@ module.exports = class Blocks extends BlocksView {
 			throw new Error("A virtual block must be standalone");
 		}
 
-		if (ancestor && ancestor.blocks && parent.id && parent.id != ancestor.id) {
+		if (ancestor?.blocks && parent.id && parent.id != ancestor.id) {
 			ancestor.blocks[parent.id] = parent;
 		}
 
@@ -205,7 +205,7 @@ module.exports = class Blocks extends BlocksView {
 				elt.contents.set(block, def.id, dom);
 			} else {
 				const node = dom.querySelector(`[block-content="${def.id}"]`);
-				if (node && node.closest('[block-id]') == dom) {
+				if (node?.closest('[block-id]') == dom) {
 					elt.contents.set(block, def.id, node);
 				} else {
 					console.error(`block.content[${def.id}] not found`, block, dom);

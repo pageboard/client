@@ -77,7 +77,7 @@ Page.setup(function navigate(state) {
 	Page.connect({
 		handleClick: (e, state) => {
 			const a = e.target.closest('a');
-			const href = a && a.getAttribute('href');
+			const href = a?.getAttribute('href');
 			if (!href || e.defaultPrevented || a.target) return;
 			e.preventDefault();
 			state.push(href);

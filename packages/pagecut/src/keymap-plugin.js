@@ -29,7 +29,7 @@ function breakCommand(state, dispatch, view) {
 	const parent = sel.$from.parent;
 	const isRoot = parent.type.spec.typeName == "root";
 	let handled = false;
-	if (bef && bef.type.name == "hard_break" && isRoot && parent.isTextblock) {
+	if (bef?.type.name == "hard_break" && isRoot && parent.isTextblock) {
 		tr.delete(sel.$from.pos - bef.nodeSize, sel.$from.pos).scrollIntoView();
 		// ok let's handle the split ourselves
 		const elt = view.element(parent.type.name);
@@ -81,7 +81,7 @@ function deleteCommand(back, state, dispatch, view) {
 		const $to = sel.$to;
 		if ($to.parentOffset == $to.parent.nodeSize - 2) {
 			const nextNode = $to.doc.resolve($to.after()).nodeAfter;
-			if (nextNode && nextNode.isTextblock) {
+			if (nextNode?.isTextblock) {
 				if (dispatch) {
 					dispatch(tr.join(sel.to + 1));
 				}

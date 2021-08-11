@@ -19,7 +19,7 @@ exports.define = function define(viewer, elt, schema, nodeViews) {
 		merge: false,
 		genId: false
 	});
-	if (dom && dom.nodeType == Node.DOCUMENT_FRAGMENT_NODE && dom.children.length == 1) {
+	if (dom?.nodeType == Node.DOCUMENT_FRAGMENT_NODE && dom?.children.length == 1) {
 		dom = dom.children[0];
 	}
 	if (!dom || dom.nodeType != Node.ELEMENT_NODE) {
@@ -70,7 +70,7 @@ exports.define = function define(viewer, elt, schema, nodeViews) {
 		} else {
 			throw new Error("Missing type in flagDom iterator", type, obj);
 		}
-		if (obj.children && obj.children.length) {
+		if (obj?.children.length) {
 			// this type of node has content that is wrap or container type nodes
 			spec.wrapper = true;
 			spec.content = obj.children.map(function (child) {
@@ -101,7 +101,7 @@ exports.define = function define(viewer, elt, schema, nodeViews) {
 			obj.name = `${elt.name}_${type}_${spec.contentName || index++}`;
 		}
 
-		const parseTag = spec.parseDOM && spec.parseDOM[0].tag;
+		const parseTag = spec.parseDOM?.[0].tag;
 		if (parseTag) {
 			let parseTagKey = spec.typeName == "root" ? parseTag : `${elt.name} ${parseTag}`;
 			if (elt.context) parseTagKey += " " + elt.context;
@@ -203,11 +203,8 @@ function createRootSpec(elt, obj, viewer) {
 				Object.keys(elt.properties).forEach(function(key) {
 					const prop = elt.properties[key];
 					const attr = key.replace(/([A-Z])/g, (g) => `-${g[0].toLowerCase()}`);
-					let val = dom.getAttribute(attr);
-					if (val == null) {
-						val = dom.dataset && dom.dataset[key] || null;
-						if (val == null) return;
-					}
+					let val = dom.getAttribute(attr) ?? dom.dataset?.[key];
+					if (val == null) return;
 					if (prop.type == "integer") {
 						val = parseInt(val);
 						if (!Number.isNaN(val)) dataObj[key] = val;
@@ -291,7 +288,7 @@ function createRootSpec(elt, obj, viewer) {
 		parseDOM: [parseRule],
 		toDOM: function(node) {
 			let id = node.attrs.id;
-			if (!id && node.marks && node.marks[0] && !elt.contents.leaf) {
+			if (!id && node.marks?.[0] && !elt.contents.leaf) {
 				id = node.marks[0].attrs.id;
 				// eslint-disable-next-line no-console
 				console.warn("Probably unsupported case of id from in node.marks", elt.inline, node);
@@ -303,7 +300,7 @@ function createRootSpec(elt, obj, viewer) {
 			else block.focused = node.attrs.focused;
 
 			let dom = viewer.render(block, {type: node.attrs.type, merge: false});
-			if (dom && dom.nodeType == Node.DOCUMENT_FRAGMENT_NODE && dom.children.length == 1) {
+			if (dom?.nodeType == Node.DOCUMENT_FRAGMENT_NODE && dom?.children.length == 1) {
 				dom = dom.children[0];
 			}
 			if (!dom) {
@@ -479,7 +476,7 @@ function specAttrs(atts) {
 	for (const k in atts) {
 		val = atts[k];
 		obj[k] = {};
-		obj[k].default = val && val.default || val;
+		obj[k].default = val?.default ?? val;
 	}
 	return obj;
 }
@@ -490,7 +487,7 @@ function domSelector(dom) {
 	let sel = dom.nodeName.toLowerCase();
 	let cn = dom.className;
 	// might be SVGAnimatedString
-	if (cn && cn.baseVal != null) cn = cn.baseVal;
+	if (cn?.baseVal != null) cn = cn.baseVal;
 	if (cn) {
 		sel += cn.split(' ').filter(function(str) {
 			return Boolean(str);

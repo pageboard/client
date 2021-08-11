@@ -6,7 +6,7 @@ const MixinMedia = {
 	patch(state) {
 		this.classList.remove('error', 'loading');
 		const loc = Page.parse(this.options.src);
-		const meta = state.scope.$hrefs && state.scope.$hrefs[loc.pathname] || {};
+		const meta = state.scope.$hrefs?.[loc.pathname] ?? {};
 		if (!meta || !meta.width || !meta.height) return;
 		this.width = meta.width;
 		this.height = meta.height;

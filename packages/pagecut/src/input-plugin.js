@@ -23,7 +23,7 @@ module.exports = class InputPlugin {
 		if (!parents.length) return true;
 		const parent = parents[0];
 		const root = parent.container || parent.root;
-		if (tr.selection.node && tr.selection.node.isTextblock) {
+		if (tr.selection.node?.isTextblock) {
 			// change selection to be inside that node
 			view.dispatch(
 				tr.setSelection(
@@ -32,7 +32,7 @@ module.exports = class InputPlugin {
 			);
 			return false;
 		}
-		if (root && root.node && (root.node.isTextblock || root.node.type.name == "_") || parent.inline) {
+		if (root.node?.isTextblock || root.node?.type.name == "_" || parent.inline) {
 			// it should be all right then
 			return false;
 		}
@@ -67,7 +67,7 @@ module.exports = class InputPlugin {
 		if (str instanceof Model.Slice) {
 			return str;
 		}
-		const type = $pos.parent && $pos.parent.type.name || '';
+		const type = $pos.parent?.type.name ?? '';
 		let dom;
 		if (type.startsWith('svg')) {
 			dom = (new DOMParser()).parseFromString(str, "image/svg+xml");

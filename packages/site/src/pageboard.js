@@ -1,4 +1,4 @@
-exports.elements = window.Pageboard && window.Pageboard.elements || {
+exports.elements = window.Pageboard?.elements ?? {
 	error: {
 		scripts: [],
 		stylesheets: [],
@@ -16,7 +16,7 @@ exports.elements = window.Pageboard && window.Pageboard.elements || {
 	}
 };
 require('./polyfills');
-exports.cache = window.Pageboard && window.Pageboard.cache || {};
+exports.cache = window.Pageboard?.cache ?? {};
 exports.debounce = require('debounce');
 exports.fetch = require('./fetch');
 exports.load = require('./load');
@@ -35,7 +35,7 @@ function initState(res, state) {
 	if (res.hrefs) Object.assign(state.data.$hrefs, res.hrefs);
 	scope.$hrefs = state.data.$hrefs; // backward compat FIXME get rid of this, data.$hrefs is good
 
-	if (res.meta && res.meta.group == "page") {
+	if (res.meta?.group == "page") {
 		["grants", "links", "site", "locked", "granted"].forEach(function(k) {
 			if (res[k] !== undefined) scope[`$${k}`] = res[k];
 		});

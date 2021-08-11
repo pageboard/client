@@ -10,7 +10,7 @@ class Semafor {
 				query[key] = null;
 			} else {
 				const fieldset = elem.closest('fieldset');
-				if (fieldset && fieldset.disabled) continue;
+				if (fieldset?.disabled) continue;
 			}
 			let old = query[key];
 			let val;
@@ -212,7 +212,7 @@ class Semafor {
 	static flatten(tree, obj, schema) {
 		if (!tree) return tree;
 		if (!obj) obj = {};
-		const props = schema && schema.properties || this.stubSchema(tree);
+		const props = schema?.properties ?? this.stubSchema(tree);
 		if (schema === undefined && props) schema = { properties: props };
 		Object.entries(props).forEach(function ([key, field]) {
 			let val = tree[key];
@@ -234,14 +234,14 @@ class Semafor {
 					}
 				}
 				if (schema !== undefined) {
-					if (field && field.type == "array") {
+					if (field?.type == "array") {
 						let allStrings = false;
-						if (field.items && field.items.anyOf) {
+						if (field.items?.anyOf) {
 							allStrings = field.items.anyOf.every(function (item) {
 								return item.type == "string";
 							});
 						}
-						if (field.items && field.items.type == "string") {
+						if (field.items?.type == "string") {
 							allStrings = true;
 						}
 						if (allStrings) {
@@ -257,7 +257,7 @@ class Semafor {
 							obj[`${key}.${k}`] = kval;
 						});
 						return;
-					} else if (!field || !field.properties) {
+					} else if (!field?.properties) {
 						obj[key] = JSON.stringify(val);
 						return;
 					}

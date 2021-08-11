@@ -24,8 +24,7 @@ Pageboard.schemaHelpers.pageTitle = class PageTitle {
 	change() {
 		if (!this.tracking) return;
 		const node = Pageboard.editor.blocks.domQuery(this.block.id, { focused: true });
-		const parentNode = node && node.parentNode.closest('[block-id]');
-		const parentUrl = parentNode && parentNode.dataset.url || '';
+		const parentUrl = node?.parentNode.closest('[block-id]')?.dataset.url ?? '';
 		const url = this.block.data.url || (parentUrl + '/');
 		const val = this.input.value;
 		const slug = Pageboard.slug(val);

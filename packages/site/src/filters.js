@@ -130,7 +130,7 @@ exports.schema = function (val, what, spath) {
 	if (val === undefined) return;
 
 	const path = what.scope.path;
-	let data = (path[0] && path[0].startsWith('$')) ? what.scope.data : what.data;
+	let data = path[0]?.startsWith('$') ? what.scope.data : what.data;
 	const blocks = [];
 	for (let i = 0; i < path.length; i++) {
 		if (!data) break;
@@ -192,7 +192,7 @@ exports.autolink = function (val, what) {
 	} else if (val) {
 		const href = val.split('?')[0];
 		const meta = (hrefs || {})[href];
-		if (meta && meta.mime && meta.mime.startsWith("text/html") == false) {
+		if (!meta?.mime?.startsWith("text/html")) {
 			a.target = "_blank";
 		}
 	}
@@ -236,8 +236,8 @@ exports.query = function (query, what) {
 		query
 	}, what).substring(1);
 	const nextFilter = what.expr.filters[what.expr.filter];
-	if (nextFilter && nextFilter.name == "enc") {
-		if (str && str.startsWith('?')) return str.slice(1);
+	if (nextFilter?.name == "enc") {
+		if (str?.startsWith('?')) return str.slice(1);
 	}
 	return str;
 };
@@ -246,7 +246,7 @@ exports.urltpl = function (obj, what, pName = 'pathname', qName = 'query') {
 	const pathname = obj[pName];
 	const query = obj[qName];
 	if (pathname == null && query == null) return null;
-	if (pathname && pathname.fuse()) return pathname;
+	if (pathname?.fuse()) return pathname;
 	const url = Page.parse(pathname || what.scope.data.$loc.pathname);
 	Object.assign(url.query, query || {});
 	const fakes = [];

@@ -37,8 +37,8 @@ class FormBlock {
 	}
 	static pruneObj(obj, schema) {
 		const entries = Object.entries(obj).map(([key, val]) => {
-			const prop = schema.properties && schema.properties[key] || null;
-			if (prop && prop.type == "object") {
+			const prop = schema.properties?.[key];
+			if (prop?.type == "object") {
 				if (val != null) val = this.pruneObj(val, prop);
 				return [key, val];
 			} else if (val == null || val === "" || typeof val == "number" && Number.isNaN(val)) {
@@ -174,7 +174,7 @@ class FormBlock {
 			return;
 		}
 		let inst = this.helpers[key];
-		if (inst && inst.destroy) inst.destroy();
+		inst?.destroy?.();
 		inst = this.helpers[key] = new Helper(node.querySelector(`[name="${key}"]`), opts, prop, parentProp);
 		if (inst.init) prop = inst.init(this.block, prop);
 	}
@@ -215,7 +215,7 @@ class FormBlock {
 			if (!inst) {
 				inst = this.filters[key] = new Filter(key, opts, prop);
 			}
-			prop = inst.update && inst.update(this.block, prop) || prop;
+			prop = inst.update?.(this.block, prop) || prop;
 		}
 		if (this.mode == "expr") {
 			prop = FormBlock.propToMeta(prop);
@@ -225,7 +225,7 @@ class FormBlock {
 
 	handleEvent(e) {
 		if (!this.block || this.ignoreEvents || !this.form) return;
-		if (e && e.target) {
+		if (e?.target) {
 			if (!e.target.matches('.nullable') && !e.target.name || e.target.name.startsWith('$')) return;
 			if (e.type == "input" && ["checkbox", "radio", "select"].includes(e.target.type)) return; // change events only
 		}
@@ -324,8 +324,8 @@ Pageboard.Controls.Form = class Form {
 		this.selection = sel;
 		const parent = parents[0];
 		this.parents = parents;
-		const showBlocks = sel.jsonID == "all" || sel.node && (sel.node.isBlock || sel.node.isLeaf);
-		const showInlines = sel.jsonID != "all" && (!sel.node || sel.node && sel.node.isLeaf);
+		const showBlocks = sel.jsonID == "all" || sel.node?.isBlock || sel.node?.isLeaf;
+		const showInlines = sel.jsonID != "all" && (!sel.node || sel.node?.isLeaf);
 
 		const block = parent.block;
 		if (!block) {
@@ -352,7 +352,7 @@ Pageboard.Controls.Form = class Form {
 			if (!el) return false;
 			if (el.expressions && !i) return true;
 			const def = item.contentName && el.contents.find(item.contentName);
-			return def && def.expressions || false;
+			return def?.expressions || false;
 		});
 
 		if (!this.main) this.main = new FormBlock(editor, this.node, parent.type);
@@ -362,7 +362,7 @@ Pageboard.Controls.Form = class Form {
 		this.main.node.classList.toggle('hidden', !showBlocks);
 
 		let curInlines = this.inlines;
-		const inlines = (showInlines && parent.inline && parent.inline.blocks || []).map(function (block) {
+		const inlines = (showInlines && parent.inline?.blocks || []).map(function (block) {
 			let curForm;
 			curInlines = curInlines.filter(function (form) {
 				if (form.block.type == block.type) {
@@ -379,7 +379,7 @@ Pageboard.Controls.Form = class Form {
 				curForm.reset();
 			}
 			curForm.update(parents, block, this.mode);
-			canShowExpressions = canShowExpressions || curForm.el.properties;
+			canShowExpressions ||= curForm.el.properties;
 			return curForm;
 		}, this);
 		this.toggleExpr.classList.toggle('hidden', !showExpressions);
@@ -390,8 +390,8 @@ Pageboard.Controls.Form = class Form {
 		const lock = this.block.lock;
 		let unlocked = true;
 		if (lock) {
-			if (lock.read && lock.read.length) unlocked = false;
-			else if (lock.write && lock.write.length) unlocked = false;
+			if (lock.read?.length) unlocked = false;
+			else if (lock.write?.length) unlocked = false;
 		}
 		this.toggleLocks.firstElementChild.classList.toggle('lock', !unlocked);
 		this.toggleLocks.firstElementChild.classList.toggle('red', !unlocked);
@@ -403,7 +403,7 @@ Pageboard.Controls.Form = class Form {
 		});
 		this.inlines = inlines;
 
-		if (selection && selection.name) {
+		if (selection?.name) {
 			setTimeout(() => {
 				// give an instant for input mutations to propagate
 				const found = this.node.querySelector(`[name="${selection.name}"]`);
