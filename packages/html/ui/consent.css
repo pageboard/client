@@ -1,3 +1,15 @@
+header .form[block-type="consent_form"][data-transient="true"],
+footer .form[block-type="consent_form"][data-transient="true"] {
+	position:fixed;
+	width:100%;
+	z-index:10000;
+}
+header [block-type="consent_form"][data-transient="true"] {
+	top:0;
+}
+footer [block-type="consent_form"][data-transient="true"] {
+	bottom:0;
+}
 [block-type="consent_form"][data-transient="true"]:not(.visible) {
 	display:none;
 }
