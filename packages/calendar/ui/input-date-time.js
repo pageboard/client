@@ -1,4 +1,5 @@
 class HTMLElementInputDateTime extends VirtualHTMLElement {
+	#dt
 	static defaults = {
 		format: (str) => {
 			if (['date', 'time', 'datetime'].includes(str)) return str;
@@ -13,15 +14,15 @@ class HTMLElementInputDateTime extends VirtualHTMLElement {
 	}
 
 	set value(val) {
-		if (this._dt) this._dt.setTime(val);
+		if (this.#dt) this.#dt.setTime(val);
 		else this.querySelector('input').value = val;
 	}
 
 	handleClick(e, state) {
 		if (e.target.classList.contains('incr')) {
-			this._dt.step(1);
+			this.#dt.step(1);
 		} else if (e.target.classList.contains('decr')) {
-			this._dt.step(-1);
+			this.#dt.step(-1);
 		} else return;
 	}
 
@@ -43,7 +44,7 @@ class HTMLElementInputDateTime extends VirtualHTMLElement {
 
 		view.value = this.value;
 
-		this._dt = new window.DateTimeEntry(view, {
+		this.#dt = new window.DateTimeEntry(view, {
 			step: this.options.step || null,
 			locale: document.documentElement.lang || window.navigator.language,
 			format: this.formatFromOptions(),
@@ -55,13 +56,13 @@ class HTMLElementInputDateTime extends VirtualHTMLElement {
 	}
 
 	patch(state) {
-		if (!this._dt) return;
-		this._dt.setOptions({
+		if (!this.#dt) return;
+		this.#dt.setOptions({
 			format: this.formatFromOptions(),
 			useUTC: Boolean(this.options.timeZone),
 			step: this.options.step || null
 		});
-		this._dt.setTime(this.value);
+		this.#dt.setTime(this.value);
 	}
 
 	setDate(date) {
@@ -90,9 +91,9 @@ class HTMLElementInputDateTime extends VirtualHTMLElement {
 	}
 
 	close() {
-		if (this._dt) {
-			this._dt.destroy();
-			delete this._dt;
+		if (this.#dt) {
+			this.#dt.destroy();
+			this.#dt = null;
 		}
 	}
 }

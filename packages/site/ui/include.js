@@ -1,6 +1,7 @@
+
 class HTMLElementInclude extends VirtualHTMLElement {
 	patch(state) {
-		if (this._refreshing) return;
+		if (this.loading) return;
 		return this.fetch(state);
 	}
 	render(res, state) {

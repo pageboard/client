@@ -1,12 +1,14 @@
 class HTMLElementInputFile extends VirtualHTMLElement {
+	#xhr
+	#promise
 	captureClick(e, state) {
 		const input = this.querySelector('input[type="text"]');
 		if (!input) return;
 		if (input.value) {
 			e.preventDefault();
-			if (this._xhr) {
-				this._xhr.abort();
-				delete this._xhr;
+			if (this.#xhr) {
+				this.#xhr.abort();
+				this.#xhr = null;
 			}
 			input.value = '';
 			const file = this.querySelector('input[type="file"]');
@@ -27,12 +29,12 @@ class HTMLElementInputFile extends VirtualHTMLElement {
 	}
 
 	upload() {
-		if (this._promise) return this._promise;
+		if (this.#promise) return this.#promise;
 		const file = this.querySelector('input[type="file"]');
 		const input = this.querySelector('input[type="text"]');
 		if (!input || !file) throw new Error("Unitialized input-file");
 		if (!file.files.length) return Promise.resolve();
-		const self = this;
+
 		const field = this.closest('.field');
 		field.classList.remove('success', 'error');
 		const label = this.querySelector('.label');
@@ -41,13 +43,14 @@ class HTMLElementInputFile extends VirtualHTMLElement {
 		}
 		track(0);
 		field.classList.add('loading');
-		const p = new Promise(function (resolve, reject) {
+		const p = new Promise((resolve, reject) => {
+			const me = this;
 			function fail(err) {
 				field.classList.add('error');
 				field.classList.remove('loading');
-				delete self._xhr;
+				me.#xhr = null;
 				reject(err);
-				delete self._promise;
+				me.#promise = null;
 			}
 			function pass(obj) {
 				if (!obj.items || obj.items.length == 0) return fail(new Error("File rejected"));
@@ -55,9 +58,9 @@ class HTMLElementInputFile extends VirtualHTMLElement {
 				input.value = val;
 				field.classList.add('success');
 				field.classList.remove('loading');
-				delete self._xhr;
+				me.#xhr = null;
 				resolve();
-				delete self._promise;
+				me.#promise = null;
 			}
 			if (file.files.length == 0) return resolve(); // or reject ?
 
@@ -96,12 +99,12 @@ class HTMLElementInputFile extends VirtualHTMLElement {
 				xhr.open("POST", `/.api/upload/${file.id}`, true);
 				xhr.setRequestHeader('Accept', "application/json; q=1.0");
 				xhr.send(fd);
-				self._xhr = xhr;
+				this.#xhr = xhr;
 			} catch (err) {
 				fail(err);
 			}
-		}.bind(this));
-		this._promise = p;
+		});
+		this.#promise = p;
 		return p;
 	}
 }

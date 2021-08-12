@@ -1,5 +1,5 @@
 class HTMLElementSelect extends VirtualHTMLElement {
-	_observer
+	#observer
 
 	static defaults = {
 		placeholder: null,
@@ -10,37 +10,37 @@ class HTMLElementSelect extends VirtualHTMLElement {
 		required: false
 	};
 
-	_child(sel) {
+	#child(sel) {
 		return this.children.find(node => node.matches(sel));
 	}
-	get _menu() {
-		return this._child('.menu');
+	get #menu() {
+		return this.#child('.menu');
 	}
-	get _text() {
-		return this._child('.text');
+	get #text() {
+		return this.#child('.text');
 	}
-	get _select() {
-		return this._child('select');
+	get #select() {
+		return this.#child('select');
 	}
 
 	handleClick(e, state) {
 		const node = e.target;
 		const item = node.closest('element-select .item');
 		if (item) {
-			const opt = this._selectOption(item.dataset.value);
+			const opt = this.#selectOption(item.dataset.value);
 			if (opt) {
 				opt.selected = true;
 				opt.dispatchEvent(new Event('change', {
 					bubbles: true,
 					cancelable: true
 				}));
-				this._toggleMenu(false);
+				this.#toggleMenu(false);
 			}
 			return;
 		}
 		const label = node.closest('.label');
 		if (label) {
-			const opt = this._selectOption(label.dataset.value);
+			const opt = this.#selectOption(label.dataset.value);
 			if (opt) {
 				opt.selected = false;
 				opt.dispatchEvent(new Event('change', {
@@ -50,80 +50,80 @@ class HTMLElementSelect extends VirtualHTMLElement {
 			}
 			return;
 		}
-		this._toggleMenu();
+		this.#toggleMenu();
 	}
 	handleChange(e, state) {
 		const opt = e.target;
 		if (opt.selected) {
-			this._selectItem(opt.value);
+			this.#selectItem(opt.value);
 		} else {
-			this._deselectItem(opt.value);
+			this.#deselectItem(opt.value);
 		}
 	}
-	_toggleMenu(show) {
-		const style = this._menu.style;
+	#toggleMenu(show) {
+		const style = this.#menu.style;
 		if (show === undefined) show = !style.display;
 		style.display = show ? "block" : null;
 	}
-	_selectItem(val) {
-		const select = this._select;
-		const item = this._menuOption(val);
+	#selectItem(val) {
+		const select = this.#select;
+		const item = this.#menuOption(val);
 
 		if (this.options.multiple) {
-			if (this._child(`.label[data-value="${val}"]`) == null) {
-				this._setText("").insertAdjacentHTML(
+			if (this.#child(`.label[data-value="${val}"]`) == null) {
+				this.#setText("").insertAdjacentHTML(
 					'beforeBegin',
 					`<a class="ui label" data-value="${val}">${item.innerHTML}<i class="delete icon"></i></a>`
 				);
 			}
 		} else {
-			this._setText(item.innerText.trim());
+			this.#setText(item.innerText.trim());
 		}
 
 		const defaultOption = select.querySelector(`option[value=""]`);
 		if (defaultOption && val) defaultOption.selected = false;
 	}
-	_deselectItem(val) {
+	#deselectItem(val) {
 		if (this.options.multiple) {
-			const item = this._child(`.label[data-value="${val}"]`);
+			const item = this.#child(`.label[data-value="${val}"]`);
 			if (item) item.remove();
 		}
-		if (!this._select.value) {
-			this._setPlaceholder();
+		if (!this.#select.value) {
+			this.#setPlaceholder();
 		}
 	}
-	_setText(str) {
-		const text = this._text;
+	#setText(str) {
+		const text = this.#text;
 		text.textContent = str;
 		text.classList.remove('default');
 		return text;
 	}
-	_setPlaceholder(str) {
-		const text = this._text;
+	#setPlaceholder(str) {
+		const text = this.#text;
 		text.textContent = str || this.options.placeholder;
 		text.classList.add('default');
 
-		const defaultOption = this._select.querySelector('option[value=""]');
+		const defaultOption = this.#select.querySelector('option[value=""]');
 		if (defaultOption) defaultOption.innerHTML = str || "-";
 	}
 
-	_menuOption(val) {
+	#menuOption(val) {
 		return this.querySelector(`element-select-option[data-value="${val}"]`);
 	}
-	_selectOption(val) {
+	#selectOption(val) {
 		return this.querySelector(`select > option[value="${val}"]`);
 	}
 
 	close() {
-		if (this._observer) {
-			this._observer.disconnect();
-			this._observer = null;
+		if (this.#observer) {
+			this.#observer.disconnect();
+			this.#observer = null;
 		}
 	}
-	_fillSelect() {
-		const select = this._select;
+	#fillSelect() {
+		const select = this.#select;
 		if (!select) return;
-		const menu = this._menu;
+		const menu = this.#menu;
 		select.innerHTML = '<option selected value="">-</option>';
 		menu.children.forEach(item => select.insertAdjacentHTML(
 			'beforeEnd',
@@ -131,8 +131,8 @@ class HTMLElementSelect extends VirtualHTMLElement {
 		));
 	}
 	setup(state) {
-		this._observer = new MutationObserver((mutations) => this._fillSelect());
-		this._observer.observe(this._menu, {
+		this.#observer = new MutationObserver((mutations) => this.#fillSelect());
+		this.#observer.observe(this.#menu, {
 			childList: true
 		});
 	}
@@ -145,7 +145,7 @@ class HTMLElementSelect extends VirtualHTMLElement {
 				'<i class="dropdown icon"></i><div class="text"></div><select></select>'
 			);
 		}
-		const select = this._select;
+		const select = this.#select;
 
 		select.disabled = this.options.disabled;
 		select.required = this.options.required;
@@ -154,7 +154,7 @@ class HTMLElementSelect extends VirtualHTMLElement {
 			this.querySelectorAll('.ui.label').forEach(node => node.remove());
 		}
 		select.name = this.options.name;
-		this._fillSelect();
+		this.#fillSelect();
 	}
 
 	patch(state) {
@@ -163,10 +163,10 @@ class HTMLElementSelect extends VirtualHTMLElement {
 
 		state.finish(() => {
 			// synchronize after form has filled select
-			this._select.children.forEach((opt) => {
+			this.#select.children.forEach((opt) => {
 				if (opt.value) {
-					if (opt.selected) this._selectItem(opt.value);
-					else this._deselectItem(opt.value);
+					if (opt.selected) this.#selectItem(opt.value);
+					else this.#deselectItem(opt.value);
 				}
 			});
 		});

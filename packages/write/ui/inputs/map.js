@@ -1,60 +1,65 @@
 class HTMLInputMap extends VirtualHTMLElement {
-	init() {
-		this._changed = this._changed.bind(this);
-		this._focused = this._focused.bind(this);
-	}
+	#proxy
+	#observer
+	#table
+	#selection
+
 	get name() {
 		return this.getAttribute('name') || '';
 	}
 	get value() {
 		let obj;
-		if (this._proxy?.value) try {
-			obj = JSON.parse(this._proxy.value);
+		if (this.#proxy?.value) try {
+			obj = JSON.parse(this.#proxy.value);
 		} catch(ex) {
 			console.error(ex);
 		}
 		return obj;
 	}
 	set value(obj) {
-		if (!this._proxy) return;
+		if (!this.#proxy) return;
 		const val = JSON.stringify(obj);
-		if (this._proxy.value == val) return;
-		this._proxy.value = val;
-		Pageboard.trigger(this._proxy, 'change');
+		if (this.#proxy.value == val) return;
+		this.#proxy.value = val;
+		Pageboard.trigger(this.#proxy, 'change');
 	}
 	connectedCallback() {
-		if (this._proxy) return;
-		this._proxy = this.appendChild(
+		if (this.#proxy) return;
+		this.#proxy = this.appendChild(
 			this.dom(`<input name="${this.name}" type="hidden" />`)
 		);
-		const renderer = Pageboard.debounce(this._render.bind(this), 10);
-		this._observer = new MutationObserver(function(mutations) {
+		const renderer = Pageboard.debounce(() => this.#render(), 10);
+		this.#observer = new MutationObserver(function(mutations) {
 			renderer();
 		});
-		this._observer.observe(this._proxy, {
+		this.#observer.observe(this.#proxy, {
 			attributes: true
 		});
-		this._table = this.appendChild(this.dom(`<table class="ui very compact celled small striped table">
+		this.#table = this.appendChild(this.dom(`<table class="ui very compact celled small striped table">
 			<tbody></tbody>
 		</table>`));
-		this._table.addEventListener('change', this._changed, false);
-		this._table.addEventListener('input', this._focused, false);
-		this._table.addEventListener('focus', this._focused, true);
-		this._render();
+		this.#table.addEventListener('change', this, false);
+		this.#table.addEventListener('input', this, false);
+		this.#table.addEventListener('focus', this, true);
+		this.#render();
 	}
 	disconnectedCallback() {
-		if (this._observer) {
-			this._observer.disconnect();
-			delete this._observer;
+		if (this.#observer) {
+			this.#observer.disconnect();
+			this.#observer = null;
 		}
-		delete this._proxy;
-		this._table.removeEventListener('input', this._focused, false);
-		this._table.removeEventListener('focus', this._focused, true);
-		this._table.removeEventListener('change', this._changed, false);
+		this.#proxy = null;
+		this.#table.removeEventListener('focus', this, true);
+		this.#table.removeEventListener('input', this, false);
+		this.#table.removeEventListener('change', this, false);
 	}
-	_render() {
+	handleEvent(e) {
+		if (e.type == "change") this.#changed(e);
+		else this.#focused(e);
+	}
+	#render() {
 		const obj = Pageboard.Semafor.flatten(this.value || {});
-		const body = this._table.querySelector('tbody');
+		const body = this.#table.querySelector('tbody');
 		body.textContent = '';
 		const name = this.name;
 		Object.keys(obj).concat([""]).forEach(function(key, i) {
@@ -68,34 +73,33 @@ class HTMLInputMap extends VirtualHTMLElement {
 				</tr>`));
 			}, this);
 		}, this);
-		this._restoreSel();
+		this.#restoreSel();
 	}
-	_focused(e) {
+	#focused(e) {
 		if (e.target.matches('input')) {
-			this._saveSel(e.target);
+			this.#saveSel(e.target);
 		}
 	}
-	_saveSel(node) {
-		this._selection = {
+	#saveSel(node) {
+		this.#selection = {
 			name: node.name,
 			start: node.selectionStart,
 			end: node.selectionEnd,
 			dir: node.selectionDirection
 		};
 	}
-	_restoreSel() {
-		const sel = this._selection;
+	#restoreSel() {
+		const sel = this.#selection;
 		if (!sel) return;
-		const node = this._table.querySelector(`[name="${sel.name}"]`);
-		if (!node) return;
-		node.focus();
-		if (node.setSelectionRange) node.setSelectionRange(sel.start, sel.end, sel.dir);
+		const node = this.#table.querySelector(`[name="${sel.name}"]`);
+		node?.focus();
+		node?.setSelectionRange?.(sel.start, sel.end, sel.dir);
 	}
-	_changed(e) {
+	#changed(e) {
 		const obj = {};
 		const removals = [];
 
-		this._table.querySelector('tbody').children.forEach(function(tr) {
+		this.#table.querySelector('tbody').children.forEach(function(tr) {
 			const key = tr.children[0].firstChild.value;
 			let val = obj[key];
 			const inputVal = tr.children[1].firstChild.value;

@@ -1,7 +1,10 @@
 class HTMLElementTemplate extends VirtualHTMLElement {
+	loading
+	#mode
+
 	patch(state) {
 		this.ownTpl.prerender();
-		if (this.isContentEditable || this._refreshing || this.closest('[block-content="template"]')) {
+		if (this.isContentEditable || this.loading || this.closest('[block-content="template"]')) {
 			return;
 		}
 		return this.fetch(state);
@@ -29,8 +32,10 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 				const loader = action
 					? Pageboard.fetch('get', action, $query)
 					: Promise.resolve();
-				this._refreshing = true;
-				if (action) this.classList.add('loading');
+				this.loading = true;
+				if (action) {
+					this.classList.add('loading');
+				}
 				return Pageboard.bundle(loader, state).then((res) => {
 					if (res) {
 						data.$response = res;
@@ -46,7 +51,7 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 			console.error("Error building", err);
 		}).then(() => {
 			this.classList.remove('loading');
-			this._refreshing = false;
+			this.loading = false;
 			if (data.$status == null) return;
 			const redirect = this.getRedirect(data.$status);
 			if (!redirect) {
