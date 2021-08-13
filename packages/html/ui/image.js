@@ -90,8 +90,11 @@ class HTMLElementImage extends VirtualHTMLElement {
 		}
 	}
 	patch(state) {
-		this.classList.remove('error', 'loading');
+		this.classList.remove('loading');
 		if (!this.options.src) return;
+		if (this.currentSrc != this.options.src) {
+			this.classList.remove('error');
+		}
 		const loc = Page.parse(this.options.src);
 		const meta = state.scope.$hrefs?.[loc.pathname] ?? {};
 		if (!meta || !meta.width || !meta.height) return;
