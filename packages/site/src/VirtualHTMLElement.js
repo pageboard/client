@@ -162,6 +162,8 @@ function nodeOptions(node, defaults, state, is) {
 			if (typeof val != "number") {
 				val = parseFloat(val);
 			}
+		} else if (Array.isArray(def)) {
+			if (!def.includes(val)) val = null;
 		}
 		if (val != null) opts[name] = val;
 	});
