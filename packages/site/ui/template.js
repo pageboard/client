@@ -1,6 +1,6 @@
 class HTMLElementTemplate extends VirtualHTMLElement {
-	loading
-	#mode
+	loading = false;
+	infinite = false;
 
 	patch(state) {
 		this.ownTpl.prerender();
@@ -33,9 +33,7 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 					? Pageboard.fetch('get', action, $query)
 					: Promise.resolve();
 				this.loading = true;
-				if (action) {
-					this.classList.add('loading');
-				}
+				if (action) this.classList.add('loading');
 				return Pageboard.bundle(loader, state).then((res) => {
 					if (res) {
 						data.$response = res;
@@ -147,7 +145,10 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 		scope.$pathname = state.pathname;
 		scope.$query = state.query;
 		scope.$referrer = state.referrer.pathname || state.pathname;
-		view.textContent = '';
+
+		if (!this.infinite) {
+			view.textContent = '';
+		}
 		const node = Pageboard.render(data, scope, el);
 
 		if (Object.keys(collector.missings).length) {
