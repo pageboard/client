@@ -182,7 +182,7 @@
 
 			const partIndex = this.#state.parts.findIndex(p => type ? p.type === type : p.type !== 'literal');
 
-			if (!~partIndex) return;
+			if (partIndex < 0) return;
 
 			const ss = this.#state.parts
 				.slice(0, partIndex)
@@ -369,7 +369,7 @@
 
 			let curIndex = this.#state.parts.findIndex(p => p.type === this.#state.type);
 
-			if (!~curIndex) {
+			if (curIndex < 0) {
 				curIndex = this.#state.parts.findIndex(p => p.type !== 'literal');
 			}
 
