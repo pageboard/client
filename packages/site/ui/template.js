@@ -148,6 +148,8 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 
 		if (!this.infinite) {
 			view.textContent = '';
+		} else {
+			this.infinite = false;
 		}
 		const node = Pageboard.render(data, scope, el);
 
