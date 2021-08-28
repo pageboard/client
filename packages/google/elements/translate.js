@@ -17,7 +17,7 @@ exports.google_translate = {
 		script: [
 			"https://translate.googleapis.com",
 			"https://translate.google.com",
-			"[csp.google_translate]"
+			"[$commons.csp.google_translate]"
 		],
 		style: ["https://translate.googleapis.com"],
 		img: ["https://translate.googleapis.com", "https://www.gstatic.com", "https://www.google.com"],

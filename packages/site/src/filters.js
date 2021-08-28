@@ -61,7 +61,7 @@ exports.csp = function ($elements, what) {
 		return csp[src].length > 0;
 	}).map(function (src) {
 		const key = src.indexOf('-') > 0 ? src : `${src}-src`;
-		return `${key} ${csp[src].join(' ')}`.trim();
+		return `${key} ${csp[src].join(' ')}`.trim().fuse({}, what.scope.data);
 	}).join('; ');
 };
 
