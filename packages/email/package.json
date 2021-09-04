@@ -34,12 +34,12 @@
     "inlineresources": "^1.0.1",
     "juice": "^7.0.0",
     "postinstall": "^0.7.0",
-    "postinstall-browserify": "^0.7.0"
+    "postinstall-bundle": "^0.7.0"
   },
   "prepare": {
     "inlineresources/dist/inlineresources.allinone.js": "copy lib/inlineresources.js",
     "foundation-emails/dist/foundation-emails.css": "copy lib/",
     "europa/dist/europa.js": "copy lib/",
-    "juice/client.js": "browserify --standalone=Juice lib/juice.js"
+    "juice/client.js": "bundle --name=Juice lib/juice.js"
   }
 }

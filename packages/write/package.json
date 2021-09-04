@@ -27,7 +27,7 @@
     "cropperjs": "^1.5.12",
     "duration-relativetimeformat": "^2.0.1",
     "fast-safe-stringify": "^2.0.8",
-    "postinstall-browserify": "^0.7.1",
+    "postinstall-bundle": "^0.7.0",
     "pretty-bytes": "^5.6.0",
     "prosemirror-dev-tools": "^3.1.0",
     "react": "^17.0.2",
@@ -42,11 +42,11 @@
     "cropperjs/dist/cropper.css": "copy lib/",
     "cropperjs/dist/cropper.js": "copy lib/",
     "speakingurl/lib/speakingurl.js": "copy lib/",
-    "@pageboard/pagecut/src/editor.js": "browserify --standalone=Pagecut lib/pagecut/",
-    "@pageboard/pagecut/src/menubar.js": "browserify --standalone=Pagecut.Menubar lib/pagecut/menu.js",
+    "@pageboard/pagecut/src/editor.js": "bundle --name=Pagecut lib/pagecut/",
+    "@pageboard/pagecut/src/menubar.js": "bundle --name=Pagecut.Menubar lib/pagecut/menu.js",
     "@pageboard/pagecut/src/*.css": "copy lib/pagecut/",
-    "prosemirror-dev-tools/dist/cjs/index.js": "browserify --standalone=ProseMirrorDevTools lib/prosemirror-dev-tools.js",
-    "./src/pageboard.js": "browserify --standalone=Pageboard.utils lib/"
+    "prosemirror-dev-tools/dist/cjs/index.js": "bundle --name=ProseMirrorDevTools lib/prosemirror-dev-tools.js",
+    "./src/pageboard.js": "bundle --name=Pageboard.utils lib/"
   },
   "pageboard": {
     "priority": -1,

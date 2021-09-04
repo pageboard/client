@@ -22,14 +22,14 @@
     "@ungap/custom-elements": "^1.0.0",
     "debounce": "^1.2.1",
     "matchdom": "^5.10.7",
-    "postinstall-browserify": "^0.7.1",
+    "postinstall-bundle": "^0.7.0",
     "postinstall-patch": "^0.7.1",
     "window-page": "^11.0.1"
   },
   "prepare": {
     "@ungap/custom-elements/index.js": "copy lib/custom-elements.js",
     "window-page/window-page.js": "copy lib/",
-    "./src/pageboard.js": "browserify --standalone=Pageboard lib/"
+    "./src/pageboard.js": "bundle --name=Pageboard lib/"
   },
   "pageboard": {
     "priority": -100,
