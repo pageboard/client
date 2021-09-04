@@ -106,6 +106,7 @@ function monkeyPatch(proto, meth, cb, after) {
 	Object.defineProperty(proto, meth, {
 		configurable: true,
 		enumerable: true,
+		writable: true,
 		value: (function(fn) {
 			return function(...args) {
 				let isP = false;
