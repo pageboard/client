@@ -24,7 +24,7 @@
     "matchdom": "^5.10.7",
     "postinstall-bundle": "^0.7.0",
     "postinstall-patch": "^0.7.1",
-    "window-page": "^11.0.1"
+    "window-page": "^12.0.0"
   },
   "prepare": {
     "@ungap/custom-elements/index.js": "copy lib/custom-elements.js",
