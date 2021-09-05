@@ -1,0 +1,3 @@
+a[is="element-pagination"].disabled {
+	display: none !important;
+}
