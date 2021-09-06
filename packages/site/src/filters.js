@@ -192,7 +192,7 @@ exports.autolink = function (val, what) {
 	} else if (val) {
 		const href = val.split('?')[0];
 		const meta = (hrefs || {})[href];
-		if (!meta?.mime?.startsWith("text/html")) {
+		if (meta?.mime && meta.mime.startsWith("text/html")) {
 			a.target = "_blank";
 		}
 	}
