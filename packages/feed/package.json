@@ -1,6 +1,6 @@
 {
   "name": "@pageboard/feed",
-  "version": "0.9.7",
+  "version": "0.10.0",
   "description": "",
   "main": "index.js",
   "scripts": {
