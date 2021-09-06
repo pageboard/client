@@ -22,8 +22,8 @@
     "@ungap/custom-elements": "^1.0.0",
     "debounce": "^1.2.1",
     "matchdom": "^5.10.7",
-    "postinstall-bundle": "^0.7.0",
-    "window-page": "^12.1.0"
+    "postinstall-bundle": "^0.7.2",
+    "window-page": "^12.1.3"
   },
   "prepare": {
     "@ungap/custom-elements/index.js": "copy lib/custom-elements.js",
