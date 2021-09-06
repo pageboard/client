@@ -1,4 +1,4 @@
-exports.Contents = class Contents {
+export default class Contents {
 	constructor(list) {
 		if (!list) list = [];
 		else if (typeof list == "string") list = [{ nodes: list }];
@@ -78,4 +78,4 @@ exports.Contents = class Contents {
 		if (block.virtual && Object.keys(copy).length == 0) return;
 		else return copy;
 	}
-};
+}

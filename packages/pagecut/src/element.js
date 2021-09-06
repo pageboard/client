@@ -1,5 +1,5 @@
-const { Contents } = require('./contents');
-module.exports = class Element {
+import Contents from './contents';
+export default class Element {
 	constructor(elt) {
 		Object.assign(this, elt);
 		if (!elt.contents || !elt.contents.list) {
@@ -24,5 +24,4 @@ module.exports = class Element {
 	get leaf() {
 		return this.contents.size == 0;
 	}
-};
-
+}

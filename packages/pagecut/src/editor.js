@@ -1,27 +1,29 @@
-const State = require("prosemirror-state");
-const Transform = require("prosemirror-transform");
-const View = require("prosemirror-view");
-const Model = require("prosemirror-model");
-const { keymap } = require("prosemirror-keymap");
-const Commands = require("prosemirror-commands");
-const Setup = require("prosemirror-example-setup");
-const { dropCursor } = require("prosemirror-dropcursor");
-const { gapCursor } = require("prosemirror-gapcursor");
-const History = require("prosemirror-history");
-const OrderedMap = require("orderedmap");
+import * as State from "prosemirror-state";
+import * as Transform from "prosemirror-transform";
+import * as View from "prosemirror-view";
+import * as Model from "prosemirror-model";
+import { keymap } from "prosemirror-keymap";
+import * as Commands from "prosemirror-commands";
+import * as Setup from "prosemirror-example-setup";
+import { dropCursor } from "prosemirror-dropcursor";
+import { gapCursor } from "prosemirror-gapcursor";
+import * as History from "prosemirror-history";
+import OrderedMap from "orderedmap";
 
-const baseSchema = require("prosemirror-schema-basic");
+import * as baseSchema from "prosemirror-schema-basic";
 
-const IdPlugin = require("./id-plugin");
-const FocusPlugin = require("./focus-plugin");
-const KeymapPlugin = require("./keymap-plugin");
-const InputPlugin = require("./input-plugin");
+import IdPlugin from "./id-plugin";
+import FocusPlugin from "./focus-plugin";
+import KeymapPlugin from "./keymap-plugin";
+import InputPlugin from "./input-plugin";
 
-const Utils = require("./utils");
-const Specs = require("./specs");
-const BlocksEdit = require('./blocks-edit');
-const SetDocAttr = require("./SetDocAttr");
-const Viewer = global.Pagecut?.Viewer ?? require("./viewer");
+import Utils from "./utils";
+import DefineSpecs from "./specs";
+import BlocksEdit from "./blocks-edit";
+import SetDocAttr from "./SetDocAttr";
+import EditorViewer from "./viewer";
+
+const Viewer = window.Pagecut?.Viewer ?? EditorViewer;
 Viewer.Blocks = BlocksEdit;
 
 Transform.Transform.prototype.docAttr = function(key, value) {
@@ -88,7 +90,7 @@ class Editor extends View.EditorView {
 			return (a.priority || 0) - (b.priority || 0);
 		});
 		for (let i = elemsList.length - 1; i >= 0; i--) {
-			Specs.define(viewer, elemsList[i], spec, nodeViews);
+			DefineSpecs(viewer, elemsList[i], spec, nodeViews);
 		}
 		const schema = new Model.Schema(spec);
 		const domParser = Model.DOMParser.fromSchema(schema);
@@ -224,7 +226,7 @@ class Editor extends View.EditorView {
 	);
 });
 
-module.exports = {
+export {
 	Editor, View, Model, State, Transform, Commands, keymap, Viewer
 };
 

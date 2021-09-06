@@ -1,6 +1,6 @@
-const Menu = require("prosemirror-menu");
+import * as Menu from "prosemirror-menu";
 
-module.exports = Menubar;
+export default Menubar;
 
 Menubar.Menu = Menu;
 

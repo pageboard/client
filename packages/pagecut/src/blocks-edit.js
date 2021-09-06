@@ -1,5 +1,5 @@
-const BlocksView = require('./blocks-view');
-module.exports = class Blocks extends BlocksView {
+import BlocksView from './blocks-view';
+export default class Blocks extends BlocksView {
 	constructor(view, opts) {
 		super(view, opts);
 	}
@@ -309,4 +309,4 @@ module.exports = class Blocks extends BlocksView {
 		this.view.focus();
 		this.view.utils.selectDom(node);
 	}
-};
+}

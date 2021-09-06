@@ -1,4 +1,4 @@
-const { DiffDOM } = require('diff-dom');
+import { DiffDOM } from 'diff-dom';
 
 const differ = new DiffDOM({
 	preDiffApply(info) {
@@ -21,11 +21,11 @@ const innerDiff = new DiffDOM({
 	}
 });
 
-Object.assign(exports, {
+export {
 	flagDom, findContent, tryJSON, domAttrsMap, saveDomAttrs, staticHtml
-});
+};
 
-exports.RootNodeView = class RootNodeView {
+export class RootNodeView {
 	constructor(node, view, getPos, decorations) {
 		this.view = view;
 		this.element = node.type.spec.element;
@@ -213,9 +213,9 @@ exports.RootNodeView = class RootNodeView {
 			return true;
 		}
 	}
-};
+}
 
-exports.WrapNodeView = class WrapNodeView {
+export class WrapNodeView {
 	constructor(node, view, getPos, decorations) {
 		this.view = view;
 		this.getPos = typeof getPos == "function" ? getPos : null;
@@ -239,9 +239,9 @@ exports.WrapNodeView = class WrapNodeView {
 		// always ignore mutation
 		if (record.type != "selection") return true;
 	}
-};
+}
 
-exports.ConstNodeView = class ConstNodeView {
+export class ConstNodeView {
 	constructor(node, view, getPos, decorations) {
 		this.view = view;
 		this.getPos = typeof getPos == "function" ? getPos : null;
@@ -271,9 +271,9 @@ exports.ConstNodeView = class ConstNodeView {
 		// always ignore mutation, even selection
 		return true;
 	}
-};
+}
 
-exports.ContainerNodeView = class ContainerNodeView {
+export class ContainerNodeView {
 	constructor(node, view, getPos, decorations) {
 		this.view = view;
 		this.element = node.type.spec.element;
@@ -324,7 +324,7 @@ exports.ContainerNodeView = class ContainerNodeView {
 			return true;
 		}
 	}
-};
+}
 
 /*
 Nota Bene: nodes between obj.dom and obj.contentDOM (included) can be modified

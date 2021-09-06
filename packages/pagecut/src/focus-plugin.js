@@ -1,6 +1,6 @@
-const { NodeSelection, TextSelection } = require("prosemirror-state");
+import { NodeSelection, TextSelection } from "prosemirror-state";
 
-module.exports = class FocusPlugin {
+export default class FocusPlugin {
 	constructor() {
 		this.click = this.click.bind(this);
 		this.appendTransaction = this.appendTransaction.bind(this);
@@ -159,4 +159,4 @@ module.exports = class FocusPlugin {
 		}
 		return tr.setMeta('focus', true);
 	}
-};
+}

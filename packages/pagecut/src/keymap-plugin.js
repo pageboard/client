@@ -1,7 +1,7 @@
-const { keymap } = require("prosemirror-keymap");
-const State = require("prosemirror-state");
+import { keymap } from "prosemirror-keymap";
+import { Selection } from "prosemirror-state";
 
-module.exports = keymap({
+export default keymap({
 	Enter: breakCommand,
 	Delete: deleteCommand.bind(this, false),
 	Backspace: deleteCommand.bind(this, true),
@@ -37,7 +37,7 @@ function breakCommand(state, dispatch, view) {
 			const from = view.utils.splitTr(tr, sel.to);
 			if (from != null) {
 				if (from != sel.from) {
-					tr.setSelection(State.Selection.near(tr.doc.resolve(from + 1)));
+					tr.setSelection(Selection.near(tr.doc.resolve(from + 1)));
 				}
 				handled = true;
 			}

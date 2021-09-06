@@ -1,4 +1,4 @@
-const str2dom = require('./str2dom');
+import str2dom from './str2dom';
 
 function htmlToFrag(str, {doc, ns}) {
 	try {
@@ -12,7 +12,7 @@ function htmlToFrag(str, {doc, ns}) {
 	}
 }
 
-module.exports = class BlocksView {
+export default class BlocksView {
 	constructor(view, opts) {
 		this.view = view;
 		this.initial = {};
@@ -187,4 +187,4 @@ module.exports = class BlocksView {
 		});
 		return fragment;
 	}
-};
+}

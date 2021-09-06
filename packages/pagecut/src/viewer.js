@@ -1,7 +1,7 @@
-const BlocksView = require('./blocks-view');
-const Element = require('./element');
+import BlocksView from './blocks-view';
+import Element from './element';
 
-module.exports = class Viewer {
+export default class Viewer {
 	static Blocks = BlocksView;
 
 	constructor(opts) {
@@ -92,4 +92,4 @@ module.exports = class Viewer {
 
 		return dom;
 	}
-};
+}

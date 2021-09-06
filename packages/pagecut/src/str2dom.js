@@ -1,4 +1,4 @@
-module.exports = parse;
+export default parse;
 
 let innerHTMLBug = false;
 let bugTestDiv;

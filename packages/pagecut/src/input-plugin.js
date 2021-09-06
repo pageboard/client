@@ -1,7 +1,7 @@
-const State = require("prosemirror-state");
-const Model = require("prosemirror-model");
+import { Selection } from "prosemirror-state";
+import { Slice } from "prosemirror-model";
 
-module.exports = class InputPlugin {
+export default class InputPlugin {
 	constructor() {
 		this.clipboardTextParser = this.clipboardTextParser.bind(this);
 		this.transformPasted = this.transformPasted.bind(this);
@@ -27,7 +27,7 @@ module.exports = class InputPlugin {
 			// change selection to be inside that node
 			view.dispatch(
 				tr.setSelection(
-					State.Selection.near(tr.selection.$from)
+					Selection.near(tr.selection.$from)
 				)
 			);
 			return false;
@@ -64,7 +64,7 @@ module.exports = class InputPlugin {
 	}
 
 	clipboardTextParser(str, $pos) {
-		if (str instanceof Model.Slice) {
+		if (str instanceof Slice) {
 			return str;
 		}
 		const type = $pos.parent?.type.name ?? '';
@@ -79,4 +79,4 @@ module.exports = class InputPlugin {
 			context: $pos
 		});
 	}
-};
+}

@@ -1,6 +1,6 @@
-const { State } = require("./editor");
+import { NodeSelection, TextSelection } from "prosemirror-state";
 
-module.exports = class IdPlugin {
+export default class IdPlugin {
 	constructor() {
 		this.count = 0;
 		setInterval(() => {
@@ -135,14 +135,12 @@ module.exports = class IdPlugin {
 		});
 		if (modified) {
 			if (sel.node) {
-				sel = State.NodeSelection.create(tr.doc, sel.from);
+				sel = NodeSelection.create(tr.doc, sel.from);
 			} else {
-				sel = State.TextSelection.create(tr.doc, sel.from, sel.to);
+				sel = TextSelection.create(tr.doc, sel.from, sel.to);
 			}
 			tr.setSelection(sel);
 		}
 		return modified;
 	}
-};
-
-
+}

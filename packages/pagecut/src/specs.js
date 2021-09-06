@@ -1,13 +1,13 @@
-const Model = require('prosemirror-model');
-const {
+import { Mark } from 'prosemirror-model';
+import {
 	RootNodeView,
 	ConstNodeView,
 	ContainerNodeView,
 	WrapNodeView,
 	flagDom, findContent, tryJSON, domAttrsMap, saveDomAttrs, staticHtml
-} = require('./node-views');
+} from './node-views';
 
-exports.define = function define(viewer, elt, schema, nodeViews) {
+export default function define(viewer, elt, schema, nodeViews) {
 	if (!viewer.tags) viewer.tags = {};
 	if (elt.name == "text") {
 		schema.nodes = schema.nodes.remove(elt.name);
@@ -136,7 +136,7 @@ exports.define = function define(viewer, elt, schema, nodeViews) {
 			nodeViews[obj.name] = spec.nodeView;
 		}
 	});
-};
+}
 
 function toDOMOutputSpec(obj, node, inplace) {
 	let out = 0;
@@ -156,7 +156,7 @@ function toDOMOutputSpec(obj, node, inplace) {
 			delete attrs['block-content'];
 		} else {
 			if (contentName) attrs['block-content'] = contentName;
-			if (!obj.contentDOM || node instanceof Model.Mark) {
+			if (!obj.contentDOM || node instanceof Mark) {
 				out = [dom.nodeName, attrs];
 			} else {
 				out = [dom.nodeName, attrs, out];

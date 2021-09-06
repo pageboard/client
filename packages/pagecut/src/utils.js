@@ -1,9 +1,9 @@
-const State = require("prosemirror-state");
-const Model = require("prosemirror-model");
-const Commands = require("prosemirror-commands");
-const DeepEqual = require("fast-deep-equal");
+import { AllSelection, Selection, TextSelection, NodeSelection } from "prosemirror-state";
+import { Slice, Fragment, ResolvedPos, Mark } from "prosemirror-model";
+import { toggleMark } from "prosemirror-commands";
+import DeepEqual from "fast-deep-equal";
 
-module.exports = class Utils {
+export default class Utils {
 	constructor(view) {
 		this.view = view;
 	}
@@ -21,13 +21,13 @@ module.exports = class Utils {
 		}
 		const state = this.view.state;
 		const tr = state.tr;
-		this.insertTr(tr, dom, new State.AllSelection(tr.doc));
+		this.insertTr(tr, dom, new AllSelection(tr.doc));
 		if (!tr) {
 			console.error("Cannot insert", dom);
 			return;
 		}
 		const sel = tr.selection;
-		if (!sel.empty) tr.setSelection(State.Selection.atStart(tr.doc));
+		if (!sel.empty) tr.setSelection(Selection.atStart(tr.doc));
 		tr.setMeta('addToHistory', false);
 		this.view.dispatch(tr);
 
@@ -114,7 +114,7 @@ module.exports = class Utils {
 				tr.split(from);
 				fromto = from + 1;
 			}
-			slice = new Model.Slice(frag, 0, 0);
+			slice = new Slice(frag, 0, 0);
 			to = from = fromto;
 		}
 		tr.replaceRange(from, to, slice);
@@ -132,7 +132,7 @@ module.exports = class Utils {
 	}
 
 	fill(frag) {
-		if (!(frag instanceof Model.Fragment)) frag = Model.Fragment.from(frag);
+		if (!(frag instanceof Fragment)) frag = Fragment.from(frag);
 		const list = [];
 		frag.forEach((node) => {
 			let content = node.content;
@@ -144,12 +144,12 @@ module.exports = class Utils {
 			}
 			const match = node.type.contentMatch.matchFragment(content);
 			if (match) {
-				const after = match.fillBefore(Model.Fragment.empty, true);
+				const after = match.fillBefore(Fragment.empty, true);
 				if (after) content = content.append(after);
 			}
 			list.push(node.copy(this.fill(content)));
 		});
-		return Model.Fragment.from(list);
+		return Fragment.from(list);
 	}
 
 	delete(sel) {
@@ -180,7 +180,7 @@ module.exports = class Utils {
 
 	refreshTr(tr, dom, block) {
 		let pos;
-		if (dom instanceof Model.ResolvedPos) {
+		if (dom instanceof ResolvedPos) {
 			pos = dom.pos;
 			dom = null;
 		} else {
@@ -217,7 +217,7 @@ module.exports = class Utils {
 						attrs.focused = mark.attrs.focused;
 					}
 					const [exFrom, exTo] = this.extendUpdateMark(tr, sel.from, sel.to, mark, attrs);
-					tr.setSelection(State.TextSelection.create(tr.doc, exFrom, exTo));
+					tr.setSelection(TextSelection.create(tr.doc, exFrom, exTo));
 					return true;
 				})) return tr;
 			} else {
@@ -246,7 +246,7 @@ module.exports = class Utils {
 			selectedNode = false;
 		}
 		if (selectedNode) {
-			tr.setSelection(State.NodeSelection.create(tr.doc, pos));
+			tr.setSelection(NodeSelection.create(tr.doc, pos));
 		}
 		return tr;
 	}
@@ -257,14 +257,14 @@ module.exports = class Utils {
 		const $pos = tr.doc.resolve(pos);
 		let sel;
 		if (node.nodeType != Node.ELEMENT_NODE || textSelection) {
-			sel = new State.TextSelection($pos);
+			sel = new TextSelection($pos);
 		} else {
 			if (!$pos.nodeAfter) {
 				if (node.parentNode && node.parentNode != this.view.dom) this.selectDom(node.parentNode);
 				else console.warn("cannot select node", node);
 				return;
 			}
-			sel = new State.NodeSelection($pos);
+			sel = new NodeSelection($pos);
 		}
 		this.view.dispatch(tr.setSelection(sel));
 	}
@@ -277,20 +277,20 @@ module.exports = class Utils {
 		let parent, pos;
 		if (obj.root?.rpos) {
 			parent = obj;
-		} else if (obj instanceof State.Selection) {
+		} else if (obj instanceof Selection) {
 			parent = this.selectionParents(tr, obj).shift();
 		} else {
-			if (obj instanceof Model.ResolvedPos) {
+			if (obj instanceof ResolvedPos) {
 				pos = obj.pos;
 			} else {
 				if (obj.ownerDocument == this.view.dom.ownerDocument) {
 					if (obj == this.view.dom) {
-						return new State.AllSelection(tr.doc);
+						return new AllSelection(tr.doc);
 					} else if (obj.pmViewDesc) {
 						if (textSelection || obj.pmViewDesc.mark) {
-							return State.TextSelection.create(tr.doc, obj.pmViewDesc.posAtStart, obj.pmViewDesc.posAtEnd);
+							return TextSelection.create(tr.doc, obj.pmViewDesc.posAtStart, obj.pmViewDesc.posAtEnd);
 						} else {
-							return new State.NodeSelection(tr.doc.resolve(obj.pmViewDesc.posBefore));
+							return new NodeSelection(tr.doc.resolve(obj.pmViewDesc.posBefore));
 						}
 					} else {
 						pos = this.posFromDOM(obj);
@@ -318,25 +318,25 @@ module.exports = class Utils {
 			const nodeAfter = root.rpos.nodeAfter;
 
 			let start = root.rpos.pos;
-			if (nodeBefore && Model.Mark.sameSet(nodeBefore.marks, parent.inline.node.marks)) {
+			if (nodeBefore && Mark.sameSet(nodeBefore.marks, parent.inline.node.marks)) {
 				start = start - root.rpos.nodeBefore.nodeSize;
 			}
 			let end = root.rpos.pos;
-			if (nodeAfter && Model.Mark.sameSet(nodeAfter.marks, parent.inline.node.marks)) {
+			if (nodeAfter && Mark.sameSet(nodeAfter.marks, parent.inline.node.marks)) {
 				end = end + root.rpos.nodeAfter.nodeSize;
 			}
-			return State.TextSelection.create(tr.doc, start, end);
+			return TextSelection.create(tr.doc, start, end);
 		} else if (textSelection) {
 			if (tr.selection.node) {
-				return State.TextSelection.create(tr.doc, $pos.pos, $pos.pos);
+				return TextSelection.create(tr.doc, $pos.pos, $pos.pos);
 			} else {
 				return tr.selection;
 			}
 		} else {
 			if (root.node == tr.doc) {
-				return new State.AllSelection(root.node);
+				return new AllSelection(root.node);
 			} else {
-				return new State.NodeSelection($rootPos);
+				return new NodeSelection($rootPos);
 			}
 		}
 	}
@@ -455,7 +455,7 @@ module.exports = class Utils {
 
 	selectionParents(tr, sel) {
 		if (!sel) sel = tr.selection;
-		if (sel instanceof State.AllSelection) {
+		if (sel instanceof AllSelection) {
 			return [{ root: { node: tr.doc } }];
 		}
 		const fromParents = this.parents(tr, sel.from, true, false);
@@ -630,7 +630,7 @@ module.exports = class Utils {
 		pos = this.insertTrNode(tr, pos, node);
 		if (tr.doc.content.size > 0) {
 			$pos = tr.doc.resolve(pos);
-			if ($pos.nodeAfter) tr.setSelection(new State.NodeSelection($pos));
+			if ($pos.nodeAfter) tr.setSelection(new NodeSelection($pos));
 		}
 		return tr;
 	}
@@ -645,7 +645,7 @@ module.exports = class Utils {
 	}
 
 	toggleMark(type, attrs) {
-		return Commands.toggleMark(type, attrs);
+		return toggleMark(type, attrs);
 	}
 
 	extendUpdateMark(tr, from, to, mark, attrs) {
@@ -732,4 +732,4 @@ module.exports = class Utils {
 
 		return elt;
 	}
-};
+}

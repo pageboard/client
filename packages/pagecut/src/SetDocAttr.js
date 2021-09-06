@@ -1,6 +1,6 @@
-const { Step, StepResult } = require('prosemirror-transform');
+import { Step, StepResult } from 'prosemirror-transform';
 
-module.exports = class SetDocAttr extends Step {
+export default class SetDocAttr extends Step {
 	constructor(key, value, stepType = 'SetDocAttr') {
 		super();
 		this.stepType = stepType;
@@ -29,5 +29,4 @@ module.exports = class SetDocAttr extends Step {
 	static fromJSON(json) {
 		return new SetDocAttr(json.key, json.value, json.stepType);
 	}
-};
-
+}
