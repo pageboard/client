@@ -1,16 +1,10 @@
 {
   "name": "@pageboard/datetime-entry",
-  "version": "4.1.0",
+  "version": "4.2.0",
   "description": "Enter formatted date and time using native date api and without pickers",
   "main": "dist/datetime.min.js",
   "scripts": {
-    "test": "karma start --singleRun --browsers Firefox",
-    "build:prod": "BABEL_ENV=production babel src -o dist/datetime.min.js ",
-    "build:stg": "BABEL_ENV=production babel src -o dist/datetime.stg.js --source-maps",
-    "build:dev": "babel src -o dist/datetime.js",
-    "build:gh": "BABEL_ENV=production babel src -o docs/datetime.min.js",
-    "build": "npm run build:dev && npm run build:prod && npm run build:stg && npm run build:gh",
-    "prepare": "npm run build"
+    "test": "karma start --singleRun --browsers Firefox"
   },
   "authors": [
     "Serge Balykov (ua9msn@gmail.com)",
@@ -29,12 +23,6 @@
     "url": "https://github.com/pageboard/client"
   },
   "devDependencies": {
-    "@babel/cli": "^7.13.14",
-    "@babel/core": "^7.13.8",
-    "@babel/plugin-proposal-class-properties": "^7.13.0",
-    "@babel/plugin-proposal-private-methods": "^7.13.0",
-    "@babel/preset-env": "^7.13.9",
-    "babel-preset-minify": "^0.6.0-alpha.9",
     "jasmine": "^2.8.0",
     "jasmine-core": "^2.8.0",
     "karma": "^1.7.1",
