@@ -4,7 +4,7 @@
   "description": "Enter formatted date and time using native date api and without pickers",
   "main": "dist/datetime.min.js",
   "scripts": {
-    "test": "karma start --singleRun --browsers Firefox"
+    "test": "karma start --singleRun --browsers Chrome"
   },
   "authors": [
     "Serge Balykov (ua9msn@gmail.com)",
@@ -28,7 +28,6 @@
     "karma": "^1.7.1",
     "karma-chrome-launcher": "^2.2.0",
     "karma-coverage": "^1.1.1",
-    "karma-firefox-launcher": "^1.0.1",
     "karma-jasmine": "^1.1.0"
   }
 }
