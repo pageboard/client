@@ -37,14 +37,12 @@ class HTMLElementPagination extends HTMLAnchorElement {
 				this.removeAttribute('href');
 				this.classList.toggle('disabled', true);
 			}
-			if (off == 0) {
-				this.#continue = true;
-			}
 		});
 	}
 
 	#more(state) {
-		this.#queue = this.#queue.then(() => {
+		this.#reached = true;
+		if (this.#queue) this.#queue = this.#queue.then(() => {
 			if (!this.#continue || !this.hasAttribute('href')) {
 				return;
 			}
@@ -81,17 +79,22 @@ class HTMLElementPagination extends HTMLAnchorElement {
 		if (fetch) fetch.infinite = false;
 	}
 
-	setup(state) {
+	paint(state) {
 		const name = this.dataset.name || 'offset';
 		const off = parseInt(state.query[name]) || 0;
-		if (off != 0) this.#continue = false;
+		if (off == 0) {
+			this.#continue = true;
+			this.#more(state);
+		}
+	}
+
+	setup(state) {
 		if (this.isContentEditable || !this.#infinite) return;
 		this.#queue = Promise.resolve();
 		this.#observer = new IntersectionObserver((entries) => {
 			entries.forEach((entry) => {
 				if (this.#reached) return;
 				if (this.offsetParent && (entry.intersectionRatio || 0) !== 0) {
-					this.#reached = true;
 					this.#more(state);
 				}
 			});
