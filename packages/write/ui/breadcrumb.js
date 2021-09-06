@@ -104,7 +104,7 @@ Pageboard.Controls.Breadcrumb = class Breadcrumb {
 			const id = item.dataset.id;
 			let sel = item.dataset.selector;
 			if (id) sel += `[block-id="${id}"]`;
-			if (!subFocused) sel += '[block-focused]';
+			if (!subFocused && i > 0) sel += '[block-focused]';
 			if (item.dataset.focused == "last") subFocused = true;
 			selectors.push(sel);
 			if (item == target) return true;
