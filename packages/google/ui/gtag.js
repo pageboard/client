@@ -3,14 +3,14 @@ Page.connect(new class {
 	constructor() {
 		const node = document.head.querySelector('script[src^="https://www.googletagmanager.com"]');
 		if (!node) return;
-		const obj = Page.parse(node.src);
-		this.type = obj.pathname.startsWith('/gtm') ? 'gtm' : 'gtag';
+		const loc = Page.parse(node.src);
+		this.type = loc.pathname.startsWith('/gtm') ? 'gtm' : 'gtag';
 		if (this.type == "gtag") {
 			window.gtag = window.gtag || function gtag() {
 				window.dataLayer.push(arguments);
 			};
 		}
-		this.id = obj.query.id;
+		this.id = loc.query.id;
 	}
 	consent(state) {
 		if (!this.id) return;

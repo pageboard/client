@@ -48,7 +48,7 @@ class HTMLElementBlogs extends VirtualHTMLElement {
 		} else {
 			const link = Page.format({
 				pathname: state.pathname + '.rss',
-				query: Object.assign({}, state.query, {version: version})
+				query: Object.assign({}, state.query, { version: version })
 			});
 			let node = document.head.querySelector('link[rel="alternate"][type="application/rss+xml"]');
 			if (!node) {

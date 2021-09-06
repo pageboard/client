@@ -19,7 +19,7 @@ Page.setup(function(state) {
 	});
 	const loc = state.copy();
 	loc.query.develop = "write";
-	const src = Page.format(loc);
+	const src = loc.toString();
 
 	if (iframe.getAttribute('src') == src) return;
 	iframe.setAttribute('src', src);

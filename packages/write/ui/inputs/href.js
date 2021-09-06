@@ -88,7 +88,7 @@ Pageboard.schemaHelpers.href = class Href {
 
 	static normUrl(url) {
 		// keeps only path if same domain
-		return Page.format(Page.parse(url));
+		return Page.format(url);
 	}
 
 	constructor(input, opts, props) {

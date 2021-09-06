@@ -167,8 +167,8 @@ Page.paint(function (state) {
 		const loc = Page.parse(equivs.Location);
 		let same = true;
 
-		if (Page.samePathname(loc, state)) {
-			if (Page.sameQuery(loc, state)) {
+		if (state.samePathname(state)) {
+			if (state.sameQuery(loc)) {
 				// do nothing
 			} else if (Object.keys(loc.query).every(key => loc.query[key] === state.query[key])) {
 				// different but handled here - keep same data

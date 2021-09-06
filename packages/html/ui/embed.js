@@ -40,9 +40,9 @@ class HTMLElementEmbed extends VirtualHTMLElement {
 		const prev = Page.parse(this.currentSrc || this.iframe.src || "about:blank");
 		const cur = Page.parse(opts.src || "about:blank");
 		cur.hash = opts.hash;
-		this.currentSrc = Page.format(cur);
+		this.currentSrc = cur.toString();
 
-		if (Page.samePath(cur, prev) == false) {
+		if (cur.samePath(prev) == false) {
 			this.classList.remove('error');
 			this.classList.add('loading');
 			this.iframe.setAttribute('src', this.currentSrc);

@@ -10,7 +10,7 @@ module.exports = function(method, url, data) {
 		credentials: "same-origin"
 	};
 	if (method == "get" || method == "delete") {
-		url = Page.format(Object.assign(Page.parse(url), {query: data}));
+		url = Object.assign(Page.parse(url), {query: data}).toString();
 		const pending = pendings[url];
 		if (pending) {
 			return pending;

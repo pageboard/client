@@ -183,11 +183,11 @@ exports.schema = function (val, what, spath) {
 exports.autolink = function (val, what) {
 	const hrefs = what.scope.data.$hrefs;
 	const a = what.parent;
-	const obj = Page.parse(val);
-	if (obj.hostname && obj.hostname != document.location.hostname) {
+	const loc = Page.parse(val);
+	if (loc.hostname && loc.hostname != document.location.hostname) {
 		a.target = "_blank";
 		a.rel = "noopener";
-	} else if (obj.pathname && (obj.pathname.startsWith('/.') || /\.\w+$/.test(obj.pathname))) {
+	} else if (loc.pathname && (loc.pathname.startsWith('/.') || /\.\w+$/.test(loc.pathname))) {
 		a.target = "_blank";
 	} else if (val) {
 		const href = val.split('?')[0];
@@ -247,20 +247,20 @@ exports.urltpl = function (obj, what, pName = 'pathname', qName = 'query') {
 	const query = obj[qName];
 	if (pathname == null && query == null) return null;
 	if (pathname?.fuse()) return pathname;
-	const url = Page.parse(pathname || what.scope.data.$loc.pathname);
-	Object.assign(url.query, query || {});
+	const loc = Page.parse(pathname || what.scope.data.$loc.pathname);
+	Object.assign(loc.query, query || {});
 	const fakes = [];
-	Object.entries(url.query).forEach(([key, val]) => {
+	Object.entries(loc.query).forEach(([key, val]) => {
 		if (val === undefined) {
-			delete url.query[key];
+			delete loc.query[key];
 		} else if (typeof val == "string" && val.fuse()) {
-			delete url.query[key];
+			delete loc.query[key];
 			fakes.push([key, val]);
 		}
 	});
-	let str = Page.format(url);
+	let str = loc.toString();
 	if (fakes.length) {
-		if (Object.keys(url.query).length == 0) str += '?';
+		if (Object.keys(loc.query).length == 0) str += '?';
 		else str += '&';
 		str += fakes.map(([key, val]) => {
 			return (val == null ? key : `${key}=${val}`);

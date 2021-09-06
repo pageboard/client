@@ -36,12 +36,12 @@ class HTMLElementMailImage extends HTMLImageElement {
 		let w = meta.width;
 
 		if (loc.hostname && loc.hostname != document.location.hostname) {
-			loc = {
+			loc = Page.parse({
 				pathname: "/.api/image",
 				query: {
 					url: this.options.src
 				}
-			};
+			});
 		}
 		const r = this.crop;
 		if (r.x != 50 || r.y != 50 || r.w != 100 || r.h != 100) {
@@ -63,7 +63,7 @@ class HTMLElementMailImage extends HTMLImageElement {
 		loc.query.rs = "z-" + wz;
 		const dloc = document.location;
 		const base = dloc.protocol + '//' + dloc.host;
-		const url = (new URL(Page.format(loc), base)).href;
+		const url = (new URL(loc.toString(), base)).href;
 		img.setAttribute('src', url);
 	}
 }

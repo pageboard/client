@@ -26,7 +26,7 @@ Page.State.prototype.scroll = function(opts) {
 			return;
 		}
 	}
-	if (this.stage == "hash" && Page.samePathname(this, this.referrer) && this.referrer.data.$scroll) {
+	if (this.stage == "hash" && this.samePathname(this.referrer) && this.referrer.data.$scroll) {
 		scrollOpts.behavior = 'smooth';
 	}
 	if (this.transition) this.transition.scrollTo(scrollOpts);

@@ -201,7 +201,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		const redirect = this.getAttribute('action');
 		const loc = Page.parse(redirect);
 		Object.assign(loc.query, this.read(false));
-		if (Page.samePathname(loc, state)) {
+		if (loc.samePathname(state)) {
 			loc.query = Object.assign({}, state.query, loc.query);
 		}
 		let status = 200;
@@ -253,7 +253,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 				form.forget();
 				form.save();
 				if (!redirect && form.closest('element-template') && !hasMsg) {
-					redirect = Page.format(state);
+					redirect = state.toString();
 				}
 			}
 
@@ -262,7 +262,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			data.$response = res;
 			data.$status = res.status;
 			if (!redirect) {
-				if (res.granted) redirect = Page.format(state);
+				if (res.granted) redirect = state.toString();
 				else return;
 			}
 			if (redirect && !ok) {
@@ -271,7 +271,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 
 			const loc = Page.parse(redirect).fuse(data, state.scope);
 			let vary = false;
-			if (Page.samePathname(loc, state)) {
+			if (loc.samePathname(state)) {
 				if (res.granted) {
 					vary = true;
 				} else {

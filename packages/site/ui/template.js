@@ -64,10 +64,9 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 			}
 
 			const loc = Page.parse(redirect).fuse(data, state.scope);
-			const locStr = Page.format(loc);
 			state.status = 301;
 			state.statusText = `Form Redirection ${data.$status}`;
-			state.location = locStr;
+			state.location = loc.toString();
 		});
 	}
 
@@ -206,7 +205,7 @@ HTMLScriptElement.prototype.prerender = function () {
 
 VirtualHTMLElement.define('element-template', HTMLElementTemplate);
 
-Page.State.prototype.fuse = function (data, scope) {
+Page.Loc.prototype.fuse = function (data, scope) {
 	this.pathname = this.pathname.fuse(data, scope);
 	const q = this.query;
 	for (const key in q) {
@@ -231,10 +230,9 @@ class QueryCollectorFilter {
 		const path = what.scope.path;
 		if (path[0] != "$query") return val;
 		this.used = true;
-		let key;
 		const { query, vars } = this.state;
 		if (path.length > 1) {
-			key = path.slice(1).join('.');
+			const key = path.slice(1).join('.');
 			const undef = val === undefined;
 			if (undef) {
 				this.missings[key] = true;
@@ -245,10 +243,10 @@ class QueryCollectorFilter {
 			this.query[key] = val;
 		} else if (typeof val == "string") {
 			const isEnc = (what.expr.filters[what.expr.filters.length - 1] || {}).name == "enc";
-			const obj = Page.parse(isEnc ? '?' + decodeURIComponent(val) : val).query;
-			for (key in obj) {
-				if (query[key] === obj[key]) vars[key] = true;
-				this.query[key] = obj[key];
+			const loc = Page.parse(isEnc ? '?' + decodeURIComponent(val) : val).query;
+			for (const key in loc) {
+				if (query[key] === loc[key]) vars[key] = true;
+				this.query[key] = loc[key];
 			}
 		}
 		return val;

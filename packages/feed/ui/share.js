@@ -10,7 +10,7 @@ class HTMLShareAnchorElement extends HTMLAnchorElement {
 	patch(state) {
 		const href = document.location.origin + Page.format({
 			pathname: state.pathname,
-			query: Object.assign({}, state.query, {develop:undefined})
+			query: Object.assign({}, state.query, { develop: undefined })
 		});
 		const card = {
 			url: href
@@ -50,7 +50,7 @@ class HTMLShareAnchorElement extends HTMLAnchorElement {
 			}
 		}[this.options.network];
 		if (obj) {
-			this.href = Page.format(Object.assign(Page.parse(obj.url), {query: obj.query}));
+			this.href = Object.assign(Page.parse(obj.url), { query: obj.query }).toString();
 		} else {
 			this.removeAttribute('href');
 		}

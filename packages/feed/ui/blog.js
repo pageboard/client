@@ -3,9 +3,9 @@ Page.patch(function(state) {
 	if (ogImage) {
 		const image = ogImage.querySelector('element-image');
 		if (image) {
-			const obj = Page.parse(image.dataset.src);
-			obj.query = {rs: 'w-800_h-450_max'};
-			ogImage.setAttribute('content', document.location.origin + Page.format(obj));
+			const loc = Page.parse(image.dataset.src);
+			loc.query = {rs: 'w-800_h-450_max'};
+			ogImage.setAttribute('content', document.location.origin + loc.toString());
 			ogImage.removeAttribute('block-content');
 			ogImage.innerText = '';
 		}

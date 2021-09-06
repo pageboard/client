@@ -233,11 +233,11 @@ Pageboard.schemaHelpers.page = class PageHelper {
 	}
 
 	get(href) {
-		const urlObj = Page.parse(href);
-		const obj = PageHelper.cache[urlObj.pathname];
+		const loc = Page.parse(href);
+		const obj = PageHelper.cache[loc.pathname];
 		if (obj) return Promise.resolve(obj);
 		return Pageboard.uiLoad(this.node, Pageboard.fetch('get', '/.api/pages', {
-			url: urlObj.pathname,
+			url: loc.pathname,
 			type: this.opts.type
 		})).then(function (obj) {
 			return obj.items;
@@ -287,13 +287,13 @@ Pageboard.schemaHelpers.page = class PageHelper {
 	}
 
 	read() {
-		const val = Page.parse(this.input.value);
+		const loc = Page.parse(this.input.value);
 		if (this.input.value.startsWith('/')) {
-			this.fakeInput.value = val.pathname;
+			this.fakeInput.value = loc.pathname;
 		} else {
 			this.fakeInput.value = "";
 		}
-		if (this.inputMap) this.inputMap.value = val.query;
+		if (this.inputMap) this.inputMap.value = loc.query;
 	}
 
 	write() {

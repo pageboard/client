@@ -1,11 +1,11 @@
 Page.patch(function(state) {
 	function isSameOrParent(loc, state) {
-		if (!Page.sameDomain(loc, state)) {
+		if (!state.sameDomain(loc)) {
 			return false;
-		} else if (Page.samePathname(loc, state)) {
-			if (Page.sameQuery(loc, {query:{}})) return true;
+		} else if (state.samePathname(loc)) {
+			if (loc.sameQuery({query:{}})) return true;
 			loc.query.develop = state.query.develop;
-			if (Page.sameQuery(loc, state)) return true;
+			if (state.sameQuery(loc)) return true;
 		} else {
 			return state.pathname.startsWith(loc.pathname + '/');
 		}

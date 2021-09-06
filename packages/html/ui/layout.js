@@ -37,12 +37,12 @@ class HTMLElementLayout extends HTMLDivElement {
 
 		let loc = Page.parse(this.options.src);
 		if (loc.hostname && loc.hostname != document.location.hostname) {
-			loc = {
+			loc = Page.parse({
 				pathname: "/.api/image",
 				query: {
 					url: this.options.src
 				}
-			};
+			});
 		}
 
 		if (r.x != 50 || r.y != 50 || r.w != 100 || r.h != 100) {
@@ -67,7 +67,7 @@ class HTMLElementLayout extends HTMLDivElement {
 			}
 			loc.query.rs = "z-" + HTMLElementLayout.getZoom({w, h, rw, rh, fit});
 		}
-		const curSrc = Page.format(loc);
+		const curSrc = loc.toString();
 		if (curSrc != this.currentSrc) {
 			try {
 				this.currentSrc = curSrc;
