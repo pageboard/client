@@ -1,8 +1,8 @@
 {
   "name": "@pageboard/datetime-entry",
-  "version": "4.2.1",
+  "version": "4.2.2",
   "description": "Enter formatted date and time using native date api and without pickers",
-  "main": "dist/datetime.min.js",
+  "main": "src/datetime.js",
   "scripts": {
     "test": "karma start --singleRun --browsers Chrome"
   },
