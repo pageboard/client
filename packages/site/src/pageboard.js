@@ -4,6 +4,7 @@ import * as load from './load';
 import { render, install } from './render';
 import * as equivs from './equivs';
 import VHE from './VirtualHTMLElement';
+import 'window-page';
 
 window.VirtualHTMLElement = VHE;
 const baseElements = window.Pageboard?.elements ?? {
@@ -237,3 +238,33 @@ function merge(obj, extra, fn) {
 	});
 	return copy;
 }
+
+Page.setup(function(state) {
+	if (window.IntersectionObserver) {
+		state.ui.observer = new IntersectionObserver((entries, observer) => {
+			entries.forEach((entry) => {
+				const target = entry.target;
+				const ratio = entry.intersectionRatio || 0;
+				if (ratio <= 0) return;
+				if ((target.constructor.revealRatio || 0) > ratio) return;
+				observer.unobserve(target);
+				if (target.currentSrc) return;
+				target.reveal(state);
+			});
+		}, {
+			threshold: [
+				0.001,	// images
+				0.2,		// embeds
+				1				// headings
+			],
+			rootMargin: "30px"
+		});
+	}
+});
+
+Page.close(function(state) {
+	if (state.ui.observer) {
+		state.ui.observer.disconnect();
+		delete state.ui.observer;
+	}
+});

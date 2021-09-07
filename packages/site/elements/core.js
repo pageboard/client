@@ -233,7 +233,6 @@ exports.site = {
 		}
 	},
 	scripts: [
-		"../lib/window-page.js",
 		"../lib/pageboard.js",
 		"../ui/route.js"
 	]
