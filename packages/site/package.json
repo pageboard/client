@@ -22,12 +22,12 @@
     "@ungap/custom-elements": "^1.0.0",
     "debounce": "^1.2.1",
     "matchdom": "^5.10.7",
-    "postinstall": "^0.7.2",
+    "postinstall": "^0.7.3",
     "postinstall-bundle": "^0.7.3",
     "window-page": "^13.1.1"
   },
   "prepare": {
-    "@ungap/custom-elements/index.js": "copy lib/custom-elements.js",
+    "@ungap/custom-elements": "copy lib/custom-elements.js",
     "window-page": "copy lib/",
     "./src/pageboard.js": "bundle --name=window.Pageboard lib/"
   },
