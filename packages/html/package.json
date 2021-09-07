@@ -19,22 +19,22 @@
   },
   "homepage": "https://github.com/pageboard/client#readme",
   "dependencies": {
-    "postinstall": "^0.7.0",
+    "postinstall": "^0.7.3",
     "semantic-ui-css": "^2.4.1"
   },
   "devDependencies": {
-    "formdata-polyfill": "^3.0.20",
-    "nouislider": "^15.2.0",
+    "formdata-polyfill": "^4.0.7",
+    "nouislider": "^15.4.0",
     "object-fit-images": "^3.2.4",
-    "postinstall-bundle": "^0.7.0"
+    "postinstall-bundle": "^0.7.3"
   },
   "postinstall": {
     "semantic-ui-css/components": "link lib/components",
     "semantic-ui-css/themes": "link lib/themes"
   },
   "prepare": {
-    "object-fit-images/dist/ofi.common-js.js": "bundle --name=window.objectFitImages lib/object-fit-images.js",
-    "formdata-polyfill/formdata.min.js": "copy lib/formdata.js",
+    "object-fit-images": "bundle --name=window.objectFitImages lib/object-fit-images.js",
+    "formdata-polyfill": "copy lib/formdata.js",
     "nouislider/dist/nouislider.js": "copy lib/",
     "nouislider/dist/nouislider.css": "copy lib/"
   },

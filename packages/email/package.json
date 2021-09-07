@@ -33,13 +33,13 @@
     "foundation-emails": "^2.3.1",
     "inlineresources": "^1.0.1",
     "juice": "^8.0.0",
-    "postinstall": "^0.7.0",
+    "postinstall": "^0.7.3",
     "postinstall-bundle": "^0.7.2"
   },
   "prepare": {
     "inlineresources/dist/inlineresources.allinone.js": "copy lib/inlineresources.js",
-    "foundation-emails/dist/foundation-emails.css": "copy lib/",
-    "europa/dist/europa.js": "copy lib/",
-    "juice/client.js": "bundle --name=Juice lib/juice.js"
+    "foundation-emails": "copy lib/foundation-emails.css",
+    "europa": "copy lib/europa.js",
+    "juice/client.js": "bundle --name=window.Juice lib/juice.js"
   }
 }

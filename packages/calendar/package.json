@@ -19,10 +19,10 @@
   "homepage": "https://github.com/pageboard/client#readme",
   "devDependencies": {
     "@pageboard/datetime-entry": "^4.2.2",
-    "postinstall": "^0.7.0"
+    "postinstall": "^0.7.3"
   },
   "prepare": {
-    "@pageboard/datetime-entry/src/datetime.js": "copy lib/"
+    "@pageboard/datetime-entry": "copy lib/datetime.js"
   },
   "pageboard": {
     "directories": [
