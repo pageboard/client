@@ -4,7 +4,6 @@ import * as load from './load';
 import { render, install } from './render';
 import * as equivs from './equivs';
 import VHE from './VirtualHTMLElement';
-import 'window-page';
 
 window.VirtualHTMLElement ||= VHE;
 
