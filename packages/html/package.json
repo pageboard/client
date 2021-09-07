@@ -33,7 +33,7 @@
     "semantic-ui-css/themes": "link lib/themes"
   },
   "prepare": {
-    "object-fit-images/dist/ofi.common-js.js": "bundle --name=objectFitImages lib/object-fit-images.js",
+    "object-fit-images/dist/ofi.common-js.js": "bundle --name=window.objectFitImages lib/object-fit-images.js",
     "formdata-polyfill/formdata.min.js": "copy lib/formdata.js",
     "nouislider/dist/nouislider.js": "copy lib/",
     "nouislider/dist/nouislider.css": "copy lib/"
