@@ -233,7 +233,7 @@ export function enc(str) {
 }
 
 export function query(query, what) {
-	const str = exports.urltpl({
+	const str = urltpl({
 		pathname: "/",
 		query
 	}, what).substring(1);
@@ -295,7 +295,7 @@ export function templates(val, what, prefix) {
 }
 
 export function isoDate(val, what) {
-	const d = exports.parseDate(val);
+	const d = parseDate(val);
 	if (Number.isNaN(d.getTime())) return null;
 	else return d.toISOString();
 }
@@ -305,7 +305,7 @@ export function parseDate(val) {
 	if (val instanceof Date) {
 		d = val;
 	} else {
-		if (!val) val = exports.toDate(new Date());
+		if (!val) val = toDate(new Date());
 		else if (/^\d\d:\d\d/.test(val)) {
 			val = '0 ' + val;
 		}
@@ -325,13 +325,13 @@ export function orNow(val, what) {
 
 export function toTime(val) {
 	if (!val) return val;
-	return exports.parseDate(val).toISOString().split('T').pop().split('.').shift();
+	return parseDate(val).toISOString().split('T').pop().split('.').shift();
 }
 
 export function toDate(val, what, unit) {
 	if (!val) return val;
 
-	let date = exports.parseDate(val).toISOString().split('T');
+	let date = parseDate(val).toISOString().split('T');
 	const time = date.pop().split('.')[0];
 	date = date[0];
 	if (!unit) return date;
@@ -344,7 +344,7 @@ export function toDate(val, what, unit) {
 }
 
 export function setDate(val, what, amount, unit) {
-	const d = exports.parseDate(val);
+	const d = parseDate(val);
 	amount = parseInt(amount);
 	if (!Number.isNaN(amount)) {
 		if (!unit) unit = 'day';

@@ -6,7 +6,8 @@ import * as equivs from './equivs';
 import VHE from './VirtualHTMLElement';
 import 'window-page';
 
-window.VirtualHTMLElement = VHE;
+window.VirtualHTMLElement ||= VHE;
+
 const baseElements = window.Pageboard?.elements ?? {
 	error: {
 		scripts: [],
@@ -70,7 +71,7 @@ function bundle(loader, state) {
 				// and navigational bundle load
 				res.meta = meta;
 			}
-			return exports.load.meta(meta);
+			return load.meta(meta);
 		})).then(function() {
 			return res;
 		});
@@ -116,10 +117,10 @@ Page.init(function(state) {
 });
 
 Page.patch(function (state) {
-	const equivs = exports.equivs.read();
-	if (equivs.Status) {
-		state.status = parseInt(equivs.Status);
-		state.statusText = equivs.Status.substring(status.toString().length).trim();
+	const metas = equivs.read();
+	if (metas.Status) {
+		state.status = parseInt(metas.Status);
+		state.statusText = metas.Status.substring(state.status.toString().length).trim();
 	}
 
 	state.finish(function() {
@@ -157,26 +158,26 @@ Page.patch(function (state) {
 		}
 
 		if (state.status) {
-			equivs.Status = `${state.status} ${state.statusText || ""}`.trim();
+			metas.Status = `${state.status} ${state.statusText || ""}`.trim();
 		}
 		if (state.location) {
 			if (state.location != state.toString()) {
-				equivs.Location = state.location;
+				metas.Location = state.location;
 			} else {
 				console.warn("Not redirecting to same url", state.location);
 			}
 		}
 
-		exports.equivs.write(equivs);
+		equivs.write(metas);
 	});
 });
 
 Page.paint(function (state) {
 	if (state.scope.$write) return;
 	state.finish(() => {
-		const equivs = exports.equivs.read();
-		if (!equivs.Location) return;
-		const loc = Page.parse(equivs.Location);
+		const metas = equivs.read();
+		if (!metas.Location) return;
+		const loc = Page.parse(metas.Location);
 		let same = true;
 
 		if (state.samePathname(state)) {
@@ -197,15 +198,15 @@ Page.paint(function (state) {
 		}
 	});
 });
-
+let adv = false;
 Page.setup(function(state) {
 	try {
 		window.getSelection().removeAllRanges();
 	} catch(ex) {
 		// ignore
 	}
-	if (exports.adv) return;
-	exports.adv = true;
+	if (adv) return;
+	adv = true;
 	state.finish(function() {
 		if (window.parent == window) {
 			// eslint-disable-next-line no-console
