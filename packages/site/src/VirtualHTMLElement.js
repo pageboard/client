@@ -1,7 +1,7 @@
 // this works in babel 6, see postinstall-js
 const extendCache = {};
 
-class VirtualHTMLElement extends HTMLElement {
+export default class VirtualHTMLElement extends HTMLElement {
 	constructor() {
 		super();
 		if (this.init) this.init();
@@ -192,8 +192,6 @@ function monkeyPatchAll(ClaProto, ExtProto, after) {
 		}
 	});
 }
-
-module.exports = VirtualHTMLElement;
 
 Page.setup(function(state) {
 	if (window.IntersectionObserver) {

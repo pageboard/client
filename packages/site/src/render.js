@@ -1,8 +1,9 @@
-const matchdom = require('matchdom');
-const Viewer = require('@pageboard/pagecut/src/viewer.js');
-const str2dom = require('@pageboard/pagecut/src/str2dom.js');
+import matchdom from 'matchdom';
+import Viewer from '@pageboard/pagecut/src/viewer.js';
+import str2dom from '@pageboard/pagecut/src/str2dom.js';
 
-Object.assign(matchdom.filters, require('./filters'));
+import * as filters from './filters';
+Object.assign(matchdom.filters, filters);
 
 Document.prototype.dom = function(str) {
 	return str2dom(Array.prototype.join.call(arguments, '\n'), {
@@ -37,7 +38,7 @@ String.prototype.fuse = function(obj, scope) {
 
 
 
-module.exports = function(res, scope, el) {
+export function render(res, scope, el) {
 	const elts = scope.$elements;
 	if (!res) res = {};
 
@@ -74,11 +75,9 @@ module.exports = function(res, scope, el) {
 		scope: scope,
 		strip: !scope.$write
 	});
-};
+}
 
-module.exports.install = install;
-
-function install(el, scope) {
+export function install(el, scope) {
 	if (el.$installed) return;
 	el.$installed = true;
 	try {

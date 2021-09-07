@@ -1,5 +1,3 @@
-export default parse;
-
 let innerHTMLBug = false;
 let bugTestDiv;
 if (typeof document !== 'undefined') {
@@ -54,7 +52,7 @@ const nsuris = {
 };
 let domParser;
 
-function parse(html, {doc, ns, frag}) {
+export default function parse(html, {doc, ns, frag}) {
 	if (typeof html != 'string') throw new TypeError('String expected');
 
 	// default to the global `document` object

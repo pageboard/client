@@ -1,6 +1,6 @@
 const pendings = {};
 
-module.exports = function(method, url, data) {
+export default function(method, url, data) {
 	method = method.toLowerCase();
 	const fetchOpts = {
 		method: method,
@@ -62,4 +62,4 @@ module.exports = function(method, url, data) {
 		});
 	}
 	return p;
-};
+}

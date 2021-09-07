@@ -18,7 +18,7 @@ function load(node, head) {
 	});
 }
 
-exports.meta = function(meta) {
+export function meta(meta) {
 	let pr = Promise.resolve();
 	if (!meta) return pr;
 	if (meta.elements) Object.entries(meta.elements).forEach(function([name, el]) {
@@ -41,7 +41,7 @@ exports.meta = function(meta) {
 	});
 
 	return pr;
-};
+}
 
 function getHead(doc) {
 	if (!doc) doc = document;
@@ -49,7 +49,7 @@ function getHead(doc) {
 	return doc.querySelector('head');
 }
 
-exports.js = function(url, doc) {
+export function js(url, doc) {
 	const head = getHead(doc);
 	doc = head.ownerDocument;
 	if (head.querySelector(`script[src="${url}"]`)) {
@@ -60,9 +60,9 @@ exports.js = function(url, doc) {
 	node.defer = true;
 	node.src = url;
 	return load(node, head);
-};
+}
 
-exports.css = function(url, doc) {
+export function css(url, doc) {
 	const head = getHead(doc);
 	doc = head.ownerDocument;
 	if (head.querySelector(`link[rel="stylesheet"][href="${url}"]`)) {
@@ -72,5 +72,4 @@ exports.css = function(url, doc) {
 	node.rel = "stylesheet";
 	node.href = url;
 	return load(node, head);
-};
-
+}

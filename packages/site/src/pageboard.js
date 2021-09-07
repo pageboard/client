@@ -1,4 +1,12 @@
-exports.elements = window.Pageboard?.elements ?? {
+export { default as debounce } from 'debounce';
+export { default as fetch } from './fetch';
+import * as load from './load';
+import { render, install } from './render';
+import * as equivs from './equivs';
+import VHE from './VirtualHTMLElement';
+
+window.VirtualHTMLElement = VHE;
+const baseElements = window.Pageboard?.elements ?? {
 	error: {
 		scripts: [],
 		stylesheets: [],
@@ -15,13 +23,18 @@ exports.elements = window.Pageboard?.elements ?? {
 		</body></html>`
 	}
 };
-require('./polyfills');
-exports.cache = window.Pageboard?.cache ?? {};
-exports.debounce = require('debounce');
-exports.fetch = require('./fetch');
-exports.load = require('./load');
-exports.render = require('./render');
-exports.equivs = require('./equivs');
+import './polyfills';
+const cache = window.Pageboard?.cache ?? {};
+
+export {
+	cache,
+	baseElements as elements,
+	load,
+	render,
+	equivs,
+	bundle,
+	merge
+};
 
 function initState(res, state) {
 	const scope = state.scope;
@@ -43,7 +56,7 @@ function initState(res, state) {
 	}
 }
 
-exports.bundle = function(loader, state) {
+function bundle(loader, state) {
 	const scope = state.scope;
 	return loader.then(function(res) {
 		if (!res) return Promise.resolve();
@@ -81,13 +94,11 @@ exports.bundle = function(loader, state) {
 		Object.keys(elts).forEach(function(name) {
 			const el = elts[name];
 			if (!el.name) el.name = name;
-			exports.render.install(el, scope);
+			install(el, scope);
 		});
 		return res;
 	});
-};
-
-window.VirtualHTMLElement = require('./VirtualHTMLElement');
+}
 
 Page.init(function(state) {
 	state.vars = {};
@@ -96,7 +107,7 @@ Page.init(function(state) {
 	if (dev === "" || dev === "write") state.vars.develop = true;
 	let scope = state.scope;
 	if (!scope) scope = state.scope = {
-		$elements: exports.elements,
+		$elements: baseElements,
 		$filters: {}
 	};
 	// once elements are installed they all refer to the same scope object
@@ -202,7 +213,7 @@ Page.setup(function(state) {
 	});
 });
 
-exports.merge = function merge(obj, extra, fn) {
+function merge(obj, extra, fn) {
 	const single = arguments.length == 2;
 	if ((fn == null || single) && typeof extra == "function") {
 		fn = extra;
@@ -225,4 +236,4 @@ exports.merge = function merge(obj, extra, fn) {
 		}
 	});
 	return copy;
-};
+}

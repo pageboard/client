@@ -1,4 +1,4 @@
-exports.write = function(obj) {
+export function write(obj) {
 	const head = document.head;
 	let meta = document.head.querySelector('meta');
 	Object.entries(obj).forEach(([name, content]) => {
@@ -16,13 +16,13 @@ exports.write = function(obj) {
 			node.content = content;
 		}
 	});
-};
+}
 
-exports.read = function () {
+export function read() {
 	const list = document.head.querySelectorAll('meta[http-equiv]');
 	const obj = {};
 	list.forEach(node => {
 		obj[node.httpEquiv] = node.content;
 	});
 	return obj;
-};
+}

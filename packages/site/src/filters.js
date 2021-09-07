@@ -1,4 +1,4 @@
-exports.alias = function (val, what, name) {
+export function alias(val, what, name) {
 	if (!name) return val;
 	const list = name.split('.');
 	const obj = {};
@@ -8,9 +8,9 @@ exports.alias = function (val, what, name) {
 		else cur = cur[item] = {};
 	});
 	return obj;
-};
+}
 
-exports.polyfills = function ($elements, what) {
+export function polyfills($elements, what) {
 	const map = {};
 	Object.keys($elements).forEach(function (key) {
 		let list = $elements[key].polyfills;
@@ -23,9 +23,9 @@ exports.polyfills = function ($elements, what) {
 		});
 	});
 	return Object.keys(map).join(',');
-};
+}
 
-exports.csp = function ($elements, what) {
+export function csp($elements, what) {
 	const csp = {};
 	Object.keys($elements).forEach(function (key) {
 		const el = $elements[key];
@@ -63,20 +63,18 @@ exports.csp = function ($elements, what) {
 		const key = src.indexOf('-') > 0 ? src : `${src}-src`;
 		return `${key} ${csp[src].join(' ')}`.trim().fuse({}, what.scope.data);
 	}).join('; ');
-};
+}
 
 
-exports.id = function (id, what) {
+export function id(id, what) {
 	if (id) return id;
 	id = what.scope.data.$id;
 	if (!id) return id;
 	return 'x' + id.slice(0, 4);
-};
-exports.num = function (val, what, str) {
-	if (!val) return '';
-	return what.filters.post(exports.num.map[val] || '', what, str);
-};
-exports.num.map = {
+}
+
+
+const numMap = {
 	0: '',
 	1: 'one',
 	2: 'two',
@@ -95,19 +93,23 @@ exports.num.map = {
 	15: 'fifteen',
 	16: 'sixteen'
 };
+export function num(val, what, str) {
+	if (!val) return '';
+	return what.filters.post(numMap[val] || '', what, str);
+}
 
-exports.checked = function (val, what, selector) {
+export function checked(val, what, selector) {
 	const ret = what.filters.attr(val === true ? 'checked' : null, what, 'checked', selector);
 	if (val !== true) delete what.attr;
 	return ret;
-};
+}
 
-exports.includes = function (val, what, str) {
+export function includes(val, what, str) {
 	if (Array.isArray(val)) return val.includes(str);
 	else if (typeof val == "string") return val == str;
-};
+}
 
-exports.sum = function (obj, what, ...list) {
+export function sum(obj, what, ...list) {
 	let sum = 0;
 	if (obj == null) return sum;
 	list.forEach(function (str) {
@@ -123,9 +125,9 @@ exports.sum = function (obj, what, ...list) {
 		sum += sign * val;
 	});
 	return sum;
-};
+}
 
-exports.schema = function (val, what, spath) {
+export function schema(val, what, spath) {
 	// return schema of repeated key, schema of anyOf/listOf const value
 	if (val === undefined) return;
 
@@ -178,9 +180,9 @@ exports.schema = function (val, what, spath) {
 		sval = null;
 	}
 	return sval;
-};
+}
 
-exports.autolink = function (val, what) {
+export function autolink(val, what) {
 	const hrefs = what.scope.data.$hrefs;
 	const a = what.parent;
 	const loc = Page.parse(val);
@@ -196,9 +198,9 @@ exports.autolink = function (val, what) {
 			a.target = "_blank";
 		}
 	}
-};
+}
 
-exports.unset = function (obj, what, ...list) {
+export function unset(obj, what, ...list) {
 	if (obj == null || typeof obj != "object") return obj;
 	obj = Object.assign({}, obj);
 	if (!list.length) list = Object.keys(obj);
@@ -206,9 +208,9 @@ exports.unset = function (obj, what, ...list) {
 		obj[name] = undefined;
 	});
 	return obj;
-};
+}
 
-exports.set = function (obj, what, name, val) {
+export function set(obj, what, name, val) {
 	if (obj == null) {
 		obj = {};
 	}
@@ -223,14 +225,14 @@ exports.set = function (obj, what, name, val) {
 	obj = Object.assign({}, obj);
 	obj[name] = val;
 	return obj;
-};
+}
 
-exports.enc = function (str) {
+export function enc(str) {
 	if (str == null || typeof str != "string") return str;
 	return encodeURIComponent(str);
-};
+}
 
-exports.query = function (query, what) {
+export function query(query, what) {
 	const str = exports.urltpl({
 		pathname: "/",
 		query
@@ -240,9 +242,9 @@ exports.query = function (query, what) {
 		if (str?.startsWith('?')) return str.slice(1);
 	}
 	return str;
-};
+}
 
-exports.urltpl = function (obj, what, pName = 'pathname', qName = 'query') {
+export function urltpl(obj, what, pName = 'pathname', qName = 'query') {
 	const pathname = obj[pName];
 	const query = obj[qName];
 	if (pathname == null && query == null) return null;
@@ -267,9 +269,9 @@ exports.urltpl = function (obj, what, pName = 'pathname', qName = 'query') {
 		}).join('&');
 	}
 	return str;
-};
+}
 
-exports.templates = function (val, what, prefix) {
+export function templates(val, what, prefix) {
 	if (!val) return val;
 	const obj = {};
 	JSON.stringify(val).fuse({ [prefix]: {} }, {
@@ -290,15 +292,15 @@ exports.templates = function (val, what, prefix) {
 		}
 	});
 	return Object.keys(obj).map(key => obj[key]).join(' ') || null;
-};
+}
 
-exports.isoDate = function (val, what) {
+export function isoDate(val, what) {
 	const d = exports.parseDate(val);
 	if (Number.isNaN(d.getTime())) return null;
 	else return d.toISOString();
-};
+}
 
-exports.parseDate = function (val) {
+export function parseDate(val) {
 	let d;
 	if (val instanceof Date) {
 		d = val;
@@ -310,19 +312,23 @@ exports.parseDate = function (val) {
 		d = new Date(val);
 	}
 	return d;
-};
+}
 
-exports.orNow = exports.now = function (val, what) {
+export function now(val, what) {
 	if (val == null) return Date.now();
 	else return val;
-};
+}
+export function orNow(val, what) {
+	return now(val, what);
+}
 
-exports.toTime = function (val) {
+
+export function toTime(val) {
 	if (!val) return val;
 	return exports.parseDate(val).toISOString().split('T').pop().split('.').shift();
-};
+}
 
-exports.toDate = function (val, what, unit) {
+export function toDate(val, what, unit) {
 	if (!val) return val;
 
 	let date = exports.parseDate(val).toISOString().split('T');
@@ -335,9 +341,9 @@ exports.toDate = function (val, what, unit) {
 	else if (unit == "time") date = time;
 	else if (unit == "datetime") date += " " + time;
 	return date;
-};
+}
 
-exports.setDate = function (val, what, amount, unit) {
+export function setDate(val, what, amount, unit) {
 	const d = exports.parseDate(val);
 	amount = parseInt(amount);
 	if (!Number.isNaN(amount)) {
@@ -356,9 +362,9 @@ exports.setDate = function (val, what, amount, unit) {
 		d[`setUTC${name}`](d[`getUTC${name}`]() + amount);
 	}
 	return d;
-};
+}
 
-exports.formatDate = function (val, what, ...list) {
+export function formatDate(val, what, ...list) {
 	if (/^\d\d:\d\d(:\d\d)?$/.test(val)) {
 		val = '1970-01-01T' + val + 'Z';
 	}
@@ -411,4 +417,4 @@ exports.formatDate = function (val, what, ...list) {
 		}
 	}
 	return str;
-};
+}
