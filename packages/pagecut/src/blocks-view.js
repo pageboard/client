@@ -156,18 +156,18 @@ export default class BlocksView {
 			}
 			for (const node of frag.querySelectorAll('[block-id]')) {
 				const id = node.getAttribute('block-id');
-				if (id === block.id) return;
+				if (id === block.id) continue;
 				const type = node.getAttribute('block-type');
 				const parent = node.parentNode;
 				const child = blocks[id];
 
 				if (!child) {
 					if (store[id]) {
-						return;
+						continue;
 					}
 					console.warn("missing block for", parent.nodeName, '>', node.nodeName, id);
 					parent.replaceChild(node.ownerDocument.createTextNode('∅'), node);
-					return;
+					continue;
 				}
 				const frag = this.renderFrom(child, blocks, store, Object.assign({}, opts, {
 					type: type,
@@ -175,7 +175,7 @@ export default class BlocksView {
 				}));
 				if (!frag) {
 					parent.removeChild(node);
-					return;
+					continue;
 				}
 				if (frag.attributes) {
 					for (const att of Array.from(node.attributes)) {

@@ -63,9 +63,9 @@ export function render(res, scope, el) {
 			// this case should actually be res.item.children (like blocks.search api)
 			// but page.get api returns res.item/res.items and we can't change it in a compatible way.
 			if (child.children && !res.item) {
-				child.children.forEach((child) => {
-					blocks[child.id] = child;
-				});
+				for (const item of child.children) {
+					blocks[item.id] = item;
+				}
 			}
 		}
 	}
@@ -179,23 +179,23 @@ export function install(el, scope) {
 			if (!dom) throw new Error("Invalid element", el, "missing dom");
 			dom = dom.fuse(data, rscope);
 			if (!dom) return;
-			let list = dom;
+			let list;
 			if (dom.nodeType != Node.DOCUMENT_FRAGMENT_NODE) {
 				list = [dom];
 			} else {
-				list = dom.children;
+				list = Array.from(dom.children);
 			}
-			list.forEach((dom) => {
-				for (const attr of Array.from(dom.attributes)) {
+			for (const node of list) {
+				for (const attr of Array.from(node.attributes)) {
 					if (!attr.name.startsWith('style-')) continue;
 					const style = attr.name.split('-').slice(1).map((w, i) => {
 						if (i > 0) w = w[0].toUpperCase() + w.substr(1);
 						return w;
 					}).join("");
-					dom.style[style] = attr.value;
-					dom.removeAttribute(attr.name);
+					node.style[style] = attr.value;
+					node.removeAttribute(attr.name);
 				}
-			});
+			}
 		}
 		return dom;
 	};
