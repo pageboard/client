@@ -1,6 +1,6 @@
---- dist/index.js	1985-10-26 09:15:00.000000000 +0100
-+++ dist/index.js	2020-02-18 18:12:38.120215665 +0100
-@@ -1342,7 +1342,10 @@
+--- index.es.js	1985-10-26 09:15:00.000000000 +0100
++++ index.es.js	2021-09-08 15:19:31.289320573 +0200
+@@ -1438,7 +1438,10 @@
  // Create a view desc for the top-level document node, to be exported
  // and used by the view class.
  function docViewDesc(doc, outerDeco, innerDeco, dom, view) {
@@ -10,4 +10,3 @@
 +  if (spec) return new CustomNodeViewDesc(null, doc, outerDeco, innerDeco, dom, dom, dom, spec, view, 0)
    return new NodeViewDesc(null, doc, outerDeco, innerDeco, dom, dom, dom, view, 0)
  }
- 

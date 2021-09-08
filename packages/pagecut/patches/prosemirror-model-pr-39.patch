@@ -1,7 +1,7 @@
---- dist/index.js.orig	1985-10-26 09:15:00.000000000 +0100
-+++ dist/index.js	2019-08-05 11:44:07.268410620 +0200
-@@ -2648,7 +2648,8 @@
-     var rule = this$1.tags[i];
+--- index.es.js.orig	1985-10-26 09:15:00.000000000 +0100
++++ index.es.js	2021-09-08 15:28:13.180196237 +0200
+@@ -2622,7 +2622,8 @@
+     var rule = this.tags[i];
      if (matches(dom, rule.tag) &&
          (rule.namespace === undefined || dom.namespaceURI == rule.namespace) &&
 -        (!rule.context || context.matchesContext(rule.context))) {
@@ -10,16 +10,15 @@
        if (rule.getAttrs) {
          var result = rule.getAttrs(dom);
          if (result === false) { continue }
-@@ -3136,6 +3137,36 @@
-   } }
+@@ -3151,6 +3152,35 @@
+   return match(parts.length - 1, this.open)
  };
  
 +// : (NodeType) → bool
 +// Determines whether the given node type
 +// matches this context.
 +ParseContext.prototype.matchesType = function matchesType (type) {
-+    var this$1 = this;
-+
++  var this$1 = this;
 +  var option = this.options.context;
 +  var useRoot = !this.isOpen && (!option || option.parent.type == this.nodes[0].type);
 +  var minDepth = -(option ? option.depth + 1 : 0) + (useRoot ? 0 : 1);
@@ -33,7 +32,7 @@
 +      var nextMatch = function(contentMatch) {
 +        if (contentMatch.matchType(type)) return true;
 +        if (!contentMatch.validEnd) {
-+        	return nextMatch(contentMatch.next[contentMatch.next.length - 1]);
++          return nextMatch(contentMatch.next[contentMatch.next.length - 1]);
 +        }
 +        return false;
 +      };
@@ -44,6 +43,6 @@
 +  return match(this.open);
 +};
 +
- // : (string) → bool
- // Determines whether the given [context
- // string](#ParseRule.context) matches this context.
+ ParseContext.prototype.textblockFromContext = function textblockFromContext () {
+   var $context = this.options.context;
+   if ($context) { for (var d = $context.depth; d >= 0; d--) {
