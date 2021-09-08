@@ -58,7 +58,7 @@ export function render(res, scope, el) {
 		el = elts[block.type];
 	}
 	if (res.items) {
-		res.items.forEach((child) => {
+		for (const child of res.items) {
 			blocks[child.id] = child;
 			// this case should actually be res.item.children (like blocks.search api)
 			// but page.get api returns res.item/res.items and we can't change it in a compatible way.
@@ -67,7 +67,7 @@ export function render(res, scope, el) {
 					blocks[child.id] = child;
 				});
 			}
-		});
+		}
 	}
 	return scope.$view.from(block, blocks, {
 		type: el.name,
@@ -92,7 +92,7 @@ export function install(el, scope) {
 		}
 		if (el.fragments) {
 			let reparse = false;
-			el.fragments.forEach((obj) => {
+			for (const obj of el.fragments) {
 				let target;
 				if (obj.type === 'doc') target = scope.$element;
 				else if (obj.type) target = scope.$elements[obj.type] || {};
@@ -107,18 +107,19 @@ export function install(el, scope) {
 							node.insertAdjacentHTML(obj.position || 'afterend', obj.html);
 							if (obj.html.fuse()) el.fusable = true;
 						}
-						if (obj.attributes) Object.keys(obj.attributes).forEach(key => {
-							const attr = obj.attributes[key];
-							if (key == "is" && attr) reparse = true;
-							node.setAttribute(key, attr);
-							if (attr.fuse()) el.fusable = true;
-						});
+						if (obj.attributes) {
+							for (const [key, attr] of Object.entries(obj.attributes)) {
+								if (key == "is" && attr) reparse = true;
+								node.setAttribute(key, attr);
+								if (attr.fuse()) el.fusable = true;
+							}
+						}
 					} else {
 						// eslint-disable-next-line no-console
 						console.warn("path not found", obj.path, "in", el.name, el.html);
 					}
 				}
-			});
+			}
 			if (reparse) el.dom = str2dom(el.dom.outerHTML, {
 				doc: scope.$doc,
 				ns: el.ns
@@ -140,10 +141,10 @@ export function install(el, scope) {
 		const rscope = Object.assign({}, scope, bscope, {
 			$element: el
 		});
-		["id", "type", "parent", "child", "parents", "children", "updated_at", "created_at", "lock", "expr"].forEach(function(name) {
+		for (const name of ["id", "type", "parent", "child", "parents", "children", "updated_at", "created_at", "lock", "expr"]) {
 			const val = block[name];
 			if (val != null) rscope['$' + name] = val;
-		});
+		}
 
 		if (el.filters) rscope.$filters = Object.assign({}, rscope.$filters, el.filters);
 
@@ -185,15 +186,15 @@ export function install(el, scope) {
 				list = dom.children;
 			}
 			list.forEach((dom) => {
-				Array.from(dom.attributes).forEach(attr => {
-					if (!attr.name.startsWith('style-')) return;
+				for (const attr of Array.from(dom.attributes)) {
+					if (!attr.name.startsWith('style-')) continue;
 					const style = attr.name.split('-').slice(1).map((w, i) => {
 						if (i > 0) w = w[0].toUpperCase() + w.substr(1);
 						return w;
 					}).join("");
 					dom.style[style] = attr.value;
 					dom.removeAttribute(attr.name);
-				});
+				}
 			});
 		}
 		return dom;

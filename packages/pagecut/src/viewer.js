@@ -77,10 +77,10 @@ export default class Viewer {
 		} else {
 			dom.removeAttribute('block-id');
 			const data = Object.assign({}, block.data);
-			if (el.properties) Object.keys(el.properties).forEach((key) => {
+			if (el.properties) for (const key of Object.keys(el.properties)) {
 				const attr = key.replace(/([A-Z])/g, (g) => `-${g[0].toLowerCase()}`);
 				if (dom.getAttribute(attr) == data[key]) delete data[key];
-			});
+			}
 			if (data && Object.keys(data).length) {
 				dom.setAttribute('block-data', JSON.stringify(data));
 			} else {

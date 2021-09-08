@@ -57,11 +57,12 @@ export default class BlocksView {
 		// sometimes data can carry an old odd value
 		if (data === undefined || typeof data == "string") data = {};
 		else data = Object.assign({}, data);
-		Object.keys(schema.properties).forEach(function (key) {
-			const prop = schema.properties[key];
-			if (prop.default !== undefined && data[key] === undefined) data[key] = prop.default;
+		for (const [key, prop] of Object.entries(schema.properties)) {
+			if (prop.default !== undefined && data[key] === undefined) {
+				data[key] = prop.default;
+			}
 			if (prop.properties) data[key] = BlocksView.fill(prop, data[key]);
-		});
+		}
 		return data;
 	}
 
@@ -131,13 +132,13 @@ export default class BlocksView {
 			console.error(ex);
 		}
 		if (block.children) {
-			block.children.forEach(function (child) {
+			for (const child of block.children) {
 				if (!blocks[child.id]) {
 					blocks[child.id] = child;
 				} else {
 					console.warn("child already exists", child, "in", block);
 				}
-			});
+			}
 			delete block.children;
 		}
 		// if (block.blocks) {
@@ -146,14 +147,14 @@ export default class BlocksView {
 		if (!fragment || !fragment.querySelectorAll) return;
 
 		const fragments = [fragment.nodeName == "BODY" ? fragment.parentNode : fragment];
-		Array.prototype.forEach.call(fragment.querySelectorAll('template'), (node) => {
+		for (const node of fragment.querySelectorAll('template')) {
 			fragments.push(node.content);
-		});
-		fragments.forEach((fragment) => {
-			if (opts.strip) Array.prototype.forEach.call(fragment.querySelectorAll('[block-data]'), (node) => {
+		}
+		for (const frag of fragments) {
+			if (opts.strip) for (const node of frag.querySelectorAll('[block-data]')) {
 				node.removeAttribute('block-data');
-			});
-			Array.prototype.forEach.call(fragment.querySelectorAll('[block-id]'), (node) => {
+			}
+			for (const node of frag.querySelectorAll('[block-id]')) {
 				const id = node.getAttribute('block-id');
 				if (id === block.id) return;
 				const type = node.getAttribute('block-type');
@@ -177,14 +178,14 @@ export default class BlocksView {
 					return;
 				}
 				if (frag.attributes) {
-					for (let i = 0, att; i < node.attributes.length, att = node.attributes[i]; i++) {
+					for (const att of Array.from(node.attributes)) {
 						if (opts.strip && att.name == "block-id") continue;
 						if (!frag.hasAttribute(att.name)) frag.setAttribute(att.name, att.value);
 					}
 				}
 				parent.replaceChild(frag, node);
-			});
-		});
+			}
+		}
 		return fragment;
 	}
 }

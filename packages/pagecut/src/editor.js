@@ -87,10 +87,10 @@ class Editor extends View.EditorView {
 
 		const nodeViews = {};
 		const elemsList = Object.values(elements).sort(function(a, b) {
-			return (a.priority || 0) - (b.priority || 0);
+			return (b.priority || 0) - (a.priority || 0);
 		});
-		for (let i = elemsList.length - 1; i >= 0; i--) {
-			DefineSpecs(viewer, elemsList[i], spec, nodeViews);
+		for (const el of elemsList) {
+			DefineSpecs(viewer, el, spec, nodeViews);
 		}
 		const schema = new Model.Schema(spec);
 		const domParser = Model.DOMParser.fromSchema(schema);
