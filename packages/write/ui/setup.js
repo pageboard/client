@@ -233,7 +233,7 @@ function editorClose() {
 function devTools() {
 	const editor = this;
 	if (window.ProseMirrorDevTools) {
-		window.ProseMirrorDevTools.applyDevTools(editor, {
+		window.ProseMirrorDevTools(editor, {
 			EditorState: editor.root.defaultView.Pagecut.View.EditorState
 		});
 	} else {

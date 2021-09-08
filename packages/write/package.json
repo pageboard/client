@@ -20,14 +20,14 @@
   "homepage": "https://github.com/pageboard/client#readme",
   "dependencies": {
     "fomantic-ui-css": "2.7.2",
-    "postinstall": "^0.7.0"
+    "postinstall": "^0.7.3"
   },
   "devDependencies": {
     "@pageboard/pagecut": "^0.10.0",
     "cropperjs": "^1.5.12",
     "duration-relativetimeformat": "^2.0.1",
     "fast-safe-stringify": "^2.0.8",
-    "postinstall-bundle": "^0.7.2",
+    "postinstall-bundle": "^0.7.4",
     "pretty-bytes": "^5.6.0",
     "prosemirror-dev-tools": "^3.1.0",
     "react": "^17.0.2",
@@ -42,11 +42,11 @@
     "cropperjs/dist/cropper.css": "copy lib/",
     "cropperjs/dist/cropper.js": "copy lib/",
     "speakingurl/lib/speakingurl.js": "copy lib/",
-    "@pageboard/pagecut/src/editor.js": "bundle --name=Pagecut lib/pagecut/",
-    "@pageboard/pagecut/src/menubar.js": "bundle --name=Pagecut.Menubar lib/pagecut/menu.js",
+    "@pageboard/pagecut/src/editor.js": "bundle --name=window.Pagecut lib/pagecut/",
+    "@pageboard/pagecut/src/menubar.js": "bundle --name=window.Pagecut.Menubar lib/pagecut/menu.js",
     "@pageboard/pagecut/src/*.css": "copy lib/pagecut/",
-    "prosemirror-dev-tools/dist/cjs/index.js": "bundle --name=ProseMirrorDevTools lib/prosemirror-dev-tools.js",
-    "./src/pageboard.js": "bundle --name=Pageboard.utils lib/"
+    "prosemirror-dev-tools/dist/cjs/index.js": "bundle --name=ProseMirrorDevTools --replace=process.env.NODE_ENV:development lib/prosemirror-dev-tools.js",
+    "./src/pageboard.js": "bundle --name=window.Pageboard.utils lib/"
   },
   "pageboard": {
     "priority": -1,
