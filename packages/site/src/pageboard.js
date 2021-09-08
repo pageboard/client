@@ -179,7 +179,7 @@ Page.paint(function (state) {
 		const loc = Page.parse(metas.Location);
 		let same = true;
 
-		if (state.samePathname(state)) {
+		if (state.samePathname(loc)) {
 			if (state.sameQuery(loc)) {
 				// do nothing
 			} else if (Object.keys(loc.query).every(key => loc.query[key] === state.query[key])) {
