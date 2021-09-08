@@ -1,9 +1,9 @@
-exports.PrettyBytes = require('pretty-bytes');
-exports.stableStringify = require('fast-safe-stringify').stableStringify;
+export { default as PrettyBytes } from 'pretty-bytes';
+export { stableStringify } from 'fast-safe-stringify';
+import Duration from 'duration-relativetimeformat';
 
-const Duration = require('duration-relativetimeformat');
 let duration;
-exports.durationFormat = function (to, from) {
+export function durationFormat(to, from) {
 	if (!duration) duration = new Duration(document.documentElement.lang || "en");
 	return duration.format(to, from);
-};
+}
