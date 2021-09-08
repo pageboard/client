@@ -1,6 +1,6 @@
 {
   "name": "@pageboard/write",
-  "version": "0.10.0",
+  "version": "0.10.2",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -45,7 +45,6 @@
     "@pageboard/pagecut/src/editor.js": "bundle --name=window.Pagecut lib/pagecut/",
     "@pageboard/pagecut/src/menubar.js": "bundle --name=window.Pagecut.Menubar lib/pagecut/menu.js",
     "@pageboard/pagecut/src/*.css": "copy lib/pagecut/",
-    "prosemirror-dev-tools/dist/cjs/index.js": "bundle --name=ProseMirrorDevTools --replace=process.env.NODE_ENV:development lib/prosemirror-dev-tools.js",
     "./src/pageboard.js": "bundle --name=window.Pageboard.utils lib/"
   },
   "pageboard": {
