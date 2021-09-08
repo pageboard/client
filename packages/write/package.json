@@ -26,7 +26,7 @@
     "@pageboard/pagecut": "^0.10.0",
     "cropperjs": "^1.5.12",
     "duration-relativetimeformat": "^2.0.1",
-    "fast-safe-stringify": "^2.0.8",
+    "fast-safe-stringify": "^2.1.1",
     "postinstall-bundle": "^0.7.4",
     "pretty-bytes": "^5.6.0",
     "prosemirror-dev-tools": "^3.1.0",
