@@ -14,7 +14,7 @@ Page.patch(function(state) {
 		return loc;
 	}
 	state.push = function(url, opts) {
-		if (!it.editor?.closed) return Promise.resolve();
+		if (it.editor && !it.editor.closed) return Promise.resolve();
 		return Object.getPrototypeOf(this).push.call(this, fixLoc(url, this), opts);
 	};
 	state.replace = function(url, opts) {
