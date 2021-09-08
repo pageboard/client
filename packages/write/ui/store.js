@@ -164,7 +164,7 @@ Pageboard.Controls.Store = class Store {
 			this.initial = root;
 			Store.generatedBefore = Store.generated;
 		} else {
-			if (!this.editor.utils.equal(this.initial, root)) {
+			if (Store.isDifferentRoot(this.initial, root)) {
 				this.unsaved = root;
 				this.set(root);
 			} else {
@@ -443,7 +443,7 @@ Pageboard.Controls.Store = class Store {
 				delete block.virtual;
 				delete iblock.virtual;
 
-				if (!this.editor.utils.equal(iblock, block)) {
+				if (JSON.stringify(block) != JSON.stringify(iblock)) {
 					changes.update.push(block);
 				}
 			}
@@ -471,6 +471,20 @@ Pageboard.Controls.Store = class Store {
 		if (!parent) return;
 		else if (parent.virtual) return this.getParentBlock(parent.virtual, initial, pre);
 		else return parent;
+	}
+
+	static isDifferentRoot(a, b) {
+		const ak = Object.keys(a);
+		const bk = Object.keys(b);
+		if (ak.length != bk.length) return true;
+		ak.sort();
+		bk.sort();
+		for (let i = ak.length - 1; i >= 0; i--) {
+			const k = ak[i];
+			if (bk[i] !== k) return true;
+			if (JSON.stringify(a[k]) != JSON.stringify(b[k])) return true;
+		}
+		return false;
 	}
 
 };
