@@ -3,7 +3,8 @@ class HTMLElementPagination extends HTMLAnchorElement {
 	#queue
 	#reached
 	#size
-	#continue = false
+	#visible
+	#continue
 
 	constructor() {
 		super();
@@ -36,6 +37,8 @@ class HTMLElementPagination extends HTMLAnchorElement {
 			if (this.#updateFetchSize() == false) {
 				this.removeAttribute('href');
 				this.classList.toggle('disabled', true);
+			} else {
+				this.#continue = true;
 			}
 		});
 	}
@@ -84,7 +87,7 @@ class HTMLElementPagination extends HTMLAnchorElement {
 		const off = parseInt(state.query[name]) || 0;
 		if (off == 0) {
 			this.#continue = true;
-			this.#more(state);
+			if (this.#visible) this.#more(state);
 		}
 	}
 
@@ -95,7 +98,10 @@ class HTMLElementPagination extends HTMLAnchorElement {
 			entries.forEach((entry) => {
 				if (this.#reached) return;
 				if (this.offsetParent && (entry.intersectionRatio || 0) !== 0) {
+					this.#visible = true;
 					this.#more(state);
+				} else {
+					this.#visible = false;
 				}
 			});
 		}, {
