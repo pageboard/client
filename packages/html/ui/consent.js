@@ -68,7 +68,10 @@ Page.ready(function(state) {
 });
 
 Page.State.prototype.consent = function (fn) {
-	const consent = this.scope.$consent = Page.storage.get('consent');
+	const initial = this.scope.$consent === undefined;
+	let consent = Page.storage.get('consent');
+	if (consent == null && initial) consent = undefined;
+	this.scope.$consent = consent;
 	this.chain('consent', fn);
 	if (consent === undefined) {
 		HTMLCustomConsentElement.waiting = true;
