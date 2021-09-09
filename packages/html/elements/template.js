@@ -45,7 +45,7 @@ exports.query_tags = {
 };
 
 exports.pagination = {
-	priority: 10, // after fetch
+	priority: 13, // after fetch and after menu items
 	title: "Pagination",
 	icon: '<b class="icon">±N</b>',
 	menu: "link",
