@@ -1,16 +1,19 @@
 class HTMLElementGoogleTranslate extends VirtualHTMLElement {
+	#inst
+	#observer
+	#shown
 	setup(state) {
 		if (this.style) {
 			Object.assign(document.body.style, this.style);
 		}
 		if (this.observer) this.close(state);
-		this.observer = new MutationObserver((list) => {
+		this.#observer = new MutationObserver((list) => {
 			list.forEach((mut) => {
 				if (mut.attributeName == "style") {
 					const s = mut.target.style;
 					const top = parseInt(s.top);
-					this.shown = !Number.isNaN(top) && top > 10;
-					if (this.shown) {
+					this.#shown = !Number.isNaN(top) && top > 10;
+					if (this.#shown) {
 						this.style = {
 							minHeight: s.minHeight,
 							top: s.top,
@@ -24,7 +27,7 @@ class HTMLElementGoogleTranslate extends VirtualHTMLElement {
 				}
 			});
 		});
-		this.observer.observe(document.body, {attributes: true});
+		this.#observer.observe(document.body, {attributes: true});
 	}
 	paint(state) {
 		this.translate = Page.storage.getCookies().googtrans;
@@ -45,18 +48,18 @@ class HTMLElementGoogleTranslate extends VirtualHTMLElement {
 		document.head.appendChild(script);
 	}
 	setClass() {
-		document.documentElement.classList.toggle('google-translate-shown', Boolean(this.shown));
+		document.documentElement.classList.toggle('google-translate-shown', Boolean(this.#shown));
 	}
 	cb(state) {
-		if (this.shown) return;
+		if (this.#shown) return;
 		this.script.remove();
 		const TE = window.google.translate.TranslateElement;
-		if (!this.inst) this.inst = new TE({
+		if (!this.#inst) this.#inst = new TE({
 			pageLanguage: document.documentElement.lang,
 			layout: TE.InlineLayout.SIMPLE,
 			autoDisplay: true
 		});
-		this.inst.showBanner();
+		this.#inst.showBanner();
 	}
 	started() {
 		if (this.translate) {
@@ -67,11 +70,11 @@ class HTMLElementGoogleTranslate extends VirtualHTMLElement {
 		}
 	}
 	close() {
-		if (this.observer) this.observer.disconnect();
-		delete this.observer;
-		if (this.inst) {
-			this.inst.dispose();
-			delete this.inst;
+		if (this.#observer) this.#observer.disconnect();
+		this.#observer = null;
+		if (this.#inst) {
+			this.#inst.dispose();
+			this.#inst = null;
 		}
 	}
 	handleClick(e, state) {
