@@ -27,14 +27,16 @@ class HTMLElementSitepage extends VirtualHTMLElement {
 		if (!content) return;
 		this.updating = true;
 		const parentUrl = this.dataset.url || "";
+		const uniques = {};
 		Array.prototype.forEach.call(content.children, function(child, index) {
 			if (!child.matches('element-sitepage')) return; // cursor
 			const childUrl = child.dataset.url || '';
 			if (childUrl.startsWith('/.')) return;
 			const newUrl = parentUrl + "/" + childUrl.split('/').pop();
-			if (childUrl != newUrl) {
+			if (childUrl != newUrl && !uniques[newUrl]) {
 				child.setAttribute('data-url', newUrl);
 			}
+			uniques[newUrl] = true;
 			const curIndex = parseInt(child.dataset.index);
 			if (curIndex != index) {
 				child.setAttribute('data-index', index);
