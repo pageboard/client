@@ -35,7 +35,6 @@ export default class BlocksView {
 	}
 
 	mount(el, block, blocks) {
-		if (!el) return;
 		el.contents.normalize(block);
 		const copy = this.copy(block);
 		const doc = this.view.doc;
@@ -114,9 +113,14 @@ export default class BlocksView {
 		const view = this.view;
 		if (!blocks) blocks = {};
 		if (!opts) opts = {};
-		const el = view.element(opts.element || opts.type || block.type);
+		const type = opts.element || opts.type || block.type;
+		const el = view.element(type);
 		if (block.id) {
 			this.initial[block.id] = block;
+		}
+		if (!el) {
+			console.warn("Unknown block type", block.id, type);
+			return;
 		}
 		block = this.mount(el, block, blocks);
 		if (!block) return;

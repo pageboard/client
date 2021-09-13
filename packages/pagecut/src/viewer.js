@@ -45,12 +45,7 @@ export default class Viewer {
 	render(block, opts) {
 		let dom;
 		opts = opts || {};
-		const type = opts.element || opts.type || block.type;
-		const el = this.element(type);
-		if (!el) {
-			console.warn("Unknown block type", type);
-			return;
-		}
+		const el = this.element(opts.element || opts.type || block.type);
 		try {
 			dom = this.blocks.render(el, block, opts);
 		} catch (ex) {
