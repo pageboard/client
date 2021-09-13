@@ -19,7 +19,7 @@ class HTMLElementPagination extends HTMLAnchorElement {
 		const off = parseInt(state.query[name]) || 0;
 		const delta = parseInt(this.dataset.value) || 0;
 		const cur = off + delta;
-		const disabled = cur < 0 || !this.#findFetch() || this.#continue && delta < 0;
+		const disabled = cur < 0 || !this.#findFetch() || this.#continue && delta < 0 || false;
 		this.classList.toggle('disabled', disabled);
 
 		if (disabled) {
