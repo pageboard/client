@@ -65,8 +65,8 @@
 		#state
 		#props
 		constructor(element, props) {
-			const _props = Object.assign({}, defaultProps, props);
-			if (!_props.step) _props.step = parseInt(element.getAttribute('step'));
+			props = Object.assign({}, defaultProps, props);
+			if (!props.step) props.step = parseInt(element.getAttribute('step'));
 
 			this.element = element;
 
@@ -80,10 +80,10 @@
 			this.#state = {
 				type: undefined,
 				parts: [],
-				datetime: _props.datetime || element.value
+				datetime: props.datetime || element.value
 			};
 
-			this.setOptions(_props);
+			this.setOptions(props);
 		}
 
 		#setState(newPartialState, callback) {
