@@ -195,7 +195,7 @@ function createRootSpec(elt, obj, viewer) {
 			if (data) {
 				attrs.data = data;
 			} else if (elt.parse) {
-				attrs.data = JSON.stringify(elt.parse.call(elt, dom));
+				attrs.data = JSON.stringify(elt.parse(dom));
 			} else if (elt.inplace && elt.properties) {
 				const dataObj = {};
 				Object.keys(elt.properties).forEach(function(key) {

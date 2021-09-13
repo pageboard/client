@@ -126,7 +126,7 @@ export function install(el, scope) {
 			});
 		}
 		if (el.install && scope.$element) {
-			el.install.call(el, scope);
+			el.install(scope);
 		}
 	} catch(err) {
 		// eslint-disable-next-line no-console
@@ -174,7 +174,7 @@ export function install(el, scope) {
 		});
 		let dom = el.dom && el.dom.cloneNode(true);
 		if (el.fuse) {
-			dom = el.fuse.call(el, dom, data, rscope) || dom;
+			dom = el.fuse(dom, data, rscope) || dom;
 		} else if (el.fusable) {
 			if (!dom) throw new Error("Invalid element", el, "missing dom");
 			dom = dom.fuse(data, rscope);

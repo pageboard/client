@@ -29,7 +29,7 @@ export default class BlocksView {
 
 		block = Object.assign({}, block);
 		block.data = BlocksView.fill(el, block.data);
-		const dom = el.render.call(el, block, scope);
+		const dom = el.render(block, scope);
 		if (dom && opts.merge !== false) this.merge(el, dom, block);
 		return dom;
 	}
