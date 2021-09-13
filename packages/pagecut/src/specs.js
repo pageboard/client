@@ -121,10 +121,8 @@ export default function define(viewer, elt, schema, nodeViews) {
 				if (schema.marks.get(existingName)) {
 					schema.marks = schema.marks.remove(existingName);
 				}
-			} else {
-				if (schema.nodes.get(existingName)) {
-					schema.nodes = schema.nodes.remove(existingName);
-				}
+			} else if (schema.nodes.get(existingName)) {
+				schema.nodes = schema.nodes.remove(existingName);
 			}
 		}
 		if (spec.inline && spec.content) {

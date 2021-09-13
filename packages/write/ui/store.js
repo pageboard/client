@@ -163,14 +163,12 @@ Pageboard.Controls.Store = class Store {
 		if (!this.initial) {
 			this.initial = root;
 			Store.generatedBefore = Store.generated;
+		} else if (Store.isDifferentRoot(this.initial, root)) {
+			this.unsaved = root;
+			this.set(root);
 		} else {
-			if (Store.isDifferentRoot(this.initial, root)) {
-				this.unsaved = root;
-				this.set(root);
-			} else {
-				delete this.unsaved;
-				this.clear();
-			}
+			delete this.unsaved;
+			this.clear();
 		}
 		this.uiUpdate();
 		this.pageUpdate();
@@ -394,18 +392,16 @@ Pageboard.Controls.Store = class Store {
 								changes.remove[id] = true;
 							}
 						}
-					} else {
-						if (!iblock.standalone) {
-							if (!dropped[iparent]) {
-								Store.parentList(changes.unrelate, iblock);
-								unrelated[id] = true;
-								changes.remove[id] = true;
-							}
-						} else if (unsaved[iparent]) {
+					} else if (!iblock.standalone) {
+						if (!dropped[iparent]) {
+							Store.parentList(changes.unrelate, iblock);
+							unrelated[id] = true;
 							changes.remove[id] = true;
-						} else {
-							dropped[id] = true;
 						}
+					} else if (unsaved[iparent]) {
+						changes.remove[id] = true;
+					} else {
+						dropped[id] = true;
 					}
 				} else {
 					// eslint-disable-next-line no-console

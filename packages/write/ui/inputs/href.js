@@ -210,19 +210,17 @@ Pageboard.schemaHelpers.href = class Href {
 				return Pageboard.uiLoad(remove, this.remove(Href.cache[href].url)).then(() => {
 					this.renderList();
 				});
+			} else if (href == input.value) {
+				this.searchStop();
 			} else {
-				if (href == input.value) {
-					this.searchStop();
-				} else {
-					input.value = href;
-					const data = Href.cache[href];
-					if (data && !Pageboard.hrefs[href]) {
-						Pageboard.hrefs[href] = Object.assign({
-							mime: data.mime
-						}, data.meta);
-					}
-					Pageboard.trigger(input, 'change');
+				input.value = href;
+				const data = Href.cache[href];
+				if (data && !Pageboard.hrefs[href]) {
+					Pageboard.hrefs[href] = Object.assign({
+						mime: data.mime
+					}, data.meta);
 				}
+				Pageboard.trigger(input, 'change');
 			}
 		});
 	}

@@ -60,8 +60,8 @@ Pageboard.schemaHelpers.pageUrl = class PageUrl {
 	check() {
 		if (Pageboard.editor.controls.store.checkUrl(this.block.id, this.input.value)) {
 			this.field.appendChild(this.sameDom);
-		} else {
-			if (this.sameDom.parentNode) this.sameDom.remove();
+		} else if (this.sameDom.parentNode) {
+			this.sameDom.remove();
 		}
 	}
 

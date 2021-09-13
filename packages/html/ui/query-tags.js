@@ -17,8 +17,8 @@ class HTMLElementQueryTags extends VirtualHTMLElement {
 		return nodes.filter(node => {
 			if (Array.isArray(value)) {
 				if (value.indexOf(node.value) < 0) return;
-			} else {
-				if (value != node.value) return;
+			} else if (value != node.value) {
+				return;
 			}
 			return true;
 		});

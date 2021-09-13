@@ -282,22 +282,20 @@ export default class Utils {
 		} else {
 			if (obj instanceof ResolvedPos) {
 				pos = obj.pos;
-			} else {
-				if (obj.ownerDocument == this.view.dom.ownerDocument) {
-					if (obj == this.view.dom) {
-						return new AllSelection(tr.doc);
-					} else if (obj.pmViewDesc) {
-						if (textSelection || obj.pmViewDesc.mark) {
-							return TextSelection.create(tr.doc, obj.pmViewDesc.posAtStart, obj.pmViewDesc.posAtEnd);
-						} else {
-							return new NodeSelection(tr.doc.resolve(obj.pmViewDesc.posBefore));
-						}
+			} else if (obj.ownerDocument == this.view.dom.ownerDocument) {
+				if (obj == this.view.dom) {
+					return new AllSelection(tr.doc);
+				} else if (obj.pmViewDesc) {
+					if (textSelection || obj.pmViewDesc.mark) {
+						return TextSelection.create(tr.doc, obj.pmViewDesc.posAtStart, obj.pmViewDesc.posAtEnd);
 					} else {
-						pos = this.posFromDOM(obj);
+						return new NodeSelection(tr.doc.resolve(obj.pmViewDesc.posBefore));
 					}
 				} else {
-					pos = obj;
+					pos = this.posFromDOM(obj);
 				}
+			} else {
+				pos = obj;
 			}
 			if (typeof pos != "number") return;
 			parent = this.parents(tr, pos);
@@ -332,12 +330,10 @@ export default class Utils {
 			} else {
 				return tr.selection;
 			}
+		} else if (root.node == tr.doc) {
+			return new AllSelection(root.node);
 		} else {
-			if (root.node == tr.doc) {
-				return new AllSelection(root.node);
-			} else {
-				return new NodeSelection($rootPos);
-			}
+			return new NodeSelection($rootPos);
 		}
 	}
 
@@ -563,9 +559,10 @@ export default class Utils {
 				} else {
 					return false;
 				}
+			} else if (cands.includes(last) && last) {
+				return true;
 			} else {
-				if (cands.includes(last) && last) return true;
-				else return false;
+				return false;
 			}
 		});
 	}
