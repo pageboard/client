@@ -1,6 +1,7 @@
 Pageboard.schemaHelpers['element-property'] = class ElementProperty {
 	constructor(input, opts, props) {
 		this.field = input.closest('.field');
+		this.field.classList.add('inline');
 		this.input = input;
 	}
 

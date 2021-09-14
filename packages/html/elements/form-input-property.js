@@ -6,29 +6,28 @@ exports.input_property = {
 	icon: '<i class="icon">X</i>',
 	properties: {
 		name: {
-			title: 'name',
+			title: 'Name',
 			type: 'string',
 			format: 'singleline',
 			$helper: 'element-property'
 		},
-		disabled: {
-			title: 'disabled',
-			type: 'boolean',
-			default: false
-		},
 		radios: {
-			title: 'Show radios if less than',
-			description: 'If number of options is over this number, show a <select>',
+			title: 'Radios < Select',
 			type: 'integer',
 			default: 5
 		},
 		range: {
-			title: 'Show range if interval less than',
+			title: 'Range < Input',
 			type: 'integer',
 			default: 10
 		},
+		disabled: {
+			title: 'Disabled',
+			type: 'boolean',
+			default: false
+		},
 		multiple: {
-			title: 'Allow multiple choices',
+			title: 'Multiple choices',
 			type: 'boolean',
 			default: false
 		},
