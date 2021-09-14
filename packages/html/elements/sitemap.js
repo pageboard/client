@@ -55,6 +55,7 @@ exports.sitemap = {
 					<span class="ui mini red label">[$lock.read|magnet:*]</span>
 					<br>
 					<a href="[url]" class="description">[url|or:-]</a>
+					<a href="[redirect|magnet:*]" class="redirection"> ➜ [redirect]</a>
 				</div>
 				<div class="list content [leaf|!|bmagnet:*]" block-content="children"></div>
 			</element-sitepage>`

@@ -43,6 +43,12 @@ element-sitepage > .title > .label {
 	float:right;
 	display:none;
 }
+element-sitepage > .title > a.description {
+	color: darkgrey;
+}
+element-sitepage > .title > a.redirection {
+	color:dodgerblue;
+}
 [contenteditable] element-sitepage > .title > .label {
 	display:block;
 }
