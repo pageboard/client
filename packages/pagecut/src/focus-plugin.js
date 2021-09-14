@@ -16,17 +16,11 @@ export default class FocusPlugin {
 
 	appendTransaction(transactions, oldState, newState) {
 		// focus once per transaction
-		let itr;
-		let editorUpdate = false;
-		for (let i = 0; i < transactions.length; i++) {
-			itr = transactions[i];
-			if (itr.getMeta('focus')) {
-				return;
-			}
-			if (itr.getMeta('editor')) {
-				editorUpdate = true;
-			}
-		}
+		const onlyPointer = transactions.every((tr) => tr.getMeta('pointer'));
+		if (onlyPointer) return;
+		const editorUpdate = transactions.some((tr) => {
+			return !tr.getMeta('focus') && tr.getMeta('editor');
+		});
 		const tr = newState.tr;
 		if (this.action(tr, editorUpdate)) {
 			return tr;
