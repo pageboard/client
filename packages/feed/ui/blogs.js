@@ -165,7 +165,4 @@ class HTMLElementBlogs extends VirtualHTMLElement {
 	}
 }
 
-Page.ready(function() {
-	VirtualHTMLElement.define('element-blogs', HTMLElementBlogs);
-});
-
+Page.ready(() => VirtualHTMLElement.define('element-blogs', HTMLElementBlogs));

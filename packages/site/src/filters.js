@@ -12,57 +12,56 @@ export function alias(val, what, name) {
 
 export function polyfills($elements, what) {
 	const map = {};
-	Object.keys($elements).forEach(function (key) {
+	for (const key of $elements) {
 		let list = $elements[key].polyfills;
 		if (!list) return;
 		if (typeof list == "string") list = [list];
-		list.forEach(function (item) {
+		for (const item of list) {
 			// what.scope from matchdom is not like scope from pageboard
-			item = item.fuse({}, what.scope.data);
-			map[item] = true;
-		});
-	});
+			map[item.fuse({}, what.scope.data)] = true;
+		}
+	}
 	return Object.keys(map).join(',');
 }
 
 export function csp($elements, what) {
 	const csp = {};
-	Object.keys($elements).forEach(function (key) {
+	for (const key of $elements) {
 		const el = $elements[key];
-		if (el.scripts) el.scripts.forEach(function (src) {
+		if (el.scripts) for (const src of el.scripts) {
 			const origin = /(^https?:\/\/[.-\w]+)/.exec(src);
 			if (origin) {
 				if (!el.csp) el.csp = {};
 				if (!el.csp.script) el.csp.script;
 				el.csp.script.push(origin[0]);
 			}
-		});
-		if (el.stylesheets) el.stylesheets.forEach(function (src) {
+		}
+		if (el.stylesheets) for (const src of el.stylesheets) {
 			const origin = /(^https?:\/\/[.-\w]+)/.exec(src);
 			if (origin) {
 				if (!el.csp) el.csp = {};
 				if (!el.csp.style) el.csp.style;
 				el.csp.style.push(origin[0]);
 			}
-		});
-		if (!el.csp) return;
-		Object.keys(el.csp).forEach(function (src) {
+		}
+		if (!el.csp) continue;
+		for (const src of Object.keys(el.csp)) {
 			let gcsp = csp[src];
 			if (!gcsp) csp[src] = gcsp = [];
 			let list = el.csp[src];
-			if (!list) return;
+			if (!list) continue;
 			if (typeof list == "string") list = [list];
-			list.forEach(function (val) {
-				if (gcsp.includes(val) == false) gcsp.push(val);
-			});
-		});
-	});
-	return Object.keys(csp).filter(function (src) {
-		return csp[src].length > 0;
-	}).map(function (src) {
-		const key = src.indexOf('-') > 0 ? src : `${src}-src`;
-		return `${key} ${csp[src].join(' ')}`.trim().fuse({}, what.scope.data);
-	}).join('; ');
+			for (const item of list) {
+				if (gcsp.includes(item) == false) gcsp.push(item);
+			}
+		}
+	}
+	return Object.keys(csp)
+		.filter((src) => csp[src].length > 0)
+		.map((src) => {
+			const key = src.indexOf('-') > 0 ? src : `${src}-src`;
+			return `${key} ${csp[src].join(' ')}`.trim().fuse({}, what.scope.data);
+		}).join('; ');
 }
 
 
@@ -112,18 +111,18 @@ export function includes(val, what, str) {
 export function sum(obj, what, ...list) {
 	let sum = 0;
 	if (obj == null) return sum;
-	list.forEach(function (str) {
+	for (let str of list) {
 		let sign = 1;
 		if (str.startsWith('-')) {
 			sign = -1;
 			str = str.substring(1);
 		}
 		let val = what.expr.get(obj, str);
-		if (val == null) return;
+		if (val == null) continue;
 		if (typeof val == "string") val = parseFloat(val);
-		if (Number.isNaN(val)) return;
+		if (Number.isNaN(val)) continue;
 		sum += sign * val;
-	});
+	}
 	return sum;
 }
 
@@ -163,7 +162,7 @@ export function schema(val, what, spath) {
 	if (!iskey && val !== undefined) {
 		const listOf = schema.oneOf || schema.anyOf;
 		if (listOf) {
-			const prop = listOf.find(function (item) {
+			const prop = listOf.find((item) => {
 				return item.const === val || item.type === "null" && val === null;
 			});
 			if (prop != null) schema = prop;
@@ -204,9 +203,9 @@ export function unset(obj, what, ...list) {
 	if (obj == null || typeof obj != "object") return obj;
 	obj = Object.assign({}, obj);
 	if (!list.length) list = Object.keys(obj);
-	list.forEach(function (name) {
+	for (const name of list) {
 		obj[name] = undefined;
-	});
+	}
 	return obj;
 }
 
@@ -252,14 +251,14 @@ export function urltpl(obj, what, pName = 'pathname', qName = 'query') {
 	const loc = Page.parse(pathname || what.scope.data.$loc.pathname);
 	Object.assign(loc.query, query || {});
 	const fakes = [];
-	Object.entries(loc.query).forEach(([key, val]) => {
+	for (const [key, val] of Object.entries(loc.query)) {
 		if (val === undefined) {
 			delete loc.query[key];
 		} else if (typeof val == "string" && val.fuse()) {
 			delete loc.query[key];
 			fakes.push([key, val]);
 		}
-	});
+	}
 	let str = loc.toString();
 	if (fakes.length) {
 		if (Object.keys(loc.query).length == 0) str += '?';
@@ -375,7 +374,7 @@ export function formatDate(val, what, ...list) {
 	const l = 'long';
 	const num = 'numeric';
 	const dig = '2-digit';
-	list.forEach(function (tok) {
+	for (const tok of list) {
 		switch (tok) {
 			case 'd': p.weekday = n; break;
 			case 'da': p.weekday = s; break;
@@ -403,7 +402,7 @@ export function formatDate(val, what, ...list) {
 				else console.warn("Unrecognized date format option", tok);
 				break;
 		}
-	});
+	}
 	const lang = document.documentElement.lang || 'en';
 	let str;
 	try {

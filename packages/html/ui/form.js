@@ -15,12 +15,14 @@ class HTMLCustomFormElement extends HTMLFormElement {
 				state.vars.submit = true;
 			}
 			const vars = state.templatesQuery(this);
-			for (const key in vars) this.setAttribute('data-' + key, vars[key]);
+			for (const key in vars) {
+				this.setAttribute('data-' + key, vars[key]);
+			}
 			this.restore(state.scope);
 		} else {
-			this.fill(state.query, state.scope).forEach((name) => {
+			for (const name of this.fill(state.query, state.scope)) {
 				state.vars[name] = true;
-			});
+			}
 		}
 	}
 	paint(state) {
@@ -59,8 +61,8 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			}
 		}, this);
 
-		this.elements.forEach(function (node) {
-			if (node.name == null || node.name == "" || node.type == "button") return;
+		for (const node of this.elements) {
+			if (node.name == null || node.name == "" || node.type == "button") continue;
 			let val = node.value;
 			if (val == "") val = null;
 			if (node.type == "radio") {
@@ -83,7 +85,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			if (query[node.name] === undefined && withDefaults) {
 				query[node.name] = null;
 			}
-		});
+		}
 		const btn = document.activeElement;
 		if (btn && btn.type == "submit" && btn.name && btn.value) {
 			query[btn.name] = btn.value;
@@ -94,14 +96,14 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		// workaround for merging arrays
 		const tagList = "element-fieldset-list";
 		const FieldSet = VirtualHTMLElement.define(tagList);
-		this.querySelectorAll(tagList).forEach((node) => {
+		for (const node of this.querySelectorAll(tagList)) {
 			if (!node.fill) Object.setPrototypeOf(node, FieldSet.prototype);
 			node.fill(query, scope);
-		});
+		}
 		const vars = [];
-		this.elements.forEach(function (elem) {
+		for (const elem of this.elements) {
 			const name = elem.name;
-			if (!name) return;
+			if (!name) continue;
 			if (Object.prototype.hasOwnProperty.call(query, name) && !vars.includes(name)) vars.push(name);
 			const val = query[name];
 			const str = ((v) => {
@@ -116,9 +118,11 @@ class HTMLCustomFormElement extends HTMLFormElement {
 				case 'checkbox':
 					if (Array.isArray(val) && val.length == 0 && elem.value == "") {
 						elem.checked = true;
-					} else elem.checked = (Array.isArray(val) ? val : [str]).some(function (str) {
-						return str.toString() == elem.value;
-					});
+					} else {
+						elem.checked = (Array.isArray(val) ? val : [str]).some((str) => {
+							return str.toString() == elem.value;
+						});
+					}
 					break;
 				case 'select-multiple':
 					elem.fill(str);
@@ -139,18 +143,18 @@ class HTMLCustomFormElement extends HTMLFormElement {
 					}
 					break;
 			}
-		});
+		}
 		return vars;
 	}
 	save() {
-		this.elements.forEach(function (node) {
+		for (const node of this.elements) {
 			if (node.save) node.save();
-		});
+		}
 	}
 	reset() {
-		this.elements.forEach(function (node) {
+		for (const node of this.elements) {
 			if (node.reset) node.reset();
-		});
+		}
 	}
 	backup() {
 		if (!this.action) return;
@@ -227,11 +231,11 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		form.classList.add('loading');
 
 		const data = { $query	};
-		return Promise.all(Array.prototype.filter.call(form.elements, function (node) {
+		return Promise.all(Array.from(form.elements).filter((node) => {
 			return node.type == "file";
-		}).map(function (input) {
+		}).map((input) => {
 			return input.closest('element-input-file').upload();
-		})).then(function () {
+		})).then(() => {
 			data.$query = state.query;
 			data.$request = form.read(true);
 			form.disable();
@@ -239,9 +243,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 				pathname: form.getAttribute('action'),
 				query: data.$query
 			}), data.$request);
-		}).catch(function (err) {
-			return err;
-		}).then(function (res) {
+		}).catch((err) => err).then((res) => {
 			if (res?.grants) state.data.$grants = res.grants;
 			state.scope.$response = res;
 			form.enable();
@@ -306,7 +308,7 @@ HTMLFormElement.prototype.disable = function () {
 	}
 };
 
-Page.ready(function () {
+Page.ready(() => {
 	const Cla = window.customElements.get('element-template');
 	HTMLCustomFormElement.prototype.toggleMessages = function (status) {
 		return Cla.prototype.toggleMessages.call(this, status, this);
@@ -375,21 +377,16 @@ Object.defineProperty(HTMLInputElement.prototype, 'defaultValue', {
 	}
 });
 
-Page.setup(function (state) {
+Page.setup((state) => {
 	// https://daverupert.com/2017/11/happier-html5-forms/
 	Page.connect({
-		captureBlur: function (e, state) {
-			blurHandler(e, false);
-		},
-		captureFocus: function (e, state) {
+		captureBlur: (e, state) => blurHandler(e, false),
+		captureInvalid: (e, state) => blurHandler(e, true),
+		captureFocus: (e, state) => {
 			const el = e.target;
 			if (!el.matches || !el.matches('input,textarea,select')) return;
 			if (e.relatedTarget?.type == "submit") return;
 			updateClass(el.closest('.field') || el, el.validity, true);
-		},
-		captureInvalid: function (e, state) {
-			// e.preventDefault(); // show native ui
-			blurHandler(e, true);
 		}
 	}, document);
 
@@ -409,7 +406,7 @@ Page.setup(function (state) {
 	}
 });
 
-Page.ready(function (state) {
+Page.ready((state) => {
 	const filters = state.scope.$filters;
 
 	function linearizeValues(query, obj = {}, prefix) {
@@ -418,14 +415,14 @@ Page.ready(function (state) {
 		})) {
 			// do not linearize array-as-value
 			obj[prefix] = query;
-		}	else Object.keys(query).forEach(function(key) {
+		}	else for (let key in Object.keys(query)) {
 			const val = query[key];
 			if (prefix) key = prefix + '.' + key;
-			if (val === undefined) return;
+			if (val === undefined) continue;
 			if (val == null) obj[key] = val;
 			else if (typeof val == "object") linearizeValues(val, obj, key);
 			else obj[key] = val;
-		});
+		}
 		return obj;
 	}
 	filters.form = function (val, what, action, name) {
@@ -452,9 +449,9 @@ Page.ready(function (state) {
 				if (val.id && val.data) {
 					// old way
 					values = Object.assign({}, val.data);
-					Object.keys(val).forEach((key) => {
+					for (const key in Object.keys(val)) {
 						if (key != "data") values['$' + key] = val[key];
-					});
+					}
 				} else {
 					// new way
 				}

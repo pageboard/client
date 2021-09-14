@@ -39,7 +39,7 @@ export default class BlocksView {
 		const copy = this.copy(block);
 		const doc = this.view.doc;
 
-		el.contents.each(block, function (content, def) {
+		el.contents.each(block, (content, def) => {
 			if (!(content instanceof Node)) {
 				el.contents.set(copy, def.id, htmlToFrag(content, { doc: doc, ns: el.ns }));
 			}
@@ -77,7 +77,7 @@ export default class BlocksView {
 
 	merge(el, dom, block) {
 		if (dom.nodeType != Node.ELEMENT_NODE) return;
-		el.contents.each(block, function (content, def) {
+		el.contents.each(block, (content, def) => {
 			if (!content) return;
 			let node;
 			if (!def.id || def.id == dom.getAttribute('block-content') || el.inline) {
