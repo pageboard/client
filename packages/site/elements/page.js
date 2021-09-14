@@ -69,7 +69,7 @@ exports.page = {
 		<title>[title][$site.title|pre: - |or:]</title>
 		<meta http-equiv="Status" content="[$status|or:200] [$statusText|or:OK][redirect|!|bmagnet:*]">
 		<meta http-equiv="Status" content="301 Moved Permanently[transition.from|!|bmagnet:*+]">
-		<meta http-equiv="Location" content="[redirect|eq:[url]:|ornull|magnet:+*]">
+		<meta http-equiv="Location" content="[redirect|eq:[url]:|ornull|magnet:+*][$loc.search]">
 		<meta http-equiv="Status" content="301 Matching Location">
 		<meta http-equiv="Location" content="[$links.found|ornull|magnet:+*]">
 		<meta http-equiv="Content-Security-Policy" content="[$elements|csp]">
