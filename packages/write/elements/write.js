@@ -134,6 +134,7 @@ exports.write = {
 		"../ui/inputs/relation.js",
 		"../ui/inputs/service.js",
 		"../ui/notification.js",
+		"../ui/inputs/infinite-scroll.js",
 		"../ui/inputs/href.js",
 		"../ui/inputs/page-title-url.js",
 		"../ui/inputs/page.js",

@@ -2,8 +2,6 @@ Pageboard.schemaHelpers.page = class PageHelper {
 	static cache = {};
 
 	constructor(input, opts, props, block) {
-		this.renderList = this.renderList.bind(this);
-		this.cache = this.cache.bind(this);
 		this.opts = opts;
 		this.input = input;
 		input.type = "hidden";
@@ -13,11 +11,13 @@ Pageboard.schemaHelpers.page = class PageHelper {
 
 	init() {
 		const input = this.input;
-
-		let nodes = input.dom(`<div class="ui input"></div>
-		<div class="ui items"></div>`);
-		this.container = nodes.lastElementChild;
-		this.node = this.container.previousElementSibling;
+		const nodes = input.dom(`
+			<div class="ui input"></div>
+			<div class="ui items"></div>
+			<div class="pager"></div>
+		`);
+		this.node = nodes.firstElementChild;
+		this.container = this.node.nextElementSibling;
 
 		if (this.opts.query) {
 			const fieldset = input.dom('<fieldset class="field href page-href"></fieldset>');
@@ -26,60 +26,83 @@ Pageboard.schemaHelpers.page = class PageHelper {
 			const label = input.previousElementSibling;
 			label.remove();
 			fieldset.prepend(input.dom(`<legend>${label.innerHTML}</legend>`));
-			nodes = input.dom(`
-			<label>[opts.title|or:Query]</label>
-			<input-map title="[opts.description]"></input-map>
-		`).fuse({
+			const queryNodes = input.dom(`
+				<label>[opts.title|or:Query]</label>
+				<input-map title="[opts.description]"></input-map>
+			`).fuse({
 				opts: this.opts
 			}, {});
-			this.inputMap = nodes.lastElementChild;
-			this.node.after(...nodes.children);
-			this.inputMap.addEventListener('change', function (e) {
+			this.inputMap = queryNodes.lastElementChild;
+			this.node.after(...queryNodes.children);
+			this.inputMap.addEventListener('change', (e) => {
 				e.stopPropagation();
 				this.searchStop();
-			}.bind(this));
+			});
 		} else {
 			input.parentNode.classList.add('href', 'page-href');
 			input.after(...nodes.children);
 		}
 
-		this.container.addEventListener('click', function (e) {
+		this.container.addEventListener('click', (e) => {
 			if (e.target.closest('a')) e.preventDefault();
 		}, true);
 
 		const me = this;
 
-		this.node.addEventListener('input', Pageboard.debounce(function (e) {
-			if (me.ignoreEvents) return;
-			if (me.action == "search") {
-				me.searchUpdate();
+		this.infinite = new (class extends window.Pageboard.InfiniteScroll {
+			load(page) {
+				const filter = Object.assign({
+					type: me.opts.type
+				}, me.opts.filter);
+				const text = me.uiInput.value;
+				if (text && !text.startsWith('/')) filter.text = text;
+				else filter.url = (text || '/').replace(/\s+/g, '-');
+				filter.limit = 10;
+				filter.offset = page * filter.limit;
+				return Pageboard.uiLoad(
+					this.node,
+					Pageboard.fetch('get', '/.api/pages', filter)
+				).then(({ items: data }) => {
+					if (!data || data.length == 0) return true;
+					const node = me.container.ownerDocument.createElement('div');
+					me.cache(data);
+					me.renderList(data, node);
+					me.container.append(...node.children);
+				});
+			}
+		})(this.container.nextElementSibling);
+
+		this.node.addEventListener('input', Pageboard.debounce((e) => {
+			if (this.ignoreEvents) return;
+			if (this.action == "search") {
+				this.searchUpdate();
 			} else if (!me.action) {
-				me.write();
-				me.start("search");
+				this.write();
+				this.start("search");
 			}
 		}, 100));
 
-		this.node.addEventListener('focusin', function (e) {
-			if (me.ignoreEvents) return;
+		this.node.addEventListener('focusin', (e) => {
+			if (this.ignoreEvents) return;
 			if (!e.target.matches('input')) return;
-			if (!me.action) {
-				if (me.input.value) {
-					me.node.querySelector('input').select();
+			if (!this.action) {
+				if (this.input.value) {
+					this.node.querySelector('input').select();
 				} else {
-					me.start('search');
+					this.start('search');
 				}
 			}
 		});
 
-		this.node.addEventListener('click', function (e) {
+		this.node.addEventListener('click', (e) => {
 			if (me.ignoreEvents) return;
 			if (e.target.closest('input')) return;
 			const actioner = e.target.closest('[data-action]');
 			if (actioner) this.start(actioner.dataset.action);
-			else this.stop();
-		}.bind(this));
+			else this.stop(true);
+		});
 
-		this.container.addEventListener('click', function (e) {
+		this.container.addEventListener('click', (e) => {
 			e.preventDefault();
 			const item = e.target.closest('.item');
 			if (!item) {
@@ -87,10 +110,10 @@ Pageboard.schemaHelpers.page = class PageHelper {
 				return;
 			}
 			if (this.action == 'search') {
-				me.fakeInput.value = item.getAttribute('href');
+				me.uiInput.value = item.getAttribute('href');
 				this.stop();
 			}
-		}.bind(this));
+		});
 	}
 
 	destroy() {
@@ -101,7 +124,7 @@ Pageboard.schemaHelpers.page = class PageHelper {
 		this.list = [];
 		this.renderField();
 		const val = this.input.value;
-		if (val && !this.fakeInput.value) {
+		if (val && !this.uiInput.value) {
 			this.read();
 		}
 		this.renderList();
@@ -117,10 +140,10 @@ Pageboard.schemaHelpers.page = class PageHelper {
 		this.ignoreEvents = false;
 	}
 
-	stop() {
+	stop(cancel) {
 		const prev = this.action;
 		if (prev) {
-			this[prev + 'Stop']();
+			this[prev + 'Stop'](cancel);
 			this.action = null;
 		}
 		this.renderField();
@@ -148,7 +171,7 @@ Pageboard.schemaHelpers.page = class PageHelper {
 		}
 		this.node.textContent = '';
 		this.node.appendChild(content);
-		this.fakeInput = this.node.querySelector('input');
+		this.uiInput = this.node.querySelector('input');
 		this.read();
 	}
 
@@ -160,88 +183,45 @@ Pageboard.schemaHelpers.page = class PageHelper {
 		return list;
 	}
 
-	searchStart(same) {
-		if (same) {
-			return;
-		}
-		const me = this;
-		const input = this.fakeInput;
-		setTimeout(function () {
-			input.focus();
-		});
-		this.infinite = new window.InfiniteScroll(this.container, {
-			path: function () {
-				const limit = me.opts.limit || 10;
-				const filter = {
-					type: me.opts.type,
-					limit: limit,
-					offset: (this.pageIndex - 1) * limit
-				};
-				const text = me.fakeInput.value;
-				if (text && !text.startsWith('/')) filter.text = text;
-				else filter.url = (text || '/').replace(/\s+/g, '-');
-				return Page.format({
-					pathname: '/.api/pages',
-					query: filter
-				});
-			},
-			responseType: 'text',
-			domParseResponse: false,
-			scrollThreshold: 400,
-			elementScroll: Pageboard.write,
-			loadOnScroll: true,
-			history: false,
-			debug: false
-		});
+	searchStart() {
+		this.initialValue = this.input.value;
+		this.uiInput.value = '';
+		this.uiInput.focus();
 		Pageboard.write.classList.add('href');
-		this.input.closest('form').classList.add('href');
-		let parent = this.input;
-		while ((parent = parent.parentNode.closest('fieldset,.fieldset'))) {
-			parent.classList.add('href');
+		let parent = this.input.parentNode;
+		while (parent) {
+			parent = parent.parentNode.closest('.field,.fieldset');
+			if (parent) parent.classList.add('href');
 		}
+		this.infinite.start();
 		return this.searchUpdate();
 	}
 
 	searchUpdate() {
-		this.container.textContent = "";
-		this.infinite.pageIndex = 1;
-		const p = this.infinite.loadNextPage();
-		if (p) p.then(res => {
-			if (!res || !res.body) return;
-			const data = JSON.parse(res.body).items;
-			const node = this.container.ownerDocument.createElement('div');
-			this.cache(data);
-			this.renderList(data, node);
-			this.infinite.appendItems(Array.from(node.children));
-		});
+		if (!this.infinite.active) {
+			this.searchStart();
+		} else {
+			this.infinite.stop();
+			this.container.textContent = "";
+			this.infinite.start();
+		}
 	}
 
-	searchStop() {
-		if (this.infinite) {
-			this.infinite.destroy();
-			delete this.infinite;
-		}
-		this.container.textContent = '';
+	searchStop(cancel) {
+		this.infinite.stop();
 		Pageboard.write.classList.remove('href');
-		this.input.closest('form').classList.remove('href');
-		let parent = this.input;
-		while ((parent = parent.parentNode.closest('fieldset,.fieldset'))) {
-			parent.classList.remove('href');
+		let parent = this.input.parentNode;
+		while (parent) {
+			parent = parent.parentNode.closest('.field,.fieldset');
+			if (parent) parent.classList.remove('href');
 		}
+		if (cancel) {
+			this.uiInput.value = this.initialValue;
+		}
+		delete this.initialValue;
 		this.write();
+		this.container.textContent = "";
 		Pageboard.trigger(this.input, 'change');
-	}
-
-	get(href) {
-		const loc = Page.parse(href);
-		const obj = PageHelper.cache[loc.pathname];
-		if (obj) return Promise.resolve(obj);
-		return Pageboard.uiLoad(this.node, Pageboard.fetch('get', '/.api/pages', {
-			url: loc.pathname,
-			type: this.opts.type
-		})).then(function (obj) {
-			return obj.items;
-		});
 	}
 
 	renderList(list, container) {
@@ -251,17 +231,17 @@ Pageboard.schemaHelpers.page = class PageHelper {
 		if (!container) container = this.container;
 		const selected = this.input.value;
 		if (list.rendered) {
-			container.childNodes.forEach(function (child) {
-				if (child.nodeType != Node.ELEMENT_NODE) return;
+			for (const child of container.childNodes) {
+				if (child.nodeType != Node.ELEMENT_NODE) continue;
 				const href = child.getAttribute('href');
 				if (href == selected) child.classList.add('selected');
 				else child.classList.remove('selected');
-			});
+			}
 			return;
 		}
 		list.rendered = true;
 		container.textContent = '';
-		list.forEach(function (obj) {
+		for (const obj of list) {
 			const item = this.renderItem(obj);
 			if (selected && item.getAttribute('href') == selected) {
 				item.classList.add('selected');
@@ -269,7 +249,7 @@ Pageboard.schemaHelpers.page = class PageHelper {
 			} else {
 				container.appendChild(item);
 			}
-		}, this);
+		}
 	}
 
 	renderItem(block) {
@@ -289,23 +269,23 @@ Pageboard.schemaHelpers.page = class PageHelper {
 	read() {
 		const loc = Page.parse(this.input.value);
 		if (this.input.value.startsWith('/')) {
-			this.fakeInput.value = loc.pathname;
+			this.uiInput.value = loc.pathname;
 		} else {
-			this.fakeInput.value = "";
+			this.uiInput.value = "";
 		}
 		if (this.inputMap) this.inputMap.value = loc.query;
 	}
 
 	write() {
-		this.input.value = this.format(this.fakeInput.value, this.inputMap?.value);
+		this.input.value = this.format(this.uiInput.value, this.inputMap?.value);
 	}
 
 	format(pathname, query) {
 		const list = [];
-		if (query) Object.keys(query).forEach(function (key) {
-			let val = query[key];
-			if (!Array.isArray(val)) val = [val];
-			val.forEach(function (val) {
+		if (query) for (const key of Object.keys(query)) {
+			let aval = query[key];
+			if (!Array.isArray(aval)) aval = [aval];
+			for (const val of aval) {
 				let item = encodeURIComponent(key);
 				if (typeof val == "string" && val.fuse({ $query: {}, $body: {}, $response: {} }, {}) != val) {
 					// do not escape val
@@ -314,8 +294,8 @@ Pageboard.schemaHelpers.page = class PageHelper {
 					item += '=' + encodeURIComponent(val);
 				}
 				list.push(item);
-			});
-		});
+			}
+		}
 		let qstr = list.join('&');
 		if (qstr.length) qstr = '?' + qstr;
 		return (pathname || "") + qstr;
