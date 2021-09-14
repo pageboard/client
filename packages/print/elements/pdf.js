@@ -3,26 +3,6 @@
 exports.pdf = Object.assign({}, exports.page, {
 	title: 'PDF',
 	icon: '<i class="icon file pdf outline"></i>',
-	properties: {
-		title: {
-			title: 'Title',
-			nullable: true,
-			type: "string",
-			format: "singleline",
-			$helper: 'pageTitle'
-		},
-		url: {
-			title: 'Address',
-			type: "string",
-			pattern: "^(/[a-zA-Z0-9-]*)+$",
-			$helper: 'pageUrl'
-		},
-		index: {
-			type: "integer",
-			default: 0,
-			minimum: 0
-		}
-	},
 	contents: {
 		id: 'body',
 		nodes: 'block+'
@@ -40,6 +20,8 @@ exports.pdf = Object.assign({}, exports.page, {
 		pdf: true
 	}
 });
+exports.pdf.properties.url.pattern = "^(/[a-zA-Z0-9-]*)+$";
+
 if (exports.sitemap) exports.sitepdf = exports.sitemap.itemModel('pdf', true);
 
 exports.sheet = {
