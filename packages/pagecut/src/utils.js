@@ -191,7 +191,7 @@ export default class Utils {
 		if (!parent) return;
 		const root = parent.root;
 		if (!block) {
-			const id = (parent.inline?.node.marks.find(function (mark) {
+			const id = (parent.inline?.node.marks.find((mark) => {
 				return mark.attrs.id != null;
 			}) ?? root.node).attrs.id;
 			if (!id) return;
@@ -473,7 +473,7 @@ export default class Utils {
 		const context = Utils.parseContext(nodeType.spec.element?.context);
 		let can = sel.$from.depth == 0 ? state.doc.type.allowsMarkType(nodeType) : false;
 		try {
-			state.doc.nodesBetween(sel.from, sel.to, function (node, pos) {
+			state.doc.nodesBetween(sel.from, sel.to, (node, pos) => {
 				if (can) return false;
 				if (node.inlineContent && node.type.allowsMarkType(nodeType)) {
 					if (context) {
@@ -539,19 +539,18 @@ export default class Utils {
 
 	static parseContext(context) {
 		if (!context) return;
-		const list = context.split('|').map(function (str) {
+		return context.split('|').map((str) => {
 			const pc = str.trim().split('/');
 			pc.pop();
 			return pc;
 		});
-		return list;
 	}
 
 	static checkContext(list, type, last) {
 		// does not check nested contexts
 		const cands = type.spec.group ? type.spec.group.split(' ') : [];
 		cands.push(type.name);
-		return list.some(function (pc) {
+		return list.some((pc) => {
 			const last = pc[pc.length - 1];
 			if (!last) {
 				if (pc.length == 2 && cands.includes(pc[0])) {
@@ -715,11 +714,9 @@ export default class Utils {
 		let depth = 0;
 
 		if ((wrap = firstTag && Utils.wrapMap[firstTag[1].toLowerCase()])) {
-			html = wrap.map(function (n) {
-				return "<" + n + ">";
-			}).join("") + html + wrap.map(function (n) {
-				return "</" + n + ">";
-			}).reverse().join("");
+			html = wrap.map((n) => `<${n}>`).join("")
+				+ html
+				+ wrap.map((n) => `</${n}>`).reverse().join("");
 			depth = wrap.length;
 		}
 		elt.innerHTML = html;

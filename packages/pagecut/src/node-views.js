@@ -156,7 +156,7 @@ export class RootNodeView {
 					block.content[cname] = [];
 				}
 				let found = false;
-				block.content[cname].forEach(function (idom) {
+				block.content[cname].forEach((idom) => {
 					if (idom == cdom) {
 						found = true;
 					} else {
@@ -166,10 +166,8 @@ export class RootNodeView {
 				if (!found) {
 					block.content[cname].push(cdom);
 				}
-			} else {
-				if (block.content[cname] != cdom) {
-					block.content[cname] = cdom;
-				}
+			} else if (block.content[cname] != cdom) {
+				block.content[cname] = cdom;
 			}
 		}
 		return !(this.virtualContent && node.childCount == 0 && this.dom.isConnected);
@@ -202,7 +200,7 @@ export class RootNodeView {
 				obj[name] = val;
 			}
 			return true;
-		} else if (record.type == "childList" && record.addedNodes.length > 0 && !Array.prototype.some.call(record.addedNodes, function (node) {
+		} else if (record.type == "childList" && record.addedNodes.length > 0 && !Array.prototype.some.call(record.addedNodes, (node) => {
 			if (node.nodeType != Node.ELEMENT_NODE) return true;
 			return node.getAttribute('contenteditable') != "false";
 		})) {
@@ -352,7 +350,7 @@ function mutateNodeView(tr, pos, pmNode, obj, nobj) {
 	if (nobj.children.length) {
 		// pmNode's contentDOM.children may be wrap, container, const
 		let curpos = pos + 1;
-		nobj.children.forEach(function(objChild, i) {
+		nobj.children.forEach((objChild, i) => {
 			const pmChild = pmNode.child(i);
 			const newAttrs = Object.assign({}, pmChild.attrs, {
 				_json: saveDomAttrs(objChild.dom)
@@ -480,10 +478,10 @@ function mapOfStyle(style) {
 
 function mapOfClass(att) {
 	const map = {};
-	(att || '').split(' ').forEach(function(str) {
+	for (let str of (att || '').split(' ')) {
 		str = str.trim();
 		if (str) map[str] = true;
-	});
+	}
 	return map;
 }
 
@@ -556,16 +554,16 @@ function flagDom(elt, dom, iterate, parent) {
 	}
 	if (obj.contentDOM) {
 		const contentDOM = obj.contentDOM.cloneNode(false);
-		Array.prototype.forEach.call(obj.contentDOM.childNodes, function(node) {
+		for (const node of Array.from(obj.contentDOM.childNodes)) {
 			const child = flagDom(elt, node, iterate, obj);
-			if (!child) return;
+			if (!child) continue;
 			if (["wrap", "container", "const"].includes(child.type)) {
 				obj.children.push(child);
 				contentDOM.appendChild(node.cloneNode(true));
 			} else {
 				// ignore it, it is used as default content by viewer
 			}
-		});
+		}
 		if (obj.contentDOM != obj.dom) {
 			obj.contentDOM.parentNode.replaceChild(contentDOM, obj.contentDOM);
 		} else {
@@ -581,11 +579,9 @@ function flagDom(elt, dom, iterate, parent) {
 function getImmediateContents(root, list) {
 	if (root.hasAttribute('block-content')) {
 		list.push(root);
-		return;
-	}
-	Array.prototype.forEach.call(root.childNodes, function(node) {
+	} else for (const node of root.childNodes) {
 		if (node.nodeType == Node.ELEMENT_NODE) getImmediateContents(node, list);
-	});
+	}
 }
 
 function findContent(elt, dom, type) {
@@ -622,15 +618,15 @@ function setupView(me, node) {
 	me.contentDOM.setAttribute("contenteditable", "true");
 	me.dom.setAttribute("contenteditable", "false");
 
-	[
+	for (const type of [
 		'focus',
 		'selectionchange',
 		// 'DOMCharacterDataModified'
-	].forEach(function(type) {
-		me.contentDOM.addEventListener(type, function(e) {
+	]) {
+		me.contentDOM.addEventListener(type, (e) => {
 			me.view.dom.dispatchEvent(new e.constructor(e.type, e));
 		}, false);
-	});
+	}
 }
 
 function staticHtml(dom) {

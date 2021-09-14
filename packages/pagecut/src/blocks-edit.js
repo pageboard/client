@@ -26,9 +26,9 @@ export default class Blocks extends BlocksView {
 		}
 		const view = this.view;
 		const tr = view.state.tr;
-		nodes.forEach(function (node) {
+		for (const node of nodes) {
 			view.utils.refreshTr(tr, node, block);
-		});
+		}
 		view.dispatch(tr);
 	}
 
@@ -177,13 +177,13 @@ export default class Blocks extends BlocksView {
 					if (id) delete ancestor.blocks[id];
 				}
 			}
-			list.forEach(function (item) {
+			for (const item of list) {
 				if (item.id) item.node.setAttribute('block-id', item.id);
 				if (item.type) {
 					// can override block.type
 					item.node.setAttribute('block-type', item.type);
 				}
-			});
+			}
 			el.contents.set(parent, def.id, this.view.utils.serializeHTML(content, true));
 		});
 
@@ -200,7 +200,7 @@ export default class Blocks extends BlocksView {
 			if (!block.standalone) {
 				console.warn("block without content", block, dom);
 			}
-		} else elt.contents.each(block, function (content, def) {
+		} else elt.contents.each(block, (content, def) => {
 			if (!def.id || def.id == dom.getAttribute('block-content') || elt.inline) {
 				elt.contents.set(block, def.id, dom);
 			} else {

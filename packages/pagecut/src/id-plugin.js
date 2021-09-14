@@ -42,15 +42,15 @@ export default class IdPlugin {
 				modified = true;
 				return false;
 			}
-			node.marks.forEach(mark => {
+			for (const mark of node.marks) {
 				if (lastMark && (mark.attrs.id == lastMark.attrs.id || mark.eq(lastMark))) {
-					return;
+					continue;
 				}
 				const attrs = mark.attrs;
 				const el = mark.type.spec.element;
-				if (!el) return;
+				if (!el) continue;
 				const id = attrs.id;
-				if (el.inplace && !id) return;
+				if (el.inplace && !id) continue;
 				lastMark = mark;
 				if (id && ids[id] || !el.inplace && !id) {
 					// add id attribute to the extended mark
@@ -71,7 +71,7 @@ export default class IdPlugin {
 				} else if (id) {
 					ids[id] = true;
 				}
-			});
+			}
 			if (!node.marks.length) lastMark = null;
 
 			const attrs = node.attrs;

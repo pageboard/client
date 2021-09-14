@@ -100,7 +100,7 @@ Pageboard.Controls.Breadcrumb = class Breadcrumb {
 		const items = Array.from(this.node.children);
 		const target = e.target.closest('span');
 		let subFocused = false;
-		items.some(function (item, i) {
+		items.some((item, i) => {
 			const id = item.dataset.id;
 			let sel = item.dataset.selector;
 			if (id) sel += `[block-id="${id}"]`;

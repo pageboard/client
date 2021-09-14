@@ -55,7 +55,7 @@ export default function define(viewer, elt, schema, nodeViews) {
 		return;
 	}
 
-	flagDom(elt, dom, function (obj) {
+	flagDom(elt, dom, (obj) => {
 		let spec;
 		const type = obj.type;
 		if (type == "root") {
@@ -73,7 +73,7 @@ export default function define(viewer, elt, schema, nodeViews) {
 		if (obj?.children.length) {
 			// this type of node has content that is wrap or container type nodes
 			spec.wrapper = true;
-			spec.content = obj.children.map(function (child) {
+			spec.content = obj.children.map((child) => {
 				// eslint-disable-next-line no-console
 				if (!child.name) console.warn(obj, "has no name for child", child);
 				return child.name + (child.type == "const" ? "?" : "");
@@ -198,11 +198,10 @@ function createRootSpec(elt, obj, viewer) {
 				attrs.data = JSON.stringify(elt.parse(dom));
 			} else if (elt.inplace && elt.properties) {
 				const dataObj = {};
-				Object.keys(elt.properties).forEach(function(key) {
-					const prop = elt.properties[key];
+				for (const [key, prop] of Object.entries(elt.properties)) {
 					const attr = key.replace(/([A-Z])/g, (g) => `-${g[0].toLowerCase()}`);
 					let val = dom.getAttribute(attr) ?? dom.dataset?.[key];
-					if (val == null) return;
+					if (val == null) continue;
 					if (prop.type == "integer") {
 						val = parseInt(val);
 						if (!Number.isNaN(val)) dataObj[key] = val;
@@ -214,7 +213,7 @@ function createRootSpec(elt, obj, viewer) {
 					} else if (prop.type == "string") {
 						dataObj[key] = val;
 					}
-				});
+				}
 				attrs.data = JSON.stringify(dataObj);
 			}
 
@@ -487,11 +486,9 @@ function domSelector(dom) {
 	// might be SVGAnimatedString
 	if (cn?.baseVal != null) cn = cn.baseVal;
 	if (cn) {
-		sel += cn.split(' ').filter(function(str) {
-			return Boolean(str);
-		}).map(function(str) {
-			return '.' + str;
-		}).join('');
+		sel += cn.split(' ').filter((str) => Boolean(str))
+			.map((str) => `.${str}`)
+			.join('');
 	}
 	return sel;
 }

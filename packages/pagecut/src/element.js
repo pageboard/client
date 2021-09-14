@@ -14,10 +14,9 @@ export default class Element {
 	}
 	clone() {
 		const el = new Element(this);
-		Object.keys(this).forEach((key) => {
-			const val = this[key];
+		for (const [key, val] of Object.entries(this)) {
 			if (Array.isArray(val)) el[key] = val.slice();
-		});
+		}
 		el.contents = el.contents.clone();
 		return el;
 	}

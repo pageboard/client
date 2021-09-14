@@ -2,21 +2,19 @@
 
 let adv = false;
 
-Page.patch(function(state) {
+Page.patch((state) => {
 	// write mode accepts all params at the moment
-	Object.keys(state.query).forEach((key) => {
+	for (const key in Object.keys(state.query)) {
 		state.vars[key] = true;
-	});
+	}
 });
 
-Page.setup(function(state) {
+Page.setup((state) => {
 	const parentRead = document.getElementById('pageboard-read');
 	const iframe = Pageboard.read = document.createElement('iframe');
 	parentRead.insertBefore(iframe, parentRead.lastElementChild);
 	Pageboard.write = document.getElementById('pageboard-write');
-	document.body.addEventListener('submit', function(e) {
-		e.preventDefault();
-	});
+	document.body.addEventListener('submit', (e) => e.preventDefault());
 	const loc = state.copy();
 	loc.query.develop = "write";
 	const src = loc.toString();
@@ -26,13 +24,13 @@ Page.setup(function(state) {
 });
 
 Pageboard.adopt = function(win, readState) {
-	Page.setup(function(writeState) {
+	Page.setup((writeState) => {
 		win.addEventListener('click', anchorListener, true);
 		// FIXME this prevents setting selection inside a selected link...
 		//win.addEventListener('mouseup', anchorListener, true);
 		win.addEventListener('submit', submitListener, true);
 		win.addEventListener('invalid', submitListener, true);
-		readState.finish(function() {
+		readState.finish(() => {
 			window.document.title = win.document.title;
 			const readCopy = readState.copy();
 			const dev = writeState.query.develop;
@@ -96,9 +94,9 @@ function updatePage(state) {
 
 function filterParents(editor, list) {
 	const sec = [];
-	list.forEach(function(item) {
+	for (const item of list) {
 		const node = item.root.node;
-		if (node.attrs.focused == null) return;
+		if (node.attrs.focused == null) continue;
 		const obj = {
 			node: node,
 			block: editor.blocks.get(node.attrs.id) || editor.blocks.fromAttrs(node.attrs),
@@ -108,14 +106,14 @@ function filterParents(editor, list) {
 		if (item.inline) {
 			obj.inline = {
 				node: item.inline.node,
-				blocks: item.inline.node.marks.map(function(mark) {
+				blocks: item.inline.node.marks.map((mark) => {
 					return editor.blocks.get(mark.attrs.id) || editor.blocks.fromAttrs(mark.attrs);
 				}),
 				rpos: item.inline.rpos
 			};
 		}
 		sec.push(obj);
-	});
+	}
 	return sec;
 }
 
@@ -129,14 +127,14 @@ function update() {
 	this.selection = sel;
 	const parents = filterParents(editor, editor.utils.selectionParents(tr, sel));
 	if (!parents.length) return;
-	if (editor.controls) Object.keys(editor.controls).forEach(function(key) {
+	if (editor.controls) for (const key of Object.keys(editor.controls)) {
 		const c = editor.controls[key];
 		try {
 			if (c.update) c.update(parents, sel, changed);
 		} catch(err) {
 			Pageboard.notify(`control.${key}`, err);
 		}
-	});
+	}
 	editor.updatePage();
 }
 
@@ -199,7 +197,7 @@ Pageboard.Editor = function Editor(win, state) {
 	view.blocks.store = editor.blocks.store;
 
 	const controls = {};
-	Object.keys(Pageboard.Controls).forEach(function(key) {
+	for (const key of Object.keys(Pageboard.Controls)) {
 		const lKey = key.toLowerCase();
 		const ControlClass = Pageboard.Controls[key];
 		const node = document.getElementById(lKey);
@@ -209,7 +207,7 @@ Pageboard.Editor = function Editor(win, state) {
 		} else {
 			controls[lKey] = new ControlClass(editor, node);
 		}
-	});
+	}
 	editor.controls = controls;
 	controls.store.preinitial = editor.blocks.initial = view.blocks.initial;
 	const $store = state.data.$store;

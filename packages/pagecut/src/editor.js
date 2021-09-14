@@ -66,14 +66,16 @@ class Editor extends View.EditorView {
 				return out;
 			};
 		}
-		Object.keys(ser.nodes).forEach(function(name) {
-			if (spec.nodes.get(name).typeName == null) return;
-			ser.nodes[name] = replaceOutputSpec(ser.nodes[name]);
-		});
-		Object.keys(ser.marks).forEach(function(name) {
-			if (spec.marks.get(name).typeName == null) return;
-			ser.marks[name] = replaceOutputSpec(ser.marks[name]);
-		});
+		for (const name of Object.keys(ser.nodes)) {
+			if (spec.nodes.get(name).typeName != null) {
+				ser.nodes[name] = replaceOutputSpec(ser.nodes[name]);
+			}
+		}
+		for (const name of Object.keys(ser.marks)) {
+			if (spec.marks.get(name).typeName != null) {
+				ser.marks[name] = replaceOutputSpec(ser.marks[name]);
+			}
+		}
 		return ser;
 	}
 
@@ -86,7 +88,7 @@ class Editor extends View.EditorView {
 		};
 
 		const nodeViews = {};
-		const elemsList = Object.values(elements).sort(function(a, b) {
+		const elemsList = Object.values(elements).sort((a, b) => {
 			return (b.priority || 0) - (a.priority || 0);
 		});
 		for (const el of elemsList) {
@@ -119,7 +121,7 @@ class Editor extends View.EditorView {
 
 		const clipboardParser = Model.DOMParser.fromSchema(schema);
 
-		const viewSerializer = this.filteredSerializer(spec, function(node, out) {
+		const viewSerializer = this.filteredSerializer(spec, (node, out) => {
 			if (node.type.name == "_") return "";
 			const obj = out[1];
 			if (typeof obj != "object") return;
@@ -127,7 +129,8 @@ class Editor extends View.EditorView {
 		});
 
 		const pluginKeys = {};
-		plugins = [IdPlugin,
+		plugins = [
+			IdPlugin,
 			KeymapPlugin,
 			FocusPlugin,
 			InputPlugin,
@@ -219,13 +222,13 @@ class Editor extends View.EditorView {
 		return new State.PluginKey(key).get(this.state);
 	}
 }
-['render', 'element', 'from'].forEach(name => {
+for (const name of ['render', 'element', 'from']) {
 	Object.defineProperty(
 		Editor.prototype,
 		name,
 		Object.getOwnPropertyDescriptor(Viewer.prototype, name)
 	);
-});
+}
 
 export {
 	Editor, View, Model, State, Transform, Commands, keymap, Viewer
