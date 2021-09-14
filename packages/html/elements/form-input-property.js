@@ -71,9 +71,7 @@ exports.input_property = {
 		let listOf = prop.anyOf || prop.oneOf;
 		let propType;
 		if (listOf) {
-			const listOfNo = listOf.filter(function(item) {
-				return item.type != "null";
-			});
+			const listOfNo = listOf.filter((item) => item.type != "null");
 			if (listOfNo.length != listOf.length) {
 				required = false;
 			}
@@ -84,7 +82,7 @@ exports.input_property = {
 				listOf = listOfNo;
 			}
 		} else if (Array.isArray(prop.type)) {
-			listOf = prop.type.filter(function(type) {
+			listOf = prop.type.filter((type) => {
 				if (type == "null") {
 					required = false;
 					return false;
@@ -117,7 +115,7 @@ exports.input_property = {
 				}
 				node.appendChild(content);
 				content = content.lastElementChild;
-				listOf.forEach(function(item) {
+				for (const item of listOf) {
 					content.appendChild(view.render({
 						type: d.multiple ? 'input_checkbox' : 'input_radio',
 						data: {
@@ -129,10 +127,10 @@ exports.input_property = {
 							label: item.title
 						}
 					}));
-				});
+				}
 			} else {
 				const frag = doc.createDocumentFragment();
-				listOf.forEach(function(item) {
+				for (const item of listOf) {
 					frag.appendChild(view.render({
 						type: 'input_select_option',
 						data: {
@@ -142,7 +140,7 @@ exports.input_property = {
 							label: item.title
 						}
 					}));
-				});
+				}
 				node.appendChild(view.render({
 					type: 'input_select',
 					data: {

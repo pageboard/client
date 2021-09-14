@@ -9,12 +9,11 @@ Pageboard.schemaHelpers['element-property'] = class ElementProperty {
 		if (!ret) ret = {};
 		const props = obj.properties;
 		if (!props) return ret;
-		Object.keys(props).forEach(function (key) {
-			const val = props[key];
+		for (const [key, val] of Object.entries(props)) {
 			const cur = `${pre || ""}${key}`;
 			ret[cur] = val;
 			ElementProperty.asPaths(val, ret, cur + '.');
-		});
+		}
 		return ret;
 	}
 
@@ -74,10 +73,10 @@ Pageboard.schemaHelpers['element-property'] = class ElementProperty {
 	}
 
 	updateOptions(prev, cur) {
-		this.select.options.forEach(function (opt) {
+		for (const opt of this.select.options) {
 			if (opt.value == prev) opt.disabled = false;
 			if (opt.value == cur) opt.disabled = true;
-		});
+		}
 	}
 
 	update(block) {
