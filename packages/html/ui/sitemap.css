@@ -41,11 +41,8 @@ element-sitepage .title.caret-icon.active {
 }
 element-sitepage > .title > .label {
 	float:right;
-	display:none;
 }
-element-sitepage[block-id] > .title > .label {
-	display:block;
-}
+
 element-sitepage > .title > a.description {
 	color: darkgrey;
 }

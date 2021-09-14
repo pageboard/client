@@ -49,10 +49,10 @@ exports.sitemap = {
 			html: `<element-sitepage class="item [leaf|!?:fold]" data-url="[url]" data-index="[index]">
 				<div class="title [leaf|!?:caret-icon]">
 					<span class="header">[title|or:Untitled]</span>
-					<span class="ui mini type label">[$type]</span>
-					<span class="ui mini orange label">[nositemap|bmagnet:*]no sitemap</span>
-					<span class="ui mini orange label">[noindex|bmagnet:*]no index</span>
-					<span class="ui mini red label">[$lock.read|magnet:*]</span>
+					<span class="ui mini type label">[$grants.webmaster|bmagnet:*][$type]</span>
+					<span class="ui mini black label">[$grants.webmaster|bmagnet:*][nositemap|bmagnet:*]no sitemap</span>
+					<span class="ui mini orange label">[$grants.webmaster|bmagnet:*][noindex|bmagnet:*]no index</span>
+					<span class="ui mini red label">[$grants.webmaster|bmagnet:*][$lock.read|magnet:*]</span>
 					<br>
 					<a href="[url]" class="description">[url|or:-]</a>
 					<a href="[redirect|magnet:*]" class="redirection"> ➜ [redirect]</a>
