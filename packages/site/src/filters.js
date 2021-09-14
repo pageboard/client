@@ -12,9 +12,9 @@ export function alias(val, what, name) {
 
 export function polyfills($elements, what) {
 	const map = {};
-	for (const key of $elements) {
-		let list = $elements[key].polyfills;
-		if (!list) return;
+	for (const el of Object.values($elements)) {
+		let list = el.polyfills;
+		if (!list) continue;
 		if (typeof list == "string") list = [list];
 		for (const item of list) {
 			// what.scope from matchdom is not like scope from pageboard
@@ -26,8 +26,7 @@ export function polyfills($elements, what) {
 
 export function csp($elements, what) {
 	const csp = {};
-	for (const key of $elements) {
-		const el = $elements[key];
+	for (const el of Object.values($elements)) {
 		if (el.scripts) for (const src of el.scripts) {
 			const origin = /(^https?:\/\/[.-\w]+)/.exec(src);
 			if (origin) {
