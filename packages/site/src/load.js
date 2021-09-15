@@ -2,7 +2,7 @@ function load(node, head) {
 	const live = node.ownerDocument == document;
 	return new Promise((resolve, reject) => {
 		if (live) {
-			node.addEventListener('load', resolve)
+			node.addEventListener('load', resolve);
 			node.addEventListener('error', () => {
 				const err = new Error(`Cannot load ${node.src || node.href}`);
 				err.code = 404;
