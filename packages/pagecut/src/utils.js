@@ -618,7 +618,7 @@ export default class Utils {
 		let pos = null, $pos = null;
 		while (pos == null) {
 			pos = this.nextInsertPoint(tr, cur, node.type, dir, around);
-			if (pos == null) return;
+			if (pos == null) break;
 			$pos = tr.doc.resolve(pos);
 		}
 		if (check) return true;
