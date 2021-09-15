@@ -13,11 +13,11 @@ if (typeof document !== 'undefined') {
 const map = {
 	legend: [1, '<fieldset>', '</fieldset>'],
 	tr: [2, '<table><tbody>', '</tbody></table>'],
-	col: [2, '<table><tbody></tbody><colgroup>', '</colgroup></table>'],
-	// for script/link/style tags to work in IE6-8, you have to wrap
-	// in a div with a non-whitespace character in front, ha!
-	_default: innerHTMLBug ? [1, 'X<div>', '</div>'] : [0, '', '']
+	col: [2, '<table><tbody></tbody><colgroup>', '</colgroup></table>']
 };
+// for script/link/style tags to work in IE6-8, you have to wrap
+// in a div with a non-whitespace character in front, ha!
+const defaultWrap = innerHTMLBug ? [1, 'X<div>', '</div>'] : [0, '', ''];
 
 map.td =
 map.th = [3, '<table><tbody><tr>', '</tr></tbody></table>'];
@@ -79,7 +79,7 @@ export default function parse(html, {doc, ns, frag}) {
 	}
 
 	// wrap map
-	const wrap = map[tag] || map._default;
+	const wrap = map[tag] || defaultWrap;
 	let depth = wrap[0];
 	const prefix = wrap[1];
 	const suffix = wrap[2];

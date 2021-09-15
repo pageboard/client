@@ -84,8 +84,8 @@ class HTMLElementQueryTags extends VirtualHTMLElement {
 	}
 	remove(label) {
 		if (!label) return;
-		this.find(label.dataset.name, label.dataset.value).forEach(function(control) {
-			if (control.type == "hidden") return;
+		for (const control of this.find(label.dataset.name, label.dataset.value)) {
+			if (control.type == "hidden") continue;
 			if (control.checked) control.checked = false;
 			else if (control.selected) control.selected = false;
 			else if (control.reset) control.reset();
@@ -93,7 +93,7 @@ class HTMLElementQueryTags extends VirtualHTMLElement {
 			const e = document.createEvent('HTMLEvents');
 			e.initEvent('submit', true, true);
 			control.form.dispatchEvent(e);
-		}, this);
+		}
 		label.remove();
 	}
 	get labels() {
@@ -101,7 +101,7 @@ class HTMLElementQueryTags extends VirtualHTMLElement {
 	}
 }
 
-Page.ready(function() {
+Page.ready(() => {
 	VirtualHTMLElement.define('element-query-tags', HTMLElementQueryTags);
 });
 

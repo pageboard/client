@@ -27,10 +27,10 @@ Pageboard.Controls.Store = class Store {
 		this.unsaved = this.get();
 
 		if (this.unsaved) {
-			this.restore(this.unsaved).catch(function (err) {
+			this.restore(this.unsaved).catch((err) => {
 				Pageboard.notify("Unsaved work not readable, discarding", err);
 				return this.discard();
-			}.bind(this));
+			});
 		}
 	}
 
@@ -259,9 +259,9 @@ Pageboard.Controls.Store = class Store {
 
 	discard(e) {
 		const doc = this.window.document;
-		const focused = doc.querySelectorAll('[block-focused][block-id]').map(function (node) {
-			return node.getAttribute('block-id');
-		}).reverse();
+		const focused = doc.querySelectorAll('[block-focused][block-id]').map(
+			(node) => node.getAttribute('block-id')
+		).reverse();
 		Store.generated = {};
 		this.clear();
 		Pageboard.notify.clear();
@@ -274,17 +274,15 @@ Pageboard.Controls.Store = class Store {
 			Pageboard.notify("Impossible to restore<br><a href=''>please reload</a>", err);
 		}
 		const editor = this.editor;
-		setTimeout(function () {
-			focused.some(function (id) {
-				const node = doc.querySelector(`[block-id="${id}"]`);
-				if (!node) return false;
-				const sel = editor.utils.select(node);
-				if (!sel) return false;
-				editor.focus();
-				editor.dispatch(editor.state.tr.setSelection(sel));
-				return true;
-			});
-		});
+		setTimeout(() => focused.some((id) => {
+			const node = doc.querySelector(`[block-id="${id}"]`);
+			if (!node) return false;
+			const sel = editor.utils.select(node);
+			if (!sel) return false;
+			editor.focus();
+			editor.dispatch(editor.state.tr.setSelection(sel));
+			return true;
+		}));
 	}
 
 	pageUpdate() {
@@ -313,9 +311,9 @@ Pageboard.Controls.Store = class Store {
 		}
 		const children = root.children || root.blocks && Object.values(root.blocks);
 		if (children) {
-			children.forEach(function (child) {
+			for (const child of children) {
 				Store.flattenBlock(child, root.id, blocks);
-			});
+			}
 			if (root.children) delete shallowCopy.children;
 			if (root.blocks) delete shallowCopy.blocks;
 		}
@@ -341,9 +339,9 @@ Pageboard.Controls.Store = class Store {
 		const els = this.editor.elements;
 		const preinitial = this.preinitial;
 		const pre = {};
-		Object.keys(preinitial).forEach(function (id) {
-			Object.assign(pre, Store.flattenBlock(preinitial[id]));
-		});
+		for (const preblock of Object.values(preinitial)) {
+			Object.assign(pre, Store.flattenBlock(preblock));
+		}
 
 		for (const id in Store.generatedBefore) {
 			delete initial[id];
@@ -447,17 +445,17 @@ Pageboard.Controls.Store = class Store {
 
 		changes.remove = Object.keys(changes.remove);
 
-		changes.add.forEach(function (block) {
+		for (const block of changes.add) {
 			block.content = els[block.type].contents.prune(block);
 			if (block.content == null) delete block.content;
 			delete block.virtual;
 			delete block.parent;
-		});
+		}
 
-		changes.update.forEach(function (block) {
+		for (const block of changes.update) {
 			delete block.virtual;
 			delete block.parent;
-		});
+		}
 
 		return changes;
 	}

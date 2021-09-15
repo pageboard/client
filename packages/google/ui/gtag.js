@@ -64,6 +64,6 @@ class HTMLElementGTMScript extends HTMLScriptElement {
 		if (this.#id) state.consent(this);
 	}
 }
-Page.setup(function() {
-	VirtualHTMLElement.define('element-gtm-script', HTMLElementGTMScript, "script");
-});
+Page.setup(
+	() => VirtualHTMLElement.define('element-gtm-script', HTMLElementGTMScript, "script")
+);

@@ -13,7 +13,7 @@ class HTMLElementRating extends VirtualHTMLElement {
 		while (this.children.length < opts.maximum) {
 			this.insertAdjacentHTML('beforeEnd', `<i class="icon" data-char="${opts.char}"></i>`);
 		}
-		this.children.forEach(function(item, i) {
+		this.children.forEach((item, i) => {
 			item.dataset.char = opts.char;
 			item.classList.toggle('active', i + 1 <= opts.value);
 		});

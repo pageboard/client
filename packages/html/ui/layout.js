@@ -84,13 +84,13 @@ class HTMLElementLayout extends HTMLDivElement {
 
 (function(HTMLElementImage) {
 HTMLElementLayout.getZoom = HTMLElementImage.getZoom;
-['crop', 'dimensions'].forEach(function(name) {
+for (const name of ['crop', 'dimensions']) {
 	Object.defineProperty(
 		HTMLElementLayout.prototype,
 		name,
 		Object.getOwnPropertyDescriptor(HTMLElementImage.prototype, name)
 	);
-});
+}
 })(window.customElements.get('element-image'));
 
 VirtualHTMLElement.define(`element-layout`, HTMLElementLayout, 'div');

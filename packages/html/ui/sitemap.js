@@ -14,7 +14,7 @@ class HTMLElementSitemap extends VirtualHTMLElement {
 		} else {
 			page = parent;
 		}
-		Object.keys(tree).sort(function(a, b) {
+		for (const name of Object.keys(tree).sort((a, b) => {
 			const pageA = tree[a]._;
 			const pageB = tree[b]._;
 			if (!pageA || !pageB) return 0;
@@ -25,9 +25,9 @@ class HTMLElementSitemap extends VirtualHTMLElement {
 			if (indexA == indexB) return 0;
 			else if (indexA < indexB) return -1;
 			else if (indexA > indexB) return 1;
-		}).forEach(function (name) {
+		})) {
 			this.makeTree(tree[name], page);
-		}, this);
+		}
 		return parent;
 	}
 
@@ -35,16 +35,16 @@ class HTMLElementSitemap extends VirtualHTMLElement {
 		const pages = res.items;
 		const tree = {};
 
-		pages.forEach(function (page) {
-			if (!page.data.url) return;
+		for (const page of pages) {
+			if (!page.data.url) continue;
 			let branch = tree;
 			const arr = page.data.url.substring(1).split('/');
-			arr.forEach(function(name, i) {
+			arr.forEach((name, i) => {
 				if (!branch[name]) branch[name] = {};
 				branch = branch[name];
 				if (i == arr.length - 1) branch._ = page;
 			});
-		});
+		}
 		return this.makeTree(tree, {
 			type: 'sitemap',
 			content: { children: '' },
@@ -72,7 +72,7 @@ class HTMLElementSitemap extends VirtualHTMLElement {
 	}
 }
 
-Page.ready(function() {
+Page.ready(() => {
 	VirtualHTMLElement.define('element-sitemap', HTMLElementSitemap);
 });
 

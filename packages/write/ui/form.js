@@ -14,13 +14,9 @@ class FormBlock {
 			if (schema.type) {
 				hint = schema.type;
 			} else if (schema.anyOf) {
-				hint = 'any of: ' + schema.anyOf.map(function(item) {
-					return item.const;
-				}).join(', ');
+				hint = 'any of: ' + schema.anyOf.map((item) => item.const).join(', ');
 			} else if (schema.oneOf) {
-				hint = 'one of: ' + schema.anyOf.map(function(item) {
-					return item.const;
-				}).join(', ');
+				hint = 'one of: ' + schema.anyOf.map((item) => item.const).join(', ');
 			}
 			copy.type = 'string';
 			copy.format = 'singleline';
@@ -45,19 +41,15 @@ class FormBlock {
 				return null;
 			}
 			return [key, val];
-		}).filter(function(entry) {
-			return entry != null;
-		});
+		}).filter((entry) => entry != null);
 		if (entries.length == 0) return null;
 		if (Array.isArray(obj)) {
-			return entries.map(function([key, val]) {
-				return val;
-			});
+			return entries.map(([key, val]) => val);
 		} else {
 			const copy = {};
-			entries.forEach(function([key, val]) {
+			for (const [key, val] of entries) {
 				copy[key] = val;
-			});
+			}
 			return copy;
 		}
 	}
@@ -81,11 +73,11 @@ class FormBlock {
 	destroy() {
 		this.node.removeEventListener('change', this);
 		this.node.removeEventListener('input', this);
-		Object.values(this.helpers).forEach(function (inst) {
+		Object.values(this.helpers).forEach((inst) => {
 			if (inst.destroy) inst.destroy();
 		});
 		this.helpers = {};
-		Object.values(this.filters).forEach(function (inst) {
+		Object.values(this.filters).forEach((inst) => {
 			if (inst.destroy) inst.destroy();
 		});
 		this.filters = {};
@@ -141,8 +133,8 @@ class FormBlock {
 
 	customHelper(key, prop, node, parentProp) {
 		const editor = this.editor;
-		if (prop.context && this.parents && !this.parents.some(function (parent) {
-			return prop.context.split('|').some(function (tok) {
+		if (prop.context && this.parents && !this.parents.some((parent) => {
+			return prop.context.split('|').some((tok) => {
 				const type = parent.block.type;
 				if (type == tok) return true;
 				const el = editor.element(type);
@@ -266,9 +258,9 @@ class FormBlock {
 			if (nodes.length == 0) {
 				if (!found) console.warn("No dom nodes found for this block", block);
 			} else {
-				nodes.forEach(function(node) {
+				for (const node of nodes) {
 					editor.utils.refreshTr(tr, node, block);
-				});
+				}
 				dispatch = true;
 			}
 		}
@@ -305,9 +297,9 @@ Pageboard.Controls.Form = class Form {
 			this.main.destroy();
 			delete this.main;
 		}
-		this.inlines.forEach(function (form) {
+		for (const form of this.inlines) {
 			form.destroy();
-		});
+		}
 		this.inlines = [];
 		this.mode = "data";
 	}
@@ -347,7 +339,7 @@ Pageboard.Controls.Form = class Form {
 		}
 		const editor = this.editor;
 
-		const showExpressions = parents.find(function (item, i) {
+		const showExpressions = parents.find((item, i) => {
 			const el = editor.element(item.block.type);
 			if (!el) return false;
 			if (el.expressions && !i) return true;
@@ -364,7 +356,7 @@ Pageboard.Controls.Form = class Form {
 		let curInlines = this.inlines;
 		const inlines = (showInlines && parent.inline?.blocks || []).map(function (block) {
 			let curForm;
-			curInlines = curInlines.filter(function (form) {
+			curInlines = curInlines.filter((form) => {
 				if (form.block.type == block.type) {
 					curForm = form;
 					return false;
@@ -398,9 +390,7 @@ Pageboard.Controls.Form = class Form {
 		this.toggleLocks.firstElementChild.classList.toggle('unlock', unlocked);
 		this.toggleLocks.classList.toggle('active', this.mode == "lock");
 
-		curInlines.forEach(function (form) {
-			form.destroy();
-		});
+		for (const form of curInlines) form.destroy();
 		this.inlines = inlines;
 
 		if (selection?.name) {

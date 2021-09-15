@@ -36,9 +36,9 @@ class HTMLElementGallery extends VirtualHTMLElement {
 			// only allow click on medialist's media
 			return;
 		}
-		const carousel = this.children.find(function(gal) {
-			return gal.getAttribute('block-type') == "carousel";
-		});
+		const carousel = this.children.find(
+			(gal) => gal.getAttribute('block-type') == "carousel"
+		);
 		if (!carousel) return;
 		let position = 0;
 		let cur = item;

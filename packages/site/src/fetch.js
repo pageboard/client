@@ -20,10 +20,10 @@ export default function(method, url, data) {
 		fetchOpts.body = JSON.stringify(data);
 	}
 
-	const p = fetch(url, fetchOpts).then(function(res) {
+	const p = fetch(url, fetchOpts).then((res) => {
 		const type = res.headers.get('Content-Type') || "";
 		if (res.status == 204 || !type.startsWith('application/json')) {
-			return res.text().then(function(text) {
+			return res.text().then((text) => {
 				if (res.status >= 400) {
 					const err = new Error(res.statusText);
 					err.status = res.status;
@@ -38,7 +38,7 @@ export default function(method, url, data) {
 				}
 			});
 		} else {
-			return res.json().then(function(obj) {
+			return res.json().then((obj) => {
 				obj.status = res.status;
 				let text;
 				if (obj.item?.type == "error") {
@@ -53,10 +53,10 @@ export default function(method, url, data) {
 	});
 	if (method == "get") {
 		pendings[url] = p;
-		p.catch(function(err) {
+		p.catch((err) => {
 			delete pendings[url];
 			throw err;
-		}).then(function(r) {
+		}).then((r) => {
 			delete pendings[url];
 			return r;
 		});

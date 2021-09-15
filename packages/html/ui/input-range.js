@@ -106,7 +106,7 @@ class HTMLElementInputRange extends HTMLInputElement {
 	}
 }
 
-Page.ready(function() {
+Page.ready(() => {
 	VirtualHTMLElement.define('element-input-range', HTMLElementInputRange, 'input');
 });
 

@@ -50,31 +50,29 @@ function initState(res, state) {
 	scope.$hrefs = state.data.$hrefs; // backward compat FIXME get rid of this, data.$hrefs is good
 
 	if (res.meta?.group == "page") {
-		["grants", "links", "site", "locked", "granted"].forEach(function(k) {
+		for (const k of ["grants", "links", "site", "locked", "granted"]) {
 			if (res[k] !== undefined) scope[`$${k}`] = res[k];
-		});
+		}
 		scope.$element = scope.$elements[res.meta.name];
 	}
 }
 
 function bundle(loader, state) {
 	const scope = state.scope;
-	return loader.then(function(res) {
+	return loader.then((res) => {
 		if (!res) return Promise.resolve();
 		const metas = [];
 		if (res.meta) metas.push(res.meta);
 		if (res.metas) metas.push(...res.metas);
-		return Promise.all(metas.map(function(meta) {
+		return Promise.all(metas.map((meta) => {
 			if (meta.group == "page" && !res.meta) {
 				// restores an asymmetry between route bundle load
 				// and navigational bundle load
 				res.meta = meta;
 			}
 			return load.meta(meta);
-		})).then(function() {
-			return res;
-		});
-	}).catch(function (err) {
+		})).then(() => res);
+	}).catch((err) => {
 		return {
 			meta: {
 				group: 'page'
@@ -89,19 +87,19 @@ function bundle(loader, state) {
 				}
 			}
 		};
-	}).then(function(res) {
+	}).then((res) => {
 		initState(res, state);
 		const elts = scope.$elements;
-		Object.keys(elts).forEach(function(name) {
+		for (const name of Object.keys(elts)) {
 			const el = elts[name];
 			if (!el.name) el.name = name;
 			install(el, scope);
-		});
+		}
 		return res;
 	});
 }
 
-Page.init(function(state) {
+Page.init((state) => {
 	state.vars = {};
 	state.data.$hrefs = {};
 	const dev = state.query.develop;
@@ -115,14 +113,14 @@ Page.init(function(state) {
 	scope.$write = dev == "write";
 });
 
-Page.patch(function (state) {
+Page.patch((state) => {
 	const metas = equivs.read();
 	if (metas.Status) {
 		state.status = parseInt(metas.Status);
 		state.statusText = metas.Status.substring(state.status.toString().length).trim();
 	}
 
-	state.finish(function() {
+	state.finish(() => {
 		const query = {};
 		const extra = [];
 		const missing = [];
@@ -130,16 +128,16 @@ Page.patch(function (state) {
 		let location;
 		if (!state.status) state.status = 200;
 
-		Object.keys(state.query).forEach(function(key) {
+		for (const key of Object.keys(state.query)) {
 			if (state.vars[key] === undefined) {
 				extra.push(key);
 			} else {
 				query[key] = state.query[key];
 			}
-		});
-		Object.keys(state.vars).forEach(function(key) {
+		}
+		for (const key of Object.keys(state.vars)) {
 			if (state.vars[key] === false) missing.push(key);
-		});
+		}
 		if (extra.length > 0) {
 			// eslint-disable-next-line no-console
 			console.warn("Removing extra query parameters", extra);
@@ -171,7 +169,7 @@ Page.patch(function (state) {
 	});
 });
 
-Page.paint(function (state) {
+Page.paint((state) => {
 	if (state.scope.$write) return;
 	state.finish(() => {
 		const metas = equivs.read();
@@ -198,7 +196,7 @@ Page.paint(function (state) {
 	});
 });
 let adv = false;
-Page.setup(function(state) {
+Page.setup((state) => {
 	try {
 		window.getSelection().removeAllRanges();
 	} catch(ex) {
@@ -206,7 +204,7 @@ Page.setup(function(state) {
 	}
 	if (adv) return;
 	adv = true;
-	state.finish(function() {
+	state.finish(() => {
 		if (window.parent == window) {
 			// eslint-disable-next-line no-console
 			console.info("Powered by https://pageboard.fr");
@@ -223,23 +221,21 @@ function merge(obj, extra, fn) {
 	}
 	if (!extra) return obj;
 	const copy = Object.assign({}, obj);
-	Object.keys(extra).forEach(function (key) {
-		let val = extra[key];
+	for (const [key, val] of Object.entries(extra)) {
 		if (val == null) {
-			return;
+			continue;
 		} else if (typeof val == "object") {
 			copy[key] = single ? merge(val, fn) : merge(copy[key], val, fn);
+		} else if (fn) {
+			copy[key] = single ? fn(val) : fn(copy[key], val);
 		} else {
-			if (fn) {
-				val = single ? fn(val) : fn(copy[key], val);
-			}
 			copy[key] = val;
 		}
-	});
+	}
 	return copy;
 }
 
-Page.setup(function(state) {
+Page.setup((state) => {
 	if (window.IntersectionObserver) {
 		state.ui.observer = new IntersectionObserver((entries, observer) => {
 			entries.forEach((entry) => {
@@ -262,7 +258,7 @@ Page.setup(function(state) {
 	}
 });
 
-Page.close(function(state) {
+Page.close((state) => {
 	if (state.ui.observer) {
 		state.ui.observer.disconnect();
 		delete state.ui.observer;

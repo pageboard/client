@@ -1,4 +1,4 @@
-Page.setup(function(state) {
+Page.setup((state) => {
 	const it = window.parent.Pageboard;
 	if (!it || !it.adopt || !state.data.$cache) return;
 	state.finish(() => {
@@ -6,7 +6,7 @@ Page.setup(function(state) {
 	});
 });
 
-Page.patch(function(state) {
+Page.patch((state) => {
 	const it = window.parent.Pageboard;
 	function fixLoc(url, state) {
 		const loc = Page.parse(url);

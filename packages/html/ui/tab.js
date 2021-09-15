@@ -12,7 +12,8 @@ class HTMLElementTabs extends VirtualHTMLElement {
 	patch(state) {
 		const pos = this.options.index;
 		const id = this.id;
-		Array.prototype.forEach.call(this.items.children, function(item, i) {
+
+		this.items.children.forEach((item, i) => {
 			const query = Object.assign({}, state.query);
 			const key = `${id}.index`;
 			if (i == 0) delete query[key];
@@ -23,12 +24,12 @@ class HTMLElementTabs extends VirtualHTMLElement {
 			}));
 			item.classList.toggle('active', i == pos);
 		});
-		Array.prototype.forEach.call(this.tabs.children, function(item, i) {
+		this.tabs.children.forEach((item, i) => {
 			item.classList.toggle('active', i == pos);
 		});
 	}
 }
 
-Page.ready(function() {
+Page.ready(() => {
 	VirtualHTMLElement.define('element-tabs', HTMLElementTabs);
 });

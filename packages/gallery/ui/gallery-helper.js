@@ -30,10 +30,10 @@ VirtualHTMLElement.extend('element-gallery', class GalleryHelper {
 		});
 		const target = record.target;
 		if (target.matches('[block-content="items"]')) {
-			Array.from(record.addedNodes).forEach(function(node) {
-				if (node.nodeType != Node.ELEMENT_NODE) return;
+			for (const node of record.addedNodes) {
+				if (node.nodeType != Node.ELEMENT_NODE) continue;
 				const pos = target.children.indexOf(node);
-				gals.forEach((gal) => {
+				for (const gal of gals) {
 					const items = gal.queryClosest('[block-content="items"]');
 					const item = ed.render({
 						type: `${gal.getAttribute('block-type')}_item`
@@ -42,20 +42,18 @@ VirtualHTMLElement.extend('element-gallery', class GalleryHelper {
 						type: 'image'
 					}));
 					items.insertBefore(item, items.children[pos]);
-				});
-			});
-			Array.from(record.removedNodes).forEach(function(node, i) {
+				}
+			}
+			Array.from(record.removedNodes).forEach((node, i) => {
 				if (node.nodeType != Node.ELEMENT_NODE) return;
 				const pos = target.childNodes.indexOf(record.previousSibling) + 1 + i;
-				gals.forEach((gal) => {
+				for (const gal of gals) {
 					const items = gal.queryClosest('[block-content="items"]');
 					const child = items.childNodes[pos];
 					if (child) child.remove();
-				});
+				}
 			});
-			return;
-		}
-		if (target.matches('[block-type="image"]')) {
+		} else if (target.matches('[block-type="image"]')) {
 			if (record.type == "attributes" && record.attributeName != "url") return;
 			const item = target.closest(`[block-type="${mode}_item"]`);
 			if (!item) return;
@@ -65,22 +63,22 @@ VirtualHTMLElement.extend('element-gallery', class GalleryHelper {
 				console.warn("Cannot synchronize without source block", record);
 				return;
 			}
-			gals.forEach((gal) => {
+			for (const gal of gals) {
 				const items = gal.queryClosest('[block-content="items"]');
 				const child = items.children[pos];
 				if (!child) {
 					console.warn("Cannot synchronize", gal, "at pos", pos);
-					return;
+					continue;
 				}
 				const image = child.querySelector('[block-type="image"]');
 				if (!image) {
 					console.warn("Cannot synchronize", gal, "with image at pos", pos);
-					return;
+					continue;
 				}
 				ed.blocks.mutate(image, {
 					url: (block.data || {}).url
 				});
-			});
+			}
 		}
 	}
 });

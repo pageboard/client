@@ -29,9 +29,7 @@ class HTMLInputMap extends VirtualHTMLElement {
 			this.dom(`<input name="${this.name}" type="hidden" />`)
 		);
 		const renderer = Pageboard.debounce(() => this.#render(), 10);
-		this.#observer = new MutationObserver(function(mutations) {
-			renderer();
-		});
+		this.#observer = new MutationObserver((mutations) => renderer());
 		this.#observer.observe(this.#proxy, {
 			attributes: true
 		});
@@ -99,7 +97,7 @@ class HTMLInputMap extends VirtualHTMLElement {
 		const obj = {};
 		const removals = [];
 
-		this.#table.querySelector('tbody').children.forEach(function(tr) {
+		for (const tr of this.#table.querySelector('tbody').children) {
 			const key = tr.children[0].firstChild.value;
 			let val = obj[key];
 			const inputVal = tr.children[1].firstChild.value;
@@ -115,11 +113,9 @@ class HTMLInputMap extends VirtualHTMLElement {
 			} else {
 				removals.push(tr);
 			}
-		}, this);
+		}
 		this.value = Pageboard.Semafor.unflatten(obj);
-		removals.forEach(function(node) {
-			node.remove();
-		});
+		for (const node of removals) node.remove();
 	}
 }
 window.customElements.define('input-map', HTMLInputMap);

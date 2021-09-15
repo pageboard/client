@@ -57,7 +57,6 @@ class HTMLShareAnchorElement extends HTMLAnchorElement {
 	}
 }
 
-Page.patch(function(state) {
-	VirtualHTMLElement.define(`element-share`, HTMLShareAnchorElement, 'a');
-});
-
+Page.patch(
+	() => VirtualHTMLElement.define(`element-share`, HTMLShareAnchorElement, 'a')
+);

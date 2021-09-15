@@ -41,7 +41,7 @@ Pageboard.Controls.Menu = class Menu {
 		if (disabled) {
 			dom.classList.add("disabled");
 		} else {
-			dom.addEventListener("mousedown", function (e) {
+			dom.addEventListener("mousedown", (e) => {
 				e.preventDefault();
 				spec.run(view.state, view.dispatch, view);
 			});
@@ -101,9 +101,9 @@ Pageboard.Controls.Menu = class Menu {
 	update(parents, sel) {
 		this.selection = sel;
 		this.parents = parents || [];
-		Object.values(this.tabs).forEach(function (tab) {
+		for (const tab of Object.values(this.tabs)) {
 			tab.div.textContent = '';
-		});
+		}
 		this.inlines.textContent = "";
 		let isBlockSelection = false;
 		if (sel) {
@@ -180,9 +180,9 @@ Pageboard.Controls.Menu = class Menu {
 		} else {
 			this.hideTabs();
 		}
-		Object.values(this.tabs).forEach(function (tab) {
+		for (const tab of Object.values(this.tabs)) {
 			tab.menu.classList.toggle('disabled', tab.div.children.length == 0);
-		});
+		}
 	}
 
 	tab(name) {
@@ -219,9 +219,10 @@ Pageboard.Controls.Menu = class Menu {
 							const resel = sel ? editor.utils.selectTr(tr, sel) : null;
 							if (resel) tr.setSelection(resel);
 						} else {
-							editor.utils.toggleMark(nodeType, editor.blocks.toAttrs(block))(state, function (atr) {
-								tr = atr;
-							});
+							editor.utils.toggleMark(
+								nodeType,
+								editor.blocks.toAttrs(block)
+							)(state, (atr) => tr = atr);
 						}
 					} else {
 						const blocks = {};
@@ -266,17 +267,18 @@ Pageboard.Controls.Menu = class Menu {
 	}
 	items() {
 		const list = [];
-		Object.values(this.editor.elements).sort(function(a, b) {
+		for (const el of Object.values(this.editor.elements).sort((a, b) => {
 			const ap = a.priority != null ? a.priority : Infinity;
 			const bp = b.priority != null ? b.priority : Infinity;
 			if (ap < bp) return -1;
 			else if (ap > bp) return 1;
 			else return a.name.localeCompare(b.name);
-		}).forEach(function(el) {
+		})) {
 			const itemSpec = this.item(el);
-			if (!itemSpec) return;
-			list.push(new Pagecut.Menubar.Menu.MenuItem(itemSpec));
-		}, this);
+			if (itemSpec) {
+				list.push(new Pagecut.Menubar.Menu.MenuItem(itemSpec));
+			}
+		}
 		return list;
 	}
 };

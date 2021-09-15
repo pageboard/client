@@ -4,13 +4,13 @@ Object.defineProperty(document, 'body', {
 		return this.documentElement.querySelector('body:last-of-type');
 	}
 });
-Page.init(function(state) {
+Page.init((state) => {
 	const root = document.documentElement;
 	function dtr(state) {
 		root.dataset.stage = state.stage;
-		if (state.stage == "setup" || state.stage == "patch") setTimeout(function() {
-			root.removeAttribute('data-stage');
-		}, 500);
+		if (state.stage == "setup" || state.stage == "patch") {
+			setTimeout(() => root.removeAttribute('data-stage'), 500);
+		}
 	}
 	dtr(state);
 	Page.ready(dtr);
@@ -30,10 +30,10 @@ Page.State.prototype.mergeBody = function(body, corpse) {
 	}
 };
 
-Page.setup(function(state) {
+Page.setup((state) => {
 	if (state.transition) {
 		if (state.transition.ok) {
-			state.finish(function() {
+			state.finish(() => {
 				return state.transition.start();
 			});
 		} else {

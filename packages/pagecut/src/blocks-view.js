@@ -182,7 +182,7 @@ export default class BlocksView {
 					continue;
 				}
 				if (frag.attributes) {
-					for (const att of Array.from(node.attributes)) {
+					for (const att of node.attributes) {
 						if (opts.strip && att.name == "block-id") continue;
 						if (!frag.hasAttribute(att.name)) frag.setAttribute(att.name, att.value);
 					}

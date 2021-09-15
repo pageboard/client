@@ -14,7 +14,7 @@ class HTMLElementInclude extends VirtualHTMLElement {
 		return this.children.find(node => node.matches('[block-content="blocks"]'));
 	}
 }
-Page.ready(function() {
+Page.ready(() => {
 	const Cla = window.customElements.get('element-template');
 	HTMLElementInclude.prototype.toggleMessages = function (name) {
 		const parent = this.children.find(

@@ -448,18 +448,15 @@ function createContainerSpec(elt, obj) {
 
 function attrsTo(attrs) {
 	const domAttrs = {};
-	for (const k in attrs) {
-		if (!k.startsWith('_') && attrs[k] != null && attrs[k] != '{}') domAttrs['block-' + k] = attrs[k];
+	for (const [k, v] in Object.entries(attrs)) {
+		if (!k.startsWith('_') && v != null && v != '{}') domAttrs['block-' + k] = v;
 	}
 	return domAttrs;
 }
 
 function attrsFrom(dom) {
-	const domAttrs = dom.attributes;
 	const attrs = {};
-	let att;
-	for (let i = 0; i < domAttrs.length; i++) {
-		att = domAttrs[i];
+	for (const att of dom.attributes) {
 		if (att.name.startsWith('block-')) {
 			attrs[att.name.substring(6)] = att.value;
 		}

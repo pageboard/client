@@ -24,7 +24,7 @@ window.Pageboard.InfiniteScroll = class {
 		});
 	}
 	waitRepaint() {
-		return new Promise(function (resolve) {
+		return new Promise((resolve) => {
 			window.requestAnimationFrame(() => {
 				setTimeout(resolve, 0);
 			});

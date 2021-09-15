@@ -34,7 +34,7 @@ class Semafor {
 					// skip
 					break;
 				case 'select-multiple':
-					elem.selectedOptions.forEach(function (item, i) {
+					elem.selectedOptions.forEach((item, i) => {
 						query[`${key}.${i}`] = item.value;
 					});
 					break;
@@ -56,14 +56,14 @@ class Semafor {
 	static formSet(form, values, obj) {
 		function asPaths(obj, ret, pre) {
 			if (!ret) ret = {};
-			Object.entries(obj).forEach(function ([key, val]) {
+			for (const [key, val] of Object.entries(obj)) {
 				const cur = `${pre || ""}${key}`;
 				if (val == null || typeof val != "object") {
 					ret[cur] = val;
 				} else if (typeof val == "object") {
 					asPaths(val, ret, cur + '.');
 				}
-			});
+			}
 			return ret;
 		}
 		const flats = asPaths(values, {});
@@ -85,9 +85,7 @@ class Semafor {
 				case 'checkbox':
 					if (val == null) val = [''];
 					else if (!Array.isArray(val)) val = [val];
-					elem.checked = val.some(function (val) {
-						return val.toString() == elem.value;
-					});
+					elem.checked = val.some((val) => val.toString() == elem.value);
 					break;
 				case 'select-one':
 					if (val) {
@@ -108,7 +106,7 @@ class Semafor {
 					} else if (!Array.isArray(val)) {
 						val = [val];
 					}
-					elem.options.forEach(function (item) {
+					elem.options.forEach((item) => {
 						item.selected = val.includes(item.value);
 					});
 					break;
@@ -175,11 +173,11 @@ class Semafor {
 	static unflatten(map, obj) {
 		if (!map) return map;
 		if (!obj) obj = {};
-		Object.keys(map).forEach(function (key) {
+		for (const key of Object.keys(map)) {
 			const list = key.split('.');
 			let val = obj;
 			let prev = val;
-			list.forEach(function (sub, i) {
+			list.forEach((sub, i) => {
 				const num = parseInt(sub);
 				if (!Number.isNaN(num) && sub == num && !Array.isArray(val)) {
 					val = [];
@@ -192,7 +190,7 @@ class Semafor {
 				prev = val;
 				val = val[sub];
 			});
-		});
+		}
 		return obj;
 	}
 
@@ -214,7 +212,8 @@ class Semafor {
 		if (!obj) obj = {};
 		const props = schema?.properties ?? this.stubSchema(tree);
 		if (schema === undefined && props) schema = { properties: props };
-		Object.entries(props).forEach(function ([key, field]) {
+		for (const key of Object.keys(props)) {
+			let field = props[key];
 			let val = tree[key];
 			if (val == null) {
 				if (field.default && field.anyOf) {
@@ -226,7 +225,7 @@ class Semafor {
 			}
 			if (val != null && typeof val == "object") {
 				if (field && !field.properties && (field.oneOf || field.anyOf)) {
-					const listNoNull = (field.oneOf || field.anyOf).filter(function (item) {
+					const listNoNull = (field.oneOf || field.anyOf).filter((item) => {
 						return item.type != "null";
 					});
 					if (listNoNull.length == 1 && listNoNull[0].properties) {
@@ -237,9 +236,9 @@ class Semafor {
 					if (field?.type == "array") {
 						let allStrings = false;
 						if (field.items?.anyOf) {
-							allStrings = field.items.anyOf.every(function (item) {
-								return item.type == "string";
-							});
+							allStrings = field.items.anyOf.every(
+								(item) => item.type == "string"
+							);
 						}
 						if (field.items?.type == "string") {
 							allStrings = true;
@@ -251,26 +250,26 @@ class Semafor {
 							} else {
 								obj[key] = val;
 							}
-							return;
+							continue;
 						}
-						Object.entries(Semafor.flatten(val, {})).forEach(function ([k, kval]) {
+						for (const [k, kval] of Object.entries(Semafor.flatten(val, {}))) {
 							obj[`${key}.${k}`] = kval;
-						});
-						return;
+						}
+						continue;
 					} else if (!field?.properties) {
 						obj[key] = JSON.stringify(val);
-						return;
+						continue;
 					}
 				} else {
 					console.warn("no schema", key, val);
 				}
-				Object.entries(Semafor.flatten(val, {}, field)).forEach(function ([k, kval]) {
+				for (const [k, kval] of Object.entries(Semafor.flatten(val, {}, field))) {
 					obj[`${key}.${k}`] = kval;
-				});
+				}
 			} else {
 				obj[key] = val;
 			}
-		}, this);
+		}
 		return obj;
 	}
 	convert(vals, field) {
@@ -288,7 +287,7 @@ class Semafor {
 				let nullable = false;
 				if (listOf && !field.properties) {
 					// we support promotion to null and that's it
-					const listOfNo = listOf.filter(function (item) {
+					const listOfNo = listOf.filter((item) => {
 						if (typeof item == "string") {
 							return item != "null";
 						} else {
@@ -300,11 +299,9 @@ class Semafor {
 					}
 					if (listOfNo.length == 1) {
 						type = listOfNo[0].type || listOfNo[0];
-					} else if (listOfNo.every(function (item) {
-						return item.const !== undefined;
-					})) {
+					} else if (listOfNo.every((item) => item.const !== undefined)) {
 						// nothing
-					} else if (listOfNo.every(function (item) {
+					} else if (listOfNo.every((item) => {
 						return item == "string" || item.type === undefined || item.type == "string";
 					})) {
 						type = "string";
@@ -327,9 +324,9 @@ class Semafor {
 						break;
 					case "object":
 						if (!field.properties && (field.oneOf || field.anyOf)) {
-							const listNoNull = (field.oneOf || field.anyOf).filter(function (item) {
-								return item.type != "null";
-							});
+							const listNoNull = (field.oneOf || field.anyOf).filter(
+								(item) => item.type != "null"
+							);
 							if (listNoNull.length == 1 && listNoNull[0].properties) {
 								field = listNoNull[0];
 							}
@@ -347,9 +344,7 @@ class Semafor {
 						break;
 					case "array":
 						if (typeof val == "string") {
-							val = val.split('\n').filter(function (str) {
-								return str.length > 0;
-							});
+							val = val.split('\n').filter((str) => str.length > 0);
 						}
 						break;
 					default:
@@ -389,15 +384,15 @@ class Semafor {
 				} else {
 					field.optional = true;
 				}
-				Object.keys(schema).forEach(function (kw) {
-					if (Semafor.keywords[kw]) field.rules.push(Semafor.keywords[kw](schema[kw]));
-				});
+				for (const [kw, vw] of Object.entries(schema)) {
+					if (Semafor.keywords[kw]) field.rules.push(Semafor.keywords[kw](vw));
+				}
 				Semafor.types[type](key, schema, node, this);
 			}
 		} else if (Array.isArray(type)) {
-			type.forEach(function (type) {
-				Semafor.types[type](key, schema, node, this);
-			});
+			for (const stype of type) {
+				Semafor.types[stype](key, schema, node, this);
+			}
 		} else if (schema.const != null) {
 			Semafor.types.const(key, schema, node, this);
 		} else {
@@ -479,7 +474,7 @@ Semafor.types.oneOf = function (key, schema, node, inst) {
 	let listOf = schema.oneOf || schema.anyOf;
 	let nullable = schema.nullable;
 	let hasNullOption = false;
-	const alts = listOf.filter(function (item) {
+	const alts = listOf.filter((item) => {
 		if (item.type == "null") {
 			nullable = true;
 			hasNullOption = true;
@@ -492,15 +487,11 @@ Semafor.types.oneOf = function (key, schema, node, inst) {
 	let icons = false;
 	if (alts.length == 1 && alts[0].const === undefined) {
 		oneOfType = alts[0];
-	} else if (alts.every(function (item) {
-		return Boolean(item.icon);
-	})) {
+	} else if (alts.every((item) => Boolean(item.icon))) {
 		icons = true;
-	} else if (alts.every(function (item) {
-		return item.const !== undefined;
-	})) {
+	} else if (alts.every((item) => item.const !== undefined)) {
 		// do nothing
-	} else if (alts.every(function (item) {
+	} else if (alts.every((item) => {
 		return item == "string" || item.type === undefined || item.type == "string";
 	})) {
 		oneOfType = { type: "string", format: 'singleline' }; // FIXME use an array of formats
@@ -626,10 +617,9 @@ Semafor.types.object = function (key, schema, node, inst) {
 	if (!schema.properties) return;
 	const props = {};
 	const prefix = key ? (key + '.') : '';
-	Object.keys(schema.properties).forEach(function (name) {
-		const propSchema = schema.properties[name];
+	for (const [name, propSchema] of Object.entries(schema.properties)) {
 		props[name] = inst.process(prefix + name, propSchema, fieldset, schema.properties) || propSchema;
-	});
+	}
 	schema.properties = props;
 };
 
@@ -659,13 +649,13 @@ Semafor.types.array = function (key, schema, node, inst) {
 	if (Array.isArray(schema.items)) {
 		const fieldset = node.dom(`<fieldset><legend>${schema.title}</legend></fieldset>`);
 		node.appendChild(fieldset);
-		schema.items.forEach(function (item, i) {
+		schema.items.forEach((item, i) => {
 			inst.process(`${key}.${i}`, item, fieldset, schema);
 		});
 	} else if (schema.items.type == "string") {
 		Semafor.types.string(key, schema, node, inst);
 	} else if (schema.items.anyOf) {
-		const allStrings = schema.items.anyOf.every(function (item) {
+		const allStrings = schema.items.anyOf.every((item) => {
 			return item.type == "string";
 		});
 		if (allStrings) {

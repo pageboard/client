@@ -36,10 +36,9 @@ Pageboard.Controls.Mode = class Mode {
 		if (!item) return;
 		const com = item.dataset.command;
 		if (com == "logout") {
-			Page.setup(function(state) {
-				return Pageboard.fetch("get", "/.api/logout").then(function() {
-					state.reload(true);
-				});
+			Page.setup((state) => {
+				return Pageboard.fetch("get", "/.api/logout")
+					.then(() => state.reload(true));
 			});
 			return;
 		}

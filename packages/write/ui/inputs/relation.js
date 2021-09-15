@@ -10,9 +10,7 @@ Pageboard.schemaFilters.relation = class RelationFilter {
 		const path = this.key.split('.');
 		if (this.opts.from == "service") {
 			path.splice(-2, 2, 'method');
-			type = path.reduce(function (obj, name) {
-				return obj[name] || null;
-			}, block.data);
+			type = path.reduce((obj, name) => obj[name] || null, block.data);
 			if (!type) return;
 			const parts = type.split('.');
 			if (parts.length == 2) {
@@ -20,9 +18,7 @@ Pageboard.schemaFilters.relation = class RelationFilter {
 			}
 		} else {
 			path.splice(-1, 1, 'type');
-			type = path.reduce(function (obj, name) {
-				return obj?.[name];
-			}, block.data);
+			type = path.reduce((obj, name) => obj?.[name], block.data);
 			if (!type) return;
 			el = Pageboard.editor.elements[type];
 		}

@@ -25,7 +25,7 @@ exports.mail_paragraph = {
 	},
 	parse: function(dom) {
 		const prop = Pageboard.elements.mail_paragraph.properties.align;
-		const align = (prop.anyOf.find(function (item) {
+		const align = (prop.anyOf.find((item) => {
 			return dom.classList.contains(item.const);
 		}) || { const: prop.default }).const;
 		return {align: align};

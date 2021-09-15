@@ -1,4 +1,4 @@
-Page.route(function(state) {
+Page.route((state) => {
 	let loader;
 	if (state.data.$cache) {
 		loader = Promise.resolve(state.data.$cache);
@@ -9,7 +9,7 @@ Page.route(function(state) {
 		});
 	}
 
-	return Pageboard.bundle(loader, state).then(function(res) {
+	return Pageboard.bundle(loader, state).then((res) => {
 		state.data.$cache = res;
 		state.scope.$page = res.item;
 		const node = Pageboard.render(res, state.scope);

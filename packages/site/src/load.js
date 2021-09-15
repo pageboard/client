@@ -1,11 +1,9 @@
 function load(node, head) {
 	const live = node.ownerDocument == document;
-	return new Promise(function(resolve, reject) {
+	return new Promise((resolve, reject) => {
 		if (live) {
-			node.addEventListener('load', function() {
-				resolve();
-			});
-			node.addEventListener('error', function() {
+			node.addEventListener('load', resolve)
+			node.addEventListener('error', () => {
 				const err = new Error(`Cannot load ${node.src || node.href}`);
 				err.code = 404;
 				reject(err);
@@ -21,21 +19,21 @@ function load(node, head) {
 export function meta(meta) {
 	let pr = Promise.resolve();
 	if (!meta) return pr;
-	if (meta.elements) Object.entries(meta.elements).forEach(function([name, el]) {
+	if (meta.elements) for (const [name, el] of Object.entries(meta.elements)) {
 		if (!Pageboard.elements[name]) Pageboard.elements[name] = el;
-	});
+	}
 	if (meta.bundle && !Pageboard.cache[meta.bundle]) {
 		pr = Pageboard.cache[meta.bundle] = Pageboard.load.js(meta.bundle);
 	}
 
 	// additional resources - elements in group page usually do not have those
-	if (meta.stylesheets) pr = pr.then(function() {
-		return Promise.all(meta.stylesheets.map(function(url) {
+	if (meta.stylesheets) pr = pr.then(() => {
+		return Promise.all(meta.stylesheets.map((url) => {
 			return Pageboard.load.css(url);
 		}));
 	});
-	if (meta.scripts) pr = pr.then(function() {
-		return Promise.all(meta.scripts.map(function(url) {
+	if (meta.scripts) pr = pr.then(() => {
+		return Promise.all(meta.scripts.map((url) => {
 			return Pageboard.load.js(url);
 		}));
 	});

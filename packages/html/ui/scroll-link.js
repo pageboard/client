@@ -25,7 +25,7 @@ class HTMLScrollLinkElement extends HTMLAnchorElement {
 	}
 }
 
-Page.setup(function(state) {
+Page.setup(() => {
 	VirtualHTMLElement.define(`element-scroll-link`, HTMLScrollLinkElement, 'a');
 });
 

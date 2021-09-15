@@ -32,7 +32,7 @@ class HTMLElementHeadingHelper extends HTMLHeadingElement {
 	}
 }
 
-Page.setup(function() {
+Page.setup(() => {
 	for (let i = 1; i <= 6; i++) {
 		VirtualHTMLElement.define(
 			`h${i}-helper`,

@@ -85,7 +85,7 @@ class HTMLElementGoogleTranslate extends VirtualHTMLElement {
 	}
 }
 
-Page.setup(function() {
-	VirtualHTMLElement.define('element-google-translate', HTMLElementGoogleTranslate);
-});
+Page.setup(
+	() => VirtualHTMLElement.define('element-google-translate', HTMLElementGoogleTranslate)
+);
 

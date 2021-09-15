@@ -481,9 +481,7 @@
 			const arr = [x % 10000, x % 1000, x % 100, x % 10];
 
 			// calculate closest less value
-			let mm = arr.reduce(function (p, c) {
-				return c <= max ? Math.max(p, c) : p;
-			}, 0);
+			let mm = arr.reduce((p, c) => c <= max ? Math.max(p, c) : p, 0);
 
 			// rollback month value
 			// but prevent pass 0

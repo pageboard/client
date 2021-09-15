@@ -71,7 +71,7 @@ class HTMLElementInputFile extends VirtualHTMLElement {
 
 			const xhr = new XMLHttpRequest();
 
-			xhr.upload.addEventListener("progress", function (e) {
+			xhr.upload.addEventListener("progress", (e) => {
 				if (e.lengthComputable) {
 					let percent = Math.round((e.loaded * 100) / e.total);
 					if (percent >= 100) percent = 99; // only load event can reach 100
@@ -79,7 +79,7 @@ class HTMLElementInputFile extends VirtualHTMLElement {
 				}
 			});
 
-			xhr.addEventListener('load', function () {
+			xhr.addEventListener('load', () => {
 				track(100);
 				try {
 					pass(JSON.parse(xhr.responseText));
@@ -88,7 +88,7 @@ class HTMLElementInputFile extends VirtualHTMLElement {
 				}
 			});
 
-			xhr.addEventListener('error', function (e) {
+			xhr.addEventListener('error', (e) => {
 				if (xhr.status == 0) return fail("Connection error");
 				const msg = xhr.statusText || "Connection error";
 				const err = new Error(msg);
@@ -109,6 +109,6 @@ class HTMLElementInputFile extends VirtualHTMLElement {
 	}
 }
 
-Page.setup(function () {
+Page.setup(() => {
 	VirtualHTMLElement.define('element-input-file', HTMLElementInputFile);
 });

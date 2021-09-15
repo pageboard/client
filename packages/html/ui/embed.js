@@ -10,9 +10,7 @@ class HTMLElementEmbed extends VirtualHTMLElement {
 	}
 	reveal(state) {
 		let done;
-		this.promise = new Promise(function(resolve) {
-			done = resolve;
-		});
+		this.promise = new Promise((resolve) => done = resolve);
 		this.promise.done = done;
 		this.classList.add('waiting');
 
@@ -81,6 +79,6 @@ class HTMLElementEmbed extends VirtualHTMLElement {
 	}
 }
 
-Page.ready(function() {
+Page.ready(() => {
 	VirtualHTMLElement.define('element-embed', HTMLElementEmbed);
 });

@@ -28,7 +28,7 @@ class HTMLElementSitepage extends VirtualHTMLElement {
 		this.updating = true;
 		const parentUrl = this.dataset.url || "";
 		const uniques = {};
-		Array.prototype.forEach.call(content.children, function(child, index) {
+		Array.prototype.forEach.call(content.children, (child, index) => {
 			if (!child.matches('element-sitepage')) return; // cursor
 			const childUrl = child.dataset.url || '';
 			if (childUrl.startsWith('/.')) return;
@@ -61,7 +61,7 @@ class HTMLElementSitepage extends VirtualHTMLElement {
 	}
 }
 
-Page.setup(function() {
+Page.setup(() => {
 	VirtualHTMLElement.define('element-sitepage', HTMLElementSitepage);
 	VirtualHTMLElement.extend('element-sitemap', HTMLElementSitepage);
 });

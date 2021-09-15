@@ -32,7 +32,7 @@ export default class VirtualHTMLElement extends HTMLElement {
 		if (claDefs) {
 			const defaults = {};
 			if (!cla.observedAttributes) {
-				cla.observedAttributes = Object.keys(claDefs).map(function (camel) {
+				cla.observedAttributes = Object.keys(claDefs).map((camel) => {
 					let attr = camel.replace(/([A-Z])/g, (g) => `-${g[0].toLowerCase()}`);
 					if (!is) attr = 'data-' + attr;
 					const isData = attr.startsWith('data-');
@@ -173,22 +173,22 @@ function nodeOptions(node, defaults, state, is) {
 
 function stateOptions(id, defaults, state) {
 	const opts = {};
-	Object.keys(state.query).forEach(function(key) {
+	for (const key in Object.keys(state.query)) {
 		const [qid, name] = key.split('.');
-		if (name == null || qid != id) return;
+		if (name == null || qid != id) continue;
 		const { isData } = defaults[name];
 		if (isData) {
 			opts[name] = state.query[key];
 			state.vars[key] = true;
 		}
-	});
+	}
 	return opts;
 }
 
 function monkeyPatchAll(ClaProto, ExtProto, after) {
-	Object.getOwnPropertyNames(ExtProto).forEach(function(meth) {
+	for (const meth of Object.getOwnPropertyNames(ExtProto)) {
 		if (meth != "constructor") {
 			monkeyPatch(ClaProto, meth, ExtProto[meth], after);
 		}
-	});
+	}
 }

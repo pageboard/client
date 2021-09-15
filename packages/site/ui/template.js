@@ -43,7 +43,7 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 					this.render(res, state);
 				});
 			}
-		}).catch(function (err) {
+		}).catch((err) => {
 			data.$status = -1;
 			// eslint-disable-next-line no-console
 			console.error("Error building", err);
@@ -137,10 +137,9 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 				};
 			})
 		};
-
-		Object.keys(state.data).forEach(function (key) {
-			if (key.startsWith('$') && scope[key] == null) scope[key] = state.data[key];
-		});
+		for (const [key, val] of Object.entries(state.data)) {
+			if (key.startsWith('$') && scope[key] == null) scope[key] = val;
+		}
 		scope.$pathname = state.pathname;
 		scope.$query = state.query;
 		scope.$referrer = state.referrer.pathname || state.pathname;

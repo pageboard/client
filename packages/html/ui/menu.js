@@ -1,4 +1,4 @@
-Page.patch(function(state) {
+Page.patch((state) => {
 	function isSameOrParent(loc, state) {
 		if (!state.sameDomain(loc)) {
 			return false;
@@ -10,14 +10,14 @@ Page.patch(function(state) {
 			return state.pathname.startsWith(loc.pathname + '/');
 		}
 	}
-	state.finish(function() {
-		document.querySelectorAll('[block-type="menu"] [href]').forEach((item) => {
+	state.finish(() => {
+		for (const item of document.querySelectorAll('[block-type="menu"] [href]')) {
 			const loc = item.getAttribute('href');
-			if (!loc) return;
+			if (!loc) continue;
 			if (isSameOrParent(Page.parse(loc), state)) {
 				item.classList.add('active');
 			}
-		});
+		}
 	});
 });
 
@@ -73,6 +73,6 @@ class HTMLElementMenu extends VirtualHTMLElement {
 	}
 }
 
-Page.setup(function() {
+Page.setup(() => {
 	VirtualHTMLElement.define('element-menu', HTMLElementMenu);
 });

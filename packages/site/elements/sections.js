@@ -44,7 +44,7 @@ exports.paragraph = {
 		let align;
 		const prop = this.properties.align;
 		if (dom.classList.contains("aligned")) {
-			align = prop.anyOf.find(function(item) {
+			align = prop.anyOf.find((item) => {
 				return dom.classList.contains(item.const);
 			});
 			if (align) align = align.const;

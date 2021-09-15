@@ -63,7 +63,7 @@ Pageboard.notify = function(title, obj) {
 
 	if (obj.timeout) {
 		item.node = msg;
-		setTimeout(function() {
+		setTimeout(() => {
 			if (msg.parentNode) msg.animate(
 				[{ opacity: 1.0 }, { opacity: 0 }], { duration: 1000 }
 			).onfinish = () => msg.remove();
@@ -83,7 +83,7 @@ Pageboard.notify.dom = function(where) {
 	if (roots[where]) return roots[where];
 	const root = document.querySelector(`#pageboard-${where} > .notifications`);
 	roots[where] = root;
-	root.addEventListener('click', function(e) {
+	root.addEventListener('click', (e) => {
 		const msg = e.target.closest('.message');
 		if (!msg) return;
 		let index = 0;

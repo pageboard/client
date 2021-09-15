@@ -1,7 +1,7 @@
 Pageboard.schemaFilters.service = class ServiceFilter {
 	static setServiceParameters(key, block, props) {
 		let val = block.data;
-		if (key) key.split('.').some(function(str) {
+		if (key) key.split('.').some((str) => {
 			val = val[str];
 			if (val == null) return true;
 		});
@@ -20,19 +20,17 @@ Pageboard.schemaFilters.service = class ServiceFilter {
 	constructor(key, opts, schema) {
 		const list = [];
 		this.key = key;
-		const services = Pageboard.services;
-		Object.keys(services).forEach(function(group) {
-			Object.keys(services[group]).forEach(function(key) {
-				const it = services[group][key];
+		for (const [group, service] of Object.entries(Pageboard.services)) {
+			for (const [name, it] of Object.entries(service)) {
 				if (opts.action == it.$action || opts.action == "write" && it.$action != "read") {
 					list.push({
-						const: `${group}.${key}`,
+						const: `${group}.${name}`,
 						title: it.title
 					});
 				}
-			});
-		});
-		this.list = list.sort(function(a, b) {
+			}
+		}
+		this.list = list.sort((a, b) => {
 			if (a.const < b.const) return -1;
 			else if (a.const > b.const) return 1;
 			else return 0;

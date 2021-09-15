@@ -17,9 +17,10 @@ Pageboard.schemaFilters.schema = class SchemaFilter {
 			return;
 		}
 		const schemaPath = this.opts.path.split('.');
-		const otherSchema = schemaPath.reduce(function (obj, name) {
-			return obj[name] || null;
-		}, Pageboard.editor.elements[schemaPath.shift()]);
+		const otherSchema = schemaPath.reduce(
+			(obj, name) => obj[name] || null,
+			Pageboard.editor.elements[schemaPath.shift()]
+		);
 		if (!otherSchema) {
 			console.warn('$filter schema does not find', this.opts.path);
 			return;

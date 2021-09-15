@@ -23,22 +23,20 @@ class HTMLElementAccordion extends VirtualHTMLElement {
 		}
 	}
 	static refreshAll() {
-		Object.keys(HTMLElementAccordion.folds).forEach(function(id) {
+		for (const id of Object.keys(HTMLElementAccordion.folds)) {
 			const node = document.getElementById(id);
 			if (!node) delete HTMLElementAccordion.folds[id];
 			const title = node.querySelector('.title');
 			HTMLElementAccordion.toggle(title);
-		});
+		}
 	}
 }
 
 HTMLElementAccordion.folds = {};
 
-Page.setup(function(state) {
+Page.setup(() => {
 	VirtualHTMLElement.define('element-accordion', HTMLElementAccordion);
 	HTMLElementAccordion.refreshAll();
 });
 
-Page.patch(function(state) {
-	HTMLElementAccordion.refreshAll();
-});
+Page.patch(() => HTMLElementAccordion.refreshAll());

@@ -148,7 +148,7 @@ export function install(el, scope) {
 
 		if (el.filters) rscope.$filters = Object.assign({}, rscope.$filters, el.filters);
 
-		const data = Pageboard.merge(block.data, block.expr, function (c, v) {
+		const data = Pageboard.merge(block.data, block.expr, (c, v) => {
 			if (typeof v != "string") return;
 			return v.fuse({
 				$default: c

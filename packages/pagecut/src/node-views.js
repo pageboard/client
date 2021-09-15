@@ -332,8 +332,8 @@ untouched.
 */
 function mutateNodeView(tr, pos, pmNode, obj, nobj) {
 	const dom = obj.dom;
-	const initial = !obj._pcinit;
-	if (initial) obj._pcinit = true;
+	const initial = !obj.pcInit;
+	if (initial) obj.pcInit = true;
 	if (dom && nobj.dom.nodeName != dom.nodeName) {
 		const emptyDom = nobj.dom.cloneNode(false);
 		const sameContentDOM = obj.contentDOM == obj.dom;
@@ -390,7 +390,7 @@ function mutateNodeView(tr, pos, pmNode, obj, nobj) {
 		node = parent.firstChild;
 		let cur;
 		while (node) {
-			if (node._pcElt || initial) {
+			if (node.pcElt || initial) {
 				cur = node;
 			} else {
 				cur = null;
@@ -400,7 +400,7 @@ function mutateNodeView(tr, pos, pmNode, obj, nobj) {
 		}
 		node = nobj.dom.firstChild;
 		while (node) {
-			node._pcElt = true;
+			node.pcElt = true;
 			cur = node;
 			node = node.nextSibling;
 			parent.appendChild(cur);
@@ -419,7 +419,7 @@ function mutateNodeView(tr, pos, pmNode, obj, nobj) {
 		parent = cont.parentNode;
 		node = cont;
 		while (node.previousSibling) {
-			if (node.previousSibling._pcElt || initial) {
+			if (node.previousSibling.pcElt || initial) {
 				parent.removeChild(node.previousSibling);
 			} else {
 				node = node.previousSibling;
@@ -427,19 +427,19 @@ function mutateNodeView(tr, pos, pmNode, obj, nobj) {
 		}
 		node = cont;
 		while (node.nextSibling) {
-			if (node.nextSibling._pcElt || initial) {
+			if (node.nextSibling.pcElt || initial) {
 				parent.removeChild(node.nextSibling);
 			} else {
 				node = node.nextSibling;
 			}
 		}
 		while ((node = ncont.parentNode.firstChild) != ncont) {
-			node._pcElt = true;
+			node.pcElt = true;
 			parent.insertBefore(node, cont);
 		}
 		node = ncont;
 		while (node.nextSibling) {
-			node.nextSibling._pcElt = true;
+			node.nextSibling.pcElt = true;
 			parent.appendChild(node.nextSibling);
 		}
 		cont = parent;

@@ -133,16 +133,12 @@ class HTMLElementCarousel extends VirtualHTMLElement {
 
 	updateCells() {
 		const opts = this.options;
-		Array.prototype.forEach.call(
-			this.querySelectorAll('element-carousel-cell'),
-			function (cell) {
-				if (opts.width) cell.dataset.width = opts.width + '%';
-				else delete cell.dataset.width;
-				if (opts.height) cell.dataset.height = opts.height;
-				else delete cell.dataset.height;
-			},
-			this
-		);
+		for (const cell of this.querySelectorAll('element-carousel-cell')) {
+			if (opts.width) cell.dataset.width = opts.width + '%';
+			else delete cell.dataset.width;
+			if (opts.height) cell.dataset.height = opts.height;
+			else delete cell.dataset.height;
+		}
 	}
 	reload() {
 		this.updateCells();
@@ -168,12 +164,12 @@ class HTMLElementCarouselCell extends VirtualHTMLElement {
 	}
 }
 
-Page.ready(function () {
+Page.ready(() => {
 	VirtualHTMLElement.define('element-carousel-cell', HTMLElementCarouselCell);
 	VirtualHTMLElement.define('element-carousel', HTMLElementCarousel);
 });
 
-Page.setup(function (state) {
+Page.setup((state) => {
 	function modabs(i, l) {
 		return ((i % l) + l) % l;
 	}

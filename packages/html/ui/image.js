@@ -152,9 +152,7 @@ class HTMLElementImage extends VirtualHTMLElement {
 			}
 			this.classList.add('loading');
 			let done;
-			this.promise = new Promise(function (resolve) {
-				done = resolve;
-			});
+			this.promise = new Promise((resolve) => done = resolve);
 			this.promise.done = done;
 			img.setAttribute('src', curSrc);
 		}
@@ -206,13 +204,13 @@ class HTMLElementInlineImage extends HTMLImageElement {
 	}
 }
 
-['patch', 'reveal', 'captureError', 'crop', 'dimensions', 'position', 'fit', 'findClass', 'fix'].forEach(function (name) {
+for (const name of ['patch', 'reveal', 'captureError', 'crop', 'dimensions', 'position', 'fit', 'findClass', 'fix']) {
 	Object.defineProperty(
 		HTMLElementInlineImage.prototype,
 		name,
 		Object.getOwnPropertyDescriptor(HTMLElementImage.prototype, name)
 	);
-});
+}
 
 VirtualHTMLElement.define('element-image', HTMLElementImage);
 VirtualHTMLElement.define(`element-img`, HTMLElementInlineImage, 'img');

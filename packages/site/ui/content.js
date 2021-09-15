@@ -19,7 +19,7 @@ class HTMLElementContent extends VirtualHTMLElement {
 		}
 	}
 }
-Page.ready(function() {
+Page.ready(() => {
 	VirtualHTMLElement.define('element-content', HTMLElementContent);
 });
 

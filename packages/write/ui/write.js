@@ -28,11 +28,11 @@ Object.assign(window.Pageboard, {
 		} else {
 			what.classList.add('loading');
 		}
-		return p.catch(function(err) {
+		return p.catch((err) => {
 			Pageboard.notify("Request error", err);
 			// rethrow, we don't want to show any result
 			throw err;
-		}).finally(function() {
+		}).finally(() => {
 			if (icon) icon.className = classes;
 			else what.classList.remove('loading');
 		});

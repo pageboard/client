@@ -68,7 +68,5 @@ class UserStore {
 	}
 }
 
-Page.setup(function(state) {
-	Page.storage = new UserStore();
-});
+Page.setup(() => Page.storage = new UserStore());
 
