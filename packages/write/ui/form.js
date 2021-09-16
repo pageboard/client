@@ -100,7 +100,7 @@ class FormBlock {
 				}
 			}
 			this.block = Object.assign({}, block);
-			this.block[mode] = JSON.parse(JSON.stringify(block[mode] || {}));
+			this.block[mode] = JSON.parse(JSON.stringify(block[mode] ?? {}));
 		}
 		if (parents) {
 			this.parents = parents;
@@ -222,7 +222,7 @@ class FormBlock {
 			if (e.type == "input" && ["checkbox", "radio", "select"].includes(e.target.type)) return; // change events only
 		}
 		const editor = this.editor;
-		const formData = FormBlock.pruneObj(this.form.get(), this.form.schema) || {};
+		const formData = FormBlock.pruneObj(this.form.get(), this.form.schema) ?? {};
 		const mode = this.mode;
 
 		const same = Pageboard.utils.stableStringify(this.block[mode]) == Pageboard.utils.stableStringify(formData);

@@ -69,7 +69,7 @@ class HTMLElementEmbed extends VirtualHTMLElement {
 	handleAllMessage(e, state) {
 		if (!e.origin || !this.options.src) return;
 		if (this.options.src.startsWith(e.origin) == false) return;
-		if (this.receiveMessage) this.receiveMessage(e.data || {});
+		if (this.receiveMessage) this.receiveMessage(e.data ?? {});
 	}
 	close() {
 		if (this.iframe) {

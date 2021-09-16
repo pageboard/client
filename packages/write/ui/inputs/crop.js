@@ -243,7 +243,7 @@ Pageboard.schemaHelpers.crop = class Crop {
 	}
 
 	updateData() {
-		const data = this.from(this.getField(this.prefix + 'crop') || {});
+		const data = this.from(this.getField(this.prefix + 'crop') ?? {});
 		if (data) this.cropper.setData(data);
 	}
 

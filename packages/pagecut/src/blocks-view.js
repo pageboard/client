@@ -16,13 +16,13 @@ export default class BlocksView {
 	constructor(view, opts) {
 		this.view = view;
 		this.initial = {};
-		this.store = opts.store || {};
+		this.store = opts.store ?? {};
 		if (opts.genId) this.genId = opts.genId;
 	}
 
 	render(el, block, opts) {
 		if (!opts) opts = {};
-		const scope = opts.scope || this.view.scope || {};
+		const scope = opts.scope ?? this.view.scope ?? {};
 		if (!scope.$doc) scope.$doc = this.view.doc;
 		if (!scope.$elements) scope.$elements = this.view.elements;
 		if (!scope.$element) scope.$element = el;

@@ -13,7 +13,7 @@ export default class Viewer {
 		this.blocks = new Viewer.Blocks(this, opts);
 
 		this.doc = opts.document || document.cloneNode();
-		const elts = this.elements = opts.elements || {};
+		const elts = this.elements = opts.elements ?? {};
 		for (const name in elts) {
 			const el = elts[name];
 			el.name = name;
@@ -44,7 +44,7 @@ export default class Viewer {
 
 	render(block, opts) {
 		let dom;
-		opts = opts || {};
+		opts = opts ?? {};
 		const el = this.element(opts.element || opts.type || block.type);
 		try {
 			dom = this.blocks.render(el, block, opts);

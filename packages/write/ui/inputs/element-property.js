@@ -25,11 +25,11 @@ Pageboard.schemaHelpers['element-property'] = class ElementProperty {
 		const formBlock = Pageboard.editor.blocks.get(formId);
 		if (!formBlock) throw new Error("Cannot find form block for " + formId);
 		this.formBlock = formBlock;
-		let type = formBlock.data || {};
+		let type = formBlock.data ?? {};
 		if (formBlock.type == "query_form") {
 			type = type.type;
 		} else if (formBlock.type == "api_form") {
-			type = ((type.action || {}).parameters || {}).type;
+			type = type.action?.parameters?.type;
 		} else {
 			type = null;
 		}

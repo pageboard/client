@@ -6,10 +6,10 @@ Pageboard.schemaFilters.service = class ServiceFilter {
 			if (val == null) return true;
 		});
 		let service = {};
-		const method = (val || {}).method;
+		const method = (val ?? {}).method;
 		const parts = (method || "").split('.');
 		if (parts.length == 2) {
-			service = (Pageboard.services[parts[0]] || {})[parts[1]] || {};
+			service = Pageboard.services[parts[0]]?.[parts[1]] ?? {};
 		}
 		if (!service.properties) {
 			delete props.parameters;

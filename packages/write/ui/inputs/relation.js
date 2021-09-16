@@ -14,7 +14,7 @@ Pageboard.schemaFilters.relation = class RelationFilter {
 			if (!type) return;
 			const parts = type.split('.');
 			if (parts.length == 2) {
-				el = (Pageboard.services[parts[0]] || {})[parts[1]] || {};
+				el = Pageboard.services[parts[0]]?.[parts[1]] ?? {};
 			}
 		} else {
 			path.splice(-1, 1, 'type');

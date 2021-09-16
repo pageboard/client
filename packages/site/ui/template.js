@@ -241,7 +241,7 @@ class QueryCollectorFilter {
 			if (!vars[key]) vars[key] = !undef;
 			this.query[key] = val;
 		} else if (typeof val == "string") {
-			const isEnc = (what.expr.filters[what.expr.filters.length - 1] || {}).name == "enc";
+			const isEnc = what.expr.filters[what.expr.filters.length - 1]?.name == "enc";
 			const loc = Page.parse(isEnc ? '?' + decodeURIComponent(val) : val).query;
 			for (const key in loc) {
 				if (query[key] === loc[key]) vars[key] = true;

@@ -41,7 +41,7 @@ Pageboard.adopt = function(win, readState) {
 			// writeState.data = readState.data;
 			writeState.save();
 
-			Pageboard.hrefs = readState.scope.$hrefs || {};
+			Pageboard.hrefs = readState.scope.$hrefs ?? {};
 			if (Pageboard.editor?.closed) return;
 			if (!Pageboard.modeControl) {
 				Pageboard.modeControl = new Pageboard.Controls.Mode({

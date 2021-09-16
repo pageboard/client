@@ -102,9 +102,9 @@ export class RootNodeView {
 		// consider it's the same data when it's initializing
 		let sameData = false;
 		if (oldBlock) {
-			sameData = view.utils.equal(oldBlock.data || {}, block.data || {});
+			sameData = view.utils.equal(oldBlock.data ?? {}, block.data ?? {});
 			if (sameData && block.expr) {
-				sameData = view.utils.equal(oldBlock.expr || {}, block.expr || {});
+				sameData = view.utils.equal(oldBlock.expr ?? {}, block.expr ?? {});
 			}
 		}
 		const sameFocus = Boolean(oldBlock?.focused) == Boolean(node.attrs.focused);

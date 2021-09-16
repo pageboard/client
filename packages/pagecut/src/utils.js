@@ -427,13 +427,13 @@ export default class Utils {
 					};
 				}
 				if ((type == "container" || level != depth) && node.attrs.content) {
-					if (!obj.container) obj.container = obj.root || {};
+					if (!obj.container) obj.container = obj.root ?? {};
 					obj.container.name = node.attrs.content;
 				}
 				if (type == "root") {
 					const el = node.type.spec.element;
 					if (!el.inline && el.contents.firstId) {
-						if (!obj.container) obj.container = obj.root || {};
+						if (!obj.container) obj.container = obj.root ?? {};
 						obj.container.name = el.contents.firstId;
 					}
 				}

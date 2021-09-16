@@ -30,7 +30,7 @@ class HTMLElementInputRange extends HTMLInputElement {
 		return node;
 	}
 	get rangeValue() {
-		return (this.options || {}).value;
+		return this.options?.value;
 	}
 	set rangeValue(val) {
 		if (this.options) this.options.value = val;

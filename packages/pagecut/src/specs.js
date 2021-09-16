@@ -228,7 +228,7 @@ function createRootSpec(elt, obj, viewer) {
 				const oldBlock = viewer.blocks.get(id);
 				if (oldBlock) {
 					// update the stored block and keep default data
-					block.data = Object.assign(oldBlock.data || {}, block.data);
+					block.data = Object.assign(oldBlock.data ?? {}, block.data);
 					Object.assign(oldBlock, block);
 					block = oldBlock;
 				}

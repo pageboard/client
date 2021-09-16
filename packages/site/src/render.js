@@ -52,7 +52,7 @@ export function render(res, scope, el) {
 	scope = Object.assign({}, scope);
 	for (const k in res) scope[`$${k}`] = res[k];
 
-	const block = res.item || {};
+	const block = res.item ?? {};
 	const blocks = {};
 	if (!el && block.type) {
 		el = elts[block.type];
@@ -95,7 +95,7 @@ export function install(el, scope) {
 			for (const obj of el.fragments) {
 				let target;
 				if (obj.type === 'doc') target = scope.$element;
-				else if (obj.type) target = scope.$elements[obj.type] || {};
+				else if (obj.type) target = scope.$elements[obj.type] ?? {};
 				else target = el;
 				if (!target.dom) {
 					// eslint-disable-next-line no-console

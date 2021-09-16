@@ -181,7 +181,6 @@ export function schema(val, what, spath) {
 }
 
 export function autolink(val, what) {
-	const hrefs = what.scope.data.$hrefs;
 	const a = what.parent;
 	const loc = Page.parse(val);
 	if (loc.hostname && loc.hostname != document.location.hostname) {
@@ -191,7 +190,7 @@ export function autolink(val, what) {
 		a.target = "_blank";
 	} else if (val) {
 		const href = val.split('?')[0];
-		const meta = (hrefs || {})[href];
+		const meta = what.scope.data.$hrefs?.[href];
 		if (meta?.mime && meta.mime.startsWith("text/html")) {
 			a.target = "_blank";
 		}
@@ -248,7 +247,7 @@ export function urltpl(obj, what, pName = 'pathname', qName = 'query') {
 	if (pathname == null && query == null) return null;
 	if (pathname?.fuse()) return pathname;
 	const loc = Page.parse(pathname || what.scope.data.$loc.pathname);
-	Object.assign(loc.query, query || {});
+	Object.assign(loc.query, query ?? {});
 	const fakes = [];
 	for (const [key, val] of Object.entries(loc.query)) {
 		if (val === undefined) {

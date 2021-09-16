@@ -76,7 +76,7 @@ VirtualHTMLElement.extend('element-gallery', class GalleryHelper {
 					continue;
 				}
 				ed.blocks.mutate(image, {
-					url: (block.data || {}).url
+					url: block.data?.url
 				});
 			}
 		}

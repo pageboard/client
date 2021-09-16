@@ -550,7 +550,7 @@ Semafor.types.oneOf = function (key, schema, node, inst) {
 		</div>`);
 		node.appendChild(field);
 		if (def !== undefined) {
-			(field.querySelector(`option[value="${def}"]`) || {}).selected = true;
+			(field.querySelector(`option[value="${def}"]`) ?? {}).selected = true;
 		}
 	}
 };

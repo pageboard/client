@@ -56,7 +56,7 @@ class HTMLInputMap extends VirtualHTMLElement {
 		else this.#focused(e);
 	}
 	#render() {
-		const obj = Pageboard.Semafor.flatten(this.value || {});
+		const obj = Pageboard.Semafor.flatten(this.value ?? {});
 		const body = this.#table.querySelector('tbody');
 		body.textContent = '';
 		const name = this.name;
