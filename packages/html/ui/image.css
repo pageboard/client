@@ -142,3 +142,7 @@ element-image.none.hcenter.bottom > img {
 img:not([src]) {
 	visibility: hidden;
 }
+img[is="element-img"] {
+	max-width: 100%;
+	height:auto;
+}
