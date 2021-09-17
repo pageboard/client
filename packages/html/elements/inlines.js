@@ -1,5 +1,5 @@
 exports.strong = {
-	priority: 12,
+	priority: 100,
 	title: "Strong",
 	contents: "text*",
 	inplace: true,
@@ -11,7 +11,7 @@ exports.strong = {
 };
 
 exports.em = {
-	priority: 12,
+	priority: 101,
 	title: "Emphasize",
 	contents: "text*",
 	inline: true,
@@ -23,7 +23,7 @@ exports.em = {
 };
 
 exports.i = {
-	priority: 12,
+	priority: 102,
 	title: "Italic",
 	contents: "text*",
 	inline: true,
@@ -35,7 +35,7 @@ exports.i = {
 };
 
 exports.light = {
-	priority: 12,
+	priority: 103,
 	title: "Light",
 	icon: '<i class="icon" style="font-weight:lighter">L</i>',
 	contents: "text*",
@@ -46,7 +46,7 @@ exports.light = {
 };
 
 exports.sup = {
-	priority: 12,
+	priority: 104,
 	title: "Sup",
 	icon: '<i class="superscript icon"></i>',
 	contents: "text*",
@@ -58,7 +58,7 @@ exports.sup = {
 };
 
 exports.sub = {
-	priority: 12,
+	priority: 105,
 	title: "Inf",
 	icon: '<i class="subscript icon"></i>',
 	contents: "text*",
@@ -70,7 +70,7 @@ exports.sub = {
 };
 
 exports.strike = {
-	priority: 12,
+	priority: 106,
 	title: "Strike",
 	icon: '<i class="strikethrough icon"></i>',
 	contents: "text*",
@@ -82,7 +82,7 @@ exports.strike = {
 };
 
 exports.u = {
-	priority: 12,
+	priority: 107,
 	title: "Strike",
 	icon: '<i class="underline icon"></i>',
 	contents: "text*",
@@ -94,7 +94,7 @@ exports.u = {
 };
 
 exports.caps = {
-	priority: 12,
+	priority: 108,
 	title: "Capitalization",
 	icon: '<span class="icon">A<span style="font-variant: small-caps;">a</span></span>',
 	contents: "text*",
@@ -129,7 +129,7 @@ exports.caps = {
 };
 
 exports.color = {
-	priority: 12,
+	priority: 109,
 	title: "Color",
 	icon: `<i class="icon" style="background-image:
 		linear-gradient(
