@@ -15,14 +15,14 @@ Arr.ancestor = function() {
 	} while (parent);
 };
 
-[
+for (const name of [
 	'filter', 'some', 'map', 'forEach',
 	'indexOf', 'find', 'includes', 'reduce',
-	'slice', 'ancestor'
-].forEach((name) => {
-	if (!NodeList.prototype[name]) NodeList.prototype[name] = Arr[name];
-	if (!HTMLCollection.prototype[name]) HTMLCollection.prototype[name] = Arr[name];
-});
+	'slice', 'ancestor', 'pop', 'shift'
+]) {
+	NodeList.prototype[name] ??= Arr[name];
+	HTMLCollection.prototype[name] ??= Arr[name];
+}
 
 Node.prototype.queryClosest = function(sel) {
 	if (this.matches(sel)) return this;
