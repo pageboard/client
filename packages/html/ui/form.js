@@ -15,8 +15,8 @@ class HTMLCustomFormElement extends HTMLFormElement {
 				state.vars.submit = true;
 			}
 			const vars = state.templatesQuery(this);
-			for (const key in vars) {
-				this.setAttribute('data-' + key, vars[key]);
+			for (const [key, val] of Object.entries(vars)) {
+				this.setAttribute('data-' + key, val);
 			}
 			this.restore(state.scope);
 		} else {
@@ -41,7 +41,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 	read(withDefaults) {
 		const fd = new FormData(this);
 		const query = {};
-		fd.forEach(function (val, key) {
+		fd.forEach((val, key) => {
 			if (val == null || val == "") {
 				const cur = Array.from(this.querySelectorAll(`[name="${key}"]`)).pop();
 				if (cur.required == false) {
@@ -59,7 +59,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			} else {
 				query[key] = val;
 			}
-		}, this);
+		});
 
 		for (const node of this.elements) {
 			if (node.name == null || node.name == "" || node.type == "button") continue;
@@ -391,9 +391,8 @@ Page.setup((state) => {
 	}, document);
 
 	function updateClass(field, validity, remove) {
-		for (const key in validity) {
+		for (const [key, has] of Object.entries(validity)) {
 			if (key == "valid") continue;
-			const has = validity[key];
 			field.classList.toggle(key, !remove && has);
 		}
 		field.classList.toggle('error', !remove && !validity.valid);
@@ -415,7 +414,7 @@ Page.ready((state) => {
 		})) {
 			// do not linearize array-as-value
 			obj[prefix] = query;
-		}	else for (let key in Object.keys(query)) {
+		}	else for (let key of Object.keys(query)) {
 			const val = query[key];
 			if (prefix) key = prefix + '.' + key;
 			if (val === undefined) continue;
@@ -449,7 +448,7 @@ Page.ready((state) => {
 				if (val.id && val.data) {
 					// old way
 					values = Object.assign({}, val.data);
-					for (const key in Object.keys(val)) {
+					for (const key of Object.keys(val)) {
 						if (key != "data") values['$' + key] = val[key];
 					}
 				} else {
@@ -459,8 +458,8 @@ Page.ready((state) => {
 			}
 		} else if (action == "read") {
 			const obj = {};
-			for (const key in val) {
-				if (form.querySelector(`[name="${key}"]`)) obj[key] = val[key];
+			for (const [key, kval] of Object.entries(val)) {
+				if (form.querySelector(`[name="${key}"]`)) obj[key] = kval;
 			}
 			return obj;
 		}

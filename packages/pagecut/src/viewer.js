@@ -14,8 +14,7 @@ export default class Viewer {
 
 		this.doc = opts.document || document.cloneNode();
 		const elts = this.elements = opts.elements ?? {};
-		for (const name in elts) {
-			const el = elts[name];
+		for (const [name, el] of Object.entries(elts)) {
 			el.name = name;
 			this.setElement(el);
 		}

@@ -122,9 +122,9 @@ class FormBlock {
 				form.clear();
 			}
 			form.set(this.block[mode]);
-			Object.values(this.helpers).forEach(function (inst) {
+			for (const inst of Object.values(this.helpers)) {
 				if (inst.update) inst.update(this.block);
-			}, this);
+			}
 		}
 		this.node.addEventListener('change', this);
 		this.node.addEventListener('input', this);
@@ -354,7 +354,7 @@ Pageboard.Controls.Form = class Form {
 		this.main.node.classList.toggle('hidden', !showBlocks);
 
 		let curInlines = this.inlines;
-		const inlines = (showInlines && parent.inline?.blocks || []).map(function (block) {
+		const inlines = (showInlines && parent.inline?.blocks || []).map((block) => {
 			let curForm;
 			curInlines = curInlines.filter((form) => {
 				if (form.block.type == block.type) {
@@ -373,7 +373,7 @@ Pageboard.Controls.Form = class Form {
 			curForm.update(parents, block, this.mode);
 			canShowExpressions ||= curForm.el.properties;
 			return curForm;
-		}, this);
+		});
 		this.toggleExpr.classList.toggle('hidden', !showExpressions);
 		this.toggleExpr.classList.toggle('disabled', !canShowExpressions);
 		this.toggleExpr.classList.toggle('active', this.mode == "expr");

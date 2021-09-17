@@ -21,8 +21,9 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 		this.#size = len;
 
 		const tpl = this.ownTpl.content.cloneNode(true);
-		tpl.querySelectorAll('[block-id]')
-			.forEach(node => node.removeAttribute('block-id'));
+		for (const node of tpl.querySelectorAll('[block-id]')) {
+			node.removeAttribute('block-id');
+		}
 		const anc = tpl.querySelectorAll('[name]:not(button)').ancestor();
 
 		for (let i = len - 1; i >= 1; i--) {
@@ -40,17 +41,17 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 
 	updateAncestor(node, i) {
 		const prefix = this.prefix;
-		node.querySelectorAll('[name]:not(button)').forEach(node => {
-			node.name = `${prefix}${i}.${node.name}`;
-		});
+		for (const child of node.querySelectorAll('[name]:not(button)')) {
+			child.name = `${prefix}${i}.${child.name}`;
+		}
 		return node;
 	}
 
 	modelFromTemplate() {
 		const obj = {};
-		this.ownTpl.content.querySelectorAll('[name]:not(button)').forEach(node => {
+		for (const node of this.ownTpl.content.querySelectorAll('[name]:not(button)')) {
 			obj[node.name] = null;
-		});
+		}
 		return obj;
 	}
 
@@ -58,17 +59,16 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 		const list = [];
 		const prefix = this.prefix;
 		// just unflatten the array
-		Object.keys(values).forEach(key => {
-			if (!key.startsWith(prefix)) return;
+		for (const [key, val] of Object.entries(values)) {
+			if (!key.startsWith(prefix)) continue;
 			const parts = key.slice(prefix.length).split(".");
 			const index = Number(parts.shift());
-			if (!Number.isInteger(index)) return;
-			const val = values[key];
+			if (!Number.isInteger(index)) continue;
 			delete values[key];
 			let obj = list[index];
 			if (!obj) list[index] = obj = {};
 			obj[parts.join('.')] = val;
-		});
+		}
 		return list;
 	}
 
@@ -76,8 +76,8 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 		const prefix = this.prefix;
 		for (let i = 0; i < list.length; i++) {
 			const obj = list[i];
-			for (const key in obj) {
-				values[`${prefix}${i}.${key}`] = obj[key];
+			for (const [key, val] of Object.entries(obj)) {
+				values[`${prefix}${i}.${key}`] = val;
 			}
 		}
 	}

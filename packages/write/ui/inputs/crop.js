@@ -201,9 +201,9 @@ Pageboard.schemaHelpers.crop = class Crop {
 	change(obj) {
 		if (!this.cropper || !obj) return;
 		const crop = this.to(obj);
-		Object.keys(crop).forEach(function (key) {
-			this[key].value = crop[key];
-		}, this);
+		for (const [key, val] of Object.entries(crop)) {
+			this[key].value = val;
+		}
 
 		Pageboard.trigger(this.input, 'change');
 	}

@@ -42,8 +42,8 @@ class UserStore {
 	}
 	clearCookies(re) {
 		const cookies = this.getCookies();
-		for (const key in cookies) {
-			if (!re || re.test(key)) this.clearCookie(key, cookies[key]);
+		for (const [key, val] of Object.entries(cookies)) {
+			if (!re || re.test(key)) this.clearCookie(key, val);
 		}
 	}
 	clearCookie(key, opts) {

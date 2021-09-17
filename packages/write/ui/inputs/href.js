@@ -398,7 +398,7 @@ Pageboard.schemaHelpers.href = class Href {
 		}
 		list.rendered = true;
 		container.textContent = ' ';
-		list.forEach(function (obj) {
+		for (const obj of list) {
 			const item = this.renderItem(obj);
 			if (selected && item.getAttribute('href') == selected) {
 				item.classList.add('selected');
@@ -406,7 +406,7 @@ Pageboard.schemaHelpers.href = class Href {
 			} else {
 				container.appendChild(item);
 			}
-		}, this);
+		}
 		container.className = `ui items ${this.opts.display || ''}`;
 	}
 

@@ -55,7 +55,7 @@ class HTMLElementCarousel extends VirtualHTMLElement {
 	setup(state) {
 		if (!this.itemsObserver) {
 			this.itemsObserver = new MutationObserver((records) => {
-				records.forEach((record) => this.reload(record, state));
+				for (const record of records) this.reload(record, state);
 			});
 			this.itemsObserver.observe(this.querySelector('[block-content="items"]'), {
 				childList: true
@@ -92,19 +92,19 @@ class HTMLElementCarousel extends VirtualHTMLElement {
 			const oldIndex = this.options.index;
 			const oldSlide = this.widget.slides[oldIndex];
 			if (oldSlide) {
-				oldSlide.cells.forEach((cell) => {
-					cell.element.querySelectorAll('video,audio').forEach((node) => {
+				for (const cell of oldSlide.cells) {
+					for (const node of cell.element.querySelectorAll('video,audio')) {
 						if (node.pause) node.pause();
-					});
-				});
+					}
+				}
 			}
 			const newSlide = this.widget.slides[index];
 			if (newSlide) {
-				newSlide.cells.forEach((cell) => {
-					cell.element.querySelectorAll('video,audio').forEach((node) => {
+				for (const cell of newSlide.cells) {
+					for (const node of cell.element.querySelectorAll('video,audio')) {
 						if (node.play && node.options.autoplay) node.play();
-					});
-				});
+					}
+				}
 			}
 			if (opts.fullview || gallery) {
 				state.query[`${this.id}.index`] = index;
@@ -180,13 +180,13 @@ Page.setup((state) => {
 		const slide = this.slides[i];
 		if (!slide) return;
 		const lazies = [];
-		slide.cells.forEach((cell) => {
-			cell.element.querySelectorAll("[data-src]").forEach((node) => {
+		for (const cell of slide.cells) {
+			for (const node of cell.element.querySelectorAll("[data-src]")) {
 				if (node.reveal && !node.currentSrc) {
 					lazies.push(node.reveal(state).catch(() => { }));
 				}
-			});
-		});
+			}
+		}
 
 		return Promise.all(lazies).then(() => {
 			this.select(i, isWrap, instant);

@@ -58,9 +58,7 @@ Pageboard.Controls.Menu = class Menu {
 		);
 		this.tabs = {};
 		this.lastTab;
-		Menu.tabs.forEach(function (name) {
-			this.tab(name);
-		}, this);
+		for (const name of Menu.tabs) this.tab(name);
 		this.menu = new Pagecut.Menubar({
 			items: this.items()
 		});
@@ -92,9 +90,9 @@ Pageboard.Controls.Menu = class Menu {
 
 	hideTabs() {
 		this.tabMenu.setAttribute('hidden', '');
-		for (const k in this.tabs) {
-			this.tabs[k].menu.classList.remove('active');
-			this.tabs[k].div.classList.remove('active');
+		for (const tab of Object.values(this.tabs)) {
+			tab.menu.classList.remove('active');
+			tab.div.classList.remove('active');
 		}
 	}
 

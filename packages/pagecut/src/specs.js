@@ -448,7 +448,7 @@ function createContainerSpec(elt, obj) {
 
 function attrsTo(attrs) {
 	const domAttrs = {};
-	for (const [k, v] in Object.entries(attrs)) {
+	for (const [k, v] of Object.entries(attrs)) {
 		if (!k.startsWith('_') && v != null && v != '{}') domAttrs['block-' + k] = v;
 	}
 	return domAttrs;
@@ -466,9 +466,7 @@ function attrsFrom(dom) {
 
 function specAttrs(atts) {
 	const obj = {};
-	let val;
-	for (const k in atts) {
-		val = atts[k];
+	for (const [k, val] of Object.entries(atts)) {
 		obj[k] = {};
 		obj[k].default = val?.default ?? val;
 	}

@@ -185,7 +185,9 @@ export class RootNodeView {
 					const oldClass = mapOfClass(record.oldValue);
 					const newClass = mapOfClass(val);
 					const diffClass = {};
-					for (const k in newClass) if (newClass[k] && !oldClass[k]) diffClass[k] = true;
+					for (const [k, vk] of Object.entries(newClass)) {
+						if (vk && !oldClass[k]) diffClass[k] = true;
+					}
 					obj[name] = Object.keys(diffClass).join(' ');
 				}
 			} else if (name == "style") {
@@ -193,7 +195,9 @@ export class RootNodeView {
 					const oldStyle = mapOfStyle(record.oldValue);
 					const newStyle = mapOfStyle(dom.style);
 					const diffStyle = [];
-					for (const j in newStyle) if (newStyle[j] && !oldStyle[j]) diffStyle.push(j + ':' + newStyle[j] + ';');
+					for (const [j, vj] of Object.entries(newStyle)) {
+						if (vj && !oldStyle[j]) diffStyle.push(j + ':' + vj + ';');
+					}
 					obj[name] = diffStyle.join('');
 				}
 			} else {
@@ -377,7 +381,7 @@ function mutateNodeView(tr, pos, pmNode, obj, nobj) {
 				}
 				curpos += pmChild.nodeSize;
 			}
-		}, this);
+		});
 	}
 	if (!obj.dom) return;
 	// first upgrade attributes
@@ -491,17 +495,15 @@ function applyDiffClass(a, b) {
 
 function restoreDomAttrs(srcAtts, dom) {
 	if (!srcAtts || !dom) return;
-	let attr, name, dstVal, srcVal;
-	const dstAtts = dom.attributes;
 	let uiAtts = dom.pcUiAttrs;
 	if (!uiAtts) {
 		uiAtts = dom.pcUiAttrs = {};
 	}
+	const dstAtts = Array.from(dom.attributes); // immutable copy
 	// pcUiAttrs: attributes set by ui processes
-	for (name in srcAtts) {
+	for (const [name, srcVal] of Object.entries(srcAtts)) {
 		if (name == "contenteditable") continue;
-		dstVal = dom.getAttribute(name);
-		srcVal = srcAtts[name];
+		const dstVal = dom.getAttribute(name);
 		if (name == "class") {
 			dom.setAttribute(name, applyDiffClass(srcVal, uiAtts[name]));
 		} else if (name == "style") {
@@ -510,10 +512,8 @@ function restoreDomAttrs(srcAtts, dom) {
 			dom.setAttribute(name, srcVal);
 		}
 	}
-
-	for (let j = 0; j < dstAtts.length; j++) {
-		attr = dstAtts[j];
-		name = attr.name;
+	for (const attr of dstAtts) {
+		const name = attr.name;
 		if (name == "block-content" || name == "contenteditable") continue;
 		// remove attribute if not in srcAtts unless it is set in uiAtts
 		if (srcAtts[name] == null && uiAtts[name] == null) {

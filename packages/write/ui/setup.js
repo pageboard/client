@@ -4,7 +4,7 @@ let adv = false;
 
 Page.patch((state) => {
 	// write mode accepts all params at the moment
-	for (const key in Object.keys(state.query)) {
+	for (const key of Object.keys(state.query)) {
 		state.vars[key] = true;
 	}
 });
@@ -222,10 +222,9 @@ function editorClose() {
 	this.closed = true;
 	Pageboard.notify.destroy();
 	this.destroy();
-	Object.keys(this.controls).forEach(function(name) {
-		const control = this.controls[name];
+	for (const control of Object.values(this.controls)) {
 		if (control.destroy) control.destroy();
-	}, this);
+	}
 }
 
 function devTools() {

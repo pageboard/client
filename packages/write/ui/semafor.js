@@ -272,11 +272,11 @@ class Semafor {
 		}
 		return obj;
 	}
-	convert(vals, field) {
+	convert(vals, pfield) {
 		const obj = {};
-		const schema = field.properties;
-		for (const name in vals) {
-			field = schema[name];
+		const schema = pfield.properties;
+		for (const name of Object.keys(vals)) {
+			let field = schema[name];
 			let val = vals[name];
 			if (field) {
 				let type = field.type;

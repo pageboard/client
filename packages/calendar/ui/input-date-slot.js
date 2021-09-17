@@ -68,8 +68,8 @@ class HTMLElementInputDateSlot extends VirtualHTMLElement {
 		const dts = els.map(el => el.dataset);
 
 		const tz = this.options.timeZone;
-		if (tz) dts.forEach(dt => { dt.timeZone = tz; } );
-		else dts.forEach(dt => { delete dt.timeZone; } );
+		if (tz) for (const dt of dts) dt.timeZone = tz;
+		else for (const dt of dts) delete dt.timeZone;
 
 
 		if (dayRange) {

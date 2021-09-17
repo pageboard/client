@@ -207,12 +207,8 @@ VirtualHTMLElement.define('element-template', HTMLElementTemplate);
 Page.Loc.prototype.fuse = function (data, scope) {
 	this.pathname = this.pathname.fuse(data, scope);
 	const q = this.query;
-	for (const key in q) {
-		let val = q[key];
-		if (typeof val == "string") {
-			val = val.fuse(data, scope);
-		}
-		q[key] = val;
+	for (const [key, val] of Object.entries(q)) {
+		q[key] = typeof val == "string" ? val.fuse(data, scope) : val;
 	}
 	return this;
 };
@@ -243,9 +239,9 @@ class QueryCollectorFilter {
 		} else if (typeof val == "string") {
 			const isEnc = what.expr.filters[what.expr.filters.length - 1]?.name == "enc";
 			const loc = Page.parse(isEnc ? '?' + decodeURIComponent(val) : val).query;
-			for (const key in loc) {
-				if (query[key] === loc[key]) vars[key] = true;
-				this.query[key] = loc[key];
+			for (const [key, val] of Object.entries(loc)) {
+				if (query[key] === val) vars[key] = true;
+				this.query[key] = val;
 			}
 		}
 		return val;

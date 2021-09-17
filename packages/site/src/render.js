@@ -50,7 +50,7 @@ export function render(res, scope, el) {
 	if (el) install(el, scope);
 
 	scope = Object.assign({}, scope);
-	for (const k in res) scope[`$${k}`] = res[k];
+	for (const [k, rek] of Object.entries(res)) scope[`$${k}`] = rek;
 
 	const block = res.item ?? {};
 	const blocks = {};

@@ -148,7 +148,7 @@ class HTMLElementBlogs extends VirtualHTMLElement {
 			return val.toUTCString();
 		};
 		const rss = rssDoc.fuse(feed, scope);
-		rss.querySelectorAll('encoded').forEach((node) => {
+		for (const node of rss.querySelectorAll('encoded')) {
 			const frag = rssDoc.createDocumentFragment();
 			while (node.firstChild) frag.appendChild(node.firstChild);
 			const fragStr = (new XMLSerializer()).serializeToString(frag).trim();
@@ -157,7 +157,7 @@ class HTMLElementBlogs extends VirtualHTMLElement {
 			} else {
 				node.appendChild(rssDoc.createCDATASection(fragStr));
 			}
-		});
+		}
 		return {
 			mime: 'application/xml',
 			body: (new XMLSerializer()).serializeToString(rss)

@@ -28,8 +28,8 @@ class HTMLElementQueryTags extends VirtualHTMLElement {
 		state.finish(() => {
 			this.labels.textContent = '';
 			if (this.isContentEditable) this.insertLabel('', '', 'Auto');
-			else for (const name in query) {
-				this.add(name, query[name]);
+			else for (const [name, val] of Object.entries(query)) {
+				this.add(name, val);
 			}
 		});
 	}

@@ -55,9 +55,9 @@ Page.Transition = class {
 		};
 
 		const st = document.body.style;
-		for (const t in transitions) {
+		for (const [t, v] of Object.entries(transitions)) {
 			if (st[t] !== undefined) {
-				return transitions[t];
+				return v;
 			}
 		}
 	}

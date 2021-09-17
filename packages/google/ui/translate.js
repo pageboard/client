@@ -7,10 +7,10 @@ class HTMLElementGoogleTranslate extends VirtualHTMLElement {
 			Object.assign(document.body.style, this.style);
 		}
 		if (this.observer) this.close(state);
-		this.#observer = new MutationObserver((list) => {
-			list.forEach((mut) => {
-				if (mut.attributeName == "style") {
-					const s = mut.target.style;
+		this.#observer = new MutationObserver((records) => {
+			for (const record of records) {
+				if (record.attributeName == "style") {
+					const s = record.target.style;
 					const top = parseInt(s.top);
 					this.#shown = !Number.isNaN(top) && top > 10;
 					if (this.#shown) {
@@ -25,7 +25,7 @@ class HTMLElementGoogleTranslate extends VirtualHTMLElement {
 					}
 					this.setClass();
 				}
-			});
+			}
 		});
 		this.#observer.observe(document.body, {attributes: true});
 	}

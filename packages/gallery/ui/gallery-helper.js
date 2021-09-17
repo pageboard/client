@@ -3,7 +3,7 @@ VirtualHTMLElement.extend('element-gallery', class GalleryHelper {
 		if (!state.scope.$write) return;
 		if (!this.itemsObserver) this.itemsObserver = new MutationObserver((records) => {
 			setTimeout(() => {
-				records.forEach((record) => this.mutate(record, state));
+				for (const record of records) this.mutate(record, state);
 			}, 300);
 		});
 		this.itemsObserver.disconnect();

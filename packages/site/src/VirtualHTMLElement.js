@@ -141,7 +141,7 @@ function monkeyPatch(proto, meth, cb, after) {
 function nodeOptions(node, defaults, state, is) {
 	const params = stateOptions(node.id, defaults, state);
 	const opts = {};
-	Object.entries(defaults).forEach(([name, {attr, isData, def}]) => {
+	for (const [name, {attr, isData, def}] of Object.entries(defaults)) {
 		let val;
 		if (Object.hasOwnProperty.call(params, name)) {
 			val = params[name];
@@ -167,13 +167,13 @@ function nodeOptions(node, defaults, state, is) {
 			if (!def.includes(val)) val = null;
 		}
 		if (val != null) opts[name] = val;
-	});
+	}
 	return opts;
 }
 
 function stateOptions(id, defaults, state) {
 	const opts = {};
-	for (const key in Object.keys(state.query)) {
+	for (const key of Object.keys(state.query)) {
 		const [qid, name] = key.split('.');
 		if (name == null || qid != id) continue;
 		const { isData } = defaults[name];

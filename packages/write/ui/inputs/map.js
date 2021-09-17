@@ -60,17 +60,17 @@ class HTMLInputMap extends VirtualHTMLElement {
 		const body = this.#table.querySelector('tbody');
 		body.textContent = '';
 		const name = this.name;
-		Object.keys(obj).concat([""]).forEach(function(key, i) {
+		Object.keys(obj).concat([""]).forEach((key, i) => {
 			let val = obj[key];
 			if (val === undefined || val === null) val = '';
 			if (!Array.isArray(val)) val = [val];
-			val.forEach(function(val, j) {
+			val.forEach((val, j) => {
 				body.appendChild(this.dom(`<tr>
 					<td><input class="ui input" name="$key-${name}.${i}-${j}" value="${key}" /></td>
 					<td><input class="ui input" name="$val-${name}.${i}-${j}" value="${val}" /></td>
 				</tr>`));
-			}, this);
-		}, this);
+			});
+		});
 		this.#restoreSel();
 	}
 	#focused(e) {

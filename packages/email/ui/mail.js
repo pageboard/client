@@ -13,12 +13,12 @@ Page.serialize = function() {
 	const dloc = doc.location;
 	const base = dloc.protocol + '//' + dloc.host;
 	function absolut(selector, att) {
-		doc.querySelectorAll(selector).forEach((node) => {
+		for (const node of doc.querySelectorAll(selector)) {
 			const item = node.attributes.getNamedItem(att);
-			if (!item) return;
+			if (!item) continue;
 			const uloc = new URL(item.nodeValue, base);
 			item.nodeValue = uloc.href;
-		});
+		}
 	}
 	absolut('a', 'href');
 	for (const node of doc.querySelectorAll('img[is]')) {

@@ -15,10 +15,10 @@ class HTMLShareAnchorElement extends HTMLAnchorElement {
 		const card = {
 			url: href
 		};
-		['title', 'description', 'image'].forEach(name => {
+		for (const name of ['title', 'description', 'image']) {
 			const node = document.head.querySelector(`meta[property="og:${name}"]`);
 			if (node?.content) card[name] = node.content;
-		});
+		}
 
 		const obj = {
 			linkedin: {

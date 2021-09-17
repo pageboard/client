@@ -10,10 +10,10 @@ class HTMLCustomConsentElement extends HTMLFormElement {
 	static ask() {
 		this.waiting = false;
 		let tacit = true;
-		document.querySelectorAll('[block-type="consent_form"]').forEach((node) => {
+		for (const node of document.querySelectorAll('[block-type="consent_form"]')) {
 			node.classList.add('visible');
 			tacit = false;
-		});
+		}
 		return !tacit;
 	}
 	setup(state) {

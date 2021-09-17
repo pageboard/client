@@ -33,9 +33,7 @@ class HTMLElementImage extends VirtualHTMLElement {
 		this.promise.done = function () { };
 	}
 	findClass(list) {
-		return list.find(function (name) {
-			return this.matches(`.${name}`);
-		}, this) || list[0];
+		return list.find((name) => this.matches(`.${name}`)) || list[0];
 	}
 	get fit() {
 		return this.findClass(['none', 'contain', 'cover']);
@@ -49,9 +47,9 @@ class HTMLElementImage extends VirtualHTMLElement {
 		this.classList.add(val);
 	}
 	set position(val) {
-		(val || '').split(' ').forEach(function (val) {
+		(val || '').split(' ').forEach((val) => {
 			if (val) this.classList.add(val);
-		}, this);
+		});
 	}
 	get crop() {
 		let [x, y, w, h, z] = (this.dataset.crop || ";;;;").split(";").map((x) => parseFloat(x));

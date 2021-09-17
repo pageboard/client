@@ -55,9 +55,9 @@ export default class Blocks extends BlocksView {
 
 	fromAttrs(attrs) {
 		const block = {};
-		for (const name in attrs) {
+		for (const [name, att] of Object.entries(attrs)) {
 			if (!name.startsWith("_") && name != "content") {
-				block[name] = attrs[name];
+				block[name] = att;
 			}
 		}
 		if (block.data) block.data = JSON.parse(block.data);
