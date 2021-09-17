@@ -130,9 +130,9 @@ class Semafor {
 	}
 
 	destroy() {
-		this.node.querySelectorAll('.nullable.fieldset > .nullable').forEach((node) => {
+		for (const node of this.node.querySelectorAll('.nullable.fieldset > .nullable')) {
 			node.removeEventListener('change', this);
-		});
+		}
 		this.fields = {};
 		this.node.textContent = '';
 	}

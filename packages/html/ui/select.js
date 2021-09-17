@@ -151,7 +151,7 @@ class HTMLElementSelect extends VirtualHTMLElement {
 		select.required = this.options.required;
 		select.multiple = this.options.multiple;
 		if (!select.multiple) {
-			this.querySelectorAll('.ui.label').forEach(node => node.remove());
+			for (const node of this.querySelectorAll('.ui.label')) node.remove();
 		}
 		select.name = this.options.name;
 		this.#fillSelect();

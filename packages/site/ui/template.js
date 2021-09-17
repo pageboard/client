@@ -91,8 +91,8 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 			`[block-type="message"][data-status="${status}"]`
 		);
 		let found = false;
-		parent.querySelectorAll(`[block-type="message"]`).forEach(node => {
-			if (node.closest('[action]') != this) return;
+		for (const node of parent.querySelectorAll(`[block-type="message"]`)) {
+			if (node.closest('[action]') != this) continue;
 			let show = node == statusMsg;
 			if (!show && !statusMsg) {
 				if (name && node.classList.contains(name)) show = true;
@@ -101,7 +101,7 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 			}
 			if (show) found = true;
 			node.classList.toggle('visible', show);
-		});
+		}
 		return found;
 	}
 
@@ -109,20 +109,22 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 		const view = this.ownView;
 		const scope = Object.assign({}, state.scope);
 		const tmpl = this.ownTpl.content.cloneNode(true);
-		tmpl.querySelectorAll('[block-id]')
-			.forEach(node => node.removeAttribute('block-id'));
+		for (const node of tmpl.querySelectorAll('[block-id]')) {
+			node.removeAttribute('block-id');
+		}
 
 		// allow sub-templates to merge current data
-		tmpl.querySelectorAll('template').forEach(tpl => {
-			if (tpl.parentNode.nodeName == this.nodeName || !tpl.content) return;
+		for (const tpl of tmpl.querySelectorAll('template')) {
+			if (tpl.parentNode.nodeName == this.nodeName || !tpl.content) continue;
 			tpl.content.fuse(data, {
 				$filters: Object.assign({}, scope.$filters, { repeat() { } })
 			});
 			// get rid of block-id in those templates to avoid
 			// pagecut from dying on them
-			tpl.content.querySelectorAll('[block-id]')
-				.forEach(node => node.removeAttribute('block-id'));
-		});
+			for (const node of tpl.content.querySelectorAll('[block-id]')) {
+				node.removeAttribute('block-id');
+			}
+		}
 
 		const collector = state.collector();
 
