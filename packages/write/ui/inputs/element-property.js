@@ -7,14 +7,47 @@ Pageboard.schemaHelpers['element-property'] = class ElementProperty {
 
 	static asPaths(obj, ret, pre) {
 		if (!ret) ret = {};
+		const discName = this.discriminator(obj);
+		if (discName) {
+			const discSchema = obj.properties[discName];
+			if (obj.selectCases) {
+				for (const [discValue, subSchema] of Object.entries(obj.selectCases)) {
+					const discCase = (discSchema.oneOf || discSchema.anyOf).find((it) => {
+						return it.const == discValue;
+					});
+					const subRet = {};
+					ElementProperty.asPaths(subSchema, subRet, `${pre || ''}${discName}.${discValue}.`);
+					for (const prop of Object.values(subRet)) {
+						prop.title = `${discCase.title}: ${prop.title}`;
+					}
+					Object.assign(ret, subRet);
+				}
+			} else if (obj.oneOf) {
+				// TODO finish this
+				for (const schema of obj.oneOf) {
+					ElementProperty.asPaths(schema, ret, schema.properties[obj.discriminator.propertyName] + '.');
+				}
+			}
+		}
 		const props = obj.properties;
 		if (!props) return ret;
 		for (const [key, val] of Object.entries(props)) {
 			const cur = `${pre || ""}${key}`;
-			ret[cur] = val;
+			ret[cur] = Object.assign({}, val);
 			ElementProperty.asPaths(val, ret, cur + '.');
 		}
+
 		return ret;
+	}
+
+	static discriminator(schema) {
+		if (schema.select) {
+			const ref = schema.select.$data;
+			if (!ref || !ref.startsWith('0/')) return null;
+			return ref.substring(2);
+		} else if (schema.discriminator) {
+			return schema.discriminator.propertyName;
+		}
 	}
 
 	init(block) {

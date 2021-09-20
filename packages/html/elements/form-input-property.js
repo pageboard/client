@@ -57,10 +57,17 @@ exports.input_property = {
 		let prop = el;
 		let propKey;
 		let required = false;
+		let cases = null;
 		for (let i = 0; i < list.length; i++) {
 			propKey = list[i];
 			required = prop.required && prop.required.indexOf(propKey) >= 0;
-			prop = (prop.properties || {})[propKey] || null;
+			if (cases) {
+				prop = cases[propKey];
+				cases = null;
+			} else {
+				cases = prop.selectCases;
+				prop = (prop.properties || {})[propKey] || null;
+			}
 			if (prop == null) break;
 		}
 		if (!prop) {
