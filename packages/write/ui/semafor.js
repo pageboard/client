@@ -274,6 +274,7 @@ class Semafor {
 	}
 	convert(vals, pfield) {
 		const obj = {};
+		if (vals == null) return obj;
 		const schema = pfield.properties;
 		for (const name of Object.keys(vals)) {
 			let field = schema[name];
