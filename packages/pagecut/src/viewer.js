@@ -86,8 +86,13 @@ export default class Viewer {
 				dom.removeAttribute('block-data');
 			}
 		}
-		if (block.focused) dom.setAttribute('block-focused', block.focused);
-		else dom.removeAttribute('block-focused');
+		const focus = block.focused;
+		if (focus) {
+			dom.setAttribute('block-focused', focus);
+			if (focus == "last") dom.setAttribute('spellcheck', 'true');
+		} else {
+			dom.removeAttribute('block-focused');
+		}
 
 		return dom;
 	}

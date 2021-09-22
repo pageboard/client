@@ -163,6 +163,9 @@ class Editor extends View.EditorView {
 		});
 
 		return {
+			attributes: {
+				spellcheck: 'false'
+			},
 			state: State.EditorState.create({
 				schema, plugins, doc
 			}),
