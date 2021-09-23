@@ -7,35 +7,35 @@ exports.input_date_time = {
 	context: 'form//',
 	properties: {
 		name: {
-			title: "name",
+			title: "Name",
 			description: "The form object key",
 			type: "string",
 			format: "singleline"
 		},
 		value: {
-			title: "default value",
+			title: "Default value",
 			nullable: true,
 			type: "string",
 			format: "singleline"
 		},
 		placeholder: {
-			title: "placeholder",
+			title: "Placeholder",
 			nullable: true,
 			type: "string",
 			format: "singleline"
 		},
 		required: {
-			title: 'required',
+			title: 'Required',
 			type: 'boolean',
 			default: false
 		},
 		disabled: {
-			title: 'disabled',
+			title: 'Disabled',
 			type: 'boolean',
 			default: false
 		},
 		format: {
-			title: 'format',
+			title: 'Format',
 			default: "datetime",
 			anyOf: [{
 				const: "datetime",
@@ -49,7 +49,7 @@ exports.input_date_time = {
 			}]
 		},
 		step: {
-			title: 'step',
+			title: 'Step',
 			description: 'rounding/increment in seconds',
 			type: 'integer',
 			nullable: true,
@@ -112,13 +112,13 @@ exports.input_date_slot = {
 	context: 'form//',
 	properties: {
 		nameStart: {
-			title: "name for start date",
+			title: "Name for start date",
 			description: "The form object key",
 			type: "string",
 			format: "singleline"
 		},
 		nameEnd: {
-			title: "name for end date",
+			title: "Name for end date",
 			description: "The form object key",
 			type: "string",
 			format: "singleline"
@@ -136,12 +136,12 @@ exports.input_date_slot = {
 			format: "singleline"
 		},
 		required: {
-			title: 'required',
+			title: 'Required',
 			type: 'boolean',
 			default: false
 		},
 		disabled: {
-			title: 'disabled',
+			title: 'Disabled',
 			type: 'boolean',
 			default: false
 		},

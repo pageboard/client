@@ -49,31 +49,31 @@ exports.segment = {
 			title: 'Attached',
 			anyOf: [{
 				const: null,
-				title: 'no',
+				title: 'No',
 			}, {
 				const: 'top',
-				title: 'top'
+				title: 'Top'
 			}, {
 				const: 'both',
-				title: 'both'
+				title: 'Both'
 			}, {
 				const: 'bottom',
-				title: 'bottom'
+				title: 'Bottom'
 			}]
 		},
 		align: {
 			title: 'Align',
 			anyOf: [{
 				const: null,
-				title: "left",
+				title: "Left",
 				icon: '<i class="icon align left"></i>'
 			}, {
 				const: "center",
-				title: "center",
+				title: "Center",
 				icon: '<i class="icon align center"></i>'
 			}, {
 				const: "right",
-				title: "right",
+				title: "Right",
 				icon: '<i class="icon align right"></i>'
 			}]
 		},
@@ -103,25 +103,25 @@ exports.heading = {
 			default: "left",
 			anyOf: [{
 				const: "left",
-				title: "left",
+				title: "Left",
 				icon: '<i class="icon align left"></i>'
 			}, {
 				const: "center",
-				title: "center",
+				title: "Center",
 				icon: '<i class="icon align center"></i>'
 			}, {
 				const: "right",
-				title: "right",
+				title: "Right",
 				icon: '<i class="icon align right"></i>'
 			}, {
 				const: "justify",
-				title: "justify",
+				title: "Justify",
 				icon: '<i class="icon align justify"></i>'
 			}]
 		},
 		linkable: {
-			title: 'Show #link',
-			description: 'Shows a link hash on hover',
+			title: 'Show hash link',
+			description: 'On hover',
 			type: 'boolean',
 			default: false
 		},

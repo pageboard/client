@@ -5,17 +5,17 @@ exports.nav = {
 	description: "Navigation links",
 	properties: {
 		relation: {
-			title: "relation",
+			title: "Relation",
 			default: "up",
 			anyOf: [{
 				const: "up",
-				title: "up"
+				title: "Up"
 			}, {
 				const: "prev",
-				title: "previous"
+				title: "Previous"
 			}, {
 				const: "next",
-				title: "next"
+				title: "Next"
 			}]
 		}
 	},

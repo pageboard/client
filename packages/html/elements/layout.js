@@ -3,77 +3,77 @@ exports.layout = {
 	icon: '<i class="icon move"></i>',
 	properties: {
 		horizontal: {
-			title: 'horizontal',
+			title: 'Horizontal',
 			description: 'Position horizontally',
 			default: "left",
 			anyOf: [{
 				const: "left",
-				title: "left"
+				title: "Left"
 			}, {
 				const: "hcenter",
-				title: "center"
+				title: "Center"
 			}, {
 				const: "hbetween",
-				title: "spaced between"
+				title: "Spaced between"
 			}, {
 				const: "haround",
-				title: "spaced around"
+				title: "Spaced around"
 			}, {
 				const: "right",
-				title: "right"
+				title: "Right"
 			}]
 		},
 		vertical: {
-			title: 'vertical',
+			title: 'Vertical',
 			description: 'Position vertically',
 			default: "top",
 			anyOf: [{
 				const: "top",
-				title: "top"
+				title: "Top"
 			}, {
 				const: "vcenter",
-				title: "center"
+				title: "Center"
 			}, {
 				const: "vstretch",
-				title: "stretch"
+				title: "Stretch"
 			}, {
 				const: "vbaseline",
-				title: "baseline"
+				title: "Baseline"
 			}, {
 				const: "bottom",
-				title: "bottom"
+				title: "Bottom"
 			}]
 		},
 		direction: {
-			title: 'direction',
+			title: 'Direction',
 			default: "column",
 			anyOf: [{
 				const: "column",
-				title: "column"
+				title: "Column"
 			}, {
 				const: "row",
-				title: "row"
+				title: "Row"
 			}]
 		},
 		width: {
-			title: 'width',
+			title: 'Width',
 			default: "full",
 			anyOf: [{
 				const: "full",
-				title: "full"
+				title: "Full"
 			}, {
 				const: "contained",
-				title: "contained"
+				title: "Contained"
 			}]
 		},
 		height: {
-			title: 'height',
+			title: 'Height',
 			type: 'number',
 			minimum: 0,
 			default: 0
 		},
 		heightUnits: {
-			title: 'height units',
+			title: 'Height units',
 			default: 'em',
 			anyOf: [{
 				title: 'em',
@@ -93,7 +93,7 @@ exports.layout = {
 			}]
 		},
 		invert: {
-			title: 'invert',
+			title: 'Invert',
 			description: 'Invert background',
 			default: false,
 			type: 'boolean'

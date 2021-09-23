@@ -95,13 +95,13 @@ exports.blogs = {
 			title: 'Relaxed',
 			anyOf: [{
 				const: null,
-				title: 'no'
+				title: 'No'
 			}, {
 				const: 'relaxed',
-				title: 'a little'
+				title: 'Less'
 			}, {
 				const: 'very relaxed',
-				title: 'a lot'
+				title: 'More'
 			}]
 		}
 	},

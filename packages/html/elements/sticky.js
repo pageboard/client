@@ -7,10 +7,10 @@ exports.sticky = {
 			default: "top",
 			anyOf: [{
 				const: "top",
-				title: "top"
+				title: "Top"
 			}, {
 				const: "bottom",
-				title: "bottom"
+				title: "Bottom"
 			}]
 		},
 		collapsed: {

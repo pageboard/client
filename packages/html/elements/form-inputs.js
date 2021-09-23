@@ -33,7 +33,7 @@ exports.input_button = {
 	},
 	properties: {
 		type: {
-			title: 'type',
+			title: 'Type',
 			default: 'submit',
 			anyOf: [{
 				title: 'Submit',
@@ -50,24 +50,24 @@ exports.input_button = {
 			}]
 		},
 		name: {
-			title: "name",
+			title: "Name",
 			description: "The form object key",
 			type: "string",
 			format: "singleline"
 		},
 		value: {
-			title: "default value",
+			title: "Default value",
 			nullable: true,
 			type: "string",
 			format: "singleline"
 		},
 		disabled: {
-			title: 'disabled',
+			title: 'Disabled',
 			type: 'boolean',
 			default: false
 		},
 		full: {
-			title: 'full width',
+			title: 'Full width',
 			type: 'boolean',
 			default: false
 		}
@@ -86,7 +86,7 @@ exports.input_fields = {
 	context: "form//",
 	properties: {
 		inline: {
-			title: "inline",
+			title: "Inline",
 			type: 'boolean',
 			default: false
 		}
@@ -104,65 +104,65 @@ exports.input_text = {
 	context: 'form//',
 	properties: {
 		name: {
-			title: "name",
+			title: "Name",
 			description: "The form object key",
 			type: "string",
 			format: "singleline"
 		},
 		value: {
-			title: "default value",
+			title: "Default value",
 			nullable: true,
 			type: "string",
 			format: "singleline"
 		},
 		placeholder: {
-			title: "placeholder",
+			title: "Placeholder",
 			nullable: true,
 			type: "string",
 			format: "singleline"
 		},
 		required: {
-			title: 'required',
+			title: 'Required',
 			type: 'boolean',
 			default: false
 		},
 		disabled: {
-			title: 'disabled',
+			title: 'Disabled',
 			type: 'boolean',
 			default: false
 		},
 		readonly: {
-			title: 'read only',
+			title: 'Read only',
 			type: 'boolean',
 			default: false
 		},
 		type: {
-			title: 'format',
+			title: 'Format',
 			default: "text",
 			anyOf: [{
 				const: "text",
-				title: "text"
+				title: "Text"
 			}, {
 				const: "textarea",
-				title: "textarea"
+				title: "Textarea"
 			}, {
 				const: "email",
-				title: "email"
+				title: "Email"
 			}, {
 				const: "tel",
-				title: "tel"
+				title: "Tel"
 			}, {
 				const: "number",
-				title: "number"
+				title: "Number"
 			}, {
 				const: "hidden",
-				title: "hidden"
+				title: "Hidden"
 			}, {
 				const: "password",
-				title: "password"
+				title: "Password"
 			}, {
 				const: "new-password",
-				title: "new password"
+				title: "New password"
 			}]
 		},
 		width: {
@@ -211,48 +211,48 @@ exports.input_range = {
 	context: 'form//',
 	properties: {
 		name: {
-			title: "name",
+			title: "Name",
 			description: "The form object key",
 			type: "string",
 			format: "singleline"
 		},
 		disabled: {
-			title: 'disabled',
+			title: 'Disabled',
 			type: 'boolean',
 			default: false
 		},
 		required: {
-			title: 'required',
+			title: 'Required',
 			type: 'boolean',
 			default: false
 		},
 		multiple: {
-			title: 'multiple',
+			title: 'Multiple',
 			type: 'boolean',
 			default: false
 		},
 		value: {
-			title: "value",
+			title: "Value",
 			type: "number",
 			nullable: true
 		},
 		min: {
-			title: 'minimum value',
+			title: 'Minimum value',
 			type: "number",
 			default: 0
 		},
 		max: {
-			title: 'maximum value',
+			title: 'Maximum value',
 			type: "number",
 			default: 100
 		},
 		step: {
-			title: 'step',
+			title: 'Step',
 			type: "number",
 			default: 1
 		},
 		pips: {
-			title: 'pips',
+			title: 'Pips',
 			type: 'boolean',
 			default: true
 		}
@@ -290,32 +290,32 @@ exports.input_checkbox = {
 	required: ["name"],
 	properties: {
 		name: {
-			title: "name",
+			title: "Name",
 			type: "string",
 			format: "singleline"
 		},
 		value: {
-			title: "value",
+			title: "Value",
 			type: "string",
 			format: "singleline"
 		},
 		checked: {
-			title: 'checked',
+			title: 'Checked',
 			type: 'boolean',
 			default: false
 		},
 		disabled: {
-			title: 'disabled',
+			title: 'Disabled',
 			type: 'boolean',
 			default: false
 		},
 		required: {
-			title: 'required',
+			title: 'Required',
 			type: 'boolean',
 			default: false
 		},
 		toggle: {
-			title: 'toggle',
+			title: 'Toggle',
 			type: 'boolean',
 			default: false
 		}
@@ -351,18 +351,18 @@ exports.input_radio = {
 			format: "singleline"
 		},
 		checked: {
-			title: 'checked',
-			type: 'boolean',
+			title: "Checked",
+			type: "boolean",
 			default: false
 		},
 		value: {
-			title: "value",
+			title: "Value",
 			type: "string",
 			format: "singleline"
 		},
 		disabled: {
-			title: 'disabled',
-			type: 'boolean',
+			title: "Disabled",
+			type: "boolean",
 			default: false
 		}
 	},
@@ -392,34 +392,34 @@ exports.input_select = {
 	context: 'form//',
 	properties: {
 		name: {
-			title: "name",
+			title: "Name",
 			description: "The form object key",
 			type: "string",
 			format: "singleline"
 		},
 		placeholder: {
-			title: "placeholder",
+			title: "Placeholder",
 			nullable: true,
 			type: "string",
 			format: "singleline"
 		},
 		disabled: {
-			title: 'disabled',
+			title: 'Disabled',
 			type: 'boolean',
 			default: false
 		},
 		required: {
-			title: 'required',
+			title: 'Required',
 			type: 'boolean',
 			default: false
 		},
 		multiple: {
-			title: 'multiple',
+			title: 'Multiple',
 			type: 'boolean',
 			default: false
 		},
 		value: {
-			title: "default value",
+			title: "Default value",
 			nullable: true,
 			type: "string",
 			format: "singleline"
@@ -459,7 +459,7 @@ exports.input_select_option = {
 	icon: '<b class="icon">Opt</b>',
 	properties: {
 		value: {
-			title: "value",
+			title: "Value",
 			description: "Defaults to option label",
 			nullable: true,
 			type: "string",

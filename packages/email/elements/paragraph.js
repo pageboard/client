@@ -10,15 +10,15 @@ exports.mail_paragraph = {
 			default: "text-left",
 			anyOf: [{
 				const: "text-left",
-				title: "left",
+				title: "Left",
 				icon: '<i class="icon align left"></i>'
 			}, {
 				const: "text-center",
-				title: "center",
+				title: "Center",
 				icon: '<i class="icon align center"></i>'
 			}, {
 				const: "text-right",
-				title: "right",
+				title: "Right",
 				icon: '<i class="icon align right"></i>'
 			}]
 		}
@@ -54,15 +54,15 @@ exports.mail_heading = {
 			default: "text-left",
 			anyOf: [{
 				const: "text-left",
-				title: "left",
+				title: "Left",
 				icon: '<i class="icon align left"></i>'
 			}, {
 				const: "text-center",
-				title: "center",
+				title: "Center",
 				icon: '<i class="icon align center"></i>'
 			}, {
 				const: "text-right",
-				title: "right",
+				title: "Right",
 				icon: '<i class="icon align right"></i>'
 			}]
 		}

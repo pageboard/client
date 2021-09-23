@@ -7,29 +7,29 @@ exports.input_file = {
 	context: 'form//',
 	properties: {
 		name: {
-			title: "name",
+			title: "Name",
 			description: "The form object key",
 			type: "string",
 			format: "singleline"
 		},
 		placeholder: {
-			title: "placeholder",
+			title: "Placeholder",
 			nullable: true,
 			type: "string",
 			format: "singleline"
 		},
 		required: {
-			title: 'required',
+			title: 'Required',
 			type: 'boolean',
 			default: false
 		},
 		disabled: {
-			title: 'disabled',
+			title: 'Disabled',
 			type: 'boolean',
 			default: false
 		},
 		now: {
-			title: 'upload on change',
+			title: 'Upload on change',
 			type: 'boolean',
 			default: false
 		},

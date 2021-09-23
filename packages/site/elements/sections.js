@@ -23,19 +23,19 @@ exports.paragraph = {
 			nullable: true,
 			anyOf: [{
 				const: "left",
-				title: "left",
+				title: "Left",
 				icon: '<i class="icon align left"></i>'
 			}, {
 				const: "center",
-				title: "center",
+				title: "Center",
 				icon: '<i class="icon align center"></i>'
 			}, {
 				const: "right",
-				title: "right",
+				title: "Right",
 				icon: '<i class="icon align right"></i>'
 			}, {
 				const: "justify",
-				title: "justify",
+				title: "Justify",
 				icon: '<i class="icon align justify"></i>'
 			}]
 		}

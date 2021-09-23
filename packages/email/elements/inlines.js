@@ -61,19 +61,19 @@ exports.mail_caps = {
 			default: "uppercase",
 			anyOf: [{
 				const: "uppercase",
-				title: "upper",
+				title: "Upper",
 				icon: '<span class="icon">A</span>'
 			}, {
 				const: "lowercase",
-				title: "lower",
+				title: "Lower",
 				icon: '<span class="icon">a</span>'
 			}, {
 				const: "capitalize",
-				title: "all caps",
+				title: "All caps",
 				icon: '<span class="icon" style="text-transform:capitalize">Aa</span>'
 			}, {
 				const: "smallcaps",
-				title: "small caps",
+				title: "Small caps",
 				icon: '<span class="icon" style="font-variant:small-caps">Aa</span>'
 			}]
 		}

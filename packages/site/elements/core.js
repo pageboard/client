@@ -49,7 +49,7 @@ exports.priv = {
 			type: 'object',
 			properties: {
 				type: {
-					title: 'user',
+					title: 'User',
 					const: 'user'
 				},
 				id: {
@@ -123,7 +123,7 @@ exports.settings = {
 			type: 'object',
 			properties: {
 				type: {
-					title: 'user',
+					title: 'User',
 					const: 'user'
 				},
 				id: {

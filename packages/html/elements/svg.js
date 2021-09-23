@@ -6,15 +6,16 @@ exports.svg = {
 	group: "block",
 	properties: {
 		viewBox: {
-			title: 'viewBox',
-			type: 'string'
+			title: 'View Box',
+			type: 'string',
+			description: 'Typically "0 0 width height"'
 		},
 		width: {
-			title: 'width',
+			title: 'Width',
 			type: 'integer'
 		},
 		height: {
-			title: 'height',
+			title: 'Height',
 			type: 'integer'
 		}
 	},
@@ -85,17 +86,17 @@ exports.svg_group = {
 			nullable: true
 		},
 		fill: {
-			title: 'fill',
+			title: 'Fill',
 			type: 'string',
 			nullable: true
 		},
 		stroke: {
-			title: 'stroke',
+			title: 'Stroke',
 			type: 'string',
 			nullable: true
 		},
 		transform: {
-			title: 'transform',
+			title: 'Transform',
 			type: 'string',
 			nullable: true
 		}
@@ -172,12 +173,12 @@ exports.svg_rect = {
 			nullable: true
 		},
 		width: {
-			title: 'width',
+			title: 'Width',
 			type: 'number',
 			nullable: true
 		},
 		height: {
-			title: 'height',
+			title: 'Height',
 			type: 'number',
 			nullable: true
 		},
@@ -263,7 +264,7 @@ exports.svg_polygon = {
 	group: "svg_node",
 	properties: {
 		points: {
-			title: 'points',
+			title: 'Points',
 			type: 'string',
 			nullable: true
 		}
@@ -280,7 +281,7 @@ exports.svg_polyline = {
 	group: "svg_node",
 	properties: {
 		points: {
-			title: 'points',
+			title: 'Points',
 			type: 'string',
 			nullable: true
 		}
@@ -303,12 +304,12 @@ exports.svg_linearGradient = {
 			nullable: true
 		},
 		gradientUnits: {
-			title: 'units',
+			title: 'Units',
 			type: 'string',
 			nullable: true
 		},
 		gradientTransform: {
-			title: 'transform',
+			title: 'Transform',
 			type: 'string',
 			nullable: true
 		},
@@ -345,17 +346,17 @@ exports.svg_stop = {
 	menu: 'media',
 	properties: {
 		offset: {
-			title: 'offset',
+			title: 'Offset',
 			type: 'string',
 			nullable: true
 		},
 		stopColor: {
-			title: 'color',
+			title: 'Color',
 			type: 'string',
 			nullable: true
 		},
 		stopOpacity: {
-			title: 'opacity',
+			title: 'Opacity',
 			type: 'string',
 			nullable: true
 		}

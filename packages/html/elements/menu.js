@@ -12,13 +12,13 @@ exports.menu = {
 			nullable: true,
 			anyOf: [{
 				const: null,
-				title: "horizontal"
+				title: "Horizontal"
 			}, {
 				const: "vertical",
-				title: "vertical"
+				title: "Vertical"
 			}, {
 				const: "compact",
-				title: "compact"
+				title: "Compact"
 			}]
 		}
 	},
@@ -40,10 +40,10 @@ exports.menu_group = {
 			nullable: true,
 			anyOf: [{
 				const: null,
-				title: "left"
+				title: "Left"
 			}, {
 				const: "right",
-				title: "right"
+				title: "Right"
 			}]
 		}
 	},
@@ -156,10 +156,10 @@ exports.menu_item_dropdown = {
 			nullable: true,
 			anyOf: [{
 				const: null,
-				title: "left"
+				title: "Left"
 			}, {
 				const: "right",
-				title: "right"
+				title: "Right"
 			}]
 		},
 		icon: {
