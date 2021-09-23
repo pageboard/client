@@ -434,7 +434,7 @@ Pageboard.Controls.Store = class Store {
 				delete bko.virtual;
 				delete bki.virtual;
 
-				if (JSON.stringify(bko) != JSON.stringify(bki)) {
+				if (Pageboard.utils.stableStringify(bko) != Pageboard.utils.stableStringify(bki)) {
 					changes.update.push(bko);
 				}
 			}
@@ -473,7 +473,7 @@ Pageboard.Controls.Store = class Store {
 		for (let i = ak.length - 1; i >= 0; i--) {
 			const k = ak[i];
 			if (bk[i] !== k) return true;
-			if (JSON.stringify(a[k]) != JSON.stringify(b[k])) return true;
+			if (Pageboard.utils.stableStringify(a[k]) != Pageboard.utils.stableStringify(b[k])) return true;
 		}
 		return false;
 	}
