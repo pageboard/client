@@ -43,7 +43,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		const query = {};
 		fd.forEach((val, key) => {
 			if (val == null || val == "") {
-				const cur = this.querySelectorAll(`[name="${key}"]`).pop();
+				const cur = this.querySelectorAll(`[name="${key}"]`).slice(-1).pop();
 				if (cur.required == false) {
 					val = undefined;
 				} else {
