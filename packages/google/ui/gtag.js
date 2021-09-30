@@ -27,8 +27,8 @@ class HTMLElementGTMScript extends HTMLScriptElement {
 	#gtm(agreed, state) {
 		if (!agreed) {
 			Page.storage.clearCookies(/^_g/);
-		} else if (!this.started) {
-			this.started = true;
+		} else if (!this.#started) {
+			this.#started = true;
 			this.#push({
 				'gtm.start': new Date().getTime(),
 				event: 'gtm.js',
