@@ -20,7 +20,10 @@ exports.pdf = Object.assign({}, exports.page, {
 		pdf: true
 	}
 });
-exports.pdf.properties.url.pattern = "^(/[a-zA-Z0-9-]*)+$";
+exports.pdf.properties = Object.assign({}, exports.pdf.properties);
+exports.pdf.properties.url = Object.assign({}, exports.pdf.properties.url, {
+	pattern: "^(/[a-zA-Z0-9-]*)+$"
+});
 
 if (exports.sitemap) exports.sitepdf = exports.sitemap.itemModel('pdf', true);
 
