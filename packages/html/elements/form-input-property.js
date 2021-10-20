@@ -261,6 +261,7 @@ exports.input_property = {
 					type: propType.format ? 'text' : 'textarea',
 					disabled: d.disabled,
 					default: propType.default,
+					placeholder: propType.description,
 					required: required
 				},
 				content: {
