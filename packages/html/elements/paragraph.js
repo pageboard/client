@@ -128,7 +128,7 @@ exports.heading = {
 		id: {
 			nullable: true,
 			type: 'string',
-			format: 'id'
+			pattern: '^[a-z0-9-]*$'
 		}
 	},
 	contents: {
