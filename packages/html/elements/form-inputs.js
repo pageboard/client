@@ -152,8 +152,8 @@ exports.input_text = {
 				const: "tel",
 				title: "Tel"
 			}, {
-				const: "number",
-				title: "Number"
+				// deprecated, use input_number or input_range
+				const: "number"
 			}, {
 				const: "hidden",
 				title: "Hidden"
@@ -203,60 +203,71 @@ exports.input_text = {
 	</div>`
 };
 
+exports.input_number = {
+	title: 'Number input',
+	icon: '<i class="text cursor icon">n</i>',
+	menu: "form",
+	required: ["name"],
+	group: "block",
+	context: 'form//',
+	properties: {
+		name: exports.input_text.properties.name,
+		disabled: exports.input_text.properties.disabled,
+		required: exports.input_text.properties.required,
+		value: exports.input_text.properties.value,
+		min: {
+			title: 'Minimum value',
+			type: "number",
+			nullable: true
+		},
+		max: {
+			title: 'Maximum value',
+			type: "number",
+			nullable: true
+		},
+		step: {
+			title: 'Step',
+			type: "number",
+			default: 0.001
+		}
+	},
+	contents: {
+		id: 'label',
+		nodes: 'inline*'
+	},
+	html: `<div class="[width|num: wide] field">
+		<label block-content="label">Label</label>
+		<input name="[name]"
+			required="[required]"
+			readonly="[readonly]"
+			disabled="[disabled]"
+			placeholder="[placeholder]"
+			type="number"
+			value="[value]"
+			min="[minimum]"
+			max="[maximum]"
+			step="[step]"
+	</div>`
+};
+
 exports.input_range = {
 	title: 'Range',
 	icon: '<i class="options icon"></i>',
 	menu: "form",
 	group: "block",
 	context: 'form//',
-	properties: {
-		name: {
-			title: "Name",
-			description: "The form object key",
-			type: "string",
-			format: "singleline"
-		},
-		disabled: {
-			title: 'Disabled',
-			type: 'boolean',
-			default: false
-		},
-		required: {
-			title: 'Required',
-			type: 'boolean',
-			default: false
-		},
+	properties: Object.assign({
 		multiple: {
 			title: 'Multiple',
 			type: 'boolean',
 			default: false
-		},
-		value: {
-			title: "Value",
-			type: "number",
-			nullable: true
-		},
-		min: {
-			title: 'Minimum value',
-			type: "number",
-			default: 0
-		},
-		max: {
-			title: 'Maximum value',
-			type: "number",
-			default: 100
-		},
-		step: {
-			title: 'Step',
-			type: "number",
-			default: 1
 		},
 		pips: {
 			title: 'Pips',
 			type: 'boolean',
 			default: true
 		}
-	},
+	}, exports.input_number.properties),
 	contents: {
 		id: 'label',
 		nodes: 'inline*'
