@@ -213,8 +213,12 @@ exports.input_property = {
 				}
 			}));
 		} else if (propType.type == "string" && propType.format == "date") {
+			let type = "input_date_time";
+			if (!scope.$elements[type]) {
+				type = 'input_text';
+			}
 			node.appendChild(view.render({
-				type: 'input_date_time',
+				type: type,
 				data: {
 					name: name,
 					type: propType.format,
@@ -228,8 +232,12 @@ exports.input_property = {
 				}
 			}));
 		} else if (propType.type == "string" && propType.format == "time") {
+			let type = "input_date_time";
+			if (!scope.$elements[type]) {
+				type = 'input_text';
+			}
 			node.appendChild(view.render({
-				type: 'input_date_time',
+				type: type,
 				data: {
 					name: name,
 					type: propType.format,
