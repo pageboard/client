@@ -253,6 +253,31 @@ exports.input_property = {
 					label: prop.title
 				}
 			}));
+		} else if (propType.$helper && propType.$helper.name == "href") {
+			const limits = {
+				files: d.multiple ? null : 1
+			};
+			const filter = propType.$helper.filter;
+			if (filter && filter.type) {
+				limits.types = filter.type.map((type) => {
+					if (type == "image") return "image/*";
+					else if (type == "video") return "video/*";
+					else return "*/*";
+				});
+			}
+			node.appendChild(view.render({
+				type: 'input_file',
+				data: {
+					name: name,
+					disabled: d.disabled,
+					placeholder: propType.description,
+					required: required,
+					limits: limits
+				},
+				content: {
+					label: prop.title
+				}
+			}));
 		} else {
 			node.appendChild(view.render({
 				type: 'input_text',
