@@ -165,7 +165,8 @@ exports.input_property = {
 					}
 				}));
 			}
-		} else if (propType.type == "integer") {
+		} else if (propType.type == "integer" || propType.type == "number") {
+			const step = propType.multipleOf || (propType.type == "integer" ? 1 : 0.001);
 			if (propType.minimum != null && propType.maximum != null) {
 				if (propType.maximum - propType.minimum <= d.range) {
 					return node.appendChild(view.render({
@@ -178,7 +179,7 @@ exports.input_property = {
 							disabled: d.disabled,
 							required: required,
 							multiple: d.multiple,
-							step: 1
+							step: step
 						},
 						content: {
 							label: prop.title
@@ -187,13 +188,15 @@ exports.input_property = {
 				}
 			}
 			node.appendChild(view.render({
-				type: 'input_text',
+				type: 'input_number',
 				data: {
 					name: name,
-					type: 'number',
 					default: propType.default,
 					disabled: d.disabled,
-					required: required
+					required: required,
+					min: propType.minimum,
+					max: propType.maximum,
+					step: step
 				},
 				content: {
 					label: prop.title
