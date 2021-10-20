@@ -65,7 +65,9 @@ exports.input_property = {
 				prop = cases[propKey];
 				cases = null;
 			} else {
-				cases = prop.selectCases;
+				if (prop.select && prop.select.$data == `0/${propKey}`) {
+					cases = prop.selectCases;
+				}
 				prop = (prop.properties || {})[propKey] || null;
 			}
 			if (prop == null) break;
