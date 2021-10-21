@@ -20,7 +20,7 @@
   "homepage": "https://github.com/pageboard/client#readme",
   "dependencies": {
     "fomantic-ui-css": "2.7.2",
-    "postinstall": "^0.7.3"
+    "postinstall": "^0.7.4"
   },
   "devDependencies": {
     "@pageboard/pagecut": "^0.10.0",
