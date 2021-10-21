@@ -23,10 +23,10 @@
     "semantic-ui-css": "^2.4.1"
   },
   "devDependencies": {
-    "formdata-polyfill": "^4.0.7",
-    "nouislider": "^15.4.0",
+    "formdata-polyfill": "^4.0.10",
+    "nouislider": "^15.5.0",
     "object-fit-images": "^3.2.4",
-    "postinstall-bundle": "^0.7.3"
+    "postinstall-bundle": "^0.7.4"
   },
   "postinstall": {
     "semantic-ui-css/components": "link lib/components",
