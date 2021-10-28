@@ -17,7 +17,7 @@ exports.query_form = {
 			description: 'Checks schema and helps adding form controls',
 			nullable: true,
 			type: 'string',
-			format: 'id',
+			format: 'name',
 			$filter: {
 				name: 'element',
 				contentless: true,
