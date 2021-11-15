@@ -23,6 +23,10 @@
 	outline: none;
 }
 
+img.ProseMirror-separator {
+	width:0 !important;
+}
+
 [contenteditable="true"]:focus {
 	outline: none;
 }
