@@ -204,8 +204,8 @@ exports.input_text = {
 };
 
 exports.input_number = {
-	title: 'Number input',
-	icon: '<i class="text cursor icon">n</i>',
+	title: 'Number',
+	icon: '<i class="text cursor icon"></i>',
 	menu: "form",
 	required: ["name"],
 	group: "block",
