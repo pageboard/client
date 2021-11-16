@@ -170,7 +170,7 @@ class FormBlock {
 		inst = this.helpers[key] = new Helper(node.querySelector(`[name="${key}"]`), opts, prop, parentProp);
 		if (inst.init) prop = inst.init(this.block, prop);
 	}
-	customFilter(key, prop) {
+	customFilter(key, prop, parentProp) {
 		let opts = prop.$filter;
 		if (this.mode == "lock") {
 			if (key == null) return {
@@ -205,7 +205,7 @@ class FormBlock {
 			}
 			let inst = this.filters[key];
 			if (!inst) {
-				inst = this.filters[key] = new Filter(key, opts, prop);
+				inst = this.filters[key] = new Filter(key, opts, prop, parentProp);
 			}
 			prop = inst.update?.(this.block, prop) || prop;
 		}
