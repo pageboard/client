@@ -3,6 +3,7 @@ Pageboard.schemaHelpers['element-property'] = class ElementProperty {
 		this.field = input.closest('.field');
 		this.field.classList.add('inline');
 		this.input = input;
+		this.existing = opts.existing;
 	}
 
 	static asPaths(obj, ret, pre) {
@@ -75,6 +76,7 @@ Pageboard.schemaHelpers['element-property'] = class ElementProperty {
 		const doc = this.input.ownerDocument;
 		const paths = ElementProperty.asPaths(this.el, {}, this.el.name + '.');
 		const content = Pageboard.editor.element(form.getAttribute('block-type')).contents.get(this.formBlock);
+		const existing = this.existing;
 		function getSelectOption(key) {
 			const prop = paths[key];
 			if (!prop.title) return;
@@ -84,7 +86,9 @@ Pageboard.schemaHelpers['element-property'] = class ElementProperty {
 			} else {
 				node = doc.dom(`<option value="${key}">${prop.title}</option>`);
 				const pkey = key.split('.').slice(1).join('.');
-				node.disabled = Boolean(content.querySelector(`[name="${pkey}"]`));
+				const disable = Boolean(content.querySelector(`[name="${pkey}"]`));
+				if (existing) node.disabled = !disable;
+				else node.disabled = disable;
 			}
 			return node.outerHTML;
 		}
