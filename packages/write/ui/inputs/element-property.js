@@ -128,3 +128,25 @@ Pageboard.schemaHelpers['element-property'] = class ElementProperty {
 	}
 
 };
+
+Pageboard.schemaFilters['element-value'] = class ElementValueFilter {
+	constructor(key, opts) {
+		this.key = key;
+		this.using = opts.using;
+	}
+
+	update(block, schema) {
+		const empty = { title: schema.title, $filter: schema.$filter, type: "null" };
+		const usingPath = this.using.split('.');
+		const key = usingPath.reduce((obj, name) => obj?.[name], block.data);
+		if (!key) return empty;
+		const path = key.split('.');
+		const type = path.shift();
+		const el = Pageboard.editor.elements[type];
+		if (!el) return empty;
+		const prop = path.reduce((obj, name) => obj?.[name], el.properties);
+		if (!prop) return empty;
+		delete empty.type;
+		return Object.assign({}, prop, empty);
+	}
+};
