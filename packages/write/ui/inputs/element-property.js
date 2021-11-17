@@ -23,9 +23,9 @@ Pageboard.schemaHelpers['element-property'] = class ElementProperty {
 					}
 					Object.assign(ret, subRet);
 				}
-			} else if (obj.oneOf) {
+			} else if (obj.oneOf || obj.anyOf) {
 				// TODO finish this
-				for (const schema of obj.oneOf) {
+				for (const schema of (obj.oneOf || obj.anyOf)) {
 					ElementProperty.asPaths(schema, ret, schema.properties[obj.discriminator.propertyName] + '.');
 				}
 			}
