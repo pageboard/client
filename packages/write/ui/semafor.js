@@ -41,8 +41,8 @@ class Semafor {
 				default:
 					val = elem.value;
 			}
-			if (val == null) continue;
-			if (old !== undefined) {
+			if (val === "") val = null;
+			if (old !== undefined && val != null) {
 				if (!Array.isArray(old)) {
 					query[key] = [old];
 				}
@@ -341,7 +341,7 @@ class Semafor {
 						} else {
 							val = this.convert(val, field);
 						}
-						if (Object.keys(val).length == 0 && nullable) val = null;
+						if (val != null && Object.keys(val).length == 0 && nullable) val = null;
 						break;
 					case "array":
 						if (typeof val == "string") {
