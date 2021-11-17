@@ -5,6 +5,25 @@ exports.fieldset = {
 	group: 'block',
 	context: 'form//',
 	properties: {
+		name: {
+			title: 'Form element name',
+			type: 'string',
+			format: 'singleline',
+			nullable: true,
+			$helper: {
+				name: 'element-property',
+				existing: true
+			}
+		},
+		value: {
+			title: 'Form element value',
+			type: 'string',
+			format: 'singleline',
+			$filter: {
+				name: 'element-value',
+				using: 'name'
+			}
+		},
 		plain: {
 			title: 'Without borders',
 			type: 'boolean',
@@ -12,7 +31,8 @@ exports.fieldset = {
 		}
 	},
 	contents: "fieldset_legend block+",
-	html: '<fieldset class="[plain|?]"></fieldset>'
+	html: '<fieldset class="[plain|?]" data-name="[name]" data-value="[value]" is="element-fieldset"></fieldset>',
+	scripts: ["../ui/fieldset.js"]
 };
 
 exports.fieldset_legend = {
