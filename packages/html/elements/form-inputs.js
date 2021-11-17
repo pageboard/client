@@ -6,7 +6,7 @@ exports.fieldset = {
 	context: 'form//',
 	properties: {
 		name: {
-			title: 'Form element name',
+			title: 'Show if input named',
 			type: 'string',
 			format: 'singleline',
 			nullable: true,
@@ -16,7 +16,7 @@ exports.fieldset = {
 			}
 		},
 		value: {
-			title: 'Form element value',
+			title: 'matches this value',
 			type: 'string',
 			format: 'singleline',
 			$filter: {
