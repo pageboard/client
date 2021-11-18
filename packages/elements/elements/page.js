@@ -129,7 +129,7 @@ exports.page = {
 				return csp[src].length > 0;
 			}).map(function(src) {
 				var key = src.indexOf('-') > 0 ? src : `${src}-src`;
-				return `${key} ${csp[src].join(' ')}`.trim();
+				return `${key} ${csp[src].join(' ')}`.trim().fuse({}, what.scope.data);
 			}).join('; ');
 		}
 	},
