@@ -9,8 +9,7 @@ class Semafor {
 			if (elem.disabled) {
 				query[key] = null;
 			} else {
-				const fieldset = elem.closest('fieldset');
-				if (fieldset?.disabled) continue;
+				if (elem.closest('fieldset')?.disabled) continue;
 			}
 			let old = query[key];
 			let val;
