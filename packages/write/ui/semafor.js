@@ -41,13 +41,13 @@ class Semafor {
 					val = elem.value;
 			}
 			if (val === "") val = null;
-			if (old !== undefined && val != null) {
+			if (old === undefined) {
+				query[key] = val;
+			} else if (val != null) {
 				if (!Array.isArray(old)) {
 					query[key] = [old];
 				}
 				query[key].push(val);
-			} else {
-				query[key] = val;
 			}
 		}
 		return query;
