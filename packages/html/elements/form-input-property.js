@@ -134,6 +134,7 @@ exports.input_property = {
 				for (const item of listOf) {
 					content.appendChild(view.render({
 						type: multiple ? 'input_checkbox' : 'input_radio',
+						id,
 						data: {
 							name: name,
 							value: item.type == "null" ? null : item.const,
