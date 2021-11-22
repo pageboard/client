@@ -100,11 +100,15 @@ class HTMLElementSelect extends VirtualHTMLElement {
 	}
 	#setPlaceholder(str) {
 		const text = this.#text;
-		text.textContent = str || this.options.placeholder;
-		text.classList.add('default');
+		if (!str) str = this.options.placeholder;
 
 		const defaultOption = this.#select.querySelector('option[value=""]');
-		if (defaultOption) defaultOption.innerHTML = str || "-";
+		if (defaultOption) {
+			if (!str) str = defaultOption.innerHTML;
+			else defaultOption.innerHTML = str;
+		}
+		text.textContent = str;
+		text.classList.add('default');
 	}
 
 	#menuOption(val) {
@@ -124,11 +128,13 @@ class HTMLElementSelect extends VirtualHTMLElement {
 		const select = this.#select;
 		if (!select) return;
 		const menu = this.#menu;
-		select.innerHTML = '<option selected value="">-</option>';
-		menu.children.forEach(item => select.insertAdjacentHTML(
-			'beforeEnd',
-			`<option value="${item.dataset.value || item.innerText.trim()}">${item.innerHTML}</option>`
-		));
+		menu.children.forEach(item => {
+			const val = item.dataset.value || item.innerText != "-" && item.innerText.trim() || "";
+			select.insertAdjacentHTML(
+				'beforeEnd',
+				`<option value="${val}">${item.innerHTML}</option>`
+			);
+		});
 	}
 	setup(state) {
 		this.#observer = new MutationObserver((mutations) => this.#fillSelect());
@@ -154,6 +160,12 @@ class HTMLElementSelect extends VirtualHTMLElement {
 			for (const node of this.querySelectorAll('.ui.label')) node.remove();
 		}
 		select.name = this.options.name;
+		if (!select.required) {
+			const menu = this.#menu;
+			if (!menu.querySelector('element-select-option[data-value=""]')) {
+				menu.insertAdjacentHTML('afterBegin', `<element-select-option data-value="" block-type="input_select_option" class="item">-</element-select-option>`);
+			}
+		}
 		this.#fillSelect();
 	}
 
