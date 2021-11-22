@@ -54,6 +54,7 @@ exports.input_property = {
 		// /.api/form wraps it into block.data
 		list.shift();
 		name = list.join('.');
+		const id = scope.$id;
 		let prop = el;
 		let propKey;
 		let required = false;
@@ -151,6 +152,7 @@ exports.input_property = {
 					}));
 				}
 				node.appendChild(view.render({
+					id,
 					type: 'input_select',
 					data: {
 						name: name,
@@ -170,6 +172,7 @@ exports.input_property = {
 			if (propType.minimum != null && propType.maximum != null) {
 				if (propType.maximum - propType.minimum <= d.range) {
 					return node.appendChild(view.render({
+						id,
 						type: 'input_range',
 						data: {
 							name: name,
@@ -188,6 +191,7 @@ exports.input_property = {
 				}
 			}
 			node.appendChild(view.render({
+				id,
 				type: 'input_number',
 				data: {
 					name: name,
@@ -204,6 +208,7 @@ exports.input_property = {
 			}));
 		} else if (propType.type == "boolean") {
 			node.appendChild(view.render({
+				id,
 				type: 'input_checkbox',
 				data: {
 					name: name,
@@ -221,6 +226,7 @@ exports.input_property = {
 				type = 'input_text';
 			}
 			node.appendChild(view.render({
+				id,
 				type: type,
 				data: {
 					name: name,
@@ -240,6 +246,7 @@ exports.input_property = {
 				type = 'input_text';
 			}
 			node.appendChild(view.render({
+				id,
 				type: type,
 				data: {
 					name: name,
@@ -266,6 +273,7 @@ exports.input_property = {
 				});
 			}
 			node.appendChild(view.render({
+				id,
 				type: 'input_file',
 				data: {
 					name: name,
@@ -280,6 +288,7 @@ exports.input_property = {
 			}));
 		} else {
 			node.appendChild(view.render({
+				id,
 				type: 'input_text',
 				data: {
 					name: name,
