@@ -1,4 +1,6 @@
 window.dataLayer = window.dataLayer || [];
+
+// debug using https://tagassistant.google.com/
 class HTMLElementGTMScript extends HTMLScriptElement {
 	#type
 	#id

@@ -87,6 +87,8 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			}
 		}
 		const btn = document.activeElement;
+		// FIXME https://github.com/whatwg/html/issues/3195 use e.submitter polyfill
+		// https://github.com/whatwg/xhr/issues/262 it's a mess
 		if (btn && btn.type == "submit" && btn.name && btn.value) {
 			query[btn.name] = btn.value;
 		}
