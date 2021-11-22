@@ -64,6 +64,7 @@ exports.input_property = {
 			required = prop.required && prop.required.indexOf(propKey) >= 0;
 			if (cases) {
 				prop = cases[propKey];
+				name = list.slice(0, i - 1).concat(list.slice(i + 1)).join('.');
 				cases = null;
 			} else {
 				if (prop.select && prop.select.$data == `0/${propKey}`) {
