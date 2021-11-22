@@ -78,8 +78,14 @@ exports.input_property = {
 		}
 		node.textContent = "";
 		if (prop.nullable) required = false;
-		let listOf = prop.anyOf || prop.oneOf;
-		let propType;
+		let propType = prop;
+		let multiple = d.multiple;
+		if (prop.type == "array" && prop.items && Array.isArray(prop.items) == false) {
+			propType = prop.items;
+			multiple = true;
+		}
+
+		let listOf = propType.anyOf || propType.oneOf;
 		if (listOf) {
 			const listOfNo = listOf.filter((item) => item.type != "null");
 			if (listOfNo.length != listOf.length) {
@@ -88,7 +94,7 @@ exports.input_property = {
 			if (listOfNo.length == 1 && listOfNo[0].const === undefined) {
 				propType = listOfNo[0];
 				listOf = null;
-			} else if (d.multiple) {
+			} else if (multiple) {
 				listOf = listOfNo;
 			}
 		} else if (Array.isArray(prop.type)) {
@@ -107,7 +113,6 @@ exports.input_property = {
 				listOf = null; // cannot deal with this for now
 			}
 		}
-		if (!propType) propType = prop;
 
 		if (listOf) {
 			if (listOf.length <= d.radios) {
@@ -127,7 +132,7 @@ exports.input_property = {
 				content = content.lastElementChild;
 				for (const item of listOf) {
 					content.appendChild(view.render({
-						type: d.multiple ? 'input_checkbox' : 'input_radio',
+						type: multiple ? 'input_checkbox' : 'input_radio',
 						data: {
 							name: name,
 							value: item.type == "null" ? null : item.const,
@@ -156,7 +161,7 @@ exports.input_property = {
 					type: 'input_select',
 					data: {
 						name: name,
-						multiple: d.multiple,
+						multiple: multiple,
 						placeholder: prop.description,
 						disabled: d.disabled,
 						required: required
@@ -178,10 +183,10 @@ exports.input_property = {
 							name: name,
 							min: propType.minimum,
 							max: propType.maximum,
-							value: d.multiple ? `${propType.minimum}⩽${propType.maximum}` : propType.default,
+							value: multiple ? `${propType.minimum}⩽${propType.maximum}` : propType.default,
 							disabled: d.disabled,
 							required: required,
-							multiple: d.multiple,
+							multiple: multiple,
 							step: step
 						},
 						content: {
@@ -262,7 +267,7 @@ exports.input_property = {
 			}));
 		} else if (propType.$helper && propType.$helper.name == "href") {
 			const limits = {
-				files: d.multiple ? null : 1
+				files: multiple ? null : 1
 			};
 			const filter = propType.$helper.filter;
 			if (filter && filter.type) {
