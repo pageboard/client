@@ -56,7 +56,7 @@ class HTMLElementGTMScript extends HTMLScriptElement {
 		}]);
 	}
 	#push(args) {
-		if (this.type == "gtm") {
+		if (this.#type == "gtm") {
 			window.dataLayer.push(args);
 		} else {
 			window.gtag.apply(null, args);
