@@ -227,37 +227,13 @@ exports.input_property = {
 					label: prop.title
 				}
 			}));
-		} else if (propType.type == "string" && propType.format == "date") {
-			let type = "input_date_time";
-			if (!scope.$elements[type]) {
-				type = 'input_text';
-			}
+		} else if (propType.type == "string" && ["date", "time", "date-time"].includes(propType.format)) {
 			node.appendChild(view.render({
 				id,
-				type: type,
-				data: {
+				type: 'input_date_time',
+				dat: {
 					name: name,
-					type: propType.format,
-					default: propType.default,
-					disabled: d.disabled,
-					required: required,
-					step: propType.step
-				},
-				content: {
-					label: prop.title
-				}
-			}));
-		} else if (propType.type == "string" && propType.format == "time") {
-			let type = "input_date_time";
-			if (!scope.$elements[type]) {
-				type = 'input_text';
-			}
-			node.appendChild(view.render({
-				id,
-				type: type,
-				data: {
-					name: name,
-					type: propType.format,
+					format: propType.format.replace('-', ''),
 					default: propType.default,
 					disabled: d.disabled,
 					required: required,
