@@ -75,7 +75,7 @@ exports.input_date_time = {
 	html: `<div class="field">
 		<label block-content="label">Label</label>
 		<input name="[name]" disabled="[disabled]" placeholder="[placeholder]"
-			required="[required]" value="[value]" step="[step|magnet:]" type="[format|eq:datetime:datetime-local:]"
+			required="[required]" value="[value]" step="[step|magnet:]" type="[format|eq:datetime:datetime-local]"
 		/>
 	</div>`
 };
