@@ -231,7 +231,7 @@ exports.input_property = {
 			node.appendChild(view.render({
 				id,
 				type: 'input_date_time',
-				dat: {
+				data: {
 					name: name,
 					format: propType.format.replace('-', ''),
 					default: propType.default,
