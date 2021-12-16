@@ -1,6 +1,5 @@
 class HTMLElementInputDateSlot extends VirtualHTMLElement {
 	static defaults = {
-		timeZone: null,
 		range: null,
 		step: 0
 	};
@@ -65,11 +64,6 @@ class HTMLElementInputDateSlot extends VirtualHTMLElement {
 			this.insertBefore(els[0], els[1]);
 		}
 		const dts = els.map(el => el.dataset);
-
-		const tz = this.options.timeZone;
-		if (tz) for (const dt of dts) dt.timeZone = tz;
-		else for (const dt of dts) delete dt.timeZone;
-
 
 		if (dayRange) {
 			dts[0].type = "date";

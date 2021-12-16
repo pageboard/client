@@ -122,8 +122,7 @@ exports.input_date_slot = {
 			type: 'boolean',
 			default: false
 		},
-		step: exports.input_date_time.properties.step,
-		timeZone: exports.input_date_time.properties.timeZone
+		step: exports.input_date_time.properties.step
 	},
 	contents: {
 		id: 'label',
@@ -131,7 +130,7 @@ exports.input_date_slot = {
 	},
 	html: `<div class="field">
 		<label block-content="label">Label</label>
-		<element-input-date-slot data-time-zone="[timeZone]" data-step="[step|magnet:]">
+		<element-input-date-slot data-step="[step|magnet:]">
 			<input name="[nameStart]" value="[valueStart]" />
 			<input name="[nameEnd]" value="[valueEnd]" />
 		</element-input-date-slot>
