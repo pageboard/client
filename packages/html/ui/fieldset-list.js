@@ -1,5 +1,5 @@
 class HTMLElementFieldsetList extends VirtualHTMLElement {
-	#size
+	size
 	fill(values, scope) {
 		const list = this.listFromValues(Object.assign({}, values));
 		this.resize(list.length, scope);
@@ -8,7 +8,7 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 	patch(state) {
 		this.ownTpl.prerender();
 		if (this.isContentEditable) return;
-		if (!this.#size) this.resize(0, state.scope);
+		if (!this.size) this.resize(0, state.scope);
 	}
 
 	setup(state) {
@@ -17,8 +17,8 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 
 	resize(size, scope) {
 		const len = Math.max(Number(this.dataset.size) || 0, size);
-		if (this.#size == len) return;
-		this.#size = len;
+		if (this.size == len) return;
+		this.size = len;
 
 		const tpl = this.ownTpl.content.cloneNode(true);
 		for (const node of tpl.querySelectorAll('[block-id]')) {
