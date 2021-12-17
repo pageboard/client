@@ -14,7 +14,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			if (name && name == this.name) {
 				state.vars.submit = true;
 			}
-			const vars = state.templatesQuery(this);
+			const vars = state.templatesQuery(this) || {};
 			for (const [key, val] of Object.entries(vars)) {
 				this.setAttribute('data-' + key, val);
 			}
