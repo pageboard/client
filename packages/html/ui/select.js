@@ -129,10 +129,10 @@ class HTMLElementSelect extends VirtualHTMLElement {
 		if (!select) return;
 		const menu = this.#menu;
 		menu.children.forEach(item => {
-			const val = item.dataset.value || item.innerText != "-" && item.innerText.trim() || "";
+			const val = item.dataset.value;
 			select.insertAdjacentHTML(
 				'beforeEnd',
-				`<option value="${val}">${item.innerHTML}</option>`
+				`<option value="${val == null ? '' : val}">${item.innerHTML}</option>`
 			);
 		});
 	}
