@@ -8,7 +8,7 @@ class HTMLElementInputDateSlot extends VirtualHTMLElement {
 		const step = this.step;
 		if (step) {
 			if (step >= 86400) return "date";
-			else if (type == "date") return "datetime";
+			else if (type == "date") return "datetime-local";
 		}
 		return type;
 	}
@@ -25,40 +25,15 @@ class HTMLElementInputDateSlot extends VirtualHTMLElement {
 		else this.setAttribute('step', val);
 	}
 
-	#setValue(input, date) {
-		const step = this.step * 1000;
-		if (step) {
-			const t = date.getTime();
-			date.setTime(Math.round(t / step) * step);
-		}
-		date = date.toISOString().replace(/Z$/, '');
-		if (input.type == "date") date = date.split('T').shift();
-		else if (input.type == "time") date = date.split('T').pop();
-		input.value = date;
-	}
-
-	#getValue(input) {
-		let str = input.value;
-		if (!str.endsWith('Z')) str += 'Z';
-		return new Date(str);
-	}
-
 	update(input) {
 		const [startEl, endEl] = this.#inputs();
 		const isStart = input == startEl;
 
-		const start = this.#getValue(startEl);
-		const end = this.#getValue(endEl);
-		const startTime = start.getTime();
-		const endTime = end.getTime();
-		const notStart = Number.isNaN(startTime);
-		const notEnd = Number.isNaN(endTime);
-		if (notStart && notEnd) return;
-		if (notStart && !isStart) {
-			start.setTime(endTime);
-		} else if (notEnd && isStart) {
-			end.setTime(startTime);
-		}
+		let start = startEl.valueAsDate;
+		let end = endEl.valueAsDate;
+		if (!start && !end) return;
+		if (!start) start = new Date(end);
+		else if (!end) end = new Date(start);
 		let startPart, endPart;
 		for (const Part of ['FullYear', 'Month', 'Date', 'Hours', 'Minutes', 'Seconds']) {
 			startPart = start[`get${Part}`]();
@@ -71,8 +46,8 @@ class HTMLElementInputDateSlot extends VirtualHTMLElement {
 				}
 			}
 		}
-		this.#setValue(endEl, end);
-		this.#setValue(startEl, start);
+		endEl.valueAsDate = end;
+		startEl.valueAsDate = start;
 	}
 	#inputs() {
 		return Array.from(this.querySelectorAll('input'));
@@ -90,7 +65,7 @@ class HTMLElementInputDateSlot extends VirtualHTMLElement {
 			start.removeAttribute('step');
 			end.removeAttribute('step');
 		}
-		start.type = end.type = type == "datetime" ? "datetime-local" : type;
+		start.type = end.type = type;
 	}
 }
 

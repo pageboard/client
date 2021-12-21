@@ -77,10 +77,15 @@ exports.input_date_time = {
 	},
 	html: `<div class="field">
 		<label block-content="label">Label</label>
-		<input name="[name]" disabled="[disabled]" placeholder="[placeholder]"
-			required="[required]" value="[value]" step="[step|magnet:]" type="[format|eq:datetime:datetime-local]"
+		<input is="element-input-date"
+			name="[name]" disabled="[disabled]" placeholder="[placeholder]"
+			required="[required]" value="[value]" step="[step|magnet:]"
+			type="[format|eq:datetime:datetime-local]"
 		/>
-	</div>`
+	</div>`,
+	scripts: [
+		'../ui/input-date.js'
+	]
 };
 
 exports.input_date_slot = {
@@ -134,9 +139,9 @@ exports.input_date_slot = {
 	},
 	html: `<div class="field">
 		<label block-content="label">Label</label>
-		<element-input-date-slot type="[format|magnet:]" step="[step|magnet:]">
-			<input name="[nameStart]" value="[valueStart]" />
-			<input name="[nameEnd]" value="[valueEnd]" />
+		<element-input-date-slot type="[format|eq:datetime:datetime-local]" step="[step|magnet:]">
+			<input is="element-input-date" name="[nameStart]" value="[valueStart]" />
+			<input is="element-input-date" name="[nameEnd]" value="[valueEnd]" />
 		</element-input-date-slot>
 	</div>`,
 	scripts: [
