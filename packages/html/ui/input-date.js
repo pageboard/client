@@ -39,6 +39,12 @@ class HTMLElementInputDate extends HTMLInputElement {
 	set value(str) {
 		this.valueAsDate = new Date(str);
 	}
+
+	set type(t) {
+		const str = super.value;
+		super.type = t;
+		this.value = str;
+	}
 }
 
 VirtualHTMLElement.define('element-input-date', HTMLElementInputDate, 'input');
