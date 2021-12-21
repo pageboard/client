@@ -1,42 +1,69 @@
 class HTMLElementInputDateSlot extends VirtualHTMLElement {
-	static defaults = {
-		range: null,
-		step: 0
-	};
-
 	handleChange(e, state) {
-		const els = this.inputs;
-		if (els.length == 3 && e.target == els[0]) {
-			this.dateChange(e);
+		this.update(e.target);
+	}
+
+	get type() {
+		const type = this.getAttribute('type');
+		const step = this.step;
+		if (step) {
+			if (step >= 86400) return "date";
+			else if (type == "date") return "datetime";
 		}
-		this.timeChange(e);
+		return type;
+	}
+	set type(f) {
+		this.setAttribute('type', f);
+	}
+	get step() {
+		const step = parseInt(this.getAttribute('step'));
+		if (Number.isNaN(step)) return null;
+		else return step;
+	}
+	set step(val) {
+		if (!val) this.removeAttribute('step');
+		else this.setAttribute('step', val);
 	}
 
-	dateChange(e) {
-		const date = e.target.value || (new Date()).toISOString();
-		const els = this.inputs;
-		els[1].setDate(date); // FIXME
-		els[2].setDate(date);
+	#setValue(input, date) {
+		const step = this.step * 1000;
+		if (step) {
+			const t = date.getTime();
+			date.setTime(Math.round(t / step) * step);
+		}
+		date = date.toISOString().replace(/Z$/, '');
+		if (input.type == "date") date = date.split('T').shift();
+		else if (input.type == "time") date = date.split('T').pop();
+		input.value = date;
 	}
 
-	timeChange(e) {
-		const els = this.inputs;
-		const startEl = els[els.length - 2];
-		const endEl = els[els.length - 1];
-		const isStart = e.target == startEl;
-		const start = new Date(startEl.value);
-		const end = new Date(endEl.value);
+	#getValue(input) {
+		let str = input.value;
+		if (!str.endsWith('Z')) str += 'Z';
+		return new Date(str);
+	}
+
+	update(input) {
+		const [startEl, endEl] = this.#inputs();
+		const isStart = input == startEl;
+
+		const start = this.#getValue(startEl);
+		const end = this.#getValue(endEl);
 		const startTime = start.getTime();
-		let endTime = end.getTime();
-		if (Number.isNaN(endTime)) endTime = startTime;
-		if (Number.isNaN(startTime)) return;
-		if (endTime >= startTime) return;
-		let startPart, endPart, changed = false;
+		const endTime = end.getTime();
+		const notStart = Number.isNaN(startTime);
+		const notEnd = Number.isNaN(endTime);
+		if (notStart && notEnd) return;
+		if (notStart && !isStart) {
+			start.setTime(endTime);
+		} else if (notEnd && isStart) {
+			end.setTime(startTime);
+		}
+		let startPart, endPart;
 		for (const Part of ['FullYear', 'Month', 'Date', 'Hours', 'Minutes', 'Seconds']) {
 			startPart = start[`get${Part}`]();
 			endPart = end[`get${Part}`]();
 			if (startPart > endPart) {
-				changed = true;
 				if (isStart) {
 					end[`set${Part}`](startPart);
 				} else {
@@ -44,36 +71,26 @@ class HTMLElementInputDateSlot extends VirtualHTMLElement {
 				}
 			}
 		}
-		if (changed) {
-			if (isStart) {
-				endEl.value = end.toISOString();
-			} else {
-				startEl.value = start.toISOString();
-			}
-		}
+		this.#setValue(endEl, end);
+		this.#setValue(startEl, start);
 	}
-	get inputs() {
+	#inputs() {
 		return Array.from(this.querySelectorAll('input'));
 	}
 
 	patch(state) {
-		const els = this.inputs;
-		const dayRange = this.options.step < 60 * 60 * 24;
-		if (els.length == 2 && dayRange) {
-			els.unshift(this.ownerDocument.createElement('input'));
-			this.insertBefore(els[0], els[1]);
-		}
-		const dts = els.map(el => el.dataset);
-
-		if (dayRange) {
-			dts[0].type = "date";
-			dts[1].step = dts[2].step = this.options.step;
-			dts[1].type = dts[2].type = "time";
-			els[0].value = els[1].value || "";
+		const [ start, end ] = this.#inputs();
+		const type = this.type;
+		let step = this.step;
+		if (step) {
+			if (type == "date") step = Math.round(step / 86400);
+			start.setAttribute('step', step);
+			end.setAttribute('step', step);
 		} else {
-			dts[0].type = "date";
-			dts[1].type = "date";
+			start.removeAttribute('step');
+			end.removeAttribute('step');
 		}
+		start.type = end.type = type == "datetime" ? "datetime-local" : type;
 	}
 }
 

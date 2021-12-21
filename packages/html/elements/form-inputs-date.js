@@ -65,6 +65,9 @@ exports.input_date_time = {
 			}, {
 				const: 60 * 60,
 				title: '1 hour'
+			}, {
+				const: 86400,
+				title: '1 day'
 			}]
 		}
 	},
@@ -122,7 +125,8 @@ exports.input_date_slot = {
 			type: 'boolean',
 			default: false
 		},
-		step: exports.input_date_time.properties.step
+		step: exports.input_date_time.properties.step,
+		format: exports.input_date_time.properties.format
 	},
 	contents: {
 		id: 'label',
@@ -130,7 +134,7 @@ exports.input_date_slot = {
 	},
 	html: `<div class="field">
 		<label block-content="label">Label</label>
-		<element-input-date-slot data-step="[step|magnet:]">
+		<element-input-date-slot type="[format|magnet:]" step="[step|magnet:]">
 			<input name="[nameStart]" value="[valueStart]" />
 			<input name="[nameEnd]" value="[valueEnd]" />
 		</element-input-date-slot>
