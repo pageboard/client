@@ -104,10 +104,10 @@ Pageboard.schemaHelpers['element-property'] = class ElementProperty {
 				context.level++;
 				context.key = key;
 			} else if (prop.type == "array" && prop.items?.properties) {
+				// TODO <option value="${key}">@${prop.title}</option>
+				// when form-input-property will be an helper instead of a block type
 				context.parent = context.parent.appendChild(
-					doc.dom(`<optgroup label="${prop.title}">
-						<option value="${key}">@${prop.title}</option>
-					</optgroup>`)
+					doc.dom(`<optgroup label="${prop.title}"></optgroup>`)
 				);
 				context.level++;
 				context.key = key;

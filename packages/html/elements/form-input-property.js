@@ -70,7 +70,7 @@ exports.input_property = {
 				if (prop.select && prop.select.$data == `0/${propKey}`) {
 					cases = prop.selectCases;
 				}
-				prop = (prop.properties || {})[propKey] || null;
+				prop = (prop.items && prop.items.properties || prop.properties || {})[propKey] || null;
 			}
 			if (prop == null) break;
 		}
