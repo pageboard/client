@@ -39,7 +39,10 @@ class HTMLElementInputDate extends HTMLInputElement {
 	set value(str) {
 		this.valueAsDate = new Date(str);
 	}
-
+	
+	get type() {
+		return super.type;
+	}
 	set type(t) {
 		const str = super.value;
 		super.type = t;
