@@ -19,19 +19,26 @@ class HTMLElementInputDate extends HTMLInputElement {
 			str = `1970-01-01T${str}`;
 		}
 		const d = new Date(str + 'Z');
-		if (Number.isNaN(d.getTime())) return null;
+		const t = d.getTime();
+		if (Number.isNaN(t)) return null;
+		const tz = d.getTimezoneOffset();
+		d.setTime(t + tz * 60 * 1000);
 		return d;
 	}
 	set valueAsDate(d) {
-		if (!d || Number.isNaN(d.getTime())) {
+		let t = d.getTime();
+		if (!d || Number.isNaN(t)) {
 			super.value = "";
 			return;
 		}
+		d = new Date(t);
 		const step = this.step * 1000;
 		if (step) {
-			const t = d.getTime();
-			d.setTime(Math.round(t / step) * step);
+			t = Math.round(t / step) * step;
+			d.setTime(t);
 		}
+		const tz = d.getTimezoneOffset();
+		d.setTime(t - tz * 60 * 1000);
 		const str = d.toISOString().replace(/Z$/, '');
 		if (this.type == "time") {
 			super.value = str.split('T')[1];
