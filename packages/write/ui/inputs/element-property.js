@@ -80,43 +80,47 @@ Pageboard.schemaHelpers['element-property'] = class ElementProperty {
 		const paths = ElementProperty.asPaths(this.el, {}, this.el.name + '.');
 		const content = Pageboard.editor.element(form.getAttribute('block-type')).contents.get(this.formBlock);
 		const existing = this.existing;
-		const indent = {
+		this.select = doc.dom(`<select class="ui compact dropdown">
+			<option value="">--</option>
+		</select>`);
+		const context = {
 			level: 0,
-			key: null
+			key: null,
+			parent: this.select
 		};
-		function getSelectOption(key) {
-			const prop = paths[key];
+		for (const [key, prop] of Object.entries(paths)) {
 			const parts = key.split('.');
 			const pkey = parts.slice(0, -1).join('.');
-			if (indent.key && indent.key != pkey) {
-				indent.level--;
-				indent.key = pkey;
+			if (context.key && context.key != pkey) {
+				context.level--;
+				context.key = pkey;
+				context.parent = context.parent.parentNode || context.parent;
 			}
-			if (!prop.title) return;
-			let node;
-			const curIndent = '-'.repeat(indent.level) + (indent.level ? ' ' : '');
+			if (!prop.title) continue;
 			if (prop.type == "object") {
-				node = doc.dom(`<optgroup label="${curIndent}${prop.title}"></optgroup>`);
-				indent.level++;
-				indent.key = key;
+				context.parent = context.parent.appendChild(
+					doc.dom(`<optgroup label="${prop.title}"></optgroup>`)
+				);
+				context.level++;
+				context.key = key;
 			} else if (prop.type == "array" && prop.items?.properties) {
-				node = doc.dom(`<optgroup label="${curIndent}${prop.title}"></optgroup>`);
-				indent.level++;
-				indent.key = key;
+				context.parent = context.parent.appendChild(
+					doc.dom(`<optgroup label="${prop.title}">
+						<option value="${key}">@${prop.title}</option>
+					</optgroup>`)
+				);
+				context.level++;
+				context.key = key;
 			} else {
-				node = doc.dom(`<option value="${key}">${curIndent ? ' ' + curIndent : ''}${prop.title}</option>`);
+				const node = doc.dom(`<option value="${key}">${prop.title}</option>`);
 				const disable = Boolean(
 					content.querySelector(`[name="${parts.slice(1).join('.')}"]`)
 				);
 				if (existing) node.disabled = !disable;
 				else node.disabled = disable;
+				context.parent.appendChild(node);
 			}
-			return node.outerHTML;
 		}
-		this.select = doc.dom(`<select class="ui compact dropdown">
-		<option value="">--</option>
-		${Object.keys(paths).map(getSelectOption).join('\n')}
-	</select>`);
 		this.field.appendChild(this.select);
 		this.select.addEventListener('change', this.toInput.bind(this));
 		this.update(block);
