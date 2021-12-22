@@ -30,12 +30,15 @@ Pageboard.schemaHelpers['element-property'] = class ElementProperty {
 				}
 			}
 		}
-		const props = obj.properties;
-		if (!props) return ret;
-		for (const [key, val] of Object.entries(props)) {
-			const cur = `${pre || ""}${key}`;
-			ret[cur] = Object.assign({}, val);
-			ElementProperty.asPaths(val, ret, cur + '.');
+		if (obj.properties) {
+			const props = obj.properties;
+			for (const [key, val] of Object.entries(props)) {
+				const cur = `${pre || ""}${key}`;
+				ret[cur] = Object.assign({}, val);
+				ElementProperty.asPaths(val, ret, cur + '.');
+			}
+		} else if (obj.type == "array" && obj.items && !Array.isArray(obj.items)) {
+			return this.asPaths(obj.items, ret, pre);
 		}
 
 		return ret;
@@ -77,16 +80,34 @@ Pageboard.schemaHelpers['element-property'] = class ElementProperty {
 		const paths = ElementProperty.asPaths(this.el, {}, this.el.name + '.');
 		const content = Pageboard.editor.element(form.getAttribute('block-type')).contents.get(this.formBlock);
 		const existing = this.existing;
+		const indent = {
+			level: 0,
+			key: null
+		};
 		function getSelectOption(key) {
 			const prop = paths[key];
+			const parts = key.split('.');
+			const pkey = parts.slice(0, -1).join('.');
+			if (indent.key && indent.key != pkey) {
+				indent.level--;
+				indent.key = pkey;
+			}
 			if (!prop.title) return;
 			let node;
+			const curIndent = '-'.repeat(indent.level) + (indent.level ? ' ' : '');
 			if (prop.type == "object") {
-				node = doc.dom(`<optgroup label="${prop.title}"></optgroup>`);
+				node = doc.dom(`<optgroup label="${curIndent}${prop.title}"></optgroup>`);
+				indent.level++;
+				indent.key = key;
+			} else if (prop.type == "array" && prop.items?.properties) {
+				node = doc.dom(`<optgroup label="${curIndent}${prop.title}"></optgroup>`);
+				indent.level++;
+				indent.key = key;
 			} else {
-				node = doc.dom(`<option value="${key}">${prop.title}</option>`);
-				const pkey = key.split('.').slice(1).join('.');
-				const disable = Boolean(content.querySelector(`[name="${pkey}"]`));
+				node = doc.dom(`<option value="${key}">${curIndent ? ' ' + curIndent : ''}${prop.title}</option>`);
+				const disable = Boolean(
+					content.querySelector(`[name="${parts.slice(1).join('.')}"]`)
+				);
 				if (existing) node.disabled = !disable;
 				else node.disabled = disable;
 			}
