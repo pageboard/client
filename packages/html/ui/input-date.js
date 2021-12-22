@@ -4,6 +4,14 @@ class HTMLElementInputDate extends HTMLInputElement {
 		if (this.init) this.init();
 	}
 
+	setAttribute(name, value) {
+		if (name == "value") {
+			this.value = value;
+			value = super.value;
+		}
+		super.setAttribute(name, value);
+	}
+
 	get valueAsDate() {
 		let str = super.value;
 		if (!str) return null;
