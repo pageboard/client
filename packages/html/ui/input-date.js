@@ -3,6 +3,7 @@ class HTMLElementInputDate extends HTMLInputElement {
 		super();
 		if (this.init) this.init();
 	}
+
 	get valueAsDate() {
 		let str = super.value;
 		if (!str) return null;
@@ -39,7 +40,7 @@ class HTMLElementInputDate extends HTMLInputElement {
 	set value(str) {
 		this.valueAsDate = new Date(str);
 	}
-	
+
 	get type() {
 		return super.type;
 	}
