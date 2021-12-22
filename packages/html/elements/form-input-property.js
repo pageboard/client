@@ -270,16 +270,21 @@ exports.input_property = {
 				}
 			}));
 		} else {
+			let type = 'text';
+			if (!propType.format) {
+				if (!propType.pattern) type = 'textarea';
+			} else if (propType.format == "uri-reference") {
+				type = 'url';
+			}
+
 			node.appendChild(view.render({
 				id,
 				type: 'input_text',
 				data: {
-					name: name,
-					type: (propType.pattern || propType.format) ? 'text' : 'textarea',
+					name, type, required,
 					disabled: d.disabled,
 					default: propType.default,
-					placeholder: propType.description,
-					required: required
+					placeholder: propType.description
 				},
 				content: {
 					label: prop.title
