@@ -35,15 +35,18 @@ class HTMLElementInputDateSlot extends VirtualHTMLElement {
 		if (!start) start = new Date(end);
 		else if (!end) end = new Date(start);
 		let startPart, endPart;
+		let equal = true;
 		for (const Part of ['FullYear', 'Month', 'Date', 'Hours', 'Minutes', 'Seconds']) {
 			startPart = start[`get${Part}`]();
 			endPart = end[`get${Part}`]();
-			if (startPart > endPart) {
+			if (startPart > endPart && equal) {
 				if (isStart) {
 					end[`set${Part}`](startPart);
 				} else {
 					start[`set${Part}`](endPart);
 				}
+			} else if (startPart != endPart) {
+				equal = false;
 			}
 		}
 		endEl.valueAsDate = end;
