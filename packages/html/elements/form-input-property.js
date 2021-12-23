@@ -270,13 +270,7 @@ exports.input_property = {
 				}
 			}));
 		} else {
-			let type = 'text';
-			if (!propType.format) {
-				if (!propType.pattern) type = 'textarea';
-			} else if (propType.format == "uri-reference") {
-				type = 'url';
-			}
-
+			const type = (propType.format || propType.pattern) ? 'text' : 'textarea';
 			node.appendChild(view.render({
 				id,
 				type: 'input_text',
