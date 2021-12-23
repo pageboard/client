@@ -1,6 +1,6 @@
 class HTMLElementInputFile extends VirtualHTMLElement {
-	#xhr
-	#promise
+	#xhr;
+	#promise;
 	captureClick(e, state) {
 		const input = this.querySelector('input[type="text"]');
 		if (!input) return;

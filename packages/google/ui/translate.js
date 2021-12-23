@@ -1,7 +1,7 @@
 class HTMLElementGoogleTranslate extends VirtualHTMLElement {
-	#inst
-	#observer
-	#shown
+	#inst;
+	#observer;
+	#shown;
 	setup(state) {
 		if (this.style) {
 			Object.assign(document.body.style, this.style);

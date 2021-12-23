@@ -1,8 +1,8 @@
 class HTMLInputMap extends VirtualHTMLElement {
-	#proxy
-	#observer
-	#table
-	#selection
+	#proxy;
+	#observer;
+	#table;
+	#selection;
 
 	get name() {
 		return this.getAttribute('name') || '';

@@ -53,7 +53,7 @@ class Editor extends View.EditorView {
 				}
 			}
 		}
-	}
+	};
 
 	static filteredSerializer(spec, obj) {
 		if (typeof obj == "function") obj = {filter: obj};

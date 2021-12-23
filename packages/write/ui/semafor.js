@@ -8,8 +8,8 @@ class Semafor {
 			if (key.startsWith('$')) continue;
 			if (elem.disabled) {
 				query[key] = null;
-			} else {
-				if (elem.closest('fieldset')?.disabled) continue;
+			} else if (elem.closest('fieldset')?.disabled) {
+				continue;
 			}
 			let old = query[key];
 			let val;

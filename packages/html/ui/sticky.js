@@ -3,7 +3,7 @@ class HTMLElementStickyNav extends HTMLElement {
 		super();
 		if (this.init) this.init();
 	}
-	#lastScroll
+	#lastScroll;
 	#currentScroll() {
 		return document.documentElement.scrollTop;
 	}

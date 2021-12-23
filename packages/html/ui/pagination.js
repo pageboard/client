@@ -1,10 +1,10 @@
 class HTMLElementPagination extends HTMLAnchorElement {
-	#observer
-	#queue
-	#reached
-	#size
-	#visible
-	#continue
+	#observer;
+	#queue;
+	#reached;
+	#size;
+	#visible;
+	#continue;
 
 	constructor() {
 		super();

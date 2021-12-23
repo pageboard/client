@@ -1,5 +1,5 @@
 class HTMLElementSelect extends VirtualHTMLElement {
-	#observer
+	#observer;
 
 	static defaults = {
 		placeholder: null,
