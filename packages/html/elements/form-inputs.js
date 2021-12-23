@@ -140,9 +140,6 @@ exports.input_text = {
 			}, {
 				const: "new-password",
 				title: "New password"
-			}, {
-				const: "url",
-				title: "Url"
 			}]
 		},
 		width: {
