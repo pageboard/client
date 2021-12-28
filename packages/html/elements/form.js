@@ -65,6 +65,7 @@ exports.api_form = {
 	icon: '<i class="write icon"></i>',
 	group: 'block form',
 	menu: "form",
+	standalone: true,
 	required: ["action"],
 	$lock: {
 		'data.action.parameters': 'webmaster'
