@@ -1,47 +1,55 @@
-element-input-file > input[type="text"] + input[type="file"] {
-	position:absolute !important;
-	left:0 !important;
-	top:0 !important;
-	width:100% !important;
-	height:100% !important;
-	opacity:0 !important;
-	padding:0 !important;
-	margin:0 !important;
-}
-element-input-file {
-	display:block;
+[block-type="input_file"] {
 	position:relative;
 }
-element-input-file > .ui.icon.button {
+[block-type="input_file"] > .ui.label {
+	display:none;
+	position: absolute;
+	right:-0.25em;
+	top:0.25em;
+}
+.loading[block-type="input_file"] > .ui.label {
+	display:block;
+}
+.form .field > input[type="file"],
+.form .field > input[type="file"]:focus,
+.form .field > input[type="file"]:hover {
+	position:relative;
+	color: rgba(0 0 0 / 0%);
+}
+.form .field > input[type="file"][value]::after {
+	content:attr(value);
+	color: rgba(0 0 0 / 100%);
+	text-align: left;
+	position: absolute;
+	left: 0;
+	right: 0;
+	padding-left: inherit;
+	padding-right: inherit;
+}
+.form .field > input[type="file"]::after,
+.form .field > input[type="file"]:not([value])::after {
+	content:attr(placeholder);
+	color: rgba(0 0 0 / 100%);
+	float: left;
+}
+input[type="file"]::file-selector-button {
+	display:block;
+	position:absolute;
+	top:0;
+	right:0;
+	margin:0;
+	border-width: 0;
+	font-size: 0;
+	width:2rem;
+	height:100%;
+	background-image: url('data:image/svg+xml,<svg width="64" height="64" xmlns="http://www.w3.org/2000/svg"><path d="M28 1.6C29.1.5 30.6-.1 32.2 0c1.5-.095 3 .48 4.1 1.6l26 26a5.6 5.6 0 1 1-7.8 7.9l-17-17v40a5.37 5.37 0 0 1-5.4 5.5h-.048c-3.1-.048-5.5-2.5-5.5-5.5v-40l-17 17a5.6 5.6 0 1 1-7.8-7.9z"/></svg>');
+	background-size: 1rem;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-color:inherit;
 	z-index: 1;
 }
-element-input-file i.icon.upload::before {
-	content:'⬆';
-}
-element-input-file > input[type="file"] + .ui.icon.button {
-	display:none;
-}
-element-input-file > input[type="text"] + input[type="file"] + .ui.icon.button {
-	display:block;
-}
-element-input-file .button > .upload {
-	pointer-events:none;
-}
-element-input-file input[type="text"]:not([value]) ~ .button > .delete,
-element-input-file input[type="text"][value=""] ~ .button > .delete,
-element-input-file input[type="text"][value]:not([value=""]) ~ .button > .upload,
-.loading.field element-input-file .button > .upload,
-.success.field element-input-file .button > .upload {
-	display:none;
-}
-element-input-file input[type="text"][value]:not([value=""]) ~ .button > .delete,
-.loading.field element-input-file .button > .delete,
-.success.field element-input-file .button > .delete {
-	display:inline-block;
-}
-element-input-file > .ui.label {
-	display:none;
-}
-.loading.field element-input-file > .ui.label {
-	display:block;
+
+input[type="file"][value]::file-selector-button {
+	background-image: url('data:image/svg+xml,<svg width="64" height="64" xmlns="http://www.w3.org/2000/svg"><path d="m40.9 31.9 21-21a6.4 6.4 0 1 0-9-9l-21 21-21-21a6.4 6.4 0 1 0-9 9l21 21-21 21a6.4 6.4 0 0 0 0 9C3 63 4.6 63.8 6.2 63.8s3.3-.7 4.5-2l21-21 21 21c1.2 1.3 2.8 2 4.5 2s3.2-.7 4.5-2a6.4 6.4 0 0 0 0-9z"/></svg>');
 }

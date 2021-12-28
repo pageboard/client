@@ -80,6 +80,9 @@ class HTMLCustomFormElement extends HTMLFormElement {
 				if (defVal == "") defVal = null;
 				if (!withDefaults && query[node.name] == defVal) {
 					query[node.name] = undefined;
+				} else {
+					// not yet using form-associated custom input
+					query[node.name] = node.value;
 				}
 			}
 			if (query[node.name] === undefined && withDefaults) {
@@ -234,9 +237,9 @@ class HTMLCustomFormElement extends HTMLFormElement {
 
 		const data = { $query	};
 		return Promise.all(Array.from(form.elements).filter((node) => {
-			return node.type == "file";
+			return Boolean(node.presubmit);
 		}).map((input) => {
-			return input.closest('element-input-file').upload();
+			return input.presubmit();
 		})).then(() => {
 			data.$query = state.query;
 			data.$request = form.read(true);

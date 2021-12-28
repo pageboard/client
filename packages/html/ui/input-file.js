@@ -1,73 +1,72 @@
-class HTMLElementInputFile extends VirtualHTMLElement {
+class HTMLElementInputFile extends HTMLInputElement {
 	#xhr;
 	#promise;
+	get value() {
+		return this.getAttribute('value') || super.value;
+	}
+	set value(str) {
+		if (str != null) {
+			this.setAttribute('value', str);
+		} else {
+			this.removeAttribute('value');
+			super.value = "";
+		}
+	}
 	captureClick(e, state) {
-		const input = this.querySelector('input[type="text"]');
-		if (!input) return;
-		if (input.value) {
+		if (this.value) {
 			e.preventDefault();
 			if (this.#xhr) {
 				this.#xhr.abort();
 				this.#xhr = null;
 			}
-			input.value = '';
-			const file = this.querySelector('input[type="file"]');
-			file.reset();
-			this.closest('.field').classList.remove('filled', 'loading', 'error', 'success');
+			this.value = null;
+			this.closest('.field').classList.remove('loading', 'error', 'success');
 		} else {
 			// ok
 		}
 	}
 
 	handleChange(e, state) {
-		const input = this.querySelector('input[type="text"]');
-		if (!input) return;
-		if (e.target.type == "file" && e.target.value) {
-			input.value = (e.target.value || "").split(/\/|\\/).pop();
+		if (super.value) {
+			this.value = super.value.split(/\/|\\/).pop();
+		} else {
+			this.value = null;
 		}
-		if (this.dataset.now != null) this.upload();
 	}
 
-	upload() {
+	presubmit() {
 		if (this.#promise) return this.#promise;
-		const file = this.querySelector('input[type="file"]');
-		const input = this.querySelector('input[type="text"]');
-		if (!input || !file) throw new Error("Unitialized input-file");
-		if (!file.files.length) return Promise.resolve();
-
+		if (!this.files.length) return Promise.resolve();
 		const field = this.closest('.field');
 		field.classList.remove('success', 'error');
-		const label = this.querySelector('.label');
+		const label = field.querySelector('.label');
 		function track(num) {
 			label.innerText = num;
 		}
 		track(0);
 		field.classList.add('loading');
 		const p = new Promise((resolve, reject) => {
-			const me = this;
-			function fail(err) {
+			const fail = (err) => {
 				field.classList.add('error');
 				field.classList.remove('loading');
-				me.#xhr = null;
+				this.#xhr = null;
 				reject(err);
-				me.#promise = null;
-			}
-			function pass(obj) {
+				this.#promise = null;
+			};
+			const pass = (obj) => {
 				if (!obj.items || obj.items.length == 0) return fail(new Error("File rejected"));
 				const val = obj.items[0];
-				input.value = val;
+				this.value = val;
 				field.classList.add('success');
 				field.classList.remove('loading');
-				me.#xhr = null;
+				this.#xhr = null;
 				resolve();
-				me.#promise = null;
-			}
-			if (file.files.length == 0) return resolve(); // or reject ?
+				this.#promise = null;
+			};
+			if (this.files.length == 0) return resolve(); // or reject ?
 
 			const fd = new FormData();
-			for (let i = 0; i < file.files.length; i++) {
-				fd.append("files", file.files[i]);
-			}
+			fd.append("files", this.files[0]);
 
 			const xhr = new XMLHttpRequest();
 
@@ -96,7 +95,7 @@ class HTMLElementInputFile extends VirtualHTMLElement {
 				fail(err);
 			});
 			try {
-				xhr.open("POST", `/.api/upload/${file.id}`, true);
+				xhr.open("POST", `/.api/upload/${this.id}`, true);
 				xhr.setRequestHeader('Accept', "application/json; q=1.0");
 				xhr.send(fd);
 				this.#xhr = xhr;
@@ -109,6 +108,5 @@ class HTMLElementInputFile extends VirtualHTMLElement {
 	}
 }
 
-Page.setup(() => {
-	VirtualHTMLElement.define('element-input-file', HTMLElementInputFile);
-});
+VirtualHTMLElement.define('element-input-file', HTMLElementInputFile, 'input');
+

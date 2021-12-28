@@ -28,11 +28,6 @@ exports.input_file = {
 			type: 'boolean',
 			default: false
 		},
-		now: {
-			title: 'Upload on change',
-			type: 'boolean',
-			default: false
-		},
 		limits: {
 			title: 'Limits',
 			type: 'object',
@@ -51,13 +46,6 @@ exports.input_file = {
 						type: 'string'
 					},
 					default: ['*/*']
-				},
-				files: {
-					title: 'Files',
-					description: 'Max number of files',
-					type: 'integer',
-					minimum: 1,
-					default: 1
 				}
 			}
 		}
@@ -68,16 +56,9 @@ exports.input_file = {
 	},
 	html: `<div class="field">
 		<label block-content="label">Label</label>
-		<element-input-file class="ui action input" data-now="[now]">
-			<input type="text" name="[name]" placeholder="[placeholder]" />
-			<input type="file" id="[$id]" required="[required]"
-				disabled="[disabled]" multiple="[limits.files|gt:1|battr]" />
-			<label for="[$id]" class="ui icon button">
-				<i class="upload icon"></i>
-				<i class="delete icon"></i>
-			</label>
-			<div class="mini floating ui basic label"></div>
-		</element-input-file>
+		<div class="ui basic label"></div>
+		<input is="element-input-file" type="file" id="[$id]" required="[required]"
+			disabled="[disabled]" accept="[limits.types|join:,]" name="[name]" placeholder="[placeholder]" />
 	</div>`,
 	stylesheets: [
 		'../lib/components/input.css',
