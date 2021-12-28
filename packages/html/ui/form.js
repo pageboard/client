@@ -441,6 +441,7 @@ Page.ready((state) => {
 		if (action == "toggle") {
 			action = val ? "enable" : "disable";
 		}
+		// NB: call Class methods to deal with uninstantiated custom form
 		if (action == "enable") {
 			HTMLCustomFormElement.prototype.enable.call(form);
 		} else if (action == "disable") {
