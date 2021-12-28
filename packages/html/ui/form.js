@@ -184,6 +184,9 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		if (!this.action) return;
 		window.sessionStorage.removeItem(this.action);
 	}
+	handleReset(e, state) {
+		this.reset();
+	}
 	handleSubmit(e, state) {
 		if (e.type == "submit") e.preventDefault();
 		if (this.isContentEditable) return;
