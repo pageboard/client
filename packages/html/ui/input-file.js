@@ -1,19 +1,35 @@
 class HTMLElementInputFile extends HTMLInputElement {
 	#xhr;
 	#promise;
+	#value;
+
+	constructor() {
+		super();
+		if (this.init) this.init();
+		this.save();
+	}
+
 	get value() {
-		return this.getAttribute('value') || super.value;
+		return this.getAttribute('value');
+	}
+	save() {
+		this.#value = this.value;
+	}
+	reset() {
+		if (this.#value != null) this.setAttribute('value', this.#value);
+		else this.removeAttribute('value');
+		this.value = this.#value;
 	}
 	set value(str) {
 		if (str != null) {
-			this.setAttribute('value', str);
+			this.setAttribute('filename', str.split(/\/|\\/).pop());
 		} else {
-			this.removeAttribute('value');
+			this.removeAttribute('filename');
 			super.value = "";
 		}
 	}
 	captureClick(e, state) {
-		if (this.value) {
+		if (super.value) {
 			e.preventDefault();
 			if (this.#xhr) {
 				this.#xhr.abort();
@@ -28,7 +44,7 @@ class HTMLElementInputFile extends HTMLInputElement {
 
 	handleChange(e, state) {
 		if (super.value) {
-			this.value = super.value.split(/\/|\\/).pop();
+			this.value = super.value;
 		} else {
 			this.value = null;
 		}
@@ -56,7 +72,7 @@ class HTMLElementInputFile extends HTMLInputElement {
 			const pass = (obj) => {
 				if (!obj.items || obj.items.length == 0) return fail(new Error("File rejected"));
 				const val = obj.items[0];
-				this.value = val;
+				this.setAttribute('value', val);
 				field.classList.add('success');
 				field.classList.remove('loading');
 				this.#xhr = null;
