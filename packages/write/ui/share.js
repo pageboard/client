@@ -15,7 +15,7 @@ Pageboard.Controls.Share = class Share {
 		this.block = parents[0].block;
 		this.disabled = true;
 		const el = this.editor.element(this.block.type);
-		this.standalone = this.block.standalone || el.standalone;
+		this.standalone = this.block.standalone;
 		this.toggle.checked = this.standalone;
 		const hide = !this.block.id || el.inplace || el.inline;
 		const hasAncestor = !this.standalone && parents.slice(1, -1).some((parent) => {
@@ -31,7 +31,7 @@ Pageboard.Controls.Share = class Share {
 		this.node.classList.toggle('standalone-no', Boolean(hide));
 		this.node.classList.toggle('standalone-descendant', hasDescendant);
 		this.node.classList.toggle('standalone-ancestor', hasAncestor);
-		const disabled = hasAncestor || hasDescendant || hide || el.standalone || el.virtual;
+		const disabled = hasAncestor || hasDescendant || hide || this.standalone && el.standalone || el.virtual;
 		this.toggle.disabled = this.disabled = disabled;
 	}
 

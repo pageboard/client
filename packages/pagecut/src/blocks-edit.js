@@ -103,7 +103,7 @@ export default class Blocks extends BlocksView {
 			ancestor.blocks[parent.id] = parent;
 		}
 
-		if (el.standalone || parent.standalone) {
+		if (parent.standalone) {
 			ancestor = parent;
 		}
 
