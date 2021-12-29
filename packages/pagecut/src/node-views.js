@@ -151,22 +151,7 @@ export class RootNodeView {
 		if (cname != null) {
 			const cdom = this.contentDOM;
 			if (!block.content) block.content = {};
-			if (block.standalone && oldBlock) {
-				if (!Array.isArray(block.content[cname])) {
-					block.content[cname] = [];
-				}
-				let found = false;
-				block.content[cname].forEach((idom) => {
-					if (idom == cdom) {
-						found = true;
-					} else {
-						differ.apply(idom, differ.diff(idom, cdom));
-					}
-				});
-				if (!found) {
-					block.content[cname].push(cdom);
-				}
-			} else if (block.content[cname] != cdom) {
+			if (block.content[cname] != cdom) {
 				block.content[cname] = cdom;
 			}
 		}
