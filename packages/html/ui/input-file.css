@@ -18,13 +18,16 @@
 }
 .form .field > input[type="file"][filename]::after {
 	content:attr(filename);
-	color: rgba(0 0 0 / 100%);
+	color: black;
 	text-align: left;
 	position: absolute;
 	left: 0;
 	right: 0;
 	padding-left: inherit;
 	padding-right: inherit;
+}
+.form .field.error > input[type="file"][filename]::after {
+	color:inherit;
 }
 .form .field > input[type="file"]::after,
 .form .field > input[type="file"]:not([filename])::after {
