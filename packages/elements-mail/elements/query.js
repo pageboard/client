@@ -5,8 +5,7 @@ Pageboard.elements.mail_query = Object.assign({}, Pageboard.elements.query, {
 			spec: 'mail_block+'
 		}
 	},
-	group: "mail_block",
-	priority: 2
+	group: "mail_block"
 });
 Pageboard.elements.mail_query._render = Pageboard.elements.query.render;
 Pageboard.elements.mail_query.render = function(doc, block) {
