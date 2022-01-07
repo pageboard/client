@@ -18,12 +18,12 @@
   },
   "homepage": "https://github.com/pageboard/client/packages/elements#readme",
   "dependencies": {
-    "document-register-element": "^1.9.0",
-    "dom-template-strings": "^2.4.2",
-    "matchdom": "^5.3.5",
+    "document-register-element": "1.9.x",
+    "dom-template-strings": "2.4.x",
+    "matchdom": "5.3.x",
     "pagecut": "1.0.0-beta.73",
-    "postinstall": "^0.4.0",
-    "window-page": "^4.2.4"
+    "postinstall": "0.4.x",
+    "window-page": "4.2.x"
   },
   "postinstall": {
     "pagecut/dist/viewer.js": "link lib/",
