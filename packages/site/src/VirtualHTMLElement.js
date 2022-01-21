@@ -57,13 +57,13 @@ export default class VirtualHTMLElement extends HTMLElement {
 				},
 				patch(state) {
 					this.options = nodeOptions(this, defaults, state, is);
-					if (typeof this.reveal == "function" && this.currentSrc) {
-						this.reveal(state);
-					}
 				},
 				paint(state) {
 					if (!this.options) {
 						this.options = nodeOptions(this, defaults, state, is);
+					}
+					if (typeof this.reveal == "function" && this.currentSrc) {
+						state.finish(() => this.reveal(state));
 					}
 				},
 				setup(state) {
@@ -72,7 +72,7 @@ export default class VirtualHTMLElement extends HTMLElement {
 					}
 					if (typeof this.reveal == "function" && !this.currentSrc) {
 						if (state.ui.observer) state.ui.observer.observe(this);
-						else this.reveal(state);
+						else state.finish(() => this.reveal(state));
 					}
 				},
 				close(state) {
