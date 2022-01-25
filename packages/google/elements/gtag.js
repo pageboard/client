@@ -28,7 +28,6 @@ exports.google_tag = {
 	}],
 	csp: {
 		connect: ["https://www.google-analytics.com", "https://stats.g.doubleclick.net"],
-		img: ["https://www.google-analytics.com"],
 		script: ["https://www.googletagmanager.com", "https://www.google-analytics.com", "https://ssl.google-analytics.com"]
 	},
 	scripts: [
