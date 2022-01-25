@@ -107,8 +107,8 @@ exports.page = {
 		script: ["'self'", "https://cdn.polyfill.io"],
 		frame: ["https:"],
 		style: ["'self'", "'unsafe-inline'"],
-		font: ["'self'", "data:"],
-		img: ["'self'", "data:"]
+		font: ["'self'", "data:", "https:"],
+		img: ["'self'", "data:", "https:"]
 	}
 };
 
