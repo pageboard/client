@@ -21,24 +21,24 @@
 	0% {
 		width:0%;
 		margin-left:0px;
-		opacity:0.3;
+		opacity:30%;
 	}
 	50% {
 		width:20px;
 		margin-left:-10px;
-		opacity:1;
+		opacity:100%;
 	}
 	100% {
 		width:0%;
 		margin-left:0px;
-		opacity:0.3;
+		opacity:30%;
 	}
 }
 
 .loading[data-src]::after {
 	display: block;
 	animation: scanner 6s steps(3, end) infinite;
-	content: '';
+	content: "";
 	width: 20px;
 	height: 0;
 	border-top: 4px dotted #aaa;
@@ -48,17 +48,17 @@
 
 .error[data-src]::after {
 	display: block;
-	content: '∅';
+	content: "∅";
 }
 
 .waiting[data-src]::after {
 	display:block;
-	content: '?';
+	content: "?";
 }
 
 .denied[data-src]::after {
 	display:block;
-	content: '🛇';
+	content: "🛇";
 }
 
 .error[data-src],

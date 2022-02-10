@@ -43,12 +43,12 @@
 		margin-left:0;
 	}
 	[block-type="portfolio"] > [block-type="portfolio_item"] {
-		margin: 0 0 4px 0;
+		margin: 0 0 4px;
 	}
 }
 
 [block-type="portfolio_item"]::after {
-	content: '';
+	content: "";
 	display: block;
 	height: 0;
 }
@@ -149,7 +149,7 @@
 }
 
 [block-type="portfolio_item"]:hover > .content {
-	background-color:rgba(0, 0, 0, 0.5);
+	background-color:rgba(0 0 0 / 50%);
 	color:white;
 }
 

@@ -7,10 +7,10 @@
 	margin-bottom: 1em;
 }
 #menu .ui.icon.menu .active.item {
-	background-color: rgba(129, 165, 255, 0.3);
+	background-color: rgb(129 165 255 / 30%);
 }
 #menu .ui.menu .item.has-active {
-	background-color: rgba(129, 165, 255, 0.2);
+	background-color: rgb(129 165 255 / 20%);
 }
 #menu .popup {
 	display:none;
@@ -30,10 +30,10 @@
 .ui.menu .dropdown.item:hover,
 .ui.menu .link.item:hover,
 .ui.menu a.item:hover {
-	background-color:rgba(129, 165, 255, 0.1);
+	background-color:rgb(129 165 255 / 10%);
 }
 .ui.icon.menu > .item.radio.checkbox.checked {
-	background-color:rgba(129, 165, 255, 0.2);
+	background-color:rgb(129 165 255 / 20%);
 }
 #menu .ui.labeled.icon.menu .item {
 	min-width:5em;
@@ -71,7 +71,7 @@
 	background-color:#353535;
 }
 #menu .menu .item.disabled {
-	opacity:0.5;
+	opacity:50%;
 }
 #menu .tabular.menu .item.disabled {
 	display:none;
@@ -90,7 +90,7 @@
 }
 /* TODO remove me with fomantic 2.7.2 */
 .ui.inverted.menu .item.disabled, .ui.inverted.menu .item.disabled:hover {
-	color: rgba(225, 225, 225, 0.3) !important;
+	color: rgb(225 225 225 / 30%) !important;
 }
 .ui.menu > .item.disabled,
 .ui.menu > .item.disabled:hover {
@@ -102,7 +102,7 @@
 	padding: 0;
 }
 .ui.compact.icon.menu > .ui.radio.checkbox.item > span {
-	padding: 0.7em 0.7em;
+	padding: 0.7em;
 	display: inline-block;
 	height: 100%;
 }
@@ -122,7 +122,7 @@
 .ui.labeled.icon.menu .item > i.icons {
 	height: 1em;
 	display: block;
-	font-size: 1.71428571em !important;
+	font-size: 1.7143em !important;
 	margin: 0em auto 0.5rem !important;
 }
 .ui.labeled.icon.menu .item > i.icons > .corner.icon {

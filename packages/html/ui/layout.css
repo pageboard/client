@@ -53,7 +53,7 @@
 }
 
 .inverted.layout {
-	background: rgba(0, 0, 0, 0.8);
+	background: rgb(0 0 0 / 80%);
 }
 
 .inverted.layout p {

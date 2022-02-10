@@ -247,7 +247,14 @@ export function urltpl(obj, what, pName = 'pathname', qName = 'query') {
 	if (pathname == null && query == null) return null;
 	if (pathname?.fuse()) return pathname;
 	const loc = Page.parse(pathname || what.scope.data.$loc.pathname);
-	Object.assign(loc.query, query ?? {});
+	if (query) {
+		// flatten and assign
+		Object.assign(loc.query, Page.parse(Page.format({ query })).query);
+		// N.B:
+		// "/path?type=[$query.type]".fuse({$query: {type: ["a", "b"]}}) -> "/path?type=a,b"
+		// this is wrong, it should be "/path?type=a&type=b"
+		// maybe "/path?type=[$query.type|url]"
+	}
 	const fakes = [];
 	for (const [key, val] of Object.entries(loc.query)) {
 		if (val === undefined) {

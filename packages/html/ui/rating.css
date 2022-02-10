@@ -24,7 +24,7 @@ element-rating .icon {
 	height: auto;
 	transition: opacity 0.1s ease, background 0.1s ease, text-shadow 0.1s ease, color 0.1s ease;
 	backface-visibility: hidden;
-	color: rgba(0, 0, 0, 0.15);
+	color: rgb(0 0 0 / 15%);
 }
 element-rating .icon:last-child {
 	padding-right:0;
@@ -40,20 +40,20 @@ element-rating .icon::before {
 
 /* Active Icon */
 element-rating .active.icon {
-	color: rgba(0, 0, 0, 0.85);
+	color: rgb(0 0 0 / 85%);
 }
 
 /* Selected Icon */
 element-rating .icon.selected,
 element-rating .icon.selected.active {
-	color: rgba(0, 0, 0, 0.87);
+	color: rgb(0 0 0 / 87%);
 }
 
 /* Star */
 
 /* Inactive */
 element-rating.star .icon {
-	color: rgba(0, 0, 0, 0.15);
+	color: rgb(0 0 0 / 15%);
 	text-shadow: none;
 }
 
@@ -73,7 +73,7 @@ element-rating.star .icon.selected.active {
 /* Heart */
 
 element-rating.heart .icon {
-	color: rgba(0, 0, 0, 0.15);
+	color: rgb(0 0 0 / 15%);
 	text-shadow: none !important;
 }
 
@@ -101,10 +101,10 @@ element-rating.disabled .icon {
 
 /* Selected Rating */
 element-rating.selected .active.icon {
-	opacity: 1;
+	opacity: 100%;
 }
 element-rating .icon.selected,
 element-rating.selected .icon.selected {
-	opacity: 1;
+	opacity: 100%;
 }
 

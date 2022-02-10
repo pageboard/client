@@ -61,7 +61,7 @@
 /*************************************/
 
 input[type="range"] {
-	-webkit-appearance: none; /* removes default webkit styles */
+	appearance: none; /* removes default webkit styles */
 	width: 100%;
 	/* required for proper track sizing in FF */
 	max-width: 100%;
@@ -73,13 +73,13 @@ input[type="range"] {
 input[type="range"]::-webkit-slider-runnable-track {
 	width: 100%;
 	height: 3px;
-	background: rgba(0, 0, 0, 0.5);
+	background: rgb(0 0 0 / 50%);
 	border: 0;
 	border-radius: 3px;
 }
 
 input[type="range"]::-webkit-slider-thumb {
-	-webkit-appearance: none;
+	appearance: none;
 	border: none;
 	height: 16px;
 	width: 16px;
@@ -100,7 +100,7 @@ background: #ccc;
 input[type="range"]::-moz-range-track {
 	width: 100%;
 	height: 3px;
-	background: rgba(0, 0, 0, 0.5);
+	background: rgb(0 0 0 / 50%);
 	border: 0;
 	border-radius: 3px;
 }
@@ -132,11 +132,11 @@ input[type="range"]::-ms-track {
 	color: transparent;
 }
 input[type="range"]::-ms-fill-lower {
-	background: rgba(0, 0, 0, 0.5);
+	background: rgb(0 0 0 / 50%);
 	border-radius: 10px;
 }
 input[type="range"]::-ms-fill-upper {
-	background: rgba(0, 0, 0, 0.5);
+	background: rgb(0 0 0 / 50%);
 	border-radius: 10px;
 }
 input[type="range"]::-ms-thumb {
@@ -148,8 +148,8 @@ input[type="range"]::-ms-thumb {
 	margin-top:1px;
 }
 input[type="range"]:focus::-ms-fill-lower {
-	background: rgba(0, 0, 0, 0.5);
+	background: rgb(0 0 0 / 50%);
 }
 input[type="range"]:focus::-ms-fill-upper {
-	background: rgba(0, 0, 0, 0.5);
+	background: rgb(0 0 0 / 50%);
 }

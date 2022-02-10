@@ -122,10 +122,7 @@ body[data-mode="read"] #pageboard-read > iframe {
 }
 
 .wide {
-	margin-top:0 !important;
-	margin-left:-1rem !important;
-	margin-right:-1rem !important;
-	margin-bottom:1rem;
+	margin: 0 -1rem 1rem !important;
 }
 .wide.bottom {
 	margin-bottom:0.1rem;
@@ -139,7 +136,7 @@ body[data-mode="read"] #pageboard-read > iframe {
 
 .ui.range {
 	height:auto;
-	padding: 0.67857143em 1em; /* this is the padding value of .field */
+	padding: 0.6786em 1em; /* this is the padding value of .field */
 }
 
 .inline.field,
@@ -212,7 +209,7 @@ body[data-mode="read"] #pageboard-read > iframe {
 }
 #form .ui.radio.checkbox .box,
 #form .ui.radio.checkbox label {
-	padding-left:1.65714em;
+	padding-left:1.6571em;
 }
 
 #form .ui.icon.menu .ui.item.radio.checkbox label {
@@ -261,11 +258,11 @@ body[data-mode="read"] #pageboard-read > iframe {
 
 .ui.toggle.checkbox .box:hover::before,
 .ui.toggle.checkbox label:hover::before {
-	background-color: rgba(0, 0, 0, 0.4);
+	background-color: rgb(0 0 0 / 40%);
 }
 .ui.toggle.checkbox .box::before,
 .ui.toggle.checkbox label::before {
-	background-color: rgba(0, 0, 0, 0.2);
+	background-color: rgb(0 0 0 / 20%);
 	top:0.25rem;
 	width:2.3rem;
 	height:1rem;
@@ -277,11 +274,11 @@ body[data-mode="read"] #pageboard-read > iframe {
 }
 #share .ui.toggle.checkbox.disabled label {
 	padding-left:0;
-	opacity:1;
+	opacity:100%;
 }
 .ui.toggle.checkbox.disabled .box:hover::before,
 .ui.toggle.checkbox.disabled label:hover::before {
-	background-color: rgba(0, 0, 0, 0.2);
+	background-color: rgb(0 0 0 / 20%);
 }
 
 .ui.toggle.checkbox input ~ .box::after,
@@ -289,8 +286,8 @@ body[data-mode="read"] #pageboard-read > iframe {
 .ui.toggle.checkbox input:checked ~ .box::after,
 .ui.toggle.checkbox input:checked ~ label::after {
 	box-shadow:
-		rgba(34, 36, 38, 0.15) 0 1px 2px 0,
-		rgba(34, 36, 38, 0.15) 0 0 0 1px inset;
+		rgb(34 36 38 / 15%) 0 1px 2px 0,
+		rgb(34 36 38 / 15%) 0 0 0 1px inset;
 }
 .ui.toggle.checkbox input:checked ~ .box::after,
 .ui.toggle.checkbox input:checked ~ label::after {

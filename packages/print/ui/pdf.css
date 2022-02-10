@@ -30,7 +30,7 @@ body {
 }
 .page-sheet::after {
 	display:block;
-	content:'';
+	content:"";
 	padding-bottom: 141.42%; /* calc(100 * 29.7 / 21) */
 }
 .page-sheet > [block-content="page"] {
