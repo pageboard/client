@@ -12,7 +12,7 @@ class HTMLElementGallery extends VirtualHTMLElement {
 	}
 
 	patch(state) {
-		const mode = this.options.mode || this.children[0].getAttribute('block-type');
+		const mode = this.options.mode || this.firstElementChild?.getAttribute('block-type');
 		this.selectedMode = mode;
 	}
 
