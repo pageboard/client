@@ -468,6 +468,7 @@ Page.ready((state) => {
 					// new way
 				}
 				HTMLCustomFormElement.prototype.fill.call(form, linearizeValues(values), state.scope);
+				HTMLCustomFormElement.prototype.save.call(form);
 			}
 		} else if (action == "read") {
 			const obj = {};
