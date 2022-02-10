@@ -14,10 +14,10 @@
 .form .field > input[type="file"]:focus,
 .form .field > input[type="file"]:hover {
 	position:relative;
-	color: rgba(0 0 0 / 0%);
+	color: transparent !important;
 }
-.form .field > input[type="file"][filename]::after {
-	content:attr(filename);
+.form .field > input[type="file"][value]::after {
+	content:attr(value);
 	color: black;
 	text-align: left;
 	position: absolute;
@@ -26,11 +26,11 @@
 	padding-left: inherit;
 	padding-right: inherit;
 }
-.form .field.error > input[type="file"][filename]::after {
+.form .field.error > input[type="file"][value]::after {
 	color:inherit;
 }
 .form .field > input[type="file"]::after,
-.form .field > input[type="file"]:not([filename])::after {
+.form .field > input[type="file"]:not([value])::after {
 	content:attr(placeholder);
 	color: rgba(0 0 0 / 50%);
 	float: left;
@@ -53,6 +53,6 @@ input[type="file"]::file-selector-button {
 	z-index: 1;
 }
 
-input[type="file"][filename]::file-selector-button {
+input[type="file"][value]::file-selector-button {
 	background-image: url('data:image/svg+xml,<svg width="64" height="64" xmlns="http://www.w3.org/2000/svg"><path d="m40.9 31.9 21-21a6.4 6.4 0 1 0-9-9l-21 21-21-21a6.4 6.4 0 1 0-9 9l21 21-21 21a6.4 6.4 0 0 0 0 9C3 63 4.6 63.8 6.2 63.8s3.3-.7 4.5-2l21-21 21 21c1.2 1.3 2.8 2 4.5 2s3.2-.7 4.5-2a6.4 6.4 0 0 0 0-9z"/></svg>');
 }

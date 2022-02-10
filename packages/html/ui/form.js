@@ -344,8 +344,10 @@ HTMLInputElement.prototype.fill = function (val) {
 	if (val == null) val = "";
 	if (this.type == "radio" || this.type == "checkbox") {
 		this.checked = val;
-	} else {
+	} else try {
 		this.value = val;
+	} catch(err) {
+		this.setAttribute('value', val);
 	}
 };
 
