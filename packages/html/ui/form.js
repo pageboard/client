@@ -344,10 +344,10 @@ HTMLInputElement.prototype.fill = function (val) {
 	if (val == null) val = "";
 	if (this.type == "radio" || this.type == "checkbox") {
 		this.checked = val;
-	} else try {
-		this.value = val;
-	} catch(err) {
+	} else if (this.type == "file") {
 		this.setAttribute('value', val);
+	} else {
+		this.value = val;
 	}
 };
 
@@ -362,6 +362,8 @@ HTMLInputElement.prototype.reset = function () {
 HTMLInputElement.prototype.save = function () {
 	if (this.type == "radio" || this.type == "checkbox") {
 		this.defaultChecked = this.checked;
+	} else if (this.type == "file") {
+		this.defaultValue = this.getAttribute('value');
 	} else {
 		this.defaultValue = this.value;
 	}
