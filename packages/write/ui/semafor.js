@@ -17,7 +17,14 @@ class Semafor {
 				case 'submit':
 					break;
 				case 'checkbox':
-					val = elem.checked ? elem.value : "";
+					if (elem.checked) {
+						val = elem.value;
+						if (old == null) old = undefined;
+					} else if (old === undefined) {
+						val = "";
+					} else {
+						val = null;
+					}
 					break;
 				case 'radio':
 					if (elem.checked) {
@@ -57,7 +64,7 @@ class Semafor {
 			if (!ret) ret = {};
 			for (const [key, val] of Object.entries(obj)) {
 				const cur = `${pre || ""}${key}`;
-				if (val == null || typeof val != "object") {
+				if (val == null || typeof val != "object" || Array.isArray(val)) {
 					ret[cur] = val;
 				} else if (typeof val == "object") {
 					asPaths(val, ret, cur + '.');
@@ -235,6 +242,10 @@ class Semafor {
 					if (field?.type == "array") {
 						let allStrings = false;
 						if (field.items?.anyOf) {
+							if (field.items.anyOf.every(item => item.const !== undefined)) {
+								obj[key] = val;
+								continue;
+							}
 							allStrings = field.items.anyOf.every(
 								(item) => item.type == "string"
 							);
