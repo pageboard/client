@@ -84,6 +84,8 @@ body[data-mode="code"] [block-type][element-type="block"] {
 	border-bottom-right-radius: 0 !important;
 	border-top-color: #BBB !important;
 	border-left-color: #AAA !important;
+	width: auto !important;
+	height: auto !important;
 }
 body[data-mode="code"] [block-type]::before {
 	content: attr(element-title);
@@ -97,7 +99,7 @@ body[data-mode="code"] [block-type]::before {
 	padding-left: 2px;
 	align-self: center;
 	padding-right: 2px;
-	box-shadow: 0;
+	box-shadow: none;
 	color: #4183c4;
 	font-weight: bold;
 }

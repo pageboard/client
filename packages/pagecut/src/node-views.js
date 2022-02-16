@@ -135,7 +135,7 @@ export class RootNodeView {
 				view.dispatch(tr);
 			}
 			if (view.explicit && !node.type.spec.wrapper && this.contentDOM && !this.element.inline) {
-				this.contentDOM.setAttribute('element-content', 'true');
+				setAncestorsAttr(this.dom, this.contentDOM, 'element-content', true);
 			}
 			if (this.contentDOM && node.isTextblock) {
 				this.contentDOM.setAttribute('block-text', 'true');
@@ -278,7 +278,7 @@ export class ContainerNodeView {
 		restoreDomAttrs(tryJSON(node.attrs._json), this.dom);
 
 		if (this.view.explicit) {
-			this.contentDOM.setAttribute('element-content', 'true');
+			setAncestorsAttr(this.dom, this.contentDOM, 'element-content', true);
 		} else if (node.attrs._html) {
 			const diffs = innerDiff.diff(this.dom, node.attrs._html);
 			innerDiff.apply(this.dom, diffs);
@@ -648,4 +648,13 @@ function tryJSON(str) {
 		console.info("Bad attributes", str);
 	}
 	return obj;
+}
+
+function setAncestorsAttr(p, c, name, val) {
+	let node = c;
+	while (node) {
+		node.setAttribute(name, val);
+		if (node == p) break;
+		node = node.parentNode;
+	}
 }
