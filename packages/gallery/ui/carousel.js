@@ -64,9 +64,16 @@ class HTMLElementCarousel extends VirtualHTMLElement {
 	}
 
 	paint(state) {
-		if (this.widget) this.destroy();
 		const gallery = this.closest('[block-type="gallery"]');
-		if (gallery && gallery.selectedMode != "carousel") return;
+		this.classList.toggle('fade', this.options.fade);
+		state.finish(() => {
+			const enabled = !gallery || gallery.selectedMode == "carousel";
+			if (!this.widget && enabled) this.#create(state);
+			if (this.widget && !enabled) this.destroy(state);
+		});
+	}
+
+	#create(state) {
 		const opts = Object.assign({}, this.options, {
 			noDomMod: true,
 			lazyLoad: false, // unless element-image populates the right attribute for carousel
@@ -83,12 +90,11 @@ class HTMLElementCarousel extends VirtualHTMLElement {
 		opts.initialIndex = opts.index;
 		opts.imagesLoaded = opts.width == null;
 		if (opts.autoPlay) opts.wrapAround = true;
-
-		this.fullview(opts.fullview);
-		this.classList.toggle('fade', opts.fade);
+		this.fullview(this.options.fullview);
 
 		this.widget = new window.Flickity(this, opts);
 		this.widget.on('change', (index) => {
+			const gallery = this.closest('[block-type="gallery"]');
 			const oldIndex = this.options.index;
 			const oldSlide = this.widget.slides[oldIndex];
 			if (oldSlide) {
@@ -119,6 +125,7 @@ class HTMLElementCarousel extends VirtualHTMLElement {
 		if (this.widget) {
 			this.widget.stopPlayer();
 			this.widget.destroy();
+			this.widget = null;
 		}
 		this.fullview(false);
 	}
@@ -164,10 +171,8 @@ class HTMLElementCarouselCell extends VirtualHTMLElement {
 	}
 }
 
-Page.ready(() => {
-	VirtualHTMLElement.define('element-carousel-cell', HTMLElementCarouselCell);
-	VirtualHTMLElement.define('element-carousel', HTMLElementCarousel);
-});
+VirtualHTMLElement.define('element-carousel-cell', HTMLElementCarouselCell);
+VirtualHTMLElement.define('element-carousel', HTMLElementCarousel);
 
 Page.setup((state) => {
 	function modabs(i, l) {
