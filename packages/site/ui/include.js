@@ -23,5 +23,6 @@ Page.ready(() => {
 		return Cla.prototype.toggleMessages.call(this, name, parent);
 	};
 	HTMLElementInclude.prototype.fetch = Cla.prototype.fetch;
+	HTMLElementInclude.prototype.getRedirect = Cla.prototype.getRedirect;
 	VirtualHTMLElement.define('element-include', HTMLElementInclude);
 });
