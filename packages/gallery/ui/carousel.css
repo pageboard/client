@@ -128,24 +128,25 @@ i.expand.icon::before {
 
 /* Fade CSS */
 
-element-carousel.fade > .flickity-viewport > .flickity-slider {
+element-carousel[data-fade="true"] > .flickity-viewport > .flickity-slider,
+element-carousel[data-fade="true"] > .flickity-viewport > .flickity-slider > * {
 	transform: none !important;
 	left:0 !important;
 }
 
-element-carousel.fade element-carousel-cell {
+element-carousel[data-fade="true"] element-carousel-cell {
 	left: 0 !important;
 	opacity: 0%;
 	transition: opacity 0.6s ease-in-out 0.3s;
 	z-index: 1;
 }
 
-element-carousel.fade element-carousel-cell.is-selected {
+element-carousel[data-fade="true"] element-carousel-cell.is-selected {
 	opacity: 100%;
 	transition: opacity 0.6s ease-in-out;
 	z-index: 2;
 }
 
-element-carousel.fade > .flickity-prev-next-button {
+element-carousel[data-fade="true"] > .flickity-prev-next-button {
 	z-index: 3;
 }

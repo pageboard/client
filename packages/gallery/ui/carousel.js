@@ -65,7 +65,6 @@ class HTMLElementCarousel extends VirtualHTMLElement {
 
 	paint(state) {
 		const gallery = this.closest('[block-type="gallery"]');
-		this.classList.toggle('fade', this.options.fade);
 		state.finish(() => {
 			const enabled = !gallery || gallery.selectedMode == "carousel";
 			if (!this.widget && enabled) this.#create(state);
