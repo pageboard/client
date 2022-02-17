@@ -10,7 +10,9 @@ const differ = new DiffDOM({
 
 const innerDiff = new DiffDOM({
 	filterOuterDiff(a, b, diffs) {
-		if (a.attributes?.['block-content']) {
+		// this works only with diff-dom@4.2.2
+		const cname = a.attributes?.['block-content'];
+		if (cname) {
 			a.innerDone = true;
 		}
 	},
