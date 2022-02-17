@@ -65,6 +65,7 @@ class HTMLElementCarousel extends VirtualHTMLElement {
 
 	paint(state) {
 		const gallery = this.closest('[block-type="gallery"]');
+		this.fullview(this.options.fullview);
 		state.finish(() => {
 			const enabled = !gallery || gallery.selectedMode == "carousel";
 			if (!this.widget && enabled) this.#create(state);
@@ -89,7 +90,6 @@ class HTMLElementCarousel extends VirtualHTMLElement {
 		opts.initialIndex = opts.index;
 		opts.imagesLoaded = opts.width == null;
 		if (opts.autoPlay) opts.wrapAround = true;
-		this.fullview(this.options.fullview);
 
 		this.widget = new window.Flickity(this, opts);
 		this.widget.on('change', (index) => {
