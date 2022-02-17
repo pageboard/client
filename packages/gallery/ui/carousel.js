@@ -65,7 +65,6 @@ class HTMLElementCarousel extends VirtualHTMLElement {
 
 	paint(state) {
 		const gallery = this.closest('[block-type="gallery"]');
-		this.fullview(this.options.fullview);
 		state.finish(() => {
 			const enabled = !gallery || gallery.selectedMode == "carousel";
 			if (!this.widget && enabled) this.#create(state);
@@ -118,6 +117,7 @@ class HTMLElementCarousel extends VirtualHTMLElement {
 				this.options.index = index;
 			}
 		});
+		this.fullview(this.options.fullview);
 	}
 
 	destroy() {
