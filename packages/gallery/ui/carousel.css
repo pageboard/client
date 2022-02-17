@@ -15,6 +15,10 @@ element-carousel .flickity-page-dots .dot {
 element-carousel:not(.flickity-enabled) .flickity-slider {
 	position:relative;
 }
+element-carousel .flickity-slider {
+	display: flex;
+	align-items: center;
+}
 element-carousel:not(.flickity-enabled) .flickity-slider > element-carousel-cell + element-carousel-cell {
 	display:none;
 }
