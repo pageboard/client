@@ -89,6 +89,7 @@ class HTMLElementCarousel extends VirtualHTMLElement {
 		opts.initialIndex = opts.index;
 		opts.imagesLoaded = opts.width == null;
 		if (opts.autoPlay) opts.wrapAround = true;
+		this.fullview(this.options.fullview);
 
 		this.widget = new window.Flickity(this, opts);
 		this.widget.on('change', (index) => {
@@ -117,7 +118,6 @@ class HTMLElementCarousel extends VirtualHTMLElement {
 				this.options.index = index;
 			}
 		});
-		this.fullview(this.options.fullview);
 	}
 
 	destroy() {
