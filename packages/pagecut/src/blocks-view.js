@@ -140,7 +140,7 @@ export default class BlocksView {
 				if (!blocks[child.id]) {
 					blocks[child.id] = child;
 				} else {
-					console.warn("child already exists", child, "in", block);
+					console.warn("child already exists", child.id, child.type, "in", block.id, block.type);
 				}
 			}
 			delete block.children;
