@@ -27,15 +27,17 @@ class HTMLElementMenu extends VirtualHTMLElement {
 		const menu = this.firstElementChild;
 		const helper = this.lastElementChild;
 		helper.lastElementChild.lastElementChild.appendChild(this.toHelper(menu));
-		this.observer = new ResizeObserver((entries, observer) => {
-			window.requestAnimationFrame(() => {
-				const styles = window.getComputedStyle(this);
-				const parentWidth = parseFloat(styles.marginLeft) + parseFloat(styles.marginRight) + this.offsetWidth;
-				const menuWidth = menu.offsetWidth;
-				this.classList.toggle('burger', parentWidth <= menuWidth);
+		state.finish(() => {
+			this.observer = new ResizeObserver((entries, observer) => {
+				window.requestAnimationFrame(() => {
+					const styles = window.getComputedStyle(this);
+					const parentWidth = parseFloat(styles.marginLeft) + parseFloat(styles.marginRight) + this.offsetWidth;
+					const menuWidth = menu.offsetWidth;
+					this.classList.toggle('burger', parentWidth <= menuWidth);
+				});
 			});
+			this.observer.observe(this.parentNode);
 		});
-		this.observer.observe(this.parentNode);
 	}
 	close(state) {
 		if (this.observer) this.observer.disconnect();
