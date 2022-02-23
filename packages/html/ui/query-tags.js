@@ -90,9 +90,10 @@ class HTMLElementQueryTags extends VirtualHTMLElement {
 			else if (control.selected) control.selected = false;
 			else if (control.reset) control.reset();
 			else if (control.value) control.value = "";
-			const e = document.createEvent('HTMLEvents');
-			e.initEvent('submit', true, true);
-			control.form.dispatchEvent(e);
+			control.form.dispatchEvent(new Event('submit', {
+				bubbles: true,
+				cancelable: true
+			}));
 		}
 		label.remove();
 	}

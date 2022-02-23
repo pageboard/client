@@ -81,9 +81,10 @@ class HTMLElementInputRange extends HTMLInputElement {
 			helper.classList.remove('indeterminate');
 			if (isInt) values = values.map((n) => parseInt(n));
 			this.rangeValue = values;
-			const e = document.createEvent('HTMLEvents');
-			e.initEvent('change', true, true);
-			this.dispatchEvent(e);
+			this.dispatchEvent(new Event('change', {
+				bubbles: true,
+				cancelable: true
+			}));
 		});
 		helper.addEventListener('keydown', this, true);
 		helper.addEventListener('dblclick', this, true);
@@ -92,9 +93,10 @@ class HTMLElementInputRange extends HTMLInputElement {
 	handleEvent(e) {
 		if (e.type == "dblclick" || e.keyCode == 8 || e.keyCode == 46) {
 			this.fill();
-			const ne = document.createEvent('HTMLEvents');
-			ne.initEvent('change', true, true);
-			this.dispatchEvent(ne);
+			this.dispatchEvent(new Event('change', {
+				bubbles: true,
+				cancelable: true
+			}));
 		}
 	}
 

@@ -623,14 +623,9 @@
 
 		#notify() {
 			this.#props.onChange(this.#state.datetime);
-			let e;
-			if (document.createEvent) {
-				e = document.createEvent('HTMLEvents');
-				e.initEvent('change', true, true);
-			} else {
-				e = new Event('change', { bubbles: true, cancelable: true });
-			}
-			this.element.dispatchEvent(e);
+			this.element.dispatchEvent(new Event('change', {
+				bubbles: true, cancelable: true
+			}));
 		}
 
 

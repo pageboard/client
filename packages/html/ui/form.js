@@ -33,9 +33,10 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		delete state.query.submit;
 		state.finish(() => {
 			if (state.status != 200) return;
-			const e = document.createEvent('HTMLEvents');
-			e.initEvent('submit', true, true);
-			this.dispatchEvent(e);
+			this.dispatchEvent(new Event('submit', {
+				bubbles: true,
+				cancelable: true
+			}));
 		});
 	}
 	read(withDefaults) {
