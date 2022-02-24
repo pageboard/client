@@ -26,7 +26,7 @@ class HTMLElementInputFile extends HTMLInputElement {
 		return this.getAttribute('value');
 	}
 	set value(str) {
-		if (str != null) {
+		if (str) {
 			this.setAttribute('value', str);
 		} else {
 			this.removeAttribute('value');
