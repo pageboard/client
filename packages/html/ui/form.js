@@ -39,22 +39,20 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			}));
 		});
 	}
-	read(withDefaults) {
+	read(withDefaults = false) {
 		const fd = new FormData(this);
 		const query = {};
 		fd.forEach((val, key) => {
-			if (val == null || val == "") {
-				const cur = this.querySelectorAll(`[name="${key}"]`).slice(-1).pop();
-				if (cur.required == false) {
-					val = undefined;
-				} else {
-					val = null;
-				}
+			const cur = this.querySelectorAll(`[name="${key}"]`).slice(-1).pop();
+			if (cur.type == "file") {
+				val = cur.value;
 			}
+			if (val == "") val = null;
+			// build array-like values
 			const old = query[key];
 			if (old !== undefined) {
 				if (!Array.isArray(old)) {
-					query[key] = [old];
+					query[key] = old == null ? [] : [old];
 				}
 				if (val !== undefined) query[key].push(val);
 			} else {
@@ -62,37 +60,48 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			}
 		});
 
+		// withDefaults: keep value if equals to its default
+		// else unset value
 		for (const node of this.elements) {
-			if (node.name == null || node.name == "" || node.type == "button") continue;
+			const { name, type } = node;
+			if (name == null || name == "" || type == "button") {
+				continue;
+			}
 			let val = node.value;
 			if (val == "") val = null;
-			if (node.type == "radio") {
-				if (!withDefaults && node.checked == node.defaultChecked && query[node.name] == val) {
-					query[node.name] = undefined;
-				}
-			} else if (node.type == "checkbox") {
-				if (!(node.name in query)) {
-					if (!withDefaults) query[node.name] = undefined;
-				}
-			} else if (node.type == "hidden") {
-				// always include them
-			} else {
-				let defVal = node.defaultValue;
-				if (defVal == "") defVal = null;
-				if (!withDefaults && query[node.name] == defVal) {
-					query[node.name] = undefined;
-				} else {
-					// not yet using form-associated custom input
-					query[node.name] = node.value;
-				}
-			}
-			if (query[node.name] === undefined && withDefaults) {
-				query[node.name] = null;
+			let defVal = node.defaultValue;
+			if (defVal == "") defVal = null;
+
+			switch (type) {
+				case "radio":
+					if (!withDefaults && node.checked == node.defaultChecked) {
+						if (query[name] == val) {
+							query[name] = undefined;
+						}
+					}
+					break;
+				case "checkbox":
+					if (!withDefaults) {
+						if (!(name in query)) {
+							query[name] = undefined;
+						}
+					}
+					break;
+				case "hidden":
+					break;
+				default:
+					if (withDefaults) {
+						if (query[name] === undefined) {
+							query[name] = defVal;
+						}
+					} else if (val === defVal) {
+						query[name] = node.required ? null : undefined;
+					}
 			}
 		}
+		// FIXME use e.submitter polyfill when available
+		// https://github.com/Financial-Times/polyfill-library/issues/1111
 		const btn = document.activeElement;
-		// FIXME https://github.com/whatwg/html/issues/3195 use e.submitter polyfill
-		// https://github.com/whatwg/xhr/issues/262 it's a mess
 		if (btn && btn.type == "submit" && btn.name && btn.value) {
 			query[btn.name] = btn.value;
 		}
