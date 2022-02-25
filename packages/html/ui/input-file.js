@@ -14,7 +14,6 @@ class HTMLElementInputFile extends HTMLInputElement {
 		super();
 		if (this.init) this.init();
 		this.save();
-
 	}
 	get defaultValue() {
 		return this.#defaultValue;

@@ -355,7 +355,8 @@ HTMLInputElement.prototype.fill = function (val) {
 	if (this.type == "radio" || this.type == "checkbox") {
 		this.checked = val;
 	} else if (this.type == "file") {
-		this.setAttribute('value', val);
+		if (val == '' || val == null) this.removeAttribute('value');
+		else this.setAttribute('value', val);
 	} else {
 		this.value = val;
 	}
@@ -373,7 +374,7 @@ HTMLInputElement.prototype.save = function () {
 	if (this.type == "radio" || this.type == "checkbox") {
 		this.defaultChecked = this.checked;
 	} else if (this.type == "file") {
-		this.defaultValue = this.getAttribute('value');
+		this.defaultValue = this.getAttribute('value') || '';
 	} else {
 		this.defaultValue = this.value;
 	}
@@ -391,11 +392,13 @@ Object.defineProperty(HTMLInputElement.prototype, 'defaultValue', {
 	configurable: true,
 	enumerable: true,
 	get: function () {
+		// FIXME might not be needed anymore
 		if (this.form?.method == "get") return '';
 		else return this.getAttribute('value');
 	},
 	set: function (val) {
-		this.setAttribute('value', val);
+		if (val == '' || val == null) this.removeAttribute('value');
+		else this.setAttribute('value', val);
 	}
 });
 
