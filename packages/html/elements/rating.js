@@ -27,7 +27,7 @@ exports.rating = {
 			title: 'Color',
 			anyOf: [{
 				title: 'Default',
-				type: 'null'
+				const: null
 			}, {
 				title: 'Star',
 				const: "star"

@@ -106,8 +106,9 @@ exports.layout = {
 				image: {
 					title: 'Image',
 					description: 'Local or remote URL',
-					nullable: true,
 					anyOf: [{
+						type: "null"
+					}, {
 						type: "string",
 						format: "uri"
 					}, {
@@ -168,7 +169,7 @@ exports.layout = {
 				size: {
 					title: 'Size',
 					anyOf: [{
-						type: 'null',
+						const: null,
 						title: 'Auto'
 					}, {
 						const: 'cover',
@@ -181,7 +182,7 @@ exports.layout = {
 				position: {
 					title: 'Position',
 					anyOf: [{
-						type: 'null',
+						const: null,
 						title: 'Top Left'
 					}, {
 						const: 'top center',
@@ -212,7 +213,7 @@ exports.layout = {
 				repeat: {
 					title: 'Repeat',
 					anyOf: [{
-						type: 'null',
+						const: null,
 						title: 'Repeat'
 					}, {
 						const: 'no-repeat',
@@ -234,7 +235,7 @@ exports.layout = {
 				attachment: {
 					title: 'Attachment',
 					anyOf: [{
-						type: 'null',
+						const: null,
 						title: 'Local'
 					}, {
 						const: 'scroll',

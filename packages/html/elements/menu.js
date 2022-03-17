@@ -9,7 +9,6 @@ exports.menu = {
 	properties: {
 		direction: {
 			title: 'Direction',
-			nullable: true,
 			anyOf: [{
 				const: null,
 				title: "Horizontal"
@@ -37,7 +36,6 @@ exports.menu_group = {
 	properties: {
 		position: {
 			title: 'Position',
-			nullable: true,
 			anyOf: [{
 				const: null,
 				title: "Left"
@@ -153,7 +151,6 @@ exports.menu_item_dropdown = {
 	properties: {
 		position: {
 			title: 'Position',
-			nullable: true,
 			anyOf: [{
 				const: null,
 				title: "Left"

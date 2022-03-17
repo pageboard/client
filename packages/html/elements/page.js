@@ -16,9 +16,8 @@ exports.page.properties.transition = {
 	properties: {
 		close: {
 			title: 'Close',
-			nullable: true,
 			anyOf: [{
-				type: 'null',
+				const: null,
 				title: 'None'
 			}, {
 				const: 'tr-up',
@@ -39,9 +38,8 @@ exports.page.properties.transition = {
 		},
 		open: {
 			title: 'Open',
-			nullable: true,
 			anyOf: [{
-				type: 'null',
+				const: null,
 				title: 'None'
 			}, {
 				const: 'tr-up',

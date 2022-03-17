@@ -521,13 +521,13 @@ Semafor.types.oneOf = function (key, schema, node, inst) {
 		listOf = listOf.slice();
 		if (icons) {
 			listOf.splice(0, 0, {
-				type: "null",
+				const: null,
 				icon: '<i class="close icon"></i>',
 				title: 'None'
 			});
 		} else {
 			listOf.splice(0, 0, {
-				type: "null",
+				const: null,
 				title: 'None'
 			});
 		}

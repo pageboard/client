@@ -20,9 +20,10 @@ exports.paragraph = {
 	properties: {
 		align: {
 			title: 'Align',
-			nullable: true,
 			anyOf: [{
-				const: "left",
+				const: "left"
+			}, {
+				const: null,
 				title: "Left",
 				icon: '<i class="icon align left"></i>'
 			}, {
@@ -49,7 +50,8 @@ exports.paragraph = {
 			});
 			if (align) align = align.const;
 		}
-		return {align: align};
+		if (align == "left") align = null;
+		return { align };
 	},
 	contents: "inline*",
 	group: "block",

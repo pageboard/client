@@ -8,8 +8,9 @@ exports.video = {
 		url: {
 			title: 'Address',
 			description: 'Local or remote URL',
-			nullable: true,
 			anyOf: [{
+				type: "null"
+			}, {
 				type: "string",
 				format: "uri"
 			}, {
@@ -88,8 +89,9 @@ exports.audio = {
 		url: {
 			title: 'Address',
 			description: 'Local or remote URL',
-			nullable: true,
 			anyOf: [{
+				type: "null"
+			}, {
 				type: "string",
 				format: "uri"
 			}, {

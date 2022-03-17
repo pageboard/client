@@ -12,8 +12,9 @@ exports.image = {
 		url: {
 			title: 'Address',
 			description: 'Local or remote URL',
-			nullable: true,
 			anyOf: [{
+				type: "null"
+			}, {
 				type: "string",
 				format: "uri"
 			}, {
@@ -156,8 +157,9 @@ exports.inlineImage = {
 		url: {
 			title: 'Address',
 			description: 'Local or remote URL',
-			nullable: true,
 			anyOf: [{
+				type: "null"
+			}, {
 				type: "string",
 				format: "uri"
 			}, {

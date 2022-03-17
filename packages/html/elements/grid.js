@@ -17,8 +17,10 @@ exports.grid = {
 		},
 		responsive: {
 			title: 'Responsive',
-			nullable: true,
 			anyOf: [{
+				title: 'No',
+				const: null
+			}, {
 				title: 'Stackable',
 				const: 'stackable'
 			}, {
@@ -67,9 +69,8 @@ exports.grid_row = {
 	properties: {
 		responsive: {
 			title: 'Responsive',
-			nullable: true,
 			anyOf: [{
-				title: 'Disable',
+				title: 'No',
 				const: null
 			}, {
 				title: 'Stackable',

@@ -10,8 +10,9 @@ exports.mail_image = {
 		url: {
 			title: 'Address',
 			description: 'Local or remote URL',
-			nullable: true,
 			anyOf: [{
+				type: "null"
+			}, {
 				type: "string",
 				format: "uri"
 			}, {

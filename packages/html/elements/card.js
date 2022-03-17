@@ -18,7 +18,7 @@ exports.cards = {
 		shape: {
 			title: 'Shape',
 			anyOf: [{
-				type: 'null',
+				const: null,
 				title: 'Default',
 			}, {
 				const: "square",
@@ -33,9 +33,8 @@ exports.cards = {
 		},
 		responsive: {
 			title: 'Responsive',
-			nullable: true,
 			anyOf: [{
-				title: 'Disable',
+				title: 'No',
 				const: null
 			}, {
 				title: 'Stackable',
