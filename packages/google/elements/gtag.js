@@ -2,14 +2,14 @@ exports.site.properties.google_analytics = {
 	title: 'Google Analytics ID',
 	nullable: true,
 	type: 'string',
-	pattern: '^(UA-\\w+-\\d|G-\\w+)$'
+	pattern: /^(UA-\w+-\d|G-\w+)$/.source
 };
 
 exports.site.properties.google_tag_manager = {
 	title: 'Google Tag Manager ID',
 	nullable: true,
 	type: 'string',
-	pattern: '^GTM-\\w+$'
+	pattern: /^GTM-\w+$/.source
 };
 
 exports.google_tag = {

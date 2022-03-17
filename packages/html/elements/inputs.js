@@ -156,8 +156,8 @@ exports.input_text = {
 		nodes: 'inline*'
 	},
 	patterns: {
-		tel: '^(\\(\\d+\\))? *\\d+([ .\\-]?\\d+)*$',
-		email: '^[\\w.!#$%&\'*+\\/=?^`{|}~-]+@\\w(?:[\\w-]{0,61}\\w)?(?:\\.\\w(?:[\\w-]{0,61}\\w)?)*$'
+		tel: /^(\(\d+\))? *\d+([ .\-]?\d+)*$/.source,
+		email: /^[\w.!#$%&'*+\/=?^`{|}~-]+@\w(?:[\w-]{0,61}\w)?(?:\.\w(?:[\w-]{0,61}\w)?)*$/.source
 	},
 	html: `<div class="[width|num: wide] field [type|eq:hidden:hidden:]">
 		<label block-content="label">Label</label>

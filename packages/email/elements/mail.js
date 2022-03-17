@@ -14,7 +14,7 @@ exports.mail = {
 		url: {
 			title: 'Address',
 			type: "string",
-			pattern: "^(/[a-zA-Z0-9-]*)+$",
+			pattern: /^(\/[a-zA-Z0-9-]*)+$/.source,
 			$helper: 'pageUrl'
 		},
 		index: {

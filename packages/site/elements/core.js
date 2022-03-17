@@ -193,7 +193,8 @@ exports.site = {
 			title: 'Server version',
 			description: 'Major.minor pageboard server version',
 			nullable: true,
-			pattern: '^\\d+\\.\\d+$'
+			type: "string",
+			pattern: /^\d+\.\d+$/.source
 		},
 		maintenance: {
 			title: 'Maintenance',

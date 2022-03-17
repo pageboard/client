@@ -37,7 +37,7 @@ exports.fetch = {
 					title: 'Method',
 					nullable: true,
 					type: "string",
-					pattern: "^(\\w+\\.\\w+)?$"
+					pattern: /^(\w+\.\w+)?$/.source
 				},
 				parameters: {
 					title: 'Parameters',
