@@ -8,26 +8,19 @@ Pageboard.schemaHelpers['element-property'] = class ElementProperty {
 
 	static asPaths(obj, ret, pre) {
 		if (!ret) ret = {};
-		const discName = this.discriminator(obj);
-		if (discName) {
-			const discSchema = obj.properties[discName];
-			if (obj.selectCases) {
-				for (const [discValue, subSchema] of Object.entries(obj.selectCases)) {
-					const discCase = (discSchema.oneOf || discSchema.anyOf).find((it) => {
-						return it.const == discValue;
-					});
-					const subRet = {};
-					ElementProperty.asPaths(subSchema, subRet, `${pre || ''}${discName}.${discValue}.`);
-					for (const prop of Object.values(subRet)) {
-						prop.title = `${discCase.title}: ${prop.title}`;
-					}
-					Object.assign(ret, subRet);
+		const [discKey, discList] = this.discriminator(obj) ?? [];
+		if (discKey) {
+			const discProp = obj.properties[discKey];
+			for (const [discValue, subSchema] of discList) {
+				const discCase = (discProp.oneOf || discProp.anyOf || []).find((it) => {
+					return it.const == discValue;
+				});
+				const subRet = {};
+				ElementProperty.asPaths(subSchema, subRet, `${pre || ''}${discKey}.${discValue}.`);
+				if (discCase) for (const subProp of Object.values(subRet)) {
+					subProp.title = `${discCase.title}: ${subProp.title}`;
 				}
-			} else if (obj.oneOf || obj.anyOf) {
-				// TODO finish this
-				for (const schema of (obj.oneOf || obj.anyOf)) {
-					ElementProperty.asPaths(schema, ret, schema.properties[obj.discriminator.propertyName] + '.');
-				}
+				Object.assign(ret, subRet);
 			}
 		}
 		if (obj.properties) {
@@ -48,9 +41,17 @@ Pageboard.schemaHelpers['element-property'] = class ElementProperty {
 		if (schema.select) {
 			const ref = schema.select.$data;
 			if (!ref || !ref.startsWith('0/')) return null;
-			return ref.substring(2);
+			return [
+				ref.substring(2),
+				Object.entries(schema.selectCases)
+			];
 		} else if (schema.discriminator) {
-			return schema.discriminator.propertyName;
+			const key = schema.discriminator.propertyName;
+			if (!key) return null;
+			return [
+				key,
+				schema.oneOf.map(obj => [obj.properties?.[key]?.const, obj])
+			];
 		}
 	}
 

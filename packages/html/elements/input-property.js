@@ -59,16 +59,25 @@ exports.input_property = {
 		let propKey;
 		let required = false;
 		let cases = null;
+		let discKey = null;
 		for (let i = 0; i < list.length; i++) {
 			propKey = list[i];
 			required = prop.required && prop.required.indexOf(propKey) >= 0;
 			if (cases) {
-				prop = cases[propKey];
+				if (Array.isArray(cases)) {
+					prop = cases.find(obj => obj.properties?.[discKey]?.const == propKey);
+				} else {
+					prop = cases[propKey];
+				}
 				name = list.slice(0, i - 1).concat(list.slice(i + 1)).join('.');
 				cases = null;
+				discKey = null;
 			} else {
 				if (prop.select && prop.select.$data == `0/${propKey}`) {
 					cases = prop.selectCases;
+				} else if (prop.discriminator && prop.discriminator.propertyName == propKey) {
+					cases = prop.oneOf;
+					discKey = propKey;
 				}
 				prop = (prop.items && prop.items.properties || prop.properties || {})[propKey] || null;
 			}
