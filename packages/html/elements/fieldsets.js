@@ -45,7 +45,7 @@ exports.fieldset_list = {
 	title: 'FieldList',
 	menu: "form",
 	icon: '<i class="icons"><i class="folder outline icon"></i><i class="corner add icon"></i></i>',
-	group: "block",
+	group: 'block template',
 	context: 'form//',
 	priority: 0,
 	properties: {
@@ -54,20 +54,14 @@ exports.fieldset_list = {
 			type: "integer",
 			minimum: 0,
 			default: 1
-		},
-		prefix: {
-			title: 'Prefix',
-			description: '',
-			type: "string",
-			format: 'singleline',
-			nullable: true
 		}
 	},
 	contents: [{
 		id: 'template',
-		nodes: 'block+'
+		nodes: 'block+',
+		expressions: true
 	}],
-	html: `<element-fieldset-list data-size="[size]" data-prefix="[prefix]">
+	html: `<element-fieldset-list data-size="[size]">
 		<template block-content="template"></template>
 		<div class="view"></div>
 	</element-fieldset-list>`,
