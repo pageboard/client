@@ -42,7 +42,7 @@ exports.fieldset_legend = {
 };
 
 exports.fieldset_list = {
-	title: 'FieldList',
+	title: 'Field List',
 	menu: "form",
 	icon: '<i class="icons"><i class="folder outline icon"></i><i class="corner add icon"></i></i>',
 	group: 'block template',
@@ -67,4 +67,45 @@ exports.fieldset_list = {
 	</element-fieldset-list>`,
 	scripts: ['../ui/fieldset-list.js'],
 	stylesheets: ['../ui/fieldset-list.css']
+};
+
+
+exports.fieldlist_button = {
+	title: 'Field List Buttons',
+	menu: "form",
+	icon: '<i class="icons"><i class="folder outline icon"></i><i class="corner hand pointer icon"></i></i>',
+	group: 'block',
+	context: 'fieldset_list//',
+	properties: {
+		type: {
+			title: 'Type',
+			default: 'add',
+			anyOf: [{
+				title: 'Add',
+				const: 'add'
+			}, {
+				title: 'Delete',
+				const: 'del'
+			}, {
+				title: 'Up',
+				const: 'up'
+			}, {
+				title: 'Down',
+				const: 'down'
+			}]
+		},
+		full: {
+			title: 'Full width',
+			type: 'boolean',
+			default: false
+		}
+	},
+	contents: {
+		nodes: "inline*",
+		marks: "nolink"
+	},
+	html: '<button type="button" class="ui [full|?:fluid:] button" value="[type]">Label</button>',
+	stylesheets: [
+		'../lib/components/button.css',
+	]
 };

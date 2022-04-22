@@ -4,8 +4,8 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 	#model;
 
 	fill(values, scope) {
-		const list = this.listFromValues(Object.assign({}, values));
-		this.resize(list.length, scope);
+		const list = this.#listFromValues(Object.assign({}, values));
+		this.#resize(list.length, scope);
 	}
 
 	#prepare() {
@@ -15,7 +15,8 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 			node.removeAttribute('block-id');
 		}
 		const keys = new Set();
-		for (const node of this.ownTpl.content.querySelectorAll('[name]:not(button)')) {
+		const inputs = this.ownTpl.content.querySelectorAll('[name]');
+		for (const node of inputs) {
 			keys.add(node.name);
 		}
 		const splits = Array.from(keys).map(name => name.split('.'));
@@ -49,80 +50,60 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 
 	patch(state) {
 		this.#prepare();
-		if (!this.#size) this.resize(0, state.scope);
+		if (!this.#size) this.#resize(0, state.scope);
 	}
 
 	setup() {
 		this.#prepare();
 	}
 
-	resize(size, scope) {
+	#resize(size, scope) {
+		if (this.isContentEditable) return;
 		const len = Math.max(Number(this.dataset.size) || 0, size);
 		if (this.#size === len) return;
 		this.#size = len;
 		let tpl = this.ownTpl.content.cloneNode(true);
-		const $fieldset = { count: len };
-		const nodes = [];
-		const anc = tpl.querySelectorAll('[name]:not(button[name="add"])').ancestor();
-		if (anc) {
-			for (let i = 0; i < len; i++) {
-				const clone = this.updateAncestor(anc.cloneNode(true), i);
-				$fieldset.index = i + 1;
-				clone.fuse({ $fieldset }, scope);
-				nodes.push(clone);
+		const $fieldset = Array.from(Array(len)).map((x, i) => {
+			return { index: i };
+		});
+		const inputs = tpl.querySelectorAll('[name]');
+		const prefix = this.#prefix;
+		for (const node of inputs) {
+			if (node.name.startsWith(prefix)) {
+				node.name = `${prefix}[$field.index].${node.name.substring(prefix.length)}`;
 			}
-		} else {
-			// TODO add a warning to the view (missing inputs/buttons)
 		}
+		const subtpl = inputs.ancestor();
+		if (!subtpl) {
+			console.warn("fieldset-list should contain input[name]", this);
+			return;
+		}
+		subtpl.appendChild(
+			subtpl.ownerDocument.createTextNode('[$fieldset|repeat:*:$field|]')
+		);
 		if (len == 0) {
-			let node = tpl.querySelector('button[type="button"][name="add"]');
-			if (node) {
-				while (node != tpl) {
-					while (node.nextSibling) node.nextSibling.remove();
-					while (node.previousSibling) node.previousSibling.remove();
-					node = node.parentNode;
-				}
-				nodes.push(tpl.firstElementChild);
+			let node = tpl.querySelector('[block-type="fieldlist_button"][value="add"]');
+			while (node != null && node != tpl && node != subtpl) {
+				while (node.nextSibling) node.nextSibling.remove();
+				while (node.previousSibling) node.previousSibling.remove();
+				node = node.parentNode;
 			}
 		}
-		if (tpl != anc) {
-			// need to fuse tpl
-			$fieldset.index = null;
-			tpl.fuse({ $fieldset }, scope);
-			for (const node of nodes) {
-				anc.before(node);
-			}
-			if (anc) anc.remove();
-		} else {
-			tpl = tpl.cloneNode();
-			for (const node of nodes) {
-				tpl.appendChild(node);
-			}
-		}
-
-		this.querySelectorAll('button[type="button"][name="up"]').forEach((node, i) => {
-			node.disabled = i == 0;
-		});
-		this.querySelectorAll('button[type="button"][name="down"]').forEach((node, i, arr) => {
-			node.disabled = i == arr.length - 1;
-		});
+		tpl = tpl.fuse({ $fieldset }, scope);
 
 		const view = this.ownView;
 		view.textContent = '';
 		view.appendChild(tpl);
+
+		view.querySelectorAll('[block-type="fieldlist_button"][value="up"]').forEach((node, i) => {
+			node.disabled = i == 0;
+		});
+		view.querySelectorAll('[block-type="fieldlist_button"][value="down"]').forEach((node, i, arr) => {
+			node.disabled = i == arr.length - 1;
+		});
 	}
 
-	updateAncestor(node, i) {
-		const prefix = this.#prefix;
-		for (const child of node.querySelectorAll('[name]:not(button)')) {
-			if (child.name.startsWith(prefix)) {
-				child.name = `${prefix}${i}.${child.name.substring(prefix.length)}`;
-			}
-		}
-		return node;
-	}
-
-	listFromValues(values) {
+	#listFromValues(values) {
 		const list = [];
 		const prefix = this.#prefix;
 		// just unflatten the array
@@ -139,7 +120,7 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 		return list;
 	}
 
-	listToValues(values, list) {
+	#listToValues(values, list) {
 		const prefix = this.#prefix;
 		for (let i = 0; i < list.length; i++) {
 			const obj = list[i];
@@ -151,41 +132,53 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 
 	handleClick(e, state) {
 		if (this.isContentEditable) return;
-		const btn = e.target.closest('button[type="button"][name]');
+		const btn = e.target.closest('button');
 		if (!btn) return;
-		if (["add", "del", "up", "down"].includes(btn.name) == false) return;
+		const action = btn.value;
+		if (["add", "del", "up", "down"].includes(action) == false) return;
 
 		const form = this.closest('form');
 		const values = form.read(true);
-		const list = this.listFromValues(values);
+		const list = this.#listFromValues(values);
+		const prefix = this.#prefix;
 		let index;
-		if (btn.value !== "") {
-			index = Number(btn.value);
-			if (!Number.isInteger(index) || index < 0 || index > list.length) {
-				throw new Error(`fieldset-list expects ${btn.outerHTML} to have a value with a valid index`);
-			}
-			index += -1;
-		} else {
-			index = this.ownView.querySelectorAll(
-				`button[type="button"][name="${btn.name}"]`
-			).indexOf(btn);
-			if (index < 0) index = list.length;
-		}
+		const walk = this.ownerDocument
+			.createTreeWalker(this, NodeFilter.SHOW_ELEMENT, {
+				acceptNode(node) {
+					if (node.name?.startsWith(prefix)) {
+						index = Number(node.name.substring(prefix.length).split('.').shift());
+						if (Number.isInteger(index) || index >= 0 || index < list.length) {
+							return NodeFilter.FILTER_ACCEPT;
+						} else {
+							index = null;
+						}
+					}
+					return NodeFilter.FILTER_SKIP;
+				}
+			});
+		walk.currentNode = btn;
+		walk.previousNode();
+		if (!index) index = 0;
 
-		if (btn.name == "add") {
-			list.splice(index + 1, 0, this.#model);
-		} else if (btn.name == "del") {
-			list.splice(index, 1);
-		} else if (btn.name == "up") {
-			if (index > 0) {
-				list.splice(index - 1, 0, list.splice(index, 1).pop());
-			}
-		} else if (btn.name == "down") {
-			if (index < list.length - 1) {
-				list.splice(index + 1, 0, list.splice(index, 1).pop());
-			}
+		switch (action) {
+			case "add":
+				list.splice(index + 1, 0, this.#model);
+				break;
+			case "del":
+				list.splice(index, 1);
+				break;
+			case "up":
+				if (index > 0) {
+					list.splice(index - 1, 0, list.splice(index, 1).pop());
+				}
+				break;
+			case "down":
+				if (index < list.length - 1) {
+					list.splice(index + 1, 0, list.splice(index, 1).pop());
+				}
+				break;
 		}
-		this.listToValues(values, list);
+		this.#listToValues(values, list);
 		form.fill(values, state.scope);
 	}
 
@@ -200,6 +193,3 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 }
 
 VirtualHTMLElement.define('element-fieldset-list', HTMLElementFieldsetList);
-
-
-
