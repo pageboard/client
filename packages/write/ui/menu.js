@@ -266,11 +266,7 @@ Pageboard.Controls.Menu = class Menu {
 	items() {
 		const list = [];
 		for (const el of Object.values(this.editor.elements).sort((a, b) => {
-			const ap = a.priority != null ? a.priority : Infinity;
-			const bp = b.priority != null ? b.priority : Infinity;
-			if (ap < bp) return -1;
-			else if (ap > bp) return 1;
-			else return a.name.localeCompare(b.name);
+			return (a.title ?? a.name).localeCompare(b.title ?? b.name);
 		})) {
 			const itemSpec = this.item(el);
 			if (itemSpec) {
