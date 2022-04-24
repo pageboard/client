@@ -1,5 +1,5 @@
 exports.input_date_time = {
-	title: 'DateTime',
+	title: 'Date Time',
 	icon: '<i class="calendar outline icon"></i>',
 	menu: "form",
 	required: ["name"],
@@ -89,7 +89,7 @@ exports.input_date_time = {
 };
 
 exports.input_date_slot = {
-	title: 'DateSlot',
+	title: 'Date Slot',
 	icon: '<i class="calendar outline icon"></i>',
 	menu: "form",
 	required: ["nameStart", "nameEnd"],

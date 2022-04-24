@@ -1,5 +1,5 @@
 exports.sitemap = {
-	title: "Site map",
+	title: "Sitemap",
 	group: "block",
 	icon: '<i class="sitemap icon"></i>',
 	menu: 'link',
