@@ -7,7 +7,7 @@ export default class Element {
 		}
 	}
 	create(obj) {
-		obj = Object.assign({}, obj);
+		obj = { ...obj };
 		obj.type = this.name;
 		if (this.standalone) obj.standalone = true;
 		return obj;

@@ -85,10 +85,10 @@ exports.page = {
 	</head>
 	<body block-content="body"></body></html>`,
 	scripts: [
-		'../lib/custom-elements.js'
-	].concat(exports.site.scripts).concat([
+		'../lib/custom-elements.js',
+		...exports.site.scripts,
 		'../ui/nav.js'
-	]),
+	],
 	polyfills: [
 		'default',
 		'Element.prototype.dataset',

@@ -30,12 +30,13 @@ exports.sitemap = {
 			title: schema.title,
 			icon: schema.icon,
 			standalone: true,
-			properties: Object.assign({
+			properties: {
 				leaf: {
 					type: 'boolean',
 					default: Boolean(leaf)
-				}
-			}, schema.properties),
+				},
+				...schema.properties
+			},
 			menu: "link",
 			group: 'sitemap_item',
 			virtual: true,

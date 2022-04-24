@@ -9,7 +9,7 @@ export default class SetDocAttr extends Step {
 	}
 	apply(doc) {
 		this.prevValue = doc.attrs[this.key];
-		if (doc.attrs == doc.type.defaultAttrs) doc.attrs = Object.assign({}, doc.attrs);
+		if (doc.attrs == doc.type.defaultAttrs) doc.attrs = { ...doc.attrs };
 		doc.attrs[this.key] = this.value;
 		return StepResult.ok(doc);
 	}

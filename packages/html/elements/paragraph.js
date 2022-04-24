@@ -1,11 +1,11 @@
-exports.paragraph_nolink = Object.assign({}, exports.paragraph, {
+exports.paragraph_nolink = { ...exports.paragraph,
 	priority: exports.paragraph.priority - 1,
 	group: null,
 	contents: {
 		nodes: "inline*",
 		marks: "nolink"
 	}
-});
+};
 
 exports.segment = {
 	title: "Segment",
@@ -159,13 +159,12 @@ exports.heading = {
 };
 
 
-exports.heading_nolink = Object.assign({}, exports.heading, {
+exports.heading_nolink = {
+	...exports.heading,
 	priority: exports.heading.priority - 1,
 	group: null,
-	contents: Object.assign({}, exports.heading.contents, {
-		marks: "nolink"
-	})
-});
+	contents: { ...exports.heading.contents, marks: "nolink" }
+};
 
 exports.divider = {
 	title: "Divider",

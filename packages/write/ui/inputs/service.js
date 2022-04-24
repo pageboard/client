@@ -14,7 +14,7 @@ Pageboard.schemaFilters.service = class ServiceFilter {
 		if (!service.properties) {
 			delete props.parameters;
 		} else {
-			props.parameters = Object.assign({}, service, {type: 'object'});
+			props.parameters = { ...service, type: 'object'};
 		}
 	}
 	constructor(key, opts, schema) {
@@ -37,9 +37,9 @@ Pageboard.schemaFilters.service = class ServiceFilter {
 		});
 	}
 	update(block, schema) {
-		schema = Object.assign({}, schema);
-		const props = schema.properties = Object.assign({}, schema.properties);
-		props.method = Object.assign({}, props.method, {anyOf: this.list});
+		schema = { ...schema };
+		const props = schema.properties = { ...schema.properties };
+		props.method = { ...props.method, anyOf: this.list};
 		delete props.method.type;
 		ServiceFilter.setServiceParameters(this.key, block, props);
 		return schema;
@@ -51,8 +51,8 @@ Pageboard.schemaHelpers.service = class ServiceHelper {
 	}
 
 	update(block, schema) {
-		schema = Object.assign({}, schema);
-		const props = schema.properties = Object.assign({}, schema.properties);
+		schema = { ...schema };
+		const props = schema.properties = { ...schema.properties };
 		Pageboard.schemaFilters.service.setServiceParameters(this.key, block, props);
 		return schema;
 	}

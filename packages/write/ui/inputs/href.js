@@ -89,10 +89,11 @@ Pageboard.schemaHelpers.href = class Href {
 					if (text.endsWith('#')) url = url + '#';
 					text = null;
 				}
-				const filter = Object.assign({
-					text: text,
-					url: url
-				}, me.opts.filter);
+				const filter = {
+					text,
+					url,
+					...me.opts.filter
+				};
 				filter.limit = 10;
 				filter.offset = page * filter.limit;
 				return Pageboard.uiLoad(
@@ -159,9 +160,10 @@ Pageboard.schemaHelpers.href = class Href {
 				input.value = href;
 				const data = Href.cache[href];
 				if (data && !Pageboard.hrefs[href]) {
-					Pageboard.hrefs[href] = Object.assign({
-						mime: data.mime
-					}, data.meta);
+					Pageboard.hrefs[href] = {
+						mime: data.mime,
+						...data.meta
+					};
 				}
 				Pageboard.trigger(input, 'change');
 			}
@@ -198,9 +200,10 @@ Pageboard.schemaHelpers.href = class Href {
 			const href = Href.normUrl(obj.url);
 			map[href] = obj;
 			if (!hrefs[href]) {
-				hrefs[href] = Object.assign({
-					mime: obj.mime
-				}, obj.meta);
+				hrefs[href] = {
+					mime: obj.mime,
+					...obj.meta
+				};
 			}
 		});
 		return result;

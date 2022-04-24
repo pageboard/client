@@ -295,7 +295,7 @@ Pageboard.Controls.Store = class Store {
 
 	static flattenBlock(root, ancestorId, blocks) {
 		if (!blocks) blocks = {};
-		const shallowCopy = Object.assign({}, root);
+		const shallowCopy = { ...root };
 		if (ancestorId && ancestorId != root.id) {
 			shallowCopy.parent = ancestorId;
 		}
@@ -362,7 +362,7 @@ Pageboard.Controls.Store = class Store {
 		for (const [id, block] of Object.entries(unsaved)) {
 			if (!initial[id] && !pre[id]) {
 				if (Store.generated[id]) {
-					changes.add.push(Object.assign({}, block));
+					changes.add.push({ ...block });
 					Store.parentList(changes.relate, block);
 				} else if (block.standalone) {
 					Store.parentList(changes.relate, block);
@@ -404,8 +404,8 @@ Pageboard.Controls.Store = class Store {
 				}
 			} else {
 				if (block.ignore) continue;
-				const bko = Object.assign({}, block);
-				const bki = Object.assign({}, iblock);
+				const bko = { ...block };
+				const bki = { ...iblock };
 
 				if (bko.parent != bki.parent) {
 					if (bki.parent) Store.parentList(changes.unrelate, bki);

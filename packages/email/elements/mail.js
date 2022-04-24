@@ -36,12 +36,13 @@ exports.mail = {
 	</head>
 	<body block-content="body"></body>
 </html>`,
-	scripts: exports.page.scripts.concat([
+	scripts: [
+		...exports.page.scripts,
 		'../lib/inlineresources.js',
 		'../lib/europa.js',
 		'../lib/juice.js',
 		'../ui/mail.js'
-	]),
+	],
 	stylesheets: [
 		'../lib/foundation-emails.css',
 		'../ui/mail.css'

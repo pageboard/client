@@ -1,12 +1,11 @@
-exports.mail_fetch = Object.assign({}, exports.fetch, {
+exports.mail_fetch = { ...exports.fetch,
 	group: "mail_block mail_template",
-	contents: Object.assign({}, exports.fetch.contents, {
+	contents: { ...exports.fetch.contents,
 		nodes: 'mail_block+'
-	})
-});
+	}
+};
 
-exports.mail_binding = Object.assign({}, exports.binding, {
+exports.mail_binding = { ...exports.binding,
 	context: 'mail_template//',
 	group: "mail_inline"
-});
-
+};

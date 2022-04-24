@@ -27,7 +27,7 @@ Pageboard.schemaHelpers['element-property'] = class ElementProperty {
 			const props = obj.properties;
 			for (const [key, val] of Object.entries(props)) {
 				const cur = `${pre || ""}${key}`;
-				ret[cur] = Object.assign({}, val);
+				ret[cur] = { ...val };
 				ElementProperty.asPaths(val, ret, cur + '.');
 			}
 		} else if (obj.type == "array" && obj.items && !Array.isArray(obj.items)) {
@@ -175,6 +175,6 @@ Pageboard.schemaFilters['element-value'] = class ElementValueFilter {
 		}, el);
 		if (!prop) return empty;
 		delete empty.type;
-		return Object.assign({}, prop, empty);
+		return { ...prop, ...empty };
 	}
 };

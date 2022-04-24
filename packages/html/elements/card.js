@@ -159,14 +159,14 @@ exports.card_header = {
 	contents: "inline*",
 	html: '<div class="header">Header</div>'
 };
-exports.card_header_nolink = Object.assign({}, exports.card_header, {
+exports.card_header_nolink = { ...exports.card_header,
 	context: 'cardlink//',
 	contents: {
 		nodes: "inline*",
 		marks: "nolink"
 	},
 	html: '<div class="header">Header</div>'
-});
+};
 
 exports.card_meta = {
 	title: 'meta',
@@ -177,14 +177,14 @@ exports.card_meta = {
 	contents: "inline*",
 	html: '<div class="meta">Meta</div>'
 };
-exports.card_meta_nolink = Object.assign({}, exports.card_meta, {
+exports.card_meta_nolink = { ...exports.card_meta,
 	context: 'cardlink//',
 	contents: {
 		nodes: "inline*",
 		marks: "nolink"
 	},
 	html: '<div class="meta">Meta</div>'
-});
+};
 
 exports.card_description = {
 	title: 'description',
@@ -195,9 +195,9 @@ exports.card_description = {
 	contents: "paragraph+",
 	html: '<div class="description"></div>'
 };
-exports.card_description_nolink = Object.assign({}, exports.card_description, {
+exports.card_description_nolink = { ...exports.card_description,
 	context: 'cardlink//',
 	contents: "paragraph_nolink+",
 	html: '<div class="description"></div>'
-});
+};
 

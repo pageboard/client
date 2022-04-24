@@ -62,7 +62,7 @@ Pageboard.Controls.Mode = class Mode {
 			if (com == "code") {
 				state.data.$jsonContent = Mode.pruneNonRoot(Pageboard.editor.state.doc.toJSON(), null, Pageboard.editor.state.schema);
 				delete Pageboard.editor;
-				Pageboard.backupElements = Object.assign({}, elts);
+				Pageboard.backupElements = { ...elts };
 				Object.entries(elts).forEach(([name, elt]) => {
 					elt = elts[name] = elt.clone();
 					if (!elt.dom) return;

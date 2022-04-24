@@ -4,7 +4,7 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 	#model;
 
 	fill(values, scope) {
-		const list = this.#listFromValues(Object.assign({}, values));
+		const list = this.#listFromValues({ ...values });
 		this.#resize(list.length, scope);
 	}
 

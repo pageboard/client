@@ -61,7 +61,7 @@ class FormBlock {
 		if (!el) {
 			throw new Error(`Unknown element type ${type}`);
 		}
-		el = this.el = Object.assign({}, el);
+		el = this.el = { ...el };
 		if (el.properties) {
 			el.properties = JSON.parse(JSON.stringify(el.properties));
 		}
@@ -99,7 +99,7 @@ class FormBlock {
 					sameData = Pageboard.utils.stableStringify(this.block[mode]) == Pageboard.utils.stableStringify(block[mode]);
 				}
 			}
-			this.block = Object.assign({}, block);
+			this.block = { ...block };
 			this.block[mode] = JSON.parse(JSON.stringify(block[mode] ?? {}));
 		}
 		if (parents) {
@@ -107,7 +107,7 @@ class FormBlock {
 		}
 
 		if (!sameData || !sameMode) {
-			const schema = Object.assign({}, this.el, { type: 'object' });
+			const schema = { ...this.el, type: 'object' };
 
 			let form = this.form;
 			if (!form) form = this.form = new Pageboard.Semafor(
@@ -232,7 +232,7 @@ class FormBlock {
 		let found = false;
 
 		// this must be done after reselecting with breadcrumb.click
-		const block = Object.assign({}, this.block);
+		const block = { ...this.block };
 		block[mode] = formData;
 
 		if (id == editor.state.doc.attrs.id) {

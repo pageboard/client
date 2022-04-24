@@ -27,9 +27,10 @@ class HTMLElementPagination extends HTMLAnchorElement {
 		} else {
 			this.setAttribute('href', Page.format({
 				pathname: state.pathname,
-				query: Object.assign({}, state.query, {
+				query: {
+					...state.query,
 					[name]: cur || undefined
-				})
+				}
 			}));
 		}
 		state.finish(() => {

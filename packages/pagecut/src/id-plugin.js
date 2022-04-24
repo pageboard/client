@@ -58,13 +58,14 @@ export default class IdPlugin {
 					delete block.id;
 					view.blocks.set(block);
 					ids[block.id] = true;
-					view.utils.extendUpdateMark(tr, pos, pos, mark, Object.assign({}, attrs, {
+					view.utils.extendUpdateMark(tr, pos, pos, mark, {
+						...attrs,
 						id: block.id
-					}));
+					});
 					modified = true;
 				} else if (id && el.inplace) {
 					// remove id attribute from the extended mark
-					const copy = Object.assign({}, attrs);
+					const copy = { ...attrs };
 					delete copy.id;
 					view.utils.extendUpdateMark(tr, pos, pos, mark, copy);
 					modified = true;
@@ -83,7 +84,7 @@ export default class IdPlugin {
 					const parentId = parent.type.spec.typeName == "root" ? parent.attrs.id : parent.attrs._id;
 					if (parentId != attrs._id) {
 						modified = true;
-						tr.setNodeMarkup(pos, null, Object.assign({}, attrs, {_id: parentId}));
+						tr.setNodeMarkup(pos, null, { ...attrs, _id: parentId});
 					}
 				}
 				return;
@@ -108,9 +109,10 @@ export default class IdPlugin {
 				}
 				delete block.id;
 				view.blocks.set(block);
-				const newAttrs = Object.assign({}, attrs, {
+				const newAttrs = {
+					...attrs,
 					id: block.id
-				});
+				};
 				if (!standalone) {
 					delete newAttrs.standalone;
 					block.standalone = false;
@@ -119,7 +121,7 @@ export default class IdPlugin {
 				ids[block.id] = true;
 				modified = true;
 			} else if (rem) {
-				const copy = Object.assign({}, attrs);
+				const copy = { ...attrs };
 				delete copy.id;
 				tr.setNodeMarkup(pos, null, copy);
 				modified = true;

@@ -75,7 +75,7 @@ export default class Viewer {
 			else dom.removeAttribute('block-id');
 		} else {
 			dom.removeAttribute('block-id');
-			const data = Object.assign({}, block.data);
+			const data = { ...block.data };
 			if (el.properties) for (const key of Object.keys(el.properties)) {
 				const attr = key.replace(/([A-Z])/g, (g) => `-${g[0].toLowerCase()}`);
 				if (dom.getAttribute(attr) == data[key]) delete data[key];

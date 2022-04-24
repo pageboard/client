@@ -27,7 +27,7 @@ export default class BlocksView {
 		if (!scope.$elements) scope.$elements = this.view.elements;
 		if (!scope.$element) scope.$element = el;
 
-		block = Object.assign({}, block);
+		block = { ...block };
 		block.data = BlocksView.fill(el, block.data);
 		const dom = el.render(block, scope);
 		if (dom && opts.merge !== false) this.merge(el, dom, block);
@@ -55,7 +55,7 @@ export default class BlocksView {
 		if (!schema.properties) return data;
 		// sometimes data can carry an old odd value
 		if (data === undefined || typeof data == "string") data = {};
-		else data = Object.assign({}, data);
+		else data = { ...data };
 		for (const [key, prop] of Object.entries(schema.properties)) {
 			if (prop.default !== undefined && data[key] === undefined) {
 				data[key] = prop.default;
@@ -66,11 +66,11 @@ export default class BlocksView {
 	}
 
 	copy(block) {
-		const copy = Object.assign({}, block);
-		copy.data = Object.assign({}, block.data);
-		if (block.expr) copy.expr = Object.assign({}, block.expr);
-		if (block.lock) copy.lock = Object.assign({}, block.lock);
-		if (block.content) copy.content = Object.assign({}, block.content);
+		const copy = { ...block };
+		copy.data = { ...block.data };
+		if (block.expr) copy.expr = { ...block.expr };
+		if (block.lock) copy.lock = { ...block.lock };
+		if (block.content) copy.content = { ...block.content };
 		delete copy.focused;
 		return copy;
 	}
@@ -173,10 +173,11 @@ export default class BlocksView {
 					parent.replaceChild(node.ownerDocument.createTextNode('∅'), node);
 					continue;
 				}
-				const frag = this.renderFrom(child, blocks, store, Object.assign({}, opts, {
+				const frag = this.renderFrom(child, blocks, store, {
+					...opts,
 					type: type,
 					element: null
-				}));
+				});
 				if (!frag) {
 					parent.removeChild(node);
 					continue;

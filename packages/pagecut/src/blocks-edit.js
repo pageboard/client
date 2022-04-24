@@ -21,7 +21,7 @@ export default class Blocks extends BlocksView {
 			};
 			nodes = [node];
 		} else {
-			block.data = Object.assign(block.data ?? {}, data);
+			block.data = { ...block.data, ...data };
 			nodes = this.domQuery(id, { all: true });
 		}
 		const view = this.view;

@@ -233,7 +233,7 @@ exports.input_range = {
 	menu: "form",
 	group: "block",
 	context: 'form//',
-	properties: Object.assign({
+	properties: {
 		multiple: {
 			title: 'Multiple',
 			type: 'boolean',
@@ -243,8 +243,9 @@ exports.input_range = {
 			title: 'Pips',
 			type: 'boolean',
 			default: true
-		}
-	}, exports.input_number.properties),
+		},
+		...exports.input_number.properties
+	},
 	contents: {
 		id: 'label',
 		nodes: 'inline*'

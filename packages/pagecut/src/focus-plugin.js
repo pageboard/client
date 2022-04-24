@@ -62,7 +62,7 @@ export default class FocusPlugin {
 	}
 
 	focusRoot(tr, pos, node, focus) {
-		const attrs = Object.assign({}, node.attrs);
+		const attrs = { ...node.attrs };
 		const prev = attrs.focused;
 		if (prev == focus) {
 			return;

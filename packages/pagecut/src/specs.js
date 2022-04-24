@@ -139,7 +139,11 @@ export default function define(viewer, elt, schema, nodeViews) {
 function toDOMOutputSpec(obj, node, inplace) {
 	let out = 0;
 	let dom = obj.contentDOM || obj.dom;
-	const attrs = Object.assign(attrsTo(node.attrs), tryJSON(node.attrs._json), domAttrsMap(obj.dom));
+	const attrs = {
+		...attrsTo(node.attrs),
+		...tryJSON(node.attrs._json),
+		...domAttrsMap(obj.dom)
+	};
 	if (!inplace) {
 		delete attrs['block-data'];
 	}
@@ -228,7 +232,7 @@ function createRootSpec(elt, obj, viewer) {
 				const oldBlock = viewer.blocks.get(id);
 				if (oldBlock) {
 					// update the stored block and keep default data
-					block.data = Object.assign(oldBlock.data ?? {}, block.data);
+					block.data = { ...oldBlock.data, ...block.data };
 					Object.assign(oldBlock, block);
 					block = oldBlock;
 				}
@@ -281,7 +285,7 @@ function createRootSpec(elt, obj, viewer) {
 		inline: Boolean(elt.inline),
 		defining: obj.contentDOM ? obj.dom != obj.contentDOM : false,
 		isolating: elt.isolating !== undefined ? elt.isolating : !elt.inline,
-		attrs: Object.assign({}, defaultSpecAttrs),
+		attrs: { ...defaultSpecAttrs },
 		parseDOM: [parseRule],
 		toDOM: function(node) {
 			let id = node.attrs.id;

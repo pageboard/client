@@ -31,6 +31,6 @@ Pageboard.schemaFilters.schema = class SchemaFilter {
 			nullable: schema.nullable
 		};
 
-		return Object.assign({}, otherSchema, copy);
+		return { ...otherSchema, ...copy };
 	}
 };

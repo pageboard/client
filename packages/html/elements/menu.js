@@ -102,14 +102,14 @@ exports.menu_item_link = {
 	html: '<a class="[labeled|?] item" href="[url|autolink]">Link</a>'
 };
 
-exports.menu_item_block = Object.assign({}, exports.menu_item_link, {
+exports.menu_item_block = { ...exports.menu_item_link,
 	title: 'Block',
 	priority: 11,
 	contents: {
 		nodes: "block+",
 		marks: "nolink"
 	}
-});
+};
 
 exports.menu_item_text = {
 	priority: 11,

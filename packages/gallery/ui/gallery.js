@@ -24,9 +24,12 @@ class HTMLElementGallery extends VirtualHTMLElement {
 		const anchor = e.target.closest('a');
 		if (anchor) {
 			if (anchor.dataset.mode != this.selectedMode) {
-				state.push({query: Object.assign({
-					[`${this.id}.mode`]: anchor.dataset.mode
-				}, state.query)});
+				state.push({
+					query: {
+						[`${this.id}.mode`]: anchor.dataset.mode,
+						...state.query
+					}
+				});
 			}
 			return;
 		}
@@ -43,10 +46,13 @@ class HTMLElementGallery extends VirtualHTMLElement {
 		let position = 0;
 		let cur = item;
 		while ((cur = cur.previousSibling)) position++;
-		state.push({query: Object.assign({
-			[`${this.id}.mode`]: 'carousel',
-			[`${carousel.id}.index`]: position
-		}, state.query)});
+		state.push({
+			query: {
+				[`${this.id}.mode`]: 'carousel',
+				[`${carousel.id}.index`]: position,
+				...state.query
+			}
+		});
 	}
 }
 

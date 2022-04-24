@@ -107,7 +107,7 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 
 	render(data, state) {
 		const view = this.ownView;
-		const scope = Object.assign({}, state.scope);
+		const scope = { ...state.scope };
 		const tmpl = this.ownTpl.content.cloneNode(true);
 		for (const node of tmpl.querySelectorAll('[block-id]')) {
 			node.removeAttribute('block-id');
@@ -117,7 +117,10 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 		for (const tpl of tmpl.querySelectorAll('template')) {
 			if (tpl.parentNode.nodeName == this.nodeName || !tpl.content) continue;
 			tpl.content.fuse(data, {
-				$filters: Object.assign({}, scope.$filters, { repeat() { } })
+				$filters: {
+					...scope.$filters,
+					repeat() { }
+				}
 			});
 			// get rid of block-id in those templates to avoid
 			// pagecut from dying on them
@@ -258,9 +261,10 @@ Page.State.prototype.templatesQuery = function (node) {
 	const state = this;
 	const params = node.getAttribute('parameters') || '';
 	const $query = {};
-	const scope = Object.assign({}, state.scope);
+	const scope = { ...state.scope };
 	let missings = 0;
-	scope.$filters = Object.assign({}, scope.$filters, {
+	scope.$filters = {
+		...scope.$filters,
 		'||': function (val, what) {
 			const key = what.expr.path.slice(1).join('.');
 			if (val === undefined) {
@@ -271,7 +275,7 @@ Page.State.prototype.templatesQuery = function (node) {
 				if (val != null) $query[key] = val;
 			}
 		}
-	});
+	};
 	params.split(' ').map(str => {
 		return `[${str}]`;
 	}).join('').fuse({ $query: state.query }, scope);

@@ -1,8 +1,8 @@
-exports.blog = Object.assign({}, exports.page, {
+exports.blog = { ...exports.page,
 	title: 'Blog',
 	bundle: 'page',
 	icon: '<i class="newspaper outline icon"></i>',
-	contents: exports.page.contents.concat([{
+	contents: [...exports.page.contents, {
 		id: 'preview',
 		title: 'Preview',
 		nodes: 'image'
@@ -10,8 +10,8 @@ exports.blog = Object.assign({}, exports.page, {
 		id: 'description',
 		title: 'Description',
 		nodes: "inline*"
-	}]),
-	properties: Object.assign({}, exports.page.properties, {
+	}],
+	properties: { ...exports.page.properties,
 		publication: {
 			title: 'Publication',
 			type: 'string',
@@ -25,8 +25,8 @@ exports.blog = Object.assign({}, exports.page, {
 			},
 			nullable: true
 		}
-	}),
-	scripts: exports.page.scripts.concat(['../ui/blog.js']),
+	},
+	scripts: [ ...exports.page.scripts, '../ui/blog.js'],
 	fragments: [{
 		path: 'html > head > meta',
 		position: 'afterend',
@@ -37,11 +37,11 @@ exports.blog = Object.assign({}, exports.page, {
 			<meta property="article:published_time" content="[publication|magnet:*|isoDate]">
 			<meta property="article:tag" content="[topics|repeat:*|magnet:*]">`
 	}]
-});
+};
 
 exports.siteblog = exports.sitemap.itemModel('blog', true);
 
-exports.itemblog = Object.assign({}, exports.siteblog, {
+exports.itemblog = { ...exports.siteblog,
 	contents: exports.blog.contents.slice(1),
 	context: 'blogs/',
 	html: `<a href="[url]" class="ui" data-index="[index]" data-publication="[publication]">
@@ -52,7 +52,7 @@ exports.itemblog = Object.assign({}, exports.siteblog, {
 			<div class="description" block-content="description"></div>
 		</div>
 	</a>`
-});
+};
 
 exports.blogs = {
 	title: 'Blogs',

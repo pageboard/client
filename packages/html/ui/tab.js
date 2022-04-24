@@ -14,7 +14,7 @@ class HTMLElementTabs extends VirtualHTMLElement {
 		const id = this.id;
 
 		this.items.children.forEach((item, i) => {
-			const query = Object.assign({}, state.query);
+			const query = { ...state.query };
 			const key = `${id}.index`;
 			if (i == 0) delete query[key];
 			else query[key] = i;

@@ -49,7 +49,7 @@ export function render(res, scope, el) {
 
 	if (el) install(el, scope);
 
-	scope = Object.assign({}, scope);
+	scope = { ...scope };
 	for (const [k, rek] of Object.entries(res)) scope[`$${k}`] = rek;
 
 	const block = res.item ?? {};
@@ -138,15 +138,13 @@ export function install(el, scope) {
 	el.render = function(block, bscope) {
 		const el = this;
 		if (!block) block = {};
-		const rscope = Object.assign({}, scope, bscope, {
-			$element: el
-		});
+		const rscope = { ...scope, ...bscope, $element: el };
 		for (const name of ["id", "type", "parent", "child", "parents", "children", "updated_at", "created_at", "lock", "expr"]) {
 			const val = block[name];
 			if (val != null) rscope['$' + name] = val;
 		}
 
-		if (el.filters) rscope.$filters = Object.assign({}, rscope.$filters, el.filters);
+		if (el.filters) rscope.$filters = { ...rscope.$filters, ...el.filters };
 
 		const data = Pageboard.merge(block.data, block.expr, (c, v) => {
 			if (typeof v != "string") return;

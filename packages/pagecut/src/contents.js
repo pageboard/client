@@ -64,7 +64,9 @@ export default class Contents {
 		return block;
 	}
 	clone() {
-		return new Contents(this.list.slice().map((obj) => Object.assign({}, obj)));
+		return new Contents(this.list.slice().map(obj => {
+			return { ...obj };
+		}));
 	}
 	prune(block) {
 		const copy = {};

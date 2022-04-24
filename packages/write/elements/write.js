@@ -122,7 +122,8 @@ exports.write = {
 		"../lib/cropper.css",
 		"../ui/inputs/crop.css"
 	],
-	scripts: exports.page.scripts.slice().concat([
+	scripts: [
+		...exports.page.scripts,
 		"../ui/write.js",
 		"../lib/pageboard.js",
 		"../ui/semafor.js",
@@ -150,7 +151,7 @@ exports.write = {
 		"../lib/pagecut/menu.js",
 		"../lib/cropper.js",
 		"../lib/speakingurl.js"
-	]),
+	],
 	resources: {
 		devtools: "../lib/prosemirror-dev-tools.js",
 		empty: "../ui/empty.png",

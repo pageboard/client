@@ -32,7 +32,7 @@ class HTMLElementCarousel extends VirtualHTMLElement {
 		const node = e.target.closest('a.fullview');
 		if (!node) return;
 		e.stopImmediatePropagation();
-		const query = Object.assign({}, state.query);
+		const query = { ...state.query };
 		const keyFv = `${this.id}.fullview`;
 		const gallery = this.closest('[block-type="gallery"]');
 		if (gallery) {

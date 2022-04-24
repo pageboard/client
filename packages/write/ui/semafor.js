@@ -508,9 +508,12 @@ Semafor.types.oneOf = function (key, schema, node, inst) {
 		oneOfType = { type: "string", format: 'singleline' }; // FIXME use an array of formats
 	}
 	if (oneOfType) {
-		inst.process(key, Object.assign(
-			{}, schema, { oneOf: null, anyOf: null }, oneOfType
-		), node, schema);
+		inst.process(key, {
+			...schema,
+			oneOf: null,
+			anyOf: null,
+			...oneOfType
+		}, node, schema);
 		return true;
 	}
 
@@ -567,7 +570,7 @@ Semafor.types.oneOf = function (key, schema, node, inst) {
 };
 
 Semafor.types.integer = function (key, schema, node, inst) {
-	schema = Object.assign({}, schema);
+	schema = { ...schema };
 	if (!schema.multipleOf) schema.multipleOf = 1;
 	Semafor.types.number(key, schema, node, inst);
 	inst.fields[key].type = 'integer';
@@ -696,12 +699,15 @@ Semafor.types.array = function (key, schema, node, inst) {
 		}
 	} else {
 		console.warn("FIXME: array type supports only items: [schemas], or items.anyOf", schema);
-		return inst.process(key, Object.assign({}, schema.items, { title: schema.title }), node, schema);
+		return inst.process(key, {
+			...schema.items,
+			title: schema.title
+		}, node, schema);
 	}
 };
 
 Semafor.types.const = function (key, schema, node, inst) {
-	schema = Object.assign({}, schema);
+	schema = { ...schema };
 	schema.pattern = new RegExp(schema.const);
 	schema.placeholder = schema.const;
 	if (schema.title) schema.title = `> ${schema.title}`;

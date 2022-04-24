@@ -199,7 +199,7 @@ export function autolink(val, what) {
 
 export function unset(obj, what, ...list) {
 	if (obj == null || typeof obj != "object") return obj;
-	obj = Object.assign({}, obj);
+	obj = { ...obj };
 	if (!list.length) list = Object.keys(obj);
 	for (const name of list) {
 		obj[name] = undefined;
@@ -219,7 +219,7 @@ export function set(obj, what, name, val) {
 			return obj;
 		}
 	}
-	obj = Object.assign({}, obj);
+	obj = { ...obj };
 	obj[name] = val;
 	return obj;
 }

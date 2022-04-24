@@ -42,7 +42,7 @@ function initState(res, state) {
 	if (!scope.$doc) scope.$doc = document.cloneNode();
 	scope.$loc = new URL(state.toString(), document.location);
 	scope.$loc.searchParams.delete('develop');
-	scope.$loc.query = Object.assign({}, state.query);
+	scope.$loc.query = { ...state.query };
 	delete scope.$loc.query.develop;
 	if (!res) return;
 	if (res.grants) state.data.$grants = res.grants;
@@ -220,7 +220,7 @@ function merge(obj, extra, fn) {
 		obj = {};
 	}
 	if (!extra) return obj;
-	const copy = Object.assign({}, obj);
+	const copy = { ...obj };
 	for (const [key, val] of Object.entries(extra)) {
 		if (val == null) {
 			continue;

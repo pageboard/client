@@ -144,8 +144,9 @@ class Editor extends View.EditorView {
 			dropCursor({
 				width: 2,
 				class: 'ProseMirror-dropcursor'
-			})
-		].concat(plugins).map(plugin => {
+			}),
+			...plugins
+		].map(plugin => {
 			if (plugin instanceof State.Plugin) return plugin;
 			if (plugin.prototype) plugin = new plugin();
 			if (plugin.update || plugin.destroy ) {
@@ -184,7 +185,7 @@ class Editor extends View.EditorView {
 	constructor(opts) {
 		const elts = opts.elements;
 		for (const [name, elt] of Object.entries(Editor.defaults.elements)) {
-			elts[name] = Object.assign({}, elt, elts[name]);
+			elts[name] = { ...elt, ...elts[name] };
 		}
 		const viewer = new Viewer(opts);
 		super({

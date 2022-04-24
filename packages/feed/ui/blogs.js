@@ -40,7 +40,7 @@ class HTMLElementBlogs extends VirtualHTMLElement {
 				state.statusText = 'Found Version';
 				state.location = Page.format({
 					pathname: state.pathname,
-					query: Object.assign({}, state.query, { version: version })
+					query: {...state.query, version }
 				});
 			} else {
 				Page.serialize = (state) => this.rss(state);
@@ -48,7 +48,7 @@ class HTMLElementBlogs extends VirtualHTMLElement {
 		} else {
 			const link = Page.format({
 				pathname: state.pathname + '.rss',
-				query: Object.assign({}, state.query, { version: version })
+				query: { ...state.query, version }
 			});
 			let node = document.head.querySelector('link[rel="alternate"][type="application/rss+xml"]');
 			if (!node) {

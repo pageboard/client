@@ -51,9 +51,10 @@ Pageboard.schemaHelpers.page = class PageHelper {
 
 		this.infinite = new (class extends window.Pageboard.InfiniteScroll {
 			load(page) {
-				const filter = Object.assign({
-					type: me.opts.type
-				}, me.opts.filter);
+				const filter = {
+					type: me.opts.type,
+					...me.opts.filter
+				};
 				const text = me.uiInput.value;
 				if (text && !text.startsWith('/')) filter.text = text;
 				else filter.url = (text || '/').replace(/\s+/g, '-');

@@ -343,9 +343,10 @@ function mutateNodeView(tr, pos, pmNode, obj, nobj) {
 		let curpos = pos + 1;
 		nobj.children.forEach((objChild, i) => {
 			const pmChild = pmNode.child(i);
-			const newAttrs = Object.assign({}, pmChild.attrs, {
+			const newAttrs = {
+				...pmChild.attrs,
 				_json: saveDomAttrs(objChild.dom)
-			});
+			};
 			const type = pmChild.type.spec.typeName;
 			if (type != "root") {
 				if (pmNode.attrs.id) {

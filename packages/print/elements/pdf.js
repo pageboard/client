@@ -1,29 +1,31 @@
 
 // extend page
-exports.pdf = Object.assign({}, exports.page, {
+exports.pdf = {
+	...exports.page,
 	title: 'PDF',
 	icon: '<i class="icon file pdf outline"></i>',
 	contents: {
 		id: 'body',
 		nodes: 'block+'
 	},
-	stylesheets: exports.page.stylesheets.slice(0, 2).concat([
+	stylesheets: [ ...exports.page.stylesheets.slice(0, 2),
 		'../ui/pdf.css'
-	]),
-	scripts: exports.page.scripts.concat([
+	],
+	scripts: [ ...exports.page.scripts,
 		'../ui/pdf.js'
-	]),
+	],
 	output: {
 		display: true,
 		fonts: true,
 		medias: true,
 		pdf: true
 	}
-});
-exports.pdf.properties = Object.assign({}, exports.pdf.properties);
-exports.pdf.properties.url = Object.assign({}, exports.pdf.properties.url, {
+};
+exports.pdf.properties = { ...exports.pdf.properties };
+exports.pdf.properties.url = {
+	...exports.pdf.properties.url,
 	pattern: /^(\/[a-zA-Z0-9-]*)+$/.source
-});
+};
 
 if (exports.sitemap) exports.sitepdf = exports.sitemap.itemModel('pdf', true);
 

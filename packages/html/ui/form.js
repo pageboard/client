@@ -228,7 +228,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		const loc = Page.parse(redirect);
 		Object.assign(loc.query, this.read(false));
 		if (loc.samePathname(state)) {
-			loc.query = Object.assign({}, state.query, loc.query);
+			loc.query = { ...state.query, ...loc.query };
 		}
 		let status = 200;
 		const p = this.ignoreInputChange
@@ -473,7 +473,7 @@ Page.ready((state) => {
 				let values = val;
 				if (val.id && val.data) {
 					// old way
-					values = Object.assign({}, val.data);
+					values = { ...val.data };
 					for (const key of Object.keys(val)) {
 						if (key != "data") values['$' + key] = val[key];
 					}

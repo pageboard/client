@@ -5,9 +5,10 @@ exports.page.stylesheets = [
 	'../ui/transition.css'
 ];
 
-exports.page.scripts = exports.page.scripts.concat([
+exports.page.scripts = [
+	...exports.page.scripts,
 	'../ui/transition.js'
-]);
+];
 
 exports.page.properties.transition = {
 	title: 'Transition',
