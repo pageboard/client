@@ -5,42 +5,42 @@ Pageboard.Controls.Menu = class Menu {
 	static renderItem(item, view, name) {
 		let disabled = false;
 		const spec = item.spec;
+		const el = spec.element;
 		if (spec.select && !spec.select(view.state)) {
-			if (spec.onDeselected == "disable" || spec.element.name == name) {
+			if (spec.onDeselected == "disable" || el.name == name) {
 				disabled = true;
 			} else {
 				return null;
 			}
 		}
+
 		const active = !disabled && spec.active?.(view.state);
-
-		const dom = document.createElement('a');
-		dom.className = "item";
-
-		const icon = spec.element.icon;
-		if (icon) {
-			// can be a string formatted as SVG, or an URL
-			if (/<svg/i.test(icon)) {
-				dom.insertAdjacentHTML('afterbegin', icon);
-				dom.querySelector('svg').setAttribute('class', 'icon');
-			} else if (icon.startsWith('<')) {
-				dom.insertAdjacentHTML('afterbegin', icon);
+		const icon = ((str) => {
+			if (/<svg/i.test(str) || str.startsWith('<')) {
+				return str;
 			} else {
-				dom.insertAdjacentHTML('afterbegin', `<img class="icon" src="${icon}" />`);
+				return `<img class="icon" src="${str}" />`;
 			}
-		}
-		if (!spec.element.inline) {
-			dom.appendChild(document.createTextNode('\n' + spec.element.title));
-		}
-		if (active) {
-			dom.classList.add("active");
-		}
-		if (spec.element.description) {
-			dom.setAttribute("title", spec.element.description);
-		}
-		if (disabled) {
-			dom.classList.add("disabled");
-		} else {
+		})(el.icon);
+
+		const title = el.inline ? "" : el.title;
+
+		const dom = document.dom(`<a class="item [active|?] [disabled|?]" title="[el.description]">
+			[icon|html|svg]
+			<span>[title|breaks|br]</span>
+		</a>`).fuse({
+			active, icon, title, el
+		}, {
+			$filters: {
+				breaks(str) {
+					return str.split(' ').join('\n');
+				},
+				svg(node) {
+					if (node && node.nodeName == "SVG") node.setAttribute('class', 'icon');
+				}
+			}
+		});
+		if (!disabled) {
 			dom.addEventListener("mousedown", (e) => {
 				e.preventDefault();
 				spec.run(view.state, view.dispatch, view);

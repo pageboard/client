@@ -36,9 +36,9 @@
 	background-color:rgb(129 165 255 / 20%);
 }
 #menu .ui.labeled.icon.menu .item {
-	min-width:5em;
-	padding:0.7em 0;
+	padding: 0.5em 0.7em 0.2em;
 	border-radius: 0;
+	min-width: 0;
 }
 #menu .ui.menu:not(.vertical) .item {
 	padding: 0.6em 0.7em;
@@ -71,7 +71,7 @@
 	background-color:#353535;
 }
 #menu .menu .item.disabled {
-	opacity:50%;
+	opacity:0.5;
 }
 #menu .tabular.menu .item.disabled {
 	display:none;
@@ -124,6 +124,9 @@
 	display: block;
 	font-size: 1.7143em !important;
 	margin: 0em auto 0.5rem !important;
+}
+.ui.labeled.icon.menu .item > i.small {
+	font-size: 1.7143em !important;
 }
 .ui.labeled.icon.menu .item > i.icons > .corner.icon {
 	font-size:0.55em;
