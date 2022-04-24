@@ -1,13 +1,5 @@
 import { DiffDOM } from 'diff-dom';
 
-const differ = new DiffDOM({
-	preDiffApply(info) {
-		if (info.diff.action.endsWith("Attribute") && info.diff.name == "block-focused") {
-			return true;
-		}
-	}
-});
-
 const innerDiff = new DiffDOM({
 	filterOuterDiff(a, b, diffs) {
 		// this works only with diff-dom@4.2.2
