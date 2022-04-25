@@ -116,7 +116,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		for (const elem of this.elements) {
 			const name = elem.name;
 			if (!name) continue;
-			if (Object.prototype.hasOwnProperty.call(query, name) && !vars.includes(name)) vars.push(name);
+			if (name in query && !vars.includes(name)) vars.push(name);
 			const val = query[name];
 			const str = ((v) => {
 				if (v == null) return "";
