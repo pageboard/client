@@ -65,7 +65,13 @@ exports.input_property = {
 			required = prop.required && prop.required.indexOf(propKey) >= 0;
 			if (cases) {
 				if (Array.isArray(cases)) {
-					prop = cases.find(obj => obj.properties?.[discKey]?.const == propKey);
+					prop = cases.find(obj => {
+						if (obj.properties && obj.properties[discKey] && obj.properties[discKey].const == propKey) {
+							return true;
+						} else {
+							return false;
+						}
+					});
 				} else {
 					prop = cases[propKey];
 				}
