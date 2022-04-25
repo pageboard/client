@@ -19,7 +19,7 @@
   "homepage": "https://github.com/pageboard/client#readme",
   "devDependencies": {
     "@pageboard/pagecut": "^0.10.1",
-    "@ungap/custom-elements": "^1.0.0",
+    "@ungap/custom-elements": "^1.0.2",
     "debounce": "^1.2.1",
     "matchdom": "^5.10.7",
     "postinstall": "^0.7.4",
