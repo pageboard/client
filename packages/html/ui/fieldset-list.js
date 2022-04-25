@@ -20,6 +20,7 @@ class WalkIndex {
 		}
 	}
 	findBefore(node) {
+		this.#index = null;
 		this.#walk.currentNode = node;
 		this.#walk.previousNode();
 		return this.#index;
