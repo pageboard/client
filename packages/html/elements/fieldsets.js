@@ -71,7 +71,7 @@ exports.fieldset_list = {
 
 
 exports.fieldlist_button = {
-	title: 'Field List Buttons',
+	title: 'Field List Button',
 	menu: "form",
 	icon: '<i class="icons"><i class="folder outline icon"></i><i class="corner hand pointer icon"></i></i>',
 	group: 'block',
