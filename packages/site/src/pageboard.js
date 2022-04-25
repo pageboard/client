@@ -99,7 +99,7 @@ function bundle(loader, state) {
 	});
 }
 
-Page.init((state) => {
+Page.init(state => {
 	state.vars = {};
 	state.data.$hrefs = {};
 	const dev = state.query.develop;
@@ -113,7 +113,7 @@ Page.init((state) => {
 	scope.$write = dev == "write";
 });
 
-Page.patch((state) => {
+Page.patch(state => {
 	const metas = equivs.read();
 	if (metas.Status) {
 		state.status = parseInt(metas.Status);
@@ -169,7 +169,7 @@ Page.patch((state) => {
 	}));
 });
 
-Page.paint((state) => {
+Page.paint(state => {
 	if (state.scope.$write) return;
 	state.finish(() => {
 		const metas = equivs.read();
@@ -196,7 +196,7 @@ Page.paint((state) => {
 	});
 });
 let adv = false;
-Page.setup((state) => {
+Page.setup(state => {
 	try {
 		window.getSelection().removeAllRanges();
 	} catch(ex) {
@@ -235,7 +235,7 @@ function merge(obj, extra, fn) {
 	return copy;
 }
 
-Page.setup((state) => {
+Page.setup(state => {
 	if (window.IntersectionObserver) {
 		state.ui.observer = new IntersectionObserver((entries, observer) => {
 			entries.forEach((entry) => {
@@ -258,7 +258,7 @@ Page.setup((state) => {
 	}
 });
 
-Page.close((state) => {
+Page.close(state => {
 	if (state.ui.observer) {
 		state.ui.observer.disconnect();
 		delete state.ui.observer;
