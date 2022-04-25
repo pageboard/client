@@ -15,8 +15,8 @@ class HTMLCustomFieldSetElement extends HTMLFieldSetElement {
 		this.disabled = this.hidden = val != this.options.value;
 	}
 
-	patch() {
-		this.#update();
+	patch(state) {
+		state.finish(() => this.#update());
 	}
 	setup() {
 		this.form?.addEventListener('change', this);
