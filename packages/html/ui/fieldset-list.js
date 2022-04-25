@@ -87,6 +87,10 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 		this.#prepare();
 	}
 
+	#selector(name) {
+		return `[block-type="fieldlist_button"][value="${name}"]`;
+	}
+
 	#resize(size, scope) {
 		if (this.isContentEditable) return;
 		const len = Math.max(Number(this.dataset.size) || 0, size);
@@ -112,7 +116,7 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 			subtpl.ownerDocument.createTextNode('[$fieldset|repeat:*:$field|]')
 		);
 		if (len == 0) {
-			let node = tpl.querySelector('[block-type="fieldlist_button"][value="add"]');
+			let node = tpl.querySelector(this.#selector('add'));
 			while (node != null && node != tpl && node != subtpl) {
 				while (node.nextSibling) node.nextSibling.remove();
 				while (node.previousSibling) node.previousSibling.remove();
@@ -125,10 +129,10 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 		view.textContent = '';
 		view.appendChild(tpl);
 
-		view.querySelectorAll('[block-type="fieldlist_button"][value="up"]').forEach((node, i) => {
+		view.querySelectorAll(this.#selector('up')).forEach((node, i) => {
 			node.disabled = i == 0;
 		});
-		view.querySelectorAll('[block-type="fieldlist_button"][value="down"]').forEach((node, i, arr) => {
+		view.querySelectorAll(this.#selector('down')).forEach((node, i, arr) => {
 			node.disabled = i == arr.length - 1;
 		});
 	}
@@ -190,17 +194,13 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 				list.splice(this.#walk.findBefore(btn) ?? 0, 1);
 				break;
 			case "up":
-				index = this.querySelectorAll(
-					'[block-type="fieldlist_button"][value="up"]'
-				).indexOf(btn);
+				index = this.querySelectorAll(this.#selector('up')).indexOf(btn);
 				if (index > 0) {
 					list.splice(index - 1, 0, list.splice(index, 1).pop());
 				}
 				break;
 			case "down":
-				index = this.querySelectorAll(
-					'[block-type="fieldlist_button"][value="down"]'
-				).indexOf(btn);
+				index = this.querySelectorAll(this.#selector('down')).indexOf(btn);
 				if (index < list.length - 1) {
 					list.splice(index + 1, 0, list.splice(index, 1).pop());
 				}
