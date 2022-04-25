@@ -120,7 +120,7 @@ Page.patch((state) => {
 		state.statusText = metas.Status.substring(state.status.toString().length).trim();
 	}
 
-	state.finish(() => {
+	state.finish(() => state.finish(() => {
 		const query = {};
 		const extra = [];
 		const missing = [];
@@ -166,7 +166,7 @@ Page.patch((state) => {
 		}
 
 		equivs.write(metas);
-	});
+	}));
 });
 
 Page.paint((state) => {

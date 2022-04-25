@@ -108,11 +108,8 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		return query;
 	}
 	fill(query, scope) {
-		// workaround for merging arrays
-		const tagList = "element-fieldset-list";
-		const FieldSet = VirtualHTMLElement.define(tagList);
-		for (const node of this.querySelectorAll(tagList)) {
-			if (!node.fill) Object.setPrototypeOf(node, FieldSet.prototype);
+		// fieldset-list are not custom inputs yet
+		for (const node of this.querySelectorAll("element-fieldset-list")) {
 			node.fill(query, scope);
 		}
 		const vars = [];
@@ -430,7 +427,7 @@ Page.setup((state) => {
 	}
 });
 
-Page.ready((state) => {
+Page.patch(state => {
 	const filters = state.scope.$filters;
 
 	function linearizeValues(query, obj = {}, prefix) {
@@ -461,35 +458,32 @@ Page.ready((state) => {
 		if (action == "toggle") {
 			action = val ? "enable" : "disable";
 		}
-		// NB: call Class methods to deal with uninstantiated custom form
-		if (action == "enable") {
-			HTMLCustomFormElement.prototype.enable.call(form);
-		} else if (action == "disable") {
-			HTMLCustomFormElement.prototype.disable.call(form);
-		} else if (action == "fill") {
-			if (val == null) {
-				form.reset();
-			} else if (typeof val == "object") {
-				let values = val;
-				if (val.id && val.data) {
-					// old way
-					values = { ...val.data };
-					for (const key of Object.keys(val)) {
-						if (key != "data") values['$' + key] = val[key];
+
+		state.finish(() => {
+			if (action == "enable") {
+				form.enable();
+			} else if (action == "disable") {
+				form.disable();
+			} else if (action == "fill") {
+				if (val == null) {
+					form.reset();
+				} else if (typeof val == "object") {
+					let values = val;
+					if (val.id && val.data) {
+						// old way
+						values = { ...val.data };
+						for (const key of Object.keys(val)) {
+							if (key != "data") values['$' + key] = val[key];
+						}
+					} else {
+						// new way
 					}
-				} else {
-					// new way
+					form.fill(linearizeValues(values), state.scope);
+					form.save();
 				}
-				HTMLCustomFormElement.prototype.fill.call(form, linearizeValues(values), state.scope);
-				HTMLCustomFormElement.prototype.save.call(form);
 			}
-		} else if (action == "read") {
-			const obj = {};
-			for (const [key, kval] of Object.entries(val)) {
-				if (form.querySelector(`[name="${key}"]`)) obj[key] = kval;
-			}
-			return obj;
-		}
+		});
+
 		return val;
 	};
 });
