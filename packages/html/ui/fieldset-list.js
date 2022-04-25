@@ -1,7 +1,36 @@
+class WalkIndex {
+	#walk;
+	#find;
+	#index;
+	constructor(root, fn) {
+		this.#find = fn;
+		this.#walk = root.ownerDocument.createTreeWalker(
+			root,
+			NodeFilter.SHOW_ELEMENT,
+			this
+		);
+	}
+	acceptNode(node) {
+		const index = this.#find(node);
+		if (index != null) {
+			this.#index = index;
+			return NodeFilter.FILTER_ACCEPT;
+		} else {
+			return NodeFilter.FILTER_SKIP;
+		}
+	}
+	findBefore(node) {
+		this.#walk.currentNode = node;
+		this.#walk.previousNode();
+		return this.#index;
+	}
+}
+
 class HTMLElementFieldsetList extends VirtualHTMLElement {
 	#size;
 	#prefix;
 	#model;
+	#walk;
 
 	fill(values, scope) {
 		const list = this.#listFromValues({ ...values });
@@ -141,38 +170,36 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 		const values = form.read(true);
 		const list = this.#listFromValues(values);
 		const prefix = this.#prefix;
-		let index;
-		const walk = this.ownerDocument
-			.createTreeWalker(this, NodeFilter.SHOW_ELEMENT, {
-				acceptNode(node) {
-					if (node.name?.startsWith(prefix)) {
-						index = Number(node.name.substring(prefix.length).split('.').shift());
-						if (Number.isInteger(index) || index >= 0 || index < list.length) {
-							return NodeFilter.FILTER_ACCEPT;
-						} else {
-							index = null;
-						}
-					}
-					return NodeFilter.FILTER_SKIP;
+		if (!this.#walk) this.#walk = new WalkIndex(this, (node) => {
+			if (node.name?.startsWith(prefix)) {
+				const index = Number(node.name.substring(prefix.length).split('.').shift());
+				if (Number.isInteger(index) || index >= 0 || index < list.length) {
+					return index;
 				}
-			});
-		walk.currentNode = btn;
-		walk.previousNode();
-		if (!index) index = 0;
+			}
+			return null;
+		});
+		let index;
 
 		switch (action) {
 			case "add":
-				list.splice(index + 1, 0, this.#model);
+				list.splice((this.#walk.findBefore(btn) ?? -1) + 1, 0, this.#model);
 				break;
 			case "del":
-				list.splice(index, 1);
+				list.splice(this.#walk.findBefore(btn) ?? 0, 1);
 				break;
 			case "up":
+				index = this.querySelectorAll(
+					'[block-type="fieldlist_button"][value="up"]'
+				).indexOf(btn);
 				if (index > 0) {
 					list.splice(index - 1, 0, list.splice(index, 1).pop());
 				}
 				break;
 			case "down":
+				index = this.querySelectorAll(
+					'[block-type="fieldlist_button"][value="down"]'
+				).indexOf(btn);
 				if (index < list.length - 1) {
 					list.splice(index + 1, 0, list.splice(index, 1).pop());
 				}
