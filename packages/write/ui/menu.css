@@ -38,6 +38,7 @@
 #menu .ui.labeled.icon.menu .item {
 	padding: 0.5em 0.7em 0.2em;
 	border-radius: 0;
+	width: 4.2em;
 	min-width: 0;
 }
 #menu .ui.menu:not(.vertical) .item {
@@ -59,6 +60,7 @@
 #menu .ui.attached.tab.menu {
 	margin:0;
 	width:100%;
+	justify-content: space-between;
 }
 #menu .item > img:not(.ui) {
 	width:1.5em;
