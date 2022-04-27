@@ -57,8 +57,10 @@ exports.layout = {
 		},
 		width: {
 			title: 'Width',
-			default: "full",
 			anyOf: [{
+				type: "null",
+				title: "None"
+			}, {
 				const: "full",
 				title: "Full"
 			}, {
