@@ -298,11 +298,11 @@
 /* Icon */
 .ui.cards > .ui > .content .star.icon {
 	cursor: pointer;
-	opacity: 75%;
+	opacity: 0.75;
 	transition: color 0.1s ease;
 }
 .ui.cards > .ui > .content .star.icon:hover {
-	opacity: 100%;
+	opacity: 1;
 	color: #FFB70A;
 }
 .ui.cards > .ui > .content .active.star.icon {
@@ -315,11 +315,11 @@
 /* Icon */
 .ui.cards > .ui > .content .like.icon {
 	cursor: pointer;
-	opacity: 75%;
+	opacity: 0.75;
 	transition: color 0.1s ease;
 }
 .ui.cards > .ui > .content .like.icon:hover {
-	opacity: 100%;
+	opacity: 1;
 	color: #FF2733;
 }
 .ui.cards > .ui > .content .active.like.icon {

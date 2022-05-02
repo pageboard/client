@@ -140,13 +140,13 @@ element-carousel[data-fade="true"] > .flickity-viewport > .flickity-slider > * {
 
 element-carousel[data-fade="true"] element-carousel-cell {
 	left: 0 !important;
-	opacity: 0%;
+	opacity: 0;
 	transition: opacity 0.6s ease-in-out 0.3s;
 	z-index: 1;
 }
 
 element-carousel[data-fade="true"] element-carousel-cell.is-selected {
-	opacity: 100%;
+	opacity: 1;
 	transition: opacity 0.6s ease-in-out;
 	z-index: 2;
 }

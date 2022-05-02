@@ -274,7 +274,7 @@ body[data-mode="read"] #pageboard-read > iframe {
 }
 #share .ui.toggle.checkbox.disabled label {
 	padding-left:0;
-	opacity:100%;
+	opacity:1;
 }
 .ui.toggle.checkbox.disabled .box:hover::before,
 .ui.toggle.checkbox.disabled label:hover::before {

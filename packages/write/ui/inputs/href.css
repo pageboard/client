@@ -8,7 +8,7 @@ input-map {
 	position: absolute;
 	border-radius: 0;
 	bottom: 0;
-	opacity: 70%;
+	opacity: 0.7;
 	margin: 0;
 }
 
@@ -176,11 +176,11 @@ input-map {
 }
 
 .field.href .search + .buttons > .button + .button {
-	opacity:95%;
+	opacity:0.95;
 }
 
 .field.href .search + .buttons > .button + .button + .button {
-	opacity:90%;
+	opacity:0.9;
 }
 
 .field.href .search {

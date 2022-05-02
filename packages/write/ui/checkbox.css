@@ -6,7 +6,7 @@ label.checkbox > input {
 	position: absolute;
 	width:1em;
 	height:1em;
-	opacity: 0%;
+	opacity: 0;
 	cursor:inherit;
 }
 label.checkbox > input + *::before {
@@ -50,7 +50,7 @@ label.checkbox > input:focus + *::before {
 }
 label.checkbox > input:disabled + *::before,
 label.checkbox > input:disabled + * {
-	opacity:50%;
+	opacity:0.5;
 }
 
 label.checkbox.toggle > input + * {

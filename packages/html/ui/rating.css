@@ -101,10 +101,10 @@ element-rating.disabled .icon {
 
 /* Selected Rating */
 element-rating.selected .active.icon {
-	opacity: 100%;
+	opacity: 1;
 }
 element-rating .icon.selected,
 element-rating.selected .icon.selected {
-	opacity: 100%;
+	opacity: 1;
 }
 

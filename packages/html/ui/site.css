@@ -308,7 +308,7 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 	width: auto;
 	height: auto;
 	top: 100% !important;
-	opacity: 100%;
+	opacity: 1;
 }
 
 [contenteditable] .field[block-focused] .dropdown > .menu {

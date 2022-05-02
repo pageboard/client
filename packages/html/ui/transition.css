@@ -8,7 +8,7 @@ body::after {
 	top:1px;
 	width:0%;
 	height:0;
-	opacity:70%;
+	opacity:0.7;
 	background: #4486cc;
 	box-shadow: 0 0 5px rgb(99 162 235 / 70%);
 	z-index:1000;
@@ -75,7 +75,7 @@ html.transition > body + body[data-transition-open] {
 }
 
 html.transition > body + body[data-transition-open] > *:not([block-type="main"]) {
-	opacity:0%;
+	opacity:0;
 }
 
 html.transition > body + body[data-transition-open="tr-right"] {
@@ -99,7 +99,7 @@ html.transition > body + body[data-transition-open="tr-bottom"] {
 }
 
 html.transition > body + body[data-transition-open="fade"] {
-	opacity:0%;
+	opacity:0;
 	transition: opacity 1.5s ease-in;
 }
 
@@ -107,7 +107,7 @@ html.transition.transitioning > body + body[data-transition-open|="tr"] {
 	transform: translate3d(0, 0, 0);
 }
 html.transition.transitioning > body + body[data-transition-open="fade"] {
-	opacity:100%;
+	opacity:1;
 }
 
 /* closing transitions */
@@ -118,7 +118,7 @@ html.transition > body[data-transition-close|="tr"]:first-of-type {
 
 html.transition > body[data-transition-close="fade"]:first-of-type {
 	z-index:1;
-	opacity:100%;
+	opacity:1;
 	transition: opacity 1.5s ease-in;
 }
 
@@ -139,6 +139,6 @@ html.transition.transitioning > body[data-transition-close="tr-bottom"]:first-of
 }
 
 html.transition.transitioning > body[data-transition-close="fade"]:first-of-type {
-	opacity:0%;
+	opacity:0;
 }
 

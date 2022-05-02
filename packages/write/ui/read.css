@@ -44,7 +44,7 @@ li.ProseMirror-selectednode::after {
 
 [contenteditable] .hidden[block-id] {
 	display: block !important;
-	opacity:50%;
+	opacity:0.5;
 }
 
 body[data-mode="code"] {
