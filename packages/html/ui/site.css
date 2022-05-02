@@ -193,6 +193,7 @@ i.icon::before {
 .caret-icon::before {
 	content: "\f0da";
 	transform: rotate(0deg);
+	/* stylelint-disable-next-line font-family-no-missing-generic-family-keyword */
 	font-family: Accordion;
 	font-style:normal;
 	vertical-align: top;
