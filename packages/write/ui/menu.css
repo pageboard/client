@@ -60,7 +60,6 @@
 #menu .ui.attached.tab.menu {
 	margin:0;
 	width:100%;
-	justify-content: space-between;
 }
 #menu .item > img:not(.ui) {
 	width:1.5em;
