@@ -1,3 +1,6 @@
+fieldset {
+	padding: 1rem;
+}
 element-fieldset-list {
 	display: block;
 	position: relative;
