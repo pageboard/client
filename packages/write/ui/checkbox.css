@@ -15,7 +15,7 @@ label.checkbox > input + *::before {
 	vertical-align: middle;
 	width: 1em;
 	height: 1em;
-	border: 1px solid currentColor;
+	border: 1px solid currentcolor;
 	margin-right: 0.3em;
 	background-repeat:no-repeat;
 	background-position: center;
@@ -35,14 +35,14 @@ label.checkbox.item > input:checked + * {
 }
 
 label.checkbox > input[type="radio"]:checked + *::before {
-	background-image: radial-gradient(currentColor 0%, currentColor 30%, transparent 40%, transparent);
+	background-image: radial-gradient(currentcolor 0%, currentcolor 30%, transparent 40%, transparent);
 }
 
 label.checkbox > input[type="checkbox"]:checked + *::before {
-	background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M1.73 12.91l6.37 6.37L22.79 4.59" fill="none" stroke="currentColor" stroke-width="3"/></svg>');
+	background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M1.73 12.91l6.37 6.37L22.79 4.59" fill="none" stroke="currentcolor" stroke-width="3"/></svg>');
 }
 label.checkbox > input[type="checkbox"]:indeterminate + *::before {
-	background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M2 12L22 12" fill="none" stroke="currentColor" stroke-width="3"/></svg>');
+	background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M2 12L22 12" fill="none" stroke="currentcolor" stroke-width="3"/></svg>');
 }
 
 label.checkbox > input:focus + *::before {
@@ -87,7 +87,7 @@ label.inverted.checkbox.toggle > input + *::before {
 }
 
 label.checkbox.toggle > input:focus + *::before {
-	border-color:currentColor;
+	border-color:currentcolor;
 }
 
 label.checkbox.toggle > input:checked + *::before {
