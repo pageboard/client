@@ -6,20 +6,25 @@ exports.grid = {
 	properties: {
 		width: {
 			title: 'Width',
-			default: "full",
 			anyOf: [{
+				type: 'null',
+				title: 'normal'
+			}, {
+				const: "min",
+				title: "minimal"
+			}, {
 				const: "full",
-				title: "full"
+				title: "maximal"
 			}, {
 				const: "contained",
-				title: "container"
+				title: "contained"
 			}]
 		},
 		responsive: {
 			title: 'Responsive',
 			anyOf: [{
 				title: 'No',
-				const: null
+				type: 'null'
 			}, {
 				title: 'Stackable',
 				const: 'stackable'
@@ -38,7 +43,7 @@ exports.grid = {
 			maximum: 16
 		}
 	},
-	html: '<div class="ui [responsive] equal width [columns|num: columns] grid [width|eq:contained:container]"></div>',
+	html: '<div class="ui [responsive] [width|neq:min:equal width:] [columns|num: columns] grid [width|eq:contained:container]"></div>',
 	stylesheets: [
 		'../lib/components/grid.css'
 	]
@@ -71,7 +76,7 @@ exports.grid_row = {
 			title: 'Responsive',
 			anyOf: [{
 				title: 'No',
-				const: null
+				type: 'null'
 			}, {
 				title: 'Stackable',
 				const: 'stackable'
@@ -90,5 +95,5 @@ exports.grid_row = {
 			maximum: 16
 		}
 	},
-	html: '<div class="[responsive] equal width [columns|num: columns] row"></div>'
+	html: '<div class="[responsive] [columns|num: columns] row"></div>'
 };

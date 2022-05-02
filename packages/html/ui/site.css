@@ -290,6 +290,9 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 .ui.grid.container {
 	display:flex;
 }
+.ui.grid.full {
+	width: 100% !important;
+}
 
 /* for editor only, but semantic-ui dependent */
 [contenteditable] .ui.buttons .disabled.button,
