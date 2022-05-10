@@ -27,7 +27,7 @@ body {
 	line-height: 1.4285em;
 	color: rgb(0 0 0 / 87%);
 }
-.hidden,[hidden] {
+.hidden:not(.divider),[hidden] {
 	display:none !important;
 }
 
