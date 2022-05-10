@@ -8,7 +8,6 @@ class Semafor {
 			if (key.startsWith('$')) continue;
 			if (elem.disabled) {
 				query[key] = null;
-			} else if (elem.closest('fieldset')?.disabled) {
 				continue;
 			}
 			let old = query[key];
@@ -420,7 +419,16 @@ class Semafor {
 		if (!legend) return;
 		const fieldset = legend.parentNode;
 		if (!fieldset) return;
-		fieldset.disabled = !e.target.checked;
+		const bool = !e.target.checked;
+		fieldset.disabled = bool;
+		let node;
+		for (node of fieldset.querySelectorAll('[name]')) {
+			node.disabled = bool;
+		}
+		if (node) node.dispatchEvent(new Event("change", {
+			bubbles: true,
+			cancelable: true
+		}));
 	}
 	static findPath(obj, path) {
 		const list = path.split('.');
