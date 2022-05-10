@@ -94,6 +94,33 @@ exports.layout = {
 				const: '%'
 			}]
 		},
+		margins: {
+			title: 'Margins',
+			type: 'object',
+			nullable: true,
+			properties: {
+				inline: {
+					title: 'Inline (em)',
+					type: 'number',
+					default: 0,
+					multipleOf: 0.1,
+					nullable: true
+				},
+				inlineUnits: {
+					const: 'em'
+				},
+				block: {
+					title: 'Block (rem)',
+					type: 'number',
+					default: 0,
+					multipleOf: 0.1,
+					nullable: true
+				},
+				blockUnits: {
+					const: 'rem'
+				}
+			}
+		},
 		invert: {
 			title: 'Invert',
 			description: 'Invert background',
@@ -260,6 +287,8 @@ exports.layout = {
 		[direction]
 		[invert|?:inverted]"
 		is="element-layout"
+		style-margin-block="[margins.block|eq:0:|not|magnet][margins.blockUnits]"
+		style-margin-inline="[margins.inline|eq:0:|not|magnet][margins.inlineUnits]"
 		style-height="[height|eq:0:|not|magnet][heightUnits]"
 		data-src="[background.image]"
 		data-crop="[background.crop.x];[background.crop.y];[background.crop.width];[background.crop.height];[background.crop.zoom]"
