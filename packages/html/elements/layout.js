@@ -154,6 +154,7 @@ exports.layout = {
 				crop: {
 					title: 'Crop and scale',
 					type: "object",
+					nullable: true,
 					properties: {
 						x: {
 							type: "number",
