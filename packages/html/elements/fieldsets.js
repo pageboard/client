@@ -25,14 +25,16 @@ exports.fieldset = {
 			}
 		},
 		plain: {
-			title: 'Without borders',
+			title: 'Plain',
+			description: 'Without legend or borders',
 			type: 'boolean',
 			default: false
 		}
 	},
 	contents: "fieldset_legend block+",
 	html: '<fieldset class="[plain|?]" data-name="[name]" data-value="[value]" is="element-fieldset"></fieldset>',
-	scripts: ["../ui/fieldset.js"]
+	scripts: ["../ui/fieldset.js"],
+	stylesheets: ['../ui/fieldset.css']
 };
 
 exports.fieldset_legend = {

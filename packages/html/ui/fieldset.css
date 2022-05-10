@@ -1,0 +1,14 @@
+fieldset:not(.plain) {
+	padding: 1em;
+	padding-top:0.5em;
+}
+fieldset.plain {
+	padding:0;
+}
+fieldset.plain > legend {
+	display:none;
+}
+fieldset:not(.plain) > legend {
+	padding-left:0.1em;
+	padding-right:0.2em;
+}

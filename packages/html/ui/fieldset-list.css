@@ -1,13 +1,3 @@
-fieldset:not(.plain) {
-	padding: 1em;
-	padding-top:0.5em;
-}
-fieldset.plain {
-	padding:0;
-}
-fieldset.plain > legend {
-	display:none;
-}
 element-fieldset-list {
 	display: block;
 	position: relative;
