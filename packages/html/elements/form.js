@@ -131,7 +131,8 @@ exports.api_form = {
 			properties: {
 				parameters: {
 					title: 'Parameters',
-					type: "object"
+					type: "object",
+					nullable: true
 				}
 			},
 			nullable: true
@@ -142,7 +143,8 @@ exports.api_form = {
 			properties: {
 				parameters: {
 					title: 'Parameters',
-					type: "object"
+					type: "object",
+					nullable: true
 				}
 			},
 			nullable: true
@@ -153,7 +155,8 @@ exports.api_form = {
 			properties: {
 				parameters: {
 					title: 'Parameters',
-					type: "object"
+					type: "object",
+					nullable: true
 				}
 			},
 			nullable: true
