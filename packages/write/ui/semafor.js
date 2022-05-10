@@ -420,7 +420,6 @@ class Semafor {
 		const fieldset = legend.parentNode;
 		if (!fieldset) return;
 		const bool = !e.target.checked;
-		fieldset.disabled = bool;
 		let node;
 		for (node of fieldset.querySelectorAll('[name]')) {
 			node.disabled = bool;
