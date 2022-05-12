@@ -122,6 +122,12 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 				while (node.previousSibling) node.previousSibling.remove();
 				node = node.parentNode;
 			}
+			{
+				const hidden = tpl.ownerDocument.createElement('input');
+				hidden.type = "hidden";
+				hidden.name = prefix.slice(0, -1);
+				tpl.appendChild(hidden);
+			}
 		}
 		tpl = tpl.fuse({ $fieldset }, scope);
 
