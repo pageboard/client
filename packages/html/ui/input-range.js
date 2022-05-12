@@ -16,11 +16,12 @@ class HTMLElementInputRange extends HTMLInputElement {
 		max: (x) => parseFloat(x) || 100,
 		value: (x) => this.parse(x),
 		step: (x) => parseFloat(x) || 1,
-		multiple: true,
-		pips: true,
+		multiple: false,
+		pips: false
 	};
 
 	get helper() {
+		if (!this.parentNode) return null;
 		let node = this.parentNode.querySelector('.noUi-target');
 		if (!node) {
 			node = this.ownerDocument.createElement('div');
@@ -43,19 +44,35 @@ class HTMLElementInputRange extends HTMLInputElement {
 		this.rangeValue = this.constructor.parse(str);
 		this.updateSlider();
 	}
+	convertOptions(opts) {
+		return {
+			step: Math.max(opts.step ?? 10, Math.round((opts.max - opts.min) / 10)),
+			range: {
+				min: opts.min ?? 0,
+				max: opts.max ?? 100
+			},
+			pips: opts.pips ? {
+				mode: 'steps',
+				density: 100
+			} : false,
+		};
+	}
 	updateSlider() {
 		const helper = this.helper;
-		if (!helper.noUiSlider) return;
-		let [start, stop] = this.options.value || [];
+		const slider = helper?.noUiSlider;
+		if (!slider) return;
+		const opts = this.options;
+		let [start, stop] = opts.value || [];
 		let indet = false;
 		if (start == null) {
-			start = this.options.min;
-			if (stop == null) stop = this.options.max;
+			start = opts.min;
+			if (stop == null) stop = opts.max;
 			indet = true;
 		}
 		if (stop == null) stop = start;
 
-		helper.noUiSlider.set([start, stop]);
+		slider.set([start, stop]);
+		slider.updateOptions(this.convertOptions(opts));
 		helper.classList.toggle('indeterminate', indet);
 	}
 	patch(state) {
@@ -64,19 +81,12 @@ class HTMLElementInputRange extends HTMLInputElement {
 	setup(state) {
 		const opts = this.options;
 		const helper = this.helper;
-		if (!helper.noUiSlider) window.noUiSlider.create(helper, {
+		if (!helper) return;
+		if (!helper.noUiSlider) window.noUiSlider.create(helper, Object.assign({
 			start: opts.multiple ? [null, null] : [null],
-			step: opts.step,
-			range: {
-				min: opts.min,
-				max: opts.max
-			},
-			pips: opts.pips ? {
-				mode: 'steps',
-				density: 100
-			} : false,
 			connect: true
-		}).on('change', (values) => {
+		}, this.convertOptions(opts))).on('change', (values) => {
+			if (this.isContentEditable) return;
 			const isInt = parseInt(opts.step) == opts.step;
 			helper.classList.remove('indeterminate');
 			if (isInt) values = values.map((n) => parseInt(n));
@@ -91,6 +101,7 @@ class HTMLElementInputRange extends HTMLInputElement {
 		this.patch(state);
 	}
 	handleEvent(e) {
+		if (this.isContentEditable) return;
 		if (e.type == "dblclick" || e.keyCode == 8 || e.keyCode == 46) {
 			this.fill();
 			this.dispatchEvent(new Event('change', {
@@ -102,6 +113,7 @@ class HTMLElementInputRange extends HTMLInputElement {
 
 	close() {
 		const helper = this.helper;
+		if (!helper) return;
 		if (helper.noUiSlider) helper.noUiSlider.destroy();
 		helper.removeEventListener('keydown', this, true);
 		helper.removeEventListener('dblclick', this, true);

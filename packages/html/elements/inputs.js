@@ -233,7 +233,7 @@ exports.input_range = {
 	menu: "form",
 	group: "block",
 	context: 'form//',
-	properties: {
+	properties: Object.assign({}, exports.input_number.properties, {
 		multiple: {
 			title: 'Multiple',
 			type: 'boolean',
@@ -242,10 +242,14 @@ exports.input_range = {
 		pips: {
 			title: 'Pips',
 			type: 'boolean',
-			default: true
+			default: false
 		},
-		...exports.input_number.properties
-	},
+		step: {
+			title: 'Step',
+			type: "number",
+			default: 10
+		}
+	}),
 	contents: {
 		id: 'label',
 		nodes: 'inline*'
