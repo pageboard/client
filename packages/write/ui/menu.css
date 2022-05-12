@@ -36,10 +36,14 @@
 	background-color:rgb(129 165 255 / 20%);
 }
 #menu .ui.labeled.icon.menu .item {
-	padding: 0.5em 0.7em 0.2em;
+	padding: 0.5em 0.6em 0.3em;
 	border-radius: 0;
-	width: 4.2em;
+	width: auto;
 	min-width: 0;
+	align-self: flex-end;
+}
+#menu .ui.labeled.icon.menu .item b.icon {
+	font-size: 1.4em !important;
 }
 #menu .ui.menu:not(.vertical) .item {
 	padding: 0.6em 0.7em;
