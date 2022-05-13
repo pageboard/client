@@ -51,10 +51,16 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			// build array-like values
 			const old = query[key];
 			if (old !== undefined) {
-				if (!Array.isArray(old)) {
-					query[key] = old == null ? [] : [old];
+				if (old == null) {
+					if (val == null) {
+						// keep it that way
+					} else {
+						query[key] = [];
+					}
+				} else if (val != null) {
+					if (!Array.isArray(old)) query[key] = [old];
+					query[key].push(val);
 				}
-				if (val !== undefined) query[key].push(val);
 			} else {
 				query[key] = val;
 			}
@@ -119,9 +125,16 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			if (name in query && !vars.includes(name)) vars.push(name);
 			const val = query[name];
 			const str = ((v) => {
-				if (v == null) return "";
-				else if (typeof v == "object") return v;
-				else return v.toString();
+				if (v == null) {
+					return "";
+				} else if (Array.isArray(v)) {
+					if (["radio", "checkbox"].includes(elem.type)) return v;
+					else return v.shift();
+				} else if (typeof v == "object") {
+					return v;
+				} else {
+					return v.toString();
+				}
 			})(val);
 			switch (elem.type) {
 				case 'submit':
