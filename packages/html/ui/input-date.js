@@ -26,7 +26,7 @@ class HTMLElementInputDate extends HTMLInputElement {
 		return d;
 	}
 	set valueAsDate(d) {
-		let t = d.getTime();
+		let t = d?.getTime();
 		if (!d || Number.isNaN(t)) {
 			super.value = "";
 			return;
