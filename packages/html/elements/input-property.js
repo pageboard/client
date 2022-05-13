@@ -41,6 +41,7 @@ exports.input_property = {
 	fuse: function(node, d, scope) {
 		const view = scope.$view;
 		const doc = scope.$doc;
+		const dateFormats = ["date", "time", "date-time"];
 		let name = d.name;
 		if (!name) {
 			return node;
@@ -227,8 +228,40 @@ exports.input_property = {
 					label: prop.title
 				}
 			}));
-		} else if (propType.type == "string" && ["date", "time", "date-time"].includes(propType.format)) {
+		} else if (propType.type == "object" && Object.keys(propType.properties).sort().join(' ') == "end start" && dateFormats.includes(propType.properties.start.format) && dateFormats.includes(propType.properties.end.format)) {
 			node.appendChild(view.render({
+				id,
+				type: 'input_date_slot',
+				data: {
+					nameStart: name,
+					nameEnd: name,
+					format: propType.properties.start.format.replace('-', ''),
+					disabled: d.disabled,
+					required: required,
+					step: propType.properties.start.step
+				},
+				content: {
+					label: prop.title
+				}
+			}));
+		} else if (propType.type == "string" && dateFormats.includes(propType.format)) {
+			if (d.multiple) node.appendChild(view.render({
+				id,
+				type: 'input_date_slot',
+				data: {
+					nameStart: name,
+					nameEnd: name,
+					format: propType.format.replace('-', ''),
+					default: propType.default,
+					disabled: d.disabled,
+					required: required,
+					step: propType.step
+				},
+				content: {
+					label: prop.title
+				}
+			}));
+			else node.appendChild(view.render({
 				id,
 				type: 'input_date_time',
 				data: {
