@@ -11,7 +11,7 @@ fieldset.plain {
 fieldset.plain > legend {
 	display:none;
 }
-fieldset:not(.plain) > legend {
+fieldset:not(.plain) > legend:not(:empty) {
 	padding-left:0.1em;
 	padding-right:0.2em;
 }
