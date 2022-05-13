@@ -25,6 +25,9 @@ Pageboard.schemaHelpers['element-property'] = class ElementProperty {
 		}
 		if (obj.properties) {
 			const props = obj.properties;
+			if (Object.keys(props).sort().join(' ') == "end start") {
+				ret[pre.slice(0, -1)] = obj;
+			}
 			for (const [key, val] of Object.entries(props)) {
 				const cur = `${pre || ""}${key}`;
 				ret[cur] = { ...val };
@@ -89,6 +92,7 @@ Pageboard.schemaHelpers['element-property'] = class ElementProperty {
 			key: null,
 			parent: this.select
 		};
+		const dateFormats = ["date", "time", "date-time"];
 		for (const [key, prop] of Object.entries(paths)) {
 			const parts = key.split('.');
 			const pkey = parts.slice(0, -1).join('.');
@@ -98,7 +102,7 @@ Pageboard.schemaHelpers['element-property'] = class ElementProperty {
 				context.parent = context.parent.parentNode || context.parent;
 			}
 			if (!prop.title) continue;
-			if (prop.type == "object") {
+			if (prop.type == "object" && !(Object.keys(prop.properties).sort().join(' ') == "end start" && dateFormats.includes(prop.properties.start.format) && dateFormats.includes(prop.properties.end.format))) {
 				context.parent = context.parent.appendChild(
 					doc.dom(`<optgroup label="${prop.title}"></optgroup>`)
 				);
