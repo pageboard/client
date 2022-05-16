@@ -57,7 +57,7 @@ class HTMLElementMenu extends VirtualHTMLElement {
 			} else {
 				const padding = this.offsetTop + this.offsetHeight;
 				const menu = tosser.lastElementChild.lastElementChild;
-				menu.style.maxHeight = `calc(100% - ${padding}px)`;
+				menu.style.maxHeight = `calc(100vh - ${padding}px)`;
 			}
 		} else if (item) {
 			this.active = item != this.active ? item : null;
