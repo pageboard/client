@@ -100,7 +100,6 @@ exports.page = {
 	],
 	csp: {
 		default: ["'none'"],
-		'block-all-mixed-content': [""],
 		'form-action': ["'self'"],
 		connect: ["'self'"],
 		object: ["'none'"],
