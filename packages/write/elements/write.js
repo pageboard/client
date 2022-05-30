@@ -5,8 +5,11 @@ exports.write = {
 	html: `<html lang="[$site.lang|ornull]">
 	<head>
 		<title>[title][$site.title|pre: - |or:]</title>
+		<meta http-equiv="Content-Security-Policy" content="[$elements|csp]">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<base href="[$loc.origin]">
 		<link rel="stylesheet" href="[$elements.write.stylesheets|repeat]" />
+		<script crossorigin="anonymous" defer src="https://cdn.polyfill.io/v3/polyfill.min.js?flags=gated&unknown=polyfill&features=[$elements|polyfills|url|magnet:*]"></script>
 		<script defer src="[$elements.write.scripts|repeat]"></script>
 		<script defer src="[$meta.services]"></script>
 	</head>
@@ -162,7 +165,25 @@ exports.write = {
 		reset: "../lib/components/reset.css",
 	},
 	polyfills: [
-		'Element.prototype.animate'
-	]
+		'default',
+		'Element.prototype.animate',
+		'Element.prototype.dataset',
+		'fetch',
+		'es2015', 'es2016', 'es2017', 'es2018',
+		'URL',
+		`Intl.~locale.[$site.lang|or:en]`,
+		'smoothscroll'
+	],
+	csp: {
+		default: ["'none'"],
+		'form-action': ["'self'"],
+		connect: ["'self'"],
+		object: ["'none'"],
+		script: ["'self'", "https://cdn.polyfill.io"],
+		frame: ["'self'"],
+		style: ["'self'", "'unsafe-inline'"],
+		font: ["'self'", "data:", "https:"],
+		img: ["'self'", "data:", "https:"]
+	}
 };
 
