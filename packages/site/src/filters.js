@@ -55,12 +55,13 @@ export function csp($elements, what) {
 			}
 		}
 	}
-	return Object.keys(csp)
+	const list = Object.keys(csp)
 		.filter((src) => csp[src].length > 0)
 		.map((src) => {
 			const key = src.indexOf('-') > 0 ? src : `${src}-src`;
 			return `${key} ${csp[src].join(' ')}`.trim().fuse({}, what.scope.data);
-		}).join('; ');
+		});
+	return list.join('; ');
 }
 
 
