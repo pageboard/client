@@ -16,7 +16,9 @@ export default class VirtualHTMLElement extends HTMLElement {
 			attributeChangedCallback(name, src, dst, ns) {
 				if (src !== dst && this.patch) {
 					if (!Object.hasOwnProperty.call(this.constructor, 'defaults') || this.options) {
-						Page.patch(this).then(() => Page.paint(this));
+						Promise.resolve()
+							.then(() => Page.patch(this))
+							.then(() => Page.paint(this));
 					}
 				}
 			},
