@@ -1,7 +1,10 @@
+// user, priv do not belong to a site and thus they do not need to be standalone
+// settings do belong to a site and needs to be standalone to be exportable
 exports.user = {
 	title: 'User',
 	priority: -10,
 	bundle: true,
+	standalone: true,
 	required: ['email'],
 	$lock: true,
 	properties: {
@@ -24,6 +27,7 @@ exports.priv = {
 	title: 'Private',
 	priority: -10,
 	$lock: true,
+	standalone: true,
 	properties: {
 		otp: {
 			type: 'object',
@@ -66,6 +70,7 @@ exports.settings = {
 	title: 'Settings',
 	priority: -10,
 	bundle: 'user',
+	standalone: true,
 	properties: {
 		consents: {
 			title: 'User Consents',
