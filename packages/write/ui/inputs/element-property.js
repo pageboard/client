@@ -175,6 +175,9 @@ Pageboard.schemaFilters['element-value'] = class ElementValueFilter {
 		const el = Pageboard.editor.elements[type];
 		if (!el) return empty;
 		const prop = path.reduce((obj, name) => {
+			if (obj.type == "array" && obj.items && !Array.isArray(obj.items)) {
+				obj = obj.items;
+			}
 			return obj?.properties?.[name];
 		}, el);
 		if (!prop) return empty;

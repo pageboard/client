@@ -80,13 +80,17 @@ exports.input_property = {
 				cases = null;
 				discKey = null;
 			} else {
+				if (prop.type == "array" && prop.items && !Array.isArray(prop.items)) {
+					prop = prop.items;
+				}
 				if (prop.select && prop.select.$data == `0/${propKey}`) {
 					cases = prop.selectCases;
 				} else if (prop.discriminator && prop.discriminator.propertyName == propKey) {
 					cases = prop.oneOf;
 					discKey = propKey;
 				}
-				prop = (prop.items && prop.items.properties || prop.properties || {})[propKey] || null;
+				if (prop.properties) prop = prop.properties;
+				prop = prop[propKey];
 			}
 			if (prop == null) break;
 		}
