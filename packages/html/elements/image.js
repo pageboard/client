@@ -132,7 +132,7 @@ exports.image = {
 		class="[display.fit|or:none] [display.horizontal|or:] [display.vertical|or:]"
 		alt="[alt]"
 		data-src="[url|or:[$element.resources.empty]]"
-		data-crop="[crop.x];[crop.y];[crop.width];[crop.height];[crop.zoom]"
+		data-crop="[crop.x|or:50];[crop.y|or:50];[crop.width|or:100];[crop.height|or:100];[crop.zoom|or:100]"
 	>
 		<div block-content="legend"></div>
 	</element-image>`,
