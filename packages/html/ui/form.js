@@ -65,8 +65,8 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		// withDefaults: keep value if equals to its default
 		// else unset value
 		for (const node of this.elements) {
-			const { name, type } = node;
-			if (name == null || name == "" || type == "button") {
+			const { name, type, disabled } = node;
+			if (name == null || name == "" || type == "button" || disabled) {
 				continue;
 			}
 			let val = node.value;
