@@ -32,7 +32,7 @@ exports.fieldset = {
 		}
 	},
 	contents: "fieldset_legend block+",
-	html: '<fieldset class="[plain|?]" data-name="[name]" data-value="[value]" is="element-fieldset"></fieldset>',
+	html: '<fieldset class="[plain|?]" data-name="[name|split:.|slice:1|join:.]" data-value="[value]" is="element-fieldset"></fieldset>',
 	scripts: ["../ui/fieldset.js"],
 	stylesheets: ['../ui/fieldset.css']
 };

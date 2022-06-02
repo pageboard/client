@@ -10,12 +10,13 @@ class HTMLCustomFieldSetElement extends HTMLFieldSetElement {
 
 	#update() {
 		if (this.isContentEditable || !this.options.name) return;
-		const name = this.options.name.split(".").slice(1).join('.');
-		const val = this.form?.read(true)?.[name];
+		const val = this.form?.read(true)?.[this.options.name];
 		this.disabled = this.hidden = val != this.options.value;
 	}
 
 	patch(state) {
+		// before/after form#fill
+		this.#update();
 		state.finish(() => this.#update());
 	}
 	setup() {
