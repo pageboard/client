@@ -43,10 +43,6 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		const fd = new FormData(this);
 		const query = {};
 		fd.forEach((val, key) => {
-			const cur = this.querySelectorAll(`[name="${key}"]`).slice(-1).pop();
-			if (cur.type == "file") {
-				val = cur.value;
-			}
 			if (val == "") val = null;
 			// build array-like values
 			const old = query[key];
@@ -79,6 +75,9 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			if (defVal == "") defVal = null;
 
 			switch (type) {
+				case "file":
+					query[name] = val;
+					break;
 				case "radio":
 					if (!withDefaults && node.checked == node.defaultChecked) {
 						if (query[name] == val) {
