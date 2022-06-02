@@ -172,11 +172,17 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		return vars;
 	}
 	save() {
+		for (const node of this.querySelectorAll("element-fieldset-list")) {
+			node.save();
+		}
 		for (const node of this.elements) {
 			if (node.save) node.save();
 		}
 	}
 	reset() {
+		for (const node of this.querySelectorAll("element-fieldset-list")) {
+			node.reset();
+		}
 		for (const node of this.elements) {
 			if (node.reset) node.reset();
 		}

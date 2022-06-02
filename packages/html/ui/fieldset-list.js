@@ -29,13 +29,23 @@ class WalkIndex {
 
 class HTMLElementFieldsetList extends VirtualHTMLElement {
 	#size;
+	#initialSize;
 	#prefix;
 	#model;
 	#walk;
 
 	fill(values, scope) {
 		const list = this.#listFromValues({ ...values });
+		if (this.#initialSize == null) this.#initialSize = list.length;
 		this.#resize(list.length, scope);
+	}
+
+	reset() {
+		this.#resize(this.#initialSize, {}); // missing scope
+	}
+
+	save() {
+		this.#initialSize = this.#size;
 	}
 
 	#prepare() {
