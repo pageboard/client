@@ -68,10 +68,14 @@ exports.input_property = {
 				name = list.slice(0, i - 1).concat(list.slice(i + 1)).join('.');
 				cases = null;
 			} else {
+				if (prop.type == "array" && prop.items && !Array.isArray(prop.items)) {
+					prop = prop.items;
+				}
 				if (prop.select && prop.select.$data == `0/${propKey}`) {
 					cases = prop.selectCases;
 				}
-				prop = (prop.items && prop.items.properties || prop.properties || {})[propKey] || null;
+				if (prop.properties) prop = prop.properties;
+				prop = prop[propKey];
 			}
 			if (prop == null) break;
 		}
