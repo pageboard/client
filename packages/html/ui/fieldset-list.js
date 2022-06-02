@@ -105,8 +105,24 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 		for (const node of inputs) {
 			if (node.name.startsWith(prefix)) {
 				node.name = `${prefix}[$field.index].${node.name.substring(prefix.length)}`;
+				if (node.id?.startsWith('for-' + prefix)) {
+					node.id = `for-${prefix}[$field.index].${node.id.substring(4 + prefix.length)}`;
+				}
 			}
 		}
+		const conditionalFieldsets = tpl.querySelectorAll('[is="element-fieldset"]');
+		for (const node of conditionalFieldsets) {
+			if (node.dataset.name?.startsWith(prefix)) {
+				node.dataset.name = `${prefix}[$field.index].${node.dataset.name.substring(prefix.length)}`;
+			}
+		}
+		const labels = tpl.querySelectorAll('label[for]');
+		for (const node of labels) {
+			if (node.htmlFor?.startsWith('for-' + prefix)) {
+				node.htmlFor = `for-${prefix}[$field.index].${node.htmlFor.substring(4 + prefix.length)}`;
+			}
+		}
+
 		const subtpl = inputs.ancestor();
 		if (!subtpl) {
 			console.warn("fieldset-list should contain input[name]", this);
