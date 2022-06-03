@@ -62,7 +62,7 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 		const splits = Array.from(keys).map(name => name.split('.'));
 		const coms = [];
 		let pos = 0, com = null;
-		while (splits.every(list => {
+		if (splits.length && splits.every(list => {
 			if (com == null) {
 				if (pos < list.length) {
 					com = list[pos];
