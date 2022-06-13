@@ -23,16 +23,16 @@
     "packages/*"
   ],
   "dependencies": {
-    "@pageboard/calendar": "workspace:*",
-    "@pageboard/email": "workspace:*",
-    "@pageboard/feed": "workspace:*",
-    "@pageboard/gallery": "workspace:*",
-    "@pageboard/google": "workspace:*",
-    "@pageboard/html": "workspace:*",
-    "@pageboard/pagecut": "workspace:*",
-    "@pageboard/print": "workspace:*",
-    "@pageboard/site": "workspace:*",
-    "@pageboard/write": "workspace:*"
+    "@pageboard/calendar": "file:packages/calendar",
+    "@pageboard/email": "file:packages/email",
+    "@pageboard/feed": "file:packages/feed",
+    "@pageboard/gallery": "file:packages/gallery",
+    "@pageboard/google": "file:packages/google",
+    "@pageboard/html": "file:packages/html",
+    "@pageboard/pagecut": "file:packages/pagecut",
+    "@pageboard/print": "file:packages/print",
+    "@pageboard/site": "file:packages/site",
+    "@pageboard/write": "file:packages/write"
   },
   "pageboard": true,
   "devDependencies": {
