@@ -37,7 +37,7 @@
   "pageboard": true,
   "devDependencies": {
     "@kapouer/eslint-config": "^1.7.5",
-    "@kapouer/stylelint-config": "^1.3.0"
+    "@kapouer/stylelint-config": "^1.4.0"
   },
   "eslintConfig": {
     "extends": "@kapouer/eslint-config",
