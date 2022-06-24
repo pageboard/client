@@ -249,7 +249,7 @@ exports.event_reservation = {
 				phone: {
 					title: 'Phone',
 					type: 'string',
-					pattern: /^(\(\d+\))? *\d+([ .\-]?\d+)*$/.source
+					pattern: /^(\(\d+\))? *\d+([ .-]?\d+)*$/.source
 				}
 			}
 		},
