@@ -142,10 +142,7 @@ exports.event_date = {
 			description: 'Use event.subscribe to manage this field',
 			type: 'integer',
 			default: 0,
-			minimum: 0,
-			maximum: {
-				$data: "1/seats"
-			}
+			minimum: 0
 		},
 		slot: {
 			type: 'object',
