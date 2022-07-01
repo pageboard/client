@@ -158,7 +158,7 @@ class FormBlock {
 		}
 		const Helper = Pageboard.schemaHelpers[opts.name];
 		if (!Helper) {
-			console.error("Unknown helper name", prop);
+			console.warn("Unknown helper name", prop);
 			return;
 		}
 
@@ -200,7 +200,7 @@ class FormBlock {
 			}
 			const Filter = Pageboard.schemaFilters[opts.name];
 			if (!Filter) {
-				console.error("Unknown filter name", prop);
+				console.warn("Unknown filter name", prop);
 				return prop;
 			}
 			let inst = this.filters[key];
