@@ -183,13 +183,14 @@ exports.site = {
 		},
 		module: {
 			title: 'Module name',
+			description: 'npm name, or git url',
 			nullable: true,
 			type: "string",
 			format: "singleline"
 		},
 		version: {
 			title: 'Module version',
-			description: 'Semantic version or git tag or commit',
+			description: 'version or git branch|tag|commit',
 			nullable: true,
 			type: "string",
 			format: "singleline" // a "version" format ?
