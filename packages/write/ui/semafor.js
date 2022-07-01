@@ -421,6 +421,7 @@ class Semafor {
 		if (!fieldset) return;
 		const bool = !e.target.checked;
 		let node;
+		fieldset.disabled = bool;
 		for (node of fieldset.querySelectorAll('[name]')) {
 			node.disabled = bool;
 		}
