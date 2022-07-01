@@ -17,6 +17,11 @@ exports.blog = { ...exports.page,
 			type: 'string',
 			format: 'date'
 		},
+		author: {
+			title: 'Author',
+			type: 'string',
+			format: 'singleline'
+		},
 		topics: {
 			title: 'Topics',
 			type: 'array',
