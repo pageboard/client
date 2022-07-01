@@ -1,6 +1,6 @@
 {
   "name": "@pageboard/feed",
-  "version": "0.10.2",
+  "version": "0.11.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/pageboard/client#readme",
   "pageboard": {
+    "priority": -0.5,
     "directories": [
       "elements",
       "ui"
