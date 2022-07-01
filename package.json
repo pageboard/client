@@ -37,7 +37,14 @@
   "pageboard": true,
   "devDependencies": {
     "@kapouer/eslint-config": "^1.7.5",
-    "@kapouer/stylelint-config": "^1.4.0"
+    "@kapouer/stylelint-config": "^1.4.0",
+    "eslint": "8.17.0",
+    "eslint-plugin-mocha": "^10.0.5",
+    "mocha": "^10.0.0"
+  },
+  "mocha": {
+    "spec": "tests/*.test.js",
+    "ui": "tdd"
   },
   "eslintConfig": {
     "extends": "@kapouer/eslint-config",
@@ -54,6 +61,26 @@
       "!/packages/*/src",
       "!/packages/*/ui",
       "!/packages/*/elements"
+    ],
+    "overrides": [
+      {
+        "files": [
+          "tests/*.test.js"
+        ],
+        "env": {
+          "mocha": true
+        },
+        "plugins": [
+          "mocha"
+        ],
+        "extends": [
+          "plugin:mocha/recommended"
+        ],
+        "rules": {
+          "prefer-arrow-callback": "off",
+          "mocha/prefer-arrow-callback": "warn"
+        }
+      }
     ]
   },
   "stylelint": {
