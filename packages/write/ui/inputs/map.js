@@ -94,27 +94,28 @@ class HTMLInputMap extends VirtualHTMLElement {
 		node?.setSelectionRange?.(sel.start, sel.end, sel.dir);
 	}
 	#changed(e) {
-		const obj = {};
+		const map = new Map();
 		const removals = [];
 
 		for (const tr of this.#table.querySelector('tbody').children) {
 			const key = tr.children[0].firstChild.value;
-			let val = obj[key];
+			let val = map.get(key);
 			const inputVal = tr.children[1].firstChild.value;
 			if (key) {
 				if (val != null) {
 					if (!Array.isArray(val)) {
-						obj[key] = val = [val];
+						val = [val];
+						map.set(key, val);
 					}
 					val.push(inputVal);
 				} else {
-					obj[key] = inputVal;
+					map.set(key, inputVal);
 				}
 			} else {
 				removals.push(tr);
 			}
 		}
-		this.value = Pageboard.Semafor.unflatten(obj);
+		this.value = Pageboard.Semafor.unflatten(map);
 		for (const node of removals) node.remove();
 	}
 }

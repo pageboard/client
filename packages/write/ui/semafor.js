@@ -1,16 +1,16 @@
 class Semafor {
 	static formGet(form) {
-		const query = {};
+		const query = new Map();
 		for (let i = 0; i < form.elements.length; i++) {
 			const elem = form.elements[i];
 			const key = elem.name;
 			if (!key) continue;
 			if (key.startsWith('$')) continue;
 			if (elem.disabled) {
-				query[key] = null;
+				query.set(key, null);
 				continue;
 			}
-			let old = query[key];
+			let old = query.get(key);
 			let val;
 			switch (elem.type) {
 				case 'submit':
@@ -40,7 +40,7 @@ class Semafor {
 					break;
 				case 'select-multiple':
 					elem.selectedOptions.forEach((item, i) => {
-						query[`${key}.${i}`] = item.value;
+						query.set(`${key}.${i}`, item.value);
 					});
 					break;
 				default:
@@ -48,12 +48,13 @@ class Semafor {
 			}
 			if (val === "") val = null;
 			if (old === undefined) {
-				query[key] = val;
+				query.set(key, val);
 			} else if (val != null) {
 				if (!Array.isArray(old)) {
-					query[key] = [old];
+					old = [old];
+					query.set(key, old);
 				}
-				query[key].push(val);
+				old.push(val);
 			}
 		}
 		return query;
