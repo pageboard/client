@@ -66,6 +66,7 @@ exports.api_form = {
 	group: 'block form',
 	menu: "form",
 	required: ["action"],
+	expressions: true,
 	$lock: {
 		'data.action.parameters': 'webmaster'
 	},
