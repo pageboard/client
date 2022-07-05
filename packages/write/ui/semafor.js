@@ -80,9 +80,15 @@ class Semafor {
 			if (elem.name.startsWith('$')) continue;
 			let val = flats[elem.name];
 			if (elem.parentNode.matches('.fieldset.nullable')) {
-				const realVal = Semafor.findPath(obj, elem.name);
-				elem.disabled = !realVal;
-				elem.querySelector('input:not([name])').checked = Boolean(realVal);
+				if (elem.dataset.disabled == null) {
+					const realVal = Semafor.findPath(obj, elem.name);
+					elem.disabled = !realVal;
+					for (const child of Array.from(elem.querySelectorAll('[name]'))) {
+						child.disabled = elem.disabled;
+					}
+					elem.querySelector('input:not([name])').checked = Boolean(realVal);
+				}
+				elem.dataset.disabled = elem.disabled;
 			}
 			switch (elem.type) {
 				case 'submit':
