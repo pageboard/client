@@ -24,6 +24,12 @@ exports.page = {
 			$helper: 'pageUrl' // works with sitemap editor to update pages url in a coherent manner
 			// see also page.save: the href updater will only change input.name == "href".
 		},
+		match: {
+			title: 'Match prefix',
+			description: `Matches all addresses having same prefix as this page, unless a page having that address exists.`,
+			type: "boolean",
+			nullable: true
+		},
 		redirect: {
 			title: 'Redirect',
 			type: "string",
@@ -149,4 +155,3 @@ exports.redirection = {
 	</body>
 	</html>`
 };
-
