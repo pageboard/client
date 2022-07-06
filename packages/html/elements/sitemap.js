@@ -65,4 +65,4 @@ exports.sitemap = {
 };
 
 exports.sitepage = exports.sitemap.itemModel('page', false);
-
+exports.siteredirection = exports.sitemap.itemModel('redirection', true);
