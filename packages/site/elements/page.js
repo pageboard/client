@@ -24,9 +24,9 @@ exports.page = {
 			$helper: 'pageUrl' // works with sitemap editor to update pages url in a coherent manner
 			// see also page.save: the href updater will only change input.name == "href".
 		},
-		match: {
-			title: 'Match prefix',
-			description: `Matches all addresses having same prefix as this page, unless a page having that address exists.`,
+		prefix: {
+			title: 'Match by prefix',
+			description: `Match all url having this prefix, unless an actual page exist.`,
 			type: "boolean",
 			nullable: true
 		},
