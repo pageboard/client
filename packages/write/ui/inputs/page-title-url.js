@@ -46,8 +46,11 @@ Pageboard.schemaHelpers.pageTitle = class PageTitle {
 	}
 
 	update(block) {
+		const oldPrefix = this.block.data?.prefix;
 		this.block = block;
-		this.refresh();
+		if (oldPrefix != block.data?.prefix) {
+			this.refresh();
+		}
 	}
 
 	init(block) {
@@ -69,14 +72,26 @@ Pageboard.schemaHelpers.pageUrl = class PageUrl {
 		this.input = input;
 		this.check = this.check.bind(this);
 		this.input.addEventListener('input', this.check);
-		this.sameDom = this.field.dom(`<div class="ui pointing red basic label">Another page has the same address</div>`);
+		this.notPrefix = this.field.dom(`<div class="ui pointing red basic label">Only the home page can have a url ending with /</div>`);
+		this.warnSame = this.field.dom(`<div class="ui pointing red basic label">Another page has the same address</div>`);
 	}
 
 	check() {
-		if (Pageboard.editor.controls.store.checkUrl(this.block.id, this.input.value)) {
-			this.field.appendChild(this.sameDom);
-		} else if (this.sameDom.parentNode) {
-			this.sameDom.remove();
+		let { value } = this.input;
+		if (this.block.data?.prefix) {
+			this.notPrefix.remove();
+			if (!value.endsWith('/')) {
+				value = this.input.value = value.split('/').slice(0, -1).join('/') + '/';
+			}
+		} else if (value != "/" && value.endsWith('/')) {
+			this.field.appendChild(this.notPrefix);
+		} else if (this.notPrefix.parentNode) {
+			this.notPrefix.remove();
+		}
+		if (Pageboard.editor.controls.store.checkUrl(this.block.id, value)) {
+			this.field.appendChild(this.warnSame);
+		} else if (this.warnSame.parentNode) {
+			this.warnSame.remove();
 		}
 	}
 
