@@ -12,7 +12,7 @@ Pageboard.schemaHelpers.pageTitle = class PageTitle {
 	}
 
 	check(only) {
-		const url = this.block.data.url || "";
+		const { url = "" } = this.block.data;
 		const nameUrl = url.split("/").pop();
 		if (Pageboard.slug(this.input.value) == nameUrl) {
 			this.tracking = true;
@@ -22,17 +22,32 @@ Pageboard.schemaHelpers.pageTitle = class PageTitle {
 	}
 
 	change() {
-		if (!this.tracking) return;
+		const inputUrl = this.form.querySelector('[name="url"]');
+		this.refresh();
+		Pageboard.trigger(inputUrl, 'input');
+	}
+
+	refresh() {
+		const inputUrl = this.form.querySelector('[name="url"]');
 		const node = Pageboard.editor.blocks.domQuery(this.block.id, { focused: true });
 		const parentUrl = node?.parentNode.closest('[block-id]')?.dataset.url ?? '';
-		const url = this.block.data.url || (parentUrl + '/');
+		const { url = parentUrl + '/', prefix } = this.block.data;
+		if (!this.tracking && !prefix) return;
+
 		const val = this.input.value;
-		const slug = Pageboard.slug(val);
-		const list = url.split('/');
-		list[list.length - 1] = slug;
-		const inputUrl = this.form.querySelector('[name="url"]');
-		inputUrl.value = list.join('/');
-		Pageboard.trigger(inputUrl, 'input');
+		if (!prefix) {
+			const slug = Pageboard.slug(val);
+			const list = url.split('/');
+			list[list.length - 1] = slug;
+			inputUrl.value = list.join('/');
+		} else {
+			inputUrl.value = url.endsWith('/') ? url : (parentUrl + '/');
+		}
+	}
+
+	update(block) {
+		this.block = block;
+		this.refresh();
 	}
 
 	init(block) {
