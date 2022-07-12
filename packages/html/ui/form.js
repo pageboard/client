@@ -127,8 +127,11 @@ class HTMLCustomFormElement extends HTMLFormElement {
 				if (v == null) {
 					return "";
 				} else if (Array.isArray(v)) {
-					if (["radio", "checkbox"].includes(elem.type)) return v;
-					else return v.shift();
+					if (["radio", "checkbox", "select-multiple"].includes(elem.type)) {
+						return v;
+					} else {
+						return v.shift();
+					}
 				} else if (typeof v == "object") {
 					return v;
 				} else {
