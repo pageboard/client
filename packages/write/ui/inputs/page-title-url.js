@@ -49,7 +49,7 @@ Pageboard.schemaHelpers.pageTitle = class PageTitle {
 		const oldPrefix = this.block.data?.prefix;
 		this.block = block;
 		if (oldPrefix != block.data?.prefix) {
-			this.refresh();
+			this.change();
 		}
 	}
 
@@ -82,6 +82,7 @@ Pageboard.schemaHelpers.pageUrl = class PageUrl {
 			this.notPrefix.remove();
 			if (!value.endsWith('/')) {
 				value = this.input.value = value.split('/').slice(0, -1).join('/') + '/';
+				Pageboard.trigger(this.input, 'input');
 			}
 		} else if (value != "/" && value.endsWith('/')) {
 			this.field.appendChild(this.notPrefix);
