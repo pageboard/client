@@ -439,7 +439,8 @@ exports.input_select = {
 	</div>`,
 	stylesheets: [
 		'../lib/components/dropdown.css',
-		'../lib/components/label.css'
+		'../lib/components/label.css',
+		'../ui/select.css'
 	],
 	scripts: [
 		'../ui/select.js'

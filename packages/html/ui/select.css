@@ -1,0 +1,7 @@
+element-select.ui.multiple.dropdown > .label > .icon {
+	vertical-align: middle;
+}
+element-select.ui.multiple.dropdown > .label {
+	vertical-align: baseline;
+	line-height: inherit;
+}
