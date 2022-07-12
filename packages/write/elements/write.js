@@ -172,7 +172,8 @@ exports.write = {
 		'es2015', 'es2016', 'es2017', 'es2018',
 		'URL',
 		`Intl.~locale.[$site.lang|or:en]`,
-		'smoothscroll'
+		'smoothscroll',
+		'queueMicrotask'
 	],
 	csp: {
 		default: ["'none'"],
