@@ -49,8 +49,6 @@ exports.mail = {
 	],
 	output: {
 		mime: 'application/json',
-		display: false,
-		fonts: false,
 		medias: true
 	}
 };

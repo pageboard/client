@@ -15,9 +15,6 @@ exports.pdf = {
 		'../ui/pdf.js'
 	],
 	output: {
-		display: true,
-		fonts: true,
-		medias: true,
 		pdf: true
 	}
 };
