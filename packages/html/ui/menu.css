@@ -82,7 +82,6 @@
 
 /* menu_group */
 element-menu {
-	position: relative;
 	flex-shrink: 1;
 }
 .ui.menu:not(.vertical) > element-menu {
@@ -116,6 +115,9 @@ element-menu.burger .placer .title {
 }
 element-menu.burger > .item .popup.item {
 	display:block;
+}
+element-menu [block-type="menu_item_popup"].fixed {
+	position:initial;
 }
 element-menu.burger .placer .popup.active .title {
 	margin-bottom:0.5em;
