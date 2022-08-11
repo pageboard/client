@@ -46,16 +46,18 @@
 	flex-direction: column;
 }
 .right.burger .popup.item > .placer {
-	left: auto;
+	left: 0;
 	right:0;
 }
 .right.popup.item > .placer > div {
 	left:auto;
 	right:0;
 }
+.fixed.popup.item {
+	position:static !important;
+}
 .fixed.popup.item > .placer > div {
 	max-width: 100vw;
-	max-height: 100vh;
 }
 .center.popup.item > .placer > div {
 	transform: translateX(-50%);
@@ -98,12 +100,12 @@ element-menu > [block-content="items"] {
 	display:flex;
 }
 element-menu.burger > [block-content="items"] {
-	position: fixed;
 	left:0;
 }
 element-menu.burger.right > [block-content="items"] {
-	left:auto;
-	right: 0;
+	position: absolute;
+	pointer-events: none;
+	height: 0;
 }
 
 element-menu:not(.burger) > .item {
@@ -116,8 +118,8 @@ element-menu.burger .placer .title {
 element-menu.burger > .item .popup.item {
 	display:block;
 }
-element-menu [block-type="menu_item_popup"].fixed {
-	position:initial;
+.ui.menu [block-type="menu_item_popup"] {
+	position:initial !important;
 }
 element-menu.burger .placer .popup.active .title {
 	margin-bottom:0.5em;
@@ -127,6 +129,10 @@ element-menu.burger > [block-content="items"] > * {
 }
 element-menu.burger .popup.item.active > .placer > div {
 	display:block;
+}
+element-menu.burger .popup.item > .placer > div {
+	left: 0 !important;
+	right: 0 !important;
 }
 element-menu.burger > .item .dropdown.item:hover > .menu,
 element-menu.burger > .item .popup.item:hover > .placer > div {
@@ -140,8 +146,8 @@ element-menu.burger > .item .dropdown.item.active > .menu {
 }
 
 element-menu.burger > .item .popup.item.active > .placer > div {
-	display:block !important;
-	position:relative;
+	display: block !important;
+	position: relative;
 }
 element-menu.burger > .item:hover > .popup.item {
 	display:block;
@@ -152,7 +158,7 @@ element-menu.burger > .item .placer .menu .ui.dropdown {
 }
 
 element-menu.burger > .item .popup.item > .placer {
-	position:relative;
+	position: relative;
 }
 element-menu.burger > .item .popup.item > .placer > div > .grid {
 	border:0 !important;
@@ -164,9 +170,7 @@ element-menu.burger > .popup > .icon {
 	font-weight: bold;
 	font-family: sans-serif;
 }
-element-menu.burger > .popup > .placer > .menu {
-	right:auto; /* disables the right:0 given by .popup > .placer > div */
-}
+
 
 @media screen and (max-width: 768px) {
 	.ui.menu [block-type="menu_item_text"] {

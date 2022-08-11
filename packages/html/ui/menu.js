@@ -33,7 +33,7 @@ class HTMLElementMenu extends VirtualHTMLElement {
 					const styles = window.getComputedStyle(this);
 					const parentWidth = parseFloat(styles.marginLeft) + parseFloat(styles.marginRight) + this.offsetWidth;
 					const menuWidth = menu.offsetWidth;
-					this.classList.toggle('burger', parentWidth <= menuWidth);
+					this.classList.toggle('burger', menuWidth >= parentWidth);
 				});
 			});
 			this.observer.observe(this.parentNode);
@@ -55,9 +55,9 @@ class HTMLElementMenu extends VirtualHTMLElement {
 				tosser.classList.add('inactive');
 				tosser.blur();
 			} else {
-				const padding = this.offsetTop + this.offsetHeight;
-				const menu = tosser.lastElementChild.lastElementChild;
-				menu.style.maxHeight = `calc(100vh - ${padding}px)`;
+				const placer = tosser.lastElementChild;
+				const padding = placer.offsetTop;
+				placer.lastElementChild.style.maxHeight = `calc(100vh - ${padding}px)`;
 			}
 		} else if (item) {
 			this.active = item != this.active ? item : null;
