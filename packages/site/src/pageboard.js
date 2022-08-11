@@ -39,13 +39,15 @@ export {
 
 function initState(res, state) {
 	const scope = state.scope;
+
 	if (!scope.$doc) scope.$doc = document.cloneNode();
 	scope.$loc = new URL(state.toString(), document.location);
-	scope.$loc.searchParams.delete('develop');
 	scope.$loc.query = { ...state.query };
-	delete scope.$loc.query.develop;
 	if (!res) return;
-	if (res.grants) state.data.$grants = res.grants;
+	if (res.grants) {
+		state.data.$grants = res.grants;
+		scope.$write = !!res.grants.webmaster;
+	}
 	if (res.hrefs) Object.assign(state.data.$hrefs, res.hrefs);
 	scope.$hrefs = state.data.$hrefs; // backward compat FIXME get rid of this, data.$hrefs is good
 
@@ -102,15 +104,11 @@ function bundle(loader, state) {
 Page.init(state => {
 	state.vars = {};
 	state.data.$hrefs = {};
-	const dev = state.query.develop;
-	if (dev === "" || dev === "write") state.vars.develop = true;
 	let scope = state.scope;
 	if (!scope) scope = state.scope = {
 		$elements: baseElements,
 		$filters: {}
 	};
-	// once elements are installed they all refer to the same scope object
-	scope.$write = dev == "write";
 });
 
 Page.patch(state => {

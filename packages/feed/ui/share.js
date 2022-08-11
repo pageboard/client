@@ -10,7 +10,7 @@ class HTMLShareAnchorElement extends HTMLAnchorElement {
 	patch(state) {
 		const href = document.location.origin + Page.format({
 			pathname: state.pathname,
-			query: { ...state.query, develop: undefined }
+			query: { ...state.query }
 		});
 		const card = {
 			url: href

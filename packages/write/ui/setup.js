@@ -15,9 +15,7 @@ Page.setup((state) => {
 	parentRead.insertBefore(iframe, parentRead.lastElementChild);
 	Pageboard.write = document.getElementById('pageboard-write');
 	document.body.addEventListener('submit', (e) => e.preventDefault());
-	const loc = state.copy();
-	loc.query.develop = "write";
-	const src = loc.toString();
+	const src = state.toString();
 
 	if (iframe.getAttribute('src') == src) return;
 	iframe.setAttribute('src', src);
@@ -33,9 +31,6 @@ Pageboard.adopt = function(win, readState) {
 		readState.finish(() => {
 			window.document.title = win.document.title;
 			const readCopy = readState.copy();
-			const dev = writeState.query.develop;
-			if (dev !== undefined) readCopy.query.develop = dev;
-			else delete readCopy.query.develop;
 			writeState.pathname = readCopy.pathname;
 			writeState.query = readCopy.query;
 			// writeState.data = readState.data;

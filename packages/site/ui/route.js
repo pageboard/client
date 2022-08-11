@@ -5,7 +5,7 @@ Page.route((state) => {
 	} else {
 		loader = Pageboard.fetch('get', '/.api/page', {
 			url: state.pathname.replace(/\.\w+$/, ''),
-			develop: state.query.develop
+			nested: window.parent != window ? 1 : undefined
 		});
 	}
 
