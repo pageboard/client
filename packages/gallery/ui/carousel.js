@@ -67,8 +67,12 @@ class HTMLElementCarousel extends VirtualHTMLElement {
 		const gallery = this.closest('[block-type="gallery"]');
 		state.finish(() => {
 			const enabled = !gallery || gallery.selectedMode == "carousel";
-			if (!this.widget && enabled) this.#create(state);
-			if (this.widget && !enabled) this.destroy(state);
+			if (enabled) {
+				if (!this.widget) this.#create(state);
+				this.fullview(this.options.fullview);
+			} else if (this.widget) {
+				this.destroy(state);
+			}
 		});
 	}
 
@@ -89,7 +93,6 @@ class HTMLElementCarousel extends VirtualHTMLElement {
 		opts.initialIndex = opts.index;
 		opts.imagesLoaded = opts.width == null;
 		if (opts.autoPlay) opts.wrapAround = true;
-		this.fullview(this.options.fullview);
 
 		this.widget = new window.Flickity(this, opts);
 		this.widget.on('change', (index) => {
