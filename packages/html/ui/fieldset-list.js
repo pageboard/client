@@ -48,14 +48,9 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 		this.#initialSize = this.#size;
 	}
 
-	#prepare() {
-		this.ownTpl.prerender();
-		if (this.isContentEditable) return;
-		for (const node of this.ownTpl.content.querySelectorAll('[block-id]')) {
-			node.removeAttribute('block-id');
-		}
+	#modelize(tpl) {
 		const keys = new Set();
-		const inputs = this.ownTpl.content.querySelectorAll('[name]');
+		const inputs = tpl.querySelectorAll('[name]');
 		for (const node of inputs) {
 			keys.add(node.name);
 		}
@@ -86,6 +81,19 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 			if (key.startsWith(prefix)) model[key.substring(prefix.length)] = null;
 		}
 		this.#model = model;
+	}
+
+	#prepare() {
+		const tpl = this.ownTpl;
+		tpl.prerender();
+		if (this.isContentEditable) {
+			this.#modelize(tpl);
+			return;
+		}
+		this.#modelize(tpl.content);
+		for (const node of tpl.content.querySelectorAll('[block-id]')) {
+			node.removeAttribute('block-id');
+		}
 	}
 
 	patch(state) {
@@ -249,6 +257,9 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 	}
 	get ownView() {
 		return this.children.find(node => node.matches('.view'));
+	}
+	get prefix() {
+		return this.#prefix;
 	}
 }
 
