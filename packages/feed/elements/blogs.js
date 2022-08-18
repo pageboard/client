@@ -1,17 +1,29 @@
-exports.blog = { ...exports.page,
+exports.blog = {
 	title: 'Blog',
 	bundle: 'page',
 	icon: '<i class="newspaper outline icon"></i>',
-	contents: [...exports.page.contents, {
-		id: 'preview',
-		title: 'Preview',
-		nodes: 'image'
-	}, {
-		id: 'description',
-		title: 'Description',
-		nodes: "inline*"
-	}],
-	properties: { ...exports.page.properties,
+	standalone: true,
+	group: 'block',
+	properties: {
+		title: {
+			title: 'Title',
+			nullable: true,
+			type: "string",
+			format: "singleline",
+			$helper: 'pageTitle'
+		},
+		url: {
+			title: 'Address',
+			type: "string",
+			format: 'page',
+			$helper: 'pageUrl' // works with sitemap editor to update pages url in a coherent manner
+			// see also page.save: the href updater will only change input.name == "href".
+		},
+		draft: {
+			title: 'Draft',
+			type: 'boolean',
+			default: true
+		},
 		publication: {
 			title: 'Publication',
 			type: 'string',
@@ -31,19 +43,28 @@ exports.blog = { ...exports.page,
 			nullable: true
 		}
 	},
-	scripts: [ ...exports.page.scripts, '../ui/blog.js'],
-	fragments: [{
-		path: 'html > head > meta',
-		position: 'afterend',
-		html: `<meta property="og:type" content="article">
-			<meta property="og:title" content="[title]">
-			<meta property="og:description" block-content="description" />
-			<meta property="og:image" block-content="preview" />
-			<meta property="article:published_time" content="[publication|magnet:*|isoDate]">
-			<meta property="article:tag" content="[topics|repeat:*|magnet:*]">`
-	}]
+	contents: [{
+		id: 'description',
+		nodes: 'inline*'
+	}, {
+		id: 'content',
+		nodes: 'block+'
+	}, {
+		id: 'preview',
+		nodes: 'image'
+	}],
+	html: `<a href="[url]" class="ui" data-publication="[publication]">
+		<div class="image" block-content="preview"></div>
+		<div class="content">
+			<div class="meta">[publication|magnet|formatDate:D:M:Y]</div>
+			<div class="header">[title]</div>
+			<div class="description" block-content="description"></div>
+		</div>
+		<div class="extra" block-content="content"></div>
+	</a>`,
 };
 
+/*
 exports.siteblog = exports.sitemap.itemModel('blog', true);
 
 exports.itemblog = { ...exports.siteblog,
@@ -124,4 +145,4 @@ exports.blogs = {
 		if (scope.$write) Pageboard.load.js(this.resources.helper, scope);
 	},
 };
-
+*/
