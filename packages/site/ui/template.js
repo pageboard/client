@@ -132,7 +132,7 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 		const collector = state.collector();
 
 		const el = {
-			name: 'element_template_' + String(Math.round(Date.now() * Math.random())).substr(-6),
+			name: 'element_template_' + String(Math.round(Date.now() * Math.random())).slice(-6),
 			dom: tmpl,
 			filters: { '||': (v, w) => collector.filter(v, w) },
 			contents: tmpl.querySelectorAll('[block-content]').map((node) => {
