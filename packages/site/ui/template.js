@@ -177,7 +177,9 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 	}
 }
 HTMLTemplateElement.prototype.prerender = function () {
-	if (this.isContentEditable || document.visibilityState != "prerender") return this;
+	if (this.isContentEditable || !document.hidden) {
+		return this;
+	}
 	const doc = this.ownerDocument;
 	let tmpl = this;
 	const dest = doc.createElement('script');
