@@ -125,7 +125,7 @@ body[data-mode="read"] #pageboard-read > iframe {
 	margin: 0 -1rem 1rem !important;
 }
 .wide.bottom {
-	margin-bottom:0.1rem;
+	margin-bottom: 0.1rem !important;
 	width:100%;
 }
 
