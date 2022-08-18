@@ -1,18 +1,31 @@
-Pageboard.schemaHelpers['element-property'] = class ElementProperty {
+class ElementProperty {
+	#field;
+	#input;
+	#existing;
+	#select;
+	#block;
+	#prefix;
+
+	static virtuals = {};
+
+	static element(type) {
+		return this.virtuals[type] ?? Pageboard.editor.element(type);
+	}
+
 	constructor(input, opts, props) {
-		this.field = input.closest('.field');
-		this.field.classList.add('inline');
-		this.input = input;
-		this.existing = opts.existing;
+		this.#field = input.closest('.field');
+		this.#field.classList.add('inline');
+		this.#input = input;
+		this.#existing = opts.existing;
 	}
 
 	static asPaths(obj, ret, pre) {
 		if (!ret) ret = {};
 		const [discKey, discList] = this.discriminator(obj) ?? [];
 		if (discKey) {
-			const discProp = obj.properties[discKey];
+			const discProp = obj.properties?.[discKey];
 			for (const [discValue, subSchema] of discList) {
-				const discCase = (discProp.oneOf || discProp.anyOf || []).find((it) => {
+				const discCase = (discProp?.oneOf ?? discProp?.anyOf ?? []).find(it => {
 					return it.const == discValue;
 				});
 				const subRet = {};
@@ -59,38 +72,81 @@ Pageboard.schemaHelpers['element-property'] = class ElementProperty {
 	}
 
 	init(block) {
+		this.#block = block;
 		const dom = Pageboard.editor.blocks.domQuery(block.id);
-		if (!dom) throw new Error("Cannot create input, DOM node not found for block " + block.id);
+		if (!dom) throw new Error(
+			`Cannot create input, DOM node not found for block ${block.id}`
+		);
+		this.#prefix = dom.closest('[block-type="fieldset_list"]')?.prefix;
 		const form = dom.closest('form');
 		const formId = form.getAttribute('block-id');
 		const formBlock = Pageboard.editor.blocks.get(formId);
 		if (!formBlock) throw new Error("Cannot find form block for " + formId);
-		this.formBlock = formBlock;
-		let type = formBlock.data ?? {};
-		if (formBlock.type == "query_form") {
-			type = type.type;
-		} else if (formBlock.type == "api_form") {
-			type = type.action?.parameters?.type;
-		} else {
-			type = null;
-		}
-		if (!type) throw new Error("Please select a type to bind the form to");
-		const el = Pageboard.editor.element(type);
-		if (!el) throw new Error("Cannot map type to element " + type);
-		this.el = el;
+		const el = this.#buildSchema(formBlock);
+		this.#input.hidden = true;
+		this.#buildSelector(formBlock, el);
+		this.update();
+	}
 
-		this.input.hidden = true;
-		const doc = this.input.ownerDocument;
-		const paths = ElementProperty.asPaths(this.el, {}, this.el.name + '.');
-		const content = Pageboard.editor.element(form.getAttribute('block-type')).contents.get(this.formBlock);
-		const existing = this.existing;
-		this.select = doc.dom(`<select class="ui compact dropdown">
+	#buildSchema(block) {
+		let cand = null;
+		if (block.type == "query_form") {
+			cand = block.data?.type;
+			if (!cand) {
+				throw new Error("Please select a type to bind the form to");
+			}
+		} else if (block.type == "api_form") {
+			cand = block.data?.action?.parameters?.type;
+			if (!cand) {
+				throw new Error("Please select a type to bind the form to");
+			}
+		} else {
+			throw new Error(`Unknown parent form type: ${block.type}`);
+		}
+
+		if (Array.isArray(cand)) {
+			const vblock = 'block' + block.id;
+			ElementProperty.virtuals[vblock] = {
+				name: vblock,
+				type: 'object',
+				properties: {
+					type: {
+						title: 'Type',
+						anyOf: cand.map(type => {
+							const el = ElementProperty.element(type);
+							if (!el) throw new Error(
+								`Unknown type in parent form ${block.type}: ${type}`
+							);
+							return {
+								const: type,
+								title: el.title
+							};
+						})
+					}
+				}
+			};
+			cand = vblock;
+		}
+		const el = ElementProperty.element(cand);
+		if (!el) throw new Error(
+			`Unknown type in parent form ${block.type}: ${cand}`
+		);
+		return el;
+	}
+
+	#buildSelector(formBlock, el) {
+		const doc = this.#input.ownerDocument;
+		const paths = ElementProperty.asPaths(el, {}, el.name + '.' + this.#prefix);
+		const content = ElementProperty.element(formBlock.type)
+			.contents.get(formBlock);
+		const existing = this.#existing;
+		this.#select = doc.dom(`<select class="ui compact dropdown">
 			<option value="">--</option>
 		</select>`);
 		const context = {
 			level: 0,
 			key: null,
-			parent: this.select
+			parent: this.#select
 		};
 		const dateFormats = ["date", "time", "date-time"];
 		for (const [key, prop] of Object.entries(paths)) {
@@ -126,54 +182,74 @@ Pageboard.schemaHelpers['element-property'] = class ElementProperty {
 				context.parent.appendChild(node);
 			}
 		}
-		this.field.appendChild(this.select);
-		this.select.addEventListener('change', this.toInput.bind(this));
-		this.update(block);
+		this.#field.appendChild(this.#select);
+		this.#select.addEventListener('change', this);
 	}
 
-	toInput() {
-		const cur = this.select.value;
-		this.updateOptions(this.input.value, cur);
-		this.input.value = cur;
-		// not sure it's useful to trigger something here
-		Pageboard.trigger(this.input, 'change');
+	handleEvent(e) {
+		if (e.type != "change") return;
+		if (e.target == this.#select) {
+			const cur = this.#select.value;
+			this.#updateOptions(this.#input.value, cur);
+			this.#input.value = cur;
+			// not sure it's useful to trigger something here
+			Pageboard.trigger(this.#input, 'change');
+		}
 	}
 
-	updateOptions(prev, cur) {
-		for (const opt of this.select.options) {
+	#updateOptions(prev, cur) {
+		for (const opt of this.#select.options) {
 			if (opt.value == prev) opt.disabled = false;
 			if (opt.value == cur) opt.disabled = true;
 		}
 	}
 
 	update(block) {
+		if (!block) block = this.#block;
+		else this.#block = block;
 		const cur = block.data.name || "";
-		this.updateOptions(this.select.value, cur);
-		this.select.value = cur;
+		if (this.#select) {
+			this.#updateOptions(this.#select.value, cur);
+			this.#select.value = cur;
+		}
 	}
 
 	destroy() {
-		if (this.select) this.select.remove();
-		this.input.hidden = false;
+		if (this.#select) this.#select.remove();
+		this.#input.hidden = false;
 	}
+}
 
-};
+Pageboard.schemaHelpers['element-property'] = ElementProperty;
 
 Pageboard.schemaFilters['element-value'] = class ElementValueFilter {
+	#using;
+
 	constructor(key, opts) {
-		this.key = key;
-		this.using = opts.using;
+		this.#using = opts.using;
 	}
 
 	update(block, schema) {
-		const empty = { title: schema.title, $filter: schema.$filter, type: "null" };
-		const usingPath = this.using.split('.');
+		const empty = {
+			title: schema.title,
+			$filter: schema.$filter,
+			type: "null"
+		};
+		const usingPath = this.#using.split('.');
 		const key = usingPath.reduce((obj, name) => obj?.[name], block.data);
 		if (!key) return empty;
 		const path = key.split('.');
 		const type = path.shift();
-		const el = Pageboard.editor.elements[type];
+		const el = ElementProperty.element(type);
 		if (!el) return empty;
+
+		const dom = Pageboard.editor.blocks.domQuery(block.id);
+		if (!dom) throw new Error(
+			`Cannot create input, DOM node not found for block ${block.id}`
+		);
+		const prefix = (dom.closest('[block-type="fieldset_list"]')?.prefix || null)?.split('.') ?? [];
+		while (prefix.length) if (path[0] == prefix.shift()) path.shift();
+
 		const prop = path.reduce((obj, name) => {
 			if (obj.type == "array" && obj.items && !Array.isArray(obj.items)) {
 				obj = obj.items;
