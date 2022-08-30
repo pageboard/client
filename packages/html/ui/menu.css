@@ -58,6 +58,7 @@
 }
 .fixed.popup.item > .placer > div {
 	max-width: 100vw;
+	margin-top: -1rem;
 }
 .center.popup.item > .placer > div {
 	transform: translateX(-50%);
