@@ -9,7 +9,13 @@ class FormBlock {
 			else copy.description = 'object';
 		} else if (schema.type == "array") {
 			copy.type = 'array';
-			copy.items = { type: 'string' };
+			if (!schema.items) {
+				// this is probably an error, skip
+			} else if (Array.isArray(schema.items)) {
+				copy.items = schema.items;
+			} else {
+				copy.items = { type: 'string' };
+			}
 		} else if (schema.type || schema.anyOf || schema.oneOf) {
 			if (schema.type) {
 				hint = schema.type;
