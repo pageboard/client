@@ -185,22 +185,29 @@ class Semafor {
 	static unflatten(map, obj) {
 		if (!map) return map;
 		if (!obj) obj = {};
-		for (const key of Object.keys(map)) {
-			const list = key.split('.');
-			let val = obj;
-			let prev = val;
-			list.forEach((sub, i) => {
-				const num = parseInt(sub);
-				if (!Number.isNaN(num) && sub == num && !Array.isArray(val)) {
-					val = [];
-					prev[list[i - 1]] = val = [];
+		for (const [path, val] of map.entries()) {
+			const list = path.split('.');
+			let cur = obj;
+			let prev = cur;
+			list.forEach((key, i) => {
+				const num = parseInt(key);
+				if (!Number.isNaN(num) && key == num && !Array.isArray(cur)) {
+					cur = [];
+					prev[list[i - 1]] = cur = [];
 				}
-				if (!val[sub]) {
-					if (i < list.length - 1) val[sub] = {};
-					else val[sub] = map[key];
+				if (cur?.[key] == null) {
+					if (val == null) {
+						if (i == 0) cur[key] = null;
+					} else if (i < list.length - 1) {
+						cur[key] = {};
+					} else {
+						cur[key] = val;
 				}
-				prev = val;
-				val = val[sub];
+				}
+				if (cur?.[key] != null) {
+					prev = cur;
+					cur = cur[key];
+				}
 			});
 		}
 		return obj;
