@@ -66,6 +66,7 @@ exports.api_form = {
 	group: 'block form',
 	menu: "form",
 	required: ["action"],
+	expressions: true,
 	$lock: {
 		'data.action.parameters': 'webmaster'
 	},
@@ -131,7 +132,8 @@ exports.api_form = {
 			properties: {
 				parameters: {
 					title: 'Parameters',
-					type: "object"
+					type: "object",
+					nullable: true
 				}
 			},
 			nullable: true
@@ -142,7 +144,8 @@ exports.api_form = {
 			properties: {
 				parameters: {
 					title: 'Parameters',
-					type: "object"
+					type: "object",
+					nullable: true
 				}
 			},
 			nullable: true
@@ -153,7 +156,8 @@ exports.api_form = {
 			properties: {
 				parameters: {
 					title: 'Parameters',
-					type: "object"
+					type: "object",
+					nullable: true
 				}
 			},
 			nullable: true
