@@ -6,7 +6,7 @@ class HTMLElementInputDateSlot extends VirtualHTMLElement {
 	get type() {
 		const type = this.getAttribute('type');
 		const step = this.step;
-		if (step) {
+		if (step && !type) {
 			if (step >= 86400) return "date";
 			else if (type == "date") return "datetime-local";
 		}
@@ -63,6 +63,7 @@ class HTMLElementInputDateSlot extends VirtualHTMLElement {
 		const [ start, end ] = this.#inputs();
 		const type = this.type;
 		let step = this.step;
+		if (type == "date" && step < 86400) step = 0;
 		if (step) {
 			if (type == "date") step = Math.round(step / 86400);
 			start.setAttribute('step', step);
