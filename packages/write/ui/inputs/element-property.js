@@ -77,7 +77,7 @@ class ElementProperty {
 		if (!dom) throw new Error(
 			`Cannot create input, DOM node not found for block ${block.id}`
 		);
-		this.#prefix = dom.closest('[block-type="fieldset_list"]')?.prefix;
+		this.#prefix = dom.closest('[block-type="fieldset_list"]')?.prefix ?? '';
 		const form = dom.closest('form');
 		const formId = form.getAttribute('block-id');
 		const formBlock = Pageboard.editor.blocks.get(formId);
