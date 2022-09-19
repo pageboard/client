@@ -4,6 +4,7 @@ Page.patch((state) => {
 			return false;
 		} else if (state.samePathname(loc)) {
 			if (loc.sameQuery({query:{}})) return true;
+			if (state.query.develop !== undefined) loc.query.develop = state.query.develop;
 			if (state.sameQuery(loc)) return true;
 		} else {
 			return state.pathname.startsWith(loc.pathname + '/');
