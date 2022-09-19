@@ -13,7 +13,7 @@ exports.fetch = {
 	html: `<element-template
 		disabled="[disabled]"
 		action="/.api/query/[$id][action.method|bmagnet]"
-		parameters="[$expr.action.parameters|ornull|templates:$query]"
+		parameters="[$expr.action.parameters|ornull|templates:$query:$pathname]"
 		success="[redirection|urltpl:url:parameters]"
 		badrequest="[badrequest|urltpl:url:parameters]"
 		unauthorized="[unauthorized|urltpl:url:parameters]"

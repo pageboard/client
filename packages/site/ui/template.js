@@ -268,19 +268,21 @@ Page.State.prototype.templatesQuery = function (node) {
 	scope.$filters = {
 		...scope.$filters,
 		'||': function (val, what) {
-			const key = what.expr.path.slice(1).join('.');
 			if (val === undefined) {
 				// it is the duty of the fetch block to redirect 400 if needed
 				missings++;
-			} else {
+			} else if (what.expr.path.length > 1) {
+				const key = what.expr.path.slice(1).join('.');
 				state.vars[key] = true;
 				if (val != null) $query[key] = val;
+			} else if (what.expr.path[0] == "$pathname") {
+				$query["$pathname"] = val;
 			}
 		}
 	};
 	params.split(' ').map(str => {
 		return `[${str}]`;
-	}).join('').fuse({ $query: state.query }, scope);
+	}).join('').fuse({ $query: state.query, $pathname: state.pathname }, scope);
 	if (missings > 0) return null;
 	else return $query;
 };

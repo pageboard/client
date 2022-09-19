@@ -276,20 +276,22 @@ export function urltpl(obj, what, pName = 'pathname', qName = 'query') {
 	return str;
 }
 
-export function templates(val, what, prefix) {
+export function templates(val, what, ...prefixes) {
 	if (!val) return val;
 	const obj = {};
-	JSON.stringify(val).fuse({ [prefix]: {} }, {
+	const data = {};
+	for (const prefix of prefixes) data[prefix] = {};
+	JSON.stringify(val).fuse(data, {
 		$filters: {
 			'||'(val, what) {
-				if (what.expr.path[0] != prefix) return val;
+				if (prefixes.includes(what.expr.path[0]) == false) return val;
 				const key = what.expr.path.slice(1).map(
 					k => k.replace(/\\./g, '%5C')
 				).join('.');
 				const expr = what.expr.toString();
 				if (obj[key] !== undefined && obj[key] !== expr) {
 					// eslint-disable-next-line no-console
-					console.error(`templates:${prefix} has incompatible values (${obj[key]} != ${expr})`);
+					console.error(`templates:${prefixes} has incompatible values (${obj[key]} != ${expr})`);
 				} else {
 					obj[key] = expr;
 				}
