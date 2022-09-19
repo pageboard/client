@@ -123,53 +123,14 @@ class HTMLCustomFormElement extends HTMLFormElement {
 			if (!name) continue;
 			if (name in query && !vars.includes(name)) vars.push(name);
 			const val = query[name];
-			const str = ((v) => {
-				if (v == null) {
-					return "";
-				} else if (Array.isArray(v)) {
-					if (["radio", "checkbox", "select-multiple"].includes(elem.type)) {
-						return v;
-					} else {
-						return v.shift();
-					}
-				} else if (typeof v == "object") {
-					return v;
-				} else {
-					return v.toString();
-				}
-			})(val);
-			switch (elem.type) {
-				case 'submit':
-					break;
-				case 'radio':
-				case 'checkbox':
-					if (Array.isArray(val) && val.length == 0 && elem.value == "") {
-						elem.checked = true;
-					} else {
-						elem.checked = (Array.isArray(val) ? val : [str]).some((str) => {
-							return str.toString() == elem.value;
-						});
-					}
-					break;
-				case 'select-multiple':
-					elem.fill(str);
-					break;
-				case 'textarea':
-					elem.innerText = str;
-					break;
-				case 'hidden':
-					if (val !== undefined) elem.value = str;
-					break;
-				case 'button':
-					break;
-				default:
-					if (elem.fill) {
-						elem.fill(str);
-					} else {
-						elem.value = str;
-					}
-					break;
+			if (val === undefined) {
+				elem.reset?.();
+			} else {
+				elem.fill?.(val);
 			}
+		}
+		for (const node of this.querySelectorAll('fieldset[is="element-fieldset"]')) {
+			node.fill(query);
 		}
 		return vars;
 	}
@@ -356,12 +317,11 @@ Page.ready(() => {
 	VirtualHTMLElement.define(`element-form`, HTMLCustomFormElement, 'form');
 });
 
-
-HTMLSelectElement.prototype.fill = function (values) {
-	if (!Array.isArray(values)) values = [values];
+HTMLSelectElement.prototype.fill = function (val) {
+	if (!Array.isArray(val)) val = [val];
 	for (let i = 0; i < this.options.length; i++) {
 		const opt = this.options[i];
-		opt.selected = values.indexOf(opt.value) > -1;
+		opt.selected = val.indexOf(opt.value) > -1;
 	}
 };
 HTMLSelectElement.prototype.reset = function () {
@@ -371,12 +331,24 @@ HTMLSelectElement.prototype.reset = function () {
 HTMLInputElement.prototype.fill = function (val) {
 	if (val == null) val = "";
 	if (this.type == "radio" || this.type == "checkbox") {
-		this.checked = val;
-	} else if (this.type == "file") {
-		if (val == '' || val == null) this.removeAttribute('value');
-		else this.setAttribute('value', val);
+		if (Array.isArray(val) && val.length == 0 && this.value == "") {
+			this.checked = true;
+		} else {
+			this.checked = (Array.isArray(val) ? val : [val]).some(str => {
+				return str.toString() == this.value;
+			});
+		}
 	} else {
-		this.value = val;
+		if (Array.isArray(val)) {
+			console.warn("Avoid fill(array) on scalar input", this, val);
+			val = val.shift();
+		}
+		if (this.type == "file") {
+			if (val === '') this.removeAttribute('value');
+			else this.setAttribute('value', val);
+		} else {
+			this.value = val;
+		}
 	}
 };
 
@@ -396,6 +368,10 @@ HTMLInputElement.prototype.save = function () {
 	} else {
 		this.defaultValue = this.value;
 	}
+};
+
+HTMLTextAreaElement.prototype.fill = function (val) {
+	this.value = val == null ? '' : val;
 };
 
 HTMLTextAreaElement.prototype.reset = function () {

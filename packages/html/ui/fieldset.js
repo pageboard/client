@@ -8,9 +8,10 @@ class HTMLCustomFieldSetElement extends HTMLFieldSetElement {
 		this.init?.();
 	}
 
-	#update() {
-		if (this.isContentEditable || !this.options.name) return;
-		const val = this.form?.read(true)?.[this.options.name];
+	fill(query) {
+		if (this.isContentEditable || !this.options?.name) return;
+		if (!query) query = this.form.read(true);
+		const val = query[this.options.name];
 		const disabled = this.disabled = this.hidden = val != this.options.value;
 		for (const node of this.querySelectorAll('[name]')) {
 			node.disabled = disabled;
@@ -19,8 +20,8 @@ class HTMLCustomFieldSetElement extends HTMLFieldSetElement {
 
 	patch(state) {
 		// before/after form#fill
-		this.#update();
-		state.finish(() => this.#update());
+		this.fill();
+		state.finish(() => this.fill());
 	}
 	setup() {
 		this.form?.addEventListener('change', this);
@@ -30,7 +31,7 @@ class HTMLCustomFieldSetElement extends HTMLFieldSetElement {
 	}
 	handleEvent(e) {
 		if (e.type == "change") {
-			this.#update();
+			this.fill();
 		}
 	}
 }
