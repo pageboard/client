@@ -41,24 +41,43 @@ exports.blog = {
 				type: 'string'
 			},
 			nullable: true
+		},
+		thumbnail: {
+			title: 'Thumbnail',
+			anyOf: [{
+				type: "null"
+			}, {
+				type: "string",
+				format: "uri"
+			}, {
+				type: "string",
+				format: "pathname"
+			}],
+			$helper: {
+				name: 'href',
+				filter: {
+					type: ["image"]
+				}
+			}
+		},
+		description: {
+			title: 'Description',
+			type: 'string',
+			nullable: true
 		}
 	},
 	contents: [{
-		id: 'description',
-		nodes: 'inline*'
-	}, {
 		id: 'content',
 		nodes: 'block+'
-	}, {
-		id: 'preview',
-		nodes: 'image'
 	}],
 	html: `<a href="[url]" class="ui" data-publication="[publication]">
-		<div class="image" block-content="preview"></div>
+		<div class="image">
+			<element-image alt="thumbnail" data-src="[thumbnail|magnet:.image]"></element-image>
+		</div>
 		<div class="content">
 			<div class="meta">[publication|magnet|formatDate:D:M:Y]</div>
 			<div class="header">[title]</div>
-			<div class="description" block-content="description"></div>
+			<div class="description">[description]</div>
 		</div>
 		<div class="extra" block-content="content"></div>
 	</a>`,
