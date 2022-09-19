@@ -425,3 +425,18 @@ export function formatDate(val, what, ...list) {
 	}
 	return str;
 }
+
+export function content(block, what, name) {
+	const { scope } = what;
+
+	const el = {
+		name: block.type, // can't we just use block.type ? no risk to overwrite ?
+		contents: scope.data.$elements[block.type].contents,
+		html: `<div block-content="${name}"></div>`
+	};
+
+	const dom = Pageboard.render({ item: block }, scope.data, el);
+	const frag = scope.data.$doc.createDocumentFragment();
+	while (dom.childNodes.length) frag.appendChild(dom.firstChild);
+	return what.filters.html(frag, what);
+}

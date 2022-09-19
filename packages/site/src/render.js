@@ -77,6 +77,68 @@ export function render(res, scope, el) {
 	});
 }
 
+function renderBlock(el, scope, block, bscope) {
+	if (!block) block = {};
+	const rscope = { ...scope, ...bscope, $element: el };
+	for (const name of ["id", "type", "parent", "child", "parents", "children", "updated_at", "created_at", "lock", "expr"]) {
+		const val = block[name];
+		if (val != null) rscope['$' + name] = val;
+	}
+
+	if (el.filters) rscope.$filters = { ...rscope.$filters, ...el.filters };
+
+	const data = Pageboard.merge(block.data, block.expr, (c, v) => {
+		if (typeof v != "string") return;
+		return v.fuse({
+			$default: c
+		}, {
+			$filters: {
+				magnet: function (val) {
+					return val;
+				},
+				bmagnet: function (val) {
+					return;
+				},
+				attr: function (val) {
+					return val;
+				},
+				'||': function (val, what) {
+					if (what.expr.path[0] != "$default") {
+						what.cancel = true;
+					}
+					return val;
+				}
+			}
+		});
+	});
+	let dom = el.dom && el.dom.cloneNode(true);
+	if (el.fuse) {
+		dom = el.fuse(dom, data, rscope) || dom;
+	} else if (el.fusable) {
+		if (!dom) throw new Error("Invalid element", el, "missing dom");
+		dom = dom.fuse(data, rscope);
+		if (!dom) return;
+		let list;
+		if (dom.nodeType != Node.DOCUMENT_FRAGMENT_NODE) {
+			list = [dom];
+		} else {
+			list = Array.from(dom.children);
+		}
+		for (const node of list) {
+			for (const attr of Array.from(node.attributes)) {
+				if (!attr.name.startsWith('style-')) continue;
+				const style = attr.name.split('-').slice(1).map((w, i) => {
+					if (i > 0) w = w[0].toUpperCase() + w.slice(1);
+					return w;
+				}).join("");
+				node.style[style] = attr.value;
+				node.removeAttribute(attr.name);
+			}
+		}
+	}
+	return dom;
+};
+
 export function install(el, scope) {
 	if (el.$installed) return;
 	el.$installed = true;
@@ -135,67 +197,8 @@ export function install(el, scope) {
 	}
 
 	if (!el.dom) return;
-	el.render = function(block, bscope) {
-		const el = this;
-		if (!block) block = {};
-		const rscope = { ...scope, ...bscope, $element: el };
-		for (const name of ["id", "type", "parent", "child", "parents", "children", "updated_at", "created_at", "lock", "expr"]) {
-			const val = block[name];
-			if (val != null) rscope['$' + name] = val;
-		}
-
-		if (el.filters) rscope.$filters = { ...rscope.$filters, ...el.filters };
-
-		const data = Pageboard.merge(block.data, block.expr, (c, v) => {
-			if (typeof v != "string") return;
-			return v.fuse({
-				$default: c
-			}, {
-				$filters: {
-					magnet: function (val) {
-						return val;
-					},
-					bmagnet: function (val) {
-						return;
-					},
-					attr: function (val) {
-						return val;
-					},
-					'||': function (val, what) {
-						if (what.expr.path[0] != "$default") {
-							what.cancel = true;
-						}
-						return val;
-					}
-				}
-			});
-		});
-		let dom = el.dom && el.dom.cloneNode(true);
-		if (el.fuse) {
-			dom = el.fuse(dom, data, rscope) || dom;
-		} else if (el.fusable) {
-			if (!dom) throw new Error("Invalid element", el, "missing dom");
-			dom = dom.fuse(data, rscope);
-			if (!dom) return;
-			let list;
-			if (dom.nodeType != Node.DOCUMENT_FRAGMENT_NODE) {
-				list = [dom];
-			} else {
-				list = Array.from(dom.children);
-			}
-			for (const node of list) {
-				for (const attr of Array.from(node.attributes)) {
-					if (!attr.name.startsWith('style-')) continue;
-					const style = attr.name.split('-').slice(1).map((w, i) => {
-						if (i > 0) w = w[0].toUpperCase() + w.slice(1);
-						return w;
-					}).join("");
-					node.style[style] = attr.value;
-					node.removeAttribute(attr.name);
-				}
-			}
-		}
-		return dom;
+	el.render = (block, bscope) => {
+		return renderBlock(el, scope, block, bscope);
 	};
 }
 
