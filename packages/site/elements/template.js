@@ -190,6 +190,16 @@ exports.binding = {
 	>[fill|trim|split:%0A|join:%7C|pre:%5B|post:%5D]</span>`
 };
 
+exports.block_binding = {
+	...exports.binding,
+	inline: false,
+	group: "block",
+	html: `<div
+		data-attr="[attr|trim|split:%0A|join:%7C|pre:%5B|post:%5D]"
+		data-label="[fill|split:%0A|slice:0:1|join:|split:.|slice:-1|join:|or: ]"
+	>[fill|trim|split:%0A|join:%7C|pre:%5B|post:%5D]</div>`
+};
+
 exports.content = {
 	title: "Content",
 	icon: '<i class="square outline icon"></i>',
