@@ -9,7 +9,7 @@ class HTMLCustomFieldSetElement extends HTMLFieldSetElement {
 	}
 
 	fill(query) {
-		if (this.isContentEditable || !this.options?.name) return;
+		if (this.isContentEditable || !this.options?.name || !this.form) return;
 		if (!query) query = this.form.read(true);
 		const val = query[this.options.name];
 		const disabled = this.disabled = this.hidden = val != this.options.value;
