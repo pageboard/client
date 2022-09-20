@@ -227,7 +227,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 
 		form.classList.add('loading');
 
-		const data = { $query	};
+		const data = { $query };
 		return Promise.all(Array.from(form.elements).filter((node) => {
 			return Boolean(node.presubmit);
 		}).map((input) => {
