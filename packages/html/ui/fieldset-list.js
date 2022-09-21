@@ -214,17 +214,16 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 		const form = this.closest('form');
 		const values = form.read(true);
 		const list = this.#listFromValues(values);
-		const prefix = this.#prefix;
-		if (!this.#walk) this.#walk = new WalkIndex(this, (node) => {
-			if (node.name?.startsWith(prefix)) {
-				const index = Number(node.name.substring(prefix.length).split('.').shift());
-				if (Number.isInteger(index) || index >= 0 || index < list.length) {
-					return index;
-				}
-			}
-			return null;
+
+		if (!this.#walk) this.#walk = new WalkIndex(this, node => {
+			const { index } = this.#parseName(node.name);
+			if (index >= 0 && index < list.length) return index;
+			else return null;
 		});
 		let index;
+
+		const fileInputs = this.querySelectorAll('[name][type="file"]')
+			.map(n => n.cloneNode(true));
 
 		switch (action) {
 			case "add":
@@ -248,6 +247,26 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 		}
 		this.#listToValues(values, list);
 		form.fill(values, state.scope);
+		const liveFileInputs = this.querySelectorAll('[name][type="file"]');
+		for (const node of fileInputs) {
+			const { value } = node;
+			const { sub } = this.#parseName(node.name);
+			const live = liveFileInputs.find(node => node.value == value);
+			if (!live) continue;
+			if (this.#parseName(live.name).sub === sub) {
+				node.name = live.name;
+				live.replaceWith(node);
+			}
+		}
+	}
+
+	#parseName(name) {
+		const prefix = this.prefix;
+		if (!name?.startsWith(prefix)) return { index: -1 };
+		const parts = name.substring(prefix.length).split('.');
+		const index = Number(parts.shift());
+		if (!Number.isInteger(index)) return { index: -1 };
+		return { index, sub: parts.join('.') };
 	}
 
 	get ownTpl() {
