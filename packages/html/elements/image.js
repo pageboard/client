@@ -184,7 +184,7 @@ exports.inlineImage = {
 				avatar: {
 					title: 'avatar',
 					type: 'boolean',
-					default: true
+					default: false
 				},
 				rounded: {
 					title: 'rounded',
