@@ -180,6 +180,7 @@ exports.inlineImage = {
 		display: {
 			title: 'Display options',
 			type: 'object',
+			nullable: true,
 			properties: {
 				avatar: {
 					title: 'avatar',
@@ -212,7 +213,8 @@ exports.inlineImage = {
 					}, {
 						const: "right",
 						title: "right"
-					}]
+					}],
+					default: ""
 				},
 				align: {
 					title: 'align',
