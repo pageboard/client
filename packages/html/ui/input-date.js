@@ -5,7 +5,7 @@ class HTMLElementInputDate extends HTMLInputElement {
 	}
 
 	patch() {
-		if (this.type == "date" && this.step < 86400) this.removeAttribute('step');
+		if (this.type == "date") this.removeAttribute('step');
 	}
 
 	setAttribute(name, value) {

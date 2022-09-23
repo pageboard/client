@@ -62,10 +62,8 @@ class HTMLElementInputDateSlot extends VirtualHTMLElement {
 	patch(state) {
 		const [ start, end ] = this.#inputs();
 		const type = this.type;
-		let step = this.step;
-		if (type == "date" && step < 86400) step = 0;
+		const step = type == "date" ? 0 : this.step;
 		if (step) {
-			if (type == "date") step = Math.round(step / 86400);
 			start.setAttribute('step', step);
 			end.setAttribute('step', step);
 		} else {
