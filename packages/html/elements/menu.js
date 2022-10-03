@@ -43,6 +43,17 @@ exports.menu_group = {
 				const: "right",
 				title: "Right"
 			}]
+		},
+		responsive: {
+			title: 'Responsive',
+			default: 'popup',
+			anyOf: [{
+				const: null,
+				title: 'None'
+			}, {
+				const: 'popup',
+				title: 'Popup'
+			}]
 		}
 	},
 	contents: {
@@ -51,7 +62,7 @@ exports.menu_group = {
 	},
 	html: `<element-menu class="[position] menu">
 		<div block-content="items"></div>
-		<div tabindex="0" class="ui fixed popup item">
+		<div tabindex="0" class="ui fixed popup item [responsive|eq:popup|bmagnet:*]">
 			<div class="icon">≡</div>
 			<div class="dropdown placer"><div class="menu"></div></div>
 		</div>

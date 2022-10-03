@@ -4,7 +4,10 @@ Page.patch((state) => {
 			return false;
 		} else if (state.samePathname(loc)) {
 			if (loc.sameQuery({query:{}})) return true;
-			if (state.query.develop !== undefined) loc.query.develop = state.query.develop;
+			if (state.query.develop !== undefined) {
+				// kept for backward compatibility
+				loc.query.develop = state.query.develop;
+			}
 			if (state.sameQuery(loc)) return true;
 		} else {
 			return state.pathname.startsWith(loc.pathname + '/');
@@ -26,6 +29,10 @@ class HTMLElementMenu extends VirtualHTMLElement {
 		if (this.isContentEditable || this.matches('.vertical')) return;
 		const menu = this.firstElementChild;
 		const helper = this.lastElementChild;
+		if (helper == menu) {
+			// not a popup
+			return;
+		}
 		helper.lastElementChild.lastElementChild.appendChild(this.toHelper(menu));
 		state.finish(() => {
 			this.observer = new ResizeObserver((entries, observer) => {
@@ -43,10 +50,14 @@ class HTMLElementMenu extends VirtualHTMLElement {
 		if (this.observer) this.observer.disconnect();
 	}
 	handleAllClick(e, state) {
+		const tosser = this.lastElementChild;
+		if (tosser == this.firstElementChild) {
+			// not a popup
+			return;
+		}
 		if (this.active) {
 			this.active.classList.toggle('active', false);
 		}
-		const tosser = this.lastElementChild;
 		tosser.classList.remove('inactive');
 		let item = tosser.contains(e.target) && !e.target.closest('a') && e.target.closest('.item');
 		if (item == tosser) {
