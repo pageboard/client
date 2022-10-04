@@ -170,6 +170,10 @@ body[data-mode="read"] #pageboard-read > iframe {
 #form fieldset:disabled > :not(legend) {
 	display:none;
 }
+#form fieldset:disabled {
+	opacity:1;
+	pointer-events: auto;
+}
 
 #form .inline.fields .field {
 	padding:0;
