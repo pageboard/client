@@ -33,8 +33,8 @@
     "foundation-emails": "^2.3.1",
     "inlineresources": "^1.0.1",
     "juice": "^8.0.0",
-    "postinstall": "^0.7.3",
-    "postinstall-bundle": "^0.7.2"
+    "postinstall": "^0.8.0",
+    "postinstall-bundle": "^0.7.4"
   },
   "prepare": {
     "inlineresources/dist/inlineresources.allinone.js": "copy lib/inlineresources.js",
