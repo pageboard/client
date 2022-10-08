@@ -156,8 +156,8 @@ exports.input_text = {
 		nodes: 'inline*'
 	},
 	patterns: {
-		tel: /^(\(\d+\))? *\d+([ .\-]?\d+)*$/.source,
-		email: /^[\w.!#$%&'*+\/=?^`{|}~-]+@\w(?:[\w-]{0,61}\w)?(?:\.\w(?:[\w-]{0,61}\w)?)*$/.source
+		tel: /^(\(\d+\))? *\d+([ .-]?\d+)*$/.source,
+		email: /^[\w.!#$%&'*+/=?^`{|}~-]+@\w(?:[\w-]{0,61}\w)?(?:\.\w(?:[\w-]{0,61}\w)?)*$/.source
 	},
 	html: `<div class="[width|num: wide] field [type|eq:hidden:hidden:]">
 		<label block-content="label">Label</label>
@@ -233,7 +233,7 @@ exports.input_range = {
 	menu: "form",
 	group: "block",
 	context: 'form//',
-	properties: Object.assign({
+	properties: Object.assign({}, exports.input_number.properties, {
 		multiple: {
 			title: 'Multiple',
 			type: 'boolean',
@@ -242,9 +242,14 @@ exports.input_range = {
 		pips: {
 			title: 'Pips',
 			type: 'boolean',
-			default: true
+			default: false
+		},
+		step: {
+			title: 'Step',
+			type: "number",
+			default: 10
 		}
-	}, exports.input_number.properties),
+	}),
 	contents: {
 		id: 'label',
 		nodes: 'inline*'

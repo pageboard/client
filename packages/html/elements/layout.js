@@ -57,8 +57,10 @@ exports.layout = {
 		},
 		width: {
 			title: 'Width',
-			default: "full",
 			anyOf: [{
+				type: "null",
+				title: "None"
+			}, {
 				const: "full",
 				title: "Full"
 			}, {
@@ -125,6 +127,7 @@ exports.layout = {
 				crop: {
 					title: 'Crop and scale',
 					type: "object",
+					nullable: true,
 					properties: {
 						x: {
 							type: "number",

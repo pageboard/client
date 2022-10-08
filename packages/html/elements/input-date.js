@@ -52,8 +52,13 @@ exports.input_date_time = {
 			title: 'Step',
 			description: 'rounding/increment in seconds',
 			type: 'integer',
-			nullable: true,
+			default: null,
 			anyOf: [{
+				const: null,
+				title: '1 minute'
+			}, {
+				const: 60
+			}, {
 				const: 60 * 5,
 				title: '5 minutes'
 			}, {
