@@ -102,13 +102,10 @@ element-menu > [block-content="items"] {
 }
 element-menu.burger > [block-content="items"] {
 	left:0;
-}
-element-menu.burger.right > [block-content="items"] {
 	position: absolute;
 	pointer-events: none;
 	height: 0;
 }
-
 element-menu:not(.burger) > .item {
 	display:none !important;
 }
