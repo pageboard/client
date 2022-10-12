@@ -144,13 +144,21 @@ export function schema(val, what, spath) {
 	const item = blocks.pop();
 	if (!item) return;
 
+	const isIndex = !Number.isNaN(parseInt(path[path.length - 1]));
+
 	const schemaPath = item.block.type + '.properties.'
-		+ path.slice(item.index).join('.properties.');
+		+ path.slice(item.index, isIndex ? -1 : null).join('.properties.');
 
 	let schema = what.expr.get(what.scope.data.$elements, schemaPath);
 	if (!schema) {
 		// eslint-disable-next-line no-console
 		console.warn("No schema for", schemaPath);
+		return;
+	}
+	if (schema.type == "array") {
+		schema = schema.items;
+	} else if (isIndex) {
+		console.warn("Expected schema type: array", schemaPath);
 		return;
 	}
 	let iskey = spath.endsWith('+');
