@@ -1,4 +1,4 @@
-Page.patch((state) => {
+Page.patch(state => {
 	const ogImage = document.head.querySelector('meta[property="og:image"]');
 	if (ogImage) {
 		const image = ogImage.querySelector('element-image');

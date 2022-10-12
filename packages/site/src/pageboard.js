@@ -89,7 +89,7 @@ function bundle(loader, state) {
 				}
 			}
 		};
-	}).then((res) => {
+	}).then(res => {
 		initState(res, state);
 		const elts = scope.$elements;
 		for (const name of Object.keys(elts)) {
