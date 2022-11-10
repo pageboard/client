@@ -126,39 +126,41 @@ export function sum(obj, what, ...list) {
 	return sum;
 }
 
-export function schema(val, what, spath) {
+export function schema(val, what, spath, absPath) {
 	// return schema of repeated key, schema of anyOf/listOf const value
 	if (val === undefined) return;
+	let isIndex = false;
+	if (!absPath) {
+		const path = what.scope.path;
+		let data = path[0]?.startsWith('$') ? what.scope.data : what.data;
+		const blocks = [];
+		for (let i = 0; i < path.length; i++) {
+			if (!data) break;
+			if (data.id && data.type) blocks.push({
+				index: i + 1, // add one because path will be block.data and schema is block.data schema
+				block: data
+			});
+			data = data[path[i]];
+		}
+		const item = blocks.pop();
+		if (!item) return;
 
-	const path = what.scope.path;
-	let data = path[0]?.startsWith('$') ? what.scope.data : what.data;
-	const blocks = [];
-	for (let i = 0; i < path.length; i++) {
-		if (!data) break;
-		if (data.id && data.type) blocks.push({
-			index: i + 1, // add one because path will be block.data and schema is block.data schema
-			block: data
-		});
-		data = data[path[i]];
+		isIndex = !Number.isNaN(parseInt(path[path.length - 1]));
+
+		absPath = item.block.type + '.properties.'
+			+ path.slice(item.index, isIndex ? -1 : null).join('.properties.');
 	}
-	const item = blocks.pop();
-	if (!item) return;
 
-	const isIndex = !Number.isNaN(parseInt(path[path.length - 1]));
-
-	const schemaPath = item.block.type + '.properties.'
-		+ path.slice(item.index, isIndex ? -1 : null).join('.properties.');
-
-	let schema = what.expr.get(what.scope.data.$elements, schemaPath);
+	let schema = what.expr.get(what.scope.data.$elements, absPath);
 	if (!schema) {
 		// eslint-disable-next-line no-console
-		console.warn("No schema for", schemaPath);
+		console.warn("No schema for", absPath);
 		return;
 	}
 	if (schema.type == "array") {
 		schema = schema.items;
 	} else if (isIndex) {
-		console.warn("Expected schema type: array", schemaPath);
+		console.warn("Expected schema type: array", absPath);
 		return;
 	}
 	let iskey = spath.endsWith('+');
