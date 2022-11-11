@@ -170,7 +170,8 @@ export default class BlocksView {
 						continue;
 					}
 					console.warn("missing block for", parent.nodeName, '>', node.nodeName, id);
-					parent.replaceChild(node.ownerDocument.createTextNode('∅'), node);
+					// FIXME find another way
+					//parent.replaceChild(node.ownerDocument.createTextNode('∅'), node);
 					continue;
 				}
 				const frag = this.renderFrom(child, blocks, store, {
