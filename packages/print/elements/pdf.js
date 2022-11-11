@@ -18,10 +18,44 @@ exports.pdf = {
 		pdf: true
 	}
 };
-exports.pdf.properties = { ...exports.pdf.properties };
-exports.pdf.properties.url = {
-	...exports.pdf.properties.url,
-	pattern: /^(\/[a-zA-Z0-9-]*)+$/.source
+exports.pdf.fragments = [
+	...exports.pdf.fragments || [], {
+		path: 'body',
+		attributes: {
+			"data-width": "[paper.width]",
+			"data-height": "[paper.height]",
+			"data-margin": "[paper.margin]"
+		}
+	}
+];
+
+exports.pdf.properties = {
+	...exports.pdf.properties,
+	url: {
+		...exports.pdf.properties.url,
+		pattern: /^(\/[a-zA-Z0-9-]*)+$/.source
+	},
+	paper: {
+		title: 'Paper',
+		type: 'object',
+		properties: {
+			width: {
+				title: 'Width',
+				type: 'string',
+				default: '210mm'
+			},
+			height: {
+				title: 'Height',
+				type: 'string',
+				default: '297mm'
+			},
+			margin: {
+				title: 'Margin',
+				type: 'string',
+				default: '10mm'
+			}
+		}
+	}
 };
 
 if (exports.sitemap) exports.sitepdf = exports.sitemap.itemModel('pdf', true);
@@ -39,24 +73,5 @@ exports.sheet = {
 	upgrade: {
 		'content.' : 'content.page'
 	},
-	html: '<div class="page-sheet"><div block-content="page"></div></div>'
-};
-
-exports.break = {
-	title: 'Break',
-	menu: "pdf",
-	group: 'block',
-	context: 'pdf//',
-	icon: '<i class="icon cut"></i>',
-	html: '<div class="page-break"></div>'
-};
-
-exports.nobreak = {
-	title: 'Avoid',
-	menu: "pdf",
-	group: 'block',
-	context: 'pdf//',
-	icon: '<i class="icons"><i class="blue dont icon"></i><i class="icon cut"></i></i>',
-	contents: "block+",
-	html: '<div class="page-nobreak"></div>'
+	html: '<div class="page-sheet" block-content="page"></div>'
 };
