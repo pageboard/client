@@ -5,8 +5,8 @@ class HTMLElementHeadingHelper extends HTMLHeadingElement {
 	}
 	init() {
 		this.willSync = Pageboard.debounce(this.sync, 100);
-		this.observer = new MutationObserver((records) => {
-			if (records.some((mut) => {
+		this.observer = new MutationObserver(records => {
+			if (records.some(mut => {
 				return mut.type == "characterData" || mut.type == "childList" && mut.addedNodes.length;
 			}))	this.willSync();
 		});
