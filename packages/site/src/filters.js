@@ -31,7 +31,7 @@ export function csp($elements, what) {
 			const origin = /(^https?:\/\/[.-\w]+)/.exec(src);
 			if (origin) {
 				if (!el.csp) el.csp = {};
-				if (!el.csp.script) el.csp.script;
+				if (!el.csp.script) el.csp.script = [];
 				el.csp.script.push(origin[0]);
 			}
 		}
@@ -39,7 +39,7 @@ export function csp($elements, what) {
 			const origin = /(^https?:\/\/[.-\w]+)/.exec(src);
 			if (origin) {
 				if (!el.csp) el.csp = {};
-				if (!el.csp.style) el.csp.style;
+				if (!el.csp.style) el.csp.style = [];
 				el.csp.style.push(origin[0]);
 			}
 		}
