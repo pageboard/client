@@ -150,6 +150,9 @@ exports.heading = {
 	stylesheets: [
 		'../ui/heading.css'
 	],
+	scripts: [
+		'../ui/heading.js'
+	],
 	resources: {
 		helper: '../ui/heading-helper.js'
 	},
