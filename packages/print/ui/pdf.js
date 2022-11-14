@@ -8,18 +8,24 @@ Page.setup(state => {
 	opts.page = '.page-sheet';
 	autobreakFn(opts);
 	if (state.pathname.endsWith('.pdf') == false) {
-		const href = Page.format({
-			pathname: state.pathname + ".pdf",
-			query: state.query
-		});
-		// TODO multiple buttons for screen/print presets
-		// TODO add a button for preview ?
-		document.documentElement.insertAdjacentHTML('beforeend', `
-			<a href="${href}" target="_blank">PDF</a>
-		`);
+		showPrintButtons(state);
 	}
 });
 
+function showPrintButtons(state) {
+	const root = document.documentElement;
+	root.appendChild(root.dom(`<div class="pdf-chooser">
+		<a target="_blank" href="[$pathname].pdf[$query|set:pdf:[presets.const|repeat:a:preset]|query]">[preset.title]</a>
+	</div>`).fuse({
+		presets: [{
+			const: 'ebook',
+			title: '👁'
+		}, {
+			const: 'printer',
+			title: '🖶'
+		}]
+	}, state.scope));
+}
 
 function autobreakFn(opts = {}) {
 	if (!opts.page) opts.page = ".page";

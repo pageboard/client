@@ -4,26 +4,31 @@
 }
 
 @media screen {
-	body + a {
-		top: 0;
-		left: 50%;
-		transform: translate(-50%, 0);
+	body + div.pdf-chooser {
+		top: 0%;
+		left: 0%;
 		position: fixed;
-		background: white;
-		border-bottom-left-radius: 0.5em;
-		border-bottom-right-radius: 0.5em;
-		text-align: center;
-		color: black;
+		margin:0.2em;
 		font-size: 2rem;
+	}
+	body + div.pdf-chooser > a {
+		color: black;
+		opacity:0.9;
+		margin:0.2em;
+		background: white;
+		border-radius: 0.5em;
+		text-align: center;
 		padding: 0rem 1rem 0.5rem;
 		box-shadow: rgb(0 0 0 / 20%) 0px 0.2em 0.5em -0.1em;
 		z-index: 1;
-		font-weight: bold;
+	}
+	body + div.pdf-chooser > a:visited {
+		color:black;
 	}
 }
 
 @media print {
-	body + a {
+	body + div.pdf-chooser {
 		display:none;
 	}
 }
