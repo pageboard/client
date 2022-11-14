@@ -22,9 +22,10 @@ export function meta(meta) {
 	if (meta.elements) for (const [name, el] of Object.entries(meta.elements)) {
 		if (!Pageboard.elements[name]) Pageboard.elements[name] = el;
 	}
-	if (meta.bundle && !Pageboard.cache[meta.bundle]) {
-		pr = Pageboard.cache[meta.bundle] = Pageboard.load.js(meta.bundle);
-	}
+	if (meta.schemas) meta.schemas.forEach(schema => {
+		if (Pageboard.cache[schema]) return;
+		pr = Pageboard.cache[schema] = Pageboard.load.js(schema);
+	});
 
 	// additional resources - elements in group page usually do not have those
 	if (meta.stylesheets) pr = pr.then(() => {

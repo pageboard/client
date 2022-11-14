@@ -1,6 +1,7 @@
 exports.sitemap = {
 	title: "Sitemap",
 	group: "block",
+	bundle: true,
 	icon: '<i class="sitemap icon"></i>',
 	menu: 'link',
 	contents: {
@@ -38,6 +39,7 @@ exports.sitemap = {
 				...schema.properties
 			},
 			menu: "link",
+			bundle: 'sitemap',
 			group: 'sitemap_item',
 			virtual: true,
 			contents: leaf ? undefined : {

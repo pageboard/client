@@ -34,7 +34,7 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 					: Promise.resolve();
 				this.loading = true;
 				if (action) this.classList.add('loading');
-				return Pageboard.bundle(loader, state).then((res) => {
+				return Pageboard.bundle(loader, state).then(res => {
 					if (res) {
 						data.$response = res;
 						data.$status = res.status;
@@ -145,9 +145,6 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 		for (const [key, val] of Object.entries(state.data)) {
 			if (key.startsWith('$') && scope[key] == null) scope[key] = val;
 		}
-		scope.$pathname = state.pathname;
-		scope.$query = state.query;
-		scope.$referrer = state.referrer.pathname || state.pathname;
 
 		if (!this.infinite) {
 			view.textContent = '';

@@ -3,6 +3,8 @@ exports.mail = {
 	title: 'Mail',
 	icon: '<i class="icon file outline"></i>',
 	group: 'page',
+	bundle: true,
+	standalone: true,
 	properties: {
 		title: {
 			title: 'Title',

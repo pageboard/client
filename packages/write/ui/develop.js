@@ -4,13 +4,10 @@ Pageboard.elements.develop = {
 		const fuse = pscope.$element.fuse;
 		pscope.$element.fuse = function(node, d, scope) {
 			const $el = scope.$element;
-			let scripts = [];
-			let stylesheets = [];
+
 			const meta = scope.$meta;
-			if (meta?.writes) {
-				scripts = meta.writes.scripts;
-				stylesheets = meta.writes.stylesheets;
-			}
+			let scripts = meta?.resources?.scripts ?? [];
+			let stylesheets = meta?.resources?.stylesheets ?? [];
 			const active = window.parent.document.body.dataset.mode != "read";
 			const ret = fuse ? fuse.call($el, node, d, scope) : node.fuse(d, scope);
 			const body = node.querySelector('body');
@@ -31,8 +28,8 @@ Pageboard.elements.develop = {
 				<link rel="stylesheet" href="[stylesheets|repeat]">
 				<script defer src="[scripts|repeat]"></script>`
 			).fuse({
-				stylesheets: stylesheets,
-				scripts: scripts
+				stylesheets,
+				scripts
 			}, scope);
 			const head = node.querySelector('head');
 			head.prepend(frag);

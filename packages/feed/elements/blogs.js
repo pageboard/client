@@ -1,6 +1,5 @@
 exports.blog = {
 	title: 'Blog',
-	bundle: 'page',
 	icon: '<i class="newspaper outline icon"></i>',
 	standalone: true,
 	group: 'block',

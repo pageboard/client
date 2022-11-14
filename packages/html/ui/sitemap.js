@@ -8,7 +8,7 @@ class HTMLElementSitemap extends VirtualHTMLElement {
 			if (parent.content == null) parent.content = {};
 			if (parent.content.children == null) parent.content.children = "";
 			if (typeof parent.content.children == "string") {
-				parent.content.children += `<div block-id="${page.id}" block-type="site${page.type}"></div>`;
+				parent.content.children += `<div block-id="${page.id}" block-type="${page.type}"></div>`;
 			}
 			delete tree._;
 		} else {

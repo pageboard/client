@@ -1,17 +1,18 @@
 exports.write = {
 	priority: 100,
 	title: 'Editor',
-	group: 'page',
+	bundle: true,
+	standalone: true,
 	html: `<html lang="[$site.lang|ornull]">
 	<head>
 		<title>[title][$site.title|pre: - |or:]</title>
 		<meta http-equiv="Content-Security-Policy" content="[$elements|csp]">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<base href="[$loc.origin]">
-		<link rel="stylesheet" href="[$elements.write.stylesheets|repeat]" />
+		<link rel="stylesheet" href="[$element.stylesheets|repeat]" />
 		<script crossorigin="anonymous" defer src="https://cdn.polyfill.io/v3/polyfill.min.js?flags=gated&unknown=polyfill&features=[$elements|polyfills|url|magnet:*]"></script>
-		<script defer src="[$elements.write.scripts|repeat]"></script>
-		<script defer src="[$meta.services]"></script>
+		<script defer src="[$element.scripts|repeat]"></script>
+		<script defer src="[$meta.services|repeat]"></script>
 	</head>
 	<body
 		data-devtools="[$element.resources.devtools]"

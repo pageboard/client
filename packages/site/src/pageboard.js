@@ -43,38 +43,30 @@ function initState(res, state) {
 	if (!scope.$doc) scope.$doc = document.cloneNode();
 	scope.$loc = new URL(state.toString(), document.location);
 	scope.$loc.query = { ...state.query };
+	scope.$pathname = state.pathname;
+	scope.$query = state.query;
+	scope.$referrer = state.referrer.pathname || state.pathname;
 	if (!res) return;
 	if (res.grants) {
 		state.data.$grants = res.grants;
-		scope.$write = !!res.grants.webmaster;
+		scope.$write = Boolean(res.grants.webmaster);
 	}
 	if (res.hrefs) Object.assign(state.data.$hrefs, res.hrefs);
 	scope.$hrefs = state.data.$hrefs; // backward compat FIXME get rid of this, data.$hrefs is good
 
-	if (res.meta?.group == "page") {
-		for (const k of ["grants", "links", "site", "locked", "granted"]) {
-			if (res[k] !== undefined) scope[`$${k}`] = res[k];
-		}
-		scope.$element = scope.$elements[res.meta.name];
+	for (const k of ["grants", "links", "site", "locked", "granted"]) {
+		if (res[k] !== undefined) scope[`$${k}`] = res[k];
+	}
+	if (res.item && !scope.$element) {
+		scope.$element = scope.$elements[res.item.type];
 	}
 }
 
 function bundle(loader, state) {
 	const scope = state.scope;
-	return loader.then((res) => {
-		if (!res) return Promise.resolve();
-		const metas = [];
-		if (res.meta) metas.push(res.meta);
-		if (res.metas) metas.push(...res.metas);
-		return Promise.all(metas.map((meta) => {
-			if (meta.group == "page" && !res.meta) {
-				// restores an asymmetry between route bundle load
-				// and navigational bundle load
-				res.meta = meta;
-			}
-			return load.meta(meta);
-		})).then(() => res);
-	}).catch((err) => {
+	return loader.then(res => {
+		return load.meta(res.meta).then(() => res);
+	}).catch(err => {
 		return {
 			meta: {
 				group: 'page'

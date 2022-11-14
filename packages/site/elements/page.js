@@ -3,6 +3,8 @@ exports.page = {
 	title: 'Page',
 	icon: '<i class="icon file outline"></i>',
 	group: 'page',
+	bundle: true,
+	standalone: true,
 	required: ['url'],
 	properties: {
 		title: {
@@ -121,6 +123,8 @@ exports.redirection = {
 	priority: -100,
 	title: 'Redirection',
 	icon: '<i class="icon random"></i>',
+	bundle: true,
+	standalone: true,
 	group: 'page',
 	required: ['url'],
 	properties: {
