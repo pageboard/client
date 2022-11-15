@@ -1,9 +1,9 @@
 Page.patch((state) => {
-	function isSameOrParent(loc, state) {
+	function isSameOrParent(loc, state, isItem) {
 		if (!state.sameDomain(loc)) {
 			return false;
 		} else if (state.samePathname(loc)) {
-			if (loc.sameQuery({query:{}})) return true;
+			if (!isItem && loc.sameQuery({query:{}})) return true;
 			if (state.query.develop !== undefined) {
 				// kept for backward compatibility
 				loc.query.develop = state.query.develop;
@@ -17,7 +17,7 @@ Page.patch((state) => {
 		for (const item of document.querySelectorAll('[block-type="menu"] [href]')) {
 			const loc = item.getAttribute('href');
 			if (!loc) continue;
-			if (isSameOrParent(Page.parse(loc), state)) {
+			if (isSameOrParent(Page.parse(loc), state, item.matches('.item'))) {
 				item.classList.add('active');
 			}
 		}
