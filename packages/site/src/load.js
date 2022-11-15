@@ -33,12 +33,12 @@ export function meta(meta) {
 
 	// additional resources - elements in group page usually do not have those
 	if (meta.stylesheets) pr = pr.then(() => {
-		return Promise.all(meta.stylesheets.map((url) => {
+		return Promise.all(meta.stylesheets.map(url => {
 			return Pageboard.load.css(url);
 		}));
 	});
 	if (meta.scripts) pr = pr.then(() => {
-		return Promise.all(meta.scripts.map((url) => {
+		return Promise.all(meta.scripts.map(url => {
 			return Pageboard.load.js(url);
 		}));
 	});

@@ -9,7 +9,7 @@ Page.route((state) => {
 		});
 	}
 
-	return Pageboard.bundle(loader, state).then((res) => {
+	return Pageboard.bundle(loader, state).then(res => {
 		state.data.$cache = res;
 		state.scope.$page = res.item;
 		const node = Pageboard.render(res, state.scope);
