@@ -22,9 +22,13 @@ export function meta(meta) {
 	if (meta.elements) for (const [name, el] of Object.entries(meta.elements)) {
 		if (!Pageboard.elements[name]) Pageboard.elements[name] = el;
 	}
-	if (meta.schemas) meta.schemas.forEach(schema => {
-		if (Pageboard.cache[schema]) return;
-		pr = Pageboard.cache[schema] = Pageboard.load.js(schema);
+	if (meta.schemas) pr = pr.then(() => {
+		return Promise.all(meta.schemas.map(schema => {
+			if (!Pageboard.cache[schema]) {
+				Pageboard.cache[schema] = Pageboard.load.js(schema);
+			}
+			return Pageboard.cache[schema];
+		}));
 	});
 
 	// additional resources - elements in group page usually do not have those
