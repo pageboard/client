@@ -14,6 +14,7 @@ Page.setup(state => {
 
 function showPrintButtons(state) {
 	const root = document.documentElement;
+	if (document.querySelector('html > .pdf-chooser')) return;
 	root.appendChild(root.dom(`<div class="pdf-chooser">
 		<a target="_blank" href="[$pathname].pdf[$query|set:pdf:[presets.const|repeat:a:preset]|query]">[preset.title]</a>
 	</div>`).fuse({

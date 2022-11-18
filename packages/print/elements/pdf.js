@@ -38,6 +38,7 @@ exports.pdf.properties = {
 	paper: {
 		title: 'Paper',
 		type: 'object',
+		nullable: true,
 		properties: {
 			width: {
 				title: 'Width',
