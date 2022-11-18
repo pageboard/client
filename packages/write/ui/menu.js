@@ -210,7 +210,7 @@ Pageboard.Controls.Menu = class Menu {
 				try {
 					let tr = state.tr;
 					let sel = self.selection;
-					const block = editor.blocks.create(el.alias || el.name);
+					const block = editor.blocks.create(el.name);
 					if (el.inline) {
 						if (el.leaf) {
 							tr.replaceSelectionWith(nodeType.create(editor.blocks.toAttrs(block)));
