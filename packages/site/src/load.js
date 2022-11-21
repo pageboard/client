@@ -46,15 +46,14 @@ export function meta(meta) {
 	return pr;
 }
 
-function getHead(doc) {
-	if (!doc) doc = document;
-	else if (doc.$element) doc = doc.$element.dom;
-	return doc.querySelector('head');
+function getHead(scope) {
+	const doc = scope?.$element?.dom ?? document;
+	return doc.querySelector('head') || document.head;
 }
 
-export function js(url, doc) {
-	const head = getHead(doc);
-	doc = head.ownerDocument;
+export function js(url, scope) {
+	const head = getHead(scope);
+	const doc = head.ownerDocument;
 	if (head.querySelector(`script[src="${url}"]`)) {
 		return Promise.resolve();
 	}
@@ -65,9 +64,9 @@ export function js(url, doc) {
 	return load(node, head);
 }
 
-export function css(url, doc) {
-	const head = getHead(doc);
-	doc = head.ownerDocument;
+export function css(url, scope) {
+	const head = getHead(scope);
+	const doc = head.ownerDocument;
 	if (head.querySelector(`link[rel="stylesheet"][href="${url}"]`)) {
 		return Promise.resolve();
 	}
