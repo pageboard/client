@@ -1,6 +1,6 @@
 class HTMLElementBlogs extends VirtualHTMLElement {
 	static defaults = {
-		topics: (x) => (x || '').split(',').filter((x) => Boolean(x))
+		topics: (x) => (x || '').split(',').filter(x => Boolean(x))
 	};
 
 	patch(state) {

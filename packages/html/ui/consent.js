@@ -94,7 +94,7 @@ Page.State.prototype.reconsent = function (fn) {
 	return asking;
 };
 
-Page.paint((state) => {
+Page.paint(state => {
 	state.finish(() => {
 		let run = true;
 		if (HTMLCustomConsentElement.waiting) {

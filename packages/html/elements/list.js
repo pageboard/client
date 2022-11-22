@@ -69,7 +69,7 @@ exports.list = {
 	parse: function(dom) {
 		let marker = null;
 		const style = dom.style.listStyleType;
-		if (style && this.properties.marker.anyOf.some((item) => item.const == style)) {
+		if (style && this.properties.marker.anyOf.some(item => item.const == style)) {
 			marker = style;
 		} else if (dom.nodeName == "OL") {
 			marker = 'decimal';

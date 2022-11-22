@@ -7,7 +7,7 @@ class HTMLElementGoogleTranslate extends VirtualHTMLElement {
 			Object.assign(document.body.style, this.style);
 		}
 		if (this.observer) this.close(state);
-		this.#observer = new MutationObserver((records) => {
+		this.#observer = new MutationObserver(records => {
 			for (const record of records) {
 				if (record.attributeName == "style") {
 					const s = record.target.style;

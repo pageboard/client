@@ -2,8 +2,8 @@ window.Pageboard.InfiniteScroll = class {
 	constructor(node) {
 		this.node = node;
 		this.page = 0;
-		this.observer = new IntersectionObserver((entries) => {
-			entries.forEach((entry) => {
+		this.observer = new IntersectionObserver(entries => {
+			entries.forEach(entry => {
 				this.visible = this.node.offsetParent && (entry.intersectionRatio || 0) !== 0;
 				this.fetch();
 			});
@@ -14,7 +14,7 @@ window.Pageboard.InfiniteScroll = class {
 	fetch() {
 		if (!this.queue) return;
 		this.queue = this.queue.then(() => {
-			if (this.visible && this.active) return this.load(this.page).then((stop) => {
+			if (this.visible && this.active) return this.load(this.page).then(stop => {
 				if (stop) return;
 				this.page += 1;
 				return this.waitRepaint().then(() => {
@@ -24,7 +24,7 @@ window.Pageboard.InfiniteScroll = class {
 		});
 	}
 	waitRepaint() {
-		return new Promise((resolve) => {
+		return new Promise(resolve => {
 			window.requestAnimationFrame(() => {
 				setTimeout(resolve, 0);
 			});

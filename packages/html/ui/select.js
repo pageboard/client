@@ -137,7 +137,7 @@ class HTMLElementSelect extends VirtualHTMLElement {
 		});
 	}
 	setup(state) {
-		this.#observer = new MutationObserver((mutations) => this.#fillSelect());
+		this.#observer = new MutationObserver(mutations => this.#fillSelect());
 		this.#observer.observe(this.#menu, {
 			childList: true
 		});
@@ -175,7 +175,7 @@ class HTMLElementSelect extends VirtualHTMLElement {
 
 		state.finish(() => {
 			// synchronize after form has filled select
-			this.#select.children.forEach((opt) => {
+			this.#select.children.forEach(opt => {
 				if (opt.value) {
 					if (opt.selected) this.#selectItem(opt.value);
 					else this.#deselectItem(opt.value);

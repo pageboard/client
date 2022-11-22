@@ -15,7 +15,7 @@ Pageboard.Controls.Menu = class Menu {
 		}
 
 		const active = !disabled && spec.active?.(view.state);
-		const icon = ((str) => {
+		const icon = (str => {
 			if (/<svg/i.test(str) || str.startsWith('<')) {
 				return str;
 			} else {
@@ -123,7 +123,7 @@ Pageboard.Controls.Menu = class Menu {
 		const inlineSpans = [];
 		let inlineSpansActive = false;
 
-		if (sel) this.menu.items.forEach((item) => {
+		if (sel) this.menu.items.forEach(item => {
 			const dom = Menu.renderItem(item, this.editor, sel.node?.type.name);
 			if (!dom) return;
 			const el = item.spec.element;
@@ -156,12 +156,12 @@ Pageboard.Controls.Menu = class Menu {
 			<div class="ui icon menu"></div>
 		</div>`);
 			this.inlines.appendChild(inlinesMenu);
-			inlineSpans.forEach((dom) => inlinesMenu.firstElementChild.append(dom));
+			inlineSpans.forEach(dom => inlinesMenu.firstElementChild.append(dom));
 		}
 		if (inlineBlocks.length) {
 			const inlineBlocksMenu = this.inlines.dom(`<div class="right menu"></div>`);
 			this.inlines.appendChild(inlineBlocksMenu);
-			inlineBlocks.forEach((dom) => inlineBlocksMenu.appendChild(dom));
+			inlineBlocks.forEach(dom => inlineBlocksMenu.appendChild(dom));
 		}
 		if (isBlockSelection) {
 			if (!activeTab) {

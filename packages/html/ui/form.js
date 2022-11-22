@@ -213,7 +213,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		const p = this.ignoreInputChange
 			? state.replace(loc)
 			: state.push(loc);
-		return p.catch((err) => {
+		return p.catch(err => {
 			if (err.status != null) status = err.status;
 			else status = 0;
 		}).then(() => {
@@ -228,9 +228,9 @@ class HTMLCustomFormElement extends HTMLFormElement {
 		form.classList.add('loading');
 
 		const data = { $query };
-		return Promise.all(Array.from(form.elements).filter((node) => {
+		return Promise.all(Array.from(form.elements).filter(node => {
 			return Boolean(node.presubmit);
-		}).map((input) => {
+		}).map(input => {
 			return input.presubmit();
 		})).then(() => {
 			data.$query = state.query;
@@ -240,7 +240,7 @@ class HTMLCustomFormElement extends HTMLFormElement {
 				pathname: form.getAttribute('action'),
 				query: data.$query
 			}), data.$request);
-		}).catch((err) => err).then((res) => {
+		}).catch(err => err).then(res => {
 			if (res?.grants) state.data.$grants = res.grants;
 			state.scope.$response = res;
 			form.enable();
@@ -396,7 +396,7 @@ Object.defineProperty(HTMLInputElement.prototype, 'defaultValue', {
 	}
 });
 
-Page.setup((state) => {
+Page.setup(state => {
 	// https://daverupert.com/2017/11/happier-html5-forms/
 	Page.connect({
 		captureBlur: (e, state) => blurHandler(e, false),

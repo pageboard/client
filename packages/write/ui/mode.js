@@ -6,7 +6,7 @@ Pageboard.Controls.Mode = class Mode {
 		if (tn == null) return obj;
 		const list = obj.content || [];
 		let childList = [];
-		list.forEach((item) => {
+		list.forEach(item => {
 			const list = this.pruneNonRoot(item, obj, schema);
 			if (Array.isArray(list)) childList = childList.concat(list);
 			else if (list != null) childList.push(list);
@@ -36,14 +36,14 @@ Pageboard.Controls.Mode = class Mode {
 		if (!item) return;
 		const com = item.dataset.command;
 		if (com == "logout") {
-			Page.setup((state) => {
+			Page.setup(state => {
 				return Pageboard.fetch("get", "/.api/logout")
 					.then(() => state.reload(true));
 			});
 			return;
 		}
 		if (["code", "write", "read"].includes(com) == false) return;
-		this.win.Page.patch((state) => {
+		this.win.Page.patch(state => {
 			const mode = document.body.dataset.mode;
 			if (mode != "read") {
 				const store = this.editor.controls.store;

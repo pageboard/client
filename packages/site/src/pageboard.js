@@ -229,7 +229,7 @@ function merge(obj, extra, fn) {
 Page.setup(state => {
 	if (window.IntersectionObserver) {
 		state.ui.observer = new IntersectionObserver((entries, observer) => {
-			entries.forEach((entry) => {
+			entries.forEach(entry => {
 				const target = entry.target;
 				const ratio = entry.intersectionRatio || 0;
 				if (ratio <= 0) return;

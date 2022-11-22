@@ -6,7 +6,7 @@ class HTMLElementInputRange extends HTMLInputElement {
 	static parse(x) {
 		return (x == null ? '' : x)
 			.split('⩽')
-			.map((n) => {
+			.map(n => {
 				n = parseFloat(n);
 				return Number.isNaN(n) ? null : n;
 			});
@@ -89,7 +89,7 @@ class HTMLElementInputRange extends HTMLInputElement {
 			if (this.isContentEditable) return;
 			const isInt = parseInt(opts.step) == opts.step;
 			helper.classList.remove('indeterminate');
-			if (isInt) values = values.map((n) => parseInt(n));
+			if (isInt) values = values.map(n => parseInt(n));
 			this.rangeValue = values;
 			this.dispatchEvent(new Event('change', {
 				bubbles: true,

@@ -108,7 +108,7 @@ exports.input_property = {
 
 		let listOf = propType.anyOf || propType.oneOf;
 		if (listOf) {
-			const listOfNo = listOf.filter((item) => item.type != "null");
+			const listOfNo = listOf.filter(item => item.type != "null");
 			if (listOfNo.length != listOf.length) {
 				required = false;
 			}
@@ -119,7 +119,7 @@ exports.input_property = {
 				listOf = listOfNo;
 			}
 		} else if (Array.isArray(prop.type)) {
-			listOf = prop.type.filter((type) => {
+			listOf = prop.type.filter(type => {
 				if (type == "null") {
 					required = false;
 					return false;
@@ -301,7 +301,7 @@ exports.input_property = {
 			};
 			const filter = propType.$helper.filter;
 			if (filter && filter.type) {
-				limits.types = filter.type.map((type) => {
+				limits.types = filter.type.map(type => {
 					if (type == "image") return "image/*";
 					else if (type == "video") return "video/*";
 					else return "*/*";

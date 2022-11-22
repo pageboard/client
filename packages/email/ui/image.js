@@ -8,7 +8,7 @@ class HTMLElementMailImage extends HTMLImageElement {
 		dataCrop: null
 	};
 	get crop() {
-		let [x, y, w, h, z] = (this.dataset.crop || ";;;;").split(";").map((x) => parseFloat(x));
+		let [x, y, w, h, z] = (this.dataset.crop || ";;;;").split(";").map(x => parseFloat(x));
 		if (Number.isNaN(x)) x = 50;
 		if (Number.isNaN(y)) y = 50;
 		if (Number.isNaN(w)) w = 100;

@@ -33,7 +33,7 @@ class HTMLElementImage extends VirtualHTMLElement {
 		this.promise.done = function () { };
 	}
 	findClass(list) {
-		return list.find((name) => this.matches(`.${name}`)) || list[0];
+		return list.find(name => this.matches(`.${name}`)) || list[0];
 	}
 	get fit() {
 		return this.findClass(['none', 'contain', 'cover']);
@@ -47,12 +47,12 @@ class HTMLElementImage extends VirtualHTMLElement {
 		this.classList.add(val);
 	}
 	set position(val) {
-		(val || '').split(' ').forEach((val) => {
+		(val || '').split(' ').forEach(val => {
 			if (val) this.classList.add(val);
 		});
 	}
 	get crop() {
-		let [x, y, w, h, z] = (this.dataset.crop || ";;;;").split(";").map((x) => parseFloat(x));
+		let [x, y, w, h, z] = (this.dataset.crop || ";;;;").split(";").map(x => parseFloat(x));
 		if (Number.isNaN(x)) x = 50;
 		if (Number.isNaN(y)) y = 50;
 		if (Number.isNaN(w)) w = 100;
@@ -150,7 +150,7 @@ class HTMLElementImage extends VirtualHTMLElement {
 			}
 			this.classList.add('loading');
 			let done;
-			this.promise = new Promise((resolve) => done = resolve);
+			this.promise = new Promise(resolve => done = resolve);
 			this.promise.done = done;
 			img.setAttribute('src', curSrc);
 		}

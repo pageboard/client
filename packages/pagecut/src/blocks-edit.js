@@ -43,7 +43,7 @@ export default class Blocks extends BlocksView {
 		block.standalone = val;
 		const nodes = this.domQuery(block.id, { all: true });
 		const tr = this.view.state.tr;
-		nodes.forEach((node) => {
+		nodes.forEach(node => {
 			this.view.utils.refreshTr(tr, node, block);
 		});
 		this.view.dispatch(tr);

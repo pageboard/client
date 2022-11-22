@@ -27,7 +27,7 @@ Pageboard.Controls.Store = class Store {
 		this.unsaved = this.get();
 
 		if (this.unsaved) {
-			this.restore(this.unsaved).catch((err) => {
+			this.restore(this.unsaved).catch(err => {
 				Pageboard.notify("Unsaved work not readable, discarding", err);
 				return this.discard();
 			});
@@ -62,7 +62,7 @@ Pageboard.Controls.Store = class Store {
 		// TODO use similar approach to update links when a pageUrl changes ?
 		const editor = this.editor;
 		const blocks = editor.blocks.store;
-		const id = Object.keys(blocks).find((bid) => {
+		const id = Object.keys(blocks).find(bid => {
 			const block = blocks[bid];
 			if (bid != rootId && block.data) {
 				return block.data.url == url && editor.element(block.type).group == "page";
@@ -188,11 +188,11 @@ Pageboard.Controls.Store = class Store {
 		this.saving = true;
 		changes.recursive = true;
 
-		const p = Pageboard.fetch('put', '/.api/page', changes).then((result) => {
+		const p = Pageboard.fetch('put', '/.api/page', changes).then(result => {
 			if (!result) return;
 			if (result.status == 404 && result.blocks) {
 				let allStandalones = true;
-				result.blocks.forEach((id) => {
+				result.blocks.forEach(id => {
 					const block = this.editor.blocks.get(id);
 					if (block?.standalone) {
 						this.editor.blocks.setStandalone(block, false);
@@ -274,7 +274,7 @@ Pageboard.Controls.Store = class Store {
 			Pageboard.notify("Impossible to restore<br><a href=''>please reload</a>", err);
 		}
 		const editor = this.editor;
-		setTimeout(() => focused.some((id) => {
+		setTimeout(() => focused.some(id => {
 			const node = doc.querySelector(`[block-id="${id}"]`);
 			if (!node) return false;
 			const sel = editor.utils.select(node);

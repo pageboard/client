@@ -29,7 +29,7 @@ class HTMLInputMap extends VirtualHTMLElement {
 			this.dom(`<input name="${this.name}" type="hidden" />`)
 		);
 		const renderer = Pageboard.debounce(() => this.#render(), 10);
-		this.#observer = new MutationObserver((mutations) => renderer());
+		this.#observer = new MutationObserver(mutations => renderer());
 		this.#observer.observe(this.#proxy, {
 			attributes: true
 		});

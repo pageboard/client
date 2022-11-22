@@ -8,7 +8,7 @@ Pageboard.schemaHelpers.crop = class Crop {
 		}
 		let urlProp = "url";
 		if (parentProp) {
-			urlProp = Object.keys(parentProp).find((key) => {
+			urlProp = Object.keys(parentProp).find(key => {
 				const pp = parentProp[key].$helper;
 				if (!pp) return;
 				if (pp.name == "href" && (pp.filter?.type ?? []).includes('image')) {
@@ -36,7 +36,7 @@ Pageboard.schemaHelpers.crop = class Crop {
 		this.valueChange = this.valueChange.bind(this);
 		this.valueFocus = this.valueFocus.bind(this);
 
-		this.debouncedChange = Pageboard.debounce((obj) => this.change(obj), 500);
+		this.debouncedChange = Pageboard.debounce(obj => this.change(obj), 500);
 
 		this.block = block;
 

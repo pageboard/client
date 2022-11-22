@@ -20,9 +20,9 @@ class FormBlock {
 			if (schema.type) {
 				hint = schema.type;
 			} else if (schema.anyOf) {
-				hint = 'any of: ' + schema.anyOf.map((item) => item.const).join(', ');
+				hint = 'any of: ' + schema.anyOf.map(item => item.const).join(', ');
 			} else if (schema.oneOf) {
-				hint = 'one of: ' + schema.anyOf.map((item) => item.const).join(', ');
+				hint = 'one of: ' + schema.anyOf.map(item => item.const).join(', ');
 			}
 			copy.type = 'string';
 			copy.format = 'singleline';
@@ -47,7 +47,7 @@ class FormBlock {
 				return null;
 			}
 			return [key, val];
-		}).filter((entry) => entry != null);
+		}).filter(entry => entry != null);
 		if (entries.length == 0) return null;
 		if (Array.isArray(obj)) {
 			return entries.map(([key, val]) => val);
@@ -79,11 +79,11 @@ class FormBlock {
 	destroy() {
 		this.node.removeEventListener('change', this);
 		this.node.removeEventListener('input', this);
-		Object.values(this.helpers).forEach((inst) => {
+		Object.values(this.helpers).forEach(inst => {
 			if (inst.destroy) inst.destroy();
 		});
 		this.helpers = {};
-		Object.values(this.filters).forEach((inst) => {
+		Object.values(this.filters).forEach(inst => {
 			if (inst.destroy) inst.destroy();
 		});
 		this.filters = {};
@@ -139,8 +139,8 @@ class FormBlock {
 
 	customHelper(key, prop, node, parentProp) {
 		const editor = this.editor;
-		if (prop.context && this.parents && !this.parents.some((parent) => {
-			return prop.context.split('|').some((tok) => {
+		if (prop.context && this.parents && !this.parents.some(parent => {
+			return prop.context.split('|').some(tok => {
 				const type = parent.block.type;
 				if (type == tok) return true;
 				const el = editor.element(type);
@@ -360,9 +360,9 @@ Pageboard.Controls.Form = class Form {
 		this.main.node.classList.toggle('hidden', !showBlocks);
 
 		let curInlines = this.inlines;
-		const inlines = (showInlines && parent.inline?.blocks || []).map((block) => {
+		const inlines = (showInlines && parent.inline?.blocks || []).map(block => {
 			let curForm;
-			curInlines = curInlines.filter((form) => {
+			curInlines = curInlines.filter(form => {
 				if (form.block.type == block.type) {
 					curForm = form;
 					return false;

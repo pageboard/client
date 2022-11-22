@@ -1,7 +1,7 @@
 Pageboard.schemaFilters.service = class ServiceFilter {
 	static setServiceParameters(key, block, props) {
 		let val = block.data;
-		if (key) key.split('.').some((str) => {
+		if (key) key.split('.').some(str => {
 			val = val[str];
 			if (val == null) return true;
 		});

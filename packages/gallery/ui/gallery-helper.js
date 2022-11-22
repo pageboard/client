@@ -1,14 +1,14 @@
 VirtualHTMLElement.extend('element-gallery', class GalleryHelper {
 	paint(state) {
 		if (!state.scope.$write) return;
-		if (!this.itemsObserver) this.itemsObserver = new MutationObserver((records) => {
+		if (!this.itemsObserver) this.itemsObserver = new MutationObserver(records => {
 			setTimeout(() => {
 				for (const record of records) this.mutate(record, state);
 			}, 300);
 		});
 		this.itemsObserver.disconnect();
 		const mode = this.selectedMode;
-		const gal = this.children.find((node) => !mode || node.getAttribute('block-type') == mode);
+		const gal = this.children.find(node => !mode || node.getAttribute('block-type') == mode);
 		this.itemsObserver.observe(gal, {
 			childList: true,
 			subtree: true,

@@ -41,11 +41,11 @@ Page.State.prototype.debounce = function(fn, to) {
 	return db;
 };
 
-Page.init((state) => {
+Page.init(state => {
 	if (!state.data.$scroll) state.data.$scroll = {left: 0, top: 0};
 });
 
-Page.hash((state) => {
+Page.hash(state => {
 	const hash = state.hash;
 	if (!hash) return;
 	const node = document.getElementById(hash);
@@ -53,14 +53,14 @@ Page.hash((state) => {
 	state.scroll({node: node});
 });
 
-Page.setup((state) => {
+Page.setup(state => {
 	if (window.history && 'scrollRestoration' in window.history) {
 		window.history.scrollRestoration = 'manual';
 		if (!state.hash) state.scroll(state.data.$scroll);
 	}
 });
 
-Page.setup((state) => {
+Page.setup(state => {
 	Page.connect({
 		handleScroll: state.debounce((e, state) => {
 			if (state.transition) return;

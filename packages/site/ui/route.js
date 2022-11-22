@@ -1,4 +1,4 @@
-Page.route((state) => {
+Page.route(state => {
 	let loader;
 	if (state.data.$cache) {
 		loader = Promise.resolve(state.data.$cache);

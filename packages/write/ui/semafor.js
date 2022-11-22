@@ -94,7 +94,7 @@ class Semafor {
 				case 'checkbox':
 					if (val == null) val = [''];
 					else if (!Array.isArray(val)) val = [val];
-					elem.checked = val.some((val) => val.toString() == elem.value);
+					elem.checked = val.some(val => val.toString() == elem.value);
 					break;
 				case 'select-one':
 					if (val) {
@@ -115,7 +115,7 @@ class Semafor {
 					} else if (!Array.isArray(val)) {
 						val = [val];
 					}
-					elem.options.forEach((item) => {
+					elem.options.forEach(item => {
 						item.selected = val.includes(item.value);
 					});
 					break;
@@ -241,7 +241,7 @@ class Semafor {
 			}
 			if (val != null && typeof val == "object") {
 				if (field && !field.properties && (field.oneOf || field.anyOf)) {
-					const listNoNull = (field.oneOf || field.anyOf).filter((item) => {
+					const listNoNull = (field.oneOf || field.anyOf).filter(item => {
 						return item.type != "null";
 					});
 					if (listNoNull.length == 1 && listNoNull[0].properties) {
@@ -308,7 +308,7 @@ class Semafor {
 				let nullable = false;
 				if (listOf && !field.properties) {
 					// we support promotion to null and that's it
-					const listOfNo = listOf.filter((item) => {
+					const listOfNo = listOf.filter(item => {
 						if (typeof item == "string") {
 							return item != "null";
 						} else {
@@ -320,9 +320,9 @@ class Semafor {
 					}
 					if (listOfNo.length == 1) {
 						type = listOfNo[0].type || listOfNo[0];
-					} else if (listOfNo.every((item) => item.const !== undefined)) {
+					} else if (listOfNo.every(item => item.const !== undefined)) {
 						// nothing
-					} else if (listOfNo.every((item) => {
+					} else if (listOfNo.every(item => {
 						return item == "string" || item.type === undefined || item.type == "string";
 					})) {
 						type = "string";
@@ -365,7 +365,7 @@ class Semafor {
 						break;
 					case "array":
 						if (typeof val == "string") {
-							val = val.split('\n').filter((str) => str.length > 0);
+							val = val.split('\n').filter(str => str.length > 0);
 						}
 						break;
 					default:
@@ -504,7 +504,7 @@ Semafor.types.oneOf = function (key, schema, node, inst) {
 	let listOf = schema.oneOf || schema.anyOf;
 	let nullable = schema.nullable;
 	let hasNullOption = false;
-	const alts = listOf.filter((item) => {
+	const alts = listOf.filter(item => {
 		if (item.type == "null") {
 			nullable = true;
 			hasNullOption = true;
@@ -517,11 +517,11 @@ Semafor.types.oneOf = function (key, schema, node, inst) {
 	let icons = false;
 	if (alts.length == 1 && alts[0].const === undefined) {
 		oneOfType = alts[0];
-	} else if (alts.every((item) => Boolean(item.icon))) {
+	} else if (alts.every(item => Boolean(item.icon))) {
 		icons = true;
-	} else if (alts.every((item) => item.const !== undefined)) {
+	} else if (alts.every(item => item.const !== undefined)) {
 		// do nothing
-	} else if (alts.every((item) => {
+	} else if (alts.every(item => {
 		return item == "string" || item.type === undefined || item.type == "string";
 	})) {
 		oneOfType = { type: "string", format: 'singleline' }; // FIXME use an array of formats
@@ -688,7 +688,7 @@ Semafor.types.array = function (key, schema, node, inst) {
 	} else if (schema.items.type == "string") {
 		Semafor.types.string(key, schema, node, inst);
 	} else if (schema.items.anyOf) {
-		const allStrings = schema.items.anyOf.every((item) => {
+		const allStrings = schema.items.anyOf.every(item => {
 			return item.type == "string";
 		});
 		if (allStrings) {

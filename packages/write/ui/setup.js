@@ -2,14 +2,14 @@
 
 let adv = false;
 
-Page.patch((state) => {
+Page.patch(state => {
 	// write mode accepts all params at the moment
 	for (const key of Object.keys(state.query)) {
 		state.vars[key] = true;
 	}
 });
 
-Page.setup((state) => {
+Page.setup(state => {
 	const parentRead = document.getElementById('pageboard-read');
 	const iframe = Pageboard.read = document.createElement('iframe');
 	parentRead.insertBefore(iframe, parentRead.lastElementChild);
@@ -22,7 +22,7 @@ Page.setup((state) => {
 });
 
 Pageboard.adopt = function(win, readState) {
-	Page.setup((writeState) => {
+	Page.setup(writeState => {
 		win.addEventListener('click', anchorListener, true);
 		// FIXME this prevents setting selection inside a selected link...
 		//win.addEventListener('mouseup', anchorListener, true);
@@ -101,7 +101,7 @@ function filterParents(editor, list) {
 		if (item.inline) {
 			obj.inline = {
 				node: item.inline.node,
-				blocks: item.inline.node.marks.map((mark) => {
+				blocks: item.inline.node.marks.map(mark => {
 					return editor.blocks.get(mark.attrs.id) || editor.blocks.fromAttrs(mark.attrs);
 				}),
 				rpos: item.inline.rpos

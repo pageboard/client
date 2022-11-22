@@ -8,7 +8,7 @@ Arr.ancestor = function() {
 		throw new TypeError("Expected an array of DOM elements");
 	}
 	do {
-		if (list.every((node) => parent.contains(node))) {
+		if (list.every(node => parent.contains(node))) {
 			return parent;
 		}
 		parent = parent.parentNode;

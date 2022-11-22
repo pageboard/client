@@ -1,4 +1,4 @@
-Page.patch((state) => {
+Page.patch(state => {
 	function isSameOrParent(loc, state, isItem) {
 		if (!state.sameDomain(loc)) {
 			return false;
@@ -79,7 +79,7 @@ class HTMLElementMenu extends VirtualHTMLElement {
 	}
 	toHelper(root) {
 		const frag = root.ownerDocument.createDocumentFragment();
-		root.children.forEach((item) => {
+		root.children.forEach(item => {
 			frag.append(item.cloneNode(true));
 		});
 		return frag;

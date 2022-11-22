@@ -56,8 +56,8 @@ export function csp($elements, what) {
 		}
 	}
 	const list = Object.keys(csp)
-		.filter((src) => csp[src].length > 0)
-		.map((src) => {
+		.filter(src => csp[src].length > 0)
+		.map(src => {
 			const key = src.indexOf('-') > 0 ? src : `${src}-src`;
 			return `${key} ${csp[src].join(' ')}`.trim().fuse({}, what.scope.data);
 		});
@@ -172,7 +172,7 @@ export function schema(val, what, spath, absPath) {
 	if (!iskey && val !== undefined) {
 		const listOf = schema.oneOf || schema.anyOf;
 		if (listOf) {
-			const prop = listOf.find((item) => {
+			const prop = listOf.find(item => {
 				return item.const === val || item.type === "null" && val === null;
 			});
 			if (prop != null) schema = prop;

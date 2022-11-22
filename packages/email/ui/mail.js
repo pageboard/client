@@ -30,7 +30,7 @@ Page.serialize = function() {
 	}
 
 	const md = (new window.Europa()).convert(doc.documentElement);
-	return window.inlineresources.loadAndInlineCssLinks(doc, {}).then((errors) => {
+	return window.inlineresources.loadAndInlineCssLinks(doc, {}).then(errors => {
 		return {
 			mime: "application/json",
 			body: JSON.stringify({

@@ -54,7 +54,7 @@ class HTMLElementCarousel extends VirtualHTMLElement {
 
 	setup(state) {
 		if (!this.itemsObserver) {
-			this.itemsObserver = new MutationObserver((records) => {
+			this.itemsObserver = new MutationObserver(records => {
 				for (const record of records) this.reload(record, state);
 			});
 			this.itemsObserver.observe(this.querySelector('[block-content="items"]'), {
@@ -177,7 +177,7 @@ class HTMLElementCarouselCell extends VirtualHTMLElement {
 VirtualHTMLElement.define('element-carousel-cell', HTMLElementCarouselCell);
 VirtualHTMLElement.define('element-carousel', HTMLElementCarousel);
 
-Page.setup((state) => {
+Page.setup(state => {
 	function modabs(i, l) {
 		return ((i % l) + l) % l;
 	}

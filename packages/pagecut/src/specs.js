@@ -73,7 +73,7 @@ export default function define(viewer, elt, schema, nodeViews) {
 		if (obj?.children.length) {
 			// this type of node has content that is wrap or container type nodes
 			spec.wrapper = true;
-			spec.content = obj.children.map((child) => {
+			spec.content = obj.children.map(child => {
 				// eslint-disable-next-line no-console
 				if (!child.name) console.warn(obj, "has no name for child", child);
 				return child.name + (child.type == "const" ? "?" : "");
@@ -257,7 +257,7 @@ function createRootSpec(elt, obj, viewer) {
 		contentElement: function(dom) { return findContent(elt, dom, "root"); }
 	};
 	if (elt.context) {
-		if (elt.context.split(/\s*\|\s*/).some((tok) => {
+		if (elt.context.split(/\s*\|\s*/).some(tok => {
 			while (tok.endsWith('/')) tok = tok.slice(0, -1);
 			return tok.indexOf('/') >= 0;
 		})) {
@@ -485,8 +485,8 @@ function domSelector(dom) {
 	// might be SVGAnimatedString
 	if (cn?.baseVal != null) cn = cn.baseVal;
 	if (cn) {
-		sel += cn.split(' ').filter((str) => Boolean(str))
-			.map((str) => `.${str}`)
+		sel += cn.split(' ').filter(str => Boolean(str))
+			.map(str => `.${str}`)
 			.join('');
 	}
 	return sel;

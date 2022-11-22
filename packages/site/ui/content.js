@@ -15,7 +15,7 @@ class HTMLElementContent extends VirtualHTMLElement {
 				dom: Array.from(this.querySelectorAll(selector))
 			});
 			this.textContent = '';
-			list.forEach((node) => this.appendChild(node));
+			list.forEach(node => this.appendChild(node));
 		}
 	}
 }

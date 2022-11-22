@@ -121,7 +121,7 @@ exports.mail_color = {
 	},
 	parse: function(dom) {
 		const prop = this.properties.color;
-		let color = prop.anyOf.find((item) => {
+		let color = prop.anyOf.find(item => {
 			return item.const && dom.classList.contains(item.const);
 		});
 		if (color) color = color.const;

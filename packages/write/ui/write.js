@@ -28,7 +28,7 @@ Object.assign(window.Pageboard, {
 		} else {
 			what.classList.add('loading');
 		}
-		return p.catch((err) => {
+		return p.catch(err => {
 			Pageboard.notify("Request error", err);
 			// rethrow, we don't want to show any result
 			throw err;

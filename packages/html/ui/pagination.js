@@ -95,8 +95,8 @@ class HTMLElementPagination extends HTMLAnchorElement {
 	setup(state) {
 		if (this.isContentEditable || !this.#infinite) return;
 		this.#queue = Promise.resolve();
-		this.#observer = new IntersectionObserver((entries) => {
-			entries.forEach((entry) => {
+		this.#observer = new IntersectionObserver(entries => {
+			entries.forEach(entry => {
 				if (this.#reached) return;
 				if (this.offsetParent && (entry.intersectionRatio || 0) !== 0) {
 					this.#visible = true;

@@ -4,7 +4,7 @@ Object.defineProperty(document, 'body', {
 		return this.documentElement.querySelector('body:last-of-type');
 	}
 });
-Page.init((state) => {
+Page.init(state => {
 	const root = document.documentElement;
 	function dtr(state) {
 		root.dataset.stage = state.stage;
@@ -30,7 +30,7 @@ Page.State.prototype.mergeBody = function(body, corpse) {
 	}
 };
 
-Page.setup((state) => {
+Page.setup(state => {
 	if (state.transition) {
 		if (state.transition.ok) {
 			state.finish(() => {
@@ -79,7 +79,7 @@ Page.Transition = class {
 		from.after(to);
 	}
 	start() {
-		return new Promise((resolve) => {
+		return new Promise(resolve => {
 			this.resolve = resolve;
 			if (!this.ok) {
 				this.destroy();

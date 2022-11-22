@@ -34,7 +34,7 @@ export default class VirtualHTMLElement extends HTMLElement {
 		if (claDefs) {
 			const defaults = {};
 			if (!cla.observedAttributes) {
-				cla.observedAttributes = Object.keys(claDefs).map((camel) => {
+				cla.observedAttributes = Object.keys(claDefs).map(camel => {
 					let attr = camel.replace(/([A-Z])/g, (g) => `-${g[0].toLowerCase()}`);
 					if (!is) attr = 'data-' + attr;
 					const isData = attr.startsWith('data-');

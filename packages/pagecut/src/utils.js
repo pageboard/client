@@ -134,7 +134,7 @@ export default class Utils {
 	fill(frag) {
 		if (!(frag instanceof Fragment)) frag = Fragment.from(frag);
 		const list = [];
-		frag.forEach((node) => {
+		frag.forEach(node => {
 			let content = node.content;
 			if (content.size) {
 				const before = node.type.contentMatch.fillBefore(content);
@@ -191,7 +191,7 @@ export default class Utils {
 		if (!parent) return;
 		const root = parent.root;
 		if (!block) {
-			const id = (parent.inline?.node.marks.find((mark) => {
+			const id = (parent.inline?.node.marks.find(mark => {
 				return mark.attrs.id != null;
 			}) ?? root.node).attrs.id;
 			if (!id) return;
@@ -208,7 +208,7 @@ export default class Utils {
 		if (parent.inline) {
 			node = parent.inline.node;
 			if (sel.empty || sel.node) {
-				if (node.marks.some((mark) => {
+				if (node.marks.some(mark => {
 					if (attrs.id && attrs.id != mark.attrs.id) return;
 					const markType = mark.attrs.type;
 					if (!markType || type != markType) return;
@@ -539,7 +539,7 @@ export default class Utils {
 
 	static parseContext(context) {
 		if (!context) return;
-		return context.split('|').map((str) => {
+		return context.split('|').map(str => {
 			const pc = str.trim().split('/');
 			pc.pop();
 			return pc;
@@ -550,7 +550,7 @@ export default class Utils {
 		// does not check nested contexts
 		const cands = type.spec.group ? type.spec.group.split(' ') : [];
 		cands.push(type.name);
-		return list.some((pc) => {
+		return list.some(pc => {
 			const last = pc[pc.length - 1];
 			if (!last) {
 				if (pc.length == 2 && cands.includes(pc[0])) {
@@ -714,9 +714,9 @@ export default class Utils {
 		let depth = 0;
 
 		if ((wrap = firstTag && Utils.wrapMap[firstTag[1].toLowerCase()])) {
-			html = wrap.map((n) => `<${n}>`).join("")
+			html = wrap.map(n => `<${n}>`).join("")
 				+ html
-				+ wrap.map((n) => `</${n}>`).reverse().join("");
+				+ wrap.map(n => `</${n}>`).reverse().join("");
 			depth = wrap.length;
 		}
 		elt.innerHTML = html;

@@ -10,7 +10,7 @@ class HTMLElementSitepage extends VirtualHTMLElement {
 	setup(state) {
 		const content = this.querySelector('[block-content="children"]');
 		if (!content) return;
-		this.observer = new MutationObserver((mutations) => this.updateChildren());
+		this.observer = new MutationObserver(mutations => this.updateChildren());
 		this.observer.observe(content, {
 			childList: true
 		});
@@ -52,7 +52,7 @@ class HTMLElementSitepage extends VirtualHTMLElement {
 		const block = editor.blocks.get(this.getAttribute('block-id'));
 		if (!block.data) block.data = {};
 		const data = this.options;
-		if (Object.keys(data).some((key) => data[key] != block.data[key])) {
+		if (Object.keys(data).some(key => data[key] != block.data[key])) {
 			Object.assign(block.data, data);
 			editor.dispatch(editor.utils.refreshTr(editor.state.tr, this, block));
 			this.updateChildren();

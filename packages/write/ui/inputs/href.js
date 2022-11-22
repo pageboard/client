@@ -182,7 +182,7 @@ Pageboard.schemaHelpers.href = class Href {
 			this.uiInput.value = val;
 		}
 		if (val && !this.infinite.active) {
-			this.get(val).then(this.cache).then((list) => {
+			this.get(val).then(this.cache).then(list => {
 				this.set(val);
 			});
 		} else {
@@ -196,7 +196,7 @@ Pageboard.schemaHelpers.href = class Href {
 		let list = result;
 		if (list == null) return;
 		if (!Array.isArray(list)) list = [list];
-		list.forEach((obj) => {
+		list.forEach(obj => {
 			const href = Href.normUrl(obj.url);
 			map[href] = obj;
 			if (!hrefs[href]) {
@@ -314,7 +314,7 @@ Pageboard.schemaHelpers.href = class Href {
 			});
 			input.value = null;
 			input.click();
-		}).then((obj) => {
+		}).then(obj => {
 			const files = Array.isArray(obj) ? obj : obj?.items ?? [];
 			let p = Promise.resolve();
 			for (const file of files) {
@@ -353,9 +353,9 @@ Pageboard.schemaHelpers.href = class Href {
 	remove(href) {
 		return Pageboard.uiLoad(this.node, Pageboard.fetch('delete', '/.api/href', {
 			url: href
-		})).then((obj) => {
+		})).then(obj => {
 			this.cache([obj]);
-			this.list = this.list.filter((obj) => obj.url != href);
+			this.list = this.list.filter(obj => obj.url != href);
 		});
 	}
 
@@ -364,7 +364,7 @@ Pageboard.schemaHelpers.href = class Href {
 		if (obj) return Promise.resolve(obj);
 		return Pageboard.uiLoad(this.node, Pageboard.fetch('get', '/.api/hrefs', {
 			url: href
-		})).then((obj) => obj.data);
+		})).then(obj => obj.data);
 	}
 
 	insert(url) {
@@ -374,7 +374,7 @@ Pageboard.schemaHelpers.href = class Href {
 			Pageboard.fetch('post', '/.api/href', {
 				url: url
 			})
-		).then((result) => {
+		).then(result => {
 			this.cache([result]);
 			this.input.value = result.url;
 			this.list.unshift(result);

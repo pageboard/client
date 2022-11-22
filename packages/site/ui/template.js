@@ -43,7 +43,7 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 					this.render(res, state);
 				});
 			}
-		}).catch((err) => {
+		}).catch(err => {
 			data.$status = -1;
 			// eslint-disable-next-line no-console
 			console.error("Error building", err);
@@ -71,7 +71,7 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 	}
 
 	getRedirect(status) {
-		const name = ((n) => {
+		const name = (n => {
 			if (n >= 200 && n < 400) return 'success';
 			else if (n == 404) return 'notfound';
 			else if (n == 401 || n == 403) return 'unauthorized';
@@ -82,7 +82,7 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 	}
 
 	toggleMessages(status = null, parent = this.ownView) {
-		const name = ((n) => {
+		const name = (n => {
 			if (n >= 200 && n < 300) return "success";
 			else if (n >= 400 && n < 500) return "warning";
 			else if (n || n === 0) return "error";
@@ -135,7 +135,7 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 			name: 'element_template_' + String(Math.round(Date.now() * Math.random())).slice(-6),
 			dom: tmpl,
 			filters: { '||': (v, w) => collector.filter(v, w) },
-			contents: tmpl.querySelectorAll('[block-content]').map((node) => {
+			contents: tmpl.querySelectorAll('[block-content]').map(node => {
 				return {
 					id: node.getAttribute('block-content'),
 					nodes: 'block+'

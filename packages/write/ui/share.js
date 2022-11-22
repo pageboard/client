@@ -18,11 +18,11 @@ Pageboard.Controls.Share = class Share {
 		this.standalone = this.block.standalone;
 		this.toggle.checked = this.standalone;
 		const hide = !this.block.id || el.inplace || el.inline;
-		const hasAncestor = !this.standalone && parents.slice(1, -1).some((parent) => {
+		const hasAncestor = !this.standalone && parents.slice(1, -1).some(parent => {
 			return parent.block.standalone;
 		});
 		let hasDescendant = false;
-		if (!this.standalone) parents[0].node.descendants((child) => {
+		if (!this.standalone) parents[0].node.descendants(child => {
 			if (child.attrs.standalone == "true") {
 				hasDescendant = true;
 				return false;

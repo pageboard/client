@@ -33,13 +33,13 @@ export default class Contents {
 		}
 	}
 	each(block, fn) {
-		this.list.forEach((def) => {
+		this.list.forEach(def => {
 			const content = this.get(block, def.id);
 			if (content != null) fn(content, def);
 		});
 	}
 	find(name) {
-		return this.list.find((def) => {
+		return this.list.find(def => {
 			return !def.id || def.id == name;
 		});
 	}
@@ -71,7 +71,7 @@ export default class Contents {
 	prune(block) {
 		const copy = {};
 		const content = block.content;
-		if (content) this.list.forEach((def) => {
+		if (content) this.list.forEach(def => {
 			if (!def.virtual) {
 				const cont = content[def.id || ""];
 				if (cont !== undefined) copy[def.id || ""] = cont;

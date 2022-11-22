@@ -168,7 +168,7 @@ exports.color = {
 	},
 	parse: function(dom) {
 		const prop = this.properties.color;
-		const color = (prop.anyOf.find((item) => {
+		const color = (prop.anyOf.find(item => {
 			return item.const && dom.classList.contains(item.const);
 		}) || { const: prop.default }).const;
 		return { color: color };
