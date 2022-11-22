@@ -12,18 +12,19 @@
 		font-size: 2rem;
 	}
 	body + div.pdf-menu > a {
-		color: black;
+		color: white;
 		opacity:0.9;
 		margin:0.2em;
-		background: white;
+		background: black;
 		border-radius: 0.5em;
 		text-align: center;
 		padding: 0rem 1rem 0.5rem;
 		box-shadow: rgb(0 0 0 / 20%) 0px 0.2em 0.5em -0.1em;
+		text-shadow: white 0.1em 0.1em 0.5em;
 		z-index: 1;
 	}
 	body + div.pdf-menu > a:visited {
-		color:black;
+		color:white;
 	}
 }
 
