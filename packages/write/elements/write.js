@@ -1,6 +1,6 @@
 exports.write = {
 	priority: 100,
-	title: 'Editor',
+	title: 'Write',
 	bundle: true,
 	standalone: true,
 	html: `<html lang="[$site.lang|ornull]">
