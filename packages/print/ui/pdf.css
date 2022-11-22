@@ -4,14 +4,14 @@
 }
 
 @media screen {
-	body + div.pdf-chooser {
+	body + div.pdf-menu {
 		top: 0%;
 		left: 0%;
 		position: fixed;
 		margin:0.2em;
 		font-size: 2rem;
 	}
-	body + div.pdf-chooser > a {
+	body + div.pdf-menu > a {
 		color: black;
 		opacity:0.9;
 		margin:0.2em;
@@ -22,13 +22,13 @@
 		box-shadow: rgb(0 0 0 / 20%) 0px 0.2em 0.5em -0.1em;
 		z-index: 1;
 	}
-	body + div.pdf-chooser > a:visited {
+	body + div.pdf-menu > a:visited {
 		color:black;
 	}
 }
 
 @media print {
-	body + div.pdf-chooser {
+	body + div.pdf-menu {
 		display:none;
 	}
 }

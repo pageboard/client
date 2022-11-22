@@ -14,18 +14,12 @@ Page.setup(state => {
 
 function showPrintButtons(state) {
 	const root = document.documentElement;
-	if (document.querySelector('html > .pdf-chooser')) return;
-	root.appendChild(root.dom(`<div class="pdf-chooser">
-		<a target="_blank" href="[$pathname].pdf[$query|set:pdf:[presets.const|repeat:a:preset]|query]">[preset.title]</a>
-	</div>`).fuse({
-		presets: [{
-			const: 'ebook',
-			title: '👁'
-		}, {
-			const: 'printer',
-			title: '🖶'
-		}]
-	}, state.scope));
+	if (document.querySelector('html > .pdf-menu')) return;
+	const target = state.copy();
+	target.pathname += ".pdf";
+	root.appendChild(root.dom(`<div class="pdf-menu">
+		<a target="_blank" href="${target.toString()}">⎙</a>
+	</div>`));
 }
 
 function autobreakFn(opts = {}) {
