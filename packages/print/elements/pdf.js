@@ -44,16 +44,19 @@ exports.pdf.properties = {
 			width: {
 				title: 'Width',
 				type: 'string',
+				format: 'singleline',
 				default: '210mm'
 			},
 			height: {
 				title: 'Height',
 				type: 'string',
+				format: 'singleline',
 				default: '297mm'
 			},
 			margin: {
 				title: 'Margin',
 				type: 'string',
+				format: 'singleline',
 				default: '10mm'
 			},
 			preset: {
