@@ -1,6 +1,3 @@
-// VirtualHTMLElement replaces it by a stub that calls back immediately
-window.IntersectionObserver = null;
-
 Page.setup(state => {
 	if (this.isContentEditable) return;
 	const opts = document.body.dataset;
@@ -9,6 +6,9 @@ Page.setup(state => {
 	autobreakFn(opts);
 	if (state.pathname.endsWith('.pdf') == false) {
 		showPrintButtons(state);
+	} else {
+		state.ui.observer?.disconnect();
+		delete state.ui.observer;
 	}
 });
 
