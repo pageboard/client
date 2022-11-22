@@ -5,18 +5,19 @@ Page.setup(state => {
 	opts.page = '.page-sheet';
 	autobreakFn(opts);
 	if (state.pathname.endsWith('.pdf') == false) {
-		showPrintButtons(state);
+		showPrintButtons(state, opts);
 	} else {
 		state.ui.observer?.disconnect();
 		delete state.ui.observer;
 	}
 });
 
-function showPrintButtons(state) {
+function showPrintButtons(state, { preset }) {
 	const root = document.documentElement;
 	if (document.querySelector('html > .pdf-menu')) return;
 	const target = state.copy();
 	target.pathname += ".pdf";
+	if (preset) target.query.pdf = preset;
 	root.appendChild(root.dom(`<div class="pdf-menu">
 		<a target="_blank" href="${target.toString()}">⎙</a>
 	</div>`));

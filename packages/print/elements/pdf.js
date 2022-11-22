@@ -24,7 +24,8 @@ exports.pdf.fragments = [
 		attributes: {
 			"data-width": "[paper.width]",
 			"data-height": "[paper.height]",
-			"data-margin": "[paper.margin]"
+			"data-margin": "[paper.margin]",
+			"data-preset": "[paper.preset]"
 		}
 	}
 ];
@@ -54,6 +55,20 @@ exports.pdf.properties = {
 				title: 'Margin',
 				type: 'string',
 				default: '10mm'
+			},
+			preset: {
+				title: 'Preset',
+				description: 'Default pdf export',
+				anyOf: [{
+					type: 'null',
+					title: 'Printer'
+				}, {
+					const: 'ebook',
+					title: 'Ebook'
+				}, {
+					const: 'screen',
+					title: 'Screen'
+				}]
 			}
 		}
 	}
