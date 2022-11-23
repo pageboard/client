@@ -4,6 +4,9 @@
 }
 
 @media screen {
+	.page-sheet {
+		box-shadow: rgb(0 0 0 / 40%) 0.2em 0.2em 0.4em;
+	}
 	body + div.pdf-menu {
 		top: 0%;
 		left: 0%;
