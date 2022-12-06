@@ -3,7 +3,7 @@ exports.mail_button = {
 	icon: '<b class="icon">Bt</b>',
 	contents: {
 		id: 'text',
-		nodes: "text*",
+		nodes: "mail_inline*",
 	},
 	group: "mail_block",
 	properties: {

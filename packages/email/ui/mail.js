@@ -29,7 +29,7 @@ Page.serialize = function() {
 		node.parentNode.replaceChild(img, node);
 	}
 
-	const md = (new window.Europa()).convert(doc.documentElement);
+	const md = (new window.Europa()).convert(doc.documentElement.cloneNode(true));
 	return window.inlineresources.loadAndInlineCssLinks(doc, {}).then(errors => {
 		return {
 			mime: "application/json",
