@@ -16,8 +16,7 @@ exports.pdf = {
 	],
 	csp: {
 		...exports.page.csp,
-		style: ["'self'", "'unsafe-inline'", 'data:', 'https:'],
-		font: ["'self'", 'data:', 'https:']
+		style: ["'self'", "'unsafe-inline'", 'https:']
 	},
 	mime: "application/pdf"
 };
