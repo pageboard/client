@@ -49,10 +49,8 @@ exports.mail = {
 		'../lib/foundation-emails.css',
 		'../ui/mail.css'
 	],
-	output: {
-		mime: 'application/json',
-		medias: true
-	}
+	csp: { ...exports.page.csp },
+	mime: 'application/json'
 };
 if (exports.sitemap) exports.sitemail = exports.sitemap.itemModel('mail', true);
 

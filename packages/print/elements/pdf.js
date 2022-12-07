@@ -14,9 +14,12 @@ exports.pdf = {
 	scripts: [ ...exports.page.scripts,
 		'../ui/pdf.js'
 	],
-	output: {
-		pdf: true
-	}
+	csp: {
+		...exports.page.csp,
+		style: ["'self'", "'unsafe-inline'", 'data:', 'https:'],
+		font: ["'self'", 'data:', 'https:']
+	},
+	mime: "application/pdf"
 };
 exports.pdf.fragments = [
 	...exports.pdf.fragments || [], {
