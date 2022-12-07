@@ -521,7 +521,7 @@ Semafor.types.oneOf = function (key, schema, node, inst) {
 		icons = true;
 	} else if (alts.every(item => item.const !== undefined)) {
 		// do nothing
-	} else if (alts.every(item => {
+	} else if (alts.some(item => {
 		return item == "string" || item.type === undefined || item.type == "string";
 	})) {
 		oneOfType = { type: "string", format: 'singleline' }; // FIXME use an array of formats
