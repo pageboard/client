@@ -33,6 +33,7 @@ Pageboard.Controls.Menu = class Menu {
 		}, {
 			$filters: {
 				breaks(str) {
+					if (!str) return str;
 					return str.split(' ').join('\n');
 				},
 				svg(node) {
