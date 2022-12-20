@@ -80,7 +80,7 @@ export default class Viewer {
 				const attr = key.replace(/([A-Z])/g, (g) => `-${g[0].toLowerCase()}`);
 				if (dom.getAttribute(attr) == data[key]) delete data[key];
 			}
-			if (data && Object.keys(data).length) {
+			if (data && Object.keys(data).length && !el.parse) {
 				dom.setAttribute('block-data', JSON.stringify(data));
 			} else {
 				dom.removeAttribute('block-data');

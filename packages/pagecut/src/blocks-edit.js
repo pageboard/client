@@ -155,8 +155,14 @@ export default class Blocks extends BlocksView {
 						}
 					}
 				} else {
-					block = { type: type };
+					block = { type };
+					if (blockEl.parse) {
+						block.data = blockEl.parse(node);
+					}
+					type = null;
 					div = node;
+					div.removeAttribute('block-text');
+					div.removeAttribute('spellcheck');
 					div.removeAttribute('block-type');
 					div.removeAttribute('block-focused');
 				}
@@ -164,14 +170,11 @@ export default class Blocks extends BlocksView {
 					block.virtual = parent.id;
 				}
 				if (!id || !block || this.serializeTo(block, blockEl, ancestor, blocks, def)) {
-					if (id) {
-						if (block) {
-							if (block.type == type) type = null;
-						} else {
-							parent.blocks[id] = { id: id, ignore: true };
-						}
+					if (id && !block) {
+						parent.blocks[id] = { id: id, ignore: true };
 					}
-					list.push({ node: div, id: id, type: type });
+					if (block?.type == type) type = null;
+					list.push({ node: div, id, type });
 				} else {
 					parentNode.removeChild(div);
 					if (id) delete ancestor.blocks[id];
