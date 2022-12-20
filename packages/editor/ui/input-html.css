@@ -1,0 +1,10 @@
+[block-type="input_html"] .textarea {
+	line-height: 1.2857;
+	padding: 0.7857em 1em;
+	background: #eee;
+	color: #333;
+	min-height: 5em;
+}
+[block-type="input_html"] .textarea + textarea {
+	display:none;
+}

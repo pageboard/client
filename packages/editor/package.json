@@ -1,0 +1,43 @@
+{
+  "name": "@pageboard/editor",
+  "version": "0.11.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "postinstall",
+    "prepare": "postinstall"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pageboard/client.git"
+  },
+  "author": "Jérémy Lal <kapouer@melix.org>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pageboard/client/issues"
+  },
+  "homepage": "https://github.com/pageboard/client#readme",
+  "dependencies": {
+    "postinstall": "^0.8.0"
+  },
+  "devDependencies": {
+    "@pageboard/pagecut": "^0.10.1"
+  },
+  "prepare": {
+    "@pageboard/pagecut/src/editor.js": "bundle --name=window.Pagecut lib/",
+    "@pageboard/pagecut/src/menubar.js": "bundle --name=window.Pagecut.Menubar lib/menu.js",
+    "@pageboard/pagecut/src/*.css": "copy lib/"
+  },
+  "pageboard": {
+    "priority": -1,
+    "directories": [
+      "elements",
+      "lib",
+      "ui"
+    ],
+    "elements": [
+      "elements/"
+    ]
+  }
+}
