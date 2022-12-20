@@ -1,7 +1,6 @@
 class ElementProperty {
 	#field;
 	#input;
-	#existing;
 	#select;
 	#block;
 	#prefix;
@@ -16,7 +15,6 @@ class ElementProperty {
 		this.#field = input.closest('.field');
 		this.#field.classList.add('inline');
 		this.#input = input;
-		this.#existing = opts.existing;
 	}
 
 	static asPaths(obj, ret, pre) {
@@ -82,9 +80,7 @@ class ElementProperty {
 		const formId = form.getAttribute('block-id');
 		const formBlock = Pageboard.editor.blocks.get(formId);
 		if (!formBlock) throw new Error("Cannot find form block for " + formId);
-		const el = this.#buildSchema(formBlock);
-		this.#input.hidden = true;
-		this.#buildSelector(formBlock, el);
+		this.#buildSelector(formBlock);
 		this.update();
 	}
 
@@ -92,16 +88,11 @@ class ElementProperty {
 		let cand = null;
 		if (block.type == "query_form") {
 			cand = block.data?.type;
-			if (!cand) {
-				throw new Error("Please select a type to bind the form to");
-			}
 		} else if (block.type == "api_form") {
 			cand = block.data?.action?.parameters?.type;
-			if (!cand) {
-				throw new Error("Please select a type to bind the form to");
-			}
-		} else {
-			throw new Error(`Unknown parent form type: ${block.type}`);
+		}
+		if (!cand) {
+			return;
 		}
 
 		if (Array.isArray(cand)) {
@@ -134,20 +125,28 @@ class ElementProperty {
 		return el;
 	}
 
-	#buildSelector(formBlock, el) {
-		const doc = this.#input.ownerDocument;
-		const paths = ElementProperty.asPaths(el, {}, el.name + '.' + this.#prefix);
+	pathsProperties(block) {
+		const el = this.#buildSchema(block);
+		if (!el) return null;
+		return ElementProperty.asPaths(el, {}, el.name + '.' + this.#prefix);
+	}
+
+	#buildSelector(formBlock) {
 		const content = ElementProperty.element(formBlock.type)
 			.contents.get(formBlock);
-		const existing = this.#existing;
-		this.#select = doc.dom(`<select class="ui compact dropdown">
-			<option value="">--</option>
-		</select>`);
+		const paths = this.pathsProperties(formBlock, content);
+		if (!paths) return;
+		const doc = this.#input.ownerDocument;
+		this.#select = doc.dom(`<select class="ui compact dropdown"></select>`);
 		const context = {
 			level: 0,
 			key: null,
 			parent: this.#select
 		};
+
+		const node = doc.dom(`<option value="">(custom name)</option>`);
+		context.parent.appendChild(node);
+
 		const dateFormats = ["date", "time", "date-time"];
 		for (const [key, prop] of Object.entries(paths)) {
 			const parts = key.split('.');
@@ -165,8 +164,6 @@ class ElementProperty {
 				context.level++;
 				context.key = key;
 			} else if (prop.type == "array" && prop.items?.properties) {
-				// TODO <option value="${key}">@${prop.title}</option>
-				// when form-input-property will be an helper instead of a block type
 				context.parent = context.parent.appendChild(
 					doc.dom(`<optgroup label="${prop.title}"></optgroup>`)
 				);
@@ -174,15 +171,13 @@ class ElementProperty {
 				context.key = key;
 			} else {
 				const node = doc.dom(`<option value="${key}">${prop.title}</option>`);
-				const disable = Boolean(
+				node.disabled = Boolean(
 					content.querySelector(`[name="${parts.slice(1).join('.')}"]`)
 				);
-				if (existing) node.disabled = !disable;
-				else node.disabled = disable;
 				context.parent.appendChild(node);
 			}
 		}
-		this.#field.appendChild(this.#select);
+		this.#field.insertBefore(this.#select, this.#input);
 		this.#select.addEventListener('change', this);
 	}
 
@@ -190,18 +185,26 @@ class ElementProperty {
 		if (e.type != "change") return;
 		if (e.target == this.#select) {
 			const cur = this.#select.value;
-			this.#updateOptions(this.#input.value, cur);
+			this.#updateOptions(cur);
 			this.#input.value = cur;
 			// not sure it's useful to trigger something here
 			Pageboard.trigger(this.#input, 'change');
 		}
 	}
 
-	#updateOptions(prev, cur) {
+	#updateOptions(cur) {
+		let found = false;
 		for (const opt of this.#select.options) {
-			if (opt.value == prev) opt.disabled = false;
-			if (opt.value == cur) opt.disabled = true;
+			opt.disabled = opt.value == cur;
+			if (opt.disabled) found = true;
 		}
+		if (!found && cur != "") {
+			this.#updateOptions("");
+			return false;
+		}
+		if (cur === "") this.#input.hidden = false;
+		else this.#input.hidden = true;
+		return found;
 	}
 
 	update(block) {
@@ -209,8 +212,11 @@ class ElementProperty {
 		else this.#block = block;
 		const cur = block.data.name || "";
 		if (this.#select) {
-			this.#updateOptions(this.#select.value, cur);
-			this.#select.value = cur;
+			if (this.#updateOptions(cur)) {
+				this.#select.value = cur;
+			} else {
+				this.#select.value = "";
+			}
 		}
 	}
 
@@ -222,6 +228,20 @@ class ElementProperty {
 
 Pageboard.schemaHelpers['element-property'] = ElementProperty;
 
+Pageboard.schemaHelpers['form-element'] = class FormElement extends ElementProperty {
+	pathsProperties(block, content) {
+		const all = content.querySelectorAll("[name]");
+		const obj = {};
+		for (const node of all) {
+			if (!node.name) continue;
+			obj[node.name] = {
+				title: node.closest('.field')?.querySelector('label')?.innerText ?? node.name
+			};
+		}
+		return obj;
+	}
+};
+
 Pageboard.schemaFilters['element-value'] = class ElementValueFilter {
 	#using;
 
@@ -230,6 +250,8 @@ Pageboard.schemaFilters['element-value'] = class ElementValueFilter {
 	}
 
 	update(block, schema) {
+		// TODO instead of requiring a schema from type,
+		// infer a schema from current form inputs
 		const empty = {
 			title: schema.title,
 			$filter: schema.$filter,

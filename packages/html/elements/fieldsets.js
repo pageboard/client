@@ -10,10 +10,7 @@ exports.fieldset = {
 			type: 'string',
 			format: 'singleline',
 			nullable: true,
-			$helper: {
-				name: 'element-property',
-				existing: true
-			}
+			$helper: 'form-element'
 		},
 		value: {
 			title: 'matches this value',

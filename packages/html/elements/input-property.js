@@ -1,9 +1,8 @@
 exports.input_property = {
-	title: 'Property',
+	// deprecated
 	menu: 'form',
 	group: 'block',
 	context: 'form//',
-	icon: '<i class="icon">X</i>',
 	properties: {
 		name: {
 			title: 'Name',

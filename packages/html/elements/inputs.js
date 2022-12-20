@@ -84,7 +84,8 @@ exports.input_text = {
 			title: "Name",
 			description: "The form object key",
 			type: "string",
-			format: "singleline"
+			format: "singleline",
+			$helper: 'element-property'
 		},
 		value: {
 			title: "Default value",
@@ -285,7 +286,8 @@ exports.input_checkbox = {
 		name: {
 			title: "Name",
 			type: "string",
-			format: "singleline"
+			format: "singleline",
+			$helper: 'element-property'
 		},
 		value: {
 			title: "Value",
@@ -341,7 +343,8 @@ exports.input_radio = {
 		name: {
 			title: "name",
 			type: "string",
-			format: "singleline"
+			format: "singleline",
+			$helper: 'element-property'
 		},
 		checked: {
 			title: "Checked",
@@ -388,7 +391,8 @@ exports.input_select = {
 			title: "Name",
 			description: "The form object key",
 			type: "string",
-			format: "singleline"
+			format: "singleline",
+			$helper: 'element-property'
 		},
 		placeholder: {
 			title: "Placeholder",
