@@ -40,7 +40,8 @@ exports.query_form = {
 					nullable: true,
 					type: "object"
 				}
-			}
+			},
+			nullable: true
 		}
 	},
 	contents: 'block+',
