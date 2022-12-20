@@ -32,6 +32,7 @@ export {
 	baseElements as elements,
 	load,
 	render,
+	install,
 	equivs,
 	bundle,
 	merge
