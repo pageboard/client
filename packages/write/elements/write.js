@@ -12,7 +12,6 @@ exports.write = {
 		<link rel="stylesheet" href="[$element.stylesheets|repeat]" />
 		<script crossorigin="anonymous" defer src="https://cdn.polyfill.io/v3/polyfill.min.js?flags=gated&unknown=polyfill&features=[$elements|polyfills|url|magnet:*]"></script>
 		<script defer src="[$element.scripts|repeat]"></script>
-		<script defer src="[$meta.services|repeat]"></script>
 	</head>
 	<body
 		data-devtools="[$element.resources.devtools]"
