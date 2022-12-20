@@ -148,8 +148,10 @@ export default class FocusPlugin {
 				console.error(ex);
 			}
 		}
-		if (root && sel.node && sel.from === rootPos || sel.empty && !firstParent.container && !root.node.isTextblock) {
-			tr.setSelection(NodeSelection.create(tr.doc, rootPos));
+		if (root) {
+			if (sel.node && sel.from === rootPos || sel.empty && !firstParent.container && !root.node.isTextblock) {
+				tr.setSelection(NodeSelection.create(tr.doc, rootPos));
+			}
 		}
 		return tr.setMeta('focus', true);
 	}

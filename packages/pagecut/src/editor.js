@@ -33,6 +33,7 @@ Transform.Transform.prototype.docAttr = function(key, value) {
 const mac = typeof navigator != "undefined" ? /Mac/.test(navigator.platform) : false;
 
 class Editor extends View.EditorView {
+	#utils;
 	static defaults = {
 		nodes: OrderedMap.from(baseSchema.nodes),
 		marks: OrderedMap.from(baseSchema.marks),
@@ -79,7 +80,7 @@ class Editor extends View.EditorView {
 		return ser;
 	}
 
-	static configure(viewer, { topNode, jsonContent, content, plugins }) {
+	static configure(viewer, { topNode, jsonContent, content, plugins = [] }) {
 		const elements = viewer.elements;
 		const spec = {
 			topNode,
@@ -191,17 +192,20 @@ class Editor extends View.EditorView {
 		super({
 			mount: typeof opts.place == "string" ?
 				document.querySelector(opts.place) :
-				opts.place
+				opts.place ?? opts.content
 		}, Editor.configure(viewer, opts));
 
 		if (opts.scope) this.scope = opts.scope;
 		if (opts.explicit) this.explicit = true;
 		this.cssChecked = true;
 	}
+	get utils() {
+		if (!this.#utils) this.#utils = new Utils(this);
+		return this.#utils;
+	}
 	get blocks() {
 		if (!this.elements) {
 			// this is a trick to do post-super initializing
-			this.utils = new Utils(this);
 			const viewer = this.props.viewer;
 			viewer.blocks.view = this;
 			Object.defineProperty(this, 'blocks', {
