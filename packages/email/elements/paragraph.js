@@ -28,7 +28,7 @@ exports.mail_paragraph = {
 		const align = (prop.anyOf.find(item => {
 			return dom.classList.contains(item.const);
 		}) || { const: prop.default }).const;
-		return {align: align};
+		return { align };
 	},
 	contents: "mail_inline*",
 	group: "mail_block",
