@@ -1,5 +1,6 @@
 exports.reading = {
 	title: 'Blog',
+	priority: 10,
 	icon: '<i class="clock outline icon"></i>',
 	required: ["for"],
 	inline: true,
