@@ -23,7 +23,7 @@
     "debounce": "^1.2.1",
     "matchdom": "^5.10.8",
     "postinstall": "^0.8.0",
-    "postinstall-bundle": "^0.7.4",
+    "postinstall-bundle": "^0.8.0",
     "window-page": "^13.2.0"
   },
   "prepare": {

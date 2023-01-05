@@ -26,7 +26,7 @@
     "formdata-polyfill": "^4.0.10",
     "nouislider": "^15.6.1",
     "object-fit-images": "^3.2.4",
-    "postinstall-bundle": "^0.7.4"
+    "postinstall-bundle": "^0.8.0"
   },
   "postinstall": {
     "semantic-ui-css/components": "link lib/components",
