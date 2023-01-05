@@ -154,6 +154,7 @@ Pageboard.Editor = function Editor(win, state) {
 	const doc = win.document;
 	const body = doc.body;
 	win.Pagecut.Editor.prototype.update = update;
+	window.Pagecut.Menubar = win.Pagecut.Menubar;
 	// and the editor must be running from child
 	editor = Pageboard.editor = new win.Pagecut.Editor({
 		store: view.blocks.store,

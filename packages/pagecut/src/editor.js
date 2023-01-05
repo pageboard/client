@@ -22,6 +22,7 @@ import DefineSpecs from "./specs";
 import BlocksEdit from "./blocks-edit";
 import SetDocAttr from "./SetDocAttr";
 import EditorViewer from "./viewer";
+import Menubar from "./menubar";
 
 const Viewer = window.Pagecut?.Viewer ?? EditorViewer;
 Viewer.Blocks = BlocksEdit;
@@ -239,6 +240,6 @@ for (const name of ['render', 'element', 'from']) {
 }
 
 export {
-	Editor, View, Model, State, Transform, Commands, keymap, Viewer
+	Editor, View, Model, State, Transform, Commands, keymap, Viewer, Menubar
 };
 

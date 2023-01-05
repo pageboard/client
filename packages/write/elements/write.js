@@ -151,7 +151,6 @@ exports.write = {
 		"../ui/share.js",
 		"../ui/mode.js",
 		"../ui/setup.js",
-		"../lib/pagecut/menu.js",
 		"../lib/cropper.js",
 		"../lib/speakingurl.js"
 	],
