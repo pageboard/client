@@ -13,6 +13,6 @@ Menubar.prototype.update = function(view) {
 	this.place.textContent = "";
 	this.place.classList.add('ProseMirror-menu');
 	const doc = this.place.ownerDocument;
-	this.place.appendChild(doc.adoptNode(Menu.renderGrouped(view, this.items)));
+	this.place.appendChild(doc.adoptNode(Menu.renderGrouped(view, this.items).dom));
 };
 

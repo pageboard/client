@@ -480,21 +480,14 @@ function specAttrs(atts) {
 
 
 function domSelector(dom) {
-	let sel;
-	const tag = dom.nodeName.toLowerCase();
+	let sel = dom.nodeName.toLowerCase();
 	let cn = dom.className;
 	// might be SVGAnimatedString
 	if (cn?.baseVal != null) cn = cn.baseVal;
 	if (cn) {
-		sel = cn.split(' ').filter(str => Boolean(str))
+		sel += cn.split(' ').filter(str => Boolean(str))
 			.map(str => `.${str}`)
 			.join('');
-	}
-	if (!sel && tag == "div") {
-		// no-go
-		throw new Error("div element needs a tag or a class: " + dom.outerHTML);
-	} else {
-		sel = tag + sel;
 	}
 	return sel;
 }
