@@ -171,10 +171,10 @@ class ElementProperty {
 				context.key = key;
 			} else {
 				const node = doc.dom(`<option value="${key}">${prop.title}</option>`);
+				context.parent.appendChild(node);
 				node.disabled = Boolean(
 					content.querySelector(`[name="${parts.slice(1).join('.')}"]`)
 				);
-				context.parent.appendChild(node);
 			}
 		}
 		this.#field.insertBefore(this.#select, this.#input);
