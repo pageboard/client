@@ -9,7 +9,7 @@ exports.textblock = {
 	title: 'Text',
 	inplace: true,
 	contents: "inline*",
-	html: '<span></span>'
+	html: '<span class="textblock"></span>'
 };
 exports.list = {
 	title: 'List',
