@@ -15,7 +15,6 @@ exports.paragraph = {
 	priority: -10,
 	title: "Paragraph",
 	icon: '<i class="icon paragraph"></i>',
-	tag: 'p',
 	isolating: false,
 	properties: {
 		align: {
@@ -56,6 +55,7 @@ exports.paragraph = {
 	contents: "inline*",
 	group: "block",
 	inplace: true,
+	tag: 'p',
 	html: '<p class="[align|post: aligned]">Text</p>'
 };
 

@@ -184,6 +184,7 @@ exports.binding = {
 	context: 'template//',
 	inline: true,
 	group: "inline nolink",
+	tag: 'span[block-type="binding"]',
 	html: `<span
 		data-attr="[attr|trim|split:%0A|join:%7C|pre:%5B|post:%5D]"
 		data-label="[fill|split:%0A|slice:0:1|join:|split:.|slice:-1|join:|or: ]"
@@ -194,6 +195,7 @@ exports.block_binding = {
 	...exports.binding,
 	inline: false,
 	group: "block",
+	tag: 'div[block-type="block_binding"]',
 	html: `<div
 		data-attr="[attr|trim|split:%0A|join:%7C|pre:%5B|post:%5D]"
 		data-label="[fill|split:%0A|slice:0:1|join:|split:.|slice:-1|join:|or: ]"
