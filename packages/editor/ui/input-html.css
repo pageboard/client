@@ -8,3 +8,9 @@
 [block-type="input_html"] .textarea + textarea {
 	display:none;
 }
+.prosemirror-menu {
+	background-color: #eee;
+	margin-right: auto;
+	border: 1px solid gray;
+	border-radius: 0.2em;
+}

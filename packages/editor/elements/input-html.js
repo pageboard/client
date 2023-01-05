@@ -61,6 +61,7 @@ exports.input_html = {
 	],
 	stylesheets: [
 		'../lib/editor.css',
+		'../lib/menu.css',
 		'../ui/input-html.css'
 	]
 };
