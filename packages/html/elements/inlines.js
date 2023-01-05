@@ -101,7 +101,10 @@ exports.caps = {
 	inline: true,
 	inplace: true,
 	group: "inline nolink",
-	tag: 'span[block-type="caps"]',
+	parse: function(dom) {
+		return { transform: dom.className };
+	},
+	tag: 'span.uppercase,span.lowercase,span.capitalize,span.smallcaps',
 	properties: {
 		transform: {
 			title: 'Transform',
@@ -176,6 +179,7 @@ exports.color = {
 	contents: "text*",
 	inline: true,
 	inplace: true,
+	tag: 'span.color',
 	group: "inline nolink",
 	html: '<span class="[color] color"></span>'
 };
