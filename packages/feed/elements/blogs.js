@@ -2,7 +2,6 @@ exports.blog = {
 	title: 'Blog',
 	icon: '<i class="newspaper outline icon"></i>',
 	standalone: true,
-	bundle: true,
 	properties: {
 		title: {
 			title: 'Title',
@@ -81,6 +80,21 @@ exports.blog = {
 		<div class="extra" block-content="content"></div>
 	</a>`,
 };
+
+/*
+exports.page.extensions.rss = {
+	bundle: true,
+	mime: 'application/xml'
+
+
+};
+*/
+// TODO
+// an bundle element that can be added to the current page element
+// when a specific extension is requested:
+// .pdf, .rss, or more (.svg, .xml, etc)
+// those elements are not "pages", however they are independent bundles
+// that are loaded on top of the page
 
 /*
 exports.siteblog = exports.sitemap.itemModel('blog', true);
