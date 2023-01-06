@@ -6,9 +6,9 @@ class HTMLSocialElement extends VirtualHTMLElement {
 	};
 
 	static links = {
-		linkedin: `<a href="https://www.linkedin.com/shareArticle?mini=true&url=[url|enc]" class="linkedin">LinkedIn</a>`,
-		twitter: `<a href="https://twitter.com/intent/tweet?text=[url|enc]" class="twitter">Twitter</a>`,
-		facebook: `<a href="https://www.facebook.com/sharer/sharer.php?u=[url|enc]" class="facebook">Facebook</a>`
+		linkedin: `<a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url=[url|enc]" class="linkedin">LinkedIn</a>`,
+		twitter: `<a target="_blank" href="https://twitter.com/intent/tweet?text=[url|enc]" class="twitter">Twitter</a>`,
+		facebook: `<a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=[url|enc]" class="facebook">Facebook</a>`
 	};
 
 	patch(state) {
