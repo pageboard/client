@@ -137,7 +137,7 @@ function renderBlock(el, scope, block, bscope) {
 		}
 	}
 	return dom;
-};
+}
 
 export function install(el, scope) {
 	if (el.$installed) return;
