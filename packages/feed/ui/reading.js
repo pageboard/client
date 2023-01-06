@@ -20,5 +20,6 @@ class HTMLElementReading extends VirtualHTMLElement {
 	}
 }
 
-Page.ready(() => VirtualHTMLElement.define('element-reading', HTMLElementReading));
-
+Page.patch(
+	() => VirtualHTMLElement.define('element-reading', HTMLElementReading)
+);
