@@ -1,5 +1,5 @@
 exports.reading = {
-	title: 'Blog',
+	title: 'Reading',
 	priority: 10,
 	icon: '<i class="clock outline icon"></i>',
 	required: ["for"],
