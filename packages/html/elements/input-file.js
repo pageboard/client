@@ -10,7 +10,8 @@ exports.input_file = {
 			title: "Name",
 			description: "The form object key",
 			type: "string",
-			format: "singleline"
+			format: "singleline",
+			$helper: 'element-property'
 		},
 		placeholder: {
 			title: "Placeholder",

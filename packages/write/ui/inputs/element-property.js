@@ -170,10 +170,11 @@ class ElementProperty {
 				context.level++;
 				context.key = key;
 			} else {
-				const node = doc.dom(`<option value="${key}">${prop.title}</option>`);
+				const name = parts.slice(1).join('.');
+				const node = doc.dom(`<option value="${name}">${prop.title}</option>`);
 				context.parent.appendChild(node);
 				node.disabled = Boolean(
-					content.querySelector(`[name="${parts.slice(1).join('.')}"]`)
+					content.querySelector(`[name="${name}"]`)
 				);
 			}
 		}

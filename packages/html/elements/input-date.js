@@ -10,7 +10,8 @@ exports.input_date_time = {
 			title: "Name",
 			description: "The form object key",
 			type: "string",
-			format: "singleline"
+			format: "singleline",
+			$helper: 'element-property'
 		},
 		value: {
 			title: "Default value",
@@ -105,13 +106,15 @@ exports.input_date_slot = {
 			title: "Name for start date",
 			description: "The form object key",
 			type: "string",
-			format: "singleline"
+			format: "singleline",
+			$helper: 'element-property'
 		},
 		nameEnd: {
 			title: "Name for end date",
 			description: "The form object key",
 			type: "string",
-			format: "singleline"
+			format: "singleline",
+			$helper: 'element-property'
 		},
 		valueStart: {
 			title: 'Start time',
