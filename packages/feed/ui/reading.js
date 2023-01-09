@@ -6,15 +6,12 @@ class HTMLElementReading extends VirtualHTMLElement {
 	patch(state) {
 		state.finish(() => {
 			const sel = this.options.for;
-			if (!sel) {
-				this.innerText = '?';
+			const body = this.closest('main');
+			const node = sel ? body.querySelector(sel) : this.closest('.view') ?? body;
+			if (!node) {
+				this.innerText = 'n/a';
 			} else {
-				const node = document.querySelector(sel);
-				if (!node) {
-					this.innerText = '!';
-				} else {
-					this.innerText = Math.ceil(node.textContent.split(/\s+/).length / 200) + 'mn';
-				}
+				this.innerText = Math.ceil(node.textContent.split(/\s+/).length / 200) + 'mn';
 			}
 		});
 	}
