@@ -1,6 +1,7 @@
 exports.write = {
 	priority: 100,
 	title: 'Write',
+	group: 'page',
 	bundle: true,
 	standalone: true,
 	html: `<html lang="[$site.lang|ornull]">
