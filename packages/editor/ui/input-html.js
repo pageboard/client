@@ -26,7 +26,7 @@ class HTMLElementInputHTML extends HTMLTextAreaElement {
 		},
 		paragraph: {
 			title: "Paragraph",
-			icon: '<i class="icon paragraph"></i>',
+			icon: { text: '¶' },
 			tag: 'p',
 			isolating: false,
 			contents: "inline*",
@@ -159,11 +159,7 @@ class HTMLElementInputHTML extends HTMLTextAreaElement {
 
 		const item = {
 			element: el,
-			render(view) {
-				const div = document.createElement('div');
-				div.innerHTML = el.name;
-				return div;
-			},
+			icon: el.icon,
 			run: function (state, dispatch, view) {
 				try {
 					let tr = state.tr;
@@ -223,10 +219,13 @@ class HTMLElementInputHTML extends HTMLTextAreaElement {
 	}
 
 	#menuitems(els) {
-		const item = new window.Pagecut.Menubar.Menu.MenuItem(this.#item(
-			els.strong
-		));
-		return [[item]];
+		const list = [];
+		for (const el of Object.values(els)) {
+			if (el.icon) list.push(
+				new window.Pagecut.Menubar.Menu.MenuItem(this.#item(el))
+			);
+		}
+		return [list];
 	}
 
 	close() {
