@@ -97,7 +97,7 @@ class HTMLElementInputHTML extends HTMLTextAreaElement {
 		if (this.isContentEditable) return;
 		const doc = this.ownerDocument;
 		if (this.previousElementSibling?.matches('.textarea')) return;
-		const textarea = doc.dom(`<div class="textarea">${this.value}</div>`);
+		const textarea = doc.dom(`<div class="textarea">${this.textContent}</div>`);
 		this.parentNode.insertBefore(textarea, this);
 		const toolbar = doc.dom(`<div class="toolbar"></div>`);
 		this.parentNode.insertBefore(toolbar, textarea);
@@ -109,14 +109,18 @@ class HTMLElementInputHTML extends HTMLTextAreaElement {
 			els[name] = copy;
 		}
 
+		const initialValue = this.textContent;
+
 		this.#saver = Pageboard.debounce(editor => {
-			this.value = editor.to()?.content[""];
-		}, 500);
+			super.value = this.#editor.to()?.content[""];
+		}, 100);
+
+
 		this.#editor = new window.Pagecut.Editor({
 			topNode: 'fragment',
 			store: {},
 			elements: els,
-			content: textarea,
+			place: textarea,
 			scope: state.scope,
 			plugins: [{
 				view: () => {
@@ -126,6 +130,7 @@ class HTMLElementInputHTML extends HTMLTextAreaElement {
 				}
 			}]
 		});
+		this.value = initialValue;
 
 		this.#menu = new window.Pagecut.Menubar({
 			items: this.#menuitems(els),
@@ -134,9 +139,14 @@ class HTMLElementInputHTML extends HTMLTextAreaElement {
 		textarea.spellcheck = false;
 	}
 
+	set value(str) {
+		if (this.#editor) this.#editor.dom.innerHTML = str;
+		super.value = str;
+	}
+
 	#update() {
 		this.#menu.update(this.#editor);
-		this.#saver(this.#editor);
+		this.#saver();
 	}
 
 	#item(el) {
