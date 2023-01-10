@@ -1,7 +1,8 @@
 class HTMLSocialElement extends VirtualHTMLElement {
 	static defaults = {
 		networks: (x) => (x || '').split(',').filter(x => Boolean(x)),
-		thumbnail: null,
+		title: null,
+		image: null,
 		description: null
 	};
 
@@ -13,34 +14,30 @@ class HTMLSocialElement extends VirtualHTMLElement {
 
 	patch(state) {
 		state.finish(() => {
-			const href = document.location.origin + Page.format({
-				pathname: state.pathname,
-				query: { ...state.query }
+			const url = document.location.origin + Page.format({
+				pathname: state.pathname
 			});
 			const card = {
-				title: document.title,
-				url: href,
+				title: this.options.title,
+				image: this.options.image,
 				description: this.options.description,
-				thumbnail: this.options.thumbnail
+				url
 			};
-			if (card.thumbnail) {
-				const obj = Page.parse(card.thumbnail);
+			if (card.image) {
+				const obj = Page.parse(card.image);
 				obj.query.rs = 'w-800_h-450_max';
-				card.thumbnail = document.location.origin + Page.format(obj);
+				card.image = document.location.origin + Page.format(obj);
 			}
-			const doc = this.ownerDocument;
+			const doc = document;
 			const title = doc.head.querySelector('title');
-			let ogDesc = doc.head.querySelector(`meta[name="description"]`);
-			if (card.description) {
-				if (!ogDesc) {
-					ogDesc = doc.dom(`<meta name="description">`);
-					doc.head.insertBefore(ogDesc, title.nextElementSibling);
-				}
-				ogDesc.setAttribute('content', card.description);
+			if (card.title && !title.textContent.startsWith(card.title)) {
+				title.insertAdjacentText('afterBegin', card.title + ' - ');
 			}
-			const ogImage = doc.head.querySelector(`meta[property="og:image"]`);
-			if (card.thumbnail) {
-				ogImage.setAttribute('content', card.thumbnail);
+
+			for (const [key, val] of Object.entries(card)) {
+				const og = doc.head.querySelector(`meta[property="og:${key}"]`);
+				if (val) og.setAttribute('content', val);
+				else og.removeAttribute('content');
 			}
 			const { links } = HTMLSocialElement;
 			this.textContent = '';
