@@ -100,7 +100,8 @@ class HTMLElementInputHTML extends HTMLTextAreaElement {
 		if (this.isContentEditable) return;
 		const doc = this.ownerDocument;
 		if (this.previousElementSibling?.matches('.textarea')) return;
-		const textarea = doc.dom(`<div class="textarea">${this.textContent}</div>`);
+		const initialValue = super.value;
+		const textarea = doc.dom(`<div class="textarea">${initialValue}</div>`);
 		this.parentNode.insertBefore(textarea, this);
 		const toolbar = doc.dom(`<div class="toolbar"></div>`);
 		this.parentNode.insertBefore(toolbar, textarea);
@@ -112,7 +113,7 @@ class HTMLElementInputHTML extends HTMLTextAreaElement {
 			els[name] = copy;
 		}
 
-		const initialValue = this.textContent;
+
 
 		this.#saver = Pageboard.debounce(editor => {
 			super.value = this.#editor.to()?.content[""];
@@ -235,6 +236,6 @@ class HTMLElementInputHTML extends HTMLTextAreaElement {
 		this.#editor?.destroy();
 	}
 }
-Page.setup(() => {
+Page.ready(() => {
 	VirtualHTMLElement.define('element-input-html', HTMLElementInputHTML, 'textarea');
 });
