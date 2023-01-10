@@ -26,7 +26,10 @@ class HTMLElementInputHTML extends HTMLTextAreaElement {
 		},
 		paragraph: {
 			title: "Paragraph",
-			icon: { text: '¶' },
+			icon: {
+				width: 16, height: 16,
+				path: "M5.5 0C3 0 1 2 1 4.5S3 9 5.5 9H8v7h2V2h1v14h2V2h2V0H5.5z"
+			},
 			tag: 'p',
 			isolating: false,
 			contents: "inline*",
