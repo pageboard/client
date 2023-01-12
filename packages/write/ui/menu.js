@@ -60,9 +60,7 @@ Pageboard.Controls.Menu = class Menu {
 		this.tabs = {};
 		this.lastTab;
 		for (const name of Menu.tabs) this.tab(name);
-		this.menu = new Pagecut.MenuBar({
-			items: this.items()
-		});
+		this.menu = this.items();
 		this.tabMenu.addEventListener('click', this, false);
 		this.inlines = this.node.dom(`<div class="ui icon menu"></div>`);
 		this.node.appendChild(this.inlines);
@@ -124,7 +122,7 @@ Pageboard.Controls.Menu = class Menu {
 		const inlineSpans = [];
 		let inlineSpansActive = false;
 
-		if (sel) this.menu.items.forEach(item => {
+		if (sel) this.menu.forEach(item => {
 			const dom = Menu.renderItem(item, this.editor, sel.node?.type.name);
 			if (!dom) return;
 			const el = item.spec.element;
