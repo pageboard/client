@@ -60,7 +60,7 @@ Pageboard.Controls.Menu = class Menu {
 		this.tabs = {};
 		this.lastTab;
 		for (const name of Menu.tabs) this.tab(name);
-		this.menu = new Pagecut.Menubar({
+		this.menu = new Pagecut.MenuBar({
 			items: this.items()
 		});
 		this.tabMenu.addEventListener('click', this, false);
@@ -271,7 +271,7 @@ Pageboard.Controls.Menu = class Menu {
 		})) {
 			const itemSpec = this.item(el);
 			if (itemSpec) {
-				list.push(new Pagecut.Menubar.Menu.MenuItem(itemSpec));
+				list.push(new Pagecut.MenuItem(itemSpec));
 			}
 		}
 		return list;
