@@ -1,18 +1,46 @@
 [block-type="input_html"] .textarea {
 	line-height: 1.2857;
 	padding: 0.7857em 1em;
-	background: #eee;
 	color: #333;
 	min-height: 5em;
+	border: 1px solid gray;
 }
 [block-type="input_html"] .textarea + textarea {
 	display:none;
 }
 .ProseMirror-menu {
 	display:inline-flex;
-	background-color: #eee;
+	background-color: #fff;
 	margin:0;
 	border: 1px solid gray;
 	border-radius: 0.2em;
 	color:#333;
+	column-gap:0.2em;
+}
+.ProseMirror-menuitem {
+	margin-right:0;
+}
+.ProseMirror-icon {
+	line-height:initial;
+	vertical-align:initial;
+	padding:0.3em 0.5em;
+}
+
+.ProseMirror-menuitem > form {
+	display:none;
+}
+.ProseMirror-menuitem > form.ProseMirror-menu-active {
+	display:inline-flex;
+}
+
+.ProseMirror-menu > .ProseMirror-menuitem > form.prosemirror-dialog > input {
+	padding: 0.25em;
+	background: white;
+	border: 1px solid lightgray;
+	width: 300px;
+	max-width: 100%;
+}
+
+.ProseMirror-menu > .ProseMirror-menuitem > form.prosemirror-dialog > input:invalid {
+	background:lightcoral;
 }

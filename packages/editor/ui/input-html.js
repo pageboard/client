@@ -1,3 +1,176 @@
+class MenuItemDialog extends window.Pagecut.MenuItem {
+	#input;
+	#editor;
+	#el;
+	constructor(el, editor) {
+		const spec = { render: view => this.render(view) };
+		super(spec);
+		this.#el = el;
+		this.#editor = editor;
+	}
+	#getMark(tr) {
+		return this.#editor.utils.selectionParents(tr).shift()?.inline?.node.marks.find(
+			m => m.type.name == this.#el.name
+		);
+	}
+	render(editor) {
+		const [name, schema] = Object.entries(this.#el.properties).shift();
+		const inputType = {
+			'uri-reference': 'url'
+		}[schema.format] ?? 'text';
+		const dom = this.dom = document.dom(
+			`<form class="prosemirror-dialog">
+				<input name="${name}" type="${inputType}" value="" title="${schema.title}" placeholder="https://...">
+				<button>✓</button>
+				<button name="del">✕</button>
+			</form>`
+		);
+		const input = this.#input = dom.querySelector('input');
+
+		dom.addEventListener('click', e => {
+			if (e.target.name == "del") this.#input.value = "";
+		});
+
+		dom.addEventListener('submit', e => {
+			const type = document.activeElement.name;
+			const { state } = this.#editor;
+			const { tr } = state;
+			e.preventDefault();
+
+			const mark = this.#getMark(tr);
+			if (!mark) return;
+			const sel = tr.selection;
+			const [from, to] = this.#editor.utils.extendUpdateMark(
+				tr, sel.from, sel.to, mark
+			);
+			const markDom = this.#editor.utils.posToDOM(from)?.parentNode;
+			if (!markDom) return;
+			if (type != "del") {
+				this.#editor.utils.refreshTr(tr, markDom, {
+					type: markDom.getAttribute('block-type'),
+					data: {
+						url: input.value ?? null
+					}
+				});
+				tr.setSelection(sel.constructor.create(tr.doc, to, to));
+				tr.removeStoredMark(mark.type);
+			} else {
+				tr.removeMark(from, to, mark.type);
+				tr.setSelection(sel.constructor.create(tr.doc, to, to));
+			}
+			editor.dispatch(tr);
+			editor.focus();
+		});
+		return { dom, update: state => this.update(state) };
+	}
+	update(state) {
+		// why state is out of sync ?
+		const mark = this.#getMark(this.#editor.state.tr);
+		const isActive = Boolean(mark);
+		this.dom.classList.toggle('ProseMirror-menu-active', isActive);
+
+		// workaround other item is not updating properly
+		this.dom.parentNode.previousElementSibling.firstElementChild.classList.toggle('ProseMirror-menu-active', isActive);
+
+		const input = this.#input;
+		try {
+			const data = JSON.parse(mark.attrs.data ?? '{}');
+			input.value = data.url ?? '';
+		} catch (err) {
+			input.value = '';
+		}
+		return true;
+	}
+}
+
+class MenuBar extends window.Pagecut.MenuBar {
+	constructor(editor, els, toolbar) {
+		super({
+			view: editor,
+			items: MenuBar.menuitems(els, editor),
+			place: toolbar
+		});
+	}
+
+	static item(el, { state: { schema }, utils, blocks }) {
+		const nodeType = schema.nodes[el.name] || schema.marks[el.name];
+		if (!nodeType && !el.icon) return;
+
+		const item = {
+			element: el,
+			icon: el.icon,
+			run: function (state, dispatch) {
+				let tr = state.tr;
+				let sel = tr.selection;
+				const block = blocks.create(el.name);
+				if (el.inline) {
+					if (el.leaf) {
+						tr.replaceSelectionWith(nodeType.create(blocks.toAttrs(block)));
+						const resel = sel ? utils.selectTr(tr, sel) : null;
+						if (resel) tr.setSelection(resel);
+					} else {
+						utils.toggleMark(
+							nodeType,
+							blocks.toAttrs(block)
+						)(state, (atr) => tr = atr);
+					}
+				} else {
+					const blocks = {};
+					const fragment = blocks.renderFrom(block, blocks, null, { type: el.name });
+					const pos = utils.insertTr(tr, fragment, sel);
+					if (pos != null) {
+						sel = utils.selectTr(tr, pos);
+						if (sel) tr.setSelection(sel);
+					}
+				}
+				tr.setMeta('editor', true);
+				tr.scrollIntoView();
+				dispatch(tr);
+			},
+			select: function (state) {
+				let can;
+				const sel = state.tr.selection;
+				if (el.inline && !nodeType.isAtom) {
+					can = utils.canMark(sel, nodeType);
+				} else {
+					can = Boolean(utils.canInsert(sel.$to, nodeType, false, false).node);
+					if (!can && sel.node) {
+						can = Boolean(utils.canInsert(sel.$from, nodeType, false, true).node);
+					}
+				}
+				return can;
+			},
+			active: function (state) {
+				let active;
+				const { tr } = state;
+				if (!el.inline || el.leaf) {
+					const parents = utils.selectionParents(tr);
+					active = parents?.[0]?.root.node.type.name == el.name;
+				} else {
+					active = utils.markActive(tr.selection, nodeType);
+				}
+				return active;
+			}
+		};
+		return item;
+	}
+
+	static menuitems(els, editor) {
+		const list = [];
+		for (const el of Object.values(els)) {
+			if (!el.icon) continue;
+			const item = this.item(el, editor);
+			list.push(
+				new window.Pagecut.MenuItem(item)
+			);
+			if (el.properties) {
+				list.push(new MenuItemDialog(el, editor));
+			}
+		}
+		return [list];
+	}
+}
+
 class HTMLElementInputHTML extends HTMLTextAreaElement {
 	#editor;
 	#menu;
@@ -25,17 +198,17 @@ class HTMLElementInputHTML extends HTMLTextAreaElement {
 			html: '<br />'
 		},
 		paragraph: {
-			title: "Paragraph",
-			icon: {
-				width: 16, height: 16,
-				path: "M5.5 0C3 0 1 2 1 4.5S3 9 5.5 9H8v7h2V2h1v14h2V2h2V0H5.5z"
-			},
+			// title: "Paragraph",
+			// icon: {
+			// 	width: 16, height: 16,
+			// 	path: "M5.5 0C3 0 1 2 1 4.5S3 9 5.5 9H8v7h2V2h1v14h2V2h2V0H5.5z"
+			// },
 			tag: 'p',
 			isolating: false,
 			contents: "inline*",
 			group: "block",
 			inplace: true,
-			html: '<p>Text</p>'
+			html: '<p></p>'
 		},
 		strong: {
 			title: "Strong",
@@ -84,7 +257,7 @@ class HTMLElementInputHTML extends HTMLTextAreaElement {
 					}
 				}
 			},
-			parse: function (dom) {
+			parse(dom) {
 				return { url: dom.href };
 			},
 			contents: "text*",
@@ -113,8 +286,6 @@ class HTMLElementInputHTML extends HTMLTextAreaElement {
 			els[name] = copy;
 		}
 
-
-
 		this.#saver = Pageboard.debounce(editor => {
 			super.value = this.#editor.to()?.content[""];
 		}, 100);
@@ -129,18 +300,14 @@ class HTMLElementInputHTML extends HTMLTextAreaElement {
 			plugins: [{
 				view: () => {
 					return {
-						update: () => this.#update()
+						update: (view, state) => this.#update(state)
 					};
 				}
 			}]
 		});
-		this.value = initialValue;
-
-		this.#menu = new window.Pagecut.Menubar({
-			items: this.#menuitems(els),
-			place: toolbar
-		});
+		this.#menu = new MenuBar(this.#editor, els, toolbar);
 		textarea.spellcheck = false;
+		this.value = initialValue;
 	}
 
 	set value(str) {
@@ -148,88 +315,9 @@ class HTMLElementInputHTML extends HTMLTextAreaElement {
 		super.value = str;
 	}
 
-	#update() {
-		this.#menu.update(this.#editor);
+	#update(state) {
+		this.#menu.update(state);
 		this.#saver();
-	}
-
-	#item(el) {
-		const editor = this.#editor;
-		const schema = editor.state.schema;
-		const nodeType = schema.nodes[el.name] || schema.marks[el.name];
-		if (!nodeType || !el.icon) return;
-
-		const self = this;
-
-		const item = {
-			element: el,
-			icon: el.icon,
-			run: function (state, dispatch, view) {
-				try {
-					let tr = state.tr;
-					let sel = self.selection;
-					const block = editor.blocks.create(el.name);
-					if (el.inline) {
-						if (el.leaf) {
-							tr.replaceSelectionWith(nodeType.create(editor.blocks.toAttrs(block)));
-							const resel = sel ? editor.utils.selectTr(tr, sel) : null;
-							if (resel) tr.setSelection(resel);
-						} else {
-							editor.utils.toggleMark(
-								nodeType,
-								editor.blocks.toAttrs(block)
-							)(state, (atr) => tr = atr);
-						}
-					} else {
-						const blocks = {};
-						const fragment = editor.blocks.renderFrom(block, blocks, null, { type: el.name });
-						const pos = editor.utils.insertTr(tr, fragment, sel);
-						if (pos != null) {
-							sel = editor.utils.selectTr(tr, pos);
-							if (sel) tr.setSelection(sel);
-						}
-					}
-					tr.setMeta('editor', true);
-					tr.scrollIntoView();
-					dispatch(tr);
-				} catch (err) {
-					Pageboard.notify("Error while inserting " + el.title, err);
-				}
-			},
-			select: function (state) {
-				let can;
-				if (el.inline && !nodeType.isAtom) {
-					can = editor.utils.canMark(self.selection, nodeType);
-				} else {
-					const sel = self.selection;
-					can = Boolean(editor.utils.canInsert(sel.$to, nodeType, false, false).node);
-					if (!can && sel.node) {
-						can = Boolean(editor.utils.canInsert(sel.$from, nodeType, false, true).node);
-					}
-				}
-				return can;
-			},
-			active: function (state) {
-				let active;
-				if (!el.inline || el.leaf) {
-					active = self.parents?.[0]?.node.type.name == el.name;
-				} else {
-					active = editor.utils.markActive(state.tr.selection, nodeType);
-				}
-				return active;
-			}
-		};
-		return item;
-	}
-
-	#menuitems(els) {
-		const list = [];
-		for (const el of Object.values(els)) {
-			if (el.icon) list.push(
-				new window.Pagecut.Menubar.Menu.MenuItem(this.#item(el))
-			);
-		}
-		return [list];
 	}
 
 	close() {
