@@ -1,18 +1,18 @@
-import * as Menu from "prosemirror-menu";
+import { MenuItem, renderGrouped } from "prosemirror-menu";
 
-export default Menubar;
+export { MenuItem };
 
-Menubar.Menu = Menu;
-
-function Menubar(opts) {
-	this.place = opts.place;
-	this.items = opts.items;
+export class MenuBar {
+	#update;
+	constructor({ place, items, view }) {
+		this.dom = place;
+		const { update, dom } = renderGrouped(view, items);
+		this.#update = update;
+		place.textContent = "";
+		place.classList.add('ProseMirror-menu');
+		place.appendChild(place.ownerDocument.adoptNode(dom));
+	}
+	update(state) {
+		this.#update(state);
+	}
 }
-
-Menubar.prototype.update = function(view) {
-	this.place.textContent = "";
-	this.place.classList.add('ProseMirror-menu');
-	const doc = this.place.ownerDocument;
-	this.place.appendChild(doc.adoptNode(Menu.renderGrouped(view, this.items).dom));
-};
-
