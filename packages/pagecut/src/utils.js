@@ -657,7 +657,7 @@ export default class Utils {
 			hadIt = true;
 			to++;
 		}
-		if (hadIt) {
+		if (hadIt && attrs) {
 			tr.removeMark(from, to, mark);
 			mark = mark.type.create(attrs);
 			tr.addMark(from, to, mark);
