@@ -96,3 +96,66 @@ exports.sheet = {
 	},
 	html: '<div class="page-sheet" block-content="page"></div>'
 };
+
+exports.sheetmatch = {
+	title: 'Match',
+	menu: "pdf",
+	group: "block",
+	context: "pdf//",
+	icon: '<b class="icon">L/R</b>',
+	properties: {
+		match: {
+			title: 'Match',
+			type: 'array',
+			nullable: true,
+			default: ['left', 'right'],
+			items: {
+				anyOf: [{
+					title: 'left pages',
+					const: 'left'
+				}, {
+					title: 'right pages',
+					const: 'right'
+				}, {
+					title: 'first page',
+					const: 'first'
+				}, {
+					title: 'last page',
+					const: 'last'
+				}]
+			}
+		}
+	},
+	contents: "block+",
+	html: '<div class="page-sheet-match" data-match="[match]"></div>',
+	stylesheets: [
+		"../ui/pdf.css"
+	],
+	scripts: [
+		'../ui/pdf.js'
+	]
+};
+
+exports.sheetcount = {
+	title: 'Count',
+	menu: "pdf",
+	group: "block",
+	context: "pdf//",
+	icon: '<b class="icon">1/2</b>',
+	properties: {
+		separator: {
+			title: 'Separator for total count',
+			description: 'Set empty to hide total count',
+			type: 'string',
+			format: 'singleline',
+			nullable: true
+		}
+	},
+	html: '<div class="page-sheet-count" data-separator="[separator]"></div>',
+	stylesheets: [
+		"../ui/pdf.css"
+	],
+	scripts: [
+		'../ui/pdf.js'
+	]
+};

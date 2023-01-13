@@ -1,6 +1,27 @@
 .page-sheet {
 	position:relative;
 	page-break-after: always;
+	counter-increment: page;
+}
+.page-sheet-first {
+	counter-reset: page;
+}
+.page-sheet-count[data-separator]::before {
+	content: counter(page) " " attr(data-separator) " " counter(pages);
+}
+.page-sheet-count:not([data-separator])::before {
+	content: counter(page);
+}
+
+.page-sheet-match {
+	display:none;
+}
+[contenteditable] .page-sheet-match,
+.page-sheet-left .page-sheet-match[data-match="left"],
+.page-sheet-right .page-sheet-match[data-match="right"],
+.page-sheet-first .page-sheet-match[data-match="first"],
+.page-sheet-last .page-sheet-match[data-match="last"] {
+	display:block;
 }
 
 @media screen {

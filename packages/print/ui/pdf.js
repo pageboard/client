@@ -1,7 +1,7 @@
 Page.setup(state => {
 	if (this.isContentEditable) return;
 	const opts = document.body.dataset;
-	opts.sibling = 'next-sheet';
+	opts.prefix = 'page-sheet-';
 	opts.page = '.page-sheet';
 	autobreakFn(opts);
 	if (state.pathname.endsWith('.pdf') == false) {
@@ -23,10 +23,13 @@ function showPrintButtons(state, { preset }) {
 	</div>`));
 }
 
-function autobreakFn(opts = {}) {
-	if (!opts.page) opts.page = ".page";
-	if (!opts.margin) opts.margin = '0px';
-
+function autobreakFn({
+	prefix = "",
+	page = ".page",
+	margin = "0px",
+	width = '210mm',
+	height = '270mm'
+}) {
 	// 1) activate media print rules, get @page size and margins
 	// 2) traverse, "page" nodes have 'page-break-after: always', 'page-break-inside:avoid'
 	// 3) page node too long is broken in several pages
@@ -39,13 +42,13 @@ function autobreakFn(opts = {}) {
 
 	const effectiveSheet = new CSSStyleSheet();
 	const pageSize = {
-		width: opts.width,
-		height: opts.height
+		width,
+		height
 	};
 
 	const innerPageSize = {
-		width: `calc(${pageSize.width} - ${opts.margin} - ${opts.margin})`,
-		height: `calc(${pageSize.height} - ${opts.margin} - ${opts.margin})`
+		width: `calc(${pageSize.width} - ${margin} - ${margin})`,
+		height: `calc(${pageSize.height} - ${margin} - ${margin})`
 	};
 	const printSheet = `
 	html, body {
@@ -56,13 +59,13 @@ function autobreakFn(opts = {}) {
 		html, body {
 			background: gray;
 		}
-		${opts.page} {
+		${page} {
 			width: ${innerPageSize.width};
 			height: ${innerPageSize.height};
-			border-left-width: ${opts.margin};
-			border-right-width: ${opts.margin};
-			border-top-width: ${opts.margin};
-			border-bottom-width: ${opts.margin};
+			border-left-width: ${margin};
+			border-right-width: ${margin};
+			border-top-width: ${margin};
+			border-bottom-width: ${margin};
 			border-color: rgba(0,0,0,0.04);
 			border-style: solid;
 			background: white;
@@ -74,10 +77,10 @@ function autobreakFn(opts = {}) {
 			background:white;
 		}
 		@page {
-			size: ${opts.width} ${opts.height};
-			margin: ${opts.margin};
+			size: ${width} ${height};
+			margin: ${margin};
 		}
-		${opts.page} {
+		${page} {
 			width: ${innerPageSize.width};
 			height: ${innerPageSize.height};
 			overflow: hidden;
@@ -87,9 +90,9 @@ function autobreakFn(opts = {}) {
 	effectiveSheet.replaceSync(printSheet);
 	document.adoptedStyleSheets.push(effectiveSheet);
 
-	function fillPage(page) {
-		const pageRect = page.getBoundingClientRect();
-		const iter = document.createNodeIterator(page, NodeFilter.SHOW_ELEMENT, null);
+	function fillSheet(sheet) {
+		const pageRect = sheet.getBoundingClientRect();
+		const iter = document.createNodeIterator(sheet, NodeFilter.SHOW_ELEMENT, null);
 		const range = new Range();
 		let node;
 		while ((node = iter.nextNode())) {
@@ -103,7 +106,7 @@ function autobreakFn(opts = {}) {
 			// honour orphans/widows
 			if (node.previousSibling) {
 				range.setStartBefore(node);
-				range.setEndAfter(page);
+				range.setEndAfter(sheet);
 				break;
 			} else {
 				Object.assign(node.style, {
@@ -117,13 +120,21 @@ function autobreakFn(opts = {}) {
 		if (!range.collapsed) {
 			const contents = range.extractContents();
 			const nextPage = contents.firstElementChild;
-			if (opts.sibling) nextPage.classList.add(opts.sibling);
-			page.after(nextPage);
-			fillPage(nextPage);
+			nextPage.classList.add(prefix + 'next');
+			sheet.after(nextPage);
+			fillSheet(nextPage);
 		}
 	}
 
-	for (const page of document.querySelectorAll(opts.page)) {
-		fillPage(page);
+	for (const sheet of document.querySelectorAll(page)) {
+		fillSheet(sheet);
+	}
+	const sheets = document.querySelectorAll(page);
+	document.body.style.counterSet = 'pages ' + sheets.length;
+	for (let i = 0; i < sheets.length; i++) {
+		const sheet = sheets[i];
+		if (i === 0) sheet.classList.add(prefix + 'first');
+		else if (i === sheets.length - 1) sheet.classList.add(prefix + 'last');
+		sheet.classList.add(prefix + (i % 2 === 0 ? 'left' : 'right'));
 	}
 }
