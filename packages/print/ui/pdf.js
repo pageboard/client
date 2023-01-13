@@ -59,10 +59,12 @@ function autobreakFn(opts = {}) {
 		${opts.page} {
 			width: ${innerPageSize.width};
 			height: ${innerPageSize.height};
-			margin-left: ${opts.margin};
-			margin-right: ${opts.margin};
-			margin-top: ${opts.margin};
-			margin-bottom: ${opts.margin};
+			border-left-width: ${opts.margin};
+			border-right-width: ${opts.margin};
+			border-top-width: ${opts.margin};
+			border-bottom-width: ${opts.margin};
+			border-color: rgba(0,0,0,0.04);
+			border-style: solid;
 			background: white;
 			overflow:hidden;
 		}
