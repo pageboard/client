@@ -72,7 +72,7 @@ class HTMLElementSitemap extends VirtualHTMLElement {
 	}
 }
 
-Page.ready(() => {
-	VirtualHTMLElement.define('element-sitemap', HTMLElementSitemap);
-});
+
+VirtualHTMLElement.define('element-sitemap', HTMLElementSitemap);
+
 
