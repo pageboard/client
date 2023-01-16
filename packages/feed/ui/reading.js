@@ -1,6 +1,7 @@
 class HTMLElementReading extends VirtualHTMLElement {
 	static defaults = {
-		for: null
+		for: null,
+		speed: (x) => parseInt(x) || 200,
 	};
 
 	patch(state) {
@@ -11,7 +12,7 @@ class HTMLElementReading extends VirtualHTMLElement {
 			if (!node) {
 				this.innerText = 'n/a';
 			} else {
-				this.innerText = Math.ceil(node.textContent.split(/\s+/).length / 200) + 'mn';
+				this.innerText = Math.ceil(node.textContent.split(/\s+/).length / this.options.speed) + 'mn';
 			}
 		});
 	}
