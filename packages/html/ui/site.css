@@ -293,6 +293,8 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 }
 .ui.grid.full {
 	width: 100% !important;
+	margin-left: auto !important;
+	margin-right: auto !important;
 }
 
 /* for editor only, but semantic-ui dependent */
