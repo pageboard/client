@@ -4,6 +4,7 @@ Page.setup(state => {
 	opts.prefix = 'page-sheet-';
 	opts.page = '.page-sheet';
 	state.ui.printStyleSheet = autobreakFn(opts);
+	pageNumbering(opts);
 	if (state.pathname.endsWith('.pdf') == false) {
 		showPrintButtons(state, opts);
 	} else {
@@ -140,13 +141,23 @@ function autobreakFn({
 	for (const sheet of document.querySelectorAll(page)) {
 		fillSheet(sheet);
 	}
+	return effectiveSheet;
+}
+
+function pageNumbering({ page, prefix }) {
 	const sheets = document.querySelectorAll(page);
-	document.body.style.counterSet = 'pages ' + sheets.length;
+	let offset = 0;
 	for (let i = 0; i < sheets.length; i++) {
 		const sheet = sheets[i];
+		if (sheet.classList.has(prefix + 'skip')) {
+			offset += 1;
+		}
 		if (i === 0) sheet.classList.add(prefix + 'first');
 		else if (i === sheets.length - 1) sheet.classList.add(prefix + 'last');
-		sheet.classList.add(prefix + (i % 2 === 0 ? 'left' : 'right'));
+		sheet.classList.add(prefix + ((i + offset) % 2 === 0 ? 'left' : 'right'));
 	}
-	return effectiveSheet;
+	document.body.style.counterSet = [
+		'sheet', -offset,
+		'sheets', sheets.length - offset
+	].join(' ');
 }

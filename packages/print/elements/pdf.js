@@ -88,6 +88,14 @@ exports.sheet = {
 	bundle: 'pdf',
 	context: 'pdf//',
 	icon: '<i class="icon file outline"></i>',
+	properties: {
+		skip: {
+			title: 'Skip',
+			description: 'Ignore this sheet for page counter',
+			type: 'boolean',
+			default: false
+		}
+	},
 	contents: {
 		id: "page",
 		nodes: "block+"
@@ -95,7 +103,7 @@ exports.sheet = {
 	upgrade: {
 		'content.' : 'content.page'
 	},
-	html: '<div class="page-sheet" block-content="page"></div>'
+	html: '<div class="page-sheet page-sheet-skip" block-content="page"></div>'
 };
 
 exports.sheetmatch = {

@@ -1,16 +1,13 @@
 .page-sheet {
 	position:relative;
 	page-break-after: always;
-	counter-increment: page;
-}
-.page-sheet-first {
-	counter-reset: page;
+	counter-increment: sheet;
 }
 .page-sheet-count[data-separator]::before {
-	content: counter(page) " " attr(data-separator) " " counter(pages);
+	content: counter(sheet) " " attr(data-separator) " " counter(sheets);
 }
 .page-sheet-count:not([data-separator])::before {
-	content: counter(page);
+	content: counter(sheet);
 }
 
 .page-sheet-match {
