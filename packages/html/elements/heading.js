@@ -81,7 +81,6 @@ exports.heading = {
 
 exports.heading_nolink = {
 	...exports.heading,
-	priority: exports.heading.priority - 1,
 	group: null,
 	contents: { ...exports.heading.contents, marks: "nolink" }
 };

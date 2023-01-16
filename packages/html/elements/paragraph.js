@@ -1,5 +1,4 @@
 exports.paragraph_nolink = { ...exports.paragraph,
-	priority: exports.paragraph.priority - 1,
 	group: null,
 	contents: {
 		nodes: "inline*",
