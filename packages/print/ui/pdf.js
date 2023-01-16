@@ -147,17 +147,22 @@ function autobreakFn({
 function pageNumbering({ page, prefix }) {
 	const sheets = document.querySelectorAll(page);
 	let offset = 0;
+	let first = 0;
 	for (let i = 0; i < sheets.length; i++) {
 		const sheet = sheets[i];
-		if (sheet.classList.has(prefix + 'skip')) {
+		if (sheet.classList.contains(prefix + 'skip')) {
 			offset += 1;
 		}
-		if (i === 0) sheet.classList.add(prefix + 'first');
-		else if (i === sheets.length - 1) sheet.classList.add(prefix + 'last');
+		if (i === 0) {
+			first = offset;
+			sheet.classList.add(prefix + 'first');
+		} else if (i === sheets.length - 1) {
+			sheet.classList.add(prefix + 'last');
+		}
 		sheet.classList.add(prefix + ((i + offset) % 2 === 0 ? 'left' : 'right'));
 	}
 	document.body.style.counterSet = [
-		'sheet', -offset,
+		'sheet', -first,
 		'sheets', sheets.length - offset
 	].join(' ');
 }

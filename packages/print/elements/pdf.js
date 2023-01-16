@@ -103,7 +103,7 @@ exports.sheet = {
 	upgrade: {
 		'content.' : 'content.page'
 	},
-	html: '<div class="page-sheet page-sheet-skip" block-content="page"></div>'
+	html: '<div class="page-sheet [skip|?:page-sheet-skip]" block-content="page"></div>'
 };
 
 exports.sheetmatch = {
