@@ -85,6 +85,7 @@ exports.sheet = {
 	title: 'Sheet',
 	menu: "pdf",
 	group: 'block',
+	bundle: 'pdf',
 	context: 'pdf//',
 	icon: '<i class="icon file outline"></i>',
 	contents: {
@@ -100,6 +101,7 @@ exports.sheet = {
 exports.sheetmatch = {
 	title: 'Match',
 	menu: "pdf",
+	bundle: 'pdf',
 	group: "block",
 	context: "pdf//",
 	icon: '<b class="icon">L/R</b>',
@@ -139,6 +141,7 @@ exports.sheetmatch = {
 exports.sheetcount = {
 	title: 'Count',
 	menu: "pdf",
+	bundle: 'pdf',
 	group: "block",
 	context: "pdf//",
 	icon: '<b class="icon">1/2</b>',
