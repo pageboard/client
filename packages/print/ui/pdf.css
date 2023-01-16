@@ -11,14 +11,14 @@
 }
 
 .page-sheet-match {
-	display:none;
+	visibility: hidden;
 }
 [contenteditable] .page-sheet-match,
 .page-sheet-left .page-sheet-match[data-match="left"],
 .page-sheet-right .page-sheet-match[data-match="right"],
 .page-sheet-first .page-sheet-match[data-match="first"],
 .page-sheet-last .page-sheet-match[data-match="last"] {
-	display:block;
+	visibility:initial;
 }
 
 @media screen {
