@@ -3,13 +3,20 @@ Page.setup(state => {
 	const opts = document.body.dataset;
 	opts.prefix = 'page-sheet-';
 	opts.page = '.page-sheet';
-	autobreakFn(opts);
+	state.ui.printStyleSheet = autobreakFn(opts);
 	if (state.pathname.endsWith('.pdf') == false) {
 		showPrintButtons(state, opts);
 	} else {
 		state.ui.observer?.disconnect();
 		delete state.ui.observer;
 	}
+	// bug in window-page: Page.close is called on opening
+	Page.close(state => {
+		const ass = document.adoptedStyleSheets;
+		const index = ass.indexOf(state.ui.printStyleSheet);
+		delete state.ui.printStyleSheet;
+		if (index >= 0) ass.splice(index, 1);
+	});
 });
 
 function showPrintButtons(state, { preset }) {
@@ -137,4 +144,5 @@ function autobreakFn({
 		else if (i === sheets.length - 1) sheet.classList.add(prefix + 'last');
 		sheet.classList.add(prefix + (i % 2 === 0 ? 'left' : 'right'));
 	}
+	return effectiveSheet;
 }
