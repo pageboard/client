@@ -1,3 +1,15 @@
 img:not([src]) {
 	visibility: hidden;
 }
+
+@media only screen {
+	html {
+		background: initial;
+	}
+}
+table.body {
+	background: initial;
+}
+table.container {
+	background: initial;
+}
