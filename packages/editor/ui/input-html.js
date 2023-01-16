@@ -190,6 +190,32 @@ class HTMLElementInputHTML extends HTMLTextAreaElement {
 			inline: true,
 			group: 'inline'
 		},
+		sup: {
+			title: "Sup",
+			icon: {
+				width: 16, height: 16,
+				path: "M16 5v1h-4V5s3.3-1.6 2.6-3.2c-.5-1.1-2-.2-2-.2l-.5-.9S14-.7 15.2.5C17.6 2.8 13.8 5 13.8 5H16zM12 3H8.6L6 6 3.4 3H0l4.3 5L0 13h3.4L6 10l2.6 3H12L7.7 8z"
+			},
+			contents: "text*",
+			inline: true,
+			inplace: true,
+			group: "inline",
+			tag: 'sup',
+			html: '<sup></sup>'
+		},
+		sub: {
+			title: "Inf",
+			contents: "text*",
+			inline: true,
+			inplace: true,
+			group: "inline",
+			tag: 'sub',
+			html: '<sub></sub>',
+			icon: {
+				width: 16, height: 16,
+				path: "M16 15v1h-4v-1s3.3-1.6 2.6-3.2c-.5-1.1-2-.2-2-.2l-.5-.9s1.9-1.4 3.1-.2c2.4 2.3-1.4 4.5-1.4 4.5H16zM12 3H8.6L6 6 3.4 3H0l4.3 5L0 13h3.4L6 10l2.6 3H12L7.7 8z"
+			}
+		},
 		hard_break: {
 			inline: true,
 			group: 'inline',
