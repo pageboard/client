@@ -67,16 +67,20 @@ function autobreakFn({
 			background: gray;
 		}
 		${page} {
+			margin: 10px;
 			width: ${innerPageSize.width};
 			height: ${innerPageSize.height};
 			border-left-width: ${margin};
 			border-right-width: ${margin};
 			border-top-width: ${margin};
 			border-bottom-width: ${margin};
-			border-color: rgba(0,0,0,0.04);
+			border-color:transparent;
 			border-style: solid;
 			background: white;
 			overflow:hidden;
+		}
+		[contenteditable] ${page} {
+			border-color: rgba(0,0,0,0.05);
 		}
 	}
 	@media print {
