@@ -81,18 +81,6 @@ exports.strike = {
 	html: '<s></s>'
 };
 
-exports.u = {
-	priority: 107,
-	title: "Strike",
-	icon: '<i class="underline icon"></i>',
-	contents: "text*",
-	inline: true,
-	inplace: true,
-	group: "inline nolink",
-	tag: 'u',
-	html: '<u></u>'
-};
-
 exports.caps = {
 	priority: 108,
 	title: "Capitalization",
