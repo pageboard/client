@@ -172,7 +172,11 @@ export function install(el, scope) {
 						if (obj.attributes) {
 							for (const [key, attr] of Object.entries(obj.attributes)) {
 								if (key == "is" && attr) reparse = true;
-								node.setAttribute(key, attr);
+								if (key == "className") {
+									node.classList.add(...attr.split(' '));
+								} else {
+									node.setAttribute(key, attr);
+								}
 								if (attr.fuse()) el.fusable = true;
 							}
 						}
