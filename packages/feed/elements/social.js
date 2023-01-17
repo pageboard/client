@@ -3,6 +3,7 @@ exports.social = {
 	priority: 5,
 	menu: "widget",
 	group: 'block',
+	bundle: 'blog',
 	icon: '<i class="share alternate icon"></i>',
 	properties: {
 		networks: {
