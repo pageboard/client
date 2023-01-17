@@ -12,10 +12,7 @@ Pageboard.schemaFilters.relation = class RelationFilter {
 			path.splice(-2, 2, 'method');
 			type = path.reduce((obj, name) => obj[name] || null, block.data);
 			if (!type) return;
-			const parts = type.split('.');
-			if (parts.length == 2) {
-				el = Pageboard.services[parts[0]]?.[parts[1]] ?? {};
-			}
+			el = Pageboard.service(type) || {};
 		} else {
 			path.splice(-1, 1, 'type');
 			type = path.reduce((obj, name) => obj?.[name], block.data);

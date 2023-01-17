@@ -43,6 +43,12 @@ Object.assign(window.Pageboard, {
 				"_": "-"
 			}
 		});
+	},
+	service(str) {
+		const [api, method] = str.split('.');
+		const obj = Pageboard.services[api]?.[method];
+		if (obj) Object.assign(obj, { api, method });
+		return obj;
 	}
 });
 

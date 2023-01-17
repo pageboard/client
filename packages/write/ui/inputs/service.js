@@ -5,12 +5,8 @@ Pageboard.schemaFilters.service = class ServiceFilter {
 			val = val[str];
 			if (val == null) return true;
 		});
-		let service = {};
 		const method = (val ?? {}).method;
-		const parts = (method || "").split('.');
-		if (parts.length == 2) {
-			service = Pageboard.services[parts[0]]?.[parts[1]] ?? {};
-		}
+		const service = Pageboard.service(method) ?? {};
 		if (!service.properties) {
 			delete props.parameters;
 		} else {
