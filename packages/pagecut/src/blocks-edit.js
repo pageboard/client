@@ -251,6 +251,11 @@ export default class Blocks extends BlocksView {
 		return this.store[id];
 	}
 
+	find(types) {
+		return Object.values(this.store)
+			.filter(block => types.includes(block.type));
+	}
+
 	set(data) {
 		if (!Array.isArray(data)) data = [data];
 		for (let i = 0, cur; i < data.length; i++) {
