@@ -1,9 +1,15 @@
-exports.fetch.install = function() {
-	this.dom.classList.add('ui');
-};
-exports.message.install = function(node, d, scope) {
-	this.dom.classList.add('ui', '[inverted|?]');
-};
+exports.fetch.fragments.push({
+	attributes: {
+		className: "ui"
+	}
+});
+
+exports.message.fragments.push({
+	attributes: {
+		className: '[inverted|?]'
+	}
+});
+
 exports.message.properties.inverted = {
 	title: 'Inverted',
 	type: 'boolean',
