@@ -132,6 +132,7 @@ exports.write = {
 		"../lib/pageboard.js",
 		"../ui/semafor.js",
 		"../ui/inputs/map.js",
+		"../ui/inputs/block.js",
 		"../ui/inputs/element.js",
 		"../ui/inputs/element-property.js",
 		"../ui/inputs/binding.js",
