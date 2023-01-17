@@ -6,18 +6,25 @@ exports.pagination = {
 	context: 'menu//',
 	group: "menu_item",
 	properties: {
-		name: {
-			title: 'Offset name',
-			description: 'Query parameter used by fetch block',
+		fetch: {
+			title: 'Fetch block',
 			type: 'string',
 			format: 'id',
-			default: 'offset'
+			$filter: {
+				name: 'block',
+				types: ["fetch"]
+			}
 		},
-		value: {
-			title: 'Offset value',
-			description: 'Integer, can be negative',
-			type: 'integer',
-			default: 10
+		dir: {
+			title: 'Direction',
+			anyOf: [{
+				const: '-',
+				title: 'Previous'
+			}, {
+				const: '+',
+				title: 'Next'
+			}],
+			default: '+'
 		},
 		infinite: {
 			title: 'Infinite loading',
@@ -26,7 +33,7 @@ exports.pagination = {
 		}
 	},
 	contents: "inline*",
-	html: `<a class="item" is="element-pagination" data-name="[name]" data-value="[value]" data-infinite="[infinite]"></a>`,
+	html: `<a class="item" is="element-pagination" data-dir="[dir]" data-fetch="[fetch]" data-infinite="[infinite]"></a>`,
 	stylesheets: [
 		'../ui/pagination.css'
 	],
