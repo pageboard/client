@@ -4,7 +4,7 @@ Object.assign(window.Pageboard, {
 	Controls: {},
 	schemaHelpers: {},
 	schemaFilters: {},
-	trigger: function trigger(node, event, detail) {
+	trigger(node, event, detail) {
 		const opts = {
 			view: window,
 			bubbles: true,
@@ -19,7 +19,7 @@ Object.assign(window.Pageboard, {
 		}
 		window.queueMicrotask(() => node.dispatchEvent(e));
 	},
-	uiLoad: function uiLoad(what, p) {
+	uiLoad(what, p) {
 		const icon = what.querySelector('.icon');
 		let classes;
 		if (icon) {
@@ -37,7 +37,7 @@ Object.assign(window.Pageboard, {
 			else what.classList.remove('loading');
 		});
 	},
-	slug: function(str) {
+	slug(str) {
 		return window.getSlug(str, {
 			custom: {
 				"_": "-"
