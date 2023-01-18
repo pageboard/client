@@ -3,7 +3,8 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 
 	patch(state) {
 		this.ownTpl.prerender();
-		if (this.isContentEditable || this.loading || this.closest('[block-content="template"]')) {
+		if (this.isContentEditable) return;
+		if (this.loading || this.closest('[block-content="template"]')) {
 			return;
 		}
 		return this.fetch(state);
