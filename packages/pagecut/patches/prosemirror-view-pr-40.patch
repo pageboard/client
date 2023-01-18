@@ -1,12 +1,15 @@
---- index.es.js	1985-10-26 09:15:00.000000000 +0100
-+++ index.es.js	2021-09-08 15:19:31.289320573 +0200
-@@ -1438,7 +1438,10 @@
+--- index.js	2023-01-18 16:20:35.225277605 +0100
++++ index.js	2023-01-18 16:23:46.425769785 +0100
+@@ -1381,7 +1381,12 @@
  // Create a view desc for the top-level document node, to be exported
  // and used by the view class.
  function docViewDesc(doc, outerDeco, innerDeco, dom, view) {
-+  var custom = view.nodeViews[doc.type.name];
-+  var spec = custom && custom(doc, view, () => { return 0; }, outerDeco);
-   applyOuterDeco(dom, outerDeco, doc);
-+  if (spec) return new CustomNodeViewDesc(null, doc, outerDeco, innerDeco, dom, dom, dom, spec, view, 0)
-   return new NodeViewDesc(null, doc, outerDeco, innerDeco, dom, dom, dom, view, 0)
++    const custom = view.nodeViews[doc.type.name];
++    const spec = custom?.(doc, view, () => { return 0; }, outerDeco);
+     applyOuterDeco(dom, outerDeco, doc);
++    if (spec) {
++      return new CustomNodeViewDesc(null, doc, outerDeco, innerDeco, dom, dom, dom, spec, view, 0);
++    }
+     return new NodeViewDesc(undefined, doc, outerDeco, innerDeco, dom, dom, dom, view, 0);
  }
+ class TextViewDesc extends NodeViewDesc {

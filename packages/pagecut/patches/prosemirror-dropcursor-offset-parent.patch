@@ -1,11 +1,11 @@
---- index.es.js	1985-10-26 09:15:00.000000000 +0100
-+++ index.es.js	2021-09-08 15:14:56.189997714 +0200
-@@ -88,7 +88,7 @@
-     rect = {left: coords.left - this.width / 2, right: coords.left + this.width / 2, top: coords.top, bottom: coords.bottom};
-   }
-
--  var parent = this.editorView.dom.offsetParent;
-+  var parent = this.editorView.dom.offsetParent || this.editorView.dom.parentNode;
-   if (!this.element) {
-     this.element = parent.appendChild(document.createElement("div"));
-     if (this.class) { this.element.className = this.class; }
+--- index.js    2023-01-18 16:09:38.817450217 +0100
++++ index.js    2023-01-18 16:18:13.123842093 +0100
+@@ -73,7 +73,7 @@
+             let coords = this.editorView.coordsAtPos(this.cursorPos);
+             rect = { left: coords.left - this.width / 2, right: coords.left + this.width / 2, top: coords.top, bottom: coords.bottom };
+         }
+-        let parent = this.editorView.dom.offsetParent;
++        let parent = this.editorView.dom.offsetParent || this.editorView.dom.parentNode;
+         if (!this.element) {
+             this.element = parent.appendChild(document.createElement("div"));
+             if (this.class)

@@ -1,48 +1,45 @@
---- index.es.js.orig	1985-10-26 09:15:00.000000000 +0100
-+++ index.es.js	2021-09-08 15:28:13.180196237 +0200
-@@ -2622,7 +2622,8 @@
-     var rule = this.tags[i];
-     if (matches(dom, rule.tag) &&
-         (rule.namespace === undefined || dom.namespaceURI == rule.namespace) &&
--        (!rule.context || context.matchesContext(rule.context))) {
-+        (!rule.context || context.matchesContext(rule.context)) &&
-+        (!rule.node || context.matchesType(this.schema.nodes[rule.node]))) {
-       if (rule.getAttrs) {
-         var result = rule.getAttrs(dom);
-         if (result === false) { continue }
-@@ -3151,6 +3152,35 @@
-   return match(parts.length - 1, this.open)
- };
- 
-+// : (NodeType) → bool
-+// Determines whether the given node type
-+// matches this context.
-+ParseContext.prototype.matchesType = function matchesType (type) {
-+  var this$1 = this;
-+  var option = this.options.context;
-+  var useRoot = !this.isOpen && (!option || option.parent.type == this.nodes[0].type);
-+  var minDepth = -(option ? option.depth + 1 : 0) + (useRoot ? 0 : 1);
-+  var match = function (depth) {
-+    var next = depth > 0 || (depth == 0 && useRoot) ? this$1.nodes[depth]
-+        : option && depth >= minDepth ? option.node(depth - minDepth)
-+        : null;
-+    if (!next) return false;
-+    if (next.match && next.match.matchType(type)) return true;
-+    if (next.type) {
-+      var nextMatch = function(contentMatch) {
-+        if (contentMatch.matchType(type)) return true;
-+        if (!contentMatch.validEnd) {
-+          return nextMatch(contentMatch.next[contentMatch.next.length - 1]);
-+        }
-+        return false;
-+      };
-+      return nextMatch(next.type.contentMatch);
+--- index.js    2023-01-18 16:25:47.799517726 +0100
++++ index.js    2023-01-18 16:47:21.407009902 +0100
+@@ -2539,7 +2539,9 @@
+             let rule = this.tags[i];
+             if (matches(dom, rule.tag) &&
+                 (rule.namespace === undefined || dom.namespaceURI == rule.namespace) &&
+-                (!rule.context || context.matchesContext(rule.context))) {
++                (!rule.context || context.matchesContext(rule.context)) &&
++                (!rule.node || context.matchesType(this.schema.nodes[rule.node]))
++            ) {
+                 if (rule.getAttrs) {
+                     let result = rule.getAttrs(dom);
+                     if (result === false)
+@@ -3104,6 +3106,31 @@
+         };
+         return match(parts.length - 1, this.open);
+     }
++    matchesType (type) {
++        const option = this.options.context;
++        const useRoot = !this.isOpen && (!option || option.parent.type == this.nodes[0].type);
++        const minDepth = -(option ? option.depth + 1 : 0) + (useRoot ? 0 : 1);
++        const match = (depth) => {
++            const next = depth > 0 || (depth == 0 && useRoot) ? this.nodes[depth]
++                : option && depth >= minDepth ? option.node(depth - minDepth)
++                : null;
++            if (!next) return false;
++            if (next.match && next.match.matchType(type)) return true;
++            if (next.type) {
++                const nextMatch = function(next) {
++                    const { contentMatch } = next.type;
++                    if (contentMatch.matchType(type)) return true;
++                    if (!contentMatch.validEnd) {
++                        return nextMatch(contentMatch.next[contentMatch.next.length - 1]);
++                    }
++                    return false;
++                };
++                return nextMatch(next);
++            }
++            return match(depth - 1);
++        };
++        return match(this.open);
 +    }
-+    return match(depth - 1);
-+  };
-+  return match(this.open);
-+};
-+
- ParseContext.prototype.textblockFromContext = function textblockFromContext () {
-   var $context = this.options.context;
-   if ($context) { for (var d = $context.depth; d >= 0; d--) {
+     textblockFromContext() {
+         let $context = this.options.context;
+         if ($context)
