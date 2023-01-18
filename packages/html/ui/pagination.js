@@ -1,10 +1,9 @@
 class HTMLElementPagination extends HTMLAnchorElement {
 	#observer;
 	#queue;
-	#reached;
-	#size;
+	#locked;
 	#visible;
-	#continue;
+	#name = 'offset';
 
 	constructor() {
 		super();
@@ -12,19 +11,22 @@ class HTMLElementPagination extends HTMLAnchorElement {
 	}
 
 	patch(state) {
-		if (this.isContentEditable || this.closest('[block-content="template"]')) {
-			return;
-		}
-		const name = this.dataset.name || 'offset';
-		const off = parseInt(state.query[name]) || 0;
-		const delta = parseInt(this.dataset.value) || 0;
-		const cur = off + delta;
-		const disabled = cur < 0 || !this.#findFetch() || this.#continue && delta < 0 || false;
-		this.classList.toggle('disabled', disabled);
+		if (this.isContentEditable) return;
+		state.finish(() => {
+			const node = this.#getFetchNode();
+			if (!node) {
+				console.warn("pagination does not find fetch node", this.dataset.fetch);
+				return;
+			}
+			const name = this.#name;
+			const start = parseInt(node.dataset.start) || 0;
+			const stop = parseInt(node.dataset.stop) || 0;
+			const limit = parseInt(node.dataset.limit) || 10;
+			const count = parseInt(node.dataset.count) || 0;
+			const sign = this.dataset.dir == "-" ? -1 : +1;
+			const cur = sign > 0 ? stop : (start - limit);
 
-		if (disabled) {
-			this.removeAttribute('href');
-		} else {
+
 			this.setAttribute('href', Page.format({
 				pathname: state.pathname,
 				query: {
@@ -32,72 +34,53 @@ class HTMLElementPagination extends HTMLAnchorElement {
 					[name]: cur || undefined
 				}
 			}));
-		}
-		state.finish(() => {
-			this.#reached = false;
-			if (this.#updateFetchSize() == false) {
-				this.removeAttribute('href');
-				this.classList.toggle('disabled', true);
-			} else {
-				this.#continue = true;
-			}
+			this.disabled = sign < 0 && cur + limit <= 0 || sign > 0 && count < limit;
+			this.#locked = false;
 		});
+	}
+
+	#getFetchNode() {
+		return this.ownerDocument.querySelector(`element-template[action="/.api/query/${this.dataset.fetch}"]`);
+	}
+
+	handleClick(e) {
+		if (this.disabled) {
+			e.preventDefault();
+			e.stopImmediatePropagation();
+		}
+	}
+
+	set disabled(val) {
+		this.classList.toggle('disabled', val);
+	}
+
+	get disabled() {
+		return this.classList.contains('disabled');
 	}
 
 	#more(state) {
-		this.#reached = true;
+		this.#locked = true;
 		if (this.#queue) this.#queue = this.#queue.then(() => {
-			if (!this.#continue || !this.hasAttribute('href')) {
-				return;
-			}
-			const fetch = this.#findFetch();
-			if (fetch) {
-				fetch.infinite = true;
-				return state.push(this.getAttribute('href'));
-			}
+			if (!this.disabled) return state.push(this.getAttribute('href'));
 		}).then(() => {
-			this.#reached = false;
+			this.#locked = false;
 		});
 	}
 
-	#updateFetchSize() {
-		const old = this.#size;
-		const cur = this.#size = this.#findFetch()?.ownView.children.length ?? 0;
-		if (this.#continue) return old != cur;
-		else return cur != 0;
-	}
-
-	#findFetch() {
-		const name = this.dataset.name || 'offset';
-		const fetch = this.ownerDocument.querySelector(
-			`element-template[block-type="fetch"][parameters~="$query.${name}|or:0"]`
-		);
-		if (!fetch) {
-			console.warn(`Pagination need Fetch to use $query.${name} parameter`);
-		}
-		return fetch;
-	}
-
-	handleClick(e, state) {
-		const fetch = this.#findFetch();
-		if (fetch) fetch.infinite = false;
-	}
-
 	paint(state) {
-		const name = this.dataset.name || 'offset';
+		const name = this.#name;
 		const off = parseInt(state.query[name]) || 0;
 		if (off == 0) {
-			this.#continue = true;
 			if (this.#visible) this.#more(state);
 		}
 	}
 
 	setup(state) {
-		if (this.isContentEditable || !this.#infinite) return;
+		if (this.isContentEditable || !this.dataset.infinite) return;
 		this.#queue = Promise.resolve();
 		this.#observer = new IntersectionObserver(entries => {
 			entries.forEach(entry => {
-				if (this.#reached) return;
+				if (this.#locked) return;
 				if (this.offsetParent && (entry.intersectionRatio || 0) !== 0) {
 					this.#visible = true;
 					this.#more(state);
@@ -118,10 +101,6 @@ class HTMLElementPagination extends HTMLAnchorElement {
 			this.#observer.disconnect();
 			this.#observer = null;
 		}
-	}
-
-	get #infinite() {
-		return this.hasAttribute('data-infinite');
 	}
 }
 

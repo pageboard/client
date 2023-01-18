@@ -1,6 +1,5 @@
 class HTMLElementTemplate extends VirtualHTMLElement {
 	loading = false;
-	infinite = false;
 
 	patch(state) {
 		this.ownTpl.prerender();
@@ -146,12 +145,30 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 			if (key.startsWith('$') && scope[key] == null) scope[key] = val;
 		}
 
-		if (!this.infinite) {
-			view.textContent = '';
-		} else {
-			this.infinite = false;
-		}
+		// we need to keep track of [start, end]
+		// fetch needs to know if response offset is after stop
+		// or before start
+		const { offset, limit } = data;
+		const count = data.items?.length ?? 0;
+		let start = parseInt(this.dataset.start);
+		if (Number.isNaN(start)) start = offset;
+		let stop = parseInt(this.dataset.stop);
+		if (Number.isNaN(stop)) stop = offset;
+
 		const node = Pageboard.render(data, scope, el);
+
+		let append = true;
+		let replace = false;
+		if (offset <= start) {
+			start = offset;
+			append = false;
+		}
+		if (offset + count >= stop) {
+			stop = offset + count;
+		} else if (append) {
+			replace = true;
+		}
+		Object.assign(this.dataset, { count, start, stop, limit });
 
 		if (Object.keys(collector.missings).length) {
 			state.statusText = `Missing Query Parameters`;
@@ -159,7 +176,9 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 			// eslint-disable-next-line no-console
 			console.warn(state.statusText, Object.keys(collector.missings).join(', '));
 		} else {
-			view.appendChild(node);
+			if (replace) view.textContent = '';
+			if (append) view.appendChild(node);
+			else view.insertBefore(node, view.firstChild);
 		}
 	}
 

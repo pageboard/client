@@ -1,3 +1,11 @@
 a[is="element-pagination"].disabled {
 	display: none !important;
 }
+
+a[is="element-pagination"][data-infinite] {
+	visibility: hidden;
+}
+
+[contenteditable] a[is="element-pagination"][data-infinite] {
+	visibility: initial;
+}
