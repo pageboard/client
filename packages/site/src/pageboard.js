@@ -3,6 +3,7 @@ export { default as fetch } from './fetch';
 import * as load from './load';
 import { render, install } from './render';
 import * as equivs from './equivs';
+import Scope from './scope';
 import VHE from './VirtualHTMLElement';
 
 window.VirtualHTMLElement ||= VHE;
@@ -39,14 +40,9 @@ export {
 };
 
 function initState(res, state) {
-	const scope = state.scope;
-
+	const { scope, referrer, pathname } = state;
 	if (!scope.$doc) scope.$doc = document.cloneNode();
-	scope.$loc = new URL(state.toString(), document.location);
-	scope.$loc.query = { ...state.query };
-	scope.$pathname = state.pathname;
-	scope.$query = state.query;
-	scope.$referrer = state.referrer.pathname || state.pathname;
+	scope.$referrer = referrer.pathname || pathname;
 	if (!res) return;
 	if (res.grants) {
 		state.data.$grants = res.grants;
@@ -97,11 +93,10 @@ function bundle(loader, state) {
 Page.init(state => {
 	state.vars = {};
 	state.data.$hrefs = {};
-	let scope = state.scope;
-	if (!scope) scope = state.scope = {
+	if (!state.scope) state.scope = new Scope(state, {
 		$elements: baseElements,
 		$filters: {}
-	};
+	});
 });
 
 Page.patch(state => {

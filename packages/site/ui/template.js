@@ -106,7 +106,7 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 
 	render(data, state) {
 		const view = this.ownView;
-		const scope = { ...state.scope };
+		const scope = state.scope.copy();
 		const tmpl = this.ownTpl.content.cloneNode(true);
 		for (const node of tmpl.querySelectorAll('[block-id]')) {
 			node.removeAttribute('block-id');
@@ -283,7 +283,7 @@ Page.State.prototype.templatesQuery = function (node) {
 	const state = this;
 	const params = node.getAttribute('parameters') || '';
 	const $query = {};
-	const scope = { ...state.scope };
+	const scope = state.scope.copy();
 	let missings = 0;
 	scope.$filters = {
 		...scope.$filters,

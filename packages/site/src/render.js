@@ -49,7 +49,7 @@ export function render(res, scope, el) {
 
 	if (el) install(el, scope);
 
-	scope = { ...scope };
+	scope = scope.copy();
 	for (const [k, rek] of Object.entries(res)) scope[`$${k}`] = rek;
 
 	const block = res.item ?? {};
@@ -79,7 +79,9 @@ export function render(res, scope, el) {
 
 function renderBlock(el, scope, block, bscope) {
 	if (!block) block = {};
-	const rscope = { ...scope, ...bscope, $element: el };
+	const rscope = scope.copy(bscope);
+	rscope.$element = el;
+
 	for (const name of ["id", "type", "parent", "child", "parents", "children", "updated_at", "created_at", "lock", "expr"]) {
 		const val = block[name];
 		if (val != null) rscope['$' + name] = val;
