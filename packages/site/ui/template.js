@@ -189,7 +189,11 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 	}
 
 	get ownView() {
-		return this.children.find(node => node.matches('.view'));
+		return this.children.find(
+			node => node.matches('.view')
+		) ?? this.appendChild(
+			this.dom(`<div class="view"></view>`)
+		);
 	}
 }
 HTMLTemplateElement.prototype.prerender = function () {

@@ -20,7 +20,6 @@ exports.fetch = {
 		notfound="[notfound|urltpl:url:parameters]"
 	>
 		<template block-content="template"></template>
-		<div class="view"></div>
 	</element-template>`,
 	properties: {
 		disabled: {
