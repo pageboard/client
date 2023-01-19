@@ -287,7 +287,7 @@ export function urltpl(obj, what, pName = 'pathname', qName = 'query') {
 }
 
 export function templates(val, what, ...prefixes) {
-	if (!val) return val;
+	if (!val) return null;
 	const obj = {};
 	const data = {};
 	for (const prefix of prefixes) data[prefix] = {};
