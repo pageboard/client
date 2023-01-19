@@ -308,7 +308,7 @@ export function templates(val, what, ...prefixes) {
 			}
 		}
 	});
-	return Object.keys(obj).map(key => obj[key]).join(' ') || null;
+	return (typeof val == "string" ? Object.keys(obj) : Object.values(obj)).join(' ') || null;
 }
 
 export function isoDate(val, what) {

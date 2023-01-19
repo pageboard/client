@@ -13,6 +13,7 @@ exports.fetch = {
 	html: `<element-template
 		disabled="[disabled]"
 		action="/.api/query/[$id][action.method|bmagnet]"
+		data-pagination="[$expr.action.parameters.offset|templates:$query]"
 		parameters="[$expr.action.parameters|templates:$query:$pathname]"
 		success="[redirection|urltpl:url:parameters]"
 		badrequest="[badrequest|urltpl:url:parameters]"
