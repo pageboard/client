@@ -13,6 +13,7 @@ exports.fetch = {
 	html: `<element-template
 		disabled="[disabled]"
 		action="/.api/query/[$id][action.method|bmagnet]"
+		data-auto="[action.auto]"
 		data-pagination="[$expr.action.parameters.offset|templates:$query]"
 		parameters="[$expr.action.parameters|templates:$query:$pathname]"
 		success="[redirection|urltpl:url:parameters]"
@@ -38,6 +39,11 @@ exports.fetch = {
 					nullable: true,
 					type: "string",
 					pattern: /^(\w+\.\w+)?$/.source
+				},
+				auto: {
+					title: 'Auto fetch on scroll',
+					type: 'boolean',
+					nullable: true
 				},
 				parameters: {
 					title: 'Parameters',

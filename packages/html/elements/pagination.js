@@ -3,8 +3,8 @@ exports.pagination = {
 	title: "Pagination",
 	icon: '<b class="icon">±N</b>',
 	menu: "link",
-	context: 'menu//',
-	group: "menu_item",
+	group: "block",
+	isolating: true,
 	properties: {
 		fetch: {
 			title: 'Fetch block',
@@ -19,24 +19,16 @@ exports.pagination = {
 			title: 'Direction',
 			anyOf: [{
 				const: '-',
-				title: 'Previous'
+				title: 'Backward'
 			}, {
 				const: '+',
-				title: 'Next'
+				title: 'Forward'
 			}],
 			default: '+'
 		},
-		infinite: {
-			title: 'Infinite loading',
-			type: 'boolean',
-			default: false
-		}
 	},
 	contents: "inline*",
-	html: `<a class="item" is="element-pagination" data-dir="[dir]" data-fetch="[fetch]" data-infinite="[infinite]"></a>`,
-	stylesheets: [
-		'../ui/pagination.css'
-	],
+	html: `<a class="ui button pagination" is="element-pagination" data-dir="[dir]" data-fetch="[fetch]">[dir|eq:1:Next:Prev]</a>`,
 	scripts: [
 		'../ui/pagination.js'
 	]

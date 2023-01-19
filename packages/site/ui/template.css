@@ -31,3 +31,9 @@ html:not([data-prerender]) > body {
 	/* initial page load does not need to be shown */
 	visibility:hidden;
 }
+
+element-template > .helper {
+	width:100%;
+	height:0;
+	visibility: hidden;
+}

@@ -1,5 +1,9 @@
 class HTMLElementTemplate extends VirtualHTMLElement {
 	loading = false;
+	#observer;
+	#queue;
+	#locked;
+	#auto;
 
 	patch(state) {
 		this.ownTpl.prerender();
@@ -7,15 +11,17 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 		if (this.loading || this.closest('[block-content="template"]')) {
 			return;
 		}
+		this.#auto = this.dataset.pagination && this.dataset.auto && this.dataset.stop && !(this.dataset.pagination in state.query);
 		return this.fetch(state);
 	}
 
 	fetch(state) {
+		// FIXME remove this heresy
 		const disabled = (this.getAttribute('disabled') || '').fuse({
 			$query: state.query
 		}, state.scope);
+		// end of heresy
 		const action = disabled ? null : this.getAttribute('action');
-
 		const $query = state.templatesQuery(this);
 		const missings = $query == null;
 
@@ -29,6 +35,9 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 				data.$status = 400;
 				data.$statusText = 'Missing Query Parameters';
 			} else {
+				if (this.#auto) {
+					$query[this.dataset.pagination] = this.dataset.stop;
+				}
 				const loader = action
 					? Pageboard.fetch('get', action, $query)
 					: Promise.resolve();
@@ -160,15 +169,22 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 
 		let append = true;
 		let replace = false;
-		if (offset <= start) {
-			start = offset;
-			append = false;
-		}
-		if (offset + count >= stop) {
-			stop = offset + count;
-		} else if (append) {
+		if (this.#auto) {
+			if (offset <= start) {
+				start = offset;
+				append = false;
+			}
+			if (offset + count >= stop) {
+				stop = offset + count;
+			} else if (append) {
+				replace = true;
+			}
+		} else {
 			replace = true;
+			start = offset;
+			stop = offset + count;
 		}
+
 		Object.assign(this.dataset, { count, start, stop, limit });
 
 		if (Object.keys(collector.missings).length) {
@@ -196,7 +212,47 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 			this.dom(`<div class="view"></view>`)
 		);
 	}
+
+	#more(state) {
+		this.#locked = true;
+
+		if (this.#queue) this.#queue = this.#queue.then(() => {
+			if (this.disabled) return;
+			return state.reload({vary: 'patch'});
+		}).then(() => {
+			this.#locked = false;
+		});
+	}
+
+	setup(state) {
+		if (this.isContentEditable) return;
+		if (this.dataset.auto != "true") return;
+		this.#queue = Promise.resolve();
+		this.#observer = new IntersectionObserver(entries => {
+			entries.forEach(entry => {
+				if (entry.isIntersecting) {
+					if (!this.#locked) this.#more(state);
+				}
+			});
+		}, {
+			threshold: [1.0]
+		});
+		const observed = this.lastElementChild.matches('.helper') ?
+			this.lastElementChild :
+			this.appendChild(this.dom(`<div class="helper"></div>`));
+		this.#observer.observe(observed);
+	}
+
+	close() {
+		this.#queue = null;
+		if (this.#observer) {
+			this.#observer.unobserve(this.lastElementChild);
+			this.#observer.disconnect();
+			this.#observer = null;
+		}
+	}
 }
+
 HTMLTemplateElement.prototype.prerender = function () {
 	if (this.isContentEditable || !document.hidden) {
 		return this;
@@ -229,8 +285,6 @@ HTMLScriptElement.prototype.prerender = function () {
 	this.textContent = helper.textContent = '';
 	return tmpl;
 };
-
-VirtualHTMLElement.define('element-template', HTMLElementTemplate);
 
 Page.Loc.prototype.fuse = function (data, scope) {
 	this.pathname = this.pathname.fuse(data, scope);
@@ -307,3 +361,5 @@ Page.State.prototype.templatesQuery = function (node) {
 	if (missings > 0) return null;
 	else return $query;
 };
+
+VirtualHTMLElement.define('element-template', HTMLElementTemplate);
