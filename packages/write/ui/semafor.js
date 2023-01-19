@@ -422,7 +422,7 @@ class Semafor {
 			console.warn(key, 'has no supported type in schema', schema);
 		}
 		if (fieldset) fieldset.classList.toggle('disabled', Boolean(schema.$disabled));
-		if (key && this.helper && noHelper) {
+		if (key && this.helper && !noHelper) {
 			schema = this.helper(key, schema, node, parent) || schema;
 		}
 		return schema;
