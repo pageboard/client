@@ -149,7 +149,6 @@ class Semafor {
 	update(newSchema) {
 		this.destroy();
 		this.lastSchema = this.process(null, newSchema || this.schema, this.node);
-
 	}
 
 	get() {
@@ -382,15 +381,17 @@ class Semafor {
 			schema = this.filter(key, schema, parent) || schema;
 		}
 		const type = getNonNullType(schema.type);
-		let hasHelper = false;
+		let noHelper = false;
+		let fieldset;
 		if (schema.oneOf || schema.anyOf) {
-			hasHelper = Boolean(Semafor.types.oneOf(key, schema, node, this));
+			fieldset = Semafor.types.oneOf(key, schema, node, this);
+			if (fieldset) noHelper = true;
 		} else if (type && Semafor.types[type]) {
 			if (type == 'object') {
 				Semafor.types.object(key, schema, node, this);
 			} else if (!schema.title) {
-				hasHelper = true;
-				Semafor.types.hidden(key, schema, node, this);
+				fieldset = Semafor.types.hidden(key, schema, node, this);
+				noHelper = true;
 			} else if (!key) {
 				console.error('Properties of type', type, 'must have a name');
 			} else {
@@ -408,18 +409,20 @@ class Semafor {
 				for (const [kw, vw] of Object.entries(schema)) {
 					if (Semafor.keywords[kw]) field.rules.push(Semafor.keywords[kw](vw));
 				}
-				Semafor.types[type](key, schema, node, this);
+				fieldset = Semafor.types[type](key, schema, node, this);
 			}
 		} else if (Array.isArray(type)) {
+			fieldset = node.appendChild(node.dom(`<div class="fieldset"></div>`));
 			for (const stype of type) {
-				Semafor.types[stype](key, schema, node, this);
+				Semafor.types[stype](key, schema, fieldset, this);
 			}
 		} else if (schema.const != null) {
-			Semafor.types.const(key, schema, node, this);
+			fieldset = Semafor.types.const(key, schema, node, this);
 		} else {
 			console.warn(key, 'has no supported type in schema', schema);
 		}
-		if (key && this.helper && !hasHelper) {
+		if (fieldset) fieldset.classList.toggle('disabled', Boolean(schema.$disabled));
+		if (key && this.helper && noHelper) {
 			schema = this.helper(key, schema, node, parent) || schema;
 		}
 		return schema;
@@ -463,19 +466,19 @@ function getNonNullType(type) {
 
 
 Semafor.types.hidden = function (key, schema, node, inst) {
-	node.appendChild(node.dom(`<input name="${key}" type="hidden" />`));
+	return node.appendChild(node.dom(`<input name="${key}" type="hidden" />`));
 };
 
 Semafor.types.string = function (key, schema, node, inst) {
 	const multiline = !schema.pattern && !schema.format;
 	const short = schema.maxLength != null && schema.maxLength <= 10;
 	if (multiline && !short) {
-		node.appendChild(node.dom(`<div class="field">
+		return node.appendChild(node.dom(`<div class="field">
 			<label>${schema.title || key}</label>
 			<textarea name="${key}"	title="${schema.description || ''}" placeholder="${schema.placeholder || schema.default || ''}"></textarea>
 		</div>`));
 	} else if (short) {
-		node.appendChild(node.dom(`<div class="inline field">
+		return node.appendChild(node.dom(`<div class="inline field">
 			<label>${schema.title || key}</label>
 			<input type="text" name="${key}"
 				placeholder="${schema.placeholder || schema.default || ''}"
@@ -483,13 +486,14 @@ Semafor.types.string = function (key, schema, node, inst) {
 			/>
 		</div>`));
 	} else {
-		const input = node.appendChild(node.dom(`<div class="field">
+		const field = node.appendChild(node.dom(`<div class="field">
 			<label>${schema.title || key}</label>
 			<input type="text" name="${key}"
 				placeholder="${schema.placeholder || schema.default || ''}"
 				title="${schema.description || ''}"
 			/>
-		</div>`)).lastElementChild;
+		</div>`));
+		const input = field.lastElementChild;
 		if (schema.format == "date") {
 			input.type = "date";
 		} else if (schema.format == "time") {
@@ -497,6 +501,7 @@ Semafor.types.string = function (key, schema, node, inst) {
 		} else if (schema.format == "date-time") {
 			input.type = "datetime-local";
 		}
+		return field;
 	}
 };
 
@@ -533,7 +538,7 @@ Semafor.types.oneOf = function (key, schema, node, inst) {
 			anyOf: null,
 			...oneOfType
 		}, node, schema);
-		return true;
+		return;
 	}
 
 	let def = schema.default;
@@ -563,6 +568,7 @@ Semafor.types.oneOf = function (key, schema, node, inst) {
 			</div>
 		</div>`);
 		node.appendChild(field);
+		return field;
 	} else if (listOf.length <= 4) {
 		const field = node.dom(`<div class="inline fields">
 			<label for="${key}">${schema.title || key}</label>
@@ -574,6 +580,7 @@ Semafor.types.oneOf = function (key, schema, node, inst) {
 		if (def !== undefined) {
 			field.querySelector(`[name="${key}"][value="${def}"]`).checked = true;
 		}
+		return field;
 	} else {
 		const field = node.dom(`<div class="inline field" title="${schema.description || ''}">
 			<label>${schema.title || key}</label>
@@ -585,18 +592,20 @@ Semafor.types.oneOf = function (key, schema, node, inst) {
 		if (def !== undefined) {
 			(field.querySelector(`option[value="${def}"]`) ?? {}).selected = true;
 		}
+		return field;
 	}
 };
 
 Semafor.types.integer = function (key, schema, node, inst) {
 	schema = { ...schema };
 	if (!schema.multipleOf) schema.multipleOf = 1;
-	Semafor.types.number(key, schema, node, inst);
+	const field = Semafor.types.number(key, schema, node, inst);
 	inst.fields[key].type = 'integer';
+	return field;
 };
 
 Semafor.types.number = function (key, schema, node, inst) {
-	node.appendChild(node.dom(`<div class="inline field">
+	const field = node.appendChild(node.dom(`<div class="inline field">
 		<label>${schema.title || key}</label>
 		<input type="number" name="${key}"
 			placeholder="${schema.default !== undefined ? schema.default : ''}"
@@ -608,10 +617,11 @@ Semafor.types.number = function (key, schema, node, inst) {
 	</div>`));
 
 	inst.fields[key].type = 'number';
+	return field;
 };
 
 Semafor.types.object = function (key, schema, node, inst) {
-	let fieldset = node;
+	let fieldset;
 	if (schema.title) {
 		if (schema.properties && key && schema.title) {
 			if (schema.nullable) {
@@ -647,13 +657,15 @@ Semafor.types.object = function (key, schema, node, inst) {
 			`));
 		}
 	}
-	if (!schema.properties) return;
-	const props = {};
-	const prefix = key ? (key + '.') : '';
-	for (const [name, propSchema] of Object.entries(schema.properties)) {
-		props[name] = inst.process(prefix + name, propSchema, fieldset, schema.properties) || propSchema;
+	if (schema.properties) {
+		const props = {};
+		const prefix = key ? (key + '.') : '';
+		for (const [name, propSchema] of Object.entries(schema.properties)) {
+			props[name] = inst.process(prefix + name, propSchema, fieldset ?? node, schema.properties) || propSchema;
+		}
+		schema.properties = props;
 	}
-	schema.properties = props;
+	return fieldset;
 };
 
 Semafor.types.boolean = function (key, schema, node, inst) {
@@ -672,6 +684,7 @@ Semafor.types.boolean = function (key, schema, node, inst) {
 	}
 	wrap.appendChild(field);
 	field.querySelector('input[type="checkbox"]').checked = schema.default;
+	return field;
 };
 
 Semafor.types.null = function (key, schema, node, inst) {
@@ -685,14 +698,15 @@ Semafor.types.array = function (key, schema, node, inst) {
 		schema.items.forEach((item, i) => {
 			inst.process(`${key}.${i}`, item, fieldset, schema);
 		});
+		return fieldset;
 	} else if (schema.items.type == "string") {
-		Semafor.types.string(key, schema, node, inst);
+		return Semafor.types.string(key, schema, node, inst);
 	} else if (schema.items.anyOf) {
 		const allStrings = schema.items.anyOf.every(item => {
 			return item.type == "string";
 		});
 		if (allStrings) {
-			Semafor.types.string(key, schema, node, inst);
+			return Semafor.types.string(key, schema, node, inst);
 		} else {
 			const fieldset = node.dom(`<fieldset>
 				<legend title="[schema.description]">[schema.title|or:[key]]</legend>
@@ -715,13 +729,15 @@ Semafor.types.array = function (key, schema, node, inst) {
 					}
 				});
 			node.appendChild(fieldset);
+			return fieldset;
 		}
 	} else {
 		console.warn("FIXME: array type supports only items: [schemas], or items.anyOf", schema);
-		return inst.process(key, {
+		inst.process(key, {
 			...schema.items,
 			title: schema.title
 		}, node, schema);
+		return;
 	}
 };
 
@@ -730,12 +746,12 @@ Semafor.types.const = function (key, schema, node, inst) {
 	schema.pattern = new RegExp(schema.const);
 	schema.placeholder = schema.const;
 	if (schema.title) schema.title = `> ${schema.title}`;
-	Semafor.types.string(key, schema, node, inst);
-	const last = node.lastElementChild;
-	const input = last.querySelector('input');
-	if (!schema.title) last.classList.add('hidden');
+	const field = Semafor.types.string(key, schema, node, inst);
+	const input = field.querySelector('input');
+	if (!schema.title) field.classList.add('hidden');
 	else input.hidden = true;
 	input.setAttribute('value', schema.const);
+	return field;
 };
 
 Semafor.formats.email = function () {
