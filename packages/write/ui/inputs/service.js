@@ -12,6 +12,9 @@ Pageboard.schemaFilters.service = class ServiceFilter {
 		} else {
 			props.parameters = { ...service, type: 'object'};
 		}
+		if (props.auto) {
+			props.auto.$disabled = service.$action != "read" || service.method != "search";
+		}
 	}
 	constructor(key, opts, schema) {
 		const list = [];
