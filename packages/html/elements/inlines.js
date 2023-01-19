@@ -76,7 +76,7 @@ exports.strike = {
 	contents: "text*",
 	inline: true,
 	inplace: true,
-	group: "inline nolink",
+	group: "nolink",
 	tag: 's',
 	html: '<s></s>'
 };
