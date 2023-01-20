@@ -84,7 +84,7 @@ export default class IdPlugin {
 					const parentId = parent.type.spec.typeName == "root" ? parent.attrs.id : parent.attrs._id;
 					if (parentId != attrs._id) {
 						modified = true;
-						tr.setNodeMarkup(pos, null, { ...attrs, _id: parentId});
+						tr.setNodeMarkup(pos, null, { ...attrs, _id: parentId}, node.marks);
 					}
 				}
 				return;
@@ -117,13 +117,13 @@ export default class IdPlugin {
 					delete newAttrs.standalone;
 					block.standalone = false;
 				}
-				tr.setNodeMarkup(pos, null, newAttrs);
+				tr.setNodeMarkup(pos, null, newAttrs, node.marks);
 				ids[block.id] = true;
 				modified = true;
 			} else if (rem) {
 				const copy = { ...attrs };
 				delete copy.id;
-				tr.setNodeMarkup(pos, null, copy);
+				tr.setNodeMarkup(pos, null, copy, node.marks);
 				modified = true;
 			} else if (id) {
 				ids[id] = true;
