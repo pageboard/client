@@ -45,6 +45,7 @@ Object.assign(window.Pageboard, {
 		});
 	},
 	service(str) {
+		if (!str) return null;
 		const [api, method] = str.split('.');
 		const obj = Pageboard.services[api]?.[method];
 		if (obj) Object.assign(obj, { api, method });
