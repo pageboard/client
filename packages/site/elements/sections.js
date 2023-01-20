@@ -20,8 +20,6 @@ exports.paragraph = {
 		align: {
 			title: 'Align',
 			anyOf: [{
-				const: "left"
-			}, {
 				const: null,
 				title: "Left",
 				icon: '<i class="icon align left"></i>'
