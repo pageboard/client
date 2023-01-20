@@ -15,7 +15,6 @@ exports.write = {
 		<script defer src="[$element.scripts|repeat]"></script>
 	</head>
 	<body
-		data-devtools="[$element.resources.devtools]"
 		data-placeholder="[$element.resources.empty]"
 		data-reset="[$element.resources.reset]"
 		data-mode="read"
@@ -157,7 +156,6 @@ exports.write = {
 		"../lib/speakingurl.js"
 	],
 	resources: {
-		devtools: "../lib/prosemirror-dev-tools.js",
 		empty: "../ui/empty.png",
 		develop: "../ui/develop.js",
 		editor: "../lib/pagecut/editor.js",

@@ -1,7 +1,5 @@
 (function(Pageboard) {
 
-let adv = false;
-
 Page.patch(state => {
 	// write mode accepts all params at the moment
 	for (const key of Object.keys(state.query)) {
@@ -135,11 +133,6 @@ function update() {
 
 Pageboard.Editor = function Editor(win, state) {
 	const page = state.data.$cache.item;
-	if (!adv) {
-		adv = true;
-		// eslint-disable-next-line no-console
-		console.info("Use top.Pageboard.dev() to debug prosemirror");
-	}
 	if (!page || page.type == "error") {
 		Pageboard.write.hidden = true;
 		console.warn("Not loading editor: no page or error page");
@@ -183,11 +176,6 @@ Pageboard.Editor = function Editor(win, state) {
 
 	editor.updatePage = updatePage.bind(editor, state);
 	editor.close = editorClose.bind(editor);
-	editor.devTools = devTools.bind(editor);
-
-	Pageboard.dev = function() {
-		editor.devTools();
-	};
 
 	// keep runtime store in sync with editor store
 	view.blocks.store = editor.blocks.store;
@@ -220,23 +208,6 @@ function editorClose() {
 	this.destroy();
 	for (const control of Object.values(this.controls)) {
 		if (control.destroy) control.destroy();
-	}
-}
-
-function devTools() {
-	const editor = this;
-	if (window.ProseMirrorDevTools) {
-		window.ProseMirrorDevTools(editor, {
-			EditorState: editor.root.defaultView.Pagecut.View.EditorState
-		});
-	} else {
-		const script = document.createElement('script');
-		script.onload = function() {
-			script.remove();
-			editor.devTools();
-		};
-		script.src = document.body.dataset.devtools;
-		document.head.appendChild(script);
 	}
 }
 

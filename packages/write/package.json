@@ -29,9 +29,6 @@
     "fast-safe-stringify": "^2.1.1",
     "postinstall-bundle": "^0.8.0",
     "pretty-bytes": "^5.6.0",
-    "prosemirror-dev-tools": "^3.1.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
     "speakingurl": "^14.0.1"
   },
   "postinstall": {
