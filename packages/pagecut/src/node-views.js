@@ -350,7 +350,7 @@ function mutateNodeView(tr, pos, pmNode, obj, nobj) {
 			}
 			if (!Number.isNaN(curpos)) {
 				// updates that are incompatible with schema might happen (e.g. popup(title + content))
-				tr.setNodeMarkup(curpos, null, newAttrs, pmChild.marks);
+				tr.setNodeMarkup(curpos, null, newAttrs);
 				// however, this transaction is going to happen right now,
 				// before all rootNodeView children have been updated with *old* state
 				pmChild.attrs = newAttrs; // so we must change pmNode right now !

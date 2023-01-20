@@ -239,7 +239,7 @@ export default class Utils {
 		}
 		let selectedNode = sel.from === pos && sel.node;
 		try {
-			tr.setNodeMarkup(pos, null, attrs, sel.node.marks);
+			tr.setNodeMarkup(pos, null, attrs);
 		} catch (ex) {
 			// ignore
 			console.warn(ex);

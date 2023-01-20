@@ -78,7 +78,7 @@ export default class FocusPlugin {
 			tr.removeMark(sel.from, sel.to, node.type);
 			tr.addMark(sel.from, sel.to, node.type.create(attrs));
 		} else {
-			tr.setNodeMarkup(pos, null, attrs, node.marks);
+			tr.setNodeMarkup(pos, null, attrs);
 		}
 	}
 
