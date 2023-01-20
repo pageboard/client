@@ -36,12 +36,7 @@ export default class IdPlugin {
 		const view = this.editor;
 		root.descendants((node, pos, parent) => {
 			pos += offset;
-			if (node.type.name == "_" && parent.childCount > 1) {
-				tr.delete(pos, pos + 1);
-				offset += -1;
-				modified = true;
-				return false;
-			}
+			if (node.type.name == "_") return false;
 			for (const mark of node.marks) {
 				if (lastMark && (mark.attrs.id == lastMark.attrs.id || mark.eq(lastMark))) {
 					continue;
