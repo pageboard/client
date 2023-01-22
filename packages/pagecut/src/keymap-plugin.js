@@ -7,8 +7,8 @@ export default keymap({
 	Backspace: deleteCommand.bind(this, true),
 	"Mod-ArrowRight": moveCommand.bind(null, 1, false),
 	"Mod-ArrowLeft": moveCommand.bind(null, -1, false),
-	"Mod-ArrowDown": moveCommand.bind(null, 1, true),
-	"Mod-ArrowUp": moveCommand.bind(null, -1, true)
+	"Alt-Shift-ArrowRight": moveCommand.bind(null, 1, true),
+	"Alt-Shift-ArrowLeft": moveCommand.bind(null, -1, true)
 });
 
 function moveCommand(dir, jump, state, dispatch, view) {

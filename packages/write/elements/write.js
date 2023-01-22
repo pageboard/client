@@ -57,9 +57,11 @@ exports.write = {
 		</div>
 		<div id="menu"></div>
 		<div id="move" class="ui inverted tiny icon menu hidden">
-			<a class="item" data-command="left" title="Move Left - Arrow up to jump"><i class="angle left icon"></i></a>
+			<a class="item" data-command="jump-left" title="Jump Left"><i class="angle double left icon"></i></a>
+			<a class="fitted item" data-command="left" title="Move Left"><i class="angle left icon"></i></a>
 			<a class="item" data-command="delete" title="Delete"><i class="close icon"></i></a>
-			<a class="item" data-command="right" title="Move right - Arrow down to jump"><i class="angle right icon"></i></a>
+			<a class="fitted item" data-command="right" title="Move right"><i class="angle right icon"></i></a>
+			<a class="item" data-command="jump-right" title="Jump right"><i class="angle double right icon"></i></a>
 			<div class="right menu">
 				<div class="item" id="share">
 					<label class="inverted toggle checkbox" title="Toggle shared status">

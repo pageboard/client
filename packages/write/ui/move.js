@@ -24,6 +24,12 @@ Pageboard.Controls.Move = class Move {
 			case "right":
 				if (!this.editor.utils.move(tr, 1, false)) return;
 				break;
+			case "jump-left":
+				if (!this.editor.utils.move(tr, -1, true)) return;
+				break;
+			case "jump-right":
+				if (!this.editor.utils.move(tr, 1, true)) return;
+				break;
 			case "delete":
 				if (!this.editor.utils.deleteTr(tr)) return;
 				break;
@@ -46,6 +52,10 @@ Pageboard.Controls.Move = class Move {
 			.classList.toggle('disabled', !utils.move(state.tr, -1, false, true));
 		this.node.querySelector('[data-command="right"]')
 			.classList.toggle('disabled', !utils.move(state.tr, 1, false, true));
+		this.node.querySelector('[data-command="jump-left"]')
+			.classList.toggle('disabled', !utils.move(state.tr, -1, true, true));
+		this.node.querySelector('[data-command="jump-right"]')
+			.classList.toggle('disabled', !utils.move(state.tr, 1, true, true));
 		this.node.querySelector('[data-command="delete"]')
 			.classList.toggle('disabled', !utils.deleteTr(state.tr));
 	}
