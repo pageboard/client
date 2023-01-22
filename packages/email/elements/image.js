@@ -74,12 +74,9 @@ exports.mail_image = {
 	group: "mail_block",
 	html: `<center><img is="element-mail-img"
 		class="float-center" align="center"
-		data-src="[url|or:[$element.resources.empty]]"
+		data-src="[url]"
 		data-crop="[crop.x];[crop.y];[crop.width];[crop.height];[crop.zoom]"
 		alt="[alt]" /></center>`,
-	resources: {
-		empty: '../ui/empty.png'
-	},
 	scripts: ['../ui/image.js']
 };
 

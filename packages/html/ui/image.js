@@ -4,6 +4,12 @@ class HTMLElementImage extends VirtualHTMLElement {
 		crop: null
 	};
 
+	static getPlaceholder(w, h, error) {
+		const txt = error ? '∅' : '';
+		return "data:image/svg+xml," + encodeURIComponent(
+			`<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 ${w} ${h}"><text text-anchor="middle" dominant-baseline="central" x="50%" y="50%" fill="#aaa">${txt}</text></svg>`);
+	}
+
 	static getZoom({ w, h, rw, rh, fit }) {
 		let z = 100;
 		if (!rw && !rh) return z;
@@ -103,7 +109,7 @@ class HTMLElementImage extends VirtualHTMLElement {
 	reveal(state) {
 		const img = this.image;
 		if (!this.options.src) {
-			img.removeAttribute('src');
+			this.placeholder(true);
 			return;
 		}
 		const fit = this.fit;
@@ -157,22 +163,22 @@ class HTMLElementImage extends VirtualHTMLElement {
 		return this.promise;
 	}
 	captureLoad() {
-		this.promise.done();
+		this.promise?.done();
 		this.classList.remove('loading');
 		this.fix(this.image);
 	}
 	captureError() {
-		this.promise.done();
+		this.promise?.done();
 		this.classList.remove('loading');
 		this.classList.add('error');
-		this.placeholder();
+		this.placeholder(true);
 	}
-	placeholder() {
+	placeholder(error) {
 		const { w, h } = this.dimensions;
-		this.image.width = w;
-		this.image.height = h;
-		this.image.src = "data:image/svg+xml," + encodeURIComponent(
-			`<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 ${w} ${h}"></svg>`
+		this.image.width = Number.isNaN(w) ? 320 : w;
+		this.image.height = Number.isNaN(h) ? 240 : h;
+		this.image.src = HTMLElementImage.getPlaceholder(
+			this.image.width, this.image.height
 		);
 	}
 }
@@ -191,14 +197,17 @@ class HTMLElementInlineImage extends HTMLImageElement {
 		return this;
 	}
 	captureLoad() {
-		this.promise.done();
+		this.promise?.done();
 		this.classList.remove('loading');
 		this.fix(this.image);
 	}
-	placeholder() {
+	placeholder(error) {
 		const { w, h } = this.dimensions;
-		this.width = w;
-		this.height = h;
+		this.width = Number.isNaN(w) ? 40 : w;
+		this.height = Number.isNaN(h) ? 30 : h;
+		this.src = HTMLElementImage.getPlaceholder(
+			this.width, this.height, error
+		);
 	}
 }
 

@@ -9,6 +9,7 @@
 	width: 100%;
 	top: 50%;
 	margin-top: -0.5rem;
+	line-height: 1rem;
 }
 
 @keyframes spinner {
