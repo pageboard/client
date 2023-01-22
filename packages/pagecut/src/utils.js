@@ -621,7 +621,7 @@ export default class Utils {
 			if (pos == null) break;
 			$pos = tr.doc.resolve(pos);
 		}
-		if (check) return true;
+		if (check) return pos == null ? null : tr;
 		node = node.cut(0);
 		pos = this.insertTrNode(tr, pos, node);
 		if (tr.doc.content.size > 0) {
