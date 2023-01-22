@@ -171,14 +171,14 @@ class HTMLElementImage extends VirtualHTMLElement {
 		this.promise?.done();
 		this.classList.remove('loading');
 		this.classList.add('error');
-		this.placeholder(true);
+		this.placeholder();
 	}
 	placeholder(error) {
 		const { w, h } = this.dimensions;
 		this.image.width = Number.isNaN(w) ? 320 : w;
 		this.image.height = Number.isNaN(h) ? 240 : h;
 		this.image.src = HTMLElementImage.getPlaceholder(
-			this.image.width, this.image.height
+			this.image.width, this.image.height, error
 		);
 	}
 }
@@ -200,6 +200,11 @@ class HTMLElementInlineImage extends HTMLImageElement {
 		this.promise?.done();
 		this.classList.remove('loading');
 		this.fix(this.image);
+	}
+	captureError() {
+		this.promise?.done();
+		this.classList.remove('loading');
+		this.placeholder(true);
 	}
 	placeholder(error) {
 		const { w, h } = this.dimensions;
