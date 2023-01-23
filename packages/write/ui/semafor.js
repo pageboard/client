@@ -148,7 +148,7 @@ class Semafor {
 
 	update(newSchema) {
 		this.destroy();
-		this.lastSchema = this.process(null, newSchema || this.schema, this.node);
+		this.lastSchema = this.process(null, newSchema || this.schema, this.node)?.shift();
 	}
 
 	get() {
@@ -425,8 +425,9 @@ class Semafor {
 		if (key && this.helper && !noHelper) {
 			schema = this.helper(key, schema, node, parent) || schema;
 		}
-		return schema;
+		return [schema, fieldset];
 	}
+
 	handleEvent(e) {
 		if (e.type != "change") return;
 		const legend = e.target.closest('fieldset > legend');
@@ -532,13 +533,13 @@ Semafor.types.oneOf = function (key, schema, node, inst) {
 		oneOfType = { type: "string", format: 'singleline' }; // FIXME use an array of formats
 	}
 	if (oneOfType) {
-		inst.process(key, {
+		// la valeur de retour de process n'est pas un fieldset
+		return inst.process(key, {
 			...schema,
 			oneOf: null,
 			anyOf: null,
 			...oneOfType
-		}, node, schema);
-		return;
+		}, node, schema)?.pop();
 	}
 
 	let def = schema.default;
@@ -661,7 +662,7 @@ Semafor.types.object = function (key, schema, node, inst) {
 		const props = {};
 		const prefix = key ? (key + '.') : '';
 		for (const [name, propSchema] of Object.entries(schema.properties)) {
-			props[name] = inst.process(prefix + name, propSchema, fieldset ?? node, schema.properties) || propSchema;
+			props[name] = inst.process(prefix + name, propSchema, fieldset ?? node, schema.properties)?.shift() || propSchema;
 		}
 		schema.properties = props;
 	}
@@ -733,11 +734,10 @@ Semafor.types.array = function (key, schema, node, inst) {
 		}
 	} else {
 		console.warn("FIXME: array type supports only items: [schemas], or items.anyOf", schema);
-		inst.process(key, {
+		return inst.process(key, {
 			...schema.items,
 			title: schema.title
-		}, node, schema);
-		return;
+		}, node, schema)?.pop();
 	}
 };
 
