@@ -8,12 +8,6 @@ class HTMLElementMailImage extends HTMLImageElement {
 		dataCrop: null
 	};
 
-	static getPlaceholder(w, h, error) {
-		const txt = error ? '∅' : '';
-		return "data:image/svg+xml," + encodeURIComponent(
-			`<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 ${w} ${h}"><text text-anchor="middle" dominant-baseline="central" x="50%" y="50%" fill="#aaa">${txt}</text></svg>`);
-	}
-
 	get crop() {
 		let [x, y, w, h, z] = (this.dataset.crop || ";;;;").split(";").map(x => parseFloat(x));
 		if (Number.isNaN(x)) x = 50;

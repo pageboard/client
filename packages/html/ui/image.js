@@ -4,12 +4,6 @@ class HTMLElementImage extends VirtualHTMLElement {
 		crop: null
 	};
 
-	static getPlaceholder(w, h, error) {
-		const txt = error ? '∅' : '';
-		return "data:image/svg+xml," + encodeURIComponent(
-			`<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 ${w} ${h}"><text text-anchor="middle" dominant-baseline="central" x="50%" y="50%" fill="#aaa">${txt}</text></svg>`);
-	}
-
 	static getZoom({ w, h, rw, rh, fit }) {
 		let z = 100;
 		if (!rw && !rh) return z;
@@ -104,8 +98,17 @@ class HTMLElementImage extends VirtualHTMLElement {
 		if (!meta || !meta.width || !meta.height) return;
 		this.dataset.width = meta.width;
 		this.dataset.height = meta.height;
-		if (!this.currentSrc) this.placeholder();
+		if (!this.currentSrc) {
+			this.placeholder();
+		}
 	}
+
+	get currentSrc() {
+		const cur = super.currentSrc;
+		if (!cur && this.src?.startsWith('data:')) return this.src;
+		else return cur;
+	}
+
 	reveal(state) {
 		const img = this.image;
 		if (!this.options.src) {
@@ -174,12 +177,11 @@ class HTMLElementImage extends VirtualHTMLElement {
 		this.placeholder();
 	}
 	placeholder(error) {
-		const { w, h } = this.dimensions;
-		this.image.width = Number.isNaN(w) ? 320 : w;
-		this.image.height = Number.isNaN(h) ? 240 : h;
-		this.image.src = HTMLElementImage.getPlaceholder(
-			this.image.width, this.image.height, error
-		);
+		let { w, h } = this.dimensions;
+		if (Number.isNaN(w)) w = 320;
+		if (Number.isNaN(h)) h = 240;
+		this.image.src = "data:image/svg+xml," + encodeURIComponent(
+			`<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 ${w} ${h}"><text text-anchor="middle" dominant-baseline="central" x="50%" y="50%" fill="#aaa">${error ? '∅' : ''}</text></svg>`);
 	}
 }
 
@@ -196,6 +198,11 @@ class HTMLElementInlineImage extends HTMLImageElement {
 	get image() {
 		return this;
 	}
+	get currentSrc() {
+		const cur = super.currentSrc;
+		if (!cur && this.src?.startsWith('data:')) return this.src;
+		else return cur;
+	}
 	captureLoad() {
 		this.promise?.done();
 		this.classList.remove('loading');
@@ -207,12 +214,11 @@ class HTMLElementInlineImage extends HTMLImageElement {
 		this.placeholder(true);
 	}
 	placeholder(error) {
-		const { w, h } = this.dimensions;
-		this.width = Number.isNaN(w) ? 40 : w;
-		this.height = Number.isNaN(h) ? 30 : h;
-		this.src = HTMLElementImage.getPlaceholder(
-			this.width, this.height, error
-		);
+		let { w, h } = this.dimensions;
+		w = Number.isNaN(w) ? 40 : w;
+		h = Number.isNaN(h) ? 30 : h;
+		this.setAttribute('src', "data:image/svg+xml," + encodeURIComponent(
+			`<svg xmlns="http://www.w3.org/2000/svg" width="${w}px" height="${h}px" viewBox="0 0 ${w} ${h}"><text text-anchor="middle" dominant-baseline="central" x="50%" y="50%" fill="#aaa">${error ? '∅' : ''}</text></svg>`));
 	}
 }
 
