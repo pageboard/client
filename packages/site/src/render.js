@@ -48,7 +48,7 @@ export function render(res, scope, el) {
 	});
 
 	if (el) install(el, scope);
-
+	// FIXME match 9.2's scope is the original object
 	scope = scope.copy ? scope.copy() : Object.assign({}, scope);
 	for (const [k, rek] of Object.entries(res)) scope[`$${k}`] = rek;
 
@@ -79,6 +79,7 @@ export function render(res, scope, el) {
 
 function renderBlock(el, scope, block, bscope) {
 	if (!block) block = {};
+	// FIXME match 9.2's scope is the original object
 	const rscope = scope.copy ? scope.copy(bscope) : Object.assign({}, scope, bscope);
 	rscope.$element = el;
 
