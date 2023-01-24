@@ -1,18 +1,20 @@
 exports.list_item = {
 	title: 'Item',
 	inplace: true,
-	contents: "textblock list?",
+	contents: "textblock (ul|ol)?",
 	icon: '<i class="list icon"></i>',
 	html: `<li></li>`,
 };
+
 exports.textblock = {
 	title: 'Text',
 	inplace: true,
 	contents: "inline*",
 	html: '<span class="textblock"></span>'
 };
-exports.list = {
-	title: 'List',
+
+exports.ul = {
+	title: 'Unordered List',
 	properties: {
 		marker: {
 			title: 'Marker',
@@ -25,6 +27,36 @@ exports.list = {
 			}, {
 				const: 'square',
 				title: 'Square'
+			}, {
+				const: 'circle',
+				title: 'Circle'
+			}]
+		}
+	},
+	inplace: true,
+	contents: "list_item+",
+	group: "block",
+	icon: '<i class="list ul icon"></i>',
+	tag: 'ul',
+	parse: function(dom) {
+		let marker = null;
+		const style = dom.style.listStyleType;
+		if (style && this.properties.marker.anyOf.some(item => item.const == style)) {
+			marker = style;
+		}
+		return { marker };
+	},
+	html: `<ul style-list-style-type="[marker]"></ul>`
+};
+
+exports.ol = {
+	title: 'Ordered List',
+	properties: {
+		marker: {
+			title: 'Marker',
+			anyOf: [{
+				const: null,
+				title: 'Default'
 			}, {
 				const: 'decimal',
 				title: '1, 2, 3'
@@ -65,20 +97,15 @@ exports.list = {
 	contents: "list_item+",
 	group: "block",
 	icon: '<i class="list ol icon"></i>',
-	tag: 'ul,ol',
-	parse: function(dom) {
+	tag: 'ol',
+	parse: function (dom) {
 		let marker = null;
 		const style = dom.style.listStyleType;
 		if (style && this.properties.marker.anyOf.some(item => item.const == style)) {
 			marker = style;
-		} else if (dom.nodeName == "OL") {
-			marker = 'decimal';
 		}
-		return { marker };
+		const start = dom.getAttribute('start') || null;
+		return { marker, start };
 	},
-	html: `
-		<ul style-list-style-type="[marker]">[marker|eq:square:|eq:disc:|!|bmagnet:*]</ul>
-		<ol style-list-style-type="[marker]" start="[start]">[marker|eq:square:|eq:disc:|bmagnet:*]</ol>
-	`
+	html: `<ol style-list-style-type="[marker]" start="[start]"></ol>`
 };
-
