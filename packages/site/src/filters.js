@@ -387,19 +387,16 @@ export function formatDate(val, what, ...list) {
 	}
 	const d = new Date(val);
 	const p = {};
-	const n = 'narrow';
 	const s = 'short';
 	const l = 'long';
 	const num = 'numeric';
 	const dig = '2-digit';
 	for (const tok of list) {
 		switch (tok) {
-			case 'd': p.weekday = n; break;
-			case 'da': p.weekday = s; break;
+			case 'd': p.weekday = s; break;
 			case 'day': p.weekday = l; break;
 			case 'Y': p.year = num; break;
 			case 'YY': p.year = dig; break;
-			case 'mo': p.month = n; break;
 			case 'mon': p.month = s; break;
 			case 'month': p.month = l; break;
 			case 'M': p.month = num; break;
@@ -413,11 +410,13 @@ export function formatDate(val, what, ...list) {
 			case 's': p.second = num; break;
 			case 'ss': p.second = dig; break;
 			case 'tz': p.timeZoneName = s; break;
-			case 'timezone': p.timeZoneName = l; break;
+			case 'timezone': p.timeZoneName = "shortGeneric"; break;
 			default:
-				if (/\w+\/\w+/.test(tok)) p.timeZone = tok;
-				// eslint-disable-next-line no-console
-				else console.warn("Unrecognized date format option", tok);
+				if (tok) {
+					if (/\w+\/\w+/.test(tok)) p.timeZone = tok;
+					// eslint-disable-next-line no-console
+					else console.warn("Unrecognized date format option", tok);
+				}
 				break;
 		}
 	}
