@@ -49,7 +49,7 @@ export function render(res, scope, el) {
 
 	if (el) install(el, scope);
 
-	scope = scope.copy();
+	scope = scope.copy ? scope.copy() : Object.assign({}, scope);
 	for (const [k, rek] of Object.entries(res)) scope[`$${k}`] = rek;
 
 	const block = res.item ?? {};
@@ -79,7 +79,7 @@ export function render(res, scope, el) {
 
 function renderBlock(el, scope, block, bscope) {
 	if (!block) block = {};
-	const rscope = scope.copy(bscope);
+	const rscope = scope.copy ? scope.copy(bscope) : Object.assign({}, scope, bscope);
 	rscope.$element = el;
 
 	for (const name of ["id", "type", "parent", "child", "parents", "children", "updated_at", "created_at", "lock", "expr"]) {
