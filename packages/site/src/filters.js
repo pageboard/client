@@ -450,3 +450,11 @@ export function content(block, what, name) {
 	while (dom.childNodes.length) frag.appendChild(dom.firstChild);
 	return what.filters.html(frag, what);
 }
+
+export function keys(val) {
+	return val ? Object.keys(val) : [];
+}
+
+export function values(val) {
+	return val ? Object.values(val) : [];
+}
