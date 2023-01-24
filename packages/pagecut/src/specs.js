@@ -136,7 +136,7 @@ export default function define(viewer, elt, schema, nodeViews) {
 	});
 }
 
-function toDOMOutputSpec(obj, node, inplace) {
+function toDOMOutputSpec(obj, node, canParseData) {
 	let out = 0;
 	let dom = obj.contentDOM || obj.dom;
 	const attrs = {
@@ -144,7 +144,7 @@ function toDOMOutputSpec(obj, node, inplace) {
 		...tryJSON(node.attrs._json),
 		...domAttrsMap(obj.dom)
 	};
-	if (!inplace) {
+	if (canParseData) {
 		delete attrs['block-data'];
 	}
 	delete attrs['block-focused'];
@@ -310,7 +310,7 @@ function createRootSpec(elt, obj, viewer) {
 				return "";
 			}
 			const uView = flagDom(elt, dom);
-			const out = toDOMOutputSpec(uView, node, elt.inplace);
+			const out = toDOMOutputSpec(uView, node, !elt.inplace || elt.parse);
 			return out;
 		}
 	};
