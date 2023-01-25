@@ -146,6 +146,8 @@ function toDOMOutputSpec(obj, node, canParseData) {
 	};
 	if (canParseData) {
 		delete attrs['block-data'];
+	} else if (Object.keys(attrs).length > 1) {
+		console.info(node.type.name, ".parse is missing", attrs);
 	}
 	delete attrs['block-focused'];
 	while (dom) {
@@ -362,7 +364,7 @@ function createWrapSpec(elt, obj) {
 		parseDOM: [parseRule],
 		defining: obj.dom == obj.contentDOM,
 		toDOM: function(node) {
-			return toDOMOutputSpec(obj, node);
+			return toDOMOutputSpec(obj, node, true);
 		},
 		nodeView: (...args) => new WrapNodeView(...args)
 	};
@@ -398,7 +400,7 @@ function createConstSpec(elt, obj) {
 		attrs: defaultSpecAttrs,
 		parseDOM: [parseRule],
 		toDOM: function(node) {
-			return toDOMOutputSpec(obj, node);
+			return toDOMOutputSpec(obj, node, true);
 		},
 		nodeView: (...args) => new ConstNodeView(...args)
 	};
@@ -443,7 +445,7 @@ function createContainerSpec(elt, obj) {
 		defining: obj.dom != obj.contentDOM,
 		parseDOM: [parseRule],
 		toDOM: function(node) {
-			return toDOMOutputSpec(obj, node);
+			return toDOMOutputSpec(obj, node, true);
 		},
 		nodeView: (...args) => new ContainerNodeView(...args)
 	};
