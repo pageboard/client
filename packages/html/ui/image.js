@@ -104,9 +104,7 @@ class HTMLElementImage extends VirtualHTMLElement {
 	}
 
 	get currentSrc() {
-		const cur = super.currentSrc;
-		if (!cur && this.src?.startsWith('data:')) return this.src;
-		else return cur;
+		return this.image?.currentSrc;
 	}
 
 	reveal(state) {
@@ -152,11 +150,6 @@ class HTMLElementImage extends VirtualHTMLElement {
 		}
 		const curSrc = loc.toString();
 		if (curSrc != this.currentSrc) {
-			try {
-				this.currentSrc = curSrc;
-			} catch (e) {
-				// pass
-			}
 			this.classList.add('loading');
 			let done;
 			this.promise = new Promise(resolve => done = resolve);
