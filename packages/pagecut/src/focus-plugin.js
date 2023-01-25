@@ -149,7 +149,7 @@ export default class FocusPlugin {
 			}
 		}
 		if (root) {
-			if (sel.node && sel.from === rootPos || sel.empty && !firstParent.container && !root.node.isTextblock) {
+			if (sel.node && sel.from === rootPos) {
 				tr.setSelection(NodeSelection.create(tr.doc, rootPos));
 			}
 		}
