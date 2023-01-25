@@ -28,7 +28,7 @@ li.ProseMirror-selectednode::after {
 /* replaced elements cannot have pseudo elements,
  * that is why we must define is for both cases */
 [block-focused="last"] {
-	outline: 1px dashed #888 !important;
+	outline: 2px dashed rgb(0 0 0 / 30%) !important;
 	outline-offset:-1px !important;
 }
 [block-focused="last"]:not(img) {
