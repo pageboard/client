@@ -1,10 +1,6 @@
 Pageboard.schemaFilters.block = function BlockFilter(key, opts, schema) {
 	delete schema.type;
 	schema.anyOf = [];
-	if (schema.nullable) schema.anyOf.push({
-		const: null,
-		title: 'none'
-	});
 	const blocks = Pageboard.editor.blocks.find(opts.types || []);
 	for (const block of blocks) {
 		const { method, parameters = {} } = block.data?.action || {};
