@@ -139,3 +139,7 @@ img[is="element-img"] {
 	max-width: 100%;
 	height:auto;
 }
+
+element-image[block-focused="last"] > [block-content="legend"] {
+	background-color: rgb(255 255 255 / 50%);
+}
