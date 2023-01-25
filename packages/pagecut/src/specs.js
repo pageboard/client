@@ -15,7 +15,7 @@ export default function define(viewer, elt, schema, nodeViews) {
 		return;
 	}
 	if (!elt.render) return; // some elements are not meant to be rendered
-	let dom = viewer.render(viewer.blocks.create(elt.name), {
+	let dom = elt.dom ?? viewer.render(viewer.blocks.create(elt.name), {
 		merge: false,
 		genId: false
 	});
@@ -489,7 +489,8 @@ function domSelector(dom) {
 	// might be SVGAnimatedString
 	if (cn?.baseVal != null) cn = cn.baseVal;
 	if (cn) {
-		sel += cn.split(' ').filter(str => Boolean(str))
+		// ignore non allowed characters for a selector - nicely removes template strings
+		sel += cn.split(' ').filter(str => Boolean(str) && !/[[\]]/.test(str))
 			.map(str => `.${str}`)
 			.join('');
 	}
