@@ -136,7 +136,7 @@ export default function define(viewer, elt, schema, nodeViews) {
 	});
 }
 
-function toDOMOutputSpec(obj, node, canParseData) {
+function toDOMOutputSpec(obj, node) {
 	let out = 0;
 	let dom = obj.contentDOM || obj.dom;
 	const attrs = {
@@ -144,11 +144,7 @@ function toDOMOutputSpec(obj, node, canParseData) {
 		...tryJSON(node.attrs._json),
 		...domAttrsMap(obj.dom)
 	};
-	if (canParseData) {
-		delete attrs['block-data'];
-	} else if (Object.keys(attrs).length > 1) {
-		console.info(node.type.name, ".parse is missing", attrs);
-	}
+	delete attrs['block-data'];
 	delete attrs['block-focused'];
 	while (dom) {
 		const contentName = dom.getAttribute('block-content') || undefined;
