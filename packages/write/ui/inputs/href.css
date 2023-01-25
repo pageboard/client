@@ -190,7 +190,7 @@ input-map {
 }
 
 .fieldset.href > :not(.href),
-fieldset.href > :not(.href):not(legend) {
+fieldset.href > :not(.href, legend) {
 	display:none !important;
 }
 

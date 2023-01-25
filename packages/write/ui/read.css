@@ -1,4 +1,4 @@
-@import "../lib/pagecut/editor.css";
+@import url("../lib/pagecut/editor.css");
 
 /* replaced elements cannot have pseudo elements,
  * that is why we must define is for both cases */
@@ -119,7 +119,7 @@ body[data-mode="code"] [block-content] {
 body[data-mode="code"] [block-type]:not([block-id]) {
 	flex-basis: 100%;
 }
-body[data-mode="code"] [block-type] > *:not([block-type]):not([element-content]):not([block-content]) {
+body[data-mode="code"] [block-type] > *:not([block-type], [element-content], [block-content]) {
 	display:none !important;
 }
 
