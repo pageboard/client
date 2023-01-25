@@ -204,27 +204,9 @@ function createRootSpec(elt, obj, viewer) {
 				attrs.data = data;
 			} else if (elt.parse) {
 				attrs.data = JSON.stringify(elt.parse(dom));
-			} else if (elt.inplace && elt.properties) {
-				const dataObj = {};
-				for (const [key, prop] of Object.entries(elt.properties)) {
-					const attr = key.replace(/([A-Z])/g, (g) => `-${g[0].toLowerCase()}`);
-					let val = dom.getAttribute(attr) ?? dom.dataset?.[key];
-					if (val == null) continue;
-					if (prop.type == "integer") {
-						val = parseInt(val);
-						if (!Number.isNaN(val)) dataObj[key] = val;
-					} else if (prop.type == "number") {
-						val = parseFloat(val);
-						if (!Number.isNaN(val)) dataObj[key] = val;
-					} else if (prop.type == "boolean") {
-						dataObj[key] = val == "true";
-					} else if (prop.type == "string") {
-						dataObj[key] = val;
-					}
-				}
-				attrs.data = JSON.stringify(dataObj);
+			} else if (elt.inplace && elt.properties && !elt.parse) {
+				console.info(elt.name, "is inline and missing parse(dom)");
 			}
-
 
 			if (elt.inplace) {
 				if (id) delete attrs.id;
