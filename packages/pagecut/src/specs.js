@@ -160,7 +160,9 @@ function toDOMOutputSpec(obj, node, canParseData) {
 			delete attrs['block-content'];
 		} else {
 			if (contentName) attrs['block-content'] = contentName;
-			if (!obj.contentDOM || node instanceof Mark) {
+			if (!obj.contentDOM) {
+				out = [dom.nodeName, attrs, dom.textContent];
+			} else if (node instanceof Mark) {
 				out = [dom.nodeName, attrs];
 			} else {
 				out = [dom.nodeName, attrs, out];
