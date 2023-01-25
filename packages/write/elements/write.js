@@ -146,6 +146,7 @@ exports.write = {
 		"../ui/inputs/page-title-url.js",
 		"../ui/inputs/page.js",
 		"../ui/inputs/crop.js",
+		"../ui/inputs/intl.js",
 		"../ui/form.js",
 		"../ui/menu.js",
 		"../ui/move.js",

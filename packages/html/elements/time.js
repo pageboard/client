@@ -1,4 +1,4 @@
-exports.datetime = {
+exports.time = {
 	title: "Date Time",
 	icon: '<i class="clock outline icon"></i>',
 	inline: true,
@@ -15,7 +15,11 @@ exports.datetime = {
 			title: ' Time zone',
 			type: 'string',
 			pattern: /\w+\/\w+/.source,
-			nullable: true
+			nullable: true,
+			$filter: {
+				name: 'intl',
+				of: 'timeZone'
+			}
 		},
 		format: {
 			title: 'Format',
@@ -150,5 +154,23 @@ exports.datetime = {
 			}
 		}
 	},
-	html: `<time datetime="[datetime|now|isoDate]">[datetime|now|formatDate:[format|values|join:%3A]]</time>`
+	parse: function (dom) {
+		const format = {};
+		const list = (dom.dataset.format ?? "").split(':');
+		for (const [key, schema] of Object.entries(this.properties.format.properties)) {
+			for (const tok in list) {
+				if (tok) {
+					const item = schema.anyOf.find(item => item.const === tok);
+					if (item) format[key] = item.const;
+				}
+			}
+		}
+		return {
+			datetime: dom.dateTime,
+			timezone: dom.dataset.timezone,
+			format
+		};
+	},
+	html: `<time datetime="[datetime|now|isoDate]" data-format="[format|values|join:%3A]" data-timezone="[timezone]" is="element-time"></time>`,
+	scripts: ['../ui/time.js']
 };
