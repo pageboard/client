@@ -175,9 +175,12 @@ function nodeOptions(node, defaults, state, is) {
 		} else if (typeof def == "number") {
 			if (typeof val != "number") {
 				val = parseFloat(val);
+				if (Number.isNaN(val)) val = def;
 			}
 		} else if (Array.isArray(def)) {
 			if (!def.includes(val)) val = null;
+		} else if (val == null && def != null) {
+			val = def;
 		}
 		if (val != null) opts[name] = val;
 	}
