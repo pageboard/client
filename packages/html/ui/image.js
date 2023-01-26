@@ -213,15 +213,9 @@ class HTMLElementInlineImage extends HTMLImageElement {
 		this.setAttribute('src', "data:image/svg+xml," + encodeURIComponent(
 			`<svg xmlns="http://www.w3.org/2000/svg" width="${w}px" height="${h}px" viewBox="0 0 ${w} ${h}"><text text-anchor="middle" dominant-baseline="central" x="50%" y="50%" fill="#aaa">${error ? '∅' : ''}</text></svg>`));
 	}
+
 }
 
-for (const name of ['patch', 'reveal', 'captureError', 'crop', 'dimensions', 'position', 'fit', 'findClass', 'fix']) {
-	Object.defineProperty(
-		HTMLElementInlineImage.prototype,
-		name,
-		Object.getOwnPropertyDescriptor(HTMLElementImage.prototype, name)
-	);
-}
-
+VirtualHTMLElement.inherits(HTMLElementInlineImage, HTMLElementImage);
 VirtualHTMLElement.define('element-image', HTMLElementImage);
 VirtualHTMLElement.define(`element-img`, HTMLElementInlineImage, 'img');

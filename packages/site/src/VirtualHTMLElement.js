@@ -102,6 +102,17 @@ export default class VirtualHTMLElement extends HTMLElement {
 		// extend appends Ext.prototype, not prepend
 		monkeyPatchAll(Cla.prototype, Ext.prototype, true);
 	}
+
+	static inherits(Child, { prototype: pp }) {
+		const cp = Child.prototype;
+		const props = Object.getOwnPropertyDescriptors(pp);
+		for (const [name, desc] of Object.entries(props)) {
+			if (!Object.prototype.hasOwnProperty.call(cp, name)) {
+				Object.defineProperty(cp, name, desc);
+			}
+		}
+		return Child;
+	}
 }
 
 function monkeyPatch(proto, meth, cb, after) {
