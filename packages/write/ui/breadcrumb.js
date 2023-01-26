@@ -102,7 +102,7 @@ Pageboard.Controls.Breadcrumb = class Breadcrumb {
 		let subFocused = false;
 		items.some((item, i) => {
 			const id = item.dataset.id;
-			let sel = item.dataset.selector;
+			let sel = item.dataset.selector || '';
 			if (id) {
 				sel += `[block-id="${id}"]`;
 			} else {
