@@ -29,7 +29,7 @@ export default class FocusPlugin {
 
 	click(view, pos, e) {
 		const tr = view.state.tr;
-		let sel = TextSelection.create(tr.doc, pos);
+		let sel = tr.selection;
 		let custom = false;
 		if (!e.ctrlKey) {
 			let dom = e.target;
