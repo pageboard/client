@@ -286,7 +286,7 @@ HTMLScriptElement.prototype.prerender = function () {
 	return tmpl;
 };
 
-Page.State.prototype.fuse = function (data, scope) {
+Page.constructor.prototype.fuse = function (data, scope) {
 	this.pathname = this.pathname.fuse(data, scope);
 	const q = this.query;
 	for (const [key, val] of Object.entries(q)) {
@@ -330,11 +330,11 @@ class QueryCollectorFilter {
 	}
 }
 
-Page.State.prototype.collector = function (query) {
+Page.constructor.prototype.collector = function (query) {
 	return new QueryCollectorFilter(this, query);
 };
 
-Page.State.prototype.templatesQuery = function (node) {
+Page.constructor.prototype.templatesQuery = function (node) {
 	const state = this;
 	const params = node.getAttribute('parameters') || '';
 	const $query = {};

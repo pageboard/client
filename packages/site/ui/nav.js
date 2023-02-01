@@ -1,4 +1,4 @@
-Page.State.prototype.scroll = function(opts) {
+Page.constructor.prototype.scroll = function(opts) {
 	if (opts.once) {
 		if (!this.data.$scroll.once) {
 			this.data.$scroll.once = true;
@@ -33,7 +33,7 @@ Page.State.prototype.scroll = function(opts) {
 	else window.scrollTo(scrollOpts);
 };
 
-Page.State.prototype.debounce = function(fn, to) {
+Page.constructor.prototype.debounce = function(fn, to) {
 	const db = Pageboard.debounce((...args) => {
 		fn(...args);
 	}, to);
@@ -85,8 +85,8 @@ Page.setup(() => {
 	}, document);
 });
 
-const statePush = Page.State.prototype.push;
-Page.State.prototype.push = function (...args) {
 	if (this.transition) this.transition.cancel();
+const statePush = Page.constructor.prototype.push;
+Page.constructor.prototype.push = function (...args) {
 	return statePush.apply(this, args);
 };

@@ -67,7 +67,7 @@ Page.ready(() => {
 	VirtualHTMLElement.define(`element-consent`, HTMLCustomConsentElement, 'form');
 });
 
-Page.State.prototype.consent = function (fn) {
+Page.constructor.prototype.consent = function (fn) {
 	const initial = this.scope.$consent === undefined;
 	let consent = Page.storage.get('consent');
 	if (consent == null && initial) consent = undefined;
@@ -81,7 +81,7 @@ Page.State.prototype.consent = function (fn) {
 	}
 };
 
-Page.State.prototype.reconsent = function (fn) {
+Page.constructor.prototype.reconsent = function (fn) {
 	if (fn) this.consent(fn);
 	const consent = this.scope.$consent;
 	let asking = false;
