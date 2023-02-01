@@ -223,7 +223,7 @@ function merge(obj, extra, fn) {
 }
 
 Page.setup(state => {
-	state.ui.observer = new IntersectionObserver((entries, observer) => {
+	state.scope.observer = new IntersectionObserver((entries, observer) => {
 		entries.forEach(entry => {
 			const target = entry.target;
 			const ratio = entry.intersectionRatio || 0;
@@ -244,8 +244,8 @@ Page.setup(state => {
 });
 
 Page.close(state => {
-	if (state.ui.observer) {
-		state.ui.observer.disconnect();
-		delete state.ui.observer;
+	if (state.scope.observer) {
+		state.scope.observer.disconnect();
+		delete state.scope.observer;
 	}
 });

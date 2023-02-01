@@ -3,19 +3,19 @@ Page.setup(state => {
 	const opts = document.body.dataset;
 	opts.prefix = 'page-sheet-';
 	opts.page = '.page-sheet';
-	state.ui.printStyleSheet = autobreakFn(opts);
+	state.scope.printStyleSheet = autobreakFn(opts);
 	pageNumbering(opts);
 	if (state.pathname.endsWith('.pdf') == false) {
 		showPrintButtons(state, opts);
 	} else {
-		state.ui.observer?.disconnect();
-		delete state.ui.observer;
+		state.scope.observer?.disconnect();
+		delete state.scope.observer;
 	}
 	// bug in window-page: Page.close is called on opening
 	Page.close(state => {
 		const ass = document.adoptedStyleSheets;
-		const index = ass.indexOf(state.ui.printStyleSheet);
-		delete state.ui.printStyleSheet;
+		const index = ass.indexOf(state.scope.printStyleSheet);
+		delete state.scope.printStyleSheet;
 		if (index >= 0) ass.splice(index, 1);
 	});
 });

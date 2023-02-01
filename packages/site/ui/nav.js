@@ -26,7 +26,7 @@ Page.State.prototype.scroll = function(opts) {
 			return;
 		}
 	}
-	if (this.stage == "hash" && this.samePathname(this.referrer) && this.referrer.data.$scroll) {
+	if (this.stage == "focus" && this.samePathname(this.referrer) && this.referrer.data.$scroll) {
 		scrollOpts.behavior = 'smooth';
 	}
 	if (this.transition) this.transition.scrollTo(scrollOpts);
@@ -45,8 +45,8 @@ Page.init(state => {
 	if (!state.data.$scroll) state.data.$scroll = {left: 0, top: 0};
 });
 
-Page.hash(state => {
-	const hash = state.hash;
+Page.focus(state => {
+	const { hash } = state;
 	if (!hash) return;
 	const node = document.getElementById(hash);
 	if (!node) return;

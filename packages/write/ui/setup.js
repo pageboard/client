@@ -28,9 +28,8 @@ Pageboard.adopt = function(win, readState) {
 		win.addEventListener('invalid', submitListener, true);
 		readState.finish(() => {
 			window.document.title = win.document.title;
-			const readCopy = readState.copy();
-			writeState.pathname = readCopy.pathname;
-			writeState.query = readCopy.query;
+			writeState.pathname = readState.pathname;
+			writeState.query = readState.query;
 			// writeState.data = readState.data;
 			writeState.save();
 

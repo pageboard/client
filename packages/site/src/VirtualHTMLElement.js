@@ -64,8 +64,11 @@ export default class VirtualHTMLElement extends HTMLElement {
 					if (!this.options) {
 						this.options = nodeOptions(this, defaults, state, is);
 					}
-					if (typeof this.reveal == "function" && this.currentSrc) {
-						state.finish(() => this.reveal(state));
+					if (typeof this.reveal == "function") {
+						state.finish(() => {
+							// don't wait for it
+							this.reveal(state);
+						});
 					}
 				},
 				setup(state) {
@@ -73,13 +76,17 @@ export default class VirtualHTMLElement extends HTMLElement {
 						this.options = nodeOptions(this, defaults, state, is);
 					}
 					if (typeof this.reveal == "function" && !this.currentSrc) {
-						if (state.ui.observer) state.ui.observer.observe(this);
-						else state.finish(() => this.reveal(state));
+						if (state.scope.observer) {
+							state.scope.observer.observe(this);
+						} else state.finish(() => {
+							// don't wait for it
+							this.reveal(state);
+						});
 					}
 				},
 				close(state) {
 					if (typeof this.reveal == "function" && !this.currentSrc) {
-						state.ui.observer?.unobserve(this);
+						state.scope.observer?.unobserve(this);
 					}
 				}
 			});
