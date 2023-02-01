@@ -4,6 +4,9 @@ class HTMLElementImage extends VirtualHTMLElement {
 		crop: null
 	};
 
+	static defaultWidth = 240;
+	static defaultHeight = 180;
+
 	static getZoom({ w, h, rw, rh, fit }) {
 		let z = 100;
 		if (!rw && !rh) return z;
@@ -89,22 +92,31 @@ class HTMLElementImage extends VirtualHTMLElement {
 	}
 	patch(state) {
 		this.classList.remove('loading');
-		if (!this.options.src) return;
 		if (this.currentSrc != this.options.src) {
 			this.classList.remove('error');
 		}
-		const loc = Page.parse(this.options.src);
-		const meta = state.scope.$hrefs?.[loc.pathname] ?? {};
-		if (!meta || !meta.width || !meta.height) return;
-		this.dataset.width = meta.width;
-		this.dataset.height = meta.height;
+		this.dataset.width = this.constructor.defaultWidth;
+		this.dataset.height = this.constructor.defaultHeight;
+		if (this.options.src) {
+			const loc = Page.parse(this.options.src);
+			const meta = state.scope.$hrefs?.[loc.pathname];
+			if (meta) {
+				this.dataset.width = meta.width;
+				this.dataset.height = meta.height;
+			}
+		}
+		const { w, h } = this.dimensions;
+		this.image.width = w || this.dataset.width;
+		this.image.height = h || this.dataset.height;
 		if (!this.currentSrc) {
 			this.placeholder();
 		}
 	}
 
 	get currentSrc() {
-		return this.image?.currentSrc;
+		const src = this.image?.currentSrc;
+		if (src?.startsWith('data:image/svg')) return null;
+		else return src;
 	}
 
 	reveal(state) {
@@ -167,14 +179,10 @@ class HTMLElementImage extends VirtualHTMLElement {
 		this.promise?.done();
 		this.classList.remove('loading');
 		this.classList.add('error');
-		this.placeholder();
+		this.placeholder(true);
 	}
 	placeholder(error) {
-		let { w, h } = this.dimensions;
-		if (Number.isNaN(w)) w = 320;
-		if (Number.isNaN(h)) h = 240;
-		this.image.src = "data:image/svg+xml," + encodeURIComponent(
-			`<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 ${w} ${h}"><text text-anchor="middle" dominant-baseline="central" x="50%" y="50%" fill="#aaa">${error ? '∅' : ''}</text></svg>`);
+		this.image.removeAttribute('src');
 	}
 }
 
@@ -188,32 +196,27 @@ class HTMLElementInlineImage extends HTMLImageElement {
 		dataCrop: null
 	};
 
+	static defaultWidth = 40;
+	static defaultHeight = 30;
+
 	get image() {
 		return this;
 	}
-	get currentSrc() {
-		const cur = super.currentSrc;
-		if (!cur && this.src?.startsWith('data:')) return this.src;
-		else return cur;
-	}
-	captureLoad() {
-		this.promise?.done();
-		this.classList.remove('loading');
-		this.fix(this.image);
-	}
-	captureError() {
-		this.promise?.done();
-		this.classList.remove('loading');
-		this.placeholder(true);
-	}
+
 	placeholder(error) {
-		let { w, h } = this.dimensions;
-		w = Number.isNaN(w) ? 40 : w;
-		h = Number.isNaN(h) ? 30 : h;
-		this.setAttribute('src', "data:image/svg+xml," + encodeURIComponent(
-			`<svg xmlns="http://www.w3.org/2000/svg" width="${w}px" height="${h}px" viewBox="0 0 ${w} ${h}"><text text-anchor="middle" dominant-baseline="central" x="50%" y="50%" fill="#aaa">${error ? '∅' : ''}</text></svg>`));
+		if (error) {
+			this.image.src = "data:image/svg+xml," + encodeURIComponent(
+				`<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 ${this.image.width} ${this.image.height}"><text text-anchor="middle" dominant-baseline="central" x="50%" y="50%" fill="#aaa">${error ? '∅' : ''}</text></svg>`);
+		} else {
+			this.image.removeAttribute('src');
+		}
 	}
 
+	get currentSrc() {
+		const cur = super.currentSrc;
+		if (!cur && this.image.src?.startsWith('data:')) return this.src;
+		else return cur;
+	}
 }
 
 VirtualHTMLElement.inherits(HTMLElementInlineImage, HTMLElementImage);
