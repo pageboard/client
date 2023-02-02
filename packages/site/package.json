@@ -18,13 +18,13 @@
   },
   "homepage": "https://github.com/pageboard/client#readme",
   "devDependencies": {
-    "@pageboard/pagecut": "^0.11.0",
+    "@pageboard/pagecut": "^0.11.1",
     "@ungap/custom-elements": "^1.1.1",
     "debounce": "^1.2.1",
     "matchdom": "^5.10.8",
     "postinstall": "^0.8.0",
     "postinstall-bundle": "^0.8.0",
-    "window-page": "^14.0.0"
+    "window-page": "^14.1.1"
   },
   "prepare": {
     "@ungap/custom-elements": "copy lib/custom-elements.js",
