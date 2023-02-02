@@ -97,6 +97,7 @@ Page.init(state => {
 		$elements: baseElements,
 		$filters: {}
 	});
+	else state.scope.update(state);
 });
 
 Page.patch(state => {

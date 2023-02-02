@@ -6,9 +6,7 @@ export default class Scope {
 		Object.assign(this, obj);
 	}
 	get $loc() {
-		const obj = new URL(this.#state.toString(), document.location);
-		obj.query = { ...this.$query };
-		return obj;
+		return this.#state;
 	}
 	get $pathname() {
 		return this.#state.pathname;
@@ -20,5 +18,8 @@ export default class Scope {
 		const scope = new Scope(this.#state, this);
 		if (extra) Object.assign(scope, extra);
 		return scope;
+	}
+	update(state) {
+		this.#state = state;
 	}
 }
