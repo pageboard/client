@@ -29,7 +29,7 @@ Page.constructor.prototype.scroll = function(opts) {
 	if (this.stage == "focus" && this.samePathname(this.referrer) && this.referrer.data.$scroll) {
 		scrollOpts.behavior = 'smooth';
 	}
-	if (this.transition) this.transition.scrollTo(scrollOpts);
+	if (this.scope.transition) this.scope.transition.scrollTo(scrollOpts);
 	else window.scrollTo(scrollOpts);
 };
 
@@ -63,7 +63,7 @@ Page.setup(state => {
 Page.setup(state => {
 	Page.connect({
 		handleScroll: state.debounce((e, state) => {
-			if (state.transition) return;
+			if (state.scope.transition) return;
 			state.data.$scroll = {
 				left: window.scrollX,
 				top: window.scrollY
@@ -85,8 +85,8 @@ Page.setup(() => {
 	}, document);
 });
 
-	if (this.transition) this.transition.cancel();
 const statePush = Page.constructor.prototype.push;
 Page.constructor.prototype.push = function (...args) {
+	if (this.scope.transition) this.scope.transition.cancel();
 	return statePush.apply(this, args);
 };

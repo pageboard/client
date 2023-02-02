@@ -30,7 +30,7 @@ class HTMLElementGoogleTranslate extends VirtualHTMLElement {
 		this.#observer.observe(document.body, {attributes: true});
 	}
 	paint(state) {
-		this.translate = Page.storage.getCookies().googtrans;
+		this.translate = state.scope.storage.getCookies().googtrans;
 		if (this.translate) {
 			state.consent(this);
 		}

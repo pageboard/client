@@ -23,11 +23,13 @@ Page.setup(state => {
 function showPrintButtons(state, { preset }) {
 	const root = document.documentElement;
 	if (document.querySelector('html > .pdf-menu')) return;
-	const target = state.copy();
-	target.pathname += ".pdf";
+	const target = {
+		pathname: state.pathname + ".pdf",
+		query: state.query
+	};
 	if (preset) target.query.pdf = preset;
 	root.appendChild(root.dom(`<div class="pdf-menu">
-		<a target="_blank" href="${target.toString()}">⎙</a>
+		<a target="_blank" href="${state.format(target)}">⎙</a>
 	</div>`));
 }
 

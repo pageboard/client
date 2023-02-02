@@ -68,5 +68,5 @@ class UserStore {
 	}
 }
 
-Page.setup(() => Page.storage = new UserStore());
+Page.setup(state => state.scope.storage = new UserStore());
 

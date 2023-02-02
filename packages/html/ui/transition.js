@@ -4,6 +4,7 @@ Object.defineProperty(document, 'body', {
 		return this.documentElement.querySelector('body:last-of-type');
 	}
 });
+
 Page.init(state => {
 	const root = document.documentElement;
 	function dtr(state) {
@@ -16,33 +17,10 @@ Page.init(state => {
 	Page.ready(dtr);
 	Page.patch(dtr);
 	Page.setup(dtr);
-	Page.error(dtr);
+	Page.catch(dtr);
 });
 
-Page.State.prototype.mergeBody = function(body, corpse) {
-	if (this.referrer.transition) {
-		this.referrer.transition.end();
-	}
-	if (body.isContentEditable || body.getAttribute('block-type') != corpse.getAttribute('block-type')) {
-		corpse.replaceWith(body);
-	} else {
-		this.transition = new Page.Transition(this, body, corpse);
-	}
-};
-
-Page.setup(state => {
-	if (state.transition) {
-		if (state.transition.ok) {
-			state.finish(() => {
-				return state.transition.start();
-			});
-		} else {
-			state.transition.end();
-		}
-	}
-});
-
-Page.Transition = class {
+class Transition {
 	static event(name) {
 		const low = name.toLowerCase();
 		const caps = name[0].toUpperCase() + low.substring(1);
@@ -144,9 +122,32 @@ Page.Transition = class {
 		this.root.scrollLeft = left;
 		delete this.from;
 		delete this.to;
-		delete this.state.transition;
+		delete this.state.scope.transition;
 		delete this.state;
+	}
+}
+
+Page.constructor.prototype.mergeBody = function (body, corpse) {
+	if (this.referrer.scope.transition) {
+		this.referrer.scope.transition.end();
+	}
+	if (body.isContentEditable || body.getAttribute('block-type') != corpse.getAttribute('block-type')) {
+		corpse.replaceWith(body);
+	} else {
+		this.scope.transition = new Transition(this, body, corpse);
 	}
 };
 
+Page.setup(state => {
+	const tr = state.scope.transition;
+	if (tr) {
+		if (tr.ok) {
+			state.finish(() => {
+				return tr.start();
+			});
+		} else {
+			tr.end();
+		}
+	}
+});
 

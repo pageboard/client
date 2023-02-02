@@ -40,7 +40,7 @@ class HTMLCustomConsentElement extends HTMLFormElement {
 		if (consent == null) {
 			return;
 		}
-		Page.storage.set('consent', consent);
+		state.scope.storage.set('consent', consent);
 		state.scope.$consent = consent;
 		state.runChain('consent');
 	}
@@ -69,7 +69,7 @@ Page.ready(() => {
 
 Page.constructor.prototype.consent = function (fn) {
 	const initial = this.scope.$consent === undefined;
-	let consent = Page.storage.get('consent');
+	let consent = this.scope.storage.get('consent');
 	if (consent == null && initial) consent = undefined;
 	this.scope.$consent = consent;
 	this.chain('consent', fn);
