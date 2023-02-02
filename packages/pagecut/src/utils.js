@@ -12,13 +12,6 @@ export default class Utils {
 	}
 
 	setDom(dom) {
-		if (dom.nodeType == Node.DOCUMENT_FRAGMENT_NODE) {
-			const frag = dom.ownerDocument.createElement('div');
-			while (dom.firstChild) {
-				frag.appendChild(dom.firstChild);
-			}
-			dom = frag;
-		}
 		const state = this.view.state;
 		const tr = state.tr;
 		this.insertTr(tr, dom, new AllSelection(tr.doc));
@@ -169,6 +162,11 @@ export default class Utils {
 	}
 
 	parse(dom, $pos) {
+		if (dom.nodeType != Node.DOCUMENT_FRAGMENT_NODE) {
+			const frag = dom.ownerDocument.createDocumentFragment();
+			frag.appendChild(dom);
+			dom = frag;
+		}
 		return this.view.parseFromClipboard(dom, $pos);
 	}
 
