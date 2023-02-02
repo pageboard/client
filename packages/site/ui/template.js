@@ -286,7 +286,7 @@ HTMLScriptElement.prototype.prerender = function () {
 	return tmpl;
 };
 
-Page.constructor.prototype.fuse = function (data, scope) {
+Object.getPrototypeOf(Page.constructor).prototype.fuse = function (data, scope) {
 	this.pathname = this.pathname.fuse(data, scope);
 	const q = this.query;
 	for (const [key, val] of Object.entries(q)) {
