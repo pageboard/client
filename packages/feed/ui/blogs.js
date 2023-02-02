@@ -43,7 +43,7 @@ class HTMLElementBlogs extends VirtualHTMLElement {
 					query: {...state.query, version }
 				});
 			} else {
-				Page.serialize = (state) => this.rss(state);
+				Page.constructor.serialize = (state) => this.rss(state);
 			}
 		} else {
 			const link = Page.format({

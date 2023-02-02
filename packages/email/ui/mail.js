@@ -1,4 +1,4 @@
-Page.serialize = function() {
+Page.constructor.serialize = function() {
 	const doc = document;
 	for (const node of doc.querySelectorAll('script')) {
 		node.remove();
