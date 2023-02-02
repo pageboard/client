@@ -12,8 +12,8 @@ export default class Utils {
 	}
 
 	setDom(dom) {
-		if (dom.nodeType != Node.DOCUMENT_FRAGMENT_NODE) {
-			const frag = dom.ownerDocument.createDocumentFragment();
+		if (dom.nodeType == Node.DOCUMENT_FRAGMENT_NODE) {
+			const frag = dom.ownerDocument.createElement('div');
 			while (dom.firstChild) {
 				frag.appendChild(dom.firstChild);
 			}

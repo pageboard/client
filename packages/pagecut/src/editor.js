@@ -218,9 +218,6 @@ class Editor extends View.EditorView {
 		return this.blocks;
 	}
 	parseFromClipboard(html, $pos) {
-		if (typeof html != "string") {
-			html = this.utils.serializeHTML(html);
-		}
 		// eslint-disable-next-line no-underscore-dangle
 		return View.__parseFromClipboard(this, null, html, null, $pos);
 	}
