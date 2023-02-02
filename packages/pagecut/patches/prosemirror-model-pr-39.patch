@@ -1,5 +1,5 @@
---- index.js.orig	2023-01-20 03:09:13.458082326 +0100
-+++ index.js	2023-01-22 17:05:07.628714154 +0100
+--- index.js.orig	2023-02-02 11:31:05.190912936 +0100
++++ index.js	2023-02-02 13:45:33.245247337 +0100
 @@ -2539,7 +2539,8 @@
              let rule = this.tags[i];
              if (matches(dom, rule.tag) &&
@@ -10,7 +10,7 @@
                  if (rule.getAttrs) {
                      let result = rule.getAttrs(dom);
                      if (result === false)
-@@ -3104,6 +3105,41 @@
+@@ -3104,6 +3105,45 @@
          };
          return match(parts.length - 1, this.open);
      }
@@ -27,24 +27,28 @@
 +        const option = this.options.context;
 +        const useRoot = !this.isOpen && (!option || option.parent.type == this.nodes[0].type);
 +        const minDepth = -(option ? option.depth + 1 : 0) + (useRoot ? 0 : 1);
++        const nextMatch = function(contentMatch) {
++            if (contentMatch.matchType(type)) return true;
++            if (!contentMatch.validEnd) {
++                for (const next of contentMatch.next) {
++                    const hasMatch = nextMatch(next.next);
++                    if (hasMatch) return true;
++                }
++            }
++            return false;
++        };
 +        const match = (depth) => {
-+            const next = depth > 0 || (depth == 0 && useRoot) ? this.nodes[depth]
++            let next = depth > 0 || (depth == 0 && useRoot) ? this.nodes[depth]
 +                : option && depth >= minDepth ? option.node(depth - minDepth)
 +                : null;
 +            if (!next) return false;
-+            if (next.match && next.match.matchType(type)) return true;
-+            if (next.type) {
-+                const nextMatch = function(next) {
-+                    const { contentMatch } = next.type;
-+                    if (contentMatch.matchType(type)) return true;
-+                    if (!contentMatch.validEnd) {
-+                        return nextMatch(contentMatch.next[contentMatch.next.length - 1]);
-+                    }
-+                    return false;
-+                };
-+                const hasMatch = nextMatch(next);
-+                if (hasMatch) return hasMatch;
++            if (!next.match) {
++                next = next.type.contentMatch;
++            } else {
++                next = next.match;
 +            }
++            const hasMatch = nextMatch(next);
++            if (hasMatch) return hasMatch;
 +            return match(depth - 1);
 +        };
 +        return match(this.open);
