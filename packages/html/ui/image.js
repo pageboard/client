@@ -95,8 +95,8 @@ class HTMLElementImage extends VirtualHTMLElement {
 		if (this.currentSrc != this.options.src) {
 			this.classList.remove('error');
 		}
-		this.dataset.width = this.constructor.defaultWidth;
-		this.dataset.height = this.constructor.defaultHeight;
+		this.dataset.width = this.constructor.defaultWidth || "";
+		this.dataset.height = this.constructor.defaultHeight || "";
 		if (this.options.src) {
 			const loc = Page.parse(this.options.src);
 			const meta = state.scope.$hrefs?.[loc.pathname];
@@ -106,8 +106,8 @@ class HTMLElementImage extends VirtualHTMLElement {
 			}
 		}
 		const { w, h } = this.dimensions;
-		this.image.width = w || this.dataset.width;
-		this.image.height = h || this.dataset.height;
+		if (w) this.image.width = w || this.dataset.width;
+		if (h) this.image.height = h || this.dataset.height;
 		if (!this.currentSrc) {
 			this.placeholder();
 		}
@@ -195,9 +195,6 @@ class HTMLElementInlineImage extends HTMLImageElement {
 		dataSrc: null,
 		dataCrop: null
 	};
-
-	static defaultWidth = 40;
-	static defaultHeight = 30;
 
 	get image() {
 		return this;
