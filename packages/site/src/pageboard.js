@@ -5,7 +5,9 @@ import { render, install } from './render';
 import * as equivs from './equivs';
 import Scope from './scope';
 import VHE from './VirtualHTMLElement';
+import { Deferred } from 'class-deferred';
 
+window.Deferred = Deferred;
 window.VirtualHTMLElement ||= VHE;
 
 const baseElements = window.Pageboard?.elements ?? {

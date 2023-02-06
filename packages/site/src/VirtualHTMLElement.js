@@ -13,12 +13,11 @@ export default class VirtualHTMLElement extends HTMLElement {
 		if (cla.init) cla.init();
 
 		monkeyPatchAll(cla.prototype, {
-			attributeChangedCallback(name, src, dst, ns) {
+			async attributeChangedCallback(name, src, dst, ns) {
 				if (src !== dst && this.patch) {
 					if (!Object.hasOwnProperty.call(this.constructor, 'defaults') || this.options) {
-						Promise.resolve()
-							.then(() => Page.patch(this))
-							.then(() => Page.paint(this));
+						await Page.patch(this);
+						await Page.paint(this);
 					}
 				}
 			},

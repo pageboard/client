@@ -1,8 +1,9 @@
-const MixinMedia = {
+class HTMLElementMedia {
+	#defer;
+
 	init() {
-		this.promise = Promise.resolve();
-		this.promise.done = function() {};
-	},
+		this.#defer = new Deferred();
+	}
 	patch(state) {
 		this.classList.remove('error', 'loading');
 		const loc = Page.parse(this.options.src);
@@ -10,7 +11,7 @@ const MixinMedia = {
 		if (!meta || !meta.width || !meta.height) return;
 		this.width = meta.width;
 		this.height = meta.height;
-	},
+	}
 	reveal(state) {
 		const curSrc = this.options.src;
 		if (curSrc != this.currentSrc) {
@@ -22,21 +23,21 @@ const MixinMedia = {
 			this.setAttribute('src', curSrc);
 		}
 		if (this.isContentEditable) this.pause();
-		return this.promise;
-	},
+		return this.#defer;
+	}
 	handleClick(e) {
 		if (this.isContentEditable) e.preventDefault();
-	},
+	}
 	captureLoad() {
-		this.promise.done();
+		this.#defer.resolve();
 		this.classList.remove('loading');
-	},
+	}
 	captureError() {
-		this.promise.done();
+		this.#defer.resolve();
 		this.classList.remove('loading');
 		this.classList.add('error');
 	}
-};
+}
 
 class HTMLElementVideo extends HTMLVideoElement {
 	constructor() {
@@ -47,7 +48,8 @@ class HTMLElementVideo extends HTMLVideoElement {
 		dataSrc: null
 	};
 }
-Object.assign(HTMLElementVideo.prototype, MixinMedia);
+VirtualHTMLElement.inherits(HTMLElementVideo, HTMLElementMedia);
+VirtualHTMLElement.define('element-video', HTMLElementVideo, 'video');
 
 class HTMLElementAudio extends HTMLAudioElement {
 	constructor() {
@@ -58,7 +60,5 @@ class HTMLElementAudio extends HTMLAudioElement {
 		dataSrc: null
 	};
 }
-Object.assign(HTMLElementAudio.prototype, MixinMedia);
-
-VirtualHTMLElement.define('element-video', HTMLElementVideo, 'video');
+VirtualHTMLElement.inherits(HTMLElementAudio, HTMLElementMedia);
 VirtualHTMLElement.define('element-audio', HTMLElementAudio, 'audio');

@@ -24,11 +24,11 @@ window.Pageboard.InfiniteScroll = class {
 		});
 	}
 	waitRepaint() {
-		return new Promise(resolve => {
-			window.requestAnimationFrame(() => {
-				setTimeout(resolve, 0);
-			});
+		const d = new Deferred();
+		window.requestAnimationFrame(() => {
+			setTimeout(d.resolve, 0);
 		});
+		return d;
 	}
 	start() {
 		this.active = true;

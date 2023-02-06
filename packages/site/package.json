@@ -20,6 +20,7 @@
   "devDependencies": {
     "@pageboard/pagecut": "^0.11.1",
     "@ungap/custom-elements": "^1.1.1",
+    "class-deferred": "^1.0.1",
     "debounce": "^1.2.1",
     "matchdom": "^5.10.8",
     "postinstall": "^0.8.0",

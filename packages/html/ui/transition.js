@@ -21,6 +21,8 @@ Page.init(state => {
 });
 
 class Transition {
+	#defer;
+
 	static event(name) {
 		const low = name.toLowerCase();
 		const caps = name[0].toUpperCase() + low.substring(1);
@@ -57,37 +59,35 @@ class Transition {
 		from.after(to);
 	}
 	start() {
-		return new Promise(resolve => {
-			this.resolve = resolve;
-			if (!this.ok) {
-				this.destroy();
-			} else {
-				setTimeout(() => {
-					this.root.addEventListener(this.event, this);
-					this.root.classList.add('transitioning');
-				});
-				this.safe = setTimeout(() => {
-					console.warn("Transition timeout");
-					this.end();
-				}, 4000);
-			}
-		});
+		this.#defer = new Deferred();
+		if (!this.ok) {
+			this.destroy();
+		} else {
+			setTimeout(() => {
+				this.root.addEventListener(this.event, this);
+				this.root.classList.add('transitioning');
+			});
+			this.safe = setTimeout(() => {
+				console.warn("Transition timeout");
+				this.end();
+			}, 4000);
+		}
 	}
 	cancel() {
 		this.ok = false;
 		this.root.classList.remove('transitioning');
-		if (this.resolve) {
-			this.resolve();
-			delete this.resolve;
+		if (this.#defer) {
+			this.#defer.resolve();
+			this.#defer = null;
 		}
 	}
 	end() {
 		this.ok = false;
 		this.from.remove();
 		this.destroy();
-		if (this.resolve) {
-			this.resolve();
-			delete this.resolve;
+		if (this.#defer) {
+			this.#defer.resolve();
+			this.#defer = null;
 		}
 	}
 	scrollTo(obj) {

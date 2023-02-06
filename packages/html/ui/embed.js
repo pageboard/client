@@ -4,18 +4,15 @@ class HTMLElementEmbed extends VirtualHTMLElement {
 		hash: null
 	};
 	static revealRatio = 0.2;
+	#defer;
+
 	init() {
-		this.promise = Promise.resolve();
-		this.promise.done = function() {};
+		this.#defer = new Deferred();
 	}
 	reveal(state) {
-		let done;
-		this.promise = new Promise(resolve => done = resolve);
-		this.promise.done = done;
 		this.classList.add('waiting');
-
 		state.consent(this);
-		return this.promise;
+		return this.#defer;
 	}
 	consent(state) {
 		const consent = state.scope.$consent;
@@ -25,7 +22,7 @@ class HTMLElementEmbed extends VirtualHTMLElement {
 		this.iframe = this.querySelector('iframe');
 		if (consent != "yes") {
 			if (this.iframe) this.iframe.remove();
-			this.promise.done();
+			this.#defer.resolve();
 			return;
 		}
 		if (!this.iframe) {
@@ -52,18 +49,18 @@ class HTMLElementEmbed extends VirtualHTMLElement {
 					this.iframe.setAttribute('src', this.currentSrc);
 				}
 			}
-			this.promise.done();
+			this.#defer.resolve();
 		}
 	}
 	captureClick(e, state) {
 		if (this.matches('.denied')) state.reconsent();
 	}
 	captureLoad() {
-		this.promise.done();
+		this.#defer.resolve();
 		this.classList.remove('loading');
 	}
 	captureError() {
-		this.promise.done();
+		this.#defer.resolve();
 		this.classList.add('error');
 	}
 	handleAllMessage(e, state) {

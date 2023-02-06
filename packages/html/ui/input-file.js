@@ -1,6 +1,6 @@
 class HTMLElementInputFile extends HTMLInputElement {
 	#xhr;
-	#promise;
+	#defer;
 	#defaultValue;
 
 	/* Since input[type=file] does not allow setting "value" property,
@@ -55,7 +55,7 @@ class HTMLElementInputFile extends HTMLInputElement {
 	}
 
 	presubmit() {
-		if (this.#promise) return this.#promise;
+		if (this.#defer) return this.#defer;
 		if (!this.files.length) return Promise.resolve();
 		const field = this.closest('.field');
 		field.classList.remove('success', 'error');
@@ -65,66 +65,65 @@ class HTMLElementInputFile extends HTMLInputElement {
 		}
 		track(0);
 		field.classList.add('loading');
-		const p = new Promise((resolve, reject) => {
-			const fail = (err) => {
-				field.classList.add('error');
-				field.classList.remove('loading');
-				this.#xhr = null;
-				reject(err);
-				this.#promise = null;
-			};
-			const pass = (obj) => {
-				if (!obj.items || obj.items.length == 0) return fail(new Error("File rejected"));
-				const val = obj.items[0];
-				this.value = val;
-				field.classList.add('success');
-				field.classList.remove('loading');
-				this.#xhr = null;
-				resolve();
-				this.#promise = null;
-			};
-			if (this.files.length == 0) return resolve(); // or reject ?
+		this.#defer = new Deferred();
 
-			const fd = new FormData();
-			fd.append("files", this.files[0]);
+		const fail = (err) => {
+			field.classList.add('error');
+			field.classList.remove('loading');
+			this.#xhr = null;
+			this.#defer.reject(err);
+			this.#defer = null;
+		};
+		const pass = (obj) => {
+			if (!obj.items || obj.items.length == 0) return fail(new Error("File rejected"));
+			const val = obj.items[0];
+			this.value = val;
+			field.classList.add('success');
+			field.classList.remove('loading');
+			this.#xhr = null;
+			this.#defer.resolve();
+			this.#defer = null;
+		};
+		if (this.files.length == 0) return this.#defer.resolve(); // or reject ?
 
-			const xhr = new XMLHttpRequest();
+		const fd = new FormData();
+		fd.append("files", this.files[0]);
 
-			xhr.upload.addEventListener("progress", (e) => {
-				if (e.lengthComputable) {
-					let percent = Math.round((e.loaded * 100) / e.total);
-					if (percent >= 100) percent = 99; // only load event can reach 100
-					track(percent);
-				}
-			});
+		const xhr = new XMLHttpRequest();
 
-			xhr.addEventListener('load', () => {
-				track(100);
-				try {
-					pass(JSON.parse(xhr.responseText));
-				} catch (ex) {
-					fail(ex);
-				}
-			});
-
-			xhr.addEventListener('error', (e) => {
-				if (xhr.status == 0) return fail("Connection error");
-				const msg = xhr.statusText || "Connection error";
-				const err = new Error(msg);
-				err.statusCode = xhr.status;
-				fail(err);
-			});
-			try {
-				xhr.open("POST", `/.api/upload/${this.id}`, true);
-				xhr.setRequestHeader('Accept', "application/json; q=1.0");
-				xhr.send(fd);
-				this.#xhr = xhr;
-			} catch (err) {
-				fail(err);
+		xhr.upload.addEventListener("progress", (e) => {
+			if (e.lengthComputable) {
+				let percent = Math.round((e.loaded * 100) / e.total);
+				if (percent >= 100) percent = 99; // only load event can reach 100
+				track(percent);
 			}
 		});
-		this.#promise = p;
-		return p;
+
+		xhr.addEventListener('load', () => {
+			track(100);
+			try {
+				pass(JSON.parse(xhr.responseText));
+			} catch (ex) {
+				fail(ex);
+			}
+		});
+
+		xhr.addEventListener('error', (e) => {
+			if (xhr.status == 0) return fail("Connection error");
+			const msg = xhr.statusText || "Connection error";
+			const err = new Error(msg);
+			err.statusCode = xhr.status;
+			fail(err);
+		});
+		try {
+			xhr.open("POST", `/.api/upload/${this.id}`, true);
+			xhr.setRequestHeader('Accept', "application/json; q=1.0");
+			xhr.send(fd);
+			this.#xhr = xhr;
+		} catch (err) {
+			fail(err);
+		}
+		return this.#defer;
 	}
 }
 

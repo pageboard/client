@@ -7,6 +7,8 @@ class HTMLElementImage extends VirtualHTMLElement {
 	static defaultWidth = 240;
 	static defaultHeight = 180;
 
+	#defer;
+
 	static getZoom({ w, h, rw, rh, fit }) {
 		let z = 100;
 		if (!rw && !rh) return z;
@@ -32,8 +34,7 @@ class HTMLElementImage extends VirtualHTMLElement {
 		return { w, h };
 	}
 	init() {
-		this.promise = Promise.resolve();
-		this.promise.done = function () { };
+		this.#defer = new Deferred();
 	}
 	findClass(list) {
 		return list.find(name => this.matches(`.${name}`)) || list[0];
@@ -156,27 +157,24 @@ class HTMLElementImage extends VirtualHTMLElement {
 			const rh = rect.height;
 			if (rw == 0 && rh == 0) {
 				// don't show
-				return this.promise;
+				return this.#defer;
 			}
 			loc.query.rs = "z-" + HTMLElementImage.getZoom({ w, h, rw, rh, fit });
 		}
 		const curSrc = loc.toString();
 		if (curSrc != this.currentSrc) {
 			this.classList.add('loading');
-			let done;
-			this.promise = new Promise(resolve => done = resolve);
-			this.promise.done = done;
 			img.setAttribute('src', curSrc);
 		}
-		return this.promise;
+		return this.#defer;
 	}
 	captureLoad() {
-		this.promise?.done();
+		this.#defer.resolve();
 		this.classList.remove('loading');
 		this.fix(this.image);
 	}
 	captureError() {
-		this.promise?.done();
+		this.#defer.resolve();
 		this.classList.remove('loading');
 		this.classList.add('error');
 		this.placeholder(true);

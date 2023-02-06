@@ -15,7 +15,7 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 		return this.fetch(state);
 	}
 
-	fetch(state) {
+	async fetch(state) {
 		// FIXME remove this heresy
 		const disabled = (this.getAttribute('disabled') || '').fuse({
 			$query: state.query
@@ -28,55 +28,50 @@ class HTMLElementTemplate extends VirtualHTMLElement {
 		// redirections are only allowed to use collected query params
 		const data = { $query };
 
-		return Promise.resolve().then(() => {
-			this.toggleMessages();
-			if (missings) {
-				this.ownView.textContent = '';
-				data.$status = 400;
-				data.$statusText = 'Missing Query Parameters';
-			} else {
-				if (this.#auto) {
-					$query[this.dataset.pagination] = this.dataset.stop;
-				}
-				const loader = action
-					? Pageboard.fetch('get', action, $query)
-					: Promise.resolve();
-				this.loading = true;
-				if (action) this.classList.add('loading');
-				return Pageboard.bundle(loader, state).then(res => {
-					if (res) {
-						data.$response = res;
-						data.$status = res.status;
-						data.$statusText = res.statusText;
-					}
-					this.render(res, state);
-				});
+
+		this.toggleMessages();
+		if (missings) {
+			this.ownView.textContent = '';
+			data.$status = 400;
+			data.$statusText = 'Missing Query Parameters';
+		} else try {
+			if (this.#auto) {
+				$query[this.dataset.pagination] = this.dataset.stop;
 			}
-		}).catch(err => {
+			const res = action ? await Pageboard.fetch('get', action, $query) : null;
+			this.loading = true;
+			if (action) this.classList.add('loading');
+			await Pageboard.bundle(state, res);
+			if (res) {
+				data.$response = res;
+				data.$status = res.status;
+				data.$statusText = res.statusText;
+			}
+			this.render(res, state);
+		} catch(err) {
 			data.$status = -1;
 			// eslint-disable-next-line no-console
 			console.error("Error building", err);
-		}).then(() => {
-			this.classList.remove('loading');
-			this.loading = false;
-			if (data.$status == null) return;
-			const redirect = this.getRedirect(data.$status);
-			if (!redirect) {
-				if (this.toggleMessages(data.$status)) {
-					// report statusCode because it is meant to be shown
-					if (data.$status > (state.status || 0)) {
-						state.status = data.$status;
-						state.statusText = data.$statusText;
-					}
+		}
+		this.classList.remove('loading');
+		this.loading = false;
+		if (data.$status == null) return;
+		const redirect = this.getRedirect(data.$status);
+		if (!redirect) {
+			if (this.toggleMessages(data.$status)) {
+				// report statusCode because it is meant to be shown
+				if (data.$status > (state.status || 0)) {
+					state.status = data.$status;
+					state.statusText = data.$statusText;
 				}
-				return;
 			}
+			return;
+		}
 
-			const loc = Page.parse(redirect).fuse(data, state.scope);
-			state.status = 301;
-			state.statusText = `Form Redirection ${data.$status}`;
-			state.location = loc.toString();
-		});
+		const loc = Page.parse(redirect).fuse(data, state.scope);
+		state.status = 301;
+		state.statusText = `Form Redirection ${data.$status}`;
+		state.location = loc.toString();
 	}
 
 	getRedirect(status) {

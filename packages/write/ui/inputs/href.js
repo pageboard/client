@@ -262,68 +262,65 @@ Pageboard.schemaHelpers.href = class Href {
 		this.renderList(this.list);
 	}
 
-	uploadStart() {
+	async uploadStart() {
 		// TODO is it possible to upload multiple files in separate steps
 		// to avoid reaching the max body server upload limit ?
 		const input = document.createElement('input');
 		input.type = "file";
 		input.multiple = true;
-		return new Promise((resolve, reject) => {
-			input.addEventListener('change', () => {
-				const fd = new FormData();
-				if (input.files.length == 0) return resolve();
-				for (let i = 0; i < input.files.length; i++) {
-					fd.append("files", input.files[i]);
-				}
-				const xhr = new XMLHttpRequest();
-				xhr.open("POST", "/.api/upload", true);
-				xhr.setRequestHeader('Accept', "application/json; q=1.0");
-				const tracker = this.uploading();
-				tracker(0);
-
-				xhr.upload.addEventListener("progress", (e) => {
-					if (e.lengthComputable) {
-						let percent = Math.round((e.loaded * 100) / e.total);
-						if (percent >= 100) percent = 99; // only load event can reach 100
-						tracker(percent);
-					}
-				});
-
-				xhr.addEventListener('load', () => {
-					tracker(100);
-					let response;
-					try {
-						response = JSON.parse(xhr.responseText);
-					} catch (ex) {
-						reject(ex);
-						return;
-					}
-					resolve(response);
-				});
-
-				xhr.addEventListener('error', (e) => {
-					if (xhr.status == 0) return tracker("Connection error");
-					const msg = xhr.statusText || "Connection error";
-					const err = new Error(msg);
-					err.statusCode = xhr.status;
-					tracker(msg + '(' + xhr.status + ')');
-					reject(err);
-				});
-
-				xhr.send(fd);
-			});
-			input.value = null;
-			input.click();
-		}).then(obj => {
-			const files = Array.isArray(obj) ? obj : obj?.items ?? [];
-			let p = Promise.resolve();
-			for (const file of files) {
-				p = p.then(() => this.insert(file));
+		const defer = new Deferred();
+		input.addEventListener('change', () => {
+			const fd = new FormData();
+			if (input.files.length == 0) return defer.resolve();
+			for (let i = 0; i < input.files.length; i++) {
+				fd.append("files", input.files[i]);
 			}
-			return p.then(() => {
-				if (files.length == 1) Pageboard.trigger(this.input, 'change');
+			const xhr = new XMLHttpRequest();
+			xhr.open("POST", "/.api/upload", true);
+			xhr.setRequestHeader('Accept', "application/json; q=1.0");
+			const tracker = this.uploading();
+			tracker(0);
+
+			xhr.upload.addEventListener("progress", (e) => {
+				if (e.lengthComputable) {
+					let percent = Math.round((e.loaded * 100) / e.total);
+					if (percent >= 100) percent = 99; // only load event can reach 100
+					tracker(percent);
+				}
 			});
+
+			xhr.addEventListener('load', () => {
+				tracker(100);
+				let response;
+				try {
+					response = JSON.parse(xhr.responseText);
+				} catch (ex) {
+					defer.reject(ex);
+					return;
+				}
+				defer.resolve(response);
+			});
+
+			xhr.addEventListener('error', (e) => {
+				if (xhr.status == 0) return tracker("Connection error");
+				const msg = xhr.statusText || "Connection error";
+				const err = new Error(msg);
+				err.statusCode = xhr.status;
+				tracker(msg + '(' + xhr.status + ')');
+				defer.reject(err);
+			});
+
+			xhr.send(fd);
 		});
+		input.value = null;
+		input.click();
+
+		const obj = await defer;
+		const files = Array.isArray(obj) ? obj : obj?.items ?? [];
+		for (const file of files) {
+			await this.insert(file);
+		}
+		if (files.length == 1) Pageboard.trigger(this.input, 'change');
 	}
 
 	uploadStop() { }
@@ -350,37 +347,34 @@ Pageboard.schemaHelpers.href = class Href {
 		};
 	}
 
-	remove(href) {
-		return Pageboard.uiLoad(this.node, Pageboard.fetch('delete', '/.api/href', {
+	async remove(href) {
+		const obj = await Pageboard.uiLoad(this.node, Pageboard.fetch('delete', '/.api/href', {
 			url: href
-		})).then(obj => {
-			this.cache([obj]);
-			this.list = this.list.filter(obj => obj.url != href);
-		});
+		}));
+		this.cache([obj]);
+		this.list = this.list.filter(obj => obj.url != href);
 	}
 
-	get(href) {
-		const obj = Href.cache[Href.normUrl(href)];
-		if (obj) return Promise.resolve(obj);
-		return Pageboard.uiLoad(this.node, Pageboard.fetch('get', '/.api/hrefs', {
+	async get(href) {
+		const obj = Href.cache[Href.normUrl(href)] ?? await Pageboard.uiLoad(this.node, Pageboard.fetch('get', '/.api/hrefs', {
 			url: href
-		})).then(obj => obj.data);
+		}));
+		return obj.data;
 	}
 
-	insert(url) {
+	async insert(url) {
 		url = Href.normUrl(url);
-		return Pageboard.uiLoad(
+		const result = await Pageboard.uiLoad(
 			this.node.querySelector(`[data-action]`),
 			Pageboard.fetch('post', '/.api/href', {
 				url: url
 			})
-		).then(result => {
-			this.cache([result]);
-			this.input.value = result.url;
-			this.list.unshift(result);
-			this.list.rendered = false;
-			this.renderList();
-		});
+		);
+		this.cache([result]);
+		this.input.value = result.url;
+		this.list.unshift(result);
+		this.list.rendered = false;
+		this.renderList();
 	}
 
 	renderList(list, container) {

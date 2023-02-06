@@ -1,49 +1,45 @@
+import { Deferred } from 'class-deferred';
+
 function load(node, head) {
+	const d = new Deferred();
 	const live = node.ownerDocument == document;
-	return new Promise((resolve, reject) => {
-		if (live) {
-			node.addEventListener('load', resolve);
-			node.addEventListener('error', () => {
-				const err = new Error(`Cannot load ${node.src || node.href}`);
-				err.code = 404;
-				reject(err);
-			});
-		}
-		const cursel = node.tagName == "LINK" ? 'script' : 'script:nth-last-child(1) + *';
-		const cursor = head.querySelector(cursel);
-		head.insertBefore(node, cursor);
-		if (!live) resolve();
-	});
+	if (live) {
+		node.addEventListener('load', d.resolve);
+		node.addEventListener('error', () => {
+			const err = new Error(`Cannot load ${node.src || node.href}`);
+			err.code = 404;
+			d.reject(err);
+		});
+	}
+	const cursel = node.tagName == "LINK" ? 'script' : 'script:nth-last-child(1) + *';
+	const cursor = head.querySelector(cursel);
+	head.insertBefore(node, cursor);
+	if (!live) d.resolve();
+	return d;
 }
 
-export function meta(meta) {
-	let pr = Promise.resolve();
-	if (!meta) return pr;
+export async function meta(state, meta) {
+	if (!meta) return;
 	if (meta.elements) for (const [name, el] of Object.entries(meta.elements)) {
 		if (!Pageboard.elements[name]) Pageboard.elements[name] = el;
 	}
-	if (meta.schemas) pr = pr.then(() => {
-		return Promise.all(meta.schemas.map(schema => {
-			if (!Pageboard.cache[schema]) {
-				Pageboard.cache[schema] = Pageboard.load.js(schema);
-			}
-			return Pageboard.cache[schema];
-		}));
-	});
+	if (meta.schemas) await Promise.all(meta.schemas.map(schema => {
+		if (!Pageboard.cache[schema]) {
+			Pageboard.cache[schema] = Pageboard.load.js(schema);
+		}
+		return Pageboard.cache[schema];
+	}));
 
 	// additional resources - elements in group page usually do not have those
-	if (meta.stylesheets) pr = pr.then(() => {
-		return Promise.all(meta.stylesheets.map(url => {
-			return Pageboard.load.css(url);
-		}));
-	});
-	if (meta.scripts) pr = pr.then(() => {
-		return Promise.all(meta.scripts.map(url => {
-			return Pageboard.load.js(url);
-		}));
-	});
-
-	return pr;
+	if (meta.scripts) await Promise.all(
+		meta.scripts.map(url => Pageboard.load.js(url))
+	);
+	// cannot wait for these
+	if (meta.stylesheets) {
+		state.setup(() => Promise.all(
+			meta.stylesheets.map(url => Pageboard.load.css(url))
+		));
+	}
 }
 
 function getHead(scope) {
@@ -51,11 +47,11 @@ function getHead(scope) {
 	return doc.querySelector('head') || document.head;
 }
 
-export function js(url, scope) {
+export async function js(url, scope) {
 	const head = getHead(scope);
 	const doc = head.ownerDocument;
 	if (head.querySelector(`script[src="${url}"]`)) {
-		return Promise.resolve();
+		return;
 	}
 	const node = doc.createElement('script');
 	node.async = false;
@@ -64,11 +60,11 @@ export function js(url, scope) {
 	return load(node, head);
 }
 
-export function css(url, scope) {
+export async function css(url, scope) {
 	const head = getHead(scope);
 	const doc = head.ownerDocument;
 	if (head.querySelector(`link[rel="stylesheet"][href="${url}"]`)) {
-		return Promise.resolve();
+		return;
 	}
 	const node = doc.createElement('link');
 	node.rel = "stylesheet";
