@@ -127,5 +127,5 @@ class HTMLElementInputFile extends HTMLInputElement {
 	}
 }
 
-VirtualHTMLElement.define('element-input-file', HTMLElementInputFile, 'input');
+Page.define('element-input-file', HTMLElementInputFile, 'input');
 

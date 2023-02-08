@@ -1,5 +1,5 @@
 
-class HTMLElementInclude extends VirtualHTMLElement {
+class HTMLElementInclude extends Page.Element {
 	patch(state) {
 		if (this.loading) return;
 		return this.fetch(state);
@@ -24,5 +24,5 @@ Page.ready(() => {
 	};
 	HTMLElementInclude.prototype.fetch = Cla.prototype.fetch;
 	HTMLElementInclude.prototype.getRedirect = Cla.prototype.getRedirect;
-	VirtualHTMLElement.define('element-include', HTMLElementInclude);
+	Page.define('element-include', HTMLElementInclude);
 });

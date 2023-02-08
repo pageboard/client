@@ -1,4 +1,4 @@
-class HTMLElementCarousel extends VirtualHTMLElement {
+class HTMLElementCarousel extends Page.Element {
 	static defaults = {
 		wrapAround: false,
 		groupCells: false,
@@ -159,7 +159,7 @@ class HTMLElementCarousel extends VirtualHTMLElement {
 	}
 }
 
-class HTMLElementCarouselCell extends VirtualHTMLElement {
+class HTMLElementCarouselCell extends Page.Element {
 	static defaults = {
 		width: null,
 		height: null
@@ -174,8 +174,8 @@ class HTMLElementCarouselCell extends VirtualHTMLElement {
 	}
 }
 
-VirtualHTMLElement.define('element-carousel-cell', HTMLElementCarouselCell);
-VirtualHTMLElement.define('element-carousel', HTMLElementCarousel);
+Page.define('element-carousel-cell', HTMLElementCarouselCell);
+Page.define('element-carousel', HTMLElementCarousel);
 
 Page.setup(state => {
 	function modabs(i, l) {

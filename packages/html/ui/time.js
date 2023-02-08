@@ -19,4 +19,4 @@ class HTMLElementTime extends HTMLTimeElement {
 	}
 }
 
-VirtualHTMLElement.define(`element-time`, HTMLElementTime, 'time');
+Page.define(`element-time`, HTMLElementTime, 'time');

@@ -1,4 +1,4 @@
-class HTMLInputMap extends VirtualHTMLElement {
+class HTMLInputMap extends Page.Element {
 	#proxy;
 	#observer;
 	#table;

@@ -351,5 +351,5 @@ class HTMLElementInputHTML extends HTMLTextAreaElement {
 	}
 }
 Page.ready(() => {
-	VirtualHTMLElement.define('element-input-html', HTMLElementInputHTML, 'textarea');
+	Page.define('element-input-html', HTMLElementInputHTML, 'textarea');
 });

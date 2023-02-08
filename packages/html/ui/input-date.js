@@ -70,4 +70,4 @@ class HTMLElementInputDate extends HTMLInputElement {
 	}
 }
 
-VirtualHTMLElement.define('element-input-date', HTMLElementInputDate, 'input');
+Page.define('element-input-date', HTMLElementInputDate, 'input');

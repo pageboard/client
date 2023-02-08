@@ -1,4 +1,4 @@
-class HTMLSocialElement extends VirtualHTMLElement {
+class HTMLSocialElement extends Page.Element {
 	static defaults = {
 		networks: (x) => (x || '').split(',').filter(x => Boolean(x)),
 		title: null,
@@ -49,5 +49,5 @@ class HTMLSocialElement extends VirtualHTMLElement {
 }
 
 Page.patch(
-	() => VirtualHTMLElement.define(`element-social`, HTMLSocialElement)
+	() => Page.define(`element-social`, HTMLSocialElement)
 );

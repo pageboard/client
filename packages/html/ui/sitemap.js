@@ -1,4 +1,4 @@
-class HTMLElementSitemap extends VirtualHTMLElement {
+class HTMLElementSitemap extends Page.Element {
 	static makeTree(tree, parent) {
 		let page = tree._;
 		if (page) {
@@ -73,6 +73,6 @@ class HTMLElementSitemap extends VirtualHTMLElement {
 }
 
 
-VirtualHTMLElement.define('element-sitemap', HTMLElementSitemap);
+Page.define('element-sitemap', HTMLElementSitemap);
 
 

@@ -47,4 +47,4 @@ class HTMLElementPagination extends HTMLAnchorElement {
 	}
 }
 
-VirtualHTMLElement.define('element-pagination', HTMLElementPagination, "a");
+Page.define('element-pagination', HTMLElementPagination, "a");

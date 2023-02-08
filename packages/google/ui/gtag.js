@@ -67,5 +67,5 @@ class HTMLElementGTMScript extends HTMLScriptElement {
 	}
 }
 Page.setup(
-	() => VirtualHTMLElement.define('element-gtm-script', HTMLElementGTMScript, "script")
+	() => Page.define('element-gtm-script', HTMLElementGTMScript, "script")
 );

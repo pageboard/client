@@ -1,4 +1,4 @@
-class HTMLElementTemplate extends VirtualHTMLElement {
+class HTMLElementTemplate extends Page.Element {
 	loading = false;
 	#observer;
 	#queue;
@@ -357,4 +357,4 @@ Page.constructor.prototype.templatesQuery = function (node) {
 	else return $query;
 };
 
-VirtualHTMLElement.define('element-template', HTMLElementTemplate);
+Page.define('element-template', HTMLElementTemplate);

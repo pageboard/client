@@ -1,4 +1,4 @@
-class HTMLElementSelect extends VirtualHTMLElement {
+class HTMLElementSelect extends Page.Element {
 	#observer;
 
 	static defaults = {
@@ -185,5 +185,5 @@ class HTMLElementSelect extends VirtualHTMLElement {
 	}
 }
 
-VirtualHTMLElement.define('element-select', HTMLElementSelect);
+Page.define('element-select', HTMLElementSelect);
 

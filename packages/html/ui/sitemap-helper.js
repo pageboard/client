@@ -1,4 +1,4 @@
-class HTMLElementSitepage extends VirtualHTMLElement {
+class HTMLElementSitepage extends Page.Element {
 	static defaults = {
 		url: null,
 		index: (x) => parseInt(x) || 0
@@ -62,6 +62,6 @@ class HTMLElementSitepage extends VirtualHTMLElement {
 }
 
 Page.setup(() => {
-	VirtualHTMLElement.define('element-sitepage', HTMLElementSitepage);
-	VirtualHTMLElement.extend('element-sitemap', HTMLElementSitepage);
+	Page.define('element-sitepage', HTMLElementSitepage);
+	Page.extend('element-sitemap', HTMLElementSitepage);
 });

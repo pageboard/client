@@ -48,8 +48,8 @@ class HTMLElementVideo extends HTMLVideoElement {
 		dataSrc: null
 	};
 }
-VirtualHTMLElement.inherits(HTMLElementVideo, HTMLElementMedia);
-VirtualHTMLElement.define('element-video', HTMLElementVideo, 'video');
+Page.inherits(HTMLElementVideo, HTMLElementMedia);
+Page.define('element-video', HTMLElementVideo, 'video');
 
 class HTMLElementAudio extends HTMLAudioElement {
 	constructor() {
@@ -60,5 +60,5 @@ class HTMLElementAudio extends HTMLAudioElement {
 		dataSrc: null
 	};
 }
-VirtualHTMLElement.inherits(HTMLElementAudio, HTMLElementMedia);
-VirtualHTMLElement.define('element-audio', HTMLElementAudio, 'audio');
+Page.inherits(HTMLElementAudio, HTMLElementMedia);
+Page.define('element-audio', HTMLElementAudio, 'audio');

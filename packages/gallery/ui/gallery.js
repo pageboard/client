@@ -1,4 +1,4 @@
-class HTMLElementGallery extends VirtualHTMLElement {
+class HTMLElementGallery extends Page.Element {
 	static defaults = {
 		mode: null
 	};
@@ -56,4 +56,4 @@ class HTMLElementGallery extends VirtualHTMLElement {
 	}
 }
 
-VirtualHTMLElement.define('element-gallery', HTMLElementGallery);
+Page.define('element-gallery', HTMLElementGallery);

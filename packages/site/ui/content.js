@@ -1,4 +1,4 @@
-class HTMLElementContent extends VirtualHTMLElement {
+class HTMLElementContent extends Page.Element {
 	static defaults = {
 		filter: null
 	};
@@ -20,6 +20,6 @@ class HTMLElementContent extends VirtualHTMLElement {
 	}
 }
 Page.ready(() => {
-	VirtualHTMLElement.define('element-content', HTMLElementContent);
+	Page.define('element-content', HTMLElementContent);
 });
 

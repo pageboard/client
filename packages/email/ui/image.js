@@ -70,4 +70,4 @@ class HTMLElementMailImage extends HTMLImageElement {
 	}
 }
 
-VirtualHTMLElement.define(`element-mail-img`, HTMLElementMailImage, 'img');
+Page.define(`element-mail-img`, HTMLElementMailImage, 'img');

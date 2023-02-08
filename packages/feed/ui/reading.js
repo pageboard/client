@@ -1,4 +1,4 @@
-class HTMLElementReading extends VirtualHTMLElement {
+class HTMLElementReading extends Page.Element {
 	static defaults = {
 		for: null,
 		speed: (x) => parseInt(x) || 200,
@@ -19,5 +19,5 @@ class HTMLElementReading extends VirtualHTMLElement {
 }
 
 Page.patch(
-	() => VirtualHTMLElement.define('element-reading', HTMLElementReading)
+	() => Page.define('element-reading', HTMLElementReading)
 );

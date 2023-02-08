@@ -1,4 +1,4 @@
-class HTMLElementBlogs extends VirtualHTMLElement {
+class HTMLElementBlogs extends Page.Element {
 	static defaults = {
 		topics: (x) => (x || '').split(',').filter(x => Boolean(x))
 	};
@@ -165,4 +165,4 @@ class HTMLElementBlogs extends VirtualHTMLElement {
 	}
 }
 
-Page.ready(() => VirtualHTMLElement.define('element-blogs', HTMLElementBlogs));
+Page.ready(() => Page.define('element-blogs', HTMLElementBlogs));

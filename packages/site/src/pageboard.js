@@ -5,12 +5,17 @@ import * as load from './load';
 import { render, install } from './render';
 import * as equivs from './equivs';
 import Scope from './scope';
-import VHE from './VirtualHTMLElement';
+import * as Class from './class';
 import { Deferred } from 'class-deferred';
 import 'window-page';
 
 window.Deferred = Deferred;
-window.VirtualHTMLElement ||= VHE;
+
+for (const key in Class) {
+	Object.defineProperty(Page.constructor.prototype, key, {
+		value: Class[key]
+	});
+}
 
 const baseElements = window.Pageboard?.elements ?? {
 	error: {
@@ -63,12 +68,19 @@ function initState(res, state) {
 	}
 }
 
-function bundle(loader, state) {
-	const scope = state.scope;
-	return loader.then(res => {
-		return load.meta(res.meta).then(() => res);
-	}).catch(err => {
-		return {
+async function bundle(state, res) {
+	const { scope } = state;
+	try {
+		await load.meta(state, res.meta);
+		initState(res, state);
+		const elts = scope.$elements;
+		for (const name of Object.keys(elts)) {
+			const el = elts[name];
+			if (!el.name) el.name = name;
+			install(el, scope);
+		}
+	} catch(err) {
+		Object.assign(res, {
 			meta: {
 				group: 'page'
 			},
@@ -81,17 +93,8 @@ function bundle(loader, state) {
 					stack: err.stack
 				}
 			}
-		};
-	}).then(res => {
-		initState(res, state);
-		const elts = scope.$elements;
-		for (const name of Object.keys(elts)) {
-			const el = elts[name];
-			if (!el.name) el.name = name;
-			install(el, scope);
-		}
-		return res;
-	});
+		});
+	}
 }
 
 Page.init(state => {
@@ -104,64 +107,62 @@ Page.init(state => {
 	else state.scope.update(state);
 });
 
-Page.patch(state => {
+Page.patch(async state => {
 	const metas = equivs.read();
 	if (metas.Status) {
 		state.status = parseInt(metas.Status);
 		state.statusText = metas.Status.substring(state.status.toString().length).trim();
 	}
-	Page.patch(state => {
-		state.finish(() => {
-			const query = {};
-			const extra = [];
-			const missing = [];
-			let status = 200, statusText = "OK";
-			let location;
-			if (!state.status) state.status = 200;
+	state.finish(() => state.finish(() => {
+		const query = {};
+		const extra = [];
+		const missing = [];
+		let status = 200, statusText = "OK";
+		let location;
+		if (!state.status) state.status = 200;
 
-			for (const key of Object.keys(state.query)) {
-				if (state.vars[key] === undefined) {
-					extra.push(key);
-				} else {
-					query[key] = state.query[key];
-				}
+		for (const key of Object.keys(state.query)) {
+			if (state.vars[key] === undefined) {
+				extra.push(key);
+			} else {
+				query[key] = state.query[key];
 			}
-			for (const key of Object.keys(state.vars)) {
-				if (state.vars[key] === false) missing.push(key);
-			}
-			if (extra.length > 0) {
-				// eslint-disable-next-line no-console
-				console.warn("Removing extra query parameters", extra);
-				status = 301;
-				statusText = 'Extra Query Parameters';
-				location = Page.format({ pathname: state.pathname, query });
-			} else if (missing.length > 0) {
-				status = 400;
-				statusText = 'Missing Query Parameters';
-			}
-			if (status > state.status) {
-				state.status = status;
-				state.statusText = statusText;
-				if (location) state.location = location;
-			}
+		}
+		for (const key of Object.keys(state.vars)) {
+			if (state.vars[key] === false) missing.push(key);
+		}
+		if (extra.length > 0) {
+			// eslint-disable-next-line no-console
+			console.warn("Removing extra query parameters", extra);
+			status = 301;
+			statusText = 'Extra Query Parameters';
+			location = Page.format({ pathname: state.pathname, query });
+		} else if (missing.length > 0) {
+			status = 400;
+			statusText = 'Missing Query Parameters';
+		}
+		if (status > state.status) {
+			state.status = status;
+			state.statusText = statusText;
+			if (location) state.location = location;
+		}
 
-			if (state.status) {
-				metas.Status = `${state.status} ${state.statusText || ""}`.trim();
+		if (state.status) {
+			metas.Status = `${state.status} ${state.statusText || ""}`.trim();
+		}
+		if (state.location) {
+			if (state.location != state.toString()) {
+				metas.Location = state.location;
+			} else {
+				console.warn("Not redirecting to same url", state.location);
 			}
-			if (state.location) {
-				if (state.location != state.toString()) {
-					metas.Location = state.location;
-				} else {
-					console.warn("Not redirecting to same url", state.location);
-				}
-			}
+		}
 
-			equivs.write(metas);
-		});
-	});
+		equivs.write(metas);
+	}));
 });
 
-Page.paint(state => {
+Page.paint(async state => {
 	if (state.scope.$write) return;
 	state.finish(() => {
 		const metas = equivs.read();

@@ -32,4 +32,4 @@ class HTMLElementBlogsHelper {
 	}
 }
 
-Page.setup(() => VirtualHTMLElement.extend('element-blogs', HTMLElementBlogsHelper));
+Page.setup(() => Page.extend('element-blogs', HTMLElementBlogsHelper));

@@ -1,4 +1,4 @@
-class HTMLElementQueryTags extends VirtualHTMLElement {
+class HTMLElementQueryTags extends Page.Element {
 	find(name, value) {
 		let nodes;
 		const formName = this.getAttribute('for');
@@ -103,6 +103,6 @@ class HTMLElementQueryTags extends VirtualHTMLElement {
 }
 
 Page.ready(() => {
-	VirtualHTMLElement.define('element-query-tags', HTMLElementQueryTags);
+	Page.define('element-query-tags', HTMLElementQueryTags);
 });
 

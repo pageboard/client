@@ -314,7 +314,7 @@ Page.ready(() => {
 		return Cla.prototype.getRedirect.call(this, status, this);
 	};
 
-	VirtualHTMLElement.define(`element-form`, HTMLCustomFormElement, 'form');
+	Page.define(`element-form`, HTMLCustomFormElement, 'form');
 });
 
 HTMLSelectElement.prototype.fill = function (val) {

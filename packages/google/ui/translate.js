@@ -1,4 +1,4 @@
-class HTMLElementGoogleTranslate extends VirtualHTMLElement {
+class HTMLElementGoogleTranslate extends Page.Element {
 	#inst;
 	#observer;
 	#shown;
@@ -86,6 +86,6 @@ class HTMLElementGoogleTranslate extends VirtualHTMLElement {
 }
 
 Page.setup(
-	() => VirtualHTMLElement.define('element-google-translate', HTMLElementGoogleTranslate)
+	() => Page.define('element-google-translate', HTMLElementGoogleTranslate)
 );
 

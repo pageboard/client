@@ -1,5 +1,5 @@
 Page.setup(() => {
-	VirtualHTMLElement.extend('element-tabs', class TabsHelper {
+	Page.extend('element-tabs', class TabsHelper {
 		setup(state) {
 			if (!this.observer) this.observer = new MutationObserver(records => {
 				for (const record of records) this.mutate(record, state);

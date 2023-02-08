@@ -1,4 +1,4 @@
-class HTMLElementEmbed extends VirtualHTMLElement {
+class HTMLElementEmbed extends Page.Element {
 	static defaults = {
 		src: null,
 		hash: null
@@ -77,5 +77,5 @@ class HTMLElementEmbed extends VirtualHTMLElement {
 }
 
 Page.ready(() => {
-	VirtualHTMLElement.define('element-embed', HTMLElementEmbed);
+	Page.define('element-embed', HTMLElementEmbed);
 });

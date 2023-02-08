@@ -33,4 +33,4 @@ class HTMLElementStickyNav extends HTMLElement {
 	}
 }
 
-VirtualHTMLElement.define('element-sticky-nav', HTMLElementStickyNav, 'header');
+Page.define('element-sticky-nav', HTMLElementStickyNav, 'header');

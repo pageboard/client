@@ -45,6 +45,26 @@ Page.init(state => {
 	if (!state.data.$scroll) state.data.$scroll = {left: 0, top: 0};
 });
 
+Page.patch(state => {
+	state.finish(() => {
+		for (const a of document.querySelectorAll('a[href]')) {
+			const loc = state.parse(a.href);
+			if (loc.hostname && loc.hostname != document.location.hostname) {
+				a.target = "_blank";
+				a.rel = "noopener";
+			} else if (loc.pathname && (loc.pathname.startsWith('/.') || /\.\w+$/.test(loc.pathname))) {
+				a.target = "_blank";
+			} else {
+				const [href] = a.href.split('?');
+				const meta = state.scope.$hrefs?.[href];
+				if (meta?.mime && meta.mime.startsWith("text/html")) {
+					a.target = "_blank";
+				}
+			}
+		}
+	});
+});
+
 Page.focus(state => {
 	const { hash } = state;
 	if (!hash) return;
@@ -58,10 +78,7 @@ Page.setup(state => {
 		window.history.scrollRestoration = 'manual';
 		if (!state.hash) state.scroll(state.data.$scroll);
 	}
-});
-
-Page.setup(state => {
-	Page.connect({
+	state.connect({
 		handleScroll: state.debounce((e, state) => {
 			if (state.scope.transition) return;
 			state.data.$scroll = {
@@ -71,10 +88,7 @@ Page.setup(state => {
 			state.save();
 		}, 500)
 	}, window);
-});
-
-Page.setup(() => {
-	Page.connect({
+	state.connect({
 		handleClick: (e, state) => {
 			const a = e.target.closest('a');
 			const href = a?.getAttribute('href');

@@ -27,7 +27,7 @@ class WalkIndex {
 	}
 }
 
-class HTMLElementFieldsetList extends VirtualHTMLElement {
+class HTMLElementFieldsetList extends Page.Element {
 	#size;
 	#initialSize;
 	#prefix;
@@ -282,4 +282,4 @@ class HTMLElementFieldsetList extends VirtualHTMLElement {
 	}
 }
 
-VirtualHTMLElement.define('element-fieldset-list', HTMLElementFieldsetList);
+Page.define('element-fieldset-list', HTMLElementFieldsetList);

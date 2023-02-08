@@ -1,4 +1,4 @@
-class HTMLElementInputDateSlot extends VirtualHTMLElement {
+class HTMLElementInputDateSlot extends Page.Element {
 	handleChange(e, state) {
 		this.update(e.target);
 	}
@@ -74,5 +74,5 @@ class HTMLElementInputDateSlot extends VirtualHTMLElement {
 	}
 }
 
-VirtualHTMLElement.define('element-input-date-slot', HTMLElementInputDateSlot);
+Page.define('element-input-date-slot', HTMLElementInputDateSlot);
 

@@ -1,4 +1,4 @@
-class HTMLElementTabs extends VirtualHTMLElement {
+class HTMLElementTabs extends Page.Element {
 	static defaults = {
 		index: (x) => parseInt(x) || 0
 	};
@@ -31,5 +31,5 @@ class HTMLElementTabs extends VirtualHTMLElement {
 }
 
 Page.ready(() => {
-	VirtualHTMLElement.define('element-tabs', HTMLElementTabs);
+	Page.define('element-tabs', HTMLElementTabs);
 });

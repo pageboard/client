@@ -1,4 +1,4 @@
-class HTMLElementImage extends VirtualHTMLElement {
+const HTMLElementImageConstructor = Superclass => class extends Superclass {
 	static defaults = {
 		src: null,
 		crop: null
@@ -159,7 +159,7 @@ class HTMLElementImage extends VirtualHTMLElement {
 				// don't show
 				return this.#defer;
 			}
-			loc.query.rs = "z-" + HTMLElementImage.getZoom({ w, h, rw, rh, fit });
+			loc.query.rs = "z-" + this.constructor.getZoom({ w, h, rw, rh, fit });
 		}
 		const curSrc = loc.toString();
 		if (curSrc != this.currentSrc) {
@@ -182,13 +182,11 @@ class HTMLElementImage extends VirtualHTMLElement {
 	placeholder(error) {
 		this.image.removeAttribute('src');
 	}
-}
+};
 
-class HTMLElementInlineImage extends HTMLImageElement {
-	constructor() {
-		super();
-		if (this.init) this.init();
-	}
+const HTMLElementImage = HTMLElementImageConstructor(Page.Element);
+
+class HTMLElementInlineImage extends HTMLElementImageConstructor(HTMLImageElement) {
 	static defaults = {
 		dataSrc: null,
 		dataCrop: null
@@ -214,6 +212,5 @@ class HTMLElementInlineImage extends HTMLImageElement {
 	}
 }
 
-VirtualHTMLElement.inherits(HTMLElementInlineImage, HTMLElementImage);
-VirtualHTMLElement.define('element-image', HTMLElementImage);
-VirtualHTMLElement.define(`element-img`, HTMLElementInlineImage, 'img');
+Page.define('element-image', HTMLElementImage);
+Page.define(`element-img`, HTMLElementInlineImage, 'img');

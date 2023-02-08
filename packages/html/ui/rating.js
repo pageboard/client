@@ -1,4 +1,4 @@
-class HTMLElementRating extends VirtualHTMLElement {
+class HTMLElementRating extends Page.Element {
 	static defaults = {
 		maximum: 4,
 		value: (x) => parseFloat(x) || 0,
@@ -20,5 +20,5 @@ class HTMLElementRating extends VirtualHTMLElement {
 	}
 }
 
-VirtualHTMLElement.define('element-rating', HTMLElementRating);
+Page.define('element-rating', HTMLElementRating);
 

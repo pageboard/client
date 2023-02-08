@@ -93,4 +93,4 @@ for (const name of ['crop', 'dimensions']) {
 }
 })(window.customElements.get('element-image'));
 
-VirtualHTMLElement.define(`element-layout`, HTMLElementLayout, 'div');
+Page.define(`element-layout`, HTMLElementLayout, 'div');

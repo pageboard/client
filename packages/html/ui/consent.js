@@ -64,7 +64,7 @@ class HTMLCustomConsentElement extends HTMLFormElement {
 }
 
 Page.ready(() => {
-	VirtualHTMLElement.define(`element-consent`, HTMLCustomConsentElement, 'form');
+	Page.define(`element-consent`, HTMLCustomConsentElement, 'form');
 });
 
 Page.constructor.prototype.consent = function (fn) {
