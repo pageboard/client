@@ -1,11 +1,13 @@
 export { default as debounce } from 'debounce';
 export { default as fetch } from './fetch';
+import '@ungap/custom-elements';
 import * as load from './load';
 import { render, install } from './render';
 import * as equivs from './equivs';
 import Scope from './scope';
 import VHE from './VirtualHTMLElement';
 import { Deferred } from 'class-deferred';
+import 'window-page';
 
 window.Deferred = Deferred;
 window.VirtualHTMLElement ||= VHE;

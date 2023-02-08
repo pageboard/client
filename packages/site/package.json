@@ -28,8 +28,6 @@
     "window-page": "^14.1.1"
   },
   "prepare": {
-    "@ungap/custom-elements": "copy lib/custom-elements.js",
-    "window-page": "copy lib/",
     "./src/pageboard.js": "bundle --name=window.Pageboard lib/"
   },
   "pageboard": {
