@@ -80,7 +80,7 @@ exports.segment = {
 	contents: "block+",
 	group: "block",
 	icon: '<b class="icon">Seg</b>',
-	html: '<div class="ui [raised|?] [disabled|?] [inverted|?] [padded|?] [compact|?] [circular|?] [basic|?] [attached|eq:both:%20|post:%20attached] [align|post:%20aligned] segment"></div>',
+	html: '<div class="ui [raised] [disabled] [inverted] [padded] [compact] [circular] [basic] [attached|eq:both:%20|post:%20attached] [align|post:%20aligned] segment"></div>',
 	stylesheets: [
 		'../lib/components/segment.css'
 	]
@@ -113,7 +113,7 @@ exports.divider = {
 			default: false
 		}
 	},
-	html: '<div class="ui divider [ruler|!?:hidden] [large|?:section] [clearing|?] [fitted|?]"></div>',
+	html: '<div class="ui divider [ruler|or:hidden] [large|?:section] [clearing] [fitted]"></div>',
 	stylesheets: [
 		'../lib/components/divider.css'
 	]

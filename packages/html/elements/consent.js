@@ -20,7 +20,7 @@ exports.consent_form = {
 		'content.': 'content.content'
 	},
 	html: `<form is="element-consent" class="ui form" data-transient="[transient]">
-		<x[transient|?:template:div|fill] block-content="content"></x[transient|?:template:div|fill]>
+		<x[transient|?:template:div] block-content="content"></x[transient|?:template:div]>
 	</form>`,
 	scripts: ['../ui/storage.js', '../ui/consent.js'],
 	stylesheets: ['../ui/consent.css']

@@ -15,7 +15,7 @@ exports.mail_row = {
 		nodes: "mail_column_first mail_column* mail_column_last mail_column_expander"
 	},
 	group: "mail_block",
-	html: `<table class="row [collapse|?]">
+	html: `<table class="row [collapse]">
 		<tr block-content="columns"></tr>
 	</table>`
 };

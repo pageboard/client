@@ -75,25 +75,24 @@ exports.page = {
 	html: `<html lang="[$site.lang|ornull]">
 	<head>
 		<title>[title][$site.title|pre: - |or:]</title>
-		<meta http-equiv="Status" content="[$status|or:200] [$statusText|or:OK][redirect|!|bmagnet:*]">
-		<meta http-equiv="Status" content="301 Moved Permanently[transition.from|!|bmagnet:*+]">
-		<meta http-equiv="Location" content="[redirect|eq:[url]:|ornull|magnet:+*][$loc.search]">
+		<meta http-equiv="Status" content="[$status|or:200] [$statusText|or:OK][redirect|prune:*]">
+		<meta http-equiv="Status" content="301 Moved Permanently[transition.from|prune:*:1]">
+		<meta http-equiv="Location" content="[redirect|neq:[url]|fail:*::1][$loc.search]">
 		<meta http-equiv="Status" content="301 Matching Location">
-		<meta http-equiv="Location" content="[$links.found|ornull|magnet:+*]">
-		<meta http-equiv="Content-Security-Policy" content="[$elements|csp]">
+		<meta http-equiv="Location" content="[$links.found|fail:*::1]">
+		<meta http-equiv="Content-Security-Policy" content="[$elements|as:csp]">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta name="robots" content="[noindex|?|ornull|magnet:*]">
-		<meta name="description" content="[description|magnet:*]">
+		<meta name="robots" content="[noindex|and:noindex|fail:*]">
+		<meta name="description" content="[description|fail:*]">
 		<base href="[$loc.origin]">
-		<link rel="canonical" href="[$loc.origin][$loc.pathname][$loc.search][noindex|!|bmagnet:*]">
+		<link rel="canonical" href="[$loc.origin][$loc.pathname][$loc.search][noindex|prune:*]">
 		<link rel="icon" href="[$site.favicon|post:?format=ico|or:data%3A,]">
-		<link rel="stylesheet" href="[$element.stylesheets|repeat]">
-		<script crossorigin="anonymous" defer src="https://cdn.polyfill.io/v3/polyfill.min.js?flags=gated&unknown=polyfill&features=[$elements|polyfills|url|magnet:*]"></script>
-		<script defer src="[$element.scripts|repeat]"></script>
+		<link rel="stylesheet" href="[$element.stylesheets|repeat:]">
+		<script crossorigin="anonymous" defer src="https://cdn.polyfill.io/v3/polyfill.min.js?flags=gated&unknown=polyfill&features=[$elements|as:polyfills|enc:url|fail:*]"></script>
+		<script defer src="[$element.scripts|repeat:]"></script>
 	</head>
 	<body block-content="body"></body></html>`,
 	scripts: [
-		'../lib/custom-elements.js',
 		...exports.site.scripts,
 		'../ui/nav.js'
 	],

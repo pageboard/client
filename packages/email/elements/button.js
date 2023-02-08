@@ -72,7 +72,7 @@ exports.mail_button = {
 		}
 	},
 	html: `<table class="button [label] [size]
-		[expanded|?] [radius|?] [rounded|?]"
+		[expanded] [radius] [rounded]"
 	><tr><td><table>
 		<tr>
 			<td><a href="[url|or:#]" block-content="text">Button</a></td>

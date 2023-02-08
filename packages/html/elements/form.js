@@ -173,7 +173,7 @@ exports.api_form = {
 		badrequest="[badrequest|urltpl:url:parameters]"
 		unauthorized="[unauthorized|urltpl:url:parameters]"
 		notfound="[notfound|urltpl:url:parameters]"
-		class="ui form [hidden|?]"></form>`,
+		class="ui form [hidden]"></form>`,
 	stylesheets: [
 		'../lib/components/form.css',
 		'../ui/form.css'

@@ -52,15 +52,15 @@ exports.table = {
 		}
 	},
 	html: `<table class="ui table
-		[definition|?]
+		[definition]
 		[single|?|post: line]
-		[unstackable|?]
-		[selectable|?]
-		[striped|?]
-		[celled|?]
-		[basic|?]
-		[collapsing|?]
-		[compact|?]"
+		[unstackable]
+		[selectable]
+		[striped]
+		[celled]
+		[basic]
+		[collapsing]
+		[compact]"
 	></table>`,
 	stylesheets: [
 		'../lib/components/table.css'
@@ -171,7 +171,7 @@ exports.table_cell = {
 		if (dom.matches('.selectable')) d.selectable = true;
 		return d;
 	},
-	html: '<td class="[align|post: aligned] [selectable|?]" rowspan="[rowspan]" colspan="[colspan]"></td>'
+	html: '<td class="[align|post: aligned] [selectable]" rowspan="[rowspan]" colspan="[colspan]"></td>'
 };
 
 exports.table_head_cell = {

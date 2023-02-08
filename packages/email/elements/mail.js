@@ -31,10 +31,10 @@ exports.mail = {
 	},
 	html: `<html lang="[$site.lang|ornull]">
 	<head>
-		<title>[$site.title|post:%3A |or:][title]</title>
+		<title>[$site.title|post:%3A ][title]</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="stylesheet" href="[$elements.mail.stylesheets|repeat]" />
-		<script defer src="[$elements.mail.scripts|repeat]"></script>
+		<link rel="stylesheet" href="[$elements.mail.stylesheets|repeat:]" />
+		<script defer src="[$elements.mail.scripts|repeat:]"></script>
 	</head>
 	<body block-content="body"></body>
 </html>`,

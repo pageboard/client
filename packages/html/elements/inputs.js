@@ -69,7 +69,7 @@ exports.input_fields = {
 		}
 	},
 	contents: "(input_text|input_range|input_checkbox|input_radio|input_select|input_button)+",
-	html: `<div class="[inline|?] fields"></div>`
+	html: `<div class="[inline] fields"></div>`
 };
 
 exports.input_text = {
@@ -160,24 +160,24 @@ exports.input_text = {
 		tel: /^(\(\d+\))? *\d+([ .-]?\d+)*$/.source,
 		email: /^[\w.!#$%&'*+/=?^`{|}~-]+@\w(?:[\w-]{0,61}\w)?(?:\.\w(?:[\w-]{0,61}\w)?)*$/.source
 	},
-	html: `<div class="[width|num: wide] field [type|eq:hidden:hidden:]">
+	html: `<div class="[width|num: wide] field [type|eq:hidden|or:]">
 		<label block-content="label">Label</label>
-		<textarea
+		[type|eq:textarea|prune:*:1]<textarea
 			name="[name]"
 			required="[required]"
 			readonly="[readonly]"
 			disabled="[disabled]"
 			placeholder="[placeholder]"
-		>[value|br]</textarea>[type|eq:textarea|bmagnet:+*]
-		<input name="[name]"
+		>[value|as:text]</textarea>
+		[type|neq:textarea|prune:*:1]<input name="[name]"
 			required="[required]"
 			readonly="[readonly]"
 			disabled="[disabled]"
 			placeholder="[placeholder]"
 			type="[type|eq:new-password:password]"
-			pattern="[$element.patterns.[type]|ornull]"
+			pattern="[$element.patterns.[type]]"
 			value="[value]"
-			autocomplete="[type|neq:new-password:|not]" />[type|neq:textarea|bmagnet:+*]
+			autocomplete="[type|eq:new-password|fail:]" />
 	</div>`
 };
 
@@ -320,7 +320,7 @@ exports.input_checkbox = {
 		nodes: 'inline*'
 	},
 	html: `<div class="field">
-		<div class="ui [toggle|?] checkbox">
+		<div class="ui [toggle] checkbox">
 			<input type="checkbox" required="[required]" disabled="[disabled]"
 				name="[name]" value="[value]" checked="[checked]"
 				id="for-[name][value|or:|pre:-]-[$id|slice:0:6]" />
@@ -433,7 +433,7 @@ exports.input_select = {
 	}],
 	html: `<div class="field">
 		<label block-content="label">Label</label>
-		<element-select class="ui selection dropdown [multiple|?]"
+		<element-select class="ui selection dropdown [multiple]"
 			data-name="[name]" data-disabled="[disabled]" data-required="[required]"
 			data-multiple="[multiple]" data-placeholder="[placeholder]"
 			data-value="[value]"

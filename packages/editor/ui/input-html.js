@@ -291,7 +291,7 @@ class HTMLElementInputHTML extends HTMLTextAreaElement {
 			inplace: true,
 			group: "inline",
 			tag: 'a',
-			html: '<a href="[url|autolink]"></a>'
+			html: '<a href="[url]"></a>'
 		}
 	};
 

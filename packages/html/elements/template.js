@@ -6,7 +6,7 @@ exports.fetch.fragments.push({
 
 exports.message.fragments.push({
 	attributes: {
-		className: '[inverted|?]'
+		className: '[inverted]'
 	}
 });
 

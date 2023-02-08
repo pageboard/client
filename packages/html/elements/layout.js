@@ -281,20 +281,19 @@ exports.layout = {
 	contents: "block+",
 	group: 'block',
 	html: `<div class="layout
-		[width|eq:full:fullwidth:]
-		[width|eq:contained:ui container:]
-		[horizontal|?]
-		[vertical|?]
+		[width|switch:full:fullwidth:contained:ui container]
+		[horizontal]
+		[vertical]
 		[direction]
 		[invert|?:inverted]"
 		is="element-layout"
-		style-margin-block="[margins.block|eq:0:|not|magnet][margins.blockUnits]"
-		style-margin-inline="[margins.inline|eq:0:|not|magnet][margins.inlineUnits]"
-		style-height="[height|eq:0:|not|magnet][heightUnits]"
+		style-margin-block="[margins.block|eq:0:|fail:][margins.blockUnits]"
+		style-margin-inline="[margins.inline|eq:0:|fail:][margins.inlineUnits]"
+		style-height="[height|eq:0:|fail:][heightUnits]"
 		data-src="[background.image]"
 		data-crop="[background.crop.x];[background.crop.y];[background.crop.width];[background.crop.height];[background.crop.zoom]"
 		data-size="[background.size]"
-		data-repeat="[background.repeat|?]"
+		data-repeat="[background.repeat]"
 		data-attachment="[background.attachment]"
 		data-position="[background.position]"
 	></div>`,

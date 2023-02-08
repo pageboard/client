@@ -88,7 +88,7 @@ exports.card = {
 		nodes: 'paragraph+',
 		title: 'extra'
 	}],
-	html: `<div class="ui [fluid|?] [centered|?] card">
+	html: `<div class="ui [fluid] [centered] card">
 		<div class="image [image|?::hidden]" block-content="image"></div>
 		<div class="content" block-content="content"></div>
 		<div class="extra content" block-content="extra"></div>
@@ -143,7 +143,7 @@ exports.cardlink = {
 		nodes: 'paragraph_nolink+',
 		title: 'extra'
 	}],
-	html: `<a href="[url]" class="ui [fluid|?] [centered|?] card">
+	html: `<a href="[url]" class="ui [fluid] [centered] card">
 		<div class="image [image|?::hidden]" block-content="image"></div>
 		<div class="content" block-content="content"></div>
 		<div class="extra content" block-content="extra"></div>

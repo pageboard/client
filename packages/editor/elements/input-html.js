@@ -53,7 +53,7 @@ exports.input_html = {
 			readonly="[readonly]"
 			disabled="[disabled]"
 			placeholder="[placeholder]"
-		>[value|html]</textarea>
+		>[value|as:html]</textarea>
 	</div>`,
 	scripts: [
 		'../lib/editor.js',

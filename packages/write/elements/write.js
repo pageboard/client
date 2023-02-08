@@ -7,12 +7,12 @@ exports.write = {
 	html: `<html lang="[$site.lang|ornull]">
 	<head>
 		<title>[title][$site.title|pre: - |or:]</title>
-		<meta http-equiv="Content-Security-Policy" content="[$elements|csp]">
+		<meta http-equiv="Content-Security-Policy" content="[$elements|as:csp]">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<base href="[$loc.origin]">
-		<link rel="stylesheet" href="[$element.stylesheets|repeat]" />
-		<script crossorigin="anonymous" defer src="https://cdn.polyfill.io/v3/polyfill.min.js?flags=gated&unknown=polyfill&features=[$elements|polyfills|url|magnet:*]"></script>
-		<script defer src="[$element.scripts|repeat]"></script>
+		<link rel="stylesheet" href="[$element.stylesheets|repeat:]" />
+		<script crossorigin="anonymous" defer src="https://cdn.polyfill.io/v3/polyfill.min.js?flags=gated&unknown=polyfill&features=[$elements|as:polyfills|enc:url|fail:*]"></script>
+		<script defer src="[$element.scripts|repeat:]"></script>
 	</head>
 	<body
 		data-placeholder="[$element.resources.empty]"

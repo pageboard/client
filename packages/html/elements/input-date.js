@@ -85,8 +85,8 @@ exports.input_date_time = {
 		<label block-content="label">Label</label>
 		<input is="element-input-date"
 			name="[name]" disabled="[disabled]" placeholder="[placeholder]"
-			required="[required]" value="[value]" step="[step|magnet:]"
-			type="[format|eq:datetime:datetime-local]"
+			required="[required]" value="[value]" step="[step]"
+			type="[format|switch:datetime:datetime-local]"
 		/>
 	</div>`,
 	scripts: [
@@ -147,7 +147,7 @@ exports.input_date_slot = {
 	},
 	html: `<div class="field">
 		<label block-content="label">Label</label>
-		<element-input-date-slot type="[format|eq:datetime:datetime-local]" step="[step|magnet:]">
+		<element-input-date-slot type="[format|switch:datetime:datetime-local]" step="[step]">
 			<input is="element-input-date" name="[nameStart]" value="[valueStart]" />
 			<input is="element-input-date" name="[nameEnd]" value="[valueEnd]" />
 		</element-input-date-slot>

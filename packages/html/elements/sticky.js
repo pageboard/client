@@ -21,7 +21,7 @@ exports.sticky = {
 		}
 	},
 	contents: "block+",
-	html: '<element-sticky data-collapsed="[collapsed|magnet]" data-position="[position]"></element-sticky>',
+	html: '<element-sticky data-collapsed="[collapsed|fail:]" data-position="[position]"></element-sticky>',
 	stylesheets: [
 		'../ui/sticky.css'
 	]
@@ -43,7 +43,7 @@ exports.header.properties.autohide = {
 exports.header.fragments.push({
 	attributes: {
 		"is": "element-sticky-nav",
-		"class": "[collapsed|?] [autohide|?]"
+		"class": "[collapsed] [autohide]"
 	}
 });
 exports.header.stylesheets.push('../ui/sticky.css');

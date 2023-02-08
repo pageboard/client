@@ -14,7 +14,7 @@ exports.gallery = {
 	},
 	contents: "portfolio carousel",
 	group: 'block',
-	html: `<element-gallery id="[name|id]"></element-gallery>`,
+	html: `<element-gallery id="[name|as:xid]"></element-gallery>`,
 	resources: {
 		helper: '../ui/gallery-helper.js'
 	},
@@ -50,5 +50,5 @@ exports.itemlink = {
 		}
 	},
 	contents: "(paragraph_nolink|heading_nolink|image)+",
-	html: '<a class="itemlink" href="[url|autolink]"></a>'
+	html: '<a class="itemlink" href="[url]"></a>'
 };

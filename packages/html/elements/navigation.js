@@ -20,20 +20,7 @@ exports.nav = {
 		}
 	},
 	group: "block",
-	html: `<a class="ui icon button [url|!?:disabled]" href="[url]" title="[title]">
-		<i class="icon [rel]"></i>
-	</a>`,
-	fuse: function(node, d, scope) {
-		let obj = (scope.$links || {})[d.relation] || {};
-		if (d.relation == "up") {
-			if (obj.length) obj = obj[0];
-		}
-		node.fuse({
-			url: obj.url,
-			title: obj.title,
-			rel: d.relation,
-		}, scope);
-	}
+	html: `<a class="ui icon button [$links.[relation]|as:array|.first|?::disabled]" href="[$links.[relation]|as:array|.first.url]" title="[$links.[relation]|as:array|.first.title]"><i class="icon [rel]"></i></a>`
 };
 
 exports.scrollLink = {
@@ -69,9 +56,9 @@ exports.breadcrumb = {
 	group: "block",
 	html: `<nav class="ui breadcrumb">
 		<div class="divider"></div>
-		<a href="[$links.up.url|reverse|repeat:+a:link:-1]" class="section">[link.title]</a>
+		<a href="[$links.up|nth:-1|at:a::1|repeat:link]" class="section">[link.title]</a>
 		<div class="divider"></div>
-		<div class="active section">[$page.data.title|magnet:+div]</div>
+		<div class="active section">[$page.data.title|fail:div::1]</div>
 	</nav>`,
 	stylesheets: [
 		'../lib/components/breadcrumb.css'

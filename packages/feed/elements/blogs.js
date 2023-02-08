@@ -72,10 +72,10 @@ exports.blog = {
 	}],
 	html: `<a href="[url]" class="ui" data-publication="[publication]">
 		<div class="image">
-			<element-image alt="thumbnail" data-src="[thumbnail|magnet:.image]"></element-image>
+			<element-image alt="thumbnail" data-src="[thumbnail|fail:**]"></element-image>
 		</div>
 		<div class="content">
-			<div class="meta">[publication|magnet|formatDate:D:M:Y]</div>
+			<div class="meta">[publication|fail:*|date:D:M:Y]</div>
 			<div class="header">[title]</div>
 			<div class="description">[description]</div>
 		</div>
@@ -107,7 +107,7 @@ exports.itemblog = { ...exports.siteblog,
 	html: `<a href="[url]" class="ui" data-index="[index]" data-publication="[publication]">
 		<div class="image" block-content="preview"></div>
 		<div class="content">
-			<div class="meta">[publication|magnet|formatDate:D:M:Y]</div>
+			<div class="meta">[publication|fail:*|date:D:M:Y]</div>
 			<div class="header">[title]</div>
 			<div class="description" block-content="description"></div>
 		</div>
@@ -165,7 +165,7 @@ exports.blogs = {
 			}]
 		}
 	},
-	html: `<element-blogs id="[name|id]" data-topics="[topics|join:%2C]" class="ui [columns|num] [responsive] [shape] [divided|?] [relaxed] [list]"></element-blogs>`,
+	html: `<element-blogs id="[name|as:xid]" data-topics="[topics|join:%2C]" class="ui [columns|num] [responsive] [shape] [divided] [relaxed] [list]"></element-blogs>`,
 	scripts: [
 		'../ui/blogs.js'
 	],

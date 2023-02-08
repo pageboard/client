@@ -20,7 +20,7 @@ exports.tabs = {
 		title: 'Tabs',
 		nodes: "tab+"
 	}],
-	html: `<element-tabs id="[name|id]">
+	html: `<element-tabs id="[name|as:xid]">
 		<div class="ui top attached tabular menu" block-content="items"></div>
 		<div block-content="tabs"></div>
 	</element-tabs>`,

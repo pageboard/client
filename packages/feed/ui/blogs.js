@@ -131,13 +131,13 @@ class HTMLElementBlogs extends VirtualHTMLElement {
 			<item>
 				<title>[items.data.title|repeat:item:item]</title>
 				<link>[$loc.origin][item.data.url]</link>
-				<guid isPermaLink="false">[item.id|magnet:*]</guid>
+				<guid isPermaLink="false">[item.id|fail:*]</guid>
 				<pubDate>[item.date|toUTCString]</pubDate>
-				<media:content url="[$loc.origin][item.preview.url|magnet:*]" medium="image" width="[item.preview.width|magnet]" height="[item.preview.height|magnet]" />
-				<description>[item.description|text|magnet]</description>
+				<media:content url="[$loc.origin][item.preview.url|fail:*]" medium="image" width="[item.preview.width]" height="[item.preview.height]" />
+				<description>[item.description|text|fail:*]</description>
 				<content:encoded>
-					<img alt="" src="[$loc.origin][item.preview.url|magnet:*]" width="[item.preview.width|magnet]" height="[item.preview.height|magnet]" />
-					<p>[item.content|html|magnet]</p>
+					<img alt="" src="[$loc.origin][item.preview.url|fail:*]" width="[item.preview.width]" height="[item.preview.height]" />
+					<p>[item.content|as:html|fail:*]</p>
 				</content:encoded>
 			</item>
 		</channel>

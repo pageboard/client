@@ -25,9 +25,9 @@ Pageboard.Controls.Menu = class Menu {
 
 		const title = el.inline ? "" : el.title;
 
-		const dom = document.dom(`<a class="item [active|?] [disabled|?]" title="[el.description]">
-			[icon|html|svg]
-			<span>[title|breaks|br]</span>
+		const dom = document.dom(`<a class="item [active] [disabled]" title="[el.description]">
+			[icon|as:html|svg:]
+			<span>[title|breaks:|as:text]</span>
 		</a>`).fuse({
 			active, icon, title, el
 		}, {

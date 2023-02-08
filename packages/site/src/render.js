@@ -1,9 +1,20 @@
-import matchdom from 'matchdom';
+import {
+	Matchdom,
+	TextPlugin,
+	OpsPlugin,
+	NumPlugin,
+	ArrayPlugin,
+	DomPlugin,
+	DatePlugin,
+	JsonPlugin
+} from 'matchdom';
+
 import Viewer from '@pageboard/pagecut/src/viewer.js';
 import str2dom from '@pageboard/pagecut/src/str2dom.js';
 
-import * as filters from './filters';
-Object.assign(matchdom.filters, filters);
+import * as matchdomPlugin from './plugin';
+
+const matchdom = new Matchdom(TextPlugin, OpsPlugin, NumPlugin, ArrayPlugin, DomPlugin, DatePlugin, JsonPlugin, matchdomPlugin);
 
 Document.prototype.dom = function(str) {
 	return str2dom(Array.prototype.join.call(arguments, '\n'), {
@@ -23,19 +34,26 @@ Node.prototype.dom = function() {
 	});
 };
 
-const mSym = matchdom.Symbols;
+const mSym = Matchdom.Symbols;
 const reFuse = new RegExp(`\\${mSym.open}[^\\${mSym.open}\\${mSym.close}]+\\${mSym.close}`);
 
-Node.prototype.fuse = function(obj, scope) {
-	// eslint-disable-next-line no-console
-	if (!scope) console.warn("Missing scope param");
-	return matchdom(this, obj, scope.$filters, {data: scope});
-};
-String.prototype.fuse = function(obj, scope) {
-	if (obj == null && scope == null) return reFuse.test(this.toString());
-	return matchdom(this.toString(), obj, scope ? scope.$filters : null, {data: scope});
+const fuse = (obj, data, scope) => {
+	const md = new Matchdom(matchdom, {
+		filters: scope.$filters,
+		hooks: scope.$hooks
+	});
+	return md.merge(obj, data, scope);
 };
 
+Node.prototype.fuse = function (data, scope) {
+	// eslint-disable-next-line no-console
+	if (!scope) console.warn("Missing scope param");
+	return fuse(this, data, scope);
+};
+String.prototype.fuse = function(data, scope, plugin) {
+	if (data == null && scope == null) return reFuse.test(this.toString());
+	return fuse(this.toString(), data, scope);
+};
 
 
 export function render(res, scope, el) {
@@ -96,18 +114,20 @@ function renderBlock(el, scope, block, bscope) {
 			$default: c
 		}, {
 			$filters: {
-				magnet: function (val) {
+				at: function (ctx, val) {
 					return val;
 				},
-				bmagnet: function (val) {
+				prune: function (ctx, val) {
 					return;
 				},
-				attr: function (val) {
+				to: function (ctx, val) {
 					return val;
-				},
-				'||': function (val, what) {
-					if (what.expr.path[0] != "$default") {
-						what.cancel = true;
+				}
+			},
+			$hooks: {
+				afterAll: function (ctx, val) {
+					if (ctx.expr.path[0] != "$default") {
+						ctx.cancel = true;
 					}
 					return val;
 				}

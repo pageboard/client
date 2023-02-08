@@ -281,10 +281,10 @@ exports.inlineImage = {
 		data-src="[url]"
 		data-crop="[crop.x];[crop.y];[crop.width];[crop.height];[crop.zoom]"
 		alt="" class="ui inline image
-		[display.avatar|?]
-		[display.rounded|?]
-		[display.circular|?]
-		[display.spaced|?]
+		[display.avatar]
+		[display.rounded]
+		[display.circular]
+		[display.spaced]
 		[display.floated|pre:floated ]
 		[display.align|post: aligned]" />`,
 	stylesheets: [

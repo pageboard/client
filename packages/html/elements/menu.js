@@ -62,7 +62,7 @@ exports.menu_group = {
 	},
 	html: `<element-menu class="[position] menu">
 		<div block-content="items"></div>
-		<div tabindex="0" class="ui fixed popup item [responsive|eq:popup|bmagnet:*]">
+		<div tabindex="0" class="ui fixed popup item [responsive|eq:popup|prune:*]">
 			<div class="icon">≡</div>
 			<div class="dropdown placer"><div class="menu"></div></div>
 		</div>
@@ -110,7 +110,7 @@ exports.menu_item_link = {
 		marks: "nolink"
 	},
 	group: 'menu_item',
-	html: '<a class="[labeled|?] item" href="[url|autolink]">Link</a>'
+	html: '<a class="[labeled] item" href="[url]">Link</a>'
 };
 
 exports.menu_item_block = { ...exports.menu_item_link,
@@ -140,7 +140,7 @@ exports.menu_item_text = {
 		nodes: "inline*"
 	},
 	group: 'menu_item',
-	html: '<div class="[labeled|?] item">Text</div>'
+	html: '<div class="[labeled] item">Text</div>'
 };
 
 exports.menu_item_dropdown = {
@@ -177,8 +177,8 @@ exports.menu_item_dropdown = {
 		}
 	},
 	group: "menu_item",
-	html: `<div tabindex="0" class="ui simple [position] dropdown item [focused|?:active]">
-		<div class="title [icon|?:caret-icon]" block-content="title">Dropdown</div>
+	html: `<div tabindex="0" class="ui simple [position] dropdown item [focused|and:active]">
+		<div class="title [icon|and:caret-icon]" block-content="title">Dropdown</div>
 		<div class="menu" block-content="items"></div>
 	</div>`,
 	stylesheets: [
@@ -232,7 +232,7 @@ exports.menu_item_popup = {
 		}
 	},
 	group: "menu_item",
-	html: `<div tabindex="0" class="ui [position] [fixed|?] popup item">
+	html: `<div tabindex="0" class="ui [position] [fixed] popup item">
 		<div class="title [icon|?:caret-icon]" block-content="title">Popup</div>
 		<div class="placer">
 			<div block-content="content"></div>

@@ -25,8 +25,8 @@ Pageboard.elements.develop = {
 				stylesheets = [];
 			}
 			const frag = node.dom(`
-				<link rel="stylesheet" href="[stylesheets|repeat]">
-				<script defer src="[scripts|repeat]"></script>`
+				<link rel="stylesheet" href="[stylesheets|repeat:]">
+				<script defer src="[scripts|repeat:]"></script>`
 			).fuse({
 				stylesheets,
 				scripts
