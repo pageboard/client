@@ -7,7 +7,7 @@ const HTMLElementImageConstructor = Superclass => class extends Superclass {
 	static defaultWidth = 240;
 	static defaultHeight = 180;
 
-	#defer;
+	#defer = new Deferred();
 
 	static getZoom({ w, h, rw, rh, fit }) {
 		let z = 100;
@@ -32,9 +32,6 @@ const HTMLElementImageConstructor = Superclass => class extends Superclass {
 			h = Math.round(h * r.z / 100);
 		}
 		return { w, h };
-	}
-	init() {
-		this.#defer = new Deferred();
 	}
 	findClass(list) {
 		return list.find(name => this.matches(`.${name}`)) || list[0];
