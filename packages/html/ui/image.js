@@ -89,6 +89,7 @@ const HTMLElementImageConstructor = Superclass => class extends Superclass {
 		}
 	}
 	patch(state) {
+		super.patch(state);
 		this.classList.remove('loading');
 		if (this.currentSrc != this.options.src) {
 			this.classList.remove('error');
@@ -183,7 +184,7 @@ const HTMLElementImageConstructor = Superclass => class extends Superclass {
 
 const HTMLElementImage = HTMLElementImageConstructor(Page.Element);
 
-class HTMLElementInlineImage extends HTMLElementImageConstructor(HTMLImageElement) {
+class HTMLElementInlineImage extends HTMLElementImageConstructor(Page.create(HTMLImageElement)) {
 	static defaults = {
 		dataSrc: null,
 		dataCrop: null
@@ -203,7 +204,7 @@ class HTMLElementInlineImage extends HTMLElementImageConstructor(HTMLImageElemen
 	}
 
 	get currentSrc() {
-		const cur = super.currentSrc;
+		const cur = Object.getOwnPropertyDescriptor(HTMLImageElement.prototype, 'currentSrc').get.call(this);
 		if (!cur && this.image.src?.startsWith('data:')) return this.src;
 		else return cur;
 	}
