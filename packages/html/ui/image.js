@@ -89,7 +89,6 @@ const HTMLElementImageConstructor = Superclass => class extends Superclass {
 		}
 	}
 	patch(state) {
-		super.patch(state);
 		this.classList.remove('loading');
 		if (this.currentSrc != this.options.src) {
 			this.classList.remove('error');
