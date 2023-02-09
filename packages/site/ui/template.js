@@ -180,7 +180,9 @@ class HTMLElementTemplate extends Page.Element {
 			stop = offset + count;
 		}
 
-		Object.assign(this.dataset, { count, start, stop, limit });
+		if (offset != null && limit != null) {
+			Object.assign(this.dataset, { count, start, stop, limit });
+		}
 
 		if (Object.keys(collector.missings).length) {
 			state.statusText = `Missing Query Parameters`;
