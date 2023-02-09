@@ -1,7 +1,7 @@
-export const formats = { as: { polyfills, csp, xid } };
+export const formats = { as: { polyfills, csp, xid, colnums } };
 
 export const filters = {
-	num, sum, schema, unset, set, query, urltpl, templates, setDate, content
+	sum, schema, unset, set, query, urltpl, templates, content
 };
 
 export const hooks = {
@@ -95,9 +95,9 @@ const numMap = {
 	16: 'sixteen'
 };
 
-function num(ctx, val, str) {
+function colnums(ctx, val) {
 	if (!val) return '';
-	return ctx.filter(numMap[val] || '', 'post', str);
+	return numMap[val] || '';
 }
 
 function sum(ctx, obj, ...list) {
@@ -280,22 +280,6 @@ function templates(ctx, val, ...prefixes) {
 		}
 	});
 	return (typeof val == "string" ? Object.keys(obj) : Object.values(obj)).join(' ') || null;
-}
-
-function setDate(ctx, date, offset, unit) {
-	console.warn("Use clock filter instead of setDate in", ctx);
-	if (!unit) unit = 'day';
-	else unit = unit.toLowerCase();
-	if (unit.endsWith('s')) unit = unit.slice(0, -1);
-	unit = {
-		day: 'D',
-		month: 'M',
-		year: 'Y',
-		hour: 'h',
-		minute: 'm',
-		second: 's'
-	}[unit];
-	return ctx.filter(date, 'clock', offset, unit);
 }
 
 function content(ctx, block, name) {

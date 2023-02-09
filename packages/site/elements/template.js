@@ -12,10 +12,10 @@ exports.fetch = {
 	},
 	html: `<element-template
 		disabled="[disabled]"
-		action="/.api/query/[$id][action.method|prune:]"
-		data-auto="[action.auto]"
-		data-pagination="[$expr.action.parameters.offset|templates:$query]"
-		parameters="[$expr.action.parameters|templates:$query:$pathname]"
+		action="/.api/query/[$id][action?.method|prune:]"
+		data-auto="[action?.auto]"
+		data-pagination="[$expr.action?.parameters.offset|templates:$query]"
+		parameters="[$expr.action?.parameters|templates:$query:$pathname]"
 		success="[redirection|urltpl:url:parameters]"
 		badrequest="[badrequest|urltpl:url:parameters]"
 		unauthorized="[unauthorized|urltpl:url:parameters]"
@@ -192,9 +192,9 @@ exports.binding = {
 	group: "inline nolink",
 	tag: 'span[block-type="binding"]',
 	html: `<span
-		data-attr="[attr|trim|split:%0A|join:%7C|pre:%5B|post:%5D]"
+		data-attr="[attr|trim:|split:%0A|join:%7C|pre:%5B|post:%5D]"
 		data-label="[fill|split:%0A|slice:0:1|join:|split:.|slice:-1|join:|or: ]"
-	>[fill|trim|split:%0A|join:%7C|pre:%5B|post:%5D]</span>`
+	>[fill|trim:|split:%0A|join:%7C|pre:%5B|post:%5D]</span>`
 };
 
 exports.block_binding = {
@@ -203,9 +203,9 @@ exports.block_binding = {
 	group: "block",
 	tag: 'div[block-type="block_binding"]',
 	html: `<div
-		data-attr="[attr|trim|split:%0A|join:%7C|pre:%5B|post:%5D]"
+		data-attr="[attr|trim:|split:%0A|join:%7C|pre:%5B|post:%5D]"
 		data-label="[fill|split:%0A|slice:0:1|join:|split:.|slice:-1|join:|or: ]"
-	>[fill|trim|split:%0A|join:%7C|pre:%5B|post:%5D]</div>`
+	>[fill|trim:|split:%0A|join:%7C|pre:%5B|post:%5D]</div>`
 };
 
 exports.content = {
@@ -237,7 +237,7 @@ exports.content = {
 			nullable: true
 		}
 	},
-	html: '<element-content block-content="[name]" data-filter="[filter]">[fill|trim|split:%0A|join:%7C|pre:%5B|post:%5D]</element-content>',
+	html: '<element-content block-content="[name]" data-filter="[filter]">[fill|trim:|split:%0A|join:%7C|pre:%5B|post:%5D]</element-content>',
 	scripts: [
 		'../ui/content.js'
 	]

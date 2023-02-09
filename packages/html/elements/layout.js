@@ -285,11 +285,11 @@ exports.layout = {
 		[horizontal]
 		[vertical]
 		[direction]
-		[invert|?:inverted]"
+		[invert|alt:inverted]"
 		is="element-layout"
-		style-margin-block="[margins.block|eq:0:|fail:][margins.blockUnits]"
-		style-margin-inline="[margins.inline|eq:0:|fail:][margins.inlineUnits]"
-		style-height="[height|eq:0:|fail:][heightUnits]"
+		style-margin-block="[margins.block|fail:][margins.blockUnits]"
+		style-margin-inline="[margins.inline|fail:][margins.inlineUnits]"
+		style-height="[height|fail:][heightUnits]"
 		data-src="[background.image]"
 		data-crop="[background.crop.x];[background.crop.y];[background.crop.width];[background.crop.height];[background.crop.zoom]"
 		data-size="[background.size]"

@@ -165,7 +165,7 @@ exports.blogs = {
 			}]
 		}
 	},
-	html: `<element-blogs id="[name|as:xid]" data-topics="[topics|join:%2C]" class="ui [columns|num] [responsive] [shape] [divided] [relaxed] [list]"></element-blogs>`,
+	html: `<element-blogs id="[name|as:xid]" data-topics="[topics|join:%2C]" class="ui [columns|as:colnums] [responsive] [shape] [divided] [relaxed] [list]"></element-blogs>`,
 	scripts: [
 		'../ui/blogs.js'
 	],

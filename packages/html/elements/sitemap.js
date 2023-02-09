@@ -49,8 +49,8 @@ exports.sitemap = {
 			},
 			alias: name,
 			context: 'sitemap/ | sitepage/',
-			html: `<element-sitepage class="item [leaf|?::fold]" data-url="[url]" data-index="[index]">
-				<div class="title [leaf|?::caret-icon]">
+			html: `<element-sitepage class="item [leaf|alt::fold]" data-url="[url]" data-index="[index]">
+				<div class="title [leaf|alt::caret-icon]">
 					<span class="header">[title|or:Untitled]</span>
 					<span class="ui mini type label">[$grants.webmaster|prune:*][$type]</span>
 					<span class="ui mini black label">[$grants.webmaster|prune:*][nositemap|prune:*]no sitemap</span>

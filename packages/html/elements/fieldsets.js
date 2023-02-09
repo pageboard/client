@@ -104,7 +104,7 @@ exports.fieldlist_button = {
 		nodes: "inline*",
 		marks: "nolink"
 	},
-	html: '<button type="button" class="ui [full|?:fluid:] button" value="[type]">Label</button>',
+	html: '<button type="button" class="ui [full|alt:fluid:] button" value="[type]">Label</button>',
 	stylesheets: [
 		'../lib/components/button.css',
 	]

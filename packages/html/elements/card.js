@@ -46,7 +46,7 @@ exports.cards = {
 			default: 'stackable'
 		}
 	},
-	html: '<div class="ui [columns|num] [shape] [responsive] cards"></div>',
+	html: '<div class="ui [columns|as:colnums] [shape] [responsive] cards"></div>',
 	stylesheets: [
 		'../ui/card.css'
 	]
@@ -89,7 +89,7 @@ exports.card = {
 		title: 'extra'
 	}],
 	html: `<div class="ui [fluid] [centered] card">
-		<div class="image [image|?::hidden]" block-content="image"></div>
+		<div class="image [image|alt::hidden]" block-content="image"></div>
 		<div class="content" block-content="content"></div>
 		<div class="extra content" block-content="extra"></div>
 	</div>`
@@ -144,7 +144,7 @@ exports.cardlink = {
 		title: 'extra'
 	}],
 	html: `<a href="[url]" class="ui [fluid] [centered] card">
-		<div class="image [image|?::hidden]" block-content="image"></div>
+		<div class="image [image|alt::hidden]" block-content="image"></div>
 		<div class="content" block-content="content"></div>
 		<div class="extra content" block-content="extra"></div>
 	</a>`

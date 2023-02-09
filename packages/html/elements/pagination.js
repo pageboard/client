@@ -28,7 +28,7 @@ exports.pagination = {
 		},
 	},
 	contents: "inline*",
-	html: `<a class="ui button pagination" is="element-pagination" data-dir="[dir]" data-fetch="[fetch]">[dir|eq:1:Next:Prev]</a>`,
+	html: `<a class="ui button pagination" is="element-pagination" data-dir="[dir]" data-fetch="[fetch]">[dir|switch:+:Next:-:Prev]</a>`,
 	scripts: [
 		'../ui/pagination.js'
 	]

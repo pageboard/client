@@ -233,7 +233,7 @@ exports.menu_item_popup = {
 	},
 	group: "menu_item",
 	html: `<div tabindex="0" class="ui [position] [fixed] popup item">
-		<div class="title [icon|?:caret-icon]" block-content="title">Popup</div>
+		<div class="title [icon|alt:caret-icon]" block-content="title">Popup</div>
 		<div class="placer">
 			<div block-content="content"></div>
 		</div>

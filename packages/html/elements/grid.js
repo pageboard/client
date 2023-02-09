@@ -43,7 +43,7 @@ exports.grid = {
 			maximum: 16
 		}
 	},
-	html: '<div class="ui [responsive] [width|neq:min:equal width:] [columns|num: columns] grid [width|eq:contained:container]"></div>',
+	html: '<div class="ui [responsive] [width|switch:min:equal width] [columns|as:colnums|post: columns] grid [width|switch:contained:container]"></div>',
 	stylesheets: [
 		'../lib/components/grid.css'
 	]
@@ -64,7 +64,7 @@ exports.grid_column = {
 		}
 	},
 	contents: "block+|card",
-	html: '<div class="[width|num: wide] column"></div>'
+	html: '<div class="[width|as:colnums|post: wide] column"></div>'
 };
 
 exports.grid_row = {
@@ -95,5 +95,5 @@ exports.grid_row = {
 			maximum: 16
 		}
 	},
-	html: '<div class="[responsive] [columns|num: columns] row"></div>'
+	html: '<div class="[responsive] [columns|as:colnums|post: columns] row"></div>'
 };

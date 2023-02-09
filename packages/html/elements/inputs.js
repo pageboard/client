@@ -49,7 +49,7 @@ exports.input_button = {
 			default: false
 		}
 	},
-	html: '<button type="[type]" disabled="[disabled]" class="ui [full|?:fluid:] button" name="[name]" value="[value]">[type|schema:title]</button>',
+	html: '<button type="[type]" disabled="[disabled]" class="ui [full|alt:fluid:] button" name="[name]" value="[value]">[type|schema:title]</button>',
 	stylesheets: [
 		'../lib/components/button.css',
 	]
@@ -160,7 +160,7 @@ exports.input_text = {
 		tel: /^(\(\d+\))? *\d+([ .-]?\d+)*$/.source,
 		email: /^[\w.!#$%&'*+/=?^`{|}~-]+@\w(?:[\w-]{0,61}\w)?(?:\.\w(?:[\w-]{0,61}\w)?)*$/.source
 	},
-	html: `<div class="[width|num: wide] field [type|eq:hidden|or:]">
+	html: `<div class="[width|as:colnums|post: wide] field [type|eq:hidden|or:]">
 		<label block-content="label">Label</label>
 		[type|eq:textarea|prune:*:1]<textarea
 			name="[name]"
@@ -174,7 +174,7 @@ exports.input_text = {
 			readonly="[readonly]"
 			disabled="[disabled]"
 			placeholder="[placeholder]"
-			type="[type|eq:new-password:password]"
+			type="[type|switch:new-password:password]"
 			pattern="[$element.patterns.[type]]"
 			value="[value]"
 			autocomplete="[type|eq:new-password|fail:]" />
@@ -213,7 +213,7 @@ exports.input_number = {
 		id: 'label',
 		nodes: 'inline*'
 	},
-	html: `<div class="[width|num: wide] field">
+	html: `<div class="[width|as:colnums|post: wide] field">
 		<label block-content="label">Label</label>
 		<input name="[name]"
 			required="[required]"
