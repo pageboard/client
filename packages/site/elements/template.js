@@ -14,8 +14,8 @@ exports.fetch = {
 		disabled="[disabled]"
 		action="/.api/query/[$id][action?.method|prune:]"
 		data-auto="[action?.auto]"
-		data-pagination="[$expr.action?.parameters.offset|templates:$query]"
-		parameters="[$expr.action?.parameters|templates:$query:$pathname]"
+		data-pagination="[$expr?.action?.parameters?.offset|templates:$query]"
+		parameters="[$expr?.action?.parameters|templates:$query:$pathname]"
 		success="[redirection|urltpl:url:parameters]"
 		badrequest="[badrequest|urltpl:url:parameters]"
 		unauthorized="[unauthorized|urltpl:url:parameters]"
@@ -162,7 +162,7 @@ exports.include = {
 	}],
 	html: `<element-include
 		action="/.api/query/[$id]"
-		parameters="[$expr.action.parameters|templates:$query]"
+		parameters="[$expr?.action?.parameters|templates:$query]"
 	>
 		<div block-content="messages"></div>
 		<div block-content="blocks"></div>
