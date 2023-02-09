@@ -5,7 +5,57 @@ export function create(Superclass) {
 	return class extends Superclass {
 		constructor() {
 			super();
-			if (this.init) this.init();
+			this.init?.();
+		}
+		async attributeChangedCallback(name, src, dst, ns) {
+			if (src !== dst && this.patch) {
+				if (!Object.hasOwnProperty.call(this.constructor, 'defaults') || this.options) {
+					await Page.patch(this);
+					await Page.paint(this);
+				}
+			}
+		}
+		connectedCallback() {
+			Page.connect(this);
+		}
+		disconnectedCallback() {
+			Page.disconnect(this);
+		}
+		init() {
+			if (this.constructor.is) this.setAttribute('is', this.constructor.nodeName);
+		}
+		build(state) {
+			this.options = nodeOptions(state, this);
+		}
+		patch(state) {
+			this.options = nodeOptions(state, this);
+		}
+		paint(state) {
+			if (!this.options) {
+				this.options = nodeOptions(state, this);
+			}
+			if (typeof this.reveal == "function") {
+				state.finish(() => {
+					// don't wait for it
+					this.reveal(state);
+				});
+			}
+		}
+		setup(state) {
+			if (!this.options) this.options = nodeOptions(state, this);
+			if (typeof this.reveal == "function" && !this.currentSrc) {
+				if (state.scope.observer) {
+					state.scope.observer.observe(this);
+				} else state.finish(() => {
+					// don't wait for it
+					this.reveal(state);
+				});
+			}
+		}
+		close(state) {
+			if (typeof this.reveal == "function" && !this.currentSrc) {
+				state.scope.observer?.unobserve(this);
+			}
 		}
 	};
 }
@@ -17,23 +67,6 @@ export function define(name, cla, is) {
 	if (preset) return preset;
 
 	if (cla.init) cla.init();
-
-	monkeyPatchAll(cla.prototype, {
-		async attributeChangedCallback(name, src, dst, ns) {
-			if (src !== dst && this.patch) {
-				if (!Object.hasOwnProperty.call(this.constructor, 'defaults') || this.options) {
-					await Page.patch(this);
-					await Page.paint(this);
-				}
-			}
-		},
-		connectedCallback() {
-			Page.connect(this);
-		},
-		disconnectedCallback() {
-			Page.disconnect(this);
-		}
-	});
 
 	const claDefs = cla.defaults;
 	if (claDefs) {
@@ -55,47 +88,10 @@ export function define(name, cla, is) {
 				return attr;
 			});
 		}
-		monkeyPatchAll(cla.prototype, {
-			init() {
-				if (is) this.setAttribute('is', name);
-			},
-			build(state) {
-				this.options = nodeOptions(this, defaults, state, is);
-			},
-			patch(state) {
-				this.options = nodeOptions(this, defaults, state, is);
-			},
-			paint(state) {
-				if (!this.options) {
-					this.options = nodeOptions(this, defaults, state, is);
-				}
-				if (typeof this.reveal == "function") {
-					state.finish(() => {
-						// don't wait for it
-						this.reveal(state);
-					});
-				}
-			},
-			setup(state) {
-				if (!this.options) {
-					this.options = nodeOptions(this, defaults, state, is);
-				}
-				if (typeof this.reveal == "function" && !this.currentSrc) {
-					if (state.scope.observer) {
-						state.scope.observer.observe(this);
-					} else state.finish(() => {
-						// don't wait for it
-						this.reveal(state);
-					});
-				}
-			},
-			close(state) {
-				if (typeof this.reveal == "function" && !this.currentSrc) {
-					state.scope.observer?.unobserve(this);
-				}
-			}
-		});
+		cla.internalDefaults = defaults;
 	}
+	if (is) cla.is = is;
+	cla.nodeName = name;
 
 	window.customElements.define(name, cla, is ? { extends: is } : undefined);
 	return cla;
@@ -163,7 +159,10 @@ function monkeyPatch(proto, meth, cb, after) {
 	});
 }
 
-function nodeOptions(node, defaults, state, is) {
+function nodeOptions(state, node) {
+	const defaults = node.constructor.internalDefaults;
+	if (!defaults) return;
+	const is = node.constructor.is;
 	const params = stateOptions(node.id, defaults, state);
 	const opts = {};
 	for (const [name, {attr, isData, def}] of Object.entries(defaults)) {
