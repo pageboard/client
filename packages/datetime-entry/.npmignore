@@ -1,6 +1,0 @@
-/docs
-/coverage
-/node_modules
-/spec
-.npmignore
-karma.conf.js
