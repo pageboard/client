@@ -5,43 +5,52 @@ export function create(Superclass) {
 	return class extends Superclass {
 		constructor() {
 			super();
+			if (this.constructor.is) {
+				this.setAttribute('is', this.constructor.nodeName);
+			}
 			this.init?.();
 		}
 		async attributeChangedCallback(name, src, dst, ns) {
 			if (src !== dst && this.patch) {
 				if (!Object.hasOwnProperty.call(this.constructor, 'defaults') || this.options) {
+					await Page.patch(state => this.#options(state));
 					await Page.patch(this);
+					await Page.paint(state => this.#paint(state));
 					await Page.paint(this);
 				}
 			}
 		}
 		connectedCallback() {
+			if (this.build) Page.build(state => this.#options(state));
+			if (this.patch) Page.patch(state => this.#options(state));
+			if (this.reveal) {
+				Page.paint(state => this.#paint(state));
+				Page.setup(state => this.#setup(state));
+				Page.close(state => this.#close(state));
+			}
 			Page.connect(this);
 		}
 		disconnectedCallback() {
 			Page.disconnect(this);
+			if (this.reveal) {
+				this.#close(Page);
+			}
 		}
-		init() {
-			if (this.constructor.is) this.setAttribute('is', this.constructor.nodeName);
-		}
-		build(state) {
+		#options(state) {
 			this.options = nodeOptions(state, this);
 		}
-		patch(state) {
-			this.options = nodeOptions(state, this);
-		}
-		paint(state) {
+		#paint(state) {
 			if (!this.options) {
 				this.options = nodeOptions(state, this);
 			}
-			if (typeof this.reveal == "function") {
+			if (typeof this.reveal == "function" && !this.currentSrc) {
 				state.finish(() => {
 					// don't wait for it
 					this.reveal(state);
 				});
 			}
 		}
-		setup(state) {
+		#setup(state) {
 			if (!this.options) this.options = nodeOptions(state, this);
 			if (typeof this.reveal == "function" && !this.currentSrc) {
 				if (state.scope.observer) {
@@ -52,7 +61,7 @@ export function create(Superclass) {
 				});
 			}
 		}
-		close(state) {
+		#close(state) {
 			if (typeof this.reveal == "function" && !this.currentSrc) {
 				state.scope.observer?.unobserve(this);
 			}
