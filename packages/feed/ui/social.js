@@ -35,8 +35,10 @@ class HTMLSocialElement extends Page.Element {
 			}
 
 			for (const [key, val] of Object.entries(card)) {
-				const og = doc.head.querySelector(`meta[property="og:${key}"]`);
-				if (val) og.setAttribute('content', val);
+				const sel = `meta[property="og:${key}"]`;
+				const og = doc.head.querySelector(sel);
+				if (!og) console.warn("missing", sel);
+				else if (val) og.setAttribute('content', val);
 				else og.removeAttribute('content');
 			}
 			const { links } = HTMLSocialElement;
