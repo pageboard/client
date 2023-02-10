@@ -5,7 +5,6 @@ exports.reading = {
 	required: ["for"],
 	inline: true,
 	group: 'inline',
-	bundle: 'blog',
 	inplace: true,
 	properties: {
 		for: {
