@@ -123,7 +123,7 @@ class HTMLElementBlogs extends Page.Element {
 			<title>[title]</title>
 			<link>[url]</link>
 			<description>[description]</description>
-			<lastBuildDate>[date|toUTCString]</lastBuildDate>
+			<lastBuildDate>[date|date:utc]</lastBuildDate>
 			<docs>https://validator.w3.org/feed/docs/rss2.html</docs>
 			<generator>Pageboard</generator>
 			<category>[categories|repeat:*]</category>
@@ -132,7 +132,7 @@ class HTMLElementBlogs extends Page.Element {
 				<title>[items.data.title|repeat:item:item]</title>
 				<link>[$loc.origin][item.data.url]</link>
 				<guid isPermaLink="false">[item.id|fail:*]</guid>
-				<pubDate>[item.date|toUTCString]</pubDate>
+				<pubDate>[item.date|date:utc]</pubDate>
 				<media:content url="[$loc.origin][item.preview.url|fail:*]" medium="image" width="[item.preview.width]" height="[item.preview.height]" />
 				<description>[item.description|text|fail:*]</description>
 				<content:encoded>
@@ -143,10 +143,6 @@ class HTMLElementBlogs extends Page.Element {
 		</channel>
 	</rss>`;
 		const rssDoc = (new DOMParser()).parseFromString(rssTemplate, "application/xml");
-		if (!scope.$filters.toUTCString) scope.$filters.toUTCString = function(val) {
-			if (!val) return val;
-			return val.toUTCString();
-		};
 		const rss = rssDoc.fuse(feed, scope);
 		for (const node of rss.querySelectorAll('encoded')) {
 			const frag = rssDoc.createDocumentFragment();

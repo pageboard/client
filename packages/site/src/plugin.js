@@ -1,4 +1,7 @@
-export const formats = { as: { polyfills, csp, xid, colnums } };
+export const formats = {
+	as: { polyfills, csp, xid, colnums },
+	date: { utc }
+};
 
 export const filters = {
 	sum, schema, unset, set, query, urltpl, templates, content
@@ -12,6 +15,11 @@ export const hooks = {
 		return val;
 	}
 };
+
+function utc(ctx, val) {
+	if (!val) return val;
+	return val.toUTCString();
+}
 
 function polyfills(ctx, $elements) {
 	const map = {};
