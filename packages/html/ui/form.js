@@ -425,8 +425,6 @@ Page.setup(state => {
 });
 
 Page.patch(state => {
-	const filters = state.scope.$filters;
-
 	function linearizeValues(query, obj = {}, prefix) {
 		if (Array.isArray(query) && query.every(val => {
 			return val == null || typeof val != "object";
@@ -443,10 +441,10 @@ Page.patch(state => {
 		}
 		return obj;
 	}
-	filters.form = function (val, what, action, name) {
+	state.scope.$filters.form = function (ctx, val, action, name) {
 		const form = name
 			? document.querySelector(`form[name="${name}"]`)
-			: what.parent.closest('form');
+			: ctx.dest.node.closest('form');
 		if (!form) {
 			// eslint-disable-next-line no-console
 			console.warn("No parent form found");

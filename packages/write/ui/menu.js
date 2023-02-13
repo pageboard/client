@@ -32,11 +32,11 @@ Pageboard.Controls.Menu = class Menu {
 			active, icon, title, el
 		}, {
 			$filters: {
-				breaks(str) {
+				breaks(ctx, str) {
 					if (!str) return str;
 					return str.split(' ').join('\n');
 				},
-				svg(node) {
+				svg(ctx, node) {
 					if (node && node.nodeName == "SVG") node.setAttribute('class', 'icon');
 				}
 			}

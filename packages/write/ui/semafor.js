@@ -723,7 +723,7 @@ Semafor.types.array = function (key, schema, node, inst) {
 					schema, key
 				}, {
 					$filters: {
-						itemVal: val => {
+						itemVal: (ctx, val) => {
 							if (val == null) return val;
 							return Semafor.getValStr(val);
 						}

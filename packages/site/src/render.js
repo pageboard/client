@@ -107,6 +107,7 @@ function renderBlock(el, scope, block, bscope) {
 	}
 
 	if (el.filters) rscope.$filters = { ...rscope.$filters, ...el.filters };
+	if (el.hooks) rscope.$hooks = { ...rscope.$hooks, ...el.hooks };
 
 	const data = Pageboard.merge(block.data, block.expr, (c, v) => {
 		if (typeof v != "string") return;

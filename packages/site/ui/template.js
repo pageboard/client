@@ -138,7 +138,12 @@ class HTMLElementTemplate extends Page.Element {
 		const el = {
 			name: 'element_template_' + String(Math.round(Date.now() * Math.random())).slice(-6),
 			dom: tmpl,
-			filters: { '||': (v, w) => collector.filter(v, w) },
+			hooks: {
+				afterAll(ctx, v) {
+					collector.filter(ctx, v);
+					return v;
+				}
+			},
 			contents: tmpl.querySelectorAll('[block-content]').map(node => {
 				return {
 					id: node.getAttribute('block-content'),
@@ -300,8 +305,8 @@ class QueryCollectorFilter {
 		this.query = query;
 		this.state = state;
 	}
-	filter(val, what) {
-		const path = what.scope.path;
+	filter(ctx, val) {
+		const path = ctx.expr.path;
 		if (path[0] != "$query") return val;
 		this.used = true;
 		const { query, vars } = this.state;
@@ -316,7 +321,7 @@ class QueryCollectorFilter {
 			if (!vars[key]) vars[key] = !undef;
 			this.query[key] = val;
 		} else if (typeof val == "string") {
-			const isEnc = what.expr.filters[what.expr.filters.length - 1]?.name == "enc";
+			const isEnc = ctx.expr.filters[ctx.expr.filters.length - 1]?.[0] == "enc";
 			const loc = Page.parse(isEnc ? '?' + decodeURIComponent(val) : val).query;
 			for (const [key, val] of Object.entries(loc)) {
 				if (query[key] === val) vars[key] = true;
@@ -337,17 +342,17 @@ Page.constructor.prototype.templatesQuery = function (node) {
 	const $query = {};
 	const scope = state.scope.copy();
 	let missings = 0;
-	scope.$filters = {
-		...scope.$filters,
-		'||': function (val, what) {
+	scope.$hooks = {
+		...scope.$hooks,
+		afterAll: function (ctx, val) {
 			if (val === undefined) {
 				// it is the duty of the fetch block to redirect 400 if needed
 				missings++;
-			} else if (what.expr.path.length > 1) {
-				const key = what.expr.path.slice(1).join('.');
+			} else if (ctx.expr.path.length > 1) {
+				const key = ctx.expr.path.slice(1).join('.');
 				state.vars[key] = true;
 				if (val != null) $query[key] = val;
-			} else if (what.expr.path[0] == "$pathname") {
+			} else if (ctx.expr.path[0] == "$pathname") {
 				$query["$pathname"] = val;
 			}
 		}
