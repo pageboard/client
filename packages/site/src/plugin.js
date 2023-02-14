@@ -4,7 +4,9 @@ export const formats = {
 };
 
 export const filters = {
-	sum, schema, unset, set, query, urltpl, templates, content
+	sum,
+	schema: ['?', 'path?', 'path?', schemaFn],
+	unset, set, query, urltpl, templates, content
 };
 
 export const hooks = {
@@ -126,14 +128,14 @@ function sum(ctx, obj, ...list) {
 	return sum;
 }
 
-function schema(ctx, val, spath, absPath) {
+function schemaFn(ctx, val, spath, absPath) {
 	// FIXME this should be simpler now
 	// return schema of repeated key, schema of anyOf/listOf const value
 	if (val === undefined) return;
 	let isIndex = false;
 	if (!absPath) {
 		const path = ctx.expr.path;
-		let data = path[0]?.startsWith('$') ? ctx.scope : ctx.data;
+		let data = ctx.data;
 		const blocks = [];
 		for (let i = 0; i < path.length; i++) {
 			if (!data) break;
@@ -148,8 +150,11 @@ function schema(ctx, val, spath, absPath) {
 
 		isIndex = !Number.isNaN(parseInt(path[path.length - 1]));
 
-		absPath = item.block.type + '.properties.'
-			+ path.slice(item.index, isIndex ? -1 : null).join('.properties.');
+		absPath = [
+			item.block.type,
+			'properties',
+			...path.slice(item.index, isIndex ? -1 : null).join('.properties.').split('.')
+		];
 	}
 
 	let schema = ctx.expr.get(ctx.scope.$elements, absPath);
@@ -164,13 +169,8 @@ function schema(ctx, val, spath, absPath) {
 		console.warn("Expected schema type: array", absPath);
 		return;
 	}
-	let iskey = spath.endsWith('+');
-	if (iskey) {
-		spath = spath.slice(0, -1);
-	} else {
-		iskey = ctx.scope.iskey !== undefined && ctx.scope.iskey !== false;
-	}
-	if (!iskey && val !== undefined) {
+
+	if (val !== undefined) {
 		const listOf = schema.oneOf || schema.anyOf;
 		if (listOf) {
 			const prop = listOf.find(item => {
