@@ -13,7 +13,7 @@ class HTMLElementContent extends Page.Element {
 			else filter = [];
 			const list = `[dom${filter.join('|')}]`.fuse({
 				dom: Array.from(this.querySelectorAll(selector))
-			});
+			}, state.scope);
 			this.textContent = '';
 			list.forEach(node => this.appendChild(node));
 		}
