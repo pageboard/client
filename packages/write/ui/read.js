@@ -1,6 +1,6 @@
 Page.setup(state => {
 	const it = window.parent.Pageboard;
-	if (!it || !it.adopt || !state.data.$cache) return;
+	if (!it || !it.adopt || !state.scope.$cache) return;
 	state.finish(() => {
 		it.adopt(window, state);
 	});

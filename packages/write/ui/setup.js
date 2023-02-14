@@ -131,7 +131,7 @@ function update() {
 }
 
 Pageboard.Editor = function Editor(win, state) {
-	const page = state.data.$cache.item;
+	const page = state.scope.$cache.item;
 	if (!page || page.type == "error") {
 		Pageboard.write.hidden = true;
 		console.warn("Not loading editor: no page or error page");

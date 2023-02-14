@@ -47,12 +47,12 @@ Pageboard.Controls.Mode = class Mode {
 			const mode = document.body.dataset.mode;
 			if (mode != "read") {
 				const store = this.editor.controls.store;
-				if (state.data.$cache) {
-					delete state.data.$cache.items;
+				if (state.scope.$cache) {
+					delete state.scope.$cache.items;
 					store.flush();
 					const backup = store.reset();
-					state.data.$cache.item = (backup.unsaved || backup.initial)[store.rootId];
-					state.data.$cache.items = Object.values(backup.unsaved || backup.initial);
+					state.scope.$cache.item = (backup.unsaved || backup.initial)[store.rootId];
+					state.scope.$cache.items = Object.values(backup.unsaved || backup.initial);
 					state.data.$store = backup;
 					state.save();
 				}

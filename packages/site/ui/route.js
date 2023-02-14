@@ -1,10 +1,10 @@
 Page.route(async state => {
-	const res = state.data.$cache ?? await Pageboard.fetch('get', '/.api/page', {
+	const res = state.scope.$cache ?? await Pageboard.fetch('get', '/.api/page', {
 		url: state.pathname.replace(/\.\w+$/, ''),
 		nested: window.parent != window ? 1 : undefined
 	});
 	await Pageboard.bundle(state, res);
-	state.data.$cache = res;
+	state.scope.$cache = res;
 	state.scope.$page = res.item;
 	const node = Pageboard.render(res, state.scope);
 	if (!node || node.nodeName != "BODY") {

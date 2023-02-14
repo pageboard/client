@@ -152,7 +152,10 @@ class HTMLElementTemplate extends Page.Element {
 			})
 		};
 		for (const [key, val] of Object.entries(state.data)) {
-			if (key.startsWith('$') && scope[key] == null) scope[key] = val;
+			if (key.startsWith('$') && scope[key] == null) {
+				console.warn("data key should not start with $", key);
+				scope[key] = val;
+			}
 		}
 
 		// we need to keep track of [start, end]
