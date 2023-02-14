@@ -52,7 +52,6 @@ exports.input_date_time = {
 		step: {
 			title: 'Time steps',
 			description: 'Ignored for dates',
-			type: 'integer',
 			default: null,
 			anyOf: [{
 				const: null,
