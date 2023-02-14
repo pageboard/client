@@ -27,15 +27,11 @@ Pageboard.Controls.Menu = class Menu {
 
 		const dom = document.dom(`<a class="item [active] [disabled]" title="[el.description]">
 			[icon|as:html|svg:]
-			<span>[title|breaks:|as:text]</span>
+			<span>[title|split: |join:\n|as:text]</span>
 		</a>`).fuse({
 			active, icon, title, el
 		}, {
 			$filters: {
-				breaks(ctx, str) {
-					if (!str) return str;
-					return str.split(' ').join('\n');
-				},
 				svg(ctx, node) {
 					if (node && node.nodeName == "SVG") node.setAttribute('class', 'icon');
 					return node;
