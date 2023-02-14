@@ -1,12 +1,8 @@
-class HTMLCustomFieldSetElement extends HTMLFieldSetElement {
+class HTMLCustomFieldSetElement extends Page.create(HTMLFieldSetElement) {
 	static defaults = {
 		dataName: null,
 		dataValue: null
 	};
-	constructor() {
-		super();
-		this.init?.();
-	}
 
 	fill(query) {
 		if (this.isContentEditable || !this.options?.name || !this.form) return;

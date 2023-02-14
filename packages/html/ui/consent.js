@@ -1,8 +1,4 @@
-class HTMLCustomConsentElement extends HTMLFormElement {
-	constructor() {
-		super();
-		if (this.init) this.init();
-	}
+class HTMLCustomConsentElement extends Page.create(HTMLFormElement) {
 	static defaults = {
 		dataTransient: false
 	};

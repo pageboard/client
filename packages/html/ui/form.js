@@ -1,8 +1,4 @@
-class HTMLCustomFormElement extends HTMLFormElement {
-	constructor() {
-		super();
-		if (this.init) this.init();
-	}
+class HTMLCustomFormElement extends Page.create(HTMLFormElement) {
 	init() {
 		this.getMethodLater = Pageboard.debounce(this.getMethod, 300);
 	}
