@@ -40,10 +40,7 @@
 	border-radius: 0;
 	width: auto;
 	min-width: 0;
-	align-self: flex-end;
-}
-#menu .ui.labeled.icon.menu .item b.icon {
-	font-size: 1.4em !important;
+	justify-content: space-around;
 }
 #menu .ui.menu:not(.vertical) .item {
 	padding: 0.6em 0.7em;
