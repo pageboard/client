@@ -714,7 +714,7 @@ Semafor.types.array = function (key, schema, node, inst) {
 				<div class="inline field">
 					<label class="ui checkbox">
 						<input type="checkbox"
-							name="[key]" value="[schema.items.anyOf|repeat:.field:item|itemVal]" tabindex="0" />
+							name="[key]" value="[schema.items.anyOf|at:.field|repeat:item|as:itemVal]" tabindex="0" />
 						<span>[item.title]</span>
 					</label>
 				</div>
@@ -723,9 +723,11 @@ Semafor.types.array = function (key, schema, node, inst) {
 					schema, key
 				}, {
 					$filters: {
-						itemVal: (ctx, val) => {
-							if (val == null) return val;
-							return Semafor.getValStr(val);
+						as: {
+							itemVal: (ctx, val) => {
+								if (val == null) return val;
+								return Semafor.getValStr(val);
+							}
 						}
 					}
 				});

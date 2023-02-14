@@ -12,7 +12,7 @@ exports.fetch = {
 	},
 	html: `<element-template
 		disabled="[disabled]"
-		action="/.api/query/[$id][action?.method|prune:]"
+		action="/.api/query/[$id][action?.method|prune:-]"
 		data-auto="[action?.auto]"
 		data-pagination="[$expr?.action?.parameters?.offset|templates:$query]"
 		parameters="[$expr?.action?.parameters|templates:$query:$pathname]"

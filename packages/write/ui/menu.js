@@ -38,6 +38,7 @@ Pageboard.Controls.Menu = class Menu {
 				},
 				svg(ctx, node) {
 					if (node && node.nodeName == "SVG") node.setAttribute('class', 'icon');
+					return node;
 				}
 			}
 		});

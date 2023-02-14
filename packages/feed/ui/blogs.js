@@ -26,7 +26,7 @@ class HTMLElementBlogs extends Page.Element {
 				items: res.items
 			}, state.scope, {
 				name: 'blogs-content',
-				html: '<div block-id="[$items.id|repeat:*:item]" block-type="item[item.type]" />'
+				html: '<div block-id="[items.id|repeat:*:item]" block-type="item[item.type]" />'
 			});
 			this.appendChild(frag);
 		});

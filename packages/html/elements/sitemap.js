@@ -55,7 +55,7 @@ exports.sitemap = {
 					<span class="ui mini type label">[$grants.webmaster|prune:*][$type]</span>
 					<span class="ui mini black label">[$grants.webmaster|prune:*][nositemap|prune:*]no sitemap</span>
 					<span class="ui mini orange label">[$grants.webmaster|prune:*][noindex|prune:*]no index</span>
-					<span class="ui mini red label">[$grants.webmaster|prune:*][$lock.read|fail:*]</span>
+					<span class="ui mini red label">[$grants.webmaster|prune:*][$lock?.read|fail:*]</span>
 					<br>
 					<a href="[url]" class="description">[url|or:-]</a>
 					<a href="[redirect|fail:*]" class="redirection"> ➜ [redirect]</a>
