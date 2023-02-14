@@ -52,23 +52,24 @@ class HTMLElementSitemap extends Page.Element {
 		});
 	}
 
-	build(state) {
+	async build(state) {
 		if (this.firstElementChild.children.length > 0 && this.isContentEditable) {
 			// workaround... build is called a second time with pagecut-placeholder set
 			return;
 		}
-		return Pageboard.bundle(Pageboard.fetch('get', `/.api/pages`), state).then(res => {
-			state.scope.$element = state.scope.$elements.sitemap;
-			const tree = this.constructor.transformResponse(res);
-			const node = Pageboard.render({
-				item: tree
-			}, state.scope);
-			// only change block content
-			const src = node.firstElementChild;
-			const dst = this.firstElementChild;
-			dst.textContent = '';
-			while (src.firstChild) dst.appendChild(src.firstChild);
-		});
+		const res = await Pageboard.fetch('get', `/.api/pages`);
+		await Pageboard.bundle(res, state);
+		const scope = state.scope.copy();
+		scope.$element = scope.$elements.sitemap;
+		const tree = this.constructor.transformResponse(res);
+		const node = Pageboard.render({
+			item: tree
+		}, scope);
+		// only change block content
+		const src = node.firstElementChild;
+		const dst = this.firstElementChild;
+		dst.textContent = '';
+		while (src.firstChild) dst.appendChild(src.firstChild);
 	}
 }
 
