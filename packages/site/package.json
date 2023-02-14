@@ -22,7 +22,7 @@
     "@ungap/custom-elements": "^1.1.1",
     "class-deferred": "^1.0.1",
     "debounce": "^1.2.1",
-    "matchdom": "^9.9.0",
+    "matchdom": "^9.9.1",
     "postinstall": "^0.8.0",
     "postinstall-bundle": "^0.8.0",
     "window-page": "^14.1.1"
