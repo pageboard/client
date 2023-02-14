@@ -54,13 +54,9 @@ function initState(res, state) {
 	scope.$referrer = referrer.pathname || pathname;
 	if (!res) return;
 	if (res.grants) {
-		state.data.$grants = res.grants;
 		scope.$write = Boolean(res.grants.webmaster);
 	}
-	if (res.hrefs) Object.assign(state.data.$hrefs, res.hrefs);
-	scope.$hrefs = state.data.$hrefs; // backward compat FIXME get rid of this, data.$hrefs is good
-
-	for (const k of ["grants", "links", "site", "locked", "granted"]) {
+	for (const k of ["grants", "links", "site", "locked", "granted", "hrefs"]) {
 		if (res[k] !== undefined) scope[`$${k}`] = res[k];
 	}
 	if (res.item && !scope.$element) {
