@@ -213,7 +213,7 @@ exports.input_number = {
 		id: 'label',
 		nodes: 'inline*'
 	},
-	html: `<div class="[width|as:colnums|post: wide] field">
+	html: `<div class="field">
 		<label block-content="label">Label</label>
 		<input name="[name]"
 			required="[required]"
