@@ -3,12 +3,12 @@ class HTMLElementBlogs extends Page.Element {
 		topics: (x) => (x || '').split(',').filter(x => Boolean(x))
 	};
 
-	patch(state) {
+	async patch(state) {
 		const blogPath = state.pathname.replace(/\.rss$/, '');
 		this.dataset.url = blogPath; // see write's page-title input helper
 		const topics = this.options.topics;
 		// if (topics && !Array.isArray(topics)) topics = [topics];
-		return Pageboard.bundle(Pageboard.fetch('get', '/.api/blocks', {
+		const res = await Pageboard.fetch('get', '/.api/blocks', {
 			type: 'blog',
 			data: {
 				'url:start': blogPath + (blogPath != '/' ? '/' : ''),
@@ -17,19 +17,19 @@ class HTMLElementBlogs extends Page.Element {
 			},
 			content: true,
 			order: ['-data.publication', 'data.index']
-		}), state).then(res => {
-			this.blogs = res.items;
-			state.scope.$element = state.scope.$elements.blogs;
-			this.textContent = '';
-			const frag = Pageboard.render({
-				item: {},
-				items: res.items
-			}, state.scope, {
-				name: 'blogs-content',
-				html: '<div block-id="[items.id|repeat:*:item]" block-type="item[item.type]" />'
-			});
-			this.appendChild(frag);
 		});
+		await Pageboard.bundle(res, state);
+		this.blogs = res.items;
+		state.scope.$element = state.scope.$elements.blogs;
+		this.textContent = '';
+		const frag = Pageboard.render({
+			item: {},
+			items: res.items
+		}, state.scope, {
+			name: 'blogs-content',
+			html: '<div block-id="[items|repeat:item|.id]" block-type="item[item.type]" />'
+		});
+		this.appendChild(frag);
 	}
 	build(state) {
 		const version = state.scope.$site.version || undefined;
