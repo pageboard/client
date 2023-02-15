@@ -16,61 +16,58 @@ class HTMLElementTemplate extends Page.Element {
 	}
 
 	async fetch(state) {
+		const { scope } = state;
 		// FIXME remove this heresy
-		const disabled = (this.getAttribute('disabled') || '').fuse({
-			$query: state.query
-		}, state.scope);
+		const disabled = (this.getAttribute('disabled') || '').fuse({}, scope);
 		// end of heresy
 		const action = disabled ? null : this.getAttribute('action');
-		const $query = state.templatesQuery(this);
-		const missings = $query == null;
+		const request = state.templatesQuery(this);
+		const missings = request == null;
 
 		// redirections are only allowed to use collected query params
-		const data = { $query };
-
 
 		this.toggleMessages();
 		if (missings) {
 			this.ownView.textContent = '';
-			data.$status = 400;
-			data.$statusText = 'Missing Query Parameters';
-		} else try {
+			scope.$status = 400;
+			scope.$statusText = 'Missing Query Parameters';
+		} else if (action) try {
 			if (this.#auto) {
-				$query[this.dataset.pagination] = this.dataset.stop;
+				request[this.dataset.pagination] = this.dataset.stop;
 			}
-			const res = action ? await Pageboard.fetch('get', action, $query) : null;
+			scope.$request = request;
+
+			const res = await Pageboard.fetch('get', action, request);
 			this.loading = true;
 			if (action) this.classList.add('loading');
 			await Pageboard.bundle(state, res);
-			if (res) {
-				data.$response = res;
-				data.$status = res.status;
-				data.$statusText = res.statusText;
-			}
-			this.render(res, state);
+			scope.$response = res;
+			scope.$status = res.status;
+			scope.$statusText = res.statusText;
 		} catch(err) {
-			data.$status = -1;
+			scope.$status = -1;
 			// eslint-disable-next-line no-console
 			console.error("Error building", err);
 		}
+		this.render(state);
 		this.classList.remove('loading');
 		this.loading = false;
-		if (data.$status == null) return;
-		const redirect = this.getRedirect(data.$status);
+		if (scope.$status == null) return;
+		const redirect = this.getRedirect(scope.$status);
 		if (!redirect) {
-			if (this.toggleMessages(data.$status)) {
+			if (this.toggleMessages(scope.$status)) {
 				// report statusCode because it is meant to be shown
-				if (data.$status > (state.status || 0)) {
-					state.status = data.$status;
-					state.statusText = data.$statusText;
+				if (scope.$status > (state.status || 0)) {
+					state.status = scope.$status;
+					state.statusText = scope.$statusText;
 				}
 			}
 			return;
 		}
 
-		const loc = Page.parse(redirect).fuse(data, state.scope);
+		const loc = Page.parse(redirect).fuse({}, scope);
 		state.status = 301;
-		state.statusText = `Form Redirection ${data.$status}`;
+		state.statusText = `Form Redirection ${scope.$status}`;
 		state.location = loc.toString();
 	}
 
@@ -109,23 +106,20 @@ class HTMLElementTemplate extends Page.Element {
 		return found;
 	}
 
-	render(data, state) {
+	render(state) {
 		const view = this.ownView;
 		const scope = state.scope.copy();
+		const data = scope.$response ?? {};
 		const tmpl = this.ownTpl.content.cloneNode(true);
 		for (const node of tmpl.querySelectorAll('[block-id]')) {
 			node.removeAttribute('block-id');
 		}
 
 		// allow sub-templates to merge current data
+
 		for (const tpl of tmpl.querySelectorAll('template')) {
 			if (tpl.parentNode.nodeName == this.nodeName || !tpl.content) continue;
-			tpl.content.fuse(data, {
-				$filters: {
-					...scope.$filters,
-					repeat() { }
-				}
-			});
+			tpl.content.fuse(data, scope);
 			// get rid of block-id in those templates to avoid
 			// pagecut from dying on them
 			for (const node of tpl.content.querySelectorAll('[block-id]')) {
@@ -295,6 +289,9 @@ Object.getPrototypeOf(Page.constructor).prototype.fuse = function (data, scope) 
 	this.pathname = this.pathname.fuse(data, scope);
 	const q = this.query;
 	for (const [key, val] of Object.entries(q)) {
+		if (scope.$request && String(val).includes('$query')) {
+			console.error("FIXME: this should use $request, not $query", key, val);
+		}
 		q[key] = typeof val == "string" ? val.fuse(data, scope) : val;
 	}
 	return this;
@@ -362,7 +359,7 @@ Page.constructor.prototype.templatesQuery = function (node) {
 	};
 	params.split(' ').map(str => {
 		return `[${str}]`;
-	}).join('').fuse({ $query: state.query, $pathname: state.pathname }, scope);
+	}).join('').fuse({}, scope);
 	if (missings > 0) return null;
 	else return $query;
 };
