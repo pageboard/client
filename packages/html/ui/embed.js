@@ -76,6 +76,6 @@ class HTMLElementEmbed extends Page.Element {
 	}
 }
 
-Page.ready(() => {
-	Page.define('element-embed', HTMLElementEmbed);
-});
+
+Page.define('element-embed', HTMLElementEmbed);
+

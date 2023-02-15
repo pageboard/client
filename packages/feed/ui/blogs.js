@@ -161,4 +161,4 @@ class HTMLElementBlogs extends Page.Element {
 	}
 }
 
-Page.ready(() => Page.define('element-blogs', HTMLElementBlogs));
+Page.define('element-blogs', HTMLElementBlogs);

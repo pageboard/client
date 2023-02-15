@@ -1,5 +1,16 @@
 
 class HTMLElementInclude extends Page.Element {
+	init() {
+		const Cla = window.customElements.get('element-template');
+		this.toggleMessages = function (name) {
+			const parent = this.children.find(
+				node => node.matches('[block-content="messages"]')
+			);
+			return Cla.prototype.toggleMessages.call(this, name, parent);
+		};
+		this.fetch = Cla.prototype.fetch;
+		this.getRedirect = Cla.prototype.getRedirect;
+	}
 	patch(state) {
 		if (this.loading) return;
 		return this.fetch(state);
@@ -14,15 +25,5 @@ class HTMLElementInclude extends Page.Element {
 		return this.children.find(node => node.matches('[block-content="blocks"]'));
 	}
 }
-Page.ready(() => {
-	const Cla = window.customElements.get('element-template');
-	HTMLElementInclude.prototype.toggleMessages = function (name) {
-		const parent = this.children.find(
-			node => node.matches('[block-content="messages"]')
-		);
-		return Cla.prototype.toggleMessages.call(this, name, parent);
-	};
-	HTMLElementInclude.prototype.fetch = Cla.prototype.fetch;
-	HTMLElementInclude.prototype.getRedirect = Cla.prototype.getRedirect;
-	Page.define('element-include', HTMLElementInclude);
-});
+
+Page.define('element-include', HTMLElementInclude);

@@ -32,6 +32,6 @@ class HTMLCustomFieldSetElement extends Page.create(HTMLFieldSetElement) {
 	}
 }
 
-Page.ready(() => {
-	Page.define(`element-fieldset`, HTMLCustomFieldSetElement, 'fieldset');
-});
+
+Page.define(`element-fieldset`, HTMLCustomFieldSetElement, 'fieldset');
+

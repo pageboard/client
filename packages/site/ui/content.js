@@ -19,7 +19,7 @@ class HTMLElementContent extends Page.Element {
 		}
 	}
 }
-Page.ready(() => {
-	Page.define('element-content', HTMLElementContent);
-});
+
+Page.define('element-content', HTMLElementContent);
+
 

@@ -350,6 +350,6 @@ class HTMLElementInputHTML extends HTMLTextAreaElement {
 		this.#editor?.destroy();
 	}
 }
-Page.ready(() => {
-	Page.define('element-input-html', HTMLElementInputHTML, 'textarea');
-});
+
+Page.define('element-input-html', HTMLElementInputHTML, 'textarea');
+

@@ -16,10 +16,6 @@ class HTMLElementGallery extends Page.Element {
 		this.selectedMode = mode;
 	}
 
-	paint() {
-		/* needed for gallery-helper */
-	}
-
 	handleClick(e, state) {
 		const anchor = e.target.closest('a');
 		if (anchor) {

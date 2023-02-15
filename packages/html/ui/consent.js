@@ -59,9 +59,9 @@ class HTMLCustomConsentElement extends Page.create(HTMLFormElement) {
 	}
 }
 
-Page.ready(() => {
-	Page.define(`element-consent`, HTMLCustomConsentElement, 'form');
-});
+
+Page.define(`element-consent`, HTMLCustomConsentElement, 'form');
+
 
 Page.constructor.prototype.consent = function (fn) {
 	const initial = this.scope.$consent === undefined;

@@ -30,6 +30,4 @@ class HTMLElementTabs extends Page.Element {
 	}
 }
 
-Page.ready(() => {
-	Page.define('element-tabs', HTMLElementTabs);
-});
+Page.define('element-tabs', HTMLElementTabs);

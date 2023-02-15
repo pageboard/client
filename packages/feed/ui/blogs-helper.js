@@ -1,4 +1,4 @@
-class HTMLElementBlogsHelper {
+Page.extend('element-blogs', class HTMLElementBlogsHelper {
 	setup() {
 		this.observer = new MutationObserver(() => this.updateChildren());
 		this.observer.observe(this, {
@@ -30,6 +30,4 @@ class HTMLElementBlogsHelper {
 		block.data.index = parseInt(node.dataset.index) || 0;
 		editor.dispatch(editor.utils.refreshTr(editor.state.tr, node, block));
 	}
-}
-
-Page.setup(() => Page.extend('element-blogs', HTMLElementBlogsHelper));
+});

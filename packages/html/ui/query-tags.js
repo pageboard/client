@@ -102,7 +102,7 @@ class HTMLElementQueryTags extends Page.Element {
 	}
 }
 
-Page.ready(() => {
-	Page.define('element-query-tags', HTMLElementQueryTags);
-});
+
+Page.define('element-query-tags', HTMLElementQueryTags);
+
 

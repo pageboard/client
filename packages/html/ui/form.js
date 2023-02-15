@@ -1,6 +1,13 @@
 class HTMLCustomFormElement extends Page.create(HTMLFormElement) {
 	init() {
 		this.getMethodLater = Pageboard.debounce(this.getMethod, 300);
+		const Cla = window.customElements.get('element-template');
+		this.toggleMessages = function (status) {
+			return Cla.prototype.toggleMessages.call(this, status, this);
+		};
+		this.getRedirect = function (status) {
+			return Cla.prototype.getRedirect.call(this, status, this);
+		};
 	}
 	patch(state) {
 		if (this.isContentEditable) return;
@@ -301,17 +308,8 @@ HTMLFormElement.prototype.disable = function () {
 	}
 };
 
-Page.ready(() => {
-	const Cla = window.customElements.get('element-template');
-	HTMLCustomFormElement.prototype.toggleMessages = function (status) {
-		return Cla.prototype.toggleMessages.call(this, status, this);
-	};
-	HTMLCustomFormElement.prototype.getRedirect = function (status) {
-		return Cla.prototype.getRedirect.call(this, status, this);
-	};
+Page.define(`element-form`, HTMLCustomFormElement, 'form');
 
-	Page.define(`element-form`, HTMLCustomFormElement, 'form');
-});
 
 HTMLSelectElement.prototype.fill = function (val) {
 	if (!Array.isArray(val)) val = [val];
