@@ -73,7 +73,7 @@ Pageboard.schemaHelpers.page = class PageHelper {
 			}
 		})(this.container.nextElementSibling);
 
-		this.node.addEventListener('input', Pageboard.debounce(e => {
+		this.node.addEventListener('input', Page.debounce(e => {
 			if (this.ignoreEvents) return;
 			if (this.action == "search") {
 				this.searchUpdate();

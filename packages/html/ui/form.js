@@ -1,6 +1,6 @@
 class HTMLCustomFormElement extends Page.create(HTMLFormElement) {
 	init() {
-		this.getMethodLater = Pageboard.debounce(this.getMethod, 300);
+		this.getMethodLater = Page.debounce(this.getMethod, 300);
 		const Cla = window.customElements.get('element-template');
 		this.toggleMessages = function (status) {
 			return Cla.prototype.toggleMessages.call(this, status, this);

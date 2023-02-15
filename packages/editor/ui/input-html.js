@@ -312,7 +312,7 @@ class HTMLElementInputHTML extends HTMLTextAreaElement {
 			els[name] = copy;
 		}
 
-		this.#saver = Pageboard.debounce(editor => {
+		this.#saver = state.debounce(editor => {
 			super.value = this.#editor.to()?.content[""];
 		}, 100);
 

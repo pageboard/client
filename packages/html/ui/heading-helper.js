@@ -1,17 +1,11 @@
 class HTMLElementHeadingHelper extends HTMLHeadingElement {
-	constructor() {
-		super();
-		if (this.init) this.init();
-	}
-	init() {
-		this.willSync = Pageboard.debounce(this.sync, 100);
+	setup(state) {
+		this.willSync = state.debounce(this.sync, 100);
 		this.observer = new MutationObserver(records => {
 			if (records.some(mut => {
 				return mut.type == "characterData" || mut.type == "childList" && mut.addedNodes.length;
-			}))	this.willSync();
+			})) this.willSync();
 		});
-	}
-	setup() {
 		this.observer.observe(this, {
 			childList: true,
 			subtree: true,

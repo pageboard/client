@@ -28,7 +28,7 @@ class HTMLInputMap extends Page.Element {
 		this.#proxy = this.appendChild(
 			this.dom(`<input name="${this.name}" type="hidden" />`)
 		);
-		const renderer = Pageboard.debounce(() => this.#render(), 10);
+		const renderer = Page.debounce(() => this.#render(), 10);
 		this.#observer = new MutationObserver(mutations => renderer());
 		this.#observer.observe(this.#proxy, {
 			attributes: true
