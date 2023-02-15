@@ -223,72 +223,62 @@ class HTMLCustomFormElement extends Page.create(HTMLFormElement) {
 			this.toggleMessages(status);
 		});
 	}
-	postMethod(e, state) {
+	async postMethod(e, state) {
 		if (e.type != "submit") return;
 		const form = this;
-		const $query = this.dataset;
-
 		form.classList.add('loading');
 
-		const data = { $query };
-		return Promise.all(Array.from(form.elements).filter(node => {
+		await Promise.all(Array.from(form.elements).filter(node => {
 			return Boolean(node.presubmit);
-		}).map(input => {
-			return input.presubmit();
-		})).then(() => {
-			data.$query = state.query;
-			data.$request = form.read(true);
-			form.disable();
-			return Pageboard.fetch(form.method, Page.format({
-				pathname: form.getAttribute('action'),
-				query: data.$query
-			}), data.$request);
-		}).catch(err => err).then(res => {
-			if (res?.grants) state.data.$grants = res.grants;
-			state.scope.$response = res;
-			form.enable();
+		}).map(input => input.presubmit()));
 
-			form.classList.remove('loading');
+		const { scope } = state;
+		scope.$request = form.read(true);
+		form.disable();
 
-			// messages shown inside form, no navigation
-			const hasMsg = form.toggleMessages(res.status);
-			const ok = res.status >= 200 && res.status < 300;
-			let redirect = form.getRedirect(res.status);
+		const res = await Pageboard.fetch(form.method, Page.format({
+			pathname: form.getAttribute('action'),
+			query: state.query
+		}), scope.$request).catch(err => err);
 
-			if (ok) {
-				form.forget();
-				form.save();
-				if (!redirect && form.closest('element-template') && !hasMsg) {
-					redirect = state.toString();
-				}
+		if (res?.grants) scope.$grants = res.grants;
+		scope.$response = res;
+		scope.$status = res.status;
+		form.enable();
+
+		form.classList.remove('loading');
+
+		// messages shown inside form, no navigation
+		const hasMsg = form.toggleMessages(res.status);
+		const ok = res.status >= 200 && res.status < 300;
+		let redirect = form.getRedirect(res.status);
+
+		if (ok) {
+			form.forget();
+			form.save();
+			if (!redirect && form.closest('element-template') && !hasMsg) {
+				redirect = state.toString();
 			}
+		}
+		if (!redirect) {
+			if (res.granted) redirect = state.toString();
+			else return;
+		}
+		if (redirect && !ok) {
+			form.backup();
+		}
 
-			if (!redirect) return;
-
-			data.$response = res;
-			data.$status = res.status;
-			if (!redirect) {
-				if (res.granted) redirect = state.toString();
-				else return;
+		const loc = Page.parse(redirect).fuse({}, scope);
+		let vary = false;
+		if (loc.samePathname(state)) {
+			if (res.granted) {
+				vary = true;
+			} else {
+				vary = "patch";
 			}
-			if (redirect && !ok) {
-				form.backup();
-			}
-
-			const loc = Page.parse(redirect).fuse(data, state.scope);
-			let vary = false;
-			if (loc.samePathname(state)) {
-				if (res.granted) {
-					vary = true;
-				} else {
-					vary = "patch";
-				}
-				state.data.$vary = vary;
-			}
-			return state.push(loc, {
-				vary: vary
-			});
-		});
+			scope.$vary = vary;
+		}
+		return state.push(loc, { vary });
 	}
 }
 window.HTMLCustomFormElement = HTMLCustomFormElement;
