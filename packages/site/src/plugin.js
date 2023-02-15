@@ -12,7 +12,11 @@ export const filters = {
 export const hooks = {
 	beforeEach(ctx, val, filter) {
 		if (filter[0] == "get" && filter[1]?.startsWith('$')) {
+			ctx.$data = ctx.data;
 			ctx.data = ctx.scope;
+		} else if (ctx.$data != null) {
+			ctx.data = ctx.$data;
+			ctx.$data = null;
 		}
 		return val;
 	}
