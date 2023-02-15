@@ -117,55 +117,21 @@ export function extend(name, Ext, is) {
 	}
 	if (list[Ext.name]) return;
 	list[Ext.name] = true;
-	// extend appends Ext.prototype, not prepend
-	monkeyPatchAll(Cla.prototype, Ext.prototype, true);
+	inherits(Cla, Ext);
 }
 
-export function inherits(Child, { prototype: pp }) {
+export function inherits(Child, Parent) {
+	const pp = Parent.prototype;
 	const cp = Child.prototype;
 	const props = Object.getOwnPropertyDescriptors(pp);
 	for (const [name, desc] of Object.entries(props)) {
 		if (!Object.prototype.hasOwnProperty.call(cp, name)) {
 			Object.defineProperty(cp, name, desc);
+		} else if (name != 'constructor') {
+			console.warn(Parent, name, "skipped because defined in", Child);
 		}
 	}
 	return Child;
-}
-
-function monkeyPatch(proto, meth, cb, after) {
-	Object.defineProperty(proto, meth, {
-		configurable: true,
-		enumerable: true,
-		writable: true,
-		value: (function(fn) {
-			return function(...args) {
-				let isP = false;
-				let ret;
-				if (after && fn) {
-					ret = fn.apply(this, args);
-					isP = Promise.resolve(ret) == ret;
-				}
-				if (isP) {
-					ret = ret.then(() => {
-						return cb.apply(this, args);
-					});
-				} else {
-					ret = cb.apply(this, args);
-					isP = Promise.resolve(ret) == ret;
-				}
-				if (!after && fn) {
-					if (isP) {
-						ret = ret.then(() => {
-							return fn.apply(this, args);
-						});
-					} else {
-						ret = fn.apply(this, args);
-					}
-				}
-				return ret;
-			};
-		})(proto[meth])
-	});
 }
 
 function nodeOptions(state, node) {
@@ -219,12 +185,4 @@ function stateOptions(id, defaults, state) {
 		}
 	}
 	return opts;
-}
-
-function monkeyPatchAll(ClaProto, ExtProto, after) {
-	for (const meth of Object.getOwnPropertyNames(ExtProto)) {
-		if (meth != "constructor") {
-			monkeyPatch(ClaProto, meth, ExtProto[meth], after);
-		}
-	}
 }
