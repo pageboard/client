@@ -4,7 +4,7 @@ Pageboard.Controls.Store = class Store {
 	static generated = {};
 
 	constructor(editor, node) {
-		this.debounceUpdate = Page.debounce(this.realUpdate, 500);
+		this.debounceUpdate = Page.debounce(() => this.realUpdate(), 500);
 		this.node = node;
 		this.editor = editor;
 
