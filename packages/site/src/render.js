@@ -66,11 +66,14 @@ export function render(res, scope, el) {
 	});
 
 	if (el) install(el, scope);
-	// FIXME match 9.2's scope is the original object
-	scope = scope.copy ? scope.copy() : Object.assign({}, scope);
-	for (const [k, rek] of Object.entries(res)) scope[`$${k}`] = rek;
 
-	const block = res.item ?? {};
+	scope = scope.copy();
+
+	const block = res.item ?? res;
+	// fixme
+	// api should always reply with some kind of block,
+	// knowing that merge(block.data) and scope contains other keys of the block,
+	// prefixed with $
 	const blocks = {};
 	if (!el && block.type) {
 		el = elts[block.type];
@@ -97,11 +100,12 @@ export function render(res, scope, el) {
 
 function renderBlock(el, scope, block, bscope) {
 	if (!block) block = {};
-	// FIXME match 9.2's scope is the original object
-	const rscope = scope.copy ? scope.copy(bscope) : Object.assign({}, scope, bscope);
+
+	const rscope = scope.copy(bscope);
+
 	rscope.$element = el;
 
-	for (const name of ["id", "type", "parent", "child", "parents", "children", "updated_at", "created_at", "lock", "expr"]) {
+	for (const name of ["id", "type", "parent", "child", "parents", "children", "updated_at", "created_at", "lock", "expr", "items"]) {
 		const val = block[name];
 		if (val != null) rscope['$' + name] = val;
 	}
@@ -109,32 +113,33 @@ function renderBlock(el, scope, block, bscope) {
 	if (el.filters) rscope.$filters = { ...rscope.$filters, ...el.filters };
 	if (el.hooks) rscope.$hooks = { ...rscope.$hooks, ...el.hooks };
 
-	const data = Pageboard.merge(block.data, block.expr, (c, v) => {
+	const data = block.expr ? Pageboard.merge(block.data, block.expr, (c, v) => {
 		if (typeof v != "string") return;
 		return v.fuse({
 			$default: c
 		}, {
 			$filters: {
 				at: function (ctx, val) {
-					return val;
+					return ctx.raw;
 				},
 				prune: function (ctx, val) {
-					return;
+					return ctx.raw;
 				},
 				to: function (ctx, val) {
-					return val;
+					return ctx.raw;
 				}
 			},
 			$hooks: {
 				afterAll: function (ctx, val) {
 					if (ctx.expr.path[0] != "$default") {
-						ctx.cancel = true;
+						ctx.expr.cancel = true;
 					}
 					return val;
 				}
 			}
 		});
-	});
+	}) : block.data;
+
 	let dom = el.dom && el.dom.cloneNode(true);
 	if (el.fuse) {
 		dom = el.fuse(dom, data, rscope) || dom;

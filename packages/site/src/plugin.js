@@ -1,12 +1,13 @@
 export const formats = {
-	as: { polyfills, csp, xid, colnums },
+	as: { polyfills, csp, xid, colnums, block },
 	date: { utc }
 };
 
 export const filters = {
 	sum,
 	schema: ['?', 'path?', 'path?', schemaFn],
-	unset, set, query, urltpl, templates, content
+	content: ['block', 'str', contentFn],
+	unset, set, query, urltpl, templates
 };
 
 export const hooks = {
@@ -21,6 +22,12 @@ export const hooks = {
 		return val;
 	}
 };
+
+function block(ctx, obj) {
+	if (!obj) return;
+	if (typeof obj == "object" && obj.type && obj.id) return obj;
+	else return;
+}
 
 function utc(ctx, val) {
 	if (!val) return val;
@@ -146,6 +153,14 @@ function schemaFn(ctx, val, spath, absPath) {
 			if (data.id && data.type) blocks.push({
 				index: i + 1, // add one because path will be block.data and schema is block.data schema
 				block: data
+			});
+			else if (data.$id && data.$type) blocks.push({
+				index: i + 1,
+				block: {
+					id: data.$id,
+					type: data.$type,
+					data
+				}
 			});
 			data = data[path[i]];
 		}
@@ -294,7 +309,7 @@ function templates(ctx, val, ...prefixes) {
 	return (typeof val == "string" ? Object.keys(obj) : Object.values(obj)).join(' ') || null;
 }
 
-function content(ctx, block, name) {
+function contentFn(ctx, block, name) {
 	const { scope } = ctx;
 
 	const el = {
