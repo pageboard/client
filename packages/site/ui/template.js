@@ -39,7 +39,7 @@ class HTMLElementTemplate extends Page.Element {
 
 			const res = await Pageboard.fetch('get', action, request);
 			this.loading = true;
-			if (action) this.classList.add('loading');
+			this.classList.add('loading');
 			await Pageboard.bundle(state, res);
 			scope.$response = res;
 			scope.$status = res.status;
