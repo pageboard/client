@@ -287,26 +287,30 @@ function urltpl(ctx, obj, pName = 'pathname', qName = 'query') {
 function templates(ctx, val, ...prefixes) {
 	if (!val) return null;
 	const obj = {};
-	const data = {};
-	for (const prefix of prefixes) data[prefix] = {};
-	JSON.stringify(val).fuse(data, {
-		$hooks: {
-			afterAll(ctx, val) {
-				if (prefixes.includes(ctx.expr.path[0]) == false) return val;
-				const key = ctx.expr.path.slice(1).map(
-					k => k.replace(/\\./g, '%5C')
-				).join('.');
-				const expr = ctx.expr.toString();
-				if (obj[key] !== undefined && obj[key] !== expr) {
-					// eslint-disable-next-line no-console
-					console.error(`templates:${prefixes} has incompatible values (${obj[key]} != ${expr})`);
-				} else {
-					obj[key] = expr;
-				}
+	const scope = {};
+	scope.$hooks = {
+		afterAll(ctx, val) {
+			const { path } = ctx.expr;
+			if (prefixes.includes(path[0]) == false) {
+				// ignore those
+				return val;
 			}
+			const key = path.slice(1).map(
+				k => k.replace(/\\./g, '%5C')
+			).join('.'); // query[path] requires path to be escaped
+
+			const optional = val === null && ctx.expr.get(scope, path) === undefined;
+			const prev = obj[key] ?? (obj[key] = `${path[0]}.${key}`);
+			if (optional && !prev.endsWith('?')) obj[key] += '?';
+
+			return val;
 		}
-	});
-	return (typeof val == "string" ? Object.keys(obj) : Object.values(obj)).join(' ') || null;
+	};
+	for (const prefix of prefixes) scope[prefix] = {};
+	JSON.stringify(val).fuse({}, scope);
+	return (
+		typeof val == "string" ? Object.keys(obj) : Object.values(obj)
+	).join(' ') || null;
 }
 
 function contentFn(ctx, block, name) {
