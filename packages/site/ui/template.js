@@ -355,6 +355,7 @@ Page.constructor.prototype.templatesQuery = function (node) {
 			} else if (ctx.expr.path[0] == "$pathname") {
 				$query["$pathname"] = val;
 			}
+			return val;
 		}
 	};
 	params.split(' ').map(str => {
