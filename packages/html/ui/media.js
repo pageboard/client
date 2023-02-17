@@ -1,4 +1,4 @@
-class HTMLElementMedia {
+const HTMLElementMediaConstructor = Superclass => class extends Superclass {
 	#defer;
 
 	init() {
@@ -17,7 +17,7 @@ class HTMLElementMedia {
 		if (curSrc != this.currentSrc) {
 			try {
 				this.currentSrc = curSrc;
-			} catch(e) {
+			} catch (e) {
 				// pass
 			}
 			this.setAttribute('src', curSrc);
@@ -37,28 +37,18 @@ class HTMLElementMedia {
 		this.classList.remove('loading');
 		this.classList.add('error');
 	}
-}
+};
 
-class HTMLElementVideo extends HTMLVideoElement {
-	constructor() {
-		super();
-		if (this.init) this.init();
-	}
+class HTMLElementVideo extends HTMLElementMediaConstructor(Page.create(HTMLVideoElement)) {
 	static defaults = {
 		dataSrc: null
 	};
 }
-Page.inherits(HTMLElementVideo, HTMLElementMedia);
 Page.define('element-video', HTMLElementVideo, 'video');
 
-class HTMLElementAudio extends HTMLAudioElement {
-	constructor() {
-		super();
-		if (this.init) this.init();
-	}
+class HTMLElementAudio extends HTMLElementMediaConstructor(Page.create(HTMLAudioElement)) {
 	static defaults = {
 		dataSrc: null
 	};
 }
-Page.inherits(HTMLElementAudio, HTMLElementMedia);
 Page.define('element-audio', HTMLElementAudio, 'audio');

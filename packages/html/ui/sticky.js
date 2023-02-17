@@ -1,8 +1,4 @@
-class HTMLElementStickyNav extends HTMLElement {
-	constructor() {
-		super();
-		if (this.init) this.init();
-	}
+class HTMLElementStickyNav extends Page.Element {
 	#lastScroll;
 	#currentScroll() {
 		return document.documentElement.scrollTop;

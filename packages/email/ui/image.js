@@ -1,8 +1,4 @@
-class HTMLElementMailImage extends HTMLImageElement {
-	constructor() {
-		super();
-		if (this.init) this.init();
-	}
+class HTMLElementMailImage extends Page.create(HTMLImageElement) {
 	static defaults = {
 		dataSrc: null,
 		dataCrop: null

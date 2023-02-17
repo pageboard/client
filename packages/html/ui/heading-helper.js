@@ -1,4 +1,4 @@
-class HTMLElementHeadingHelper extends HTMLHeadingElement {
+class HTMLElementHeadingHelper extends Page.create(HTMLHeadingElement) {
 	setup(state) {
 		this.willSync = state.debounce(this.sync, 100);
 		this.observer = new MutationObserver(records => {
@@ -26,13 +26,13 @@ class HTMLElementHeadingHelper extends HTMLHeadingElement {
 	}
 }
 
-Page.setup(() => {
-	for (let i = 1; i <= 6; i++) {
-		Page.define(
-			`h${i}-helper`,
-			class extends HTMLElementHeadingHelper { },
-			`h${i}`
-		);
-	}
-});
+
+for (let i = 1; i <= 6; i++) {
+	Page.define(
+		`h${i}-helper`,
+		class extends HTMLElementHeadingHelper { },
+		`h${i}`
+	);
+}
+
 

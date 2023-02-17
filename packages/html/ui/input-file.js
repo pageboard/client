@@ -1,4 +1,4 @@
-class HTMLElementInputFile extends HTMLInputElement {
+class HTMLElementInputFile extends Page.create(HTMLInputElement) {
 	#xhr;
 	#defer;
 	#defaultValue;
@@ -10,11 +10,6 @@ class HTMLElementInputFile extends HTMLInputElement {
 	 * and filled value attribute.
 	 */
 
-	constructor() {
-		super();
-		if (this.init) this.init();
-		this.save();
-	}
 	get defaultValue() {
 		return this.#defaultValue;
 	}
@@ -31,6 +26,9 @@ class HTMLElementInputFile extends HTMLInputElement {
 			this.removeAttribute('value');
 			super.value = "";
 		}
+	}
+	patch() {
+		this.save();
 	}
 	captureClick(e, state) {
 		if (this.value) {

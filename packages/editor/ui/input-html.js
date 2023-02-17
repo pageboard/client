@@ -171,15 +171,10 @@ class MenuBar extends window.Pagecut.MenuBar {
 	}
 }
 
-class HTMLElementInputHTML extends HTMLTextAreaElement {
+class HTMLElementInputHTML extends Page.create(HTMLTextAreaElement) {
 	#editor;
 	#menu;
 	#saver;
-
-	constructor() {
-		super();
-		if (this.init) this.init();
-	}
 
 	static elements = {
 		fragment: {

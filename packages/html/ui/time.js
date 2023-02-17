@@ -1,9 +1,4 @@
-class HTMLElementTime extends HTMLTimeElement {
-	constructor() {
-		super();
-		if (this.init) this.init();
-	}
-
+class HTMLElementTime extends Page.create(HTMLTimeElement) {
 	static defaults = {
 		dataFormat: null,
 		dataTimezone: null,

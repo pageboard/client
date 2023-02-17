@@ -1,14 +1,11 @@
 window.dataLayer = window.dataLayer || [];
 
 // debug using https://tagassistant.google.com/
-class HTMLElementGTMScript extends HTMLScriptElement {
+class HTMLElementGTMScript extends Page.create(HTMLScriptElement) {
 	#type;
 	#id;
 	#started;
-	constructor() {
-		super();
-		if (this.init) this.init();
-	}
+
 	init() {
 		const loc = Page.parse(this.src);
 		this.#type = loc.pathname.startsWith('/gtm') ? 'gtm' : 'gtag';
@@ -66,6 +63,6 @@ class HTMLElementGTMScript extends HTMLScriptElement {
 		if (this.#id) state.consent(this);
 	}
 }
-Page.setup(
-	() => Page.define('element-gtm-script', HTMLElementGTMScript, "script")
-);
+
+Page.define('element-gtm-script', HTMLElementGTMScript, "script");
+

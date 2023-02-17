@@ -1,9 +1,4 @@
-class HTMLElementInputDate extends HTMLInputElement {
-	constructor() {
-		super();
-		if (this.init) this.init();
-	}
-
+class HTMLElementInputDate extends Page.create(HTMLInputElement) {
 	patch() {
 		if (this.type == "date") this.removeAttribute('step');
 	}

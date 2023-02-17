@@ -1,8 +1,4 @@
-class HTMLElementInputRange extends HTMLInputElement {
-	constructor() {
-		super();
-		if (this.init) this.init();
-	}
+class HTMLElementInputRange extends Page.create(HTMLInputElement) {
 	static parse(x) {
 		return (x == null ? '' : x)
 			.split('⩽')

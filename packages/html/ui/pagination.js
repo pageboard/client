@@ -1,4 +1,4 @@
-class HTMLElementPagination extends HTMLAnchorElement {
+class HTMLElementPagination extends Page.create(HTMLAnchorElement) {
 	patch(state) {
 		if (this.isContentEditable) return;
 		state.finish(() => {

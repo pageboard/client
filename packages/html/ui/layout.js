@@ -1,8 +1,4 @@
-class HTMLElementLayout extends HTMLDivElement {
-	constructor() {
-		super();
-		if (this.init) this.init();
-	}
+class HTMLElementLayout extends Page.create(HTMLDivElement) {
 	static defaults = {
 		dataSrc: null,
 		dataCrop: null,
