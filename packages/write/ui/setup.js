@@ -92,6 +92,7 @@ function filterParents(editor, list) {
 		const obj = {
 			node: node,
 			block: editor.blocks.get(node.attrs.id) || editor.blocks.fromAttrs(node.attrs),
+			rpos: item.root.rpos,
 		};
 		obj.type = node.attrs.type || obj.block.type;
 		if (item.container) obj.contentName = item.container.name;
