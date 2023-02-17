@@ -56,7 +56,11 @@ function initState(res, state) {
 	if (res.grants) {
 		scope.$write = Boolean(res.grants.webmaster);
 	}
-	for (const k of ["grants", "links", "site", "locked", "granted", "hrefs", "commons", "meta", "status", "statusText"]) {
+	if (res.hrefs) {
+		if (!scope.$hrefs) scope.$hrefs = {};
+		Object.assign(scope.$hrefs, res.hrefs);
+	}
+	for (const k of ["grants", "links", "site", "locked", "granted", "commons", "meta", "status", "statusText"]) {
 		if (res[k] !== undefined) scope[`$${k}`] = res[k];
 	}
 	if (res.item && !scope.$element) {
@@ -95,7 +99,6 @@ async function bundle(state, res) {
 
 Page.init(state => {
 	state.vars = {};
-	state.data.$hrefs = {};
 	if (!state.scope) state.scope = new Scope(state, {
 		$elements: baseElements,
 		$filters: {}
