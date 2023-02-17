@@ -55,8 +55,7 @@ Page.patch(state => {
 			} else if (loc.pathname && (loc.pathname.startsWith('/.') || /\.\w+$/.test(loc.pathname))) {
 				a.target = "_blank";
 			} else {
-				const [href] = a.href.split('?');
-				const meta = state.scope.$hrefs?.[href];
+				const meta = state.scope.$hrefs?.[loc.pathname];
 				if (meta?.mime && meta.mime.startsWith("text/html")) {
 					a.target = "_blank";
 				}
