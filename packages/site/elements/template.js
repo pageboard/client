@@ -192,9 +192,9 @@ exports.binding = {
 	group: "inline nolink",
 	tag: 'span[block-type="binding"]',
 	html: `<span
-		data-attr="[attr|trim:|split:%0A|join:%7C|pre:%5B|post:%5D]"
-		data-label="[fill|split:%0A|slice:0:1|join:|split:.|slice:-1|join:|or: ]"
-	>[fill|trim:|split:%0A|join:%7C|pre:%5B|post:%5D]</span>`
+		data-attr="[attr|as:binding]"
+		data-label="[fill|parts:%0A:0:1|.first|parts:.:-1|.last|or:#]"
+	>[fill|as:binding]</span>`
 };
 
 exports.block_binding = {
@@ -203,9 +203,9 @@ exports.block_binding = {
 	group: "block",
 	tag: 'div[block-type="block_binding"]',
 	html: `<div
-		data-attr="[attr|trim:|split:%0A|join:%7C|pre:%5B|post:%5D]"
-		data-label="[fill|split:%0A|slice:0:1|join:|split:.|slice:-1|join:|or: ]"
-	>[fill|trim:|split:%0A|join:%7C|pre:%5B|post:%5D]</div>`
+		data-attr="[attr|as:binding]"
+		data-label="[fill|parts:%0A:0:1|.first|parts:.:-1|.last|or:#]"
+	>[fill|as:binding]</div>`
 };
 
 exports.content = {
@@ -237,7 +237,7 @@ exports.content = {
 			nullable: true
 		}
 	},
-	html: '<element-content block-content="[name]" data-filter="[filter]">[fill|trim:|split:%0A|join:%7C|pre:%5B|post:%5D]</element-content>',
+	html: '<element-content block-content="[name]" data-filter="[filter]">[fill|as:binding]</element-content>',
 	scripts: [
 		'../ui/content.js'
 	]

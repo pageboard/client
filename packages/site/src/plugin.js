@@ -1,5 +1,5 @@
 export const formats = {
-	as: { polyfills, csp, xid, colnums, block },
+	as: { polyfills, csp, xid, colnums, block, binding },
 	date: { utc }
 };
 
@@ -22,6 +22,11 @@ export const hooks = {
 		return val;
 	}
 };
+
+function binding(ctx, str) {
+	if (!str || typeof str != "string") return str;
+	return `[${str.trim().split('\n').join('|')}]`;
+}
 
 function block(ctx, obj) {
 	if (!obj) return;
