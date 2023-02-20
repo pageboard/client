@@ -1,4 +1,4 @@
-class HTMLCustomFormElement extends Page.create(HTMLFormElement) {
+class HTMLElementForm extends Page.create(HTMLFormElement) {
 	init() {
 		this.getMethodLater = Page.debounce(e => this.getMethod(e), 300);
 	}
@@ -280,7 +280,7 @@ class HTMLCustomFormElement extends Page.create(HTMLFormElement) {
 		return state.push(loc, { vary });
 	}
 }
-window.HTMLCustomFormElement = HTMLCustomFormElement;
+window.HTMLElementForm = HTMLElementForm;
 
 /* these methods must be available even on non-upgraded elements */
 HTMLFormElement.prototype.enable = function () {
@@ -297,7 +297,7 @@ HTMLFormElement.prototype.disable = function () {
 	}
 };
 
-Page.define(`element-form`, HTMLCustomFormElement, 'form');
+Page.define(`element-form`, HTMLElementForm, 'form');
 
 
 HTMLSelectElement.prototype.fill = function (val) {

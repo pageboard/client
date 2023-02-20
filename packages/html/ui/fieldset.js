@@ -1,4 +1,4 @@
-class HTMLCustomFieldSetElement extends Page.create(HTMLFieldSetElement) {
+class HTMLElementFieldSet extends Page.create(HTMLFieldSetElement) {
 	static defaults = {
 		dataName: null,
 		dataValue: null
@@ -33,5 +33,5 @@ class HTMLCustomFieldSetElement extends Page.create(HTMLFieldSetElement) {
 }
 
 
-Page.define(`element-fieldset`, HTMLCustomFieldSetElement, 'fieldset');
+Page.define(`element-fieldset`, HTMLElementFieldSet, 'fieldset');
 
