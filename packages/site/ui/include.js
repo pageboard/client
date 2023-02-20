@@ -1,15 +1,16 @@
 
 class HTMLElementInclude extends Page.Element {
-	init() {
-		const Cla = window.customElements.get('element-template');
-		this.toggleMessages = function (name) {
-			const parent = this.children.find(
-				node => node.matches('[block-content="messages"]')
-			);
-			return Cla.prototype.toggleMessages.call(this, name, parent);
-		};
-		this.fetch = Cla.prototype.fetch;
-		this.getRedirect = Cla.prototype.getRedirect;
+	fetch(...args) {
+		return window.HTMLElementTemplate.prototype.fetch.apply(this, args);
+	}
+	getRedirect(...args) {
+		return window.HTMLElementTemplate.prototype.getRedirect.apply(this, args);
+	}
+	toggleMessages(name) {
+		const parent = this.children.find(
+			node => node.matches('[block-content="messages"]')
+		);
+		return window.HTMLElementTemplate.prototype.toggleMessages.call(this, name, parent);
 	}
 	patch(state) {
 		if (this.loading) return;

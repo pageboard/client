@@ -1,13 +1,12 @@
 class HTMLCustomFormElement extends Page.create(HTMLFormElement) {
 	init() {
-		this.getMethodLater = Page.debounce(this.getMethod, 300);
-		const Cla = window.customElements.get('element-template');
-		this.toggleMessages = function (status) {
-			return Cla.prototype.toggleMessages.call(this, status, this);
-		};
-		this.getRedirect = function (status) {
-			return Cla.prototype.getRedirect.call(this, status, this);
-		};
+		this.getMethodLater = Page.debounce(e => this.getMethod(e), 300);
+	}
+	toggleMessages(status) {
+		return window.HTMLElementTemplate.prototype.toggleMessages.call(this, status, this);
+	}
+	getRedirect(status) {
+		return window.HTMLElementTemplate.prototype.getRedirect.call(this, status, this);
 	}
 	patch(state) {
 		if (this.isContentEditable) return;

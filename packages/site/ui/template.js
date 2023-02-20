@@ -252,6 +252,8 @@ class HTMLElementTemplate extends Page.Element {
 	}
 }
 
+window.HTMLElementTemplate = HTMLElementTemplate;
+
 HTMLTemplateElement.prototype.prerender = function () {
 	if (this.isContentEditable || !document.hidden) {
 		return this;
