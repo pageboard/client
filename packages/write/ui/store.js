@@ -223,7 +223,7 @@ Pageboard.Controls.Store = class Store {
 		}).then(() => {
 			const unsaved = this.unsaved;
 			this.reset();
-			this.initial = unsaved;
+			this.editor.blocks.initial = this.initial = unsaved;
 			this.uiUpdate();
 			this.pageUpdate();
 			this.editor.update();
