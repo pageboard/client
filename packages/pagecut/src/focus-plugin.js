@@ -83,11 +83,12 @@ export default class FocusPlugin {
 	}
 
 	focus(tr, sel) {
+		// disabled because view.hasFocus() returns false with e.g. popup menu
 		// do not unfocus if view or its document has lost focus
-		if (!this.editor.hasFocus()) {
-			this.focusRoot(tr, 0, tr.doc, false);
-			return;
-		}
+		// if (!this.editor.hasFocus()) {
+		// 	this.focusRoot(tr, 0, tr.doc, false);
+		// 	return;
+		// }
 		const parents = this.editor.utils.selectionParents(tr, sel);
 		const firstParent = parents.length && parents[0];
 		const root = firstParent.root;
