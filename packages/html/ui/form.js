@@ -1,6 +1,6 @@
 class HTMLElementForm extends Page.create(HTMLFormElement) {
 	init() {
-		this.getMethodLater = Page.debounce(e => this.getMethod(e), 300);
+		this.getMethodLater = Page.debounce((e, state) => this.getMethod(e, state), 300);
 	}
 	toggleMessages(status) {
 		return window.HTMLElementTemplate.prototype.toggleMessages.call(this, status, this);

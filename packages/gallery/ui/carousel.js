@@ -18,7 +18,7 @@ class HTMLElementCarousel extends Page.Element {
 	};
 
 	init() {
-		this.reload = Page.debounce(this.reload, 100);
+		this.reload = Page.debounce(() => this.reload(), 100);
 	}
 
 	fullview(val) {

@@ -40,7 +40,7 @@ Pageboard.schemaHelpers.href = class Href {
 	}
 
 	constructor(input, opts, props) {
-		this.trigger = Page.debounce(this.realTrigger, 500);
+		this.trigger = Page.debounce(() => this.realTrigger(), 500);
 		this.opts = opts;
 		this.input = input;
 		input.hidden = true;
