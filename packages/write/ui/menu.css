@@ -90,6 +90,9 @@
 #move {
 	margin-top:0.5em;
 }
+#move.inline > .item {
+	display:none;
+}
 /* TODO remove me with fomantic 2.7.2 */
 .ui.inverted.menu .item.disabled, .ui.inverted.menu .item.disabled:hover {
 	color: rgb(225 225 225 / 30%) !important;

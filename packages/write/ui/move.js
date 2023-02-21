@@ -5,7 +5,6 @@ Pageboard.Controls.Move = class Move {
 		this.node = node;
 		this.click = this.click.bind(this);
 		this.node.addEventListener('click', this);
-		this.update();
 	}
 
 	handleEvent(e) {
@@ -45,18 +44,20 @@ Pageboard.Controls.Move = class Move {
 	}
 
 	update(parents, sel) {
-		this.node.classList.toggle('hidden', !sel || !sel.node);
-		const state = this.editor.state;
-		const utils = this.editor.utils;
-		this.node.querySelector('[data-command="left"]')
-			.classList.toggle('disabled', !utils.move(state.tr, -1, false, true));
-		this.node.querySelector('[data-command="right"]')
-			.classList.toggle('disabled', !utils.move(state.tr, 1, false, true));
-		this.node.querySelector('[data-command="jump-left"]')
-			.classList.toggle('disabled', !utils.move(state.tr, -1, true, true));
-		this.node.querySelector('[data-command="jump-right"]')
-			.classList.toggle('disabled', !utils.move(state.tr, 1, true, true));
-		this.node.querySelector('[data-command="delete"]')
-			.classList.toggle('disabled', !utils.deleteTr(state.tr));
+		this.node.classList.remove('hidden');
+		this.node.classList.toggle('inline', !sel.node);
+		if (sel.node) {
+			const { state, utils } = this.editor;
+			this.node.querySelector('[data-command="left"]')
+				.classList.toggle('disabled', !utils.move(state.tr, -1, false, true));
+			this.node.querySelector('[data-command="right"]')
+				.classList.toggle('disabled', !utils.move(state.tr, 1, false, true));
+			this.node.querySelector('[data-command="jump-left"]')
+				.classList.toggle('disabled', !utils.move(state.tr, -1, true, true));
+			this.node.querySelector('[data-command="jump-right"]')
+				.classList.toggle('disabled', !utils.move(state.tr, 1, true, true));
+			this.node.querySelector('[data-command="delete"]')
+				.classList.toggle('disabled', !utils.deleteTr(state.tr));
+		}
 	}
 };
