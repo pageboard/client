@@ -37,8 +37,9 @@ Pageboard.adopt = function(win, readState) {
 			if (Pageboard.editor?.closed) return;
 			if (!Pageboard.modeControl) {
 				Pageboard.modeControl = new Pageboard.Controls.Mode({
+					// minimal editor interface expected by modeControl
 					root: { defaultView: win },
-					close: function() {}
+					close() { }
 				}, document.getElementById("mode"));
 			} else if (window.document.body.dataset.mode != "read") {
 				Pageboard.Editor(win, readState);
