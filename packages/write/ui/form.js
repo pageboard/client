@@ -340,7 +340,9 @@ Pageboard.Controls.Form = class Form {
 		} : null;
 
 		if (block != this.block) {
-			this.destroy();
+			if (this.block && (block.id != this.block.id || block.type != this.block.type)) {
+				this.destroy();
+			}
 			this.block = block;
 		}
 		const editor = this.editor;
