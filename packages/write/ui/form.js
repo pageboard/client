@@ -358,6 +358,7 @@ Pageboard.Controls.Form = class Form {
 
 		let canShowExpressions = this.main.el.properties;
 		this.main.node.classList.toggle('hidden', !showBlocks);
+		const allBlocks = [this.block];
 
 		let curInlines = this.inlines;
 		const inlines = (showInlines && parent.inline?.blocks || []).map(block => {
@@ -370,6 +371,7 @@ Pageboard.Controls.Form = class Form {
 					return true;
 				}
 			});
+			allBlocks.push(block);
 			if (!curForm) {
 				curForm = new FormBlock(editor, this.node, block.type);
 			} else {
@@ -383,14 +385,13 @@ Pageboard.Controls.Form = class Form {
 		this.toggleExpr.classList.toggle('hidden', !showExpressions);
 		this.toggleExpr.classList.toggle('disabled', !canShowExpressions);
 		this.toggleExpr.classList.toggle('active', this.mode == "expr");
-		this.toggleExpr.firstElementChild.classList.toggle('yellow', this.block.expr && Object.keys(this.block.expr).length && true || false);
+		this.toggleExpr.firstElementChild.classList.toggle('yellow',
+			allBlocks.some(b => b.expr && Object.keys(b.expr).length)
+		);
 
-		const lock = this.block.lock;
-		let unlocked = true;
-		if (lock) {
-			if (lock.read?.length) unlocked = false;
-			else if (lock.write?.length) unlocked = false;
-		}
+		const unlocked = !allBlocks.some(
+			b => b.lock?.read?.length || b.lock?.write?.length
+		);
 		this.toggleLocks.firstElementChild.classList.toggle('lock', !unlocked);
 		this.toggleLocks.firstElementChild.classList.toggle('red', !unlocked);
 		this.toggleLocks.firstElementChild.classList.toggle('unlock', unlocked);
