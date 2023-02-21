@@ -1,6 +1,6 @@
 class HTMLElementHeadingHelper extends Page.create(HTMLHeadingElement) {
 	setup(state) {
-		this.willSync = state.debounce(this.sync, 100);
+		this.willSync = state.debounce(() => this.sync(), 100);
 		this.observer = new MutationObserver(records => {
 			if (records.some(mut => {
 				return mut.type == "characterData" || mut.type == "childList" && mut.addedNodes.length;
