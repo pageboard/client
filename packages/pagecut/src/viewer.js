@@ -41,9 +41,8 @@ export default class Viewer {
 		this.elements[el.name] = new Element(el);
 	}
 
-	render(block, opts) {
+	render(block, opts = {}) {
 		let dom;
-		opts = opts ?? {};
 		const el = this.element(opts.element || opts.type || block.type);
 		try {
 			dom = this.blocks.render(el, block, opts);

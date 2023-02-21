@@ -20,9 +20,8 @@ export default class BlocksView {
 		if (opts.genId) this.genId = opts.genId;
 	}
 
-	render(el, block, opts) {
-		if (!opts) opts = {};
-		const scope = opts.scope ?? this.view.scope ?? {};
+	render(el, block, opts = {}) {
+		const { scope = {} } = opts;
 		if (!scope.$doc) scope.$doc = this.view.doc;
 		if (!scope.$elements) scope.$elements = this.view.elements;
 		if (!scope.$element) scope.$element = el;
@@ -109,10 +108,8 @@ export default class BlocksView {
 		return this.renderFrom(block, blocks, this.store, opts);
 	}
 
-	renderFrom(block, blocks, store, opts) {
-		const view = this.view;
-		if (!blocks) blocks = {};
-		if (!opts) opts = {};
+	renderFrom(block, blocks = {}, store, opts = {}) {
+		const { view } = this;
 		const type = opts.element || opts.type || block.type;
 		const el = view.element(type);
 		if (block.id) {
