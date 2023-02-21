@@ -193,7 +193,7 @@ exports.binding = {
 	tag: 'span[block-type="binding"]',
 	html: `<span
 		data-attr="[attr|as:binding]"
-		data-label="[fill|parts:%0A:0:1|.first|parts:.:-1|.last|or:#]"
+		data-label="[fill|parts:%0A:0:1|parts:.:-1|or:#]"
 	>[fill|as:binding]</span>`
 };
 
@@ -204,7 +204,7 @@ exports.block_binding = {
 	tag: 'div[block-type="block_binding"]',
 	html: `<div
 		data-attr="[attr|as:binding]"
-		data-label="[fill|parts:%0A:0:1|.first|parts:.:-1|.last|or:#]"
+		data-label="[fill|parts:%0A:0:1|parts:.:-1|or:#]"
 	>[fill|as:binding]</div>`
 };
 
