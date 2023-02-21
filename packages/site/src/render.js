@@ -40,7 +40,8 @@ const reFuse = new RegExp(`\\${mSym.open}[^\\${mSym.open}\\${mSym.close}]+\\${mS
 const fuse = (obj, data, scope) => {
 	const md = new Matchdom(matchdom, {
 		filters: scope.$filters,
-		hooks: scope.$hooks
+		hooks: scope.$hooks,
+		formats: scope.$formats
 	});
 	return md.merge(obj, data, scope);
 };
@@ -112,6 +113,7 @@ function renderBlock(el, scope, block, bscope) {
 
 	if (el.filters) rscope.$filters = { ...rscope.$filters, ...el.filters };
 	if (el.hooks) rscope.$hooks = { ...rscope.$hooks, ...el.hooks };
+	if (el.formats) rscope.$formats = { ...rscope.$formats, ...el.types };
 
 	const data = block.expr ? Pageboard.merge(block.data, block.expr, (c, v) => {
 		if (typeof v != "string") return;

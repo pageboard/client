@@ -722,7 +722,7 @@ Semafor.types.array = function (key, schema, node, inst) {
 				.fuse({
 					schema, key
 				}, {
-					$filters: {
+					$formats: {
 						as: {
 							itemVal: (ctx, val) => {
 								if (val == null) return val;
