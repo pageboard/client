@@ -300,12 +300,13 @@ function templates(ctx, val, ...prefixes) {
 				// ignore those
 				return val;
 			}
-			const key = path.slice(1).map(
-				k => k.replace(/\\./g, '%5C')
-			).join('.'); // query[path] requires path to be escaped
+			const key = path.length > 1 ? path.slice(1).map(
+				k => k.replace(/\\./g, '%5C') // query[path] requires path to be escaped
+			).join('.') : path[0];
+			const short = path.length > 1 ? `${path[0]}.${key}` : path[0];
 
 			const optional = val === null && ctx.expr.get(scope, path) === undefined;
-			const prev = obj[key] ?? (obj[key] = `${path[0]}.${key}`);
+			const prev = obj[key] ?? (obj[key] = short);
 			if (optional && !prev.endsWith('?')) obj[key] += '?';
 
 			return val;
