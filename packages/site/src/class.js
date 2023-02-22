@@ -11,10 +11,14 @@ export function create(Superclass) {
 		async attributeChangedCallback(name, src, dst, ns) {
 			if (src !== dst && this.patch) {
 				if (!Object.hasOwnProperty.call(this.constructor, 'defaults') || this.options) {
-					await Page.patch(state => this.#options(state));
-					await Page.patch(this);
-					await Page.paint(state => this.#paint(state));
-					await Page.paint(this);
+					await Page.patch(state => {
+						this.#options(state);
+						return this.patch?.(state);
+					});
+					await Page.paint(state => {
+						this.#paint(state);
+						return this.paint?.(state);
+					});
 				}
 			}
 		}
