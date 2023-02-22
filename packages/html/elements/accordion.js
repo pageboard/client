@@ -1,5 +1,4 @@
 exports.accordion = {
-	priority: 2, // scripts must run after 'query' scripts
 	title: "Accordion",
 	icon: '<i class="caret right icon"></i>',
 	menu: 'widget',
