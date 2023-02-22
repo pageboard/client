@@ -292,14 +292,13 @@ Pageboard.Controls.Form = class Form {
 		this.mode = "data";
 
 		this.toggleExpr = document.querySelector('#toggle-expr');
-		this.toggleExpr.addEventListener('click', this.handleToggleExpr.bind(this));
-
 		this.toggleLocks = document.querySelector('#toggle-lock');
-		this.toggleLocks.addEventListener('click', this.handleToggleLocks.bind(this));
 	}
 
 	destroy() {
 		if (this.main) {
+			this.toggleExpr.removeEventListener('click', this);
+			this.toggleLocks.removeEventListener('click', this);
 			this.main.destroy();
 			delete this.main;
 		}
@@ -355,24 +354,30 @@ Pageboard.Controls.Form = class Form {
 			return def?.expressions || false;
 		});
 
-		if (!this.main) this.main = new FormBlock(editor, this.node, parent.type);
+		if (!this.main) {
+			this.toggleExpr.addEventListener('click', this);
+			this.toggleLocks.addEventListener('click', this);
+			this.main = new FormBlock(editor, this.node, parent.type);
+		}
 		this.main.update(parents, block, this.mode);
 
 		let canShowExpressions = this.main.el.properties;
 		this.main.node.classList.toggle('hidden', !showBlocks);
 		const allBlocks = [this.block];
 
-		let curInlines = this.inlines;
+		const curInlines = this.inlines;
 		const inlines = (showInlines && parent.inline?.blocks || []).map(block => {
 			let curForm;
-			curInlines = curInlines.filter(form => {
+			// curInlines is filtered several times
+			// but it needs to keep the forms that are not used
+			for (let i = 0; i < curInlines.length; i++) {
+				const form = curInlines[i];
 				if (form.block.type == block.type) {
 					curForm = form;
-					return false;
-				} else {
-					return true;
+					curInlines.splice(i, 1);
+					break;
 				}
-			});
+			}
 			allBlocks.push(block);
 			if (!curForm) {
 				curForm = new FormBlock(editor, this.node, block.type);
@@ -399,7 +404,9 @@ Pageboard.Controls.Form = class Form {
 		this.toggleLocks.firstElementChild.classList.toggle('unlock', unlocked);
 		this.toggleLocks.classList.toggle('active', this.mode == "lock");
 
-		for (const form of curInlines) form.destroy();
+		for (const form of curInlines) {
+			form.destroy();
+		}
 		this.inlines = inlines;
 
 		if (selection?.name) {
@@ -416,16 +423,17 @@ Pageboard.Controls.Form = class Form {
 		}
 	}
 
-	handleToggleLocks(e) {
-		this.mode = this.mode == "lock" ? "data" : "lock";
-		this.toggleLocks.classList.toggle('active', this.mode == "lock");
-		this.update(this.parents, this.selection);
-	}
-
-	handleToggleExpr(e) {
-		this.mode = this.mode == "expr" ? "data" : "expr";
-		this.toggleExpr.classList.toggle('active', this.mode == "expr");
-		this.update(this.parents, this.selection);
+	handleEvent(e) {
+		if (e.type == "click") {
+			if (this.toggleLocks.contains(e.target)) {
+				this.mode = this.mode == "lock" ? "data" : "lock";
+				this.toggleLocks.classList.toggle('active', this.mode == "lock");
+			} else if (this.toggleExpr.contains(e.target)) {
+				this.mode = this.mode == "expr" ? "data" : "expr";
+				this.toggleExpr.classList.toggle('active', this.mode == "expr");
+			}
+			this.update(this.parents, this.selection);
+		}
 	}
 };
 
