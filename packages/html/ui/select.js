@@ -24,6 +24,7 @@ class HTMLElementSelect extends Page.Element {
 	}
 
 	handleClick(e, state) {
+		if (this.isContentEditable) return;
 		const node = e.target;
 		const item = node.closest('element-select .item');
 		if (item) {
@@ -175,12 +176,14 @@ class HTMLElementSelect extends Page.Element {
 
 		state.finish(() => {
 			// synchronize after form has filled select
+			let val;
 			this.#select.children.forEach(opt => {
 				if (opt.value) {
-					if (opt.selected) this.#selectItem(opt.value);
+					if (opt.selected) val = opt.value;
 					else this.#deselectItem(opt.value);
 				}
 			});
+			if (val != null) this.#selectItem(val);
 		});
 	}
 }
