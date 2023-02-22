@@ -43,24 +43,25 @@ Pageboard.Controls.Mode = class Mode {
 			return;
 		}
 		if (["code", "write", "read"].includes(com) == false) return;
+
 		this.win.Page.patch(state => {
 			const mode = document.body.dataset.mode;
 			if (mode != "read") {
 				const store = this.editor.controls.store;
-				if (state.scope.$cache) {
-					delete state.scope.$cache.items;
+				if (state.data && state.data.item) {
+					delete state.data.items;
 					store.flush();
 					const backup = store.reset();
-					state.scope.$cache.item = (backup.unsaved || backup.initial)[store.rootId];
-					state.scope.$cache.items = Object.values(backup.unsaved || backup.initial);
-					state.data.$store = backup;
+					state.data.item = (backup.unsaved || backup.initial)[store.rootId];
+					state.data.items = Object.values(backup.unsaved || backup.initial);
+					state.scope.$store = backup; // TODO move store to some place else
 					state.save();
 				}
 			}
 			this.editor.close();
 			const elts = state.scope.$elements;
 			if (com == "code") {
-				state.data.$jsonContent = Mode.pruneNonRoot(Pageboard.editor.state.doc.toJSON(), null, Pageboard.editor.state.schema);
+				state.scope.$jsonContent = Mode.pruneNonRoot(Pageboard.editor.state.doc.toJSON(), null, Pageboard.editor.state.schema);
 				delete Pageboard.editor;
 				Pageboard.backupElements = { ...elts };
 				Object.entries(elts).forEach(([name, elt]) => {
@@ -102,6 +103,8 @@ Pageboard.Controls.Mode = class Mode {
 			state.reload({
 				vary: true,
 				data: state.data
+			}).then(follower => {
+				follower.scope.$store = state.scope.$store;
 			});
 		});
 	}

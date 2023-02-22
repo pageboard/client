@@ -1,12 +1,13 @@
 Page.route(async state => {
-	const res = state.scope.$cache ?? await Pageboard.fetch('get', '/.api/page', {
-		url: state.pathname.replace(/\.\w+$/, ''),
-		nested: window.parent != window ? 1 : undefined
-	});
-	await Pageboard.bundle(state, res);
-	state.scope.$cache = res;
-	state.scope.$page = res.item;
-	const node = Pageboard.render(res, state.scope);
+	if (!Object.keys(state.data).length) {
+		state.data = await Pageboard.fetch('get', '/.api/page', {
+			url: state.pathname.replace(/\.\w+$/, ''),
+			nested: window.parent != window ? 1 : undefined
+		});
+	}
+	await Pageboard.bundle(state, state.data);
+	state.scope.$page = state.data.item;
+	const node = Pageboard.render(state.data, state.scope);
 	if (!node || node.nodeName != "BODY") {
 		throw new Error("page render should return a body element");
 	}

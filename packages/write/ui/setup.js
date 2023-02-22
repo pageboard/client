@@ -133,7 +133,7 @@ function update() {
 }
 
 Pageboard.Editor = function Editor(win, state) {
-	const page = state.scope.$cache.item;
+	const page = state.data.item;
 	if (!page || page.type == "error") {
 		Pageboard.write.hidden = true;
 		console.warn("Not loading editor: no page or error page");
@@ -156,7 +156,7 @@ Pageboard.Editor = function Editor(win, state) {
 		elements: view.elements,
 		explicit: document.body.dataset.mode == "code",
 		place: doc.body,
-		jsonContent: state.data.$jsonContent,
+		jsonContent: state.scope.$jsonContent,
 		content: body,
 		genId: Pageboard.Controls.Store.genId,
 		scope: state.scope,
@@ -195,7 +195,7 @@ Pageboard.Editor = function Editor(win, state) {
 	}
 	editor.controls = controls;
 	controls.store.preinitial = editor.blocks.initial = view.blocks.initial;
-	const $store = state.data.$store;
+	const $store = state.scope.$store;
 	if ($store) {
 		controls.store.reset($store);
 	}
