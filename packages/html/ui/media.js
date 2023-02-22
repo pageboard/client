@@ -1,9 +1,6 @@
 const HTMLElementMediaConstructor = Superclass => class extends Superclass {
-	#defer;
+	#defer = new Deferred();
 
-	init() {
-		this.#defer = new Deferred();
-	}
 	patch(state) {
 		this.classList.remove('error', 'loading');
 		const loc = Page.parse(this.options.src);

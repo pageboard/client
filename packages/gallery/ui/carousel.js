@@ -17,9 +17,7 @@ class HTMLElementCarousel extends Page.Element {
 		fade: false
 	};
 
-	init() {
-		this.reload = Page.debounce(() => this.reload(), 100);
-	}
+	reload = Page.debounce(() => this.#reload(), 100);
 
 	fullview(val) {
 		this.classList.toggle('fullview', Boolean(val));
@@ -150,7 +148,8 @@ class HTMLElementCarousel extends Page.Element {
 			else delete cell.dataset.height;
 		}
 	}
-	reload() {
+
+	#reload() {
 		this.updateCells();
 		if (this.widget) {
 			this.widget.reloadCells();

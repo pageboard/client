@@ -1,4 +1,3 @@
-// this works in babel 6, see postinstall-js
 const extendCache = {};
 
 export function create(Superclass) {
@@ -8,7 +7,6 @@ export function create(Superclass) {
 			if (this.constructor.is) {
 				this.setAttribute('is', this.constructor.nodeName);
 			}
-			this.init?.();
 		}
 		async attributeChangedCallback(name, src, dst, ns) {
 			if (src !== dst && this.patch) {
@@ -75,7 +73,7 @@ export function define(name, cla, is) {
 	const preset = window.customElements.get(name);
 	if (preset) return preset;
 
-	if (cla.init) cla.init();
+	Page.connect(cla); // calls static methods
 
 	const claDefs = cla.defaults;
 	if (claDefs) {

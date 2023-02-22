@@ -4,11 +4,8 @@ class HTMLElementEmbed extends Page.Element {
 		hash: null
 	};
 	static revealRatio = 0.2;
-	#defer;
+	#defer = new Deferred();
 
-	init() {
-		this.#defer = new Deferred();
-	}
 	reveal(state) {
 		this.classList.add('waiting');
 		state.consent(this);

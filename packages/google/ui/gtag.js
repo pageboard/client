@@ -6,7 +6,8 @@ class HTMLElementGTMScript extends Page.create(HTMLScriptElement) {
 	#id;
 	#started;
 
-	init() {
+	constructor() {
+		super();
 		const loc = Page.parse(this.src);
 		this.#type = loc.pathname.startsWith('/gtm') ? 'gtm' : 'gtag';
 		if (this.#type == "gtag") {
