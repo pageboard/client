@@ -149,7 +149,7 @@ function schemaFn(ctx, val, spath, absPath) {
 	// return schema of repeated key, schema of anyOf/listOf const value
 	if (val === undefined) return;
 	let isIndex = false;
-	if (!absPath) {
+	if (absPath.length == 0) {
 		const path = ctx.expr.path;
 		let data = ctx.data;
 		const blocks = [];
@@ -203,11 +203,11 @@ function schemaFn(ctx, val, spath, absPath) {
 			if (prop != null) schema = prop;
 			else return val;
 		} else {
-			spath = null;
+			spath = [];
 			schema = val;
 		}
 	}
-	let sval = spath ? ctx.expr.get(schema, spath) : schema;
+	let sval = ctx.expr.get(schema, spath);
 	if (sval === undefined) {
 		// eslint-disable-next-line no-console
 		console.warn("Cannot find path in schema", schema, spath);
