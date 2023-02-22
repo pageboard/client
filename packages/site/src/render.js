@@ -117,9 +117,8 @@ function renderBlock(el, scope, block, bscope) {
 
 	const data = block.expr ? Pageboard.merge(block.data, block.expr, (c, v) => {
 		if (typeof v != "string") return;
-		return v.fuse({
-			$default: c
-		}, {
+		return v.fuse({}, {
+			$default: c,
 			$filters: {
 				at: function (ctx, val) {
 					return ctx.raw;
