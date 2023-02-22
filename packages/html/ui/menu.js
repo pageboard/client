@@ -4,12 +4,7 @@ class HTMLElementMenu extends Page.Element {
 			if (!state.sameDomain(loc)) {
 				return false;
 			} else if (state.samePathname(loc)) {
-				if (!isItem && loc.sameQuery({ query: {} })) return true;
-				if (state.query.develop !== undefined) {
-					// kept for backward compatibility
-					loc.query.develop = state.query.develop;
-				}
-				if (state.sameQuery(loc)) return true;
+				if (!isItem && !loc.search || state.sameQuery(loc)) return true;
 			} else {
 				return state.pathname.startsWith(loc.pathname + '/');
 			}
