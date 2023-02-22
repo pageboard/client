@@ -21,7 +21,4 @@ class HTMLScrollLinkElement extends Page.create(HTMLAnchorElement) {
 	}
 }
 
-Page.setup(() => {
-	Page.define(`element-scroll-link`, HTMLScrollLinkElement, 'a');
-});
-
+Page.define(`element-scroll-link`, HTMLScrollLinkElement, 'a');

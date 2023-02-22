@@ -1,30 +1,29 @@
-Page.patch(state => {
-	function isSameOrParent(loc, state, isItem) {
-		if (!state.sameDomain(loc)) {
-			return false;
-		} else if (state.samePathname(loc)) {
-			if (!isItem && loc.sameQuery({query:{}})) return true;
-			if (state.query.develop !== undefined) {
-				// kept for backward compatibility
-				loc.query.develop = state.query.develop;
-			}
-			if (state.sameQuery(loc)) return true;
-		} else {
-			return state.pathname.startsWith(loc.pathname + '/');
-		}
-	}
-	state.finish(() => {
-		for (const item of document.querySelectorAll('[block-type="menu"] [href]')) {
-			const loc = item.getAttribute('href');
-			if (!loc) continue;
-			if (isSameOrParent(Page.parse(loc), state, item.matches('.item'))) {
-				item.classList.add('active');
-			}
-		}
-	});
-});
-
 class HTMLElementMenu extends Page.Element {
+	static patch(state) {
+		function isSameOrParent(loc, state, isItem) {
+			if (!state.sameDomain(loc)) {
+				return false;
+			} else if (state.samePathname(loc)) {
+				if (!isItem && loc.sameQuery({ query: {} })) return true;
+				if (state.query.develop !== undefined) {
+					// kept for backward compatibility
+					loc.query.develop = state.query.develop;
+				}
+				if (state.sameQuery(loc)) return true;
+			} else {
+				return state.pathname.startsWith(loc.pathname + '/');
+			}
+		}
+		state.finish(() => {
+			for (const item of document.querySelectorAll('[block-type="menu"] [href]')) {
+				const loc = item.getAttribute('href');
+				if (!loc) continue;
+				if (isSameOrParent(Page.parse(loc), state, item.matches('.item'))) {
+					item.classList.add('active');
+				}
+			}
+		});
+	}
 	setup(state) {
 		if (this.isContentEditable || this.matches('.vertical')) return;
 		const menu = this.firstElementChild;
@@ -86,6 +85,4 @@ class HTMLElementMenu extends Page.Element {
 	}
 }
 
-Page.setup(() => {
-	Page.define('element-menu', HTMLElementMenu);
-});
+Page.define('element-menu', HTMLElementMenu);

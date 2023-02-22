@@ -18,6 +18,5 @@ class HTMLElementReading extends Page.Element {
 	}
 }
 
-Page.patch(
-	() => Page.define('element-reading', HTMLElementReading)
-);
+Page.define('element-reading', HTMLElementReading);
+

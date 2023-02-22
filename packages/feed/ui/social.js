@@ -50,6 +50,4 @@ class HTMLSocialElement extends Page.Element {
 	}
 }
 
-Page.patch(
-	() => Page.define(`element-social`, HTMLSocialElement)
-);
+Page.define(`element-social`, HTMLSocialElement);

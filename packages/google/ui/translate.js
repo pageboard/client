@@ -85,7 +85,5 @@ class HTMLElementGoogleTranslate extends Page.Element {
 	}
 }
 
-Page.setup(
-	() => Page.define('element-google-translate', HTMLElementGoogleTranslate)
-);
+Page.define('element-google-translate', HTMLElementGoogleTranslate);
 
