@@ -179,17 +179,14 @@ class HTMLElementSelect extends Page.Element {
 
 		state.finish(() => {
 			// synchronize after form has filled select
-			let val;
 			this.#select.children.forEach(opt => {
 				if (opt.value) {
-					if (opt.selected) val = opt.value;
+					if (opt.selected) this.#selectItem(opt.value);
 					else this.#deselectItem(opt.value);
 				}
 			});
-			if (val != null) this.#selectItem(val);
 		});
 	}
 }
 
 Page.define('element-select', HTMLElementSelect);
-
