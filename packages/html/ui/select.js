@@ -174,6 +174,9 @@ class HTMLElementSelect extends Page.Element {
 		if (this.isContentEditable) return; // write mode stop there
 		if (this.children.length == 1) this.build(state);
 
+		// FIXME this does work in query_form > fetch > select
+		// instead one must do fetch > query_form > select
+
 		state.finish(() => {
 			// synchronize after form has filled select
 			let val;
