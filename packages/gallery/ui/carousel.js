@@ -17,6 +17,37 @@ class HTMLElementCarousel extends Page.Element {
 		fade: false
 	};
 
+	static setup(state) {
+		function modabs(i, l) {
+			return ((i % l) + l) % l;
+		}
+		function flickLazy(i, isWrap, instant) {
+			if (this.options.wrapAround || isWrap) {
+				i = modabs(i, this.slides.length);
+			}
+			const slide = this.slides[i];
+			if (!slide) return;
+			const lazies = [];
+			for (const cell of slide.cells) {
+				for (const node of cell.element.querySelectorAll("[data-src]")) {
+					if (node.reveal && !node.currentSrc) {
+						lazies.push(node.reveal(state).catch(() => { }));
+					}
+				}
+			}
+
+			return Promise.all(lazies).then(() => {
+				this.select(i, isWrap, instant);
+			});
+		}
+		window.Flickity.prototype.next = function (isWrap, i) {
+			return flickLazy.call(this, this.selectedIndex + 1, isWrap, i);
+		};
+		window.Flickity.prototype.previous = function (isWrap, i) {
+			return flickLazy.call(this, this.selectedIndex - 1, isWrap, i);
+		};
+	}
+
 	reload = Page.debounce(() => this.#reload(), 100);
 
 	fullview(val) {
@@ -175,34 +206,3 @@ class HTMLElementCarouselCell extends Page.Element {
 
 Page.define('element-carousel-cell', HTMLElementCarouselCell);
 Page.define('element-carousel', HTMLElementCarousel);
-
-Page.setup(state => {
-	function modabs(i, l) {
-		return ((i % l) + l) % l;
-	}
-	function flickLazy(i, isWrap, instant) {
-		if (this.options.wrapAround || isWrap) {
-			i = modabs(i, this.slides.length);
-		}
-		const slide = this.slides[i];
-		if (!slide) return;
-		const lazies = [];
-		for (const cell of slide.cells) {
-			for (const node of cell.element.querySelectorAll("[data-src]")) {
-				if (node.reveal && !node.currentSrc) {
-					lazies.push(node.reveal(state).catch(() => { }));
-				}
-			}
-		}
-
-		return Promise.all(lazies).then(() => {
-			this.select(i, isWrap, instant);
-		});
-	}
-	window.Flickity.prototype.next = function (isWrap, i) {
-		return flickLazy.call(this, this.selectedIndex + 1, isWrap, i);
-	};
-	window.Flickity.prototype.previous = function (isWrap, i) {
-		return flickLazy.call(this, this.selectedIndex - 1, isWrap, i);
-	};
-});
