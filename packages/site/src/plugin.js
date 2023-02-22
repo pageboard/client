@@ -144,53 +144,52 @@ function sum(ctx, obj, ...list) {
 	return sum;
 }
 
-function schemaFn(ctx, val, spath, absPath) {
-	// FIXME this should be simpler now
+function schemaFn(ctx, val, schemaPath, pathToSchema) {
 	// return schema of repeated key, schema of anyOf/listOf const value
 	if (val === undefined) return;
 	let isIndex = false;
-	if (absPath.length == 0) {
+	if (pathToSchema.length == 0) {
+		// read current path until we find a block
 		const path = ctx.expr.path;
 		let data = ctx.data;
-		const blocks = [];
+		let item;
 		for (let i = 0; i < path.length; i++) {
 			if (!data) break;
-			if (data.id && data.type) blocks.push({
+			if (data.id && data.type) item = {
 				index: i + 1, // add one because path will be block.data and schema is block.data schema
 				block: data
-			});
-			else if (data.$id && data.$type) blocks.push({
+			};
+			else if (data.$id && data.$type) item = {
 				index: i + 1,
 				block: {
 					id: data.$id,
 					type: data.$type,
 					data
 				}
-			});
+			};
 			data = data[path[i]];
 		}
-		const item = blocks.pop();
-		if (!item) return;
-
+		if (!item) return val;
 		isIndex = !Number.isNaN(parseInt(path[path.length - 1]));
-
-		absPath = [
+		pathToSchema = [
 			item.block.type,
-			'properties',
-			...path.slice(item.index, isIndex ? -1 : null).join('.properties.').split('.')
+			...path.slice(item.index, isIndex ? -1 : null)
 		];
 	}
 
-	let schema = ctx.expr.get(ctx.scope.$elements, absPath);
+	let schema = ctx.expr.get(
+		ctx.scope.$elements,
+		pathToSchema.join('.properties.').split('.')
+	);
 	if (!schema) {
 		// eslint-disable-next-line no-console
-		console.warn("No schema for", absPath);
+		console.warn("No schema for", pathToSchema);
 		return;
 	}
 	if (schema.type == "array") {
 		schema = schema.items;
 	} else if (isIndex) {
-		console.warn("Expected schema type: array", absPath);
+		console.warn("Expected schema type: array", pathToSchema);
 		return;
 	}
 
@@ -203,14 +202,14 @@ function schemaFn(ctx, val, spath, absPath) {
 			if (prop != null) schema = prop;
 			else return val;
 		} else {
-			spath = [];
+			schemaPath = [];
 			schema = val;
 		}
 	}
-	let sval = ctx.expr.get(schema, spath);
+	let sval = ctx.expr.get(schema, schemaPath);
 	if (sval === undefined) {
 		// eslint-disable-next-line no-console
-		console.warn("Cannot find path in schema", schema, spath);
+		console.warn("Cannot find path in schema", schema, schemaPath);
 		sval = null;
 	}
 	return sval;
