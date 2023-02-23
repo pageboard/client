@@ -21,11 +21,6 @@ Page.setup(state => {
 
 Pageboard.adopt = function(win, readState) {
 	Page.setup(writeState => {
-		win.addEventListener('click', anchorListener, true);
-		// FIXME this prevents setting selection inside a selected link...
-		//win.addEventListener('mouseup', anchorListener, true);
-		win.addEventListener('submit', submitListener, true);
-		win.addEventListener('invalid', submitListener, true);
 		readState.finish(() => {
 			window.document.title = win.document.title;
 			writeState.pathname = readState.pathname;
@@ -47,28 +42,6 @@ Pageboard.adopt = function(win, readState) {
 		});
 	});
 };
-
-function submitListener(e) {
-	if (!Pageboard.editor || Pageboard.editor.closed) return;
-	e.preventDefault();
-	e.stopImmediatePropagation();
-}
-
-function anchorListener(e) {
-	const editor = Pageboard.editor;
-	if (!editor || editor.closed) return;
-	const node = e.target.closest('a[href],input,button,textarea,label[for]');
-	if (!node) return;
-	e.preventDefault();
-	const isInput = node.matches('input,textarea,select');
-	if (!isInput) return;
-	const parent = node.closest('[block-type]');
-	const sel = editor.utils.select(parent);
-	if (sel) {
-		editor.focus();
-		editor.dispatch(editor.state.tr.setSelection(sel));
-	}
-}
 
 function updatePage(state) {
 	if (this.closed) return;
@@ -131,7 +104,7 @@ function update() {
 	}
 	editor.updatePage();
 }
-
+// TODO extend instead of wrap
 Pageboard.Editor = function Editor(win, state) {
 	const page = state.data.item;
 	if (!page || page.type == "error") {

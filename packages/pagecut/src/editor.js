@@ -199,6 +199,9 @@ class Editor extends View.EditorView {
 		if (opts.scope) this.scope = opts.scope;
 		if (opts.explicit) this.explicit = true;
 		this.cssChecked = true;
+		this.dom.addEventListener('click', this, true);
+		this.dom.addEventListener('submit', this, true);
+		this.dom.addEventListener('invalid', this, true);
 	}
 	get utils() {
 		if (!this.#utils) this.#utils = new Utils(this);
@@ -226,6 +229,34 @@ class Editor extends View.EditorView {
 	}
 	getPlugin(key) {
 		return new State.PluginKey(key).get(this.state);
+	}
+	handleEvent(e) {
+		super.handleEvent(e);
+		if (this.closed) return;
+		if (e.type == "submit") {
+			e.preventDefault();
+			e.stopImmediatePropagation();
+		} else if (e.type == "click") {
+			const editor = this;
+			if (editor.closed) return;
+			const node = e.target.closest('a[href],input,button,textarea,label[for]');
+			if (!node) return;
+			e.preventDefault();
+			const isInput = node.matches('input,textarea,select');
+			if (!isInput) return;
+			const parent = node.closest('[block-type]');
+			const sel = editor.utils.select(parent);
+			if (sel) {
+				editor.focus();
+				editor.dispatch(editor.state.tr.setSelection(sel));
+			}
+		}
+	}
+	close() {
+		this.closed = true;
+		this.dom.removeEventListener('click', this, true);
+		this.dom.removeEventListener('submit', this, true);
+		this.dom.removeEventListener('invalid', this, true);
 	}
 }
 for (const name of ['render', 'element', 'from']) {
