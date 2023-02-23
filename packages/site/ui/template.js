@@ -11,7 +11,7 @@ class HTMLElementTemplate extends Page.Element {
 		if (this.loading || this.closest('[block-content="template"]')) {
 			return;
 		}
-		this.#auto = this.dataset.pagination && this.dataset.auto && this.dataset.stop && !(this.dataset.pagination in state.query);
+		this.#auto = this.dataset.pagination && this.dataset.auto && this.dataset.stop && !(this.dataset.pagination in state.query) && state.sameQuery(state.referrer);
 		return this.fetch(state);
 	}
 
@@ -127,15 +127,70 @@ class HTMLElementTemplate extends Page.Element {
 			}
 		}
 
+		// we need to keep track of [start, end]
+		// fetch needs to know if response offset is after stop
+		// or before start
+		const { offset, limit } = data;
+		const count = data.items?.length ?? 0;
+		let start = parseInt(this.dataset.start);
+		if (Number.isNaN(start)) start = offset;
+		let stop = parseInt(this.dataset.stop);
+		if (Number.isNaN(stop)) stop = offset;
+
+		let append = true;
+		let replace = false;
+		const auto = {
+			name: "$items",
+			enabled: Boolean(this.dataset.auto)
+		};
+		if (this.#auto) {
+			auto.node = view.querySelector(`[data-auto-repeat="${auto.name}"]`);
+			if (offset <= start) {
+				start = offset;
+				append = false;
+			}
+			if (offset + count >= stop) {
+				stop = offset + count;
+			} else if (append) {
+				replace = true;
+			}
+		} else {
+			replace = true;
+			start = offset;
+			stop = offset + count;
+		}
+
 		const collector = state.collector();
 
 		const el = {
 			name: 'element_template_' + String(Math.round(Date.now() * Math.random())).slice(-6),
 			dom: tmpl,
 			hooks: {
+				beforeEach(ctx, v, filter) {
+					if (auto.enabled && filter[0] == "repeat" && filter.length <= 2) {
+						filter.push('repeatPlacer');
+					}
+					return v;
+				},
 				afterAll(ctx, v) {
 					collector.filter(ctx, v);
 					return v;
+				}
+			},
+			filters: {
+				repeatPlacer(ctx, item, cursor, fragment) {
+					const parent = cursor.parentNode;
+					const name = ctx.expr.path[ctx.expr.path.length - 1];
+					if (auto.name == name && !parent.dataset.autoRepeat) {
+						parent.dataset.autoRepeat = name;
+					}
+					if (replace || !auto.node || auto.name != name) {
+						parent.insertBefore(fragment, cursor);
+					} else if (append) {
+						auto.node.appendChild(fragment);
+					} else {
+						auto.node.insertBefore(fragment, auto.node.firstChild);
+					}
 				}
 			},
 			contents: tmpl.querySelectorAll('[block-content]').map(node => {
@@ -152,49 +207,22 @@ class HTMLElementTemplate extends Page.Element {
 			}
 		}
 
-		// we need to keep track of [start, end]
-		// fetch needs to know if response offset is after stop
-		// or before start
-		const { offset, limit } = data;
-		const count = data.items?.length ?? 0;
-		let start = parseInt(this.dataset.start);
-		if (Number.isNaN(start)) start = offset;
-		let stop = parseInt(this.dataset.stop);
-		if (Number.isNaN(stop)) stop = offset;
-
-		const node = Pageboard.render(data, scope, el);
-
-		let append = true;
-		let replace = false;
-		if (this.#auto) {
-			if (offset <= start) {
-				start = offset;
-				append = false;
-			}
-			if (offset + count >= stop) {
-				stop = offset + count;
-			} else if (append) {
-				replace = true;
-			}
-		} else {
-			replace = true;
-			start = offset;
-			stop = offset + count;
-		}
-
 		if (offset != null && limit != null) {
 			Object.assign(this.dataset, { count, start, stop, limit });
 		}
+
+		const frag = Pageboard.render(data, scope, el);
 
 		if (Object.keys(collector.missings).length) {
 			state.statusText = `Missing Query Parameters`;
 			state.status = 400;
 			// eslint-disable-next-line no-console
 			console.warn(state.statusText, Object.keys(collector.missings).join(', '));
+		} else if (replace || !auto.node) {
+			view.textContent = '';
+			view.appendChild(frag);
 		} else {
-			if (replace) view.textContent = '';
-			if (append) view.appendChild(node);
-			else view.insertBefore(node, view.firstChild);
+			// do nothing
 		}
 	}
 
@@ -212,12 +240,12 @@ class HTMLElementTemplate extends Page.Element {
 		);
 	}
 
-	#more(state) {
+	#more() {
 		this.#locked = true;
 
 		if (this.#queue) this.#queue = this.#queue.then(() => {
 			if (this.disabled) return;
-			return state.reload({vary: 'patch'});
+			return Page.reload({vary: 'patch'});
 		}).then(() => {
 			this.#locked = false;
 		});
@@ -230,7 +258,7 @@ class HTMLElementTemplate extends Page.Element {
 		this.#observer = new IntersectionObserver(entries => {
 			entries.forEach(entry => {
 				if (entry.isIntersecting) {
-					if (!this.#locked) this.#more(state);
+					if (!this.#locked) this.#more();
 				}
 			});
 		}, {
