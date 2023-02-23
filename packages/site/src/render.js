@@ -9,7 +9,6 @@ import {
 	JsonPlugin
 } from 'matchdom';
 
-import Viewer from '@pageboard/pagecut/src/viewer.js';
 import str2dom from '@pageboard/pagecut/src/str2dom.js';
 
 import * as matchdomPlugin from './plugin';
@@ -61,14 +60,7 @@ export function render(res, scope, el) {
 	const elts = scope.$elements;
 	if (!res) res = {};
 
-	if (!scope.$view) scope.$view = new Viewer({
-		elements: elts,
-		doc: scope.$doc
-	});
-
 	if (el) install(el, scope);
-
-	scope = scope.copy();
 
 	const block = res.item ?? res;
 	// fixme

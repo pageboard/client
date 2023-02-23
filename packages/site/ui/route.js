@@ -5,9 +5,10 @@ Page.route(async state => {
 			nested: window.parent != window ? 1 : undefined
 		});
 	}
-	await Pageboard.bundle(state, state.data);
-	state.scope.$page = state.data.item;
-	const node = Pageboard.render(state.data, state.scope);
+	const scope = await Pageboard.bundle(state, state.data);
+	scope.$page = state.data.item;
+	const node = Pageboard.render(state.data, scope);
+	Object.assign(state.scope, scope);
 	if (!node || node.nodeName != "BODY") {
 		throw new Error("page render should return a body element");
 	}

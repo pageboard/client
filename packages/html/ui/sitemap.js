@@ -58,8 +58,7 @@ class HTMLElementSitemap extends Page.Element {
 			return;
 		}
 		const res = await Pageboard.fetch('get', `/.api/pages`);
-		await Pageboard.bundle(res, state);
-		const scope = state.scope.copy();
+		const scope = await Pageboard.bundle(state, res);
 		scope.$element = scope.$elements.sitemap;
 		const tree = this.constructor.transformResponse(res);
 		const node = Pageboard.render({

@@ -14,6 +14,9 @@ export default class Scope {
 	get $query() {
 		return this.#state.query;
 	}
+	get $referrer() {
+		return this.#state.referrer.pathname ?? this.$pathname;
+	}
 	copy(extra) {
 		const scope = new Scope(this.#state, this);
 		if (extra) Object.assign(scope, extra);

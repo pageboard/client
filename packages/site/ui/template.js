@@ -16,7 +16,7 @@ class HTMLElementTemplate extends Page.Element {
 	}
 
 	async fetch(state) {
-		const { scope } = state;
+		let { scope } = state;
 		// FIXME remove this heresy
 		const disabled = (this.getAttribute('disabled') || '').fuse({}, scope);
 		// end of heresy
@@ -29,27 +29,26 @@ class HTMLElementTemplate extends Page.Element {
 		this.toggleMessages();
 		if (missings) {
 			this.ownView.textContent = '';
+			scope = state.scope.copy();
 			scope.$status = 400;
 			scope.$statusText = 'Missing Query Parameters';
 		} else if (action) try {
 			if (this.#auto) {
 				request[this.dataset.pagination] = this.dataset.stop;
 			}
-			scope.$request = request;
-
 			const res = await Pageboard.fetch('get', action, request);
 			this.loading = true;
 			this.classList.add('loading');
-			await Pageboard.bundle(state, res);
+			scope = await Pageboard.bundle(state, res);
 			scope.$response = res;
-			scope.$status = res.status;
-			scope.$statusText = res.statusText;
-		} catch(err) {
+			scope.$request = request;
+		} catch (err) {
+			scope = state.scope.copy();
 			scope.$status = -1;
 			// eslint-disable-next-line no-console
 			console.error("Error building", err);
 		}
-		this.render(state);
+		this.render(state, scope);
 		this.classList.remove('loading');
 		this.loading = false;
 		if (scope.$status == null) return;
@@ -106,10 +105,9 @@ class HTMLElementTemplate extends Page.Element {
 		return found;
 	}
 
-	render(state) {
-		const view = this.ownView;
-		const scope = state.scope.copy();
+	render(state, scope) {
 		const data = scope.$response ?? {};
+		const view = this.ownView;
 		const tmpl = this.ownTpl.content.cloneNode(true);
 		for (const node of tmpl.querySelectorAll('[block-id]')) {
 			node.removeAttribute('block-id');

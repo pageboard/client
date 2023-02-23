@@ -1,6 +1,7 @@
 export { default as debounce } from 'debounce';
 export { default as fetch } from './fetch';
 import '@ungap/custom-elements';
+import Viewer from '@pageboard/pagecut/src/viewer.js';
 import * as load from './load';
 import { render, install } from './render';
 import * as equivs from './equivs';
@@ -48,10 +49,12 @@ export {
 	merge
 };
 
-function initState(res, state) {
-	const { scope, referrer, pathname } = state;
+function initScope(scope, res) {
 	if (!scope.$doc) scope.$doc = document.cloneNode();
-	scope.$referrer = referrer.pathname || pathname;
+	if (!scope.$view) scope.$view = new Viewer({
+		elements: scope.$elements,
+		doc: scope.$doc
+	});
 	if (!res) return;
 	if (res.grants) {
 		scope.$write = Boolean(res.grants.webmaster);
@@ -69,10 +72,10 @@ function initState(res, state) {
 }
 
 async function bundle(state, res) {
-	const { scope } = state;
+	const scope = state.scope.copy();
 	try {
 		await load.meta(state, res.meta);
-		initState(res, state);
+		initScope(scope, res);
 		const elts = scope.$elements;
 		for (const name of Object.keys(elts)) {
 			const el = elts[name];
@@ -95,6 +98,9 @@ async function bundle(state, res) {
 			}
 		});
 	}
+	scope.$status = res.status;
+	scope.$statusText = res.statusText;
+	return scope;
 }
 
 Page.init(state => {
