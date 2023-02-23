@@ -115,29 +115,29 @@ class HTMLElementFieldsetList extends Page.Element {
 		if (this.#size === len) return;
 		this.#size = len;
 		let tpl = this.ownTpl.content.cloneNode(true);
-		const $fieldset = Array.from(Array(len)).map((x, i) => {
+		const fieldlist = Array.from(Array(len)).map((x, i) => {
 			return { index: i };
 		});
 		const inputs = tpl.querySelectorAll('[name]');
 		const prefix = this.#prefix;
 		for (const node of inputs) {
 			if (node.name.startsWith(prefix)) {
-				node.name = `${prefix}[$field.index].${node.name.substring(prefix.length)}`;
+				node.name = `${prefix}[fielditem.index].${node.name.substring(prefix.length)}`;
 				if (node.id?.startsWith('for-' + prefix)) {
-					node.id = `for-${prefix}[$field.index].${node.id.substring(4 + prefix.length)}`;
+					node.id = `for-${prefix}[fielditem.index].${node.id.substring(4 + prefix.length)}`;
 				}
 			}
 		}
 		const conditionalFieldsets = tpl.querySelectorAll('[is="element-fieldset"]');
 		for (const node of conditionalFieldsets) {
 			if (node.dataset.name?.startsWith(prefix)) {
-				node.dataset.name = `${prefix}[$field.index].${node.dataset.name.substring(prefix.length)}`;
+				node.dataset.name = `${prefix}[fielditem.index].${node.dataset.name.substring(prefix.length)}`;
 			}
 		}
 		const labels = tpl.querySelectorAll('label[for]');
 		for (const node of labels) {
 			if (node.htmlFor?.startsWith('for-' + prefix)) {
-				node.htmlFor = `for-${prefix}[$field.index].${node.htmlFor.substring(4 + prefix.length)}`;
+				node.htmlFor = `for-${prefix}[fielditem.index].${node.htmlFor.substring(4 + prefix.length)}`;
 			}
 		}
 
@@ -147,7 +147,7 @@ class HTMLElementFieldsetList extends Page.Element {
 			return;
 		}
 		subtpl.appendChild(
-			subtpl.ownerDocument.createTextNode('[$fieldset|repeat:*:$field|]')
+			subtpl.ownerDocument.createTextNode('[fieldlist|at:*|repeat:fielditem|]')
 		);
 		if (len == 0) {
 			let node = tpl.querySelector(this.#selector('add'));
@@ -163,7 +163,7 @@ class HTMLElementFieldsetList extends Page.Element {
 				tpl.appendChild(hidden);
 			}
 		}
-		tpl = tpl.fuse({ $fieldset }, scope);
+		tpl = tpl.fuse({ fieldlist }, scope);
 
 		const view = this.ownView;
 		view.textContent = '';
