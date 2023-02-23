@@ -431,7 +431,7 @@ Pageboard.Controls.Form = class Form {
 			} else if (this.toggleExpr.contains(e.target)) {
 				this.mode = this.mode == "expr" ? "data" : "expr";
 				this.toggleExpr.classList.toggle('active', this.mode == "expr");
-			}
+			} else return;
 			this.update(this.parents, this.selection);
 		}
 	}
