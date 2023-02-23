@@ -232,12 +232,8 @@ body[data-mode="read"] #pageboard-read > iframe {
 	font-size:0.9rem;
 }
 
-#form input-map > table {
+#form input[is="input-map"] + table {
 	margin-top:0;
-}
-#form input-map > label {
-	font-style:italic;
-	font-size:0.9em;
 }
 
 #form > form {

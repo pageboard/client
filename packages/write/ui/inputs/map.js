@@ -1,67 +1,57 @@
-class HTMLInputMap extends Page.Element {
-	#proxy;
-	#observer;
+class HTMLElementInputMap extends HTMLInputElement {
 	#table;
 	#selection;
 
-	get name() {
-		return this.getAttribute('name') || '';
+	constructor() {
+		super();
+		this.setAttribute('is', 'element-input-map');
+		this.hidden = true;
 	}
-	get value() {
-		let obj;
-		if (this.#proxy?.value) try {
-			obj = JSON.parse(this.#proxy.value);
-		} catch(ex) {
+
+	#parse(str) {
+		try {
+			return JSON.parse(str || '{}');
+		} catch (ex) {
 			console.error(ex);
 		}
-		return obj;
 	}
-	set value(obj) {
-		if (!this.#proxy) return;
-		const val = JSON.stringify(obj);
-		if (this.#proxy.value == val) return;
-		this.#proxy.value = val;
-		Pageboard.trigger(this.#proxy, 'change');
+
+	get value() {
+		return this.getAttribute('value');
+	}
+
+	set value(str) {
+		if (str == this.getAttribute('value')) return;
+		this.setAttribute('value', str);
+		this.#render(this.#parse(str));
 	}
 	connectedCallback() {
-		if (this.#proxy) return;
-		this.#proxy = this.appendChild(
-			this.dom(`<input name="${this.name}" type="hidden" />`)
-		);
-		const renderer = Page.debounce(() => this.#render(), 10);
-		this.#observer = new MutationObserver(mutations => renderer());
-		this.#observer.observe(this.#proxy, {
-			attributes: true
-		});
-		this.#table = this.appendChild(this.dom(`<table class="ui very compact celled small striped table">
+		this.#table = this.parentNode.insertBefore(this.dom(`<table class="ui very compact celled small striped table">
 			<tbody></tbody>
-		</table>`));
+		</table>`), this.nextSibling);
 		this.#table.addEventListener('change', this, false);
 		this.#table.addEventListener('input', this, false);
 		this.#table.addEventListener('focus', this, true);
-		this.#render();
+		this.#render(this.#parse(this.value));
 	}
 	disconnectedCallback() {
-		if (this.#observer) {
-			this.#observer.disconnect();
-			this.#observer = null;
-		}
-		this.#proxy = null;
 		this.#table.removeEventListener('focus', this, true);
 		this.#table.removeEventListener('input', this, false);
 		this.#table.removeEventListener('change', this, false);
+		this.#table.remove();
+		this.#table = null;
 	}
 	handleEvent(e) {
-		if (e.type == "change") this.#changed(e);
-		else this.#focused(e);
+		if (e.type == "change" && e.target != this) this.#changed(e);
+		else if (e.type == "input" || e.type == "focus") this.#focused(e);
 	}
-	#render() {
-		const obj = Pageboard.Semafor.flatten(this.value ?? {});
+	#render(obj = {}) {
+		const flat = Pageboard.Semafor.flatten(obj);
 		const body = this.#table.querySelector('tbody');
 		body.textContent = '';
 		const name = this.name;
-		Object.keys(obj).concat([""]).forEach((key, i) => {
-			let val = obj[key];
+		Object.keys(flat).concat([""]).forEach((key, i) => {
+			let val = flat[key];
 			if (val === undefined || val === null) val = '';
 			if (!Array.isArray(val)) val = [val];
 			val.forEach((val, j) => {
@@ -115,9 +105,10 @@ class HTMLInputMap extends Page.Element {
 				removals.push(tr);
 			}
 		}
-		this.value = Pageboard.Semafor.unflatten(map);
+		this.value = JSON.stringify(Pageboard.Semafor.unflatten(map));
 		for (const node of removals) node.remove();
+		Pageboard.trigger(this, 'change');
 	}
 }
-window.customElements.define('input-map', HTMLInputMap);
+window.customElements.define('element-input-map', HTMLElementInputMap, { extends: "input"});
 

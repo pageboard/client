@@ -28,7 +28,7 @@ Pageboard.schemaHelpers.page = class PageHelper {
 			fieldset.prepend(input.dom(`<legend>${label.innerHTML}</legend>`));
 			const queryNodes = input.dom(`
 				<label>[opts.title|or:Query]</label>
-				<input-map title="[opts.description]"></input-map>
+				<input is="element-input-map" title="[opts.description]">
 			`).fuse({
 				opts: this.opts
 			}, {});

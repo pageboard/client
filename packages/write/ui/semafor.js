@@ -654,7 +654,7 @@ Semafor.types.object = function (key, schema, node, inst) {
 			node.appendChild(fieldset);
 			fieldset.appendChild(node.dom(`
 				<label>${schema.title || key}</label>
-				<input-map name="${key}"><label>${schema.description || ''}</label></input-map>
+				<input is="element-input-map" name="${key}" />
 			`));
 		}
 	}
