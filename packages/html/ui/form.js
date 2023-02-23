@@ -1,6 +1,94 @@
 class HTMLElementForm extends Page.create(HTMLFormElement) {
 	getMethodLater = Page.debounce((e, state) => this.getMethod(e, state), 300);
 
+	static linearizeValues(query, obj = {}, prefix) {
+		if (Array.isArray(query) && query.every(val => {
+			return val == null || typeof val != "object";
+		})) {
+			// do not linearize array-as-value
+			obj[prefix] = query;
+		} else for (let key of Object.keys(query)) {
+			const val = query[key];
+			if (prefix) key = prefix + '.' + key;
+			if (val === undefined) continue;
+			if (val == null) obj[key] = val;
+			else if (typeof val == "object") this.linearizeValues(val, obj, key);
+			else obj[key] = val;
+		}
+		return obj;
+	}
+
+	static patch(state) {
+		state.scope.$filters.form = (ctx, val, action, name) => {
+			const form = name
+				? document.querySelector(`form[name="${name}"]`)
+				: ctx.dest.node.closest('form');
+			if (!form) {
+				// eslint-disable-next-line no-console
+				console.warn("No parent form found");
+				return val;
+			}
+			if (action == "toggle") {
+				action = val ? "enable" : "disable";
+			}
+
+			state.finish(() => {
+				if (action == "enable") {
+					form.enable();
+				} else if (action == "disable") {
+					form.disable();
+				} else if (action == "fill") {
+					if (val == null) {
+						form.reset();
+					} else if (typeof val == "object") {
+						let values = val;
+						if (val.id && val.data) {
+							// old way
+							values = { ...val.data };
+							for (const key of Object.keys(val)) {
+								if (key != "data") values['$' + key] = val[key];
+							}
+						} else {
+							// new way
+						}
+						form.fill(this.linearizeValues(values), state.scope);
+						form.save();
+					}
+				}
+			});
+
+			return val;
+		};
+	}
+
+	static setup(state) {
+		// https://daverupert.com/2017/11/happier-html5-forms/
+		state.connect({
+			captureBlur: (e, state) => blurHandler(e, false),
+			captureInvalid: (e, state) => blurHandler(e, true),
+			captureFocus: (e, state) => {
+				const el = e.target;
+				if (!el.matches || !el.matches('input,textarea,select')) return;
+				if (e.relatedTarget?.type == "submit") return;
+				updateClass(el.closest('.field') || el, el.validity, true);
+			}
+		}, document);
+
+		function updateClass(field, validity, remove) {
+			for (const [key, has] of Object.entries(validity)) {
+				if (key == "valid") continue;
+				field.classList.toggle(key, !remove && has);
+			}
+			field.classList.toggle('error', !remove && !validity.valid);
+		}
+		function blurHandler(e, checked) {
+			const el = e.target;
+			if (!el.matches || !el.matches('input,textarea,select')) return;
+			if (!checked) el.checkValidity();
+			updateClass(el.closest('.field') || el, el.validity);
+		}
+	}
+
 	toggleMessages(status) {
 		return window.HTMLElementTemplate.prototype.toggleMessages.call(this, status, this);
 	}
@@ -281,6 +369,7 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 	}
 }
 window.HTMLElementForm = HTMLElementForm;
+Page.define(`element-form`, HTMLElementForm, 'form');
 
 /* these methods must be available even on non-upgraded elements */
 HTMLFormElement.prototype.enable = function () {
@@ -297,7 +386,7 @@ HTMLFormElement.prototype.disable = function () {
 	}
 };
 
-Page.define(`element-form`, HTMLElementForm, 'form');
+
 
 
 HTMLSelectElement.prototype.fill = function (val) {
@@ -379,89 +468,3 @@ Object.defineProperty(HTMLInputElement.prototype, 'defaultValue', {
 	}
 });
 
-Page.setup(state => {
-	// https://daverupert.com/2017/11/happier-html5-forms/
-	Page.connect({
-		captureBlur: (e, state) => blurHandler(e, false),
-		captureInvalid: (e, state) => blurHandler(e, true),
-		captureFocus: (e, state) => {
-			const el = e.target;
-			if (!el.matches || !el.matches('input,textarea,select')) return;
-			if (e.relatedTarget?.type == "submit") return;
-			updateClass(el.closest('.field') || el, el.validity, true);
-		}
-	}, document);
-
-	function updateClass(field, validity, remove) {
-		for (const [key, has] of Object.entries(validity)) {
-			if (key == "valid") continue;
-			field.classList.toggle(key, !remove && has);
-		}
-		field.classList.toggle('error', !remove && !validity.valid);
-	}
-	function blurHandler(e, checked) {
-		const el = e.target;
-		if (!el.matches || !el.matches('input,textarea,select')) return;
-		if (!checked) el.checkValidity();
-		updateClass(el.closest('.field') || el, el.validity);
-	}
-});
-
-Page.patch(state => {
-	function linearizeValues(query, obj = {}, prefix) {
-		if (Array.isArray(query) && query.every(val => {
-			return val == null || typeof val != "object";
-		})) {
-			// do not linearize array-as-value
-			obj[prefix] = query;
-		}	else for (let key of Object.keys(query)) {
-			const val = query[key];
-			if (prefix) key = prefix + '.' + key;
-			if (val === undefined) continue;
-			if (val == null) obj[key] = val;
-			else if (typeof val == "object") linearizeValues(val, obj, key);
-			else obj[key] = val;
-		}
-		return obj;
-	}
-	state.scope.$filters.form = function (ctx, val, action, name) {
-		const form = name
-			? document.querySelector(`form[name="${name}"]`)
-			: ctx.dest.node.closest('form');
-		if (!form) {
-			// eslint-disable-next-line no-console
-			console.warn("No parent form found");
-			return val;
-		}
-		if (action == "toggle") {
-			action = val ? "enable" : "disable";
-		}
-
-		state.finish(() => {
-			if (action == "enable") {
-				form.enable();
-			} else if (action == "disable") {
-				form.disable();
-			} else if (action == "fill") {
-				if (val == null) {
-					form.reset();
-				} else if (typeof val == "object") {
-					let values = val;
-					if (val.id && val.data) {
-						// old way
-						values = { ...val.data };
-						for (const key of Object.keys(val)) {
-							if (key != "data") values['$' + key] = val[key];
-						}
-					} else {
-						// new way
-					}
-					form.fill(linearizeValues(values), state.scope);
-					form.save();
-				}
-			}
-		});
-
-		return val;
-	};
-});
