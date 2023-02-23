@@ -127,7 +127,7 @@ class HTMLElementBlogs extends Page.Element {
 			<category>[categories|repeat:*]</category>
 			<atom:link href="[links.rss]" rel="self" type="application/rss+xml"/>
 			<item>
-				<title>[items.data.title|repeat:item:item]</title>
+				<title>[items|at:item|repeat:item|.data.title]</title>
 				<link>[$loc.origin][item.data.url]</link>
 				<guid isPermaLink="false">[item.id|fail:*]</guid>
 				<pubDate>[item.date|date:utc]</pubDate>
