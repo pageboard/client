@@ -56,9 +56,9 @@ class HTMLElementSelect extends Page.Element {
 	handleChange(e, state) {
 		const opt = e.target;
 		if (opt.selected) {
-			this.#selectItem(opt.value);
+			this.#selectItem(opt);
 		} else {
-			this.#deselectItem(opt.value);
+			this.#deselectItem(opt);
 		}
 	}
 	#toggleMenu(show) {
@@ -66,8 +66,9 @@ class HTMLElementSelect extends Page.Element {
 		if (show === undefined) show = !style.display;
 		style.display = show ? "block" : null;
 	}
-	#selectItem(val) {
+	#selectItem(opt) {
 		const select = this.#select;
+		const val = opt.getAttribute('value');
 		const item = this.#menuOption(val);
 
 		if (this.options.multiple) {
@@ -81,11 +82,12 @@ class HTMLElementSelect extends Page.Element {
 			this.#setText(item.innerText.trim());
 		}
 
-		const defaultOption = select.querySelector(`option[value=""]`);
+		const defaultOption = select.querySelector(`option:not([value])`);
 		if (defaultOption && val) defaultOption.selected = false;
 	}
-	#deselectItem(val) {
-		if (this.options.multiple) {
+	#deselectItem(opt) {
+		const val = opt.getAttribute('value');
+		if (this.options.multiple && val) {
 			const item = this.#child(`.label[data-value="${val}"]`);
 			if (item) item.remove();
 		}
@@ -113,9 +115,11 @@ class HTMLElementSelect extends Page.Element {
 	}
 
 	#menuOption(val) {
+		if (val == null) val = "";
 		return this.querySelector(`element-select-option[data-value="${val}"]`);
 	}
 	#selectOption(val) {
+		if (val == null) val = "";
 		return this.querySelector(`select > option[value="${val}"]`);
 	}
 
@@ -125,20 +129,14 @@ class HTMLElementSelect extends Page.Element {
 			this.#observer = null;
 		}
 	}
-	#fillSelect() {
+	#fillSelect(state) {
 		const select = this.#select;
 		if (!select) return;
-		const menu = this.#menu;
-		menu.children.forEach(item => {
-			const val = item.dataset.value;
-			select.insertAdjacentHTML(
-				'beforeEnd',
-				`<option value="${val == null ? '' : val}">${item.innerHTML}</option>`
-			);
-		});
+		select.insertAdjacentHTML('afterBegin', '<option value="[item.dataset.value]">[children|at:*|repeat:item|.innerText]</option>');
+		select.fuse(this.#menu, state.scope);
 	}
 	setup(state) {
-		this.#observer = new MutationObserver(mutations => this.#fillSelect());
+		this.#observer = new MutationObserver(mutations => this.#fillSelect(state));
 		this.#observer.observe(this.#menu, {
 			childList: true
 		});
@@ -167,22 +165,19 @@ class HTMLElementSelect extends Page.Element {
 				menu.insertAdjacentHTML('afterBegin', `<element-select-option data-value="" block-type="input_select_option" class="item">-</element-select-option>`);
 			}
 		}
-		this.#fillSelect();
+		this.#fillSelect(state);
 	}
 
 	patch(state) {
-		if (this.isContentEditable) return; // write mode stop there
+		if (this.isContentEditable) return;
 		if (this.children.length == 1) this.build(state);
-
-		// FIXME this does work in query_form > fetch > select
-		// instead one must do fetch > query_form > select
 
 		state.finish(() => {
 			// synchronize after form has filled select
 			this.#select.children.forEach(opt => {
 				if (opt.value) {
-					if (opt.selected) this.#selectItem(opt.value);
-					else this.#deselectItem(opt.value);
+					if (opt.selected) this.#selectItem(opt);
+					else this.#deselectItem(opt);
 				}
 			});
 		});
