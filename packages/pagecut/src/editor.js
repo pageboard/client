@@ -231,7 +231,6 @@ class Editor extends View.EditorView {
 		return new State.PluginKey(key).get(this.state);
 	}
 	handleEvent(e) {
-		super.handleEvent(e);
 		if (this.closed) return;
 		if (e.type == "submit") {
 			e.preventDefault();
