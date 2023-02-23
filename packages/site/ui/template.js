@@ -11,7 +11,11 @@ class HTMLElementTemplate extends Page.Element {
 		if (this.loading || this.closest('[block-content="template"]')) {
 			return;
 		}
-		this.#auto = this.dataset.pagination && this.dataset.auto && this.dataset.stop && !(this.dataset.pagination in state.query) && state.sameQuery(state.referrer);
+		if (!state.sameQuery(state.referrer)) {
+			delete this.dataset.stop;
+			delete this.dataset.start;
+		}
+		this.#auto = this.dataset.pagination && this.dataset.auto && this.dataset.stop && !(this.dataset.pagination in state.query);
 		return this.fetch(state);
 	}
 
