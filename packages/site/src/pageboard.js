@@ -105,6 +105,7 @@ async function bundle(state, res) {
 
 Page.init(state => {
 	state.vars = {};
+	state.ivars = new Set();
 	if (!state.scope) state.scope = new Scope(state, {
 		$elements: baseElements,
 		$filters: {}

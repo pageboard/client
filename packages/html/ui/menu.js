@@ -1,19 +1,23 @@
 class HTMLElementMenu extends Page.Element {
 	static patch(state) {
-		function isSameOrParent(loc, state, isItem) {
-			if (!state.sameDomain(loc)) {
+		function isSameOrParent(loc, ref, isItem) {
+			if (!ref.sameDomain(loc)) {
 				return false;
-			} else if (state.samePathname(loc)) {
-				if (!isItem && !loc.search || state.sameQuery(loc)) return true;
+			} else if (ref.samePathname(loc)) {
+				if (!isItem && !loc.search || ref.sameQuery(loc)) return true;
 			} else {
-				return state.pathname.startsWith(loc.pathname + '/');
+				return ref.pathname.startsWith(loc.pathname + '/');
 			}
 		}
 		state.finish(() => {
+			const ref = state.parse(state);
+			for (const name of state.ivars) {
+				delete ref.query[name];
+			}
 			for (const item of document.querySelectorAll('[block-type="menu"] [href]')) {
 				const loc = item.getAttribute('href');
 				if (!loc) continue;
-				if (isSameOrParent(Page.parse(loc), state, item.matches('.item'))) {
+				if (isSameOrParent(state.parse(loc), ref, item.matches('.item'))) {
 					item.classList.add('active');
 				}
 			}

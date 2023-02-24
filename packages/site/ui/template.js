@@ -15,7 +15,13 @@ class HTMLElementTemplate extends Page.Element {
 			delete this.dataset.stop;
 			delete this.dataset.start;
 		}
-		this.#auto = this.dataset.pagination && this.dataset.auto && this.dataset.stop && !(this.dataset.pagination in state.query);
+		const offname = this.dataset.pagination;
+		if (offname) {
+			state.ivars.add(offname);
+			this.#auto = this.dataset.auto && this.dataset.stop && !(offname in state.query);
+		} else {
+			this.#auto = false;
+		}
 		return this.fetch(state);
 	}
 
