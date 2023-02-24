@@ -104,7 +104,7 @@ function update() {
 	}
 	editor.updatePage();
 }
-// TODO extend instead of wrap
+
 Pageboard.Editor = function Editor(win, state) {
 	const page = state.data.item;
 	if (!page || page.type == "error") {
