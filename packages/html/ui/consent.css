@@ -14,7 +14,7 @@ footer [block-type="consent_form"][data-transient="true"] {
 	display:none;
 }
 
-[contenteditable] header[block-focused="last"] .form[block-type="consent_form"][data-transient="true"],
-[contenteditable] footer[block-focused="last"] .form[block-type="consent_form"][data-transient="true"] {
+[contenteditable] [block-focused="last"] > .form[block-type="consent_form"][data-transient="true"],
+.form[block-type="consent_form"][data-transient="true"][block-focused] {
 	display: block;
 }
