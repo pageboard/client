@@ -407,6 +407,7 @@ HTMLInputElement.prototype.fill = function (val) {
 			this.checked = true;
 		} else {
 			this.checked = (Array.isArray(val) ? val : [val]).some(str => {
+				if (str == false && this.value == "") return true;
 				return str.toString() == this.value;
 			});
 		}
