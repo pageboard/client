@@ -81,6 +81,7 @@ export default class Scope {
 	async import(res) {
 		await load.schemas(this, res.meta.schemas);
 		const elts = this.$elements;
+		this.#state.doc ??= document.cloneNode();
 		if (res.item && !this.$element) {
 			this.$element = elts[res.item.type];
 		}

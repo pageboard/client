@@ -40,7 +40,6 @@ Page.route(async state => {
 
 	const scope = Scope.init(state);
 	await scope.import(data);
-	state.doc ??= document.cloneNode();
 	scope.$page = data.item;
 	const node = scope.render(data);
 	if (!node || node.nodeName != "BODY") {
