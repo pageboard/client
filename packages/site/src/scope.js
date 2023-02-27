@@ -61,6 +61,9 @@ export default class Scope {
 	get $doc() {
 		return this.#state.doc;
 	}
+	set $doc(v) {
+		// ignore it
+	}
 	get $view() {
 		if (!this.#view) this.#view = new Viewer({
 			elements: this.$elements,
