@@ -110,6 +110,10 @@ export function define(name, cla, is) {
 
 export function extend(name, Ext, is) {
 	const Cla = window.customElements.get(name);
+	if (!Cla) {
+		console.info("Cannot extend missing", name);
+		return;
+	}
 	if (is) name += "_" + is;
 	let list = extendCache[name];
 	if (!list) list = extendCache[name] = {};
