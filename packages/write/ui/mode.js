@@ -100,12 +100,16 @@ Pageboard.Controls.Mode = class Mode {
 				delete Pageboard.backupElements;
 			}
 			document.body.dataset.mode = com;
-			state.reload({
+			const follower = state.reload({
 				vary: true,
 				data: state.data
-			}).then(follower => {
-				follower.scope.$store = state.scope.$store;
 			});
+			const body = state.scope.$element.dom.querySelector('body');
+			const $write = com == "write";
+			body.classList.toggle('ProseMirror', $write);
+			body.setAttribute('spellcheck', !$write);
+			body.setAttribute('contenteditable', $write);
+			follower.scope = state.scope.copy({ $write });
 		});
 	}
 };

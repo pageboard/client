@@ -1,8 +1,3 @@
-Page.route(state => {
-	state.scope.$write = window.parent.document.body.dataset.mode != "read";
-});
-
-
 Page.setup(state => {
 	const it = window.parent.Pageboard;
 	if (!it || !it.adopt || !state.data.item) return;
