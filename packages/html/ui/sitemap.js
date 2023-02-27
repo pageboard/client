@@ -58,12 +58,12 @@ class HTMLElementSitemap extends Page.Element {
 			return;
 		}
 		const res = await state.fetch('get', `/.api/pages`);
-		const scope = await Pageboard.bundle(state, res);
-		scope.$element = scope.$elements.sitemap;
+		const scope = state.scope.copy();
+		await scope.import(res);
 		const tree = this.constructor.transformResponse(res);
-		const node = Pageboard.render({
+		const node = scope.render({
 			item: tree
-		}, scope);
+		});
 		// only change block content
 		const src = node.firstElementChild;
 		const dst = this.firstElementChild;
