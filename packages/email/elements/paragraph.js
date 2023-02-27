@@ -24,10 +24,10 @@ exports.mail_paragraph = {
 		}
 	},
 	parse: function(dom) {
-		const prop = Pageboard.elements.mail_paragraph.properties.align;
-		const align = (prop.anyOf.find(item => {
+		const schema = this.properties.align;
+		const align = (schema.anyOf.find(item => {
 			return dom.classList.contains(item.const);
-		}) || { const: prop.default }).const;
+		}) || { const: schema.default }).const;
 		return { align };
 	},
 	contents: "mail_inline*",
