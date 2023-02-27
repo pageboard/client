@@ -98,7 +98,7 @@ Pageboard.schemaHelpers.href = class Href {
 				filter.offset = page * filter.limit;
 				return Pageboard.uiLoad(
 					this.node,
-					Pageboard.fetch('get', '/.api/hrefs', filter)
+					Page.fetch('get', '/.api/hrefs', filter)
 				).then(({ data }) => {
 					if (!data || data.length == 0) return true;
 					const node = me.container.ownerDocument.createElement('div');
@@ -348,7 +348,7 @@ Pageboard.schemaHelpers.href = class Href {
 	}
 
 	async remove(href) {
-		const obj = await Pageboard.uiLoad(this.node, Pageboard.fetch('delete', '/.api/href', {
+		const obj = await Pageboard.uiLoad(this.node, Page.fetch('delete', '/.api/href', {
 			url: href
 		}));
 		this.cache([obj]);
@@ -356,7 +356,7 @@ Pageboard.schemaHelpers.href = class Href {
 	}
 
 	async get(href) {
-		const obj = Href.cache[Href.normUrl(href)] ?? await Pageboard.uiLoad(this.node, Pageboard.fetch('get', '/.api/hrefs', {
+		const obj = Href.cache[Href.normUrl(href)] ?? await Pageboard.uiLoad(this.node, Page.fetch('get', '/.api/hrefs', {
 			url: href
 		}));
 		return obj.data;
@@ -366,7 +366,7 @@ Pageboard.schemaHelpers.href = class Href {
 		url = Href.normUrl(url);
 		const result = await Pageboard.uiLoad(
 			this.node.querySelector(`[data-action]`),
-			Pageboard.fetch('post', '/.api/href', {
+			Page.fetch('post', '/.api/href', {
 				url: url
 			})
 		);

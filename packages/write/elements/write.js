@@ -128,7 +128,6 @@ exports.write = {
 		"../ui/inputs/crop.css"
 	],
 	scripts: [
-		...exports.page.scripts,
 		"../ui/write.js",
 		"../lib/pageboard.js",
 		"../ui/semafor.js",

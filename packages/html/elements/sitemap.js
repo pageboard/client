@@ -22,9 +22,6 @@ exports.sitemap = {
 	resources: {
 		helper: '../ui/sitemap-helper.js'
 	},
-	install: function(scope) {
-		if (scope.$write) Pageboard.load.js(this.resources.helper, scope);
-	},
 	itemModel: function(name, leaf) {
 		const schema = exports[name];
 		return {

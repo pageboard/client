@@ -93,7 +93,6 @@ exports.page = {
 	</head>
 	<body block-content="body"></body></html>`,
 	scripts: [
-		...exports.site.scripts,
 		'../ui/nav.js'
 	],
 	polyfills: [

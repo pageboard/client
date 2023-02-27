@@ -72,9 +72,6 @@ exports.heading = {
 	],
 	resources: {
 		helper: '../ui/heading-helper.js'
-	},
-	install: function (scope) {
-		if (scope.$write) Pageboard.load.js(this.resources.helper, scope);
 	}
 };
 

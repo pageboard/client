@@ -41,7 +41,7 @@ Page.constructor.prototype.debounce = function(fn, to) {
 	return db;
 };
 
-Page.init(state => {
+Page.ready(state => {
 	if (!state.scope.$scroll) state.scope.$scroll = {left: 0, top: 0};
 });
 

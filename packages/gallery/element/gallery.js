@@ -23,10 +23,7 @@ exports.gallery = {
 	],
 	scripts: [
 		'../ui/gallery.js'
-	],
-	install: function(scope) {
-		if (scope.$write) Pageboard.load.js(this.resources.helper, scope);
-	}
+	]
 };
 
 exports.itemlink = {

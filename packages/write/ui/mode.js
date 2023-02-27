@@ -37,7 +37,7 @@ Pageboard.Controls.Mode = class Mode {
 		const com = item.dataset.command;
 		if (com == "logout") {
 			Page.setup(state => {
-				return Pageboard.fetch("get", "/.api/logout")
+				return state.fetch("get", "/.api/logout")
 					.then(() => state.reload(true));
 			});
 			return;

@@ -1,3 +1,10 @@
+exports.core = {
+	bundle: true,
+	scripts: [
+		"../lib/pageboard.js"
+	]
+};
+
 // user, priv do not belong to a site and thus they do not need to be standalone
 // settings do belong to a site and needs to be standalone to be exportable
 exports.user = {
@@ -238,9 +245,5 @@ exports.site = {
 				}
 			}
 		}
-	},
-	scripts: [
-		"../lib/pageboard.js",
-		"../ui/route.js"
-	]
+	}
 };

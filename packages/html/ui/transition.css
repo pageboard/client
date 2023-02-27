@@ -18,14 +18,14 @@ html[data-stage] > body::after {
 	transition-duration:1s;
 	transition-timing-function:linear;
 }
-html[data-stage="init"] > body::after,
+html[data-stage="route"] > body::after,
 html[data-stage="ready"] > body::after,
 html[data-stage="setup"] > body::after,
 html[data-stage="error"] > body::after {
 	height:2px;
 }
 
-html[data-stage="init"] > body::after {
+html[data-stage="route"] > body::after {
 	width:50%;
 }
 html[data-stage="ready"] > body::after,

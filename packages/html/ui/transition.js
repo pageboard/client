@@ -5,7 +5,7 @@ Object.defineProperty(document, 'body', {
 	}
 });
 
-Page.init(state => {
+Page.route(state => {
 	const root = document.documentElement;
 	function dtr(state) {
 		root.dataset.stage = state.stage;

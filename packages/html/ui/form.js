@@ -323,7 +323,7 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 		scope.$request = form.read(true);
 		form.disable();
 
-		const res = await Pageboard.fetch(form.method, Page.format({
+		const res = await state.fetch(form.method, Page.format({
 			pathname: form.getAttribute('action'),
 			query: state.query
 		}), scope.$request).catch(err => err);

@@ -33,9 +33,6 @@ exports.tabs = {
 	],
 	resources: {
 		helper: '../ui/tab-helper.js'
-	},
-	install: function(scope) {
-		if (scope.$write) Pageboard.load.js(this.resources.helper, scope);
 	}
 };
 

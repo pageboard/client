@@ -10,6 +10,7 @@ import {
 } from 'matchdom';
 
 import str2dom from '@pageboard/pagecut/src/str2dom.js';
+export { str2dom };
 
 import * as matchdomPlugin from './plugin';
 
@@ -56,27 +57,27 @@ String.prototype.fuse = function(data, scope, plugin) {
 };
 
 
-export function render(res, scope, el) {
+export function render(scope, data, element) {
 	const elts = scope.$elements;
-	if (!res) res = {};
+	if (!data) data = {};
 
-	if (el) install(el, scope);
+	if (element) install(element, scope);
 
-	const block = res.item ?? res;
+	const block = data.item ?? data;
 	// fixme
 	// api should always reply with some kind of block,
 	// knowing that merge(block.data) and scope contains other keys of the block,
 	// prefixed with $
 	const blocks = {};
-	if (!el && block.type) {
-		el = elts[block.type];
+	if (!element && block.type) {
+		element = elts[block.type];
 	}
-	if (res.items) {
-		for (const child of res.items) {
+	if (data.items) {
+		for (const child of data.items) {
 			blocks[child.id] = child;
 			// this case should actually be res.item.children (like blocks.search api)
 			// but page.get api returns res.item/res.items and we can't change it in a compatible way.
-			if (child.children && !res.item) {
+			if (child.children && !data.item) {
 				for (const item of child.children) {
 					blocks[item.id] = item;
 				}
@@ -84,9 +85,8 @@ export function render(res, scope, el) {
 		}
 	}
 	return scope.$view.from(block, blocks, {
-		type: el.name,
-		element: el,
-		scope: scope,
+		element,
+		scope,
 		strip: !scope.$write
 	});
 }
@@ -107,7 +107,7 @@ function renderBlock(el, scope, block, bscope) {
 	if (el.hooks) rscope.$hooks = { ...rscope.$hooks, ...el.hooks };
 	if (el.formats) rscope.$formats = { ...rscope.$formats, ...el.types };
 
-	const data = block.expr ? Pageboard.merge(block.data, block.expr, (c, v) => {
+	const data = block.expr ? merge(block.data, block.expr, (c, v) => {
 		if (typeof v != "string") return;
 		return v.fuse({}, {
 			$default: c,
@@ -174,41 +174,9 @@ export function install(el, scope) {
 		} else {
 			el.fusable = true;
 		}
-		if (el.fragments) {
-			let reparse = false;
-			for (const obj of el.fragments) {
-				let target;
-				if (obj.type === 'doc') target = scope.$element;
-				else if (obj.type) target = scope.$elements[obj.type] ?? {};
-				else target = el;
-				if (!target.dom) {
-					// eslint-disable-next-line no-console
-					console.warn("dom not found for fragment", obj.type, el.name);
-				} else {
-					const node = obj.path ? target.dom.querySelector(obj.path) : target.dom;
-					if (node) {
-						if (obj.html) {
-							node.insertAdjacentHTML(obj.position || 'afterend', obj.html);
-							if (obj.html.fuse()) el.fusable = true;
-						}
-						if (obj.attributes) {
-							for (const [key, attr] of Object.entries(obj.attributes)) {
-								if (key == "is" && attr) reparse = true;
-								if (key == "className") {
-									node.classList.add(...attr.split(' '));
-								} else {
-									node.setAttribute(key, attr);
-								}
-								if (attr.fuse()) el.fusable = true;
-							}
-						}
-					} else {
-						// eslint-disable-next-line no-console
-						console.warn("path not found", obj.path, "in", el.name, el.html);
-					}
-				}
-			}
-			if (reparse) el.dom = str2dom(el.dom.outerHTML, {
+		if (el.fragments && insertFragments(scope, el)) {
+			// reparse
+			el.dom = str2dom(el.dom.outerHTML, {
 				doc: scope.$doc,
 				ns: el.ns
 			});
@@ -216,7 +184,12 @@ export function install(el, scope) {
 		if (el.install && scope.$element) {
 			el.install(scope);
 		}
-	} catch(err) {
+		if (scope.$write && el.resources?.helper) {
+			// TODO add el.resources.helper to meta.scripts
+			// load.js(el.resources?.helper, scope.$doc);
+			console.log("FIXME add optional resources");
+		}
+	} catch (err) {
 		// eslint-disable-next-line no-console
 		console.error("Invalid element", el, err);
 		return;
@@ -228,3 +201,62 @@ export function install(el, scope) {
 	};
 }
 
+function insertFragments(scope, el) {
+	let reparse = false;
+	for (const obj of el.fragments) {
+		let target;
+		if (obj.type === 'doc') target = scope.$element;
+		else if (obj.type) target = scope.$elements[obj.type] ?? {};
+		else target = el;
+		if (!target.dom) {
+			// eslint-disable-next-line no-console
+			console.warn("dom not found for fragment", obj.type, el.name);
+		} else {
+			const node = obj.path ? target.dom.querySelector(obj.path) : target.dom;
+			if (node) {
+				if (obj.html) {
+					node.insertAdjacentHTML(obj.position || 'afterend', obj.html);
+					if (obj.html.fuse()) el.fusable = true;
+				}
+				if (obj.attributes) {
+					for (const [key, attr] of Object.entries(obj.attributes)) {
+						if (key == "is" && attr) reparse = true;
+						if (key == "className") {
+							node.classList.add(...attr.split(' '));
+						} else {
+							node.setAttribute(key, attr);
+						}
+						if (attr.fuse()) el.fusable = true;
+					}
+				}
+			} else {
+				// eslint-disable-next-line no-console
+				console.warn("path not found", obj.path, "in", el.name, el.html);
+			}
+		}
+	}
+	return reparse;
+}
+
+function merge(obj, extra, fn) {
+	const single = arguments.length == 2;
+	if ((fn == null || single) && typeof extra == "function") {
+		fn = extra;
+		extra = obj;
+		obj = {};
+	}
+	if (!extra) return obj;
+	const copy = { ...obj };
+	for (const [key, val] of Object.entries(extra)) {
+		if (val == null) {
+			continue;
+		} else if (typeof val == "object") {
+			copy[key] = single ? merge(val, fn) : merge(copy[key], val, fn);
+		} else if (fn) {
+			copy[key] = single ? fn(val) : fn(copy[key], val);
+		} else {
+			copy[key] = val;
+		}
+	}
+	return copy;
+}

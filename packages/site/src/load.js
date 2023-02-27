@@ -1,5 +1,7 @@
 import { Deferred } from 'class-deferred';
 
+const cache = new Map();
+
 function load(node, head) {
 	const d = new Deferred();
 	const live = node.ownerDocument == document;
@@ -18,38 +20,33 @@ function load(node, head) {
 	return d;
 }
 
-export async function meta(state, meta) {
-	if (!meta) return;
-	if (meta.elements) for (const [name, el] of Object.entries(meta.elements)) {
-		if (!Pageboard.elements[name]) Pageboard.elements[name] = el;
-	}
-	if (meta.schemas) await Promise.all(meta.schemas.map(schema => {
-		if (!Pageboard.cache[schema]) {
-			Pageboard.cache[schema] = Pageboard.load.js(schema);
+export async function schemas(scope, list) {
+	if (list) await Promise.all(list.map(schema => {
+		if (!cache.has(schema)) {
+			cache.set(schema, js(schema, scope.$doc));
 		}
-		return Pageboard.cache[schema];
+		return cache.get(schema);
 	}));
+}
 
-	// additional resources - elements in group page usually do not have those
-	if (meta.scripts) await Promise.all(
-		meta.scripts.map(url => Pageboard.load.js(url))
+export async function bundles(state, { scripts, stylesheets }) {
+	if (scripts) await Promise.all(
+		scripts.map(url => js(url, state.doc))
 	);
 	// cannot wait for these
-	if (meta.stylesheets) {
+	if (stylesheets) {
 		state.setup(() => Promise.all(
-			meta.stylesheets.map(url => Pageboard.load.css(url))
+			stylesheets.map(url => css(url, state.doc))
 		));
 	}
 }
 
-function getHead(scope) {
-	const doc = scope?.$element?.dom ?? document;
-	return doc.querySelector('head') || document.head;
+function getHead(doc) {
+	return doc.head ?? doc.querySelector('head');
 }
 
-export async function js(url, scope) {
-	const head = getHead(scope);
-	const doc = head.ownerDocument;
+export async function js(url, doc = document) {
+	const head = getHead(doc);
 	if (head.querySelector(`script[src="${url}"]`)) {
 		return;
 	}
@@ -60,9 +57,8 @@ export async function js(url, scope) {
 	return load(node, head);
 }
 
-export async function css(url, scope) {
-	const head = getHead(scope);
-	const doc = head.ownerDocument;
+export async function css(url, doc = document) {
+	const head = getHead(doc);
 	if (head.querySelector(`link[rel="stylesheet"][href="${url}"]`)) {
 		return;
 	}

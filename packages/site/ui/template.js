@@ -26,9 +26,8 @@ class HTMLElementTemplate extends Page.Element {
 	}
 
 	async fetch(state) {
-		let { scope } = state;
 		// FIXME remove this heresy
-		const disabled = (this.getAttribute('disabled') || '').fuse({}, scope);
+		const disabled = (this.getAttribute('disabled') || '').fuse({}, state.scope);
 		// end of heresy
 		const action = disabled ? null : this.getAttribute('action');
 		const request = state.templatesQuery(this);
@@ -37,23 +36,23 @@ class HTMLElementTemplate extends Page.Element {
 		// redirections are only allowed to use collected query params
 
 		this.toggleMessages();
+		const scope = state.scope.copy();
 		if (missings) {
 			this.ownView.textContent = '';
-			scope = state.scope.copy();
 			scope.$status = 400;
 			scope.$statusText = 'Missing Query Parameters';
 		} else if (action) try {
 			if (this.#auto) {
 				request[this.dataset.pagination] = this.dataset.stop;
 			}
-			const res = await Pageboard.fetch('get', action, request);
+			const res = await state.fetch('get', action, request);
 			this.loading = true;
 			this.classList.add('loading');
-			scope = await Pageboard.bundle(state, res);
+			await scope.import(res);
+			await scope.bundles(res);
 			scope.$response = res;
 			scope.$request = request;
 		} catch (err) {
-			scope = state.scope.copy();
 			scope.$status = -1;
 			// eslint-disable-next-line no-console
 			console.error("Error building", err);
@@ -218,8 +217,7 @@ class HTMLElementTemplate extends Page.Element {
 		if (offset != null && limit != null) {
 			Object.assign(this.dataset, { count, start, stop, limit });
 		}
-
-		const frag = Pageboard.render(data, scope, el);
+		const frag = scope.render(data, el);
 
 		if (Object.keys(collector.missings).length) {
 			state.statusText = `Missing Query Parameters`;
@@ -263,6 +261,7 @@ class HTMLElementTemplate extends Page.Element {
 		if (this.isContentEditable) return;
 		if (this.dataset.auto != "true") return;
 		this.#queue = Promise.resolve();
+		// FIXME when the list is not long enough, it does not trigger autoload
 		this.#observer = new IntersectionObserver(entries => {
 			entries.forEach(entry => {
 				if (entry.isIntersecting) {
