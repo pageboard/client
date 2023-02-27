@@ -181,9 +181,6 @@ export function install(el, scope) {
 				ns: el.ns
 			});
 		}
-		if (el.install && scope.$element) {
-			el.install(scope);
-		}
 	} catch (err) {
 		// eslint-disable-next-line no-console
 		console.error("Invalid element", el, err);
