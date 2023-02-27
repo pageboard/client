@@ -300,12 +300,9 @@ class HTMLElementInputHTML extends Page.create(HTMLTextAreaElement) {
 		const toolbar = doc.dom(`<div class="toolbar"></div>`);
 		this.parentNode.insertBefore(toolbar, textarea);
 
-		const els = {};
-		for (const [name, el] of Object.entries(this.constructor.elements)) {
-			const copy = { ...el };
-			Pageboard.install(copy, state.scope);
-			els[name] = copy;
-		}
+		const elts = this.constructor.elements;
+		const scope = state.scope.copy({ $elements: elts });
+		scope.install();
 
 		this.#saver = state.debounce(editor => {
 			super.value = this.#editor.to()?.content[""];
@@ -315,9 +312,9 @@ class HTMLElementInputHTML extends Page.create(HTMLTextAreaElement) {
 		this.#editor = new window.Pagecut.Editor({
 			topNode: 'fragment',
 			store: {},
-			elements: els,
+			elements: elts,
 			place: textarea,
-			scope: state.scope,
+			scope,
 			plugins: [{
 				view: () => {
 					return {
@@ -326,7 +323,7 @@ class HTMLElementInputHTML extends Page.create(HTMLTextAreaElement) {
 				}
 			}]
 		});
-		this.#menu = new MenuBar(this.#editor, els, toolbar);
+		this.#menu = new MenuBar(this.#editor, elts, toolbar);
 		textarea.spellcheck = false;
 		this.value = initialValue;
 	}

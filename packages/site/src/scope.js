@@ -78,18 +78,22 @@ export default class Scope {
 		return scope;
 	}
 
-	async import(res) {
-		await load.schemas(this, res.meta.schemas);
-		const elts = this.$elements;
+	install() {
 		this.#state.doc ??= document.cloneNode();
-		if (res.item && !this.$element) {
-			this.$element = elts[res.item.type];
-		}
+		const elts = this.$elements;
 		for (const name of Object.keys(elts)) {
 			const el = elts[name];
 			if (!el.name) el.name = name;
 			fuse.install(el, this);
 		}
+	}
+
+	async import(res = {}) {
+		await load.schemas(this, res.meta?.schemas);
+		if (res.item && !this.$element) {
+			this.$element = this.$elements[res.item.type];
+		}
+		this.install();
 		if (res.grants) {
 			this.$write = Boolean(res.grants.webmaster);
 		}
