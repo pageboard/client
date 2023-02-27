@@ -33,14 +33,6 @@ Page.constructor.prototype.scroll = function(opts) {
 	else window.scrollTo(scrollOpts);
 };
 
-Page.constructor.prototype.debounce = function(fn, to) {
-	const db = Pageboard.debounce((...args) => {
-		fn(...args);
-	}, to);
-	this.chain('close', db.clear);
-	return db;
-};
-
 Page.ready(state => {
 	if (!state.scope.$scroll) state.scope.$scroll = {left: 0, top: 0};
 });

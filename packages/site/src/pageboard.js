@@ -1,4 +1,4 @@
-export { default as debounce } from 'debounce';
+import { default as debounce } from 'debounce';
 import { default as fetchHelper } from './fetch';
 import '@ungap/custom-elements';
 import * as Class from './class';
@@ -11,6 +11,9 @@ import './stages';
 
 window.Deferred = Deferred;
 
+
+export const elements = window.Pageboard?.elements ?? {};
+
 for (const key in Class) {
 	Object.defineProperty(Page.constructor.prototype, key, {
 		value: Class[key]
@@ -18,6 +21,13 @@ for (const key in Class) {
 }
 
 Page.constructor.prototype.fetch = fetchHelper;
+Page.constructor.prototype.debounce = function (fn, to) {
+	const db = debounce((...args) => {
+		fn(...args);
+	}, to);
+	this.chain('close', db.clear);
+	return db;
+};
 
 Page.route(async state => {
 	let data = state.data;
