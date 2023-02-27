@@ -184,11 +184,6 @@ export function install(el, scope) {
 		if (el.install && scope.$element) {
 			el.install(scope);
 		}
-		if (scope.$write && el.resources?.helper) {
-			// TODO add el.resources.helper to meta.scripts
-			// load.js(el.resources?.helper, scope.$doc);
-			console.log("FIXME add optional resources");
-		}
 	} catch (err) {
 		// eslint-disable-next-line no-console
 		console.error("Invalid element", el, err);

@@ -6,7 +6,7 @@ Page.extend('element-gallery', class GalleryHelper {
 				for (const record of records) this.mutate(record, state);
 			}, 300);
 		});
-		this.itemsObserver.disconnect();
+		else this.itemsObserver.disconnect();
 		const mode = this.selectedMode;
 		const gal = this.children.find(node => !mode || node.getAttribute('block-type') == mode);
 		this.itemsObserver.observe(gal, {
@@ -22,6 +22,7 @@ Page.extend('element-gallery', class GalleryHelper {
 		}
 	}
 	mutate(record, state) {
+		if (!state.scope.$write) return;
 		const ed = window.parent.Pageboard.editor;
 		if (!ed || ed.closed) return;
 		const mode = this.selectedMode;

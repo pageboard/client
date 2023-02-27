@@ -19,9 +19,6 @@ exports.sitemap = {
 	scripts: [
 		'../ui/sitemap.js'
 	],
-	resources: {
-		helper: '../ui/sitemap-helper.js'
-	},
 	itemModel: function(name, leaf) {
 		const schema = exports[name];
 		return {
@@ -62,6 +59,6 @@ exports.sitemap = {
 		};
 	}
 };
-
+exports.editor.scripts.push('../ui/sitemap-helper.js');
 exports.sitepage = exports.sitemap.itemModel('page', false);
 exports.siteredirection = exports.sitemap.itemModel('redirection', true);

@@ -15,9 +15,6 @@ exports.gallery = {
 	contents: "portfolio carousel",
 	group: 'block',
 	html: `<element-gallery id="[name|as:xid]"></element-gallery>`,
-	resources: {
-		helper: '../ui/gallery-helper.js'
-	},
 	stylesheets: [
 		'../ui/gallery.css'
 	],
@@ -25,6 +22,7 @@ exports.gallery = {
 		'../ui/gallery.js'
 	]
 };
+exports.editor.scripts.push('../ui/gallery-helper.js');
 
 exports.itemlink = {
 	priority: 10,

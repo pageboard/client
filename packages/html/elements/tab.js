@@ -30,12 +30,9 @@ exports.tabs = {
 	],
 	scripts: [
 		'../ui/tab.js'
-	],
-	resources: {
-		helper: '../ui/tab-helper.js'
-	}
+	]
 };
-
+exports.editor.scripts.push('../ui/tab-helper.js');
 
 exports.tab_item = {
 	title: "Item",

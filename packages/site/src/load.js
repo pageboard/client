@@ -35,7 +35,7 @@ export async function bundles(state, { scripts, stylesheets }) {
 	);
 	// cannot wait for these
 	if (stylesheets) {
-		state.setup(() => Promise.all(
+		state.setup(state => Promise.all(
 			stylesheets.map(url => css(url, state.doc))
 		));
 	}

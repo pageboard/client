@@ -22,6 +22,7 @@ Page.setup(state => {
 Pageboard.adopt = function(win, readState) {
 	Page.setup(writeState => {
 		readState.finish(() => {
+			const sbody = win.document.documentElement;
 			window.document.title = win.document.title;
 			writeState.pathname = readState.pathname;
 			writeState.query = readState.query;
@@ -36,8 +37,13 @@ Pageboard.adopt = function(win, readState) {
 					root: { defaultView: win },
 					close() { }
 				}, document.getElementById("mode"));
-			} else if (window.document.body.dataset.mode != "read") {
+			} else if (readState.scope.$write) {
 				Pageboard.Editor(win, readState);
+				sbody.classList.add('ProseMirror');
+				sbody.setAttribute('spellcheck', 'false');
+			} else {
+				sbody.classList.remove('ProseMirror');
+				sbody.removeAttribute('spellcheck');
 			}
 		});
 	});

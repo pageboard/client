@@ -159,10 +159,6 @@ exports.write = {
 	],
 	resources: {
 		empty: "../ui/empty.png",
-		develop: "../ui/develop.js",
-		editor: "../lib/pagecut/editor.js",
-		readScript: "../ui/read.js",
-		readStyle: "../ui/read.css",
 		reset: "../lib/components/reset.css",
 	},
 	polyfills: [
@@ -190,3 +186,13 @@ exports.write = {
 	}
 };
 
+exports.editor = {
+	bundle: true,
+	scripts: [
+		"../lib/pagecut/editor.js",
+		"../ui/editor.js"
+	],
+	stylesheets: [
+		"../ui/editor.css"
+	]
+};

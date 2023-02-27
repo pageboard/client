@@ -44,7 +44,7 @@
     "./src/pageboard.js": "bundle --name=window.Pageboard.utils lib/"
   },
   "pageboard": {
-    "priority": -1,
+    "priority": -1000,
     "directories": [
       "elements",
       "lib",

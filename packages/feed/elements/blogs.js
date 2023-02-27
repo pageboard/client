@@ -171,9 +171,7 @@ exports.blogs = {
 	],
 	stylesheets: [
 		'../ui/blogs.css'
-	],
-	resources: {
-		helper: '../ui/blogs-helper.js'
-	}
+	]
 };
+exports.editor.scripts.push('../ui/blogs-helper.js');
 */

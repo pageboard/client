@@ -69,12 +69,9 @@ exports.heading = {
 	],
 	scripts: [
 		'../ui/heading.js'
-	],
-	resources: {
-		helper: '../ui/heading-helper.js'
-	}
+	]
 };
-
+exports.editor.scripts.push('../ui/heading-helper.js');
 
 exports.heading_nolink = {
 	...exports.heading,

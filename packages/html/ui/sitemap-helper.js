@@ -63,5 +63,10 @@ class HTMLElementSitepage extends Page.Element {
 
 
 Page.define('element-sitepage', HTMLElementSitepage);
-Page.extend('element-sitemap', HTMLElementSitepage);
+
+Page.setup(state => {
+	state.finish(() => {
+		Page.extend('element-sitemap', HTMLElementSitepage);
+	});
+});
 
