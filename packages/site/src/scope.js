@@ -94,9 +94,6 @@ export default class Scope {
 			this.$element = this.$elements[res.item.type];
 		}
 		this.install();
-		if (res.grants) {
-			this.$write = Boolean(res.grants.webmaster);
-		}
 		if (res.hrefs) {
 			if (!this.$hrefs) this.$hrefs = {};
 			Object.assign(this.$hrefs, res.hrefs);
