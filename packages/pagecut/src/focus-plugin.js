@@ -1,4 +1,4 @@
-import { NodeSelection, TextSelection } from "prosemirror-state";
+import { NodeSelection } from "prosemirror-state";
 
 export default class FocusPlugin {
 	constructor() {
@@ -83,12 +83,6 @@ export default class FocusPlugin {
 	}
 
 	focus(tr, sel) {
-		// disabled because view.hasFocus() returns false with e.g. popup menu
-		// do not unfocus if view or its document has lost focus
-		// if (!this.editor.hasFocus()) {
-		// 	this.focusRoot(tr, 0, tr.doc, false);
-		// 	return;
-		// }
 		const parents = this.editor.utils.selectionParents(tr, sel);
 		const firstParent = parents.length && parents[0];
 		const root = firstParent.root;
@@ -99,7 +93,7 @@ export default class FocusPlugin {
 		const changes = [{
 			pos: 0,
 			node: tr.doc,
-			focus: 'first'
+			focus: "zero"
 		}];
 
 		if (root) {
@@ -116,33 +110,23 @@ export default class FocusPlugin {
 				changes.push({
 					pos: cur.rpos.before(cur.level),
 					node: cur.node,
-					focus: i == parents.length - 1 ? "first" : "middle"
+					focus: i == parents.length - 2 ? "first" : "middle"
 				});
 			}
 		}
 		function hasChanged(node, pos) {
-			if (node.type.spec.typeName == "root") {
-				// node is good
-				//	} else if (node.marks.length && node.marks[0].type.spec.typeName == "root") {
-				//node = node.marks[0]; // disabled for now
-			} else {
-				return;
+			if (node.type.spec.typeName != "root") return;
+			const changed = changes.some(obj => obj.node == node);
+			if (!changed && node.attrs.focused) {
+				changes.unshift({
+					pos, node
+				});
 			}
-			let changed = false;
-			for (let i = 0; i < changes.length; i++) {
-				if (node == changes[i].node) {
-					changed = true;
-					break;
-				}
-			}
-			if (!changed && node.attrs.focused) changes.unshift({ pos: pos, node: node, focus: false });
 		}
-		hasChanged(tr.doc);
+
 		tr.doc.descendants(hasChanged);
 
-		let change;
-		for (let j = 0; j < changes.length; j++) {
-			change = changes[j];
+		for (const change of changes) {
 			try {
 				me.focusRoot(tr, change.pos, change.node, change.focus);
 			} catch (ex) {
