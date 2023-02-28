@@ -102,6 +102,7 @@ exports.page = {
 		'es2015', 'es2016', 'es2017', 'es2018',
 		'Intl.NumberFormat.~locale.[$site.lang|or:en]',
 		`Intl.DateTimeFormat.~locale.[$site.lang|or:en]`,
+		'console.debug',
 		'smoothscroll'
 	],
 	csp: {
