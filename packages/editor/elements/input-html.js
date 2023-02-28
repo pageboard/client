@@ -4,6 +4,7 @@ exports.input_html = {
 	menu: "form",
 	required: ["name"],
 	group: "block",
+	bundle: true,
 	context: 'form//',
 	properties: {
 		name: {
