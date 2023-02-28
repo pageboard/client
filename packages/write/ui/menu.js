@@ -27,7 +27,7 @@ Pageboard.Controls.Menu = class Menu {
 
 		const dom = document.dom(`<a class="item [active] [disabled]" title="[el.description]">
 			[icon|as:html|svg:]
-			<span>[title|split: |join:\n|as:text]</span>
+			<span>[title|split: |join:%0A|as:text]</span>
 		</a>`).fuse({
 			active, icon, title, el
 		}, {
