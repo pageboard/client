@@ -1,6 +1,6 @@
 Page.extend('element-blogs', class HTMLElementBlogsHelper {
-	setup() {
-		this.observer = new MutationObserver(() => this.updateChildren());
+	setup(state) {
+		this.observer = new MutationObserver(() => this.updateChildren(state.scope));
 		this.observer.observe(this, {
 			childList: true
 		});
@@ -11,19 +11,19 @@ Page.extend('element-blogs', class HTMLElementBlogsHelper {
 		delete this.observer;
 	}
 
-	updateChildren() {
+	updateChildren(scope) {
 		this.children.forEach((child, index) => {
 			if (!child.getAttribute('block-id')) return;
 			const curIndex = parseInt(child.dataset.index);
 			if (curIndex != index) {
 				child.setAttribute('data-index', index);
-				this.syncBlock(child);
+				this.syncBlock(scope, child);
 			}
 		});
 	}
 
-	syncBlock(node) {
-		const editor = window.parent.Pageboard.editor;
+	syncBlock(scope, node) {
+		const editor = scope.editor;
 		if (!editor || editor.closed) return;
 		const block = editor.blocks.get(node.getAttribute('block-id'));
 		if (!block.data) block.data = {};

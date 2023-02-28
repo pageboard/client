@@ -14,7 +14,7 @@ Pageboard.schemaHelpers.pageTitle = class PageTitle {
 	check(only) {
 		const { url = "" } = this.block.data;
 		const nameUrl = url.split("/").pop();
-		if (Pageboard.slug(this.input.value) == nameUrl) {
+		if (Pageboard.utils.slug(this.input.value) == nameUrl) {
 			this.tracking = true;
 		} else if (!only) {
 			this.tracking = false;
@@ -36,7 +36,7 @@ Pageboard.schemaHelpers.pageTitle = class PageTitle {
 
 		const val = this.input.value;
 		if (!prefix) {
-			const slug = Pageboard.slug(val);
+			const slug = Pageboard.utils.slug(val);
 			const list = url.split('/');
 			list[list.length - 1] = slug;
 			inputUrl.value = list.join('/');

@@ -154,8 +154,7 @@ exports.write = {
 		"../ui/share.js",
 		"../ui/mode.js",
 		"../ui/setup.js",
-		"../lib/cropper.js",
-		"../lib/speakingurl.js"
+		"../lib/cropper.js"
 	],
 	resources: {
 		empty: "../ui/empty.png",

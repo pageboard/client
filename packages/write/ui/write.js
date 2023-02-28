@@ -37,13 +37,6 @@ Object.assign(window.Pageboard, {
 			else what.classList.remove('loading');
 		});
 	},
-	slug(str) {
-		return window.getSlug(str, {
-			custom: {
-				"_": "-"
-			}
-		});
-	},
 	service(str) {
 		if (!str) return null;
 		const [api, method] = str.split('.');

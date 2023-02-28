@@ -5,7 +5,7 @@ class HTMLElementSitepage extends Page.Element {
 	};
 
 	patch(state) {
-		if (this.isConnected) this.syncBlock();
+		if (this.isConnected) this.syncBlock(state.scope);
 	}
 	setup(state) {
 		const content = this.querySelector('[block-content="children"]');
@@ -45,9 +45,9 @@ class HTMLElementSitepage extends Page.Element {
 		this.updating = false;
 	}
 
-	syncBlock() {
+	syncBlock(scope) {
 		if (!this.parentNode || this.matches('element-sitemap')) return;
-		const editor = window.parent.Pageboard.editor;
+		const editor = scope.editor;
 		if (!editor || editor.closed) return;
 		const block = editor.blocks.get(this.getAttribute('block-id'));
 		if (!block.data) block.data = {};
@@ -65,6 +65,7 @@ class HTMLElementSitepage extends Page.Element {
 Page.define('element-sitepage', HTMLElementSitepage);
 
 Page.setup(state => {
+	if (!state.scope.$write) return;
 	state.finish(() => {
 		Page.extend('element-sitemap', HTMLElementSitepage);
 	});

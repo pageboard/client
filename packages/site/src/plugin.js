@@ -327,7 +327,7 @@ function contentFn(ctx, block, name) {
 		html: `<div block-content="${name}"></div>`
 	};
 
-	const dom = Pageboard.render({ item: block }, scope, el);
+	const dom = scope.render({ item: block }, el);
 	const frag = scope.$doc.createDocumentFragment();
 	while (dom.childNodes.length) frag.appendChild(dom.firstChild);
 	return ctx.filter(frag, 'as', 'html');

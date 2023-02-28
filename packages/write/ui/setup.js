@@ -37,7 +37,7 @@ Pageboard.adopt = function(win, readState) {
 					close() { }
 				}, document.getElementById("mode"));
 			} else if (readState.scope.$write) {
-				Pageboard.Editor(win, readState);
+				readState.scope.editor = Pageboard.Editor(win, readState);
 			}
 		});
 	});
@@ -147,7 +147,7 @@ Pageboard.Editor = function Editor(win, state) {
 			}
 		}]
 	});
-
+	editor.slug = Pageboard.utils.slug;
 	editor.updatePage = updatePage.bind(editor, state);
 	editor.close = editorClose.bind(editor);
 

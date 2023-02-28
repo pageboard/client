@@ -38,7 +38,6 @@
   "prepare": {
     "cropperjs/dist/cropper.css": "copy lib/",
     "cropperjs/dist/cropper.js": "copy lib/",
-    "speakingurl/lib/speakingurl.js": "copy lib/",
     "@pageboard/pagecut/src/editor.js": "bundle --name=window.Pagecut lib/pagecut/",
     "@pageboard/pagecut/src/*.css": "copy lib/pagecut/",
     "./src/pageboard.js": "bundle --name=window.Pageboard.utils lib/"

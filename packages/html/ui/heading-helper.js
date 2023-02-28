@@ -15,13 +15,13 @@ class HTMLElementHeadingHelper extends Page.create(HTMLHeadingElement) {
 	close() {
 		if (this.observer) this.observer.disconnect();
 	}
-	sync() {
-		const Pb = window.parent.Pageboard;
-		if (!Pb.slug || !Pb.editor) return;
-		const txt = Pb.slug(this.textContent);
+	sync(scope) {
+		const { editor } = scope;
+		if (!editor) return;
+		const txt = editor.slug(this.textContent);
 		const id = txt.length <= 64 ? txt : null;
 		if (id != this.id) {
-			Pb.editor.blocks.mutate(this, { id });
+			editor.blocks.mutate(this, { id });
 		}
 	}
 }

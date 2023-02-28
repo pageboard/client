@@ -17,7 +17,7 @@ class HTMLElementInclude extends Page.Element {
 		return this.fetch(state);
 	}
 	render(res, state) {
-		const node = Pageboard.render(res, state.scope);
+		const node = state.scope.render(res);
 		const view = this.ownView;
 		view.textContent = '';
 		view.appendChild(node);

@@ -23,7 +23,7 @@ Page.extend('element-gallery', class GalleryHelper {
 	}
 	mutate(record, state) {
 		if (!state.scope.$write) return;
-		const ed = window.parent.Pageboard.editor;
+		const ed = state.scope.editor;
 		if (!ed || ed.closed) return;
 		const mode = this.selectedMode;
 		const gals = Array.prototype.filter.call(this.children, (gal) => {
