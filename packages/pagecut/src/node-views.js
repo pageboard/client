@@ -67,7 +67,7 @@ export class RootNodeView {
 		this.dom.classList.remove('ProseMirror-selectednode');
 	}
 
-	update(node, decorations) {
+	update(node) {
 		if (this.element.name != node.attrs.type) {
 			return false;
 		}
@@ -138,7 +138,8 @@ export class RootNodeView {
 				this.selectNode();
 			}
 		} else {
-			// no point in calling render
+			// might be content change and some helpers need that
+			this.dom.edited?.(node);
 		}
 
 		const cname = node.type.spec.contentName;
