@@ -1,19 +1,6 @@
 class HTMLElementHeadingHelper extends Page.create(HTMLHeadingElement) {
 	setup(state) {
-		this.willSync = state.debounce(() => this.sync(), 100);
-		this.observer = new MutationObserver(records => {
-			if (records.some(mut => {
-				return mut.type == "characterData" || mut.type == "childList" && mut.addedNodes.length;
-			})) this.willSync();
-		});
-		this.observer.observe(this, {
-			childList: true,
-			subtree: true,
-			characterData: true
-		});
-	}
-	close() {
-		if (this.observer) this.observer.disconnect();
+		this.edited = state.debounce(() => this.sync(state.scope), 500);
 	}
 	sync(scope) {
 		const { editor } = scope;
@@ -34,5 +21,3 @@ for (let i = 1; i <= 6; i++) {
 		`h${i}`
 	);
 }
-
-
