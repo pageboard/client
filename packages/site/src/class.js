@@ -23,8 +23,9 @@ export function create(Superclass) {
 			}
 		}
 		connectedCallback() {
-			if (this.build) Page.build(state => this.#options(state));
-			if (this.patch) Page.patch(state => this.#options(state));
+			if (this.build) Page.build(state => this.#options(state, true));
+			if (this.patch) Page.patch(state => this.#options(state, true));
+			if (this.setup) Page.setup(state => this.#options(state));
 			if (this.reveal) {
 				Page.paint(state => this.#paint(state));
 				Page.setup(state => this.#setup(state));
@@ -38,27 +39,25 @@ export function create(Superclass) {
 				this.#close(Page);
 			}
 		}
-		#options(state) {
-			this.options = nodeOptions(state, this);
+		#options(state, refresh) {
+			if (!this.options || refresh) this.options = nodeOptions(state, this);
 		}
 		#paint(state) {
-			if (!this.options) {
-				this.options = nodeOptions(state, this);
-			}
 			if (typeof this.reveal == "function" && !this.currentSrc) {
 				state.finish(() => {
 					// don't wait for it
+					this.#options(state);
 					this.reveal(state);
 				});
 			}
 		}
 		#setup(state) {
-			if (!this.options) this.options = nodeOptions(state, this);
 			if (typeof this.reveal == "function" && !this.currentSrc) {
 				if (state.scope.observer) {
 					state.scope.observer.observe(this);
 				} else state.finish(() => {
 					// don't wait for it
+					this.#options(state);
 					this.reveal(state);
 				});
 			}
