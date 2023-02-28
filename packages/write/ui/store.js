@@ -400,7 +400,7 @@ Pageboard.Controls.Store = class Store {
 					}
 				} else {
 					// eslint-disable-next-line no-console
-					console.info("ignoring removed generated block", iblock);
+					console.debug("ignoring removed generated block", iblock);
 				}
 			} else {
 				if (block.ignore) continue;

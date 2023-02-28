@@ -378,7 +378,7 @@ export default class Utils {
 			pos = this.view.posAtDOM(dom, offset, 0);
 		} catch (ex) {
 			// eslint-disable-next-line no-console
-			console.info(ex);
+			console.debug(ex);
 			pos = false;
 		}
 		return pos;

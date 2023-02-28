@@ -109,7 +109,7 @@ export default function define(viewer, elt, schema, nodeViews) {
 			const oldName = viewer.tags[parseTagKey];
 			if (oldName) {
 				// eslint-disable-next-line no-console
-				console.info(`Two elements with same tag "${parseTag}" - ${oldName} and ${obj.name}`);
+				console.debug(`Two elements with same tag "${parseTag}" - ${oldName} and ${obj.name}`);
 			} else {
 				viewer.tags[parseTagKey] = obj.name;
 			}
@@ -201,7 +201,7 @@ function createRootSpec(elt, obj, viewer) {
 			} else if (elt.parse) {
 				attrs.data = JSON.stringify(elt.parse(dom));
 			} else if (elt.inplace && elt.properties && !elt.parse) {
-				console.info(elt.name, "is inline and missing parse(dom)");
+				console.debug(elt.name, "is inline and missing parse(dom)");
 			}
 
 			if (elt.inplace) {

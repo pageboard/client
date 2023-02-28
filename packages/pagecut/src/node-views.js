@@ -640,7 +640,7 @@ function tryJSON(str) {
 		obj = JSON.parse(str);
 	} catch(ex) {
 		// eslint-disable-next-line no-console
-		console.info("Bad attributes", str);
+		console.debug("Bad attributes", str);
 	}
 	return obj;
 }

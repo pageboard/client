@@ -37,7 +37,7 @@ Pageboard.notify = function(title, obj) {
 			} else {
 				// do nothing
 				// eslint-disable-next-line no-console
-				console.info("Repeated notification", title);
+				console.debug("Repeated notification", title);
 				return;
 			}
 		}
