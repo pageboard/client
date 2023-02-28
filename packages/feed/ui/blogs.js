@@ -18,12 +18,13 @@ class HTMLElementBlogs extends Page.Element {
 			content: true,
 			order: ['-data.publication', 'data.index']
 		});
-
-		const scope = await Pageboard.bundle(state, res);
+		const scope = state.scope.copy();
+		await scope.import(res);
 		this.blogs = res.items;
-		state.scope.$element = state.scope.$elements.blogs;
+		state.scope.$element = state.scope.$elements.blogs; // might not be needed
 		this.textContent = '';
-		const frag = Pageboard.render(res, scope, {
+
+		const frag = scope.render(res, {
 			name: 'blogs-content',
 			html: '<div block-id="[items|repeat:item|.id]" block-type="item[item.type]" />'
 		});
