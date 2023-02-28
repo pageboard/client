@@ -36,12 +36,12 @@
   },
   "pageboard": true,
   "devDependencies": {
-    "@kapouer/eslint-config": "^1.9.0",
-    "@kapouer/stylelint-config": "^1.5.0",
-    "eslint": "8.32.0",
+    "@kapouer/eslint-config": "^1.9.1",
+    "@kapouer/stylelint-config": "^1.6.0",
+    "eslint": "8.35.0",
     "eslint-plugin-mocha": "^10.1.0",
     "mocha": "^10.2.0",
-    "stylelint": "^14.16.1"
+    "stylelint": "^15.2.0"
   },
   "mocha": {
     "spec": "tests/*.test.js",
