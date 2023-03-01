@@ -2,7 +2,7 @@ import { Deferred } from 'class-deferred';
 
 const cache = new Map();
 
-function load(node, head) {
+function load(node, head, priority = 0) {
 	const d = new Deferred();
 	const live = node.ownerDocument == document;
 	if (live) {
@@ -13,8 +13,14 @@ function load(node, head) {
 			d.reject(err);
 		});
 	}
-	const cursel = node.tagName == "LINK" ? 'script' : 'script:nth-last-child(1) + *';
-	const cursor = head.querySelector(cursel);
+	// insert after nodes with < priority, or before nodes with > priority
+	if (priority) node.dataset.priority = priority;
+	const nodes = head.querySelectorAll(node.tagName);
+	let cursor = Array.from(nodes).find(inode => {
+		const p = parseInt(inode.dataset.priority) || 0;
+		return p >= priority;
+	});
+	if (!cursor && node.tagName == "LINK") cursor = head.querySelector('script');
 	head.insertBefore(node, cursor);
 	if (!live) d.resolve();
 	return d;
@@ -29,14 +35,15 @@ export async function schemas(scope, list) {
 	}));
 }
 
-export async function bundles(state, { scripts, stylesheets }) {
+export async function bundles(state, meta = {}) {
+	const { scripts, stylesheets } = meta;
 	if (scripts) await Promise.all(
-		scripts.map(url => js(url, state.doc))
+		scripts.map(url => js(url, state.doc, meta.priority))
 	);
 	// cannot wait for these
 	if (stylesheets) {
 		state.setup(state => Promise.all(
-			stylesheets.map(url => css(url, state.doc))
+			stylesheets.map(url => css(url, state.doc, meta.priority))
 		));
 	}
 }
@@ -45,7 +52,7 @@ function getHead(doc) {
 	return doc.head ?? doc.querySelector('head');
 }
 
-export async function js(url, doc = document) {
+export async function js(url, doc = document, priority = 0) {
 	const head = getHead(doc);
 	if (head.querySelector(`script[src="${url}"]`)) {
 		return;
@@ -54,10 +61,10 @@ export async function js(url, doc = document) {
 	node.async = false;
 	node.defer = true;
 	node.src = url;
-	return load(node, head);
+	return load(node, head, priority);
 }
 
-export async function css(url, doc = document) {
+export async function css(url, doc = document, priority = 0) {
 	const head = getHead(doc);
 	if (head.querySelector(`link[rel="stylesheet"][href="${url}"]`)) {
 		return;
@@ -65,5 +72,5 @@ export async function css(url, doc = document) {
 	const node = doc.createElement('link');
 	node.rel = "stylesheet";
 	node.href = url;
-	return load(node, head);
+	return load(node, head, priority);
 }

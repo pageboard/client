@@ -1,8 +1,7 @@
 exports.core = {
 	bundle: true,
-	scripts: [
-		"../lib/pageboard.js"
-	]
+	scripts: ["../lib/pageboard.js"],
+	priority: -1000 // way before page group
 };
 
 // user, priv do not belong to a site and thus they do not need to be standalone

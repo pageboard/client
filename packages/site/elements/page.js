@@ -87,9 +87,9 @@ exports.page = {
 		<base href="[$loc.origin]">
 		<link rel="canonical" href="[$loc.origin][$loc.pathname][$loc.search][noindex|prune:*]">
 		<link rel="icon" href="[$site.favicon|post:?format=ico|or:data%3A,]">
-		<link rel="stylesheet" href="[$element.stylesheets|repeat:]">
+		<link rel="stylesheet" href="[$element.stylesheets|repeat:]" data-priority="[$element.priority]">
 		<script crossorigin="anonymous" defer src="https://cdn.polyfill.io/v3/polyfill.min.js?flags=gated&unknown=polyfill&features=[$elements|as:polyfills|enc:url|fail:*]"></script>
-		<script defer src="[$element.scripts|repeat:]"></script>
+		<script defer src="[$element.scripts|repeat:]" data-priority="[$element.priority]"></script>
 	</head>
 	<body block-content="body"></body></html>`,
 	scripts: [
