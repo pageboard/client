@@ -1,4 +1,4 @@
-const extendCache = {};
+const extendCache = new Map();
 
 export function create(Superclass) {
 	return class extends Superclass {
@@ -114,14 +114,13 @@ export function extend(name, Ext, is) {
 		return;
 	}
 	if (is) name += "_" + is;
-	let list = extendCache[name];
-	if (!list) list = extendCache[name] = {};
-	if (!Ext.name) {
-		// eslint-disable-next-line no-console
-		console.warn("Please name the extension of", name, Ext);
+	let list = extendCache.get(name);
+	if (!list) {
+		list = new Set();
+		extendCache.set(name, list);
 	}
-	if (list[Ext.name]) return;
-	list[Ext.name] = true;
+	if (list.has(Ext)) return;
+	list.add(Ext);
 	inherits(Cla, Ext);
 }
 
