@@ -129,6 +129,10 @@ body[data-mode="code"] [block-type="_"] {
 	display:none;
 }
 
+body[data-mode="code"] element-template > [block-content="template"] {
+	display:block !important;
+}
+
 body[data-mode="code"] pagecut-placeholder::after {
 	padding:0;
 }
