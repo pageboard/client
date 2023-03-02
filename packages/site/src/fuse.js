@@ -197,9 +197,14 @@ function insertFragments(scope, el) {
 	let reparse = false;
 	for (const obj of el.fragments) {
 		let target;
-		if (obj.type === 'doc') target = scope.$element;
-		else if (obj.type) target = scope.$elements[obj.type] ?? {};
-		else target = el;
+		if (obj.type === 'doc') {
+			target = scope.$element;
+			if (!target?.dom) target = { dom: document.documentElement };
+		} else if (obj.type) {
+			target = scope.$elements[obj.type] ?? {};
+		} else {
+			target = el;
+		}
 		if (!target.dom) {
 			// eslint-disable-next-line no-console
 			console.warn("dom not found for fragment", obj.type, el.name);
