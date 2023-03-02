@@ -18,6 +18,7 @@ class HTMLElementHeadingHelper extends Page.create(HTMLHeadingElement) {
 	sync(scope) {
 		const { editor } = scope;
 		if (!editor) return;
+		if (this.firstElementChild?.nodeName != "A") return;
 		const txt = editor.slug(this.textContent);
 		const id = txt.length <= 64 ? txt : null;
 		if (id != this.id) {
