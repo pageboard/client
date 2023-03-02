@@ -173,10 +173,10 @@ class HTMLElementCarousel extends Page.Element {
 	updateCells() {
 		const opts = this.options;
 		for (const cell of this.querySelectorAll('element-carousel-cell')) {
-			if (opts.width) cell.dataset.width = opts.width + '%';
-			else delete cell.dataset.width;
-			if (opts.height) cell.dataset.height = opts.height;
-			else delete cell.dataset.height;
+			if (opts.width) cell.style.width = opts.width + '%';
+			else delete cell.style.width;
+			if (opts.height) cell.style.height = opts.height;
+			else delete cell.style.height;
 		}
 	}
 
@@ -189,20 +189,5 @@ class HTMLElementCarousel extends Page.Element {
 	}
 }
 
-class HTMLElementCarouselCell extends Page.Element {
-	static defaults = {
-		width: null,
-		height: null
-	};
-
-	updateStyle() {
-		this.style.width = this.options.width;
-		this.style.height = this.options.height;
-	}
-	patch(state) {
-		this.updateStyle();
-	}
-}
-
-Page.define('element-carousel-cell', HTMLElementCarouselCell);
 Page.define('element-carousel', HTMLElementCarousel);
+
