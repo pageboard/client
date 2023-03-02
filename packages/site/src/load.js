@@ -13,7 +13,6 @@ function load(node, head, priority = 0) {
 			d.reject(err);
 		});
 	}
-	// insert after nodes with < priority, or before nodes with > priority
 	if (priority) node.dataset.priority = priority;
 	const nodes = head.querySelectorAll(node.tagName);
 	let cursor = Array.from(nodes).find(inode => {
@@ -26,8 +25,10 @@ function load(node, head, priority = 0) {
 	return d;
 }
 
-export async function schemas(scope, list) {
-	if (list) await Promise.all(list.map(schema => {
+export async function schemas(scope, metas = []) {
+	const list = [];
+	for (const item of metas) if (item.schemas) list.push(...item.schemas);
+	await Promise.all(list.map(schema => {
 		if (!cache.has(schema)) {
 			cache.set(schema, js(schema, scope.$doc));
 		}
@@ -35,16 +36,17 @@ export async function schemas(scope, list) {
 	}));
 }
 
-export async function bundles(state, meta = {}) {
-	const { scripts, stylesheets } = meta;
-	if (scripts) await Promise.all(
-		scripts.map(url => js(url, state.doc, meta.priority))
-	);
-	// cannot wait for these
-	if (stylesheets) {
-		state.setup(state => Promise.all(
-			stylesheets.map(url => css(url, state.doc, meta.priority))
-		));
+export async function bundles(state, metas = []) {
+	for (const meta of metas) {
+		const { scripts, stylesheets, priority } = meta;
+		if (scripts) await Promise.all(
+			scripts.map(url => js(url, state.doc, priority))
+		);
+		if (stylesheets) {
+			state.setup(state => Promise.all(
+				stylesheets.map(url => css(url, state.doc, priority))
+			));
+		}
 	}
 }
 

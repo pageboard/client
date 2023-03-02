@@ -89,7 +89,7 @@ export default class Scope {
 	}
 
 	async import(res = {}) {
-		await load.schemas(this, res.meta?.schemas);
+		await load.schemas(this, res.metas);
 		if (res.item && !this.$element) {
 			this.$element = this.$elements[res.item.type];
 		}
@@ -104,7 +104,7 @@ export default class Scope {
 	}
 
 	async bundles(res) {
-		await load.bundles(this.#state, res.meta);
+		await load.bundles(this.#state, res.metas);
 	}
 
 	render(data, el) {
