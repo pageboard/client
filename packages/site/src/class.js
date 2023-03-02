@@ -1,4 +1,4 @@
-const extendCache = new Map();
+const extendCache = new Set();
 
 export function create(Superclass) {
 	return class extends Superclass {
@@ -114,13 +114,8 @@ export function extend(name, Ext, is) {
 		return;
 	}
 	if (is) name += "_" + is;
-	let list = extendCache.get(name);
-	if (!list) {
-		list = new Set();
-		extendCache.set(name, list);
-	}
-	if (list.has(Ext)) return;
-	list.add(Ext);
+	if (extendCache.has(name)) return;
+	extendCache.add(name);
 	inherits(Cla, Ext);
 }
 
