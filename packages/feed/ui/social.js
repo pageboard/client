@@ -7,9 +7,9 @@ class HTMLSocialElement extends Page.Element {
 	};
 
 	static links = {
-		linkedin: `<a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url=[url|enc]" class="linkedin">LinkedIn</a>`,
-		twitter: `<a target="_blank" href="https://twitter.com/intent/tweet?text=[url|enc]" class="twitter">Twitter</a>`,
-		facebook: `<a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=[url|enc]" class="facebook">Facebook</a>`
+		linkedin: `<a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url=[url|enc:url]" class="linkedin">LinkedIn</a>`,
+		twitter: `<a target="_blank" href="https://twitter.com/intent/tweet?text=[url|enc:url]" class="twitter">Twitter</a>`,
+		facebook: `<a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=[url|enc:url]" class="facebook">Facebook</a>`
 	};
 
 	patch(state) {
@@ -36,9 +36,8 @@ class HTMLSocialElement extends Page.Element {
 
 			for (const [key, val] of Object.entries(card)) {
 				const sel = `meta[property="og:${key}"]`;
-				const og = doc.head.querySelector(sel);
-				if (!og) console.warn("missing", sel);
-				else if (val) og.setAttribute('content', val);
+				const og = doc.head.querySelector(sel) ?? doc.head.appendChild(doc.dom(`<meta property="og:${key}">`));
+				if (val) og.setAttribute('content', val);
 				else og.removeAttribute('content');
 			}
 			const { links } = HTMLSocialElement;

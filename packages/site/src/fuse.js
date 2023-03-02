@@ -194,12 +194,12 @@ export function install(el, scope) {
 }
 
 function insertFragments(scope, el) {
+	// fragments can only be added on elements that have not yet been rendered
 	let reparse = false;
 	for (const obj of el.fragments) {
 		let target;
 		if (obj.type === 'doc') {
 			target = scope.$element;
-			if (!target?.dom) target = { dom: document.documentElement };
 		} else if (obj.type) {
 			target = scope.$elements[obj.type] ?? {};
 		} else {
