@@ -14,12 +14,13 @@ function load(node, head, priority = 0) {
 		});
 	}
 	if (priority) node.dataset.priority = priority;
-	const nodes = head.querySelectorAll(node.tagName);
+	const isLink = node.tagName == "LINK";
+	const nodes = head.querySelectorAll(isLink ? 'link[rel="stylesheet"]' : 'script');
 	let cursor = Array.from(nodes).find(inode => {
 		const p = parseInt(inode.dataset.priority) || 0;
 		return p >= priority;
 	});
-	if (!cursor && node.tagName == "LINK") cursor = head.querySelector('script');
+	if (!cursor && isLink) cursor = head.querySelector('script');
 	head.insertBefore(node, cursor);
 	if (!live) d.resolve();
 	return d;
@@ -39,14 +40,12 @@ export async function schemas(scope, metas = []) {
 export async function bundles(state, metas = []) {
 	for (const meta of metas) {
 		const { scripts, stylesheets, priority } = meta;
+		if (stylesheets) await Promise.all(
+			stylesheets.map(url => css(url, state.doc, priority))
+		);
 		if (scripts) await Promise.all(
 			scripts.map(url => js(url, state.doc, priority))
 		);
-		if (stylesheets) {
-			state.setup(state => Promise.all(
-				stylesheets.map(url => css(url, state.doc, priority))
-			));
-		}
 	}
 }
 
