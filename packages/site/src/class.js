@@ -11,10 +11,8 @@ export function create(Superclass) {
 		async attributeChangedCallback(name, src, dst, ns) {
 			if (src !== dst && this.patch) {
 				if (!Object.hasOwnProperty.call(this.constructor, 'defaults') || this.options) {
-					await Page.patch(state => {
-						this.#options(state);
-						return this.patch?.(state);
-					});
+					this.#options(Page, true);
+					if (this.patch) await this.patch(Page);
 					await Page.paint(state => {
 						this.#paint(state);
 						return this.paint?.(state);
