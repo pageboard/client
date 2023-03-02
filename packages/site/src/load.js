@@ -4,7 +4,8 @@ const cache = new Map();
 
 function load(node, head, priority = 0) {
 	const d = new Deferred();
-	const live = node.ownerDocument == document;
+	const isLink = node.tagName == "LINK";
+	const live = node.ownerDocument == document && !(isLink && document.hidden);
 	if (live) {
 		node.addEventListener('load', d.resolve);
 		node.addEventListener('error', () => {
@@ -14,7 +15,6 @@ function load(node, head, priority = 0) {
 		});
 	}
 	if (priority) node.dataset.priority = priority;
-	const isLink = node.tagName == "LINK";
 	const nodes = head.querySelectorAll(isLink ? 'link[rel="stylesheet"]' : 'script');
 	let cursor = Array.from(nodes).find(inode => {
 		const p = parseInt(inode.dataset.priority) || 0;
