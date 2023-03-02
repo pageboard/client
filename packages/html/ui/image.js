@@ -93,8 +93,8 @@ const HTMLElementImageConstructor = Superclass => class extends Superclass {
 		if (this.currentSrc != this.options.src) {
 			this.classList.remove('error');
 		}
-		this.dataset.width = this.constructor.defaultWidth || "";
-		this.dataset.height = this.constructor.defaultHeight || "";
+		this.dataset.width ??= this.constructor.defaultWidth || "";
+		this.dataset.height ??= this.constructor.defaultHeight || "";
 		if (this.options.src) {
 			const loc = Page.parse(this.options.src);
 			const meta = state.scope.$hrefs?.[loc.pathname];
