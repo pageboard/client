@@ -50,7 +50,7 @@ export async function bundles(state, metas = []) {
 }
 
 function getHead(doc) {
-	return doc.head ?? doc.querySelector('head');
+	return doc.head ?? doc.querySelector('head') ?? document.head;
 }
 
 export async function js(url, doc = document, priority = 0) {
