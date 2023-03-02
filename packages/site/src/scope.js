@@ -67,7 +67,7 @@ export default class Scope {
 	get $view() {
 		if (!this.#view) this.#view = new Viewer({
 			elements: this.$elements,
-			doc: this.$doc
+			document: this.$doc
 		});
 		return this.#view;
 	}
