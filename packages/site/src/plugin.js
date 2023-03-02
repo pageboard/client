@@ -268,7 +268,7 @@ function urltpl(ctx, obj, pName = 'pathname', qName = 'query') {
 		// N.B:
 		// "/path?type=[$query.type]".fuse({$query: {type: ["a", "b"]}}) -> "/path?type=a,b"
 		// this is wrong, it should be "/path?type=a&type=b"
-		// maybe "/path?type=[$query.type|url]"
+		// maybe "/path?type=[$query.type|enc:url]"
 	}
 	const fakes = [];
 	for (const [key, val] of Object.entries(loc.query)) {

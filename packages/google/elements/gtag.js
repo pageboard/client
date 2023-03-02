@@ -19,7 +19,7 @@ exports.google_tag = {
 		type: 'doc',
 		path: 'html > head',
 		position: 'beforeend',
-		html: `<script async is="element-gtm-script" src="https://www.googletagmanager.com/gtag/js?id=[$site.google_analytics|url|fail:*]">[$site.env|eq:production|prune:*]</script>`
+		html: `<script async is="element-gtm-script" src="https://www.googletagmanager.com/gtag/js?id=[$site.google_analytics|enc:url|fail:*]">[$site.env|eq:production|prune:*]</script>`
 	}, {
 		type: 'doc',
 		path: 'html > head',
