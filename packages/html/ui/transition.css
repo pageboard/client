@@ -1,45 +1,43 @@
 /* async progress bar and error signal */
 
-body::after {
+body::before {
 	content: "";
 	position:fixed;
 	display:block;
 	left:0;
-	top:1px;
+	top:0px;
 	width:0%;
 	height:0;
 	opacity:0.7;
 	background: #4486cc;
 	box-shadow: 0 0 5px rgb(99 162 235 / 70%);
-	z-index:1000;
+	z-index:10000000;
 }
-html[data-stage] > body::after {
+html[data-stage] > body::before {
 	transition-property:width;
-	transition-duration:1s;
+	transition-duration:0.5s;
 	transition-timing-function:linear;
 }
-html[data-stage="route"] > body::after,
-html[data-stage="ready"] > body::after,
-html[data-stage="setup"] > body::after,
-html[data-stage="error"] > body::after {
+html[data-stage="route"] > body::before,
+html[data-stage="ready"] > body::before,
+html[data-stage="paint"] > body::before,
+html[data-stage="error"] > body::before {
 	height:2px;
 }
 
-html[data-stage="route"] > body::after {
+html[data-stage="route"] > body::before {
+	width:25%;
+}
+html[data-stage="ready"] > body::before {
 	width:50%;
 }
-html[data-stage="ready"] > body::after,
-html[data-stage="setup"] > body::after {
+html[data-stage="paint"] > body::before {
 	width:100%;
 }
-html[data-stage="error"] > body::after {
+html[data-stage="error"] > body::before {
 	display:block;
 	width:100%;
 	background:#c33;
-}
-
-html.transition > body::after {
-	display:none !important;
 }
 
 /* transitions */

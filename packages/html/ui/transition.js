@@ -10,7 +10,7 @@ Page.route(state => {
 	function dtr(state) {
 		root.dataset.stage = state.stage;
 		if (state.stage == "paint") {
-			setTimeout(() => root.removeAttribute('data-stage'), 500);
+			setTimeout(() => root.removeAttribute('data-stage'), 700);
 		}
 	}
 	dtr(state);
