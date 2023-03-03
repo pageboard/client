@@ -1,6 +1,6 @@
-@import './prosemirror.css';
+@import url('./prosemirror.css');
 
-@import './prosemirror-gapcursor.css';
+@import url('./prosemirror-gapcursor.css');
 
 .ProseMirror {
 	white-space: normal;
@@ -67,4 +67,44 @@ pagecut-placeholder.ProseMirror-selectednode::after {
 
 .ProseMirror-dropcursor {
 	z-index: 2147483647; /* max z-index everywhere but Safari <= 3 */
+}
+
+li.ProseMirror-selectednode {
+	outline: none !important;
+	box-shadow:none !important;
+}
+li.ProseMirror-selectednode::after {
+	outline: 2px solid rgb(121 153 238 / 60%) !important;
+	outline-offset: -1px !important;
+	border:none;
+	left: -2em;
+	right: 0;
+	top: 0;
+	bottom: 0;
+}
+.ProseMirror-selectednode:not(img) {
+	min-width:1em;
+}
+
+/* replaced elements cannot have pseudo elements,
+ * that is why we must define is for both cases */
+[block-focused="last"] {
+	outline: 2px dashed rgb(97 163 228 / 50%) !important;
+	outline-offset:-1px !important;
+}
+.ProseMirror-selectednode {
+	outline: 2px solid rgb(121 153 238 / 60%) !important;
+	outline-offset: -1px !important;
+	cursor: pointer !important;
+	box-shadow: 0 0 0 1px rgb(97 163 228) !important;
+}
+[block-focused="last"]:not(img) {
+	min-width: 1em;
+}
+.ProseMirror *::selection {
+	color:inherit;
+}
+
+::selection {
+	background-color: #cce2ff;
 }

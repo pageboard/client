@@ -1,3 +1,7 @@
+@import url('../lib/editor.css');
+
+@import url('../lib/menu.css');
+
 [block-type="input_html"] .textarea {
 	line-height: 1.2857;
 	padding: 0.7857em 1em;
