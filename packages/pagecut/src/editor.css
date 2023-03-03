@@ -19,10 +19,6 @@
 	outline:none;
 }
 
-.ProseMirror-selectednode {
-	outline: none;
-}
-
 img.ProseMirror-separator {
 	width:0 !important;
 }
