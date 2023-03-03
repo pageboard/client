@@ -18,7 +18,7 @@ function load(node, head, priority = 0) {
 	const nodes = head.querySelectorAll(isLink ? 'link[rel="stylesheet"]' : 'script');
 	let cursor = Array.from(nodes).find(inode => {
 		const p = parseInt(inode.dataset.priority) || 0;
-		return p >= priority;
+		return p > priority;
 	});
 	if (!cursor && isLink) cursor = head.querySelector('script');
 	head.insertBefore(node, cursor);
