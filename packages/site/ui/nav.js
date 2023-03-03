@@ -93,5 +93,6 @@ Page.setup(state => {
 const statePush = Page.constructor.prototype.push;
 Page.constructor.prototype.push = function (...args) {
 	if (this.scope.transition) this.scope.transition.cancel();
+	document.documentElement.dataset.stage = "route";
 	return statePush.apply(this, args);
 };

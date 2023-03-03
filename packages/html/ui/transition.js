@@ -9,15 +9,15 @@ Page.route(state => {
 	const root = document.documentElement;
 	function dtr(state) {
 		root.dataset.stage = state.stage;
-		if (state.stage == "setup" || state.stage == "patch") {
+		if (state.stage == "paint") {
 			setTimeout(() => root.removeAttribute('data-stage'), 500);
 		}
 	}
 	dtr(state);
-	Page.ready(dtr);
-	Page.patch(dtr);
-	Page.setup(dtr);
-	Page.catch(dtr);
+	state.ready(dtr);
+	state.patch(dtr);
+	state.paint(dtr);
+	state.catch(dtr);
 });
 
 class Transition {
