@@ -13,9 +13,9 @@ export function create(Superclass) {
 				if (!Object.hasOwnProperty.call(this.constructor, 'defaults') || this.options) {
 					this.#options(Page, true);
 					if (this.patch) await this.patch(Page);
-					await Page.paint(state => {
-						this.#paint(state);
-						return this.paint?.(state);
+					if (this.reveal && this.currentSrc) this.reveal(Page);
+					if (this.paint) await Page.paint(state => {
+						return this.paint(state);
 					});
 				}
 			}
@@ -41,7 +41,7 @@ export function create(Superclass) {
 			if (!this.options || refresh) this.options = nodeOptions(state, this);
 		}
 		#paint(state) {
-			if (typeof this.reveal == "function" && !this.currentSrc) {
+			if (this.reveal && !this.currentSrc) {
 				state.finish(() => {
 					// don't wait for it
 					this.#options(state);
@@ -50,7 +50,7 @@ export function create(Superclass) {
 			}
 		}
 		#setup(state) {
-			if (typeof this.reveal == "function" && !this.currentSrc) {
+			if (this.reveal && !this.currentSrc) {
 				if (state.scope.observer) {
 					state.scope.observer.observe(this);
 				} else state.finish(() => {
@@ -61,7 +61,7 @@ export function create(Superclass) {
 			}
 		}
 		#close(state) {
-			if (typeof this.reveal == "function" && !this.currentSrc) {
+			if (this.reveal && !this.currentSrc) {
 				state.scope.observer?.unobserve(this);
 			}
 		}
