@@ -1,7 +1,9 @@
 class HTMLElementMailImage extends Page.create(HTMLImageElement) {
 	static defaults = {
 		dataSrc: null,
-		dataCrop: null
+		dataCrop: null,
+		dataWidth: x => parseInt(x) || 0,
+		dataHeight: x => parseInt(x) || 0,
 	};
 
 	get crop() {
@@ -26,21 +28,11 @@ class HTMLElementMailImage extends Page.create(HTMLImageElement) {
 				`<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 320 240"><text text-anchor="middle" dominant-baseline="central" x="50%" y="50%" fill="#aaa">∅</text></svg>`);
 			return;
 		}
-		let loc = Page.parse(this.options.src);
-		const meta = state.scope.$hrefs?.[loc.pathname] ?? {};
-		if (!meta || !meta.width || !meta.height) return;
-		if (meta.mime == "image/svg+xml") loc.query.format = 'png';
+		const loc = Page.parse(this.options.src);
+		if (this.dataset.mime == "image/svg+xml") loc.query.format = 'png';
 
-		let w = meta.width;
+		let w = this.options.width;
 
-		if (loc.hostname && loc.hostname != document.location.hostname) {
-			loc = Page.parse({
-				pathname: "/.api/image",
-				query: {
-					url: this.options.src
-				}
-			});
-		}
 		const r = this.crop;
 		if (r.x != 50 || r.y != 50 || r.w != 100 || r.h != 100) {
 			if (Math.round((r.x - r.w / 2) * 100) < 0 || Math.round((r.x + r.w / 2) * 100) > 10000) {

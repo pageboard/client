@@ -95,14 +95,6 @@ const HTMLElementImageConstructor = Superclass => class extends Superclass {
 		}
 		this.dataset.width ??= this.constructor.defaultWidth || "";
 		this.dataset.height ??= this.constructor.defaultHeight || "";
-		if (this.options.src) {
-			const loc = Page.parse(this.options.src);
-			const meta = state.scope.$hrefs?.[loc.pathname];
-			if (meta) {
-				this.dataset.width = meta.width;
-				this.dataset.height = meta.height;
-			}
-		}
 		const { w, h } = this.dimensions;
 		if (w) this.image.width = w || this.dataset.width;
 		if (h) this.image.height = h || this.dataset.height;

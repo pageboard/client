@@ -11,14 +11,6 @@ class HTMLElementLayout extends Page.create(HTMLDivElement) {
 	get fit() {
 		return this.options.size || 'none';
 	}
-	patch(state) {
-		if (!this.options.src) return;
-		const loc = Page.parse(this.options.src);
-		const meta = state.scope.$hrefs?.[loc.pathname] ?? {};
-		if (!meta || !meta.width || !meta.height) return;
-		this.dataset.width = meta.width;
-		this.dataset.height = meta.height;
-	}
 	reveal(state) {
 		this.style.backgroundRepeat = this.options.repeat;
 		this.style.backgroundSize = this.options.size;

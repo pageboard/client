@@ -132,6 +132,8 @@ exports.image = {
 		class="[display.fit|or:none] [display.horizontal|or:] [display.vertical|or:]"
 		alt="[alt]"
 		data-src="[url]"
+		data-width="[url|meta:width]"
+		data-height="[url|meta:height]"
 		data-crop="[crop.x|or:50];[crop.y|or:50];[crop.width|or:100];[crop.height|or:100];[crop.zoom|or:100]"
 	>
 		<div block-content="legend"></div>
@@ -279,6 +281,8 @@ exports.inlineImage = {
 	tag: "img",
 	html: `<img is="element-img"
 		data-src="[url]"
+		data-width="[url|meta:width]"
+		data-height="[url|meta:height]"
 		data-crop="[crop.x];[crop.y];[crop.width];[crop.height];[crop.zoom]"
 		alt="" class="ui inline image
 		[display.avatar]

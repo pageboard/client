@@ -3,11 +3,6 @@ const HTMLElementMediaConstructor = Superclass => class extends Superclass {
 
 	patch(state) {
 		this.classList.remove('error', 'loading');
-		const loc = Page.parse(this.options.src);
-		const meta = state.scope.$hrefs?.[loc.pathname] ?? {};
-		if (!meta || !meta.width || !meta.height) return;
-		this.width = meta.width;
-		this.height = meta.height;
 	}
 	reveal(state) {
 		const curSrc = this.options.src;
