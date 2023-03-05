@@ -2,6 +2,7 @@
 	min-height:2em;
 	position:relative;
 	display: block;
+	width: 100%;
 }
 [block-type="sitemap"] .caret-icon::before {
 	right:auto;
