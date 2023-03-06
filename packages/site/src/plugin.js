@@ -307,9 +307,8 @@ function templates(ctx, val, ...prefixes) {
 				// ignore those
 				return val;
 			}
-			const key = path.length > 1 ? path.slice(1).map(
-				k => k.replace(/\\./g, '%5C') // query[path] requires path to be escaped
-			).join('.') : path[0];
+			// templatesQuery checks flattened query
+			const key = path.length > 1 ? path.slice(1).join('%2E') : path[0];
 			const short = path.length > 1 ? `${path[0]}.${key}` : path[0];
 
 			const optional = val === null && ctx.expr.get(scope, path) === undefined;
