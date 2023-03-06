@@ -93,11 +93,17 @@ const HTMLElementImageConstructor = Superclass => class extends Superclass {
 		if (this.currentSrc != this.options.src) {
 			this.classList.remove('error');
 		}
-		this.dataset.width ??= this.constructor.defaultWidth || "";
-		this.dataset.height ??= this.constructor.defaultHeight || "";
+		const d = this.dataset;
+		if (d.width == null || d.height == null) {
+			const meta = state.scope.$hrefs?.[this.options.src];
+			if (meta?.width) d.width = meta.width;
+			if (meta?.height) d.height = meta.height;
+		}
+		d.width ??= this.constructor.defaultWidth || "";
+		d.height ??= this.constructor.defaultHeight || "";
 		const { w, h } = this.dimensions;
-		if (w) this.image.width = w || this.dataset.width;
-		if (h) this.image.height = h || this.dataset.height;
+		if (w) this.image.width = w || d.width;
+		if (h) this.image.height = h || d.height;
 		if (!this.currentSrc) {
 			this.placeholder();
 		}
