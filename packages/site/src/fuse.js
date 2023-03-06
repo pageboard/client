@@ -98,7 +98,7 @@ function renderBlock(el, scope, block, bscope) {
 
 	rscope.$element = el;
 
-	for (const name of ["id", "type", "parent", "child", "parents", "children", "updated_at", "created_at", "lock", "expr", "items"]) {
+	for (const name of ["id", "type", "parent", "child", "parents", "children", "updated_at", "created_at", "lock", "expr"]) {
 		const val = block[name];
 		if (val != null) rscope['$' + name] = val;
 	}

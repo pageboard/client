@@ -98,7 +98,7 @@ export default class Scope {
 			if (!this.$hrefs) this.$hrefs = {};
 			Object.assign(this.$hrefs, res.hrefs);
 		}
-		for (const k of ["grants", "links", "site", "locked", "granted", "commons", "meta", "status", "statusText"]) {
+		for (const k of ["grants", "links", "site", "locked", "granted", "commons", "meta", "status", "statusText", "item", "items"]) {
 			if (res[k] !== undefined) this[`$${k}`] = res[k];
 		}
 	}
