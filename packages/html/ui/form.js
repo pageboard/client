@@ -299,16 +299,17 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 		if (loc.samePathname(state)) {
 			loc.query = { ...state.query, ...loc.query };
 		}
-		let status = 200;
-		const p = this.ignoreInputChange
+		const nstate = this.ignoreInputChange
 			? state.replace(loc)
 			: state.push(loc);
-		return p.catch(err => {
-			if (err.status != null) status = err.status;
-			else status = 0;
-		}).then(() => {
+		nstate.catch(state => {
+			const status = state.error?.status ?? 0;
 			this.toggleMessages(status);
 		});
+	}
+	catch(state) {
+		const status = state.error?.status ?? 0;
+		this.toggleMessages(status);
 	}
 	async postMethod(e, state) {
 		if (e.type != "submit") return;
@@ -365,7 +366,7 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 			}
 			scope.$vary = vary;
 		}
-		return state.push(loc, { vary });
+		state.push(loc, { vary });
 	}
 }
 window.HTMLElementForm = HTMLElementForm;
