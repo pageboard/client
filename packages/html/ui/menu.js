@@ -24,7 +24,7 @@ class HTMLElementMenu extends Page.Element {
 		});
 	}
 	setup(state) {
-		if (this.isContentEditable || this.matches('.vertical')) return;
+		if (state.scope.$write || this.matches('.vertical')) return;
 		const menu = this.firstElementChild;
 		const helper = this.lastElementChild;
 		if (helper == menu) {

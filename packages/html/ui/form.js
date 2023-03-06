@@ -96,7 +96,7 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 		return window.HTMLElementTemplate.prototype.getRedirect.call(this, status, this);
 	}
 	patch(state) {
-		if (this.isContentEditable) return;
+		if (state.scope.$write) return;
 		if (this.method != "get") {
 			// ?submit=<name> for auto-submit
 			const name = state.query.submit;
@@ -220,7 +220,7 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 			}
 		}
 		for (const node of this.querySelectorAll('fieldset[is="element-fieldset"]')) {
-			node.fill(query);
+			node.fill(query, scope);
 		}
 		return vars;
 	}
@@ -268,7 +268,7 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 	}
 	handleSubmit(e, state) {
 		if (e.type == "submit") e.preventDefault();
-		if (this.isContentEditable) return;
+		if (state.scope.$write) return;
 		this.toggleMessages();
 		if (this.matches('.loading')) return;
 		if (e.type != "submit" && this.querySelector('[type="submit"]')) return;

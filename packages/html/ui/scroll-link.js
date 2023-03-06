@@ -4,7 +4,7 @@ class HTMLScrollLinkElement extends Page.create(HTMLAnchorElement) {
 	};
 
 	handleClick(e, state) {
-		if (this.isContentEditable) return;
+		if (state.scope.$write) return;
 		if (this.options.to == "home") {
 			const main = document.querySelector('body > main') || document.body;
 			main.scrollIntoView({

@@ -83,10 +83,10 @@ class HTMLElementFieldsetList extends Page.Element {
 		this.#model = model;
 	}
 
-	#prepare() {
+	#prepare(scope) {
 		const tpl = this.ownTpl;
 		tpl.prerender();
-		if (this.isContentEditable) {
+		if (scope.$write) {
 			this.#modelize(tpl);
 			return;
 		}
@@ -96,13 +96,13 @@ class HTMLElementFieldsetList extends Page.Element {
 		}
 	}
 
-	patch(state) {
-		this.#prepare();
-		if (!this.#size) this.#resize(0, state.scope);
+	patch({ scope }) {
+		this.#prepare(scope);
+		if (!this.#size) this.#resize(0, scope);
 	}
 
-	setup() {
-		this.#prepare();
+	setup({ scope }) {
+		this.#prepare(scope);
 	}
 
 	#selector(name) {
@@ -110,7 +110,7 @@ class HTMLElementFieldsetList extends Page.Element {
 	}
 
 	#resize(size, scope) {
-		if (this.isContentEditable) return;
+		if (scope.$write) return;
 		const len = Math.max(Number(this.dataset.size) || 0, size);
 		if (this.#size === len) return;
 		this.#size = len;
@@ -205,7 +205,7 @@ class HTMLElementFieldsetList extends Page.Element {
 	}
 
 	handleClick(e, state) {
-		if (this.isContentEditable) return;
+		if (state.scope.$write) return;
 		const btn = e.target.closest('button');
 		if (!btn) return;
 		const action = btn.value;

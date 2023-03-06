@@ -37,7 +37,7 @@ class HTMLElementGoogleTranslate extends Page.Element {
 	}
 	consent(state) {
 		const agreed = state.scope.$consent == "yes";
-		if (!agreed || document.body.isContentEditable) return;
+		if (!agreed || state.scope.$write) return;
 		delete window.google?.translate;
 		this.id = `id${Date.now()}`;
 		const cb = `HTMLElementGoogleTranslate_${this.id}`;

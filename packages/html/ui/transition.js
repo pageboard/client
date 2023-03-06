@@ -131,7 +131,7 @@ Page.constructor.prototype.mergeBody = function (body, corpse) {
 	if (this.referrer.scope.transition) {
 		this.referrer.scope.transition.end();
 	}
-	if (body.isContentEditable || body.getAttribute('block-type') != corpse.getAttribute('block-type')) {
+	if (this.scope.$write || body.getAttribute('block-type') != corpse.getAttribute('block-type')) {
 		corpse.replaceWith(body);
 	} else {
 		this.scope.transition = new Transition(this, body, corpse);

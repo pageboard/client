@@ -27,7 +27,7 @@ class HTMLElementQueryTags extends Page.Element {
 		const query = state.query;
 		state.finish(() => {
 			this.labels.textContent = '';
-			if (this.isContentEditable) this.insertLabel('', '', 'Auto');
+			if (state.scope.$write) this.insertLabel('', '', 'Auto');
 			else for (const [name, val] of Object.entries(query)) {
 				this.add(name, val);
 			}

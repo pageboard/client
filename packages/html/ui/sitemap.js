@@ -53,7 +53,7 @@ class HTMLElementSitemap extends Page.Element {
 	}
 
 	async build(state) {
-		if (this.firstElementChild.children.length > 0 && this.isContentEditable) {
+		if (this.firstElementChild.children.length > 0 && state.scope.$write) {
 			// workaround... build is called a second time with pagecut-placeholder set
 			return;
 		}

@@ -114,7 +114,7 @@ class HTMLElementCarousel extends Page.Element {
 			adaptativeHeight: false,
 			cellAlign: 'left',
 			contain: true
-		}, this.isContentEditable ? {
+		}, state.scope.$write ? {
 			autoPlay: 0,
 			draggable: false,
 			wrapAround: false,

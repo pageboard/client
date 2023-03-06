@@ -7,7 +7,7 @@ class HTMLElementTemplate extends Page.Element {
 
 	patch(state) {
 		this.ownTpl.prerender();
-		if (this.isContentEditable) return;
+		if (state.scope.$write) return;
 		if (this.loading || this.closest('[block-content="template"]')) {
 			return;
 		}
@@ -257,8 +257,8 @@ class HTMLElementTemplate extends Page.Element {
 		});
 	}
 
-	setup(state) {
-		if (this.isContentEditable) return;
+	setup({ scope }) {
+		if (scope.$write) return;
 		if (this.dataset.auto != "true") return;
 		this.#queue = Promise.resolve();
 		// FIXME when the list is not long enough, it does not trigger autoload

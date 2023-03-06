@@ -13,7 +13,7 @@ class HTMLElementConsent extends Page.create(HTMLFormElement) {
 		return !tacit;
 	}
 	setup(state) {
-		if (this.isContentEditable) return;
+		if (state.scope.$write) return;
 		if (this.options.transient) {
 			const tmpl = this.ownTpl.prerender();
 			if (tmpl.content && tmpl.children.length == 0) {
@@ -30,7 +30,7 @@ class HTMLElementConsent extends Page.create(HTMLFormElement) {
 	}
 	handleSubmit(e, state) {
 		if (e.type == "submit") e.preventDefault();
-		if (this.isContentEditable) return;
+		if (state.scope.$write) return;
 		const fd = window.HTMLElementForm.prototype.read.call(this);
 		const consent = fd.consent;
 		if (consent == null) {
@@ -44,7 +44,7 @@ class HTMLElementConsent extends Page.create(HTMLFormElement) {
 		this.handleSubmit(e, state);
 	}
 	patch(state) {
-		if (this.isContentEditable) return;
+		if (state.scope.$write) return;
 		if (this.options.transient) {
 			this.ownTpl.prerender();
 		}

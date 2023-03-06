@@ -4,7 +4,7 @@ class HTMLElementContent extends Page.Element {
 	};
 
 	patch(state) {
-		if (this.isContentEditable) return;
+		if (state.scope.$write) return;
 		let filter = this.options.filter;
 		if (filter) {
 			filter = filter.split('\n');

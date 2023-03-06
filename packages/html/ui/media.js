@@ -14,11 +14,11 @@ const HTMLElementMediaConstructor = Superclass => class extends Superclass {
 			}
 			this.setAttribute('src', curSrc);
 		}
-		if (this.isContentEditable) this.pause();
+		if (state.scope.$write) this.pause();
 		return this.#defer;
 	}
-	handleClick(e) {
-		if (this.isContentEditable) e.preventDefault();
+	handleClick(e, state) {
+		if (state.scope.$write) e.preventDefault();
 	}
 	captureLoad() {
 		this.#defer.resolve();

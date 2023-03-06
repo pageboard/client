@@ -24,7 +24,7 @@ class HTMLElementSelect extends Page.Element {
 	}
 
 	handleClick(e, state) {
-		if (this.isContentEditable) return;
+		if (state.scope.$write) return;
 		const node = e.target;
 		const item = node.closest('element-select .item');
 		if (item) {
@@ -143,7 +143,7 @@ class HTMLElementSelect extends Page.Element {
 	}
 
 	build(state) {
-		if (this.isContentEditable) return;
+		if (state.scope.$write) return;
 		if (this.children.length == 1) {
 			this.insertAdjacentHTML(
 				'afterBegin',
@@ -169,7 +169,7 @@ class HTMLElementSelect extends Page.Element {
 	}
 
 	patch(state) {
-		if (this.isContentEditable) return;
+		if (this.state.scope.$write) return;
 		if (this.children.length == 1) this.build(state);
 
 		state.finish(() => {

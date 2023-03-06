@@ -291,7 +291,7 @@ class HTMLElementInputHTML extends Page.create(HTMLTextAreaElement) {
 	};
 
 	setup(state) {
-		if (this.isContentEditable) return;
+		if (state.scope.$write) return;
 		const doc = this.ownerDocument;
 		if (this.previousElementSibling?.matches('.textarea')) return;
 		const initialValue = super.value;

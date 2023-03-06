@@ -4,8 +4,8 @@ class HTMLElementFieldSet extends Page.create(HTMLFieldSetElement) {
 		dataValue: null
 	};
 
-	fill(query) {
-		if (this.isContentEditable || !this.options?.name || !this.form) return;
+	fill(query, scope) {
+		if (scope.$write || !this.options?.name || !this.form) return;
 		if (!query) query = this.form.read(true);
 		const val = query[this.options.name];
 		const disabled = this.disabled = this.hidden = val != this.options.value;
@@ -16,8 +16,8 @@ class HTMLElementFieldSet extends Page.create(HTMLFieldSetElement) {
 
 	patch(state) {
 		// before/after form#fill
-		this.fill();
-		state.finish(() => this.fill());
+		this.fill(null, state.scope);
+		state.finish(() => this.fill(null, state.scope));
 	}
 	setup() {
 		this.form?.addEventListener('change', this);
@@ -25,9 +25,9 @@ class HTMLElementFieldSet extends Page.create(HTMLFieldSetElement) {
 	close() {
 		this.form?.removeEventListener('change', this);
 	}
-	handleEvent(e) {
+	handleEvent(e, state) {
 		if (e.type == "change") {
-			this.fill();
+			this.fill(null, state.scope);
 		}
 	}
 }

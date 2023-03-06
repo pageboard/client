@@ -1,5 +1,5 @@
 Page.setup(state => {
-	if (this.isContentEditable) return;
+	if (state.scope.$write) return;
 	const opts = document.body.dataset;
 	opts.prefix = 'page-sheet-';
 	opts.page = '.page-sheet';

@@ -82,7 +82,7 @@ class HTMLElementInputRange extends Page.create(HTMLInputElement) {
 			start: opts.multiple ? [null, null] : [null],
 			connect: true
 		}, this.convertOptions(opts))).on('change', (values) => {
-			if (this.isContentEditable) return;
+			if (state.scope.$write) return;
 			const isInt = parseInt(opts.step) == opts.step;
 			helper.classList.remove('indeterminate');
 			if (isInt) values = values.map(n => parseInt(n));
@@ -96,8 +96,8 @@ class HTMLElementInputRange extends Page.create(HTMLInputElement) {
 		helper.addEventListener('dblclick', this, true);
 		this.patch(state);
 	}
-	handleEvent(e) {
-		if (this.isContentEditable) return;
+	handleEvent(e, state) {
+		if (state.scope.$write) return;
 		if (e.type == "dblclick" || e.keyCode == 8 || e.keyCode == 46) {
 			this.fill();
 			this.dispatchEvent(new Event('change', {
