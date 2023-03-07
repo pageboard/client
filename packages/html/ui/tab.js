@@ -11,11 +11,11 @@ class HTMLElementTabs extends Page.Element {
 	}
 	patch(state) {
 		const pos = this.options.index;
-		const id = this.id;
+		const key = `${this.id}.index`;
+		state.vars[key] = true;
 
 		this.items.children.forEach((item, i) => {
 			const query = { ...state.query };
-			const key = `${id}.index`;
 			if (i == 0) delete query[key];
 			else query[key] = i;
 			item.setAttribute('href', Page.format({
