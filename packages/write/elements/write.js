@@ -4,6 +4,7 @@ exports.write = {
 	group: 'page',
 	bundle: true,
 	standalone: true,
+	dependencies: ['core', 'user'],
 	html: `<html lang="[$site.lang|ornull]">
 	<head>
 		<title>[title][$site.title|pre: - |or:]</title>

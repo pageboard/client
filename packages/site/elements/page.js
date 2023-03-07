@@ -4,6 +4,7 @@ exports.page = {
 	icon: '<i class="icon file outline"></i>',
 	group: 'page',
 	bundle: true,
+	dependencies: ['core'],
 	standalone: true,
 	required: ['url'],
 	properties: {

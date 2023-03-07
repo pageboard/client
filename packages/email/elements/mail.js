@@ -5,6 +5,7 @@ exports.mail = {
 	group: 'page',
 	bundle: true,
 	standalone: true,
+	dependencies: ['core'],
 	properties: {
 		title: {
 			title: 'Title',
