@@ -1,5 +1,6 @@
 element-tabs {
 	display:block;
+	width: 100%;
 }
 .ui.tab.segment:not(.active) {
 	display: none;
