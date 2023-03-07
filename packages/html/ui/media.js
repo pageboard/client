@@ -15,7 +15,7 @@ const HTMLElementMediaConstructor = Superclass => class extends Superclass {
 			this.setAttribute('src', curSrc);
 		}
 		if (state.scope.$write) this.pause();
-		return this.#defer;
+		// return this.#defer; // do not hang chain
 	}
 	handleClick(e, state) {
 		if (state.scope.$write) e.preventDefault();

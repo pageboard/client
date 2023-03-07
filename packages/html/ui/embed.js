@@ -9,7 +9,7 @@ class HTMLElementEmbed extends Page.Element {
 	reveal(state) {
 		this.classList.add('waiting');
 		state.consent(this);
-		return this.#defer;
+		// return this.#defer; // do not hang the chain
 	}
 	consent(state) {
 		const consent = state.scope.$consent;

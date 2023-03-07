@@ -8,6 +8,8 @@ class HTMLElementLayout extends Page.create(HTMLDivElement) {
 		dataPosition:null
 	};
 
+	#defer;
+
 	get fit() {
 		return this.options.size || 'none';
 	}
@@ -63,11 +65,14 @@ class HTMLElementLayout extends Page.create(HTMLDivElement) {
 				// pass
 			}
 			this.style.backgroundImage = `url(${curSrc})`;
+			this.#defer = new Deferred();
+			const img = new Image();
+			img.addEventListener('load', this.#defer.resolve);
+			img.addEventListener('error', this.#defer.resolve);
+			img.src = curSrc;
+			return this.#defer;
 		}
 	}
-	captureLoad() {}
-	captureError() {}
-	placeholder() {}
 }
 
 (function(HTMLElementImage) {

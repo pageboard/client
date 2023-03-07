@@ -7,7 +7,7 @@ const HTMLElementImageConstructor = Superclass => class extends Superclass {
 	static defaultWidth = 240;
 	static defaultHeight = 180;
 
-	#defer = new Deferred();
+	#defer;
 
 	static getZoom({ w, h, rw, rh, fit }) {
 		let z = 100;
@@ -121,6 +121,9 @@ const HTMLElementImageConstructor = Superclass => class extends Superclass {
 			this.placeholder(true);
 			return;
 		}
+		if (this.classList.contains('loading')) {
+			return;
+		}
 		const fit = this.fit;
 		const r = this.crop;
 
@@ -152,16 +155,17 @@ const HTMLElementImageConstructor = Superclass => class extends Superclass {
 			const rh = rect.height;
 			if (rw == 0 && rh == 0) {
 				// don't show
-				return this.#defer;
+				return;
 			}
 			loc.query.rs = "z-" + this.constructor.getZoom({ w, h, rw, rh, fit });
 		}
 		const curSrc = loc.toString();
 		if (curSrc != this.currentSrc) {
 			this.classList.add('loading');
+			this.#defer = new Deferred();
 			img.setAttribute('src', curSrc);
+			return this.#defer;
 		}
-		return this.#defer;
 	}
 	captureLoad() {
 		this.#defer.resolve();

@@ -61,7 +61,7 @@ Page.patch(async state => {
 	}));
 });
 
-Page.paint(async state => {
+Page.paint(state => {
 	if (state.scope.$write) return;
 	state.finish(() => {
 		const metas = equivs.read();
@@ -113,7 +113,7 @@ Page.setup(state => {
 			if ((target.constructor.revealRatio || 0) > ratio) return;
 			observer.unobserve(target);
 			if (target.currentSrc) return;
-			target.reveal(state);
+			state.reveal(target);
 		});
 	}, {
 		threshold: [

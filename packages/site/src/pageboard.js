@@ -19,8 +19,15 @@ for (const key in Class) {
 		value: Class[key]
 	});
 }
+Page.constructor.prototype.reveal = function (node) {
+	const p = node.reveal(this);
+	if (!p) return;
+	if (!this.scope.reveals) this.scope.reveals = [];
+	this.scope.reveals.push(p);
+};
 
 Page.constructor.prototype.fetch = fetchHelper;
+
 Page.constructor.prototype.debounce = function (fn, to) {
 	const db = debounce((...args) => {
 		fn(...args);

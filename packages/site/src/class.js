@@ -43,20 +43,18 @@ export function create(Superclass) {
 		#paint(state) {
 			if (this.reveal && !this.currentSrc) {
 				state.finish(() => {
-					// don't wait for it
 					this.#options(state);
-					this.reveal(state);
+					return state.reveal(this);
 				});
 			}
 		}
 		#setup(state) {
 			if (this.reveal && !this.currentSrc) {
+				this.#options(state);
 				if (state.scope.observer) {
 					state.scope.observer.observe(this);
 				} else state.finish(() => {
-					// don't wait for it
-					this.#options(state);
-					this.reveal(state);
+					return state.reveal(this);
 				});
 			}
 		}
