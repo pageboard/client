@@ -54,7 +54,9 @@ Page.route(async state => {
 	}
 	state.doc = node.ownerDocument;
 	await scope.bundles(data);
-	Object.assign(state.scope, scope);
+	// cleanup
+	delete state.scope.$item;
+	delete state.scope.$items;
 });
 
 Page.ready(state => {
