@@ -103,8 +103,8 @@ export default class Scope {
 		}
 	}
 
-	async bundles(res) {
-		await load.bundles(this.#state, res.metas);
+	bundles(res) {
+		return load.bundles(this.#state, res.metas);
 	}
 
 	render(data, el) {
