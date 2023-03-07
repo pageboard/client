@@ -2,8 +2,11 @@ Page.setup(state => {
 	const opts = document.body.dataset;
 	opts.prefix = 'page-sheet-';
 	opts.page = '.page-sheet';
+	removePrintButtons();
 	state.scope.printStyleSheet = printStyle(opts);
-	if (state.scope.$write) return;
+	if (state.scope.$write) {
+		return;
+	}
 	autobreakFn(opts);
 	pageNumbering(opts);
 	if (state.pathname.endsWith('.pdf') == false) {
@@ -23,7 +26,6 @@ Page.close(state => {
 
 function showPrintButtons(state, { preset }) {
 	const root = document.documentElement;
-	if (document.querySelector('html > .pdf-menu')) return;
 	const target = {
 		pathname: state.pathname + ".pdf",
 		query: state.query
@@ -32,6 +34,10 @@ function showPrintButtons(state, { preset }) {
 	root.appendChild(root.dom(`<div class="pdf-menu">
 		<a target="_blank" href="${state.format(target)}">⎙</a>
 	</div>`));
+}
+
+function removePrintButtons() {
+	document.querySelector('html > .pdf-menu')?.remove();
 }
 
 function printStyle({
