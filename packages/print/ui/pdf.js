@@ -1,9 +1,10 @@
 Page.setup(state => {
-	if (state.scope.$write) return;
 	const opts = document.body.dataset;
 	opts.prefix = 'page-sheet-';
 	opts.page = '.page-sheet';
-	state.scope.printStyleSheet = autobreakFn(opts);
+	state.scope.printStyleSheet = printStyle(opts);
+	if (state.scope.$write) return;
+	autobreakFn(opts);
 	pageNumbering(opts);
 	if (state.pathname.endsWith('.pdf') == false) {
 		showPrintButtons(state, opts);
@@ -11,13 +12,13 @@ Page.setup(state => {
 		state.scope.observer?.disconnect();
 		delete state.scope.observer;
 	}
-	// bug in window-page: Page.close is called on opening
-	Page.close(state => {
-		const ass = document.adoptedStyleSheets;
-		const index = ass.indexOf(state.scope.printStyleSheet);
-		delete state.scope.printStyleSheet;
-		if (index >= 0) ass.splice(index, 1);
-	});
+});
+
+Page.close(state => {
+	const ass = document.adoptedStyleSheets;
+	const index = ass.indexOf(state.scope.printStyleSheet);
+	delete state.scope.printStyleSheet;
+	if (index >= 0) ass.splice(index, 1);
 });
 
 function showPrintButtons(state, { preset }) {
@@ -33,23 +34,13 @@ function showPrintButtons(state, { preset }) {
 	</div>`));
 }
 
-function autobreakFn({
+function printStyle({
 	prefix = "",
 	page = ".page",
 	margin = "0px",
 	width = '210mm',
 	height = '270mm'
 }) {
-	// 1) activate media print rules, get @page size and margins
-	// 2) traverse, "page" nodes have 'page-break-after: always', 'page-break-inside:avoid'
-	// 3) page node too long is broken in several pages
-	// 4) try to break text nodes, honour widows/orphans
-	// 5) leaf nodes that can't fit must be resized ! (and a warning)
-
-	// TODO set style of nodes having print style
-	// page-break-inside: avoid;
-	// page -break-after: always;
-
 	const effectiveSheet = new CSSStyleSheet();
 	const pageSize = {
 		width,
@@ -103,6 +94,33 @@ function autobreakFn({
 
 	effectiveSheet.replaceSync(printSheet);
 	document.adoptedStyleSheets.push(effectiveSheet);
+	return effectiveSheet;
+}
+
+function autobreakFn({
+	prefix = "",
+	page = ".page",
+	margin = "0px",
+	width = '210mm',
+	height = '270mm'
+}) {
+	// 1) activate media print rules, get @page size and margins
+	// 2) traverse, "page" nodes have 'page-break-after: always', 'page-break-inside:avoid'
+	// 3) page node too long is broken in several pages
+	// 4) try to break text nodes, honour widows/orphans
+	// 5) leaf nodes that can't fit must be resized ! (and a warning)
+
+	// TODO set style of nodes having print style
+	// page-break-inside: avoid;
+	// page -break-after: always;
+	const pageSize = {
+		width,
+		height
+	};
+	const innerPageSize = {
+		width: `calc(${pageSize.width} - ${margin} - ${margin})`,
+		height: `calc(${pageSize.height} - ${margin} - ${margin})`
+	};
 
 	function fillSheet(sheet) {
 		const pageRect = sheet.getBoundingClientRect();
@@ -143,7 +161,6 @@ function autobreakFn({
 	for (const sheet of document.querySelectorAll(page)) {
 		fillSheet(sheet);
 	}
-	return effectiveSheet;
 }
 
 function pageNumbering({ page, prefix }) {
