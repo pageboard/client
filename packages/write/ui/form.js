@@ -186,12 +186,12 @@ class FormBlock {
 					read: {
 						title: 'Read',
 						type: 'array',
-						items: this.editor.element('settings').properties.grants.items
+						items: Pageboard.elements.settings.properties.grants.items
 					},
 					write: {
 						title: 'Write',
 						type: 'array',
-						items: this.editor.element('settings').properties.grants.items
+						items: Pageboard.elements.settings.properties.grants.items
 					}
 				}
 			};
