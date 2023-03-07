@@ -81,9 +81,127 @@ exports.strike = {
 	html: '<s></s>'
 };
 
-exports.caps = {
+exports.style = {
+	priority: 99,
+	title: "Style",
+	icon: '<i class="paint brush icon"></i>',
+	contents: "text*",
+	inline: true,
+	inplace: true,
+	group: "inline nolink",
+	tag: 'span.style',
+	properties: {
+		size: {
+			title: 'Size',
+			default: null,
+			anyOf: [{
+				const: null,
+				title: 'Default',
+				icon: '<span class="icon">∅</span>'
+			}, {
+				const: 'small',
+				title: 'Small',
+				icon: '<span class="icon char" style="font-size:0.6em">aA</span>'
+			}, {
+				const: 'base',
+				title: 'Base',
+				icon: '<span class="icon char" style="font-size:0.8em">aA</span>'
+			}, {
+				const: 'large',
+				title: 'Large',
+				icon: '<span class="icon char" style="font-size:1.2em">aA</span>'
+			}, {
+				const: 'extra',
+				title: 'Extra',
+				icon: '<span class="icon char" style="font-size:1.6em">aA</span>'
+			}]
+		},
+		transform: {
+			title: 'Transform',
+			default: null,
+			anyOf: [{
+				const: null,
+				title: 'Default',
+				icon: '<span class="icon">∅</span>'
+			}, {
+				const: "uppercase",
+				title: "upper",
+				icon: '<span class="icon">AB</span>'
+			}, {
+				const: "lowercase",
+				title: "lower",
+				icon: '<span class="icon">ab</span>'
+			}, {
+				const: "capitalize",
+				title: "all caps",
+				icon: '<span class="icon" style="text-transform:capitalize">Ab</span>'
+			}, {
+				const: "smallcaps",
+				title: "small caps",
+				icon: '<span class="icon" style="font-variant:small-caps">Ab</span>'
+			}]
+		},
+		color: {
+			title: 'Color',
+			default: null,
+			anyOf: [{
+				const: null,
+				title: 'Default',
+				icon: '<span class="icon">∅</span>'
+			}, {
+				const: "white",
+				title: "White",
+				icon: '<i class="icon color" style="color:white">W</i>'
+			}, {
+				const: "black",
+				title: "Black",
+				icon: '<i class="icon color" style="color:black">B</i>'
+			}, {
+				const: "red",
+				title: "Red",
+				icon: '<i class="icon color" style="color:red">R</i>'
+			}, {
+				const: "orange",
+				title: "Orange",
+				icon: '<i class="icon color" style="color:orange">O</i>'
+			}, {
+				const: "yellow",
+				title: "Yellow",
+				icon: '<i class="icon color" style="color:yellow">Y</i>'
+			}, {
+				const: "green",
+				title: "Green",
+				icon: '<i class="icon color" style="color:green">G</i>'
+			}, {
+				const: "blue",
+				title: "Blue",
+				icon: '<i class="icon color" style="color:blue">B</i>'
+			}, {
+				const: "purple",
+				title: "Purple",
+				icon: '<i class="icon color" style="color:purple">P</i>'
+			}]
+		}
+	},
+	parse: function(dom) {
+		const data = {};
+		for (const [key, schema] of Object.entries(this.properties)) {
+			for (const item of schema.anyOf) {
+				if (item.const && dom.classList.contains(item.const)) {
+					data[key] = item.const;
+				}
+			}
+		}
+		return data;
+	},
+	html: '<span class="style [size] [transform] [color]"></span>',
+	stylesheets: [
+		'../ui/inlines.css'
+	]
+};
+
+exports.caps = { // deprecated
 	priority: 108,
-	title: "Capitalization",
 	icon: '<span class="icon">A<span style="font-variant: small-caps;">a</span></span>',
 	contents: "text*",
 	inline: true,
@@ -92,7 +210,7 @@ exports.caps = {
 	parse: function(dom) {
 		return { transform: dom.className };
 	},
-	tag: 'span.uppercase,span.lowercase,span.capitalize,span.smallcaps',
+	tag: 'span.uppercase:not(.style),span.lowercase:not(.style),span.capitalize:not(.style),span.smallcaps:not(.style)',
 	properties: {
 		transform: {
 			title: 'Transform',
@@ -119,14 +237,9 @@ exports.caps = {
 	html: '<span class="[transform]"></span>'
 };
 
-exports.color = {
+exports.color = { // deprecated
 	priority: 109,
-	title: "Color",
-	icon: `<i class="icon" style="background-image:
-		linear-gradient(
-			to right,
-			red, orange, yellow, green, blue, purple
-		);"></i>`,
+	icon: '<span class="icon">C</span>',
 	properties: {
 		color: {
 			default: "",

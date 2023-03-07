@@ -107,9 +107,11 @@
 	padding: 0;
 }
 .ui.compact.icon.menu > .ui.radio.checkbox.item > span {
-	padding: 0.7em;
-	display: inline-block;
+	display: inline-flex;
 	height: 100%;
+}
+.ui.compact.icon.menu > .ui.radio.checkbox.item > span > * {
+	margin: 0.7em;
 }
 
 #move > .right.menu > .item {
@@ -139,4 +141,19 @@
 .ui.compact.icon.menu {
 	min-height: 2.4em;
 	flex-wrap:nowrap;
+}
+.ui.compact.icon.menu > .ui.checkbox.item span.icon.char {
+	line-height: 0;
+	margin-top: 0 !important;
+	margin-bottom: 0!important;
+	align-self: center;
+}
+.ui.compact.icon.menu > .ui.checkbox.item i.icon.color {
+	margin: 0 !important;
+	padding:0.7em;
+	height: 100%;
+	width: 2em;
+	font-weight: 900;
+	font-family: sans-serif;
+	text-shadow: 0 0 1.2em black;
 }

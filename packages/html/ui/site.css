@@ -106,45 +106,7 @@ p:last-child {
 	text-align:justify;
 }
 
-span.lighter {
-	font-weight:lighter;
-}
-span.capitalize {
-	text-transform:capitalize;
-}
-span.lowercase {
-	text-transform:lowercase;
-}
-span.uppercase {
-	text-transform:uppercase;
-}
-span.smallcaps {
-	font-variant:small-caps;
-}
-span.black {
-	color: black;
-}
-span.white {
-	color: white;
-}
-span.red {
-	color: red;
-}
-span.orange {
-	color: orange;
-}
-span.yellow {
-	color: yellow;
-}
-span.green {
-	color: green;
-}
-span.blue {
-	color: blue;
-}
-span.purple {
-	color: purple;
-}
+
 
 /*-------------------
 				Links
