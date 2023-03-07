@@ -108,7 +108,8 @@ Pageboard.Controls.Mode = class Mode {
 			const $write = com == "write";
 			body.classList.toggle('ProseMirror', $write);
 			body.setAttribute('spellcheck', !$write);
-			body.setAttribute('contenteditable', $write);
+			if ($write) body.setAttribute('contenteditable', $write);
+			else body.removeAttribute('contenteditable');
 			follower.scope = state.scope.copy({ $write });
 		});
 	}
