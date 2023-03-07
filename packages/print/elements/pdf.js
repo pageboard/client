@@ -20,6 +20,7 @@ exports.pdf = {
 	},
 	mime: "application/pdf"
 };
+
 exports.pdf.fragments = [
 	...exports.pdf.fragments || [], {
 		path: 'body',
