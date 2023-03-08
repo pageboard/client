@@ -54,8 +54,8 @@ class HTMLElementFieldsetList extends Page.Element {
 		for (const node of inputs) {
 			keys.add(node.name);
 		}
-		const splits = Array.from(keys).map(name => name.split('.'));
-		const coms = [];
+		const splits = Array.from(keys).map(name => this.#parts(name));
+		const prefix = [];
 		let pos = 0, com = null;
 		while (splits.length && splits.every(list => {
 			if (com == null) {
@@ -69,16 +69,16 @@ class HTMLElementFieldsetList extends Page.Element {
 				return list[pos] == com;
 			}
 		})) {
-			coms.push(com);
+			prefix.push(com);
 			com = null;
 			pos++;
 		}
-		if (coms.length) coms.push('');
-		const prefix = coms.join('.');
 		this.#prefix = prefix;
 		const model = {};
 		for (const key of keys) {
-			if (key.startsWith(prefix)) model[key.substring(prefix.length)] = null;
+			if (this.#prefixed(key)) {
+				model[this.#parts(key).slice(prefix.length).join('.')] = null;
+			}
 		}
 		this.#model = model;
 	}
@@ -109,6 +109,22 @@ class HTMLElementFieldsetList extends Page.Element {
 		return `[block-type="fieldlist_button"][value="${name}"]`;
 	}
 
+	#prefixed(key, p = this.#prefix) {
+		const parts = this.#parts(key);
+		for (let i = 0; i < p.length; i++) {
+			if (parts[i] != p[i]) return false;
+		}
+		return true;
+	}
+
+	#incrementkey(index, name) {
+		if (!this.#prefixed(name)) return null;
+		const parts = this.#prefix.slice();
+		parts.push(index);
+		parts.push(...this.#parts(name).slice(this.#prefix.length));
+		return parts.join('.');
+	}
+
 	#resize(size, scope) {
 		if (scope.$write) return;
 		const len = Math.max(Number(this.dataset.size) || 0, size);
@@ -119,25 +135,17 @@ class HTMLElementFieldsetList extends Page.Element {
 			return { index: i };
 		});
 		const inputs = tpl.querySelectorAll('[name]');
-		const prefix = this.#prefix;
 		for (const node of inputs) {
-			if (node.name.startsWith(prefix)) {
-				node.name = `${prefix}[fielditem.index].${node.name.substring(prefix.length)}`;
-				if (node.id?.startsWith('for-' + prefix)) {
-					node.id = `for-${prefix}[fielditem.index].${node.id.substring(4 + prefix.length)}`;
-				}
+			const name = this.#incrementkey('[fielditem.index]', node.name);
+			if (name != null) {
+				node.name = name;
 			}
 		}
 		const conditionalFieldsets = tpl.querySelectorAll('[is="element-fieldset"]');
 		for (const node of conditionalFieldsets) {
-			if (node.dataset.name?.startsWith(prefix)) {
-				node.dataset.name = `${prefix}[fielditem.index].${node.dataset.name.substring(prefix.length)}`;
-			}
-		}
-		const labels = tpl.querySelectorAll('label[for]');
-		for (const node of labels) {
-			if (node.htmlFor?.startsWith('for-' + prefix)) {
-				node.htmlFor = `for-${prefix}[fielditem.index].${node.htmlFor.substring(4 + prefix.length)}`;
+			const name = this.#incrementkey('[fielditem.index]', node.dataset.name);
+			if (name != null) {
+				node.dataset.name = name;
 			}
 		}
 
@@ -159,7 +167,7 @@ class HTMLElementFieldsetList extends Page.Element {
 			{
 				const hidden = tpl.ownerDocument.createElement('input');
 				hidden.type = "hidden";
-				hidden.name = prefix.slice(0, -1);
+				hidden.name = this.#prefix.join('.');
 				tpl.appendChild(hidden);
 			}
 		}
@@ -177,13 +185,16 @@ class HTMLElementFieldsetList extends Page.Element {
 		});
 	}
 
+	#parts(key) {
+		return key ? key.split(".") : [];
+	}
+
 	#listFromValues(values) {
 		const list = [];
-		const prefix = this.#prefix;
 		// just unflatten the array
 		for (const [key, val] of Object.entries(values)) {
-			if (!key.startsWith(prefix)) continue;
-			const parts = key.slice(prefix.length).split(".");
+			if (!this.#prefixed(key)) continue;
+			const parts = this.#parts(key).slice(this.#prefix.length);
 			const index = Number(parts.shift());
 			if (!Number.isInteger(index)) continue;
 			delete values[key];
@@ -195,11 +206,13 @@ class HTMLElementFieldsetList extends Page.Element {
 	}
 
 	#listToValues(values, list) {
-		const prefix = this.#prefix;
 		for (let i = 0; i < list.length; i++) {
 			const obj = list[i];
 			for (const [key, val] of Object.entries(obj)) {
-				values[`${prefix}${i}.${key}`] = val;
+				const parts = this.#prefix.slice();
+				parts.push(i);
+				parts.push(...this.#parts(key));
+				values[parts.join('.')] = val;
 			}
 		}
 	}
@@ -261,9 +274,10 @@ class HTMLElementFieldsetList extends Page.Element {
 	}
 
 	#parseName(name) {
-		const prefix = this.prefix;
-		if (!name?.startsWith(prefix)) return { index: -1 };
-		const parts = name.substring(prefix.length).split('.');
+		if (!this.#prefixed(name)) {
+			return { index: -1 };
+		}
+		const parts = this.#parts(name).slice(this.#prefix.length);
 		const index = Number(parts.shift());
 		if (!Number.isInteger(index)) return { index: -1 };
 		return { index, sub: parts.join('.') };

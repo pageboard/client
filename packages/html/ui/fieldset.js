@@ -19,14 +19,8 @@ class HTMLElementFieldSet extends Page.create(HTMLFieldSetElement) {
 		this.fill(null, state.scope);
 		state.finish(() => this.fill(null, state.scope));
 	}
-	setup() {
-		this.form?.addEventListener('change', this);
-	}
-	close() {
-		this.form?.removeEventListener('change', this);
-	}
-	handleEvent(e, state) {
-		if (e.type == "change") {
+	handleAllChange(e, state) {
+		if (this.form.contains(e.target)) {
 			this.fill(null, state.scope);
 		}
 	}
