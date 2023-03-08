@@ -49,7 +49,7 @@ exports.message = {
 		}
 	},
 	contents: "block+",
-	html: '<div class="message [type]" data-status="[status]"><p>Message</p></div>',
+	html: '<div class="ui message [type]" data-status="[status]"><p>Message</p></div>',
 	stylesheets: ['../ui/message.css']
 };
 
