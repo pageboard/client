@@ -29,6 +29,15 @@ Page.constructor.serialize = function() {
 		node.parentNode.replaceChild(img, node);
 	}
 
+	const attachments = [];
+	for (const node of doc.querySelectorAll('a[download]')) {
+		attachments.push({
+			filename: node.download,
+			href: node.href
+		});
+		node.remove();
+	}
+
 	const md = (new window.Europa()).convert(doc.documentElement.cloneNode(true));
 	return window.inlineresources.loadAndInlineCssLinks(doc, {}).then(errors => {
 		return {
@@ -37,7 +46,8 @@ Page.constructor.serialize = function() {
 				errors,
 				title: doc.title,
 				text: md,
-				html: '<!DOCTYPE html>\n' + window.Juice(doc.documentElement.outerHTML)
+				html: '<!DOCTYPE html>\n' + window.Juice(doc.documentElement.outerHTML),
+				attachments
 			})
 		};
 	});
