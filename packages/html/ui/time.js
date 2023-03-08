@@ -6,7 +6,7 @@ class HTMLElementTime extends Page.create(HTMLTimeElement) {
 	};
 
 	patch(state) {
-		this.textContent = `[stamp|formatDate:[fmt]:[tz]]`.fuse({
+		this.textContent = `[stamp|or:now|date:[fmt]:[tz]]`.fuse({
 			stamp: this.dateTime,
 			fmt: this.dataset.format,
 			tz: this.dataset.timezone

@@ -171,6 +171,7 @@ exports.time = {
 			format
 		};
 	},
-	html: `<time datetime="[datetime|now|isoDate]" data-format="[format|values|join:%3A]" data-timezone="[timezone]" is="element-time"></time>`,
+	tag: 'time',
+	html: `<time datetime="[datetime|or:now|date:iso]" data-format="[format|as:values|join:%3A]" data-timezone="[timezone]" is="element-time"></time>`,
 	scripts: ['../ui/time.js']
 };
