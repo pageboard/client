@@ -27,8 +27,19 @@ exports.google_tag = {
 		html: `<script async is="element-gtm-script" src="https://www.googletagmanager.com/gtm.js?id=[$site.google_tag_manager|url|magnet:*]">[$site.env|eq:production|bmagnet:*]</script>`
 	}],
 	csp: {
-		connect: ["https://www.google-analytics.com", "https://stats.g.doubleclick.net"],
-		script: ["https://www.googletagmanager.com", "https://www.google-analytics.com", "https://ssl.google-analytics.com"]
+		img: [
+			"https://*.google-analytics.com",
+			"https://*.googletagmanager.com"
+		],
+		connect: [
+			"https://*.google-analytics.com",
+			"https://*.analytics.google.com",
+			"https://*.googletagmanager.com",
+			"https://*.g.doubleclick.net"
+		],
+		script: [
+			"https://*.googletagmanager.com"
+		]
 	},
 	scripts: [
 		'../ui/gtag.js'
