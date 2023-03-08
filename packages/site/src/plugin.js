@@ -1,5 +1,5 @@
 export const formats = {
-	as: { polyfills, csp, xid, colnums, block, binding },
+	as: { polyfills, csp, xid, colnums, block, binding, query },
 	date: { utc }
 };
 
@@ -8,7 +8,7 @@ export const filters = {
 	meta: ['?', 'path', metaFn],
 	schema: ['?', 'path?', 'path?', schemaFn],
 	content: ['block', 'str', contentFn],
-	unset, set, query, urltpl, templates
+	unset, set, urltpl, templates, only
 };
 
 export const hooks = {
@@ -248,6 +248,14 @@ function set(ctx, obj, name, val) {
 	obj = { ...obj };
 	obj[name] = val;
 	return obj;
+}
+
+function only(ctx, obj, ...keys) {
+	const cop = {};
+	for (const key of keys) {
+		if (obj[key] !== undefined) cop[key] = obj[key];
+	}
+	return cop;
 }
 
 function query(ctx, query) {
