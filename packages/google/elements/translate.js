@@ -15,12 +15,14 @@ exports.google_translate = {
 	],
 	csp: {
 		script: [
-			"https://translate.googleapis.com",
-			"https://translate.google.com",
-			"[$commons.csp.google_translate]"
+			"[$commons.csp.script.google_translate]"
 		],
-		style: ["https://translate.googleapis.com"],
-		connect: ["https://translate.googleapis.com"]
+		style: [
+			"[$commons.csp.style.google_translate]"
+		],
+		connect: [
+			"[$commons.csp.connect.google_translate]"
+		]
 	},
 	stylesheets: [
 		'../ui/translate.css'
