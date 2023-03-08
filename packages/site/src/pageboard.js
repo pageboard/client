@@ -50,7 +50,7 @@ function initState(res, state) {
 	scope.$hrefs = state.data.$hrefs; // backward compat FIXME get rid of this, data.$hrefs is good
 
 	if (res.meta?.group == "page") {
-		for (const k of ["grants", "links", "site", "locked", "granted"]) {
+		for (const k of ["grants", "links", "site", "locked", "granted", "commons"]) {
 			if (res[k] !== undefined) scope[`$${k}`] = res[k];
 		}
 		scope.$element = scope.$elements[res.meta.name];
