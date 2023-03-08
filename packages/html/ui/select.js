@@ -169,7 +169,7 @@ class HTMLElementSelect extends Page.Element {
 	}
 
 	patch(state) {
-		if (this.state.scope.$write) return;
+		if (state.scope.$write) return;
 		if (this.children.length == 1) this.build(state);
 
 		state.finish(() => {
