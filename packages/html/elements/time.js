@@ -158,7 +158,7 @@ exports.time = {
 		const format = {};
 		const list = (dom.dataset.format ?? "").split(':');
 		for (const [key, schema] of Object.entries(this.properties.format.properties)) {
-			for (const tok in list) {
+			for (const tok of list) {
 				if (tok) {
 					const item = schema.anyOf.find(item => item.const === tok);
 					if (item) format[key] = item.const;
