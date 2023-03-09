@@ -1,5 +1,4 @@
 const HTMLElementMediaConstructor = Superclass => class extends Superclass {
-	#defer = new Deferred();
 
 	patch(state) {
 		this.classList.remove('error', 'loading');
@@ -15,17 +14,14 @@ const HTMLElementMediaConstructor = Superclass => class extends Superclass {
 			this.setAttribute('src', curSrc);
 		}
 		if (state.scope.$write) this.pause();
-		// return this.#defer; // do not hang chain
 	}
 	handleClick(e, state) {
 		if (state.scope.$write) e.preventDefault();
 	}
 	captureLoad() {
-		this.#defer.resolve();
 		this.classList.remove('loading');
 	}
 	captureError() {
-		this.#defer.resolve();
 		this.classList.remove('loading');
 		this.classList.add('error');
 	}
