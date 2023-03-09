@@ -1,0 +1,5 @@
+[block-type][id] > a.linkable[aria-hidden="true"] {
+	display: block;
+	position: absolute;
+	left: -2ch;
+}

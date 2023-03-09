@@ -33,7 +33,6 @@ exports.heading = {
 		},
 		linkable: {
 			title: 'Show hash link',
-			description: 'On hover',
 			type: 'boolean',
 			default: false
 		},
@@ -55,8 +54,8 @@ exports.heading = {
 	group: "block",
 	icon: '<i class="icon header"></i>',
 	tag: 'h1,h2,h3,h4,h5,h6',
-	html: `<h[level] class="ui [align|or:left] aligned header" is="h[level]-helper" id="[id][linkable|prune:-]" entitled="[entitled]">
-		<a aria-hidden="true" href="[$loc.pathname][$loc.search][id|pre:%23]">[linkable|prune:*]#</a>
+	html: `<h[level] class="ui [align|or:left] aligned header" is="h[level]-helper" id="[id]" entitled="[entitled]">
+		<a aria-hidden="true" class="linkable" href="[$loc.pathname][$loc.search][id|pre:%23]">[linkable|prune:*]#</a>
 		<div block-content="text">Heading</div>
 	</hn>`,
 	parse: function (dom) {
@@ -65,7 +64,8 @@ exports.heading = {
 		};
 	},
 	stylesheets: [
-		'../ui/heading.css'
+		'../ui/heading.css',
+		'../ui/linkable.css'
 	],
 	scripts: [
 		'../ui/heading.js'

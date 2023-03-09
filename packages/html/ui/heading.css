@@ -1,12 +1,3 @@
-[block-type="heading"] > a[aria-hidden="true"] {
-	display: block;
-	position: absolute;
-	visibility:hidden;
-	left: -1ch;
-}
-[block-type="heading"]:hover > a[aria-hidden="true"] {
-	visibility:visible;
-}
 h1,
 h2,
 h3,
