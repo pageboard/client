@@ -253,7 +253,7 @@ class FormBlock {
 
 		if (this.el.inplace) {
 			// simply select focused node
-			const node = this.el.inline ? this.parents[0].inline.rpos : editor.root.querySelector('[block-focused="last"]');
+			const node = this.parents[0].inline && this.parents[0].inline.rpos || this.parents[0].rpos || editor.root.querySelector('[block-focused="last"]');
 			if (node) {
 				editor.utils.refreshTr(tr, node, block);
 				dispatch = true;
