@@ -8,11 +8,17 @@ exports.embed = {
 			description: 'The iframe src URL',
 			nullable: true,
 			type: 'string',
-			format: 'uri-reference'
-			// TODO plug embeds to href, but url-inspector makes it difficult for us right now
+			format: 'uri-reference',
+			$helper: {
+				name: 'href',
+				filter: {
+					type: ["embed"]
+				}
+			}
 		},
 		name: {
 			title: 'Name',
+			description: 'Helps focus the embed',
 			type: 'string',
 			format: 'id',
 			nullable: true
