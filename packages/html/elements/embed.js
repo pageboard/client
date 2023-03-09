@@ -16,29 +16,41 @@ exports.embed = {
 				}
 			}
 		},
-		name: {
-			title: 'Name',
-			description: 'Helps focus the embed',
+		linkable: {
+			title: 'Show hash link',
+			type: 'boolean',
+			default: false
+		},
+		id: {
+			nullable: true,
 			type: 'string',
-			format: 'id',
+			pattern: /^[a-z0-9-]*$/.source
+		},
+		query: {
+			title: 'Additional query parameters',
+			type: 'object',
 			nullable: true
 		}
 	},
 	group: "block",
-	parse: function(dom) {
+	parse: function (dom) {
+		if (dom.matches('element-embed')) return;
 		return {
-			url: dom.dataset.src || dom.getAttribute('src')
+			url: dom.getAttribute('src')
 		};
 	},
 	tag: 'iframe,element-embed',
-	html: `<element-embed class="ui embed" data-src="[url]" id="[name|as:xid]"></element-embed>`,
+	html: `<element-embed data-src="[url|meta:source][query|as:query]" id="[id]" title="[url|meta:title]" style="padding-bottom:calc([url|meta:height] / [url|meta:width] * 100%)">
+		<a aria-hidden="true" class="linkable" href="[$loc.pathname][$loc.search][id|pre:%23]">[linkable|prune:*]#</a>
+		<iframe loading="lazy" allowfullscreen frameborder="0" scrolling="no"></iframe>
+	</element-embed>`,
 	scripts: [
 		'../ui/embed.js'
 	],
 	stylesheets: [
 		'../ui/loading.css',
-		'../lib/components/embed.css',
-		'../ui/embed.css'
+		'../ui/embed.css',
+		'../ui/linkable.css'
 	]
 };
-
+exports.editor.scripts.push('../ui/embed-helper.js');

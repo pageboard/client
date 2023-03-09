@@ -4,72 +4,64 @@ class HTMLElementEmbed extends Page.Element {
 		hash: null
 	};
 	static revealRatio = 0.2;
-	#defer = new Deferred();
 
 	reveal(state) {
 		this.classList.add('waiting');
 		state.consent(this);
-		// return this.#defer; // do not hang the chain
+	}
+	get currentSrc() {
+		return this.querySelector('iframe')?.src ?? "about:blank";
 	}
 	consent(state) {
 		const consent = state.scope.$consent;
 		this.classList.toggle('denied', consent == "no");
 		this.classList.toggle('waiting', consent == null);
 
-		this.iframe = this.querySelector('iframe');
+		const iframe = this.querySelector('iframe');
 		if (consent != "yes") {
-			if (this.iframe) this.iframe.remove();
-			this.#defer.resolve();
+			iframe.src = "";
 			return;
 		}
-		if (!this.iframe) {
-			this.innerHTML = `<iframe width="100%" height="100%" frameborder="0" scrolling="no" allow="autoplay; fullscreen; accelerometer; gyroscope"></iframe>`;
-			this.iframe = this.firstElementChild;
-		}
-		if (!this.iframe.allow) this.iframe.allowFullscreen = true;
+		if (!iframe.allow) iframe.allowFullscreen = true;
 
 		const opts = this.options;
-		const prev = Page.parse(this.currentSrc || this.iframe.src || "about:blank");
+		const prev = Page.parse(this.currentSrc);
 		const cur = Page.parse(opts.src || "about:blank");
 		cur.hash = opts.hash;
-		this.currentSrc = cur.toString();
+		const curSrc = cur.toString();
 
 		if (cur.samePath(prev) == false) {
 			this.classList.remove('error');
 			this.classList.add('loading');
-			this.iframe.setAttribute('src', this.currentSrc);
-		} else {
-			if (cur.hash != prev.hash) {
-				try {
-					this.iframe.contentWindow.location.replace(this.currentSrc);
-				} catch (err) {
-					this.iframe.setAttribute('src', this.currentSrc);
-				}
+			if (!state.scope.$write) {
+				iframe.allow = "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture";
 			}
-			this.#defer.resolve();
+			iframe.src = curSrc;
+		} else if (cur.hash != prev.hash) {
+			try {
+				iframe.contentWindow.location.replace(curSrc);
+			} catch (err) {
+				iframe.src = curSrc;
+			}
 		}
 	}
 	captureClick(e, state) {
 		if (this.matches('.denied')) state.reconsent();
 	}
 	captureLoad() {
-		this.#defer.resolve();
 		this.classList.remove('loading');
 	}
 	captureError() {
-		this.#defer.resolve();
 		this.classList.add('error');
 	}
 	handleAllMessage(e, state) {
-		if (!e.origin || !this.options.src) return;
-		if (this.options.src.startsWith(e.origin) == false) return;
+		if (!e.origin || !this.options.source) return;
+		if (this.options.source.startsWith(e.origin) == false) return;
 		if (this.receiveMessage) this.receiveMessage(e.data ?? {});
 	}
 	close() {
-		if (this.iframe) {
-			this.iframe.remove();
-			delete this.iframe;
-		}
+		const iframe = this.querySelector('iframe');
+		if (iframe) iframe.src = "";
 	}
 }
 
