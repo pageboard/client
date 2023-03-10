@@ -106,7 +106,7 @@ class MenuBar extends window.Pagecut.MenuBar {
 				if (el.inline) {
 					if (el.leaf) {
 						tr.replaceSelectionWith(nodeType.create(blocks.toAttrs(block)));
-						const resel = sel ? utils.selectTr(tr, sel) : null;
+						const resel = sel ? utils.selectTr(tr, sel.from) : null;
 						if (resel) tr.setSelection(resel);
 					} else {
 						utils.toggleMark(

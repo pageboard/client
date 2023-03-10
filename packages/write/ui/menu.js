@@ -210,7 +210,7 @@ Pageboard.Controls.Menu = class Menu {
 					if (el.inline) {
 						if (el.leaf) {
 							tr.replaceSelectionWith(nodeType.create(editor.blocks.toAttrs(block)));
-							const resel = sel ? editor.utils.selectTr(tr, sel) : null;
+							const resel = sel ? editor.utils.selectTr(tr, sel.from) : null;
 							if (resel) tr.setSelection(resel);
 						} else {
 							editor.utils.toggleMark(
