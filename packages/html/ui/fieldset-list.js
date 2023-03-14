@@ -207,7 +207,7 @@ class HTMLElementFieldsetList extends Page.Element {
 
 	#listToValues(values, list) {
 		for (let i = 0; i < list.length; i++) {
-			const obj = list[i];
+			const obj = list[i] ?? {};
 			for (const [key, val] of Object.entries(obj)) {
 				const parts = this.#prefix.slice();
 				parts.push(i);
