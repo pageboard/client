@@ -108,6 +108,7 @@ exports.event_date = {
 	title: 'Date',
 	menu: "Calendar",
 	bundle: 'event',
+	standalone: true,
 	properties: {
 		groupsOnly: {
 			title: 'For groups only',
@@ -186,6 +187,7 @@ exports.event_reservation = {
 	title: 'Reservation',
 	menu: "Calendar",
 	bundle: 'event',
+	standalone: true,
 	required: [],
 	properties: {
 		seats: {
