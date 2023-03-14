@@ -364,7 +364,6 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 			} else {
 				vary = "patch";
 			}
-			scope.$vary = vary;
 		}
 		state.push(loc, { vary });
 	}
