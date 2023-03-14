@@ -319,7 +319,7 @@ function templates(ctx, val, ...prefixes) {
 			const key = path.length > 1 ? path.slice(1).join('%2E') : path[0];
 			const short = path.length > 1 ? `${path[0]}.${key}` : path[0];
 
-			const optional = val === null && ctx.expr.get(scope, path) === undefined;
+			const optional = val !== undefined && ctx.expr.get(scope, path) === undefined;
 			const prev = obj[key] ?? (obj[key] = short);
 			if (optional && !prev.endsWith('?')) obj[key] += '?';
 
