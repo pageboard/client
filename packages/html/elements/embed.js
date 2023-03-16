@@ -40,7 +40,7 @@ exports.embed = {
 		};
 	},
 	tag: 'iframe,element-embed',
-	html: `<element-embed data-src="[url|meta:source][query|as:query]" id="[id]" title="[url|meta:title]" style="padding-bottom:calc([url|meta:height] / [url|meta:width] * 100%)">
+	html: `<element-embed data-url="[url]" data-query="[query|as:query]" id="[id]">
 		<a aria-hidden="true" class="linkable" href="[$loc.pathname][$loc.search][id|pre:%23]">[linkable|prune:*]#</a>
 		<iframe loading="lazy" allowfullscreen frameborder="0" scrolling="no"></iframe>
 	</element-embed>`,

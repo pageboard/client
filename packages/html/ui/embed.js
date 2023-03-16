@@ -1,6 +1,7 @@
 class HTMLElementEmbed extends Page.Element {
 	static defaults = {
-		src: null,
+		url: null,
+		query: null,
 		hash: null
 	};
 	static revealRatio = 0.2;
@@ -11,6 +12,16 @@ class HTMLElementEmbed extends Page.Element {
 	}
 	get currentSrc() {
 		return this.querySelector('iframe')?.src ?? "about:blank";
+	}
+	patch(state) {
+		const meta = state.scope.$hrefs?.[this.options.url];
+		if (meta) {
+			this.title = meta.title;
+			this.setAttribute('data-src', meta.source);
+			this.style.paddingBottom = `calc(${meta.height} / ${meta.width} * 100%)`;
+		} else {
+			console.warn("Missing href", this.options.url);
+		}
 	}
 	consent(state) {
 		const consent = state.scope.$consent;
@@ -26,7 +37,7 @@ class HTMLElementEmbed extends Page.Element {
 
 		const opts = this.options;
 		const prev = Page.parse(this.currentSrc);
-		const cur = Page.parse(opts.src || "about:blank");
+		const cur = Page.parse(this.dataset.src || "about:blank");
 		cur.hash = opts.hash;
 		const curSrc = cur.toString();
 

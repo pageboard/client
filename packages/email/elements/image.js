@@ -75,9 +75,6 @@ exports.mail_image = {
 	html: `<center><img is="element-mail-img"
 		class="float-center" align="center"
 		data-src="[url]"
-		data-width="[url|meta:width]"
-		data-height="[url|meta:height]"
-		data-mime="[url|meta:mime]"
 		data-crop="[crop.x];[crop.y];[crop.width];[crop.height];[crop.zoom]"
 		alt="[alt]" /></center>`,
 	scripts: ['../ui/image.js']
