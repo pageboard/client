@@ -14,6 +14,7 @@
 }
 .ProseMirror-menu {
 	display:inline-flex;
+	width:100%;
 	background-color: #fff;
 	margin:0;
 	border: 1px solid gray;
@@ -24,25 +25,26 @@
 .ProseMirror-menuitem {
 	margin-right:0;
 }
+.ProseMirror-menuitem:last-of-type {
+	flex: 1 0 auto;
+}
 .ProseMirror-icon {
 	line-height:initial;
 	vertical-align:initial;
 	padding:0.3em 0.5em;
 }
-
 .ProseMirror-menuitem > form {
 	display:none;
 }
 .ProseMirror-menuitem > form.ProseMirror-menu-active {
 	display:inline-flex;
+	flex: 1 0 auto;
 }
 
 .ProseMirror-menu > .ProseMirror-menuitem > form.prosemirror-dialog > input {
 	padding: 0.25em;
 	background: white;
 	border: 1px solid lightgray;
-	width: 300px;
-	max-width: 100%;
 }
 
 .ProseMirror-menu > .ProseMirror-menuitem > form.prosemirror-dialog > input:invalid {

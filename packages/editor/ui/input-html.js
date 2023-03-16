@@ -179,7 +179,7 @@ class HTMLElementInputHTML extends Page.create(HTMLTextAreaElement) {
 	static elements = {
 		fragment: {
 			contents: 'paragraph+',
-			html: '<div class="textarea"></div>'
+			html: '<div class="textarea ProseMirror"></div>'
 		},
 		text: {
 			inline: true,
@@ -295,7 +295,7 @@ class HTMLElementInputHTML extends Page.create(HTMLTextAreaElement) {
 		const doc = this.ownerDocument;
 		if (this.previousElementSibling?.matches('.textarea')) return;
 		const initialValue = super.value;
-		const textarea = doc.dom(`<div class="textarea">${initialValue}</div>`);
+		const textarea = doc.dom(`<div class="textarea ProseMirror">${initialValue}</div>`);
 		this.parentNode.insertBefore(textarea, this);
 		const toolbar = doc.dom(`<div class="toolbar"></div>`);
 		this.parentNode.insertBefore(toolbar, textarea);
