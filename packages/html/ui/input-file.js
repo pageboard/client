@@ -52,7 +52,7 @@ class HTMLElementInputFile extends Page.create(HTMLInputElement) {
 		}
 	}
 
-	presubmit() {
+	presubmit(state) {
 		if (this.#defer) return this.#defer;
 		if (!this.files.length) return Promise.resolve();
 		const field = this.closest('.field');

@@ -316,9 +316,11 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 		const form = this;
 		form.classList.add('loading');
 
-		await Promise.all(Array.from(form.elements).filter(node => {
-			return Boolean(node.presubmit);
-		}).map(input => input.presubmit()));
+		await Promise.all(
+			Array.from(form.elements)
+				.filter(node => Boolean(node.presubmit))
+				.map(input => input.presubmit(state))
+		);
 
 		const { scope } = state;
 		scope.$request = form.read(true);
