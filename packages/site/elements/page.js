@@ -24,8 +24,11 @@ exports.page = {
 			title: 'Address',
 			type: "string",
 			format: 'page',
-			$helper: 'pageUrl' // works with sitemap editor to update pages url in a coherent manner
-			// see also page.save: the href updater will only change input.name == "href".
+			$helper: 'href',
+			$filter: {
+				name: 'helper',
+				helper: 'pageUrl'
+			}
 		},
 		prefix: {
 			title: 'Match by prefix',
@@ -132,8 +135,11 @@ exports.redirection = {
 			title: 'Address',
 			type: "string",
 			format: "page",
-			$helper: 'pageUrl' // works with sitemap editor to update pages url in a coherent manner
-			// see also page.save: the href updater will only change input.name == "href".
+			$helper: 'href',
+			$filter: {
+				name: 'helper',
+				helper: 'pageUrl'
+			}
 		},
 		redirect: {
 			title: 'Redirect',

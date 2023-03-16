@@ -18,7 +18,11 @@ exports.mail = {
 			title: 'Address',
 			type: "string",
 			pattern: /^(\/[a-zA-Z0-9-]*)+$/.source,
-			$helper: 'pageUrl'
+			$helper: 'href',
+			$filter: {
+				name: 'helper',
+				helper: 'pageUrl'
+			}
 		},
 		index: {
 			type: "integer",
