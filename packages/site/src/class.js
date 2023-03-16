@@ -12,7 +12,9 @@ export function create(Superclass) {
 			if (src !== dst && this.patch) {
 				if (!Object.hasOwnProperty.call(this.constructor, 'defaults') || this.options) {
 					this.#options(Page, true);
-					if (this.patch) await this.patch(Page);
+					if (this.patch) await Page.patch(state => {
+						return this.patch(state);
+					});
 					if (this.reveal && this.currentSrc) this.reveal(Page);
 					if (this.paint) await Page.paint(state => {
 						return this.paint(state);
