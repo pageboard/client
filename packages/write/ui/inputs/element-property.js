@@ -17,7 +17,7 @@ class ElementProperty {
 		this.#input = input;
 	}
 
-	static asPaths(obj, ret, pre) {
+	static asPaths(obj, ret, prefix = []) {
 		if (!ret) ret = {};
 		const [discKey, discList] = this.discriminator(obj) ?? [];
 		if (discKey) {
@@ -27,7 +27,7 @@ class ElementProperty {
 					return it.const == discValue;
 				});
 				const subRet = {};
-				ElementProperty.asPaths(subSchema, subRet, `${pre || ''}${discKey}.${discValue}.`);
+				ElementProperty.asPaths(subSchema, subRet, prefix.concat([discKey, discValue]));
 				if (discCase) for (const subProp of Object.values(subRet)) {
 					subProp.title = `${discCase.title}: ${subProp.title}`;
 				}
@@ -37,15 +37,15 @@ class ElementProperty {
 		if (obj.properties) {
 			const props = obj.properties;
 			if (Object.keys(props).sort().join(' ') == "end start") {
-				ret[pre.slice(0, -1)] = obj;
+				ret[prefix.join(".")] = obj;
 			}
 			for (const [key, val] of Object.entries(props)) {
-				const cur = `${pre || ""}${key}`;
-				ret[cur] = { ...val };
-				ElementProperty.asPaths(val, ret, cur + '.');
+				const cur = prefix.concat([key]);
+				ret[cur.join('.')] = { ...val };
+				ElementProperty.asPaths(val, ret, cur);
 			}
 		} else if (obj.type == "array" && obj.items && !Array.isArray(obj.items)) {
-			return this.asPaths(obj.items, ret, pre);
+			return this.asPaths(obj.items, ret, prefix);
 		}
 
 		return ret;
@@ -75,7 +75,7 @@ class ElementProperty {
 		if (!dom) throw new Error(
 			`Cannot create input, DOM node not found for block ${block.id}`
 		);
-		this.#prefix = dom.closest('[block-type="fieldset_list"]')?.prefix ?? '';
+		this.#prefix = dom.closest('[block-type="fieldset_list"]')?.prefix ?? [];
 		const form = dom.closest('form');
 		const formId = form.getAttribute('block-id');
 		const formBlock = Pageboard.editor.blocks.get(formId);
@@ -128,7 +128,7 @@ class ElementProperty {
 	pathsProperties(block) {
 		const el = this.#buildSchema(block);
 		if (!el) return null;
-		return ElementProperty.asPaths(el, {}, el.name + '.' + this.#prefix);
+		return ElementProperty.asPaths(el, {}, [el.name].concat(this.#prefix));
 	}
 
 	#buildSelector(formBlock) {
@@ -270,7 +270,7 @@ Pageboard.schemaFilters['element-value'] = class ElementValueFilter {
 		if (!dom) throw new Error(
 			`Cannot create input, DOM node not found for block ${block.id}`
 		);
-		const prefix = (dom.closest('[block-type="fieldset_list"]')?.prefix || null)?.split('.') ?? [];
+		const prefix = dom.closest('[block-type="fieldset_list"]')?.prefix?.slice() ?? [];
 		while (prefix.length) if (path[0] == prefix.shift()) path.shift();
 
 		const prop = path.reduce((obj, name) => {
