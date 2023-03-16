@@ -102,7 +102,7 @@ Pageboard.schemaHelpers.href = class Href {
 				).then(({ items }) => {
 					if (!items || items.length == 0) return true;
 					const node = me.container.ownerDocument.createElement('div');
-					me.cache(data);
+					me.cache(items);
 					me.renderList(items, node);
 					me.container.append(...node.children);
 				});
