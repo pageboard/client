@@ -99,11 +99,11 @@ Pageboard.schemaHelpers.href = class Href {
 				return Pageboard.uiLoad(
 					this.node,
 					Page.fetch('get', '/.api/hrefs', filter)
-				).then(({ data }) => {
-					if (!data || data.length == 0) return true;
+				).then(({ items }) => {
+					if (!items || items.length == 0) return true;
 					const node = me.container.ownerDocument.createElement('div');
 					me.cache(data);
-					me.renderList(data, node);
+					me.renderList(items, node);
 					me.container.append(...node.children);
 				});
 			}
@@ -356,10 +356,10 @@ Pageboard.schemaHelpers.href = class Href {
 	}
 
 	async get(href) {
-		const obj = Href.cache[Href.normUrl(href)] ?? await Pageboard.uiLoad(this.node, Page.fetch('get', '/.api/hrefs', {
+		const obj = Href.cache[Href.normUrl(href)] ?? await Pageboard.uiLoad(this.node, Page.fetch('get', '/.api/href', {
 			url: href
 		}));
-		return obj.data;
+		return obj.item;
 	}
 
 	async insert(url) {
