@@ -1,5 +1,6 @@
 Page.extend('element-embed', class HTMLElementEmbedHelper {
-	patch(state) {
+	paint(state) {
+		if (!state.scope.$write) return;
 		const { editor } = state.scope;
 		if (!editor) return;
 		const id = editor.slug(this.title).slice(0, 32);
