@@ -318,7 +318,7 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 
 		await Promise.all(
 			Array.from(form.elements)
-				.filter(node => Boolean(node.presubmit))
+				.filter(node => Boolean(node.presubmit) && !node.disabled)
 				.map(input => input.presubmit(state))
 		);
 
