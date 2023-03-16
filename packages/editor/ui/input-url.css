@@ -1,0 +1,7 @@
+.ui.form .field input[is="element-input-url"][type="url"] {
+	background-image: url('data:image/svg+xml,<svg width="64" height="64" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 928 929"><path d="M819 683q0-22-16-38L685 527q-16-16-38-16-24 0-41 18l10 10 12 12 8 10q5 7 7 14t2 15q0 22-16 38t-38 16q-8 0-15-2t-14-7l-10-8-12-12-10-10q-18 17-18 41 0 22 16 38l117 118q15 15 38 15 22 0 38-14l84-83q16-16 16-38zM417 281q0-22-16-38L284 125q-16-16-38-16t-38 15l-84 83q-16 16-16 38t16 38l118 118q15 15 38 15 24 0 41-17l-10-10-12-12-8-10q-5-7-7-14t-2-15q0-22 16-38t38-16q8 0 15 2t14 7l10 8 12 12 10 10q18-17 18-41zm511 402q0 68-48 116l-84 83q-47 47-116 47t-116-48L447 763q-47-47-47-116 0-70 50-119l-50-50q-49 50-118 50-68 0-116-48L48 362Q0 314 0 246t48-116l84-83Q179 0 248 0t116 48l117 118q47 47 47 116 0 70-50 119l50 50q49-50 118-50 68 0 116 48l118 118q48 48 48 116z"></path></svg>') !important;
+	background-size: 1rem;
+	background-repeat: no-repeat;
+	background-position: center right;
+	background-color:inherit;
+}
