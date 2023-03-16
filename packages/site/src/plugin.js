@@ -5,7 +5,6 @@ export const formats = {
 
 export const filters = {
 	sum,
-	meta: ['?', 'path', metaFn],
 	schema: ['?', 'path?', 'path?', schemaFn],
 	content: ['block', 'str', contentFn],
 	unset, set, urltpl, templates, only
@@ -25,11 +24,6 @@ export const hooks = {
 		return val;
 	}
 };
-
-function metaFn(ctx, url, path) {
-	if (!url) return null;
-	return ctx.expr.get(ctx.scope.$hrefs?.[url], path);
-}
 
 function binding(ctx, str) {
 	if (!str || typeof str != "string") return str;

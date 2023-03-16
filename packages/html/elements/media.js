@@ -67,7 +67,7 @@ exports.video = {
 	},
 	html: `<video is="element-video" data-src="[url]" class="[display.fit|or:none]"
 		preload="metadata" autoplay="[autoplay]" loop="[loop]"
-		muted="[muted]" controls="[controls]" width="[url|meta:width]" height="[url|meta:height]"></video>`,
+		muted="[muted]" controls="[controls]"></video>`,
 	scripts: [
 		'../ui/media.js'
 	],

@@ -31,6 +31,18 @@ class HTMLElementVideo extends HTMLElementMediaConstructor(Page.create(HTMLVideo
 	static defaults = {
 		dataSrc: null
 	};
+	patch(state) {
+		super.patch(state);
+		const { url } = this.options;
+		const meta = state.scope.$hrefs?.[url];
+		if (meta) {
+			this.title = meta.title;
+			this.width = meta.width;
+			this.height = meta.height;
+		} else {
+			console.warn("Missing href", url);
+		}
+	}
 }
 Page.define('element-video', HTMLElementVideo, 'video');
 
