@@ -43,7 +43,7 @@ Pageboard.schemaHelpers.href = class Href {
 		this.trigger = Page.debounce(() => this.realTrigger(), 500);
 		this.opts = opts;
 		this.input = input;
-		input.hidden = true;
+		input.type = "hidden";
 	}
 	realTrigger() {
 		const input = this.node.querySelector('input');
