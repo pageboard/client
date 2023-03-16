@@ -49,7 +49,7 @@ class MenuItemDialog extends window.Pagecut.MenuItem {
 				this.#editor.utils.refreshTr(tr, markDom, {
 					type: markDom.getAttribute('block-type'),
 					data: {
-						url: input.value ?? null
+						url: input.value ? Page.parse(input.value).toString() : null
 					}
 				});
 				tr.setSelection(sel.constructor.create(tr.doc, to, to));
@@ -75,7 +75,11 @@ class MenuItemDialog extends window.Pagecut.MenuItem {
 		const input = this.#input;
 		try {
 			const data = JSON.parse(mark.attrs.data ?? '{}');
-			input.value = data.url ?? '';
+			if (data.url) {
+				input.value = (new URL(data.url, document.location)).href;
+			} else {
+				input.value = '';
+			}
 		} catch (err) {
 			input.value = '';
 		}
@@ -265,8 +269,8 @@ class HTMLElementInputHTML extends Page.create(HTMLTextAreaElement) {
 			},
 			properties: {
 				url: {
-					title: 'Address',
-					description: 'Path without query or full url',
+					title: 'URL',
+					description: 'Relative or absolute',
 					nullable: true,
 					type: 'string',
 					format: 'uri-reference',
@@ -279,7 +283,10 @@ class HTMLElementInputHTML extends Page.create(HTMLTextAreaElement) {
 				}
 			},
 			parse(dom) {
-				return { url: dom.href };
+				if (!dom.href) return {};
+				return {
+					url: Page.parse(dom.href).toString()
+				};
 			},
 			contents: "text*",
 			inline: true,
