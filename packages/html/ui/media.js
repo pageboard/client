@@ -34,14 +34,11 @@ class HTMLElementVideo extends HTMLElementMediaConstructor(Page.create(HTMLVideo
 	patch(state) {
 		super.patch(state);
 		const { url } = this.options;
-		const meta = state.scope.$hrefs?.[url];
-		if (meta) {
-			this.title = meta.title;
-			this.width = meta.width;
-			this.height = meta.height;
-		} else {
-			console.warn("Missing href", url);
-		}
+		if (!url) return;
+		const { title, width, height } = state.scope.$hrefs?.[url] ?? {};
+		if (title) this.title = title;
+		if (width) this.width = width;
+		if (height) this.height = height;
 	}
 }
 Page.define('element-video', HTMLElementVideo, 'video');

@@ -14,14 +14,11 @@ class HTMLElementEmbed extends Page.Element {
 		return this.querySelector('iframe')?.src ?? "about:blank";
 	}
 	patch(state) {
-		const meta = state.scope.$hrefs?.[this.options.src];
-		if (meta) {
-			this.title = meta.title;
-			if (meta.source) this.setAttribute('data-source', meta.source);
-			this.style.paddingBottom = `calc(${meta.height} / ${meta.width} * 100%)`;
-		} else {
-			console.warn("Missing href", this.options.src);
-		}
+		const { src } = this.options;
+		if (!src) return;
+		const { width, height, source } = state.scope.$hrefs?.[src] ?? {};
+		if (source) this.dataset.source = source;
+		if (width && height) this.style.paddingBottom = `calc(${height} / ${width} * 100%)`;
 	}
 	consent(state) {
 		const consent = state.scope.$consent;
