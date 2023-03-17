@@ -177,8 +177,11 @@ export default class Utils {
 	}
 
 	refreshTr(tr, dom, block) {
-		let pos;
-		if (dom instanceof ResolvedPos) {
+		let pos = false;
+		if (typeof dom == "number") {
+			pos = dom;
+			dom = null;
+		} else if (dom instanceof ResolvedPos) {
 			pos = dom.pos;
 			dom = null;
 		} else {
