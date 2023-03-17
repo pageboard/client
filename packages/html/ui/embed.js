@@ -1,6 +1,6 @@
 class HTMLElementEmbed extends Page.Element {
 	static defaults = {
-		url: null,
+		src: null,
 		query: null,
 		hash: null
 	};
@@ -14,13 +14,13 @@ class HTMLElementEmbed extends Page.Element {
 		return this.querySelector('iframe')?.src ?? "about:blank";
 	}
 	patch(state) {
-		const meta = state.scope.$hrefs?.[this.options.url];
+		const meta = state.scope.$hrefs?.[this.options.src];
 		if (meta) {
 			this.title = meta.title;
-			if (meta.source) this.setAttribute('data-src', meta.source);
+			if (meta.source) this.setAttribute('data-source', meta.source);
 			this.style.paddingBottom = `calc(${meta.height} / ${meta.width} * 100%)`;
 		} else {
-			console.warn("Missing href", this.options.url);
+			console.warn("Missing href", this.options.src);
 		}
 	}
 	consent(state) {
@@ -37,7 +37,7 @@ class HTMLElementEmbed extends Page.Element {
 
 		const opts = this.options;
 		const prev = Page.parse(this.currentSrc);
-		const cur = Page.parse(this.dataset.src || this.options.url || "about:blank");
+		const cur = Page.parse(this.dataset.source || this.options.src || "about:blank");
 		cur.hash = opts.hash;
 		const curSrc = cur.toString();
 

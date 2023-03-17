@@ -158,6 +158,13 @@ function renderBlock(el, scope, block, bscope) {
 			}
 		}
 	}
+	if (dom.dataset?.src) {
+		const meta = scope.$hrefs?.[dom.dataset.src];
+		if (meta.width) dom.dataset.width ??= meta.width;
+		if (meta.height) dom.dataset.height ??= meta.height;
+		if (meta.source) dom.dataset.source ??= meta.source;
+		if (meta.title) dom.title ??= meta.title;
+	}
 	return dom;
 }
 
