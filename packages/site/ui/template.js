@@ -11,7 +11,7 @@ class HTMLElementTemplate extends Page.Element {
 		if (this.loading || this.closest('[block-content="template"]')) {
 			return;
 		}
-		if (!state.sameQuery(state.referrer)) {
+		if (state.referrer && !state.sameQuery(state.referrer)) {
 			delete this.dataset.stop;
 			delete this.dataset.start;
 		}

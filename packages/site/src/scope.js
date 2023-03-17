@@ -56,7 +56,7 @@ export default class Scope {
 		return this.#state.query;
 	}
 	get $referrer() {
-		return this.#state.referrer.pathname ?? this.$pathname;
+		return this.#state.referrer;
 	}
 	get $doc() {
 		return this.#state.doc;

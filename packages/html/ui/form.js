@@ -299,7 +299,7 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 		if (loc.samePathname(state)) {
 			loc.query = { ...state.query, ...loc.query };
 		}
-		const nstate = this.ignoreInputChange
+		const nstate = this.ignoreInputChange && state.referrer
 			? state.replace(loc)
 			: state.push(loc);
 		nstate.catch(state => {
