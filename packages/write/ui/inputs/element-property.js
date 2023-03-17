@@ -5,12 +5,6 @@ class ElementProperty {
 	#block;
 	#prefix;
 
-	static virtuals = {};
-
-	static element(type) {
-		return this.virtuals[type] ?? Pageboard.editor.element(type);
-	}
-
 	constructor(input, opts, props) {
 		this.#field = input.closest('.field');
 		this.#field.classList.add('inline');
@@ -84,7 +78,7 @@ class ElementProperty {
 		this.update();
 	}
 
-	#buildSchema(block) {
+	static buildSchema(block) {
 		let cand = null;
 		if (block.type == "query_form") {
 			cand = block.data?.type;
@@ -95,30 +89,31 @@ class ElementProperty {
 			return;
 		}
 
+		let el;
+
 		if (Array.isArray(cand)) {
-			const vblock = 'block' + block.id;
-			ElementProperty.virtuals[vblock] = {
-				name: vblock,
+			const list = cand.map(type => {
+				const el = Pageboard.editor.element(type);
+				if (!el) throw new Error(
+					`Unknown type in parent form ${block.type}: ${type}`
+				);
+				return {
+					const: type,
+					title: el.title
+				};
+			});
+			el = {
 				type: 'object',
 				properties: {
 					type: {
 						title: 'Type',
-						anyOf: cand.map(type => {
-							const el = ElementProperty.element(type);
-							if (!el) throw new Error(
-								`Unknown type in parent form ${block.type}: ${type}`
-							);
-							return {
-								const: type,
-								title: el.title
-							};
-						})
+						anyOf: list
 					}
 				}
 			};
-			cand = vblock;
+		} else {
+			el = Pageboard.editor.element(cand);
 		}
-		const el = ElementProperty.element(cand);
 		if (!el) throw new Error(
 			`Unknown type in parent form ${block.type}: ${cand}`
 		);
@@ -126,13 +121,13 @@ class ElementProperty {
 	}
 
 	pathsProperties(block) {
-		const el = this.#buildSchema(block);
+		const el = ElementProperty.buildSchema(block);
 		if (!el) return null;
-		return ElementProperty.asPaths(el, {}, [el.name].concat(this.#prefix));
+		return ElementProperty.asPaths(el, {}, this.#prefix);
 	}
 
 	#buildSelector(formBlock) {
-		const content = ElementProperty.element(formBlock.type)
+		const content = Pageboard.editor.element(formBlock.type)
 			.contents.get(formBlock);
 		const paths = this.pathsProperties(formBlock, content);
 		if (!paths) return;
@@ -234,9 +229,9 @@ Pageboard.schemaHelpers['form-element'] = class FormElement extends ElementPrope
 		const all = content.querySelectorAll("[name]");
 		const obj = {};
 		for (const node of all) {
-			if (!node.name) continue;
+			if (!node.name || node.closest('fieldset[data-name]')) continue;
 			obj[node.name] = {
-				title: node.closest('.field')?.querySelector('label')?.innerText ?? node.name
+				title: node.name
 			};
 		}
 		return obj;
@@ -262,9 +257,6 @@ Pageboard.schemaFilters['element-value'] = class ElementValueFilter {
 		const key = usingPath.reduce((obj, name) => obj?.[name], block.data);
 		if (!key) return empty;
 		const path = key.split('.');
-		const type = path.shift();
-		const el = ElementProperty.element(type);
-		if (!el) return empty;
 
 		const dom = Pageboard.editor.blocks.domQuery(block.id);
 		if (!dom) throw new Error(
@@ -273,7 +265,19 @@ Pageboard.schemaFilters['element-value'] = class ElementValueFilter {
 		const prefix = dom.closest('[block-type="fieldset_list"]')?.prefix?.slice() ?? [];
 		while (prefix.length) if (path[0] == prefix.shift()) path.shift();
 
+		const formId = dom.closest('form')?.getAttribute('block-id');
+		const formBlock = Pageboard.editor.blocks.get(formId);
+		if (!formBlock) {
+			console.warn("Cannot update element-value", block);
+			return;
+		}
+		const el = ElementProperty.buildSchema(formBlock);
+		if (!el) {
+			console.warn("Cannot update element-value", formBlock);
+			return;
+		}
 		const prop = path.reduce((obj, name) => {
+			if (!obj) return;
 			if (obj.type == "array" && obj.items && !Array.isArray(obj.items)) {
 				obj = obj.items;
 			}
