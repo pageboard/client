@@ -138,6 +138,13 @@ class HTMLElementFieldsetList extends Page.Element {
 		for (const node of inputs) {
 			const name = this.#incrementkey('[fielditem.index]', node.name);
 			if (name != null) {
+				const id = node.id;
+				if (id?.startsWith(`for-${node.name}`)) {
+					node.id = id.replace(node.name, name);
+				}
+				if (node.nextElementSibling?.htmlFor == id) {
+					node.nextElementSibling.htmlFor = node.id;
+				}
 				node.name = name;
 			}
 		}
