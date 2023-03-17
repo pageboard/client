@@ -43,11 +43,9 @@ class MenuItemDialog extends window.Pagecut.MenuItem {
 			const [from, to] = this.#editor.utils.extendUpdateMark(
 				tr, sel.from, sel.to, mark
 			);
-			const markDom = this.#editor.utils.posToDOM(from)?.parentNode;
-			if (!markDom) return;
 			if (type != "del") {
-				this.#editor.utils.refreshTr(tr, markDom, {
-					type: markDom.getAttribute('block-type'),
+				this.#editor.utils.refreshTr(tr, from, {
+					type: mark.type.name,
 					data: {
 						url: input.value ? Page.parse(input.value).toString() : null
 					}
