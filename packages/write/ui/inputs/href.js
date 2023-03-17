@@ -351,7 +351,7 @@ Pageboard.schemaHelpers.href = class Href {
 		const obj = await Pageboard.uiLoad(this.node, Page.fetch('delete', '/.api/href', {
 			url: href
 		}));
-		this.cache([obj]);
+		this.cache([obj.item]);
 		this.list = this.list.filter(obj => obj.url != href);
 	}
 
@@ -370,9 +370,9 @@ Pageboard.schemaHelpers.href = class Href {
 				url: url
 			})
 		);
-		this.cache([result]);
-		this.input.value = result.url;
-		this.list.unshift(result);
+		this.cache([result.item]);
+		this.input.value = result.item.url;
+		this.list.unshift(result.item);
 		this.list.rendered = false;
 		this.renderList();
 	}
