@@ -17,7 +17,7 @@ class HTMLElementEmbed extends Page.Element {
 		const meta = state.scope.$hrefs?.[this.options.url];
 		if (meta) {
 			this.title = meta.title;
-			this.setAttribute('data-src', meta.source);
+			if (meta.source) this.setAttribute('data-src', meta.source);
 			this.style.paddingBottom = `calc(${meta.height} / ${meta.width} * 100%)`;
 		} else {
 			console.warn("Missing href", this.options.url);
@@ -37,7 +37,7 @@ class HTMLElementEmbed extends Page.Element {
 
 		const opts = this.options;
 		const prev = Page.parse(this.currentSrc);
-		const cur = Page.parse(this.dataset.src || "about:blank");
+		const cur = Page.parse(this.dataset.src || this.options.url || "about:blank");
 		cur.hash = opts.hash;
 		const curSrc = cur.toString();
 
@@ -66,8 +66,8 @@ class HTMLElementEmbed extends Page.Element {
 		this.classList.add('error');
 	}
 	handleAllMessage(e, state) {
-		if (!e.origin || !this.options.source) return;
-		if (this.options.source.startsWith(e.origin) == false) return;
+		if (!e.origin || !this.currentSrc) return;
+		if (this.currentSrc?.startsWith(e.origin) == false) return;
 		if (this.receiveMessage) this.receiveMessage(e.data ?? {});
 	}
 	close() {
