@@ -1,6 +1,6 @@
 exports.input_url = {
 	title: 'Input URL',
-	icon: '<i class="icons"><i class="linkify icon"></i><i class="corner upload icon"></i></i>',
+	icon: '<i class="icons"><i class="text cursor icon"></i><i class="corner linkify icon"></i></i>',
 	menu: "form",
 	required: ["name"],
 	group: "block",

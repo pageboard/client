@@ -1,6 +1,6 @@
 exports.input_html = {
 	title: 'Input HTML',
-	icon: '<i class="text cursor icon"></i>',
+	icon: '<i class="icons"><i class="text cursor icon"></i><i class="corner pencil alternate icon"></i></i>',
 	menu: "form",
 	required: ["name"],
 	group: "block",

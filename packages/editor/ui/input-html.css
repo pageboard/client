@@ -19,19 +19,27 @@
 	margin:0;
 	border: 1px solid gray;
 	border-radius: 0.2em;
+	border-bottom:0;
+	border-bottom-left-radius:0;
+	border-bottom-right-radius:0;
 	color:#333;
-	column-gap:0.2em;
+	column-gap: 1px;
 }
 .ProseMirror-menuitem {
-	margin-right:0;
+	margin: 0;
+}
+.ProseMirror-menuitem button {
 }
 .ProseMirror-menuitem:last-of-type {
 	flex: 1 0 auto;
+	margin-left: 0;
 }
 .ProseMirror-icon {
 	line-height:initial;
 	vertical-align:initial;
 	padding:0.3em 0.5em;
+	min-width: 2em;
+	text-align: center;
 }
 .ProseMirror-menuitem > form {
 	display:none;
