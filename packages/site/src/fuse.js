@@ -159,11 +159,11 @@ function renderBlock(el, scope, block, bscope) {
 		}
 	}
 	if (dom.dataset?.src) {
-		const meta = scope.$hrefs?.[dom.dataset.src];
-		if (meta.width) dom.dataset.width ??= meta.width;
-		if (meta.height) dom.dataset.height ??= meta.height;
-		if (meta.source) dom.dataset.source ??= meta.source;
-		if (meta.title) dom.title ??= meta.title;
+		const { width, height, source, title } = scope.$hrefs?.[dom.dataset.src] ?? {};
+		if (width != null) dom.dataset.width ??= width;
+		if (height != null) dom.dataset.height ??= height;
+		if (source != null) dom.dataset.source ??= source;
+		if (title != null) dom.title ??= title;
 	}
 	return dom;
 }
