@@ -137,7 +137,7 @@ class FormBlock {
 		this.ignoreEvents = false;
 	}
 
-	customHelper(key, prop, node, parentProp) {
+	customHelper({ key, prop, node, parentProp }) {
 		const editor = this.editor;
 		if (prop.context && this.parents && !this.parents.some(parent => {
 			return prop.context.split('|').some(tok => {
@@ -174,7 +174,7 @@ class FormBlock {
 		let inst = this.helpers[key];
 		inst?.destroy?.();
 		inst = this.helpers[key] = new Helper(node.querySelector(`[name="${key}"]`), opts, prop, parentProp);
-		if (inst.init) prop = inst.init(this.block, prop);
+		inst.init?.(this.block, prop);
 	}
 	customFilter(key, prop, parentProp) {
 		let opts = prop.$filter;

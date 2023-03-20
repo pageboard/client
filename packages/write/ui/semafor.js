@@ -136,29 +136,45 @@ class Semafor {
 		this.node = node;
 		this.node.classList.add('fieldset');
 		this.fields = {};
+		this.helpers = [];
 	}
 
 	destroy() {
-		for (const node of this.node.querySelectorAll('.nullable.fieldset > .nullable')) {
-			node.removeEventListener('change', this);
-		}
 		this.fields = {};
 		this.node.textContent = '';
 	}
 
 	update(newSchema) {
-		this.destroy();
-		this.lastSchema = this.process(null, newSchema || this.schema, this.node)?.shift();
+		const { node, fields, filteredSchema, helpers } = this;
+		this.helpers = [];
+		this.node = node.cloneNode();
+		for (const { name, value } of node.attributes) {
+			this.node.setAttribute(name, value);
+		}
+		this.fields = {};
+		this.filteredSchema = this.process(null, newSchema || this.schema, this.node)?.shift();
+		if (filteredSchema && Pageboard.utils.stableStringify(filteredSchema) == Pageboard.utils.stableStringify(this.filteredSchema)) {
+			this.node = node;
+			this.fields = fields;
+			this.helpers = helpers;
+			return false;
+		} else {
+			for (const obj of this.helpers) this.helper(obj);
+			node.textContent = '';
+			while (this.node.firstChild) node.appendChild(this.node.firstChild);
+			this.node = node;
+			return true;
+		}
 	}
 
 	get() {
 		const vals = Semafor.formGet(this.node);
 		const formVals = Semafor.unflatten(vals);
-		return this.convert(formVals, this.lastSchema);
+		return this.convert(formVals, this.filteredSchema);
 	}
 
 	set(obj) {
-		const vals = Semafor.flatten(obj, {}, this.lastSchema);
+		const vals = Semafor.flatten(obj, {}, this.filteredSchema);
 		Semafor.formSet(this.node, vals, obj);
 	}
 
@@ -421,9 +437,11 @@ class Semafor {
 		} else {
 			console.warn(key, 'has no supported type in schema', schema);
 		}
-		if (fieldset) fieldset.classList.toggle('disabled', Boolean(schema.$disabled));
+		if (fieldset) {
+			fieldset.classList.toggle('disabled', Boolean(schema.$disabled));
+		}
 		if (key && this.helper && !noHelper) {
-			schema = this.helper(key, schema, node, parent) || schema;
+			this.helpers.push({ key, prop: schema, node, parentProp: parent });
 		}
 		return [schema, fieldset];
 	}

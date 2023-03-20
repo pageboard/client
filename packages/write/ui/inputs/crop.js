@@ -69,7 +69,7 @@ Pageboard.schemaHelpers.crop = class Crop {
 
 		this.initControls();
 
-		this.input.closest('#form').addEventListener('change', this.formChange, false);
+		this.input.closest('form').addEventListener('change', this.formChange, false);
 	}
 	ready() {
 		if (!this.cropper) return;
@@ -260,7 +260,7 @@ Pageboard.schemaHelpers.crop = class Crop {
 		this.slider.removeEventListener('input', this.zoomChange, false);
 		this.sliderValue.removeEventListener('input', this.valueChange, false);
 		this.sliderValue.removeEventListener('focus', this.valueFocus, false);
-		const form = this.input.closest('#form');
+		const form = this.input.closest('form');
 		if (form) form.removeEventListener('change', this.formChange, false);
 		this.resetButton.removeEventListener('click', this.reset, false);
 		this.zoomOutButton.removeEventListener('click', this.zoomOut, false);

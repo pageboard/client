@@ -25,7 +25,6 @@ Pageboard.schemaFilters.helper = class HelperFilter {
 Pageboard.schemaHelpers.pageTitle = class PageTitle {
 	constructor(input, opts, props) {
 		this.input = input;
-		this.form = input.closest('form');
 		this.change = this.change.bind(this);
 		this.checkHandler = this.checkHandler.bind(this);
 	}
@@ -45,13 +44,15 @@ Pageboard.schemaHelpers.pageTitle = class PageTitle {
 	}
 
 	change() {
-		const inputUrl = this.form.querySelector('[name="url"]');
 		this.refresh();
-		Pageboard.trigger(inputUrl, 'input');
+		Pageboard.trigger(this.inputUrl, 'input');
+	}
+
+	get inputUrl() {
+		return this.input.closest('form').querySelector('[name="url"]');
 	}
 
 	refresh() {
-		const inputUrl = this.form.querySelector('[name="url"]');
 		const node = Pageboard.editor.blocks.domQuery(this.block.id, { focused: true });
 		const parentUrl = node?.parentNode.closest('[block-id]')?.dataset.url ?? '';
 		const { url = parentUrl + '/', prefix } = this.block.data;
@@ -62,9 +63,9 @@ Pageboard.schemaHelpers.pageTitle = class PageTitle {
 			const slug = Pageboard.utils.slug(val);
 			const list = url.split('/');
 			list[list.length - 1] = slug;
-			inputUrl.value = list.join('/');
+			this.inputUrl.value = list.join('/');
 		} else {
-			inputUrl.value = url.endsWith('/') ? url : (parentUrl + '/');
+			this.inputUrl.value = url.endsWith('/') ? url : (parentUrl + '/');
 		}
 	}
 
@@ -79,13 +80,11 @@ Pageboard.schemaHelpers.pageTitle = class PageTitle {
 	init(block) {
 		this.block = block;
 		this.input.addEventListener('input', this.change);
-		// this.form.addEventListener('input', this.checkHandler);
 		this.check();
 	}
 
 	destroy() {
 		this.input.removeEventListener('input', this.change);
-		// 	this.form.removeEventListener('input', this.checkHandler);
 	}
 };
 
