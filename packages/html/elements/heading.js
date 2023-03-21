@@ -31,15 +31,15 @@ exports.heading = {
 				icon: '<i class="icon align justify"></i>'
 			}]
 		},
-		linkable: {
-			title: 'Show hash link',
-			type: 'boolean',
-			default: false
-		},
 		id: {
 			nullable: true,
 			type: 'string',
 			pattern: /^[a-z0-9-]*$/.source
+		},
+		linkable: {
+			title: 'Show hash link',
+			type: 'boolean',
+			default: false
 		},
 		entitled: {
 			title: 'H1 is a page title',

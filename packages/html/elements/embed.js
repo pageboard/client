@@ -16,15 +16,15 @@ exports.embed = {
 				}
 			}
 		},
-		linkable: {
-			title: 'Show hash link',
-			type: 'boolean',
-			default: false
-		},
 		id: {
 			nullable: true,
 			type: 'string',
 			pattern: /^[a-z0-9-]*$/.source
+		},
+		linkable: {
+			title: 'Show hash link',
+			type: 'boolean',
+			default: false
 		},
 		query: {
 			title: 'Additional query parameters',
