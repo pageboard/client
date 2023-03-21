@@ -123,6 +123,10 @@ body[data-mode="read"] #pageboard-read > iframe {
 	margin:0;
 }
 .ui.breadcrumb > span > a {
+	color:white;
+}
+.ui.breadcrumb > span > a.active,
+.ui.breadcrumb > span > a:hover {
 	color:#81C3F4;
 }
 #breadcrumb:empty {
