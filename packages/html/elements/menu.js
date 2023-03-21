@@ -29,8 +29,8 @@ exports.menu = {
 };
 
 exports.menu_group = {
-	title: 'Menu Group',
-	icon: '<b class="icon">Group</b>',
+	title: 'Group',
+	icon: '<b class="icon">Menu</b>',
 	menu: "link",
 	context: "menu//",
 	properties: {
