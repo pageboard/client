@@ -5,6 +5,8 @@
 #menu {
 	margin-top:1em;
 	margin-bottom: 1em;
+	background: #EEE;
+	box-shadow: 2px 2px 2px #EEE;
 }
 #menu .ui.icon.menu .active.item {
 	background-color: rgb(129 165 255 / 30%);
@@ -89,6 +91,8 @@
 }
 #move {
 	margin-top:0.5em;
+	margin: 0;
+	background: #222;
 }
 #move.inline > .item {
 	display:none;

@@ -195,6 +195,7 @@ input::selection {
 body ::-webkit-scrollbar {
 	appearance: none;
 	width: 10px;
+	height: 10px;
 }
 body ::-webkit-scrollbar-track {
 	background: rgb(0 0 0 / 10%);

@@ -56,12 +56,13 @@ label.checkbox > input:disabled + * {
 label.checkbox.toggle > input + * {
 	position: relative;
 	background-image: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2 1"><path d="M0.5,0.5 h1" stroke-linecap="round" stroke="%23CCC" /></svg>');
-	background-position-y: 0.25em;
+	background-position-y: 0.15em;
 	background-repeat: no-repeat;
 	padding-left: 2.4em;
 	background-size: 2em;
 	padding-bottom: 0.2em;
 	display: inline-block;
+	line-height: 1.4;
 }
 
 label.checkbox.toggle > input:checked + * {
@@ -78,7 +79,7 @@ label.checkbox.toggle > input + *::before {
 	background-color: #EEE;
 	border:1px solid #666;
 	border-radius:1em;
-	margin-top: 0.25em;
+	margin-top: 0.15em;
 	transition: 0.4s;
 }
 

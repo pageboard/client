@@ -106,7 +106,24 @@ body[data-mode="read"] #pageboard-read > iframe {
 }
 #breadcrumb {
 	line-height:1.4; /* prettier multiple lines */
-	margin: 0 0.5em;
+	margin: 0;
+	background: #555;
+	color: white;
+	padding: 0.5em 0.5em;
+	min-height: 0;
+	border-top: 1px solid #666;
+	text-align: right;
+	font-size: 1.1rem;
+}
+#breadcrumb > ul {
+	text-align:left;
+}
+.ui.breadcrumb .divider {
+	color:white;
+	margin:0;
+}
+.ui.breadcrumb > span > a {
+	color:#81C3F4;
 }
 #breadcrumb:empty {
 	display:none;
@@ -118,7 +135,6 @@ body[data-mode="read"] #pageboard-read > iframe {
 #form {
 	margin-top:1em;
 	padding-left:0.5em;
-	padding-right:0.5em;
 }
 
 .wide {
@@ -190,6 +206,7 @@ body[data-mode="read"] #pageboard-read > iframe {
 
 #form .inline.fields .field {
 	padding:0;
+	margin-top: 0.5em;
 }
 #form .field > label {
 	margin-bottom:0;

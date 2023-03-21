@@ -56,8 +56,7 @@ exports.write = {
 				</a>
 			</div>
 		</div>
-		<div id="menu"></div>
-		<div id="move" class="ui inverted tiny icon menu hidden">
+		<div id="move" class="ui inverted tiny icon top attached menu hidden">
 			<a class="item" data-command="jump-left" title="Jump Left"><i class="angle double left icon"></i></a>
 			<a class="fitted item" data-command="left" title="Move Left"><i class="angle left icon"></i></a>
 			<a class="item" data-command="delete" title="Delete"><i class="close icon"></i></a>
@@ -80,7 +79,7 @@ exports.write = {
 				</a>
 			</div>
 		</div>
-		<div id="breadcrumb" class="ui breadcrumb">
+		<div id="breadcrumb" class="ui breadcrumb inverted bottom attached menu">
 			<ul>
 				<li>click to select,<br>ctrl-click to select blocks,<br>multiple times to select parents</li>
 				<li>use breadcrumb to select parent blocks</li>
@@ -93,6 +92,7 @@ exports.write = {
 				<i class="right chevron icon divider"></i>
 			</span>
 		</div>
+		<div id="menu"></div>
 		<div id="form" class="ui form"></div>
 		<div class="ui bound bottom sticky wide notifications"></div>
 	</div>
