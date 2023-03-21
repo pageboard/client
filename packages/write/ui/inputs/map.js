@@ -26,7 +26,7 @@ class HTMLElementInputMap extends HTMLInputElement {
 		this.#render(this.#parse(str));
 	}
 	connectedCallback() {
-		this.#table = this.parentNode.insertBefore(this.dom(`<table class="ui very compact celled small striped table">
+		this.#table = this.parentNode.insertBefore(this.dom(`<table class="ui very compact celled small striped attached table">
 			<tbody></tbody>
 		</table>`), this.nextSibling);
 		this.#table.addEventListener('change', this, false);

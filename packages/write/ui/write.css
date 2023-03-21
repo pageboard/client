@@ -139,13 +139,26 @@ body[data-mode="read"] #pageboard-read > iframe {
 	padding: 0.6786em 1em; /* this is the padding value of .field */
 }
 
-.inline.field,
-.inline.fields {
+.ui.form .field {
+	margin: 0 0 0.5em;
+}
+.ui.form .inline.fields {
+	margin-bottom:0;
+}
+
+.ui.form .nullable.fieldset {
+	margin-bottom:0.5em;
+}
+.ui.form .nullable.fieldset:last-child {
+	margin-bottom:0;
+}
+
+.ui.form .inline.field,
+.ui.form .inline.fields {
 	display:flex;
 	justify-content:space-between;
 	flex-wrap: wrap;
 	align-items: baseline;
-	margin:0;
 }
 #form fieldset > .inline.fields:last-child {
 	margin-bottom:0;
@@ -168,6 +181,8 @@ body[data-mode="read"] #pageboard-read > iframe {
 	border-left:0;
 	opacity:1;
 	pointer-events: auto;
+	padding-bottom: 0;
+	padding-top: 0;
 }
 #form fieldset:disabled > :not(legend) {
 	display:none;
