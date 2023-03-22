@@ -132,6 +132,12 @@ exports.layout = {
 			type: 'object',
 			nullable: true,
 			properties: {
+				color: {
+					title: 'Color',
+					type: 'string',
+					format: 'hex-color',
+					$helper: 'color'
+				},
 				image: {
 					title: 'Image',
 					description: 'Local or remote URL',
@@ -290,6 +296,7 @@ exports.layout = {
 		style-margin-block="[margins.block|fail:][margins.blockUnits]"
 		style-margin-inline="[margins.inline|fail:][margins.inlineUnits]"
 		style-height="[height|fail:][heightUnits]"
+		style-background-color="[background.color]"
 		data-src="[background.image]"
 		data-crop="[background.crop.x];[background.crop.y];[background.crop.width];[background.crop.height];[background.crop.zoom]"
 		data-size="[background.size]"
