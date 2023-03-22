@@ -1,0 +1,14 @@
+.ui.form .color.fields {
+	display:inline-flex;
+	justify-content: space-between;
+	width: 100%;
+}
+.ui.form .color.fields input {
+	flex: 1 0 auto;
+	max-width: 45%;
+}
+.ui.form input.color.field {
+	width: 8em;
+	padding: 0 0.2em;
+	text-align: right;
+}

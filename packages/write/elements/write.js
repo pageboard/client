@@ -124,6 +124,7 @@ exports.write = {
 		"../ui/write.css",
 		"../ui/menu.css",
 		"../ui/checkbox.css",
+		"../ui/inputs/color.css",
 		"../ui/inputs/href.css",
 		"../lib/cropper.css",
 		"../ui/inputs/crop.css"
@@ -134,6 +135,7 @@ exports.write = {
 		"../ui/semafor.js",
 		"../ui/inputs/map.js",
 		"../ui/inputs/block.js",
+		"../ui/inputs/color.js",
 		"../ui/inputs/element.js",
 		"../ui/inputs/element-property.js",
 		"../ui/inputs/binding.js",
