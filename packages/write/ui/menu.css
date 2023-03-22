@@ -34,6 +34,9 @@
 .ui.menu a.item:hover {
 	background-color:rgb(129 165 255 / 10%);
 }
+.ui.icon.menu {
+	background-color:#EEE;
+}
 .ui.icon.menu > .item.radio.checkbox.checked {
 	background-color:rgb(129 165 255 / 20%);
 }
@@ -52,10 +55,14 @@
 }
 #menu .ui.tabular.mini.menu {
 	min-height:2.4em;
+	background-color: white;
 }
 #menu .ui.tabular.mini.menu > .item {
 	padding:0 0.8em;
 	z-index: 1;
+}
+#menu .ui.tabular.mini.menu > .item.active {
+	background-color:#EEE;
 }
 #menu .ui.tab.menu.active {
 	display:flex;
