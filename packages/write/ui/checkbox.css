@@ -12,13 +12,14 @@ label.checkbox > input {
 label.checkbox > input + *::before {
 	content: "";
 	display: inline-block;
-	vertical-align: middle;
 	width: 1em;
 	height: 1em;
 	border: 1px solid currentcolor;
 	margin-right: 0.3em;
 	background-repeat:no-repeat;
 	background-position: center;
+	position: relative;
+	top: 0.15em;
 }
 label.checkbox > input[type="checkbox"] + *::before {
 	margin-top: -0.15em;
@@ -31,7 +32,7 @@ label.checkbox.item > input + *::before {
 }
 
 label.checkbox.item > input:checked + * {
-	background-color:#7BF;
+	background-color: rgb(129 165 255 / 80%);
 }
 
 label.checkbox > input[type="radio"]:checked + *::before {
@@ -60,7 +61,6 @@ label.checkbox.toggle > input + * {
 	background-repeat: no-repeat;
 	padding-left: 2.4em;
 	background-size: 2em;
-	padding-bottom: 0.2em;
 	display: inline-block;
 	line-height: 1.4;
 }
@@ -94,7 +94,7 @@ label.checkbox.toggle > input:focus + *::before {
 
 label.checkbox.toggle > input:checked + *::before {
 	transform: translateX(1em);
-	border-color:#2185D0;
+	border-color: rgb(129 165 255 / 100%);
 	background-image:none;
 }
 label.checkbox.toggle > input:indeterminate + *::before {

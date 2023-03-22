@@ -9,10 +9,10 @@
 	box-shadow: 2px 2px 2px #EEE;
 }
 #menu .ui.icon.menu .active.item {
-	background-color: rgb(129 165 255 / 30%);
+	background-color: rgb(129 165 255 / 50%);
 }
 #menu .ui.menu .item.has-active {
-	background-color: rgb(129 165 255 / 20%);
+	background-color: rgb(129 165 255 / 50%);
 }
 #menu .popup {
 	display:none;
