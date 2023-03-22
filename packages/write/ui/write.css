@@ -167,7 +167,7 @@ body[data-mode="read"] #pageboard-read > iframe {
 }
 
 .ui.form .nullable.fieldset {
-	margin-bottom:0.5em;
+	margin-top: 0.5em;
 }
 .ui.form .nullable.fieldset:last-child {
 	margin-bottom:0;
@@ -210,6 +210,9 @@ body[data-mode="read"] #pageboard-read > iframe {
 
 #form .inline.fields .field {
 	padding:0;
+	margin-top: 0;
+}
+#form .inline.fields {
 	margin-top: 0.5em;
 }
 #form .field > label {
@@ -226,7 +229,7 @@ body[data-mode="read"] #pageboard-read > iframe {
 
 #form .inline.fields .field > .radio,
 #form .inline.fields .field > .toggle {
-	margin: 0 0 0 0.2em;
+	margin: 0 0.2em;
 	display: block;
 	text-align: left;
 }
@@ -344,7 +347,7 @@ body[data-mode="read"] #pageboard-read > iframe {
 
 #form input[type="number"],
 #form input[type="text"] {
-	padding: 0.5em;
+	padding: 0.3em;
 	line-height: 1.3em;
 	width: 100%;
 }
