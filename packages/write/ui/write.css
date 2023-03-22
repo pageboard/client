@@ -127,7 +127,7 @@ body[data-mode="read"] #pageboard-read > iframe {
 }
 .ui.breadcrumb > span > a.active,
 .ui.breadcrumb > span > a:hover {
-	color:#81C3F4;
+	color: rgb(129 165 255);
 }
 #breadcrumb:empty {
 	display:none;
