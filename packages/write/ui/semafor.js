@@ -513,13 +513,13 @@ Semafor.types.string = function (key, schema, node, inst) {
 			/>
 		</div>`));
 		const input = field.lastElementChild;
-		if (schema.format == "date") {
-			input.type = "date";
-		} else if (schema.format == "time") {
-			input.type = "time";
-		} else if (schema.format == "date-time") {
-			input.type = "datetime-local";
-		}
+		const typeFormats = {
+			date: "date",
+			time: "time",
+			"date-time": "datetime-local"
+		};
+		const typeFormat = typeFormats[schema.format];
+		if (typeFormat) input.type = typeFormat;
 		return field;
 	}
 };
