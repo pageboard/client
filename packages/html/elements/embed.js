@@ -3,6 +3,16 @@ exports.embed = {
 	menu: "media",
 	icon: '<i class="external square alternate icon"></i>',
 	properties: {
+		id: {
+			nullable: true,
+			type: 'string',
+			pattern: /^[a-z0-9-]*$/.source
+		},
+		linkable: {
+			title: 'Show hash link',
+			type: 'boolean',
+			default: false
+		},
 		url: {
 			title: 'Address',
 			description: 'The iframe src URL',
@@ -15,16 +25,6 @@ exports.embed = {
 					type: ["embed"]
 				}
 			}
-		},
-		id: {
-			nullable: true,
-			type: 'string',
-			pattern: /^[a-z0-9-]*$/.source
-		},
-		linkable: {
-			title: 'Show hash link',
-			type: 'boolean',
-			default: false
 		},
 		query: {
 			title: 'Additional query parameters',
