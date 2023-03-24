@@ -3,7 +3,7 @@ exports.input_url = {
 	icon: '<i class="icons"><i class="text cursor icon"></i><i class="corner linkify icon"></i></i>',
 	menu: "form",
 	required: ["name"],
-	group: "block",
+	group: "block input_field",
 	context: 'form//',
 	properties: {
 		name: {

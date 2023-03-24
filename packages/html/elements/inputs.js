@@ -2,7 +2,7 @@ exports.input_button = {
 	title: 'Button',
 	icon: '<i class="hand pointer icon"></i>',
 	menu: "form",
-	group: "block",
+	group: "block input_field",
 	context: 'form//',
 	contents: {
 		nodes: "inline*",
@@ -68,7 +68,7 @@ exports.input_fields = {
 			default: false
 		}
 	},
-	contents: "(input_text|input_range|input_checkbox|input_radio|input_select|input_button)+",
+	contents: "input_field+",
 	html: `<div class="[inline] fields"></div>`
 };
 
@@ -77,7 +77,7 @@ exports.input_text = {
 	icon: '<i class="text cursor icon"></i>',
 	menu: "form",
 	required: ["name"],
-	group: "block",
+	group: "block input_field",
 	context: 'form//',
 	properties: {
 		name: {
@@ -186,7 +186,7 @@ exports.input_number = {
 	icon: '<i class="text cursor icon"></i>',
 	menu: "form",
 	required: ["name"],
-	group: "block",
+	group: "block input_field",
 	context: 'form//',
 	properties: {
 		name: exports.input_text.properties.name,
@@ -232,7 +232,7 @@ exports.input_range = {
 	title: 'Range',
 	icon: '<i class="options icon"></i>',
 	menu: "form",
-	group: "block",
+	group: "block input_field",
 	context: 'form//',
 	properties: Object.assign({}, exports.input_number.properties, {
 		multiple: {
@@ -279,7 +279,7 @@ exports.input_checkbox = {
 	title: 'Checkbox',
 	icon: '<i class="checkmark box icon"></i>',
 	menu: "form",
-	group: "block",
+	group: "block input_field",
 	context: 'form//',
 	required: ["name"],
 	properties: {
@@ -336,7 +336,7 @@ exports.input_radio = {
 	title: 'Radio',
 	icon: '<i class="selected radio icon"></i>',
 	menu: "form",
-	group: "block",
+	group: "block input_field",
 	context: 'form//',
 	required: ["name"],
 	properties: {
@@ -384,7 +384,7 @@ exports.input_select = {
 	icon: '<i class="caret down icon"></i>',
 	menu: "form",
 	required: ["name"],
-	group: "block",
+	group: "block input_field",
 	context: 'form//',
 	properties: {
 		name: {

@@ -3,7 +3,7 @@ exports.input_file = {
 	icon: '<i class="upload icon"></i>',
 	menu: "form",
 	required: ["name"],
-	group: "block",
+	group: "block input_field",
 	context: 'form//',
 	properties: {
 		name: {

@@ -3,7 +3,7 @@ exports.input_html = {
 	icon: '<i class="icons"><i class="text cursor icon"></i><i class="corner pencil alternate icon"></i></i>',
 	menu: "form",
 	required: ["name"],
-	group: "block",
+	group: "block input_field",
 	bundle: true,
 	context: 'form//',
 	properties: {

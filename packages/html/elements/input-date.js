@@ -3,7 +3,7 @@ exports.input_date_time = {
 	icon: '<i class="calendar outline icon"></i>',
 	menu: "form",
 	required: ["name"],
-	group: "block",
+	group: "block input_field",
 	context: 'form//',
 	properties: {
 		name: {
