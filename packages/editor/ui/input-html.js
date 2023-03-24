@@ -323,7 +323,7 @@ class HTMLElementInputHTML extends Page.create(HTMLTextAreaElement) {
 			plugins: [{
 				view: () => {
 					return {
-						update: (view, state) => this.#update(state)
+						update: (view, prevState) => this.#update(view.state, prevState)
 					};
 				}
 			}]

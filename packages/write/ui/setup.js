@@ -84,7 +84,7 @@ function filterParents(editor, list) {
 	return sec;
 }
 
-function update() {
+function update(prevState) {
 	const editor = this;
 	const tr = editor.state.tr;
 	const sel = tr.selection;
@@ -141,7 +141,7 @@ Pageboard.Editor = function Editor(win, state) {
 			view: function() {
 				return {
 					update: function(editor, prevState) {
-						editor.update();
+						editor.update(prevState);
 					}
 				};
 			}
