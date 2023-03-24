@@ -161,6 +161,8 @@ export default class Blocks extends BlocksView {
 					}
 					type = null;
 					div = node;
+					// inplace blocks are no longer supported
+					div.removeAttribute('block-data');
 					div.removeAttribute('block-text');
 					div.removeAttribute('spellcheck');
 					div.removeAttribute('block-type');
@@ -187,6 +189,7 @@ export default class Blocks extends BlocksView {
 					item.node.setAttribute('block-type', item.type);
 				}
 			}
+			for (const hack of content.querySelectorAll('.ProseMirror-trailingBreak,.ProseMirror-separator')) hack.remove();
 			el.contents.set(parent, def.id, this.view.utils.serializeHTML(content, true));
 		});
 
