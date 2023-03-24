@@ -35,6 +35,7 @@ Pageboard.schemaHelpers.href = class Href {
 	}
 
 	static normUrl(url) {
+		if (!url) return '';
 		// keeps only path if same domain
 		return Page.format(url);
 	}
@@ -103,9 +104,8 @@ Pageboard.schemaHelpers.href = class Href {
 					if (!items || items.length == 0) return true;
 					const node = me.container.ownerDocument.createElement('div');
 					me.cache(items);
-					this.list = items;
-					this.container = node;
-					me.renderList();
+					me.list = items;
+					me.renderList(node);
 					me.container.append(...node.children);
 				});
 			}
@@ -156,10 +156,9 @@ Pageboard.schemaHelpers.href = class Href {
 				return Pageboard.uiLoad(remove, this.remove(Href.cache[href].url)).then(() => {
 					this.renderList();
 				});
-			} else if (href == input.value) {
-				this.searchStop();
 			} else {
-				input.value = href;
+				if (href == input.value) input.value = "";
+				else input.value = href;
 				const data = Href.cache[href];
 				if (data && !Pageboard.hrefs[href]) {
 					Pageboard.hrefs[href] = {
@@ -168,6 +167,7 @@ Pageboard.schemaHelpers.href = class Href {
 					};
 				}
 				Pageboard.trigger(input, 'change');
+				this.searchStop();
 			}
 		});
 	}
@@ -379,8 +379,9 @@ Pageboard.schemaHelpers.href = class Href {
 		this.renderList();
 	}
 
-	renderList() {
-		const { list, container } = this;
+	renderList(container) {
+		const { list } = this;
+		container ??= this.container;
 		if (!list) throw new Error("Need a list to render");
 		let selected = this.input.value;
 		if (selected) selected = Href.normUrl(selected);
@@ -410,19 +411,18 @@ Pageboard.schemaHelpers.href = class Href {
 	renderItem(obj) {
 		const dims = Href.tplDims(obj);
 
-		const item = document.dom(`<a href="${Href.normUrl(obj.url)}" class="item">
+		const item = document.dom(`<a href="[url|as:url]" class="item">
 			<div class="content">
-				<div class="ui tiny header">
-					${obj.title || '-'}
-					<div class="ui pinned right compact circular large icon button" data-action="remove">
+				<div class="ui tiny header">[title|or:-]
+					<div class="ui pinned right compact circular large icon button" data-action="remove">[url|prune:*]
 						<i class="icon ban"></i>
 					</div>
 				</div>
 			</div>
-		</a>`);
+		</a>`).fuse(obj, {});
 		const content = item.firstElementChild;
 
-		content.appendChild(item.dom(`<div class="left floated meta">
+		if (obj.meta) content.appendChild(item.dom(`<div class="left floated meta">
 			${obj.mime.split(';').shift()}<em>${Href.tplSize(obj.meta.size)}</em><br>
 			${dims ? dims + '<br>' : ''}
 			${Pageboard.utils.durationFormat(obj.updated_at)}
@@ -434,7 +434,7 @@ Pageboard.schemaHelpers.href = class Href {
 		}
 
 		if (!obj.visible || this.opts.readOnly) {
-			item.querySelector('[data-action="remove"]').remove();
+			item.querySelector('[data-action="remove"]')?.remove();
 		}
 		return item;
 	}
