@@ -9,15 +9,15 @@ Pageboard.schemaHelpers.color = class ColorHelper {
 
 	init() {
 		const input = this.input;
-		input.parentNode.classList.add('inline');
-		this.node = input.dom(`
-			<div class="inline color fields">
-				<input type="color">
-				<input type="range" min="0" max="255" step="1">
-			</div>
-		`);
-		input.parentNode.addEventListener('input', this);
-		this.input.after(this.node);
+		input.type = "text";
+		input.placeholder = "#000000FF";
+		this.node = input.parentNode;
+		this.node.classList.add('inline', 'color');
+		this.node.addEventListener('input', this);
+		this.input.after(input.dom(`
+			<input type="color">
+			<input type="range" min="0" max="255" step="1">
+		`));
 	}
 
 	update() {
@@ -43,14 +43,15 @@ Pageboard.schemaHelpers.color = class ColorHelper {
 			if (alpha < 0) alpha = 0;
 			else if (alpha > 255) alpha = 255;
 			alpha = alpha.toString(16);
-			this.input.value = color + (alpha.length == 1 ? `0${alpha}` : alpha);
+			this.input.value = (color + (alpha.length == 1 ? `0${alpha}` : alpha)).toUpperCase();
 		}
 		Pageboard.trigger(this.input, 'change');
 	}
 
 	destroy() {
-		this.input.parentNode?.removeEventListener('input', this);
-		this.node?.remove();
+		this.node.removeEventListener('input', this);
+		this.node.querySelector('[type="color"]')?.remove();
+		this.node.querySelector('[type="range"]')?.remove();
 	}
 
 };
