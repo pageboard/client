@@ -309,10 +309,6 @@ class HTMLElementInputHTML extends Page.create(HTMLTextAreaElement) {
 		const scope = state.scope.copy({ $elements: elts });
 		scope.install();
 
-		this.#saver = state.debounce(editor => {
-			super.value = this.#editor.to()?.content[""];
-		}, 100);
-
 
 		this.#editor = new window.Pagecut.Editor({
 			topNode: 'fragment',
@@ -335,12 +331,15 @@ class HTMLElementInputHTML extends Page.create(HTMLTextAreaElement) {
 
 	set value(str) {
 		if (this.#editor) this.#editor.dom.innerHTML = str;
-		super.value = str;
+		else super.value = str;
+	}
+
+	get value() {
+		return this.#editor ? this.#editor.to()?.content[""] : super.value;
 	}
 
 	#update(state) {
 		this.#menu.update(state);
-		this.#saver();
 	}
 
 	close() {
