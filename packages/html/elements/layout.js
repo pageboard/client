@@ -1,6 +1,9 @@
 exports.layout = {
 	title: "Layout",
 	icon: '<i class="icon move"></i>',
+	upgrade: {
+		'data.invert': 'data.background.invert'
+	},
 	properties: {
 		horizontal: {
 			title: 'Horizontal',
@@ -121,17 +124,17 @@ exports.layout = {
 				}
 			}
 		},
-		invert: {
-			title: 'Invert',
-			description: 'Invert background',
-			default: false,
-			type: 'boolean'
-		},
 		background: {
 			title: 'Background',
 			type: 'object',
 			nullable: true,
 			properties: {
+				invert: {
+					title: 'Invert',
+					description: 'Invert background',
+					default: false,
+					type: 'boolean'
+				},
 				color: {
 					title: 'Color',
 					type: 'string',
@@ -291,7 +294,7 @@ exports.layout = {
 		[horizontal]
 		[vertical]
 		[direction]
-		[invert|alt:inverted]"
+		[background.invert|alt:inverted]"
 		is="element-layout"
 		style-margin-block="[margins.block|fail:][margins.blockUnits]"
 		style-margin-inline="[margins.inline|fail:][margins.inlineUnits]"
