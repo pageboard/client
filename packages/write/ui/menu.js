@@ -128,7 +128,7 @@ Pageboard.Controls.Menu = class Menu {
 			} else if (el.inline) {
 				if (!isBlockSelection) {
 					if (!el.leaf) {
-						if (['link', 'strong', 'i', 'style'].includes(el.name) == false) {
+						if (['link', 'style'].includes(el.name) == false) {
 							inlineSpans.push(dom);
 							if (dom.matches('.active')) inlineSpansActive = true;
 						} else {
