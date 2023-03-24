@@ -25,9 +25,7 @@ window.Pageboard.InfiniteScroll = class {
 	}
 	waitRepaint() {
 		const d = new Deferred();
-		window.requestAnimationFrame(() => {
-			setTimeout(d.resolve, 0);
-		});
+		setTimeout(d.resolve, 250);
 		return d;
 	}
 	start() {
