@@ -9,14 +9,14 @@ Pageboard.schemaHelpers.href = class Href {
 	static tplDims(obj) {
 		let str = "";
 		if (obj.type == "video" || obj.type == "image") {
-			if (obj.meta.width) {
+			if (obj.meta?.width) {
 				str += `width ${obj.meta.width}px`;
 			}
-			if (obj.meta.height) {
+			if (obj.meta?.height) {
 				str += `, height ${obj.meta.height}px`;
 			}
 		}
-		if (obj.meta.duration) {
+		if (obj.meta?.duration) {
 			str += ` - ${obj.meta.duration}`;
 		}
 		return str;
@@ -103,7 +103,9 @@ Pageboard.schemaHelpers.href = class Href {
 					if (!items || items.length == 0) return true;
 					const node = me.container.ownerDocument.createElement('div');
 					me.cache(items);
-					me.renderList(items, node);
+					this.list = items;
+					this.container = node;
+					me.renderList();
 					me.container.append(...node.children);
 				});
 			}
@@ -259,7 +261,7 @@ Pageboard.schemaHelpers.href = class Href {
 				this.list = [this.constructor.cache[str]];
 			}
 		}
-		this.renderList(this.list);
+		this.renderList();
 	}
 
 	async uploadStart() {
@@ -377,11 +379,9 @@ Pageboard.schemaHelpers.href = class Href {
 		this.renderList();
 	}
 
-	renderList(list, container) {
-		if (list) this.list = list;
-		else list = this.list;
+	renderList() {
+		const { list, container } = this;
 		if (!list) throw new Error("Need a list to render");
-		if (!container) container = this.container;
 		let selected = this.input.value;
 		if (selected) selected = Href.normUrl(selected);
 		if (list.rendered) {
