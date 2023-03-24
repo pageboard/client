@@ -373,7 +373,7 @@ exports.input_radio = {
 	},
 	html: `<div class="field">
 		<div class="ui radio checkbox">
-			<input type="radio" disabled="[disabled]"
+			<input type="radio" disabled="[disabled]" required="[required]"
 				name="[name]" value="[value|or:]" checked="[checked]"
 				id="for-[name][value|pre:-]" />
 			<label block-content="label" for="for-[name][value|pre:-]">Label</label>
