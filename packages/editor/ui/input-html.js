@@ -329,7 +329,7 @@ class HTMLElementInputHTML extends Page.create(HTMLTextAreaElement) {
 	}
 
 	set value(str) {
-		if (this.#editor) this.#editor.dom.innerHTML = str;
+		if (this.#editor) this.#editor.utils.setDom(str);
 		else super.value = str;
 	}
 
