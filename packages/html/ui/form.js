@@ -168,6 +168,9 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 				case "file":
 					query[name] = val;
 					break;
+				case "textarea":
+					query[name] = val;
+					break;
 				case "radio":
 					if (!withDefaults && node.checked == node.defaultChecked) {
 						if (query[name] == val) {
