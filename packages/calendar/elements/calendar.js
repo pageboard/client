@@ -6,7 +6,6 @@ exports.settings.properties.grants.items.anyOf.push({
 });
 
 exports.event = {
-	priority: 2, // must install scripts after query element scripts
 	title: 'Event',
 	menu: "Calendar",
 	bundle: true,
