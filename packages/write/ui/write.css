@@ -160,7 +160,7 @@ body[data-mode="read"] #pageboard-read > iframe {
 }
 
 .ui.form .field {
-	margin: 0 0 0.5em;
+	margin: 0.5em 0 0 0;
 }
 .ui.form .inline.fields {
 	margin-bottom:0;
