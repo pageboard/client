@@ -7,7 +7,7 @@ export const filters = {
 	sum,
 	schema: ['?', 'path?', 'path?', schemaFn],
 	content: ['block', 'str', contentFn],
-	unset, set, urltpl, templates, only
+	urltpl, templates
 };
 
 export const hooks = {
@@ -215,41 +215,6 @@ function schemaFn(ctx, val, schemaPath, pathToSchema) {
 		sval = null;
 	}
 	return sval;
-}
-
-function unset(ctx, obj, ...list) {
-	if (obj == null || typeof obj != "object") return obj;
-	obj = { ...obj };
-	if (!list.length) list = Object.keys(obj);
-	for (const name of list) {
-		obj[name] = undefined;
-	}
-	return obj;
-}
-
-function set(ctx, obj, name, val) {
-	if (obj == null) {
-		obj = {};
-	}
-	if (typeof obj != "object") {
-		if (val === undefined) {
-			val = obj;
-			obj = null;
-		} else {
-			return obj;
-		}
-	}
-	obj = { ...obj };
-	obj[name] = val;
-	return obj;
-}
-
-function only(ctx, obj, ...keys) {
-	const cop = {};
-	for (const key of keys) {
-		if (obj[key] !== undefined) cop[key] = obj[key];
-	}
-	return cop;
 }
 
 function query(ctx, query) {

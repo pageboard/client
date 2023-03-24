@@ -6,7 +6,8 @@ import {
 	ArrayPlugin,
 	DomPlugin,
 	DatePlugin,
-	JsonPlugin
+	JsonPlugin,
+	UrlPlugin
 } from 'matchdom';
 
 import str2dom from '@pageboard/pagecut/src/str2dom.js';
@@ -14,7 +15,7 @@ export { str2dom };
 
 import * as matchdomPlugin from './plugin';
 
-const matchdom = new Matchdom(TextPlugin, OpsPlugin, NumPlugin, ArrayPlugin, DomPlugin, DatePlugin, JsonPlugin, matchdomPlugin);
+const matchdom = new Matchdom(TextPlugin, OpsPlugin, NumPlugin, ArrayPlugin, DomPlugin, DatePlugin, JsonPlugin, UrlPlugin, matchdomPlugin);
 
 Document.prototype.dom = function(str) {
 	return str2dom(Array.prototype.join.call(arguments, '\n'), {
