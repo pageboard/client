@@ -16,7 +16,7 @@ Pageboard.schemaHelpers.color = class ColorHelper {
 				<input type="range" min="0" max="255" step="1">
 			</div>
 		`);
-		this.node.addEventListener('input', this);
+		input.parentNode.addEventListener('input', this);
 		this.input.after(this.node);
 	}
 
@@ -33,19 +33,23 @@ Pageboard.schemaHelpers.color = class ColorHelper {
 	}
 
 	handleEvent(e) {
-		const color = this.node.querySelector('[type="color"]').value;
-		const val = this.node.querySelector('[type="range"]').value;
-		let alpha = parseInt(val);
-		if (Number(val) != alpha) alpha = 255;
-		if (alpha < 0) alpha = 0;
-		else if (alpha > 255) alpha = 255;
-		alpha = alpha.toString(16);
-		this.input.value = color + (alpha.length == 1 ? `0${alpha}` : alpha);
+		if (e.target == this.input) {
+			this.update();
+		} else {
+			const color = this.node.querySelector('[type="color"]').value;
+			const val = this.node.querySelector('[type="range"]').value;
+			let alpha = parseInt(val);
+			if (Number(val) != alpha) alpha = 255;
+			if (alpha < 0) alpha = 0;
+			else if (alpha > 255) alpha = 255;
+			alpha = alpha.toString(16);
+			this.input.value = color + (alpha.length == 1 ? `0${alpha}` : alpha);
+		}
 		Pageboard.trigger(this.input, 'change');
 	}
 
 	destroy() {
-		this.node?.removeEventListener('input', this);
+		this.input.parentNode?.removeEventListener('input', this);
 		this.node?.remove();
 	}
 
