@@ -124,8 +124,8 @@ const numMap = {
 };
 
 function colnums(ctx, val) {
-	if (!val) return '';
-	return numMap[val] || '';
+	if (val == null) return val;
+	return numMap[val] ?? null;
 }
 
 function sum(ctx, obj, ...list) {
