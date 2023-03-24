@@ -74,9 +74,10 @@ export default class Utils {
 
 	insertTr(tr, dom, sel) {
 		if (!sel) sel = tr.selection;
-		if (!dom.ownerDocument) {
-			dom = this.view.render(dom);
-		}
+
+		if (typeof dom == "string") dom = this.parseHTML(dom);
+		else if (!dom.ownerDocument) dom = this.view.render(dom);
+
 		const parent = sel.$from.parent;
 		// when replacing current selection, parse sel.$from
 		// when appending after selection, parse sel.$to
