@@ -177,6 +177,9 @@ export class RootNodeView {
 					for (const [j, vj] of Object.entries(newStyle)) {
 						if (vj && !oldStyle[j]) diffStyle.push(j + ':' + vj + ';');
 					}
+					for (const [j, vj] of Object.entries(oldStyle)) {
+						if (vj && !newStyle[j]) diffStyle.push(j + ':"";');
+					}
 					obj[name] = diffStyle.join('');
 				}
 			} else {
