@@ -360,6 +360,11 @@ exports.input_radio = {
 			title: "Disabled",
 			type: "boolean",
 			default: false
+		},
+		required: {
+			title: 'Required',
+			type: 'boolean',
+			default: false
 		}
 	},
 	contents: {
