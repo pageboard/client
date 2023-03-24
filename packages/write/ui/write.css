@@ -371,3 +371,6 @@ body[data-mode="read"] #pageboard-read > iframe {
 #store.waiting [data-command="write"] i.icon {
 	transform: rotate(-45deg);
 }
+.ui.blue.buttons .button, .ui.blue.button {
+	background-color: #4165A0;
+}
