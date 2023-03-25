@@ -46,6 +46,8 @@
 	width: auto;
 	min-width: 0;
 	justify-content: space-around;
+	margin-top: -1px;
+	z-index: 1;
 }
 #menu .ui.menu:not(.vertical) .item {
 	padding: 0.6em 0.7em;

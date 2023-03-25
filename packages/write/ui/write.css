@@ -105,11 +105,11 @@ body[data-mode="read"] #pageboard-read > iframe {
 	margin-right:0 !important;
 }
 #breadcrumb {
-	line-height:1.4; /* prettier multiple lines */
+	line-height: 1.4; /* prettier multiple lines */
 	margin: 0;
 	background: #555;
 	color: white;
-	padding: 0.5em 0.5em;
+	padding: 0.3em 0.5em;
 	min-height: 0;
 	border-top: 1px solid #666;
 	text-align: right;
