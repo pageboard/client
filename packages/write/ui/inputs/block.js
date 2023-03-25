@@ -15,6 +15,9 @@ Pageboard.schemaFilters.block = function BlockFilter(key, opts, schema) {
 		});
 	}
 	if (schema.anyOf.length == 0) {
-		Pageboard.notify("Cannot find fetch blocks for types", opts.types);
+		schema.anyOf.push({
+			title: "None",
+			const: null
+		});
 	}
 };
