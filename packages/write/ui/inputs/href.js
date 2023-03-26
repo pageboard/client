@@ -156,7 +156,7 @@ Pageboard.schemaHelpers.href = class Href {
 				return Pageboard.uiLoad(remove, this.remove(Href.cache[href].url)).then(() => {
 					this.renderList();
 				});
-			} else {
+			} else if (this.infinite.active) {
 				if (href == input.value) input.value = "";
 				else input.value = href;
 				const data = Href.cache[href];
@@ -168,6 +168,8 @@ Pageboard.schemaHelpers.href = class Href {
 				}
 				Pageboard.trigger(input, 'change');
 				this.searchStop();
+			} else {
+				this.searchStart();
 			}
 		});
 	}
