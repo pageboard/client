@@ -9,18 +9,16 @@ export function create(Superclass) {
 			}
 		}
 		async attributeChangedCallback(name, src, dst, ns) {
-			if (src !== dst && this.patch) {
-				if (!Object.hasOwnProperty.call(this.constructor, 'defaults') || this.options) {
-					this.#options(Page, true);
-					if (this.patch) await Page.patch(state => {
-						return this.patch(state);
-					});
-					this.reveal?.(Page);
-					if (this.paint) await Page.paint(state => {
-						return this.paint(state);
-					});
-				}
-			}
+			if (src == dst) return;
+			if (Object.hasOwnProperty.call(this.constructor, 'defaults') && !this.options) return;
+			this.#options(Page, true);
+			if (this.patch) await Page.patch(state => {
+				return this.patch(state);
+			});
+			this.reveal?.(Page);
+			if (this.paint) await Page.paint(state => {
+				return this.paint(state);
+			});
 		}
 		connectedCallback() {
 			if (this.build) Page.build(state => this.#options(state, true));
