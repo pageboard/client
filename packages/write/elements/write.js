@@ -81,11 +81,8 @@ exports.write = {
 		</div>
 		<div id="breadcrumb" class="ui breadcrumb inverted bottom attached menu">
 			<ul>
-				<li>click to select,<br>ctrl-click to select blocks,<br>multiple times to select parents</li>
-				<li>use breadcrumb to select parent blocks</li>
-				<li>toolbar to replace or insert new blocks</li>
-				<li>keyboard to edit, delete text or blocks</li>
-				<li>ctrl-left, ctrl-right to move selected block,<br>ctrl-down, ctrl-up to jump (or ⌘)</li>
+				<li>click to select text</li>
+				<li>ctrl-click to select blocks</li>
 			</ul>
 			<span>
 				<a class="section"></a>
