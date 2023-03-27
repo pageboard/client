@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { DiffDOM } from 'diff-dom';
 
 const innerDiff = new DiffDOM({
