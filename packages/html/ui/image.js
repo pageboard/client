@@ -162,6 +162,7 @@ const HTMLElementImageConstructor = Superclass => class extends Superclass {
 		const curSrc = loc.toString();
 		if (curSrc != this.currentSrc) {
 			this.classList.add('loading');
+			this.#defer?.reject();
 			this.#defer = new Deferred();
 			img.setAttribute('src', curSrc);
 			return this.#defer;
@@ -180,6 +181,9 @@ const HTMLElementImageConstructor = Superclass => class extends Superclass {
 	}
 	placeholder(error) {
 		this.image.removeAttribute('src');
+	}
+	close() {
+		this.#defer?.reject();
 	}
 };
 

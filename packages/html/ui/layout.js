@@ -56,6 +56,7 @@ class HTMLElementLayout extends Page.create(HTMLDivElement) {
 			} catch(e) {
 				// pass
 			}
+			this.#defer?.reject();
 			this.#defer = new Deferred();
 			const img = new Image();
 			img.addEventListener('load', this.#defer.resolve);
@@ -64,6 +65,9 @@ class HTMLElementLayout extends Page.create(HTMLDivElement) {
 			this.style.backgroundImage = `url("${curSrc}")`;
 			return this.#defer;
 		}
+	}
+	close() {
+		this.#defer?.reject();
 	}
 }
 
