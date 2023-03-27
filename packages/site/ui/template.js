@@ -57,26 +57,29 @@ class HTMLElementTemplate extends Page.Element {
 			// eslint-disable-next-line no-console
 			console.error("Error building", err);
 		}
-		this.render(state, scope);
-		this.classList.remove('loading');
-		this.loading = false;
-		if (scope.$status == null) return;
-		const redirect = this.getRedirect(scope.$status);
-		if (!redirect) {
-			if (this.toggleMessages(scope.$status)) {
-				// report statusCode because it is meant to be shown
-				if (scope.$status > (state.status || 0)) {
-					state.status = scope.$status;
-					state.statusText = scope.$statusText;
+		state.patch(() => {
+			// allow injected bundles to register e.g. scope.$filters
+			this.render(state, scope);
+			this.classList.remove('loading');
+			this.loading = false;
+			if (scope.$status == null) return;
+			const redirect = this.getRedirect(scope.$status);
+			if (!redirect) {
+				if (this.toggleMessages(scope.$status)) {
+					// report statusCode because it is meant to be shown
+					if (scope.$status > (state.status || 0)) {
+						state.status = scope.$status;
+						state.statusText = scope.$statusText;
+					}
 				}
+				return;
 			}
-			return;
-		}
 
-		const loc = Page.parse(redirect).fuse({}, scope);
-		state.status = 301;
-		state.statusText = `Form Redirection ${scope.$status}`;
-		state.location = loc.toString();
+			const loc = Page.parse(redirect).fuse({}, scope);
+			state.status = 301;
+			state.statusText = `Form Redirection ${scope.$status}`;
+			state.location = loc.toString();
+		});
 	}
 
 	getRedirect(status) {
