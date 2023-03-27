@@ -36,7 +36,7 @@
 
 .field.href .items.icon {
 	display:flex;
-	flex-wrap:wrap;
+	flex-flow: row wrap;
 }
 .field.href .items.icon > .item {
 	flex: 1;
@@ -102,7 +102,7 @@
 	display:none;
 }
 .fieldset.href .field.href .icon.items > .item > .content > .meta {
-	visibility:hidden;
+	display: none;
 }
 .field.href .items > .item > .content > .meta > .line {
 	display:inline-block;
@@ -128,6 +128,16 @@
 	width:80px;
 	height:3.33em;
 	overflow:hidden;
+}
+.fieldset.href .field.href .icon.items > a.item > .content > .header {
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	padding: 0 0.25em;
+}
+.fieldset.href .field.href .icon.items > .item > .content > .thumbnail {
+	position: relative;
+	width: 100%;
 }
 
 .field.href .items > .item.selected > .content > .header,
@@ -196,8 +206,9 @@ fieldset.href > :not(.href, legend) {
 .field.href > .items.icon .content img {
 	height: auto;
 	width: auto;
-	max-height: calc(100% - 1.8em);
+	max-height: 100%;
 	max-width: 100%;
+	flex: 0;
 }
 
 #form .field.href input[type="text"] {
