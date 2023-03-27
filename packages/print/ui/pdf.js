@@ -147,9 +147,8 @@ function autobreakFn({
 				range.setEndAfter(sheet);
 				break;
 			} else {
+				// TODO something more specific
 				Object.assign(node.style, {
-					width: '100%',
-					height: 'auto',
 					maxWidth: innerPageSize.width,
 					maxHeight: innerPageSize.height
 				});
