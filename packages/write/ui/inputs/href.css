@@ -74,9 +74,6 @@
 }
 
 .field.href .items > .item > .content > .header {
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
 	color: #777;
 	display:block;
 	padding: 0.2em 0.5em;
