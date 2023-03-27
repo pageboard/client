@@ -56,7 +56,7 @@ class HTMLElementLayout extends Page.create(HTMLDivElement) {
 			} catch(e) {
 				// pass
 			}
-			this.#defer?.reject();
+			this.#defer?.resolve();
 			this.#defer = new Deferred();
 			const img = new Image();
 			img.addEventListener('load', this.#defer.resolve);
@@ -67,7 +67,7 @@ class HTMLElementLayout extends Page.create(HTMLDivElement) {
 		}
 	}
 	close() {
-		this.#defer?.reject();
+		this.#defer?.resolve();
 	}
 }
 
