@@ -15,7 +15,7 @@ export function create(Superclass) {
 			if (this.patch) await Page.patch(state => {
 				return this.patch(state);
 			});
-			this.reveal?.(Page);
+			await Promise.resolve().then(() => this.reveal?.(Page));
 			if (this.paint) await Page.paint(state => {
 				return this.paint(state);
 			});
