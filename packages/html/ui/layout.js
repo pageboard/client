@@ -1,23 +1,15 @@
 class HTMLElementLayout extends Page.create(HTMLDivElement) {
 	static defaults = {
 		dataSrc: null,
-		dataCrop: null,
-		dataRepeat: null,
-		dataSize: null,
-		dataAttachment: null,
-		dataPosition:null
+		dataCrop: null
 	};
 
 	#defer;
 
 	get fit() {
-		return this.options.size || 'none';
+		return this.style.backgroundSize || 'none';
 	}
 	reveal(state) {
-		this.style.backgroundRepeat = this.options.repeat;
-		this.style.backgroundSize = this.options.size;
-		this.style.backgroundAttachment = this.options.attachment;
-		this.style.backgroundPosition = this.options.position;
 		if (!this.options.src) {
 			this.style.backgroundImage = '';
 			return;
@@ -64,12 +56,12 @@ class HTMLElementLayout extends Page.create(HTMLDivElement) {
 			} catch(e) {
 				// pass
 			}
-			this.style.backgroundImage = `url(${curSrc})`;
 			this.#defer = new Deferred();
 			const img = new Image();
 			img.addEventListener('load', this.#defer.resolve);
 			img.addEventListener('error', this.#defer.resolve);
 			img.src = curSrc;
+			this.style.backgroundImage = `url("${curSrc}")`;
 			return this.#defer;
 		}
 	}

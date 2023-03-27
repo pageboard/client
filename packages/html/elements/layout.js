@@ -296,16 +296,16 @@ exports.layout = {
 		[direction]
 		[background.invert|alt:inverted]"
 		is="element-layout"
+		data-src="[background.image]"
+		data-crop="[background.crop.x];[background.crop.y];[background.crop.width];[background.crop.height];[background.crop.zoom]"
 		style-margin-block="[margins.block|fail:][margins.blockUnits]"
 		style-margin-inline="[margins.inline|fail:][margins.inlineUnits]"
 		style-height="[height|fail:][heightUnits]"
 		style-background-color="[background.color]"
-		data-src="[background.image]"
-		data-crop="[background.crop.x];[background.crop.y];[background.crop.width];[background.crop.height];[background.crop.zoom]"
-		data-size="[background.size]"
-		data-repeat="[background.repeat]"
-		data-attachment="[background.attachment]"
-		data-position="[background.position]"
+		style-background-size="[background.size]"
+		style-background-repeat="[background.repeat]"
+		style-background-attachment="[background.attachment]"
+		style-background-position="[background.position]"
 	></div>`,
 	stylesheets: [
 		'../lib/components/container.css',
