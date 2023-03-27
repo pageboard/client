@@ -22,7 +22,7 @@ for (const key in Class) {
 Page.constructor.prototype.reveal = function (node) {
 	const p = node.reveal(this);
 	if (!p) return;
-	if (!this.scope.reveals) this.scope.reveals = [];
+	this.scope.reveals ??= [];
 	this.scope.reveals.push(p);
 };
 
