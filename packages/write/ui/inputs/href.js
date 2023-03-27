@@ -396,7 +396,7 @@ Pageboard.schemaHelpers.href = class Href {
 
 		const selected = Href.normUrl(this.input.value);
 		const active = selected && container.querySelector(`a.item[href="${selected}"]`);
-		active?.classList.add('selected');
+		if (active) active.classList.add('selected');
 	}
 
 	renderItem(obj) {
