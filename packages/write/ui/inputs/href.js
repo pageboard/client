@@ -102,11 +102,8 @@ Pageboard.schemaHelpers.href = class Href {
 					Page.fetch('get', '/.api/hrefs', filter)
 				).then(({ items }) => {
 					if (!items || items.length == 0) return true;
-					const node = me.container.ownerDocument.createElement('div');
 					me.cache(items);
-					me.list = items;
-					me.renderList(node);
-					me.container.append(...node.children);
+					me.renderList(items, true);
 				});
 			}
 		})(this.container.nextElementSibling);
@@ -232,7 +229,9 @@ Pageboard.schemaHelpers.href = class Href {
 			this.searchStart();
 		} else {
 			this.infinite.stop();
-			this.container.textContent = "";
+			for (const node of this.container.querySelectorAll('.item:not(.selected)')) {
+				node.remove();
+			}
 			this.infinite.start();
 		}
 	}
@@ -263,7 +262,7 @@ Pageboard.schemaHelpers.href = class Href {
 				this.list = [this.constructor.cache[str]];
 			}
 		}
-		this.renderList();
+		this.renderList(this.list);
 	}
 
 	async uploadStart() {
@@ -377,37 +376,27 @@ Pageboard.schemaHelpers.href = class Href {
 		this.cache([result.item]);
 		this.input.value = result.item.url;
 		this.list.unshift(result.item);
-		this.list.rendered = false;
 		this.renderList();
 	}
 
-	renderList(container) {
-		const { list } = this;
-		container ??= this.container;
-		if (!list) throw new Error("Need a list to render");
-		let selected = this.input.value;
-		if (selected) selected = Href.normUrl(selected);
-		if (list.rendered) {
-			for (const child of container.childNodes) {
-				if (child.nodeType != Node.ELEMENT_NODE) continue;
-				const href = child.getAttribute('href');
-				if (href == selected) child.classList.add('selected');
-				else child.classList.remove('selected');
-			}
-			return;
-		}
-		list.rendered = true;
-		container.textContent = ' ';
+	renderList(list, append) {
+		if (list) this.list = list;
+		else list = this.list;
+
+		const { container } = this;
+
+
+		if (!append) container.textContent = '';
+
 		for (const obj of list) {
-			const item = this.renderItem(obj);
-			if (selected && item.getAttribute('href') == selected) {
-				item.classList.add('selected');
-				container.insertBefore(item, container.firstChild);
-			} else {
-				container.appendChild(item);
-			}
+			container.appendChild(this.renderItem(obj));
 		}
+
 		container.className = `ui items ${this.opts.display || ''}`;
+
+		const selected = Href.normUrl(this.input.value);
+		const active = selected && container.querySelector(`a.item[href="${selected}"]`);
+		active?.classList.add('selected');
 	}
 
 	renderItem(obj) {

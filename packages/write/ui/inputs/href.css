@@ -139,6 +139,8 @@
 .field.href .items {
 	box-shadow:inset 0px 0px 200px #DDD, 0px -18px 90px #CCC;
 	margin-top:1em;
+	display: flex;
+	flex-direction: column;
 }
 
 .field.href .items > .item {
@@ -146,6 +148,10 @@
 	box-shadow: 2px 2px 3px #CCC;
 	background: white;
 	margin-bottom: 4px;
+	order:2;
+}
+.field.href .items > .item.selected {
+	order:1;
 }
 
 .field.href .items:empty {
