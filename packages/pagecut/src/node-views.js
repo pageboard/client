@@ -170,18 +170,16 @@ export class RootNodeView {
 					obj[name] = Object.keys(diffClass).join(' ');
 				}
 			} else if (name == "style") {
-				if (record.oldValue != val) {
-					const oldStyle = mapOfStyle(record.oldValue);
-					const newStyle = mapOfStyle(dom.style);
-					const diffStyle = [];
-					for (const [j, vj] of Object.entries(newStyle)) {
-						if (vj && !oldStyle[j]) diffStyle.push(j + ':' + vj + ';');
-					}
-					for (const [j, vj] of Object.entries(oldStyle)) {
-						if (vj && !newStyle[j]) diffStyle.push(j + ':"";');
-					}
-					obj[name] = diffStyle.join('');
+				const oldStyle = mapOfStyle(record.oldValue);
+				const newStyle = mapOfStyle(dom.style);
+				const diffStyle = [];
+				for (const [j, vj] of Object.entries(newStyle)) {
+					if (vj && oldStyle[j] != vj) diffStyle.push(j + ':' + vj);
 				}
+				for (const [j, vj] of Object.entries(oldStyle)) {
+					if (vj && !newStyle[j]) diffStyle.push(j + ':""');
+				}
+				obj[name] = diffStyle.join(';');
 			} else {
 				obj[name] = val;
 			}
@@ -478,18 +476,19 @@ function applyDiffClass(a, b) {
 
 function restoreDomAttrs(srcAtts, dom) {
 	if (!srcAtts || !dom) return;
+	// attributes that are set by mutations
 	let uiAtts = dom.pcUiAttrs;
 	if (!uiAtts) {
 		uiAtts = dom.pcUiAttrs = {};
 	}
 	const dstAtts = Array.from(dom.attributes); // immutable copy
-	// pcUiAttrs: attributes set by ui processes
 	for (const [name, srcVal] of Object.entries(srcAtts)) {
 		if (name == "contenteditable") continue;
 		const dstVal = dom.getAttribute(name);
 		if (name == "class") {
 			dom.setAttribute(name, applyDiffClass(srcVal, uiAtts[name]));
 		} else if (name == "style") {
+			dom.removeAttribute('style');
 			Object.assign(dom.style, mapOfStyle(srcVal), mapOfStyle(uiAtts[name]));
 		} else if (srcVal != dstVal) {
 			dom.setAttribute(name, srcVal);
