@@ -8,6 +8,12 @@ element-tabs {
 	overflow:hidden;
 	margin:0;
 }
+element-tabs > .ui.tabular.menu {
+	flex-wrap:wrap;
+}
+element-tabs > .ui.tabular.menu::after {
+	content:none;
+}
 element-tabs > .ui.tabular.menu + div[block-content="tabs"] > .segment {
 	border-top: none;
 	margin:0 0 1rem;

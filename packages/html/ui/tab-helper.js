@@ -11,19 +11,26 @@ Page.extend('element-tabs', class TabsHelper {
 		if (this.observer) this.observer.disconnect();
 	}
 	mutate(record, state) {
-		const items = this.items;
-		const tabs = this.tabs;
+		const { items, tabs } = this;
 		if (!items || !tabs) return;
+		const { editor } = state.scope;
+		if (!editor) return;
+		const { utils } = editor;
+		const { tr } = editor.state;
 		for (const node of record.addedNodes) {
-			tabs.insertBefore(state.scope.$view.render({
-				type: 'tab'
-			}), tabs.children[items.children.indexOf(node) + 1]);
+			const cur = tabs.children[items.children.indexOf(node) - 1];
+			if (!cur) continue;
+			const sel = utils.selectDomTr(tr, cur);
+			utils.insertTr(tr, editor.render({ type: 'tab' }), sel);
 		}
 		for (let i = 0; i < record.removedNodes.length; i++) {
 			const pos = record.target.childNodes.indexOf(record.previousSibling) + 1 + i;
-			const child = tabs.childNodes[pos];
-			if (child) child.remove();
+			const cur = tabs.childNodes[pos];
+			if (!cur) continue;
+			const sel = utils.selectDomTr(tr, cur);
+			utils.deleteTr(tr, sel);
 		}
+		editor.dispatch(tr);
 	}
 	handleClick(e, state) {
 		const item = e.target.closest('[block-type="tab_item"]');
