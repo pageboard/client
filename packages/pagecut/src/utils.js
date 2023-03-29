@@ -253,22 +253,21 @@ export default class Utils {
 		return tr;
 	}
 
-	selectDom(node, textSelection) {
+	selectDomTr(tr, node, textSelection) {
 		const pos = this.posFromDOM(node);
-		const tr = this.view.state.tr;
 		const $pos = tr.doc.resolve(pos);
-		let sel;
 		if (node.nodeType != Node.ELEMENT_NODE || textSelection) {
-			sel = new TextSelection($pos);
+			return new TextSelection($pos);
 		} else {
 			if (!$pos.nodeAfter) {
-				if (node.parentNode && node.parentNode != this.view.dom) this.selectDom(node.parentNode);
-				else console.warn("cannot select node", node);
-				return;
+				if (node.parentNode && node.parentNode != this.view.dom) {
+					return this.selectDomTr(tr, node.parentNode);
+				} else {
+					throw new Error("Cannot select node");
+				}
 			}
-			sel = new NodeSelection($pos);
+			return new NodeSelection($pos);
 		}
-		this.view.dispatch(tr.setSelection(sel));
 	}
 
 	select(obj, textSelection) {

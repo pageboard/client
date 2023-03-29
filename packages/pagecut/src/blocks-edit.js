@@ -317,7 +317,10 @@ export default class Blocks extends BlocksView {
 	}
 
 	domSelect(node) {
-		this.view.focus();
-		this.view.utils.selectDom(node);
+		const { view } = this;
+		view.focus();
+		const { tr } = view.state;
+		const sel = view.utils.selectDomTr(tr, node);
+		view.dispatch(tr.setSelection(sel));
 	}
 }
