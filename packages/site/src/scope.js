@@ -61,6 +61,10 @@ export default class Scope {
 	get $doc() {
 		return this.#state.doc;
 	}
+	get $hrefs() {
+		if (!this.#state.hrefs) this.#state.hrefs = {};
+		return this.#state.hrefs;
+	}
 	set $doc(v) {
 		// ignore it
 	}
@@ -95,7 +99,6 @@ export default class Scope {
 		}
 		this.install();
 		if (res.hrefs) {
-			if (!this.$hrefs) this.$hrefs = {};
 			Object.assign(this.$hrefs, res.hrefs);
 		}
 		for (const k of ["grants", "links", "site", "locked", "granted", "commons", "meta", "status", "statusText", "item", "items"]) {
