@@ -14,21 +14,20 @@ body {
 }
 
 #pageboard-read {
-	flex: 0 1 auto;
+	flex: 1 1 auto;
 	box-shadow:0 0 1em grey;
 }
 #pageboard-read > iframe {
 	border:0;
-	width:70vw;
+	width: 100%;
 	min-width:320px;
-	max-width:70vw;
 	height:100%;
 	display:block;
 	overflow:auto;
 }
 #pageboard-write {
-	flex: 1 1 auto;
-	min-width:300px;
+	flex: 1 0 auto;
+	max-width: 358px;
 	margin-top:0 !important;
 	padding-top:0 !important;
 	user-select: none;
@@ -46,7 +45,7 @@ body[data-mode="read"] #pageboard-read {
 body[data-mode="read"] #pageboard-write {
 	position:relative;
 	top:0;
-	min-width:auto;
+	max-width: none;
 	width: 100%;
 	flex: 0 1 auto;
 	padding-bottom:0;
