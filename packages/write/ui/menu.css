@@ -28,6 +28,8 @@
 	background-color: #FAFAFA;
 	border: 0;
 	box-shadow: 0 0 0 1px rgba(34, 36, 38, 0.1);
+	width: calc(100% - 2px);
+	margin-left: 1px;
 }
 #menu .ui.menu > .item:hover + .popup,
 #menu .ui.menu > .item + .popup:hover {
