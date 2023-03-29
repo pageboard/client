@@ -19,7 +19,7 @@ Pageboard.schemaFilters.schema = class SchemaFilter {
 		const schemaPath = this.opts.path.split('.');
 		const otherSchema = schemaPath.reduce(
 			(obj, name) => obj[name] || null,
-			Pageboard.editor.elements[schemaPath.shift()]
+			Pageboard.elements[schemaPath.shift()]
 		);
 		if (!otherSchema) {
 			console.warn('$filter schema does not find', this.opts.path);
