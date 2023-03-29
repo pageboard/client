@@ -31,6 +31,7 @@
 		position: fixed;
 		margin:0.2em;
 		font-size: 2rem;
+		z-index: 2147483647;
 	}
 	body + div.pdf-menu > a {
 		color: white;

@@ -1,16 +1,18 @@
 Page.setup(state => {
-	const opts = document.body.dataset;
-	opts.prefix = 'page-sheet-';
-	opts.page = '.page-sheet';
 	removePrintButtons();
-	state.scope.printStyleSheet = printStyle(opts);
+	const opts = document.body.dataset;
+	const { width = '210mm', height = '297mm', margin = '0mm' } = opts;
+	const pageBox = { width, height, margin };
+	const screenBox = convertUnits(pageBox);
+	const className = 'page-sheet';
+	state.scope.printStyleSheet = printStyle(className, pageBox, screenBox);
 	if (state.scope.$write) {
 		return;
 	}
-	autobreakFn(opts);
-	pageNumbering(opts);
+	autobreakFn(className, screenBox);
+	pageNumbering(className);
 	if (state.pathname.endsWith('.pdf') == false) {
-		showPrintButtons(state, opts);
+		showPrintButtons(state, opts.preset);
 	} else {
 		state.scope.observer?.disconnect();
 		delete state.scope.observer;
@@ -24,7 +26,7 @@ Page.close(state => {
 	if (index >= 0) ass.splice(index, 1);
 });
 
-function showPrintButtons(state, { preset }) {
+function showPrintButtons(state, preset) {
 	const root = document.documentElement;
 	const target = {
 		pathname: state.pathname + ".pdf",
@@ -40,22 +42,11 @@ function removePrintButtons() {
 	document.querySelector('html > .pdf-menu')?.remove();
 }
 
-function printStyle({
-	prefix = "",
-	page = ".page",
-	margin = "0px",
-	width = '210mm',
-	height = '270mm'
-}) {
+function printStyle(className, pageBox, { width, height, margin }) {
 	const effectiveSheet = new CSSStyleSheet();
-	const pageSize = {
-		width,
-		height
-	};
-
 	const innerPageSize = {
-		width: `calc(${pageSize.width} - ${margin} - ${margin})`,
-		height: `calc(${pageSize.height} - ${margin} - ${margin})`
+		width: `calc(${width} - ${margin} - ${margin})`,
+		height: `calc(${height} - ${margin} - ${margin})`
 	};
 	const printSheet = `
 	html, body {
@@ -66,7 +57,7 @@ function printStyle({
 		html, body {
 			background: gray;
 		}
-		${page} {
+		.${className} {
 			margin: 10px;
 			width: ${innerPageSize.width};
 			height: ${innerPageSize.height};
@@ -79,7 +70,7 @@ function printStyle({
 			background: white;
 			overflow:hidden;
 		}
-		[contenteditable] ${page} {
+		[contenteditable] .${className} {
 			border-color: rgba(0,0,0,0.05);
 		}
 	}
@@ -88,10 +79,10 @@ function printStyle({
 			background:white;
 		}
 		@page {
-			size: ${width} ${height};
-			margin: ${margin};
+			size: ${pageBox.width} ${pageBox.height};
+			margin: ${pageBox.margin};
 		}
-		${page} {
+		.${className} {
 			width: ${innerPageSize.width};
 			height: ${innerPageSize.height};
 			overflow: hidden;
@@ -103,12 +94,10 @@ function printStyle({
 	return effectiveSheet;
 }
 
-function autobreakFn({
-	prefix = "",
-	page = ".page",
-	margin = "0px",
-	width = '210mm',
-	height = '270mm'
+function autobreakFn(className, {
+	margin,
+	width,
+	height
 }) {
 	// 1) activate media print rules, get @page size and margins
 	// 2) traverse, "page" nodes have 'page-break-after: always', 'page-break-inside:avoid'
@@ -119,13 +108,10 @@ function autobreakFn({
 	// TODO set style of nodes having print style
 	// page-break-inside: avoid;
 	// page -break-after: always;
-	const pageSize = {
-		width,
-		height
-	};
+
 	const innerPageSize = {
-		width: `calc(${pageSize.width} - ${margin} - ${margin})`,
-		height: `calc(${pageSize.height} - ${margin} - ${margin})`
+		width: `calc(${width} - ${margin} - ${margin})`,
+		height: `calc(${height} - ${margin} - ${margin})`
 	};
 
 	function fillSheet(sheet) {
@@ -157,36 +143,49 @@ function autobreakFn({
 		if (!range.collapsed) {
 			const contents = range.extractContents();
 			const nextPage = contents.firstElementChild;
-			nextPage.classList.add(prefix + 'next');
+			nextPage.classList.add(className + '-next');
 			sheet.after(nextPage);
 			fillSheet(nextPage);
 		}
 	}
 
-	for (const sheet of document.querySelectorAll(page)) {
+	for (const sheet of document.querySelectorAll(`.${className}`)) {
 		fillSheet(sheet);
 	}
 }
 
-function pageNumbering({ page, prefix }) {
-	const sheets = document.querySelectorAll(page);
+function pageNumbering(className) {
+	const sheets = document.querySelectorAll(`.${className}`);
 	let offset = 0;
 	let first = 0;
 	for (let i = 0; i < sheets.length; i++) {
 		const sheet = sheets[i];
-		if (sheet.classList.contains(prefix + 'skip')) {
+		if (sheet.classList.contains(className + '-skip')) {
 			offset += 1;
 		}
 		if (i === 0) {
 			first = offset;
-			sheet.classList.add(prefix + 'first');
+			sheet.classList.add(className + '-first');
 		} else if (i === sheets.length - 1) {
-			sheet.classList.add(prefix + 'last');
+			sheet.classList.add(className + '-last');
 		}
-		sheet.classList.add(prefix + ((i + offset) % 2 === 0 ? 'left' : 'right'));
+		sheet.classList.add(className + ((i + offset) % 2 === 0 ? 'left' : 'right'));
 	}
 	document.body.style.counterSet = [
 		'sheet', -first,
 		'sheets', sheets.length - offset
 	].join(' ');
+}
+
+function convertUnits(styles) {
+	const d = document.body.appendChild(document.createElement('div'));
+	Object.assign(d.style, styles);
+	const obj = {};
+	const cs = window.getComputedStyle(d);
+	for (const key of Object.keys(styles)) obj[key] = cs[key];
+	d.remove();
+	obj.height = Math.floor(parseInt(obj.height) * 10) / 10 + 'px';
+	obj.width = Math.ceil(parseInt(obj.width) * 10) / 10 + 'px';
+	obj.margin = Math.round(parseInt(obj.margin) * 10) / 10 + 'px';
+	return obj;
 }
