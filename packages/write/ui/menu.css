@@ -45,7 +45,7 @@
 	background-color:rgb(129 165 255 / 10%);
 }
 .ui.icon.menu {
-	background-color:#EEE;
+	background-color: #F0F0F0;
 }
 .ui.icon.menu > .item.radio.checkbox.checked {
 	background-color:rgb(129 165 255 / 20%);
@@ -179,5 +179,5 @@
 	width: 2em;
 	font-weight: 900;
 	font-family: sans-serif;
-	text-shadow: 0 0 1.2em black;
+	text-shadow: 0 0 1.2em gray;
 }
