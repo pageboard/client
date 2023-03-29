@@ -5,8 +5,6 @@
 #menu {
 	margin-top:1em;
 	margin-bottom: 1em;
-	background: #EEE;
-	box-shadow: 0px 3px 3px #EEE;
 }
 #menu .ui.icon.menu .active.item {
 	background-color: rgb(129 165 255 / 50%);
@@ -18,8 +16,18 @@
 	display:none;
 	z-index:1;
 }
+#menu .menubox {
+	box-shadow:0px 3px 3px #EEE;
+	background-color:#EEE;
+}
 #menu .ui.menu {
 	position:relative;
+	margin: 0;
+}
+#menu .ui.mini.menu {
+	background-color: #FAFAFA;
+	border: 0;
+	box-shadow: 0 0 0 1px rgba(34, 36, 38, 0.1);
 }
 #menu .ui.menu > .item:hover + .popup,
 #menu .ui.menu > .item + .popup:hover {

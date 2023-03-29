@@ -60,7 +60,9 @@ Pageboard.Controls.Menu = class Menu {
 		this.menu = this.items();
 		this.tabMenu.addEventListener('click', this, false);
 		this.inlines = this.node.dom(`<div class="ui icon menu"></div>`);
+		this.inlinesMenu = this.node.dom(`<div class="ui icon mini menu"></div>`);
 		this.node.appendChild(this.inlines);
+		this.node.appendChild(this.inlinesMenu);
 		this.update();
 	}
 
@@ -117,7 +119,6 @@ Pageboard.Controls.Menu = class Menu {
 		let activeTab;
 		const inlineBlocks = [];
 		const inlineSpans = [];
-		let inlineSpansActive = false;
 
 		if (sel) this.menu.forEach(item => {
 			const dom = Menu.renderItem(item, this.editor, sel.node?.type.name);
@@ -128,11 +129,10 @@ Pageboard.Controls.Menu = class Menu {
 			} else if (el.inline) {
 				if (!isBlockSelection) {
 					if (!el.leaf) {
-						if (['link', 'style'].includes(el.name) == false) {
-							inlineSpans.push(dom);
-							if (dom.matches('.active')) inlineSpansActive = true;
-						} else {
-							this.inlines.appendChild(dom);
+						const isActive = dom.matches('.active');
+						if (el.title || isActive) {
+							if (el.properties) this.inlines.appendChild(dom);
+							else inlineSpans.push(dom);
 						}
 					} else {
 						inlineBlocks.push(dom);
@@ -144,15 +144,9 @@ Pageboard.Controls.Menu = class Menu {
 				if (!activeTab && dom.matches('.active')) activeTab = menu;
 			}
 		});
+		this.inlinesMenu.textContent = '';
 		if (inlineSpans.length && !isRootSelection) {
-			this.inlines.appendChild(this.inlines.dom(`<div class="item ${inlineSpansActive ? 'has-active' : ''}">
-			<i class="large dropdown icon" style="margin:0"></i>
-		</div>`));
-			const inlinesMenu = this.inlines.dom(`<div class="popup">
-			<div class="ui icon menu"></div>
-		</div>`);
-			this.inlines.appendChild(inlinesMenu);
-			inlineSpans.forEach(dom => inlinesMenu.firstElementChild.append(dom));
+			inlineSpans.forEach(dom => this.inlinesMenu.append(dom));
 		}
 		if (inlineBlocks.length) {
 			const inlineBlocksMenu = this.inlines.dom(`<div class="right menu"></div>`);
