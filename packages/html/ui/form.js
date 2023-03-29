@@ -41,17 +41,7 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 					if (val == null) {
 						form.reset();
 					} else if (typeof val == "object") {
-						let values = val;
-						if (val.id && val.data) {
-							// old way
-							values = { ...val.data };
-							for (const key of Object.keys(val)) {
-								if (key != "data") values['$' + key] = val[key];
-							}
-						} else {
-							// new way
-						}
-						form.fill(this.linearizeValues(values), state.scope);
+						form.fill(this.linearizeValues(val), state.scope);
 						form.save();
 					}
 				}
