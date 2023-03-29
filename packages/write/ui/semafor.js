@@ -152,8 +152,9 @@ class Semafor {
 			this.node.setAttribute(name, value);
 		}
 		this.fields = {};
+		const originalFilteredSchema = filteredSchema && Pageboard.utils.stableStringify(filteredSchema);
 		this.filteredSchema = this.process(null, newSchema || this.schema, this.node)?.shift();
-		if (filteredSchema && Pageboard.utils.stableStringify(filteredSchema) == Pageboard.utils.stableStringify(this.filteredSchema)) {
+		if (originalFilteredSchema && originalFilteredSchema == Pageboard.utils.stableStringify(this.filteredSchema)) {
 			this.node = node;
 			this.fields = fields;
 			this.helpers = helpers;
