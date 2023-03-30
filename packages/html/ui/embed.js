@@ -1,7 +1,6 @@
 class HTMLElementEmbed extends Page.Element {
 	static defaults = {
 		src: null,
-		query: null,
 		hash: null
 	};
 	static revealRatio = 0.2;
