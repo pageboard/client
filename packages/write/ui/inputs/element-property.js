@@ -152,7 +152,7 @@ class ElementProperty {
 				context.parent = context.parent.parentNode || context.parent;
 			}
 			if (!prop.title) continue;
-			if (prop.type == "object" && !(Object.keys(prop.properties).sort().join(' ') == "end start" && dateFormats.includes(prop.properties.start.format) && dateFormats.includes(prop.properties.end.format))) {
+			if (prop.type == "object" && prop.properties && !(Object.keys(prop.properties).sort().join(' ') == "end start" && dateFormats.includes(prop.properties.start.format) && dateFormats.includes(prop.properties.end.format))) {
 				context.parent = context.parent.appendChild(
 					doc.dom(`<optgroup label="${prop.title}"></optgroup>`)
 				);
