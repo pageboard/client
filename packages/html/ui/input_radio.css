@@ -1,0 +1,15 @@
+.field.button > .radio > input {
+	display:none;
+}
+.field.button > .radio > input + label {
+	opacity:0.7;
+	padding: 0.5em;
+	display: block;
+	position: relative;
+}
+.field.button > .radio > input + label:hover {
+	opacity:1;
+}
+.field.button > .radio > input:checked + label {
+	opacity:1;
+}

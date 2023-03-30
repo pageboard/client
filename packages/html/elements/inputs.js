@@ -346,18 +346,13 @@ exports.input_radio = {
 			format: "singleline",
 			$helper: 'element-property'
 		},
-		checked: {
-			title: "Checked",
-			type: "boolean",
-			default: false
-		},
 		value: {
 			title: "Value",
 			type: "string",
 			format: "singleline"
 		},
-		disabled: {
-			title: "Disabled",
+		checked: {
+			title: "Checked",
 			type: "boolean",
 			default: false
 		},
@@ -365,14 +360,25 @@ exports.input_radio = {
 			title: 'Required',
 			type: 'boolean',
 			default: false
+		},
+		disabled: {
+			title: "Disabled",
+			type: "boolean",
+			default: false
+		},
+		button: {
+			title: 'Button',
+			description:'hide radio toggle opacity',
+			type: "boolean",
+			default: false
 		}
 	},
 	contents: {
 		id: 'label',
 		nodes: 'inline*'
 	},
-	html: `<div class="field">
-		<div class="ui radio checkbox">
+	html: `<div class="field [button]">
+		<div class="ui radio [button|alt::checkbox]">
 			<input type="radio" disabled="[disabled]" required="[required]"
 				name="[name]" value="[value|or:]" checked="[checked]"
 				id="for-[name][value|pre:-]" />
@@ -380,7 +386,8 @@ exports.input_radio = {
 		</div>
 	</div>`,
 	stylesheets: [
-		'../lib/components/checkbox.css'
+		'../lib/components/checkbox.css',
+		'../ui/input_radio.css'
 	]
 };
 
