@@ -1,7 +1,16 @@
-.layout,
-.ui.container.layout {
-	flex: 0 0 auto;
+.layout {
 	display:flex;
+	flex: 0 0 auto;
+}
+.ui.container.layout {
+	display:flex;
+	flex: 1 0 auto;
+}
+.layout.wrap {
+	flex-wrap:wrap;
+}
+.layout.wrap-reverse {
+	flex-wrap:wrap-reverse;
 }
 .layout.column {
 	flex-direction: column;

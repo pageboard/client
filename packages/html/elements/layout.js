@@ -58,6 +58,19 @@ exports.layout = {
 				title: "Row"
 			}]
 		},
+		wrap: {
+			title: 'Wrap',
+			anyOf: [{
+				type: 'null',
+				title: 'No wrap'
+			}, {
+				const: 'wrap',
+				title: 'Wrap'
+			}, {
+				const: 'wrap-reverse',
+				title: 'Reverse'
+			}]
+		},
 		width: {
 			title: 'Width',
 			anyOf: [{
@@ -293,6 +306,7 @@ exports.layout = {
 		[width|switch:full:fullwidth:contained:ui container]
 		[horizontal]
 		[vertical]
+		[wrap]
 		[direction]
 		[background.invert|alt:inverted]"
 		is="element-layout"
