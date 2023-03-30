@@ -24,7 +24,7 @@
 	position:relative;
 	margin: 0;
 }
-#menu .ui.mini.menu {
+#menu .ui.mini.menu:not(.tabular) {
 	background-color: #FAFAFA;
 	border: 0;
 	box-shadow: 0 0 0 1px rgba(34, 36, 38, 0.1);
@@ -66,6 +66,9 @@
 .ui.menu {
 	flex-wrap:wrap;
 }
+#menu > div {
+	background-color:#EEE;
+}
 #menu .ui.tabular.mini.menu {
 	min-height:2.4em;
 	background-color: white;
@@ -83,6 +86,7 @@
 #menu .ui.attached.tab.menu {
 	margin:0;
 	width:100%;
+	background-color: #F0F0F0;
 }
 #menu .item > img:not(.ui) {
 	width:1.5em;
