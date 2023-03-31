@@ -41,7 +41,9 @@ class HTMLElementTemplate extends Page.Element {
 			this.ownView.textContent = '';
 			scope.$status = 400;
 			scope.$statusText = 'Missing Query Parameters';
-		} else if (action) try {
+			return;
+		}
+		if (action) try {
 			if (this.#auto) {
 				request[this.dataset.pagination] = this.dataset.stop;
 			}
@@ -56,12 +58,13 @@ class HTMLElementTemplate extends Page.Element {
 			scope.$status = -1;
 			// eslint-disable-next-line no-console
 			console.error("Error building", err);
+		} finally {
+			this.classList.remove('loading');
+			this.loading = false;
 		}
 		state.patch(() => {
 			// allow injected bundles to register e.g. scope.$filters
 			this.render(state, scope);
-			this.classList.remove('loading');
-			this.loading = false;
 			if (scope.$status == null) return;
 			const redirect = this.getRedirect(scope.$status);
 			if (!redirect) {
