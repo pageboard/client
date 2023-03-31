@@ -357,6 +357,7 @@ class QueryCollectorFilter {
 			const key = path.slice(1).join('.');
 			const undef = val === undefined;
 			if (undef) {
+				console.info("expression needs", key, ":", ctx.expr.toString());
 				this.missings[key] = true;
 			} else {
 				delete this.missings[key];
