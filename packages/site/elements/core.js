@@ -12,7 +12,6 @@ exports.user = {
 	bundle: true,
 	standalone: true,
 	required: ['email'],
-	$lock: true,
 	properties: {
 		email: {
 			title: 'Email',
