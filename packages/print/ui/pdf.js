@@ -169,7 +169,7 @@ function pageNumbering(className) {
 		} else if (i === sheets.length - 1) {
 			sheet.classList.add(className + '-last');
 		}
-		sheet.classList.add(className + ((i + offset) % 2 === 0 ? 'left' : 'right'));
+		sheet.classList.add(className + ((i + offset) % 2 === 0 ? '-left' : '-right'));
 	}
 	document.body.style.counterSet = [
 		'sheet', -first,
