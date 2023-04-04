@@ -181,19 +181,8 @@ class FormBlock {
 		if (this.mode == "lock") {
 			if (key == null) return {
 				title: 'Locks',
-				type: 'object',
-				properties: {
-					read: {
-						title: 'Read',
-						type: 'array',
-						items: Pageboard.elements.settings.properties.grants.items
-					},
-					write: {
-						title: 'Write',
-						type: 'array',
-						items: Pageboard.elements.settings.properties.grants.items
-					}
-				}
+				type: 'array',
+				items: Pageboard.elements.settings.properties.grants.items
 			};
 			else return;
 		}
