@@ -1,5 +1,5 @@
 export const formats = {
-	as: { polyfills, csp, xid, colnums, block, binding, query },
+	as: { polyfills, csp, xid, colnums, block, binding, query, render },
 	date: { utc }
 };
 
@@ -34,6 +34,13 @@ function block(ctx, obj) {
 	if (!obj) return;
 	if (typeof obj == "object" && obj.type && obj.id) return obj;
 	else return;
+}
+
+function render(ctx, block) {
+	const { scope } = ctx;
+	const el = scope.$elements[block.type];
+	const dom = scope.render({ item: block }, el);
+	return ctx.filter(dom, 'as', 'html');
 }
 
 function utc(ctx, val) {
