@@ -386,7 +386,7 @@ Pageboard.Controls.Form = class Form {
 		);
 
 		const unlocked = !allBlocks.some(
-			b => b.lock?.read?.length || b.lock?.write?.length
+			b => b.lock?.length
 		);
 		this.toggleLocks.firstElementChild.classList.toggle('lock', !unlocked);
 		this.toggleLocks.firstElementChild.classList.toggle('red', !unlocked);

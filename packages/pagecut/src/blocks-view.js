@@ -68,7 +68,7 @@ export default class BlocksView {
 		const copy = { ...block };
 		copy.data = { ...block.data };
 		if (block.expr) copy.expr = { ...block.expr };
-		if (block.lock) copy.lock = { ...block.lock };
+		if (block.lock) copy.lock = block.lock.slice();
 		if (block.content) copy.content = { ...block.content };
 		delete copy.focused;
 		return copy;
