@@ -28,6 +28,19 @@ exports.user = {
 	}
 };
 
+exports.otp = {
+	bundle: 'user',
+	group: 'block',
+	virtual: true,
+	properties: {
+		uri: {
+			type: 'string'
+		}
+	},
+	tag: 'img.otpkey',
+	html: `<img class="otpkey" src="[uri]" width="196" height="196" />`
+};
+
 exports.priv = {
 	title: 'Private',
 	priority: -10,
