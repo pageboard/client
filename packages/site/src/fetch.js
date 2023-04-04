@@ -21,6 +21,9 @@ export default function(method, url, data) {
 	}
 
 	const p = fetch(url, fetchOpts).then(res => {
+		// FIXME either throw or return an object but do not do both
+		// if an error returns an object, it should not be in obj.item,
+		// since templates expect obj.item to be populated
 		const type = res.headers.get('Content-Type') || "";
 		if (res.status == 204 || !type.startsWith('application/json')) {
 			return res.text().then(text => {
@@ -39,12 +42,12 @@ export default function(method, url, data) {
 			});
 		} else {
 			return res.json().then(obj => {
-				obj.status = res.status;
-				let text;
 				if (obj.item?.type == "error") {
-					text = obj.item.data?.message ?? "";
+					obj.statusText = obj.item.data?.messages ?? "";
+					delete obj.item;
 				}
-				obj.statusText = text || res.statusText;
+				obj.status = res.status;
+				obj.statusText ??= res.statusText;
 				obj.locked = (res.headers.get('X-Upcache-Lock') || "").split(', ').shift() || null;
 				obj.granted = res.headers.get('X-Granted') ? true : false;
 				return obj;
