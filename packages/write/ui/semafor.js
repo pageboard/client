@@ -409,6 +409,8 @@ class Semafor {
 			} else if (!schema.title) {
 				fieldset = Semafor.types.hidden(key, schema, node, this);
 				noHelper = true;
+			} else if (type == "array") {
+				fieldset = Semafor.types[type](key, schema, node, this);
 			} else if (!key) {
 				console.error('Properties of type', type, 'must have a name');
 			} else {

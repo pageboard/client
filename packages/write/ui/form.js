@@ -127,7 +127,7 @@ class FormBlock {
 				form.update(form.schema);
 				form.clear();
 			}
-			form.set(this.block[mode]);
+			form.set(mode == "lock" ? { lock: this.block.lock } : this.block[mode]);
 			for (const inst of Object.values(this.helpers)) {
 				if (inst.update) inst.update(this.block);
 			}
@@ -180,9 +180,14 @@ class FormBlock {
 		let opts = prop.$filter;
 		if (this.mode == "lock") {
 			if (key == null) return {
-				title: 'Locks',
-				type: 'array',
-				items: Pageboard.elements.settings.properties.grants.items
+				type: 'object',
+				properties: {
+					lock: {
+						title: 'Locks',
+						type: 'array',
+						items: Pageboard.elements.settings.properties.grants.items
+					}
+				}
 			};
 			else return;
 		}
@@ -217,8 +222,9 @@ class FormBlock {
 			if (e.type == "input" && ["checkbox", "radio", "select"].includes(e.target.type)) return; // change events only
 		}
 		const editor = this.editor;
-		const formData = FormBlock.pruneObj(this.form.get(), this.form.schema) ?? {};
+		let formData = FormBlock.pruneObj(this.form.get(), this.form.schema) ?? {};
 		const mode = this.mode;
+		if (mode == "lock") formData = formData.lock ?? [];
 
 		const same = Pageboard.utils.stableStringify(this.block[mode]) == Pageboard.utils.stableStringify(formData);
 		if (same) return;
