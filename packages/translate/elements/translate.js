@@ -3,11 +3,18 @@ exports.dictionary = {
 	standalone: true,
 	bundle: true,
 	properties: {
-		languages: {
-			title: 'Languages',
+		src: {
+			title: 'Source language',
+			description: 'ISO 639-3 code',
+			type: 'string',
+			pattern: /^[a-z]{3}$/.source,
+		},
+		targets: {
+			title: 'Target languages',
 			type: 'array',
 			items: {
-				type: 'string'
+				type: 'string',
+				pattern: /^[a-z]{3}$/.source
 			}
 		}
 	}
@@ -27,8 +34,8 @@ exports.translation = {
 			title: 'Source',
 			type: 'string'
 		},
-		translations: {
-			title: 'Translations',
+		targets: {
+			title: 'Targets',
 			type: 'object',
 			additionalProperties: true,
 			default: {}
