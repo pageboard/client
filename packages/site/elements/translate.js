@@ -2,8 +2,9 @@ exports.dictionary = {
 	title: 'Dictionary',
 	standalone: true,
 	bundle: true,
+	required: ['source'],
 	properties: {
-		src: {
+		source: {
 			title: 'Source language',
 			description: 'ISO 639-3 code',
 			type: 'string',
@@ -23,15 +24,27 @@ exports.dictionary = {
 exports.translation = {
 	title: 'Translation unit',
 	bundle: 'dictionary',
-	required: ['src'],
+	standalone: true,
+	required: ['type', 'content', 'source'],
 	properties: {
 		verified: {
 			title: 'Verified',
 			type: 'boolean',
 			default: false
 		},
-		src: {
-			title: 'Source',
+		type: {
+			title: 'Block type',
+			type: 'string',
+			format: 'name',
+			$filter: 'element'
+		},
+		content: {
+			title: 'Content name',
+			type: 'string',
+			format: 'name'
+		},
+		source: {
+			title: 'Source text',
 			type: 'string'
 		},
 		targets: {
