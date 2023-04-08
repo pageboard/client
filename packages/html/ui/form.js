@@ -49,6 +49,18 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 
 			return val;
 		};
+		state.finish(() => {
+			let index = 0;
+			for (const node of document.querySelectorAll('label[for]')) {
+				const prev = node.previousElementSibling;
+				if (prev?.nodeName != "INPUT") continue;
+				const others = document.querySelectorAll(`input[id="${node.htmlFor}"]`);
+				if (others.length > 1) {
+					node.htmlFor += `-${index++}`;
+					prev.id = node.htmlFor;
+				}
+			}
+		});
 	}
 
 	static setup(state) {
