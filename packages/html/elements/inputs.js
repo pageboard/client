@@ -66,10 +66,15 @@ exports.input_fields = {
 			title: "Inline",
 			type: 'boolean',
 			default: false
+		},
+		full: {
+			title: 'Full width',
+			type: 'boolean',
+			default: false
 		}
 	},
 	contents: "input_field+",
-	html: `<div class="[inline] fields"></div>`
+	html: `<div class="[inline] [full|alt:fluid:] fields"></div>`
 };
 
 exports.input_text = {
