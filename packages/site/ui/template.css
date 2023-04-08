@@ -3,6 +3,7 @@ element-template,
 element-content {
 	display:block;
 	position:relative;
+	width: 100%;
 }
 
 element-template > [block-content="template"] {
