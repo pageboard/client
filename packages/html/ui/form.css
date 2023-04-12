@@ -22,7 +22,9 @@ element-select {
 [contenteditable] .ui.form .field.hidden {
 	display: block !important;
 }
-
+.ui.form {
+	width: 100%;
+}
 .ui.form .inline.fluid.fields {
 	width:100%;
 	column-gap: 1em;
