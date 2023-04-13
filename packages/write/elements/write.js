@@ -5,7 +5,7 @@ exports.write = {
 	bundle: true,
 	standalone: true,
 	dependencies: ['core', 'user'],
-	html: `<html lang="[$site.lang|ornull]">
+	html: `<html lang="[$site.lang?]">
 	<head>
 		<title>[title][$site.title?|pre: - ]</title>
 		<meta http-equiv="Content-Security-Policy" content="[$elements|as:csp]">

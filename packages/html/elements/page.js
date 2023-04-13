@@ -65,7 +65,7 @@ exports.page.properties.transition = {
 exports.page.fragments.push({
 	path: 'body',
 	attributes: {
-		"data-transition-close": "[transition.close|ornull]",
-		"data-transition-open": "[transition.open|ornull]",
+		"data-transition-close": "[transition.close?]",
+		"data-transition-open": "[transition.open?]",
 	}
 });

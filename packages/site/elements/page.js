@@ -85,7 +85,7 @@ exports.page = {
 		nodes: 'header? main+ footer?',
 		id: 'body'
 	}],
-	html: `<html lang="[$site.lang|ornull]">
+	html: `<html lang="[$site.lang?]">
 	<head>
 		<title>[title][$site.title?|pre: - ]</title>
 		<meta http-equiv="Status" content="[$status|or:200] [$statusText|or:OK][redirect|prune:*]">
