@@ -165,7 +165,7 @@ exports.input_text = {
 		tel: /^(\(\d+\))? *\d+([ .-]?\d+)*$/.source,
 		email: /^[\w.!#$%&'*+/=?^`{|}~-]+@\w(?:[\w-]{0,61}\w)?(?:\.\w(?:[\w-]{0,61}\w)?)*$/.source
 	},
-	html: `<div class="[width|as:colnums|post: wide] field [type|eq:hidden|or:]">
+	html: `<div class="[width|as:colnums|post: wide] field [type|eq:hidden]">
 		<label block-content="label">Label</label>
 		[type|eq:textarea|prune:*:1]<textarea
 			name="[name]"
@@ -385,7 +385,7 @@ exports.input_radio = {
 	html: `<div class="field [button]">
 		<div class="ui radio [button|alt::checkbox]">
 			<input type="radio" disabled="[disabled]" required="[required]"
-				name="[name]" value="[value|or:]" checked="[checked]"
+				name="[name]" value="[value]" checked="[checked]"
 				id="for-[name][value|pre:-]" />
 			<label block-content="label" for="for-[name][value|pre:-]">Label</label>
 		</div>
@@ -482,7 +482,7 @@ exports.input_select_option = {
 		}
 	},
 	contents: 'inline*',
-	html: `<element-select-option class="item" data-value="[value|or:]"
+	html: `<element-select-option class="item" data-value="[value]"
 	></element-select-option>`
 };
 
