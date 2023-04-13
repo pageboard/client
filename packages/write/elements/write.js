@@ -7,7 +7,7 @@ exports.write = {
 	dependencies: ['core', 'user'],
 	html: `<html lang="[$site.lang|ornull]">
 	<head>
-		<title>[title][$site.title|pre: - |or:]</title>
+		<title>[title][$site.title?|pre: - ]</title>
 		<meta http-equiv="Content-Security-Policy" content="[$elements|as:csp]">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<base href="[$loc.origin]">

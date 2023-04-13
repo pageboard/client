@@ -87,7 +87,7 @@ exports.page = {
 	}],
 	html: `<html lang="[$site.lang|ornull]">
 	<head>
-		<title>[title][$site.title|pre: - |or:]</title>
+		<title>[title][$site.title?|pre: - ]</title>
 		<meta http-equiv="Status" content="[$status|or:200] [$statusText|or:OK][redirect|prune:*]">
 		<meta http-equiv="Status" content="301 Moved Permanently[transition.from|prune:*:1]">
 		<meta http-equiv="Location" content="[redirect|neq:[url]|fail:*::1][$loc.search]">

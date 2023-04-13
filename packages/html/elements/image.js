@@ -129,7 +129,7 @@ exports.image = {
 		nodes: "inline*"
 	},
 	html: `<element-image
-		class="[display.fit|or:none] [display.horizontal|or:] [display.vertical|or:]"
+		class="[display.fit|or:none] [display.horizontal?] [display.vertical?]"
 		alt="[alt]"
 		data-src="[url]"
 		data-crop="[crop.x|or:50];[crop.y|or:50];[crop.width|or:100];[crop.height|or:100];[crop.zoom|or:100]"
