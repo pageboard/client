@@ -174,7 +174,7 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 					query[name] = val;
 					break;
 				case "radio":
-					if (!withDefaults && node.checked == node.defaultChecked) {
+					if (!withDefaults && (node.checked == node.defaultChecked || val == null)) {
 						if (query[name] == val) {
 							query[name] = undefined;
 						}
