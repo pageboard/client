@@ -34,15 +34,15 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 
 			state.finish(() => {
 				if (action == "enable") {
-					form.enable();
+					form.enable?.();
 				} else if (action == "disable") {
-					form.disable();
+					form.disable?.();
 				} else if (action == "fill") {
 					if (val == null) {
-						form.reset();
+						form.reset?.();
 					} else if (typeof val == "object") {
-						form.fill(this.linearizeValues(val), state.scope);
-						form.save();
+						form.fill?.(this.linearizeValues(val), state.scope);
+						form.save?.();
 					}
 				}
 			});
