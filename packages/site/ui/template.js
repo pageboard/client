@@ -194,7 +194,7 @@ class HTMLElementTemplate extends Page.Element {
 				repeatPlacer(ctx, item, cursor, fragment) {
 					const parent = cursor.parentNode;
 					const name = ctx.expr.path[ctx.expr.path.length - 1];
-					if (auto.name == name && !parent.dataset.autoRepeat) {
+					if (auto.name == name && parent.dataset && !parent.dataset.autoRepeat) {
 						parent.dataset.autoRepeat = name;
 					}
 					if (replace || !auto.node || auto.name != name) {
