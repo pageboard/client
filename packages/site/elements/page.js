@@ -74,11 +74,7 @@ exports.page = {
 		dictionary: {
 			title: 'Dictionary',
 			type: 'string',
-			format: 'id',
-			$helper: {
-				name: 'block',
-				types: ['dictionary']
-			}
+			format: 'id'
 		}
 	},
 	contents: [{
