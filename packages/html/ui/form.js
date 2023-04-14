@@ -399,9 +399,6 @@ HTMLFormElement.prototype.disable = function () {
 	}
 };
 
-
-
-
 HTMLSelectElement.prototype.fill = function (val) {
 	if (!Array.isArray(val)) val = [val];
 	for (let i = 0; i < this.options.length; i++) {
@@ -412,7 +409,12 @@ HTMLSelectElement.prototype.fill = function (val) {
 HTMLSelectElement.prototype.reset = function () {
 	for (let i = 0; i < this.options.length; i++) this.options[i].selected = false;
 };
-
+HTMLButtonElement.prototype.fill = function(val) {
+	if (this.name && this.type == "submit") this.value = val;
+};
+HTMLButtonElement.prototype.fill = function (val) {
+	if (this.name && this.type == "submit") this.value = val;
+};
 HTMLInputElement.prototype.fill = function (val) {
 	if (val == null) val = "";
 	if (this.type == "radio" || this.type == "checkbox") {
