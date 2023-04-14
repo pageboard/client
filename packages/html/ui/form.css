@@ -33,7 +33,7 @@ element-select {
 .ui.form .inline.fluid.fields > .field {
 	margin:0;
 	padding:0;
-	flex: 1 0 auto;
+	flex: 1 1 auto;
 	position:relative;
 }
 
