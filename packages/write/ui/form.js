@@ -5,8 +5,11 @@ class FormBlock {
 		if (schema.properties || schema.type == "object") {
 			copy.type = 'object';
 			if (schema.nullable) copy.nullable = schema.nullable;
-			if (schema.properties) copy.properties = schema.properties;
-			else copy.description = 'object';
+			if (schema.properties) {
+				copy.properties = Object.assign(schema.properties);
+			} else {
+				copy.description = 'object';
+			}
 		} else if (schema.type == "array") {
 			copy.type = 'array';
 			if (!schema.items) {
@@ -127,14 +130,41 @@ class FormBlock {
 				form.update(form.schema);
 				form.clear();
 			}
-			form.set(mode == "lock" ? { lock: this.block.lock } : this.block[mode]);
+			let recheck = false;
+			if (mode == "expr") {
+				const expr = JSON.parse(JSON.stringify(this.block.expr));
+				this.fillExpr(expr, form.schema.properties);
+				form.set(expr);
+				recheck = true;
+			} else if (mode == "lock") {
+				form.set({ lock: this.block.lock });
+			} else {
+				form.set(this.block[mode]);
+			}
+
 			for (const inst of Object.values(this.helpers)) {
 				if (inst.update) inst.update(this.block);
 			}
+			this.node.addEventListener('change', this);
+			this.node.addEventListener('input', this);
+			this.ignoreEvents = false;
+			if (recheck) this.handleEvent({});
 		}
-		this.node.addEventListener('change', this);
-		this.node.addEventListener('input', this);
-		this.ignoreEvents = false;
+	}
+
+	fillExpr(expr, props) {
+		for (const [key, schema] of Object.entries(props)) {
+			if (schema.type != 'object') continue;
+			const obj = expr[key] ??= {};
+			if (schema.templates) {
+				for (const [key, value] of Object.entries(schema.templates)) {
+					if (obj[key] == null) {
+						obj[key] = value;
+					}
+				}
+			}
+			if (schema.properties) this.fillExpr(obj, schema.properties);
+		}
 	}
 
 	customHelper({ key, prop, node, parentProp }) {
