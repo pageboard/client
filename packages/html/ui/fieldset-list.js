@@ -35,6 +35,17 @@ class HTMLElementFieldsetList extends Page.Element {
 	#walk;
 
 	fill(values, scope) {
+		// unflatten array-values
+		if (this.#prefix == null) return;
+		for (const [key, val] of Object.entries(values)) {
+			if (!this.#prefixed(key)) continue;
+			if (Array.isArray(val)) {
+				for (let i = 0; i < val.length; i++) {
+					values[key + '.' + i] = val[i];
+				}
+				delete values[key];
+			}
+		}
 		const list = this.#listFromValues({ ...values });
 		if (this.#initialSize == null) this.#initialSize = list.length;
 		this.#resize(list.length, scope);
@@ -198,7 +209,6 @@ class HTMLElementFieldsetList extends Page.Element {
 
 	#listFromValues(values) {
 		const list = [];
-		// just unflatten the array
 		for (const [key, val] of Object.entries(values)) {
 			if (!this.#prefixed(key)) continue;
 			const parts = this.#parts(key).slice(this.#prefix.length);
@@ -278,6 +288,10 @@ class HTMLElementFieldsetList extends Page.Element {
 				live.replaceWith(node);
 			}
 		}
+		this.dispatchEvent(new Event('change', {
+			bubbles: true,
+			cancelable: true
+		}));
 	}
 
 	#parseName(name) {
