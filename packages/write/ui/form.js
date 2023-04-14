@@ -271,6 +271,7 @@ class FormBlock {
 			if (stored) Object.assign(stored, block);
 			else editor.blocks.set(block);
 			found = true;
+			this.block = editor.blocks.get(block.id);
 		}
 
 		const tr = editor.state.tr;
