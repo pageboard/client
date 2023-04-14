@@ -8,14 +8,14 @@ const baseElements = {
 		stylesheets: [],
 		html: `<html>
 		<head>
-			<title>[$status|or:500] [$statusText|or:Error]</title>
+			<title>[status|or:500] [statusText|or:Error]</title>
 			<meta name="viewport" content="width=device-width, initial-scale=1">
 			<meta name="robots" content="noindex">
-			<meta http-equiv="Status" content="[$status|or:500] [$statusText|or:Error]">
+			<meta http-equiv="Status" content="[status|or:500] [statusText|or:Error]">
 		</head>
 		<body>
-			<h2>[message]</h2>
-			<p><code>[stack]</code></p>
+			<h2>[body|else:get:statusText]</h2>
+			<p><code>[stack|fail:p]</code></p>
 		</body></html>`
 	}
 };

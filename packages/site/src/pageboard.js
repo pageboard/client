@@ -43,6 +43,10 @@ Page.route(async state => {
 			url: state.pathname.replace(/\.\w+$/, ''),
 			nested: window.parent != window ? 1 : undefined
 		});
+		if (!data.item) data.item = {
+			type: 'error',
+			data
+		};
 	}
 
 	const scope = Scope.init(state);
