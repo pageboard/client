@@ -168,6 +168,7 @@ exports.input_text = {
 	html: `<div class="[width|as:colnums|post: wide] field [type|eq:hidden]">
 		<label block-content="label">Label</label>
 		[type|eq:textarea|prune:*:1]<textarea
+			is="element-textarea"
 			name="[name]"
 			required="[required]"
 			readonly="[readonly]"
@@ -183,7 +184,9 @@ exports.input_text = {
 			pattern="[$element.patterns.[type]]"
 			value="[value]"
 			autocomplete="[type|eq:new-password|fail:]" />
-	</div>`
+	</div>`,
+	scripts: ['../ui/textarea.js'],
+	stylesheets: ['../ui/textarea.css']
 };
 
 exports.input_number = {
