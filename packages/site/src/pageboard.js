@@ -53,7 +53,7 @@ Page.route(async state => {
 	}
 
 	const scope = Scope.init(state);
-	scope.$lang = data.status != 400 && lang || data.site.lang;
+	scope.$lang = data.status != 400 && lang || data.site?.lang;
 	await scope.import(data);
 	scope.$page = data.item;
 	const node = scope.render(data);
