@@ -6,16 +6,17 @@ exports.dictionary = {
 	properties: {
 		source: {
 			title: 'Source language',
-			description: 'ISO 639-3 code',
+			description: 'Language tag syntax',
 			type: 'string',
-			pattern: /^[a-z]{3}$/.source,
+			pattern: /^([a-zA-Z]+-?)+$/.source
 		},
 		targets: {
 			title: 'Target languages',
+			description: 'Language tag syntax',
 			type: 'array',
 			items: {
 				type: 'string',
-				pattern: /^[a-z]{3}$/.source
+				pattern: /^([a-zA-Z]+-?)+$/.source
 			}
 		}
 	}

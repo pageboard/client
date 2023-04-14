@@ -194,10 +194,11 @@ exports.site = {
 			// TODO use spdx.org/licenses for choosing a license
 		},
 		lang: {
-			title: 'Language',
+			title: 'Locale',
+			description: 'Unicode format with dashes',
 			nullable: true,
 			type: "string",
-			format: "singleline"
+			pattern: /^([a-zA-Z]+-?)+$/.source
 		},
 		module: {
 			title: 'Module name',
