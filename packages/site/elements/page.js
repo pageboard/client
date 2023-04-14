@@ -74,7 +74,8 @@ exports.page = {
 		dictionary: {
 			title: 'Dictionary',
 			type: 'string',
-			format: 'id'
+			format: 'id',
+			nullable: true
 		}
 	},
 	contents: [{
