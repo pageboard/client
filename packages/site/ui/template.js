@@ -47,6 +47,7 @@ class HTMLElementTemplate extends Page.Element {
 			if (this.#auto) {
 				request[this.dataset.pagination] = this.dataset.stop;
 			}
+			request.lang ??= scope.$lang;
 			const res = await state.fetch('get', action, request);
 			this.loading = true;
 			this.classList.add('loading');

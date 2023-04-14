@@ -5,7 +5,7 @@ exports.write = {
 	bundle: true,
 	standalone: true,
 	dependencies: ['core', 'user'],
-	html: `<html lang="[$site.lang?]">
+	html: `<html lang="[$lang]">
 	<head>
 		<title>[title][$site.title?|pre: - ]</title>
 		<meta http-equiv="Content-Security-Policy" content="[$elements|as:csp]">
@@ -167,8 +167,8 @@ exports.write = {
 		'fetch',
 		'es2015', 'es2016', 'es2017', 'es2018',
 		'URL',
-		'Intl.NumberFormat.~locale.[$site.lang|or:en]',
-		`Intl.DateTimeFormat.~locale.[$site.lang|or:en]`,
+		'Intl.NumberFormat.~locale.[$lang]',
+		`Intl.DateTimeFormat.~locale.[$lang]`,
 		'smoothscroll',
 		'queueMicrotask'
 	],

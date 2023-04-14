@@ -23,6 +23,7 @@ const baseElements = {
 export default class Scope {
 	#state;
 	#view;
+	#lang;
 
 	static init(state) {
 		const elts = Pageboard.elements ??= {};
@@ -45,6 +46,12 @@ export default class Scope {
 	constructor(state, obj = {}) {
 		this.#state = state;
 		Object.assign(this, obj);
+	}
+	get $lang() {
+		return this.#lang;
+	}
+	set $lang(lang) {
+		this.#lang = lang;
 	}
 	get $loc() {
 		return this.#state;
@@ -78,6 +85,7 @@ export default class Scope {
 	copy(extra) {
 		const scope = new Scope(this.#state, this);
 		scope.#view = this.#view;
+		scope.#lang = this.#lang;
 		if (extra) Object.assign(scope, extra);
 		return scope;
 	}

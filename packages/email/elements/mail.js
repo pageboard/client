@@ -34,7 +34,7 @@ exports.mail = {
 		id: 'body',
 		nodes: 'mail_body'
 	},
-	html: `<html lang="[$site.lang?]">
+	html: `<html lang="[$lang]">
 	<head>
 		<title>[$site.title|post:%3A ][title]</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">

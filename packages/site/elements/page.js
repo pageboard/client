@@ -82,7 +82,7 @@ exports.page = {
 		nodes: 'header? main+ footer?',
 		id: 'body'
 	}],
-	html: `<html lang="[$site.lang?]">
+	html: `<html lang="[$lang]">
 	<head>
 		<title>[title][$site.title?|pre: - ]</title>
 		<meta http-equiv="Status" content="[$status|or:200] [$statusText|or:OK][redirect|prune:*]">
@@ -110,8 +110,8 @@ exports.page = {
 		'Element.prototype.dataset',
 		'fetch',
 		'es2015', 'es2016', 'es2017', 'es2018',
-		'Intl.NumberFormat.~locale.[$site.lang|or:en]',
-		`Intl.DateTimeFormat.~locale.[$site.lang|or:en]`,
+		'Intl.NumberFormat.~locale.[$lang]',
+		`Intl.DateTimeFormat.~locale.[$lang]`,
 		'console.debug',
 		'smoothscroll'
 	],

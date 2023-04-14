@@ -2,7 +2,7 @@
 import * as equivs from './equivs';
 
 Page.ready(state => {
-	state.vars = {};
+	state.vars = { lang: true };
 	state.ivars = new Set();
 });
 

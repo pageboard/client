@@ -41,6 +41,7 @@ Page.route(async state => {
 	if (!Object.keys(data).length) {
 		state.data = data = await fetchHelper('get', '/.api/page', {
 			url: state.pathname.replace(/\.\w+$/, ''),
+			lang: state.query.lang,
 			nested: window.parent != window ? 1 : undefined
 		});
 		if (!data.item) data.item = {
@@ -50,6 +51,7 @@ Page.route(async state => {
 	}
 
 	const scope = Scope.init(state);
+	scope.$lang = state.query.lang || data.site.lang;
 	await scope.import(data);
 	scope.$page = data.item;
 	const node = scope.render(data);
