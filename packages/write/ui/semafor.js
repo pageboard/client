@@ -321,7 +321,7 @@ class Semafor {
 					|| Array.isArray(field.oneOf) && field.oneOf
 					|| Array.isArray(field.anyOf) && field.anyOf
 					|| null;
-				let nullable = false;
+				let nullable = Boolean(field.nullable);
 				if (listOf && !field.properties) {
 					// we support promotion to null and that's it
 					const listOfNo = listOf.filter(item => {
