@@ -2,7 +2,8 @@
 import * as equivs from './equivs';
 
 Page.ready(state => {
-	state.vars = { lang: true };
+	state.vars = {};
+	if (state.query.lang == state.scope.$lang) state.vars.lang = true;
 	state.ivars = new Set();
 });
 

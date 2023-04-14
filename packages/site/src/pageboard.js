@@ -38,11 +38,13 @@ Page.constructor.prototype.debounce = function (fn, to) {
 
 Page.route(async state => {
 	let data = state.data;
+	const nested = window.parent != window ? 1 : undefined;
+	const lang = !nested ? state.query.lang : undefined;
 	if (!Object.keys(data).length) {
 		state.data = data = await fetchHelper('get', '/.api/page', {
 			url: state.pathname.replace(/\.\w+$/, ''),
-			lang: state.query.lang,
-			nested: window.parent != window ? 1 : undefined
+			lang,
+			nested
 		});
 		if (!data.item) data.item = {
 			type: 'error',
@@ -51,7 +53,7 @@ Page.route(async state => {
 	}
 
 	const scope = Scope.init(state);
-	scope.$lang = state.query.lang || data.site.lang;
+	scope.$lang = data.status != 400 && lang || data.site.lang;
 	await scope.import(data);
 	scope.$page = data.item;
 	const node = scope.render(data);
