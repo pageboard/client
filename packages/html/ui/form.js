@@ -276,7 +276,12 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 		if (state.scope.$write) return;
 		this.toggleMessages();
 		if (this.matches('.loading')) return;
-		if (e.type != "submit" && this.querySelector('[type="submit"]')) return;
+		if (e.type != "submit" && this.querySelector('[type="submit"]')) {
+			if (this.method == "post") {
+				this.classList.add('unsaved');
+			}
+			return;
+		}
 		let fn = this[this.method + 'Method'];
 		if (e.type == "input" && (!e.target || !["radio", "checkbox"].includes(e.target.type))) {
 			fn = this[this.method + 'MethodLater'] || fn;
@@ -319,6 +324,7 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 	async postMethod(e, state) {
 		if (e.type != "submit") return;
 		const form = this;
+		form.classList.remove('unsaved');
 		form.classList.add('loading');
 
 		await Promise.all(

@@ -36,3 +36,7 @@ element-select {
 	flex: 1 0 auto;
 	position:relative;
 }
+
+.ui.form[method="post"]:not(.unsaved,:hover) button[type="submit"] {
+	opacity:0.2;
+}
