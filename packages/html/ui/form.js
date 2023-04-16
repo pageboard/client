@@ -91,6 +91,10 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 		}
 	}
 
+	#isPureButtons() {
+		return this.elements.every(item => item.type == "submit");
+	}
+
 	toggleMessages(status) {
 		return window.HTMLElementTemplate.prototype.toggleMessages.call(this, status, this);
 	}
@@ -110,6 +114,7 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 				this.setAttribute('data-' + key, val);
 			}
 			this.restore(state.scope);
+			if (this.#isPureButtons()) this.classList.add('unsaved');
 		} else {
 			for (const name of this.fill(state.query, state.scope)) {
 				state.vars[name] = true;
@@ -324,7 +329,7 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 	async postMethod(e, state) {
 		if (e.type != "submit") return;
 		const form = this;
-		form.classList.remove('unsaved');
+		if (!this.#isPureButtons()) form.classList.remove('unsaved');
 		form.classList.add('loading');
 
 		await Promise.all(
