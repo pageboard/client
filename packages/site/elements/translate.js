@@ -28,11 +28,6 @@ exports.translation = {
 	standalone: true,
 	required: ['type', 'content', 'source'],
 	properties: {
-		verified: {
-			title: 'Verified',
-			type: 'boolean',
-			default: false
-		},
 		type: {
 			title: 'Block type',
 			type: 'string',
@@ -51,7 +46,21 @@ exports.translation = {
 		targets: {
 			title: 'Targets',
 			type: 'object',
-			additionalProperties: true,
+			additionalProperties: {
+				type: 'object',
+				properties: {
+					verified: {
+						title: 'Verified',
+						type: 'boolean',
+						default: false
+					},
+					text: {
+						title: 'Text',
+						type: 'string',
+						nullable: true
+					}
+				}
+			},
 			default: {}
 		}
 	},
