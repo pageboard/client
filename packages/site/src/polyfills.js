@@ -18,7 +18,7 @@ Arr.ancestor = function() {
 for (const name of [
 	'filter', 'some', 'map', 'forEach',
 	'indexOf', 'find', 'includes', 'reduce',
-	'slice', 'ancestor'
+	'slice', 'ancestor', 'every'
 ]) {
 	NodeList.prototype[name] ??= Arr[name];
 	HTMLCollection.prototype[name] ??= Arr[name];
