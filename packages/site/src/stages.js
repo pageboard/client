@@ -1,12 +1,6 @@
 
 import * as equivs from './equivs';
 
-Page.ready(state => {
-	state.vars = {};
-	if (state.query.lang == state.scope.$lang) state.vars.lang = true;
-	state.ivars = new Set();
-});
-
 Page.patch(async state => {
 	const metas = equivs.read();
 	if (metas.Status) {

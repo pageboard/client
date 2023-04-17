@@ -69,4 +69,8 @@ Page.route(async state => {
 
 Page.ready(state => {
 	Scope.init(state);
+	state.vars = {};
+	if (state.query.lang == state.scope.$lang) state.vars.lang = true;
+	state.ivars = new Set();
 });
+
