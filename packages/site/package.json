@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/pageboard/client#readme",
   "devDependencies": {
-    "@pageboard/pagecut": "^0.12.2",
+    "@pageboard/pagecut": "^0.12.4",
     "@ungap/custom-elements": "^1.2.0",
     "class-deferred": "^1.0.1",
     "debounce": "^1.2.1",
