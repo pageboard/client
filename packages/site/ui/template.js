@@ -63,8 +63,8 @@ class HTMLElementTemplate extends Page.Element {
 			this.classList.remove('loading');
 			this.loading = false;
 		}
-		state.patch(() => {
-			// allow injected bundles to register e.g. scope.$filters
+		// allow injected bundles to register e.g. scope.$filters
+		state.finish(() => {
 			this.render(state, scope);
 			if (scope.$status == null) return;
 			const redirect = this.getRedirect(scope.$status);
