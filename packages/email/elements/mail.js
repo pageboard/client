@@ -4,8 +4,9 @@ exports.mail = {
 	icon: '<i class="icon file outline"></i>',
 	group: 'page',
 	bundle: true,
-	standalone: true,
 	dependencies: ['core'],
+	standalone: true,
+	required: ['url'],
 	properties: {
 		title: {
 			title: 'Title',
@@ -17,7 +18,7 @@ exports.mail = {
 		url: {
 			title: 'Address',
 			type: "string",
-			pattern: /^(\/[a-zA-Z0-9-]*)+$/.source,
+			format: 'page',
 			$helper: 'href',
 			$filter: {
 				name: 'helper',
