@@ -51,7 +51,7 @@ Page.patch(state => {
 	});
 });
 
-Page.focus(state => {
+Page.fragment(state => {
 	const { hash } = state;
 	if (!hash) return;
 	const node = document.getElementById(hash);
