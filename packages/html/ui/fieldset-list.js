@@ -35,8 +35,8 @@ class HTMLElementFieldsetList extends Page.Element {
 	#walk;
 
 	fill(values, scope) {
+		if (scope.$write || this.prefix == null) return;
 		// unflatten array-values
-		if (this.#prefix == null) return;
 		for (const [key, val] of Object.entries(values)) {
 			if (!this.#prefixed(key)) continue;
 			if (Array.isArray(val)) {
@@ -94,13 +94,9 @@ class HTMLElementFieldsetList extends Page.Element {
 		this.#model = model;
 	}
 
-	#prepare(scope) {
+	#prepare() {
 		const tpl = this.ownTpl;
 		tpl.prerender();
-		if (scope.$write) {
-			this.#modelize(tpl);
-			return;
-		}
 		this.#modelize(tpl.content);
 		for (const node of tpl.content.querySelectorAll('[block-id]')) {
 			node.removeAttribute('block-id');
@@ -108,19 +104,18 @@ class HTMLElementFieldsetList extends Page.Element {
 	}
 
 	patch({ scope }) {
-		this.#prepare(scope);
-		if (!this.#size) this.#resize(0, scope);
-	}
-
-	setup({ scope }) {
-		this.#prepare(scope);
+		if (scope.$write) {
+			this.#modelize(this.ownTpl);
+		} else if (!this.#size) {
+			this.#resize(0, scope);
+		}
 	}
 
 	#selector(name) {
 		return `[block-type="fieldlist_button"][value="${name}"]`;
 	}
 
-	#prefixed(key, p = this.#prefix) {
+	#prefixed(key, p = this.prefix) {
 		const parts = this.#parts(key);
 		for (let i = 0; i < p.length; i++) {
 			if (parts[i] != p[i]) return false;
@@ -313,6 +308,9 @@ class HTMLElementFieldsetList extends Page.Element {
 		return this.children.find(node => node.matches('.view'));
 	}
 	get prefix() {
+		if (this.#prefix == null) {
+			this.#prepare();
+		}
 		return this.#prefix;
 	}
 }
