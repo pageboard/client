@@ -70,12 +70,6 @@ exports.page = {
 				type: 'string'
 			},
 			nullable: true
-		},
-		dictionary: {
-			title: 'Dictionary',
-			type: 'string',
-			format: 'id',
-			nullable: true
 		}
 	},
 	contents: [{

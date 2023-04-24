@@ -4,22 +4,38 @@ exports.dictionary = {
 	bundle: true,
 	required: ['source'],
 	properties: {
-		source: {
-			title: 'Source language',
-			description: 'Language tag syntax',
+		title: {
+			title: 'Title',
 			type: 'string',
-			pattern: /^([a-zA-Z]+-?)+$/.source
+			nullable: true
+		},
+		source: {
+			title: 'Language',
+			anyOf: [{
+				const: 'fr',
+				title: 'French'
+			}, {
+				const: 'en',
+				title: 'English'
+			}, {
+				const: 'it',
+				title: 'Italian'
+			}]
 		},
 		targets: {
 			title: 'Target languages',
-			description: 'Language tag syntax',
-			type: 'array',
-			items: {
-				type: 'string',
-				pattern: /^([a-zA-Z]+-?)+$/.source
-			}
+			type: 'array'
 		}
 	}
+};
+exports.dictionary.properties.targets.items = exports.dictionary.properties.source;
+
+exports.site.properties.dictionary =
+exports.page.properties.dictionary = {
+	title: 'Dictionary',
+	type: 'string',
+	format: 'id',
+	nullable: true
 };
 
 exports.translation = {
@@ -27,6 +43,7 @@ exports.translation = {
 	bundle: 'dictionary',
 	standalone: true,
 	required: ['type', 'content', 'source'],
+	contents: true,
 	properties: {
 		type: {
 			title: 'Block type',
@@ -43,23 +60,11 @@ exports.translation = {
 			title: 'Source text',
 			type: 'string'
 		},
-		targets: {
-			title: 'Targets',
+		verified: {
+			title: 'Verified translations',
 			type: 'object',
 			additionalProperties: {
-				type: 'object',
-				properties: {
-					verified: {
-						title: 'Verified',
-						type: 'boolean',
-						default: false
-					},
-					text: {
-						title: 'Text',
-						type: 'string',
-						nullable: true
-					}
-				}
+				type: 'boolean'
 			},
 			default: {}
 		}
