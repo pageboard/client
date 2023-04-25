@@ -21,7 +21,7 @@ class HTMLElementCarousel extends Page.Element {
 		function modabs(i, l) {
 			return ((i % l) + l) % l;
 		}
-		function flickLazy(i, isWrap, instant) {
+		async function flickLazy(i, isWrap, instant) {
 			if (this.options.wrapAround || isWrap) {
 				i = modabs(i, this.slides.length);
 			}
@@ -31,19 +31,18 @@ class HTMLElementCarousel extends Page.Element {
 			for (const cell of slide.cells) {
 				for (const node of cell.element.querySelectorAll("[data-src]")) {
 					if (node.reveal && !node.currentSrc) {
-						lazies.push(node.reveal(state).catch(() => { }));
+						lazies.push(node.reveal(state));
 					}
 				}
 			}
 
-			return Promise.all(lazies).then(() => {
-				this.select(i, isWrap, instant);
-			});
+			await Promise.allSettled(lazies);
+			this.select(i, isWrap, instant);
 		}
-		window.Flickity.prototype.next = function (isWrap, i) {
+		window.Flickity.prototype.next = async function (isWrap, i) {
 			return flickLazy.call(this, this.selectedIndex + 1, isWrap, i);
 		};
-		window.Flickity.prototype.previous = function (isWrap, i) {
+		window.Flickity.prototype.previous = async function (isWrap, i) {
 			return flickLazy.call(this, this.selectedIndex - 1, isWrap, i);
 		};
 	}
