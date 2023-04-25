@@ -13,6 +13,10 @@ footer [block-type="consent_form"][data-transient="true"] {
 [block-type="consent_form"][data-transient="true"]:not(.visible) {
 	display:none;
 }
+.visible[block-type="consent_form"][data-transient="true"] > template {
+	display:block !important;
+	position: relative;
+}
 
 [contenteditable] [block-focused="last"] > .form[block-type="consent_form"][data-transient="true"],
 .form[block-type="consent_form"][data-transient="true"][block-focused] {
