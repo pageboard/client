@@ -7,5 +7,6 @@ exports.mail_fetch = { ...exports.fetch,
 
 exports.mail_binding = { ...exports.binding,
 	context: 'mail_template//',
-	group: "mail_inline"
+	group: "mail_inline",
+	tag: 'span[block-type="mail_binding"]'
 };
