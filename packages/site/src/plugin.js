@@ -7,6 +7,7 @@ export const filters = {
 	sum,
 	schema: ['?', 'path?', 'path?', schemaFn],
 	content: ['block', 'str', contentFn],
+	children: ['block', 'str', childrenFn],
 	urltpl, templates
 };
 
@@ -314,3 +315,14 @@ function contentFn(ctx, block, name) {
 	return ctx.filter(frag, 'as', 'html');
 }
 
+function childrenFn(ctx, block, name) {
+	const { items } = block;
+	const list = ctx.scope.$doc.dom(block.content[name]).querySelectorAll('[block-id]');
+	const out = [];
+	for (const node of list) {
+		const item = items.find(item => item.id == node.getAttribute('block-id'));
+		if (item) out.push(item);
+	}
+	block.items = out;
+	return block;
+}
