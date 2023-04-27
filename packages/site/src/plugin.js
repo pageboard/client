@@ -317,7 +317,8 @@ function contentFn(ctx, block, name) {
 
 function childrenFn(ctx, block, name) {
 	const { items } = block;
-	const list = ctx.scope.$doc.dom(block.content[name]).querySelectorAll('[block-id]');
+	const content = ctx.scope.$doc.fragment(block.content[name]);
+	const list = content.querySelectorAll('[block-id]');
 	const out = [];
 	for (const node of list) {
 		const item = items.find(item => item.id == node.getAttribute('block-id'));
