@@ -23,6 +23,14 @@ Document.prototype.dom = function(str) {
 	});
 };
 
+Document.prototype.fragment = function(...args) {
+	const node = this.dom(...args);
+	if (node.nodeType == Document.DOCUMENT_FRAGMENT_NODE) return node;
+	const frag = this.createDocumentFragment();
+	frag.appendChild(node);
+	return frag;
+};
+
 Document.prototype.fuse = XMLDocument.prototype.fuse = function(obj, scope) {
 	this.documentElement.fuse(obj, scope);
 	return this;
