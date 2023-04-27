@@ -17,7 +17,7 @@ import * as matchdomPlugin from './plugin';
 
 const matchdom = new Matchdom(TextPlugin, OpsPlugin, NumPlugin, ArrayPlugin, DomPlugin, DatePlugin, JsonPlugin, UrlPlugin, matchdomPlugin);
 
-Document.prototype.dom = function(str) {
+Document.prototype.dom = function() {
 	return str2dom(Array.prototype.join.call(arguments, '\n'), {
 		doc: this
 	});
