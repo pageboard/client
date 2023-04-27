@@ -45,9 +45,9 @@ exports.sitemap = {
 			context: 'sitemap/ | sitepage/',
 			html: `<element-sitepage class="item [leaf|alt::fold]" data-url="[url]" data-index="[index]">
 				<div class="title [leaf|alt::caret-icon]">
-					<span class="header">[title|or:Untitled]</span>
-					<span class="ui mini type label">[$grants.webmaster|prune:*][$type]</span>
-					<span class="ui mini black label">[$grants.webmaster|prune:*][nositemap|prune:*]no sitemap</span>
+					<span class="header">[title|or:-]</span>
+					<span class="ui mini type label">[$grants.webmaster|prune:*][$type|slice:4]</span>
+					<span class="ui mini grey label">[$grants.webmaster|prune:*][nositemap|prune:*]no sitemap</span>
 					<span class="ui mini orange label">[$grants.webmaster|prune:*][noindex|prune:*]no index</span>
 					<span class="ui mini red label">[$grants.webmaster|prune:*][$lock|fail:*]</span>
 					<br>
@@ -61,4 +61,4 @@ exports.sitemap = {
 };
 exports.editor.scripts.push('../ui/sitemap-helper.js');
 exports.sitepage = exports.sitemap.itemModel('page', false);
-exports.siteredirection = exports.sitemap.itemModel('redirection', true);
+exports.siteredirection = exports.sitemap.itemModel('redirection', false);
