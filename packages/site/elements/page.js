@@ -85,9 +85,9 @@ exports.page = {
 	html: `<html lang="[$lang]">
 	<head>
 		<title>[title][$site.title?|pre: - ]</title>
-		<meta http-equiv="Status" content="[$status|or:200] [$statusText|or:OK][redirect|prune:*]">
-		<meta http-equiv="Status" content="301 Moved Permanently[transition.from|prune:*:1]">
-		<meta http-equiv="Location" content="[redirect|neq:[url]|fail:*::1][$loc.search]">
+		<meta http-equiv="Status" content="[$status|or:200] [$statusText|or:OK][redirect|not:prune:*]">
+		<meta http-equiv="Status" content="301 Moved Permanently[transition.from|not:prune:*:1]">
+		<meta http-equiv="Location" content="[redirect|switch:[url]:|fail:*::1][$loc.search]">
 		<meta http-equiv="Status" content="301 Matching Location">
 		<meta http-equiv="Location" content="[$links?.found|fail:*::1]">
 		<meta http-equiv="Content-Security-Policy" content="[$elements|as:csp]">
