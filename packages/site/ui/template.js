@@ -63,27 +63,24 @@ class HTMLElementTemplate extends Page.Element {
 			this.classList.remove('loading');
 			this.loading = false;
 		}
-		// allow injected bundles to register e.g. scope.$filters
-		state.finish(() => {
-			this.render(state, scope);
-			if (scope.$status == null) return;
-			const redirect = this.getRedirect(scope.$status);
-			if (!redirect) {
-				if (this.toggleMessages(scope.$status)) {
-					// report statusCode because it is meant to be shown
-					if (scope.$status > (state.status || 0)) {
-						state.status = scope.$status;
-						state.statusText = scope.$statusText;
-					}
+		// TODO injected bundles cannot register scope.$filters before render
+		this.render(state, scope);
+		if (scope.$status == null) return;
+		const redirect = this.getRedirect(scope.$status);
+		if (!redirect) {
+			if (this.toggleMessages(scope.$status)) {
+				// report statusCode because it is meant to be shown
+				if (scope.$status > (state.status || 0)) {
+					state.status = scope.$status;
+					state.statusText = scope.$statusText;
 				}
-				return;
 			}
-
-			const loc = Page.parse(redirect).fuse({}, scope);
-			state.status = 301;
-			state.statusText = `Form Redirection ${scope.$status}`;
-			state.location = loc.toString();
-		});
+			return;
+		}
+		const loc = Page.parse(redirect).fuse({}, scope);
+		state.status = 301;
+		state.statusText = `Form Redirection ${scope.$status}`;
+		state.location = loc.toString();
 	}
 
 	getRedirect(status) {
