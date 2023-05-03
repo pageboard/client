@@ -143,35 +143,6 @@ exports.fetch = {
 	]
 };
 
-exports.include = {
-	priority: 2,
-	title: "Include",
-	menu: 'form',
-	group: 'block template',
-	icon: '<i class="search icon"></i>',
-	expressions: true,
-	required: ['action'],
-	properties: exports.fetch.properties,
-	contents: [{
-		id: 'messages',
-		nodes: 'message+'
-	}, {
-		id: 'blocks',
-		nodes: "block+",
-		virtual: true
-	}],
-	html: `<element-include
-		action="/.api/query/[$id]"
-		parameters="[$expr?.action?.parameters|templates:$query]"
-	>
-		<div block-content="messages"></div>
-		<div block-content="blocks"></div>
-	</element-include>`,
-	scripts: [
-		'../ui/include.js'
-	]
-};
-
 exports.binding = {
 	title: "Binding",
 	icon: '<i class="asterisk icon"></i>',
@@ -207,39 +178,3 @@ exports.block_binding = {
 		data-label="[fill|parts:%0A:0:1|parts:.:-1|or:%23]"
 	>[fill|as:binding]</div>`
 };
-
-exports.content = {
-	title: "Content",
-	icon: '<i class="square outline icon"></i>',
-	menu: "form",
-	group: 'block',
-	context: 'template//',
-	properties: {
-		name: {
-			title: 'Name',
-			description: 'Must match element content name',
-			type: 'string',
-			format: "id",
-			// $helper: {
-			// 	name: 'element-content',
-			// 	standalone: true
-			// }
-		},
-		fill: {
-			title: 'Fill',
-			description: 'Fill with template expression',
-			type: 'string'
-		},
-		filter: {
-			title: 'Filter',
-			description: 'by CSS selector',
-			type: 'string',
-			nullable: true
-		}
-	},
-	html: '<element-content block-content="[name]" data-filter="[filter]">[fill|as:binding]</element-content>',
-	scripts: [
-		'../ui/content.js'
-	]
-};
-
