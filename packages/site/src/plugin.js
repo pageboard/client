@@ -304,7 +304,7 @@ function contentFn(ctx, block, name) {
 	const { scope } = ctx;
 
 	const el = {
-		name: block.type, // can't we just use block.type ? no risk to overwrite ?
+		name: block.type,
 		contents: scope.$elements[block.type].contents,
 		html: `<div block-content="${name}"></div>`
 	};
