@@ -10,10 +10,7 @@ exports.pagination = {
 			title: 'Fetch block',
 			type: 'string',
 			format: 'id',
-			$filter: {
-				name: 'block',
-				types: ["fetch"]
-			}
+			$filter: "fetch"
 		},
 		dir: {
 			title: 'Direction',
