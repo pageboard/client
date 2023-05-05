@@ -193,12 +193,21 @@ exports.site = {
 			format: "singleline"
 			// TODO use spdx.org/licenses for choosing a license
 		},
-		lang: {
-			title: 'Locale',
-			description: 'Unicode format with dashes',
-			nullable: true,
-			type: "string",
-			pattern: /^([a-zA-Z]+-?)+$/.source
+		languages: {
+			title: 'Languages',
+			description: 'Defaults to the first entry',
+			type: 'array',
+			items: {
+				type: 'string',
+				format: 'lang'
+			},
+			$helper: {
+				name: 'block',
+				type: "language",
+				const: "data.lang",
+				title: "data.title"
+			},
+			nullable: true
 		},
 		module: {
 			title: 'Module name',
@@ -256,6 +265,61 @@ exports.site = {
 					maxHeight: 320
 				}
 			}
+		}
+	}
+};
+
+exports.language = {
+	title: 'Language',
+	properties: {
+		title: {
+			title: 'Title',
+			type: 'string',
+			format: 'singleline'
+		},
+		lang: {
+			title: 'Language Code',
+			description: 'RFC 5646 format',
+			type: 'string',
+			format: 'lang',
+			nullable: true
+		},
+		translation: {
+			title: 'Translation Code',
+			description: 'Code used for translation API',
+			type: 'string',
+			format: 'id',
+			nullable: true
+		},
+		tsconfig: {
+			title: 'Text Search identifier',
+			type: 'string',
+			format: 'id'
+		}
+	}
+};
+
+exports.content = {
+	title: 'Content',
+	properties: {
+		type: {
+			title: 'Type',
+			type: 'string',
+			format: 'name'
+		},
+		name: {
+			title: 'Name',
+			type: 'string',
+			format: 'name'
+		},
+		text: {
+			title: 'Text',
+			type: 'string'
+		},
+		lang: {
+			title: 'Language',
+			type: 'string',
+			format: 'lang'
 		}
 	}
 };
