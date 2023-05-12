@@ -201,6 +201,7 @@ exports.site = {
 				type: 'string',
 				format: 'lang'
 			},
+			minItems: 1,
 			$helper: {
 				name: 'block',
 				type: "language",
@@ -271,6 +272,7 @@ exports.site = {
 
 exports.language = {
 	title: 'Language',
+	description: 'Global constants',
 	properties: {
 		title: {
 			title: 'Title',
@@ -302,24 +304,19 @@ exports.language = {
 exports.content = {
 	title: 'Content',
 	properties: {
-		type: {
-			title: 'Type',
-			type: 'string',
-			format: 'name'
-		},
 		name: {
 			title: 'Name',
 			type: 'string',
 			format: 'name'
 		},
-		text: {
-			title: 'Text',
-			type: 'string'
-		},
 		lang: {
 			title: 'Language',
 			type: 'string',
 			format: 'lang'
+		},
+		text: {
+			title: 'Text',
+			type: 'string'
 		}
 	}
 };
