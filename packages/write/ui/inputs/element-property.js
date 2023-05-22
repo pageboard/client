@@ -121,9 +121,14 @@ class ElementProperty {
 	}
 
 	pathsProperties(block) {
-		const el = ElementProperty.buildSchema(block);
-		if (!el) return null;
-		return ElementProperty.asPaths(el, {}, this.#prefix);
+		try {
+			const el = ElementProperty.buildSchema(block);
+			if (!el) return null;
+			return ElementProperty.asPaths(el, {}, this.#prefix);
+		} catch(err) {
+			console.error(err);
+		}
+		return null;
 	}
 
 	#buildSelector(formBlock) {
@@ -271,20 +276,21 @@ Pageboard.schemaFilters['element-value'] = class ElementValueFilter {
 			console.warn("Cannot update element-value", block);
 			return;
 		}
-		const el = ElementProperty.buildSchema(formBlock);
-		if (!el) {
-			console.warn("Cannot update element-value", formBlock);
+		try {
+			const el = ElementProperty.buildSchema(formBlock);
+			const prop = path.reduce((obj, name) => {
+				if (!obj) return;
+				if (obj.type == "array" && obj.items && !Array.isArray(obj.items)) {
+					obj = obj.items;
+				}
+				return obj?.properties?.[name];
+			}, el);
+			if (!prop) return empty;
+			delete empty.type;
+			return { ...prop, ...empty };
+		} catch(err) {
+			console.warn("Cannot update element-value", formBlock, err);
 			return;
 		}
-		const prop = path.reduce((obj, name) => {
-			if (!obj) return;
-			if (obj.type == "array" && obj.items && !Array.isArray(obj.items)) {
-				obj = obj.items;
-			}
-			return obj?.properties?.[name];
-		}, el);
-		if (!prop) return empty;
-		delete empty.type;
-		return { ...prop, ...empty };
 	}
 };
