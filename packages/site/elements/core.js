@@ -193,15 +193,21 @@ exports.site = {
 			format: "singleline"
 			// TODO use spdx.org/licenses for choosing a license
 		},
+		lang: {
+			title: 'Locale',
+			description: 'Single language',
+			nullable: true,
+			type: "string",
+			format: 'lang'
+		},
 		languages: {
 			title: 'Languages',
-			description: 'Defaults to the first entry',
+			description: 'Default language must be first',
 			type: 'array',
 			items: {
 				type: 'string',
 				format: 'lang'
 			},
-			minItems: 1,
 			$helper: {
 				name: 'block',
 				type: "language",
