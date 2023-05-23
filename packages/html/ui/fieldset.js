@@ -20,7 +20,7 @@ class HTMLElementFieldSet extends Page.create(HTMLFieldSetElement) {
 		state.finish(() => this.fill(null, state.scope));
 	}
 	handleAllChange(e, state) {
-		if (this.form.contains(e.target)) {
+		if (this.form?.contains(e.target)) {
 			this.fill(null, state.scope);
 		}
 	}
