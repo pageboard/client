@@ -1,12 +1,13 @@
-Pageboard.schemaFilters.fetch = function FetchFilter(key, opts, schema) {
+Pageboard.schemaFilters.action = function ActionFilter(key, opts, schema) {
 	delete schema.type;
 	schema.anyOf = [];
-	const blocks = Pageboard.editor.blocks.find(["fetch"]);
+	const blocks = Pageboard.editor.blocks.find([opts.action == "write" ? "api_form" : "fetch"]);
 	for (const block of blocks) {
 		const { method, parameters = {} } = block.data?.action || {};
 		if (!method) continue;
 		const service = Pageboard.service(method);
-		if (!service || service.$action != "read") continue;
+
+		if (!service || service.$action != opts.action) continue;
 		const { type } = parameters;
 		const typeSchema = Pageboard.standalones.find(el => el.name == type);
 		schema.anyOf.push({
