@@ -208,12 +208,6 @@ exports.site = {
 				type: 'string',
 				format: 'lang'
 			},
-			$helper: {
-				name: 'block',
-				type: "language",
-				const: "data.lang",
-				title: "data.title"
-			},
 			nullable: true
 		},
 		module: {
