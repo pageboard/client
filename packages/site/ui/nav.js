@@ -1,7 +1,7 @@
 Page.constructor.prototype.scroll = function(opts) {
 	if (opts.once) {
-		if (!this.scope.$scroll.once) {
-			this.scope.$scroll.once = true;
+		if (!this.data.scroll.once) {
+			this.data.scroll.once = true;
 		} else {
 			return false;
 		}
@@ -26,7 +26,7 @@ Page.constructor.prototype.scroll = function(opts) {
 			return;
 		}
 	}
-	if (this.stage == "focus" && this.samePathname(this.referrer) && this.referrer.scope.$scroll) {
+	if (this.stage == "fragment" && this.samePathname(this.referrer) && this.referrer.data.scroll) {
 		scrollOpts.behavior = 'smooth';
 	}
 	if (this.scope.transition) this.scope.transition.scrollTo(scrollOpts);
@@ -34,7 +34,7 @@ Page.constructor.prototype.scroll = function(opts) {
 };
 
 Page.ready(state => {
-	if (!state.scope.$scroll) state.scope.$scroll = {left: 0, top: 0};
+	if (!state.data.scroll) state.data.scroll = {left: 0, top: 0};
 });
 
 Page.patch(state => {
@@ -54,25 +54,28 @@ Page.patch(state => {
 Page.fragment(state => {
 	const { hash } = state;
 	if (!hash) return;
-	const node = document.getElementById(hash);
+	const node = document.getElementById(hash.slice(1));
 	if (!node) return;
-	state.scroll({node: node});
+	state.scroll({ node });
+});
+
+Page.paint(state => {
+	if (window.history && 'scrollRestoration' in window.history) {
+		window.history.scrollRestoration = 'manual';
+		if (!state.hash) state.scroll(state.data.scroll);
+	}
 });
 
 Page.setup(state => {
-	if (window.history && 'scrollRestoration' in window.history) {
-		window.history.scrollRestoration = 'manual';
-		if (!state.hash) state.scroll(state.scope.$scroll);
-	}
 	state.connect({
 		handleScroll: state.debounce((e, state) => {
 			if (state.scope.transition) return;
-			state.scope.$scroll = {
+			state.data.scroll = {
 				left: window.scrollX,
 				top: window.scrollY
 			};
 			state.save();
-		}, 500)
+		}, 250)
 	}, window);
 	state.connect({
 		handleClick: (e, state) => {

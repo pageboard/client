@@ -30,14 +30,15 @@ export default class Scope {
 		Object.assign(elts, baseElements);
 
 		let { scope } = state;
+		if (!scope) scope = state.referrer?.scope;
 
 		if (!scope) scope = new Scope(state, {
 			$filters: {},
 			$elements: elts
 		});
 		else {
-			scope.#state = state;
 			scope = scope.copy();
+			scope.#state = state;
 		}
 		state.scope = scope;
 		return scope;
