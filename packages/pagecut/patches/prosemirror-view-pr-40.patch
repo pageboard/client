@@ -1,15 +1,17 @@
---- index.js	2023-01-18 16:20:35.225277605 +0100
-+++ index.js	2023-01-18 16:23:46.425769785 +0100
-@@ -1381,7 +1381,12 @@
+--- index.js.orig	2023-05-22 10:41:47.247122876 +0200
++++ index.js	2023-05-22 10:43:56.148650769 +0200
+@@ -1395,8 +1395,13 @@
  // Create a view desc for the top-level document node, to be exported
  // and used by the view class.
  function docViewDesc(doc, outerDeco, innerDeco, dom, view) {
 +    const custom = view.nodeViews[doc.type.name];
 +    const spec = custom?.(doc, view, () => { return 0; }, outerDeco);
      applyOuterDeco(dom, outerDeco, doc);
-+    if (spec) {
-+      return new CustomNodeViewDesc(null, doc, outerDeco, innerDeco, dom, dom, dom, spec, view, 0);
-+    }
-     return new NodeViewDesc(undefined, doc, outerDeco, innerDeco, dom, dom, dom, view, 0);
- }
- class TextViewDesc extends NodeViewDesc {
+-    let docView = new NodeViewDesc(undefined, doc, outerDeco, innerDeco, dom, dom, dom, view, 0);
++    let docView = spec ?
++        new CustomNodeViewDesc(null, doc, outerDeco, innerDeco, dom, dom, dom, spec, view, 0)
++        :
++        new NodeViewDesc(undefined, doc, outerDeco, innerDeco, dom, dom, dom, view, 0);
+     if (docView.contentDOM)
+         docView.updateChildren(view, 0);
+     return docView;
