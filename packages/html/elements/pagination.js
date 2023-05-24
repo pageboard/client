@@ -11,8 +11,8 @@ exports.pagination = {
 			type: 'string',
 			format: 'id',
 			$filter: {
-				name: 'block',
-				types: ["fetch"]
+				name: 'action',
+				action: 'read'
 			}
 		},
 		dir: {

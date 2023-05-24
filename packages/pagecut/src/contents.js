@@ -54,12 +54,18 @@ export default class Contents {
 			delete block.content;
 		}
 		if (content && this.unnamed && !this.list[0].virtual) {
-			const name = Object.keys(content)[0];
-			if (name) {
-				content[""] = content[name];
-				delete content[name];
+			const keys = Object.keys(content);
+			if (keys.length == 0) {
+				content[""] = "";
+			} else if (keys.length == 1) {
+				const name = keys[0];
+				if (name) {
+					content[""] = content[name];
+					delete content[name];
+				}
+			} else {
+				console.warn("Failed to normalize block", block);
 			}
-			if (Object.keys(content).length != 1) console.warn("Failed to normalize block", block);
 		}
 		return block;
 	}
