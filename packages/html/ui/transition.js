@@ -5,20 +5,27 @@ Object.defineProperty(document, 'body', {
 	}
 });
 
-Page.route(state => {
-	const root = document.documentElement;
-	function dtr(state) {
-		root.dataset.stage = state.stage;
-		if (state.stage == "paint") {
-			setTimeout(() => root.removeAttribute('data-stage'), 700);
-		}
+const loader = new class {
+	ready(state) {
+		this.update(state.stage);
 	}
-	dtr(state);
-	state.ready(dtr);
-	state.patch(dtr);
-	state.paint(dtr);
-	state.catch(dtr);
-});
+	patch(state) {
+		this.update(state);
+	}
+	paint(state) {
+		this.update(state);
+		const cur = document.documentElement;
+		setTimeout(() => cur.removeAttribute('data-stage'), 700);
+	}
+	catch(state) {
+		this.update(state);
+	}
+	update(state) {
+		document.documentElement.dataset.stage = state.stage;
+	}
+};
+Page.connect(loader);
+loader.update(Page);
 
 class Transition {
 	#defer;
