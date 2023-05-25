@@ -26,7 +26,7 @@ Page.constructor.prototype.scroll = function(opts) {
 			return;
 		}
 	}
-	if (this.stage == "fragment" && this.samePathname(this.referrer) && this.referrer.data.scroll) {
+	if (this.stage == "fragment" && (!this.referrer || this.samePathname(this.referrer))) {
 		scrollOpts.behavior = 'smooth';
 	}
 	if (this.scope.transition) this.scope.transition.scrollTo(scrollOpts);
