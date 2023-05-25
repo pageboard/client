@@ -375,8 +375,7 @@ Pageboard.schemaHelpers.href = class Href {
 		);
 		this.cache([result.item]);
 		this.input.value = result.item.url;
-		this.list.unshift(result.item);
-		this.renderList();
+		this.searchStop();
 	}
 
 	renderList(list, append) {
