@@ -118,6 +118,7 @@ Pageboard.schemaHelpers.href = class Href {
 			if (val.startsWith('/') || /^(http:|https:)?\/\//.test(val)) {
 				e.preventDefault();
 				e.stopImmediatePropagation();
+				this.uiInput.blur();
 				this.insert(val);
 				Pageboard.trigger(this.input, 'change');
 			} else {
