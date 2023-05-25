@@ -211,7 +211,7 @@ class HTMLElementTemplate extends Page.Element {
 				};
 			})
 		};
-		for (const [key, val] of Object.entries(state.data)) {
+		for (const [key, val] of Object.entries(state.data.page)) {
 			if (key.startsWith('$') && scope[key] == null) {
 				console.warn("data key should not start with $", key);
 				scope[key] = val;

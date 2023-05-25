@@ -106,8 +106,8 @@ function update(prevState) {
 }
 
 Pageboard.Editor = function Editor(win, state) {
-	const page = state.data.item;
-	if (!page || page.type == "error") {
+	const item = state.data.page?.item;
+	if (!item || item.type == "error") {
 		Pageboard.write.hidden = true;
 		console.warn("Not loading editor: no page or error page");
 		return;
@@ -125,7 +125,7 @@ Pageboard.Editor = function Editor(win, state) {
 	// and the editor must be running from child
 	editor = Pageboard.editor = new win.Pagecut.Editor({
 		store: view.blocks.store,
-		topNode: page.type,
+		topNode: item.type,
 		elements: view.elements,
 		explicit: document.body.dataset.mode == "code",
 		place: doc.body,

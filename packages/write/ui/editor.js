@@ -1,6 +1,6 @@
 Page.setup(state => {
 	const it = window.parent.Pageboard;
-	if (!it || !it.adopt || !state.data.item) return;
+	if (!it || !it.adopt || !state.data.page?.item) return;
 	state.finish(() => {
 		it.adopt(window, state);
 	});

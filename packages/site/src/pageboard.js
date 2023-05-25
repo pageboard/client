@@ -37,31 +37,32 @@ Page.constructor.prototype.debounce = function (fn, to) {
 };
 
 Page.route(async state => {
-	let data = state.data;
+	const { data } = state;
 	const nested = window.parent != window ? 1 : undefined;
 	const lang = !nested ? state.query.lang : undefined;
-	if (!Object.keys(data).length) {
-		state.data = data = await fetchHelper('get', '/.api/page', {
+	if (data.page == null) {
+		data.page = await fetchHelper('get', '/.api/page', {
 			url: state.pathname.replace(/\.\w+$/, ''),
 			lang,
 			nested
 		});
-		if (!data.item) data.item = {
+		if (!data.page.item) data.page.item = {
 			type: 'error',
-			data
+			data: data.page
 		};
 	}
+	const { page } = data;
 
 	const scope = Scope.init(state);
-	scope.$lang = data.status != 400 && lang || data.site?.languages?.[0];
-	await scope.import(data);
-	scope.$page = data.item;
-	const node = scope.render(data);
+	scope.$lang = page.status != 400 && lang || page.site?.languages?.[0];
+	await scope.import(page);
+	scope.$page = page.item;
+	const node = scope.render(page);
 	if (!node || node.nodeName != "BODY") {
 		throw new Error("page render should return a body element");
 	}
 	state.doc = node.ownerDocument;
-	await scope.bundles(data);
+	await scope.bundles(page);
 	// cleanup
 	delete state.scope.$item;
 	delete state.scope.$items;

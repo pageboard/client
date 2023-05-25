@@ -30,6 +30,9 @@ export default class Scope {
 		Object.assign(elts, baseElements);
 
 		let { scope } = state;
+		if (state.pathname == state.referrer?.pathname && !state.data.page && state.referrer.data.page) {
+			state.data.page = state.referrer.data.page;
+		}
 		if (!scope) scope = state.referrer?.scope;
 
 		if (!scope) scope = new Scope(state, {
