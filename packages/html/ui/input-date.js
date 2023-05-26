@@ -60,6 +60,7 @@ class HTMLElementInputDate extends Page.create(HTMLInputElement) {
 	}
 	set type(t) {
 		const str = super.value;
+		super.value = "";
 		super.type = t;
 		this.value = str;
 	}
