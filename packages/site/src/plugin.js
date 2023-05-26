@@ -156,7 +156,6 @@ function sum(ctx, obj, ...list) {
 
 function schemaFn(ctx, val, schemaPath, pathToSchema) {
 	// return schema of repeated key, schema of anyOf/listOf const value
-	if (val === undefined) return;
 	let isIndex = false;
 	if (pathToSchema.length == 0) {
 		// read current path until we find a block
@@ -202,27 +201,21 @@ function schemaFn(ctx, val, schemaPath, pathToSchema) {
 		console.warn("Expected schema type: array", pathToSchema);
 		return;
 	}
-
-	if (val !== undefined) {
-		const listOf = schema.oneOf || schema.anyOf;
-		if (listOf) {
-			const prop = listOf.find(item => {
-				return item.const === val || item.type === "null" && val === null;
-			});
-			if (prop != null) schema = prop;
-			else return val;
-		} else {
-			schemaPath = [];
-			schema = val;
-		}
+	if (schema.oneOf || schema.anyOf) {
+		schema = schema.oneOf || schema.anyOf;
 	}
-	let sval = ctx.expr.get(schema, schemaPath);
-	if (sval === undefined) {
+	if ((val === null || typeof val == "string") && Array.isArray(schema)) {
+		schema = schema.find(item => {
+			return item.const === val || item.type === "null" && val === null;
+		});
+	}
+	if (schema == null) return val;
+	val = ctx.expr.get(schema, schemaPath);
+	if (val === undefined) {
 		// eslint-disable-next-line no-console
-		console.warn("Cannot find path in schema", schema, schemaPath);
-		sval = null;
+		console.warn("Cannot find path in schema", schemaPath, pathToSchema);
 	}
-	return sval;
+	return val;
 }
 
 function query(ctx, query) {
