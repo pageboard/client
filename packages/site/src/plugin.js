@@ -145,7 +145,7 @@ function sum(ctx, obj, ...list) {
 			sign = -1;
 			str = str.substring(1);
 		}
-		let val = ctx.expr.get(obj, str);
+		let val = ctx.filter(obj, 'get', str);
 		if (val == null) continue;
 		if (typeof val == "string") val = parseFloat(val);
 		if (Number.isNaN(val)) continue;
