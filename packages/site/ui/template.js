@@ -26,19 +26,21 @@ class HTMLElementTemplate extends Page.Element {
 	}
 
 	async fetch(state) {
+		const scope = state.scope.copy();
 		// FIXME remove this heresy
 		const disabled = (this.getAttribute('disabled') || '').fuse({}, state.scope);
 		// end of heresy
 		let action = disabled ? null : this.getAttribute('action');
-		const request = state.templatesQuery(this);
-		if (request == null) action = null; // missing parameters
-
-		// redirections are only allowed to use collected query params
-
-		this.toggleMessages();
-		const scope = state.scope.copy();
-
 		let response = {};
+		const collector = state.collector();
+		const request = state.templatesQuery(this, collector);
+		if (collector.failed) {
+			action = null; // missing parameters
+			response.status = 400;
+		} else if (action == null) {
+			response.status = 200;
+		}
+
 		if (action) try {
 			if (this.#auto) {
 				request[this.dataset.pagination] = this.dataset.stop;
@@ -50,7 +52,7 @@ class HTMLElementTemplate extends Page.Element {
 			await scope.import(response);
 			await scope.bundles(response);
 		} catch (err) {
-			scope.$status = -1;
+			response.status = -1; // FIXME check toggleMessages
 			// eslint-disable-next-line no-console
 			console.error("Error building", err);
 		} finally {
@@ -58,23 +60,28 @@ class HTMLElementTemplate extends Page.Element {
 			this.loading = false;
 		}
 		// TODO injected bundles cannot register scope.$filters before render
-		this.#render(state, scope, response);
-		if (scope.$status == null) return;
+		const frag = this.#render(state, scope, response, collector);
 		const redirect = this.getRedirect(scope.$status);
-		if (!redirect) {
-			this.toggleMessages(scope.$status);
+		if (redirect) {
+			scope.$request = request;
+			scope.$response = response;
+			const loc = Page.parse(redirect).fuse({}, scope);
+			state.status = 301;
+			state.statusText = `Form Redirection ${scope.$status}`;
+			state.location = loc.toString();
+		} else {
+			const msg = this.toggleMessages(scope.$status, frag);
+			if (msg) {
+				if (!this.contains(frag)) this.ownView.appendChild(msg);
+			} else if (scope.$status == 400 && collector.failed) {
+				scope.$status = 200;
+				scope.$statusText = "OK";
+			}
 			if (scope.$status > (state.status || 0)) {
 				state.status = scope.$status;
 				state.statusText = scope.$statusText;
 			}
-			return;
 		}
-		scope.$request = request;
-		scope.$response = response;
-		const loc = Page.parse(redirect).fuse({}, scope);
-		state.status = 301;
-		state.statusText = `Form Redirection ${scope.$status}`;
-		state.location = loc.toString();
 	}
 
 	getRedirect(status) {
@@ -112,7 +119,7 @@ class HTMLElementTemplate extends Page.Element {
 		return node;
 	}
 
-	#render(state, scope, data) {
+	#render(state, scope, data, collector) {
 		const view = this.ownView;
 		const tmpl = this.ownTpl.content.cloneNode(true);
 
@@ -167,8 +174,6 @@ class HTMLElementTemplate extends Page.Element {
 			stop = offset + count;
 		}
 
-		const collector = state.collector();
-
 		const el = {
 			name: 'element_template_' + String(Math.round(Date.now() * Math.random())).slice(-6),
 			dom: tmpl,
@@ -219,19 +224,17 @@ class HTMLElementTemplate extends Page.Element {
 		}
 		const frag = scope.render(data, el);
 
-		if (Object.keys(collector.missings).length) {
-			state.statusText = `Missing Query Parameters`;
-			state.status = 400;
-			// eslint-disable-next-line no-console
-			console.warn(state.statusText, Object.keys(collector.missings).join(', '));
-			const msg = this.toggleMessages(state.status, frag);
+		if (collector.failed) {
+			scope.$statusText = `Missing Query Parameters`;
+			scope.$status = 400;
 			view.textContent = '';
-			if (msg) view.appendChild(msg);
+			return frag;
 		} else if (replace || !auto.node) {
 			view.textContent = '';
 			view.appendChild(frag);
+			return view;
 		} else {
-			// do nothing
+			return view;
 		}
 	}
 
@@ -337,37 +340,46 @@ Object.getPrototypeOf(Page.constructor).prototype.fuse = function (data, scope) 
 
 
 class QueryCollectorFilter {
+	#missings = new Set();
+	#query;
+	#state;
+
 	constructor(state, query = {}) {
-		this.used = false;
-		this.missings = {};
-		this.query = query;
-		this.state = state;
+		this.#query = query;
+		this.#state = state;
 	}
 	filter(ctx, val) {
 		const path = ctx.expr.path;
 		if (path[0] != "$query") return val;
-		this.used = true;
-		const { query, vars } = this.state;
+		const { query, vars } = this.#state;
 		if (path.length > 1) {
 			const key = path.slice(1).join('.');
 			const undef = val === undefined;
 			if (undef) {
-				console.info("expression needs", key, ":", ctx.expr.toString());
-				this.missings[key] = true;
+				this.miss(key);
 			} else {
-				delete this.missings[key];
+				this.hit(key);
 			}
 			if (!vars[key]) vars[key] = !undef;
-			this.query[key] = val;
+			this.#query[key] = val;
 		} else if (typeof val == "string") {
 			const isEnc = ctx.expr.filters[ctx.expr.filters.length - 1]?.[0] == "enc";
 			const loc = Page.parse(isEnc ? '?' + decodeURIComponent(val) : val).query;
 			for (const [key, val] of Object.entries(loc)) {
 				if (query[key] === val) vars[key] = true;
-				this.query[key] = val;
+				this.#query[key] = val;
 			}
 		}
 		return val;
+	}
+	miss(key) {
+		this.#missings.add(key);
+	}
+	hit(key) {
+		this.#missings.delete(key);
+	}
+	get failed() {
+		return this.#missings.size > 0;
 	}
 }
 
@@ -375,19 +387,18 @@ Page.constructor.prototype.collector = function (query) {
 	return new QueryCollectorFilter(this, query);
 };
 
-Page.constructor.prototype.templatesQuery = function (node) {
+Page.constructor.prototype.templatesQuery = function (node, collector) {
 	const state = this;
 	const params = node.getAttribute('parameters') || '';
 	const $query = {};
 	const scope = state.scope.copy();
-	let missings = 0;
 	scope.$hooks = {
 		...scope.$hooks,
 		afterAll: function (ctx, val) {
 			const { path } = ctx.expr;
 			if (val === undefined) {
 				// it is the duty of the fetch block to redirect 400 if needed
-				missings++;
+				collector?.miss(path[1]);
 			} else if (path.length > 2) {
 				console.error("parameters with unescaped key", path);
 			} else if (path.length == 2) {
@@ -403,8 +414,7 @@ Page.constructor.prototype.templatesQuery = function (node) {
 	params.split(' ').map(str => {
 		return `[${str}]`;
 	}).join('').fuse({}, scope);
-	if (missings > 0) return null;
-	else return $query;
+	return $query;
 };
 
 Page.define('element-template', HTMLElementTemplate);
