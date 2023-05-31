@@ -113,7 +113,7 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 		if (this.method != "get") {
 			// ?submit=<name> for auto-submit
 			if (submit && submit == this.name) {
-				toggles.push(submit);
+				if (masked) toggles.push(submit);
 				state.vars.submit = true;
 			}
 			const vars = state.templatesQuery(this) || {};
@@ -369,14 +369,15 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 		form.classList.remove('loading');
 
 		// messages shown inside form, no navigation
-		const hasMsg = form.toggleMessages(res.status);
+		const msg = form.toggleMessages(res.status);
+		if (msg) msg.fuse({}, scope);
 		const ok = res.status >= 200 && res.status < 300;
 		let redirect = form.getRedirect(res.status);
 
 		if (ok) {
 			form.forget();
 			form.save();
-			if (!redirect && form.closest('element-template') && !hasMsg) {
+			if (!redirect && form.closest('element-template') && !msg) {
 				redirect = state.toString();
 			}
 		}
