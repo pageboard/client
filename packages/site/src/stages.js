@@ -7,53 +7,55 @@ Page.patch(async state => {
 		state.status = parseInt(metas.Status);
 		state.statusText = metas.Status.substring(state.status.toString().length).trim();
 	}
-	state.finish(() => state.finish(() => {
-		const query = {};
-		const extra = [];
-		const missing = [];
-		let status = 200, statusText = "OK";
-		let location;
-		if (!state.status) state.status = 200;
+	state.finish(() => {
+		state.finish(() => {
+			const query = {};
+			const extra = [];
+			const missing = [];
+			let status = 200, statusText = "OK";
+			let location;
+			if (!state.status) state.status = 200;
 
-		for (const key of Object.keys(state.query)) {
-			if (state.vars[key] === undefined) {
-				extra.push(key);
-			} else {
-				query[key] = state.query[key];
+			for (const key of Object.keys(state.query)) {
+				if (state.vars[key] === undefined) {
+					extra.push(key);
+				} else {
+					query[key] = state.query[key];
+				}
 			}
-		}
-		for (const key of Object.keys(state.vars)) {
-			if (state.vars[key] === false) missing.push(key);
-		}
-		if (extra.length > 0) {
-			// eslint-disable-next-line no-console
-			console.warn("Removing extra query parameters", extra);
-			status = 301;
-			statusText = 'Extra Query Parameters';
-			location = Page.format({ pathname: state.pathname, query });
-		} else if (missing.length > 0) {
-			status = 400;
-			statusText = 'Missing Query Parameters';
-		}
-		if (status > state.status) {
-			state.status = status;
-			state.statusText = statusText;
-			if (location) state.location = location;
-		}
-
-		if (state.status) {
-			metas.Status = `${state.status} ${state.statusText || ""}`.trim();
-		}
-		if (state.location) {
-			if (state.location != state.toString()) {
-				metas.Location = state.location;
-			} else {
-				console.warn("Not redirecting to same url", state.location);
+			for (const key of Object.keys(state.vars)) {
+				if (state.vars[key] === false) missing.push(key);
 			}
-		}
+			if (extra.length > 0) {
+				// eslint-disable-next-line no-console
+				console.warn("Removing extra query parameters", extra);
+				status = 301;
+				statusText = 'Extra Query Parameters';
+				location = Page.format({ pathname: state.pathname, query });
+			} else if (missing.length > 0) {
+				status = 400;
+				statusText = 'Missing Query Parameters';
+			}
+			if (status > state.status) {
+				state.status = status;
+				state.statusText = statusText;
+				if (location) state.location = location;
+			}
 
-		equivs.write(metas);
-	}));
+			if (state.status) {
+				metas.Status = `${state.status} ${state.statusText || ""}`.trim();
+			}
+			if (state.location) {
+				if (state.location != state.toString()) {
+					metas.Location = state.location;
+				} else {
+					console.warn("Not redirecting to same url", state.location);
+				}
+			}
+
+			equivs.write(metas);
+		});
+	});
 });
 
 Page.paint(state => {
