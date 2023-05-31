@@ -223,10 +223,9 @@ class HTMLElementTemplate extends Page.Element {
 			Object.assign(this.dataset, { count, start, stop, limit });
 		}
 		const frag = scope.render(data, el);
+		if (collector.failed) scope.$status = 400;
 
-		if (collector.failed) {
-			scope.$statusText = `Missing Query Parameters`;
-			scope.$status = 400;
+		if (scope.$status != 200) {
 			view.textContent = '';
 			return frag;
 		} else if (replace || !auto.node) {
