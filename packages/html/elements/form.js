@@ -12,6 +12,12 @@ exports.query_form = {
 			format: 'id',
 			nullable: true
 		},
+		masked: {
+			title: 'Masked',
+			description: 'Hidden and disabled, unmasked by $query.toggle',
+			type: 'boolean',
+			default: false
+		},
 		type: {
 			title: 'Bind to element',
 			description: 'Checks schema and helps adding form controls',
@@ -46,7 +52,7 @@ exports.query_form = {
 	},
 	contents: 'block+',
 	tag: 'form[method="get"]',
-	html: `<form is="element-form" method="get" name="[name]"
+	html: `<form is="element-form" method="get" name="[name]" masked="[masked]"
 		action="[redirection|urltpl:url:parameters]"
 		autocomplete="off" class="ui form"></form>`,
 	stylesheets: [
@@ -72,18 +78,24 @@ exports.api_form = {
 		'data.action.parameters': 'webmaster'
 	},
 	properties: {
+		name: {
+			title: 'Name',
+			description: '<action>=<name> where action=submit or toggle',
+			type: 'string',
+			format: 'id',
+			nullable: true
+		},
 		hidden: {
 			title: 'Hidden',
 			type: 'boolean',
 			default: false,
 			context: 'template'
 		},
-		name: {
-			title: 'Name',
-			description: 'Use with form.submit=name to autosubmit',
-			type: 'string',
-			format: 'id',
-			nullable: true
+		masked: {
+			title: 'Masked',
+			description: 'Hidden and disabled, unmasked by $query.toggle',
+			type: 'boolean',
+			default: false
 		},
 		action: {
 			title: 'Action',
@@ -166,7 +178,7 @@ exports.api_form = {
 	},
 	contents: 'block+',
 	tag: 'form[method="post"]',
-	html: `<form is="element-form" method="post" name="[name]"
+	html: `<form is="element-form" method="post" name="[name]" masked="[masked]"
 		action="/.api/form/[$id]"
 		parameters="[$expr?.action?.parameters|templates:$query]"
 		success="[redirection|urltpl:url:parameters]"

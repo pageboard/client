@@ -103,10 +103,17 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 	}
 	patch(state) {
 		if (state.scope.$write) return;
+		const { submit, toggle } = state.query;
+		const toggles = [];
+		if (typeof toggle == "string") toggles.push(...toggle.split('-'));
+		else if (Array.isArray(toggle)) toggles.push(...toggle);
+
+		const masked = this.hasAttribute('masked');
+
 		if (this.method != "get") {
 			// ?submit=<name> for auto-submit
-			const name = state.query.submit;
-			if (name && name == this.name) {
+			if (submit && submit == this.name) {
+				toggles.push(submit);
 				state.vars.submit = true;
 			}
 			const vars = state.templatesQuery(this) || {};
@@ -119,6 +126,13 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 			for (const name of this.fill(state.query, state.scope)) {
 				state.vars[name] = true;
 			}
+		}
+		if (toggles.includes(this.name)) {
+			// ?toggle=<name> for toggling hidden state
+			if (toggle) state.vars.toggle = true;
+			this.disabled = this.hidden = !masked;
+		} else if (this.name) {
+			this.disabled = this.hidden = masked;
 		}
 	}
 	paint(state) {
