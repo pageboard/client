@@ -328,10 +328,8 @@ HTMLScriptElement.prototype.prerender = function () {
 Object.getPrototypeOf(Page.constructor).prototype.fuse = function (data, scope) {
 	this.pathname = this.pathname.fuse(data, scope);
 	const q = this.query;
+	// FIXME this should use scope.$request ?
 	for (const [key, val] of Object.entries(q)) {
-		if (scope.$request && String(val).includes('$query')) {
-			console.error("FIXME: this should use $request, not $query", key, val);
-		}
 		q[key] = typeof val == "string" ? val.fuse(data, scope) : val;
 	}
 	return this;
