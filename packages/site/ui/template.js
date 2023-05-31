@@ -29,20 +29,14 @@ class HTMLElementTemplate extends Page.Element {
 		// FIXME remove this heresy
 		const disabled = (this.getAttribute('disabled') || '').fuse({}, state.scope);
 		// end of heresy
-		const action = disabled ? null : this.getAttribute('action');
+		let action = disabled ? null : this.getAttribute('action');
 		const request = state.templatesQuery(this);
-		const missings = request == null;
+		if (request == null) action = null; // missing parameters
 
 		// redirections are only allowed to use collected query params
 
 		this.toggleMessages();
 		const scope = state.scope.copy();
-		if (missings) {
-			this.ownView.textContent = '';
-			scope.$status = 400;
-			scope.$statusText = 'Missing Query Parameters';
-			return;
-		}
 		if (action) try {
 			if (this.#auto) {
 				request[this.dataset.pagination] = this.dataset.stop;
@@ -68,12 +62,10 @@ class HTMLElementTemplate extends Page.Element {
 		if (scope.$status == null) return;
 		const redirect = this.getRedirect(scope.$status);
 		if (!redirect) {
-			if (this.toggleMessages(scope.$status)) {
-				// report statusCode because it is meant to be shown
-				if (scope.$status > (state.status || 0)) {
-					state.status = scope.$status;
-					state.statusText = scope.$statusText;
-				}
+			this.toggleMessages(scope.$status);
+			if (scope.$status > (state.status || 0)) {
+				state.status = scope.$status;
+				state.statusText = scope.$statusText;
 			}
 			return;
 		}
@@ -94,28 +86,28 @@ class HTMLElementTemplate extends Page.Element {
 		return this.getAttribute(name);
 	}
 
-	toggleMessages(status = null, parent = this.ownView) {
+	toggleMessages(n = null, parent = this.ownView) {
 		const name = (n => {
 			if (n >= 200 && n < 300) return "success";
 			else if (n >= 400 && n < 500) return "warning";
 			else if (n || n === 0) return "error";
-		})(status);
-		const statusMsg = parent.querySelector(
-			`[block-type="message"][data-status="${status}"]`
-		);
-		let found = false;
+		})(n);
+		let statusMsg, classMsg;
 		for (const node of parent.querySelectorAll(`[block-type="message"]`)) {
-			if (node.closest('[action]') != this) continue;
-			let show = node == statusMsg;
-			if (!show && !statusMsg) {
-				if (name && node.classList.contains(name)) show = true;
-				const nstatus = node.dataset.status;
-				if (nstatus && nstatus == status) show = true;
-			}
-			if (show) found = true;
-			node.classList.toggle('visible', show);
+			const action = node.closest('[action]');
+			if (action && action != this) continue;
+			node.classList.remove('visible');
+			const { status } = node.dataset;
+			if (n && n == status) statusMsg = node;
+			else if (name && node.classList.contains(name)) classMsg = node;
 		}
-		return found;
+		let node = statusMsg;
+		if (classMsg) {
+			if (node) classMsg.classList.remove('visible');
+			else node = classMsg;
+		}
+		if (node) node.classList.add('visible');
+		return node;
 	}
 
 	render(state, scope) {
@@ -228,6 +220,9 @@ class HTMLElementTemplate extends Page.Element {
 			state.status = 400;
 			// eslint-disable-next-line no-console
 			console.warn(state.statusText, Object.keys(collector.missings).join(', '));
+			const msg = this.toggleMessages(state.status, frag);
+			view.textContent = '';
+			if (msg) view.appendChild(msg);
 		} else if (replace || !auto.node) {
 			view.textContent = '';
 			view.appendChild(frag);
