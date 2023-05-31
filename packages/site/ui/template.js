@@ -124,7 +124,9 @@ class HTMLElementTemplate extends Page.Element {
 
 		for (const tpl of tmpl.querySelectorAll('template')) {
 			if (tpl.parentNode.nodeName == this.nodeName || !tpl.content) continue;
-			tpl.content.fuse(data, scope);
+			for (const node of tpl.content.querySelectorAll('[block-type="binding"],[block-type="block_binding"]')) {
+				node.fuse(data, scope);
+			}
 			// get rid of block-id in those templates to avoid
 			// pagecut from dying on them
 			for (const node of tpl.content.querySelectorAll('[block-id]')) {
