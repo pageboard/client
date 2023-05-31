@@ -37,6 +37,11 @@ element-select {
 	position:relative;
 }
 
-.ui.form[method="post"]:not(.unsaved,:hover) button[type="submit"] {
-	opacity:0.2;
+.ui.form[method="post"].unsaved button[type="submit"] {
+	text-decoration:underline;
+}
+
+[contenteditable] form[hidden] {
+	display: block !important;
+	opacity:0.5;
 }
