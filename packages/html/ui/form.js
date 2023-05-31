@@ -352,7 +352,7 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 				.map(input => input.presubmit(state))
 		);
 
-		const { scope } = state;
+		const scope = state.scope.copy();
 		scope.$request = form.read(true);
 		form.disable();
 
