@@ -37,18 +37,18 @@ class HTMLElementTemplate extends Page.Element {
 
 		this.toggleMessages();
 		const scope = state.scope.copy();
+
+		let response = {};
 		if (action) try {
 			if (this.#auto) {
 				request[this.dataset.pagination] = this.dataset.stop;
 			}
 			request.lang ??= scope.$lang;
-			const res = await state.fetch('get', action, request);
+			response = await state.fetch('get', action, request);
 			this.loading = true;
 			this.classList.add('loading');
-			await scope.import(res);
-			await scope.bundles(res);
-			scope.$response = res;
-			scope.$request = request;
+			await scope.import(response);
+			await scope.bundles(response);
 		} catch (err) {
 			scope.$status = -1;
 			// eslint-disable-next-line no-console
@@ -58,7 +58,7 @@ class HTMLElementTemplate extends Page.Element {
 			this.loading = false;
 		}
 		// TODO injected bundles cannot register scope.$filters before render
-		this.render(state, scope);
+		this.#render(state, scope, response);
 		if (scope.$status == null) return;
 		const redirect = this.getRedirect(scope.$status);
 		if (!redirect) {
@@ -69,6 +69,8 @@ class HTMLElementTemplate extends Page.Element {
 			}
 			return;
 		}
+		scope.$request = request;
+		scope.$response = response;
 		const loc = Page.parse(redirect).fuse({}, scope);
 		state.status = 301;
 		state.statusText = `Form Redirection ${scope.$status}`;
@@ -110,10 +112,10 @@ class HTMLElementTemplate extends Page.Element {
 		return node;
 	}
 
-	render(state, scope) {
-		const data = scope.$response ?? {};
+	#render(state, scope, data) {
 		const view = this.ownView;
 		const tmpl = this.ownTpl.content.cloneNode(true);
+
 		for (const node of tmpl.querySelectorAll('[block-id]')) {
 			node.removeAttribute('block-id');
 		}
