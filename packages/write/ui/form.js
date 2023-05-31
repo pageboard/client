@@ -177,11 +177,8 @@ class FormBlock {
 				return (el.group || "").split(' ').includes(tok);
 			});
 		})) {
-			const input = node.querySelector(`[name="${key}"]`);
-			if (input) {
-				const field = input.closest('.inline.fields') || input.closest('.field');
-				if (field) field.remove();
-			}
+			node.querySelector(`[name="${key}"]`)
+				?.closest('.inline.field,.field')?.remove();
 			return;
 		}
 		let opts = prop.$helper;
