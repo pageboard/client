@@ -219,15 +219,7 @@ function schemaFn(ctx, val, schemaPath, pathToSchema) {
 }
 
 function query(ctx, query) {
-	const str = urltpl(ctx, {
-		pathname: "/",
-		query
-	}).substring(1);
-	const nextFilter = ctx.expr.filters[ctx.expr.filter];
-	if (nextFilter?.name == "enc") {
-		if (str?.startsWith('?')) return str.slice(1);
-	}
-	return str;
+	return Page.format({ pathname: '/', query }).slice(1);
 }
 
 function urltpl(ctx, obj, pName = 'pathname', qName = 'query') {
