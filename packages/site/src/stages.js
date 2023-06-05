@@ -4,8 +4,11 @@ import * as equivs from './equivs';
 Page.patch(async state => {
 	const metas = equivs.read();
 	if (metas.Status) {
-		state.status = parseInt(metas.Status);
-		state.statusText = metas.Status.substring(state.status.toString().length).trim();
+		// probably a very bad idea
+		// will keep 301 when staying on the same pathname,
+		// since window-page won't mergeHead and won't remove the meta status
+		// state.status = parseInt(metas.Status);
+		// state.statusText = metas.Status.substring(state.status.toString().length).trim();
 	}
 	state.finish(() => {
 		state.finish(() => {
@@ -61,9 +64,9 @@ Page.patch(async state => {
 Page.paint(state => {
 	if (state.scope.$write) return;
 	state.finish(() => {
-		const metas = equivs.read();
-		if (!metas.Location) return;
-		const loc = Page.parse(metas.Location);
+		// const metas = equivs.read();
+		// if (!metas.Location) return;
+		const loc = Page.parse(state.location);
 		let same = true;
 
 		if (state.samePathname(loc)) {
