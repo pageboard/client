@@ -352,16 +352,18 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 				.map(input => input.presubmit(state))
 		);
 
-		const scope = state.scope.copy();
-		scope.$request = form.read(true);
+		const request = form.read(true);
 		form.disable();
 
 		const res = await state.fetch(form.method, Page.format({
 			pathname: form.getAttribute('action'),
 			query: state.query
-		}), scope.$request).catch(err => err);
+		}), request).catch(err => err);
 
-		if (res?.grants) scope.$grants = res.grants;
+		const scope = state.scope.copy();
+		if (res?.grants) state.scope.$grants = res.grants;
+		scope.$request = request;
+
 		scope.$response = res;
 		scope.$status = res.status;
 		form.enable();
