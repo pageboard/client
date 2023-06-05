@@ -435,7 +435,7 @@ HTMLSelectElement.prototype.reset = function () {
 	for (let i = 0; i < this.options.length; i++) this.options[i].selected = false;
 };
 
-HTMLInputElement.prototype.fill = function (val) {
+HTMLButtonElement.prototype.fill = HTMLInputElement.prototype.fill = function (val) {
 	if (val == null) val = "";
 	if (this.type == "radio" || this.type == "checkbox") {
 		if (Array.isArray(val) && val.length == 0 && this.value == "") {
