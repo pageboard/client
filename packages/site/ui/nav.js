@@ -34,7 +34,10 @@ Page.constructor.prototype.scroll = function(opts) {
 };
 
 Page.ready(state => {
-	if (!state.data.scroll) state.data.scroll = {left: 0, top: 0};
+	if (!state.data.scroll) state.data.scroll = {
+		left: window.scrollX,
+		top: window.scrollY
+	};
 });
 
 Page.patch(state => {
