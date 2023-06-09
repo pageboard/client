@@ -317,6 +317,11 @@ exports.content = {
 		text: {
 			title: 'Text',
 			type: 'string'
+		},
+		valid: {
+			title: 'Valid',
+			type: 'boolean',
+			default: false
 		}
 	}
 };
