@@ -153,6 +153,7 @@ class FormBlock {
 	}
 
 	fillExpr(expr, props) {
+		if (!props) return;
 		for (const [key, schema] of Object.entries(props)) {
 			if (schema.type != 'object') continue;
 			const obj = expr[key] ??= {};
