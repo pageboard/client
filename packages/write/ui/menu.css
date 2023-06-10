@@ -27,7 +27,7 @@
 #menu .ui.mini.menu:not(.tabular) {
 	background-color: #FAFAFA;
 	border: 0;
-	box-shadow: 0 0 0 1px rgba(34, 36, 38, 0.1);
+	/* box-shadow: 0 0 0 1px rgba(34, 36, 38, 0.1); */
 	width: calc(100% - 2px);
 	margin-left: 1px;
 	margin-top: 7px;
@@ -87,6 +87,8 @@
 	margin:0;
 	width:100%;
 	background-color: #F0F0F0;
+	border: 1px solid #D4D4D5;
+	border-top: 0;
 }
 #menu .item > img:not(.ui) {
 	width:1.5em;
