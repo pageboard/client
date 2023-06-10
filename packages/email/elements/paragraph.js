@@ -32,7 +32,6 @@ exports.mail_paragraph = {
 	},
 	contents: "mail_inline*",
 	group: "mail_block",
-	inplace: true,
 	html: `<p class="[align|or:text-left]">Text</p>`
 };
 

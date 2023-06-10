@@ -155,7 +155,6 @@ exports.card_header = {
 	menu: 'widget',
 	context: 'card//',
 	icon: '<b class="icon">H</b>',
-	inplace: true,
 	contents: "inline*",
 	html: '<div class="header">Header</div>'
 };
@@ -173,7 +172,6 @@ exports.card_meta = {
 	menu: 'widget',
 	context: 'card//',
 	icon: '<em class="icon">M</em>',
-	inplace: true,
 	contents: "inline*",
 	html: '<div class="meta">Meta</div>'
 };

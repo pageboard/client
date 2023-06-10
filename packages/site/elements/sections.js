@@ -52,7 +52,6 @@ exports.paragraph = {
 	},
 	contents: "inline*",
 	group: "block",
-	inplace: true,
 	tag: 'p',
 	html: '<p class="[align|post: aligned]">Text</p>'
 };

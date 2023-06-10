@@ -35,7 +35,6 @@ exports.fieldset = {
 };
 
 exports.fieldset_legend = {
-	inplace: true,
 	context: 'fieldset//',
 	contents: "inline*",
 	html: '<legend>Title</legend>'

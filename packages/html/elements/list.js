@@ -8,7 +8,6 @@ exports.list_item = {
 
 exports.textblock = {
 	title: 'Text',
-	inplace: true,
 	contents: "inline*",
 	html: '<span class="textblock"></span>'
 };

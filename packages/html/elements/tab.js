@@ -38,7 +38,6 @@ exports.tab_item = {
 	title: "Item",
 	icon: '<i class="icons"><b class="icon">Tab</b><i class="corner add icon"></i></i>',
 	menu: 'widget',
-	inplace: true,
 	context: 'tabs_container_items/',
 	contents: "inline*",
 	html: '<a class="item">Tab Item</a>'
