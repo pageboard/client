@@ -1,5 +1,5 @@
 export const formats = {
-	as: { polyfills, csp, xid, colnums, block, binding, query, render },
+	as: { polyfills, csp, xid, colnums, block, binding, query, render, meta },
 	date: { utc }
 };
 
@@ -25,6 +25,10 @@ export const hooks = {
 		return val;
 	}
 };
+
+function meta(ctx, href) {
+	return ctx.scope.$hrefs[href];
+}
 
 function binding(ctx, str) {
 	if (!str || typeof str != "string") return str;
