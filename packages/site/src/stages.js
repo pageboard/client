@@ -64,8 +64,7 @@ Page.patch(async state => {
 Page.paint(state => {
 	if (state.scope.$write) return;
 	state.finish(() => {
-		// const metas = equivs.read();
-		// if (!metas.Location) return;
+		if (state.location == null) return;
 		const loc = Page.parse(state.location);
 		let same = true;
 
