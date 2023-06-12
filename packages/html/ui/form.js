@@ -132,10 +132,11 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 	}
 	paint(state) {
 		// ?submit=<name> for auto-submit
-		const name = state.query.submit;
+		// WORKAROUND use Page instead of state
+		const name = Page.query.submit;
 		if (!name || name != this.name) return;
 		// make sure to not resubmit in case of self-redirection
-		delete state.query.submit;
+		delete Page.query.submit;
 		state.finish(() => {
 			if (state.status != 200) return;
 			state.dispatch(this, 'submit');
