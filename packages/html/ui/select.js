@@ -31,10 +31,7 @@ class HTMLElementSelect extends Page.Element {
 			const opt = this.#selectOption(item.dataset.value);
 			if (opt) {
 				opt.selected = true;
-				opt.dispatchEvent(new Event('change', {
-					bubbles: true,
-					cancelable: true
-				}));
+				state.dispatch(opt, 'change');
 				this.#toggleMenu(false);
 			}
 			return;
@@ -44,10 +41,7 @@ class HTMLElementSelect extends Page.Element {
 			const opt = this.#selectOption(label.dataset.value);
 			if (opt) {
 				opt.selected = false;
-				opt.dispatchEvent(new Event('change', {
-					bubbles: true,
-					cancelable: true
-				}));
+				state.dispatch(opt, 'change');
 			}
 			return;
 		}

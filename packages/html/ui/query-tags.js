@@ -79,10 +79,10 @@ class HTMLElementQueryTags extends Page.Element {
 			this.insertLabel(name, control.value, `${prefix}${txt}${suffix}`);
 		});
 	}
-	handleClick(e) {
-		this.remove(e.target.closest('[data-name]'));
+	handleClick(e, state) {
+		this.remove(e.target.closest('[data-name]'), state);
 	}
-	remove(label) {
+	remove(label, state) {
 		if (!label) return;
 		for (const control of this.find(label.dataset.name, label.dataset.value)) {
 			if (control.type == "hidden") continue;
@@ -90,10 +90,7 @@ class HTMLElementQueryTags extends Page.Element {
 			else if (control.selected) control.selected = false;
 			else if (control.reset) control.reset();
 			else if (control.value) control.value = "";
-			control.form.dispatchEvent(new Event('submit', {
-				bubbles: true,
-				cancelable: true
-			}));
+			state.dispatch(control.form, 'submit');
 		}
 		label.remove();
 	}

@@ -283,10 +283,7 @@ class HTMLElementFieldsetList extends Page.Element {
 				live.replaceWith(node);
 			}
 		}
-		this.dispatchEvent(new Event('change', {
-			bubbles: true,
-			cancelable: true
-		}));
+		state.dispatch(this, 'change');
 	}
 
 	#parseName(name) {

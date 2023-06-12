@@ -19,7 +19,7 @@ class HTMLElementGoogleTranslate extends Page.Element {
 							top: s.top,
 							position: s.position
 						};
-						this.started();
+						this.started(state);
 					} else if (top === 0) {
 						delete this.style;
 					}
@@ -61,12 +61,12 @@ class HTMLElementGoogleTranslate extends Page.Element {
 		});
 		this.#inst.showBanner();
 	}
-	started() {
+	started(state) {
 		if (this.translate) {
 			this.translate = false; // once
 			const frame = document.body.querySelector('.goog-te-banner-frame');
 			const btn = frame.contentDocument.body.querySelector('[id=":0.confirm"]');
-			if (btn) btn.dispatchEvent(new MouseEvent("click"));
+			if (btn) state.dispatch(btn, "click");
 		}
 	}
 	close() {

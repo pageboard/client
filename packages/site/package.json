@@ -25,7 +25,7 @@
     "matchdom": "^11.4.0",
     "postinstall": "^0.8.0",
     "postinstall-bundle": "^0.8.0",
-    "window-page": "^18.0.2"
+    "window-page": "^18.1.0"
   },
   "prepare": {
     "./src/pageboard.js": "bundle --name=window.Pageboard lib/"

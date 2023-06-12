@@ -87,10 +87,7 @@ class HTMLElementInputRange extends Page.create(HTMLInputElement) {
 			helper.classList.remove('indeterminate');
 			if (isInt) values = values.map(n => parseInt(n));
 			this.rangeValue = values;
-			this.dispatchEvent(new Event('change', {
-				bubbles: true,
-				cancelable: true
-			}));
+			state.dispatch(this, 'change');
 		});
 		helper.addEventListener('keydown', this, true);
 		helper.addEventListener('dblclick', this, true);
@@ -100,10 +97,7 @@ class HTMLElementInputRange extends Page.create(HTMLInputElement) {
 		if (state.scope.$write) return;
 		if (e.type == "dblclick" || e.keyCode == 8 || e.keyCode == 46) {
 			this.fill();
-			this.dispatchEvent(new Event('change', {
-				bubbles: true,
-				cancelable: true
-			}));
+			state.dispatch(this, 'change');
 		}
 	}
 

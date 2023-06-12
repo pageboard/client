@@ -138,10 +138,7 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 		delete state.query.submit;
 		state.finish(() => {
 			if (state.status != 200) return;
-			this.dispatchEvent(new Event('submit', {
-				bubbles: true,
-				cancelable: true
-			}));
+			state.dispatch(this, 'submit');
 		});
 	}
 	read(withDefaults = false) {
