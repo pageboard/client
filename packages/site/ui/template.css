@@ -15,11 +15,11 @@ element-template > [block-content="template"] {
 	min-height:1em;
 }
 
-[contenteditable] [block-id][block-type="binding"][data-label] {
+[contenteditable] [block-id][data-label]:is([block-type="binding"],[block-type="block_binding"]) {
 	letter-spacing:-9999px;
 	word-spacing:-9999px;
 }
-[contenteditable] [block-id][block-type="binding"][data-label]::after {
+[contenteditable] [block-id][data-label]:is([block-type="binding"],[block-type="block_binding"])::after {
 	content:"[" attr(data-label) "]";
 	letter-spacing:normal;
 	word-spacing:normal;
