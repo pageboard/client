@@ -455,8 +455,8 @@ HTMLButtonElement.prototype.fill = HTMLInputElement.prototype.fill = function (v
 		if (this.type == "file") {
 			if (val === '') this.removeAttribute('value');
 			else this.setAttribute('value', val);
-		} else if (this.type == "submit" && this.value == '') {
-			this.value = val;
+		} else if (this.type == "submit") {
+			if (this.value == '') this.value = val;
 		} else {
 			this.value = val;
 		}
