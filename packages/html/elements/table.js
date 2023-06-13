@@ -206,6 +206,9 @@ exports.table_head_cell = {
 	contents: "block+",
 	tag: 'th',
 	inplace: true,
-	html: '<th class="[align|post: aligned] [width|as:colnums|post: wide]" rowspan="[rowspan]" colspan="[colspan]"></th>'
+	html: '<th class="[align|post: aligned] [width|as:colnums|post: wide]" rowspan="[rowspan]" colspan="[colspan]"></th>',
+	stylesheets: [
+		"../ui/table.css"
+	]
 };
 

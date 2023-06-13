@@ -1,0 +1,7 @@
+table tr:has(input:checked) {
+	background-color:rgba(0 0 0 / 10%);
+}
+
+.ui.compact.table td {
+	padding: 0 0.7em;
+}
