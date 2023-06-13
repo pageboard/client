@@ -27,6 +27,9 @@ element-template > [block-content="template"] {
 [contenteditable] div[block-type="content"] {
 	min-height:1rem;
 }
+[block-type="block_binding"] {
+	display: flex;
+}
 
 html:not([data-prerender]) > body {
 	/* initial page load does not need to be shown */
