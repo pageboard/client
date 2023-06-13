@@ -8,6 +8,7 @@
 	position: relative;
 	border: 1px solid gray;
 	border-radius: 4px;
+	text-align: center;
 }
 .field.button > .radio > input + label:hover {
 	opacity:1;
