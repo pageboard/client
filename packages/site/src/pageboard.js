@@ -19,6 +19,14 @@ for (const key in Class) {
 		value: Class[key]
 	});
 }
+
+Page.constructor.prototype.dispatch = function (target, name) {
+	target.dispatchEvent(new CustomEvent(name, {
+		bubbles: true,
+		cancelable: true
+	}));
+};
+
 Page.constructor.prototype.reveal = function (node) {
 	const p = node.reveal(this);
 	if (!p) return;
