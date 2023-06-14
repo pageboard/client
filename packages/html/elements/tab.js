@@ -40,6 +40,7 @@ exports.tab_item = {
 	menu: 'widget',
 	context: 'tabs_container_items/',
 	contents: "inline*",
+	tag: 'a.item',
 	html: '<a class="item">Tab Item</a>'
 };
 
