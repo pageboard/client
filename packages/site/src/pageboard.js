@@ -71,9 +71,12 @@ Page.route(async state => {
 	}
 	state.doc = node.ownerDocument;
 	await scope.bundles(page);
-	// cleanup
+	// cleanup - in a future version we will have named fetches
 	delete state.scope.$item;
 	delete state.scope.$items;
+	delete state.scope.$count;
+	delete state.scope.$limit;
+	delete state.scope.$offset;
 });
 
 Page.ready(state => {
