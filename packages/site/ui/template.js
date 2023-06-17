@@ -27,10 +27,7 @@ class HTMLElementTemplate extends Page.Element {
 
 	async fetch(state) {
 		const scope = state.scope.copy();
-		// FIXME remove this heresy
-		const disabled = (this.getAttribute('disabled') || '').fuse({}, state.scope);
-		// end of heresy
-		let action = disabled ? null : this.getAttribute('action');
+		let action = this.getAttribute('action');
 		let response = {};
 		const collector = state.collector();
 		const request = state.templatesQuery(this, collector);
@@ -253,9 +250,7 @@ class HTMLElementTemplate extends Page.Element {
 
 	#more() {
 		this.#locked = true;
-
 		if (this.#queue) this.#queue = this.#queue.then(() => {
-			if (this.disabled) return;
 			return Page.reload({vary: 'patch'});
 		}).then(() => {
 			this.#locked = false;

@@ -11,26 +11,16 @@ exports.fetch = {
 		expressions: true
 	},
 	html: `<element-template
-		disabled="[disabled]"
 		action="/.api/query/[$id][action?.method|prune:-]"
 		data-auto="[action?.auto]"
 		data-pagination="[$expr?.action?.parameters?.offset|templates:$query]"
 		parameters="[$expr?.action?.parameters|templates:$query:$pathname]"
-
 		success="[redirection.url][redirection.parameters|as:query]"
 		badrequest="[badrequest.url][badrequest.parameters|as:query]"
 		unauthorized="[unauthorized.url][unauthorized.parameters|as:query]"
 		notfound="[notfound.url][notfound.parameters|as:query]"
-	>
-		<template block-content="template"></template>
-	</element-template>`,
+	><template block-content="template"></template></element-template>`,
 	properties: {
-		disabled: {
-			title: 'Disabled',
-			description: 'Disable action using template expression',
-			type: 'boolean',
-			default: false
-		},
 		action: {
 			title: 'Action',
 			type: 'object',
