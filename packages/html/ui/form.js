@@ -126,7 +126,7 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 			// ?toggle=<name> for toggling hidden state
 			if (toggle) state.vars.toggle = true;
 			this.disabled = this.hidden = !masked;
-		} else if (this.name) {
+		} else {
 			this.disabled = this.hidden = masked;
 		}
 	}
