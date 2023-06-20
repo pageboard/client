@@ -305,14 +305,14 @@ function contentFn(ctx, block, name) {
 }
 
 function childrenFn(ctx, block, name) {
-	const { items } = block;
+	const { children } = block;
 	const content = ctx.scope.$doc.fragment(block.content[name]);
 	const list = content.querySelectorAll('[block-id]');
 	const out = [];
 	for (const node of list) {
-		const item = items.find(item => item.id == node.getAttribute('block-id'));
+		const id = node.getAttribute('block-id');
+		const item = children.find(item => item.id == id);
 		if (item) out.push(item);
 	}
-	block.items = out;
-	return block;
+	return out;
 }
