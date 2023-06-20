@@ -73,7 +73,7 @@ exports.input_fields = {
 			default: false
 		}
 	},
-	contents: "input_field+",
+	contents: "input_field*",
 	html: `<div class="[inline] [full|alt:fluid:] fields"></div>`
 };
 
