@@ -142,6 +142,7 @@ class HTMLElementTemplate extends Page.Element {
 		// fetch needs to know if response offset is after stop
 		// or before start
 		const { offset, limit } = data;
+		// TODO data.count is available, so just stop when offset + limit > count
 		const count = data.items?.length ?? 0;
 		let start = parseInt(this.dataset.start);
 		if (Number.isNaN(start)) start = offset;
