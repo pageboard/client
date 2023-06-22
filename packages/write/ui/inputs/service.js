@@ -19,10 +19,8 @@ Pageboard.schemaFilters.service = class ServiceFilter {
 	constructor(key, opts, schema) {
 		const list = [];
 		this.key = key;
-		const { $grants } = Page.scope;
 		for (const [group, service] of Object.entries(Pageboard.services)) {
 			for (const [name, it] of Object.entries(service)) {
-				if (it.$lock && !$grants.root) continue;
 				if (opts.action == it.$action) {
 					list.push({
 						const: `${group}.${name}`,
