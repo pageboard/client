@@ -192,11 +192,13 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 						}
 					}
 					break;
-				case "checkbox":
-					if (!withDefaults) {
-						if (!(name in query)) {
-							query[name] = undefined;
+				case "checkbox":		
+					if (withDefaults) {
+						if (query[name] === undefined) {
+							query[name] = null;
 						}
+					} else if (!query[name]) {
+						query[name] = node.required ? null : undefined;
 					}
 					break;
 				case "hidden":
