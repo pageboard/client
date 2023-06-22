@@ -158,7 +158,7 @@ Pageboard.Controls.Store = class Store {
 
 		this.rootId = root.id;
 
-		root = Store.flattenBlock(root);
+		root = this.flattenBlock(root);
 
 		if (!this.initial) {
 			this.initial = root;
@@ -293,7 +293,7 @@ Pageboard.Controls.Store = class Store {
 		}
 	}
 
-	static flattenBlock(root, ancestorId, blocks) {
+	flattenBlock(root, ancestorId, blocks) {
 		if (!blocks) blocks = {};
 		const shallowCopy = { ...root };
 		if (ancestorId && ancestorId != root.id) {
@@ -301,7 +301,8 @@ Pageboard.Controls.Store = class Store {
 		}
 		if (blocks[root.id]) {
 			if (root.standalone) {
-				// do nothing, that's ok !
+				// a standalone can appear multiple times
+				return;
 			} else {
 				// that's a cataclysmic event
 				console.error("Cannot overwrite existing block", root);
@@ -312,7 +313,7 @@ Pageboard.Controls.Store = class Store {
 		const children = root.children || root.blocks && Object.values(root.blocks);
 		if (children) {
 			for (const child of children) {
-				Store.flattenBlock(child, root.id, blocks);
+				this.flattenBlock(child, root.id, blocks);
 			}
 			if (root.children) delete shallowCopy.children;
 			if (root.blocks) delete shallowCopy.blocks;
@@ -340,7 +341,7 @@ Pageboard.Controls.Store = class Store {
 		const preinitial = this.preinitial;
 		const pre = {};
 		for (const preblock of Object.values(preinitial)) {
-			Object.assign(pre, Store.flattenBlock(preblock));
+			Object.assign(pre, this.flattenBlock(preblock));
 		}
 
 		for (const id of Object.keys(Store.generatedBefore)) {
