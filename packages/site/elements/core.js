@@ -132,6 +132,11 @@ exports.settings = {
 					title: 'Writer',
 					description: 'content editor'
 				}, {
+					const: 'translator',
+					$level: 2000,
+					title: 'Translator',
+					description: 'translator'
+				}, {
 					const: 'user',
 					$level: 10000,
 					title: 'User',
