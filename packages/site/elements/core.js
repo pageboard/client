@@ -110,6 +110,7 @@ exports.settings = {
 			title: 'Grants',
 			type: 'array',
 			uniqueItems: true,
+			nullable: true,
 			items: {
 				anyOf: [{
 					const: 'root',
