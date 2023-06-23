@@ -338,8 +338,9 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 		this.toggleMessages(status);
 	}
 	async postMethod(e, state) {
-		if (e.type != "submit") return;
 		const form = this;
+		if (e.type != "submit" && form.elements.find(item => item.type == "submit")) return;
+		
 		form.classList.add('loading');
 
 		await Promise.all(
