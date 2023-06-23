@@ -175,8 +175,7 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 			let val = node.value;
 			if (val == "") val = null;
 			let defVal = node.defaultValue;
-			if (defVal == "") defVal = null;
-			else if (type == "select-one" && defVal === undefined) defVal = null;
+			if (defVal === "" || defVal === undefined) defVal = null;
 
 			switch (type) {
 				case "file":
