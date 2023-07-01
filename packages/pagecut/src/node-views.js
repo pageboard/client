@@ -456,7 +456,7 @@ function mapOfStyle(style) {
 	let name, val;
 	for (let k = 0; k < style.length; k++) {
 		name = style.item(k);
-		val = style[name];
+		val = style.getPropertyValue(name);
 		if (val != null && val != "") map[name] = val;
 	}
 	return map;

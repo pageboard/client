@@ -158,11 +158,7 @@ function renderBlock(el, scope, block, bscope) {
 		for (const node of list) {
 			for (const attr of Array.from(node.attributes)) {
 				if (!attr.name.startsWith('style-')) continue;
-				const style = attr.name.split('-').slice(1).map((w, i) => {
-					if (i > 0) w = w[0].toUpperCase() + w.slice(1);
-					return w;
-				}).join("");
-				node.style[style] = attr.value;
+				node.style.setProperty(attr.name.slice(6), attr.value);
 				node.removeAttribute(attr.name);
 			}
 		}
