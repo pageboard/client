@@ -9,7 +9,7 @@ Page.setup(state => {
 	if (state.scope.$write) {
 		return;
 	}
-	autobreakFn(className, screenBox);
+	autobreakFn(className);
 	pageNumbering(className);
 	if (state.pathname.endsWith('.pdf') == false) {
 		showPrintButtons(state, opts.preset);
@@ -94,11 +94,7 @@ function printStyle(className, pageBox, { width, height, margin }) {
 	return effectiveSheet;
 }
 
-function autobreakFn(className, {
-	margin,
-	width,
-	height
-}) {
+function autobreakFn(className) {
 	// 1) activate media print rules, get @page size and margins
 	// 2) traverse, "page" nodes have 'page-break-after: always', 'page-break-inside:avoid'
 	// 3) page node too long is broken in several pages
@@ -109,43 +105,57 @@ function autobreakFn(className, {
 	// page-break-inside: avoid;
 	// page -break-after: always;
 
-	const innerPageSize = {
-		width: `calc(${width} - ${margin} - ${margin})`,
-		height: `calc(${height} - ${margin} - ${margin})`
-	};
-
-	function fillSheet(sheet) {
-		const pageRect = sheet.getBoundingClientRect();
-		const iter = document.createNodeIterator(sheet, NodeFilter.SHOW_ELEMENT, null);
-		const range = new Range();
-		let node;
-		while ((node = iter.nextNode())) {
-			if (node.children?.length) {
-				continue;
-			}
-			const rect = node.getBoundingClientRect();
-			if (Math.round((rect.bottom - pageRect.bottom) * 10) <= 0) continue;
-			// TODO split text nodes using this technique:
-			// https://www.bennadel.com/blog/4310-detecting-rendered-line-breaks-in-a-text-node-in-javascript.htm
-			// honour orphans/widows
-			if (node.previousSibling) {
-				range.setStartBefore(node);
-				range.setEndAfter(sheet);
-				break;
+	function checkRange(rect, range) {
+		const rangeRect = range.getBoundingClientRect();
+		return Math.round((rangeRect.bottom - rect.bottom) * 10) > 0;
+	}
+	function findRangeStart(obj, parent) {
+		const { rect, range } = obj;
+		for (let i = 0; i < parent.childNodes.length; i++) {
+			const node = parent.childNodes[i];
+			if (node.nodeType == 1) {
+				range.setEndAfter(node);
+				// TODO honor page-break-after: always ?
+				if (checkRange(rect, range)) {
+					if (node.childNodes.length == 0) {
+						// leaf node
+					} else {
+						// TODO honor page-break-inside: avoid ?
+						findRangeStart(obj, node);
+					}
+					return true;
+				}
 			} else {
-				// TODO something more specific
-				Object.assign(node.style, {
-					maxWidth: innerPageSize.width,
-					maxHeight: innerPageSize.height
-				});
+				for (let j = 0; j < node.length; j++) {
+					range.setEnd(node, j + 1);
+					if (checkRange(rect, range)) {
+						// one step back
+						range.setEnd(node, j);
+						return true;
+					}
+				}
 			}
 		}
-		if (!range.collapsed) {
-			const contents = range.extractContents();
+	}
+
+	function fillSheet(sheet) {
+		const obj = {
+			rect: sheet.getBoundingClientRect(), // odd that range(sheet).getBounding.. doesn't work - check it
+			range: new Range()
+		};
+		obj.range.setStartBefore(sheet.firstChild);
+		if (findRangeStart(obj, sheet)) {
+			obj.range.setStart(obj.range.endContainer, obj.range.endOffset);
+			obj.range.setEndAfter(sheet);
+			const contents = obj.range.extractContents();
 			const nextPage = contents.firstElementChild;
-			nextPage.classList.add(className + '-next');
-			sheet.after(nextPage);
-			fillSheet(nextPage);
+			if (nextPage.isEqualNode(sheet) == false) {
+				nextPage.classList.add(className + '-next');
+				sheet.after(nextPage);
+				fillSheet(nextPage);
+			} else {
+				sheet.classList.add(className + '-error');
+			}
 		}
 	}
 
