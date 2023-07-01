@@ -3,6 +3,25 @@
 	page-break-after: always;
 	counter-increment: sheet;
 }
+.page-sheet::before {
+	content:'';
+	position:absolute;
+	background-color:var(--color);
+	width: calc(var(--width) + 2 * var(--bleedwidth) * var(--pdfmargin));
+	height: calc(var(--height) + 2 * var(--bleedheight) * var(--pdfmargin));
+	left: var(--left);
+	top:var(--top);
+	margin:
+		calc(-1 * var(--bleedheight) * var(--pdfmargin))
+		calc(-1 * var(--bleedwidth) * var(--pdfmargin))
+		calc(-1 * var(--bleedheight) * var(--pdfmargin))
+		calc(-1 * var(--bleedwidth) * var(--pdfmargin));
+}
+
+.page-sheet-error {
+	outline: 8px dashed red;
+}
+
 .page-sheet-count[data-separator]::before {
 	content: counter(sheet) " " attr(data-separator) " " counter(sheets);
 }

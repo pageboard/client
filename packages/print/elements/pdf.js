@@ -91,10 +91,56 @@ exports.sheet = {
 	icon: '<i class="icon file outline"></i>',
 	properties: {
 		skip: {
-			title: 'Skip',
-			description: 'Ignore this sheet for page counter',
+			title: 'Skip page counter',
 			type: 'boolean',
 			default: false
+		},
+		background: {
+			title: 'Background',
+			type: 'object',
+			nullable: true,
+			properties: {
+				color: {
+					title: 'Color',
+					type: 'string',
+					format: 'hex-color',
+					$helper: 'color'
+				},
+				top: {
+					title: 'Top in %',
+					type: 'number',
+					minimum: 0,
+					nullable: true
+				},
+				left: {
+					title: 'Left in %',
+					type: 'number',
+					minimum: 0,
+					nullable: true
+				},
+				width: {
+					title: 'Width in %',
+					type: 'number',
+					minimum: 0,
+					nullable: true
+				},
+				height: {
+					title: 'Height in %',
+					type: 'number',
+					minimum: 0,
+					nullable: true
+				},
+				bleedwidth: {
+					title: 'Bleed width',
+					type: 'boolean',
+					default: false
+				},
+				bleedheight: {
+					title: 'Bleed height',
+					type: 'boolean',
+					default: false
+				},
+			}
 		}
 	},
 	contents: {
@@ -104,7 +150,14 @@ exports.sheet = {
 	upgrade: {
 		'content.' : 'content.page'
 	},
-	html: '<div class="page-sheet [skip|alt:page-sheet-skip]" block-content="page"></div>'
+	html: `<div class="page-sheet [skip|alt:page-sheet-skip]" block-content="page"
+		style---bleedwidth="[background.bleedwidth|alt:1:0]"
+		style---bleedheight="[background.bleedheight|alt:1:0]"
+		style---width="[background.width|post:%25|or:auto]"
+		style---height="[background.height|post:%25|or:auto]"
+		style---left="[background.left|post:%25|or:0]"
+		style---top="[background.top|post:%25|or:0]"
+		style---color="[background.color]"></div`
 };
 
 exports.sheetmatch = {

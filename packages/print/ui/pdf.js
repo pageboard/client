@@ -2,6 +2,7 @@ Page.setup(state => {
 	removePrintButtons();
 	const opts = document.body.dataset;
 	const { width = '210mm', height = '297mm', margin = '0mm' } = opts;
+	document.body.style.setProperty('--pdfmargin', margin);
 	const pageBox = { width, height, margin };
 	const screenBox = convertUnits(pageBox);
 	const className = 'page-sheet';
@@ -68,7 +69,8 @@ function printStyle(className, pageBox, { width, height, margin }) {
 			border-color:transparent;
 			border-style: solid;
 			background: white;
-			overflow:hidden;
+			overflow:clip;
+			overflow-clip-margin: content-box ${margin};
 		}
 		[contenteditable] .${className} {
 			border-color: rgba(0,0,0,0.05);
@@ -80,12 +82,14 @@ function printStyle(className, pageBox, { width, height, margin }) {
 		}
 		@page {
 			size: ${pageBox.width} ${pageBox.height};
-			margin: ${pageBox.margin};
+			margin: 0;
 		}
 		.${className} {
-			width: ${innerPageSize.width};
-			height: ${innerPageSize.height};
-			overflow: hidden;
+			margin: ${pageBox.margin};
+			width: calc(${pageBox.width} - 2 * ${pageBox.margin});
+			height: calc(${pageBox.height} - 2 * ${pageBox.margin});
+			overflow:clip;
+			overflow-clip-margin: content-box ${pageBox.margin};
 		}
 	}`;
 
