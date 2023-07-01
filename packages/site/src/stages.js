@@ -98,7 +98,7 @@ Page.setup(state => {
 	state.finish(() => {
 		if (window.parent == window) {
 			// eslint-disable-next-line no-console
-			console.info("Powered by https://pageboard.fr");
+			console.info("Powered by pageboard");
 		}
 	});
 });
