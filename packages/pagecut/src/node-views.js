@@ -490,7 +490,12 @@ function restoreDomAttrs(srcAtts, dom) {
 			dom.setAttribute(name, applyDiffClass(srcVal, uiAtts[name]));
 		} else if (name == "style") {
 			dom.removeAttribute('style');
-			Object.assign(dom.style, mapOfStyle(srcVal), mapOfStyle(uiAtts[name]));
+			const srcStyle = mapOfStyle(srcVal);
+			const uiStyle = mapOfStyle(uiAtts[name]);
+			for (const [key, val] of Object.entries(Object.assign(srcStyle, uiStyle))) {
+				// css variables cannot be set by Object.assign
+				dom.style.setProperty(key, val);
+			}
 		} else if (srcVal != dstVal) {
 			dom.setAttribute(name, srcVal);
 		}
