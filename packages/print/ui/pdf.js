@@ -138,7 +138,7 @@ function autobreakFn(className) {
 			rect: sheet.getBoundingClientRect(), // odd that range(sheet).getBounding.. doesn't work - check it
 			range: new Range()
 		};
-		obj.range.setStartBefore(sheet.firstChild);
+		obj.range.setStart(sheet, 0);
 		if (findRangeStart(obj, sheet)) {
 			obj.range.setStart(obj.range.endContainer, obj.range.endOffset);
 			obj.range.setEndAfter(sheet);
