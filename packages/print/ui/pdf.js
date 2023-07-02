@@ -99,16 +99,6 @@ function printStyle(className, pageBox, { width, height, margin }) {
 }
 
 function autobreakFn(className) {
-	// 1) activate media print rules, get @page size and margins
-	// 2) traverse, "page" nodes have 'page-break-after: always', 'page-break-inside:avoid'
-	// 3) page node too long is broken in several pages
-	// 4) try to break text nodes, honour widows/orphans
-	// 5) leaf nodes that can't fit must be resized ! (and a warning)
-
-	// TODO set style of nodes having print style
-	// page-break-inside: avoid;
-	// page -break-after: always;
-
 	function checkRange(rect, range) {
 		const rangeRect = range.getBoundingClientRect();
 		return Math.round((rangeRect.bottom - rect.bottom) * 10) > 0;
@@ -119,13 +109,14 @@ function autobreakFn(className) {
 			const node = parent.childNodes[i];
 			if (node.nodeType == 1) {
 				range.setEndAfter(node);
-				// TODO honor page-break-after: always ?
 				if (checkRange(rect, range)) {
 					if (node.childNodes.length == 0) {
 						// leaf node
 					} else {
-						// TODO honor page-break-inside: avoid ?
-						findRangeStart(obj, node);
+						const breakInside = window.getComputedStyle(node).breakInside;
+						if (['avoid', 'avoid-page'].includes(breakInside) == false) {
+							findRangeStart(obj, node);
+						}
 					}
 					return true;
 				}
