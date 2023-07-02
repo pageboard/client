@@ -2,7 +2,7 @@ Page.setup(state => {
 	removePrintButtons();
 	const opts = document.body.dataset;
 	const { width = '210mm', height = '297mm', margin = '0mm' } = opts;
-	document.body.style.setProperty('--pdfmargin', margin);
+	document.documentElement.style.setProperty('--pdfmargin', margin);
 	const pageBox = { width, height, margin };
 	const screenBox = convertUnits(pageBox);
 	const className = 'page-sheet';
