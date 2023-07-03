@@ -99,10 +99,6 @@ class Editor extends View.EditorView {
 		const schema = new Model.Schema(spec);
 		const domParser = Model.DOMParser.fromSchema(schema);
 
-		const doc =
-			jsonContent && schema.nodeFromJSON(jsonContent)
-			|| content && domParser.parse(content);
-
 		const clipboardSerializer = this.filteredSerializer(spec, (node, out) => {
 			if (node.type.name == "_") return "";
 			const attrs = out[1];
@@ -164,6 +160,13 @@ class Editor extends View.EditorView {
 			}
 			return new State.Plugin(plugin);
 		});
+		let doc;
+		try {
+			doc = jsonContent && schema.nodeFromJSON(jsonContent)
+				|| content && domParser.parse(content);
+		} catch (err) {
+			console.error("Cannot import document", err);
+		}
 
 		return {
 			attributes: {
