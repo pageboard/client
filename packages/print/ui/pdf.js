@@ -48,10 +48,6 @@ function removePrintButtons() {
 
 function printStyle(className, pageBox, { width, height, margin }) {
 	const effectiveSheet = new CSSStyleSheet();
-	const innerPageSize = {
-		width: `calc(${width} - ${margin} - ${margin})`,
-		height: `calc(${height} - ${margin} - ${margin})`
-	};
 	const printSheet = `
 	html, body {
 		padding: 0;
@@ -63,8 +59,8 @@ function printStyle(className, pageBox, { width, height, margin }) {
 		}
 		.${className} {
 			margin: 10px;
-			width: ${innerPageSize.width};
-			height: ${innerPageSize.height};
+			width: ${width};
+			height: ${height};
 			border-left-width: ${margin};
 			border-right-width: ${margin};
 			border-top-width: ${margin};
