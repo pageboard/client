@@ -1,14 +1,25 @@
 class HTMLElementSheet extends Page.create(HTMLDivElement) {
 	static defaults = {
 		dataSrc: null,
-		dataCrop: null
+		dataCrop: null,
+		dataWidth: null,
+		dataHeight: null
 	};
 
 	#defer;
 	reveal(state) {
 		if (!this.options.src) {
+			this.style.setProperty('--width', this.options.width);
+			this.style.setProperty('--height', this.options.height);
+			this.style.removeProperty('--size-w');
+			this.style.removeProperty('--size-h');
 			this.style.removeProperty('--image');
 			return;
+		} else {
+			this.style.setProperty('--size-w', this.options.width);
+			this.style.setProperty('--size-h', this.options.height);
+			this.style.removeProperty('--width');
+			this.style.removeProperty('--height');
 		}
 		const r = this.crop;
 

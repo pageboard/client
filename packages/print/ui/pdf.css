@@ -9,14 +9,13 @@
 	position:absolute;
 	background-color:var(--color);
 	background-image:var(--image);
-	background-size: var(--width, auto) var(--height, auto);
+	background-size: var(--size-w, auto) var(--size-h, auto);
 	background-repeat:var(--repeat);
-	background-position-x: var(--left, auto);
-	background-position-y: var(--top, auto);
-	left: 0;
-	top:0;
-	right:0;
-	bottom:0;
+	background-position: var(--position, auto);
+	left: var(--left, auto);
+	top:var(--top, auto);
+	width: calc(var(--width, 100%) + 2 * var(--bleedwidth, 0) * var(--pdfmargin, 0mm));
+	height: calc(var(--height, 100%) + 2 * var(--bleedheight, 0) * var(--pdfmargin, 0mm));
 	margin:
 		calc(-1 * var(--bleedheight, 0) * var(--pdfmargin, 0mm))
 		calc(-1 * var(--bleedwidth, 0) * var(--pdfmargin, 0mm))

@@ -185,6 +185,37 @@ exports.sheet = {
 						title: 'Round'
 					}]
 				},
+				position: {
+					title: 'Position',
+					anyOf: [{
+						const: null,
+						title: 'Top Left'
+					}, {
+						const: 'top center',
+						title: 'Top Center'
+					}, {
+						const: 'top right',
+						title: 'Top Right'
+					}, {
+						const: 'center left',
+						title: 'Center Left'
+					}, {
+						const: 'center',
+						title: 'Center'
+					}, {
+						const: 'center right',
+						title: 'Center Right'
+					}, {
+						const: 'bottom left',
+						title: 'Bottom Left'
+					}, {
+						const: 'bottom center',
+						title: 'Bottom Center'
+					}, {
+						const: 'bottom right',
+						title: 'Bottom Right'
+					}]
+				},
 				crop: {
 					title: 'Crop and scale',
 					type: "object",
@@ -249,6 +280,7 @@ exports.sheet = {
 		style---height="[background.height|post:%25]"
 		style---left="[background.left|post:%25]"
 		style---top="[background.top|post:%25]"
+		style---position="[background.position]"
 		style---color="[background.color]"
 		style---repeat="[background.repeat]"></div`,
 	scripts: [
