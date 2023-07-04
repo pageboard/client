@@ -2,22 +2,22 @@ class HTMLElementSheet extends Page.create(HTMLDivElement) {
 	static defaults = {
 		dataSrc: null,
 		dataCrop: null,
-		dataWidth: null,
-		dataHeight: null
+		dataSizeH: null,
+		dataSizeV: null
 	};
 
 	#defer;
 	reveal(state) {
 		if (!this.options.src) {
-			this.style.setProperty('--width', this.options.width);
-			this.style.setProperty('--height', this.options.height);
+			this.style.setProperty('--width', this.options.sizeH || '100%');
+			this.style.setProperty('--height', this.options.sizeV || '100%');
 			this.style.removeProperty('--size-w');
 			this.style.removeProperty('--size-h');
 			this.style.removeProperty('--image');
 			return;
 		} else {
-			this.style.setProperty('--size-w', this.options.width);
-			this.style.setProperty('--size-h', this.options.height);
+			this.style.setProperty('--size-w', this.options.sizeH || 'auto');
+			this.style.setProperty('--size-h', this.options.sizeV || 'auto');
 			this.style.removeProperty('--width');
 			this.style.removeProperty('--height');
 		}
