@@ -86,6 +86,7 @@ exports.sheet = {
 	title: 'Sheet',
 	menu: "pdf",
 	group: 'block',
+	priority: 1, // after HTMLElementImage
 	bundle: 'pdf',
 	context: 'pdf//',
 	icon: '<i class="icon file outline"></i>',
@@ -109,24 +110,28 @@ exports.sheet = {
 				top: {
 					title: 'Top in %',
 					type: 'number',
-					minimum: 0,
+					minimum: -100,
+					maximum: 100,
 					nullable: true
 				},
 				left: {
 					title: 'Left in %',
 					type: 'number',
-					minimum: 0,
+					minimum: -100,
+					maximum: 100,
 					nullable: true
 				},
 				width: {
 					title: 'Width in %',
 					type: 'number',
+					maximum: 100,
 					minimum: 0,
 					nullable: true
 				},
 				height: {
 					title: 'Height in %',
 					type: 'number',
+					maximum: 100,
 					minimum: 0,
 					nullable: true
 				},
@@ -140,6 +145,91 @@ exports.sheet = {
 					type: 'boolean',
 					default: false
 				},
+				image: {
+					title: 'Image',
+					anyOf: [{
+						type: "null"
+					}, {
+						type: "string",
+						format: "uri"
+					}, {
+						type: "string",
+						format: "pathname"
+					}],
+					$helper: {
+						name: 'href',
+						filter: {
+							type: ["image"]
+						}
+					}
+				},
+				repeat: {
+					title: 'Repeat',
+					anyOf: [{
+						const: null,
+						title: 'Repeat'
+					}, {
+						const: 'no-repeat',
+						title: 'No Repeat'
+					}, {
+						const: 'repeat-x',
+						title: 'Repeat X'
+					}, {
+						const: 'repeat-y',
+						title: 'Repeat Y'
+					}, {
+						const: 'space',
+						title: 'Space'
+					}, {
+						const: 'round',
+						title: 'Round'
+					}]
+				},
+				crop: {
+					title: 'Crop and scale',
+					type: "object",
+					nullable: true,
+					properties: {
+						x: {
+							type: "number",
+							minimum: 0,
+							maximum: 100,
+							default: 50,
+							title: "Horizontal center"
+						},
+						y: {
+							type: "number",
+							minimum: 0,
+							maximum: 100,
+							default: 50,
+							title: "Vertical center"
+						},
+						width: {
+							type: "number",
+							minimum: 0,
+							maximum: 100,
+							default: 100,
+							title: "Width"
+						},
+						height: {
+							type: "number",
+							minimum: 0,
+							maximum: 100,
+							default: 100,
+							title: "Height"
+						},
+						zoom: {
+							type: "number",
+							minimum: 1,
+							maximum: 100,
+							default: 100,
+							title: "Zoom"
+						}
+					},
+					$helper: {
+						name: 'crop'
+					}
+				}
 			}
 		}
 	},
@@ -151,13 +241,19 @@ exports.sheet = {
 		'content.' : 'content.page'
 	},
 	html: `<div class="page-sheet [skip|alt:page-sheet-skip]" block-content="page"
+		is="element-sheet" data-src="[background.image]"
+		data-crop="[background.crop.x];[background.crop.y];[background.crop.width];[background.crop.height];[background.crop.zoom]"
 		style---bleedwidth="[background.bleedwidth|alt:1:0]"
 		style---bleedheight="[background.bleedheight|alt:1:0]"
-		style---width="[background.width|post:%25|or:auto]"
-		style---height="[background.height|post:%25|or:auto]"
-		style---left="[background.left|post:%25|or:0]"
-		style---top="[background.top|post:%25|or:0]"
-		style---color="[background.color]"></div`
+		style---width="[background.width|post:%25]"
+		style---height="[background.height|post:%25]"
+		style---left="[background.left|post:%25]"
+		style---top="[background.top|post:%25]"
+		style---color="[background.color]"
+		style---repeat="[background.repeat]"></div`,
+	scripts: [
+		'../ui/sheet.js'
+	]
 };
 
 exports.sheetmatch = {
