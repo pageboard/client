@@ -58,7 +58,7 @@ function printStyle(className, pageBox, { width, height, margin }) {
 			background: gray;
 		}
 		.${className} {
-			margin: 10px;
+			margin: 1rem auto;
 			width: ${width};
 			height: ${height};
 			border-left-width: ${margin};
