@@ -1,3 +1,6 @@
+[block-type="barcode"] {
+	display: inline-flex;
+}
 [block-type="barcode"] > img.error {
 	background-color: rgb(255 0 0 / 50%);
 }
