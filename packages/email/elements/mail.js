@@ -58,7 +58,7 @@ exports.mail = {
 	csp: { ...exports.page.csp },
 	mime: 'application/json'
 };
-if (exports.sitemap) exports.sitemail = exports.sitemap.itemModel('mail', true);
+if (exports.sitemap) exports.sitemail = exports.sitemap.itemModel('mail', false);
 
 exports.mail_body = {
 	title: "Body",

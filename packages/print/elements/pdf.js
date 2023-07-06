@@ -80,7 +80,7 @@ exports.pdf.properties = {
 	}
 };
 
-if (exports.sitemap) exports.sitepdf = exports.sitemap.itemModel('pdf', true);
+if (exports.sitemap) exports.sitepdf = exports.sitemap.itemModel('pdf', false);
 
 exports.sheet = {
 	title: 'Sheet',
