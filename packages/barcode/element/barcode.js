@@ -27,12 +27,12 @@ exports.barcode = {
 		width: {
 			title: 'Width',
 			type: 'integer',
-			default: 40
+			default: 3
 		},
 		height: {
 			title: 'Height',
 			type: 'integer',
-			default: 20
+			default: 3
 		}
 	},
 	html: `<element-barcode data-bcid="[bcid]" data-text="[text]" data-scale-x="[width]" data-scale-y="[height]"></element-barcode>`,
