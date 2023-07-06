@@ -1,0 +1,36 @@
+{
+  "name": "@pageboard/barcode",
+  "version": "0.13.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "postinstall"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pageboard/client.git"
+  },
+  "author": "Jérémy Lal <kapouer@melix.org>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pageboard/client/issues"
+  },
+  "homepage": "https://github.com/pageboard/client#readme",
+  "devDependencies": {
+    "postinstall": "^0.8.0",
+    "postinstall-bundle": "^0.8.0",
+    "bwip-js": "^3.4.3"
+  },
+  "prepare": {
+    "./src/barcode.js": "bundle --name=window.Pageboard lib/"
+  },
+  "pageboard": {
+    "directories": [
+      "element",
+      "lib",
+      "ui"
+    ],
+    "elements": "element/"
+  }
+}

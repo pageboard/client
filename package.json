@@ -23,6 +23,7 @@
     "packages/*"
   ],
   "dependencies": {
+    "@pageboard/barcode": "file:packages/barcode",
     "@pageboard/calendar": "file:packages/calendar",
     "@pageboard/email": "file:packages/email",
     "@pageboard/feed": "file:packages/feed",
