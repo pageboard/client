@@ -137,6 +137,35 @@ exports.layout = {
 				}
 			}
 		},
+		padding: {
+			title: 'Padding',
+			type: 'object',
+			nullable: true,
+			properties: {
+				inline: {
+					title: 'Inline (em)',
+					type: 'number',
+					default: 0,
+					minimum: 0,
+					multipleOf: 0.1,
+					nullable: true
+				},
+				inlineUnits: {
+					const: 'em'
+				},
+				block: {
+					title: 'Block (rem)',
+					type: 'number',
+					default: 0,
+					minimum: 0,
+					multipleOf: 0.1,
+					nullable: true
+				},
+				blockUnits: {
+					const: 'rem'
+				}
+			}
+		},
 		background: {
 			title: 'Background',
 			type: 'object',
@@ -314,6 +343,8 @@ exports.layout = {
 		data-crop="[background.crop.x];[background.crop.y];[background.crop.width];[background.crop.height];[background.crop.zoom]"
 		style-margin-block="[margins.block|fail:][margins.blockUnits]"
 		style-margin-inline="[margins.inline|fail:][margins.inlineUnits]"
+		style-padding-block="[padding.block|fail:][padding.blockUnits]"
+		style-padding-inline="[padding.inline|fail:][padding.inlineUnits]"
 		style-height="[height|fail:][heightUnits]"
 		style-background-color="[background.color]"
 		style-background-size="[background.size]"
