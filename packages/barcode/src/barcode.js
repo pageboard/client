@@ -14,10 +14,11 @@ class HTMLElementBarcode extends Page.Element {
 		const img = this.querySelector('img') || this.appendChild(doc.createElement('img'));
 		img.classList.remove('error');
 		try {
-			bwipjs.toCanvas(Object.assign({ includetext: true }, this.options), canvas);
+			bwipjs.toCanvas(Object.assign({
+				includetext: true
+			}, this.options), canvas);
 			img.src = canvas.toDataURL('image/png');
 		} catch (e) {
-			console.error(e);
 			img.classList.add('error');
 		}
 	}
