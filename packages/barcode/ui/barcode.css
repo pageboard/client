@@ -3,4 +3,8 @@
 }
 [block-type="barcode"] > img.error {
 	background-color: rgb(255 0 0 / 50%);
+	min-width:20px;
+	min-height:20px;
+	display:inline-block;
+	visibility: visible;
 }
