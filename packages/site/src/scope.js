@@ -86,6 +86,9 @@ export default class Scope {
 		});
 		return this.#view;
 	}
+	var(name) {
+		this.#state.vars[name] = true;
+	}
 	copy(extra) {
 		const scope = new Scope(this.#state, this);
 		scope.#view = this.#view;
