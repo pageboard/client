@@ -67,13 +67,13 @@ exports.pdf.properties = {
 				description: 'Default pdf export',
 				anyOf: [{
 					type: 'null',
-					title: 'Printer'
+					title: 'Screen'
 				}, {
 					const: 'ebook',
 					title: 'Ebook'
 				}, {
-					const: 'screen',
-					title: 'Screen'
+					const: 'printer',
+					title: 'Printer'
 				}]
 			}
 		}
