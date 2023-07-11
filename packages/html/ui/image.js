@@ -213,6 +213,13 @@ class HTMLElementInlineImage extends HTMLElementImageConstructor(Page.create(HTM
 		if (!cur && this.image.src?.startsWith('data:')) return this.src;
 		else return cur;
 	}
+
+	captureLoad() {
+		super.captureLoad();
+	}
+	captureError() {
+		super.captureError();
+	}
 }
 
 Page.define('element-image', HTMLElementImage);
