@@ -50,7 +50,7 @@ Page.route(async state => {
 	const lang = !nested ? state.query.lang : undefined;
 	if (data.page == null) {
 		data.page = await fetchHelper('get', '/.api/page', {
-			url: state.pathname.replace(/\.\w+$/, ''),
+			url: state.pathname,
 			lang,
 			nested
 		});
