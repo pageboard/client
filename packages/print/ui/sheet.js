@@ -42,11 +42,11 @@ class HTMLElementSheet extends Page.create(HTMLDivElement) {
 			} catch (e) {
 				// pass
 			}
-			this.#defer?.resolve();
+			this.#defer?.reject();
 			this.#defer = new Deferred();
 			const img = new Image();
 			img.addEventListener('load', this.#defer.resolve);
-			img.addEventListener('error', this.#defer.resolve);
+			img.addEventListener('error', this.#defer.reject);
 			img.src = curSrc;
 			this.style.setProperty('--image', `url("${curSrc}")`);
 			return this.#defer;
