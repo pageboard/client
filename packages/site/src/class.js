@@ -69,8 +69,8 @@ export function create(Superclass) {
 export const Element = create(HTMLElement);
 
 export function define(name, cla, is) {
-	const preset = window.customElements.get(name);
-	if (preset) return preset;
+	const defined = window.customElements.get(name);
+	if (defined) return defined;
 
 	Page.connect(cla); // calls static methods
 
