@@ -61,18 +61,12 @@ function printStyle(className, pageBox, { width, height, margin }) {
 			margin: 1rem auto;
 			width: ${width};
 			height: ${height};
-			border-left-width: ${margin};
-			border-right-width: ${margin};
-			border-top-width: ${margin};
-			border-bottom-width: ${margin};
-			border-color:transparent;
-			border-style: solid;
+			border: ${margin} solid transparent;
+			outline: rgba(0 0 0 / 6%) dashed min(1px, ${margin});
+			outline-offset: -${margin};
 			background: white;
 			overflow:clip;
 			overflow-clip-margin: content-box ${margin};
-		}
-		[contenteditable] .${className} {
-			border-color: rgba(0,0,0,0.05);
 		}
 	}
 	@media print {
