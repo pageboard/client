@@ -67,14 +67,29 @@ exports.input_fields = {
 			type: 'boolean',
 			default: false
 		},
+		grouped: {
+			title: "Grouped",
+			type: 'boolean',
+			default: false
+		},
 		full: {
 			title: 'Full width',
 			type: 'boolean',
 			default: false
 		}
 	},
-	contents: "input_field*",
-	html: `<div class="[inline] [full|alt:fluid:] fields"></div>`
+	contents: "(input_label|input_field)*",
+	html: `<div class="[inline] [grouped] [full|alt:fluid:] fields"></div>`
+};
+
+exports.input_label = {
+	title: 'Input Label',
+	icon: '<i class="icons"><i class="text cursor icon"></i><i class="corner tag icon"></i></i>',
+	menu: "form",
+	group: "block",
+	context: "input_fields//",
+	contents: "inline*",
+	html: `<label></label>`
 };
 
 exports.input_text = {
