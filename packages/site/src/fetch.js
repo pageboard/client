@@ -48,7 +48,7 @@ export default function(method, url, data) {
 				}
 				obj.status = res.status;
 				obj.statusText ??= res.statusText;
-				obj.locked = (res.headers.get('X-Upcache-Lock') || "").split(', ').shift() || null;
+				obj.locks = (res.headers.get('X-Upcache-Lock') || "").split(',').map(str => str.trim()).filter(str => Boolean(str.length));
 				obj.granted = res.headers.get('X-Granted') ? true : false;
 				return obj;
 			});
