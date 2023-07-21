@@ -138,6 +138,11 @@ exports.settings = {
 					title: 'Translator',
 					description: 'translator'
 				}, {
+					const: 'reader',
+					$level: 5000,
+					title: 'Reader',
+					description: 'restricted content'
+				}, {
 					const: 'user',
 					$level: 10000,
 					title: 'User',
