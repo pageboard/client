@@ -181,6 +181,12 @@ exports.style = {
 				title: "Purple",
 				icon: '<i class="icon color" style="color:purple">P</i>'
 			}]
+		},
+		idiom: {
+			title: 'Untranslatable',
+			type: 'boolean',
+			default: false,
+			nullable: true
 		}
 	},
 	parse: function(dom) {
@@ -192,9 +198,10 @@ exports.style = {
 				}
 			}
 		}
+		if (dom.translate === false) data.idiom = true;
 		return data;
 	},
-	html: '<span class="style [size] [transform] [color]"></span>',
+	html: '<span class="style [size] [transform] [color]" translate="[idiom|alt:no:]"></span>',
 	stylesheets: [
 		'../ui/inlines.css'
 	]
