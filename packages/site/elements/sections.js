@@ -39,16 +39,14 @@ exports.paragraph = {
 		}
 	},
 	parse: function(dom) {
-		let align;
-		const prop = this.properties.align;
+		const data = {};
 		if (dom.classList.contains("aligned")) {
-			align = prop.anyOf.find(item => {
+			data.align = this.properties.align.anyOf.find(item => {
 				return dom.classList.contains(item.const);
-			});
-			if (align) align = align.const;
+			})?.const;
+			if (data.align == "left") data.align = null;
 		}
-		if (align == "left") align = null;
-		return { align };
+		return data;
 	},
 	contents: "inline*",
 	group: "block",
