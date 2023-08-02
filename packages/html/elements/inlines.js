@@ -192,7 +192,7 @@ exports.style = {
 	parse: function(dom) {
 		const data = {};
 		for (const [key, schema] of Object.entries(this.properties)) {
-			for (const item of schema.anyOf) {
+			if (schema.anyOf) for (const item of schema.anyOf) {
 				if (item.const && dom.classList.contains(item.const)) {
 					data[key] = item.const;
 				}
