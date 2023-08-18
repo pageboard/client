@@ -1,3 +1,9 @@
+Page.patch(state => {
+	const { pages } = state.query;
+	if (pages != null && /^\d+-?\d*$/.test(pages)) {
+		state.vars.pages = true;
+	}
+});
 Page.setup(state => {
 	removePrintButtons();
 	const opts = document.body.dataset;
@@ -15,6 +21,10 @@ Page.setup(state => {
 	}
 	autobreakFn(className);
 	pageNumbering(className);
+
+	if (state.vars.pages) {
+		prunePages(Array.from(document.body.querySelectorAll(`.${className}`)), state.query.pages);
+	}
 	if (state.pathname.endsWith('.pdf') == false) {
 		showPrintButtons(state, opts.preset);
 	} else {
@@ -29,6 +39,15 @@ Page.close(state => {
 	delete state.scope.printStyleSheet;
 	if (index >= 0) ass.splice(index, 1);
 });
+
+function prunePages(sheets, range) {
+	if (range.endsWith('-')) range += sheets.length;
+	else if (!range.includes('-')) range += '-' + range;
+	const [start, end] = range.split('-');
+	for (let i = 1; i <= sheets.length; i++) {
+		if (i < start || i > end) sheets[i - 1].remove();
+	}
+}
 
 function showPrintButtons(state, preset) {
 	const root = document.documentElement;
