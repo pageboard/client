@@ -28,7 +28,7 @@
     "perfect-scrollbar": "^1.4.0",
     "postinstall": "^0.4.2",
     "postinstall-browserify": "^0.1.0",
-    "pretty-bytes": "^5.6.0",
+    "pretty-bytes": "^5.1.0",
     "prosemirror-dev-tools": "^2.1.1",
     "fomantic-ui-css": "2.7.2",
     "speakingurl": "^14.0.1"
