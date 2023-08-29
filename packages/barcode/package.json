@@ -20,7 +20,7 @@
   "devDependencies": {
     "postinstall": "^0.8.0",
     "postinstall-bundle": "^0.8.0",
-    "bwip-js": "^3.4.3"
+    "bwip-js": "^4.0.1"
   },
   "prepare": {
     "./src/barcode.js": "bundle --name=window.Pageboard lib/"
