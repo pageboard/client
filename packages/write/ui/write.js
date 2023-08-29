@@ -37,11 +37,24 @@ Object.assign(window.Pageboard, {
 			else what.classList.remove('loading');
 		});
 	},
+	jsonRef(obj) {
+		const ref = obj.$ref;
+		const prefix = '/$elements/';
+		if (ref?.startsWith(prefix)) {
+			delete obj.$ref;
+			const name = ref.slice(prefix.length);
+			const el = Pageboard.elements[name];
+			for (const p of ['required', 'properties', 'type']) {
+				if (el[p]) obj[p] = el[p];
+			}
+		}
+		return obj;
+	},
 	service(str) {
 		if (!str) return null;
 		const [api, method] = str.split('.');
 		const obj = Pageboard.services[api]?.[method];
-		if (obj) Object.assign(obj, { api, method });
+		if (obj) Object.assign(this.jsonRef(obj), { api, method });
 		return obj;
 	}
 });
