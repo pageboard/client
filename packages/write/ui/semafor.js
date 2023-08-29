@@ -394,6 +394,18 @@ class Semafor {
 		return obj;
 	}
 	process(key, schema, node, parent) {
+		const { $ref } = schema;
+		if ($ref) {
+			const prefix = '/$elements/';
+			if ($ref?.startsWith(prefix)) {
+				delete schema.$ref;
+				const [name, rel] = $ref.slice(prefix.length).split("#");
+				let ref = Pageboard.elements[name];
+				if (rel) ref = rel.substring(1).split('/').reduce((schema, key) => schema[key], ref);
+				if (ref) Object.assign(schema, ref);
+				else console.error("$ref not found", $ref);
+			}
+		}
 		if (this.filter) {
 			schema = this.filter(key, schema, parent) || schema;
 		}

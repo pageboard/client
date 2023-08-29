@@ -7,7 +7,7 @@ Pageboard.schemaFilters.service = class ServiceFilter {
 		});
 		const method = (val ?? {}).method;
 		const service = Pageboard.service(method) ?? {};
-		if (!service.properties) {
+		if (!service.properties && !service.$ref) {
 			delete props.parameters;
 		} else {
 			props.parameters = { ...service, type: 'object'};
