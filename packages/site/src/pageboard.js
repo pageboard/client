@@ -30,8 +30,8 @@ Page.constructor.prototype.dispatch = function (target, name) {
 Page.constructor.prototype.reveal = function (node) {
 	const p = node.reveal(this);
 	if (!p) return;
-	this.scope.reveals ??= [];
-	this.scope.reveals.push(p);
+	this.scope.reveals ??= Promise.resolve();
+	this.scope.reveals = this.scope.reveals.then(() => p.catch());
 };
 
 Page.constructor.prototype.fetch = fetchHelper;
