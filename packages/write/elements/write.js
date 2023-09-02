@@ -4,7 +4,6 @@ exports.write = {
 	group: 'page',
 	bundle: true,
 	standalone: true,
-	dependencies: ['core', 'user', 'site'],
 	html: `<html lang="[$lang]">
 	<head>
 		<title>[title][$site.title?|pre: - ]</title>
