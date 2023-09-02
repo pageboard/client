@@ -33,7 +33,7 @@ export default class BlocksView {
 		return dom;
 	}
 
-	mount(el, block, blocks) {
+	mount(el, block) {
 		el.contents.normalize(block);
 		const copy = this.copy(block);
 		const doc = this.view.doc;
@@ -43,10 +43,6 @@ export default class BlocksView {
 				el.contents.set(copy, def.id, htmlToFrag(content, { doc: doc, ns: el.ns }));
 			}
 		});
-		if (el.mount) {
-			console.warn("deprecated el.mount", el.name);
-			el.mount(copy, blocks);
-		}
 		return copy;
 	}
 
@@ -119,7 +115,7 @@ export default class BlocksView {
 			console.warn("Unknown block type", block.id, type);
 			return;
 		}
-		block = this.mount(el, block, blocks);
+		block = this.mount(el, block);
 		if (!block) return;
 		if (block.id) {
 			// overwrite can happen when (re)loading virtual blocks
