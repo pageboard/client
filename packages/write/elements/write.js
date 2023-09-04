@@ -5,6 +5,7 @@ exports.write = {
 	dependencies: ['core', 'services'],
 	bundle: true,
 	standalone: true,
+	virtual: true,
 	html: `<html lang="[$lang]">
 	<head>
 		<title>[title][$site.title?|pre: - ]</title>

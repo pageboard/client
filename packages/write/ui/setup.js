@@ -105,6 +105,14 @@ function update(prevState) {
 	editor.updatePage();
 }
 
+function getStandalones(els) {
+	const list = [];
+	for (const [name, el] of Object.entries(els)) {
+		if (el.standalone && !el.virtual) list.push(el);
+	}
+	return list;
+}
+
 Pageboard.Editor = function Editor(win, state) {
 	const item = state.data.page?.item;
 	if (!item || item.type == "error") {
@@ -118,6 +126,8 @@ Pageboard.Editor = function Editor(win, state) {
 	if (editor && !editor.closed) {
 		editor.close();
 	}
+	Pageboard.standalones ??= getStandalones(Pageboard.elements);
+
 	const doc = win.document;
 	const body = doc.body;
 	win.Pagecut.Editor.prototype.update = update;
