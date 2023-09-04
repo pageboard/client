@@ -79,8 +79,8 @@ exports.pdf.properties = {
 		}
 	}
 };
-
-if (exports.sitemap) exports.sitepdf = exports.sitemap.itemModel('pdf', false);
+exports.sitepdf = exports.sitemap?.itemModel('pdf', false);
+exports.writepdf = exports.write?.itemModel('pdf');
 
 exports.sheet = {
 	title: 'Sheet',

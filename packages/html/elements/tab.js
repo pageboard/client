@@ -32,7 +32,7 @@ exports.tabs = {
 		'../ui/tab.js'
 	]
 };
-exports.editor.scripts.push('../ui/tab-helper.js');
+exports.editor?.scripts.push('../ui/tab-helper.js');
 
 exports.tab_item = {
 	title: "Item",

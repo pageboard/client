@@ -59,6 +59,4 @@ exports.sitemap = {
 		};
 	}
 };
-exports.editor.scripts.push('../ui/sitemap-helper.js');
-exports.sitepage = exports.sitemap.itemModel('page', false);
-exports.siteredirection = exports.sitemap.itemModel('redirection', false);
+exports.editor?.scripts.push('../ui/sitemap-helper.js');

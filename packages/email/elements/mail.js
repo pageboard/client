@@ -3,6 +3,7 @@ exports.mail = {
 	title: 'Mail',
 	icon: '<i class="icon file outline"></i>',
 	group: 'page',
+	dependencies: ['core'],
 	bundle: true,
 	standalone: true,
 	required: ['url'],
@@ -57,7 +58,8 @@ exports.mail = {
 	csp: { ...exports.page.csp },
 	mime: 'application/json'
 };
-if (exports.sitemap) exports.sitemail = exports.sitemap.itemModel('mail', false);
+exports.sitemail = exports.sitemap?.itemModel('mail', false);
+exports.writemail = exports.write?.itemModel('mail');
 
 exports.mail_body = {
 	title: "Body",

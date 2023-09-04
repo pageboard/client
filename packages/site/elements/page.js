@@ -3,6 +3,7 @@ exports.page = {
 	title: 'Page',
 	icon: '<i class="icon file outline"></i>',
 	group: 'page',
+	dependencies: ['core'],
 	bundle: true,
 	standalone: true,
 	required: ['url'],
@@ -120,11 +121,14 @@ exports.page = {
 		img: ["'self'", "data:", "https:"]
 	}
 };
+exports.sitepage = exports.sitemap?.itemModel('page', false);
+exports.writepage = exports.write?.itemModel('page');
 
 exports.redirection = {
 	priority: -100,
 	title: 'Redirection',
 	icon: '<i class="icon random"></i>',
+	dependencies: ['core'],
 	bundle: true,
 	standalone: true,
 	group: 'page',
@@ -164,3 +168,5 @@ exports.redirection = {
 	</body>
 	</html>`
 };
+exports.writeredirection = exports.write?.itemModel('redirection');
+exports.siteredirection = exports.sitemap?.itemModel('redirection', false);

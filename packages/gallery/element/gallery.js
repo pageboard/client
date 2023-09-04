@@ -22,7 +22,7 @@ exports.gallery = {
 		'../ui/gallery.js'
 	]
 };
-exports.editor.scripts.push('../ui/gallery-helper.js');
+exports.editor?.scripts.push('../ui/gallery-helper.js');
 
 exports.itemlink = {
 	priority: 10,

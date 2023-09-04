@@ -2,6 +2,18 @@ import Viewer from '@pageboard/pagecut/src/viewer.js';
 import * as fuse from './fuse';
 import * as load from './load';
 
+class OnDemandViewer extends Viewer {
+	#bundles = {};
+
+	element(type) {
+		const el = super.element(type);
+		if (!el.$installed) {
+			fuse.install(el, this.scope);
+		}
+		return el;
+	}
+}
+
 const baseElements = {
 	error: {
 		scripts: [],
@@ -80,9 +92,10 @@ export default class Scope {
 		// ignore it
 	}
 	get $view() {
-		if (!this.#view) this.#view = new Viewer({
+		if (!this.#view) this.#view = new OnDemandViewer({
 			elements: this.$elements,
-			document: this.$doc
+			document: this.$doc,
+			scope: this
 		});
 		return this.#view;
 	}
@@ -99,12 +112,6 @@ export default class Scope {
 
 	install() {
 		this.#state.doc ??= document.cloneNode();
-		const elts = this.$elements;
-		for (const name of Object.keys(elts)) {
-			const el = elts[name];
-			if (!el.name) el.name = name;
-			fuse.install(el, this);
-		}
 	}
 
 	async import(res = {}) {

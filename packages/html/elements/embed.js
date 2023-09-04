@@ -53,4 +53,4 @@ exports.embed = {
 		'../ui/linkable.css'
 	]
 };
-exports.editor.scripts.push('../ui/embed-helper.js');
+exports.editor?.scripts.push('../ui/embed-helper.js');

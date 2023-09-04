@@ -102,7 +102,7 @@ exports.page.extensions.rss = {
 // that are loaded on top of the page
 
 /*
-exports.siteblog = exports.sitemap.itemModel('blog', true);
+exports.siteblog = exports.sitemap?.itemModel('blog', true);
 
 exports.itemblog = { ...exports.siteblog,
 	contents: exports.blog.contents.slice(1),
@@ -176,5 +176,5 @@ exports.blogs = {
 		'../ui/blogs.css'
 	]
 };
-exports.editor.scripts.push('../ui/blogs-helper.js');
+exports.editor?.scripts.push('../ui/blogs-helper.js');
 */

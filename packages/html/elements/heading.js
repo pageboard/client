@@ -71,7 +71,7 @@ exports.heading = {
 		'../ui/heading.js'
 	]
 };
-exports.editor.scripts.push('../ui/heading-helper.js');
+exports.editor?.scripts.push('../ui/heading-helper.js');
 
 exports.heading_nolink = {
 	...exports.heading,

@@ -2,6 +2,7 @@ exports.write = {
 	priority: 100,
 	title: 'Write',
 	group: 'page',
+	dependencies: ['core', 'services'],
 	bundle: true,
 	standalone: true,
 	html: `<html lang="[$lang]">
@@ -181,6 +182,11 @@ exports.write = {
 		style: ["'self'", "'unsafe-inline'"],
 		font: ["'self'", "data:", "https:"],
 		img: ["'self'", "data:", "https:"]
+	},
+	itemModel: function(type) {
+		const el = exports[`write${type}`] = Object.assign({}, exports[type]);
+		if (!el.dependencies.includes('editor')) el.dependencies.push('editor');
+		return el;
 	}
 };
 
