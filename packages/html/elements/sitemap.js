@@ -19,32 +19,26 @@ exports.sitemap = {
 	scripts: [
 		'../ui/sitemap.js'
 	],
-	itemModel: function(name, leaf) {
+	itemModel: function(name) {
 		const schema = exports[name];
 		return {
 			title: schema.title,
 			icon: schema.icon,
+			properties: schema.properties,
 			standalone: true,
-			properties: {
-				leaf: {
-					type: 'boolean',
-					default: Boolean(leaf)
-				},
-				...schema.properties
-			},
 			menu: "link",
 			bundle: 'sitemap',
 			group: 'sitemap_item',
 			virtual: true,
-			contents: leaf ? undefined : {
+			contents: {
 				id: 'children',
 				nodes: "sitemap_item*",
 				virtual: true
 			},
 			alias: name,
 			context: 'sitemap/ | sitepage/',
-			html: `<element-sitepage class="item [leaf|alt::fold]" data-url="[url]" data-index="[index]">
-				<div class="title [leaf|alt::caret-icon]">
+			html: `<element-sitepage class="item fold" data-url="[url]" data-index="[index]">
+				<div class="title caret-icon">
 					<span class="header">[title|or:-]</span>
 					<span class="ui mini type label">[$grants.webmaster|prune:*][$type|slice:4]</span>
 					<span class="ui mini grey label">[$grants.webmaster|prune:*][nositemap|prune:*]no sitemap</span>
@@ -54,9 +48,10 @@ exports.sitemap = {
 					<a href="[url]" class="description">[url|or:-]</a>
 					<a href="[redirect|fail:*]" class="redirection"> ➜ [redirect]</a>
 				</div>
-				<div class="list content [leaf|not:prune:*]" block-content="children"></div>
+				<div class="list content" block-content="children"></div>
 			</element-sitepage>`
 		};
 	}
 };
 exports.editor?.scripts.push('../ui/sitemap-helper.js');
+
