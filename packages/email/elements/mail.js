@@ -59,7 +59,6 @@ exports.mail = {
 	mime: 'application/json'
 };
 exports.sitemail = exports.sitemap?.itemModel('mail', false);
-exports.writemail = exports.write?.itemModel('mail');
 
 exports.mail_body = {
 	title: "Body",

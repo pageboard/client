@@ -1,19 +1,14 @@
 Page.setup(state => {
-	const it = window.parent.Pageboard;
-	if (!it || !it.adopt || !state.data.page?.item) return;
-	state.finish(() => {
-		it.adopt(window, state);
+	const p = window.parent;
+	if (p != window && state.data.page?.item) state.finish(() => {
+		p.Pageboard?.adopt?.(window, state);
 	});
 });
 
 Page.patch(state => {
-	const it = window.parent.Pageboard;
-	state.push = function(url, opts) {
-		if (it.editor && !it.editor.closed) return Promise.resolve();
+	const p = window.parent;
+	state.push = function (url, opts) {
+		if (p.Pageboard.editor && !p.Pageboard.editor.closed) return Promise.resolve();
 		return Object.getPrototypeOf(this).push.call(this, url, opts);
 	};
-	state.replace = function(url, opts) {
-		return Object.getPrototypeOf(this).replace.call(this, url, opts);
-	};
 });
-

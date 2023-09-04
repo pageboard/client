@@ -182,11 +182,6 @@ exports.write = {
 		style: ["'self'", "'unsafe-inline'"],
 		font: ["'self'", "data:", "https:"],
 		img: ["'self'", "data:", "https:"]
-	},
-	itemModel: function(type) {
-		const el = exports[`write${type}`] = Object.assign({}, exports[type]);
-		if (!el.dependencies.includes('editor')) el.dependencies.push('editor');
-		return el;
 	}
 };
 
@@ -198,5 +193,16 @@ exports.editor = {
 	],
 	stylesheets: [
 		"../ui/editor.css"
-	]
+	],
+	fragments: [{
+		path: 'body',
+		attributes: {
+			"class": "[$write|alt:ProseMirror:]",
+			"spellcheck": "[$write|alt:false:true]",
+			"contenteditable": "[$write|alt:true:]",
+			"data-transition-close": "[transition.close?]",
+			"data-transition-open": "[transition.open?]",
+		}
+	}]
 };
+

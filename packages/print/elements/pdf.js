@@ -80,7 +80,6 @@ exports.pdf.properties = {
 	}
 };
 exports.sitepdf = exports.sitemap?.itemModel('pdf', false);
-exports.writepdf = exports.write?.itemModel('pdf');
 
 exports.sheet = {
 	title: 'Sheet',

@@ -122,7 +122,6 @@ exports.page = {
 	}
 };
 exports.sitepage = exports.sitemap?.itemModel('page', false);
-exports.writepage = exports.write?.itemModel('page');
 
 exports.redirection = {
 	priority: -100,
@@ -168,5 +167,4 @@ exports.redirection = {
 	</body>
 	</html>`
 };
-exports.writeredirection = exports.write?.itemModel('redirection');
 exports.siteredirection = exports.sitemap?.itemModel('redirection', false);

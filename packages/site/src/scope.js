@@ -3,12 +3,13 @@ import * as fuse from './fuse';
 import * as load from './load';
 
 class OnDemandViewer extends Viewer {
-	#bundles = {};
-
 	element(type) {
 		const el = super.element(type);
-		if (!el.$installed) {
-			fuse.install(el, this.scope);
+		if (el && !fuse.install(el, this.scope)) {
+			if (el.group == "page" && window.parent.Pageboard.Editor) {
+				el.scripts = el.scripts.concat(this.elements.editor.scripts);
+				el.stylesheets = el.stylesheets.concat(this.elements.editor.stylesheets);
+			}
 		}
 		return el;
 	}

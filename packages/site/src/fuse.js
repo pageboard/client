@@ -174,7 +174,7 @@ function renderBlock(el, scope, block, bscope) {
 }
 
 export function install(el, scope) {
-	if (el.$installed) return;
+	if (el.$installed) return true;
 	el.$installed = true;
 	try {
 		if (el.html != null) {
