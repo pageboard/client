@@ -105,12 +105,38 @@ function update(prevState) {
 	editor.updatePage();
 }
 
-function getStandalones(els) {
-	const list = [];
-	for (const [name, el] of Object.entries(els)) {
-		if (el.standalone && !el.virtual) list.push(el);
+function prepareRootElement(rootEl, view, elements) {
+	const groups = rootEl.groups = new Set();
+	for (const n of rootEl.bundle) {
+		const el = elements[n] = view.element(n);
+		if (el.group) for (const group of el.group.split(/\s+/)) {
+			groups.add(group);
+		}
 	}
-	return list;
+	return rootEl;
+}
+
+function prepareElements(root, view) {
+	const standalones = [];
+	const bundles = new Set();
+	for (const el of Object.values(view.elements)) {
+		if (el.standalone && !el.virtual) standalones.push(el);
+		if (el.bundle) bundles.add(el.name);
+	}
+
+	const elements = {};
+	const rootEl = view.element(root);
+	prepareRootElement(rootEl, view, elements);
+
+	for (const bundle of bundles) {
+		if (bundle == root) continue;
+		const el = view.elements[bundle];
+		if (el.group?.split(/\s+/).some(group => rootEl.groups.has(group))) {
+			prepareRootElement(view.element(el), view, elements);
+		}
+	}
+	Pageboard.standalones = standalones;
+	return elements;
 }
 
 Pageboard.Editor = function Editor(win, state) {
@@ -120,23 +146,23 @@ Pageboard.Editor = function Editor(win, state) {
 		console.warn("Not loading editor: no page or error page");
 		return;
 	}
-
-	const view = state.scope.$view;
 	let editor = Pageboard.editor;
 	if (editor && !editor.closed) {
 		editor.close();
 	}
-	Pageboard.standalones ??= getStandalones(Pageboard.elements);
+	const view = state.scope.$view;
+	const elements = prepareElements(item.type, view);
 
 	const doc = win.document;
 	const body = doc.body;
 	win.Pagecut.Editor.prototype.update = update;
 	window.Pagecut.MenuItem = win.Pagecut.MenuItem;
+
 	// and the editor must be running from child
 	editor = Pageboard.editor = new win.Pagecut.Editor({
 		store: view.blocks.store,
 		topNode: item.type,
-		elements: view.elements,
+		elements,
 		explicit: document.body.dataset.mode == "code",
 		place: doc.body,
 		jsonContent: state.scope.$jsonContent,
