@@ -3,6 +3,7 @@ exports.gallery = {
 	title: "Gallery",
 	icon: '<i class="university icon"></i>',
 	menu: "widget",
+	bundle: true,
 	properties: {
 		name: {
 			title: 'Name',
