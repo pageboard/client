@@ -28,10 +28,10 @@ Page.constructor.prototype.dispatch = function (target, name) {
 };
 
 Page.constructor.prototype.reveal = function (node) {
-	const p = node.reveal(this);
+	const p = node.reveal(this)?.catch(() => {});
 	if (!p) return;
 	this.scope.reveals ??= Promise.resolve();
-	this.scope.reveals = this.scope.reveals.then(() => p.catch());
+	this.scope.reveals = this.scope.reveals.then(() => p);
 };
 
 Page.constructor.prototype.fetch = fetchHelper;
