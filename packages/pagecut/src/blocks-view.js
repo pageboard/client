@@ -13,7 +13,7 @@ function htmlToFrag(str, {doc, ns}) {
 }
 
 export default class BlocksView {
-	constructor(view, opts) {
+	constructor(view, opts = {}) {
 		this.view = view;
 		this.initial = {};
 		this.store = opts.store ?? {};

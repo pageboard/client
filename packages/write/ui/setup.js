@@ -150,8 +150,8 @@ Pageboard.Editor = function Editor(win, state) {
 	if (editor && !editor.closed) {
 		editor.close();
 	}
-	const view = state.scope.$view;
-	const elements = prepareElements(item.type, view);
+	const viewer = state.scope.$view;
+	const elements = prepareElements(item.type, viewer);
 
 	const doc = win.document;
 	const body = doc.body;
@@ -160,7 +160,8 @@ Pageboard.Editor = function Editor(win, state) {
 
 	// and the editor must be running from child
 	editor = Pageboard.editor = new win.Pagecut.Editor({
-		store: view.blocks.store,
+		viewer,
+		store: viewer.blocks.store,
 		topNode: item.type,
 		elements,
 		explicit: document.body.dataset.mode == "code",
@@ -188,7 +189,7 @@ Pageboard.Editor = function Editor(win, state) {
 	editor.close = editorClose.bind(editor);
 
 	// keep runtime store in sync with editor store
-	view.blocks.store = editor.blocks.store;
+	viewer.blocks.store = editor.blocks.store;
 
 	const controls = {};
 	for (const key of Object.keys(Pageboard.Controls)) {
@@ -203,7 +204,7 @@ Pageboard.Editor = function Editor(win, state) {
 		}
 	}
 	editor.controls = controls;
-	controls.store.preinitial = editor.blocks.initial = view.blocks.initial;
+	controls.store.preinitial = editor.blocks.initial = viewer.blocks.initial;
 	const $store = state.scope.$store;
 	if ($store) {
 		controls.store.reset($store);

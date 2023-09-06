@@ -1,17 +1,38 @@
 import Viewer from '@pageboard/pagecut/src/viewer.js';
+import BlocksView from '@pageboard/pagecut/src/blocks-view.js';
 import * as fuse from './fuse';
 import * as load from './load';
 
-class OnDemandViewer extends Viewer {
-	element(type) {
-		const el = super.element(type);
-		if (el && !fuse.install(el, this.scope)) {
-			if (el.group == "page" && window.parent.Pageboard.Editor) {
-				el.scripts = el.scripts.concat(this.elements.editor.scripts);
-				el.stylesheets = el.stylesheets.concat(this.elements.editor.stylesheets);
+
+class CustomViewer extends Viewer {
+	#bundleMap = new Map();
+	#bundleState = new Map();
+
+	constructor(opts) {
+		super(opts);
+		const map = this.#bundleMap;
+		for (const p of Object.values(this.elements)) {
+			if (!p.bundle) continue;
+			for (const n of p.bundle) {
+				let list = map.get(n);
+				if (!list) map.set(n, list = new Set());
+				list.add(p.name);
 			}
 		}
+	}
+
+	element(type) {
+		const el = super.element(type);
+		if (el) fuse.install(el, this.scope);
 		return el;
+	}
+
+	bundlesOf(type) {
+		return this.#bundleMap.get(type);
+	}
+
+	async waitBundles() {
+		await Promise.allSettled(Object.values(this.#bundleState));
 	}
 }
 
@@ -48,10 +69,17 @@ export default class Scope {
 		}
 		if (!scope) scope = state.referrer?.scope;
 
-		if (!scope) scope = new Scope(state, {
-			$filters: {},
-			$elements: elts
-		});
+		if (!scope) {
+			scope = new Scope(state, {
+				$filters: {}
+			});
+			scope.#view = new CustomViewer({
+				elements: elts,
+				document: this.$doc,
+				scope: this
+			});
+			scope.#view.blocks = new BlocksView(scope.#view);
+		}
 		else {
 			scope = scope.copy();
 			scope.#state = state;
@@ -93,12 +121,13 @@ export default class Scope {
 		// ignore it
 	}
 	get $view() {
-		if (!this.#view) this.#view = new OnDemandViewer({
-			elements: this.$elements,
-			document: this.$doc,
-			scope: this
-		});
 		return this.#view;
+	}
+	get $elements() {
+		return this.#view.elements;
+	}
+	set $elements(els) {
+
 	}
 	var(name) {
 		this.#state.vars[name] = true;
@@ -111,26 +140,37 @@ export default class Scope {
 		return scope;
 	}
 
-	install() {
-		this.#state.doc ??= document.cloneNode();
+	async #install(type, to) {
+		const roots = this.$view.bundlesOf(type);
+		if (!roots) return;
+		for (const p of roots) {
+			const root = this.$elements[p];
+			if (root.group == "page") continue;
+
+			const { scripts, stylesheets } = root;
+			for (const url of scripts) to.scripts.add(url);
+			for (const url of stylesheets) to.stylesheets.add(url);
+		}
 	}
 
-	async import(res = {}) {
-		await load.schemas(this, res.metas);
-		if (res.item && !this.$element) {
-			this.$element = this.$elements[res.item.type];
+	async import(res) {
+		this.#state.doc ??= document.cloneNode();
+		const el = this.$element ??= { ...Pageboard.elements[res?.item.type] };
+		el.scripts = new Set(el.scripts);
+		el.stylesheets = new Set(el.stylesheets);
+		if (res?.items) for (const item of res.items) {
+			this.#install(item.type, el);
 		}
-		this.install();
-		if (res.hrefs) {
+		if (el.group == "page" && window.parent.Pageboard.Editor) {
+			this.#install('editor', el);
+		}
+		if (el.name) this.$view.setElement(el);
+		if (res?.hrefs) {
 			Object.assign(this.$hrefs, res.hrefs);
 		}
-		for (const k of ["grants", "links", "site", "locks", "granted", "commons", "meta", "status", "statusText", "item", "items", "count", "offset", "limit", "lang"]) {
+		if (res) for (const k of ["grants", "links", "site", "locks", "granted", "commons", "meta", "status", "statusText", "item", "items", "count", "offset", "limit", "lang"]) {
 			if (res[k] !== undefined) this[`$${k}`] = res[k];
 		}
-	}
-
-	bundles(res) {
-		return load.bundles(this.#state, res.metas);
 	}
 
 	render(data, el) {

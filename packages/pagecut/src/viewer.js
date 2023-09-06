@@ -1,19 +1,10 @@
-import BlocksView from './blocks-view';
 import Element from './element';
 
 export default class Viewer {
-	static Blocks = BlocksView;
 
-	constructor(opts) {
-		this.init(opts);
-	}
-
-	init(opts) {
-		if (!opts) opts = {};
-		this.blocks = new Viewer.Blocks(this, opts);
-
-		this.doc = opts.document || document.cloneNode();
-		const elts = this.elements = opts.elements ?? {};
+	constructor(opts = {}) {
+		this.doc = opts.document ?? document.cloneNode();
+		const elts = this.elements = Object.assign({}, opts.elements);
 		for (const [name, el] of Object.entries(elts)) {
 			el.name = name;
 			this.setElement(el);
@@ -31,7 +22,10 @@ export default class Viewer {
 		if (!type) return;
 
 		let el = typeof type == "string" ? this.elements[type] : type;
-		if (!el) return;
+		if (!el) {
+			console.warn("Unknown element", type);
+			return;
+		}
 		if (!(el instanceof Element)) el = new Element(el);
 		return el;
 	}

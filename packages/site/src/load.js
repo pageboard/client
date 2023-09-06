@@ -1,7 +1,5 @@
 import { Deferred } from 'class-deferred';
 
-const cache = new Map();
-
 function load(node, head, priority = 0) {
 	const d = new Deferred();
 	const isLink = node.tagName == "LINK";
@@ -26,27 +24,13 @@ function load(node, head, priority = 0) {
 	return d;
 }
 
-export async function schemas(scope, metas = []) {
-	const list = [];
-	for (const item of metas) if (item.schemas) list.push(...item.schemas);
-	await Promise.all(list.map(schema => {
-		if (!cache.has(schema)) {
-			cache.set(schema, js(schema, scope.$doc));
-		}
-		return cache.get(schema);
-	}));
-}
-
-export async function bundles(state, metas = []) {
-	for (const meta of metas) {
-		const { scripts, stylesheets, priority } = meta;
-		if (stylesheets) await Promise.all(
-			stylesheets.map(url => css(url, state.doc, priority))
-		);
-		if (scripts) await Promise.all(
-			scripts.map(url => js(url, state.doc, priority))
-		);
-	}
+export async function bundle(state, { scripts, stylesheets, priority }) {
+	if (stylesheets) await Promise.allSettled(
+		stylesheets.map(url => css(url, state.doc, priority))
+	);
+	if (scripts) await Promise.allSettled(
+		scripts.map(url => js(url, state.doc, priority))
+	);
 }
 
 function getHead(doc) {

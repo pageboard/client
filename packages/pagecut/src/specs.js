@@ -14,7 +14,7 @@ export default function define(viewer, elt, schema, nodeViews) {
 		schema.nodes = schema.nodes.addToStart(elt.name, elt);
 		return;
 	}
-	if (!elt.render) return; // some elements are not meant to be rendered
+	if (!elt.dom) return; // some elements are not meant to be rendered
 	let dom = elt.dom ?? viewer.render(viewer.blocks.create(elt.name), {
 		merge: false,
 		genId: false

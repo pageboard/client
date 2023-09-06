@@ -70,7 +70,6 @@ Page.route(async state => {
 		throw new Error("page render should return a body element");
 	}
 	state.doc = node.ownerDocument;
-	await scope.bundles(page);
 	// cleanup - in a future version we will have named fetches
 	delete state.scope.$item;
 	delete state.scope.$items;
@@ -85,4 +84,3 @@ Page.ready(state => {
 	if (state.query.lang == state.scope.$lang) state.vars.lang = true;
 	state.ivars = new Set();
 });
-

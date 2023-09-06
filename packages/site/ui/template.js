@@ -47,7 +47,6 @@ class HTMLElementTemplate extends Page.Element {
 			this.loading = true;
 			this.classList.add('loading');
 			await scope.import(response);
-			await scope.bundles(response);
 		} catch (err) {
 			response.status = -1; // FIXME check toggleMessages
 			// eslint-disable-next-line no-console

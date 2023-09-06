@@ -21,11 +21,7 @@ import Utils from "./utils";
 import DefineSpecs from "./specs";
 import BlocksEdit from "./blocks-edit";
 import SetDocAttr from "./SetDocAttr";
-import EditorViewer from "./viewer";
 import { MenuItem, MenuBar } from "./menubar";
-
-const Viewer = window.Pagecut?.Viewer ?? EditorViewer;
-Viewer.Blocks = BlocksEdit;
 
 Transform.Transform.prototype.docAttr = function(key, value) {
 	return this.step(new SetDocAttr(key, value));
@@ -47,12 +43,11 @@ class Editor extends View.EditorView {
 			_: {
 				priority: -Infinity,
 				title: "Empty",
-				group: "block",
+				name: '_',
+				group: "block mail_block",
 				inplace: true,
 				draggable: false,
-				render: function(block, scope) {
-					return scope.$doc.createElement('pagecut-placeholder');
-				}
+				html: '<pagecut-placeholder>'
 			}
 		}
 	};
@@ -82,7 +77,7 @@ class Editor extends View.EditorView {
 	}
 
 	static configure(viewer, { topNode, jsonContent, content, plugins = [] }) {
-		const elements = viewer.elements;
+		const { elements } = viewer;
 		const spec = {
 			topNode,
 			nodes: Editor.defaults.nodes.remove(topNode ? 'doc' : null),
@@ -188,11 +183,14 @@ class Editor extends View.EditorView {
 	}
 
 	constructor(opts) {
-		const elts = opts.elements;
+		const { elements, viewer } = opts;
+
+		viewer.blocks = new BlocksEdit(viewer, opts);
 		for (const [name, elt] of Object.entries(Editor.defaults.elements)) {
-			elts[name] = { ...elt, ...elts[name] };
+			viewer.setElement({ ...elt, ...elements[name] });
+			viewer.element(name); // triggers install
 		}
-		const viewer = new Viewer(opts);
+
 		super({
 			mount: typeof opts.place == "string" ?
 				document.querySelector(opts.place) :
@@ -260,16 +258,18 @@ class Editor extends View.EditorView {
 		this.dom.removeEventListener('submit', this, true);
 		this.dom.removeEventListener('invalid', this, true);
 	}
-}
-for (const name of ['render', 'element', 'from']) {
-	Object.defineProperty(
-		Editor.prototype,
-		name,
-		Object.getOwnPropertyDescriptor(Viewer.prototype, name)
-	);
+	render(...args) {
+		return this._props.viewer.render(...args);
+	}
+	element(...args) {
+		return this._props.viewer.element(...args);
+	}
+	from(...args) {
+		return this._props.viewer.from(...args);
+	}
 }
 
 export {
-	Editor, View, Model, State, Transform, Commands, keymap, Viewer, MenuItem, MenuBar
+	Editor, View, Model, State, Transform, Commands, keymap, MenuItem, MenuBar
 };
 

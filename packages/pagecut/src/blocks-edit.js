@@ -1,8 +1,5 @@
 import BlocksView from './blocks-view';
 export default class Blocks extends BlocksView {
-	constructor(view, opts) {
-		super(view, opts);
-	}
 	mutate(node, data) {
 		let nodes = [], block, id;
 		if (typeof node != "string") {

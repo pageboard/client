@@ -11,6 +11,8 @@ import {
 } from 'matchdom';
 
 import str2dom from '@pageboard/pagecut/src/str2dom.js';
+import Element from '@pageboard/pagecut/src/element.js';
+
 export { str2dom };
 
 import * as matchdomPlugin from './plugin';
@@ -67,7 +69,6 @@ String.prototype.fuse = function(data, scope, plugin) {
 
 
 export function render(scope, data, element) {
-	const elts = scope.$elements;
 	if (!data) data = {};
 
 	if (element) install(element, scope);
@@ -78,9 +79,6 @@ export function render(scope, data, element) {
 	// knowing that merge(block.data) and scope contains other keys of the block,
 	// prefixed with $
 	const blocks = {};
-	if (!element && block.type) {
-		element = elts[block.type];
-	}
 	if (data.items) {
 		for (const child of data.items) {
 			blocks[child.id] = child;
@@ -173,7 +171,12 @@ function renderBlock(el, scope, block, bscope) {
 	return dom;
 }
 
+Element.prototype.render = function(block, bscope) {
+	return renderBlock(this, this.scope, block, bscope);
+};
+
 export function install(el, scope) {
+	el.scope = scope;
 	if (el.$installed) return true;
 	el.$installed = true;
 	try {
@@ -196,13 +199,7 @@ export function install(el, scope) {
 	} catch (err) {
 		// eslint-disable-next-line no-console
 		console.error("Invalid element", el, err);
-		return;
 	}
-
-	if (!el.dom) return;
-	el.render = (block, bscope) => {
-		return renderBlock(el, scope, block, bscope);
-	};
 }
 
 function insertFragments(scope, el) {
