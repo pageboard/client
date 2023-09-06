@@ -56,7 +56,7 @@ class HTMLElementTemplate extends Page.Element {
 			this.loading = false;
 		}
 		// TODO injected bundles cannot register scope.$filters before render
-		const frag = this.#render(state, scope, response, collector);
+		const frag = await this.#render(state, scope, response, collector);
 		const redirect = this.getRedirect(scope.$status);
 		if (redirect) {
 			scope.$request = request;
@@ -115,7 +115,7 @@ class HTMLElementTemplate extends Page.Element {
 		return node;
 	}
 
-	#render(state, scope, data, collector) {
+	async #render(state, scope, data, collector) {
 		const view = this.ownView;
 		const tmpl = this.ownTpl.content.cloneNode(true);
 
@@ -219,7 +219,7 @@ class HTMLElementTemplate extends Page.Element {
 		if (offset != null && limit != null) {
 			Object.assign(this.dataset, { count, start, stop, limit });
 		}
-		const frag = scope.render(data, el);
+		const frag = await scope.render(data, el);
 		if (collector.failed) scope.$status = 400;
 
 		if (scope.$status != 200) {

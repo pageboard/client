@@ -61,7 +61,7 @@ class HTMLElementSitemap extends Page.Element {
 		const scope = state.scope.copy();
 		await scope.import(res);
 		const tree = this.constructor.transformResponse(res);
-		const node = scope.render({
+		const node = await scope.render({
 			item: tree
 		});
 		// only change block content

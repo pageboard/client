@@ -155,7 +155,12 @@ export default class Scope {
 
 	async import(res) {
 		this.#state.doc ??= document.cloneNode();
-		const el = this.$element ??= { ...Pageboard.elements[res?.item.type] };
+		let el;
+		if (this.$element || !res?.item?.type) {
+			el = { scripts: [], stylesheets: [] };
+		} else {
+			el = this.$element ??= { ...Pageboard.elements[res?.item.type] };
+		}
 		el.scripts = new Set(el.scripts);
 		el.stylesheets = new Set(el.stylesheets);
 		if (res?.items) for (const item of res.items) {
@@ -165,6 +170,7 @@ export default class Scope {
 			this.#install('editor', el);
 		}
 		if (el.name) this.$view.setElement(el);
+		else await load.bundle(this.#state, el);
 		if (res?.hrefs) {
 			Object.assign(this.$hrefs, res.hrefs);
 		}
@@ -173,9 +179,15 @@ export default class Scope {
 		}
 	}
 
-	render(data, el) {
+	renderSync(data, el) {
 		this.$status = data.status;
 		this.$statusText = data.statusText;
 		return fuse.render(this, data, el);
+	}
+
+	async render(data, el) {
+		const frag = this.renderSync(data, el);
+		await this.$view.waitBundles();
+		return frag;
 	}
 }

@@ -26,10 +26,10 @@ function load(node, head, priority = 0) {
 
 export async function bundle(state, { scripts, stylesheets, priority }) {
 	if (stylesheets) await Promise.allSettled(
-		stylesheets.map(url => css(url, state.doc, priority))
+		Array.from(stylesheets).map(url => css(url, state.doc, priority))
 	);
 	if (scripts) await Promise.allSettled(
-		scripts.map(url => js(url, state.doc, priority))
+		Array.from(scripts).map(url => js(url, state.doc, priority))
 	);
 }
 
