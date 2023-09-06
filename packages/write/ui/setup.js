@@ -129,8 +129,8 @@ function prepareElements(root, view) {
 	prepareRootElement(rootEl, view, elements);
 
 	for (const bundle of bundles) {
-		if (bundle == root) continue;
 		const el = view.elements[bundle];
+		if (el.group == "page") continue;
 		if (el.group?.split(/\s+/).some(group => rootEl.groups.has(group))) {
 			prepareRootElement(view.element(el), view, elements);
 		}
