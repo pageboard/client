@@ -61,7 +61,7 @@ exports.carousel = {
 			default: false,
 		},
 		prevNextButtons: {
-			title: 'Prev and next buttons',
+			title: 'Navigation buttons',
 			type: 'boolean',
 			default: true
 		},
