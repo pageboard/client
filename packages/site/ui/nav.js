@@ -93,6 +93,6 @@ Page.setup(state => {
 
 const statePush = Page.constructor.prototype.push;
 Page.constructor.prototype.push = function (...args) {
-	if (this.scope.transition) this.scope.transition.cancel();
+	this.scope.transition?.cancel();
 	return statePush.apply(this, args);
 };
