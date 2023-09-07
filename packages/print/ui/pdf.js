@@ -7,8 +7,9 @@ Page.patch(state => {
 Page.setup(state => {
 	removePrintButtons();
 	const opts = document.body.dataset;
+
 	if (window.devicePixelRatio < 4 && window.matchMedia('print').matches) {
-		delete opts.margin;
+		// TODO
 	}
 	const { width = '210mm', height = '297mm', margin = '0mm' } = opts;
 	document.documentElement.style.setProperty(
