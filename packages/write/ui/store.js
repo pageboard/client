@@ -251,7 +251,7 @@ Pageboard.Controls.Store = class Store {
 			Store.generatedBefore = {};
 			this.clear();
 			delete this.unsaved;
-			delete this.editor?.blocks.initial;
+			if (this.editor) this.editor.blocks.initial = {};
 			//delete this.initial;
 		}
 		return to;
