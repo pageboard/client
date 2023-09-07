@@ -170,7 +170,7 @@ export default class Scope {
 		this.#state.doc ??= document.cloneNode();
 
 		const types = new Set();
-		if (res?.bundles) for (const bundle of res.bundles) types.add(bundle);
+		if (res?.types) for (const type of res.types) types.add(type);
 		if (res?.items) for (const item of res.items) types.add(item.type);
 
 		let el;
