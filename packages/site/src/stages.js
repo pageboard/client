@@ -4,11 +4,10 @@ import * as equivs from './equivs';
 Page.patch(async state => {
 	const metas = equivs.read();
 	if (metas.Status) {
-		// probably a very bad idea
-		// will keep 301 when staying on the same pathname,
-		// since window-page won't mergeHead and won't remove the meta status
-		// state.status = parseInt(metas.Status);
-		// state.statusText = metas.Status.substring(state.status.toString().length).trim();
+		// eat it
+		state.doc.head.querySelector('meta[http-equiv="Status"]').remove();
+		state.status = parseInt(metas.Status);
+		state.statusText = metas.Status.substring(state.status.toString().length).trim();
 	}
 	state.finish(() => {
 		state.finish(() => {
