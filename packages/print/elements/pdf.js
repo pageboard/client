@@ -21,6 +21,8 @@ exports.pdf = {
 	mime: "application/pdf"
 };
 
+if (exports.pdf) exports.sitepdf = exports.sitemap.itemModel('pdf');
+
 exports.pdf.fragments = [
 	...exports.pdf.fragments || [], {
 		path: 'body',

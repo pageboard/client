@@ -39,7 +39,7 @@
     "nouislider/dist/nouislider.css": "copy lib/"
   },
   "pageboard": {
-    "priority": -1,
+    "priority": -10,
     "directories": [
       "elements",
       "lib",

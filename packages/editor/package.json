@@ -30,7 +30,7 @@
     "@pageboard/pagecut/src/*.css": "copy lib/"
   },
   "pageboard": {
-    "priority": -1,
+    "priority": -5,
     "directories": [
       "elements",
       "lib",
