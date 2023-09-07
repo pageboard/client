@@ -306,6 +306,7 @@ class HTMLElementInputHTML extends Page.create(HTMLTextAreaElement) {
 
 		const elts = this.constructor.elements;
 		const scope = state.scope.copy({ $elements: elts });
+		scope.$view.prepare();
 		scope.import();
 
 

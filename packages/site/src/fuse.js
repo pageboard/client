@@ -91,11 +91,13 @@ export function render(scope, data, element) {
 			}
 		}
 	}
-	return scope.$view.from(block, blocks, {
+	const frag = scope.$view.from(block, blocks, {
 		element,
 		scope,
 		strip: !scope.$write
 	});
+	if (element) delete scope.$view.elements[element.name];
+	return frag;
 }
 
 function renderBlock(el, scope, block, bscope) {

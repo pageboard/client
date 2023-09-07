@@ -5,29 +5,35 @@ import * as load from './load';
 
 
 class CustomViewer extends Viewer {
-	#bundleMap = new Map();
-
-	constructor(opts) {
-		super(opts);
-		const map = this.#bundleMap;
-		for (const p of Object.values(this.elements)) {
-			if (!p.bundle) continue;
-			for (const n of p.bundle) {
-				let list = map.get(n);
-				if (!list) map.set(n, list = new Set());
-				list.add(p.name);
-			}
-		}
-	}
-
 	element(type) {
 		const el = super.element(type);
 		if (el) fuse.install(el, this.scope);
 		return el;
 	}
 
+	setElement(el) {
+		fuse.install(super.setElement(el), this.scope);
+	}
+
+	prepare() {
+		for (const name in this.elements) this.element(name);
+	}
+
+	init() {
+		const map = this.bundleMap = new Map();
+		for (const [name, el] of Object.entries(this.elements)) {
+			el.name = name;
+			if (!el.bundle) continue;
+			for (const n of el.bundle) {
+				let list = map.get(n);
+				if (!list) map.set(n, list = new Set());
+				list.add(el.name);
+			}
+		}
+	}
+
 	bundlesOf(type) {
-		return this.#bundleMap.get(type);
+		return this.bundleMap.get(type);
 	}
 }
 
@@ -67,14 +73,8 @@ export default class Scope {
 			scope = new Scope(state, {
 				$filters: {}
 			});
-			scope.#view = new CustomViewer({
-				elements: elts,
-				document: this.$doc,
-				scope: this
-			});
-			scope.#view.blocks = new BlocksView(scope.#view);
-		}
-		else {
+			scope.$elements = elts;
+		} else {
 			scope = scope.copy();
 			scope.#state = state;
 		}
@@ -120,15 +120,23 @@ export default class Scope {
 	get $elements() {
 		return this.#view.elements;
 	}
-	set $elements(els) {
-
+	set $elements(elts) {
+		if (elts == this.#view?.elements) return;
+		const v = this.#view = new CustomViewer({
+			elements: elts,
+			document: this.$doc,
+			scope: this
+		});
+		v.blocks = new BlocksView(v);
 	}
+
 	var(name) {
 		this.#state.vars[name] = true;
 	}
 	copy(extra) {
 		const scope = new Scope(this.#state, this);
 		scope.#view = this.#view;
+		scope.#view.scope = this;
 		scope.#lang = this.#lang;
 		if (extra) Object.assign(scope, extra);
 		return scope;
