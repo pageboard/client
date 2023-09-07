@@ -139,40 +139,53 @@ export default class Scope {
 		return scope;
 	}
 
-	async #install(type, to) {
-		const roots = this.$view.bundlesOf(type);
-		if (!roots) return;
-		for (const p of roots) {
-			const root = this.$elements[p];
-			if (root.group == "page") continue;
-
-			const { scripts, stylesheets } = root;
-			for (const url of scripts) to.scripts.add(url);
-			for (const url of stylesheets) to.stylesheets.add(url);
+	async #install(types, to) {
+		const bundles = new Set();
+		const els = this.$elements;
+		for (const type of types) {
+			const roots = this.$view.bundlesOf(type);
+			if (!roots) continue;
+			for (const p of roots) {
+				const root = els[p];
+				if (root.group != "page") bundles.add(p);
+			}
 		}
+		const js = new Set(to.scripts);
+		const css = new Set(to.stylesheets);
+		Array.from(bundles)
+			.map(b => els[b])
+			.sort(({ priority: a = 0 }, { priority: b = 0 }) => {
+				if (a == b) return 0;
+				else if (a > b) return 1;
+				else return -1;
+			}).forEach(el => {
+				if (el.scripts) for (const url of el.scripts) js.add(url);
+				if (el.stylesheets) for (const url of el.stylesheets) css.add(url);
+			});
+		to.scripts = Array.from(js);
+		to.stylesheets = Array.from(css);
 	}
 
 	async import(res) {
 		this.#state.doc ??= document.cloneNode();
+
+		const types = new Set();
+		if (res?.bundles) for (const bundle of res.bundles) types.add(bundle);
+		if (res?.items) for (const item of res.items) types.add(item.type);
+
 		let el;
 		if (this.$element || !res?.item?.type) {
 			el = { scripts: [], stylesheets: [] };
 		} else {
 			el = this.$element ??= { ...Pageboard.elements[res?.item.type] };
+			if (window.parent.Pageboard.Editor) types.add('editor');
 		}
-		el.scripts = new Set(el.scripts);
-		el.stylesheets = new Set(el.stylesheets);
-		if (res?.bundles) for (const bundle of res.bundles) {
-			this.#install(bundle, el);
-		}
-		if (res?.items) for (const item of res.items) {
-			this.#install(item.type, el);
-		}
-		if (el.group == "page" && window.parent.Pageboard.Editor) {
-			this.#install('editor', el);
-		}
+
+		this.#install(types, el);
+
 		if (el.name) this.$view.setElement(el);
 		else await load.bundle(this.#state, el);
+
 		if (res?.hrefs) {
 			Object.assign(this.$hrefs, res.hrefs);
 		}
