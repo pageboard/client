@@ -162,6 +162,9 @@ export default class Scope {
 		}
 		el.scripts = new Set(el.scripts);
 		el.stylesheets = new Set(el.stylesheets);
+		if (res?.bundles) for (const bundle of res.bundles) {
+			this.#install(bundle, el);
+		}
 		if (res?.items) for (const item of res.items) {
 			this.#install(item.type, el);
 		}
