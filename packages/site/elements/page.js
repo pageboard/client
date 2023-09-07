@@ -121,7 +121,6 @@ exports.page = {
 		img: ["'self'", "data:", "https:"]
 	}
 };
-exports.sitepage = exports.sitemap?.itemModel('page', false);
 
 exports.redirection = {
 	priority: -100,
@@ -167,4 +166,4 @@ exports.redirection = {
 	</body>
 	</html>`
 };
-exports.siteredirection = exports.sitemap?.itemModel('redirection', false);
+

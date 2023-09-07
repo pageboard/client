@@ -53,5 +53,11 @@ exports.sitemap = {
 		};
 	}
 };
+
+if (exports.page) exports.sitepage = exports.sitemap.itemModel('page');
+if (exports.pdf) exports.sitepdf = exports.sitemap.itemModel('pdf');
+if (exports.redirection) exports.siteredirection = exports.sitemap.itemModel('redirection');
+if (exports.mail) exports.sitemail = exports.sitemap.itemModel('mail');
+
 exports.editor?.scripts.push('../ui/sitemap-helper.js');
 
