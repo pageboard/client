@@ -151,7 +151,7 @@ Pageboard.Editor = function Editor(win, state) {
 		editor.close();
 	}
 	const viewer = state.scope.$view;
-	const elements = prepareElements(item.type, viewer);
+	prepareElements(item.type, viewer);
 
 	const doc = win.document;
 	const body = doc.body;
@@ -163,7 +163,6 @@ Pageboard.Editor = function Editor(win, state) {
 		viewer,
 		store: viewer.blocks.store,
 		topNode: item.type,
-		elements,
 		explicit: document.body.dataset.mode == "code",
 		place: doc.body,
 		jsonContent: state.scope.$jsonContent,

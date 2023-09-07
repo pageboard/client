@@ -312,7 +312,7 @@ class HTMLElementInputHTML extends Page.create(HTMLTextAreaElement) {
 		this.#editor = new window.Pagecut.Editor({
 			topNode: 'fragment',
 			store: {},
-			elements: elts,
+			viewer: scope.$view,
 			place: textarea,
 			scope,
 			plugins: [{

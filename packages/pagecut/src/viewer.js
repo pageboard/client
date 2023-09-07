@@ -4,17 +4,21 @@ export default class Viewer {
 
 	constructor(opts = {}) {
 		this.doc = opts.document ?? document.cloneNode();
-		const elts = this.elements = Object.assign({}, opts.elements);
-		for (const [name, el] of Object.entries(elts)) {
+		this.scope = opts.scope;
+		this.elements = opts.elements;
+		this.init();
+	}
+
+	init() {
+		for (const [name, el] of Object.entries(this.elements)) {
 			el.name = name;
-			this.setElement(el);
 		}
 	}
 
 	from(block, blocks, opts) {
-		if (!opts) opts = {};
-		if (opts.scope) this.scope = opts.scope;
-		else opts.scope = this.scope;
+		// if (!opts) opts = {};
+		// if (opts.scope) this.scope = opts.scope;
+		// else opts.scope = this.scope;
 		return this.blocks.from(block, blocks, opts);
 	}
 
@@ -26,13 +30,15 @@ export default class Viewer {
 			console.warn("Unknown element", type);
 			return;
 		}
-		if (!(el instanceof Element)) el = new Element(el);
+		if (!(el instanceof Element)) {
+			el = this.elements[el.name] = new Element(el);
+		}
 		return el;
 	}
 
 	setElement(el) {
 		if (!el.name) throw new Error("Element must have a name");
-		this.elements[el.name] = new Element(el);
+		return this.elements[el.name] = new Element(el);
 	}
 
 	render(block, opts = {}) {
