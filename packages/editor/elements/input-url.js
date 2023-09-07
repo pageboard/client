@@ -2,6 +2,7 @@ exports.input_url = {
 	title: 'Input URL',
 	icon: '<i class="icons"><i class="text cursor icon"></i><i class="corner linkify icon"></i></i>',
 	menu: "form",
+	bundle: 'input_html',
 	required: ["name"],
 	group: "block input_field",
 	context: 'form//',
