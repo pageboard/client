@@ -219,7 +219,7 @@ class HTMLElementTemplate extends Page.Element {
 		if (offset != null && limit != null) {
 			Object.assign(this.dataset, { count, start, stop, limit });
 		}
-		const frag = await scope.render(data, el);
+		const frag = scope.render(data, el);
 		if (collector.failed) scope.$status = 400;
 
 		if (scope.$status != 200) {

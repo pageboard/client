@@ -65,7 +65,7 @@ Page.route(async state => {
 	scope.$lang = page.status != 400 && lang || page.site?.languages?.[0];
 	await scope.import(page);
 	scope.$page = page.item;
-	const node = await scope.render(page);
+	const node = scope.render(page);
 	if (!node || node.nodeName != "BODY") {
 		throw new Error("page render should return a body element");
 	}

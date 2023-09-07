@@ -24,7 +24,7 @@ class HTMLElementBlogs extends Page.Element {
 		state.scope.$element = state.scope.$elements.blogs; // might not be needed
 		this.textContent = '';
 
-		const frag = await scope.render(res, {
+		const frag = scope.render(res, {
 			name: 'blogs-content',
 			html: '<div block-id="[items|repeat:item|.id]" block-type="item[item.type]" />'
 		});

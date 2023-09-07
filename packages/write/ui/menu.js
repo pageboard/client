@@ -196,10 +196,11 @@ Pageboard.Controls.Menu = class Menu {
 
 		const item = {
 			element: el,
-			run: function (state, dispatch, view) {
+			run: async function (state, dispatch, view) {
 				try {
 					let tr = state.tr;
 					let sel = self.selection;
+					await editor.scope.import({ types: [el.name] });
 					const block = editor.blocks.create(el.name);
 					if (el.inline) {
 						if (el.leaf) {

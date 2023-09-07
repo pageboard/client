@@ -6,7 +6,6 @@ import * as load from './load';
 
 class CustomViewer extends Viewer {
 	#bundleMap = new Map();
-	#bundleState = new Map();
 
 	constructor(opts) {
 		super(opts);
@@ -29,10 +28,6 @@ class CustomViewer extends Viewer {
 
 	bundlesOf(type) {
 		return this.#bundleMap.get(type);
-	}
-
-	async waitBundles() {
-		await Promise.allSettled(Object.values(this.#bundleState));
 	}
 }
 
@@ -194,15 +189,9 @@ export default class Scope {
 		}
 	}
 
-	renderSync(data, el) {
+	render(data, el) {
 		this.$status = data.status;
 		this.$statusText = data.statusText;
 		return fuse.render(this, data, el);
-	}
-
-	async render(data, el) {
-		const frag = this.renderSync(data, el);
-		await this.$view.waitBundles();
-		return frag;
 	}
 }
