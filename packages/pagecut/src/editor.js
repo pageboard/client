@@ -184,8 +184,8 @@ class Editor extends View.EditorView {
 
 	constructor(opts) {
 		const { elements, viewer } = opts;
-
 		viewer.blocks = new BlocksEdit(viewer, opts);
+
 		for (const [name, elt] of Object.entries(Editor.defaults.elements)) {
 			viewer.setElement({ ...elt, ...elements[name] });
 			viewer.element(name); // triggers install
