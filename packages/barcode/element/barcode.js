@@ -24,18 +24,50 @@ exports.barcode = {
 			type: 'string',
 			format: 'singleline'
 		},
-		width: {
-			title: 'Width',
+		scaleX: {
+			title: 'X scale',
 			type: 'integer',
 			default: 3
 		},
-		height: {
-			title: 'Height',
+		scaleY: {
+			title: 'Y scale',
 			type: 'integer',
 			default: 3
+		},
+		dimension: {
+			title: 'Dimension',
+			type: 'object',
+			properties: {
+				length: {
+					title: 'Length',
+					type: 'number',
+					minimum: 0,
+					default: 3
+				},
+				unit: {
+					title: 'Unit',
+					default: 'em',
+					anyOf: [{
+						title: 'em',
+						const: 'em'
+					}, {
+						title: 'rem',
+						const: 'rem'
+					}, {
+						title: 'px',
+						const: 'px'
+					}, {
+						title: 'vh',
+						const: 'vh'
+					}, {
+						title: '%',
+						const: '%'
+					}]
+				}
+			}
 		}
 	},
-	html: `<element-barcode data-bcid="[bcid]" data-text="[text]" data-scale-x="[width]" data-scale-y="[height]"></element-barcode>`,
+	html: `<element-barcode data-bcid="[bcid]" data-text="[text]" data-scale-x="[scaleX]" data-scale-y="[scaleY]" data-dimension="[dimension.length][dimension.unit]"></element-barcode>`,
 	scripts: [
 		'../lib/barcode.js'
 	],
