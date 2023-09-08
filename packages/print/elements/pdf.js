@@ -18,69 +18,67 @@ exports.pdf = {
 		...exports.page.csp,
 		style: ["'self'", "'unsafe-inline'", 'https:']
 	},
-	mime: "application/pdf"
+	mime: "application/pdf",
+	properties: {
+		...exports.page.properties,
+		url: {
+			...exports.page.properties.url,
+			pattern: /^(\/[a-zA-Z0-9-]*)+$/.source
+		},
+		paper: {
+			title: 'Paper',
+			type: 'object',
+			nullable: true,
+			properties: {
+				width: {
+					title: 'Width',
+					type: 'string',
+					format: 'singleline',
+					default: '210mm'
+				},
+				height: {
+					title: 'Height',
+					type: 'string',
+					format: 'singleline',
+					default: '297mm'
+				},
+				margin: {
+					title: 'Margin',
+					type: 'string',
+					format: 'singleline',
+					default: '10mm'
+				},
+				preset: {
+					title: 'Preset',
+					description: 'Default pdf export',
+					anyOf: [{
+						type: 'null',
+						title: 'Screen'
+					}, {
+						const: 'ebook',
+						title: 'Ebook'
+					}, {
+						const: 'printer',
+						title: 'Printer'
+					}]
+				}
+			}
+		}
+	},
+	fragments: [
+		...exports.page.fragments || [], {
+			path: 'body',
+			attributes: {
+				"data-width": "[paper.width]",
+				"data-height": "[paper.height]",
+				"data-margin": "[paper.margin]",
+				"data-preset": "[paper.preset]"
+			}
+		}
+	]
 };
 
 if (exports.pdf) exports.sitepdf = exports.sitemap.itemModel('pdf');
-
-exports.pdf.fragments = [
-	...exports.pdf.fragments || [], {
-		path: 'body',
-		attributes: {
-			"data-width": "[paper.width]",
-			"data-height": "[paper.height]",
-			"data-margin": "[paper.margin]",
-			"data-preset": "[paper.preset]"
-		}
-	}
-];
-
-exports.pdf.properties = {
-	...exports.pdf.properties,
-	url: {
-		...exports.pdf.properties.url,
-		pattern: /^(\/[a-zA-Z0-9-]*)+$/.source
-	},
-	paper: {
-		title: 'Paper',
-		type: 'object',
-		nullable: true,
-		properties: {
-			width: {
-				title: 'Width',
-				type: 'string',
-				format: 'singleline',
-				default: '210mm'
-			},
-			height: {
-				title: 'Height',
-				type: 'string',
-				format: 'singleline',
-				default: '297mm'
-			},
-			margin: {
-				title: 'Margin',
-				type: 'string',
-				format: 'singleline',
-				default: '10mm'
-			},
-			preset: {
-				title: 'Preset',
-				description: 'Default pdf export',
-				anyOf: [{
-					type: 'null',
-					title: 'Screen'
-				}, {
-					const: 'ebook',
-					title: 'Ebook'
-				}, {
-					const: 'printer',
-					title: 'Printer'
-				}]
-			}
-		}
-	}
-};
 
 exports.sheet = {
 	title: 'Sheet',
