@@ -132,7 +132,7 @@ class Semafor {
 		this.filter = filter;
 		this.helper = helper;
 		// a json schema
-		this.schema = schema;
+		this.schema = cleanSchema(schema);
 		this.node = node;
 		this.node.classList.add('fieldset');
 		this.fields = {};
@@ -145,6 +145,7 @@ class Semafor {
 	}
 
 	update(newSchema) {
+		newSchema = cleanSchema(newSchema);
 		const { node, fields, filteredSchema, helpers } = this;
 		this.helpers = [];
 		this.node = node.cloneNode();
@@ -861,3 +862,14 @@ Semafor.getValStr = function (item) {
 };
 
 Pageboard.Semafor = Semafor;
+
+function cleanSchema(obj) {
+	return {
+		title: obj.title,
+		description: obj.description,
+		oneOf: obj.oneOf,
+		anyOf: obj.anyOf,
+		type: obj.type,
+		properties: obj.properties
+	};
+}
