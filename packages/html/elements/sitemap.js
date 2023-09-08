@@ -36,7 +36,7 @@ exports.sitemap = {
 				virtual: true
 			},
 			alias: name,
-			context: 'sitemap/ | sitepage/',
+			context: 'sitemap/ | sitemap_item/',
 			html: `<element-sitepage class="item fold" data-url="[url]" data-index="[index]">
 				<div class="title caret-icon">
 					<span class="header">[title|or:-]</span>
