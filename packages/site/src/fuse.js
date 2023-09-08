@@ -67,10 +67,8 @@ String.prototype.fuse = function(data, scope, plugin) {
 };
 
 
-export function render(scope, data, element) {
+export function render(scope, data, el) {
 	if (!data) data = {};
-
-	if (element) element.init(scope);
 
 	const block = data.item ?? data;
 	// fixme
@@ -91,11 +89,10 @@ export function render(scope, data, element) {
 		}
 	}
 	const frag = scope.$view.from(block, blocks, {
-		element,
+		element: el,
 		scope,
 		strip: !scope.$write
 	});
-	if (element) delete scope.$view.elements[element.name];
 	return frag;
 }
 

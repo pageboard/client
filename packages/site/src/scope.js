@@ -16,14 +16,14 @@ class CustomViewer extends Viewer {
 		if (!(el instanceof CustomElement)) {
 			el = this.elements[el.name] = new CustomElement(el);
 		}
-		el.install(this.scope);
+		el.init(this.scope);
 		return el;
 	}
 
 	setElement(el) {
 		if (!el.name) throw new Error("Element must have a name");
 		if (!(el instanceof CustomElement)) el = new CustomElement(el);
-		el.install(this.scope);
+		el.init(this.scope);
 		this.elements[el.name] = el;
 		return el;
 	}

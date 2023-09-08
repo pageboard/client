@@ -5,7 +5,8 @@ Page.patch(async state => {
 	const metas = equivs.read();
 	if (metas.Status) {
 		// eat it
-		state.doc.head.querySelector('meta[http-equiv="Status"]').remove();
+		const doc = state.doc ?? document;
+		doc.head.querySelector('meta[http-equiv="Status"]').remove();
 		state.status = parseInt(metas.Status);
 		state.statusText = metas.Status.substring(state.status.toString().length).trim();
 	}

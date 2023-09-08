@@ -107,7 +107,7 @@ export default class BlocksView {
 
 	renderFrom(block, blocks = {}, store, opts = {}) {
 		const { view } = this;
-		const type = opts.element || opts.type || block.type;
+		const type = opts.element?.name || opts.type || block.type;
 		const el = view.element(type);
 		if (block.id) {
 			this.initial[block.id] = block;

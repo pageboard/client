@@ -16,10 +16,11 @@ export default class Viewer {
 	}
 
 	from(block, blocks, opts) {
-		// if (!opts) opts = {};
-		// if (opts.scope) this.scope = opts.scope;
-		// else opts.scope = this.scope;
-		return this.blocks.from(block, blocks, opts);
+		const el = opts.element;
+		if (el) this.setElement(el);
+		const frag = this.blocks.from(block, blocks, opts);
+		if (el) delete this.elements[el.name];
+		return frag;
 	}
 
 	element(type) {

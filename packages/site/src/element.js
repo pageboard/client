@@ -5,7 +5,7 @@ export class CustomElement extends Element {
 	#ready;
 	#scope;
 
-	install(scope) {
+	init(scope) {
 		this.#scope = scope;
 		if (this.#ready) return true;
 		this.#ready = true;
