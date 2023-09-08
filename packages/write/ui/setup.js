@@ -132,7 +132,7 @@ function prepareElements(root, view) {
 		const el = view.elements[bundle];
 		if (el.group == "page") continue;
 		if (el.group?.split(/\s+/).some(group => rootEl.groups.has(group))) {
-			prepareRootElement(view.element(el), view, elements);
+			prepareRootElement(view.element(el.name), view, elements);
 		}
 	}
 	Pageboard.standalones = standalones;

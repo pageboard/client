@@ -80,7 +80,7 @@ export default class Blocks extends BlocksView {
 	}
 
 	serializeTo(parent, el, ancestor, blocks, parentDef = {}) {
-		if (!el || typeof el == "string") el = this.view.element(el || parent.type);
+		if (!el || typeof el == "string") el = this.view.element(el.name ?? parent.type);
 
 		/*
 		1. parent is the direct parent

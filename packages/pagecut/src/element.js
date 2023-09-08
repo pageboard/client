@@ -1,4 +1,5 @@
 import Contents from './contents';
+
 export default class Element {
 	constructor(elt) {
 		Object.assign(this, elt);

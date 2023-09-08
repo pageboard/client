@@ -1,18 +1,31 @@
 import Viewer from '@pageboard/pagecut/src/viewer.js';
 import BlocksView from '@pageboard/pagecut/src/blocks-view.js';
+
 import * as fuse from './fuse';
 import * as load from './load';
-
+import { CustomElement } from './element';
 
 class CustomViewer extends Viewer {
 	element(type) {
-		const el = super.element(type);
-		if (el) fuse.install(el, this.scope);
+		if (!type) return;
+		let el = this.elements[type];
+		if (!el) {
+			console.warn("Unknown element", type);
+			return;
+		}
+		if (!(el instanceof CustomElement)) {
+			el = this.elements[el.name] = new CustomElement(el);
+		}
+		el.install(this.scope);
 		return el;
 	}
 
 	setElement(el) {
-		fuse.install(super.setElement(el), this.scope);
+		if (!el.name) throw new Error("Element must have a name");
+		if (!(el instanceof CustomElement)) el = new CustomElement(el);
+		el.install(this.scope);
+		this.elements[el.name] = el;
+		return el;
 	}
 
 	prepare() {

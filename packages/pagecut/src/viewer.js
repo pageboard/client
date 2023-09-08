@@ -25,7 +25,7 @@ export default class Viewer {
 	element(type) {
 		if (!type) return;
 
-		let el = typeof type == "string" ? this.elements[type] : type;
+		let el = this.elements[type];
 		if (!el) {
 			console.warn("Unknown element", type);
 			return;
@@ -38,12 +38,12 @@ export default class Viewer {
 
 	setElement(el) {
 		if (!el.name) throw new Error("Element must have a name");
-		return this.elements[el.name] = new Element(el);
+		return this.elements[el.name] = el instanceof Element ? el : new Element(el);
 	}
 
 	render(block, opts = {}) {
 		let dom;
-		const el = this.element(opts.element || opts.type || block.type);
+		const el = this.element(opts.element?.name || opts.type || block.type);
 		try {
 			dom = this.blocks.render(el, block, opts);
 		} catch (ex) {
