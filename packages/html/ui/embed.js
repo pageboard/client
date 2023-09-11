@@ -1,6 +1,7 @@
 class HTMLElementEmbed extends Page.Element {
 	static defaults = {
 		src: null,
+		query: null,
 		hash: null
 	};
 	static revealRatio = 0.2;
@@ -34,7 +35,10 @@ class HTMLElementEmbed extends Page.Element {
 		const opts = this.options;
 		const prev = Page.parse(this.currentSrc);
 		const cur = Page.parse(this.dataset.source || this.options.src || "about:blank");
-		cur.hash = opts.hash;
+		if (opts.query) {
+			cur.query = Object.assign(cur.query, Page.parse(opts.query).query);
+		}
+		if (opts.hash) cur.hash = opts.hash;
 		const curSrc = cur.toString();
 
 		if (cur.samePath(prev) == false) {
