@@ -16,7 +16,8 @@ Page.setup(state => {
 		height = '297mm',
 		margin = '0mm',
 		foldWidth = false,
-		foldHeight = false
+		foldHeight = false,
+		sheetcounterOffset = '0'
 	} = opts;
 
 	document.documentElement.style.setProperty(
@@ -38,7 +39,7 @@ Page.setup(state => {
 		return;
 	}
 	autobreakFn(className);
-	pageNumbering(className);
+	pageNumbering(parseInt(sheetcounterOffset), className);
 
 	if (state.vars.pages) {
 		prunePages(Array.from(document.body.querySelectorAll(`.${className}`)), state.query.pages);
@@ -193,9 +194,9 @@ function autobreakFn(className) {
 	}
 }
 
-function pageNumbering(className) {
+function pageNumbering(start, className) {
 	const sheets = document.querySelectorAll(`.${className}`);
-	let offset = 0;
+	let offset = Number.isNaN(start) ? 0 : start;
 	let first = 0;
 	for (let i = 0; i < sheets.length; i++) {
 		const sheet = sheets[i];

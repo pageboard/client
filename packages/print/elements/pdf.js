@@ -71,6 +71,12 @@ exports.pdf = {
 						const: 'printer',
 						title: 'Printer'
 					}]
+				},
+				sheetcounterOffset: {
+					title: 'Sheet counter offset',
+					type: 'integer',
+					minimum: 0,
+					nullable: true
 				}
 			}
 		}
@@ -84,7 +90,8 @@ exports.pdf = {
 				"data-margin": "[paper.margin]",
 				"data-preset": "[paper.preset]",
 				"data-fold-width": "[paper.foldWidth]",
-				"data-fold-height": "[paper.foldHeight]"
+				"data-fold-height": "[paper.foldHeight]",
+				"data-sheetcounter-offset": "[paper.sheetcounterOffset]"
 			}
 		}
 	]
