@@ -1,8 +1,10 @@
 .page-sheet {
+	display:block;
 	position:relative;
-	page-break-after: always;
+	page-break-inside: avoid;
 	counter-increment: sheet;
 	z-index:0;
+	flex: 0 0 auto;
 }
 .page-sheet::before {
 	content:'';
@@ -44,6 +46,20 @@
 .page-sheet-first .page-sheet-match[data-match="first"],
 .page-sheet-last .page-sheet-match[data-match="last"] {
 	visibility:initial;
+}
+html {
+	display: flex;
+	justify-content: center;
+}
+body,
+body > element-template > .view {
+	display:flex;
+	flex-wrap: wrap;
+}
+
+body > .page-sheet,
+body > element-template > .view > .page-sheet {
+	flex: 0 0 auto;
 }
 
 @media screen {

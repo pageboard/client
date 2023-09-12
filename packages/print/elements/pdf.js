@@ -48,6 +48,16 @@ exports.pdf = {
 					format: 'singleline',
 					default: '10mm'
 				},
+				foldWidth: {
+					title: 'Fold width',
+					type: 'boolean',
+					nullable: true
+				},
+				foldHeight: {
+					title: 'Fold height',
+					type: 'boolean',
+					nullable: true
+				},
 				preset: {
 					title: 'Preset',
 					description: 'Default pdf export',
@@ -72,7 +82,9 @@ exports.pdf = {
 				"data-width": "[paper.width]",
 				"data-height": "[paper.height]",
 				"data-margin": "[paper.margin]",
-				"data-preset": "[paper.preset]"
+				"data-preset": "[paper.preset]",
+				"data-fold-width": "[paper.foldWidth]",
+				"data-fold-height": "[paper.foldHeight]"
 			}
 		}
 	]

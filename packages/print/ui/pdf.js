@@ -11,15 +11,29 @@ Page.setup(state => {
 	if (window.devicePixelRatio < 4 && window.matchMedia('print').matches) {
 		// TODO
 	}
-	const { width = '210mm', height = '297mm', margin = '0mm' } = opts;
+	const {
+		width = '210mm',
+		height = '297mm',
+		margin = '0mm',
+		foldWidth = false,
+		foldHeight = false
+	} = opts;
+
 	document.documentElement.style.setProperty(
 		'--pdfmargin',
 		margin === '0' ? '0mm' : margin
 	);
-	const pageBox = { width, height, margin };
-	const screenBox = convertUnits(pageBox);
+
+	const folds = {
+		width: foldWidth ? 2 : 1,
+		height: foldHeight ? 2 : 1
+	};
 	const className = 'page-sheet';
-	state.scope.printStyleSheet = printStyle(className, pageBox, screenBox);
+	state.scope.printStyleSheet = printStyle(
+		className,
+		roundedFoldedDims(folds, convertUnits({ width, height, margin })),
+		{ width, height }
+	);
 	if (state.scope.$write) {
 		return;
 	}
@@ -69,7 +83,8 @@ function removePrintButtons() {
 	document.querySelector('html > .pdf-menu')?.remove();
 }
 
-function printStyle(className, pageBox, { width, height, margin }) {
+function printStyle(className, sheetSize, pageSize) {
+	const { margin, width, height } = sheetSize;
 	const effectiveSheet = new CSSStyleSheet();
 	const printSheet = `
 	html, body {
@@ -80,16 +95,19 @@ function printStyle(className, pageBox, { width, height, margin }) {
 		html, body {
 			background: gray;
 		}
+		body {
+			width: ${pageSize.width};
+		}
 		.${className} {
 			margin: 1rem auto;
-			width: ${width};
-			height: ${height};
-			border: ${margin} solid transparent;
-			outline: rgba(0 0 0 / 6%) dashed min(1px, ${margin});
-			outline-offset: -${margin};
+			width: ${width}px;
+			height: ${height}px;
+			border: ${margin}px solid transparent;
+			outline: rgba(0 0 0 / 6%) dashed min(1px, ${margin}px);
+			outline-offset: -${margin}px;
 			background: white;
 			overflow:clip;
-			overflow-clip-margin: content-box ${margin};
+			overflow-clip-margin: content-box ${margin}px;
 		}
 	}
 	@media print {
@@ -97,15 +115,15 @@ function printStyle(className, pageBox, { width, height, margin }) {
 			background:white;
 		}
 		@page {
-			size: ${pageBox.width} ${pageBox.height};
+			size: ${pageSize.width} ${pageSize.height};
 			margin: 0;
 		}
 		.${className} {
-			margin: ${pageBox.margin};
-			width: calc(${pageBox.width} - 2 * ${pageBox.margin});
-			height: calc(${pageBox.height} - 2 * ${pageBox.margin});
+			margin: ${margin}px;
+			width: ${width - 2 * margin}px;
+			height: ${height - 2 * margin}px;
 			overflow:clip;
-			overflow-clip-margin: content-box ${pageBox.margin};
+			overflow-clip-margin: content-box ${margin}px;
 		}
 	}`;
 
@@ -200,13 +218,31 @@ function pageNumbering(className) {
 
 function convertUnits(styles) {
 	const d = document.body.appendChild(document.createElement('div'));
-	Object.assign(d.style, styles);
+	Object.assign(d.style, styles, {
+		display: 'block',
+		position: 'absolute'
+	});
 	const obj = {};
 	const cs = window.getComputedStyle(d);
 	for (const key of Object.keys(styles)) obj[key] = cs[key];
 	d.remove();
-	obj.height = Math.floor(parseInt(obj.height) * 10) / 10 + 'px';
-	obj.width = Math.ceil(parseInt(obj.width) * 10) / 10 + 'px';
-	obj.margin = Math.round(parseInt(obj.margin) * 10) / 10 + 'px';
+
+	// get decimal values in pixels
+	obj.width = parseFloat(obj.width);
+	obj.height = parseFloat(obj.height);
+	obj.margin = parseFloat(obj.margin);
+
 	return obj;
+}
+
+function roundedFoldedDims(folds, box) {
+	let w = Math.round(box.width / folds.width);
+	const h = box.height / folds.height;
+	const ch = w * (box.height / box.width) * (folds.width / folds.height);
+	if (ch > h) w += -1;
+	return {
+		margin: Math.round(box.margin),
+		width: w,
+		height: Math.floor(h)
+	};
 }
