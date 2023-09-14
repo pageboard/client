@@ -79,18 +79,18 @@ export default class Scope {
 		let { scope } = state;
 		if (state.pathname == state.referrer?.pathname && !state.data.page && state.referrer.data.page) {
 			state.data.page = state.referrer.data.page;
+			scope = state.scope = state.referrer.scope.copy();
 		}
 
 		if (!scope) {
-			scope = new Scope(state, {
-				$filters: {}
+			scope = state.scope = new Scope(state, {
+				$filters: {},
+				$elements: elts
 			});
-			scope.$elements = elts;
 		} else {
-			scope = scope.copy();
 			scope.#state = state;
 		}
-		state.scope = scope;
+
 		return scope;
 	}
 
