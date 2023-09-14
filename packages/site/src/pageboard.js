@@ -47,12 +47,13 @@ Page.constructor.prototype.debounce = function (fn, to) {
 Page.route(async state => {
 	const { data } = state;
 	const nested = window.parent != window ? 1 : undefined;
-	const lang = !nested ? state.query.lang : undefined;
+	let url = state.pathname;
+	let [, lang] = url.match(/(?:~([a-z]{2})?)?$/);
+	if (lang) url = url.slice(0, -3);
+	if (nested) lang = undefined;
 	if (data.page == null) {
 		data.page = await fetchHelper('get', '/.api/page', {
-			url: state.pathname,
-			lang,
-			nested
+			url, nested, lang
 		});
 		if (!data.page.item) data.page.item = {
 			type: 'error',
@@ -62,8 +63,8 @@ Page.route(async state => {
 	const { page } = data;
 
 	const scope = Scope.init(state);
-	scope.$lang = page.status != 400 && lang || page.site?.languages?.[0];
 	await scope.import(page);
+	scope.$lang ??= scope.$languages?.[0] ?? scope.$lang;
 	scope.$page = page.item;
 	const node = scope.render(page);
 	if (!node || node.nodeName != "BODY") {
@@ -80,7 +81,7 @@ Page.route(async state => {
 
 Page.ready(state => {
 	Scope.init(state);
+	state.scope.$lang ??= document.documentElement.lang;
 	state.vars = {};
-	if (state.query.lang == state.scope.$lang) state.vars.lang = true;
 	state.ivars = new Set();
 });

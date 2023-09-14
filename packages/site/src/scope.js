@@ -71,7 +71,6 @@ const baseElements = {
 export default class Scope {
 	#state;
 	#view;
-	#lang;
 
 	static init(state) {
 		const elts = Pageboard.elements ??= {};
@@ -99,12 +98,7 @@ export default class Scope {
 		this.#state = state;
 		Object.assign(this, obj);
 	}
-	get $lang() {
-		return this.#lang;
-	}
-	set $lang(lang) {
-		this.#lang = lang;
-	}
+
 	get $loc() {
 		return this.#state;
 	}
@@ -123,6 +117,9 @@ export default class Scope {
 	get $hrefs() {
 		if (!this.#state.hrefs) this.#state.hrefs = {};
 		return this.#state.hrefs;
+	}
+	set $hrefs(obj) {
+		Object.assign(this.$hrefs, obj);
 	}
 	set $doc(v) {
 		// ignore it
@@ -150,7 +147,6 @@ export default class Scope {
 		const scope = new Scope(this.#state, this);
 		scope.#view = this.#view;
 		scope.#view.scope = this;
-		scope.#lang = this.#lang;
 		if (extra) Object.assign(scope, extra);
 		return scope;
 	}
@@ -202,11 +198,8 @@ export default class Scope {
 		if (el.name) this.$view.setElement(el);
 		else await load.bundle(this.#state, el);
 
-		if (res?.hrefs) {
-			Object.assign(this.$hrefs, res.hrefs);
-		}
-		if (res) for (const k of ["grants", "links", "site", "locks", "granted", "commons", "meta", "status", "statusText", "item", "items", "count", "offset", "limit", "lang"]) {
-			if (res[k] !== undefined) this[`$${k}`] = res[k];
+		if (res) for (const [key, item] of Object.entries(res)) {
+			this[`$${key}`] = item;
 		}
 	}
 
