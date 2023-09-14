@@ -46,7 +46,7 @@ function block(ctx, obj) {
 
 function render(ctx, block) {
 	const { scope } = ctx;
-	const dom = scope.renderSync({ item: block });
+	const dom = scope.render({ item: block });
 	return ctx.filter(dom, 'as', 'html');
 }
 
@@ -299,7 +299,7 @@ function contentFn(ctx, block, name) {
 		html: `<div block-content="${name}"></div>`
 	};
 
-	const dom = scope.renderSync({ item: block }, el);
+	const dom = scope.render({ item: block }, el);
 	const frag = scope.$doc.createDocumentFragment();
 	while (dom.childNodes.length) frag.appendChild(dom.firstChild);
 	return ctx.filter(frag, 'as', 'html');
