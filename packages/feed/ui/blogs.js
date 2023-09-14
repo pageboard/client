@@ -72,7 +72,7 @@ class HTMLElementBlogs extends Page.Element {
 	}
 	rss(state) {
 		const doc = document;
-		const scope = state.scope;
+		const { scope } = state;
 		// scope.$elements.blogs.properties.topics
 		const topics = this.options.topics;
 		const latestDate = this.blogs.reduce((cur, item) => {
