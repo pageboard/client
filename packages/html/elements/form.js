@@ -180,7 +180,7 @@ exports.api_form = {
 	tag: 'form[method="post"]',
 	html: `<form is="element-form" method="post" name="[name]" masked="[masked]"
 		action="/.api/form/[$id]"
-		parameters="[$expr?.action?.parameters|templates:$query]"
+		parameters="[$expr?.action?.parameters|as:expressions]"
 		success="[redirection.url][redirection.parameters|as:query]"
 		badrequest="[badrequest.url][badrequest.parameters|as:query]"
 		unauthorized="[unauthorized.url][unauthorized.parameters|as:query]"

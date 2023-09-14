@@ -1,5 +1,8 @@
 export const formats = {
-	as: { polyfills, csp, xid, colnums, block, binding, query, render, meta },
+	as: {
+		polyfills, csp, xid, colnums, block, binding,
+		query, render, meta, expressions
+	},
 	date: { utc }
 };
 
@@ -8,7 +11,7 @@ export const filters = {
 	schema: ['?', 'path?', 'path?', schemaFn],
 	content: ['block', 'str', contentFn],
 	children: ['block', 'str', childrenFn],
-	urltpl, templates
+	urltpl
 };
 
 export const hooks = {
@@ -262,17 +265,14 @@ function urltpl(ctx, obj, pName = 'pathname', qName = 'query') {
 	return str;
 }
 
-function templates(ctx, val, ...prefixes) {
+function expressions(ctx, val) {
 	if (!val) return null;
 	const obj = {};
-	const scope = {};
+	const scope = ctx.scope.copy();
 	scope.$hooks = {
 		afterAll(ctx, val) {
 			const { path } = ctx.expr;
-			if (prefixes.includes(path[0]) == false) {
-				// ignore those
-				return val;
-			}
+			if (scope[path[0]] === undefined) return val;
 			// templatesQuery checks flattened query
 			const key = path.length > 1 ? path.slice(1).join('%2E') : path[0];
 			const short = path.length > 1 ? `${path[0]}.${key}` : path[0];
@@ -284,7 +284,6 @@ function templates(ctx, val, ...prefixes) {
 			return val;
 		}
 	};
-	for (const prefix of prefixes) scope[prefix] = {};
 	JSON.stringify(val).fuse({}, scope);
 	return (
 		typeof val == "string" ? Object.keys(obj) : Object.values(obj)

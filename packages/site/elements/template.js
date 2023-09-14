@@ -13,8 +13,8 @@ exports.fetch = {
 	html: `<element-template
 		action="/.api/query/[$id][action?.method|prune:-]"
 		data-auto="[action?.auto]"
-		data-pagination="[$expr?.action?.parameters?.offset|templates:$query]"
-		parameters="[$expr?.action?.parameters|templates:$query:$pathname]"
+		data-pagination="[$expr?.action?.parameters?.offset|as:expressions]"
+		parameters="[$expr?.action?.parameters|as:expressions]"
 		success="[redirection.url][redirection.parameters|as:query]"
 		badrequest="[badrequest.url][badrequest.parameters|as:query]"
 		unauthorized="[unauthorized.url][unauthorized.parameters|as:query]"
