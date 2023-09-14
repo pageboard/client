@@ -42,7 +42,6 @@ class HTMLElementTemplate extends Page.Element {
 			if (this.#auto) {
 				request[this.dataset.pagination] = this.dataset.stop;
 			}
-			request.lang ??= scope.$lang;
 			response = await state.fetch('get', action, request);
 			this.loading = true;
 			this.classList.add('loading');
@@ -344,6 +343,10 @@ class QueryCollectorFilter {
 	}
 	filter(ctx, val) {
 		const path = ctx.expr.path;
+		if (path[0] == "$site") {
+			console.warn("Cannot use scope.$site in template");
+			return val;
+		}
 		if (path[0] != "$query") return val;
 		const { query, vars } = this.#state;
 		if (path.length > 1) {
@@ -399,8 +402,8 @@ Page.constructor.prototype.templatesQuery = function (node, collector) {
 				const key = path[1];
 				state.vars[key] = true;
 				if (val != null) $query[key] = val;
-			} else if (path[0] == "$pathname") {
-				$query["$pathname"] = val;
+			} else if (path.length == 1 && path[0].startsWith('$')) {
+				$query[path[0]] = val;
 			}
 			return val;
 		}
