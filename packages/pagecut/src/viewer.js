@@ -17,9 +17,10 @@ export default class Viewer {
 
 	from(block, blocks, opts) {
 		const el = opts.element;
-		if (el) this.setElement(el);
+		const extra = el && !this.elements[el.name];
+		if (extra) this.setElement(el);
 		const frag = this.blocks.from(block, blocks, opts);
-		if (el) delete this.elements[el.name];
+		if (extra) delete this.elements[el.name];
 		return frag;
 	}
 
