@@ -48,12 +48,13 @@ Page.route(async state => {
 	const { data } = state;
 	const nested = window.parent != window ? 1 : undefined;
 	let url = state.pathname;
-	let [, lang] = url.match(/(?:~([a-z]{2})?)?$/);
-	if (lang) url = url.slice(0, -3);
-	if (nested) lang = undefined;
+	const [, lang, ext] = url.match(/(?:\.([a-z]{2}))?(?:\.([a-z]{3}))?$/);
+	if (ext) url = url.slice(0, -ext.length - 1);
+	if (lang) url = url.slice(0, -lang.length - 1);
 	if (data.page == null) {
 		data.page = await fetchHelper('get', '/.api/page', {
-			url, nested, lang
+			url, nested,
+			lang: nested ? undefined : lang
 		});
 		if (!data.page.item) data.page.item = {
 			type: 'error',
