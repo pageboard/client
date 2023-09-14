@@ -18,8 +18,8 @@ class HTMLElementGTMScript extends Page.create(HTMLScriptElement) {
 		this.#id = loc.query.id;
 	}
 	static build(state) {
-		const frag = document.dom(`<script async is="element-gtm-script" src="https://www.googletagmanager.com/gtag/js?id=[$site.google_analytics|enc:url|fail:*]">[$site.env|eq:production|prune:*]</script>
-		<script async is="element-gtm-script" src="https://www.googletagmanager.com/gtm.js?id=[$site.google_tag_manager|enc:url|fail:*]">[$site.env|eq:production|prune:*]</script><meta name="google-site-verification" content="[$site.google_site_verification|fail:*][$page.data.url|eq:%2F|prune:*]">`).fuse({}, state.scope);
+		const frag = document.dom(`<script async is="element-gtm-script" src="https://www.googletagmanager.com/gtag/js?id=[$site.extra.google_analytics|enc:url|fail:*]">[$site.env|eq:production|prune:*]</script>
+		<script async is="element-gtm-script" src="https://www.googletagmanager.com/gtm.js?id=[$site.extra.google_tag_manager|enc:url|fail:*]">[$site.env|eq:production|prune:*]</script><meta name="google-site-verification" content="[$site.extra.google_site_verification|fail:*][$page.data.url|eq:%2F|prune:*]">`).fuse({}, state.scope);
 		document.head.appendChild(frag);
 	}
 	consent(state) {
