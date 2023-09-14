@@ -75,7 +75,6 @@ Pageboard.Controls.Mode = class Mode {
 					}
 					if (!elt.title) return;
 					delete elt.fuse;
-					delete elt.render;
 					delete elt.$installed;
 					if (elt.inplace) return;
 					delete elt.parse;
