@@ -338,32 +338,32 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 	}
 	async postMethod(e, state) {
 		const form = this;
-		if (e.type != "submit" && form.elements.find(item => item.type == "submit")) return;
-		
-		form.classList.add('loading');
-
-		await Promise.all(
-			Array.from(form.elements)
-				.filter(node => Boolean(node.presubmit) && !node.disabled)
-				.map(input => input.presubmit(state))
-		);
-
-		const request = form.read(true);
-		form.disable();
-
-		const res = await state.fetch(form.method, Page.format({
-			pathname: form.getAttribute('action'),
-			query: state.query
-		}), request).catch(err => err);
+		if (e.type != "submit" && form.elements.find(item => item.type == "submit")) {
+			return;
+		}
 
 		const scope = state.scope.copy();
+		scope.$request = form.read(true);
+		try {
+			const prelist = Array.from(form.elements)
+				.filter(node => Boolean(node.presubmit) && !node.disabled);
+			form.disable();
+			for (const node of prelist) {
+				await node.presubmit(state);
+			}
+			form.classList.add('loading');
+			scope.$response = await state.fetch(form.method, Page.format({
+				pathname: form.getAttribute('action'),
+				query: state.query
+			}), scope.$request);
+		} catch (err) {
+			scope.$response = err;
+		}
+		const res = scope.$response;
 		if (res?.grants) state.scope.$grants = res.grants;
-		scope.$request = request;
-
-		scope.$response = res;
 		scope.$status = res.status;
-		form.enable();
 
+		form.enable();
 		form.classList.remove('loading');
 
 		// messages shown inside form, no navigation

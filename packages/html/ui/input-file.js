@@ -99,10 +99,20 @@ class HTMLElementInputFile extends Page.create(HTMLInputElement) {
 
 		xhr.addEventListener('load', () => {
 			track(100);
+			let obj;
 			try {
-				pass(JSON.parse(xhr.responseText));
-			} catch (ex) {
-				fail(ex);
+				obj = JSON.parse(xhr.responseText);
+			} catch {
+				obj = { type: 'error', data: { message: xhr.responseText } };
+			}
+			if (obj.type == "error") {
+				obj.statusText = obj.data?.message ?? '';
+			}
+			obj.status = xhr.status;
+			if (xhr.status < 200 || xhr.status >= 400) {
+				fail(obj);
+			} else {
+				pass(obj);
 			}
 		});
 
@@ -110,7 +120,7 @@ class HTMLElementInputFile extends Page.create(HTMLInputElement) {
 			if (xhr.status == 0) return fail("Connection error");
 			const msg = xhr.statusText || "Connection error";
 			const err = new Error(msg);
-			err.statusCode = xhr.status;
+			err.status = xhr.status;
 			fail(err);
 		});
 		try {

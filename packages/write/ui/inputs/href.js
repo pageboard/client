@@ -309,7 +309,7 @@ Pageboard.schemaHelpers.href = class Href {
 				if (xhr.status == 0) return tracker("Connection error");
 				const msg = xhr.statusText || "Connection error";
 				const err = new Error(msg);
-				err.statusCode = xhr.status;
+				err.status = xhr.status;
 				tracker(msg + '(' + xhr.status + ')');
 				defer.reject(err);
 			});

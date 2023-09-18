@@ -8,7 +8,11 @@ class HTMLElementInputUrl extends Page.create(HTMLInputElement) {
 			const res = await state.fetch('post', "/.api/href", { url: this.value });
 			const acceptList = this.getAttribute('accept')?.split(',') ?? [];
 			const href = res.item;
-			if (!acceptList.includes(href.type)) throw new Error("Unacceptable url type");
+			if (!acceptList.includes(href.type)) {
+				const err = new Error(`Unacceptable url type: ${href.type}`);
+				err.status = 400;
+				err.statusText = err.message;
+			}
 		} catch (err) {
 			field.classList.add('error');
 			throw err;
