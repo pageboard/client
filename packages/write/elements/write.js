@@ -8,7 +8,7 @@ exports.write = {
 	virtual: true,
 	html: `<html lang="[$lang]">
 	<head>
-		<title>[title][$site.title?|pre: - ]</title>
+		<title>[title][$parent.data.title?|pre: - ]</title>
 		<meta http-equiv="Content-Security-Policy" content="[$elements|as:csp]">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<base href="[$loc.origin]">
@@ -40,10 +40,10 @@ exports.write = {
 				</a>
 			</div>
 			<div class="text menu">
-				<div class="header item">[$site.title|or:-]</div>
-				<div class="active item">[$site.env]</div>
-				<div class="item">[$site.module]</div>
-				<div class="item">[$site.version|slice:0:12|or:latest]</div>
+				<div class="header item">[$parent.data.title|or:-]</div>
+				<div class="active item">[$parent.data.env]</div>
+				<div class="item">[$parent.data.module]</div>
+				<div class="item">[$parent.data.version|slice:0:12|or:latest]</div>
 			</div>
 			<div id="mode" class="right menu">
 				<a class="vertically fitted item" data-command="code" title="HTML Mode">

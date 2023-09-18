@@ -140,7 +140,7 @@ function prepareElements(root, view) {
 }
 
 Pageboard.Editor = function Editor(win, state) {
-	const item = state.data.page?.item;
+	const item = state.data.response?.item;
 	if (!item || item.type == "error") {
 		Pageboard.write.hidden = true;
 		console.warn("Not loading editor: no page or error page");

@@ -208,7 +208,7 @@ class HTMLElementTemplate extends Page.Element {
 				};
 			})
 		};
-		for (const [key, val] of Object.entries(state.data.page ?? {})) {
+		for (const [key, val] of Object.entries(state.data.response ?? {})) {
 			if (key.startsWith('$') && scope[key] == null) {
 				console.warn("data key should not start with $", key);
 				scope[key] = val;
@@ -343,10 +343,6 @@ class QueryCollectorFilter {
 	}
 	filter(ctx, val) {
 		const path = ctx.expr.path;
-		if (path[0] == "$site") {
-			console.warn("Cannot use scope.$site in template");
-			return val;
-		}
 		if (path[0] != "$query") return val;
 		const { query, vars } = this.#state;
 		if (path.length > 1) {

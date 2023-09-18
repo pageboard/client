@@ -77,8 +77,8 @@ export default class Scope {
 		Object.assign(elts, baseElements);
 
 		let { scope } = state;
-		if (state.pathname == state.referrer?.pathname && !state.data.page && state.referrer.data.page) {
-			state.data.page = state.referrer.data.page;
+		if (state.pathname == state.referrer?.pathname && !state.data.response && state.referrer.data.response) {
+			state.data.response = state.referrer.data.response;
 			scope = state.scope = state.referrer.scope.copy();
 		}
 

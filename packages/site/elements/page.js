@@ -78,7 +78,7 @@ exports.page = {
 	}],
 	html: `<html lang="[$lang]">
 	<head>
-		<title>[title][$site.title?|pre: - ]</title>
+		<title>[title][$parent.data.title?|pre: - ]</title>
 		<meta http-equiv="Status" content="[$status|or:200] [$statusText|or:OK][redirect|not:prune:*]">
 		<meta http-equiv="Status" content="301 Moved Permanently[transition.from|not:prune:*:1]">
 		<meta http-equiv="Location" content="[redirect|switch:[url]:|fail:*::1][$loc.search]">
@@ -90,7 +90,7 @@ exports.page = {
 		<meta name="description" content="[description|fail:*]">
 		<base href="[$loc.origin]">
 		<link rel="canonical" href="[$loc.origin][$loc.pathname][$loc.search][noindex|prune:*]">
-		<link rel="icon" href="[$site.favicon|post:?format=ico|or:data%3A,]">
+		<link rel="icon" href="[$parent.data.favicon|post:?format=ico|or:data%3A,]">
 		<link rel="stylesheet" href="[$element.stylesheets|repeat:]" data-priority="[$element.priority]">
 		<script crossorigin="anonymous" defer src="https://cdn.polyfill.io/v3/polyfill.min.js?flags=gated&unknown=polyfill&features=[$elements|as:polyfills|enc:url|fail:*]" data-priority="-10000"></script>
 		<script defer src="[$element.scripts|repeat:]" data-priority="[$element.priority]"></script>

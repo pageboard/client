@@ -37,7 +37,7 @@ exports.mail = {
 	},
 	html: `<html lang="[$lang]">
 	<head>
-		<title>[$site.title|post:%3A ][title]</title>
+		<title>[$parent.data.title|post:%3A ][title]</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" href="[$elements.mail.stylesheets|repeat:]" />
 		<script defer src="[$elements.mail.scripts|repeat:]"></script>

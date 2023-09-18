@@ -31,7 +31,7 @@ class HTMLElementBlogs extends Page.Element {
 		this.appendChild(frag);
 	}
 	build(state) {
-		const version = state.scope.$site.version || undefined;
+		const version = state.scope.$parent.data?.version || undefined;
 		if (state.pathname.endsWith('.rss')) {
 			if (version != null) state.vars.version = true;
 			if (state.query.version != version) {
@@ -107,7 +107,7 @@ class HTMLElementBlogs extends Page.Element {
 		const url = doc.location.toString();
 		const feed = {
 			title: scope.$page.data.title,
-			description: scope.$site.title,
+			description: scope.$parent.data.title,
 			url: url.replace('.rss', ''),
 			categories: topics,
 			date: latestDate,
