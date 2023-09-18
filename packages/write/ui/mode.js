@@ -48,13 +48,13 @@ Pageboard.Controls.Mode = class Mode {
 			const mode = document.body.dataset.mode;
 			if (mode != "read") {
 				const store = this.editor.controls.store;
-				const { page } = state.data;
-				if (page?.item) {
-					delete page.items;
+				const { response } = state.data;
+				if (response?.item) {
+					delete response.items;
 					store.flush();
 					const backup = store.reset();
-					page.item = (backup.unsaved || backup.initial)[store.rootId];
-					page.items = Object.values(backup.unsaved || backup.initial);
+					response.item = (backup.unsaved || backup.initial)[store.rootId];
+					response.items = Object.values(backup.unsaved || backup.initial);
 					state.scope.$store = backup; // TODO move store to some place else
 					state.save();
 				}
