@@ -356,8 +356,7 @@ class QueryCollectorFilter {
 			if (!vars[key]) vars[key] = !undef;
 			this.#query[key] = val;
 		} else if (typeof val == "string") {
-			const isEnc = ctx.expr.filters[ctx.expr.filters.length - 1]?.[0] == "enc";
-			const loc = Page.parse(isEnc ? '?' + decodeURIComponent(val) : val).query;
+			const loc = Page.parse(val).query;
 			for (const [key, val] of Object.entries(loc)) {
 				if (query[key] === val) vars[key] = true;
 				this.#query[key] = val;
