@@ -9,6 +9,10 @@ export default function(method, url, data) {
 		},
 		credentials: "same-origin"
 	};
+	const lans = window.navigator.languages;
+	if (lans?.length > 0) {
+		fetchOpts.headers['Accept-Language'] = lans.join(', ');
+	}
 	if (method == "get" || method == "delete") {
 		url = Object.assign(Page.parse(url), {query: data}).toString();
 		const pending = pendings[url];
@@ -48,8 +52,9 @@ export default function(method, url, data) {
 				}
 				obj.status = res.status;
 				obj.statusText ??= res.statusText;
-				obj.locks = (res.headers.get('X-Upcache-Lock') || "").split(',').map(str => str.trim()).filter(str => Boolean(str.length));
+				obj.locks = (res.headers.get('X-Upcache-Lock') ?? "").split(',').map(str => str.trim()).filter(str => Boolean(str.length));
 				obj.granted = res.headers.get('X-Granted') ? true : false;
+				obj.lang = res.headers.get('Content-Language') ?? "";
 				return obj;
 			});
 		}

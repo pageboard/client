@@ -65,7 +65,6 @@ Page.route(async state => {
 
 	const scope = Scope.init(state);
 	await scope.import(response);
-	scope.$lang ??= scope.$parent.data.languages?.[0] ?? scope.$parent.data.lang;
 	scope.$page = response.item;
 	const node = scope.render(response);
 	if (!node || node.nodeName != "BODY") {
