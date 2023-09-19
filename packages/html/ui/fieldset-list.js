@@ -37,8 +37,10 @@ class HTMLElementFieldsetList extends Page.Element {
 	fill(values, scope) {
 		if (scope.$write || this.prefix == null) return;
 		// unflatten array-values
+		const vars = [];
 		for (const [key, val] of Object.entries(values)) {
 			if (!this.#prefixed(key)) continue;
+			vars.push(key);
 			if (Array.isArray(val)) {
 				for (let i = 0; i < val.length; i++) {
 					values[key + '.' + i] = val[i];
@@ -49,6 +51,7 @@ class HTMLElementFieldsetList extends Page.Element {
 		const list = this.#listFromValues({ ...values });
 		if (this.#initialSize == null) this.#initialSize = list.length;
 		this.#resize(list.length, scope);
+		return vars;
 	}
 
 	reset() {

@@ -31,6 +31,7 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 			if (action == "toggle") {
 				action = val ? "enable" : "disable";
 			}
+			const isQuery = ctx.expr.path[0] == "$query" && ctx.expr.path.length == 1;
 
 			state.finish(() => {
 				if (action == "enable") {
@@ -41,7 +42,10 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 					if (val == null) {
 						form.reset?.();
 					} else if (typeof val == "object") {
-						form.fill?.(this.linearizeValues(val), state.scope);
+						const vars = form.fill?.(this.linearizeValues(val), state.scope) ?? [];
+						if (isQuery) {
+							for (const name of vars) state.vars[name] = true;
+						}
 						form.save?.();
 					}
 				}
@@ -222,14 +226,15 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 	}
 	fill(query, scope) {
 		// fieldset-list are not custom inputs yet
-		for (const node of this.querySelectorAll("element-fieldset-list")) {
-			node.fill?.(query, scope);
-		}
 		const vars = [];
+		for (const node of this.querySelectorAll("element-fieldset-list")) {
+			if (node.fill) vars.push(...node.fill(query, scope));
+		}
+
 		for (const elem of this.elements) {
 			const name = elem.name;
 			if (!name) continue;
-			if (name in query && !vars.includes(name)) vars.push(name);
+			if (name in query) vars.push(name);
 			const val = query[name];
 			if (val === undefined) {
 				elem.reset?.();
