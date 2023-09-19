@@ -47,14 +47,9 @@ Page.constructor.prototype.debounce = function (fn, to) {
 Page.route(async state => {
 	const { data } = state;
 	const nested = window.parent != window ? 1 : undefined;
-	let url = state.pathname;
-	const [, lang, ext] = url.match(/(?:\.([a-z]{2}))?(?:\.([a-z]{3}))?$/);
-	if (ext) url = url.slice(0, -ext.length - 1);
-	if (lang) url = url.slice(0, -lang.length - 1);
 	if (data.response == null) {
 		data.response = await fetchHelper('get', '/.api/page', {
-			url, nested,
-			lang: nested ? undefined : lang
+			url: state.pathname, nested
 		});
 		if (!data.response.item) data.response.item = {
 			type: 'error',
