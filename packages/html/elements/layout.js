@@ -119,7 +119,7 @@ exports.layout = {
 					title: 'Inline (em)',
 					type: 'number',
 					default: 0,
-					multipleOf: 0.1,
+					multipleOf: 0.01,
 					nullable: true
 				},
 				inlineUnits: {
@@ -129,7 +129,7 @@ exports.layout = {
 					title: 'Block (rem)',
 					type: 'number',
 					default: 0,
-					multipleOf: 0.1,
+					multipleOf: 0.01,
 					nullable: true
 				},
 				blockUnits: {
@@ -147,7 +147,7 @@ exports.layout = {
 					type: 'number',
 					default: 0,
 					minimum: 0,
-					multipleOf: 0.1,
+					multipleOf: 0.01,
 					nullable: true
 				},
 				inlineUnits: {
@@ -158,7 +158,7 @@ exports.layout = {
 					type: 'number',
 					default: 0,
 					minimum: 0,
-					multipleOf: 0.1,
+					multipleOf: 0.01,
 					nullable: true
 				},
 				blockUnits: {
