@@ -1,7 +1,7 @@
 .page-sheet {
 	display:block;
 	position:relative;
-	page-break-inside: avoid;
+	page-break-after: always;
 	counter-increment: sheet;
 	z-index:0;
 	flex: 0 0 auto;
@@ -49,12 +49,18 @@
 }
 html {
 	display: flex;
+	flex-wrap:wrap;
 	justify-content: center;
+	align-items: center;
+	flex: 0 0 auto;
 }
+
 body,
 body > element-template > .view {
 	display:flex;
 	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
 }
 
 body > .page-sheet,
