@@ -15,7 +15,7 @@ export default class Viewer {
 		}
 	}
 
-	from(block, blocks, opts) {
+	from(block, blocks, opts = {}) {
 		const el = opts.element;
 		const extra = el && !this.elements[el.name];
 		if (extra) this.setElement(el);
