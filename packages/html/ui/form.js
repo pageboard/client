@@ -359,7 +359,7 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 			form.classList.add('loading');
 			scope.$response = await state.fetch(form.method, Page.format({
 				pathname: form.getAttribute('action'),
-				query: state.query
+				query: form.dataset // because patch populates data from parameters
 			}), scope.$request);
 		} catch (err) {
 			scope.$response = err;
