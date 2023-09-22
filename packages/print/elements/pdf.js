@@ -48,6 +48,13 @@ exports.pdf = {
 					format: 'singleline',
 					default: '10mm'
 				},
+				spine: {
+					title: 'Spine',
+					description: 'Augment odd pages width',
+					type: 'string',
+					format: 'singleline',
+					default: '0mm'
+				},
 				foldWidth: {
 					title: 'Fold width',
 					type: 'boolean',
@@ -89,6 +96,7 @@ exports.pdf = {
 				"data-height": "[paper.height]",
 				"data-margin": "[paper.margin]",
 				"data-preset": "[paper.preset]",
+				"data-spine": "[paper.spine]",
 				"data-fold-width": "[paper.foldWidth]",
 				"data-fold-height": "[paper.foldHeight]",
 				"data-sheetcounter-offset": "[paper.sheetcounterOffset]"

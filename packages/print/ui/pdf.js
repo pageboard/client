@@ -1,7 +1,10 @@
 Page.patch(state => {
-	const { pages } = state.query;
+	const { pages, spine } = state.query;
 	if (pages != null && /^\d+-?\d*$/.test(pages)) {
 		state.vars.pages = true;
+	}
+	if (spine != null && !Number.isNaN(parseFloat(spine))) {
+		state.vars.spine = true;
 	}
 });
 Page.setup(state => {
@@ -19,6 +22,11 @@ Page.setup(state => {
 		foldHeight = false,
 		sheetcounterOffset = '0'
 	} = opts;
+
+	if (state.vars.spine) {
+		// TODO
+		console.warn("Got spine", state.query.spine);
+	}
 
 	document.documentElement.style.setProperty(
 		'--pdfmargin',
