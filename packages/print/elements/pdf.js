@@ -31,29 +31,26 @@ exports.pdf = {
 			nullable: true,
 			properties: {
 				width: {
-					title: 'Width',
-					type: 'string',
-					format: 'singleline',
-					default: '210mm'
+					title: 'Width in mm',
+					type: 'number',
+					default: 210
 				},
 				height: {
-					title: 'Height',
-					type: 'string',
-					format: 'singleline',
-					default: '297mm'
+					title: 'Height in mm',
+					type: 'number',
+					default: 297
 				},
 				margin: {
-					title: 'Margin',
-					type: 'string',
-					format: 'singleline',
-					default: '10mm'
+					title: 'Margins in mm',
+					description: 'Margins do not change width/height',
+					type: 'number',
+					default: 10
 				},
 				spine: {
-					title: 'Spine',
+					title: 'Spine in mm',
 					description: 'Augment odd pages width',
-					type: 'string',
-					format: 'singleline',
-					default: '0mm'
+					type: 'number',
+					default: 0
 				},
 				foldWidth: {
 					title: 'Fold width',
@@ -79,7 +76,7 @@ exports.pdf = {
 						title: 'Printer'
 					}]
 				},
-				sheetcounterOffset: {
+				counterOffset: {
 					title: 'Sheet counter offset',
 					type: 'integer',
 					minimum: 0,
@@ -97,9 +94,9 @@ exports.pdf = {
 				"data-margin": "[paper.margin]",
 				"data-preset": "[paper.preset]",
 				"data-spine": "[paper.spine]",
-				"data-fold-width": "[paper.foldWidth]",
-				"data-fold-height": "[paper.foldHeight]",
-				"data-sheetcounter-offset": "[paper.sheetcounterOffset]"
+				"data-fold-width": "[paper.foldWidth|alt:2:1]",
+				"data-fold-height": "[paper.foldHeight|alt:2:1]",
+				"data-counter-offset": "[paper.counterOffset]"
 			}
 		}
 	]

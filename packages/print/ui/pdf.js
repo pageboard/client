@@ -9,45 +9,46 @@ Page.patch(state => {
 });
 Page.setup(state => {
 	removePrintButtons();
-	const opts = document.body.dataset;
+	const opts = {};
+	for (const [name, str] of Object.entries(document.body.dataset)) {
+		opts[name] = parseFloat(str);
+	}
+	opts.width ??= 210;
+	opts.height ??= 297;
+	opts.spine ??= 0;
+	opts.foldWidth ??= 1;
+	opts.foldHeight ??= 1;
+	opts.counterOffset ??= 0;
 
 	if (window.devicePixelRatio < 4 && window.matchMedia('print').matches) {
 		// TODO
 	}
-	const {
-		width = '210mm',
-		height = '297mm',
-		margin = '0mm',
-		foldWidth = false,
-		foldHeight = false,
-		sheetcounterOffset = '0'
-	} = opts;
 
 	if (state.vars.spine) {
-		// TODO
-		console.warn("Got spine", state.query.spine);
+		opts.spine = state.query.spine;
 	}
 
 	document.documentElement.style.setProperty(
 		'--pdfmargin',
-		margin === '0' ? '0mm' : margin
+		`${opts.margin}mm`
 	);
 
-	const folds = {
-		width: foldWidth ? 2 : 1,
-		height: foldHeight ? 2 : 1
-	};
 	const className = 'page-sheet';
 	state.scope.printStyleSheet = printStyle(
 		className,
-		roundedFoldedDims(folds, convertUnits({ width, height, margin })),
-		{ width, height }
+		roundDims(convertToPx({
+			width: `${opts.width}mm`,
+			height: `${opts.height}mm`,
+			spine: `${opts.spine}mm`,
+			margin: `${opts.margin}mm`
+		})),
+		opts
 	);
 	if (state.scope.$write) {
 		return;
 	}
 	autobreakFn(className);
-	pageNumbering(parseInt(sheetcounterOffset), className);
+	pageNumbering(opts.counterOffset, className);
 
 	if (state.vars.pages) {
 		prunePages(Array.from(document.body.querySelectorAll(`.${className}`)), state.query.pages);
@@ -92,8 +93,8 @@ function removePrintButtons() {
 	document.querySelector('html > .pdf-menu')?.remove();
 }
 
-function printStyle(className, sheetSize, pageSize) {
-	const { margin, width, height } = sheetSize;
+function printStyle(className, sheet, page) {
+	const { margin, width, height, spine, foldWidth, foldHeight } = sheet;
 	const effectiveSheet = new CSSStyleSheet();
 	const printSheet = `
 	html, body {
@@ -105,7 +106,7 @@ function printStyle(className, sheetSize, pageSize) {
 			background: gray;
 		}
 		body {
-			width: ${pageSize.width};
+			width: ${page.width * foldWidth + spine}mm;
 		}
 		.${className} {
 			margin: 1rem auto;
@@ -118,18 +119,21 @@ function printStyle(className, sheetSize, pageSize) {
 			overflow:clip;
 			overflow-clip-margin: content-box ${margin}px;
 		}
+		.${className}-left {
+			width: ${width + spine}px;
+		}
 	}
 	@media print {
 		html, body {
 			background:white;
 		}
 		@page {
-			size: ${pageSize.width} ${pageSize.height};
+			size: ${page.width * foldWidth + spine}mm ${page.height * foldHeight}mm;
 			margin: 0;
 		}
 		.${className} {
 			margin: ${margin}px;
-			width: ${width - 2 * margin}px;
+			width: ${width - 2 * margin + spine}px;
 			height: ${height - 2 * margin}px;
 			overflow:clip;
 			overflow-clip-margin: content-box ${margin}px;
@@ -225,7 +229,7 @@ function pageNumbering(start, className) {
 	].join(' ');
 }
 
-function convertUnits(styles) {
+function convertToPx(styles) {
 	const d = document.body.appendChild(document.createElement('div'));
 	Object.assign(d.style, styles, {
 		display: 'block',
@@ -233,24 +237,19 @@ function convertUnits(styles) {
 	});
 	const obj = {};
 	const cs = window.getComputedStyle(d);
-	for (const key of Object.keys(styles)) obj[key] = cs[key];
+	for (const key of Object.keys(styles)) obj[key] = parseFloat(cs[key]);
 	d.remove();
-
-	// get decimal values in pixels
-	obj.width = parseFloat(obj.width);
-	obj.height = parseFloat(obj.height);
-	obj.margin = parseFloat(obj.margin);
-
 	return obj;
 }
 
-function roundedFoldedDims(folds, box) {
-	let w = Math.round(box.width / folds.width);
-	const h = box.height / folds.height;
-	const ch = w * (box.height / box.width) * (folds.width / folds.height);
+function roundDims(box) {
+	let w = Math.round(box.width);
+	const h = box.height;
+	const ch = w * (box.height / box.width);
 	if (ch > h) w += -1;
 	return {
 		margin: Math.round(box.margin),
+		spine: Math.round(box.spine),
 		width: w,
 		height: Math.floor(h)
 	};
