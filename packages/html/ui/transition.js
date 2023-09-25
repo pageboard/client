@@ -23,6 +23,15 @@ const loader = new class {
 	update(state) {
 		document.documentElement.dataset.stage = state.stage;
 	}
+	setup(state) {
+		document.body.hidden = true;
+		const tr = state.scope.transition;
+		state.finish(() => {
+			document.body.hidden = false;
+			if (tr?.ok) return tr.start();
+		});
+		tr?.end();
+	}
 };
 Page.connect(loader);
 loader.update(Page);
@@ -144,17 +153,3 @@ Page.constructor.prototype.mergeBody = function (body, corpse) {
 		this.scope.transition = new Transition(this, body, corpse);
 	}
 };
-
-Page.setup(state => {
-	const tr = state.scope.transition;
-	if (tr) {
-		if (tr.ok) {
-			state.finish(() => {
-				return tr.start();
-			});
-		} else {
-			tr.end();
-		}
-	}
-});
-
