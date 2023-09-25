@@ -39,8 +39,8 @@ Page.setup(state => {
 		roundDims(convertToPx({
 			width: `${opts.width}mm`,
 			height: `${opts.height}mm`,
-			spine: `${opts.spine}mm`,
-			margin: `${opts.margin}mm`
+			margin: `${opts.margin}mm`,
+			marginRight: `${opts.spine}mm`
 		})),
 		opts
 	);
@@ -119,7 +119,7 @@ function printStyle(className, sheet, page) {
 			overflow:clip;
 			overflow-clip-margin: content-box ${margin}px;
 		}
-		.${className}-left {
+		.${className}-right {
 			width: ${width + spine}px;
 		}
 	}
@@ -133,10 +133,13 @@ function printStyle(className, sheet, page) {
 		}
 		.${className} {
 			margin: ${margin}px;
-			width: ${width - 2 * margin + spine}px;
+			width: ${width - 2 * margin}px;
 			height: ${height - 2 * margin}px;
 			overflow:clip;
 			overflow-clip-margin: content-box ${margin}px;
+		}
+		.${className}-right {
+			width: ${width + spine - 2 * margin}px;
 		}
 	}`;
 
@@ -249,7 +252,7 @@ function roundDims(box) {
 	if (ch > h) w += -1;
 	return {
 		margin: Math.round(box.margin),
-		spine: Math.round(box.spine),
+		spine: Math.round(box.marginRight),
 		width: w,
 		height: Math.floor(h)
 	};
