@@ -25,7 +25,7 @@ Page.setup(state => {
 	}
 
 	if (state.vars.spine) {
-		opts.spine = state.query.spine;
+		opts.spine = parseFloat(state.query.spine);
 	}
 
 	document.documentElement.style.setProperty(
@@ -94,7 +94,7 @@ function removePrintButtons() {
 }
 
 function printStyle(className, sheet, page) {
-	const { margin, width, height, spine, foldWidth, foldHeight } = sheet;
+	const { margin, width, height, spine } = sheet;
 	const effectiveSheet = new CSSStyleSheet();
 	const printSheet = `
 	html, body {
@@ -106,7 +106,7 @@ function printStyle(className, sheet, page) {
 			background: gray;
 		}
 		body {
-			width: ${page.width * foldWidth + spine}mm;
+			width: ${page.width * page.foldWidth + spine}mm;
 		}
 		.${className} {
 			margin: 1rem auto;
@@ -128,7 +128,7 @@ function printStyle(className, sheet, page) {
 			background:white;
 		}
 		@page {
-			size: ${page.width * foldWidth + spine}mm ${page.height * foldHeight}mm;
+			size: ${page.width * page.foldWidth + page.spine}mm ${page.height * page.foldHeight}mm;
 			margin: 0;
 		}
 		.${className} {
