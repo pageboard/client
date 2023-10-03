@@ -72,7 +72,7 @@ export default class FocusPlugin {
 			else attrs.focused = null;
 		}
 		if (node.type.name == tr.doc.type.name) {
-			tr.docAttr('focused', attrs.focused);
+			tr.setDocAttribute('focused', attrs.focused);
 		} else if (node.type.spec.inline && !node.type.spec.element.leaf) {
 			const sel = this.editor.utils.selectTr(tr, pos);
 			tr.removeMark(sel.from, sel.to, node.type);

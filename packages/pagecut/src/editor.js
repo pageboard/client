@@ -20,12 +20,7 @@ import InputPlugin from "./input-plugin";
 import Utils from "./utils";
 import DefineSpecs from "./specs";
 import BlocksEdit from "./blocks-edit";
-import SetDocAttr from "./SetDocAttr";
 import { MenuItem, MenuBar } from "./menubar";
-
-Transform.Transform.prototype.docAttr = function(key, value) {
-	return this.step(new SetDocAttr(key, value));
-};
 
 const mac = typeof navigator != "undefined" ? /Mac/.test(navigator.platform) : false;
 

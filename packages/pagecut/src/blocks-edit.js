@@ -293,12 +293,12 @@ export default class Blocks extends BlocksView {
 			throw new Error("domQuery expects at least id or opts.focused to be set " + id);
 		}
 		const nodes = Array.from(rootDom.querySelectorAll(sel));
-		if (opts.all) return nodes;
 		if (rootDom.getAttribute('block-id') == id) {
 			// root is always focused, but another node having actual focus and representing
 			// the current page could take precedence
 			nodes.push(rootDom);
 		}
+		if (opts.all) return nodes;
 		if (nodes.length == 0) return;
 		const node = nodes[0];
 

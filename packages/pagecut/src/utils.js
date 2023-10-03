@@ -239,6 +239,13 @@ export default class Utils {
 			console.warn("Cannot refresh, node id do not match", attrs.id, node.attrs.id);
 			return tr;
 		}
+		if (pos === -1) {
+			for (const [k, v] of Object.entries(attrs)) {
+				tr.setDocAttribute(k, v);
+			}
+			tr.setSelection(new AllSelection(tr.doc));
+			return tr;
+		}
 		let selectedNode = sel.from === pos && sel.node;
 		try {
 			tr.setNodeMarkup(pos, null, attrs);
@@ -255,6 +262,7 @@ export default class Utils {
 
 	selectDomTr(tr, node, textSelection) {
 		const pos = this.posFromDOM(node);
+		if (pos === -1) return new AllSelection(tr.doc);
 		const $pos = tr.doc.resolve(pos);
 		if (node.nodeType != Node.ELEMENT_NODE || textSelection) {
 			return new TextSelection($pos);
@@ -365,13 +373,12 @@ export default class Utils {
 
 	posFromDOM(dom) {
 		let offset = 0;
-		if (dom != this.view.dom) {
-			let sib = dom;
-			while ((sib = sib.previousSibling)) {
-				offset++;
-			}
-			dom = dom.parentNode;
+		if (dom == this.view.dom) return -1;
+		let sib = dom;
+		while ((sib = sib.previousSibling)) {
+			offset++;
 		}
+		dom = dom.parentNode;
 		if (!dom) {
 			console.warn("FIXME", "cannot find posFromDOM of a dom node without parent", dom);
 			return false;
@@ -397,6 +404,10 @@ export default class Utils {
 	}
 
 	parents(tr, pos, all, before) {
+		if (pos === -1) {
+			pos = 0;
+			before = true;
+		}
 		const rpos = tr.doc.resolve(pos);
 		const depth = rpos.depth + 1;
 		const ret = [];

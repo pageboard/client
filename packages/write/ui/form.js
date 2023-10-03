@@ -264,14 +264,6 @@ class FormBlock {
 		const block = { ...this.block };
 		block[mode] = formData;
 
-		if (id == editor.state.doc.attrs.id) {
-			const stored = editor.blocks.get(block.id);
-			if (stored) Object.assign(stored, block);
-			else editor.blocks.set(block);
-			found = true;
-			this.block = editor.blocks.get(block.id);
-		}
-
 		const tr = editor.state.tr;
 		let dispatch = false;
 
@@ -297,6 +289,7 @@ class FormBlock {
 		if (dispatch) {
 			editor.dispatch(tr);
 		} else {
+			console.error("FIXME why call editor.controls.store.update here");
 			editor.controls.store.update();
 		}
 	}
