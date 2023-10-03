@@ -258,7 +258,6 @@ class FormBlock {
 		if (same) return;
 
 		const id = this.block.id;
-		let found = false;
 
 		// this must be done after reselecting with breadcrumb.click
 		const block = { ...this.block };
@@ -278,7 +277,7 @@ class FormBlock {
 			const nodes = editor.blocks.domQuery(id, {all: true});
 
 			if (nodes.length == 0) {
-				if (!found) console.warn("No dom nodes found for this block", block);
+				console.warn("No dom nodes found for this block", block);
 			} else {
 				for (const node of nodes) {
 					editor.utils.refreshTr(tr, node, block);
@@ -289,7 +288,7 @@ class FormBlock {
 		if (dispatch) {
 			editor.dispatch(tr);
 		} else {
-			console.error("FIXME why call editor.controls.store.update here");
+			// No dom nodes found, but maybe that was some change
 			editor.controls.store.update();
 		}
 	}
