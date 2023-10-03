@@ -23,7 +23,7 @@
     "postinstall": "^0.8.0"
   },
   "devDependencies": {
-    "@pageboard/pagecut": "^0.14.5",
+    "@pageboard/pagecut": "^0.14.6",
     "cropperjs": "^1.6.1",
     "duration-relativetimeformat": "^2.0.4",
     "fast-safe-stringify": "^2.1.1",
