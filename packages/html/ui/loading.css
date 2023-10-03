@@ -1,4 +1,8 @@
-[data-src]::after {
+
+.loading[data-src]::after,
+.error[data-src]::after,
+.waiting[data-src]::after,
+.denied[data-src]::after {
 	display:none;
 	box-sizing: border-box;
 	text-align:center;
