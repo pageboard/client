@@ -27,7 +27,7 @@
     "cropperjs": "^1.6.1",
     "duration-relativetimeformat": "^2.0.4",
     "fast-safe-stringify": "^2.1.1",
-    "postinstall-bundle": "^0.8.0",
+    "postinstall-bundle": "^0.9.1",
     "pretty-bytes": "^5.6.0",
     "speakingurl": "^14.0.1"
   },
@@ -38,9 +38,9 @@
   "prepare": {
     "cropperjs/dist/cropper.css": "copy lib/",
     "cropperjs/dist/cropper.js": "copy lib/",
-    "@pageboard/pagecut/src/editor.js": "bundle --name=window.Pagecut lib/pagecut/",
+    "@pageboard/pagecut/src/editor.js": "bundle --name=Pagecut --extend=true lib/pagecut/",
     "@pageboard/pagecut/src/*.css": "copy lib/pagecut/",
-    "./src/pageboard.js": "bundle --name=window.Pageboard.utils lib/"
+    "./src/pageboard.js": "bundle --name=Pageboard.utils --extend=true lib/"
   },
   "pageboard": {
     "priority": -1000,

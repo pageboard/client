@@ -2,7 +2,7 @@
   "name": "@pageboard/site",
   "version": "0.14.8",
   "description": "",
-  "main": "index.js",
+  "main": "src/pageboard.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "postinstall"
@@ -24,11 +24,11 @@
     "debounce": "^1.2.1",
     "matchdom": "^11.8.0",
     "postinstall": "^0.8.0",
-    "postinstall-bundle": "^0.8.0",
+    "postinstall-bundle": "^0.9.1",
     "window-page": "^18.2.1"
   },
   "prepare": {
-    "./src/pageboard.js": "bundle --name=window.Pageboard lib/"
+    "./src/pageboard.js": "bundle --extend=true --name=window lib/"
   },
   "pageboard": {
     "priority": -100,

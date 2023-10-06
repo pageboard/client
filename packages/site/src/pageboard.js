@@ -2,17 +2,15 @@ import { default as debounce } from 'debounce';
 import { default as fetchHelper } from './fetch';
 import '@ungap/custom-elements';
 import * as Class from './class';
-import { Deferred } from 'class-deferred';
 import './polyfills';
 import 'window-page';
 import Scope from './scope';
 import './stages';
+export { Deferred } from 'class-deferred';
 
 
-window.Deferred = Deferred;
-
-
-export const elements = window.Pageboard?.elements ?? {};
+export const Pageboard = window.Pageboard ?? {};
+export const elements = Pageboard.elements ?? {};
 
 for (const key in Class) {
 	Object.defineProperty(Page.constructor.prototype, key, {
