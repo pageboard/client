@@ -157,6 +157,7 @@ Pageboard.Editor = function Editor(win, state) {
 	const body = doc.body;
 	win.Pagecut.Editor.prototype.update = update;
 	window.Pagecut.MenuItem = win.Pagecut.MenuItem;
+	const { initial } = viewer.blocks;
 
 	// and the editor must be running from child
 	editor = Pageboard.editor = new win.Pagecut.Editor({
@@ -203,7 +204,7 @@ Pageboard.Editor = function Editor(win, state) {
 		}
 	}
 	editor.controls = controls;
-	controls.store.preinitial = editor.blocks.initial = viewer.blocks.initial;
+	controls.store.preinitial = editor.blocks.initial = initial;
 	const $store = state.scope.$store;
 	if ($store) {
 		controls.store.reset($store);
