@@ -39,6 +39,7 @@ Pageboard.adopt = function(win, readState) {
 			} else if (readState.scope.$write) {
 				readState.scope.editor = Pageboard.Editor(win, readState);
 			}
+			Pageboard.modeControl.reconnect(readState);
 		});
 	});
 };
@@ -198,7 +199,7 @@ Pageboard.Editor = function Editor(win, state) {
 		const node = document.getElementById(lKey);
 		if (ControlClass.singleton) {
 			controls[key] = ControlClass.singleton;
-			ControlClass.singleton.reset(editor, node);
+			ControlClass.singleton?.reset(editor, node);
 		} else {
 			controls[lKey] = new ControlClass(editor, node);
 		}
