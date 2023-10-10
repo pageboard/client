@@ -9,9 +9,9 @@ export default function(method, url, data) {
 		},
 		credentials: "same-origin"
 	};
-	const lans = window.navigator.languages;
-	if (lans?.length > 0) {
-		fetchOpts.headers['Accept-Language'] = lans.join(', ');
+	const langs = window.navigator.languages;
+	if (langs?.length > 0) {
+		fetchOpts.headers['Accept-Language'] = langs.join(', ');
 	}
 	if (method == "get" || method == "delete") {
 		url = Object.assign(Page.parse(url), {query: data}).toString();
