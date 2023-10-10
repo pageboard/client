@@ -134,6 +134,7 @@ exports.write = {
 		"../ui/inputs/map.js",
 		"../ui/inputs/action.js",
 		"../ui/inputs/color.js",
+		"../ui/inputs/datalist.js",
 		"../ui/inputs/element.js",
 		"../ui/inputs/element-property.js",
 		"../ui/inputs/binding.js",
