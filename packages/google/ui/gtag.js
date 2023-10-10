@@ -18,8 +18,8 @@ class HTMLElementGTMScript extends Page.create(HTMLScriptElement) {
 		this.#id = loc.query.id;
 	}
 	static build(state) {
-		const frag = document.dom(`<script async is="element-gtm-script" src="https://www.googletagmanager.com/gtag/js?id=[$parent.data.extra.google_analytics|enc:url|fail:*]">[$parent.data.env|eq:production|prune:*]</script>
-		<script async is="element-gtm-script" src="https://www.googletagmanager.com/gtm.js?id=[$parent.data.extra.google_tag_manager|enc:url|fail:*]">[$parent.data.env|eq:production|prune:*]</script><meta name="google-site-verification" content="[$parent.data.extra.google_site_verification|fail:*][$page.data.url|eq:%2F|prune:*]">`).fuse({}, state.scope);
+		const frag = document.dom(`<script async is="element-gtm-script" src="https://www.googletagmanager.com/gtag/js?id=[$parent.data.extra?.google_analytics|enc:url|fail:*]">[$parent.data.env|eq:production|prune:*]</script>
+		<script async is="element-gtm-script" src="https://www.googletagmanager.com/gtm.js?id=[$parent.data.extra?.google_tag_manager|enc:url|fail:*]">[$parent.data.env|eq:production|prune:*]</script><meta name="google-site-verification" content="[$parent.data.extra?.google_site_verification|fail:*][$page.data.url|eq:%2F|prune:*]">`).fuse({}, state.scope);
 		document.head.appendChild(frag);
 	}
 	consent(state) {
