@@ -9,6 +9,9 @@ const loader = new class {
 	ready(state) {
 		this.update(state.stage);
 	}
+	build(state) {
+		document.body.hidden = true;
+	}
 	patch(state) {
 		this.update(state);
 	}
@@ -24,7 +27,6 @@ const loader = new class {
 		document.documentElement.dataset.stage = state.stage;
 	}
 	setup(state) {
-		document.body.hidden = true;
 		const tr = state.scope.transition;
 		state.finish(() => {
 			document.body.hidden = false;
