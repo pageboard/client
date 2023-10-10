@@ -3,6 +3,7 @@ exports.portfolio = {
 	title: "Portfolio",
 	icon: '<i class="grid layout icon"></i>',
 	menu: "widget",
+	bundle: 'gallery',
 	group: 'block',
 	properties: {
 		shape: {

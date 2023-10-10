@@ -4,6 +4,7 @@ exports.carousel = {
 	icon: '<i class="image icon"></i>',
 	menu: "widget",
 	group: 'block',
+	bundle: 'gallery',
 	properties: {
 		name: {
 			title: 'Name',
