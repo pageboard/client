@@ -46,7 +46,7 @@ exports.write = {
 				<div class="item">[$parent.data.version|slice:0:12|or:latest]</div>
 			</div>
 			<div id="mode" class="right menu">
-				<a class="vertically fitted item" data-command="code" title="HTML Mode">
+				<a class="vertically fitted item" hidden data-command="code" title="HTML Mode">
 					<i class="code large icon"></i>
 				</a>
 				<a class="vertically fitted item" data-command="read" title="Read Mode">
