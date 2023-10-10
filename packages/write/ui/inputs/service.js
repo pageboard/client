@@ -29,11 +29,7 @@ Pageboard.schemaFilters.service = class ServiceFilter {
 				}
 			}
 		}
-		this.list = list.sort((a, b) => {
-			if (a.const < b.const) return -1;
-			else if (a.const > b.const) return 1;
-			else return 0;
-		});
+		this.list = list.sort((a, b) => a.const - b.const);
 	}
 	update(block, schema) {
 		schema = { ...schema };
