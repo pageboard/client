@@ -21,13 +21,23 @@ exports.link = {
 					type: ["link", "file", "archive"]
 				}
 			}
+		},
+		lang: {
+			title: 'Language',
+			type: 'string',
+			format: 'id',
+			nullable: true,
+			$helper: {
+				name: 'datalist',
+				url: '/.api/languages'
+			}
 		}
 	},
 	contents: "text*",
 	inline: true,
 	group: "inline",
 	tag: 'a:not([block-type]),a[block-type="link"]',
-	html: '<a href="[url]" class="[button|alt:ui button]"></a>',
+	html: '<a href="[url][lang|pre:.]" hreflang="[lang]" class="[button|alt:ui button]"></a>',
 	stylesheets: [
 		'../lib/components/button.css'
 	]
