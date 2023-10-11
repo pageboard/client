@@ -1,6 +1,6 @@
 {
   "name": "@pageboard/google",
-  "version": "0.14.2",
+  "version": "0.14.3",
   "description": "Elements exposing google services for pageboard",
   "main": "index.js",
   "scripts": {
