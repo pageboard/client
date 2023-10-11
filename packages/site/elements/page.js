@@ -89,7 +89,7 @@ exports.page = {
 		<meta name="robots" content="[noindex|and:noindex|fail:*]">
 		<meta name="description" content="[description|fail:*]">
 		<base href="[$loc.origin]">
-		<link rel="canonical" href="[$loc.origin][$loc.pathname][$loc.search][noindex|prune:*]">
+		<link rel="canonical" href="[$loc.pathname][$loc.search][noindex|not:prune:*::1]">
 		<link rel="icon" href="[$parent.data.favicon|post:?format=ico|or:data%3A,]">
 		<link rel="stylesheet" href="[$element.stylesheets|repeat:]" data-priority="[$element.priority]">
 		<script crossorigin="anonymous" defer src="https://cdn.polyfill.io/v3/polyfill.min.js?flags=gated&unknown=polyfill&features=[$elements|as:polyfills|enc:url|fail:*]" data-priority="-10000"></script>
