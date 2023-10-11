@@ -148,13 +148,7 @@ Pageboard.schemaHelpers.href = class Href {
 				return;
 			}
 			const href = item.getAttribute('href');
-			const remove = e.target.closest('[data-action="remove"]');
-			if (remove) {
-				e.stopPropagation();
-				return Pageboard.uiLoad(remove, this.remove(Href.cache[href].url)).then(() => {
-					this.renderList();
-				});
-			} else if (this.infinite.active) {
+			if (this.infinite.active) {
 				if (href == input.value) input.value = "";
 				else input.value = href;
 				const data = Href.cache[href];
@@ -351,14 +345,6 @@ Pageboard.schemaHelpers.href = class Href {
 		};
 	}
 
-	async remove(href) {
-		const obj = await Pageboard.uiLoad(this.node, Page.fetch('delete', '/.api/href', {
-			url: href
-		}));
-		this.cache([obj.item]);
-		this.list = this.list.filter(obj => obj.url != href);
-	}
-
 	async get(href) {
 		const obj = Href.cache[Href.normUrl(href)] ?? await Pageboard.uiLoad(this.node, Page.fetch('get', '/.api/href', {
 			url: href
@@ -404,11 +390,7 @@ Pageboard.schemaHelpers.href = class Href {
 
 		const item = document.dom(`<a href="[url|as:url]" class="item">
 			<div class="content">
-				<div class="ui tiny header">[title|or:-]
-					<div class="ui pinned right compact circular large icon button" data-action="remove">[url|prune:*]
-						<i class="icon ban"></i>
-					</div>
-				</div>
+				<div class="ui tiny header">[title|or:-]</div>
 			</div>
 		</a>`).fuse(obj, {});
 		const content = item.firstElementChild;
@@ -422,10 +404,6 @@ Pageboard.schemaHelpers.href = class Href {
 		${Href.tplPreview(obj.preview)}`));
 		if (obj.icon) {
 			content.appendChild(item.dom(`<img src="${obj.icon}" class="ui avatar icon image" />`));
-		}
-
-		if (!obj.visible || this.opts.readOnly) {
-			item.querySelector('[data-action="remove"]')?.remove();
 		}
 		return item;
 	}
