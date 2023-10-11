@@ -173,7 +173,7 @@ function stateOptions(id, defaults, state) {
 	for (const key of Object.keys(state.query)) {
 		const [qid, name] = key.split('.');
 		if (name == null || qid != id) continue;
-		const { isData } = defaults[name];
+		const { isData } = defaults[name] ?? {};
 		if (isData) {
 			opts[name] = state.query[key];
 			state.vars[key] = true;
