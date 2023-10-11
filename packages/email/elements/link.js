@@ -15,6 +15,16 @@ exports.mail_link = {
 					type: ["link", "file", "archive"]
 				}
 			}
+		},
+		lang: {
+			title: 'Language',
+			type: 'string',
+			format: 'lang',
+			nullable: true,
+			$helper: {
+				name: 'datalist',
+				url: '/.api/languages'
+			}
 		}
 	},
 	contents: "text*",
