@@ -98,6 +98,16 @@ exports.menu_item_link = {
 				}
 			}
 		},
+		lang: {
+			title: 'Language',
+			type: 'string',
+			format: 'lang',
+			nullable: true,
+			$helper: {
+				name: 'datalist',
+				url: '/.api/languages'
+			}
+		},
 		labeled: {
 			title: 'Labeled',
 			description: 'Vertical layout',
