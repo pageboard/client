@@ -103,7 +103,15 @@ Page.setup(state => {
 });
 
 const statePush = Page.constructor.prototype.push;
-Page.constructor.prototype.push = function (...args) {
+Page.constructor.prototype.push = function (loc, opts) {
 	this.scope.transition?.cancel();
-	return statePush.apply(this, args);
+	if (typeof loc == "string") loc = this.parse(loc);
+	if (loc.pathname) {
+		const { $lang } = this.scope;
+		const suffix = (str => this.pathname.endsWith(str) ? str : '')('~' + $lang);
+		if (suffix && !/~\w{2}$/.test(loc.pathname)) {
+			loc.pathname += suffix;
+		}
+	}
+	return statePush.call(this, loc, opts);
 };
