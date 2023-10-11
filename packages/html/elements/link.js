@@ -25,7 +25,7 @@ exports.link = {
 		lang: {
 			title: 'Language',
 			type: 'string',
-			format: 'id',
+			format: 'lang',
 			nullable: true,
 			$helper: {
 				name: 'datalist',
