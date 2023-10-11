@@ -42,13 +42,24 @@ Page.ready(state => {
 
 Page.patch(state => {
 	state.finish(() => {
+		const { $lang } = state.scope;
+		const suffix = (str => state.pathname.endsWith(str) ? str : '')('~' + $lang);
 		for (const a of document.querySelectorAll('a[href]')) {
 			const loc = state.parse(a.href);
 			if (loc.hostname && loc.hostname != document.location.hostname) {
 				a.target = "_blank";
 				a.rel = "noopener";
-			} else if (loc.pathname && (loc.pathname.startsWith('/.') || /\.\w+$/.test(loc.pathname))) {
+			} else if (/^\.\w+\//.test(loc.pathname)) {
 				a.target = "_blank";
+			} else {
+				const ext = /\.\w{3,4}$/.exec(loc.pathname)?.[0] ?? '';
+				if (ext) a.target = "_blank";
+				if (suffix) {
+					const bare = loc.pathname.slice(0, -ext.length || undefined);
+					if (!/~\w{2}$/.test(bare)) {
+						a.pathname = bare + suffix + ext;
+					}
+				}
 			}
 		}
 	});
