@@ -40,12 +40,20 @@ exports.write = {
 				</a>
 			</div>
 			<div class="text menu">
-				<div class="header item">[$parent.data.title|or:-]</div>
-				<div class="active item">[$parent.data.env]</div>
-				<div class="item">[$parent.data.module]</div>
-				<div class="item">[$parent.data.version|slice:0:12|or:latest]</div>
+				<div class="header item" href="/admin/settings">[$parent.data.title|or:-]</div>
+				<div class="item">[$parent.data.env]</div>
+				<div class="item">[$parent.data.module] @[$parent.data.version|slice:0:12|or:head]</div>
 			</div>
 			<div id="mode" class="right menu">
+				<a class="vertically fitted item" title="Site map" href="/admin/map">
+					<i class="sitemap large icon"></i>
+				</a>
+				<a class="vertically fitted item" title="Settings" href="/admin/settings">
+					<i class="cog large icon"></i>
+				</a>
+				<a class="vertically fitted item" data-command="translate" title="Translation" href="/admin/translations">
+					<i class="language large icon"></i>[$parent.data.languages|prune:a]
+				</a>
 				<a class="vertically fitted item" hidden data-command="code" title="HTML Mode">
 					<i class="code large icon"></i>
 				</a>

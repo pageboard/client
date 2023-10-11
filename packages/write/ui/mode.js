@@ -38,10 +38,22 @@ Pageboard.Controls.Mode = class Mode {
 	handleClick(e, state) {
 		const item = e.target.closest('[data-command]');
 		if (!item) return;
+		e.preventDefault();
 		const com = item.dataset.command;
 		if (com == "logout") {
 			return state.fetch("get", "/.api/logout")
 				.then(() => state.reload(true));
+		}
+		if (com == "translate") {
+			const { item: page } = state.data.response;
+			return state.push({
+				pathname: item.pathname,
+				query: {
+					id: page.id,
+					type: page.type,
+					s: page.data.title
+				}
+			});
 		}
 		if (["code", "write", "read"].includes(com) == false) return;
 		const mode = document.body.dataset.mode;
