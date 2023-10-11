@@ -43,7 +43,7 @@ Page.ready(state => {
 Page.patch(state => {
 	state.finish(() => {
 		const { $lang } = state.scope;
-		const suffix = (str => state.pathname.endsWith(str) ? str : '')('~' + $lang);
+		const suffixed = state.pathname.endsWith(`~${$lang}`);
 		for (const a of document.querySelectorAll('a[href]')) {
 			const loc = state.parse(a.href);
 			if (loc.hostname && loc.hostname != document.location.hostname) {
@@ -54,10 +54,10 @@ Page.patch(state => {
 			} else {
 				const ext = /\.\w{3,4}$/.exec(loc.pathname)?.[0] ?? '';
 				if (ext) a.target = "_blank";
-				if (suffix) {
+				if (suffixed || a.hreflang) {
 					const bare = loc.pathname.slice(0, -ext.length || undefined);
 					if (!/~\w{2}$/.test(bare)) {
-						a.pathname = bare + suffix + ext;
+						a.pathname = `${bare}~${a.hreflang || $lang}${ext}`;
 					}
 				}
 			}
@@ -108,8 +108,9 @@ Page.constructor.prototype.push = function (loc, opts) {
 	if (typeof loc == "string") loc = this.parse(loc);
 	if (loc.pathname) {
 		const { $lang } = this.scope;
-		const suffix = (str => this.pathname.endsWith(str) ? str : '')('~' + $lang);
-		if (suffix && !/~\w{2}$/.test(loc.pathname)) {
+		const suffix = `~${$lang}`;
+		const suffixed = this.pathname.endsWith(suffix);
+		if (suffixed && !/~\w{2}$/.test(loc.pathname)) {
 			loc.pathname += suffix;
 		}
 	}

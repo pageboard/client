@@ -37,7 +37,7 @@ exports.link = {
 	inline: true,
 	group: "inline",
 	tag: 'a:not([block-type]),a[block-type="link"]',
-	html: '<a href="[url][lang|pre:.]" hreflang="[lang]" class="[button|alt:ui button]"></a>',
+	html: '<a href="[url]" hreflang="[lang]" class="[button|alt:ui button]"></a>',
 	stylesheets: [
 		'../lib/components/button.css'
 	]

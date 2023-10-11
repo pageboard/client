@@ -120,7 +120,7 @@ exports.menu_item_link = {
 		marks: "nolink"
 	},
 	group: 'menu_item',
-	html: '<a class="[labeled] item" href="[url]">Link</a>'
+	html: '<a class="[labeled] item" href="[url]" hreflang="[lang]">Link</a>'
 };
 
 exports.menu_item_block = { ...exports.menu_item_link,
