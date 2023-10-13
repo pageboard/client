@@ -34,7 +34,7 @@
     "inlineresources": "^1.0.1",
     "juice": "^9.1.0",
     "postinstall": "^0.8.0",
-    "postinstall-bundle": "^0.8.0"
+    "postinstall-bundle": "^0.9.1"
   },
   "prepare": {
     "inlineresources/dist/inlineresources.allinone.js": "copy lib/inlineresources.js",
