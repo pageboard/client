@@ -23,7 +23,7 @@
     "bwip-js": "^4.1.1"
   },
   "prepare": {
-    "./src/barcode.js": "bundle --name=window.Pageboard lib/"
+    "./src/barcode.js": "bundle --name=window.Pageboard --extend=true lib/"
   },
   "pageboard": {
     "directories": [
