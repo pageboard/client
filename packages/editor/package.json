@@ -20,13 +20,13 @@
   "homepage": "https://github.com/pageboard/client#readme",
   "dependencies": {
     "postinstall": "^0.8.0",
-    "postinstall-bundle": "^0.8.0"
+    "postinstall-bundle": "^0.9.1"
   },
   "devDependencies": {
     "@pageboard/pagecut": "^0.14.6"
   },
   "prepare": {
-    "@pageboard/pagecut/src/editor.js": "bundle --name=window.Pagecut lib/",
+    "@pageboard/pagecut/src/editor.js": "bundle --extend --name=window.Pagecut lib/",
     "@pageboard/pagecut/src/*.css": "copy lib/"
   },
   "pageboard": {
