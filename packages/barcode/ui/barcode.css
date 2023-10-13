@@ -4,6 +4,7 @@
 [block-type="barcode"] > img {
 	width: auto;
 	max-height:100%;
+	image-rendering: pixelated;
 }
 [block-type="barcode"] > img.error {
 	background-color: rgb(255 0 0 / 50%);
