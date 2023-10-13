@@ -183,7 +183,6 @@ exports.input_property = {
 					data: {
 						name: name,
 						multiple: multiple,
-						placeholder: prop.description,
 						disabled: d.disabled,
 						required: required
 					},
@@ -312,7 +311,6 @@ exports.input_property = {
 				data: {
 					name: name,
 					disabled: d.disabled,
-					placeholder: propType.description,
 					required: required,
 					limits: limits
 				},
@@ -328,8 +326,7 @@ exports.input_property = {
 				data: {
 					name, type, required,
 					disabled: d.disabled,
-					default: propType.default,
-					placeholder: propType.description
+					default: propType.default
 				},
 				content: {
 					label: prop.title

@@ -14,12 +14,6 @@ exports.input_url = {
 			format: "singleline",
 			$helper: 'element-property'
 		},
-		placeholder: {
-			title: "Placeholder",
-			nullable: true,
-			type: "string",
-			format: "singleline"
-		},
 		required: {
 			title: 'Required',
 			type: 'boolean',
@@ -53,7 +47,7 @@ exports.input_url = {
 	html: `<div class="field">
 		<label block-content="label">Label</label>
 		<input is="element-input-url" type="url" id="[$id]" required="[required]"
-			disabled="[disabled]" accept="[types|join:,]" name="[name]" placeholder="[placeholder]" />
+			disabled="[disabled]" accept="[types|join:,]" name="[name]" />
 	</div>`,
 	stylesheets: [
 		'../ui/input-url.css'

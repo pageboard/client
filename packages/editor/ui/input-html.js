@@ -20,7 +20,7 @@ class MenuItemDialog extends window.Pagecut.MenuItem {
 		}[schema.format] ?? 'text';
 		const dom = this.dom = document.dom(
 			`<form class="prosemirror-dialog">
-				<input name="${name}" type="${inputType}" value="" title="${schema.title}" placeholder="https://...">
+				<input name="${name}" type="${inputType}" value="" title="${schema.title}">
 				<button>✔</button>
 				<button name="del">✕</button>
 			</form>`

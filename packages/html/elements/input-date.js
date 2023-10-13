@@ -19,12 +19,6 @@ exports.input_date_time = {
 			type: "string",
 			format: "singleline"
 		},
-		placeholder: {
-			title: "Placeholder",
-			nullable: true,
-			type: "string",
-			format: "singleline"
-		},
 		required: {
 			title: 'Required',
 			type: 'boolean',
@@ -83,7 +77,7 @@ exports.input_date_time = {
 	html: `<div class="field">
 		<label block-content="label">Label</label>
 		<input is="element-input-date"
-			name="[name]" disabled="[disabled]" placeholder="[placeholder]"
+			name="[name]" disabled="[disabled]"
 			required="[required]" value="[value]" step="[step]"
 			type="[format|switch:datetime:datetime-local]"
 		/>

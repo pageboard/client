@@ -29,12 +29,7 @@
 .form .field.error > input[type="file"][value]::after {
 	color:inherit;
 }
-.form .field > input[type="file"]::after,
-.form .field > input[type="file"]:not([value])::after {
-	content:attr(placeholder);
-	color: rgba(0 0 0 / 50%);
-	float: left;
-}
+
 input[type="file"]::file-selector-button {
 	display:block;
 	position:absolute;

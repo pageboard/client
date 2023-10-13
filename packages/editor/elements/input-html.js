@@ -20,12 +20,6 @@ exports.input_html = {
 			type: "string",
 			format: "singleline"
 		},
-		placeholder: {
-			title: "Placeholder",
-			nullable: true,
-			type: "string",
-			format: "singleline"
-		},
 		required: {
 			title: 'Required',
 			type: 'boolean',
@@ -53,7 +47,6 @@ exports.input_html = {
 			required="[required]"
 			readonly="[readonly]"
 			disabled="[disabled]"
-			placeholder="[placeholder]"
 		>[value|as:html]</textarea>
 	</div>`,
 	scripts: [

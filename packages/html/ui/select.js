@@ -2,7 +2,6 @@ class HTMLElementSelect extends Page.Element {
 	#observer;
 
 	static defaults = {
-		placeholder: null,
 		name: null,
 		value: null,
 		multiple: false,
@@ -95,9 +94,8 @@ class HTMLElementSelect extends Page.Element {
 		text.classList.remove('default');
 		return text;
 	}
-	#setPlaceholder(str) {
+	#setPlaceholder(str = '') {
 		const text = this.#text;
-		if (!str) str = this.options.placeholder;
 
 		const defaultOption = this.#select.querySelector('option[value=""]');
 		if (defaultOption) {

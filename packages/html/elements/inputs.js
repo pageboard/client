@@ -113,12 +113,6 @@ exports.input_text = {
 			type: "string",
 			format: "singleline"
 		},
-		placeholder: {
-			title: "Placeholder",
-			nullable: true,
-			type: "string",
-			format: "singleline"
-		},
 		required: {
 			title: 'Required',
 			type: 'boolean',
@@ -188,13 +182,11 @@ exports.input_text = {
 			required="[required]"
 			readonly="[readonly]"
 			disabled="[disabled]"
-			placeholder="[placeholder]"
 		>[value|as:text]</textarea>
 		[type|neq:textarea|prune:*:1]<input name="[name]"
 			required="[required]"
 			readonly="[readonly]"
 			disabled="[disabled]"
-			placeholder="[placeholder]"
 			type="[type|switch:new-password:password]"
 			pattern="[$element.patterns.[type]]"
 			value="[value]"
@@ -242,7 +234,6 @@ exports.input_number = {
 			required="[required]"
 			readonly="[readonly]"
 			disabled="[disabled]"
-			placeholder="[placeholder]"
 			type="number"
 			value="[value]"
 			min="[minimum]"
@@ -429,12 +420,6 @@ exports.input_select = {
 			format: "singleline",
 			$helper: 'element-property'
 		},
-		placeholder: {
-			title: "Placeholder",
-			nullable: true,
-			type: "string",
-			format: "singleline"
-		},
 		disabled: {
 			title: 'Disabled',
 			type: 'boolean',
@@ -470,7 +455,7 @@ exports.input_select = {
 		<label block-content="label">Label</label>
 		<element-select class="ui selection dropdown [multiple]"
 			data-name="[name]" data-disabled="[disabled]" data-required="[required]"
-			data-multiple="[multiple]" data-placeholder="[placeholder]"
+			data-multiple="[multiple]"
 			data-value="[value]"
 		>
 			<div class="menu" block-content="options"></div>

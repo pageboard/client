@@ -60,7 +60,8 @@ Pageboard.schemaHelpers.href = class Href {
 		input.parentNode.classList.add('href');
 
 		input.insertAdjacentHTML('afterEnd', `<div class="ui input">
-			<input name="$search" class="search" type="text" placeholder="Search or Paste..." />
+			<label>Search / Paste</label>
+			<input name="$search" class="search" type="text" />
 			<div class="ui blue icon buttons">
 				<div class="ui button" data-action="upload" title="Upload">
 					<i class="upload icon"></i>

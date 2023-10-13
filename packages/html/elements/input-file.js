@@ -13,12 +13,6 @@ exports.input_file = {
 			format: "singleline",
 			$helper: 'element-property'
 		},
-		placeholder: {
-			title: "Placeholder",
-			nullable: true,
-			type: "string",
-			format: "singleline"
-		},
 		required: {
 			title: 'Required',
 			type: 'boolean',
@@ -59,7 +53,7 @@ exports.input_file = {
 		<label block-content="label">Label</label>
 		<div class="ui basic label"></div>
 		<input is="element-input-file" type="file" id="[$id]" required="[required]"
-			disabled="[disabled]" accept="[limits.types|join:,]" name="[name]" placeholder="[placeholder]" />
+			disabled="[disabled]" accept="[limits.types|join:,]" name="[name]" />
 	</div>`,
 	stylesheets: [
 		'../lib/components/input.css',
