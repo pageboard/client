@@ -68,6 +68,12 @@
     "overrides": [
       {
         "files": [
+          "/packages/*/src"
+        ],
+        "parserOptions": { "sourceType": "module" }
+      },
+      {
+        "files": [
           "tests/*.test.js"
         ],
         "env": {
