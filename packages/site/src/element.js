@@ -40,7 +40,7 @@ export class CustomElement extends Element {
 
 		rscope.$element = el;
 
-		for (const name of ["id", "type", "parent", "child", "parents", "children", "updated_at", "created_at", "lock", "expr"]) {
+		for (const name of ["id", "type", "parent", "child", "parents", "children", "updated_at", "created_at", "lock", "expr", "content"]) {
 			const val = block[name];
 			if (val != null) rscope['$' + name] = val;
 		}
