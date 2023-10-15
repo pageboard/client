@@ -8,18 +8,6 @@ exports.page = {
 	standalone: true,
 	required: ['url'],
 	properties: {
-		title: {
-			title: 'Title',
-			nullable: true,
-			type: "string",
-			format: "singleline",
-			$helper: 'pageTitle'
-		},
-		description: {
-			title: 'Description',
-			nullable: true,
-			type: 'string'
-		},
 		url: {
 			title: 'Address',
 			type: "string",
@@ -73,12 +61,18 @@ exports.page = {
 		}
 	},
 	contents: [{
+		id: 'title',
+		nodes: 'text*'
+	}, {
+		id: 'description',
+		nodes: 'text*'
+	}, {
 		nodes: 'header? main+ footer?',
 		id: 'body'
 	}],
 	html: `<html lang="[$lang]">
 	<head>
-		<title>[title][$parent.data.title?|pre: - ]</title>
+		<title>[$content.title][$parent.data.title?|pre: - ]</title>
 		<meta http-equiv="Status" content="[$status|or:200] [$statusText|or:OK][redirect|not:prune:*]">
 		<meta http-equiv="Status" content="301 Moved Permanently[transition.from|not:prune:*:1]">
 		<meta http-equiv="Location" content="[redirect|switch:[url]:|fail:*::1][$loc.search]">
@@ -86,8 +80,8 @@ exports.page = {
 		<meta http-equiv="Location" content="[$links?.found|fail:*::1]">
 		<meta http-equiv="Content-Security-Policy" content="[$elements|as:csp]">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta name="robots" content="[noindex|and:noindex|fail:*]">
-		<meta name="description" content="[description|fail:*]">
+		<meta name="robots" content="[noindex|fail:*]">
+		<meta name="description" content="[$content.description|fail:*]">
 		<base href="[$loc.origin]">
 		<link rel="canonical" href="[$loc.pathname][$loc.search][noindex|not:prune:*::1]">
 		<link rel="alternate" hreflang="[$parent.data.languages|repeat:lang]" href="[$loc.pathname]~[lang][$loc.search]">
