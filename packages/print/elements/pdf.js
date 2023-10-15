@@ -4,10 +4,13 @@ exports.pdf = {
 	...exports.page,
 	title: 'PDF',
 	icon: '<i class="icon file pdf outline"></i>',
-	contents: {
+	contents: [{
+		id: 'title',
+		nodes: 'text*'
+	}, {
 		id: 'body',
 		nodes: 'block+'
-	},
+	}],
 	stylesheets: [ ...exports.page.stylesheets.slice(0, 2),
 		'../ui/pdf.css'
 	],
