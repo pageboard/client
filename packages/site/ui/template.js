@@ -3,29 +3,22 @@ class HTMLElementTemplate extends Page.Element {
 	#observer;
 	#queue;
 	#locked;
-	#auto;
 
-	patch(state) {
-		this.ownTpl.prerender();
-		if (state.scope.$write) return;
-		if (this.loading || this.closest('[block-content="template"]')) {
-			return;
+	#autoOffset(state) {
+		const { offset, offsetName, auto } = this.dataset;
+		if (auto == "true" && !(offsetName in state.query) && offset != 'Infinity') {
+			return parseInt(offset) || 0;
 		}
-		if (state.referrer && !state.sameQuery(state.referrer)) {
-			delete this.dataset.stop;
-			delete this.dataset.start;
-		}
-		const offname = this.dataset.pagination;
-		if (offname) {
-			state.ivars.add(offname);
-			this.#auto = this.dataset.auto && this.dataset.stop && !(offname in state.query);
-		} else {
-			this.#auto = false;
-		}
-		return this.fetch(state);
 	}
 
-	async fetch(state) {
+	async patch(state) {
+		this.ownTpl.prerender();
+		if (state.scope.$write || this.loading) return;
+		if (this.closest('[block-content="template"]')) {
+			console.warn("patch within template shouldn't happen");
+			return;
+		}
+
 		const scope = state.scope.copy();
 		let action = this.getAttribute('action');
 		let response = {};
@@ -39,12 +32,15 @@ class HTMLElementTemplate extends Page.Element {
 		}
 
 		if (action) try {
-			if (this.#auto) {
-				request[this.dataset.pagination] = this.dataset.stop;
+			const offset = this.#autoOffset(state);
+			if (offset != null) {
+				const { offsetName } = this.dataset;
+				state.ivars.add(offsetName);
+				request[offsetName] = offset;
 			}
-			response = await state.fetch('get', action, request);
 			this.loading = true;
 			this.classList.add('loading');
+			response = await state.fetch('get', action, request);
 			await scope.import(response);
 		} catch (err) {
 			response.status = -1; // FIXME check toggleMessages
@@ -123,7 +119,6 @@ class HTMLElementTemplate extends Page.Element {
 		}
 
 		// allow sub-templates to merge current data
-
 		for (const tpl of tmpl.querySelectorAll('template')) {
 			if (tpl.parentNode.nodeName == this.nodeName || !tpl.content) continue;
 			for (const node of tpl.content.querySelectorAll('[block-type="binding"],[block-type="block_binding"]')) {
@@ -136,16 +131,8 @@ class HTMLElementTemplate extends Page.Element {
 			}
 		}
 
-		// we need to keep track of [start, end]
-		// fetch needs to know if response offset is after stop
-		// or before start
-		const { offset, limit } = data;
-		// TODO data.count is available, so just stop when offset + limit > count
-		const count = data.items?.length ?? 0;
-		let start = parseInt(this.dataset.start);
-		if (Number.isNaN(start)) start = offset;
-		let stop = parseInt(this.dataset.stop);
-		if (Number.isNaN(stop)) stop = offset;
+		const { offset, limit, count } = data;
+		const initial = this.#autoOffset(state);
 
 		let append = true;
 		let replace = false;
@@ -153,21 +140,20 @@ class HTMLElementTemplate extends Page.Element {
 			name: "$items",
 			enabled: Boolean(this.dataset.auto)
 		};
-		if (this.#auto) {
+		if (initial != null) {
 			auto.node = view.querySelector(`[data-auto-repeat="${auto.name}"]`);
-			if (offset <= start) {
-				start = offset;
+			if (offset <= initial) {
 				append = false;
-			}
-			if (offset + count >= stop) {
-				stop = offset + count;
-			} else if (append) {
+			} else if (offset > initial + limit) {
 				replace = true;
 			}
 		} else {
 			replace = true;
-			start = offset;
-			stop = offset + count;
+		}
+		if (offset + limit < count) {
+			this.dataset.offset = offset + limit;
+		} else {
+			this.dataset.offset = Infinity;
 		}
 
 		const el = {
@@ -215,9 +201,6 @@ class HTMLElementTemplate extends Page.Element {
 			}
 		}
 
-		if (offset != null && limit != null) {
-			Object.assign(this.dataset, { count, start, stop, limit });
-		}
 		const frag = scope.render(data, el);
 		if (collector.failed) scope.$status = 400;
 
@@ -248,19 +231,18 @@ class HTMLElementTemplate extends Page.Element {
 	}
 
 	#more() {
+		if (!this.#queue) return;
 		this.#locked = true;
-		if (this.#queue) this.#queue = this.#queue.then(() => {
-			return Page.reload({vary: 'patch'});
-		}).then(() => {
+		this.#queue = this.#queue.then(async () => {
+			await Page.reload({ vary: 'patch' });
 			this.#locked = false;
 		});
 	}
 
-	setup({ scope }) {
-		if (scope.$write) return;
-		if (this.dataset.auto != "true") return;
+	setup(state) {
+		if (state.scope.$write) return;
+		if (this.#autoOffset(state) == null) return;
 		this.#queue = Promise.resolve();
-		// FIXME when the list is not long enough, it does not trigger autoload
 		this.#observer = new IntersectionObserver(entries => {
 			entries.forEach(entry => {
 				if (entry.isIntersecting) {
