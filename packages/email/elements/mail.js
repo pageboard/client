@@ -8,13 +8,6 @@ exports.mail = {
 	standalone: true,
 	required: ['url'],
 	properties: {
-		title: {
-			title: 'Title',
-			nullable: true,
-			type: "string",
-			format: "singleline",
-			$helper: 'pageTitle'
-		},
 		url: {
 			title: 'Address',
 			type: "string",
@@ -31,13 +24,16 @@ exports.mail = {
 			minimum: 0
 		}
 	},
-	contents: {
+	contents: [{
+		id: 'title',
+		nodes: 'text*'
+	}, {
 		id: 'body',
 		nodes: 'mail_body'
-	},
+	}],
 	html: `<html lang="[$lang]">
 	<head>
-		<title>[$parent.data.title|post:%3A ][title]</title>
+		<title>[$parent.data.title|post:%3A ][$content.title]</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" href="[$elements.mail.stylesheets|repeat:]" />
 		<script defer src="[$elements.mail.scripts|repeat:]"></script>
