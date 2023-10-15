@@ -294,7 +294,7 @@ function contentFn(ctx, block, name) {
 	const { scope } = ctx;
 
 	const el = {
-		name: block.type,
+		name: `${block.type}/${name}`,
 		contents: scope.$elements[block.type].contents,
 		html: `<div block-content="${name}"></div>`
 	};
