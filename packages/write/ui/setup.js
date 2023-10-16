@@ -49,11 +49,11 @@ function updatePage(state) {
 	const store = this.controls.store;
 	if (!store) return;
 	const page = (store.unsaved || store.initial)[store.rootId];
-	if (!page || !page.data) return;
-	const title = (page.data.title || "") + (store.unsaved ? '*' : '');
-	const path = page.data.url;
-	if (title != window.document.title || state.pathname != path) {
-		state.pathname = page.data.url;
+	if (!page?.data) return;
+	const title = (page.content?.title ?? "") + (store.unsaved ? '*' : '');
+	const { url } = page.data;
+	if (title != window.document.title || state.pathname != url) {
+		state.pathname = url;
 		window.document.title = title;
 		state.save();
 	}
