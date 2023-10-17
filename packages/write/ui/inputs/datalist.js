@@ -29,6 +29,7 @@ Pageboard.schemaHelpers.datalist = class Datalist {
 	update(block) {
 		const list = this.input.name.split('.');
 		let val = block.data;
+		if (!val) return;
 		for (let i = 0; i < list.length; i++) {
 			val = val[list[i]];
 			if (val == null) break;
