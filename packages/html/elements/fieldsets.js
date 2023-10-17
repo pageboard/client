@@ -53,6 +53,13 @@ exports.fieldset_list = {
 			type: "integer",
 			minimum: 0,
 			default: 1
+		},
+		level: {
+			title: 'Ancestor level',
+			description: 'Use higher template ancestors',
+			type: "integer",
+			minimum: 0,
+			nullable: true
 		}
 	},
 	contents: [{
@@ -60,7 +67,7 @@ exports.fieldset_list = {
 		nodes: 'block+',
 		expressions: true
 	}],
-	html: `<element-fieldset-list data-size="[size]">
+	html: `<element-fieldset-list data-size="[size]" data-level="[level]">
 		<template block-content="template"></template>
 		<div class="view"></div>
 	</element-fieldset-list>`,

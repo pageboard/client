@@ -165,7 +165,11 @@ class HTMLElementFieldsetList extends Page.Element {
 			}
 		}
 
-		const subtpl = inputs.map(node => node.closest('.fields') ?? node).ancestor();
+		let subtpl = inputs.map(node => node.closest('.fields') ?? node).ancestor();
+		let level = parseInt(this.dataset.level) || 0;
+		while (subtpl && level--) {
+			subtpl = subtpl.parentNode;
+		}
 		if (!subtpl) {
 			console.warn("fieldset-list should contain input[name]", this);
 			return;
