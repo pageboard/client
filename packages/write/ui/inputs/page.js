@@ -56,7 +56,7 @@ Pageboard.schemaHelpers.page = class PageHelper {
 					...me.opts.filter
 				};
 				const text = me.uiInput.value;
-				if (text && !text.startsWith('/')) filter.text = text;
+				if (text && !text.startsWith('/')) filter.text = text + '*'; // prefix search
 				else filter.url = (text || '/').replace(/\s+/g, '-');
 				filter.limit = 10;
 				filter.offset = page * filter.limit;
