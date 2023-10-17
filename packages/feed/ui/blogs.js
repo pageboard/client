@@ -106,8 +106,8 @@ class HTMLElementBlogs extends Page.Element {
 
 		const url = doc.location.toString();
 		const feed = {
-			title: scope.$page.data.title,
-			description: scope.$parent.data.title,
+			title: scope.$page.content.title,
+			description: scope.$page.data.description ??scope.$parent.data.title,
 			url: url.replace('.rss', ''),
 			categories: topics,
 			date: latestDate,
@@ -116,6 +116,8 @@ class HTMLElementBlogs extends Page.Element {
 			},
 			items: this.blogs
 		};
+
+		// FIXME this template needs an upgrade
 		const rssTemplate = `<?xml version="1.0" encoding="utf-8"?>
 	<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">
 		<channel>

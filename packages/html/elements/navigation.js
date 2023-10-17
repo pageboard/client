@@ -58,7 +58,7 @@ exports.breadcrumb = {
 		<div class="divider"></div>
 		<a href="[$links.up|nth:-1|at:a::1|repeat:link]" class="section">[link.title]</a>
 		<div class="divider"></div>
-		<div class="active section">[$page.data.title|fail:div::1]</div>
+		<div class="active section">[$page.content.title|fail:div::1]</div>
 	</nav>`,
 	stylesheets: [
 		'../lib/components/breadcrumb.css'

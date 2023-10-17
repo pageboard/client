@@ -257,7 +257,7 @@ Pageboard.schemaHelpers.page = class PageHelper {
 		return document.dom(`<a href="${block.data.url}" class="item">
 		<div class="content">
 			<div class="ui tiny header">
-				${block.data.title}
+				${block.content.title}
 			</div>
 			<div class="left floated meta">
 				${Pageboard.utils.durationFormat(block.updated_at || block.data.updated_at)}

@@ -51,7 +51,7 @@ Pageboard.Controls.Mode = class Mode {
 				query: {
 					id: page.id,
 					type: page.type,
-					s: page.data.title
+					s: page.content.title
 				}
 			});
 		}
