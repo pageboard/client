@@ -50,14 +50,6 @@ exports.page = {
 			title: 'Do not show in sitemap',
 			type: 'boolean',
 			default: false
-		},
-		keywords: {
-			title: 'Keywords',
-			type: 'array',
-			items: {
-				type: 'string'
-			},
-			nullable: true
 		}
 	},
 	contents: [{
