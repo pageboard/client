@@ -5,6 +5,7 @@ Page.connect(new class {
 	#adv = false;
 
 	async patch(state) {
+		if (state.scope.$write) return;
 		const metas = equivs.read();
 		if (metas.Status) {
 			// eat it
