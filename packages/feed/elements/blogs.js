@@ -102,7 +102,6 @@ exports.page.extensions.rss = {
 // that are loaded on top of the page
 
 /*
-exports.siteblog = exports.sitemap?.itemModel('blog', true);
 
 exports.itemblog = { ...exports.siteblog,
 	contents: exports.blog.contents.slice(1),

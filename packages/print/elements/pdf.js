@@ -105,8 +105,6 @@ exports.pdf = {
 	]
 };
 
-if (exports.pdf) exports.sitepdf = exports.sitemap.itemModel('pdf');
-
 exports.sheet = {
 	title: 'Sheet',
 	menu: "pdf",
