@@ -426,16 +426,12 @@ Pageboard.Controls.Form = class Form {
 		this.inlines = inlines;
 
 		if (selection?.name) {
-			setTimeout(() => {
-				// give an instant for input mutations to propagate
-				const found = this.node.querySelector(`[name="${selection.name}"]`);
-				if (found && found != document.activeElement) {
-					if (found.setSelectionRange && selection.start != null && selection.end != null) {
-						found.setSelectionRange(selection.start, selection.end, selection.dir);
-					}
-					found.focus();
-				}
-			});
+			const found = this.node.querySelector(`[name="${selection.name}"]`);
+			if (!found) return;
+			if (found.setSelectionRange && selection.start != null && selection.end != null) {
+				found.setSelectionRange(selection.start, selection.end, selection.dir);
+			}
+			found.focus();
 		}
 	}
 
