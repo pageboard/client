@@ -1,0 +1,3 @@
+.ui.button:not(.right) + .ui.button.right {
+	margin-left:auto;
+}

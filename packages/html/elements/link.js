@@ -43,3 +43,69 @@ exports.link = {
 	]
 };
 
+exports.link_button = {
+	priority: 11,
+	title: "Link Btn",
+	icon: '<i class="icons"><i class="linkify icon"></i><i class="corner hand pointer icon"></i></i>',
+	properties: {
+		url: {
+			title: 'Address',
+			description: 'Path without query or full url',
+			nullable: true,
+			type: 'string',
+			format: 'uri-reference',
+			$helper: {
+				name: 'href',
+				filter: {
+					type: ["link", "file", "archive"]
+				}
+			}
+		},
+		lang: {
+			title: 'Language',
+			type: 'string',
+			format: 'lang',
+			nullable: true,
+			$helper: {
+				name: 'datalist',
+				url: '/.api/languages'
+			}
+		},
+		full: {
+			title: 'Fluid',
+			type: 'boolean',
+			default: false
+		},
+		icon: {
+			title: 'Icon',
+			type: 'boolean',
+			default: false
+		},
+		compact: {
+			title: 'Compact',
+			type: 'boolean',
+			default: false
+		},
+		float: {
+			title: 'Float',
+			anyOf: [{
+				type: 'null',
+				title: 'No'
+			}, {
+				const: 'left',
+				title: 'Left'
+			}, {
+				const: 'right',
+				title: 'Right'
+			}],
+			default: null
+		}
+	},
+	contents: "text*",
+	group: "block",
+	tag: 'a.ui.button',
+	html: '<a href="[url]" hreflang="[lang]" class="ui [full|alt:fluid:] [icon] [compact] [float|post:%20floated] button"></a>',
+	stylesheets: [
+		'../lib/components/button.css'
+	]
+};

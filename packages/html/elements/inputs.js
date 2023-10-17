@@ -44,14 +44,39 @@ exports.input_button = {
 			default: false
 		},
 		full: {
-			title: 'Full width',
+			title: 'Fluid',
 			type: 'boolean',
 			default: false
+		},
+		icon: {
+			title: 'Icon',
+			type: 'boolean',
+			default: false
+		},
+		compact: {
+			title: 'Compact',
+			type: 'boolean',
+			default: false
+		},
+		float: {
+			title: 'Float',
+			anyOf: [{
+				type: 'null',
+				title: 'No'
+			}, {
+				const: 'left',
+				title: 'Left'
+			}, {
+				const: 'right',
+				title: 'Right'
+			}],
+			default: null
 		}
 	},
-	html: '<button type="[type]" disabled="[disabled]" class="ui [full|alt:fluid:] button" name="[name]" value="[value]">[type|schema:title]</button>',
+	html: '<button type="[type]" disabled="[disabled]" class="ui [full|alt:fluid:] [icon] [compact] [float|post:%20floated] button" name="[name]" value="[value]">[type|schema:title]</button>',
 	stylesheets: [
 		'../lib/components/button.css',
+		'../ui/button.css'
 	]
 };
 

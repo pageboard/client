@@ -104,13 +104,37 @@ exports.fieldlist_button = {
 			title: 'Full width',
 			type: 'boolean',
 			default: false
+		},
+		icon: {
+			title: 'Icon',
+			type: 'boolean',
+			default: false
+		},
+		compact: {
+			title: 'Compact',
+			type: 'boolean',
+			default: false
+		},
+		float: {
+			title: 'Float',
+			anyOf: [{
+				type: 'null',
+				title: 'No'
+			}, {
+				const: 'left',
+				title: 'Left'
+			}, {
+				const: 'right',
+				title: 'Right'
+			}],
+			default: null
 		}
 	},
 	contents: {
 		nodes: "inline*",
 		marks: "nolink"
 	},
-	html: '<button type="button" class="ui [full|alt:fluid:] button" value="[type]">Label</button>',
+	html: '<button type="button" class="ui [full|alt:fluid:] [icon] [compact] [float|post:%20floated] button" value="[type]">Label</button>',
 	stylesheets: [
 		'../lib/components/button.css',
 	]
