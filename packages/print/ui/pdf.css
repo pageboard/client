@@ -14,20 +14,38 @@
 	background-size: var(--size-w, auto) var(--size-h, auto);
 	background-repeat:var(--repeat);
 	background-position: var(--position, auto);
-	left: var(--left, auto);
-	top:var(--top, auto);
-	width: calc(var(--width, 100%) + 2 * var(--bleedwidth, 0) * var(--pdfmargin, 0mm));
-	height: calc(var(--height, 100%) + 2 * var(--bleedheight, 0) * var(--pdfmargin, 0mm));
-	margin:
-		calc(-1 * var(--bleedheight, 0) * var(--pdfmargin, 0mm))
-		calc(-1 * var(--bleedwidth, 0) * var(--pdfmargin, 0mm))
-		calc(-1 * var(--bleedheight, 0) * var(--pdfmargin, 0mm))
-		calc(-1 * var(--bleedwidth, 0) * var(--pdfmargin, 0mm));
+	width: var(--width, 100%);
+	height: var(--height, 100%);
+	left: 0;
+	top:0;
 	z-index: -1;
+	pointer-events: none;
 }
 
 .page-sheet-error {
 	outline: 8px dashed red;
+}
+
+body[data-fold-v] .page-sheet-right {
+	margin-right:0;
+	page-break-after: avoid;
+}
+
+body[data-fold-v] .page-sheet-left {
+	margin-left:0;
+}
+
+.layout.bleedLeft {
+	margin-left: calc( -1 * var(--pdf-margin));
+}
+.layout.bleedRight {
+	margin-right: calc( -1 * var(--pdf-margin));
+}
+.layout.bleedTop {
+	margin-top: calc( -1 * var(--pdf-margin));
+}
+.layout.bleedBottom {
+	margin-bottom: calc( -1 * var(--pdf-margin));
 }
 
 .page-sheet-count[data-separator]::before {
@@ -47,13 +65,6 @@
 .page-sheet-last .page-sheet-match[data-match="last"] {
 	visibility:initial;
 }
-html {
-	display: flex;
-	flex-wrap:wrap;
-	justify-content: center;
-	align-items: center;
-	flex: 0 0 auto;
-}
 
 body,
 body > element-template > .view {
@@ -63,14 +74,13 @@ body > element-template > .view {
 	justify-content: center;
 }
 
-body > .page-sheet,
-body > element-template > .view > .page-sheet {
-	flex: 0 0 auto;
-}
-
 @media screen {
 	.page-sheet {
 		box-shadow: rgb(0 0 0 / 40%) 0.2em 0.2em 0.4em;
+	}
+	body {
+		flex: 1 0 auto;
+		overflow: auto;
 	}
 	body + div.pdf-menu {
 		top: 0%;
@@ -94,6 +104,16 @@ body > element-template > .view > .page-sheet {
 	}
 	body + div.pdf-menu > a:visited {
 		color:white;
+	}
+
+	.page-sheet::after {
+		content:'';
+		position:absolute;
+		inset:var(--pdf-margin, 0);
+		border-width: min(1px, var(--pdf-margin, 0));
+		border-style: dashed;
+		z-index: 1;
+		pointer-events: none;
 	}
 }
 

@@ -1,13 +1,18 @@
 Page.connect(new class {
-	#styleSheet;
+	#stylesheet;
 
 	patch(state) {
-		const { pages, spine } = state.query;
+		const { pages, foldH, foldV } = state.query;
 		if (pages != null && /^\d+-?\d*$/.test(pages)) {
 			state.vars.pages = true;
 		}
-		if (spine != null && !Number.isNaN(parseFloat(spine))) {
-			state.vars.spine = true;
+		if (foldH != null) {
+			document.body.dataset.foldH = foldH;
+			state.vars.foldH = true;
+		}
+		if (foldV != null) {
+			document.body.dataset.foldV = foldV;
+			state.vars.foldV = true;
 		}
 	}
 	setup(state) {
@@ -18,32 +23,23 @@ Page.connect(new class {
 		}
 		opts.width ??= 210;
 		opts.height ??= 297;
-		opts.spine ??= 0;
-		opts.foldWidth ??= 1;
-		opts.foldHeight ??= 1;
+		opts.foldV ??= 0;
+		opts.foldH ??= 0;
 		opts.counterOffset ??= 0;
 
 		if (window.devicePixelRatio < 4 && window.matchMedia('print').matches) {
 			// TODO
 		}
 
-		if (state.vars.spine) {
-			opts.spine = parseFloat(state.query.spine);
-		}
-
-		document.documentElement.style.setProperty(
-			'--pdfmargin',
-			`${opts.margin}mm`
-		);
-
 		const className = 'page-sheet';
-		this.#styleSheet = this.#printStyle(
+		this.#insertPrintStyle(
 			className,
 			this.#roundDims(this.#convertToPx({
 				width: `${opts.width}mm`,
 				height: `${opts.height}mm`,
 				margin: `${opts.margin}mm`,
-				marginRight: `${opts.spine}mm`
+				foldH: `${opts.foldH}mm`,
+				foldV: `${opts.foldV}mm`
 			})),
 			opts
 		);
@@ -54,7 +50,10 @@ Page.connect(new class {
 		this.#pageNumbering(opts.counterOffset, className);
 
 		if (state.vars.pages) {
-			this.#prunePages(Array.from(document.body.querySelectorAll(`.${className}`)), state.query.pages);
+			this.#prunePages(
+				Array.from(document.body.querySelectorAll(`.${className}`)),
+				state.query.pages
+			);
 		}
 		if (state.pathname.endsWith('.pdf') == false) {
 			this.#showPrintButtons(state, opts.preset);
@@ -63,64 +62,80 @@ Page.connect(new class {
 			delete state.scope.observer;
 		}
 	}
-	close(state) {
-		if (!this.#styleSheet) return;
-		const ass = document.adoptedStyleSheets;
-		const index = ass.indexOf(this.#styleSheet);
-		this.#styleSheet = null;
-		if (index >= 0) ass.splice(index, 1);
+	close() {
+		document.adoptedStyleSheets = document.adoptedStyleSheets.filter(
+			item => item != this.#stylesheet
+		);
+		this.#stylesheet = null;
 	}
-
-	#printStyle(className, sheet, page) {
-		const { margin, width, height, spine } = sheet;
+	// https://unused-css.com/tools/border-gradient-generator
+	#insertPrintStyle(className, sheet, page) {
+		const { margin, width, height, foldH, foldV } = sheet;
+		const actualWidth = page.width * (page.foldV ? 2 : 1) + page.foldV;
+		const actualHeight = page.height * (page.foldH ? 2 : 1) + page.foldH;
 		const effectiveSheet = new CSSStyleSheet();
+		const getFoldDeco = (dir, fold) => {
+			if (!fold) return '';
+			return `.${className}-${dir} {
+				padding-${dir}: ${foldV / 2}px;
+			}
+			.${className}-${dir}::after {
+				border-${dir}: ${foldV / 2}px solid rgb(0 0 0 / 5%);
+				${dir}:0;
+			}`;
+		};
+		// TODO use css modules scripts ?
+		// https://css-tricks.com/css-modules-the-native-ones/
 		const printSheet = `
 			html, body {
 				padding: 0;
 				margin: 0;
+				--pdf-margin: ${margin}px;
+				--pdf-margin-minus: -${margin}px;
+				--pdf-fold-v: ${foldV ? foldV / 2 - margin : 0}px;
+				--pdf-fold-h: ${foldH ? foldH / 2 - margin : 0}px;
 			}
 			@media screen {
 				html, body {
 					background: gray;
 				}
 				body {
-					width: ${page.width * page.foldWidth + spine}mm;
+					width: calc(${actualWidth}mm + 2rem);
 				}
 				.${className} {
-					margin: 1rem auto;
-					width: ${width}px;
+					margin: 1rem;
+					width: ${width + (foldV ? foldV / 2 : 0)}px;
 					height: ${height}px;
-					border: ${margin}px solid transparent;
-					outline: rgba(0 0 0 / 6%) dashed min(1px, ${margin}px);
-					outline-offset: -${margin}px;
+					padding: ${margin}px;
 					background: white;
-					overflow:clip;
-					overflow-clip-margin: content-box ${margin}px;
+					overflow:hidden;
 				}
-				.${className}-right {
-					width: ${width + spine}px;
-				}
+				${getFoldDeco('right', foldV)}
+				${getFoldDeco('left', foldV)}
 			}
 			@media print {
 				html, body {
 					background:white;
 				}
 				@page {
-					size: ${page.width * page.foldWidth + page.spine}mm ${page.height * page.foldHeight}mm;
+					size: ${actualWidth}mm ${actualHeight}mm;
 					margin: 0;
 				}
 				.${className} {
-					margin: ${margin}px;
-					width: ${width - 2 * margin}px;
-					height: ${height - 2 * margin}px;
-					overflow:clip;
-					overflow-clip-margin: content-box ${margin}px;
+					padding: ${margin}px;
+					width: ${width + (foldV ? foldV / 2 : 0)}px;
+					height: ${height}px;
+					overflow:hidden;
 				}
 				.${className}-right {
-					width: ${width + spine - 2 * margin}px;
+					padding-right: ${foldV ? foldV / 2 : margin}px;
+				}
+				.${className}-left {
+					padding-left: ${foldV ? foldV / 2 : margin}px;
 				}
 			}`;
 		effectiveSheet.replaceSync(printSheet);
+		this.#stylesheet = effectiveSheet;
 		document.adoptedStyleSheets.push(effectiveSheet);
 		return effectiveSheet;
 	}
@@ -233,14 +248,14 @@ Page.connect(new class {
 	}
 
 	#convertToPx(styles) {
+		console.log(styles);
 		const d = document.body.appendChild(document.createElement('div'));
-		Object.assign(d.style, styles, {
-			display: 'block',
-			position: 'absolute'
-		});
+		d.style.position = 'absolute';
 		const obj = {};
-		const cs = window.getComputedStyle(d);
-		for (const key of Object.keys(styles)) obj[key] = parseFloat(cs[key]);
+		for (const [name, value] of Object.entries(styles)) {
+			d.style.width = value;
+			obj[name] = parseFloat(window.getComputedStyle(d).width);
+		}
 		d.remove();
 		return obj;
 	}
@@ -252,7 +267,8 @@ Page.connect(new class {
 		if (ch > h) w += -1;
 		return {
 			margin: Math.round(box.margin),
-			spine: Math.round(box.marginRight),
+			foldV: Math.round(box.foldV),
+			foldH: Math.round(box.foldH),
 			width: w,
 			height: Math.floor(h)
 		};

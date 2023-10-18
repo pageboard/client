@@ -44,26 +44,28 @@ exports.pdf = {
 					default: 297
 				},
 				margin: {
-					title: 'Margins in mm',
-					description: 'Margins do not change width/height',
+					title: 'Inner margins in mm',
 					type: 'number',
 					default: 10
 				},
-				spine: {
-					title: 'Spine in mm',
-					description: 'Augment odd pages width',
-					type: 'number',
-					default: 0
-				},
-				foldWidth: {
-					title: 'Fold width',
-					type: 'boolean',
-					nullable: true
-				},
-				foldHeight: {
-					title: 'Fold height',
-					type: 'boolean',
-					nullable: true
+				fold: {
+					title: 'Fold',
+					type: 'object',
+					nullable: true,
+					properties: {
+						h: {
+							title: 'Horizontal spine',
+							description: 'Fold width in mm',
+							type: 'number',
+							nullable: true
+						},
+						v: {
+							title: 'Vertical spine',
+							description: 'Fold width in mm',
+							type: 'number',
+							nullable: true
+						}
+					}
 				},
 				preset: {
 					title: 'Preset',
@@ -96,9 +98,8 @@ exports.pdf = {
 				"data-height": "[paper.height]",
 				"data-margin": "[paper.margin]",
 				"data-preset": "[paper.preset]",
-				"data-spine": "[paper.spine]",
-				"data-fold-width": "[paper.foldWidth|alt:2:1]",
-				"data-fold-height": "[paper.foldHeight|alt:2:1]",
+				"data-fold-h": "[paper.fold?.h]",
+				"data-fold-v": "[paper.fold?.v]",
 				"data-counter-offset": "[paper.counterOffset]"
 			}
 		}
@@ -158,13 +159,23 @@ exports.sheet = {
 					minimum: 0,
 					nullable: true
 				},
-				bleedwidth: {
-					title: 'Bleed width',
+				bleedLeft: {
+					title: 'Bleed left',
 					type: 'boolean',
 					default: false
 				},
-				bleedheight: {
-					title: 'Bleed height',
+				bleedRight: {
+					title: 'Bleed right',
+					type: 'boolean',
+					default: false
+				},
+				bleedTop: {
+					title: 'Bleed top',
+					type: 'boolean',
+					default: false
+				},
+				bleedBottom: {
+					title: 'Bleed bottom',
 					type: 'boolean',
 					default: false
 				},
@@ -294,13 +305,11 @@ exports.sheet = {
 	upgrade: {
 		'content.' : 'content.page'
 	},
-	html: `<div class="page-sheet [skip|alt:page-sheet-skip]" block-content="page"
+	html: `<div class="page-sheet [skip|alt:page-sheet-skip] [background?.bleedLeft] [background?.bleedRight] [background?.bleedTop] [background?.bleedBottom]" block-content="page"
 		is="element-sheet" data-src="[background.image]"
 		data-crop="[background.crop.x];[background.crop.y];[background.crop.width];[background.crop.height];[background.crop.zoom]"
 		data-size-h="[background.width|post:%25]"
 		data-size-v="[background.height|post:%25]"
-		style---bleedwidth="[background.bleedwidth|alt:1:0]"
-		style---bleedheight="[background.bleedheight|alt:1:0]"
 		style---left="[background.left|post:%25]"
 		style---top="[background.top|post:%25]"
 		style---position="[background.position]"
@@ -375,3 +384,18 @@ exports.sheetcount = {
 		'../ui/pdf.js'
 	]
 };
+
+
+exports.layout.properties.background.properties.bleedLeft = exports.sheet.properties.background.properties.bleedLeft;
+
+exports.layout.properties.background.properties.bleedRight = exports.sheet.properties.background.properties.bleedRight;
+
+exports.layout.properties.background.properties.bleedRight = exports.sheet.properties.background.properties.bleedBottom;
+
+exports.layout.properties.background.properties.bleedBottom = exports.sheet.properties.background.properties.bleedBottom;
+
+exports.layout.fragments.push({
+	attributes: {
+		className: "[background?.bleedLeft] [background?.bleedRight] [background?.bleedTop] [background?.bleedBottom]"
+	}
+});
