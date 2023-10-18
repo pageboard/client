@@ -9,7 +9,6 @@ exports.page = {
 	required: ['url'],
 	properties: {
 		url: {
-			title: 'Address',
 			type: "string",
 			format: 'page',
 			$helper: 'href',
@@ -25,7 +24,6 @@ exports.page = {
 			nullable: true
 		},
 		redirect: {
-			title: 'Redirect',
 			type: "string",
 			format: "uri-reference",
 			nullable: true,
