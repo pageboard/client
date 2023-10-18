@@ -72,6 +72,10 @@ Pageboard.Controls.Mode = class Mode {
 		}
 		this.editor.close();
 		const elts = state.scope.$elements;
+		const follower = {
+			vary: true,
+			data: state.data
+		};
 		if (com == "code") {
 			state.scope.$jsonContent = Mode.pruneNonRoot(
 				Pageboard.editor.state.doc.toJSON(), null, Pageboard.editor.state.schema
@@ -100,6 +104,10 @@ Pageboard.Controls.Mode = class Mode {
 				delete elt.dom;
 			});
 		} else if (com == "write") {
+			if (state.status == 404) {
+				// editing a 404 redirects to the right url
+				follower.pathname = "/.well-known/404";
+			}
 			delete Pageboard.editor;
 		}
 		if (mode == "code") {
@@ -113,11 +121,6 @@ Pageboard.Controls.Mode = class Mode {
 			delete Pageboard.backupElements;
 		}
 		document.body.dataset.mode = com;
-		const follower = state.reload({
-			vary: true,
-			data: state.data
-		});
-		const $write = com == "write";
-		follower.scope = state.scope.copy({ $write });
+		state.reload(follower).scope = state.scope.copy({ $write: com == "write" });
 	}
 };
