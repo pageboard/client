@@ -68,7 +68,7 @@
     "overrides": [
       {
         "files": [
-          "/packages/*/src"
+          "packages/*/src/**"
         ],
         "parserOptions": { "sourceType": "module" }
       },
