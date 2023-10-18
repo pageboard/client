@@ -43,14 +43,16 @@ exports.event = {
 			default: 10,
 			minimum: 1
 		},
-		openReservations: {
-			title: 'Open reservations n seconds before',
+		opening: {
+			title: 'Open reservations',
+			description: 'Hours before start of event date',
 			type: 'integer',
-			default: 30,
+			nullable: true,
 			minimum: 0,
 		},
-		closeReservations: {
-			title: 'Close reservations n seconds before',
+		closing: {
+			title: 'Close reservations',
+			description: 'Hours before start of event date',
 			type: 'integer',
 			default: 0,
 			minimum: 0,
