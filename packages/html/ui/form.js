@@ -258,11 +258,11 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 	}
 	reset() {
 		this.classList.remove('unsaved');
+		for (const node of this.elements) {
+			node.reset?.();
+		}
 		for (const node of this.querySelectorAll("element-fieldset-list")) {
 			node.reset();
-		}
-		for (const node of this.elements) {
-			if (node.reset) node.reset();
 		}
 	}
 	backup() {
@@ -289,6 +289,7 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 		window.sessionStorage.removeItem(this.action);
 	}
 	handleReset(e, state) {
+		e.preventDefault();
 		this.reset();
 	}
 	handleSubmit(e, state) {
