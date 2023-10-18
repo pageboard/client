@@ -28,15 +28,14 @@ class WalkIndex {
 }
 
 class HTMLElementFieldsetList extends Page.Element {
-	#size;
-	#initialSize;
+	#list;
+	#defaultList;
 	#prefix;
 	#model;
 	#walk;
 
-	fill(values, scope) {
-		if (scope.$write || this.prefix == null) return;
-		// unflatten array-values
+	fill(values) {
+		if (this.isContentEditable || this.prefix == null) return;
 		const vars = [];
 		for (const [key, val] of Object.entries(values)) {
 			if (!this.#prefixed(key)) continue;
@@ -48,18 +47,20 @@ class HTMLElementFieldsetList extends Page.Element {
 				delete values[key];
 			}
 		}
-		const list = this.#listFromValues({ ...values });
-		if (this.#initialSize == null) this.#initialSize = list.length;
-		this.#resize(list.length, scope);
+		this.#list = this.#listFromValues({ ...values });
+		if (this.#defaultList == null) this.save();
+		this.#resize();
 		return vars;
 	}
 
 	reset() {
-		this.#resize(this.#initialSize, {}); // missing scope
+		this.#mutate(list => {
+			return this.#list = this.#defaultList;
+		});
 	}
 
 	save() {
-		this.#initialSize = this.#size;
+		this.#defaultList = this.#list;
 	}
 
 	#modelize(tpl) {
@@ -109,8 +110,15 @@ class HTMLElementFieldsetList extends Page.Element {
 	patch({ scope }) {
 		if (scope.$write) {
 			this.#modelize(this.ownTpl);
-		} else if (!this.#size) {
-			this.#resize(0, scope);
+		}
+	}
+
+	setup(state) {
+		if (state.scope.$write) return;
+		this.#prepare();
+		if (this.#defaultList == null) {
+			const values = this.form.read(true);
+			this.#defaultList = this.#listFromValues({ ...values });
 		}
 	}
 
@@ -134,15 +142,10 @@ class HTMLElementFieldsetList extends Page.Element {
 		return parts.join('.');
 	}
 
-	#resize(size, scope) {
-		if (scope.$write) return;
-		const len = Math.max(Number(this.dataset.size) || 0, size);
-		if (this.#size === len) return;
-		this.#size = len;
+	#resize() {
+		const len = Math.max(Number(this.dataset.size) || 0, this.#list.length);
 		let tpl = this.ownTpl.content.cloneNode(true);
-		const fieldlist = Array.from(Array(len)).map((x, i) => {
-			return { index: i };
-		});
+
 		const inputs = tpl.querySelectorAll('[name]');
 		for (const node of inputs) {
 			const name = this.#incrementkey('[fielditem.index]', node.name);
@@ -157,6 +160,7 @@ class HTMLElementFieldsetList extends Page.Element {
 				node.name = name;
 			}
 		}
+
 		const conditionalFieldsets = tpl.querySelectorAll('[is="element-fieldset"]');
 		for (const node of conditionalFieldsets) {
 			const name = this.#incrementkey('[fielditem.index]', node.dataset.name);
@@ -191,7 +195,12 @@ class HTMLElementFieldsetList extends Page.Element {
 				tpl.appendChild(hidden);
 			}
 		}
-		tpl = tpl.fuse({ fieldlist }, scope);
+
+		tpl = tpl.fuse({
+			fieldlist: Array.from(Array(len)).map((x, i) => {
+				return { index: i };
+			})
+		}, {}); // no scope is natural: no persistence besides inputs
 
 		const view = this.ownView;
 		view.textContent = '';
@@ -242,43 +251,48 @@ class HTMLElementFieldsetList extends Page.Element {
 		if (!btn) return;
 		const action = btn.value;
 		if (["add", "del", "up", "down"].includes(action) == false) return;
+		this.#list = this.#mutate(list => {
+			if (!this.#walk) this.#walk = new WalkIndex(this, node => {
+				const { index } = this.#parseName(node.name);
+				if (index >= 0 && index < list.length) return index;
+				else return null;
+			});
+			let index;
 
+			switch (action) {
+				case "add":
+					list.splice((this.#walk.findBefore(btn) ?? -1) + 1, 0, this.#model);
+					break;
+				case "del":
+					list.splice(this.#walk.findBefore(btn) ?? 0, 1);
+					break;
+				case "up":
+					index = this.querySelectorAll(this.#selector('up')).indexOf(btn);
+					if (index > 0) {
+						list.splice(index - 1, 0, list.splice(index, 1).pop());
+					}
+					break;
+				case "down":
+					index = this.querySelectorAll(this.#selector('down')).indexOf(btn);
+					if (index < list.length - 1) {
+						list.splice(index + 1, 0, list.splice(index, 1).pop());
+					}
+					break;
+			}
+			return list;
+		});
+		state.dispatch(this, 'change');
+	}
+
+	#mutate(fn) {
 		const form = this.closest('form');
 		const values = form.read(true);
-		const list = this.#listFromValues(values);
-
-		if (!this.#walk) this.#walk = new WalkIndex(this, node => {
-			const { index } = this.#parseName(node.name);
-			if (index >= 0 && index < list.length) return index;
-			else return null;
-		});
-		let index;
-
 		const fileInputs = this.querySelectorAll('[name][type="file"]')
 			.map(n => n.cloneNode(true));
-
-		switch (action) {
-			case "add":
-				list.splice((this.#walk.findBefore(btn) ?? -1) + 1, 0, this.#model);
-				break;
-			case "del":
-				list.splice(this.#walk.findBefore(btn) ?? 0, 1);
-				break;
-			case "up":
-				index = this.querySelectorAll(this.#selector('up')).indexOf(btn);
-				if (index > 0) {
-					list.splice(index - 1, 0, list.splice(index, 1).pop());
-				}
-				break;
-			case "down":
-				index = this.querySelectorAll(this.#selector('down')).indexOf(btn);
-				if (index < list.length - 1) {
-					list.splice(index + 1, 0, list.splice(index, 1).pop());
-				}
-				break;
-		}
+		const list = fn(this.#listFromValues(values));
 		this.#listToValues(values, list);
-		form.fill(values, state.scope);
+		form.fill(values);
+
 		const liveFileInputs = this.querySelectorAll('[name][type="file"]');
 		for (const node of fileInputs) {
 			const { value } = node;
@@ -290,7 +304,7 @@ class HTMLElementFieldsetList extends Page.Element {
 				live.replaceWith(node);
 			}
 		}
-		state.dispatch(this, 'change');
+		return list;
 	}
 
 	#parseName(name) {
