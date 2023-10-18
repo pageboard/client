@@ -122,7 +122,7 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 			}
 			this.restore(state.scope);
 		} else {
-			for (const name of this.fill(state.query, state.scope)) {
+			for (const name of this.fill(state.query)) {
 				state.vars[name] = true;
 			}
 		}
@@ -224,11 +224,11 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 		}
 		return query;
 	}
-	fill(query, scope) {
+	fill(query) {
 		// fieldset-list are not custom inputs yet
 		const vars = [];
 		for (const node of this.querySelectorAll("element-fieldset-list")) {
-			if (node.fill) vars.push(...node.fill(query, scope));
+			if (node.fill) vars.push(...node.fill(query));
 		}
 
 		for (const elem of this.elements) {
@@ -243,7 +243,7 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 			}
 		}
 		for (const node of this.querySelectorAll('fieldset[is="element-fieldset"]')) {
-			node.fill?.(query, scope);
+			node.fill?.(query);
 		}
 		return vars;
 	}
@@ -253,7 +253,7 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 			node.save();
 		}
 		for (const node of this.elements) {
-			if (node.save) node.save();
+			node.save?.();
 		}
 	}
 	reset() {
