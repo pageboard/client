@@ -2,11 +2,12 @@ import {
 	Matchdom,
 	TextPlugin,
 	OpsPlugin,
-	NumPlugin,
 	ArrayPlugin,
-	DomPlugin,
-	DatePlugin,
 	JsonPlugin,
+	NumPlugin,
+	DatePlugin,
+	RepeatPlugin,
+	DomPlugin,
 	UrlPlugin
 } from 'matchdom';
 
@@ -14,9 +15,20 @@ import str2dom from '@pageboard/pagecut/src/str2dom.js';
 
 export { str2dom };
 
-import * as matchdomPlugin from './plugin';
+import * as CustomPlugin from './plugin';
 
-const matchdom = new Matchdom(TextPlugin, OpsPlugin, NumPlugin, ArrayPlugin, DomPlugin, DatePlugin, JsonPlugin, UrlPlugin, matchdomPlugin);
+const sharedMd = new Matchdom(
+	TextPlugin,
+	OpsPlugin,
+	ArrayPlugin,
+	JsonPlugin,
+	NumPlugin,
+	DatePlugin,
+	RepeatPlugin,
+	DomPlugin,
+	UrlPlugin,
+	CustomPlugin
+);
 
 Document.prototype.dom = function() {
 	return str2dom(Array.prototype.join.call(arguments, '\n'), {
@@ -48,11 +60,11 @@ const mSym = Matchdom.Symbols;
 const reFuse = new RegExp(`\\${mSym.open}[^\\${mSym.open}\\${mSym.close}]+\\${mSym.close}`);
 
 const fuse = (obj, data, scope) => {
-	const md = new Matchdom(matchdom, {
+	const md = (scope.$filters || scope.$hooks || scope.$formats) ? new Matchdom(sharedMd, {
 		filters: scope.$filters,
 		hooks: scope.$hooks,
 		formats: scope.$formats
-	});
+	}) : sharedMd;
 	return md.merge(obj, data, scope);
 };
 

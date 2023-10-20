@@ -199,7 +199,7 @@ exports.input_text = {
 		tel: /^(\(\d+\))? *\d+([ .-]?\d+)*$/.source,
 		email: /^[\w.!#$%&'*+/=?^`{|}~-]+@\w(?:[\w-]{0,61}\w)?(?:\.\w(?:[\w-]{0,61}\w)?)*$/.source
 	},
-	html: `<div class="[width|as:colnums|post: wide] field [type|eq:hidden]">
+	html: `<div class="[width|as:colnums|post: wide] field [type|if:eq:hidden]">
 		<label block-content="label">Label</label>
 		[type|eq:textarea|prune:*:1]<textarea
 			is="element-textarea"
@@ -215,7 +215,7 @@ exports.input_text = {
 			type="[type|switch:new-password:password]"
 			pattern="[$element.patterns.[type]]"
 			value="[value]"
-			autocomplete="[type|eq:new-password|fail:]" />
+			autocomplete="[type|if:eq:new-password]" />
 	</div>`,
 	scripts: ['../ui/textarea.js'],
 	stylesheets: ['../ui/textarea.css']

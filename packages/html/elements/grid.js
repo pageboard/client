@@ -43,7 +43,7 @@ exports.grid = {
 			maximum: 16
 		}
 	},
-	html: '<div class="ui [responsive] [width|eq:min|alt::equal width] [columns|as:colnums|post: columns] grid [width|switch:contained:container]"></div>',
+	html: '<div class="ui [responsive] [width|neq:min|alt:equal width] [columns|as:colnums|post: columns] grid [width|switch:contained:container]"></div>',
 	stylesheets: [
 		'../lib/components/grid.css'
 	]

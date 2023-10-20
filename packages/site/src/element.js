@@ -69,7 +69,6 @@ export class CustomElement extends Element {
 						if (ctx.expr.path[0] != "$default") {
 							ctx.expr.cancel = true;
 						}
-						return val;
 					}
 				}
 			});

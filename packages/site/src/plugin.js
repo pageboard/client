@@ -15,17 +15,21 @@ export const filters = {
 };
 
 export const hooks = {
-	beforeEach(ctx, val, filter) {
-		if (filter[0] == "get" && filter[1]?.startsWith('$')) {
-			if (ctx.$data == null) {
+	before: {
+		get(ctx, val, [path]) {
+			if (path[0]?.startsWith('$') && ctx.$data == null) {
 				ctx.$data = ctx.data;
 				ctx.data = ctx.scope;
 			}
-		} else if (ctx.$data != null) {
-			ctx.data = ctx.$data;
-			ctx.$data = null;
 		}
-		return val;
+	},
+	after: {
+		get(ctx) {
+			if (ctx.$data != null) {
+				ctx.data = ctx.$data;
+				ctx.$data = null;
+			}
+		}
 	}
 };
 
@@ -163,7 +167,7 @@ function sum(ctx, obj, ...list) {
 function schemaFn(ctx, val, schemaPath, pathToSchema) {
 	// return schema of repeated key, schema of anyOf/listOf const value
 	let isIndex = false;
-	if (pathToSchema.length == 0) {
+	if (!pathToSchema?.length) {
 		// read current path until we find a block
 		const path = ctx.expr.path;
 		let data = ctx.data;
@@ -272,7 +276,7 @@ function expressions(ctx, val) {
 	scope.$hooks = {
 		afterAll(ctx, val) {
 			const { path } = ctx.expr;
-			if (scope[path[0]] === undefined) return val;
+			if (scope[path[0]] === undefined) return;
 			// templatesQuery checks flattened query
 			const key = path.length > 1 ? path.slice(1).join('%2E') : path[0];
 			const short = path.length > 1 ? `${path[0]}.${key}` : path[0];
@@ -280,8 +284,6 @@ function expressions(ctx, val) {
 			const optional = val !== undefined && ctx.expr.get(scope, path) === undefined;
 			const prev = obj[key] ?? (obj[key] = short);
 			if (optional && !prev.endsWith('?')) obj[key] += '?';
-
-			return val;
 		}
 	};
 	JSON.stringify(val).fuse({}, scope);

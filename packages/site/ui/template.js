@@ -160,15 +160,15 @@ class HTMLElementTemplate extends Page.Element {
 			name: 'element_template_' + String(Math.round(Date.now() * Math.random())).slice(-6),
 			dom: tmpl,
 			hooks: {
-				beforeEach(ctx, v, filter) {
-					if (auto.enabled && filter[0] == "repeat" && filter.length <= 2) {
-						filter.push('repeatPlacer');
+				before: {
+					repeat(ctx, v, args) {
+						if (auto.enabled && args.length <= 2) {
+							args.push('repeatPlacer');
+						}
 					}
-					return v;
 				},
 				afterAll(ctx, v) {
 					collector.filter(ctx, v);
-					return v;
 				}
 			},
 			filters: {
@@ -382,7 +382,6 @@ Page.constructor.prototype.templatesQuery = function (node, collector) {
 			} else if (path.length == 1 && path[0].startsWith('$')) {
 				$query[path[0]] = val;
 			}
-			return val;
 		}
 	};
 	params.split(' ').map(str => {
