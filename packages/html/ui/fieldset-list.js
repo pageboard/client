@@ -54,9 +54,8 @@ class HTMLElementFieldsetList extends Page.Element {
 	}
 
 	reset() {
-		this.#mutate(list => {
-			return this.#list = this.#defaultList;
-		});
+		this.#list = this.#defaultList;
+		this.#refresh();
 	}
 
 	save() {
@@ -148,7 +147,7 @@ class HTMLElementFieldsetList extends Page.Element {
 
 		const inputs = tpl.querySelectorAll('[name]');
 		for (const node of inputs) {
-			const name = this.#incrementkey('[fielditem.index]', node.name);
+			const name = this.#incrementkey('[field.$i]', node.name);
 			if (name != null) {
 				const id = node.id;
 				if (id?.startsWith(`for-${node.name}`)) {
@@ -163,7 +162,7 @@ class HTMLElementFieldsetList extends Page.Element {
 
 		const conditionalFieldsets = tpl.querySelectorAll('[is="element-fieldset"]');
 		for (const node of conditionalFieldsets) {
-			const name = this.#incrementkey('[fielditem.index]', node.dataset.name);
+			const name = this.#incrementkey('[field.$i]', node.dataset.name);
 			if (name != null) {
 				node.dataset.name = name;
 			}
@@ -179,7 +178,7 @@ class HTMLElementFieldsetList extends Page.Element {
 			return;
 		}
 		subtpl.appendChild(
-			subtpl.ownerDocument.createTextNode('[fieldlist|at:*|repeat:fielditem|]')
+			subtpl.ownerDocument.createTextNode('[$fields|at:*|repeat:field|const:]')
 		);
 		if (len == 0) {
 			let node = tpl.querySelector(this.#selector('add'));
@@ -195,12 +194,18 @@ class HTMLElementFieldsetList extends Page.Element {
 				tpl.appendChild(hidden);
 			}
 		}
-
-		tpl = tpl.fuse({
-			fieldlist: Array.from(Array(len)).map((x, i) => {
-				return { index: i };
-			})
-		}, {}); // no scope is natural: no persistence besides inputs
+		tpl = tpl.fuse({ $fields: this.#list }, {
+			$hooks: {
+				before: {
+					get(ctx, val, args) {
+						const path = args[0];
+						if (path[0] == "field") {
+							args[0] = [path[0], path.slice(1).join('.')];
+						}
+					}
+				}
+			}
+		});
 
 		const view = this.ownView;
 		view.textContent = '';
@@ -229,6 +234,7 @@ class HTMLElementFieldsetList extends Page.Element {
 			let obj = list[index];
 			if (!obj) list[index] = obj = {};
 			obj[parts.join('.')] = val;
+			obj.$i = index;
 		}
 		return list;
 	}
@@ -237,6 +243,7 @@ class HTMLElementFieldsetList extends Page.Element {
 		for (let i = 0; i < list.length; i++) {
 			const obj = list[i] ?? {};
 			for (const [key, val] of Object.entries(obj)) {
+				if (key == "$i") continue;
 				const parts = this.#prefix.slice();
 				parts.push(i);
 				parts.push(...this.#parts(key));
@@ -251,46 +258,47 @@ class HTMLElementFieldsetList extends Page.Element {
 		if (!btn) return;
 		const action = btn.value;
 		if (["add", "del", "up", "down"].includes(action) == false) return;
-		this.#list = this.#mutate(list => {
-			if (!this.#walk) this.#walk = new WalkIndex(this, node => {
-				const { index } = this.#parseName(node.name);
-				if (index >= 0 && index < list.length) return index;
-				else return null;
-			});
-			let index;
-
-			switch (action) {
-				case "add":
-					list.splice((this.#walk.findBefore(btn) ?? -1) + 1, 0, this.#model);
-					break;
-				case "del":
-					list.splice(this.#walk.findBefore(btn) ?? 0, 1);
-					break;
-				case "up":
-					index = this.querySelectorAll(this.#selector('up')).indexOf(btn);
-					if (index > 0) {
-						list.splice(index - 1, 0, list.splice(index, 1).pop());
-					}
-					break;
-				case "down":
-					index = this.querySelectorAll(this.#selector('down')).indexOf(btn);
-					if (index < list.length - 1) {
-						list.splice(index + 1, 0, list.splice(index, 1).pop());
-					}
-					break;
-			}
-			return list;
+		const list = this.#list;
+		if (!this.#walk) this.#walk = new WalkIndex(this, node => {
+			const { index } = this.#parseName(node.name);
+			if (index >= 0 && index < list.length) return index;
+			else return null;
 		});
+		let index;
+
+		switch (action) {
+			case "add":
+				list.splice((this.#walk.findBefore(btn) ?? -1) + 1, 0, this.#model);
+				break;
+			case "del":
+				list.splice(this.#walk.findBefore(btn) ?? 0, 1);
+				break;
+			case "up":
+				index = this.querySelectorAll(this.#selector('up')).indexOf(btn);
+				if (index > 0) {
+					list.splice(index - 1, 0, list.splice(index, 1).pop());
+				}
+				break;
+			case "down":
+				index = this.querySelectorAll(this.#selector('down')).indexOf(btn);
+				if (index < list.length - 1) {
+					list.splice(index + 1, 0, list.splice(index, 1).pop());
+				}
+				break;
+		}
+		this.#refresh();
 		state.dispatch(this, 'change');
 	}
 
-	#mutate(fn) {
+	#refresh() {
 		const form = this.closest('form');
 		const values = form.read(true);
+		for (const key of Object.keys(values)) {
+			if (this.#prefixed(key)) delete values[key];
+		}
 		const fileInputs = this.querySelectorAll('[name][type="file"]')
 			.map(n => n.cloneNode(true));
-		const list = fn(this.#listFromValues(values));
-		this.#listToValues(values, list);
+		this.#listToValues(values, this.#list);
 		form.fill(values);
 
 		const liveFileInputs = this.querySelectorAll('[name][type="file"]');
@@ -304,7 +312,6 @@ class HTMLElementFieldsetList extends Page.Element {
 				live.replaceWith(node);
 			}
 		}
-		return list;
 	}
 
 	#parseName(name) {
