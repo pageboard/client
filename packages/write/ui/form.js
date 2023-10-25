@@ -11,13 +11,14 @@ class FormBlock {
 				copy.description = 'object';
 			}
 		} else if (schema.type == "array") {
-			copy.type = 'array';
 			if (!schema.items) {
 				// this is probably an error, skip
+				copy.type = 'string';
 			} else if (Array.isArray(schema.items)) {
+				copy.type = 'array';
 				copy.items = schema.items;
 			} else {
-				copy.items = { type: 'string' };
+				copy.type = 'string';
 			}
 		} else if (schema.type || schema.anyOf || schema.oneOf) {
 			if (schema.type) {
