@@ -33,20 +33,21 @@ class CustomViewer extends Viewer {
 	}
 
 	init() {
-		const map = this.bundleMap = new Map();
+		const bundles = this.bundles = new Map();
+		const groups = this.groups = new Map();
 		for (const [name, el] of Object.entries(this.elements)) {
 			el.name = name;
-			if (!el.bundle) continue;
-			for (const n of el.bundle) {
-				let list = map.get(n);
-				if (!list) map.set(n, list = new Set());
-				list.add(el.name);
+			if (el.group) for (const group of el.group.split(/\s+/)) {
+				let list = groups.get(group);
+				if (!list) groups.set(group, list = new Set());
+				list.add(name);
+			}
+			if (el.bundle) for (const n of el.bundle) {
+				let list = bundles.get(n);
+				if (!list) bundles.set(n, list = new Set());
+				list.add(name);
 			}
 		}
-	}
-
-	bundlesOf(type) {
-		return this.bundleMap.get(type);
 	}
 }
 
@@ -155,7 +156,7 @@ export default class Scope {
 		const bundles = new Set();
 		const els = this.$elements;
 		for (const type of types) {
-			const roots = this.$view.bundlesOf(type);
+			const roots = this.$view.bundles.get(type);
 			if (!roots) continue;
 			for (const p of roots) {
 				const root = els[p];
