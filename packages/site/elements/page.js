@@ -77,7 +77,6 @@ exports.page = {
 		<link rel="alternate" hreflang="[$parent.data.languages|repeat:lang]" href="[$loc.origin][$loc.pathname]~[lang][$loc.search]">
 		<link rel="icon" href="[$parent.data.favicon|post:?format=ico|or:data%3A,]">
 		<link rel="stylesheet" href="[$element.stylesheets|repeat:]" data-priority="[$element.priority]">
-		<script crossorigin="anonymous" defer src="https://cdn.polyfill.io/v3/polyfill.min.js?flags=gated&unknown=polyfill&features=[$elements|as:polyfills|enc:url|fail:*]" data-priority="-10000"></script>
 		<script defer src="[$element.scripts|repeat:]" data-priority="[$element.priority]"></script>
 	</head>
 	<body block-content="body"></body></html>`,
@@ -86,6 +85,7 @@ exports.page = {
 	],
 	polyfills: [
 		'default',
+		'customElements',
 		'Element.prototype.dataset',
 		'fetch',
 		'es2015', 'es2016', 'es2017', 'es2018',
@@ -99,7 +99,7 @@ exports.page = {
 		'form-action': ["'self'"],
 		connect: ["'self'"],
 		object: ["'none'"],
-		script: ["'self'", "https://cdn.polyfill.io"],
+		script: ["'self'"],
 		frame: ["https:"],
 		style: ["'self'", "'unsafe-inline'"],
 		font: ["'self'", "data:", "https:"],

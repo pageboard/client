@@ -1,6 +1,6 @@
 export const formats = {
 	as: {
-		polyfills, csp, xid, colnums, block, binding,
+		csp, xid, colnums, block, binding,
 		query, render, meta, expressions
 	},
 	date: { utc }
@@ -57,20 +57,6 @@ function render(ctx, block) {
 function utc(ctx, val) {
 	if (!val) return val;
 	return val.toUTCString();
-}
-
-function polyfills(ctx, $elements) {
-	const map = {};
-	for (const el of Object.values($elements)) {
-		let list = el.polyfills;
-		if (!list) continue;
-		if (typeof list == "string") list = [list];
-		for (const item of list) {
-			// what.scope from matchdom is not like scope from pageboard
-			map[item.fuse({}, ctx.scope)] = true;
-		}
-	}
-	return Object.keys(map).join(',');
 }
 
 function csp(ctx, $elements) {

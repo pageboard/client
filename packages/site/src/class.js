@@ -1,4 +1,4 @@
-const extendCache = new Set();
+let extendCache;
 
 export function create(Superclass) {
 	return class extends Superclass {
@@ -110,12 +110,13 @@ export function extend(name, Ext, is) {
 		return;
 	}
 	if (is) name += "_" + is;
+	extendCache ??= new Set();
 	if (extendCache.has(name)) return;
 	extendCache.add(name);
 	inherits(Cla, Ext);
 }
 
-export function inherits(Child, Parent) {
+function inherits(Child, Parent) {
 	const pp = Parent.prototype;
 	const cp = Child.prototype;
 	const props = Object.getOwnPropertyDescriptors(pp);

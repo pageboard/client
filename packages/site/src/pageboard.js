@@ -1,7 +1,7 @@
 import { default as debounce } from 'debounce';
 import { default as fetchHelper } from './fetch';
-import '@ungap/custom-elements';
 import * as Class from './class';
+import { js as loadScript } from './load';
 import './polyfills';
 import 'window-page';
 import Scope from './scope';
@@ -11,6 +11,19 @@ export { Deferred } from 'class-deferred';
 
 export const Pageboard = window.Pageboard ?? {};
 export const elements = Pageboard.elements ?? {};
+
+const polyfills = [];
+Object.entries(Pageboard.polyfills ?? {}).map(([name, ok]) => {
+	if (!ok) polyfills.push(name);
+});
+if (polyfills.length) {
+	const url = new URL(
+		`/.files/polyfill.js`,
+		document.location
+	);
+	url.searchParams.set('features', polyfills.join('+'));
+	if (!document.hidden) loadScript(url.pathname + url.search);
+}
 
 for (const key in Class) {
 	Object.defineProperty(Page.constructor.prototype, key, {

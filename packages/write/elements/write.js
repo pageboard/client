@@ -13,7 +13,6 @@ exports.write = {
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<base href="[$loc.origin]">
 		<link rel="stylesheet" href="[$element.stylesheets|repeat:]" data-priority="[$element.priority]" />
-		<script crossorigin="anonymous" defer src="https://cdn.polyfill.io/v3/polyfill.min.js?flags=gated&unknown=polyfill&features=[$elements|as:polyfills|enc:url|fail:*]" data-priority="-10000"></script>
 		<script defer src="[$element.scripts|repeat:]" data-priority="[$element.priority]"></script>
 	</head>
 	<body
@@ -187,7 +186,7 @@ exports.write = {
 		'form-action': ["'self'"],
 		connect: ["'self'"],
 		object: ["'none'"],
-		script: ["'self'", "https://cdn.polyfill.io"],
+		script: ["'self'"],
 		frame: ["'self'"],
 		style: ["'self'", "'unsafe-inline'"],
 		font: ["'self'", "data:", "https:"],
