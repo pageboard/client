@@ -141,7 +141,6 @@ exports.image = {
 		'../ui/image.css'
 	],
 	scripts: [
-		'../lib/object-fit-images.js',
 		'../ui/image.js'
 	]
 };

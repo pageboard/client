@@ -60,10 +60,9 @@ exports.query_form = {
 		'../ui/form.css'
 	],
 	scripts: [ // for asynchronous submits and automatic triggers
-		'../lib/formdata.js',
 		'../ui/form.js'
 	],
-	polyfills: ['fetch'] // unfortunately there is no formdata polyfill available right now
+	polyfills: ['fetch']
 };
 
 exports.api_form = {
@@ -191,9 +190,8 @@ exports.api_form = {
 		'../ui/form.css'
 	],
 	scripts: [ // for asynchronous submits and automatic triggers
-		'../lib/formdata.js',
 		'../ui/form.js'
 	],
-	polyfills: ['fetch'] // unfortunately there is no formdata polyfill available right now
+	polyfills: ['fetch']
 };
 

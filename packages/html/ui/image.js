@@ -72,22 +72,6 @@ const HTMLElementImageConstructor = Superclass => class extends Superclass {
 		return img;
 	}
 
-	fix(img) {
-		if (!window.objectFitImages.supportsObjectFit) {
-			let style = "";
-			if (this.fit) {
-				style += `object-fit: ${this.fit};`;
-			}
-			if (this.position) {
-				const pos = this.position.replace(/(h|v)center/g, 'center');
-				style += `object-position: ${pos};`;
-			}
-			if (style.length) {
-				img.style.fontFamily = `'${style}'`;
-				window.objectFitImages(img);
-			}
-		}
-	}
 	patch(state) {
 		this.classList.remove('loading');
 		if (this.currentSrc != this.options.src) {
@@ -171,7 +155,6 @@ const HTMLElementImageConstructor = Superclass => class extends Superclass {
 	captureLoad() {
 		this.#defer.resolve();
 		this.classList.remove('loading');
-		this.fix(this.image);
 	}
 	captureError() {
 		this.#defer.reject();
