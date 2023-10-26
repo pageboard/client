@@ -38,9 +38,9 @@
   "prepare": {
     "cropperjs/dist/cropper.css": "copy lib/",
     "cropperjs/dist/cropper.js": "copy lib/",
-    "@pageboard/pagecut/src/editor.js": "bundle --name=Pagecut --extend=true lib/pagecut/",
     "@pageboard/pagecut/src/*.css": "copy lib/pagecut/",
-    "./src/pageboard.js": "bundle --name=Pageboard.utils --extend=true lib/"
+    "./src/utils.js": "bundle lib/",
+    "./src/editor.js": "bundle lib/pagecut/"
   },
   "pageboard": {
     "priority": -1000,

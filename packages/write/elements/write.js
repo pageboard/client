@@ -136,7 +136,7 @@ exports.write = {
 	],
 	scripts: [
 		"../ui/write.js",
-		"../lib/pageboard.js",
+		"../lib/utils.js",
 		"../ui/semafor.js",
 		"../ui/inputs/map.js",
 		"../ui/inputs/action.js",

@@ -22,7 +22,7 @@
     "postinstall": "^0.8.0"
   },
   "prepare": {
-    "@pageboard/flickity/dist/flickity.js": "copy lib/",
+    "src/carousel.js": "bundle --extend=true --name=window lib/",
     "@pageboard/flickity/dist/flickity.css": "copy lib/"
   },
   "pageboard": {
@@ -32,5 +32,8 @@
       "ui"
     ],
     "elements": "element/"
+  },
+  "dependencies": {
+    "postinstall-bundle": "^0.9.1"
   }
 }

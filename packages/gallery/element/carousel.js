@@ -112,8 +112,7 @@ exports.carousel = {
 		'../ui/carousel.css'
 	],
 	scripts: [
-		'../lib/flickity.js',
-		'../ui/carousel.js'
+		'../lib/carousel.js'
 	]
 };
 

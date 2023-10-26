@@ -1,3 +1,5 @@
+import Flickity from '@pageboard/flickity';
+
 class HTMLElementCarousel extends Page.Element {
 	static defaults = {
 		wrapAround: false,
@@ -39,10 +41,10 @@ class HTMLElementCarousel extends Page.Element {
 			await Promise.allSettled(lazies);
 			this.select(i, isWrap, instant);
 		}
-		window.Flickity.prototype.next = async function (isWrap, i) {
+		Flickity.prototype.next = async function (isWrap, i) {
 			return flickLazy.call(this, this.selectedIndex + 1, isWrap, i);
 		};
-		window.Flickity.prototype.previous = async function (isWrap, i) {
+		Flickity.prototype.previous = async function (isWrap, i) {
 			return flickLazy.call(this, this.selectedIndex - 1, isWrap, i);
 		};
 	}
@@ -123,7 +125,7 @@ class HTMLElementCarousel extends Page.Element {
 		opts.imagesLoaded = opts.width == null;
 		if (opts.autoPlay) opts.wrapAround = true;
 
-		this.widget = new window.Flickity(this, opts);
+		this.widget = new Flickity(this, opts);
 		this.widget.on('change', (index) => {
 			const gallery = this.closest('[block-type="gallery"]');
 			const oldIndex = this.options.index;
