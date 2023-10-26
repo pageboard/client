@@ -466,7 +466,7 @@ HTMLButtonElement.prototype.fill = HTMLInputElement.prototype.fill = function (v
 
 HTMLInputElement.prototype.reset = function () {
 	if (this.type == "radio" || this.type == "checkbox") {
-		this.fill(this.defaultChecked);
+		this.fill(this.defaultChecked ? this.value : '');
 	} else {
 		this.fill(this.defaultValue);
 	}
