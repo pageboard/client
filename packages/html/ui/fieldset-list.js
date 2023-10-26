@@ -1,38 +1,8 @@
-class WalkIndex {
-	#walk;
-	#find;
-	#index;
-	constructor(root, fn) {
-		this.#find = fn;
-		this.#walk = root.ownerDocument.createTreeWalker(
-			root,
-			NodeFilter.SHOW_ELEMENT,
-			this
-		);
-	}
-	acceptNode(node) {
-		const index = this.#find(node);
-		if (index != null) {
-			this.#index = index;
-			return NodeFilter.FILTER_ACCEPT;
-		} else {
-			return NodeFilter.FILTER_SKIP;
-		}
-	}
-	findBefore(node) {
-		this.#index = null;
-		this.#walk.currentNode = node;
-		this.#walk.previousNode();
-		return this.#index;
-	}
-}
-
 class HTMLElementFieldsetList extends Page.Element {
 	#list;
 	#defaultList;
 	#prefix;
 	#model;
-	#walk;
 
 	fill(values) {
 		if (this.isContentEditable || this.prefix == null) return;
@@ -198,7 +168,7 @@ class HTMLElementFieldsetList extends Page.Element {
 		view.appendChild(tpl);
 
 		if (placeholder) {
-			for (const node of view.querySelectorAll(`[name^="${this.#prefix}"]`)) {
+			for (const node of view.querySelectorAll(`[name^="${this.#prefixStr}"]`)) {
 				node.disabled = true;
 			}
 		}
@@ -250,6 +220,17 @@ class HTMLElementFieldsetList extends Page.Element {
 		}
 	}
 
+	#findIndex(btn) {
+		let node = btn;
+		const sel = `[name^="${this.#prefixStr}"]`;
+		while ((node = node.parentNode)) {
+			const input = Array.from(node.querySelectorAll(sel)).pop();
+			if (!input) continue;
+			const { index } = this.#parseName(input.name);
+			if (index >= 0 && index < this.#list.length) return index;
+		}
+	}
+
 	handleClick(e, state) {
 		if (state.scope.$write) return;
 		const btn = e.target.closest('button');
@@ -257,19 +238,14 @@ class HTMLElementFieldsetList extends Page.Element {
 		const action = btn.value;
 		if (["add", "del", "up", "down"].includes(action) == false) return;
 		const list = this.#list;
-		if (!this.#walk) this.#walk = new WalkIndex(this, node => {
-			const { index } = this.#parseName(node.name);
-			if (index >= 0 && index < list.length) return index;
-			else return null;
-		});
 		let index;
 
 		switch (action) {
 			case "add":
-				list.splice((this.#walk.findBefore(btn) ?? -1) + 1, 0, { ...this.#model });
+				list.splice((this.#findIndex(btn) ?? -1) + 1, 0, { ...this.#model });
 				break;
 			case "del":
-				list.splice(this.#walk.findBefore(btn) ?? 0, 1);
+				list.splice(this.#findIndex(btn) ?? 0, 1);
 				break;
 			case "up":
 				index = this.querySelectorAll(this.#selector('up')).indexOf(btn);
@@ -335,6 +311,9 @@ class HTMLElementFieldsetList extends Page.Element {
 			this.#prepare();
 		}
 		return this.#prefix;
+	}
+	get #prefixStr() {
+		return this.#prefix.length ? this.#prefix.join('.') + '.' : '';
 	}
 }
 
