@@ -159,26 +159,6 @@ exports.sheet = {
 					minimum: 0,
 					nullable: true
 				},
-				bleedLeft: {
-					title: 'Bleed left',
-					type: 'boolean',
-					default: false
-				},
-				bleedRight: {
-					title: 'Bleed right',
-					type: 'boolean',
-					default: false
-				},
-				bleedTop: {
-					title: 'Bleed top',
-					type: 'boolean',
-					default: false
-				},
-				bleedBottom: {
-					title: 'Bleed bottom',
-					type: 'boolean',
-					default: false
-				},
 				image: {
 					title: 'Image',
 					anyOf: [{
@@ -294,6 +274,32 @@ exports.sheet = {
 					$helper: {
 						name: 'crop'
 					}
+				},
+				bleed: {
+					title: 'Bleed',
+					type: 'object',
+					properties: {
+						left: {
+							title: 'Left',
+							type: 'boolean',
+							default: false
+						},
+						right: {
+							title: 'Right',
+							type: 'boolean',
+							default: false
+						},
+						top: {
+							title: 'Top',
+							type: 'boolean',
+							default: false
+						},
+						bottom: {
+							title: 'Bottom',
+							type: 'boolean',
+							default: false
+						},
+					}
 				}
 			}
 		}
@@ -305,7 +311,7 @@ exports.sheet = {
 	upgrade: {
 		'content.' : 'content.page'
 	},
-	html: `<div class="page-sheet [skip|alt:page-sheet-skip] [background?.bleedLeft] [background?.bleedRight] [background?.bleedTop] [background?.bleedBottom]" block-content="page"
+	html: `<div class="page-sheet [skip|alt:page-sheet-skip] [background?.bleed?.left] [background?.bleed?.right] [background?.bleed?.top] [background?.bleed?.bottom]" block-content="page"
 		is="element-sheet" data-src="[background.image]"
 		data-crop="[background.crop.x];[background.crop.y];[background.crop.width];[background.crop.height];[background.crop.zoom]"
 		data-size-h="[background.width|post:%25]"
@@ -386,16 +392,11 @@ exports.sheetcount = {
 };
 
 
-exports.layout.properties.background.properties.bleedLeft = exports.sheet.properties.background.properties.bleedLeft;
+exports.layout.properties.background.properties.bleed = exports.sheet.properties.background.properties.bleed;
 
-exports.layout.properties.background.properties.bleedRight = exports.sheet.properties.background.properties.bleedRight;
-
-exports.layout.properties.background.properties.bleedRight = exports.sheet.properties.background.properties.bleedBottom;
-
-exports.layout.properties.background.properties.bleedBottom = exports.sheet.properties.background.properties.bleedBottom;
 
 exports.layout.fragments.push({
 	attributes: {
-		className: "[background?.bleedLeft] [background?.bleedRight] [background?.bleedTop] [background?.bleedBottom]"
+		className: "[background?.bleed?.left] [background?.bleed?.right] [background?.bleed?.top] [background?.bleed?.bottom]"
 	}
 });
