@@ -54,12 +54,12 @@ class HTMLElementFieldsetList extends Page.Element {
 	}
 
 	reset() {
-		this.#list = this.#defaultList;
+		this.#list = this.#defaultList.slice();
 		this.#refresh();
 	}
 
 	save() {
-		this.#defaultList = this.#list;
+		this.#defaultList = this.#list.slice();
 	}
 
 	#modelize(tpl) {
@@ -193,6 +193,8 @@ class HTMLElementFieldsetList extends Page.Element {
 				hidden.name = this.#prefix.join('.');
 				tpl.appendChild(hidden);
 			}
+		} else while (this.#list.length < len) {
+			this.#list.push({...this.#model});
 		}
 		tpl = tpl.fuse({ $fields: this.#list }, {
 			$hooks: {
