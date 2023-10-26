@@ -217,7 +217,7 @@ body[data-mode="read"] #pageboard-read > iframe {
 	margin-top: 0;
 }
 #form .inline.fields {
-	margin-top: 0.5em;
+	padding: 0.25em 0;
 }
 #form .field > label {
 	margin-bottom:0;
@@ -236,9 +236,11 @@ body[data-mode="read"] #pageboard-read > iframe {
 	margin: 0 0.2em;
 	display: block;
 	text-align: left;
+	font-weight: normal;
 }
 #form .inline.fields .inline.field > .radio {
 	display:inline-block;
+	font-weight: normal;
 }
 
 #form .flex.field {

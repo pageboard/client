@@ -617,7 +617,7 @@ Semafor.types.oneOf = function (key, schema, node, inst) {
 	} else if (listOf.length <= 4) {
 		const field = node.dom(`<div class="inline fields">
 			<label for="${key}">${schema.title || key}</label>
-			<div class="${listOf.length <= 2 ? 'inline' : ''} field">
+			<div class="inline field">
 				${listOf.map(item => Semafor.getRadioOption(item, key)).join('\n')}
 			</div>
 		</div>`);
@@ -668,7 +668,18 @@ Semafor.types.number = function (key, schema, node, inst) {
 Semafor.types.object = function (key, schema, node, inst) {
 	let fieldset;
 	if (schema.title) {
-		if (schema.properties && key && schema.title) {
+		if (schema.properties && key) {
+			if (Object.values(schema.properties).every(item => item.type == "boolean")) {
+				fieldset = node.dom(`<div class="inline fields">
+					<label>${schema.title || key}</label>
+					<div class="inline field"></div>
+				</div>`);
+				const inside = fieldset.querySelector('.field');
+				Object.entries(schema.properties)
+					.map(([sub, item]) => Semafor.types.boolean(`${key}.${sub}`, item, inside));
+				node.appendChild(fieldset);
+				return;
+			}
 			if (schema.nullable) {
 				fieldset = node.dom(`<div class="nullable fieldset">
 					<fieldset name="${key}" class="field" disabled>
