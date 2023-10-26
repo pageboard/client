@@ -18,12 +18,12 @@
   },
   "homepage": "https://github.com/pageboard/client#readme",
   "devDependencies": {
-    "@pageboard/flickity": "^2.3.1",
+    "@pageboard/flickity": "^2.3.2",
     "postinstall": "^0.8.0"
   },
   "prepare": {
-    "src/carousel.js": "bundle --extend=true --name=window lib/",
-    "@pageboard/flickity/dist/flickity.css": "copy lib/"
+    "src/carousel.js": "bundle lib/",
+    "@pageboard/flickity/css/flickity.css": "copy lib/"
   },
   "pageboard": {
     "directories": [
