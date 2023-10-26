@@ -6,11 +6,11 @@ import './polyfills';
 import 'window-page';
 import Scope from './scope';
 import './stages';
-export { Deferred } from 'class-deferred';
+import { Deferred } from 'class-deferred';
 
+window.Deferred = Deferred;
 
-export const Pageboard = window.Pageboard ?? {};
-export const elements = Pageboard.elements ?? {};
+const Pageboard = window.Pageboard ??= {};
 
 const polyfills = [];
 Object.entries(Pageboard.polyfills ?? {}).map(([name, ok]) => {
