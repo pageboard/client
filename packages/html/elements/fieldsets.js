@@ -48,18 +48,23 @@ exports.fieldset_list = {
 	context: 'form//',
 	priority: 0,
 	properties: {
-		size: {
-			title: 'Minimum size',
+		min: {
+			title: 'Min items',
 			type: "integer",
 			minimum: 0,
 			default: 1
 		},
-		level: {
-			title: 'Ancestor level',
-			description: 'Use higher template ancestors',
+		max: {
+			title: 'Max items',
 			type: "integer",
-			minimum: 0,
-			nullable: true
+			minimum: 1,
+			default: 100
+		},
+		at: {
+			title: 'Repeat selector',
+			description: 'css selector',
+			type: "string",
+			format: 'singleline'
 		}
 	},
 	contents: [{
@@ -67,7 +72,7 @@ exports.fieldset_list = {
 		nodes: 'block+',
 		expressions: true
 	}],
-	html: `<element-fieldset-list data-size="[size]" data-level="[level]">
+	html: `<element-fieldset-list data-max="[max]" data-min="[min]" data-at="[at]">
 		<template block-content="template"></template>
 		<div class="view"></div>
 	</element-fieldset-list>`,

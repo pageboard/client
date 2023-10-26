@@ -142,7 +142,6 @@ class HTMLElementFieldsetList extends Page.Element {
 	}
 
 	#resize() {
-		const len = Math.max(Number(this.dataset.size) || 0, this.#list.length);
 		let tpl = this.ownTpl.content.cloneNode(true);
 
 		const inputs = tpl.querySelectorAll('[name]');
@@ -168,32 +167,15 @@ class HTMLElementFieldsetList extends Page.Element {
 			}
 		}
 
-		let subtpl = inputs.map(node => node.closest('.fields') ?? node).ancestor();
-		let level = parseInt(this.dataset.level) || 0;
-		while (subtpl && level--) {
-			subtpl = subtpl.parentNode;
-		}
-		if (!subtpl) {
-			console.warn("fieldset-list should contain input[name]", this);
-			return;
-		}
+		const subtpl = inputs.map(node => node.closest('.fields') ?? node).ancestor();
 		subtpl.appendChild(
-			subtpl.ownerDocument.createTextNode('[$fields|at:*|repeat:field|const:]')
+			subtpl.ownerDocument.createTextNode(
+				`[$fields|at:${this.dataset.at || '*'}|repeat:field|const:]`
+			)
 		);
-		if (len == 0) {
-			let node = tpl.querySelector(this.#selector('add'));
-			while (node != null && node != tpl && node != subtpl) {
-				while (node.nextSibling) node.nextSibling.remove();
-				while (node.previousSibling) node.previousSibling.remove();
-				node = node.parentNode;
-			}
-			{
-				const hidden = tpl.ownerDocument.createElement('input');
-				hidden.type = "hidden";
-				hidden.name = this.#prefix.join('.');
-				tpl.appendChild(hidden);
-			}
-		} else while (this.#list.length < len) {
+		const min = Number(this.dataset.min);
+		const max = Number(this.dataset.max);
+		while (this.#list.length < (min || 1)) {
 			this.#list.push({...this.#model});
 		}
 		tpl = tpl.fuse({ $fields: this.#list }, {
@@ -218,6 +200,12 @@ class HTMLElementFieldsetList extends Page.Element {
 		});
 		view.querySelectorAll(this.#selector('down')).forEach((node, i, arr) => {
 			node.disabled = i == arr.length - 1;
+		});
+		view.querySelectorAll(this.#selector('del')).forEach((node) => {
+			node.disabled = this.#list.length <= min;
+		});
+		view.querySelectorAll(this.#selector('add')).forEach((node) => {
+			node.disabled = this.#list.length >= max;
 		});
 	}
 
