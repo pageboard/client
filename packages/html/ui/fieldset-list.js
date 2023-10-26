@@ -173,12 +173,14 @@ class HTMLElementFieldsetList extends Page.Element {
 				`[$fields|at:${this.dataset.at || '*'}|repeat:field|const:]`
 			)
 		);
-		const min = Number(this.dataset.min);
-		const max = Number(this.dataset.max);
-		while (this.#list.length < (min || 1)) {
-			this.#list.push({...this.#model});
+		const min = Number(this.dataset.min) || 0;
+		const max = Number(this.dataset.max) || Infinity;
+		let list = this.#list;
+		const placeholder = list.length == 0 && min == 0;
+		if (list.length == 0) {
+			list = [{...this.#model, $i: -1}];
 		}
-		tpl = tpl.fuse({ $fields: this.#list }, {
+		tpl = tpl.fuse({ $fields: list }, {
 			$hooks: {
 				before: {
 					get(ctx, val, args) {
@@ -194,6 +196,12 @@ class HTMLElementFieldsetList extends Page.Element {
 		const view = this.ownView;
 		view.textContent = '';
 		view.appendChild(tpl);
+
+		if (placeholder) {
+			for (const node of view.querySelectorAll(`[name^="${this.#prefix}"]`)) {
+				node.disabled = true;
+			}
+		}
 
 		view.querySelectorAll(this.#selector('up')).forEach((node, i) => {
 			node.disabled = i == 0;
@@ -258,7 +266,7 @@ class HTMLElementFieldsetList extends Page.Element {
 
 		switch (action) {
 			case "add":
-				list.splice((this.#walk.findBefore(btn) ?? -1) + 1, 0, this.#model);
+				list.splice((this.#walk.findBefore(btn) ?? -1) + 1, 0, { ...this.#model });
 				break;
 			case "del":
 				list.splice(this.#walk.findBefore(btn) ?? 0, 1);
