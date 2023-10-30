@@ -479,10 +479,11 @@ exports.input_select = {
 	html: `<div class="field">
 		<label block-content="label">Label</label>
 		<element-select class="ui selection dropdown [multiple]"
-			data-name="[name]" data-disabled="[disabled]" data-required="[required]"
-			data-multiple="[multiple]"
-			data-value="[value]"
+			name="[name]" disabled="[disabled]" required="[required]"
+			multiple="[multiple]"
+			value="[value]"
 		>
+			<i class="dropdown icon"></i><div class="text"></div><select></select>
 			<div class="menu" block-content="options"></div>
 		</element-select>
 	</div>`,

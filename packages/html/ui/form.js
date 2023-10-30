@@ -242,6 +242,9 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 				elem.fill?.(val);
 			}
 		}
+		for (const node of this.querySelectorAll("element-select")) {
+			node.fill?.(query);
+		}
 		for (const node of this.querySelectorAll('fieldset[is="element-fieldset"]')) {
 			node.fill?.(query);
 		}

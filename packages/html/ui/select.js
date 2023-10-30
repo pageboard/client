@@ -1,14 +1,6 @@
 class HTMLElementSelect extends Page.Element {
 	#observer;
 
-	static defaults = {
-		name: null,
-		value: null,
-		multiple: false,
-		disabled: false,
-		required: false
-	};
-
 	#child(sel) {
 		return this.children.find(node => node.matches(sel));
 	}
@@ -20,6 +12,49 @@ class HTMLElementSelect extends Page.Element {
 	}
 	get #select() {
 		return this.#child('select');
+	}
+
+	get name() {
+		return this.getAttribute('name');
+	}
+
+	get required() {
+		return this.hasAttribute('required');
+	}
+
+	get multiple() {
+		return this.hasAttribute('multiple');
+	}
+
+	get disabled() {
+		return this.hasAttribute('disabled');
+	}
+
+	get value() {
+		return this.getAttribute('value');
+	}
+
+	set name(n) {
+		this.setAttribute('name', n);
+	}
+
+	set required(b) {
+		if (b) this.setAttribute('required', '');
+		else this.removeAttribute('required');
+	}
+
+	set multiple(b) {
+		if (b) this.setAttribute('multiple', '');
+		else this.removeAttribute('multiple');
+	}
+
+	set disabled(b) {
+		if (b) this.setAttribute('disabled', '');
+		else this.removeAttribute('disabled');
+	}
+
+	set value(v) {
+		this.getAttribute('value', v);
 	}
 
 	handleClick(e, state) {
@@ -59,7 +94,7 @@ class HTMLElementSelect extends Page.Element {
 		const val = opt.getAttribute('value');
 		const item = this.#menuOption(val);
 
-		if (this.options.multiple) {
+		if (this.multiple) {
 			if (this.#child(`.label[data-value="${val}"]`) == null) {
 				this.#setText("").insertAdjacentHTML(
 					'beforeBegin',
@@ -75,7 +110,7 @@ class HTMLElementSelect extends Page.Element {
 	}
 	#deselectItem(opt) {
 		const val = opt.getAttribute('value');
-		if (this.options.multiple && val) {
+		if (this.multiple && val) {
 			const item = this.#child(`.label[data-value="${val}"]`);
 			if (item) item.remove();
 		}
@@ -116,57 +151,44 @@ class HTMLElementSelect extends Page.Element {
 			this.#observer = null;
 		}
 	}
-	#fillSelect(state) {
-		const select = this.#select;
-		if (!select) return;
-		select.insertAdjacentHTML('afterBegin', '<option value="[item.dataset.value]">[children|at:*|repeat:item|.innerText]</option>');
-		select.fuse(this.#menu, state.scope);
-	}
-	setup(state) {
-		this.#observer = new MutationObserver(mutations => this.#fillSelect(state));
-		this.#observer.observe(this.#menu, {
-			childList: true
+	fill(values) {
+		this.#select.children.forEach(opt => {
+			if (opt.value) {
+				if (opt.selected) this.#selectItem(opt);
+				else this.#deselectItem(opt);
+			}
 		});
 	}
-
-	build(state) {
-		if (state.scope.$write) return;
-		if (this.children.length == 1) {
-			this.insertAdjacentHTML(
-				'afterBegin',
-				'<i class="dropdown icon"></i><div class="text"></div><select></select>'
-			);
-		}
+	prepare(editable) {
 		const select = this.#select;
-
-		select.disabled = this.options.disabled;
-		select.required = this.options.required;
-		select.multiple = this.options.multiple;
+		select.disabled = this.disabled;
+		select.required = this.required;
+		select.multiple = this.multiple;
 		if (!select.multiple) {
 			for (const node of this.querySelectorAll('.ui.label')) node.remove();
 		}
-		select.name = this.options.name;
-		if (!select.required) {
-			const menu = this.#menu;
-			if (!menu.querySelector('element-select-option[data-value=""]')) {
+		select.name = this.name;
+		const menu = this.#menu;
+		const defaultOption = menu.querySelector('element-select-option[data-value=""]');
+		if (!select.required && !editable) {
+			if (!defaultOption) {
 				menu.insertAdjacentHTML('afterBegin', `<element-select-option data-value="" block-type="input_select_option" class="item">-</element-select-option>`);
 			}
+		} else if (defaultOption) {
+			defaultOption.remove();
 		}
-		this.#fillSelect(state);
+		if (menu.children.length != select.children.length && !editable) {
+			// TODO do a better check
+			select.textContent = '';
+			select.insertAdjacentHTML('afterBegin', '<option value="[item.dataset.value]">[children|at:*|repeat:item|.innerText]</option>');
+			select.fuse(this.#menu, {});
+		}
 	}
-
-	patch(state) {
-		if (state.scope.$write) return;
-		if (this.children.length == 1) this.build(state);
-
-		state.finish(() => {
-			// synchronize after form has filled select
-			this.#select.children.forEach(opt => {
-				if (opt.value) {
-					if (opt.selected) this.#selectItem(opt);
-					else this.#deselectItem(opt);
-				}
-			});
+	setup() {
+		if (this.isContentEditable) return;
+		this.#observer = new MutationObserver(mutations => this.prepare());
+		this.#observer.observe(this.#menu, {
+			childList: true
 		});
 	}
 }
