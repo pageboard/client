@@ -129,7 +129,10 @@ exports.sheet = {
 					title: 'Color',
 					type: 'string',
 					format: 'hex-color',
-					$helper: 'color'
+					$helper: {
+						name: 'color',
+						alpha: true
+					}
 				},
 				top: {
 					title: 'Top in %',

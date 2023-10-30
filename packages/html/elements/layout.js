@@ -181,7 +181,10 @@ exports.layout = {
 					title: 'Color',
 					type: 'string',
 					format: 'hex-color',
-					$helper: 'color'
+					$helper: {
+						name: 'color',
+						alpha: true
+					}
 				},
 				image: {
 					title: 'Image',
