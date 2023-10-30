@@ -15,8 +15,11 @@ label[for] {
 	user-select: none;
 }
 
-element-select {
-	z-index:1; /* or else dropdown menu goes under what's next */
+element-select.active {
+	z-index:1;
+}
+element-select.active.ui.dropdown .menu {
+	display:block;
 }
 
 .inline.fields element-select {

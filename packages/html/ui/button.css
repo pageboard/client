@@ -1,3 +1,11 @@
 .ui.button:not(.right) + .ui.button.right {
 	margin-left:auto;
 }
+
+[contenteditable] .ui.buttons .disabled.button,
+[contenteditable] .ui.disabled.button,
+[contenteditable] .ui.button:disabled,
+[contenteditable] .ui.disabled.button:hover,
+[contenteditable] .ui.disabled.active.button {
+	pointer-events: auto !important;
+}

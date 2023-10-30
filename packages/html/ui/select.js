@@ -31,7 +31,7 @@ class HTMLElementSelect extends Page.Element {
 			if (opt) {
 				opt.selected = true;
 				state.dispatch(opt, 'change');
-				this.#toggleMenu(false);
+				this.classList.remove('active');
 			}
 			return;
 		}
@@ -44,7 +44,7 @@ class HTMLElementSelect extends Page.Element {
 			}
 			return;
 		}
-		this.#toggleMenu();
+		this.classList.toggle('active');
 	}
 	handleChange(e, state) {
 		const opt = e.target;
@@ -53,11 +53,6 @@ class HTMLElementSelect extends Page.Element {
 		} else {
 			this.#deselectItem(opt);
 		}
-	}
-	#toggleMenu(show) {
-		const style = this.#menu.style;
-		if (show === undefined) show = !style.display;
-		style.display = show ? "block" : null;
 	}
 	#selectItem(opt) {
 		const select = this.#select;

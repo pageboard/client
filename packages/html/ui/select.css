@@ -5,3 +5,18 @@ element-select.ui.multiple.dropdown > .label {
 	vertical-align: baseline;
 	line-height: inherit;
 }
+
+[contenteditable] .ui.dropdown[block-focused] > .menu {
+	overflow: visible;
+	width: auto;
+	height: auto;
+	top: 100% !important;
+	opacity: 1;
+}
+
+[contenteditable] .field[block-focused] > .ui.dropdown {
+	z-index:1;
+}
+[contenteditable] .field[block-focused] .dropdown > .menu {
+	display: block !important;
+}
