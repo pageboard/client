@@ -426,18 +426,22 @@ HTMLFormElement.prototype.disable = function () {
 	}
 };
 
-
-
-
 HTMLSelectElement.prototype.fill = function (val) {
 	if (!Array.isArray(val)) val = [val];
 	for (let i = 0; i < this.options.length; i++) {
 		const opt = this.options[i];
-		opt.selected = val.indexOf(opt.value) > -1;
+		opt.selected = val.includes(opt.value);
 	}
 };
 HTMLSelectElement.prototype.reset = function () {
-	for (let i = 0; i < this.options.length; i++) this.options[i].selected = false;
+	for (let i = 0; i < this.options.length; i++) {
+		this.options[i].selected = this.options[i].defaultSelected;
+	}
+};
+HTMLSelectElement.prototype.save = function () {
+	for (let i = 0; i < this.options.length; i++) {
+		this.options[i].defaultSelected = this.options[i].selected;
+	}
 };
 
 HTMLButtonElement.prototype.fill = HTMLInputElement.prototype.fill = function (val) {
