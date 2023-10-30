@@ -82,7 +82,6 @@
 }
 #menu .ui.tab.menu.active {
 	display:flex;
-	justify-content: space-around;
 }
 #menu .ui.attached.tab.menu {
 	margin:0;
