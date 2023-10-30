@@ -6,10 +6,8 @@ class HTMLElementFieldsetList extends Page.Element {
 
 	fill(values) {
 		if (this.isContentEditable || this.prefix == null) return;
-		const vars = [];
 		for (const [key, val] of Object.entries(values)) {
 			if (!this.#prefixed(key)) continue;
-			vars.push(key);
 			if (Array.isArray(val)) {
 				for (let i = 0; i < val.length; i++) {
 					values[key + '.' + i] = val[i];
@@ -20,7 +18,6 @@ class HTMLElementFieldsetList extends Page.Element {
 		this.#list = this.#listFromValues({ ...values });
 		if (this.#defaultList == null) this.save();
 		this.#resize();
-		return vars;
 	}
 
 	reset() {

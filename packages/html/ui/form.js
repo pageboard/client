@@ -228,7 +228,7 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 		// fieldset-list are not custom inputs yet
 		const vars = [];
 		for (const node of this.querySelectorAll("element-fieldset-list")) {
-			if (node.fill) vars.push(...node.fill(query));
+			node?.fill(query);
 		}
 
 		for (const elem of this.elements) {
