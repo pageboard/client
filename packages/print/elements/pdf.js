@@ -2,7 +2,7 @@
 // extend page
 exports.pdf = {
 	...exports.page,
-	title: 'PDF',
+	title: 'Print',
 	icon: '<i class="icon file pdf outline"></i>',
 	contents: [{
 		id: 'title',
