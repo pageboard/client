@@ -35,7 +35,9 @@ class HTMLElementFieldsetList extends Page.Element {
 		const keys = new Set();
 		const inputs = tpl.querySelectorAll('[name]');
 		for (const node of inputs) {
-			keys.add(node.getAttribute('name')); // because custom elements are not started in templates
+			// because custom elements are not started in templates, do not use .name
+			const name = node.getAttribute('name');
+			keys.add(name);
 		}
 		const splits = Array.from(keys).map(name => this.#parts(name));
 		const prefix = [];
@@ -61,7 +63,7 @@ class HTMLElementFieldsetList extends Page.Element {
 		for (const key of keys) {
 			const keyParts = this.#prefixed(key);
 			if (keyParts) {
-				model[keyParts.join('.')] = null;
+				model[keyParts.join('.')] = undefined;
 			}
 		}
 		this.#model = model;
@@ -139,9 +141,13 @@ class HTMLElementFieldsetList extends Page.Element {
 		let list = this.#list;
 		const placeholder = list.length == 0 && min == 0;
 		if (list.length == 0) {
-			list = [{...this.#model, $i: -1}];
+			list = [{...this.#model, $i: min == 0 ? -1 : 0}];
 		}
-		tpl = tpl.fuse({ $fields: list }, {
+		tpl = tpl.fuse({
+			$fields: list,
+			$pathname: Page.pathname,
+			$query: Page.query
+		}, {
 			$hooks: {
 				before: {
 					get(ctx, val, args) {
@@ -185,8 +191,8 @@ class HTMLElementFieldsetList extends Page.Element {
 	#listFromValues(values) {
 		const list = [];
 		for (const [key, val] of Object.entries(values)) {
-			if (!this.#prefixed(key)) continue;
-			const parts = this.#parts(key).slice(this.#prefix.length);
+			const parts = this.#prefixed(key);
+			if (!parts) continue;
 			const index = Number(parts.shift());
 			if (!Number.isInteger(index)) continue;
 			delete values[key];
@@ -228,7 +234,7 @@ class HTMLElementFieldsetList extends Page.Element {
 		if (!btn) return;
 		const action = btn.value;
 		if (["add", "del", "up", "down"].includes(action) == false) return;
-		const list = this.#list;
+		const list = this.#listFromValues(this.closest('form').read(true));
 		let index;
 
 		switch (action) {
@@ -251,6 +257,7 @@ class HTMLElementFieldsetList extends Page.Element {
 				}
 				break;
 		}
+		this.#list = list;
 		this.#refresh();
 		state.dispatch(this, 'change');
 	}
