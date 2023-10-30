@@ -7,8 +7,10 @@ class HTMLElementFieldsetList extends Page.Element {
 	fill(values) {
 		if (this.isContentEditable || this.prefix == null) return;
 		for (const [key, val] of Object.entries(values)) {
-			if (!this.#prefixed(key)) continue;
-			if (Array.isArray(val)) {
+			const parts = this.#prefixed(key);
+			if (!parts) continue;
+			if (parts.length == 1 && Number.isInteger(Number(parts[0])) && Array.isArray(val)) {
+				console.warn("fielset-list should receive flat lists", key, val);
 				for (let i = 0; i < val.length; i++) {
 					values[key + '.' + i] = val[i];
 				}
@@ -57,8 +59,9 @@ class HTMLElementFieldsetList extends Page.Element {
 		this.#prefix = prefix;
 		const model = {};
 		for (const key of keys) {
-			if (this.#prefixed(key)) {
-				model[this.#parts(key).slice(prefix.length).join('.')] = null;
+			const keyParts = this.#prefixed(key);
+			if (keyParts) {
+				model[keyParts.join('.')] = null;
 			}
 		}
 		this.#model = model;
@@ -86,14 +89,15 @@ class HTMLElementFieldsetList extends Page.Element {
 		for (let i = 0; i < p.length; i++) {
 			if (parts[i] != p[i]) return false;
 		}
-		return true;
+		return parts.slice(p.length);
 	}
 
 	#incrementkey(index, name) {
-		if (!this.#prefixed(name)) return null;
+		const nameParts = this.#prefixed(name);
+		if (!nameParts) return null;
 		const parts = this.#prefix.slice();
 		parts.push(index);
-		parts.push(...this.#parts(name).slice(this.#prefix.length));
+		parts.push(...nameParts);
 		return parts.join('.');
 	}
 
@@ -276,10 +280,10 @@ class HTMLElementFieldsetList extends Page.Element {
 	}
 
 	#parseName(name) {
-		if (!this.#prefixed(name)) {
+		const parts = this.#prefixed(name);
+		if (!parts) {
 			return { index: -1 };
 		}
-		const parts = this.#parts(name).slice(this.#prefix.length);
 		const index = Number(parts.shift());
 		if (!Number.isInteger(index)) return { index: -1 };
 		return { index, sub: parts.join('.') };
