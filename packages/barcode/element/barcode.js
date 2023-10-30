@@ -53,7 +53,8 @@ exports.barcode = {
 					format: 'hex-color',
 					$helper: 'color'
 				}
-			}
+			},
+			nullable: true
 		},
 		dimension: {
 			title: 'Dimension',
@@ -104,7 +105,7 @@ exports.barcode = {
 			}]
 		}
 	},
-	html: `<element-barcode data-bcid="[bcid]" data-text="[text]" data-scale-x="[scaleX]" data-scale-y="[scaleY]" data-dimension="[dimension.length][dimension.unit]" data-color-front="[color.front]" data-color-back="[color.back]" data-rotate="[rotate]"></element-barcode>`,
+	html: `<element-barcode data-bcid="[bcid]" data-text="[text]" data-scale-x="[scaleX]" data-scale-y="[scaleY]" data-dimension="[dimension.length][dimension.unit]" data-color-front="[color?.front]" data-color-back="[color?.back]" data-rotate="[rotate]"></element-barcode>`,
 	scripts: [
 		'../lib/barcode.js'
 	],

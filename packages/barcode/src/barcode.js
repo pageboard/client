@@ -22,15 +22,16 @@ class HTMLElementBarcode extends Page.Element {
 		img.height = this.options.scaleY;
 		img.style.height = this.options.dimension;
 		const opts = {
+			text: this.options.text,
 			bcid: this.options.bcid,
 			includetext: true,
 			scaleX: this.options.scaleX,
 			scaleY: this.options.scaleY,
 			rotate: this.options.rotate,
-			backgroundColor: this.options.colorBack,
-			textColor: this.options.colorFront,
-			barColor: this.options.colorFront,
-			borderColor: this.options.colorFront
+			backgroundcolor: this.options.colorBack,
+			textcolor: this.options.colorFront,
+			barcolor: this.options.colorFront,
+			bordercolor: this.options.colorFront
 		};
 		const bwipFn = bwip[opts.bcid.replace(/-/g, '_')];
 		try {
