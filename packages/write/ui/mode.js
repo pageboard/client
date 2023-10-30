@@ -62,6 +62,8 @@ Pageboard.Controls.Mode = class Mode {
 					url: links.up[0]?.url ?? '/'
 				}
 			});
+		} else if (item.href) {
+			return state.push(item.href);
 		}
 		if (["code", "write", "read"].includes(com) == false) return;
 		const mode = document.body.dataset.mode;

@@ -69,6 +69,8 @@ body[data-mode="read"] #pageboard-write > #store {
 	margin-bottom:0 !important;
 }
 body:not([data-mode="read"]) #mode [data-command="translate"],
+body:not([data-mode="read"]) #mode [data-command="map"],
+body:not([data-mode="read"]) #mode [data-command="settings"],
 body:not([data-mode="read"]) #mode a:not([data-command]),
 body[data-mode="read"] #store > .icon.menu > :not(#auth),
 body[data-mode="write"] #store > .text.menu,

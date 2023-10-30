@@ -38,7 +38,7 @@ exports.write = {
 				</a>
 			</div>
 			<div class="text menu">
-				<div class="header item" href="/admin/settings">[$parent.data.title|or:-]</div>
+				<div class="header item">[$parent.data.title|or:-]</div>
 				<div class="item">[$parent.data.env]</div>
 				<div class="item">[$parent.data.module] [$parent.data.version|slice:0:12|or:head]</div>
 			</div>
@@ -46,7 +46,7 @@ exports.write = {
 				<a class="vertically fitted item" title="Site map" data-command="map" href="/admin/map">
 					<i class="sitemap large icon"></i>
 				</a>
-				<a class="vertically fitted item" title="Settings" href="/admin/settings">
+				<a class="vertically fitted item" title="Settings" data-command="settings" href="/admin/settings">
 					<i class="cog large icon"></i>
 				</a>
 				<a class="vertically fitted item" data-command="translate" title="Translation" href="/admin/translations">
