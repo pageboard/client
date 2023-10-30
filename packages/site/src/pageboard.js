@@ -2,7 +2,7 @@ import { default as debounce } from 'debounce';
 import { default as fetchHelper } from './fetch';
 import * as Class from './class';
 import { js as loadScript } from './load';
-import './polyfills';
+import './utils';
 import 'window-page';
 import Scope from './scope';
 import './stages';
