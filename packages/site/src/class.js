@@ -21,6 +21,7 @@ export function create(Superclass) {
 			});
 		}
 		connectedCallback() {
+			this.prepare?.(Page.scope.$write);
 			if (this.build) Page.build(state => this.#options(state, true));
 			if (this.patch) Page.patch(state => this.#options(state, true));
 			if (this.setup) Page.setup(state => this.#options(state));

@@ -36,7 +36,7 @@ class HTMLElementFieldsetList extends Page.Element {
 		const keys = new Set();
 		const inputs = tpl.querySelectorAll('[name]');
 		for (const node of inputs) {
-			keys.add(node.name);
+			keys.add(node.getAttribute('name')); // because custom elements are not started in templates
 		}
 		const splits = Array.from(keys).map(name => this.#parts(name));
 		const prefix = [];
@@ -67,27 +67,16 @@ class HTMLElementFieldsetList extends Page.Element {
 		this.#model = model;
 	}
 
-	#prepare() {
+	prepare(editable) {
 		const tpl = this.ownTpl;
-		tpl.prerender();
-		this.#modelize(tpl.content);
-		for (const node of tpl.content.querySelectorAll('[block-id]')) {
-			node.removeAttribute('block-id');
-		}
-	}
-
-	patch({ scope }) {
-		if (scope.$write) {
-			this.#modelize(this.ownTpl);
-		}
-	}
-
-	setup(state) {
-		if (state.scope.$write) return;
-		this.#prepare();
-		if (this.#defaultList == null) {
-			const values = this.form.read(true);
-			this.#defaultList = this.#listFromValues({ ...values });
+		if (editable) {
+			this.#modelize(tpl);
+		} else {
+			tpl.prerender();
+			this.#modelize(tpl.content);
+			for (const node of tpl.content.querySelectorAll('[block-id]')) {
+				node.removeAttribute('block-id');
+			}
 		}
 	}
 
@@ -116,16 +105,17 @@ class HTMLElementFieldsetList extends Page.Element {
 
 		const inputs = tpl.querySelectorAll('[name]');
 		for (const node of inputs) {
-			const name = this.#incrementkey('[field.$i]', node.name);
-			if (name != null) {
+			const name = node.getAttribute('name');
+			const iname = this.#incrementkey('[field.$i]', name);
+			if (iname != null) {
 				const id = node.id;
-				if (id?.startsWith(`for-${node.name}`)) {
-					node.id = id.replace(node.name, name);
+				if (id?.startsWith(`for-${name}`)) {
+					node.id = id.replace(name, iname);
 				}
 				if (node.nextElementSibling?.htmlFor == id) {
 					node.nextElementSibling.htmlFor = node.id;
 				}
-				node.name = name;
+				node.setAttribute('name', iname);
 			}
 		}
 
@@ -307,9 +297,6 @@ class HTMLElementFieldsetList extends Page.Element {
 		return this.children.find(node => node.matches('.view'));
 	}
 	get prefix() {
-		if (this.#prefix == null) {
-			this.#prepare();
-		}
 		return this.#prefix;
 	}
 	get #prefixStr() {
