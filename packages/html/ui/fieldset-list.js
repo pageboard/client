@@ -239,7 +239,7 @@ class HTMLElementFieldsetList extends Page.Element {
 
 		switch (action) {
 			case "add":
-				list.splice((this.#findIndex(btn) ?? -1) + 1, 0, { ...this.#model });
+				list.splice((this.#findIndex(btn) ?? 0), 0, { ...this.#model });
 				break;
 			case "del":
 				list.splice(this.#findIndex(btn) ?? 0, 1);
