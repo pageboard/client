@@ -11,6 +11,7 @@ class HTMLElementFieldsetList extends Page.Element {
 			if (!parts) continue;
 			if (parts.length == 1 && Number.isInteger(Number(parts[0])) && Array.isArray(val)) {
 				console.warn("fielset-list should receive flat lists", key, val);
+			} else if (parts.length == 0 && Array.isArray(val)) {
 				for (let i = 0; i < val.length; i++) {
 					values[key + '.' + i] = val[i];
 				}
