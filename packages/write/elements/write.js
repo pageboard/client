@@ -44,7 +44,7 @@ exports.write = {
 				<div class="item">[$parent.data.module] [$parent.data.version|slice:0:12|or:head]</div>
 			</div>
 			<div id="mode" class="right menu">
-				<a class="vertically fitted item" title="Site map" href="/admin/map">
+				<a class="vertically fitted item" title="Site map" data-command="map" href="/admin/map">
 					<i class="sitemap large icon"></i>
 				</a>
 				<a class="vertically fitted item" title="Settings" href="/admin/settings">

@@ -54,6 +54,14 @@ Pageboard.Controls.Mode = class Mode {
 					s: page.content.title
 				}
 			});
+		} else if (com == "map") {
+			const { links } = state.data.response;
+			return state.push({
+				pathname: item.pathname,
+				query: {
+					url: links.up[0]?.url ?? '/'
+				}
+			});
 		}
 		if (["code", "write", "read"].includes(com) == false) return;
 		const mode = document.body.dataset.mode;
