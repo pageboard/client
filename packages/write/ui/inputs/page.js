@@ -156,7 +156,7 @@ Pageboard.schemaHelpers.page = class PageHelper {
 		switch (this.action) {
 			case "search":
 				content = document.dom(`<input class="search" type="text" placeholder="${title}" />
-			<div class="ui small blue icon buttons">
+			<div class="ui mini blue icon buttons">
 				<div class="ui active button" title="Stop">
 					<i class="close icon"></i>
 				</div>
@@ -164,7 +164,7 @@ Pageboard.schemaHelpers.page = class PageHelper {
 				break;
 			default:
 				content = document.dom(`<input class="search" type="text" placeholder="${title}" />
-			<div class="ui small blue icon buttons">
+			<div class="ui mini blue icon buttons">
 				<div class="ui button" data-action="search" title="Search">
 					<i class="search icon"></i>
 				</div>
