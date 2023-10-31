@@ -368,6 +368,13 @@ body[data-mode="read"] #pageboard-read > iframe {
 	position:relative;
 	max-width:none;
 }
+#form .inline.field > label > small {
+	display: inline-block;
+	margin-left:0.3em;
+	position:relative;
+	max-width:none;
+	text-align:right;
+}
 
 #form input[type="number"],
 #form input[type="text"] {
