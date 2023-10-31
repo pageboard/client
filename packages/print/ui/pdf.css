@@ -14,12 +14,22 @@
 	background-size: var(--size-w, auto) var(--size-h, auto);
 	background-repeat:var(--repeat);
 	background-position: var(--position, auto);
-	width: var(--width, 100%);
-	height: var(--height, 100%);
-	left: 0;
-	top:0;
+	inset:var(--pdf-margin);
 	z-index: -1;
 	pointer-events: none;
+	background-origin: content-box;
+}
+.page-sheet.bleed-left::before {
+	left: 0;
+}
+.page-sheet.bleed-right::before {
+	right: 0;
+}
+.page-sheet.bleed-top::before {
+	top: 0;
+}
+.page-sheet.bleed-bottom::before {
+	bottom: 0;
 }
 
 .page-sheet-error {
@@ -35,16 +45,16 @@ body[data-fold-v] .page-sheet-left {
 	margin-left:0;
 }
 
-.layout.bleedLeft {
+.layout.bleed-left {
 	margin-left: calc( -1 * var(--pdf-margin));
 }
-.layout.bleedRight {
+.layout.bleed-right {
 	margin-right: calc( -1 * var(--pdf-margin));
 }
-.layout.bleedTop {
+.layout.bleed-top {
 	margin-top: calc( -1 * var(--pdf-margin));
 }
-.layout.bleedBottom {
+.layout.bleed-bottom {
 	margin-bottom: calc( -1 * var(--pdf-margin));
 }
 

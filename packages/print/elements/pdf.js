@@ -233,6 +233,32 @@ exports.sheet = {
 						title: 'Bottom Right'
 					}]
 				},
+				bleed: {
+					title: 'Bleed',
+					type: 'object',
+					properties: {
+						left: {
+							title: 'Left',
+							type: 'boolean',
+							default: false
+						},
+						right: {
+							title: 'Right',
+							type: 'boolean',
+							default: false
+						},
+						top: {
+							title: 'Top',
+							type: 'boolean',
+							default: false
+						},
+						bottom: {
+							title: 'Bottom',
+							type: 'boolean',
+							default: false
+						},
+					}
+				},
 				crop: {
 					title: 'Crop and scale',
 					type: "object",
@@ -277,32 +303,6 @@ exports.sheet = {
 					$helper: {
 						name: 'crop'
 					}
-				},
-				bleed: {
-					title: 'Bleed',
-					type: 'object',
-					properties: {
-						left: {
-							title: 'Left',
-							type: 'boolean',
-							default: false
-						},
-						right: {
-							title: 'Right',
-							type: 'boolean',
-							default: false
-						},
-						top: {
-							title: 'Top',
-							type: 'boolean',
-							default: false
-						},
-						bottom: {
-							title: 'Bottom',
-							type: 'boolean',
-							default: false
-						},
-					}
 				}
 			}
 		}
@@ -314,7 +314,7 @@ exports.sheet = {
 	upgrade: {
 		'content.' : 'content.page'
 	},
-	html: `<div class="page-sheet [skip|alt:page-sheet-skip] [background?.bleed?.left] [background?.bleed?.right] [background?.bleed?.top] [background?.bleed?.bottom]" block-content="page"
+	html: `<div class="page-sheet [skip|alt:page-sheet-skip] [background?.bleed?.left|and:bleed-left] [background?.bleed?.right|and:bleed-right] [background?.bleed?.top|and:bleed-top] [background?.bleed?.bottom|and:bleed-bottom]" block-content="page"
 		is="element-sheet" data-src="[background.image]"
 		data-crop="[background.crop.x];[background.crop.y];[background.crop.width];[background.crop.height];[background.crop.zoom]"
 		data-size-h="[background.width|post:%25]"
@@ -396,10 +396,11 @@ exports.sheetcount = {
 
 
 exports.layout.properties.background.properties.bleed = exports.sheet.properties.background.properties.bleed;
+exports.layout.properties.background.properties.crop = exports.sheet.properties.background.properties.crop;
 
 
 exports.layout.fragments.push({
 	attributes: {
-		className: "[background?.bleed?.left] [background?.bleed?.right] [background?.bleed?.top] [background?.bleed?.bottom]"
+		className: "[background?.bleed?.left|and:bleed-left] [background?.bleed?.right|and:bleed-right] [background?.bleed?.top|and:bleed-top] [background?.bleed?.bottom|and:bleed-bottom]"
 	}
 });
