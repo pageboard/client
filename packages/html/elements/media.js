@@ -7,7 +7,7 @@ exports.video = {
 	properties: {
 		url: {
 			title: 'Address',
-			description: 'Local or remote URL',
+			description: 'Local or remote',
 			anyOf: [{
 				type: "null"
 			}, {
@@ -88,7 +88,7 @@ exports.audio = {
 	properties: {
 		url: {
 			title: 'Address',
-			description: 'Local or remote URL',
+			description: 'Local or remote',
 			anyOf: [{
 				type: "null"
 			}, {

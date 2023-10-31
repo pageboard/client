@@ -33,7 +33,7 @@ exports.itemlink = {
 	properties: {
 		url: {
 			title: 'Address',
-			description: 'Local or remote URL',
+			description: 'Local or remote',
 			nullable: true,
 			type: "string",
 			format: "uri-reference",

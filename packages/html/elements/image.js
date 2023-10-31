@@ -11,7 +11,6 @@ exports.image = {
 		},
 		url: {
 			title: 'Address',
-			description: 'Local or remote URL',
 			anyOf: [{
 				type: "null"
 			}, {
@@ -152,7 +151,6 @@ exports.inlineImage = {
 	properties: {
 		url: {
 			title: 'Address',
-			description: 'Local or remote URL',
 			anyOf: [{
 				type: "null"
 			}, {

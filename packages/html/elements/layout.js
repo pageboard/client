@@ -116,7 +116,8 @@ exports.layout = {
 			nullable: true,
 			properties: {
 				inline: {
-					title: 'Inline (em)',
+					title: 'Inline',
+					description: 'Units: em',
 					type: 'number',
 					default: 0,
 					multipleOf: 0.01,
@@ -126,7 +127,8 @@ exports.layout = {
 					const: 'em'
 				},
 				block: {
-					title: 'Block (rem)',
+					title: 'Block',
+					description: 'Units: rem',
 					type: 'number',
 					default: 0,
 					multipleOf: 0.01,
@@ -143,7 +145,8 @@ exports.layout = {
 			nullable: true,
 			properties: {
 				inline: {
-					title: 'Inline (em)',
+					title: 'Inline',
+					description: 'Units: em',
 					type: 'number',
 					default: 0,
 					minimum: 0,
@@ -154,7 +157,8 @@ exports.layout = {
 					const: 'em'
 				},
 				block: {
-					title: 'Block (rem)',
+					title: 'Block',
+					description: 'Units: rem',
 					type: 'number',
 					default: 0,
 					minimum: 0,
@@ -188,7 +192,6 @@ exports.layout = {
 				},
 				image: {
 					title: 'Image',
-					description: 'Local or remote URL',
 					anyOf: [{
 						type: "null"
 					}, {
