@@ -196,19 +196,19 @@ body[data-fold-width] .page-sheet-right.bleed-right + .page-sheet-left.bleed-lef
 
 .layout.bleed-left {
 	margin-left: calc(-1 * var(--page-margin));
-	border-left: var(--page-margin) solid transparent;
+	border-left: calc(var(--page-margin) * var(--colored)) solid transparent;
 }
 .layout.bleed-right {
 	margin-right: calc(-1 * var(--page-margin));
-	border-right: var(--page-margin) solid transparent;
+	border-right: calc(var(--page-margin) * var(--colored)) solid transparent;
 }
 .layout.bleed-top {
 	margin-top: calc(-1 * var(--page-margin));
-	border-top: var(--page-margin) solid transparent;
+	border-top: calc(var(--page-margin) * var(--colored)) solid transparent;
 }
 .layout.bleed-bottom {
 	margin-bottom: calc(-1 * var(--page-margin));
-	border-bottom: var(--page-margin) solid transparent;
+	border-bottom: calc(var(--page-margin) * var(--colored)) solid transparent;
 }
 
 .page-sheet-count[data-separator]::before {

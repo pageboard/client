@@ -399,6 +399,7 @@ exports.layout.properties.background.properties.crop = exports.sheet.properties.
 
 exports.layout.fragments.push({
 	attributes: {
-		className: "[background?.bleed?.left|and:bleed-left] [background?.bleed?.right|and:bleed-right] [background?.bleed?.top|and:bleed-top] [background?.bleed?.bottom|and:bleed-bottom]"
+		className: "[background?.bleed?.left|and:bleed-left] [background?.bleed?.right|and:bleed-right] [background?.bleed?.top|and:bleed-top] [background?.bleed?.bottom|and:bleed-bottom]",
+		"style---colored": "[background.color|alt:1:0]"
 	}
 });
