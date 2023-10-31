@@ -20,7 +20,7 @@ Object.assign(window.Pageboard, {
 		window.queueMicrotask(() => node.dispatchEvent(e));
 	},
 	uiLoad(what, p) {
-		const icon = what.querySelector('.icon');
+		const icon = what.querySelector('.icon:not(.buttons)');
 		let classes;
 		if (icon) {
 			classes = icon.className;
