@@ -2,17 +2,13 @@ Page.connect(new class {
 	#stylesheet;
 
 	patch(state) {
-		const { pages, foldH, foldV } = state.query;
+		const { pages, foldWidth } = state.query;
 		if (pages != null && /^\d+-?\d*$/.test(pages)) {
 			state.vars.pages = true;
 		}
-		if (foldH != null) {
-			document.body.dataset.foldH = foldH;
-			state.vars.foldH = true;
-		}
-		if (foldV != null) {
-			document.body.dataset.foldV = foldV;
-			state.vars.foldV = true;
+		if (foldWidth != null) {
+			document.body.dataset.foldWidth = foldWidth;
+			state.vars.foldWidth = true;
 		}
 	}
 	setup(state) {
@@ -23,29 +19,26 @@ Page.connect(new class {
 		}
 		opts.width ??= 210;
 		opts.height ??= 297;
-		opts.foldV ??= 0;
-		opts.foldH ??= 0;
+		opts.foldWidth ??= 0;
 		opts.counterOffset ??= 0;
 
 		if (window.devicePixelRatio < 4 && window.matchMedia('print').matches) {
 			// TODO
 		}
 
-		const className = 'page-sheet';
 		this.#insertPrintStyle(
-			className,
 			this.#roundDims(this.#convertToPx({
 				width: `${opts.width}mm`,
 				height: `${opts.height}mm`,
 				margin: `${opts.margin}mm`,
-				foldH: `${opts.foldH}mm`,
-				foldV: `${opts.foldV}mm`
+				foldWidth: `${opts.foldWidth}mm`
 			})),
 			opts
 		);
 		if (state.scope.$write) {
 			return;
 		}
+		const className = 'page-sheet';
 		this.#autobreakFn(className);
 		this.#pageNumbering(opts.counterOffset, className);
 
@@ -69,70 +62,35 @@ Page.connect(new class {
 		this.#stylesheet = null;
 	}
 	// https://unused-css.com/tools/border-gradient-generator
-	#insertPrintStyle(className, sheet, page) {
-		const { margin, width, height, foldH, foldV } = sheet;
-		const actualWidth = page.width * (page.foldV ? 2 : 1) + page.foldV;
-		const actualHeight = page.height * (page.foldH ? 2 : 1) + page.foldH;
+	#insertPrintStyle(sheet, page) {
+		const { margin, width, height, foldWidth } = sheet;
+		const actualWidth = page.width * (page.foldWidth ? 2 : 1) + page.foldWidth;
+		const actualHeight = page.height;
 		const effectiveSheet = new CSSStyleSheet();
+		/*
 		const getFoldDeco = (dir, fold) => {
 			if (!fold) return '';
 			return `.${className}-${dir} {
-				padding-${dir}: ${foldV / 2}px;
+				padding-${dir}: ${foldWidth / 2}px;
 			}
 			.${className}-${dir}::after {
-				border-${dir}: ${foldV / 2}px solid rgb(0 0 0 / 5%);
+				border-${dir}: ${foldWidth / 2}px solid rgb(0 0 0 / 5%);
 				${dir}:0;
 			}`;
 		};
-		// TODO use css modules scripts ?
-		// https://css-tricks.com/css-modules-the-native-ones/
+
+			${getFoldDeco('right', foldWidth)}
+			${getFoldDeco('left', foldWidth)}
+		*/
+		// candidate for https://css-tricks.com/css-modules-the-native-ones/
 		const printSheet = `
-			html, body {
-				padding: 0;
-				margin: 0;
-				--pdf-margin: ${margin}px;
-				--pdf-margin-minus: -${margin}px;
-				--pdf-fold-v: ${foldV ? foldV / 2 - margin : 0}px;
-				--pdf-fold-h: ${foldH ? foldH / 2 - margin : 0}px;
-			}
-			@media screen {
-				html, body {
-					background: gray;
-				}
-				body {
-					width: calc(${actualWidth}mm + 2rem);
-				}
-				.${className} {
-					margin: 1rem;
-					width: ${width + (foldV ? foldV / 2 : 0)}px;
-					height: ${height}px;
-					padding: ${margin}px;
-					background: white;
-					overflow:hidden;
-				}
-				${getFoldDeco('right', foldV)}
-				${getFoldDeco('left', foldV)}
-			}
-			@media print {
-				html, body {
-					background:white;
-				}
-				@page {
-					size: ${actualWidth}mm ${actualHeight}mm;
-					margin: 0;
-				}
-				.${className} {
-					padding: ${margin}px;
-					width: ${width + (foldV ? foldV / 2 : 0)}px;
-					height: ${height}px;
-					overflow:hidden;
-				}
-				.${className}-right {
-					padding-right: ${foldV ? foldV / 2 : margin}px;
-				}
-				.${className}-left {
-					padding-left: ${foldV ? foldV / 2 : margin}px;
-				}
+			body {
+				--page-margin:${margin}px;
+				--page-fold-width: ${foldWidth}px;
+				--print-width: ${actualWidth}mm;
+				--print-height: ${actualHeight}mm;
+				--page-width: ${width}px;
+				--page-height: ${height}px;
 			}`;
 		effectiveSheet.replaceSync(printSheet);
 		this.#stylesheet = effectiveSheet;
@@ -266,8 +224,7 @@ Page.connect(new class {
 		if (ch > h) w += -1;
 		return {
 			margin: Math.round(box.margin),
-			foldV: Math.round(box.foldV),
-			foldH: Math.round(box.foldH),
+			foldWidth: Math.round(box.foldWidth),
 			width: w,
 			height: Math.floor(h)
 		};

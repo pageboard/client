@@ -1,3 +1,19 @@
+@page {
+	size: var(--print-width) var(--print-height);
+	margin: 0;
+}
+html, body {
+	padding: 0;
+	margin: 0;
+}
+body,
+body > element-template > .view {
+	display:flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+}
+
 .page-sheet {
 	display:block;
 	position:relative;
@@ -5,6 +21,10 @@
 	counter-increment: sheet;
 	z-index:0;
 	flex: 0 0 auto;
+	width: var(--page-width);
+	height: var(--page-height);
+	padding: var(--page-margin);
+	overflow:hidden;
 }
 .page-sheet::before {
 	content:'';
@@ -14,7 +34,11 @@
 	background-size: var(--size-w, auto) var(--size-h, auto);
 	background-repeat:var(--repeat);
 	background-position: var(--position, auto);
-	inset:var(--top, var(--pdf-margin)) var(--pdf-margin) var(--pdf-margin) var(--left, var(--pdf-margin));
+	inset:
+		var(--top, var(--page-margin))
+		var(--page-margin)
+		var(--page-margin)
+		var(--left, var(--page-margin));
 	z-index: -1;
 	pointer-events: none;
 	background-origin: content-box;
@@ -32,34 +56,148 @@
 	bottom: 0;
 }
 
+body[data-fold-width] .page-sheet-right:not(.bleed-right):has(+ .page-sheet-left:not(.bleed-left)) {
+	/* (no bleed) + no bleed */
+	width: calc(var(--page-width) + var(--page-fold-width) / 2);
+	padding-right: var(--page-fold-width / 2);
+}
+body[data-fold-width] .page-sheet-right:not(.bleed-right) + .page-sheet-left:not(.bleed-left) {
+	/* no bleed + (no bleed) */
+	width: calc(var(--page-width) + var(--page-fold-width) / 2);
+	padding-left: var(--page-fold-width / 2);
+}
+
+body[data-fold-width] .page-sheet-right.bleed-right:has(+ .page-sheet-left:not(.bleed-left)) {
+	/* (bleed) + no bleed */
+	width: calc(var(--page-width) + var(--page-fold-width));
+	padding-right: var(--page-fold-width);
+}
+body[data-fold-width] .page-sheet-right.bleed-right + .page-sheet-left:not(.bleed-left) {
+	/* bleed + (no bleed) */
+	padding-left:0;
+}
+
+body[data-fold-width] .page-sheet-right:not(.bleed-right):has(+ .page-sheet-left.bleed-left) {
+	/* (no bleed) + bleed */
+	padding-right:0;
+}
+body[data-fold-width] .page-sheet-right:not(.bleed-right) + .page-sheet-left.bleed-left {
+	/* no bleed + (bleed) */
+	width: calc(var(--page-width) + var(--page-fold-width));
+	padding-left: var(--page-fold-width);
+}
+
+body[data-fold-width] .page-sheet-right.bleed-right:has(+ .page-sheet-left.bleed-left) {
+	/* (bleed) + bleed */
+	width: calc(var(--page-width) + var(--page-fold-width) / 2);
+	padding-right: var(--page-fold-width / 2);
+}
+body[data-fold-width] .page-sheet-right.bleed-right + .page-sheet-left.bleed-left {
+	/* bleed + (bleed) */
+	width: calc(var(--page-width) + var(--page-fold-width) / 2);
+	padding-left: var(--page-fold-width / 2);
+}
+
 .page-sheet-error {
 	outline: 8px dashed red;
 }
 
-body[data-fold-v] .page-sheet-right {
+body[data-fold-width] .page-sheet-right {
 	margin-right:0;
 	page-break-after: avoid;
 }
 
-body[data-fold-v] .page-sheet-left {
+body[data-fold-width] .page-sheet-left {
 	margin-left:0;
 }
 
+body[data-fold-width] .page-sheet-right:not(.bleed-right):has(+ .page-sheet-left:not(.bleed-left))::before {
+	/* (no bleed) + no bleed */
+	right: calc(var(--page-fold-width) / 2);
+}
+body[data-fold-width] .page-sheet-right:not(.bleed-right) + .page-sheet-left:not(.bleed-left)::before {
+	/* no bleed + (no bleed) */
+	left: calc(var(--page-fold-width) / 2);
+}
+
+body[data-fold-width] .page-sheet-right.bleed-right:has(+ .page-sheet-left:not(.bleed-left))::before {
+	/* (bleed) + no bleed */
+	right:0;
+}
+body[data-fold-width] .page-sheet-right.bleed-right + .page-sheet-left:not(.bleed-left)::before {
+	/* bleed + (no bleed) */
+	left: 0;
+}
+
+body[data-fold-width] .page-sheet-right:not(.bleed-right):has(+ .page-sheet-left.bleed-left)::before {
+	/* (no bleed) + bleed */
+	right:0;
+}
+body[data-fold-width] .page-sheet-right:not(.bleed-right) + .page-sheet-left.bleed-left::before {
+	/* no bleed + (bleed) */
+	left:0;
+}
+
+body[data-fold-width] .page-sheet-right.bleed-right:has(+ .page-sheet-left.bleed-left)::before {
+	/* (bleed) + bleed */
+	right:0;
+}
+body[data-fold-width] .page-sheet-right.bleed-right + .page-sheet-left.bleed-left::before {
+	/* bleed + (bleed) */
+	left:0;
+}
+
+body[data-fold-width] .page-sheet-right:not(.bleed-right):has(+ .page-sheet-left:not(.bleed-left))::after {
+	/* (no bleed) + no bleed */
+	right: calc(var(--page-fold-width) / 2);
+}
+body[data-fold-width] .page-sheet-right:not(.bleed-right) + .page-sheet-left:not(.bleed-left)::after {
+	/* no bleed + (no bleed) */
+	left: calc(var(--page-fold-width) / 2);
+}
+
+body[data-fold-width] .page-sheet-right.bleed-right:has(+ .page-sheet-left:not(.bleed-left))::after {
+	/* (bleed) + no bleed */
+	right:var(--page-fold-width);
+}
+body[data-fold-width] .page-sheet-right.bleed-right + .page-sheet-left:not(.bleed-left)::after {
+	/* bleed + (no bleed) */
+	left: 0;
+}
+
+body[data-fold-width] .page-sheet-right:not(.bleed-right):has(+ .page-sheet-left.bleed-left)::after {
+	/* (no bleed) + bleed */
+	right:0;
+}
+body[data-fold-width] .page-sheet-right:not(.bleed-right) + .page-sheet-left.bleed-left::after {
+	/* no bleed + (bleed) */
+	left:var(--page-fold-width);
+}
+
+body[data-fold-width] .page-sheet-right.bleed-right:has(+ .page-sheet-left.bleed-left)::after {
+	/* (bleed) + bleed */
+	right:calc(var(--page-fold-width) / 2);
+}
+body[data-fold-width] .page-sheet-right.bleed-right + .page-sheet-left.bleed-left::after {
+	/* bleed + (bleed) */
+	left:calc(var(--page-fold-width) / 2);
+}
+
 .layout.bleed-left {
-	margin-left: calc( -1 * var(--pdf-margin));
-	border-left: var(--pdf-margin) solid transparent;
+	margin-left: calc(-1 * var(--page-margin));
+	border-left: var(--page-margin) solid transparent;
 }
 .layout.bleed-right {
-	margin-right: calc( -1 * var(--pdf-margin));
-	border-right: var(--pdf-margin) solid transparent;
+	margin-right: calc(-1 * var(--page-margin));
+	border-right: var(--page-margin) solid transparent;
 }
 .layout.bleed-top {
-	margin-top: calc( -1 * var(--pdf-margin));
-	border-top: var(--pdf-margin) solid transparent;
+	margin-top: calc(-1 * var(--page-margin));
+	border-top: var(--page-margin) solid transparent;
 }
 .layout.bleed-bottom {
-	margin-bottom: calc( -1 * var(--pdf-margin));
-	border-bottom: var(--pdf-margin) solid transparent;
+	margin-bottom: calc(-1 * var(--page-margin));
+	border-bottom: var(--page-margin) solid transparent;
 }
 
 .page-sheet-count[data-separator]::before {
@@ -80,19 +218,17 @@ body[data-fold-v] .page-sheet-left {
 	visibility:initial;
 }
 
-body,
-body > element-template > .view {
-	display:flex;
-	flex-wrap: wrap;
-	align-items: center;
-	justify-content: center;
-}
-
 @media screen {
+	html, body {
+		background: gray;
+	}
 	.page-sheet {
+		margin: 1rem;
+		background: white;
 		box-shadow: rgb(0 0 0 / 40%) 0.2em 0.2em 0.4em;
 	}
 	body {
+		width: calc(var(--print-width) + 2rem);
 		flex: 1 0 auto;
 		overflow: auto;
 	}
@@ -123,8 +259,16 @@ body > element-template > .view {
 	.page-sheet::after {
 		content:'';
 		position:absolute;
-		inset:var(--pdf-margin, 0);
-		border-width: min(1px, var(--pdf-margin, 0));
+		inset:
+			var(--page-margin, 0)
+			var(--page-margin, 0)
+			var(--page-margin, 0)
+			var(--page-margin, 0);
+		border-width:
+			min(1px, var(--page-margin, 0))
+			min(1px, var(--page-margin, 0))
+			min(1px, var(--page-margin, 0))
+			min(1px, var(--page-margin, 0));
 		border-style: dashed;
 		z-index: 1;
 		pointer-events: none;
@@ -132,6 +276,15 @@ body > element-template > .view {
 }
 
 @media print {
+	html, body {
+		background:white;
+	}
+	.page-sheet-right {
+		padding-right: 0;
+	}
+	.page-sheet-left {
+		padding-left: 0;
+	}
 	body + div.pdf-menu {
 		display:none;
 	}

@@ -34,17 +34,20 @@ exports.pdf = {
 			nullable: true,
 			properties: {
 				width: {
-					title: 'Width in mm',
+					title: 'Width',
+					description: 'Units: mm',
 					type: 'number',
 					default: 210
 				},
 				height: {
-					title: 'Height in mm',
+					title: 'Height',
+					description: 'Units: mm',
 					type: 'number',
 					default: 297
 				},
 				margin: {
-					title: 'Inner margins in mm',
+					title: 'Margins',
+					description: 'Units: mm',
 					type: 'number',
 					default: 10
 				},
@@ -53,15 +56,9 @@ exports.pdf = {
 					type: 'object',
 					nullable: true,
 					properties: {
-						h: {
-							title: 'Horizontal spine',
-							description: 'Fold width in mm',
-							type: 'number',
-							nullable: true
-						},
-						v: {
-							title: 'Vertical spine',
-							description: 'Fold width in mm',
+						width: {
+							title: 'Width',
+							description: 'Units: mm',
 							type: 'number',
 							nullable: true
 						}
@@ -98,8 +95,7 @@ exports.pdf = {
 				"data-height": "[paper.height]",
 				"data-margin": "[paper.margin]",
 				"data-preset": "[paper.preset]",
-				"data-fold-h": "[paper.fold?.h]",
-				"data-fold-v": "[paper.fold?.v]",
+				"data-fold-width": "[paper.fold?.width]",
 				"data-counter-offset": "[paper.counterOffset]"
 			}
 		}
