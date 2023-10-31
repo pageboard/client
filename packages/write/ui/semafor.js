@@ -671,7 +671,7 @@ Semafor.types.object = function (key, schema, node, inst) {
 		if (schema.properties && key) {
 			if (Object.values(schema.properties).every(item => item.type == "boolean")) {
 				fieldset = node.dom(`<div class="inline fields">
-					<label>${schema.title || key}</label>
+					<label title="${schema.description || ''}">${schema.title || key}</label>
 					<div class="inline field"></div>
 				</div>`);
 				const inside = fieldset.querySelector('.field');
