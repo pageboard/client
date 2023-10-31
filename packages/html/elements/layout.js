@@ -176,8 +176,7 @@ exports.layout = {
 			nullable: true,
 			properties: {
 				invert: {
-					title: 'Invert',
-					description: 'Invert background',
+					title: 'Toggle inverted theme',
 					default: false,
 					type: 'boolean'
 				},

@@ -393,7 +393,33 @@ exports.sheetcount = {
 };
 
 
-exports.layout.properties.background.properties.bleed = exports.sheet.properties.background.properties.bleed;
+exports.layout.properties.background.properties.bleed = {
+	title: 'Bleed',
+	description: 'Uncolored background bleeds content',
+	type: 'object',
+	properties: {
+		left: {
+			title: 'Left',
+			type: 'boolean',
+			default: false
+		},
+		right: {
+			title: 'Right',
+			type: 'boolean',
+			default: false
+		},
+		top: {
+			title: 'Top',
+			type: 'boolean',
+			default: false
+		},
+		bottom: {
+			title: 'Bottom',
+			type: 'boolean',
+			default: false
+		}
+	}
+};
 exports.layout.properties.background.properties.crop = exports.sheet.properties.background.properties.crop;
 
 
