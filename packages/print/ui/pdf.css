@@ -30,7 +30,7 @@ body > element-template > .view {
 	content:'';
 	position:absolute;
 	background-color:var(--color);
-	background-image:var(--image);
+	background-image: var(--image);
 	background-size: var(--size-w, auto) var(--size-h, auto);
 	background-repeat:var(--repeat);
 	background-position: var(--position, auto);
@@ -75,11 +75,16 @@ body[data-fold-width] .page-sheet-right.bleed-right:has(+ .page-sheet-left:not(.
 body[data-fold-width] .page-sheet-right.bleed-right + .page-sheet-left:not(.bleed-left) {
 	/* bleed + (no bleed) */
 	padding-left:0;
+	width: calc(var(--page-width) + var(--page-fold-smooth));
+	margin-left:calc(-1 * var(--page-fold-smooth));
 }
 
 body[data-fold-width] .page-sheet-right:not(.bleed-right):has(+ .page-sheet-left.bleed-left) {
 	/* (no bleed) + bleed */
 	padding-right:0;
+	width: calc(var(--page-width) + var(--page-fold-smooth));
+	margin-right:calc(-1 * var(--page-fold-smooth));
+	z-index:1;
 }
 body[data-fold-width] .page-sheet-right:not(.bleed-right) + .page-sheet-left.bleed-left {
 	/* no bleed + (bleed) */
@@ -127,11 +132,17 @@ body[data-fold-width] .page-sheet-right.bleed-right:has(+ .page-sheet-left:not(.
 body[data-fold-width] .page-sheet-right.bleed-right + .page-sheet-left:not(.bleed-left)::before {
 	/* bleed + (no bleed) */
 	left: 0;
+	/* stylelint-disable-next-line property-no-vendor-prefix */
+	-webkit-mask-image: linear-gradient(to right, transparent 0, black var(--page-fold-smooth));
+	mask-image: linear-gradient(to right, transparent 0, black var(--page-fold-smooth));
 }
 
 body[data-fold-width] .page-sheet-right:not(.bleed-right):has(+ .page-sheet-left.bleed-left)::before {
 	/* (no bleed) + bleed */
 	right:0;
+	/* stylelint-disable-next-line property-no-vendor-prefix */
+	-webkit-mask-image: linear-gradient(to left, transparent 0, black var(--page-fold-smooth));
+	mask-image: linear-gradient(to left, transparent 0, black var(--page-fold-smooth));
 }
 body[data-fold-width] .page-sheet-right:not(.bleed-right) + .page-sheet-left.bleed-left::before {
 	/* no bleed + (bleed) */
@@ -162,12 +173,12 @@ body[data-fold-width] .page-sheet-right.bleed-right:has(+ .page-sheet-left:not(.
 }
 body[data-fold-width] .page-sheet-right.bleed-right + .page-sheet-left:not(.bleed-left)::after {
 	/* bleed + (no bleed) */
-	left: 0;
+	left: var(--page-fold-smooth);
 }
 
 body[data-fold-width] .page-sheet-right:not(.bleed-right):has(+ .page-sheet-left.bleed-left)::after {
 	/* (no bleed) + bleed */
-	right:0;
+	right:var(--page-fold-smooth);
 }
 body[data-fold-width] .page-sheet-right:not(.bleed-right) + .page-sheet-left.bleed-left::after {
 	/* no bleed + (bleed) */

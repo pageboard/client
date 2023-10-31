@@ -85,12 +85,13 @@ Page.connect(new class {
 		// candidate for https://css-tricks.com/css-modules-the-native-ones/
 		const printSheet = `
 			body {
-				--page-margin:${margin}px;
-				--page-fold-width: ${foldWidth}px;
 				--print-width: ${actualWidth}mm;
 				--print-height: ${actualHeight}mm;
 				--page-width: ${width}px;
 				--page-height: ${height}px;
+				--page-margin:${margin}px;
+				--page-fold-width: ${foldWidth}px;
+				--page-fold-smooth: ${foldWidth ? 2 : 0}mm;
 			}`;
 		effectiveSheet.replaceSync(printSheet);
 		this.#stylesheet = effectiveSheet;
