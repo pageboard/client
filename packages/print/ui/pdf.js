@@ -67,21 +67,6 @@ Page.connect(new class {
 		const actualWidth = page.width * (page.foldWidth ? 2 : 1) + page.foldWidth;
 		const actualHeight = page.height;
 		const effectiveSheet = new CSSStyleSheet();
-		/*
-		const getFoldDeco = (dir, fold) => {
-			if (!fold) return '';
-			return `.${className}-${dir} {
-				padding-${dir}: ${foldWidth / 2}px;
-			}
-			.${className}-${dir}::after {
-				border-${dir}: ${foldWidth / 2}px solid rgb(0 0 0 / 5%);
-				${dir}:0;
-			}`;
-		};
-
-			${getFoldDeco('right', foldWidth)}
-			${getFoldDeco('left', foldWidth)}
-		*/
 		// candidate for https://css-tricks.com/css-modules-the-native-ones/
 		const printSheet = `
 			body {
