@@ -29,7 +29,7 @@ body > element-template > .view {
 .page-sheet::before {
 	content:'';
 	position:absolute;
-	background-color:var(--color);
+	background-color:var(--color, transparent);
 	background-image: var(--image);
 	background-size: var(--size-w, auto) var(--size-h, auto);
 	background-repeat:var(--repeat);
@@ -235,8 +235,7 @@ body[data-fold-width] .page-sheet-right.bleed-right + .page-sheet-left.bleed-lef
 	}
 	.page-sheet {
 		margin: 1rem;
-		background: white;
-		box-shadow: rgb(0 0 0 / 40%) 0.2em 0.2em 0.4em;
+		box-shadow: rgb(0 0 0 / 40%) 4px 4px 10px -1px;
 	}
 	body {
 		width: calc(var(--print-width) + 2rem);
