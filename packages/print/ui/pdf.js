@@ -248,7 +248,6 @@ Page.connect(new class {
 	}
 
 	#convertToPx(styles) {
-		console.log(styles);
 		const d = document.body.appendChild(document.createElement('div'));
 		d.style.position = 'absolute';
 		const obj = {};
