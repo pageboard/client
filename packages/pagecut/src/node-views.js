@@ -164,23 +164,26 @@ export class RootNodeView {
 				if (record.oldValue != val) {
 					const oldClass = mapOfClass(record.oldValue);
 					const newClass = mapOfClass(val);
-					const diffClass = {};
+					const diffClass = obj[name] ?? {};
 					for (const [k, vk] of Object.entries(newClass)) {
 						if (vk && !oldClass[k]) diffClass[k] = true;
 					}
-					obj[name] = Object.keys(diffClass).join(' ');
+					for (const [k, vk] of Object.entries(oldClass)) {
+						if (vk && !newClass[k]) diffClass[k] = false;
+					}
+					obj[name] = diffClass;
 				}
 			} else if (name == "style") {
 				const oldStyle = mapOfStyle(record.oldValue);
 				const newStyle = mapOfStyle(dom.style);
-				const diffStyle = [];
+				const diffStyle = obj[name] ?? {};
 				for (const [j, vj] of Object.entries(newStyle)) {
-					if (vj && oldStyle[j] != vj) diffStyle.push(j + ':' + vj);
+					if (vj && oldStyle[j] != vj) diffStyle[j] = vj;
 				}
 				for (const [j, vj] of Object.entries(oldStyle)) {
-					if (vj && !newStyle[j]) diffStyle.push(j + ':""');
+					if (vj && !newStyle[j]) diffStyle[j] = '';
 				}
-				obj[name] = diffStyle.join(';');
+				obj[name] = diffStyle;
 			} else {
 				obj[name] = val;
 			}
@@ -471,10 +474,6 @@ function mapOfClass(att) {
 	return map;
 }
 
-function applyDiffClass(a, b) {
-	return Object.keys(Object.assign(mapOfClass(a), mapOfClass(b))).join(' ');
-}
-
 function restoreDomAttrs(srcAtts, dom) {
 	if (!srcAtts || !dom) return;
 	// attributes that are set by mutations
@@ -487,15 +486,17 @@ function restoreDomAttrs(srcAtts, dom) {
 		if (name == "contenteditable") continue;
 		const dstVal = dom.getAttribute(name);
 		if (name == "class") {
-			dom.setAttribute(name, applyDiffClass(srcVal, uiAtts[name]));
-		} else if (name == "style") {
-			dom.removeAttribute('style');
-			const srcStyle = mapOfStyle(srcVal);
-			const uiStyle = mapOfStyle(uiAtts[name]);
-			for (const [key, val] of Object.entries(Object.assign(srcStyle, uiStyle))) {
-				// css variables cannot be set by Object.assign
-				dom.style.setProperty(key, val);
+			const list = [];
+			for (const [k, v] of Object.entries(Object.assign(mapOfClass(srcVal), uiAtts[name]))) {
+				if (v) list.push(k);
 			}
+			dom.setAttribute(name, list.join(' '));
+		} else if (name == "style") {
+			const srcStyle = mapOfStyle(srcVal);
+			const diffStyle = uiAtts[name];
+			const style = Object.entries(Object.assign(srcStyle, diffStyle))
+				.map(([k, v]) => `${k}:${v}`).join(';');
+			dom.setAttribute('style', style);
 		} else if (srcVal != dstVal) {
 			dom.setAttribute(name, srcVal);
 		}
