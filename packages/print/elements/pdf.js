@@ -239,6 +239,7 @@ exports.sheet = {
 					properties: {
 						left: {
 							title: 'Left',
+							description: 'Bypass Left',
 							type: 'boolean',
 							default: false
 						},
@@ -249,6 +250,7 @@ exports.sheet = {
 						},
 						top: {
 							title: 'Top',
+							description: 'Bypass Top',
 							type: 'boolean',
 							default: false
 						},

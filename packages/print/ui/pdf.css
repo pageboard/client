@@ -14,7 +14,7 @@
 	background-size: var(--size-w, auto) var(--size-h, auto);
 	background-repeat:var(--repeat);
 	background-position: var(--position, auto);
-	inset:var(--pdf-margin);
+	inset:var(--top, var(--pdf-margin)) var(--pdf-margin) var(--pdf-margin) var(--left, var(--pdf-margin));
 	z-index: -1;
 	pointer-events: none;
 	background-origin: content-box;
@@ -47,15 +47,19 @@ body[data-fold-v] .page-sheet-left {
 
 .layout.bleed-left {
 	margin-left: calc( -1 * var(--pdf-margin));
+	border-left: var(--pdf-margin) solid transparent;
 }
 .layout.bleed-right {
 	margin-right: calc( -1 * var(--pdf-margin));
+	border-right: var(--pdf-margin) solid transparent;
 }
 .layout.bleed-top {
 	margin-top: calc( -1 * var(--pdf-margin));
+	border-top: var(--pdf-margin) solid transparent;
 }
 .layout.bleed-bottom {
 	margin-bottom: calc( -1 * var(--pdf-margin));
+	border-bottom: var(--pdf-margin) solid transparent;
 }
 
 .page-sheet-count[data-separator]::before {
