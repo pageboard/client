@@ -6,8 +6,8 @@ class HTMLElementBarcode extends Page.Element {
 		bcid: null,
 		text: null,
 		dimension: null,
-		colorBack: null,
-		colorFront: null,
+		colorBack: '',
+		colorFront: '',
 		rotate: null,
 		scaleX: x => parseInt(x) || 0,
 		scaleY: x => parseInt(x) || 0
