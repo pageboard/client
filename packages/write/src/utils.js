@@ -2,6 +2,7 @@ import { default as PrettyBytes } from 'pretty-bytes';
 import { stableStringify } from 'fast-safe-stringify';
 import Duration from 'duration-relativetimeformat';
 import { default as Speak } from 'speakingurl';
+import { default as Cropper } from 'cropperjs';
 
 let duration;
 function durationFormat(to, from) {
@@ -19,5 +20,5 @@ function slug(str) {
 
 window.Pageboard ??= {};
 window.Pageboard.utils = {
-	slug, durationFormat, stableStringify, PrettyBytes
+	slug, durationFormat, stableStringify, PrettyBytes, Cropper
 };

@@ -37,7 +37,6 @@
   },
   "prepare": {
     "cropperjs/dist/cropper.css": "copy lib/",
-    "cropperjs/dist/cropper.js": "copy lib/",
     "@pageboard/pagecut/src/*.css": "copy lib/pagecut/",
     "./src/utils.js": "bundle lib/",
     "./src/editor.js": "bundle lib/pagecut/"

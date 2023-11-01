@@ -44,7 +44,7 @@ Pageboard.schemaHelpers.crop = class Crop {
 			<img src="${this.thumbnail(this.getField(this.urlProp))}" />
 		</div>`));
 
-		this.cropper = new window.Cropper(this.container.querySelector('img'), {
+		this.cropper = new Pageboard.utils.Cropper(this.container.querySelector('img'), {
 			viewMode: 1,
 			zoomOnTouch: false,
 			zoomOnWheel: false,
