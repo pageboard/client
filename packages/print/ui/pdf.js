@@ -77,6 +77,10 @@ Page.connect(new class {
 				--page-margin:${margin}px;
 				--page-fold-width: ${foldWidth}px;
 				--page-fold-smooth: ${foldWidth ? 2 : 0}mm;
+			}
+			@page {
+				size: ${actualWidth}mm ${actualHeight}mm;
+				margin: 0;
 			}`;
 		effectiveSheet.replaceSync(printSheet);
 		this.#stylesheet = effectiveSheet;
