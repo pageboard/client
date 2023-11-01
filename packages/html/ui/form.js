@@ -19,40 +19,6 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 	}
 
 	static patch(state) {
-		state.scope.$filters.form = (ctx, val, action, name) => {
-			const form = name
-				? document.querySelector(`form[name="${name}"]`)
-				: ctx.dest.node.closest('form');
-			if (!form) {
-				// eslint-disable-next-line no-console
-				console.warn("No parent form found");
-				return val;
-			}
-			if (action == "toggle") {
-				action = val ? "enable" : "disable";
-			}
-			const isQuery = ctx.expr.path[0] == "$query" && ctx.expr.path.length == 1;
-
-			state.finish(() => {
-				if (action == "enable") {
-					form.enable?.();
-				} else if (action == "disable") {
-					form.disable?.();
-				} else if (action == "fill") {
-					if (val == null) {
-						form.reset?.();
-					} else if (typeof val == "object") {
-						const vars = form.fill?.(this.linearizeValues(val), state.scope) ?? [];
-						if (isQuery) {
-							for (const name of vars) state.vars[name] = true;
-						}
-						form.save?.();
-					}
-				}
-			});
-
-			return val;
-		};
 		state.finish(() => {
 			let index = 0;
 			for (const node of document.querySelectorAll('label[for]')) {

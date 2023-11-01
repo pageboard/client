@@ -11,7 +11,8 @@ export const filters = {
 	schema: ['?', 'path?', 'path?', schemaFn],
 	content: ['block', 'str', contentFn],
 	children: ['block', 'str', childrenFn],
-	urltpl
+	urltpl,
+	form: ['?', 'enable|disable|fill', 'str?', formFn]
 };
 
 export const hooks = {
@@ -304,4 +305,41 @@ function childrenFn(ctx, block, name) {
 		if (item) out.push(item);
 	}
 	return out;
+}
+
+function formFn(ctx, val, action, name) {
+	const form = name
+		? document.querySelector(`form[name="${name}"]`)
+		: ctx.dest.node.closest('form');
+	if (!form) {
+		// eslint-disable-next-line no-console
+		console.warn("No parent form found");
+		return val;
+	}
+	if (action == "toggle") {
+		action = val ? "enable" : "disable";
+	}
+	const isQuery = ctx.expr.path[0] == "$query" && ctx.expr.path.length == 1;
+
+	Page.patch(async state => {
+		state.finish(() => {
+			if (action == "enable") {
+				form.enable?.();
+			} else if (action == "disable") {
+				form.disable?.();
+			} else if (action == "fill") {
+				if (val == null) {
+					form.reset?.();
+				} else if (typeof val == "object") {
+					const vars = form.fill?.(form.constructor.linearizeValues(val)) ?? [];
+					if (isQuery) {
+						for (const name of vars) state.vars[name] = true;
+					}
+					form.save?.();
+				}
+			}
+		});
+	});
+
+	return val;
 }
