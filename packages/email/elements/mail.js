@@ -42,10 +42,7 @@ exports.mail = {
 </html>`,
 	scripts: [
 		...exports.page.scripts,
-		'../lib/inlineresources.js',
-		'../lib/europa.js',
-		'../lib/juice.js',
-		'../ui/mail.js'
+		'../lib/mail.js'
 	],
 	stylesheets: [
 		'../lib/foundation-emails.css',

@@ -34,12 +34,10 @@
     "inlineresources": "^1.0.1",
     "juice": "^9.1.0",
     "postinstall": "^0.8.0",
-    "postinstall-bundle": "^0.9.1"
+    "postinstall-bundle": "^0.9.2"
   },
   "prepare": {
-    "inlineresources/dist/inlineresources.allinone.js": "copy lib/inlineresources.js",
     "foundation-emails": "copy lib/foundation-emails.css",
-    "europa": "copy lib/europa.js",
-    "juice/client.js": "bundle --name=window.Juice lib/juice.js"
+    "src/mail.js": "bundle lib/"
   }
 }

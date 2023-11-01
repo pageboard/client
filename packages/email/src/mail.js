@@ -1,4 +1,9 @@
-Page.constructor.serialize = function() {
+import Europa from 'europa';
+import { loadAndInlineCssLinks } from 'inlineresources';
+import { default as Juice } from 'juice';
+
+
+Page.constructor.serialize = function () {
 	const doc = document;
 	for (const node of doc.querySelectorAll('script')) {
 		node.remove();
@@ -38,15 +43,15 @@ Page.constructor.serialize = function() {
 		node.remove();
 	}
 
-	const md = (new window.Europa()).convert(doc.documentElement.cloneNode(true));
-	return window.inlineresources.loadAndInlineCssLinks(doc, {}).then(errors => {
+	const md = (new Europa()).convert(doc.documentElement.cloneNode(true));
+	return loadAndInlineCssLinks(doc, {}).then(errors => {
 		return {
 			mime: "application/json",
 			body: JSON.stringify({
 				errors,
 				title: doc.title,
 				text: md,
-				html: '<!DOCTYPE html>\n' + window.Juice(doc.documentElement.outerHTML),
+				html: '<!DOCTYPE html>\n' + Juice(doc.documentElement.outerHTML),
 				attachments
 			})
 		};
