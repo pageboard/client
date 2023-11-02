@@ -59,6 +59,7 @@ class HTMLElementSelect extends Page.Element {
 
 	handleClick(e, state) {
 		if (state.scope.$write) return;
+		if (this.disabled) return;
 		const node = e.target;
 		const item = node.closest('element-select .item');
 		if (item) {

@@ -5,6 +5,9 @@ element-select.ui.multiple.dropdown > .label {
 	vertical-align: baseline;
 	line-height: inherit;
 }
+element-select[disabled] {
+	pointer-events: none;
+}
 
 [contenteditable] .ui.dropdown[block-focused] > .menu {
 	overflow: visible;
