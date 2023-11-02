@@ -144,7 +144,7 @@ class ElementProperty {
 			parent: this.#select
 		};
 
-		const node = doc.dom(`<option value="">(custom name)</option>`);
+		const node = doc.dom(`<option value="">(manual)</option>`);
 		context.parent.appendChild(node);
 
 		const dateFormats = ["date", "time", "date-time"];
@@ -170,7 +170,7 @@ class ElementProperty {
 				context.level++;
 				context.key = key;
 			} else {
-				const name = parts.slice(1).join('.');
+				const name = key;
 				const node = doc.dom(`<option value="${name}">${prop.title}</option>`);
 				context.parent.appendChild(node);
 				node.disabled = Boolean(
