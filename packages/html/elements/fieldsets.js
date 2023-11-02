@@ -5,31 +5,38 @@ exports.fieldset = {
 	group: 'block',
 	context: 'form//',
 	properties: {
-		name: {
-			title: 'Show if input[name]',
-			type: 'string',
-			format: 'singleline',
-			nullable: true,
-			$helper: 'form-element'
-		},
-		value: {
-			title: 'matches this value',
-			type: 'string',
-			format: 'singleline',
-			$filter: {
-				name: 'element-value',
-				using: 'name'
-			}
-		},
 		plain: {
 			title: 'Plain',
 			description: 'Without legend or borders',
 			type: 'boolean',
 			default: false
+		},
+		name: {
+			title: 'When input named',
+			type: 'string',
+			format: 'singleline',
+			nullable: true,
+			$helper: 'form-element'
+		},
+		op: {
+			title: 'Condition',
+			anyOf: [{
+				const: 'eq',
+				title: 'is equal to'
+			}, {
+				const: 'neq',
+				title: 'is not equal to'
+			}],
+			default: 'eq'
+		},
+		value: {
+			title: 'Value',
+			type: 'string',
+			format: 'singleline'
 		}
 	},
 	contents: "fieldset_legend block+",
-	html: '<fieldset class="[plain]" data-name="[name]" data-value="[value]" is="element-fieldset"></fieldset>',
+	html: '<fieldset class="[plain]" data-name="[name]" data-op="[op]" data-value="[value]" is="element-fieldset"></fieldset>',
 	scripts: ["../ui/fieldset.js"],
 	stylesheets: ['../ui/fieldset.css']
 };
