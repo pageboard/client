@@ -233,16 +233,18 @@ body[data-mode="read"] #pageboard-read > iframe {
 	width: 50%;
 }
 
-#form .inline.fields .field > .radio,
-#form .inline.fields .field > .toggle {
+#form .inline.fields > .field > .radio,
+#form .inline.fields > .field > .toggle {
 	margin: 0 0.2em;
 	display: block;
-	text-align: left;
 	font-weight: normal;
 }
-#form .inline.fields .inline.field > .radio {
+#form .inline.fields > .inline.field > .radio {
 	display:inline-block;
 	font-weight: normal;
+}
+#form .inline.fields.rtl > .inline.field {
+	direction:rtl;
 }
 
 #form .flex.field {
@@ -380,8 +382,15 @@ body[data-mode="read"] #pageboard-read > iframe {
 #form input[type="text"] {
 	padding: 0.3em;
 	line-height: 1.3em;
-	width: 100%;
 }
+#form .field > input[type="text"],
+#form .short.field > select + input[type="text"]{
+	width:100%;
+}
+#form .short.field > input[type="text"] {
+	width: 70%;
+}
+
 #form input[type="number"] {
 	width: 30%;
 }

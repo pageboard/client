@@ -16,6 +16,7 @@ label.checkbox > input + *::before {
 	height: 1em;
 	border: 1px solid currentcolor;
 	margin-right: 0.3em;
+	margin-left:0.3em;
 	background-repeat:no-repeat;
 	background-position: center;
 	position: relative;
@@ -81,6 +82,7 @@ label.checkbox.toggle > input + *::before {
 	border-radius:1em;
 	margin-top: 0.15em;
 	transition: 0.4s;
+	margin-left: 0;
 }
 
 label.inverted.checkbox.toggle > input + *::before {

@@ -516,14 +516,14 @@ Semafor.types.hidden = function (key, schema, node, inst) {
 
 Semafor.types.string = function (key, schema, node, inst) {
 	const multiline = !schema.pattern && !schema.format;
-	const short = schema.maxLength != null && schema.maxLength <= 10;
+	const short = schema.maxLength != null && schema.maxLength <= 10 || schema.format == "singleline";
 	if (multiline && !short) {
 		return node.appendChild(node.dom(`<div class="field">
 			<label>${schema.title || key}</label>
 			<textarea name="${key}"	title="${schema.description || ''}" placeholder="${schema.placeholder || schema.default || ''}"></textarea>
 		</div>`));
 	} else if (short) {
-		return node.appendChild(node.dom(`<div class="inline field">
+		return node.appendChild(node.dom(`<div class="short inline field">
 			<label>${schema.title || key}</label>
 			<input type="text" name="${key}"
 				placeholder="${schema.placeholder || schema.default || ''}"
@@ -615,7 +615,7 @@ Semafor.types.oneOf = function (key, schema, node, inst) {
 		node.appendChild(field);
 		return field;
 	} else if (listOf.length <= 4) {
-		const field = node.dom(`<div class="inline fields">
+		const field = node.dom(`<div class="inline fields rtl">
 			<label for="${key}">${schema.title || key}<small>${schema.description || ''}</small></label>
 			<div class="inline field">
 				${listOf.map(item => Semafor.getRadioOption(item, key)).join('\n')}
