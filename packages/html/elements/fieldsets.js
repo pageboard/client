@@ -49,11 +49,11 @@ exports.fieldset_legend = {
 
 exports.fieldset_list = {
 	title: 'Field List',
+	priority: 2, // after template
 	menu: "form",
 	icon: '<i class="icons"><i class="folder outline icon"></i><i class="corner add icon"></i></i>',
 	group: 'block template',
 	context: 'form//',
-	priority: 0,
 	properties: {
 		min: {
 			title: 'Min items',
