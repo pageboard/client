@@ -25,29 +25,31 @@ if (polyfills.length) {
 	if (!document.hidden) loadScript(url.pathname + url.search);
 }
 
+const PageProto = Page.constructor.prototype;
+
 for (const key in Class) {
-	Object.defineProperty(Page.constructor.prototype, key, {
+	Object.defineProperty(PageProto, key, {
 		value: Class[key]
 	});
 }
 
-Page.constructor.prototype.dispatch = function (target, name) {
+PageProto.dispatch = function (target, name) {
 	target.dispatchEvent(new CustomEvent(name, {
 		bubbles: true,
 		cancelable: true
 	}));
 };
 
-Page.constructor.prototype.reveal = function (node) {
+PageProto.reveal = function (node) {
 	const p = node.reveal(this)?.catch(() => {});
 	if (!p) return;
 	this.scope.reveals ??= Promise.resolve();
 	this.scope.reveals = this.scope.reveals.then(() => p);
 };
 
-Page.constructor.prototype.fetch = fetchHelper;
+PageProto.fetch = fetchHelper;
 
-Page.constructor.prototype.debounce = function (fn, to) {
+PageProto.debounce = function (fn, to) {
 	const db = debounce((...args) => {
 		fn(...args);
 	}, to);
