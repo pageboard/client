@@ -1,9 +1,6 @@
 import Europa from 'europa';
-import { loadAndInlineCssLinks } from 'inlineresources';
-import { default as Juice } from 'juice';
 
-
-Page.constructor.serialize = function () {
+Page.constructor.serialize = function (state, stylesheet) {
 	const doc = document;
 	for (const node of doc.querySelectorAll('script')) {
 		node.remove();
@@ -44,16 +41,13 @@ Page.constructor.serialize = function () {
 	}
 
 	const md = (new Europa()).convert(doc.documentElement.cloneNode(true));
-	return loadAndInlineCssLinks(doc, {}).then(errors => {
-		return {
-			mime: "application/json",
-			body: JSON.stringify({
-				errors,
-				title: doc.title,
-				text: md,
-				html: '<!DOCTYPE html>\n' + Juice(doc.documentElement.outerHTML),
-				attachments
-			})
-		};
-	});
+	return {
+		mime: "application/json",
+		body: JSON.stringify({
+			title: doc.title,
+			text: md,
+			html: '<!DOCTYPE html>\n' + doc.documentElement.outerHTML,
+			attachments
+		})
+	};
 };
