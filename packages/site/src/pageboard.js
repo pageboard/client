@@ -33,6 +33,14 @@ for (const key in Class) {
 	});
 }
 
+let Element;
+Object.defineProperty(PageProto, 'Element', {
+	get() {
+		Element ??= Class.create(HTMLElement);
+		return Element;
+	}
+});
+
 PageProto.dispatch = function (target, name) {
 	target.dispatchEvent(new CustomEvent(name, {
 		bubbles: true,

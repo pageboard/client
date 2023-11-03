@@ -67,8 +67,6 @@ export function create(Superclass) {
 	};
 }
 
-export const Element = create(HTMLElement);
-
 export function define(name, cla, is) {
 	const defined = window.customElements.get(name);
 	if (defined) return defined;
