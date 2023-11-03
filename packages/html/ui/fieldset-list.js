@@ -6,12 +6,14 @@ class HTMLElementFieldsetList extends Page.Element {
 
 	fill(values) {
 		if (this.isContentEditable || this.prefix == null) return;
+		const vars = [];
 		for (const [key, val] of Object.entries(values)) {
 			const parts = this.#prefixed(key);
 			if (!parts) continue;
 			if (parts.length == 1 && Number.isInteger(Number(parts[0])) && Array.isArray(val)) {
 				console.warn("fielset-list should receive flat lists", key, val);
 			} else if (parts.length == 0 && Array.isArray(val)) {
+				vars.push(key);
 				for (let i = 0; i < val.length; i++) {
 					values[key + '.' + i] = val[i];
 				}
@@ -21,6 +23,7 @@ class HTMLElementFieldsetList extends Page.Element {
 		this.#list = this.#listFromValues({ ...values });
 		if (this.#defaultList == null) this.save();
 		this.#resize();
+		return vars;
 	}
 
 	reset() {
