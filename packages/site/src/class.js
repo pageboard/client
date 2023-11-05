@@ -25,6 +25,7 @@ export function create(Superclass) {
 			if (this.build) Page.build(state => this.#options(state, true));
 			if (this.patch) Page.patch(state => this.#options(state, true));
 			if (this.setup) Page.setup(state => this.#options(state));
+			if (this.paint) Page.paint(state => this.#options(state));
 			if (this.reveal) {
 				Page.paint(state => this.#paint(state));
 				Page.setup(state => this.#setup(state));
