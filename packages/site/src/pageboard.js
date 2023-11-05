@@ -12,18 +12,27 @@ window.Deferred = Deferred;
 
 const Pageboard = window.Pageboard ??= {};
 
-const polyfills = [];
-Object.entries(Pageboard.polyfills ?? {}).map(([name, ok]) => {
-	if (!ok) polyfills.push(name);
-});
-if (polyfills.length) {
-	const url = new URL(
-		`/.files/polyfill.js`,
-		document.location
-	);
-	url.searchParams.set('features', polyfills.join('+'));
-	if (!document.hidden) loadScript(url.pathname + url.search);
-}
+(async () => {
+	const polyfills = [];
+	Object.entries(Pageboard.polyfills ?? {}).map(([name, ok]) => {
+		if (!ok) polyfills.push(name);
+	});
+	if (polyfills.length) {
+		const url = new URL(
+			`/.files/polyfill.js`,
+			document.location
+		);
+		url.searchParams.set('features', polyfills.join('+'));
+		await loadScript(url.pathname + url.search, document, -1000);
+	}
+	if (document.documentElement.dataset.prerender == "true") {
+		for (const node of document.head.querySelectorAll('script[data-src]')) {
+			node.setAttribute('src', node.dataset.src);
+			node.removeAttribute('data-src');
+		}
+	}
+})();
+
 
 const PageProto = Page.constructor.prototype;
 
