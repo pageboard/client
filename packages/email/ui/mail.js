@@ -1,9 +1,6 @@
 
 Page.constructor.serialize = function (state) {
 	const doc = document;
-	for (const node of doc.querySelectorAll('script')) {
-		node.remove();
-	}
 	for (const node of doc.querySelectorAll('element-template')) {
 		const template = node.firstElementChild;
 		const view = node.lastElementChild;
@@ -30,6 +27,17 @@ Page.constructor.serialize = function (state) {
 		node.parentNode.replaceChild(img, node);
 	}
 
+	if (!state.pathname.endsWith('.mail')) {
+		// previsualize email
+		return {
+			mime: 'text/html',
+			body: '<!DOCTYPE html>\n' + doc.documentElement.outerHTML
+		};
+	}
+	for (const node of doc.querySelectorAll('script')) {
+		node.remove();
+	}
+
 	const attachments = [];
 	for (const node of doc.querySelectorAll('a[download]')) {
 		attachments.push({
@@ -38,23 +46,14 @@ Page.constructor.serialize = function (state) {
 		});
 		node.remove();
 	}
-	if (state.query.dev) {
-		state.vars.dev = true;
-		console.info(attachments);
-		return {
-			mime: 'text/html',
-			body: '<!DOCTYPE html>\n' + doc.documentElement.outerHTML
-		};
-	} else {
-		const md = (new Pageboard.Europa()).convert(doc.documentElement.cloneNode(true));
-		return {
-			mime: "application/json",
-			body: JSON.stringify({
-				title: doc.title,
-				text: md,
-				html: '<!DOCTYPE html>\n' + doc.documentElement.outerHTML,
-				attachments
-			})
-		};
-	}
+	const md = (new Pageboard.Europa()).convert(doc.documentElement.cloneNode(true));
+	return {
+		mime: "application/json",
+		body: JSON.stringify({
+			title: doc.title,
+			text: md,
+			html: '<!DOCTYPE html>\n' + doc.documentElement.outerHTML,
+			attachments
+		})
+	};
 };
