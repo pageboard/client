@@ -51,6 +51,11 @@ exports.pdf = {
 					type: 'number',
 					default: 10
 				},
+				trim: {
+					title: 'Trim',
+					description: 'Margins are extra space for bleeding',
+					type: 'boolean'
+				},
 				fold: {
 					title: 'Fold',
 					type: 'object',
