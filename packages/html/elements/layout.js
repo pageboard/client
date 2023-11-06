@@ -7,7 +7,7 @@ exports.layout = {
 	properties: {
 		horizontal: {
 			title: 'Horizontal',
-			description: 'Position horizontally',
+			description: 'Inline disposition',
 			default: "left",
 			anyOf: [{
 				const: "left",
@@ -28,7 +28,7 @@ exports.layout = {
 		},
 		vertical: {
 			title: 'Vertical',
-			description: 'Position vertically',
+			description: 'Block disposition',
 			default: "top",
 			anyOf: [{
 				const: "top",
