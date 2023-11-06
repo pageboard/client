@@ -27,12 +27,12 @@ class HTMLElementFieldsetList extends Page.Element {
 	}
 
 	reset() {
-		this.#list = this.#defaultList.slice();
+		this.#list = this.#defaultList?.slice();
 		this.#refresh();
 	}
 
 	save() {
-		this.#defaultList = this.#list.slice();
+		this.#defaultList = this.#list?.slice();
 	}
 
 	#modelize(tpl) {
