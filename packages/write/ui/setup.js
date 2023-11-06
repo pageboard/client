@@ -106,40 +106,6 @@ function update(prevState) {
 	editor.updatePage();
 }
 
-function prepareRootElement(rootEl, view, elements) {
-	const groups = rootEl.groups = new Set();
-	for (const n of rootEl.bundle) {
-		const el = elements[n] = view.element(n);
-		if (el.group) for (const group of el.group.split(/\s+/)) {
-			groups.add(group);
-		}
-	}
-	return rootEl;
-}
-
-function prepareElements(root, view) {
-	const standalones = [];
-	const bundles = new Set();
-	for (const el of Object.values(view.elements)) {
-		if (el.standalone && !el.virtual) standalones.push(el);
-		if (el.bundle) bundles.add(el.name);
-	}
-
-	const elements = {};
-	const rootEl = view.element(root);
-	prepareRootElement(rootEl, view, elements);
-
-	for (const bundle of bundles) {
-		const el = view.elements[bundle];
-		if (el.group == "page") continue;
-		if (el.group?.split(/\s+/).some(group => rootEl.groups.has(group))) {
-			prepareRootElement(view.element(el.name), view, elements);
-		}
-	}
-	Pageboard.standalones = standalones;
-	return elements;
-}
-
 Pageboard.Editor = function Editor(win, state) {
 	const item = state.data.response?.item;
 	if (!item || item.type == "error") {
@@ -152,8 +118,6 @@ Pageboard.Editor = function Editor(win, state) {
 		editor.close();
 	}
 	const viewer = state.scope.$view;
-	prepareElements(item.type, viewer);
-
 	const doc = win.document;
 	const body = doc.body;
 	win.Pagecut.Editor.prototype.update = update;

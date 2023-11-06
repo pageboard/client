@@ -4,8 +4,8 @@ Pageboard.schemaFilters.element = function ElementFilter(key, opts, schema) {
 		const: null,
 		title: 'none'
 	}];
-	for (const el of Pageboard.standalones) {
-		schema.anyOf.push({
+	for (const el of Object.values(Pageboard.editor.elements)) {
+		if (el.standalone && !el.virtual) schema.anyOf.push({
 			const: el.name,
 			title: el.title
 		});

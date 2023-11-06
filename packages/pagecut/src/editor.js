@@ -82,7 +82,7 @@ class Editor extends View.EditorView {
 		const nodeViews = {};
 		const elemsList = Object.keys(Editor.defaults.elements)
 			.concat(elements[topNode].bundle)
-			.map(name => elements[name])
+			.map(name => viewer.element(name))
 			.sort((a, b) => {
 				return (b.priority || 0) - (a.priority || 0);
 			});

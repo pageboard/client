@@ -93,7 +93,7 @@ class ElementProperty {
 
 		if (Array.isArray(cand)) {
 			const list = cand.map(type => {
-				const el = Pageboard.editor.element(type) ?? Pageboard.standalones.find(item => type == item.name);
+				const el = Pageboard.editor.element(type);
 				if (!el) throw new Error(
 					`Unknown type in parent form ${block.type}: ${type}`
 				);
@@ -112,7 +112,7 @@ class ElementProperty {
 				}
 			};
 		} else {
-			el = Pageboard.editor.element(cand) ?? Pageboard.standalones.find(item => cand == item.name);
+			el = Pageboard.editor.element(cand);
 		}
 		if (!el) throw new Error(
 			`Unknown type in parent form ${block.type}: ${cand}`

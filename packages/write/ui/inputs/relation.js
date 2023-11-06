@@ -17,7 +17,7 @@ Pageboard.schemaFilters.relation = class RelationFilter {
 			path.splice(-1, 1, 'type');
 			type = path.reduce((obj, name) => obj?.[name], block.data);
 			if (!type) return;
-			el = Pageboard.editor.element(type) ?? Pageboard.standalones.find(item => type == item.name);
+			el = Pageboard.editor.element(type);
 		}
 		return Object.assign({}, schema, el?.parents ?? { type: "null" });
 	}

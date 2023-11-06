@@ -9,7 +9,7 @@ Pageboard.schemaFilters.action = function ActionFilter(key, opts, schema) {
 
 		if (!service || service.$action != opts.action) continue;
 		const { type } = parameters;
-		const typeSchema = Pageboard.standalones.find(el => el.name == type);
+		const typeSchema = Pageboard.editor.element(type);
 		schema.anyOf.push({
 			const: block.id,
 			title: service.title + (typeSchema ? `: ${typeSchema.title}` : '')
