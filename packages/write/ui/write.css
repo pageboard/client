@@ -226,11 +226,11 @@ body[data-mode="read"] #pageboard-read > iframe {
 }
 
 #form .inline.fields > label {
-	width: 50%;
+	flex: 0 0 24%;
 	margin-right: 0;
 }
 #form .inline.fields > label + .field {
-	width: 50%;
+	max-width: 77%;
 }
 
 #form .inline.fields > .field > .radio,
@@ -245,6 +245,7 @@ body[data-mode="read"] #pageboard-read > iframe {
 }
 #form .inline.fields.rtl > .inline.field {
 	direction:rtl;
+	flex: 1 0;
 }
 
 #form .flex.field {
@@ -271,6 +272,7 @@ body[data-mode="read"] #pageboard-read > iframe {
 }
 #form .table.compact td input {
 	border: 0;
+	padding: 0.5em;
 }
 #form .field > select {
 	font-size:0.9rem;
@@ -289,8 +291,9 @@ body[data-mode="read"] #pageboard-read > iframe {
 	margin-top:1em;
 }
 .ui.form .field > textarea {
-	height:6em;
-	min-height:6em;
+	height: 3em;
+	min-height: 3em;
+	padding: 0.5em;
 }
 
 .ui.toggle.checkbox {
@@ -388,7 +391,8 @@ body[data-mode="read"] #pageboard-read > iframe {
 	width:100%;
 }
 #form .short.field > input[type="text"] {
-	width: 70%;
+	max-width: 70%;
+	width: auto;
 }
 
 #form input[type="number"] {

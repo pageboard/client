@@ -8,6 +8,7 @@ Pageboard.schemaHelpers.datalist = class Datalist {
 	async init(block) {
 		this.input.hidden = true;
 		const doc = this.input.ownerDocument;
+		this.field.classList.add('inline');
 		this.select = doc.dom`<select class="ui compact dropdown"></select>`;
 		this.field.appendChild(this.select);
 
