@@ -275,7 +275,7 @@ body[data-mode="read"] #pageboard-read > iframe {
 #form .field > select {
 	font-size:0.9rem;
 	padding:0.4em;
-	width: 30%;
+	max-width:60%;
 }
 #form .ui.dropdown .menu > .item {
 	font-size:0.9rem;
