@@ -10,7 +10,7 @@ const loader = new class {
 		this.update(state.stage);
 	}
 	build(state) {
-		document.body.hidden = true;
+		if (!document.hidden) document.body.hidden = true;
 	}
 	patch(state) {
 		this.update(state);
