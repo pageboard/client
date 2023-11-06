@@ -1,6 +1,3 @@
-import { qrcode, ean13, upca, isbn } from 'bwip-js';
-const bwip = { qrcode, ean13, upca, isbn };
-
 class HTMLElementBarcode extends Page.Element {
 	static defaults = {
 		bcid: null,
@@ -33,7 +30,7 @@ class HTMLElementBarcode extends Page.Element {
 			barcolor: this.options.colorFront,
 			bordercolor: this.options.colorFront
 		};
-		const bwipFn = bwip[opts.bcid.replace(/-/g, '_')];
+		const bwipFn = Pageboard.Bwip[opts.bcid.replace(/-/g, '_')];
 		try {
 			bwipFn(canvas, opts);
 			img.src = canvas.toDataURL('image/png');

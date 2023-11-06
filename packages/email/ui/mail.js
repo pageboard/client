@@ -1,6 +1,5 @@
-import Europa from 'europa';
 
-Page.constructor.serialize = function (state, stylesheet) {
+Page.constructor.serialize = function (state) {
 	const doc = document;
 	for (const node of doc.querySelectorAll('script')) {
 		node.remove();
@@ -39,15 +38,23 @@ Page.constructor.serialize = function (state, stylesheet) {
 		});
 		node.remove();
 	}
-
-	const md = (new Europa()).convert(doc.documentElement.cloneNode(true));
-	return {
-		mime: "application/json",
-		body: JSON.stringify({
-			title: doc.title,
-			text: md,
-			html: '<!DOCTYPE html>\n' + doc.documentElement.outerHTML,
-			attachments
-		})
-	};
+	if (state.query.dev) {
+		state.vars.dev = true;
+		console.info(attachments);
+		return {
+			mime: 'text/html',
+			body: '<!DOCTYPE html>\n' + doc.documentElement.outerHTML
+		};
+	} else {
+		const md = (new Pageboard.Europa()).convert(doc.documentElement.cloneNode(true));
+		return {
+			mime: "application/json",
+			body: JSON.stringify({
+				title: doc.title,
+				text: md,
+				html: '<!DOCTYPE html>\n' + doc.documentElement.outerHTML,
+				attachments
+			})
+		};
+	}
 };

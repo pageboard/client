@@ -36,6 +36,6 @@
   },
   "prepare": {
     "foundation-emails": "copy lib/foundation-emails.css",
-    "src/mail.js": "bundle lib/"
+    "src/europa.js": "bundle lib/"
   }
 }
