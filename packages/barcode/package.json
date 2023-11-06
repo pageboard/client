@@ -19,7 +19,7 @@
   "homepage": "https://github.com/pageboard/client#readme",
   "devDependencies": {
     "postinstall": "^0.8.0",
-    "postinstall-bundle": "^0.9.2",
+    "postinstall-bundle": "^0.9.3",
     "bwip-js": "^4.1.2"
   },
   "prepare": {

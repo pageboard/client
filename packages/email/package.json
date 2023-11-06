@@ -32,7 +32,7 @@
     "europa": "^6.0.0",
     "foundation-emails": "^2.4.0",
     "postinstall": "^0.8.0",
-    "postinstall-bundle": "^0.9.2"
+    "postinstall-bundle": "^0.9.3"
   },
   "prepare": {
     "foundation-emails": "copy lib/foundation-emails.css",
