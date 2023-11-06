@@ -38,7 +38,7 @@ class HTMLElementConsent extends Page.create(HTMLFormElement) {
 		}
 		state.scope.storage.set('consent', consent);
 		state.scope.$consent = consent;
-		state.runChain('consent');
+		state.copy().runChain('consent');
 	}
 	handleChange(e, state) {
 		this.handleSubmit(e, state);
@@ -58,10 +58,6 @@ class HTMLElementConsent extends Page.create(HTMLFormElement) {
 		return this.children.find(node => node.matches('.view'));
 	}
 }
-
-
-Page.define(`element-consent`, HTMLElementConsent, 'form');
-
 
 Page.constructor.prototype.consent = function (fn) {
 	const initial = this.scope.$consent === undefined;
@@ -90,12 +86,18 @@ Page.constructor.prototype.reconsent = function (fn) {
 	return asking;
 };
 
+Page.define(`element-consent`, HTMLElementConsent, 'form');
+
+
 Page.paint(state => {
 	state.finish(() => {
 		let run = true;
 		if (HTMLElementConsent.waiting) {
 			if (state.reconsent()) run = false;
 		}
-		if (run) state.runChain('consent');
+		if (run) {
+			// do not change current state stage
+			state.copy().runChain('consent');
+		}
 	});
 });
