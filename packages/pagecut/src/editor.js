@@ -80,9 +80,12 @@ class Editor extends View.EditorView {
 		};
 
 		const nodeViews = {};
-		const elemsList = Object.values(elements).sort((a, b) => {
-			return (b.priority || 0) - (a.priority || 0);
-		});
+		const elemsList = Object.keys(Editor.defaults.elements)
+			.concat(elements[topNode].bundle)
+			.map(name => elements[name])
+			.sort((a, b) => {
+				return (b.priority || 0) - (a.priority || 0);
+			});
 		for (const el of elemsList) {
 			DefineSpecs(viewer, el, spec, nodeViews);
 		}
