@@ -79,6 +79,9 @@ exports.pdf = {
 						const: 'ebook',
 						title: 'Ebook'
 					}, {
+						const: 'prepress',
+						title: 'Prepress'
+					}, {
 						const: 'printer',
 						title: 'Printer'
 					}]
