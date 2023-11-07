@@ -373,7 +373,8 @@ body[data-mode="read"] #pageboard-read > iframe {
 	position:relative;
 	max-width:none;
 }
-#form .inline.field > label > small {
+#form .inline.field > label > small,
+#form .long.field > label > small {
 	display: inline-block;
 	margin-left:0.3em;
 	position:relative;

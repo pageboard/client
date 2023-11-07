@@ -705,7 +705,7 @@ Semafor.types.object = function (key, schema, node, inst) {
 				fieldset.appendChild(node.dom(`<small>${schema.description}</small>`));
 			}
 		} else if (key) {
-			fieldset = node.dom(`<div class="field"></div>`);
+			fieldset = node.dom(`<div class="long field"></div>`);
 			node.appendChild(fieldset);
 			fieldset.appendChild(node.dom(`
 				<label>${schema.title || key}<small>${schema.description || ''}</small></label>
