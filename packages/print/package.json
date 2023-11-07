@@ -1,6 +1,6 @@
 {
   "name": "@pageboard/print",
-  "version": "0.14.10",
+  "version": "0.14.11",
   "description": "",
   "main": "index.js",
   "scripts": {
