@@ -89,7 +89,6 @@ exports.blog = {
 /*
 exports.page.extensions.rss = {
 	bundle: true,
-	mime: 'application/xml'
 
 
 };

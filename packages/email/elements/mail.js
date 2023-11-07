@@ -49,8 +49,7 @@ exports.mail = {
 		'../lib/foundation-emails.css',
 		'../ui/mail.css'
 	],
-	csp: { ...exports.page.csp },
-	mime: 'application/json'
+	csp: { ...exports.page.csp }
 };
 
 exports.mail_body = {

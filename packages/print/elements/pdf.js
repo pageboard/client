@@ -21,7 +21,6 @@ exports.pdf = {
 		...exports.page.csp,
 		style: ["'self'", "'unsafe-inline'", 'https:']
 	},
-	mime: "application/pdf",
 	properties: {
 		...exports.page.properties,
 		url: {

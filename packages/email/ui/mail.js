@@ -1,5 +1,5 @@
 
-Page.constructor.serialize = function (state) {
+Page.constructor.serialize = function (state, type) {
 	const doc = document;
 	for (const node of doc.querySelectorAll('element-template')) {
 		const template = node.firstElementChild;
@@ -27,7 +27,7 @@ Page.constructor.serialize = function (state) {
 		node.parentNode.replaceChild(img, node);
 	}
 
-	if (!state.pathname.endsWith('.mail')) {
+	if (type == "html") {
 		// previsualize email
 		return {
 			mime: 'text/html',
