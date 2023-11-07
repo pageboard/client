@@ -4,7 +4,8 @@ import * as equivs from './equivs';
 Page.connect(new class {
 	#adv = false;
 
-	async patch(state) {
+	patch(state) {
+		state.scope.reveals = [];
 		if (state.scope.$write) return;
 		const metas = equivs.read();
 		if (metas.Status) {

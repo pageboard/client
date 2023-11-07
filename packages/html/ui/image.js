@@ -156,8 +156,8 @@ const HTMLElementImageConstructor = Superclass => class extends Superclass {
 		this.#defer.resolve();
 		this.classList.remove('loading');
 	}
-	captureError() {
-		this.#defer.reject();
+	captureError(e) {
+		this.#defer.reject(new Error(this.getAttribute('src')));
 		this.classList.remove('loading');
 		this.classList.add('error');
 		this.placeholder(true);
@@ -200,8 +200,8 @@ class HTMLElementInlineImage extends HTMLElementImageConstructor(Page.create(HTM
 	captureLoad() {
 		super.captureLoad();
 	}
-	captureError() {
-		super.captureError();
+	captureError(e) {
+		super.captureError(e);
 	}
 }
 

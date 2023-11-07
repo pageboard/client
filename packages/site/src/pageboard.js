@@ -58,10 +58,8 @@ PageProto.dispatch = function (target, name) {
 };
 
 PageProto.reveal = function (node) {
-	const p = node.reveal(this)?.catch(() => {});
-	if (!p) return;
-	this.scope.reveals ??= Promise.resolve();
-	this.scope.reveals = this.scope.reveals.then(() => p);
+	const p = node.reveal(this);
+	if (p) this.scope.reveals.push(p);
 };
 
 PageProto.fetch = fetchHelper;
