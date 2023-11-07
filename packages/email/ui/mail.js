@@ -21,9 +21,10 @@ Page.constructor.serialize = function (state, type) {
 	absolut('a', 'href');
 	for (const node of doc.querySelectorAll('img[is]')) {
 		const img = doc.createElement('img');
-		img.srcset = node.srcset;
-		img.src = node.src;
-		img.alt = node.alt;
+		if (node.srcset) img.srcset = node.srcset;
+		if (node.src) img.src = node.src;
+		if (node.alt) img.alt = node.alt;
+		img.setAttribute('style', node.getAttribute('style'));
 		node.parentNode.replaceChild(img, node);
 	}
 
