@@ -404,7 +404,7 @@ class Semafor {
 				ref = rel.reduce((schema, key) => schema[key], ref);
 				if (ref) Object.assign(schema, ref);
 				else console.error("$ref not found", $ref);
-			} else if ($ref?.startsWith('#/$def/')) {
+			} else if ($ref?.startsWith('#/definitions/')) {
 				delete schema.$ref;
 				const [name, ...rel] = $ref.slice(7).split('/');
 				let ref = Pageboard.elements[name];
