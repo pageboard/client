@@ -44,6 +44,19 @@ exports.segment = {
 			type: 'boolean',
 			default: false
 		},
+		size: {
+			title: 'Size',
+			anyOf: [{
+				const: 'mini',
+				title: 'Mini'
+			}, {
+				type: 'null',
+				title: 'Normal'
+			}, {
+				const: 'large',
+				title: 'Large'
+			}]
+		},
 		attached: {
 			title: 'Attached',
 			anyOf: [{
@@ -80,7 +93,7 @@ exports.segment = {
 	contents: "block+",
 	group: "block",
 	icon: '<b class="icon">Seg</b>',
-	html: '<div class="ui [raised] [disabled] [inverted] [padded] [compact] [circular] [basic] [attached|switch:both: |post: attached] [align|post: aligned] segment"></div>',
+	html: '<div class="ui [size] [raised] [disabled] [inverted] [padded] [compact] [circular] [basic] [attached|switch:both: |post: attached] [align|post: aligned] segment"></div>',
 	stylesheets: [
 		'../lib/components/segment.css'
 	]
