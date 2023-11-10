@@ -2,12 +2,11 @@ class ElementProperty {
 	#field;
 	#input;
 	#select;
-	#block;
 	#prefix;
 
 	constructor(input, opts, props) {
 		this.#field = input.closest('.field');
-		this.#field.classList.add('inline');
+		this.#field.classList.add('inline', 'datalist');
 		this.#input = input;
 	}
 
@@ -64,18 +63,17 @@ class ElementProperty {
 	}
 
 	init(block) {
-		this.#block = block;
 		const dom = Pageboard.editor.blocks.domQuery(block.id);
 		if (!dom) throw new Error(
 			`Cannot create input, DOM node not found for block ${block.id}`
 		);
+		this.dom = dom;
 		this.#prefix = dom.closest('[block-type="fieldset_list"]')?.prefix ?? [];
 		const form = dom.closest('form');
 		const formId = form.getAttribute('block-id');
 		const formBlock = Pageboard.editor.blocks.get(formId);
 		if (!formBlock) throw new Error("Cannot find form block for " + formId);
 		this.#buildSelector(formBlock);
-		this.update();
 	}
 
 	static buildSchema(block) {
@@ -137,15 +135,15 @@ class ElementProperty {
 		const paths = this.pathsProperties(formBlock, content);
 		if (!paths) return;
 		const doc = this.#input.ownerDocument;
-		this.#select = doc.dom(`<select class="ui compact dropdown"></select>`);
+
+		this.#select = doc.dom(`<select></select>`);
 		const context = {
 			level: 0,
 			key: null,
 			parent: this.#select
 		};
 
-		const node = doc.dom(`<option value="">(manual)</option>`);
-		context.parent.appendChild(node);
+		context.parent.appendChild(doc.dom(`<option hidden value=""></option>`));
 
 		const dateFormats = ["date", "time", "date-time"];
 		for (const [key, prop] of Object.entries(paths)) {
@@ -173,68 +171,46 @@ class ElementProperty {
 				const name = key;
 				const node = doc.dom(`<option value="${name}">${prop.title}</option>`);
 				context.parent.appendChild(node);
-				node.disabled = Boolean(
+				if (!this.existing) node.disabled = Boolean(
 					content.querySelector(`[name="${name}"]`)
 				);
 			}
 		}
-		this.#field.insertBefore(this.#select, this.#input);
+		if (Object.keys(paths).length == 0) {
+			context.parent.appendChild(doc.dom(`<option disabled>No inputs</option>`));
+		}
+		this.#field.insertBefore(this.#select, this.#input.nextSibling);
 		this.#select.addEventListener('change', this);
 	}
 
 	handleEvent(e) {
-		if (e.type != "change") return;
-		if (e.target == this.#select) {
-			const cur = this.#select.value;
-			this.#updateOptions(cur);
-			this.#input.value = cur;
-			// not sure it's useful to trigger something here
-			Pageboard.trigger(this.#input, 'change');
-		}
-	}
-
-	#updateOptions(cur) {
-		let found = false;
-		for (const opt of this.#select.options) {
-			opt.disabled = opt.value == cur;
-			if (opt.disabled) found = true;
-		}
-		if (!found && cur != "") {
-			this.#updateOptions("");
-			return false;
-		}
-		if (cur === "") this.#input.hidden = false;
-		else this.#input.hidden = true;
-		return found;
-	}
-
-	update(block) {
-		if (!block) block = this.#block;
-		else this.#block = block;
-		const cur = block.data.name || "";
-		if (this.#select) {
-			if (this.#updateOptions(cur)) {
-				this.#select.value = cur;
-			} else {
-				this.#select.value = "";
-			}
-		}
+		this.#input.value = this.#select.value;
+		this.#select.value = "";
+		this.#input.focus();
+		Pageboard.trigger(this.#input, 'change');
 	}
 
 	destroy() {
-		if (this.#select) this.#select.remove();
-		this.#input.hidden = false;
+		this.#select?.removeEventListener('change', this);
+		this.#select?.remove();
 	}
 }
 
 Pageboard.schemaHelpers['element-property'] = ElementProperty;
 
 Pageboard.schemaHelpers['form-element'] = class FormElement extends ElementProperty {
+	constructor(...args) {
+		super(...args);
+		this.existing = true;
+	}
 	pathsProperties(block, content) {
-		const all = content.querySelectorAll("[name]");
+		const dom = Pageboard.editor.blocks.domQuery(block.id);
+		if (!dom) throw new Error(
+			`DOM node not found for ${block.type}: ${block.id}`
+		);
 		const obj = {};
-		for (const node of all) {
-			if (!node.name || node.closest('fieldset[data-name]')) continue;
+		for (const node of content.querySelectorAll("[name]")) {
+			if (!node.name || this.dom != node && this.dom?.contains(node)) continue;
 			obj[node.name] = {
 				title: node.name
 			};

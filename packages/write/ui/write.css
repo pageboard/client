@@ -274,11 +274,7 @@ body[data-mode="read"] #pageboard-read > iframe {
 	border: 0;
 	padding: 0.5em;
 }
-#form .field > select {
-	font-size:0.9rem;
-	padding:0.4em;
-	max-width:60%;
-}
+
 #form .ui.dropdown .menu > .item {
 	font-size:0.9rem;
 }
@@ -387,15 +383,30 @@ body[data-mode="read"] #pageboard-read > iframe {
 	padding: 0.3em;
 	line-height: 1.3em;
 }
-#form .field > input[type="text"],
-#form .short.field > select + input[type="text"]{
-	width:100%;
+#form .field > input[type="text"] {
+	width: 100%;
 }
 #form .short.field > input[type="text"] {
 	max-width: 70%;
 	width: auto;
 }
-
+#form .field > select {
+	font-size:0.9rem;
+	padding:0.4em;
+	max-width:60%;
+}
+#form .field.datalist > select {
+	width:1.5rem;
+	align-self: normal;
+	position: absolute;
+	right: 0;
+	border: none;
+	background-color: transparent;
+	margin: 2px;
+}
+#form .field.datalist > input[type="text"] {
+	max-width: calc(70% - 1.5rem);
+}
 #form input[type="number"] {
 	width: 30%;
 }
