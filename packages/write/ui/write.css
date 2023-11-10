@@ -288,7 +288,7 @@ body[data-mode="read"] #pageboard-read > iframe {
 }
 .ui.form .field > textarea {
 	height: 3em;
-	min-height: 3em;
+	min-height: 1em;
 	padding: 0.5em;
 }
 
