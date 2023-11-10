@@ -13,8 +13,10 @@ class HTMLElementTextArea extends Page.create(HTMLTextAreaElement) {
 			delete this.style.height;
 			return;
 		}
-		this.style.height = 0;
-		this.style.height = `calc(${this.scrollHeight}px + 1em)`;
+		requestAnimationFrame(() => {
+			this.style.height = 0;
+			this.style.height = `calc(${this.scrollHeight}px + 1em)`;
+		});
 	}
 }
 
