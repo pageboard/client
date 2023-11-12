@@ -54,51 +54,54 @@ label.checkbox > input:disabled + *::before,
 label.checkbox > input:disabled + * {
 	opacity:0.5;
 }
-
-label.checkbox.toggle > input + * {
+label.checkbox.toggle > input {
+	appearance: none;
+	opacity:1;
+	width: 2em;
 	position: relative;
+	margin-right: 0.5em;
+}
+label.checkbox.toggle > input + *::before {
+	content:none;
+}
+label.checkbox.toggle > input::before {
+	content:'';
 	background-image: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2 1"><path d="M0.5,0.5 h1" stroke-linecap="round" stroke="%23CCC" /></svg>');
-	background-position-y: 0.15em;
 	background-repeat: no-repeat;
 	padding-left: 2.4em;
 	background-size: 2em;
-	display: inline-block;
 	line-height: 1.4;
+	background-position-y: center;
 }
 
-label.checkbox.toggle > input:checked + * {
+label.checkbox.toggle > input:checked::before {
 	background-image: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2 1"><path d="M0.5,0.5 h1" stroke-linecap="round" stroke="%234183C4" /></svg>');
 }
 
-label.checkbox.toggle > input + *::before {
-	position: absolute;
-	content: "";
-	height: 1em;
-	width: 1em;
-	left: 0;
-	top:0;
-	background-color: #EEE;
-	border:1px solid #666;
-	border-radius:1em;
-	margin-top: 0.15em;
+label.checkbox.toggle > input::after {
+	position: relative;
+	content: '';
+	background-image: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"><path d="M0.5,0.5 h0" stroke-linecap="round" stroke="%23AAA" /></svg>');
+	background-repeat: no-repeat;
+	padding-left: 1em;
+	background-size: 1em;
+	line-height:1.4;
+	background-position-y:center;
 	transition: 0.4s;
-	margin-left: 0;
+	left: -2.4em;
 }
 
-label.inverted.checkbox.toggle > input + *::before {
-	background-color: #333;
-	border-color:white;
+label.inverted.checkbox.toggle > input::after {
 }
 
-label.checkbox.toggle > input:focus + *::before {
+label.checkbox.toggle > input:focus::after {
 	border-color:currentcolor;
 }
 
-label.checkbox.toggle > input:checked + *::before {
-	transform: translateX(1em);
-	border-color: rgb(129 165 255 / 100%);
-	background-image:none;
+label.checkbox.toggle > input:checked::after {
+	background-blend-mode: screen;
+	left: -1.4em;
 }
-label.checkbox.toggle > input:indeterminate + *::before {
+label.checkbox.toggle > input:indeterminate::after {
 	background-image:none;
 }

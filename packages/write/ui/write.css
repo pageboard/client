@@ -215,6 +215,7 @@ body[data-mode="read"] #pageboard-read > iframe {
 }
 
 #form .inline.fields .field {
+	flex:1 0 auto;
 	padding:0;
 	margin-top: 0;
 }
@@ -223,18 +224,20 @@ body[data-mode="read"] #pageboard-read > iframe {
 }
 #form .field > label {
 	margin-bottom:0;
+	position: relative;
+	flex: 1 0 auto;
+	line-height: 1.3em;
 }
 
 #form .inline.fields > label {
-	flex: 0 0 24%;
+	flex: 1 0;
 	margin-right: 0;
 }
 #form .inline.fields > label + .field {
 	max-width: 77%;
 }
 
-#form .inline.fields > .field > .radio,
-#form .inline.fields > .field > .toggle {
+#form .inline.fields > .field > .radio {
 	margin: 0 0.2em;
 	display: block;
 	font-weight: normal;
@@ -246,6 +249,7 @@ body[data-mode="read"] #pageboard-read > iframe {
 #form .inline.fields.rtl > .inline.field {
 	direction:rtl;
 	flex: 1 0;
+	justify-content: flex-start;
 }
 
 #form .flex.field {
@@ -288,7 +292,7 @@ body[data-mode="read"] #pageboard-read > iframe {
 }
 .ui.form .field > textarea {
 	height: 3em;
-	min-height: 1em;
+	min-height: 2.4em;
 	padding: 0.5em;
 }
 
@@ -355,27 +359,50 @@ body[data-mode="read"] #pageboard-read > iframe {
 }
 
 #form label > small {
-	display: block;
+	display: inline-block;
 	font-weight:normal;
 	margin:0;
 	padding:0;
 	line-height: 0.8em;
 	color:#777;
 	text-transform: lowercase;
-	max-width: 50%;
-	position: absolute;
+	max-width: none;
+	margin-left: 0.3em;
 }
 #form label > span + small {
 	position:relative;
 	max-width:none;
 }
-#form .inline.field > label > small,
-#form .long.field > label > small {
-	display: inline-block;
-	margin-left:0.3em;
+#form .inline.field > label > small {
+	display: block;
+	margin-top: -0.1em;
 	position:relative;
-	max-width:none;
-	text-align:right;
+	max-width: none;
+	margin-bottom: -0.5em;
+	margin-left: 0;
+}
+
+#form .long.field > label > small,
+#form .field > label.toggle > small {
+	display: block;
+	margin-top: -0.1em;
+	position:relative;
+	margin-bottom: -0.3em;
+}
+#form .field > .toggle {
+	margin: 0;
+	justify-content: space-between;
+	display: flex;
+	margin-bottom: 0.3em;
+}
+#form .field > label.toggle > span {
+	font-weight:bold;
+	margin-right:0.3em;
+}
+#form .field > label.toggle > small {
+	margin-left: 0;
+	top: 100%;
+	position: absolute;
 }
 
 #form input[type="number"],
@@ -386,9 +413,13 @@ body[data-mode="read"] #pageboard-read > iframe {
 #form .field > input[type="text"] {
 	width: 100%;
 }
+#form .short.field > label {
+	max-width: 29%;
+}
 #form .short.field > input[type="text"] {
-	max-width: 70%;
+	max-width: 60%;
 	width: auto;
+	flex: 1 0 auto;
 }
 #form .field > select {
 	font-size:0.9rem;
@@ -397,15 +428,9 @@ body[data-mode="read"] #pageboard-read > iframe {
 }
 #form .field.datalist > select {
 	width:1.5rem;
-	align-self: normal;
-	position: absolute;
-	right: 0;
 	border: none;
 	background-color: transparent;
-	margin: 2px;
-}
-#form .field.datalist > input[type="text"] {
-	max-width: calc(70% - 1.5rem);
+	margin-right: 2px;
 }
 #form input[type="number"] {
 	width: 30%;

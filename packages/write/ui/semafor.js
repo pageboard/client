@@ -516,28 +516,25 @@ Semafor.types.hidden = function (key, schema, node, inst) {
 
 Semafor.types.string = function (key, schema, node, inst) {
 	const multiline = !schema.pattern && !schema.format;
-	const short = schema.maxLength != null && schema.maxLength <= 10 || schema.format == "singleline";
+	const short = schema.maxLength != null && schema.maxLength <= 10 || ["singleline", "id", "lang"].includes(schema.format);
 	if (multiline && !short) {
-		return node.appendChild(node.dom(`<div class="field">
-			<label>${schema.title || key}</label>
-			<textarea name="${key}"	title="${schema.description || ''}" placeholder="${schema.placeholder || schema.default || ''}" is="element-textarea"></textarea>
-		</div>`));
+		return node.appendChild(`<div class="field">
+			<label>[title|else:$key]<small>[description|as:text|fail:*]</small></label>
+			<textarea name="[$key]"	placeholder="[placeholder|else:default]" is="element-textarea"></textarea>
+		</div>`.fuse(schema, { $key: key }));
 	} else if (short) {
-		return node.appendChild(node.dom(`<div class="short inline field">
-			<label>${schema.title || key}</label>
-			<input type="text" name="${key}"
-				placeholder="${schema.placeholder || schema.default || ''}"
-				title="${schema.description || ''}"
+		return node.appendChild(`<div class="short inline field">
+			<label>[title|else:$key]<small>[description|as:text|fail:*]</small></label>
+			<input type="text" name="[$key]" placeholder="[placeholder|else:default]"
 			/>
-		</div>`));
+		</div>`.fuse(schema, { $key: key }));
 	} else {
-		const field = node.appendChild(node.dom(`<div class="field">
-			<label>${schema.title || key}</label>
-			<input type="text" name="${key}"
-				placeholder="${schema.placeholder || schema.default || ''}"
-				title="${schema.description || ''}"
+		const field = node.appendChild(`<div class="field">
+			<label>[title|else:$key]<small>[description|as:text|fail:*]</small></label>
+			<input type="text" name="[$key]"
+				placeholder="[placeholder|else:default]"
 			/>
-		</div>`));
+		</div>`.fuse(schema, { $key: key }));
 		const input = field.lastElementChild;
 		const typeFormats = {
 			date: "date",
@@ -574,7 +571,8 @@ Semafor.types.oneOf = function (key, schema, node, inst) {
 	} else if (alts.some(item => {
 		return item == "string" || item.type === undefined || item.type == "string";
 	})) {
-		oneOfType = { type: "string", format: 'singleline' }; // FIXME use an array of formats
+		// it should display three radios: o false, o true, o [text]
+		oneOfType = { type: "string", format: 'singleline' };
 	}
 	if (oneOfType) {
 		// la valeur de retour de process n'est pas un fieldset
@@ -604,39 +602,45 @@ Semafor.types.oneOf = function (key, schema, node, inst) {
 			});
 		}
 	}
-
+	const scope = {
+		$key: key,
+		$def: def,
+		$list: listOf
+	};
 	if (icons) {
-		const field = node.dom(`<div class="inline fields">
-			<label for="${key}">${schema.title || key}<small>${schema.description || ''}</small></label>
+		const field = `<div class="inline fields">
+			<label for="[$key]">[title|else:$key]<small>[description|as:text|fail:*]</small></label>
 			<div class="ui compact icon menu">
-				${alts.map(item => Semafor.getIconOption(item, key)).join('\n')}
+				<label class="ui radio checkbox item">
+					<input type="radio" name="[$key]" value="[$list|at:label|repeat:item|.const]" checked="[item.const|eq:$def]">
+					<span>[item.icon|as:html]</span>
+					<small>[item.description|fail:*]</small>
+				</label>
 			</div>
-		</div>`);
+		</div>`.fuse(schema, scope);
 		node.appendChild(field);
 		return field;
 	} else if (listOf.length <= 4) {
-		const field = node.dom(`<div class="inline fields rtl">
-			<label for="${key}">${schema.title || key}<small>${schema.description || ''}</small></label>
+		const field = `<div class="inline fields rtl">
+			<label for="[$key]">[title|else:$key]<small>[description|as:text|fail:*]</small></label>
 			<div class="inline field">
-				${listOf.map(item => Semafor.getRadioOption(item, key)).join('\n')}
+				<label class="ui radio checkbox">
+					<input type="radio" name="[$key]" value="[$list|at:div|repeat:item|.const]" checked="[item.const|eq:$def]">
+					<span>[item.title]</span>
+					<small>[item.description]</small>
+				</label>
 			</div>
-		</div>`);
+		</div>`.fuse(schema, scope);
 		node.appendChild(field);
-		if (def !== undefined) {
-			field.querySelector(`[name="${key}"][value="${def}"]`).checked = true;
-		}
 		return field;
 	} else {
-		const field = node.dom(`<div class="inline field">
-			<label>${schema.title || key}<small>${schema.description || ''}</small></label>
-			<select name="${key}" class="ui compact dropdown">
-				${listOf.map(item => Semafor.getSelectOption(item, key)).join('\n')}
+		const field = `<div class="inline field">
+			<label>[title|else:$key]<small>[description|as:text|fail:*]</small></label>
+			<select name="[$key]" class="ui compact dropdown">
+				<option value="[$list|repeat:item|.const]" selected="[item.const|eq:$def]">[item.title|else:item.const]</option>
 			</select>
-		</div>`);
+		</div>`.fuse(schema, scope);
 		node.appendChild(field);
-		if (def !== undefined) {
-			(field.querySelector(`option[value="${def}"]`) ?? {}).selected = true;
-		}
 		return field;
 	}
 };
@@ -650,17 +654,16 @@ Semafor.types.integer = function (key, schema, node, inst) {
 };
 
 Semafor.types.number = function (key, schema, node, inst) {
-	const field = node.appendChild(node.dom(`<div class="inline field">
-		<label>${schema.title || key}<small>${schema.description || ''}</small></label>
-		<input type="number" name="${key}"
-			placeholder="${schema.default !== undefined ? schema.default : ''}"
-			title="${schema.description || ''}"
-			min="${schema.minimum != null ? schema.minimum : ''}"
-			max="${schema.maximum != null ? schema.maximum : ''}"
-			step="${schema.multipleOf != null ? schema.multipleOf : ''}"
+	const field = node.appendChild(`<div class="inline field">
+		<label>[title|else:$key]<small>[description|as:text|fail:*]</small></label>
+		<input type="number" name="[$key]"
+			placeholder="[default]"
+			min="[minimum]"
+			max="[maximum]"
+			step="[multipleOf]"
 		/>
-	</div>`));
-
+	</div>`.fuse(schema, { $key: key }));
+	//
 	inst.fields[key].type = 'number';
 	return field;
 };
@@ -670,47 +673,50 @@ Semafor.types.object = function (key, schema, node, inst) {
 	if (schema.title) {
 		if (schema.properties && key) {
 			if (Object.values(schema.properties).every(item => item.type == "boolean")) {
-				fieldset = node.dom(`<div class="inline fields">
-					<label>${schema.title || key}<small>${schema.description || ''}</small></label>
-					<div class="inline field"></div>
-				</div>`);
-				const inside = fieldset.querySelector('.field');
-				Object.entries(schema.properties)
-					.map(([sub, item]) => Semafor.types.boolean(`${key}.${sub}`, item, inside));
+				fieldset = `<div class="inline fields">
+					<label>[title|else:$key]<small>[description|as:text|fail:*]</small></label>
+					<div class="inline field">
+						[properties|as:entries|repeat:item|semafor:boolean|as:html]
+					</div>
+				</div>`.fuse(schema, {
+						$key: key,
+						$filters: {
+							semafor(ctx, { key: sub, value: item }, type) {
+								console.log('ctx.node should be inline.field', ctx.node);
+								return Semafor.types[type](`${key}.${sub}`, item, ctx.node);
+							}
+						}
+					});
 				node.appendChild(fieldset);
 				return;
 			}
 			if (schema.nullable) {
-				fieldset = node.dom(`<div class="nullable fieldset">
-					<fieldset name="${key}" class="field" disabled>
+				fieldset = `<div class="nullable fieldset">
+					<fieldset name="[$key]" class="field" disabled>
 						<legend>
 							<label class="checkbox">
 								<input type="checkbox">
-								<span>${schema.title}</span>
+								<span>[title]</span>
+								<small>[description|as:text|fail:*]</small>
 							</label>
 						</legend>
 					</fieldset>
-				</div>`);
+				</div>`.fuse(schema, { $key: key });
 				node.appendChild(fieldset);
 				fieldset = fieldset.lastElementChild;
 				fieldset.querySelector('input:not([name])').addEventListener('change', inst);
 			} else {
-				fieldset = node.dom(`<fieldset name="${key}" class="field">
-					<legend>${schema.title}</legend>
-				</fieldset>`);
+				fieldset = `<fieldset name="[$key]" class="field">
+					<legend>[title]<small>[description|as:text|fail:*]</small></legend>
+				</fieldset>`.fuse(schema, { $key: key });
 				node.appendChild(fieldset);
 			}
-
-			if (schema.description) {
-				fieldset.appendChild(node.dom(`<small>${schema.description}</small>`));
-			}
 		} else if (key) {
-			fieldset = node.dom(`<div class="long field"></div>`);
+			fieldset = `<div class="long field">
+				<label>[title|else:$key]<small>[description|as:text|fail:*]</small></label>
+				<input is="element-input-map" name="[$key]" />
+			</div>`.fuse(schema, { $key: key });
 			node.appendChild(fieldset);
-			fieldset.appendChild(node.dom(`
-				<label>${schema.title || key}<small>${schema.description || ''}</small></label>
-				<input is="element-input-map" name="${key}" />
-			`));
 		}
 	}
 	if (schema.properties) {
@@ -725,13 +731,13 @@ Semafor.types.object = function (key, schema, node, inst) {
 };
 
 Semafor.types.boolean = function (key, schema, node, inst) {
-	const field = node.dom(`<div class="field">
+	const field = `<div class="field">
 		<label class="toggle checkbox">
-			<input type="checkbox" name="${key}" value="true" />
-			<span>${schema.title || key}</span>
-			<small>${schema.description || ''}</small>
+			<span>[title|else:$key]</span>
+			<input type="checkbox" name="[$key]" value="true" checked="[default]" />
+			<small>[description|as:text|fail:*]</small>
 		</label>
-	</div>`);
+	</div>`.fuse(schema, { $key: key });
 	let wrap = node.lastElementChild;
 	if (!wrap || !wrap.matches('.inline.fields') || !wrap.querySelector('.toggle')) {
 		wrap = node.dom('<div class="inline fields"></div>');
@@ -740,7 +746,6 @@ Semafor.types.boolean = function (key, schema, node, inst) {
 		wrap.classList.add('two');
 	}
 	wrap.appendChild(field);
-	field.querySelector('input[type="checkbox"]').checked = schema.default;
 	return field;
 };
 
@@ -750,7 +755,7 @@ Semafor.types.null = function (key, schema, node, inst) {
 
 Semafor.types.array = function (key, schema, node, inst) {
 	if (Array.isArray(schema.items)) {
-		const fieldset = node.dom(`<fieldset><legend>${schema.title}</legend></fieldset>`);
+		const fieldset = `<fieldset><legend>[title]</legend></fieldset>`.fuse(schema, {});
 		node.appendChild(fieldset);
 		schema.items.forEach((item, i) => {
 			inst.process(`${key}.${i}`, item, fieldset, schema);
@@ -765,28 +770,17 @@ Semafor.types.array = function (key, schema, node, inst) {
 		if (allStrings) {
 			return Semafor.types.string(key, schema, node, inst);
 		} else {
-			const fieldset = node.dom(`<fieldset>
-				<legend>[schema.title|or:[key]]<small>${schema.description || ''}</small></legend>
+			const fieldset = `<fieldset>
+				<legend>[title|else:$key]<small>[description|as:text|fail:*]</small></legend>
 				<div class="inline field">
 					<label class="ui checkbox">
 						<input type="checkbox"
-							name="[key]" value="[schema.items.anyOf|at:.field|repeat:item|as:itemVal]" tabindex="0" />
+							name="[$key]" value="[items.anyOf|at:.field|repeat:item|.const]"/>
 						<span>[item.title]</span>
 					</label>
 				</div>
-			</fieldset>`)
-				.fuse({
-					schema, key
-				}, {
-					$formats: {
-						as: {
-							itemVal: (ctx, val) => {
-								if (val == null) return val;
-								return Semafor.getValStr(val);
-							}
-						}
-					}
-				});
+			</fieldset>`
+				.fuse(schema, { $key: key });
 			node.appendChild(fieldset);
 			return fieldset;
 		}
@@ -856,26 +850,6 @@ Semafor.keywords.pattern = function (value) {
 		type: 'regExp',
 		value: new RegExp(value)
 	};
-};
-
-Semafor.getIconOption = function (item, key) {
-	return `<label class="ui radio checkbox item">
-		<input type="radio" name="${key}" value="${Semafor.getValStr(item)}" tabindex="0">
-		<span>${item.icon}</span>
-		<small>${item.description || ''}</small>
-	</label>`;
-};
-
-Semafor.getRadioOption = function (item, key) {
-	return `<label class="ui radio checkbox">
-		<input type="radio" name="${key}" value="${Semafor.getValStr(item)}" tabindex="0">
-		<span>${item.title}</span>
-		<small>${item.description || ''}</small>
-	</label>`;
-};
-
-Semafor.getSelectOption = function (item) {
-	return `<option value="${Semafor.getValStr(item)}">${item.title || item.const}</option>`;
 };
 
 Semafor.getValStr = function (item) {

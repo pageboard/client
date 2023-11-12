@@ -179,7 +179,7 @@ class ElementProperty {
 		if (Object.keys(paths).length == 0) {
 			context.parent.appendChild(doc.dom(`<option disabled>No inputs</option>`));
 		}
-		this.#field.insertBefore(this.#select, this.#input.nextSibling);
+		this.#field.insertBefore(this.#select, this.#input);
 		this.#select.addEventListener('change', this);
 	}
 
