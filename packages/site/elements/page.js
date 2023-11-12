@@ -19,7 +19,7 @@ exports.page = {
 		},
 		prefix: {
 			title: 'Match by prefix',
-			description: `Match all url having this prefix, unless an actual page exist.`,
+			description: `Match all url having this prefix, unless an actual page exists.`,
 			type: "boolean",
 			nullable: true
 		},

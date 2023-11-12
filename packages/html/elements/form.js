@@ -79,7 +79,7 @@ exports.api_form = {
 	properties: {
 		name: {
 			title: 'Name',
-			description: 'Trigger query submit|toggle=<name>\nExpose endpoint /.api/form/<name>',
+			description: "Used by query 'submit' or 'toggle'\nExposes /.api/form/$name",
 			type: 'string',
 			format: 'id',
 			nullable: true

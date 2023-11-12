@@ -36,7 +36,7 @@ exports.grid = {
 		},
 		columns: {
 			title: 'Columns Count',
-			description: 'Between 1 and 16, set to 0 to unknown - works well with doubling',
+			description: 'Between 1 and 16, 0 for auto\nworks well with doubling',
 			type: "integer",
 			default: 0,
 			minimum: 0,
@@ -88,7 +88,7 @@ exports.grid_row = {
 		},
 		columns: {
 			title: 'Columns Count',
-			description: 'Between 1 and 16, set to 0 to unknown - works well with doubling',
+			description: 'Between 1 and 16, 0 for auto\nworks well with doubling',
 			type: "integer",
 			default: 0,
 			minimum: 0,
