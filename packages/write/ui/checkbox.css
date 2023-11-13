@@ -2,7 +2,7 @@ label.checkbox {
 	cursor: pointer;
 	line-height: 1.47em;
 }
-label.checkbox > input {
+label.checkbox > input:is([type="radio"],[type="checkbox"]) {
 	position: absolute;
 	width:1em;
 	height:1em;
@@ -21,6 +21,9 @@ label.checkbox > input + *::before {
 	background-position: center;
 	position: relative;
 	top: 0.15em;
+}
+fieldset > legend > label.checkbox > input[type="checkbox"] + *::before {
+	margin-left:0;
 }
 label.checkbox > input[type="checkbox"] + *::before {
 	margin-top: -0.15em;
@@ -81,7 +84,7 @@ label.checkbox.toggle > input:checked::before {
 label.checkbox.toggle > input::after {
 	position: relative;
 	content: '';
-	background-image: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"><path d="M0.5,0.5 h0" stroke-linecap="round" stroke="%23AAA" /></svg>');
+	background-image: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"><path d="M0.5,0.5 h0" stroke-linecap="round" stroke="%23AAA" stroke-width="0.9" /></svg>');
 	background-repeat: no-repeat;
 	padding-left: 1em;
 	background-size: 1em;
@@ -89,9 +92,6 @@ label.checkbox.toggle > input::after {
 	background-position-y:center;
 	transition: 0.4s;
 	left: -2.4em;
-}
-
-label.inverted.checkbox.toggle > input::after {
 }
 
 label.checkbox.toggle > input:focus::after {

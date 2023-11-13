@@ -220,7 +220,7 @@ body[data-mode="read"] #pageboard-read > iframe {
 	margin-top: 0;
 }
 #form .inline.fields {
-	padding: 0.25em 0;
+	margin-top: 0.5em;
 }
 #form .field > label {
 	margin-bottom:0;
@@ -243,13 +243,15 @@ body[data-mode="read"] #pageboard-read > iframe {
 	font-weight: normal;
 }
 #form .inline.fields > .inline.field > .radio {
-	display:inline-block;
 	font-weight: normal;
 }
 #form .inline.fields.rtl > .inline.field {
 	direction:rtl;
-	flex: 1 0;
+	flex: 4 0;
 	justify-content: flex-start;
+}
+#form .inline.fields.rtl > .inline.field > .radio > span::before {
+	margin-right:0;
 }
 
 #form .flex.field {
@@ -289,6 +291,17 @@ body[data-mode="read"] #pageboard-read > iframe {
 
 #form > form {
 	margin-top:1em;
+}
+#form .radio > input[type="radio"] ~ input[type="text"] {
+	display:none;
+}
+#form .radio > input[type="radio"]:checked ~ input[type="text"] {
+	display: inline-block;
+	max-width: 33%;
+	vertical-align: baseline;
+	width: auto;
+	direction: ltr;
+	text-align: right;
 }
 .ui.form .field > textarea {
 	height: 3em;
@@ -373,7 +386,9 @@ body[data-mode="read"] #pageboard-read > iframe {
 	position:relative;
 	max-width:none;
 }
-#form .inline.field > label > small {
+
+#form .inline.field > label > small,
+#form .inline.fields > label > small {
 	display: block;
 	margin-top: -0.1em;
 	position:relative;
@@ -387,17 +402,22 @@ body[data-mode="read"] #pageboard-read > iframe {
 	display: block;
 	margin-top: -0.1em;
 	position:relative;
-	margin-bottom: -0.3em;
+	margin-bottom: -0.1em;
+	margin-left: 0;
 }
 #form .field > .toggle {
 	margin: 0;
 	justify-content: space-between;
 	display: flex;
 	margin-bottom: 0.3em;
+	line-height: 1.4;
 }
 #form .field > label.toggle > span {
 	font-weight:bold;
 	margin-right:0.3em;
+}
+#form .fields .field > label.toggle > span {
+	font-weight:normal;
 }
 #form .field > label.toggle > small {
 	margin-left: 0;
