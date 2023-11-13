@@ -548,8 +548,8 @@ Semafor.types.string = function (key, schema, node, inst) {
 };
 
 Semafor.types.oneOf = function (key, schema, node, inst) {
-	let listOf = schema.oneOf || schema.anyOf;
-	let nullable = schema.nullable;
+	const listOf = (schema.oneOf || schema.anyOf).slice();
+	let { nullable } = schema;
 	let hasNullOption = false;
 	const alts = listOf.filter(item => {
 		if (item.type == "null") {
@@ -560,6 +560,14 @@ Semafor.types.oneOf = function (key, schema, node, inst) {
 			return true;
 		}
 	});
+
+	let def = schema.default;
+	if (def === null) def = "";
+	const scope = {
+		$key: key,
+		$def: def,
+		$list: listOf
+	};
 	let oneOfType;
 	let icons = false;
 	if (alts.length == 1 && alts[0].const === undefined) {
@@ -568,11 +576,14 @@ Semafor.types.oneOf = function (key, schema, node, inst) {
 		icons = true;
 	} else if (alts.every(item => item.const !== undefined)) {
 		// do nothing
-	} else if (alts.some(item => {
-		return item == "string" || item.type === undefined || item.type == "string";
-	})) {
-		// it should display three radios: o false, o true, o [text]
-		oneOfType = { type: "string", format: 'singleline' };
+	} else if (alts.every(item => item.type == "string")) {
+		oneOfType = { type: 'string', format: 'singleline' };
+	} else if (
+		alts.filter(item => item.type == "string").length > 1 ||
+		alts.some(item => (item == "string" || item.type === undefined))
+	) {
+		console.error("Unsupported schema", schema);
+		return;
 	}
 	if (oneOfType) {
 		// la valeur de retour de process n'est pas un fieldset
@@ -580,15 +591,12 @@ Semafor.types.oneOf = function (key, schema, node, inst) {
 			...schema,
 			oneOf: null,
 			anyOf: null,
+			nullable,
 			...oneOfType
 		}, node, schema)?.pop();
 	}
 
-	let def = schema.default;
-	if (def === null) def = "";
-
 	if (nullable && !hasNullOption) {
-		listOf = listOf.slice();
 		if (icons) {
 			listOf.splice(0, 0, {
 				const: null,
@@ -602,13 +610,9 @@ Semafor.types.oneOf = function (key, schema, node, inst) {
 			});
 		}
 	}
-	const scope = {
-		$key: key,
-		$def: def,
-		$list: listOf
-	};
+	let field;
 	if (icons) {
-		const field = `<div class="inline fields">
+		field = `<div class="inline fields">
 			<label for="[$key]">[title|else:$key]<small>[description|as:text|fail:*]</small></label>
 			<div class="ui compact icon menu">
 				<label class="ui radio checkbox item">
@@ -619,30 +623,33 @@ Semafor.types.oneOf = function (key, schema, node, inst) {
 			</div>
 		</div>`.fuse(schema, scope);
 		node.appendChild(field);
-		return field;
 	} else if (listOf.length <= 4) {
-		const field = `<div class="inline fields rtl">
+		field = `<div class="inline fields rtl">
 			<label for="[$key]">[title|else:$key]<small>[description|as:text|fail:*]</small></label>
-			<div class="inline field">
-				<label class="ui radio checkbox">
-					<input type="radio" name="[$key]" value="[$list|at:div|repeat:item|.const]" checked="[item.const|eq:$def]">
+			<div class="inline field">[$list|repeat:item|const:]
+				<label class="ui radio checkbox">[item.const|is:none|not:prune:label]
+					<input type="radio" name="[$key]" value="[item.const]" checked="[item.const|eq:$def]">
 					<span>[item.title]</span>
 					<small>[item.description]</small>
+				</label>
+				<label class="ui radio checkbox ltr">[item.const|is:none|prune:label]
+					<input type="radio" is="textradio" name="[$key]" value="[item.title]">
+					<span>[item.title]</span>
+					<input type="text">
 				</label>
 			</div>
 		</div>`.fuse(schema, scope);
 		node.appendChild(field);
-		return field;
 	} else {
-		const field = `<div class="inline field">
+		field = `<div class="inline field">
 			<label>[title|else:$key]<small>[description|as:text|fail:*]</small></label>
 			<select name="[$key]" class="ui compact dropdown">
 				<option value="[$list|repeat:item|.const]" selected="[item.const|eq:$def]">[item.title|else:item.const]</option>
 			</select>
 		</div>`.fuse(schema, scope);
 		node.appendChild(field);
-		return field;
 	}
+	return field;
 };
 
 Semafor.types.integer = function (key, schema, node, inst) {
@@ -675,15 +682,13 @@ Semafor.types.object = function (key, schema, node, inst) {
 			if (Object.values(schema.properties).every(item => item.type == "boolean")) {
 				fieldset = `<div class="inline fields">
 					<label>[title|else:$key]<small>[description|as:text|fail:*]</small></label>
-					<div class="inline field">
-						[properties|as:entries|repeat:item|semafor:boolean|as:html]
-					</div>
+					<div>[properties|as:entries|at:-|repeat:item:semafor:boolean]</div>
 				</div>`.fuse(schema, {
 						$key: key,
 						$filters: {
-							semafor(ctx, { key: sub, value: item }, type) {
-								console.log('ctx.node should be inline.field', ctx.node);
-								return Semafor.types[type](`${key}.${sub}`, item, ctx.node);
+							semafor(ctx, { key: sub, value: item }, cursor, fragment, type) {
+								Semafor.types[type](`${key}.${sub}`, item, fragment);
+								cursor.before(fragment);
 							}
 						}
 					});
@@ -731,22 +736,13 @@ Semafor.types.object = function (key, schema, node, inst) {
 };
 
 Semafor.types.boolean = function (key, schema, node, inst) {
-	const field = `<div class="field">
+	node.appendChild(`<div class="field">
 		<label class="toggle checkbox">
 			<span>[title|else:$key]</span>
 			<input type="checkbox" name="[$key]" value="true" checked="[default]" />
 			<small>[description|as:text|fail:*]</small>
 		</label>
-	</div>`.fuse(schema, { $key: key });
-	let wrap = node.lastElementChild;
-	if (!wrap || !wrap.matches('.inline.fields') || !wrap.querySelector('.toggle')) {
-		wrap = node.dom('<div class="inline fields"></div>');
-		node.appendChild(wrap);
-	} else {
-		wrap.classList.add('two');
-	}
-	wrap.appendChild(field);
-	return field;
+	</div>`.fuse(schema, { $key: key }));
 };
 
 Semafor.types.null = function (key, schema, node, inst) {

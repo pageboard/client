@@ -139,6 +139,7 @@ exports.write = {
 		"../ui/semafor.js",
 		"../ui/custom-elements/map.js",
 		"../ui/custom-elements/textarea.js",
+		"../ui/custom-elements/textradio.js",
 		"../ui/inputs/action.js",
 		"../ui/inputs/color.js",
 		"../ui/inputs/datalist.js",
