@@ -344,7 +344,7 @@ class Semafor {
 					})) {
 						type = "string";
 					} else {
-						console.warn("Unsupported type in schema", field);
+						console.warn("Unsupported type in schema:", field);
 					}
 				}
 				switch (type) {

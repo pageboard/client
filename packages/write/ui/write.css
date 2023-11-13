@@ -424,7 +424,6 @@ body[data-mode="read"] #pageboard-read > iframe {
 	top: 100%;
 	position: absolute;
 }
-
 #form input[type="number"],
 #form input[type="text"] {
 	padding: 0.3em;
