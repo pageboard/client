@@ -579,11 +579,10 @@ Semafor.types.oneOf = function (key, schema, node, inst) {
 	} else if (alts.every(item => item.type == "string")) {
 		oneOfType = { type: 'string', format: 'singleline' };
 	} else if (
-		alts.filter(item => item.type == "string").length > 1 ||
-		alts.some(item => (item == "string" || item.type === undefined))
+		alts.some(item => (item == "string" || item.type === undefined || item.type == "string"))
 	) {
-		console.error("Unsupported schema", schema);
-		return;
+		console.error("Unsupported schema replaced by string type:", schema);
+		oneOfType = { type: 'string', format: 'singleline' };
 	}
 	if (oneOfType) {
 		// la valeur de retour de process n'est pas un fieldset
