@@ -4,7 +4,7 @@ exports.mail_image = {
 	properties: {
 		alt: {
 			title: 'Alternative text',
-			description: 'Short contextual description. Leave empty when used in links.',
+			description: 'Short contextual description.\nLeave empty when used in links.',
 			type: "string"
 		},
 		url: {
