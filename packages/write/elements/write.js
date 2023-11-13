@@ -146,6 +146,7 @@ exports.write = {
 		"../ui/filters/element.js",
 		"../ui/helpers/element-property.js",
 		"../ui/filters/element-value.js",
+		"../ui/filters/element-content.js",
 		"../ui/helpers/binding.js",
 		"../ui/filters/schema.js",
 		"../ui/filters/relation.js",
