@@ -153,11 +153,11 @@ const HTMLElementImageConstructor = Superclass => class extends Superclass {
 		}
 	}
 	captureLoad() {
-		this.#defer.resolve();
+		this.#defer?.resolve();
 		this.classList.remove('loading');
 	}
 	captureError(e) {
-		this.#defer.reject(e);
+		this.#defer?.reject(e);
 		this.classList.remove('loading');
 		this.classList.add('error');
 		this.placeholder(true);
