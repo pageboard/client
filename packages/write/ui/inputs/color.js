@@ -23,36 +23,43 @@ Pageboard.schemaHelpers.color = class ColorHelper {
 	}
 
 	update() {
-		const rgba = this.input.value || (this.opts.alpha ? "#000000FF" : "#000000");
+		let rgba = this.input.value || (this.opts.alpha ? "#000000FF" : "#000000");
+		if (!rgba.startsWith('#')) {
+			rgba = this.input.value = '#' + rgba;
+		}
+		if (rgba.length == 7 && this.opts.alpha) rgba += "FF";
+		if (rgba.length != 9) return;
 		const alpha = parseInt(rgba.slice(-2), 16);
 		const rgb = this.opts.alpha ? rgba.slice(0, -2) : rgba;
 		try {
 			this.node.querySelector('[type="color"]').value = rgb;
 		} catch(ex) {
-			this.input.value = "";
+			
 		}
 		if (this.opts.alpha) this.node.querySelector('[type="range"]').value = alpha;
 	}
 
 	handleEvent(e) {
-		if (e.target == this.input) {
-			this.update();
-		} else {
-			const color = this.node.querySelector('[type="color"]').value;
-			if (this.opts.alpha) {
-				const val = this.node.querySelector('[type="range"]').value;
-				let alpha = parseInt(val);
-				if (Number(val) != alpha) alpha = 255;
-				if (alpha < 0) alpha = 0;
-				else if (alpha > 255) alpha = 255;
-				alpha = alpha.toString(16);
-				this.input.value = (color + (alpha.length == 1 ? `0${alpha}` : alpha)).toUpperCase();
+		window.requestAnimationFrame(() => {
+			if (e.target == this.input) {
+				this.update();
 			} else {
-				this.input.value = color.toUpperCase();
+				const color = this.node.querySelector('[type="color"]').value;
+				if (this.opts.alpha) {
+					const val = this.node.querySelector('[type="range"]').value;
+					let alpha = parseInt(val);
+					if (Number(val) != alpha) alpha = 255;
+					if (alpha < 0) alpha = 0;
+					else if (alpha > 255) alpha = 255;
+					alpha = alpha.toString(16);
+					this.input.value = (color + (alpha.length == 1 ? `0${alpha}` : alpha)).toUpperCase();
+				} else {
+					this.input.value = color.toUpperCase();
+				}
+	
 			}
-
-		}
-		Pageboard.trigger(this.input, 'change');
+			Pageboard.trigger(this.input, 'change');
+		});
 	}
 
 	destroy() {
