@@ -626,16 +626,11 @@ Semafor.types.oneOf = function (key, schema, node, inst) {
 	} else if (listOf.length <= 4) {
 		field = `<div class="inline fields rtl">
 			<label for="[$key]">[title|else:$key]<small>[description|as:text|fail:*]</small></label>
-			<div class="inline field">[$list|repeat:item|const:]
-				<label class="ui radio checkbox">[item.const|is:none|not:prune:label]
-					<input type="radio" name="[$key]" value="[item.const]" checked="[item.const|eq:$def]">
+			<div class="inline field">
+				<label class="ui radio checkbox">
+					<input type="radio" name="[$key]" value="[$list|at:div|repeat:item|.const]" checked="[item.const|eq:$def]">
 					<span>[item.title]</span>
 					<small>[item.description]</small>
-				</label>
-				<label class="ui radio checkbox ltr">[item.const|is:none|prune:label]
-					<input type="radio" is="textradio" name="[$key]" value="[item.title]">
-					<span>[item.title]</span>
-					<input type="text">
 				</label>
 			</div>
 		</div>`.fuse(schema, scope);
