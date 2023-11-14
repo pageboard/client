@@ -428,6 +428,7 @@ body[data-mode="read"] #pageboard-read > iframe {
 #form input[type="text"] {
 	padding: 0.3em;
 	line-height: 1.3em;
+	font-size: 0.92857143em;
 }
 #form .field > input[type="text"] {
 	width: 100%;
@@ -441,10 +442,12 @@ body[data-mode="read"] #pageboard-read > iframe {
 	flex: 1 0 auto;
 }
 #form .field > select {
-	font-size:0.9rem;
-	padding:0.4em;
+	font-size: 0.92857143em;
+	padding: 0.31em;
 	max-width:60%;
+	line-height: 1.3em;
 }
+
 #form .field.datalist > select {
 	width:1.5rem;
 	border: none;
