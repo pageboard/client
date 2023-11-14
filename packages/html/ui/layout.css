@@ -1,71 +1,94 @@
 .layout {
 	display:flex;
 	flex: 0 0 auto;
-}
-.ui.container.layout {
-	display:flex;
-	flex: 1 0 auto;
-}
-.layout.wrap {
-	flex-wrap:wrap;
-}
-.layout.wrap-reverse {
-	flex-wrap:wrap-reverse;
-}
-.layout.column {
-	flex-direction: column;
-	align-items:stretch;
-}
-.layout.top {
-	align-items: flex-start;
-}
-.layout.vcenter {
-	align-items: center;
-}
-.layout.vbaseline {
-	align-items: baseline;
-}
-.layout.vstretch {
-	align-items: stretch;
-}
-.layout.bottom {
-	align-items: flex-end;
-}
-.layout.left {
-	justify-content: flex-start;
-}
-.layout.hcenter {
-	justify-content: center;
-}
-.layout.hbetween {
-	justify-content: space-between;
-}
-.layout.haround {
-	justify-content: space-around;
-}
-.layout.right {
-	justify-content: flex-end;
-}
-.layout.column > img,
-.layout.column.left > img {
-	align-self:flex-start;
-}
-.layout.column.hcenter > img {
-	align-self:center;
-}
-.layout.column.right > img {
-	align-self:flex-end;
-}
+	position:relative;
 
-.layout.fullwidth {
-	width:100%;
-}
+	&.overlay {
+		position:absolute;
+		&.block-start {
+			top: 0;
+		}
+		&.block-end {
+			bottom: 0;
+		}
+		&.inline-start {
+			left: 0;
+		}
+		&.inline-end {
+			right: 0;
+		}
+	}
 
-.inverted.layout {
-	background: rgb(0 0 0 / 80%);
-}
+	&.ui.container {
+		flex: 1 0 auto;
+	}
 
-.inverted.layout p {
-	color: white;
-}
+	&.wrap {
+		flex-wrap:wrap;
+	}
 
+	&.wrap-reverse {
+		flex-wrap:wrap-reverse;
+	}
+
+	&.column {
+		flex-direction: column;
+		align-items:stretch;
+	}
+
+	&.top {
+		align-items: flex-start;
+	}
+	&.vcenter {
+		align-items: center;
+	}
+	&.vbaseline {
+		align-items: baseline;
+	}
+	&.vstretch {
+		align-items: stretch;
+	}
+	&.bottom {
+		align-items: flex-end;
+	}
+	&.left {
+		justify-content: flex-start;
+	}
+	&.hcenter {
+		justify-content: center;
+	}
+	&.hbetween {
+		justify-content: space-between;
+	}
+	&.haround {
+		justify-content: space-around;
+	}
+	&.right {
+		justify-content: flex-end;
+	}
+
+	&.column {
+		& > img,
+		&.left > img {
+			align-self:flex-start;
+		}
+		&.hcenter > img {
+			align-self:center;
+		}
+		&.right > img {
+			align-self:flex-end;
+		}
+	}
+
+	&.fullwidth {
+		width:100%;
+	}
+
+	&.inverted {
+		background: rgb(0 0 0 / 80%);
+
+		p {
+			color: white;
+		}
+	}
+}
