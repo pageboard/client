@@ -436,3 +436,5 @@ exports.layout.fragments.push({
 		"style---colored": "[background.color|alt:1:0]"
 	}
 });
+
+exports.layout.stylesheets.push('../ui/layout.css');

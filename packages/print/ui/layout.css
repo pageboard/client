@@ -1,0 +1,45 @@
+.layout {
+	&.overlay {
+		position:absolute;
+		&.block-start {
+			top: var(--page-margin);
+			&.bleed-top {
+				top:0;
+			}
+		}
+		&.block-end {
+			bottom: var(--page-margin);
+			&.bleed-bottom {
+				bottom:0;
+			}
+		}
+		&.inline-start {
+			left: var(--page-margin);
+			&.bleed-left {
+				left:0;
+			}
+		}
+		&.inline-end {
+			right: var(--page-margin);
+			&.bleed-right {
+				right:0;
+			}
+		}
+	}
+	&.bleed-left {
+		margin-left: calc(-1 * var(--page-margin));
+		border-left: calc(var(--page-margin) * var(--colored)) solid transparent;
+	}
+	&.bleed-right {
+		margin-right: calc(-1 * var(--page-margin));
+		border-right: calc(var(--page-margin) * var(--colored)) solid transparent;
+	}
+	&.bleed-top {
+		margin-top: calc(-1 * var(--page-margin));
+		border-top: calc(var(--page-margin) * var(--colored)) solid transparent;
+	}
+	&.bleed-bottom {
+		margin-bottom: calc(-1 * var(--page-margin));
+		border-bottom: calc(var(--page-margin) * var(--colored)) solid transparent;
+	}
+}
