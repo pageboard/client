@@ -170,6 +170,20 @@ exports.layout = {
 				}
 			}
 		},
+		overlay: {
+			title: 'Overlay',
+			nullable: true,
+			properties: {
+				inline: {
+					title: 'Inline',
+					anyOf: [{ const: 'start', title: 'Start' }, { const: 'end', title: 'End' }]
+				},
+				block: {
+					title: 'Block',
+					anyOf: [{ const: 'start', title: 'Start' }, { const: 'end', title: 'End' }]
+				}
+			}
+		},
 		background: {
 			title: 'Background',
 			type: 'object',
@@ -337,6 +351,7 @@ exports.layout = {
 	contents: "block+",
 	group: 'block',
 	html: `<div class="layout
+		[overlay.block|pre:overlay block-] [overlay.inline|pre:overlay inline-]
 		[width|switch:full:fullwidth:contained:ui container]
 		[horizontal]
 		[vertical]
