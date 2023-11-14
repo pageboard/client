@@ -419,7 +419,6 @@ class Semafor {
 		let fieldset;
 		if (schema.oneOf || schema.anyOf) {
 			fieldset = Semafor.types.oneOf(key, schema, node, this);
-			if (fieldset) noHelper = true;
 		} else if (type && Semafor.types[type]) {
 			if (type == 'object') {
 				Semafor.types.object(key, schema, node, this);
