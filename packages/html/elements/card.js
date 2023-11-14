@@ -10,7 +10,7 @@ exports.cards = {
 	properties: {
 		columns: {
 			title: 'Column count',
-			description: 'How many cards should exist in a row - zero for unknown',
+			description: 'How many cards should exist in a row\nzero for unknown',
 			type: 'integer',
 			minimum: 0,
 			default: 0
