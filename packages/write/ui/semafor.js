@@ -397,16 +397,10 @@ class Semafor {
 	process(key, schema, node, parent) {
 		const { $ref } = schema;
 		if ($ref) {
-			if ($ref?.startsWith('#/$el/')) {
+			const prefix = '#/definitions/';
+			if ($ref?.startsWith(prefix)) {
 				delete schema.$ref;
-				const [name, ...rel] = $ref.slice(6).split('/');
-				let ref = Pageboard.elements[name]?.properties;
-				ref = rel.reduce((schema, key) => schema[key], ref);
-				if (ref) Object.assign(schema, ref);
-				else console.error("$ref not found", $ref);
-			} else if ($ref?.startsWith('#/definitions/')) {
-				delete schema.$ref;
-				const [name, ...rel] = $ref.slice(7).split('/');
+				const [name, ...rel] = $ref.slice(prefix.length).split('/');
 				let ref = Pageboard.elements[name];
 				if (rel[0] != 'properties' && rel[1] != 'data') {
 					console.error("Cannot resolve", $ref);
