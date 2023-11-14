@@ -171,9 +171,18 @@ body[data-mode="read"] #pageboard-read > iframe {
 .ui.form .inline.fields {
 	margin-bottom:0;
 }
+.ui.form fieldset > legend > small {
+	display:block;
+	position:absolute;
+	margin-top:-0.5em;
+}
 
 .ui.form .nullable.fieldset {
-	margin-top: 0.5em;
+	margin-bottom: 0em;
+	padding-bottom: 0em;
+}
+.ui.form .nullable.fieldset fielset {
+	padding: 0.35em 0.5em 0.35em;
 }
 .ui.form .nullable.fieldset:last-child {
 	margin-bottom:0;
@@ -199,15 +208,15 @@ body[data-mode="read"] #pageboard-read > iframe {
 }
 #form .nullable.fieldset > fieldset > legend {
 	margin-left: -0.9em;
+	margin-bottom: -0.9em;
 }
 
 #form fieldset:disabled {
 	border-bottom:0;
 	border-right:0;
-	border-left:0;
 	opacity:1;
 	pointer-events: auto;
-	padding-bottom: 0;
+	padding-bottom: 0.5em;
 	padding-top: 0;
 }
 #form fieldset:disabled > :not(legend) {
@@ -247,7 +256,7 @@ body[data-mode="read"] #pageboard-read > iframe {
 }
 #form .inline.fields.rtl > .inline.field {
 	direction:rtl;
-	flex: 4 0;
+	flex: 1 1 auto;
 	justify-content: flex-start;
 }
 #form .inline.fields.rtl > .inline.field > .radio > span::before {
@@ -273,12 +282,14 @@ body[data-mode="read"] #pageboard-read > iframe {
 #form .ui.icon.menu .ui.item.radio.checkbox label {
 	padding-left:0;
 }
+#form .table.compact {
+	border-radius:3px;
+}
 #form .table.compact td {
 	padding:0;
 }
 #form .table.compact td input {
 	border: 0;
-	padding: 0.5em;
 }
 
 #form .ui.dropdown .menu > .item {
@@ -420,13 +431,13 @@ body[data-mode="read"] #pageboard-read > iframe {
 	font-weight:normal;
 }
 #form .field > label.toggle > small {
-	margin-left: 0;
-	top: 100%;
+	top: 85%;
 	position: absolute;
 }
 #form input[type="number"],
-#form input[type="text"] {
-	padding: 0.3em;
+#form input[type="text"],
+#form input.ui.input {
+	padding: 0.31em;
 	line-height: 1.3em;
 	font-size: 0.92857143em;
 }
@@ -446,6 +457,7 @@ body[data-mode="read"] #pageboard-read > iframe {
 	padding: 0.31em;
 	max-width:60%;
 	line-height: 1.3em;
+	min-width: 8ch;
 }
 
 #form .field.datalist > select {
@@ -455,7 +467,8 @@ body[data-mode="read"] #pageboard-read > iframe {
 	margin-right: 2px;
 }
 #form input[type="number"] {
-	width: 30%;
+	max-width: 25%;
+	text-align: right;
 }
 
 #move .ui.toggle.checkbox > label {
