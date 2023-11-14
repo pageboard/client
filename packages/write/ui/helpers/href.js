@@ -167,6 +167,9 @@ Pageboard.schemaHelpers.href = class Href {
 	}
 
 	destroy() {
+		for (const node of this.input.closest('.href').querySelectorAll('.ui.input,.pager, .ui.items')) {
+			node.remove();
+		}
 		Pageboard.write.classList.remove('href');
 	}
 
