@@ -62,9 +62,6 @@ label.checkbox.toggle > input {
 	opacity:1;
 	width: 2.4em;
 	position: relative;
-	overflow: hidden;
-	height: 1.2em;
-	vertical-align: middle;
 }
 label.checkbox.toggle > input + *::before {
 	content:none;
