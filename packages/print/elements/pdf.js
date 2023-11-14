@@ -123,6 +123,34 @@ exports.sheet = {
 			type: 'boolean',
 			default: false
 		},
+		bleed: {
+			title: 'Bleed',
+			description: 'Affects background and content',
+			type: 'object',
+			nullable: true,
+			properties: {
+				left: {
+					title: 'Left',
+					type: 'boolean',
+					default: false
+				},
+				right: {
+					title: 'Right',
+					type: 'boolean',
+					default: false
+				},
+				top: {
+					title: 'Top',
+					type: 'boolean',
+					default: false
+				},
+				bottom: {
+					title: 'Bottom',
+					type: 'boolean',
+					default: false
+				}
+			}
+		},
 		background: {
 			title: 'Background',
 			type: 'object',
@@ -236,34 +264,6 @@ exports.sheet = {
 						title: 'Bottom Right'
 					}]
 				},
-				bleed: {
-					title: 'Bleed',
-					type: 'object',
-					properties: {
-						left: {
-							title: 'Left',
-							description: 'Bypass Left',
-							type: 'boolean',
-							default: false
-						},
-						right: {
-							title: 'Right',
-							type: 'boolean',
-							default: false
-						},
-						top: {
-							title: 'Top',
-							description: 'Bypass Top',
-							type: 'boolean',
-							default: false
-						},
-						bottom: {
-							title: 'Bottom',
-							type: 'boolean',
-							default: false
-						},
-					}
-				},
 				crop: {
 					title: 'Crop and scale',
 					type: "object",
@@ -319,7 +319,7 @@ exports.sheet = {
 	upgrade: {
 		'content.' : 'content.page'
 	},
-	html: `<div class="page-sheet [skip|alt:page-sheet-skip] [background?.bleed?.left|and:bleed-left] [background?.bleed?.right|and:bleed-right] [background?.bleed?.top|and:bleed-top] [background?.bleed?.bottom|and:bleed-bottom]" block-content="page"
+	html: `<div class="page-sheet [skip|alt:page-sheet-skip] [bleed?.left|and:bleed-left] [bleed?.right|and:bleed-right] [bleed?.top|and:bleed-top] [bleed?.bottom|and:bleed-bottom]" block-content="page"
 		is="element-sheet" data-src="[background.image]"
 		data-crop="[background.crop.x];[background.crop.y];[background.crop.width];[background.crop.height];[background.crop.zoom]"
 		data-size-h="[background.width|post:%25]"
@@ -400,9 +400,9 @@ exports.sheetcount = {
 };
 
 
-exports.layout.properties.background.properties.bleed = {
+exports.layout.properties.bleed = {
 	title: 'Bleed',
-	description: 'Uncolored background bleeds content',
+	description: 'bleeds content\nif background is transparent',
 	type: 'object',
 	properties: {
 		left: {
@@ -432,7 +432,7 @@ exports.layout.properties.background.properties.crop = exports.sheet.properties.
 
 exports.layout.fragments.push({
 	attributes: {
-		className: "[background?.bleed?.left|and:bleed-left] [background?.bleed?.right|and:bleed-right] [background?.bleed?.top|and:bleed-top] [background?.bleed?.bottom|and:bleed-bottom]",
+		className: "[bleed?.left|and:bleed-left] [bleed?.right|and:bleed-right] [bleed?.top|and:bleed-top] [bleed?.bottom|and:bleed-bottom]",
 		"style---colored": "[background.color|alt:1:0]"
 	}
 });
