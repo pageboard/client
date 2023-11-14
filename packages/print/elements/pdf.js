@@ -123,34 +123,6 @@ exports.sheet = {
 			type: 'boolean',
 			default: false
 		},
-		bleed: {
-			title: 'Bleed',
-			description: 'Affects background and content',
-			type: 'object',
-			nullable: true,
-			properties: {
-				left: {
-					title: 'Left',
-					type: 'boolean',
-					default: false
-				},
-				right: {
-					title: 'Right',
-					type: 'boolean',
-					default: false
-				},
-				top: {
-					title: 'Top',
-					type: 'boolean',
-					default: false
-				},
-				bottom: {
-					title: 'Bottom',
-					type: 'boolean',
-					default: false
-				}
-			}
-		},
 		background: {
 			title: 'Background',
 			type: 'object',
@@ -400,10 +372,11 @@ exports.sheetcount = {
 };
 
 
-exports.layout.properties.bleed = {
+exports.layout.properties.bleed = exports.sheet.properties.bleed = {
 	title: 'Bleed',
 	description: 'bleeds content\nif background is transparent',
 	type: 'object',
+	nullable: true,
 	properties: {
 		left: {
 			title: 'Left',
