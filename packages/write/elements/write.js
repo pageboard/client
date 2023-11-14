@@ -153,6 +153,7 @@ exports.write = {
 		"../ui/filters/service.js",
 		"../ui/notification.js",
 		"../ui/behaviors/infinite-scroll.js",
+		"../ui/helpers/units.js",
 		"../ui/helpers/href.js",
 		"../ui/helpers/page-title-url.js",
 		"../ui/helpers/page.js",

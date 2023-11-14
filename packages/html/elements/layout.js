@@ -1,3 +1,31 @@
+exports.units = {
+	properties: {
+		inline: {
+			title: 'Inline units',
+			anyOf: [
+				{ const: 'em' },
+				{ const: 'ch' },
+				{ const: 'vw' },
+				{ const: 'px' }
+			],
+			default: 'em',
+			$helper: 'units'
+		},
+		block: {
+			title: 'Block units',
+			anyOf: [
+				{ const: 'rem' },
+				{ const: 'ex' },
+				{ const: 'vh' },
+				{ const: '%' },
+				{ const: 'px' }
+			],
+			default: 'rem',
+			$helper: 'units'
+		}
+	}
+};
+
 exports.layout = {
 	title: "Layout",
 	icon: '<i class="icon move"></i>',
@@ -91,24 +119,7 @@ exports.layout = {
 			default: 0
 		},
 		heightUnits: {
-			title: 'Height units',
-			default: 'em',
-			anyOf: [{
-				title: 'em',
-				const: 'em'
-			}, {
-				title: 'rem',
-				const: 'rem'
-			}, {
-				title: 'px',
-				const: 'px'
-			}, {
-				title: 'vh',
-				const: 'vh'
-			}, {
-				title: '%',
-				const: '%'
-			}]
+			$ref: "#/definitions/units/properties/data/properties/block"
 		},
 		margins: {
 			title: 'Margins',
@@ -117,25 +128,23 @@ exports.layout = {
 			properties: {
 				inline: {
 					title: 'Inline',
-					description: 'Units: em',
 					type: 'number',
 					default: 0,
 					multipleOf: 0.01,
 					nullable: true
 				},
 				inlineUnits: {
-					const: 'em'
+					$ref: "#/definitions/units/properties/data/properties/inline"
 				},
 				block: {
 					title: 'Block',
-					description: 'Units: rem',
 					type: 'number',
 					default: 0,
 					multipleOf: 0.01,
 					nullable: true
 				},
 				blockUnits: {
-					const: 'rem'
+					$ref: "#/definitions/units/properties/data/properties/block"
 				}
 			}
 		},
@@ -146,7 +155,6 @@ exports.layout = {
 			properties: {
 				inline: {
 					title: 'Inline',
-					description: 'Units: em',
 					type: 'number',
 					default: 0,
 					minimum: 0,
@@ -154,11 +162,10 @@ exports.layout = {
 					nullable: true
 				},
 				inlineUnits: {
-					const: 'em'
+					$ref: "#/definitions/units/properties/data/properties/inline"
 				},
 				block: {
 					title: 'Block',
-					description: 'Units: rem',
 					type: 'number',
 					default: 0,
 					minimum: 0,
@@ -166,7 +173,7 @@ exports.layout = {
 					nullable: true
 				},
 				blockUnits: {
-					const: 'rem'
+					$ref: "#/definitions/units/properties/data/properties/block"
 				}
 			}
 		},
