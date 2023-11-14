@@ -622,7 +622,7 @@ Semafor.types.oneOf = function (key, schema, node, inst) {
 			</div>
 		</div>`.fuse(schema, scope);
 		node.appendChild(field);
-	} else if (listOf.length <= 4) {
+	} else if (listOf.length <= 3) {
 		field = `<div class="inline fields rtl">
 			<label for="[$key]">[title|else:$key]<small>[description|as:text|fail:*]</small></label>
 			<div class="inline field">
