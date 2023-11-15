@@ -6,7 +6,10 @@
 }
 #form fieldset.crop > .crop {
 	position:relative;
-	width:100%;
+	width: calc(100% + 1em);
+	margin-top: 0.6em;
+	margin-left: -0.5em;
+	margin-right: -0.5em;
 }
 
 .crop > img {
