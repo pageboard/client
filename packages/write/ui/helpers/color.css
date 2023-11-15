@@ -16,5 +16,5 @@
 }
 .ui.form .color.field input[type="range"] {
 	max-width: 30%;
-	padding: 0;
+	padding: 0 0.5em;
 }
