@@ -171,6 +171,9 @@ body[data-mode="read"] #pageboard-read > iframe {
 .ui.form .inline.fields {
 	margin-bottom:0;
 }
+.ui.form fieldset {
+	border-width: 1px;
+}
 .ui.form fieldset > legend > small {
 	display:block;
 	position:absolute;
