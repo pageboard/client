@@ -75,7 +75,7 @@ label.checkbox.toggle > input::before {
 	background-position-y: center;
 	width: 2em;
 	display: block;
-	height: 1em;
+	height: 1.1em;
 	position: absolute;
 }
 
