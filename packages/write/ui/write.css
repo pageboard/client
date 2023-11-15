@@ -461,6 +461,7 @@ body[data-mode="read"] #pageboard-read > iframe {
 	max-width:60%;
 	line-height: 1.3em;
 	min-width: 8ch;
+	font-family: revert;
 }
 
 #form .field.datalist > select {
