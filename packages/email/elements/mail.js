@@ -1,6 +1,6 @@
 exports.mail = {
-	priority: -100,
 	title: 'Mail',
+	priority: -100,
 	icon: '<i class="icon file outline"></i>',
 	group: 'page',
 	dependencies: ['core'],

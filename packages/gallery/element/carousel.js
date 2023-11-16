@@ -1,6 +1,6 @@
 exports.carousel = {
-	priority: 21,
 	title: "Carousel",
+	priority: 21,
 	icon: '<i class="image icon"></i>',
 	menu: "widget",
 	group: 'block',

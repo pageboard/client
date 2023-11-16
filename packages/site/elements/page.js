@@ -1,6 +1,6 @@
 exports.page = {
-	priority: -100,
 	title: 'Page',
+	priority: -100,
 	icon: '<i class="icon file outline"></i>',
 	group: 'page',
 	dependencies: ['core'],
@@ -108,8 +108,8 @@ exports.page = {
 };
 
 exports.redirection = {
-	priority: -100,
 	title: 'Redirection',
+	priority: -100,
 	icon: '<i class="icon random"></i>',
 	dependencies: ['core'],
 	bundle: true,

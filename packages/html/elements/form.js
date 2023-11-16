@@ -1,6 +1,6 @@
 exports.query_form = {
-	priority: 0, // scripts must run before 'query' scripts
 	title: 'Form Query',
+	priority: 0, // scripts must run before 'query' scripts
 	icon: '<i class="write icon"></i>',
 	group: 'block form',
 	menu: "form",
@@ -66,8 +66,8 @@ exports.query_form = {
 };
 
 exports.api_form = {
-	priority: 0, // scripts must run before 'query' scripts
 	title: 'Form Submit',
+	priority: 0, // scripts must run before 'query' scripts
 	icon: '<i class="write icon"></i>',
 	group: 'block form',
 	menu: "form",

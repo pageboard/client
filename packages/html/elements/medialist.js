@@ -1,6 +1,6 @@
 exports.medialist = {
-	priority: 20,
 	title: "List",
+	priority: 20,
 	group: "block",
 	icon: '<i class="list icon"></i>',
 	menu: "widget",

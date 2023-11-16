@@ -20,8 +20,8 @@ exports.site.properties.extra.properties.google_site_verification = {
 };
 
 exports.google_tag = {
-	priority: 10,
 	group: "block",
+	priority: 10,
 	csp: {
 		img: [
 			"https://*.google-analytics.com",

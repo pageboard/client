@@ -111,9 +111,9 @@ exports.pdf = {
 
 exports.sheet = {
 	title: 'Sheet',
+	priority: 1, // after HTMLElementImage
 	menu: "pdf",
 	group: 'block',
-	priority: 1, // after HTMLElementImage
 	bundle: 'pdf',
 	context: 'pdf//',
 	icon: '<i class="icon file outline"></i>',

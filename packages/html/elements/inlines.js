@@ -1,6 +1,6 @@
 exports.strong = {
-	priority: 100,
 	title: "Strong",
+	priority: 100,
 	contents: "text*",
 	inplace: true,
 	inline: true,
@@ -11,8 +11,8 @@ exports.strong = {
 };
 
 exports.em = {
-	priority: 101,
 	title: "Emphasize",
+	priority: 101,
 	contents: "text*",
 	inline: true,
 	inplace: true,
@@ -23,8 +23,8 @@ exports.em = {
 };
 
 exports.i = {
-	priority: 102,
 	title: "Italic",
+	priority: 102,
 	contents: "text*",
 	inline: true,
 	inplace: true,
@@ -35,8 +35,8 @@ exports.i = {
 };
 
 exports.light = {
-	priority: 103,
 	title: "Light",
+	priority: 103,
 	icon: '<i class="icon" style="font-weight:lighter">L</i>',
 	contents: "text*",
 	inline: true,
@@ -46,8 +46,8 @@ exports.light = {
 };
 
 exports.sup = {
-	priority: 104,
 	title: "Sup",
+	priority: 104,
 	icon: '<i class="superscript icon"></i>',
 	contents: "text*",
 	inline: true,
@@ -58,8 +58,8 @@ exports.sup = {
 };
 
 exports.sub = {
-	priority: 105,
 	title: "Inf",
+	priority: 105,
 	icon: '<i class="subscript icon"></i>',
 	contents: "text*",
 	inline: true,
@@ -70,8 +70,8 @@ exports.sub = {
 };
 
 exports.strike = {
-	priority: 106,
 	title: "Strike",
+	priority: 106,
 	icon: '<i class="strikethrough icon"></i>',
 	contents: "text*",
 	inline: true,
@@ -82,8 +82,8 @@ exports.strike = {
 };
 
 exports.style = {
-	priority: 99,
 	title: "Style",
+	priority: 99,
 	icon: '<i class="paint brush icon"></i>',
 	contents: "text*",
 	inline: true,

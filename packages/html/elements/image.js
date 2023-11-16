@@ -145,8 +145,8 @@ exports.image = {
 };
 
 exports.inlineImage = {
-	priority: 12,
 	title: "Icon",
+	priority: 12,
 	icon: '<i class="icon image"></i>',
 	properties: {
 		url: {

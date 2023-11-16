@@ -1,6 +1,6 @@
 exports.pagination = {
-	priority: 13, // after fetch and after menu items
 	title: "Pagination",
+	priority: 13, // after fetch and after menu items
 	icon: '<b class="icon">±N</b>',
 	menu: "link",
 	group: "block",

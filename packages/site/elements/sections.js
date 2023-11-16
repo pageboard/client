@@ -12,8 +12,8 @@ exports.hard_break = {
 };
 
 exports.paragraph = {
-	priority: -10,
 	title: "Paragraph",
+	priority: -10,
 	icon: '<i class="icon paragraph"></i>',
 	isolating: false,
 	properties: {

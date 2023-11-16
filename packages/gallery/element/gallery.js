@@ -26,8 +26,8 @@ exports.gallery = {
 exports.editor?.scripts.push('../ui/gallery-helper.js');
 
 exports.itemlink = {
-	priority: 10,
 	title: "Item Link",
+	priority: 10,
 	icon: '<i class="icon linkify"></i>',
 	menu: "widget",
 	properties: {

@@ -44,8 +44,8 @@ exports.link = {
 };
 
 exports.link_button = {
-	priority: 11,
 	title: "Link Btn",
+	priority: 11,
 	icon: '<i class="icons"><i class="linkify icon"></i><i class="corner hand pointer icon"></i></i>',
 	properties: {
 		url: {

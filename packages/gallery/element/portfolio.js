@@ -1,6 +1,6 @@
 exports.portfolio = {
-	priority: 21,
 	title: "Portfolio",
+	priority: 21,
 	icon: '<i class="grid layout icon"></i>',
 	menu: "widget",
 	bundle: 'gallery',

@@ -79,8 +79,8 @@ exports.menu_group = {
 };
 
 exports.menu_item_link = {
-	priority: 10,
 	title: "Inline",
+	priority: 10,
 	icon: '<b class="icon">Link</b>',
 	menu: "link",
 	context: "menu//",
@@ -133,8 +133,8 @@ exports.menu_item_block = { ...exports.menu_item_link,
 };
 
 exports.menu_item_text = {
-	priority: 11,
 	title: 'Text',
+	priority: 11,
 	icon: '<b class="icon">Item</b>',
 	menu: "link",
 	context: "menu//",
@@ -154,8 +154,8 @@ exports.menu_item_text = {
 };
 
 exports.menu_item_dropdown = {
-	priority: 11,
 	title: "Dropdown",
+	priority: 11,
 	icon: '<b class="icon">Drop</b>',
 	menu: "link",
 	context: "menu//",
@@ -197,8 +197,8 @@ exports.menu_item_dropdown = {
 };
 
 exports.menu_item_popup = {
-	priority: 11,
 	title: "Popup",
+	priority: 11,
 	icon: '<b class="icon">Pop</b>',
 	menu: "link",
 	context: "menu//",

@@ -1,6 +1,6 @@
 exports.barcode = {
-	priority: 21,
 	title: "Barcode",
+	priority: 21,
 	icon: '<i class="barcode icon"></i>',
 	menu: "media",
 	bundle: true,

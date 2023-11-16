@@ -3,8 +3,8 @@ exports.text.group += " mail_inline";
 exports.hard_break.group += " mail_inline";
 
 exports.mail_strong = {
-	priority: 12,
 	title: "Strong",
+	priority: 12,
 	icon: '<i class="icon bold"></i>',
 	contents: "text*",
 	inplace: true,
@@ -14,8 +14,8 @@ exports.mail_strong = {
 };
 
 exports.mail_em = {
-	priority: 12,
 	title: "Emphasize",
+	priority: 12,
 	icon: '<i class="icon italic"></i>',
 	contents: "text*",
 	inline: true,
@@ -25,8 +25,8 @@ exports.mail_em = {
 };
 
 exports.mail_light = {
-	priority: 12,
 	title: "Light",
+	priority: 12,
 	icon: '<i class="icon" style="font-weight:lighter">L</i>',
 	contents: "text*",
 	inline: true,
@@ -36,8 +36,8 @@ exports.mail_light = {
 };
 
 exports.mail_sup = {
-	priority: 12,
 	title: "Sup",
+	priority: 12,
 	icon: '<b class="icon">S<sup>up</sup></b>',
 	contents: "text*",
 	inline: true,
@@ -47,8 +47,8 @@ exports.mail_sup = {
 };
 
 exports.mail_caps = {
-	priority: 12,
 	title: "Capitalization",
+	priority: 12,
 	icon: '<span class="icon">Aa</span>',
 	contents: "text*",
 	inline: true,
@@ -82,8 +82,8 @@ exports.mail_caps = {
 };
 
 exports.mail_color = {
-	priority: 12,
 	title: "Color",
+	priority: 12,
 	icon: `<i class="icon" style="background-image:
 		linear-gradient(
 			to right,

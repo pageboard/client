@@ -1,6 +1,6 @@
 exports.write = {
-	priority: 100,
 	title: 'Write',
+	priority: 100,
 	dependencies: ['core', 'services'],
 	bundle: true,
 	standalone: true,

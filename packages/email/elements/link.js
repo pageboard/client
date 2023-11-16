@@ -1,6 +1,6 @@
 exports.mail_link = {
-	priority: 11,
 	title: "Link",
+	priority: 11,
 	icon: '<i class="icon linkify"></i>',
 	properties: {
 		url: {
