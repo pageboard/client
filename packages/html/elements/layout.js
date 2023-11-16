@@ -6,6 +6,7 @@ exports.units = {
 				{ const: 'em' },
 				{ const: 'ch' },
 				{ const: 'vw' },
+				{ const: 'rem' },
 				{ const: 'px' }
 			],
 			default: 'em',
@@ -18,6 +19,7 @@ exports.units = {
 				{ const: 'ex' },
 				{ const: 'vh' },
 				{ const: '%' },
+				{ const: 'em' },
 				{ const: 'px' }
 			],
 			default: 'rem',
