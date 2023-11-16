@@ -1,6 +1,6 @@
 exports.fetch = {
-	priority: 1,
 	title: "Fetch",
+	priority: 1,
 	icon: '<i class="icons"><i class="search icon"></i><i class="top right corner asterisk icon"></i></i>',
 	menu: 'form',
 	group: 'block template',
