@@ -56,7 +56,7 @@ exports.query_form = {
 		action="[redirection.url][redirection.parameters|as:query]"
 		autocomplete="off" class="ui form"></form>`,
 	stylesheets: [
-		'../lib/components/form.css',
+		'../ui/components/form.css',
 		'../ui/form.css'
 	],
 	scripts: [ // for asynchronous submits and automatic triggers
@@ -186,7 +186,7 @@ exports.api_form = {
 		notfound="[notfound.url][notfound.parameters|as:query]"
 		class="ui form [hidden]"></form>`,
 	stylesheets: [
-		'../lib/components/form.css',
+		'../ui/components/form.css',
 		'../ui/form.css'
 	],
 	scripts: [ // for asynchronous submits and automatic triggers

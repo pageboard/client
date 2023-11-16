@@ -285,7 +285,7 @@ exports.inlineImage = {
 		[display.floated|pre:floated ]
 		[display.align|post: aligned]" />`,
 	stylesheets: [
-		'../lib/components/image.css'
+		'../ui/components/image.css'
 	],
 	polyfills: [
 		'IntersectionObserver'

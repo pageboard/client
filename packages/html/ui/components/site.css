@@ -1,0 +1,184 @@
+/*!
+ * # Semantic UI 2.4.1 - Site
+ * http://github.com/semantic-org/semantic-ui/
+ *
+ *
+ * Released under the MIT license
+ * http://opensource.org/licenses/MIT
+ *
+ */
+
+
+/*******************************
+             Page
+*******************************/
+
+html,
+body {
+	height: 100%;
+}
+html {
+	font-size: 14px;
+}
+body {
+	margin: 0px;
+	padding: 0px;
+	overflow-x: hidden;
+	min-width: 320px;
+	background: #FFFFFF;
+	font-family: Arial, sans-serif;
+	font-size: 14px;
+	line-height: 1.4285em;
+	color: rgb(0 0 0 / 87%);
+	-webkit-font-smoothing: antialiased;
+}
+
+
+/*******************************
+             Headers
+*******************************/
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+	font-family: Arial, sans-serif;
+	line-height: 1.2857em;
+	margin: calc(2rem - 0.1429em) 0em 1rem;
+	font-weight: bold;
+	padding: 0em;
+}
+h1 {
+	min-height: 1rem;
+	font-size: 2rem;
+}
+h2 {
+	font-size: 1.7143rem;
+}
+h3 {
+	font-size: 1.2857rem;
+}
+h4 {
+	font-size: 1.0714rem;
+}
+h5 {
+	font-size: 1rem;
+}
+h1:first-child,
+h2:first-child,
+h3:first-child,
+h4:first-child,
+h5:first-child {
+	margin-top: 0em;
+}
+h1:last-child,
+h2:last-child,
+h3:last-child,
+h4:last-child,
+h5:last-child {
+	margin-bottom: 0em;
+}
+
+
+/*******************************
+             Text
+*******************************/
+
+p {
+	margin: 0em 0em 1em;
+	line-height: 1.4285em;
+}
+p:first-child {
+	margin-top: 0em;
+}
+p:last-child {
+	margin-bottom: 0em;
+}
+
+/*-------------------
+        Links
+--------------------*/
+
+a {
+	color: #4183C4;
+	text-decoration: none;
+}
+a:hover {
+	color: #1e70bf;
+	text-decoration: none;
+}
+
+
+/*******************************
+         Scrollbars
+*******************************/
+
+
+
+/*******************************
+          Highlighting
+*******************************/
+
+
+/* Site */
+::selection {
+	background-color: #CCE2FF;
+	color: rgb(0 0 0 / 87%);
+}
+
+/* Form */
+textarea::selection,
+input::selection {
+	background-color: rgb(100 100 100 / 40%);
+	color: rgb(0 0 0 / 87%);
+}
+
+/* Force Simple Scrollbars */
+body ::-webkit-scrollbar {
+	appearance: none;
+	width: 10px;
+	height: 10px;
+}
+body ::-webkit-scrollbar-track {
+	background: rgb(0 0 0 / 10%);
+	border-radius: 0px;
+}
+body ::-webkit-scrollbar-thumb {
+	cursor: pointer;
+	border-radius: 5px;
+	background: rgb(0 0 0 / 25%);
+	transition: color 0.2s ease;
+}
+body ::-webkit-scrollbar-thumb:window-inactive {
+	background: rgb(0 0 0 / 15%);
+}
+body ::-webkit-scrollbar-thumb:hover {
+	background: rgb(128 135 139 / 80%);
+}
+
+/* Inverted UI */
+body .ui.inverted::-webkit-scrollbar-track {
+	background: rgb(255 255 255 / 10%);
+}
+body .ui.inverted::-webkit-scrollbar-thumb {
+	background: rgb(255 255 255 / 25%);
+}
+body .ui.inverted::-webkit-scrollbar-thumb:window-inactive {
+	background: rgb(255 255 255 / 15%);
+}
+body .ui.inverted::-webkit-scrollbar-thumb:hover {
+	background: rgb(255 255 255 / 35%);
+}
+
+
+/*******************************
+        Global Overrides
+*******************************/
+
+
+
+/*******************************
+         Site Overrides
+*******************************/
+

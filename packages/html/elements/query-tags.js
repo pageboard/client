@@ -21,7 +21,7 @@ exports.query_tags = {
 		<div class="ui labels"></div>
 	</element-query-tags>`,
 	stylesheets: [
-		'../lib/components/label.css',
+		'../ui/components/label.css',
 		'../ui/query-tags.css'
 	],
 	scripts: [

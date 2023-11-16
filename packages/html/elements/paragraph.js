@@ -95,7 +95,7 @@ exports.segment = {
 	icon: '<b class="icon">Seg</b>',
 	html: '<div class="ui [size] [raised] [disabled] [inverted] [padded] [compact] [circular] [basic] [attached|switch:both: |post: attached] [align|post: aligned] segment"></div>',
 	stylesheets: [
-		'../lib/components/segment.css'
+		'../ui/components/segment.css'
 	]
 };
 
@@ -128,7 +128,7 @@ exports.divider = {
 	},
 	html: '<div class="ui divider [ruler|or:hidden] [large|alt:section] [clearing] [fitted]"></div>',
 	stylesheets: [
-		'../lib/components/divider.css'
+		'../ui/components/divider.css'
 	]
 };
 

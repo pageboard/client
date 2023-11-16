@@ -75,7 +75,7 @@ exports.input_button = {
 	},
 	html: '<button type="[type]" disabled="[disabled]" class="ui [full|alt:fluid:] [icon] [compact] [float|post:%20floated] button" name="[name]" value="[value]">[type|schema:title]</button>',
 	stylesheets: [
-		'../lib/components/button.css',
+		'../ui/components/button.css',
 		'../ui/button.css'
 	]
 };
@@ -367,7 +367,7 @@ exports.input_checkbox = {
 		</div>
 	</div>`,
 	stylesheets: [
-		'../lib/components/checkbox.css'
+		'../ui/components/checkbox.css'
 	]
 };
 
@@ -425,7 +425,7 @@ exports.input_radio = {
 		</div>
 	</div>`,
 	stylesheets: [
-		'../lib/components/checkbox.css',
+		'../ui/components/checkbox.css',
 		'../ui/input_radio.css'
 	]
 };
@@ -488,8 +488,8 @@ exports.input_select = {
 		</element-select>
 	</div>`,
 	stylesheets: [
-		'../lib/components/dropdown.css',
-		'../lib/components/label.css',
+		'../ui/components/dropdown.css',
+		'../ui/components/label.css',
 		'../ui/select.css'
 	],
 	scripts: [

@@ -24,7 +24,7 @@ exports.menu = {
 	group: "block",
 	html: `<nav class="ui [direction] menu"></nav>`,
 	stylesheets: [
-		'../lib/components/menu.css'
+		'../ui/components/menu.css'
 	]
 };
 
@@ -192,7 +192,7 @@ exports.menu_item_dropdown = {
 		<div class="menu" block-content="items"></div>
 	</div>`,
 	stylesheets: [
-		'../lib/components/dropdown.css'
+		'../ui/components/dropdown.css'
 	]
 };
 

@@ -148,6 +148,6 @@ exports.fieldlist_button = {
 	},
 	html: '<button type="button" class="ui [full|alt:fluid:] [icon] [compact] [float|post:%20floated] button" value="[type]">Label</button>',
 	stylesheets: [
-		'../lib/components/button.css',
+		'../ui/components/button.css',
 	]
 };

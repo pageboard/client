@@ -39,7 +39,7 @@ exports.link = {
 	tag: 'a:not([block-type]),a[block-type="link"]',
 	html: '<a href="[url]" hreflang="[lang]" class="[button|alt:ui button]"></a>',
 	stylesheets: [
-		'../lib/components/button.css'
+		'../ui/components/button.css'
 	]
 };
 
@@ -106,6 +106,6 @@ exports.link_button = {
 	tag: 'a.ui.button',
 	html: '<a href="[url]" hreflang="[lang]" class="ui [full|alt:fluid:] [icon] [compact] [float|post:%20floated] button"></a>',
 	stylesheets: [
-		'../lib/components/button.css'
+		'../ui/components/button.css'
 	]
 };

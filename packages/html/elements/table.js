@@ -63,7 +63,7 @@ exports.table = {
 		[compact]"
 	></table>`,
 	stylesheets: [
-		'../lib/components/table.css'
+		'../ui/components/table.css'
 	]
 };
 

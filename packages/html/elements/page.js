@@ -1,6 +1,6 @@
 exports.page.stylesheets = [
 	...exports.page.stylesheets,
-	'../lib/components/reset.css',
+	'../ui/components/reset.css',
 	'../ui/site.css',
 	'../ui/page.css',
 	'../ui/transition.css'

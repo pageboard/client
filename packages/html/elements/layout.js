@@ -382,7 +382,7 @@ exports.layout = {
 		style-background-position="[background.position]"
 	></div>`,
 	stylesheets: [
-		'../lib/components/container.css',
+		'../ui/components/container.css',
 		'../ui/layout.css'
 	],
 	scripts: [

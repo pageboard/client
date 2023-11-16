@@ -56,8 +56,8 @@ exports.input_file = {
 			disabled="[disabled]" accept="[limits.types|join:,]" name="[name]" />
 	</div>`,
 	stylesheets: [
-		'../lib/components/input.css',
-		'../lib/components/label.css',
+		'../ui/components/input.css',
+		'../ui/components/label.css',
 		'../ui/input-file.css'
 	],
 	scripts: [

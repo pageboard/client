@@ -25,7 +25,7 @@ exports.tabs = {
 		<div block-content="tabs"></div>
 	</element-tabs>`,
 	stylesheets: [
-		'../lib/components/tab.css',
+		'../ui/components/tab.css',
 		'../ui/tab.css'
 	],
 	scripts: [

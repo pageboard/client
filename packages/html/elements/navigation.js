@@ -61,7 +61,7 @@ exports.breadcrumb = {
 		<div class="active section">[$page.content.title|fail:div::1]</div>
 	</nav>`,
 	stylesheets: [
-		'../lib/components/breadcrumb.css'
+		'../ui/components/breadcrumb.css'
 	]
 };
 

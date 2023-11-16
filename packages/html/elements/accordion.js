@@ -6,7 +6,7 @@ exports.accordion = {
 	contents: "fold+",
 	html: '<element-accordion class="ui accordion"></element-accordion>',
 	stylesheets: [
-		'../lib/components/accordion.css',
+		'../ui/components/accordion.css',
 		'../ui/accordion.css'
 	],
 	scripts: [

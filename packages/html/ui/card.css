@@ -509,7 +509,7 @@
 --------------------*/
 
 
-@media only screen and (max-width: 767px) {
+@media (width <= 767px) {
 	/* Mobile Only */
 	.ui.two.doubling.cards {
 		margin-left: 0em;
@@ -594,7 +594,7 @@
 	}
 }
 
-@media only screen and (min-width: 768px) and (max-width: 991px) {
+@media (width >= 768px) and (width <= 991px) {
 	/* Tablet Only */
 	.ui.two.doubling.cards {
 		margin-left: 0em;
@@ -674,7 +674,7 @@
 			Stackable
 --------------------*/
 
-@media only screen and (max-width: 767px) {
+@media (width <= 767px) {
 	.ui.stackable.cards {
 		display: block !important;
 	}

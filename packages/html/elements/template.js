@@ -17,5 +17,5 @@ exports.message.properties.inverted = {
 };
 
 exports.message.stylesheets.unshift(
-	'../lib/components/message.css'
+	'../ui/components/message.css'
 );

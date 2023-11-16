@@ -336,7 +336,7 @@ exports.input_property = {
 		return node;
 	},
 	stylesheets: [
-		'../lib/components/accordion.css',
+		'../ui/components/accordion.css',
 		'../ui/accordion.css'
 	],
 	scripts: [
