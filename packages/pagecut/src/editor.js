@@ -10,8 +10,6 @@ import { gapCursor } from "prosemirror-gapcursor";
 import * as History from "prosemirror-history";
 import OrderedMap from "orderedmap";
 
-import * as baseSchema from "prosemirror-schema-basic";
-
 import IdPlugin from "./id-plugin";
 import FocusPlugin from "./focus-plugin";
 import KeymapPlugin from "./keymap-plugin";
@@ -27,8 +25,8 @@ const mac = typeof navigator != "undefined" ? /Mac/.test(navigator.platform) : f
 class Editor extends View.EditorView {
 	#utils;
 	static defaults = {
-		nodes: OrderedMap.from(baseSchema.nodes),
-		marks: OrderedMap.from(baseSchema.marks),
+		nodes: OrderedMap.from({}),
+		marks: OrderedMap.from({}),
 		mapKeys: {
 			"Mod-z": History.undo,
 			"Shift-Mod-z": History.redo,
@@ -75,7 +73,7 @@ class Editor extends View.EditorView {
 		const { elements } = viewer;
 		const spec = {
 			topNode,
-			nodes: Editor.defaults.nodes.remove(topNode ? 'doc' : null),
+			nodes: Editor.defaults.nodes,
 			marks: Editor.defaults.marks
 		};
 
