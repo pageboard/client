@@ -33,19 +33,25 @@ class CustomViewer extends Viewer {
 	}
 
 	init() {
-		const bundles = this.bundles = new Map();
-		const groups = this.groups = new Map();
-		for (const [name, el] of Object.entries(this.elements)) {
-			el.name = name;
-			if (el.group) for (const group of el.group.split(/\s+/)) {
-				let list = groups.get(group);
-				if (!list) groups.set(group, list = new Set());
-				list.add(name);
-			}
-			if (el.bundle) for (const n of el.bundle) {
-				let list = bundles.get(n);
-				if (!list) bundles.set(n, list = new Set());
-				list.add(name);
+		const bbg = this.bundlesByGroup = new Map();
+		const bbe = this.bundlesByElement = new Map();
+		for (const root of this.elements.core.bundles) {
+			const rootEl = this.elements[root];
+			if (!rootEl) continue;
+			rootEl.groups = new Set();
+			for (const name of rootEl.bundle) {
+				const el = this.elements[name];
+				el.name = name;
+				let list = bbe.get(name);
+				if (!list) bbe.set(name, list = new Set());
+				list.add(root);
+
+				if (el.group) for (const group of el.group.split(/\s+/)) {
+					rootEl.groups.add(group);
+					let bundles = bbg.get(group);
+					if (!bundles) bbg.set(group, bundles = new Set());
+					bundles.add(root);
+				}
 			}
 		}
 	}
@@ -53,6 +59,7 @@ class CustomViewer extends Viewer {
 
 const baseElements = {
 	error: {
+		name: 'error',
 		scripts: [],
 		stylesheets: [],
 		html: `<html>
@@ -156,9 +163,8 @@ export default class Scope {
 		const bundles = new Set();
 		const els = this.$elements;
 		for (const type of types) {
-			const roots = this.$view.bundles.get(type);
-			if (!roots) continue;
-			for (const p of roots) {
+			const roots = this.$view.bundlesByElement.get(type);
+			if (roots) for (const p of roots) {
 				const root = els[p];
 				if (root.group != "page") bundles.add(p);
 			}

@@ -256,9 +256,14 @@ Pageboard.Controls.Menu = class Menu {
 	}
 	items() {
 		const list = [];
-		for (const el of Object.values(this.editor.elements).sort((a, b) => {
+		const { schema } = this.editor.state;
+		const els = Object.keys(schema.marks)
+			.concat(Object.keys(schema.nodes))
+			.map(name => this.editor.elements[name]);
+		for (const el of els.sort((a, b) => {
 			return (a.title ?? a.name).localeCompare(b.title ?? b.name);
 		})) {
+			if (!el) continue;
 			const itemSpec = this.item(el);
 			if (itemSpec) {
 				list.push(new Pagecut.MenuItem(itemSpec));

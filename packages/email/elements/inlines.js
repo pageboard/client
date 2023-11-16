@@ -1,6 +1,6 @@
-exports.text.group += " mail_inline";
+exports.text.group = "mail_inline";
 
-exports.hard_break.group += " mail_inline";
+exports.hard_break.group = "mail_inline";
 
 exports.mail_strong = {
 	title: "Strong",

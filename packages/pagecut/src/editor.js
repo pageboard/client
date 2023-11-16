@@ -78,8 +78,24 @@ class Editor extends View.EditorView {
 		};
 
 		const nodeViews = {};
-		const elemsList = Object.keys(Editor.defaults.elements)
-			.concat(elements[topNode].bundle)
+
+		const elSet = new Set();
+
+		for (const name of Object.keys(Editor.defaults.elements)) {
+			elSet.add(name);
+		}
+
+		for (const group of elements[topNode].groups) {
+			for (const name of viewer.bundlesByGroup.get(group)) {
+				if (name != topNode && elements[name].group == 'page') continue;
+				elSet.add(name);
+				for (const sub of elements[name].bundle) {
+					elSet.add(sub);
+				}
+			}
+		}
+
+		const elemsList = Array.from(elSet)
 			.map(name => viewer.element(name))
 			.sort((a, b) => {
 				return (b.priority || 0) - (a.priority || 0);
@@ -183,6 +199,7 @@ class Editor extends View.EditorView {
 		viewer.blocks = new BlocksEdit(viewer, opts);
 
 		for (const [name, elt] of Object.entries(Editor.defaults.elements)) {
+			elt.name = name;
 			viewer.setElement({ ...elt, ...viewer.elements[name] });
 		}
 
