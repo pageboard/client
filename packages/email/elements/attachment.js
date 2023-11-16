@@ -4,7 +4,8 @@ exports.attachment = {
 	properties: {
 		filename: {
 			title: 'File name',
-			type: 'string'
+			type: 'string',
+			format: 'singleline'
 		},
 		href: {
 			title: 'URL',
