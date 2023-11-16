@@ -10,7 +10,6 @@ import {
 export default function define(viewer, elt, schema, nodeViews) {
 	if (!viewer.tags) viewer.tags = {};
 	if (elt.name == "text") {
-		schema.nodes = schema.nodes.remove(elt.name);
 		schema.nodes = schema.nodes.addToStart(elt.name, elt);
 		return;
 	}

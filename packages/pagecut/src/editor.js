@@ -94,12 +94,26 @@ class Editor extends View.EditorView {
 				}
 			}
 		}
-
+		const text = {
+			name: 'text',
+			priority: -1001,
+			inline: true,
+			group: 'inline'
+		};
+		const re = /\b(?<group>[a-zA-Z0-9]+_inline)\b/g;
 		const elemsList = Array.from(elSet)
-			.map(name => viewer.element(name))
+			.map(name => {
+				const el = viewer.element(name);
+				if (el.inline && el.group) {
+					const { group } = re.exec(el.group)?.groups || {};
+					if (group) text.group = group;
+				}
+				return el;
+			})
 			.sort((a, b) => {
 				return (b.priority || 0) - (a.priority || 0);
 			});
+		elemsList.unshift(text);
 		for (const el of elemsList) {
 			DefineSpecs(viewer, el, spec, nodeViews);
 		}

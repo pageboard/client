@@ -1,8 +1,3 @@
-exports.text = {
-	inline: true,
-	group: 'inline'
-};
-
 exports.hard_break = {
 	inline: true,
 	inplace: true,
