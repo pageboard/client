@@ -1,5 +1,13 @@
-Page.connect(new class {
+class HTMLElementBodyPrint extends Page.create(HTMLBodyElement) {
 	#stylesheet;
+
+	static defaults = {
+		dataFoldWidth: x => parseFloat(x) || 0,
+		dataCounterOffset: x => parseInt(x) || 0,
+		dataWidth: x => parseFloat(x) || 210,
+		dataHeight: x => parseFloat(x) || 297,
+		dataMargin: x => parseFloat(x) || 0
+	};
 
 	patch(state) {
 		const { pages, foldWidth } = state.query;
@@ -11,17 +19,9 @@ Page.connect(new class {
 			state.vars.foldWidth = true;
 		}
 	}
-	setup(state) {
+	paint(state) {
 		this.#removePrintButtons();
-		const opts = {};
-		for (const [name, str] of Object.entries(document.body.dataset)) {
-			opts[name] = parseFloat(str);
-		}
-		opts.width ??= 210;
-		opts.height ??= 297;
-		opts.foldWidth ??= 0;
-		opts.counterOffset ??= 0;
-
+		const opts = this.options;
 		if (window.devicePixelRatio < 4 && window.matchMedia('print').matches) {
 			// TODO
 		}
@@ -219,4 +219,5 @@ Page.connect(new class {
 			height: Math.floor(h)
 		};
 	}
-});
+}
+Page.define(`element-print`, HTMLElementBodyPrint, 'body');

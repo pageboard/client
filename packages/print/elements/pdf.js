@@ -98,6 +98,7 @@ exports.pdf = {
 		...exports.page.fragments || [], {
 			path: 'body',
 			attributes: {
+				"is": "element-print",
 				"data-width": "[paper.width]",
 				"data-height": "[paper.height]",
 				"data-margin": "[paper.margin]",
