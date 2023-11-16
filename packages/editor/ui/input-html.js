@@ -306,14 +306,14 @@ class HTMLElementInputHTML extends Page.create(HTMLTextAreaElement) {
 
 		const elts = this.constructor.elements;
 		const scope = state.scope.copy({ $elements: elts });
-		scope.$view.prepare();
+		scope.viewer.prepare();
 		scope.import();
 
 
 		this.#editor = new window.Pagecut.Editor({
 			topNode: 'fragment',
 			store: {},
-			viewer: scope.$view,
+			viewer: scope.viewer,
 			place: textarea,
 			scope,
 			plugins: [{

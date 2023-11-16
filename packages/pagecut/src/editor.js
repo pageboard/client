@@ -86,7 +86,7 @@ class Editor extends View.EditorView {
 		}
 
 		for (const group of elements[topNode].groups) {
-			for (const name of viewer.bundlesByGroup.get(group)) {
+			for (const name of viewer.groups.get(group)) {
 				if (name != topNode && elements[name].group == 'page') continue;
 				elSet.add(name);
 				for (const sub of elements[name].bundle) {

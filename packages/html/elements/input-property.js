@@ -38,7 +38,6 @@ exports.input_property = {
 	},
 	html: '<div><code>select property name</code></div>',
 	fuse: function(node, d, scope) {
-		const view = scope.$view;
 		const doc = scope.$doc;
 		const dateFormats = ["date", "time", "date-time"];
 		let name = d.name;
@@ -151,7 +150,7 @@ exports.input_property = {
 				node.appendChild(content);
 				content = content.lastElementChild;
 				for (const item of listOf) {
-					content.appendChild(view.render({
+					content.appendChild(scope.render({
 						type: multiple ? 'input_checkbox' : 'input_radio',
 						id,
 						data: {
@@ -167,7 +166,7 @@ exports.input_property = {
 			} else {
 				const frag = doc.createDocumentFragment();
 				for (const item of listOf) {
-					frag.appendChild(view.render({
+					frag.appendChild(scope.render({
 						type: 'input_select_option',
 						data: {
 							value: item.type == "null" ? null : item.const
@@ -177,7 +176,7 @@ exports.input_property = {
 						}
 					}));
 				}
-				node.appendChild(view.render({
+				node.appendChild(scope.render({
 					id,
 					type: 'input_select',
 					data: {
@@ -196,7 +195,7 @@ exports.input_property = {
 			const step = propType.multipleOf || (propType.type == "integer" ? 1 : 0.001);
 			if (propType.minimum != null && propType.maximum != null) {
 				if (propType.maximum - propType.minimum <= d.range) {
-					return node.appendChild(view.render({
+					return node.appendChild(scope.render({
 						id,
 						type: 'input_range',
 						data: {
@@ -215,7 +214,7 @@ exports.input_property = {
 					}));
 				}
 			}
-			node.appendChild(view.render({
+			node.appendChild(scope.render({
 				id,
 				type: 'input_number',
 				data: {
@@ -232,7 +231,7 @@ exports.input_property = {
 				}
 			}));
 		} else if (propType.type == "boolean") {
-			node.appendChild(view.render({
+			node.appendChild(scope.render({
 				id,
 				type: 'input_checkbox',
 				data: {
@@ -246,7 +245,7 @@ exports.input_property = {
 				}
 			}));
 		} else if (propType.type == "object" && Object.keys(propType.properties).sort().join(' ') == "end start" && dateFormats.includes(propType.properties.start.format) && dateFormats.includes(propType.properties.end.format)) {
-			node.appendChild(view.render({
+			node.appendChild(scope.render({
 				id,
 				type: 'input_date_slot',
 				data: {
@@ -262,7 +261,7 @@ exports.input_property = {
 				}
 			}));
 		} else if (propType.type == "string" && dateFormats.includes(propType.format)) {
-			if (d.multiple) node.appendChild(view.render({
+			if (d.multiple) node.appendChild(scope.render({
 				id,
 				type: 'input_date_slot',
 				data: {
@@ -278,7 +277,7 @@ exports.input_property = {
 					label: prop.title
 				}
 			}));
-			else node.appendChild(view.render({
+			else node.appendChild(scope.render({
 				id,
 				type: 'input_date_time',
 				data: {
@@ -305,7 +304,7 @@ exports.input_property = {
 					else return "*/*";
 				});
 			}
-			node.appendChild(view.render({
+			node.appendChild(scope.render({
 				id,
 				type: 'input_file',
 				data: {
@@ -320,7 +319,7 @@ exports.input_property = {
 			}));
 		} else {
 			const type = (propType.format || propType.pattern) ? 'text' : 'textarea';
-			node.appendChild(view.render({
+			node.appendChild(scope.render({
 				id,
 				type: 'input_text',
 				data: {

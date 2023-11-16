@@ -33,7 +33,7 @@ class CustomViewer extends Viewer {
 	}
 
 	init() {
-		const bbg = this.bundlesByGroup = new Map();
+		const bbg = this.groups = new Map();
 		const bbe = this.bundlesByElement = new Map();
 		for (const root of this.elements.core.bundles) {
 			const rootEl = this.elements[root];
@@ -78,7 +78,6 @@ const baseElements = {
 
 export default class Scope {
 	#state;
-	#view;
 
 	static init(state) {
 		const elts = Pageboard.elements ??= {};
@@ -132,15 +131,12 @@ export default class Scope {
 	set $doc(v) {
 		// ignore it
 	}
-	get $view() {
-		return this.#view;
-	}
 	get $elements() {
-		return this.#view.elements;
+		return this.viewer.elements;
 	}
 	set $elements(elts) {
-		if (elts == this.#view?.elements) return;
-		const v = this.#view = new CustomViewer({
+		if (elts == this.viewer?.elements) return;
+		const v = this.viewer = new CustomViewer({
 			elements: elts,
 			document: this.$doc,
 			scope: this
@@ -148,13 +144,17 @@ export default class Scope {
 		v.blocks = new BlocksView(v);
 	}
 
+	get $groups() {
+		return this.viewer.groups;
+	}
+
 	var(name) {
 		this.#state.vars[name] = true;
 	}
 	copy(extra) {
 		const scope = new Scope(this.#state, this);
-		scope.#view = this.#view;
-		scope.#view.scope = this;
+		scope.viewer = this.viewer;
+		scope.viewer.scope = this;
 		if (extra) Object.assign(scope, extra);
 		return scope;
 	}
@@ -163,7 +163,7 @@ export default class Scope {
 		const bundles = new Set();
 		const els = this.$elements;
 		for (const type of types) {
-			const roots = this.$view.bundlesByElement.get(type);
+			const roots = this.viewer.bundlesByElement.get(type);
 			if (roots) for (const p of roots) {
 				const root = els[p];
 				if (root.group != "page") bundles.add(p);
@@ -202,7 +202,7 @@ export default class Scope {
 
 		this.#install(types, el);
 
-		if (el.name) this.$view.setElement(el);
+		if (el.name) this.viewer.setElement(el);
 		else await load.bundle(this.#state, el);
 
 		if (res) for (const [key, item] of Object.entries(res)) {

@@ -100,7 +100,7 @@ export function render(scope, data, el) {
 			}
 		}
 	}
-	const frag = scope.$view.from(block, blocks, {
+	const frag = scope.viewer.from(block, blocks, {
 		element: el,
 		scope,
 		strip: !scope.$write

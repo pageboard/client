@@ -117,7 +117,7 @@ Pageboard.Editor = function Editor(win, state) {
 	if (editor && !editor.closed) {
 		editor.close();
 	}
-	const viewer = state.scope.$view;
+	const { viewer } = state.scope;
 	const doc = win.document;
 	const body = doc.body;
 	win.Pagecut.Editor.prototype.update = update;
