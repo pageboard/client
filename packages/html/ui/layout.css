@@ -68,7 +68,7 @@
 	}
 
 	&.column {
-		& > img,
+		> img,
 		&.left > img {
 			align-self:flex-start;
 		}
