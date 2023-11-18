@@ -51,8 +51,8 @@ exports.pdf = {
 					default: 10
 				},
 				trim: {
-					title: 'Trim after print',
-					description: 'Amidst margin\nUseless without bleed',
+					title: 'Trim margins after print',
+					description: 'About 2.5mm',
 					type: 'boolean'
 				},
 				fold: {
