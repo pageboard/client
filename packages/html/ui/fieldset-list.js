@@ -164,28 +164,28 @@ class HTMLElementFieldsetList extends Page.Element {
 			}
 		});
 
-		const view = this.ownView;
-		view.textContent = '';
-		view.appendChild(tpl);
-
 		if (placeholder) {
-			for (const node of view.querySelectorAll(`[name^="${this.#prefixStr}"]`)) {
+			for (const node of tpl.querySelectorAll(`[name^="${this.#prefixStr}"]`)) {
 				node.disabled = true;
 			}
 		}
 
-		view.querySelectorAll(this.#selector('up')).forEach((node, i) => {
+		tpl.querySelectorAll(this.#selector('up')).forEach((node, i) => {
 			node.disabled = i == 0;
 		});
-		view.querySelectorAll(this.#selector('down')).forEach((node, i, arr) => {
+		tpl.querySelectorAll(this.#selector('down')).forEach((node, i, arr) => {
 			node.disabled = i == arr.length - 1;
 		});
-		view.querySelectorAll(this.#selector('del')).forEach((node) => {
+		tpl.querySelectorAll(this.#selector('del')).forEach((node) => {
 			node.disabled = this.#list.length <= min;
 		});
-		view.querySelectorAll(this.#selector('add')).forEach((node) => {
+		tpl.querySelectorAll(this.#selector('add')).forEach((node) => {
 			node.disabled = this.#list.length >= max;
 		});
+
+		const view = this.ownView;
+		view.textContent = '';
+		view.appendChild(tpl);
 	}
 
 	#parts(key) {
