@@ -13,8 +13,23 @@ class HTMLElementFieldSet extends Page.create(HTMLFieldSetElement) {
 
 	fill(query) {
 		if (this.isContentEditable || !this.options?.name || !this.form) return;
-		if (!query) query = this.form.read(true);
-		const val = query[this.options.name];
+		const { name } = this.options;
+		if (!query) {
+			query = {};
+			for (const node of this.form.querySelectorAll(
+				`[name="${name}"]`
+			)) {
+				if (node.type == "checkbox") {
+					throw new Error("Unsupported checkbox in fiedset condition: " + this.options.name);
+				}
+				if (node.type == "radio") {
+					if (node.checked) query[name] = node.value;
+				} else {
+					query[name] = node.value;
+				}
+			}
+		}
+		const val = query[name];
 		const disabled = this.disabled = this.hidden = !this.#compare(val);
 		for (const node of this.querySelectorAll('[name]')) {
 			node.disabled = disabled;
@@ -22,13 +37,12 @@ class HTMLElementFieldSet extends Page.create(HTMLFieldSetElement) {
 	}
 
 	patch(state) {
-		// before/after form#fill
-		this.fill(null);
-		state.finish(() => this.fill(null));
+		// initialize
+		this.fill();
 	}
 	handleAllChange(e, state) {
 		if (this.form?.contains(e.target)) {
-			this.fill(null);
+			this.fill();
 		}
 	}
 }
