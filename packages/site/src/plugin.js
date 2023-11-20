@@ -304,7 +304,7 @@ function childrenFn(ctx, block, name) {
 		const item = children.find(item => item.id == id);
 		if (item) out.push(item);
 	}
-	return out;
+	return { items: out };
 }
 
 function formFn(ctx, val, action, name) {
