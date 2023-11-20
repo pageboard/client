@@ -139,13 +139,13 @@ exports.binding = {
 	icon: '<i class="asterisk icon"></i>',
 	properties: {
 		fill: {
-			title: 'Fill',
-			description: 'fill content with matchdom expression, filters on new lines',
+			title: 'Fill content',
+			description: 'Matchdom expression, one filter by line',
 			type: 'string'
 		},
 		attr: {
-			title: 'Attribute',
-			description: 'set attributes with matchdom expression, filters on new lines',
+			title: 'Fill attribute',
+			description: 'Matchdom expression, one filter by line',
 			type: 'string'
 		}
 	},
