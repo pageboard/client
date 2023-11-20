@@ -182,10 +182,6 @@ class HTMLElementInputHTML extends Page.create(HTMLTextAreaElement) {
 			contents: 'paragraph+',
 			html: '<div class="textarea ProseMirror"></div>'
 		},
-		text: {
-			inline: true,
-			group: 'inline'
-		},
 		sup: {
 			title: "Sup",
 			icon: {
@@ -305,6 +301,7 @@ class HTMLElementInputHTML extends Page.create(HTMLTextAreaElement) {
 		this.parentNode.insertBefore(toolbar, textarea);
 
 		const elts = this.constructor.elements;
+		elts.fragment.bundle = Object.keys(elts);
 		const scope = state.scope.copy({ $elements: elts });
 		scope.viewer.prepare();
 		scope.import();

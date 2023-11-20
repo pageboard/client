@@ -14,6 +14,7 @@ class CustomViewer extends Viewer {
 			return;
 		}
 		if (!(el instanceof CustomElement)) {
+			el.name ??= type;
 			el = this.elements[el.name] = new CustomElement(el);
 		}
 		el.init(this.scope);
@@ -33,9 +34,14 @@ class CustomViewer extends Viewer {
 	}
 
 	init() {
+		const bundles = [];
+		for (const [name, el] of Object.entries(this.elements)) {
+			if (el.bundle) bundles.push(name);
+		}
+
 		const bbg = this.groups = new Map();
 		const bbe = this.bundlesByElement = new Map();
-		for (const root of this.elements.core.bundles) {
+		for (const root of bundles) {
 			const rootEl = this.elements[root];
 			if (!rootEl) continue;
 			rootEl.groups = new Set();
@@ -48,9 +54,9 @@ class CustomViewer extends Viewer {
 
 				if (el.group) for (const group of el.group.split(/\s+/)) {
 					rootEl.groups.add(group);
-					let bundles = bbg.get(group);
-					if (!bundles) bbg.set(group, bundles = new Set());
-					bundles.add(root);
+					let groupBundles = bbg.get(group);
+					if (!groupBundles) bbg.set(group, groupBundles = new Set());
+					groupBundles.add(root);
 				}
 			}
 		}
