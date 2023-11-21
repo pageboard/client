@@ -192,6 +192,6 @@ exports.api_form = {
 	scripts: [ // for asynchronous submits and automatic triggers
 		'../ui/form.js'
 	],
-	polyfills: ['fetch']
+	polyfills: ['fetch', 'FormDataSubmitter']
 };
 

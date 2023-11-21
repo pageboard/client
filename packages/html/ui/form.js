@@ -112,8 +112,8 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 			state.dispatch(this, 'submit');
 		});
 	}
-	read(withDefaults = false) {
-		const fd = new FormData(this);
+	read(withDefaults = false, e) {
+		const fd = new FormData(this, e.submitter);
 		const query = {};
 		fd.forEach((val, key) => {
 			if (val == "") val = null;
@@ -181,12 +181,6 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 						query[name] = node.required ? null : undefined;
 					}
 			}
-		}
-		// FIXME use e.submitter polyfill when available
-		// https://github.com/Financial-Times/polyfill-library/issues/1111
-		const btn = document.activeElement;
-		if (btn && btn.type == "submit" && btn.name && btn.value) {
-			query[btn.name] = btn.value;
 		}
 		return query;
 	}
@@ -295,7 +289,7 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 	getMethod(e, state) {
 		const redirect = this.getAttribute('action');
 		const loc = Page.parse(redirect);
-		Object.assign(loc.query, this.read(false));
+		Object.assign(loc.query, this.read(false, e));
 		if (loc.samePathname(state)) {
 			loc.query = { ...state.query, ...loc.query };
 		}
