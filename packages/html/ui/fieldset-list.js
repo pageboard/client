@@ -4,7 +4,7 @@ class HTMLElementFieldsetList extends Page.Element {
 	#prefix;
 	#model;
 
-	fill(values) {
+	fill(values = {}) {
 		if (this.isContentEditable || this.prefix == null) return;
 		const vars = [];
 		for (const [key, val] of Object.entries(values)) {
@@ -24,6 +24,12 @@ class HTMLElementFieldsetList extends Page.Element {
 		if (this.#defaultList == null) this.save();
 		this.#resize();
 		return vars;
+	}
+	patch(state) {
+		// initialize
+		if (this.ownView.children.length == 0) {
+			this.#resize();
+		}
 	}
 
 	reset() {
@@ -142,7 +148,7 @@ class HTMLElementFieldsetList extends Page.Element {
 		);
 		const min = Number(this.dataset.min) || 0;
 		const max = Number(this.dataset.max) || Infinity;
-		let list = this.#list;
+		let list = this.#list ?? [];
 		const placeholder = list.length == 0 && min == 0;
 		if (list.length == 0) {
 			list = [{...this.#model, $i: min == 0 ? -1 : 0}];
