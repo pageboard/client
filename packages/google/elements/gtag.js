@@ -23,18 +23,14 @@ exports.google_tag = {
 	priority: 10,
 	group: "block",
 	csp: {
+		script: [
+			"[$commons.csp.script.google_analytics]"
+		],
 		img: [
-			"https://*.google-analytics.com",
-			"https://*.googletagmanager.com"
+			"[$commons.csp.img.google_analytics]"
 		],
 		connect: [
-			"https://*.google-analytics.com",
-			"https://*.analytics.google.com",
-			"https://*.googletagmanager.com",
-			"https://*.g.doubleclick.net"
-		],
-		script: [
-			"https://*.googletagmanager.com"
+			"[$commons.csp.connect.google_analytics]"
 		]
 	},
 	scripts: [
