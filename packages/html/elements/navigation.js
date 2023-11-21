@@ -56,7 +56,7 @@ exports.breadcrumb = {
 	group: "block",
 	html: `<nav class="ui breadcrumb">
 		<div class="divider"></div>
-		<a href="[$links.up|nth:-1|at:a::1|repeat:link]" class="section">[link.title]</a>
+		<a href="[$links.up|nth:-1|at:a::1|repeat:link|.url]" class="section">[link.title]</a>
 		<div class="divider"></div>
 		<div class="active section">[$page.content.title|fail:div::1]</div>
 	</nav>`,
