@@ -25,12 +25,6 @@ class HTMLElementFieldsetList extends Page.Element {
 		this.#resize();
 		return vars;
 	}
-	patch(state) {
-		// initialize
-		if (this.ownView.children.length == 0) {
-			this.#resize();
-		}
-	}
 
 	reset() {
 		this.#list = this.#defaultList?.slice();
@@ -88,6 +82,9 @@ class HTMLElementFieldsetList extends Page.Element {
 			this.#modelize(tpl.content);
 			for (const node of tpl.content.querySelectorAll('[block-id]')) {
 				node.removeAttribute('block-id');
+			}
+			if (this.ownView.children.length == 0) {
+				this.#resize();
 			}
 		}
 	}
