@@ -112,8 +112,8 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 			state.dispatch(this, 'submit');
 		});
 	}
-	read(withDefaults = false, e) {
-		const fd = new FormData(this, e.submitter);
+	read(withDefaults = false, submitter) {
+		const fd = new FormData(this, submitter);
 		const query = {};
 		fd.forEach((val, key) => {
 			if (val == "") val = null;
@@ -289,7 +289,7 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 	getMethod(e, state) {
 		const redirect = this.getAttribute('action');
 		const loc = Page.parse(redirect);
-		Object.assign(loc.query, this.read(false, e));
+		Object.assign(loc.query, this.read(false, e.submitter));
 		if (loc.samePathname(state)) {
 			loc.query = { ...state.query, ...loc.query };
 		}
