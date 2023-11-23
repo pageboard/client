@@ -148,7 +148,7 @@ class HTMLElementFieldsetList extends Page.Element {
 		);
 		const min = Number(this.dataset.min) || 0;
 		const max = Number(this.dataset.max) || Infinity;
-		let list = this.#list ?? [];
+		let list = this.#list ??= [];
 		const placeholder = list.length == 0 && min == 0;
 		if (list.length == 0) {
 			list = [{...this.#model, $i: min == 0 ? -1 : 0}];
@@ -183,10 +183,10 @@ class HTMLElementFieldsetList extends Page.Element {
 			node.disabled = i == arr.length - 1;
 		});
 		tpl.querySelectorAll(this.#selector('del')).forEach((node) => {
-			node.disabled = this.#list.length <= min;
+			node.disabled = list.length <= min;
 		});
 		tpl.querySelectorAll(this.#selector('add')).forEach((node) => {
-			node.disabled = this.#list.length >= max;
+			node.disabled = list.length >= max;
 		});
 
 		const view = this.ownView;
