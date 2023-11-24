@@ -13,8 +13,8 @@ Page.constructor.prototype.scroll = function(opts) {
 	};
 	if (opts.node) {
 		const rect = opts.node.getBoundingClientRect();
-		scrollOpts.top = window.pageYOffset + rect.top;
-		scrollOpts.left = window.pageXOffset + rect.left;
+		scrollOpts.top = window.scrollY + rect.top;
+		scrollOpts.left = window.scrollX + rect.left;
 		let section = opts.node.closest('body > [block-type="main"]');
 		if (section) {
 			while ((section = section.previousElementSibling)) {
