@@ -312,7 +312,7 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 		}
 
 		const scope = state.scope.copy();
-		scope.$request = form.read(true);
+		scope.$request = form.read(true, e.submitter);
 		try {
 			const prelist = Array.from(form.elements)
 				.filter(node => Boolean(node.presubmit) && !node.disabled);
