@@ -28,7 +28,8 @@ const loader = new class {
 	}
 	setup(state) {
 		const tr = state.scope.transition;
-		state.finish(() => {
+		state.finish(async () => {
+			await document.fonts?.ready;
 			document.body.hidden = false;
 			if (tr?.ok) return tr.start();
 		});
