@@ -178,11 +178,7 @@ body[data-fold-width] {
 .page-sheet-match {
 	visibility: hidden;
 
-	[contenteditable] &,
-	.page-sheet-left &[data-match="left"],
-	.page-sheet-right &[data-match="right"],
-	.page-sheet-first &[data-match="first"],
-	.page-sheet-last &[data-match="last"] {
+	[contenteditable] &, .page-sheet-left &[data-match="left"], .page-sheet-right &[data-match="right"], .page-sheet-first &[data-match="first"], .page-sheet-last &[data-match="last"] {
 		visibility:initial;
 	}
 }
