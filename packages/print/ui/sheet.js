@@ -46,7 +46,9 @@ class HTMLElementSheet extends Page.create(HTMLDivElement) {
 			this.#defer = new Deferred();
 			const img = new Image();
 			img.addEventListener('load', this.#defer.resolve);
-			img.addEventListener('error', this.#defer.reject);
+			img.addEventListener('error',
+				e => this.#defer.reject(new Error(this.currentSrc))
+			);
 			img.src = curSrc;
 			this.style.setProperty('--image', `url("${curSrc}")`);
 			return this.#defer;

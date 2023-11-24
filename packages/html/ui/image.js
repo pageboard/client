@@ -157,7 +157,7 @@ const HTMLElementImageConstructor = Superclass => class extends Superclass {
 		this.classList.remove('loading');
 	}
 	captureError(e) {
-		this.#defer?.reject(e);
+		this.#defer?.reject(new Error(this.currentSrc));
 		this.classList.remove('loading');
 		this.classList.add('error');
 		this.placeholder(true);
