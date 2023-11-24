@@ -249,7 +249,7 @@ body[data-fold-width] {
 
 @media print {
 	html, body {
-		background:white;
+		background-color:unset !important;
 	}
 	.page-sheet-right {
 		padding-right: 0;
