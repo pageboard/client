@@ -1,6 +1,7 @@
 html, body {
 	padding: 0;
 	margin: 0;
+	background-color:unset !important;
 }
 body,
 body > element-template > .view {
@@ -245,9 +246,6 @@ body[data-fold-width] {
 }
 
 @media print {
-	html, body {
-		background-color:unset !important;
-	}
 	.page-sheet-right {
 		padding-right: 0;
 	}
