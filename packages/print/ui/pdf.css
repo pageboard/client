@@ -184,9 +184,6 @@ body[data-fold-width] {
 }
 
 @media screen {
-	html, body {
-		background: gray;
-	}
 	.page-sheet {
 		margin: 1rem;
 		box-shadow: rgb(0 0 0 / 40%) 4px 4px 10px -1px;
