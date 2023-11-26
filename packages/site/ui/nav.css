@@ -1,0 +1,3 @@
+:target, .pseudo-target {
+	scroll-margin-top: var(--page-header-height);
+}

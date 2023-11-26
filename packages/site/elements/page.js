@@ -83,6 +83,9 @@ exports.page = {
 	scripts: [
 		'../ui/nav.js'
 	],
+	stylesheets: [
+		'../ui/nav.css'
+	],
 	polyfills: [
 		'default',
 		'customElementsBuiltin',
