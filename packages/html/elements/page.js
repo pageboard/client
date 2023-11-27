@@ -6,6 +6,11 @@ exports.page.stylesheets = [
 	'../ui/transition.css'
 ];
 
+exports.page.resources = {
+	reset: '../ui/components/reset.css',
+	site: '../ui/site.css'
+};
+
 exports.page.scripts = [
 	...exports.page.scripts,
 	'../ui/transition.js'

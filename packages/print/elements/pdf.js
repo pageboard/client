@@ -11,7 +11,9 @@ exports.pdf = {
 		id: 'body',
 		nodes: 'block+'
 	}],
-	stylesheets: [ ...exports.page.stylesheets.slice(0, 2),
+	stylesheets: [
+		exports.page.resources.reset,
+		exports.page.resources.site,
 		'../ui/pdf.css'
 	],
 	scripts: [ ...exports.page.scripts,
