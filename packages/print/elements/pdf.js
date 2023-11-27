@@ -14,7 +14,8 @@ exports.pdf = {
 	stylesheets: [
 		exports.page.resources.reset,
 		exports.page.resources.site,
-		'../ui/pdf.css'
+		'../ui/pdf.css',
+		'../ui/text-wrap.css'
 	],
 	scripts: [ ...exports.page.scripts,
 		'../ui/pdf.js'
