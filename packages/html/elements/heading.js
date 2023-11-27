@@ -32,9 +32,11 @@ exports.heading = {
 			}]
 		},
 		id: {
+			title: 'Link name',
+			description: 'Target for anchors',
 			nullable: true,
 			type: 'string',
-			pattern: /^[a-z0-9-]*$/.source
+			format: 'grant'
 		},
 		linkable: {
 			title: 'Show hash link',
@@ -60,6 +62,7 @@ exports.heading = {
 	</hn>`,
 	parse: function (dom) {
 		return {
+			id: dom.getAttribute('id') || null,
 			level: parseInt(dom.nodeName.substring(1))
 		};
 	},
@@ -71,7 +74,6 @@ exports.heading = {
 		'../ui/heading.js'
 	]
 };
-exports.editor?.scripts.push('../ui/heading-helper.js');
 
 exports.heading_nolink = {
 	...exports.heading,

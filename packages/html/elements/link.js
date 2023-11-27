@@ -31,13 +31,20 @@ exports.link = {
 				name: 'datalist',
 				url: '/.api/languages'
 			}
-		}
+		},
+		id: {
+			title: 'Link name',
+			description: 'Target for anchors',
+			nullable: true,
+			type: 'string',
+			format: 'grant'
+		},
 	},
 	contents: "text*",
 	inline: true,
 	group: "inline",
 	tag: 'a:not([block-type]),a[block-type="link"]',
-	html: '<a href="[url]" hreflang="[lang]" class="[button|alt:ui button]"></a>',
+	html: '<a href="[url]" hreflang="[lang]" class="[button|alt:ui button]" id="[id]"></a>',
 	stylesheets: [
 		'../ui/components/button.css'
 	]
