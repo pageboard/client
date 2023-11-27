@@ -105,7 +105,7 @@ exports.carousel = {
 		<div class="flickity-viewport">
 			<div class="flickity-slider" block-content="items"></div>
 		</div>
-		<a class="ui icon button fullview"><i class="expand icon"></i><i class="close icon"></i></a>
+		<div class="ui icon button fullview" role="button"><i class="expand icon"></i><i class="close icon"></i></div>
 	</element-carousel>`,
 	stylesheets: [
 		'../lib/flickity.css',

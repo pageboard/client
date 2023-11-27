@@ -57,7 +57,7 @@ class HTMLElementCarousel extends Page.Element {
 	}
 
 	handleClick(e, state) {
-		const node = e.target.closest('a.fullview');
+		const node = e.target.closest('.fullview[role="button"]');
 		if (!node) return;
 		e.stopImmediatePropagation();
 		const query = { ...state.query };
