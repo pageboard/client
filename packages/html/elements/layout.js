@@ -7,7 +7,8 @@ exports.units = {
 				{ const: 'ch' },
 				{ const: 'vw' },
 				{ const: 'rem' },
-				{ const: 'px' }
+				{ const: 'px' },
+				{ const: '%' }
 			],
 			default: 'em',
 			$helper: 'units'
@@ -113,6 +114,15 @@ exports.layout = {
 				const: "contained",
 				title: "Contained"
 			}]
+		},
+		maxWidth: {
+			title: 'Max width',
+			type: 'number',
+			minimum: 0,
+			nullable: true
+		},
+		maxWidthUnits: {
+			$ref: "#/definitions/units/properties/data/properties/inline"
 		},
 		height: {
 			title: 'Height',
@@ -374,6 +384,7 @@ exports.layout = {
 		style-margin-inline="[margins.inline|fail:][margins.inlineUnits]"
 		style-padding-block="[padding.block|fail:][padding.blockUnits]"
 		style-padding-inline="[padding.inline|fail:][padding.inlineUnits]"
+		style-max-width="[maxWidth|fail:][maxWidthUnits]"
 		style-height="[height|fail:][heightUnits]"
 		style-background-color="[background.color]"
 		style-background-size="[background.size]"
