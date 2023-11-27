@@ -4,9 +4,11 @@ exports.embed = {
 	icon: '<i class="external square alternate icon"></i>',
 	properties: {
 		id: {
+			title: 'Link name',
+			description: 'Target for anchors',
 			nullable: true,
 			type: 'string',
-			pattern: /^[a-z0-9-]*$/.source
+			format: 'grant'
 		},
 		linkable: {
 			title: 'Show hash link',
@@ -53,4 +55,3 @@ exports.embed = {
 		'../ui/linkable.css'
 	]
 };
-exports.editor?.scripts.push('../ui/embed-helper.js');
