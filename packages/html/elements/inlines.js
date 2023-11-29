@@ -1,17 +1,3 @@
-// TODO use "excludes" https://prosemirror.net/docs/ref/#model.MarkSpec.excludes
-// to avoid having incompatible marks
-exports.notranslate = {
-	title: "No translation",
-	priority: 100,
-	contents: "text*",
-	inplace: true,
-	inline: true,
-	group: "inline nolink",
-	icon: '<b class="icon">no tr</b>',
-	tag: 'span[translate="no"]',
-	html: '<span translate="no"></span>'
-};
-
 exports.strong = {
 	title: "Strong",
 	priority: 100,
@@ -309,3 +295,16 @@ exports.color = { // deprecated
 	group: "inline nolink",
 	html: '<span class="[color] color"></span>'
 };
+
+exports.notranslate = {
+	title: "Untranslatable",
+	priority: 110,
+	contents: "text*",
+	inplace: true,
+	inline: true,
+	group: "inline nolink",
+	icon: '<i class="large translate icon"></i>',
+	tag: 'span[translate="no"]',
+	html: '<span translate="no"></span>'
+};
+
