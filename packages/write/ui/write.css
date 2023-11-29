@@ -184,8 +184,8 @@ body[data-mode="read"] #pageboard-read > iframe {
 	margin-bottom: 0em;
 	padding-bottom: 0em;
 }
-.ui.form .nullable.fieldset fielset {
-	padding: 0.35em 0.5em 0.35em;
+.ui.form .nullable.fieldset fieldset {
+	padding: 0.35em 0.5em;
 }
 .ui.form .nullable.fieldset:last-child {
 	margin-bottom:0;
@@ -442,7 +442,7 @@ body[data-mode="read"] #pageboard-read > iframe {
 #form input.ui.input {
 	padding: 0.31em;
 	line-height: 1.3em;
-	font-size: 0.92857143em;
+	font-size: 0.9286em;
 }
 #form .field > input[type="text"] {
 	width: 100%;
@@ -456,7 +456,7 @@ body[data-mode="read"] #pageboard-read > iframe {
 	flex: 1 0 auto;
 }
 #form .field > select {
-	font-size: 0.92857143em;
+	font-size: 0.9286em;
 	padding: 0.31em;
 	max-width:60%;
 	line-height: 1.3em;
