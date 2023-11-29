@@ -1,17 +1,15 @@
-exports.intl = {
-	properties: {
-		idiom: {
-			title: 'Untranslatable',
-			type: 'boolean',
-			default: false,
-			nullable: true
-		}
-	},
-	parse: function (dom) {
-		return {
-			idiom: dom.translate === false
-		};
-	}
+// TODO use "excludes" https://prosemirror.net/docs/ref/#model.MarkSpec.excludes
+// to avoid having incompatible marks
+exports.notranslate = {
+	title: "No translation",
+	priority: 100,
+	contents: "text*",
+	inplace: true,
+	inline: true,
+	group: "inline nolink",
+	icon: '<b class="icon">no tr</b>',
+	tag: 'span[translate="no"]',
+	html: '<span translate="no"></span>'
 };
 
 exports.strong = {
@@ -23,13 +21,7 @@ exports.strong = {
 	group: "inline nolink",
 	icon: '<i class="icon bold"></i>',
 	tag: 'strong,b',
-	html: '<strong translate="[idiom|alt:no:]"></strong>',
-	properties: {
-		idiom: {
-			$ref: "#/definitions/intl/properties/idiom"
-		}
-	},
-	parse: exports.intl.parse
+	html: '<strong></strong>'
 };
 
 exports.em = {
@@ -41,13 +33,7 @@ exports.em = {
 	group: "inline nolink",
 	icon: '<b class="icon">em</b>',
 	tag: 'em',
-	html: '<em translate="[idiom|alt:no:]"></em>',
-	properties: {
-		idiom: {
-			$ref: "#/definitions/intl/properties/idiom"
-		}
-	},
-	parse: exports.intl.parse
+	html: '<em></em>'
 };
 
 exports.i = {
@@ -59,13 +45,7 @@ exports.i = {
 	group: "inline nolink",
 	icon: '<i class="icon italic"></i>',
 	tag: 'i',
-	html: '<i translate="[idiom|alt:no:]"></i>',
-	properties: {
-		idiom: {
-			$ref: "#/definitions/intl/properties/idiom"
-		}
-	},
-	parse: exports.intl.parse
+	html: '<i></i>'
 };
 
 exports.light = {
@@ -76,13 +56,7 @@ exports.light = {
 	inline: true,
 	inplace: true,
 	group: "inline nolink",
-	html: '<span class="lighter" translate="[idiom|alt:no:]"></span>',
-	properties: {
-		idiom: {
-			$ref: "#/definitions/intl/properties/idiom"
-		}
-	},
-	parse: exports.intl.parse
+	html: '<span class="lighter"></span>'
 };
 
 exports.sup = {
@@ -94,13 +68,7 @@ exports.sup = {
 	inplace: true,
 	group: "inline nolink",
 	tag: 'sup',
-	html: '<sup translate="[idiom|alt:no:]"></sup>',
-	properties: {
-		idiom: {
-			$ref: "#/definitions/intl/properties/idiom"
-		}
-	},
-	parse: exports.intl.parse
+	html: '<sup></sup>'
 };
 
 exports.sub = {
@@ -112,13 +80,7 @@ exports.sub = {
 	inplace: true,
 	group: "inline nolink",
 	tag: 'sub',
-	html: '<sub translate="[idiom|alt:no:]"></sub>',
-	properties: {
-		idiom: {
-			$ref: "#/definitions/intl/properties/idiom"
-		}
-	},
-	parse: exports.intl.parse
+	html: '<sub></sub>'
 };
 
 exports.strike = {
@@ -130,13 +92,7 @@ exports.strike = {
 	inplace: true,
 	group: "nolink",
 	tag: 's',
-	html: '<s translate="[idiom|alt:no:]"></s>',
-	properties: {
-		idiom: {
-			$ref: "#/definitions/intl/properties/idiom"
-		}
-	},
-	parse: exports.intl.parse
+	html: '<s></s>'
 };
 
 exports.style = {
@@ -241,7 +197,10 @@ exports.style = {
 			}]
 		},
 		idiom: {
-			$ref: "#/definitions/intl/properties/idiom"
+			title: 'Untranslatable',
+			type: 'boolean',
+			default: false,
+			nullable: true
 		}
 	},
 	parse: function(dom) {
