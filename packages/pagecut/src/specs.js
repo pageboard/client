@@ -263,6 +263,7 @@ function createRootSpec(elt, obj, viewer) {
 		typeName: "root",
 		element: elt,
 		domModel: obj.dom,
+		excludes: elt.excludes,
 		inline: Boolean(elt.inline),
 		defining: obj.contentDOM ? obj.dom != obj.contentDOM : false,
 		isolating: elt.isolating !== undefined ? elt.isolating : !elt.inline,
