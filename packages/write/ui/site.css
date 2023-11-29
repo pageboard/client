@@ -27,6 +27,9 @@ body {
 	line-height: 1.4285em;
 	color: rgb(0 0 0 / 87%);
 }
+.hidden:not(.divider),[hidden] {
+	display:none !important;
+}
 
 
 /*******************************
@@ -42,7 +45,7 @@ h5 {
 	line-height: 1.2857em;
 	margin: calc(2rem - 0.1429em) 0em 1rem;
 	font-weight: bold;
-	padding: 0em;
+	padding: 0;
 }
 h1 {
 	min-height: 1rem;
@@ -65,14 +68,14 @@ h2:first-child,
 h3:first-child,
 h4:first-child,
 h5:first-child {
-	margin-top: 0em;
+	margin-top: 0;
 }
 h1:last-child,
 h2:last-child,
 h3:last-child,
 h4:last-child,
 h5:last-child {
-	margin-bottom: 0em;
+	margin-bottom: 0;
 }
 
 
@@ -81,25 +84,25 @@ h5:last-child {
 *******************************/
 
 p {
-	margin: 0em 0em 1em;
+	margin: 0 0 1em;
 	line-height: 1.4285em;
 }
 p:first-child {
-	margin-top: 0em;
+	margin-top: 0;
 }
 p:last-child {
-	margin-bottom: 0em;
+	margin-bottom: 0;
 }
 
-p.center.aligned {
+.center.aligned {
 	text-align:center;
 }
 
-p.right.aligned {
+.right.aligned {
 	text-align:right;
 }
 
-p.justify.aligned {
+.justify.aligned {
 	text-align:justify;
 }
 
