@@ -106,7 +106,33 @@ p:last-child {
 	text-align:justify;
 }
 
-
+span.lighter {
+	font-weight:lighter;
+}
+span.black {
+	color: black;
+}
+span.white {
+	color: white;
+}
+span.red {
+	color: red;
+}
+span.orange {
+	color: orange;
+}
+span.yellow {
+	color: yellow;
+}
+span.green {
+	color: green;
+}
+span.blue {
+	color: blue;
+}
+span.purple {
+	color: purple;
+}
 
 /*-------------------
 				Links
