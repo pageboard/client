@@ -66,6 +66,7 @@ exports.sup = {
 	contents: "text*",
 	inline: true,
 	inplace: true,
+	excludes: 'sub',
 	group: "inline nolink",
 	tag: 'sup',
 	html: '<sup></sup>'
@@ -78,6 +79,7 @@ exports.sub = {
 	contents: "text*",
 	inline: true,
 	inplace: true,
+	excludes: 'sup',
 	group: "inline nolink",
 	tag: 'sub',
 	html: '<sub></sub>'
