@@ -75,7 +75,7 @@ exports.sup = {
 };
 
 exports.sub = {
-	title: "Inf",
+	title: "Sub",
 	priority: 105,
 	icon: '<i class="subscript icon"></i>',
 	contents: "text*",
