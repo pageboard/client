@@ -23,7 +23,7 @@
     "postinstall-bundle": "^0.9.1"
   },
   "devDependencies": {
-    "@pageboard/pagecut": "^0.14.9"
+    "@pageboard/pagecut": "^0.14.10"
   },
   "prepare": {
     "src/editor.js": "bundle lib/",
