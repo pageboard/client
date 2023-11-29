@@ -18,6 +18,7 @@ exports.strong = {
 	contents: "text*",
 	inplace: true,
 	inline: true,
+	excludes: 'light',
 	group: "inline nolink",
 	icon: '<i class="icon bold"></i>',
 	tag: 'strong,b',
@@ -55,6 +56,7 @@ exports.light = {
 	contents: "text*",
 	inline: true,
 	inplace: true,
+	excludes: 'strong',
 	group: "inline nolink",
 	html: '<span class="lighter"></span>'
 };
