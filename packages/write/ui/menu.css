@@ -63,6 +63,9 @@
 #menu .ui.menu:not(.vertical) .item {
 	padding: 0.6em 0.7em;
 }
+#menu .ui.mini.menu:not(.vertical) .item {
+	padding: 0.3em 0.7em;
+}
 .ui.menu {
 	flex-wrap:wrap;
 }
