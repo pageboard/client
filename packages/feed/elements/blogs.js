@@ -5,13 +5,6 @@ exports.blog = {
 	bundle: true,
 	group: 'block',
 	properties: {
-		title: {
-			title: 'Title',
-			nullable: true,
-			type: "string",
-			format: "singleline",
-			$helper: 'pageTitle'
-		},
 		url: {
 			title: 'Address',
 			type: "string",
@@ -62,14 +55,15 @@ exports.blog = {
 					type: ["image"]
 				}
 			}
-		},
-		description: {
-			title: 'Description',
-			type: 'string',
-			nullable: true
 		}
 	},
 	contents: [{
+		id: 'title',
+		nodes: 'text*'
+	}, {
+		id: 'description',
+		nodes: 'text*'
+	}, {
 		id: 'content',
 		nodes: 'block+'
 	}],
@@ -79,8 +73,8 @@ exports.blog = {
 		</div>
 		<div class="content">
 			<div class="meta">[publication|fail:*|date:D:M:Y]</div>
-			<div class="header">[title]</div>
-			<div class="description">[description]</div>
+			<div class="header" block-content="title"></div>
+			<div class="description" block-content="description"></div>
 		</div>
 		<div class="extra" block-content="content"></div>
 	</a>`,
