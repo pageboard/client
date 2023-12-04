@@ -26,7 +26,7 @@ Page.extend('element-gallery', class GalleryHelper {
 		const ed = state.scope.editor;
 		if (!ed || ed.closed) return;
 		const mode = this.selectedMode;
-		const gals = Array.prototype.filter.call(this.children, (gal) => {
+		const gals = this.children.filter(gal => {
 			return gal.getAttribute('block-type') != mode;
 		});
 		const target = record.target;
