@@ -23,11 +23,9 @@ exports.social = {
 				}]
 			}
 		},
-		title: exports.blog.properties.title,
-		thumbnail: exports.blog.properties.thumbnail,
-		description: exports.blog.properties.description
+		thumbnail: exports.blog.properties.thumbnail
 	},
-	html: `<element-social data-networks="[networks]" data-title="[title]" data-image="[thumbnail]" data-description="[description]"></element-social>`,
+	html: `<element-social data-networks="[networks]" data-image="[thumbnail]"></element-social>`,
 	scripts: ['../ui/social.js'],
 	stylesheets: ['../ui/social.css']
 };

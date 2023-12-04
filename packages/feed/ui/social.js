@@ -1,9 +1,7 @@
 class HTMLSocialElement extends Page.Element {
 	static defaults = {
 		networks: (x) => (x || '').split(',').filter(x => Boolean(x)),
-		title: null,
-		image: null,
-		description: null
+		image: null
 	};
 
 	static links = {
@@ -18,21 +16,22 @@ class HTMLSocialElement extends Page.Element {
 				pathname: state.pathname
 			});
 			const card = {
-				title: this.options.title,
-				image: this.options.image,
-				description: this.options.description,
 				url
 			};
+
+			card.image = document.querySelectorAll('element-image')
+				.find(item => {
+					return parseFloat(item.dataset.width) > 256 && parseFloat(item.dataset.height) > 256;
+				}) ?? this.options.image;
+
 			if (card.image) {
 				const obj = Page.parse(card.image);
-				obj.query.rs = 'w-800_h-450_max';
+				obj.query.rs = 'w-600_h-350_max';
 				card.image = document.location.origin + Page.format(obj);
 			}
 			const doc = document;
-			const title = doc.head.querySelector('title');
-			if (card.title && !title.textContent.startsWith(card.title)) {
-				title.insertAdjacentText('afterBegin', card.title + ' - ');
-			}
+			card.title = doc.head.querySelector('title')?.innerText;
+			card.description = doc.head.querySelector('meta[name="description"]')?.innerText;
 
 			for (const [key, val] of Object.entries(card)) {
 				const sel = `meta[property="og:${key}"]`;
