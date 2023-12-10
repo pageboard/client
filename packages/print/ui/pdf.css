@@ -94,7 +94,7 @@ body[data-fold-width] {
 			&:has(+ .page-sheet-left:not(.bleed-left)) {
 				/* (no bleed) + no bleed */
 				width: calc(var(--page-width) + var(--page-fold-width) / 2);
-				padding-right: var(--page-fold-width / 2);
+				padding-right: calc(var(--page-fold-width) / 2);
 				&::before {
 					right: calc(var(--page-fold-width) / 2);
 				}
@@ -105,7 +105,7 @@ body[data-fold-width] {
 			&+ .page-sheet-left:not(.bleed-left) {
 				/* no bleed + (no bleed) */
 				width: calc(var(--page-width) + var(--page-fold-width) / 2);
-				padding-left: var(--page-fold-width / 2);
+				padding-left: calc(var(--page-fold-width) / 2);
 				&::before {
 					left: calc(var(--page-fold-width) / 2);
 				}
@@ -144,7 +144,7 @@ body[data-fold-width] {
 			&:has(+ .page-sheet-left.bleed-left) {
 				/* (bleed) + bleed */
 				width: calc(var(--page-width) + var(--page-fold-width) / 2);
-				padding-right: var(--page-fold-width / 2);
+				padding-right: calc(var(--page-fold-width) / 2);
 				&::before {
 					right:0;
 				}
@@ -155,7 +155,7 @@ body[data-fold-width] {
 			&+ .page-sheet-left.bleed-left {
 				/* bleed + (bleed) */
 				width: calc(var(--page-width) + var(--page-fold-width) / 2);
-				padding-left: var(--page-fold-width / 2);
+				padding-left: calc(var(--page-fold-width) / 2);
 				&::before {
 					left:0;
 				}
