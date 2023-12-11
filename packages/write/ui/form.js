@@ -7,8 +7,6 @@ class FormBlock {
 			if (schema.nullable) copy.nullable = schema.nullable;
 			if (schema.properties) {
 				copy.properties = Object.assign(schema.properties);
-			} else {
-				copy.description = 'object';
 			}
 		} else if (schema.type == "array") {
 			if (!schema.items) {
