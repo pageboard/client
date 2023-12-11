@@ -6,7 +6,8 @@ class HTMLElementBodyPrint extends Page.create(HTMLBodyElement) {
 		dataCounterOffset: x => parseInt(x) || 0,
 		dataWidth: x => parseFloat(x) || 210,
 		dataHeight: x => parseFloat(x) || 297,
-		dataMargin: x => parseFloat(x) || 0
+		dataMargin: x => parseFloat(x) || 0,
+		dataPreset: null
 	};
 
 	patch(state) {
