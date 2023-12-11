@@ -11,7 +11,7 @@ exports.fetch = {
 		expressions: true
 	},
 	html: `<element-template
-		action="/.api/query/[$id][action?.method|prune:-]"
+		action="/.api/query/[name|else:$id][action?.method|prune:-]"
 		data-auto="[action?.auto]"
 		data-offset-name="[$expr?.action?.parameters?.offset|as:expressions]"
 		parameters="[$expr?.action?.parameters|as:expressions]"
