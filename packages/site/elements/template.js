@@ -21,6 +21,13 @@ exports.fetch = {
 		notfound="[notfound.url][notfound.parameters|as:query]"
 	><template block-content="template"></template></element-template>`,
 	properties: {
+		name: {
+			title: 'Name',
+			description: "Exposes /.api/query/$name",
+			type: 'string',
+			format: 'id',
+			nullable: true
+		},
 		action: {
 			title: 'Action',
 			type: 'object',
