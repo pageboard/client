@@ -351,7 +351,7 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 				.map(input => input.presubmit(state))
 		);
 
-		const request = form.read(true);
+		const request = form.read(true, e.submitter || document.activeElement);
 		form.disable();
 
 		const res = await state.fetch(form.method, Page.format({
