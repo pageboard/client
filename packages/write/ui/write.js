@@ -1,9 +1,11 @@
-window.Pagecut = {modules:{}};
+window.Pagecut = { modules: {} };
+
 Object.assign(window.Pageboard, {
 	write: true,
 	Controls: {},
 	schemaHelpers: {},
 	schemaFilters: {},
+	schemas: {},
 	trigger(node, event, detail) {
 		const opts = {
 			view: window,
@@ -29,20 +31,27 @@ Object.assign(window.Pageboard, {
 			what.classList.add('loading');
 		}
 		return p.catch(err => {
-			Pageboard.notify("Request error", err);
+			window.Pageboard.notify("Request error", err);
 			// rethrow, we don't want to show any result
 			throw err;
 		}).finally(() => {
 			if (icon) icon.className = classes;
 			else what.classList.remove('loading');
 		});
-	},
-	service(str) {
-		if (!str) return null;
-		const [api, method] = str.split('.');
-		const obj = Pageboard.services[api]?.[method];
-		if (obj) Object.assign(obj, { api, method });
-		return obj;
 	}
 });
 
+for (const name of ['elements', 'services']) {
+	const definitions = window.Pageboard[name];
+	// TODO this hard-coded translation could be avoided
+	window.Pageboard.schemas[name] = {
+		$id: '/' + name,
+		definitions,
+		discriminator: {
+			propertyName: name == 'elements' ? 'type' : 'method'
+		},
+		oneOf: Object.keys(definitions).map(key => {
+			return { $ref: '#/definitions/' + key };
+		})
+	};
+}

@@ -463,7 +463,18 @@ body[data-mode="read"] #pageboard-read > iframe {
 	min-width: 8ch;
 	font-family: revert;
 }
-
+#form .field > select[multiple] {
+	padding:0;
+	width:50%;
+}
+#form .field > select[multiple] > option {
+	padding:0.2em 0.4em;
+	border-radius:5px;
+	margin:1px;
+}
+#form .field > select[multiple]:focus > option:checked {
+	background-image: linear-gradient(0deg, #4b97e200, #4b97e2FF);
+}
 #form .field.datalist > select {
 	width:1.5rem;
 	border: none;

@@ -128,11 +128,12 @@ class Semafor {
 		}
 	}
 
-	constructor(schema, node, filter, helper) {
+	constructor({ schema, node, filter, helper, schemas }) {
 		this.filter = filter;
 		this.helper = helper;
 		// a json schema
 		this.schema = cleanSchema(schema);
+		this.schemas = schemas;
 		this.node = node;
 		this.node.classList.add('fieldset');
 		this.fields = {};
@@ -293,7 +294,7 @@ class Semafor {
 							obj[`${key}.${k}`] = kval;
 						}
 						continue;
-					} else if (!field?.properties) {
+					} else if (!field?.properties && !field.oneOf && !field.anyOf) {
 						obj[key] = JSON.stringify(val);
 						continue;
 					}
@@ -395,21 +396,9 @@ class Semafor {
 		return obj;
 	}
 	process(key, schema, node, parent) {
-		const { $ref } = schema;
-		if ($ref) {
-			const prefix = '#/definitions/';
-			if ($ref?.startsWith(prefix)) {
-				delete schema.$ref;
-				const [name, ...rel] = $ref.slice(prefix.length).split('/');
-				let ref = Pageboard.elements[name];
-				if (rel[0] != 'properties' && rel[1] != 'data') {
-					console.error("Cannot resolve", $ref);
-				} else {
-					ref = rel.slice(2).reduce((schema, key) => schema[key], ref);
-					if (ref) Object.assign(schema, ref);
-					else console.error("$ref not found", $ref);
-				}
-			}
+		schema = this.resolveRef(schema);
+		if (schema.properties && !schema.type) {
+			schema.type = 'object';
 		}
 		if (this.filter) {
 			schema = this.filter(key, schema, parent) || schema;
@@ -453,7 +442,7 @@ class Semafor {
 			}
 		} else if (schema.const != null) {
 			fieldset = Semafor.types.const(key, schema, node, this);
-		} else {
+		} else if (type != null) {
 			console.warn(key, 'has no supported type in schema', schema);
 		}
 		if (fieldset) {
@@ -482,6 +471,44 @@ class Semafor {
 			cancelable: true
 		}));
 	}
+
+	resolveRef(schema, parentId) {
+		const { $ref } = schema;
+		if (!$ref) return schema;
+		const refUrl = new URL($ref, "http://a.a" + parentId);
+		const root = this.schemas[refUrl.pathname.substring(1) || 'elements'];
+		if (!root) console.error("Unsupported $ref", $ref);
+		const prefix = '#/definitions/';
+		if (refUrl.hash.startsWith(prefix)) {
+			delete schema.$ref;
+			const [name, ...rel] = refUrl.hash.slice(prefix.length).split('/');
+			let ref = root.definitions[name];
+			if (rel.length >= 2 && rel[0] != 'properties' && rel[1] != 'data') {
+				console.error("Cannot resolve", $ref);
+			} else {
+				ref = rel.slice(2).reduce((schema, key) => schema[key], ref);
+				if (ref) Object.assign(schema, ref);
+				else console.error("$ref not found", $ref);
+			}
+		} else if (refUrl.searchParams.size > 0) {
+			const list = [];
+			const entries = Array.from(refUrl.searchParams.entries());
+			for (const item of root.oneOf) {
+				const schema = this.resolveRef(item, root.$id);
+				if (entries.every(([key, val]) => schema[key] == val)) {
+					list.push(schema);
+				}
+			}
+			delete schema.$ref;
+			schema.required = root.required;
+			schema.oneOf = list;
+			if (root.discriminator) schema.discriminator = root.discriminator;
+		} else {
+			Object.assign(schema, root);
+		}
+		return schema;
+	}
+
 	static findPath(obj, path) {
 		const list = path.split('.');
 		let cur = obj;
@@ -491,8 +518,6 @@ class Semafor {
 		return cur;
 	}
 }
-
-
 
 function getNonNullType(type) {
 	if (!type || !Array.isArray(type)) return type;
@@ -554,8 +579,7 @@ Semafor.types.oneOf = function (key, schema, node, inst) {
 		}
 	});
 
-	let def = schema.default;
-	if (def === null) def = "";
+	const def = schema.default === null ? "" : schema.default;
 	const scope = {
 		$key: key,
 		$def: def,
@@ -563,7 +587,14 @@ Semafor.types.oneOf = function (key, schema, node, inst) {
 	};
 	let oneOfType;
 	let icons = false;
-	if (alts.length == 1 && alts[0].const === undefined) {
+	const disc = schema.discriminator?.propertyName;
+	if (disc) {
+		scope.$list = listOf.map(item => {
+			item = inst.resolveRef(item, schema.$id); // often needed here
+			return item.properties[disc];
+		});
+		scope.$key += `.${disc}`;
+	} else if (alts.length == 1 && alts[0].const === undefined) {
 		oneOfType = alts[0];
 	} else if (alts.every(item => Boolean(item.icon))) {
 		icons = true;
@@ -752,7 +783,7 @@ Semafor.types.array = function (key, schema, node, inst) {
 		});
 		if (allStrings) {
 			return Semafor.types.string(key, schema, node, inst);
-		} else {
+		} else if (schema.items.anyOf.length <= 4) {
 			const fieldset = `<fieldset>
 				<legend>[title|else:$key]<small>[description|as:text|fail:*]</small></legend>
 				<div class="inline field">
@@ -766,6 +797,13 @@ Semafor.types.array = function (key, schema, node, inst) {
 				.fuse(schema, { $key: key });
 			node.appendChild(fieldset);
 			return fieldset;
+		} else {
+			return node.appendChild(`<div class="inline field">
+				<label>[title|else:$key]<small>[description|as:text|fail:*]</small></label>
+				<select multiple name="[$key]">
+					<option value="[items.anyOf|repeat:item|.const]">[item.title|else:item.const]</option>
+				</select>
+			</div>`.fuse(schema, { $key: key }));
 		}
 	} else {
 		console.warn("FIXME: array type supports only items: [schemas], or items.anyOf", schema);

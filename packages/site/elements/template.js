@@ -30,31 +30,8 @@ exports.fetch = {
 		},
 		action: {
 			title: 'Action',
-			type: 'object',
-			properties: {
-				method: {
-					title: 'Method',
-					nullable: true,
-					type: "string",
-					pattern: /^(\w+\.\w+)?$/.source
-				},
-				auto: {
-					title: 'Auto fetch on scroll',
-					type: 'boolean',
-					nullable: true
-				},
-				parameters: {
-					title: 'Parameters',
-					nullable: true,
-					type: "object"
-				}
-			},
-			nullable: true,
-			$filter: {
-				name: 'service',
-				action: "read"
-			},
-			$helper: 'service'
+			description: 'Choose a service',
+			$ref: '/services?$action=read'
 		},
 		redirection: {
 			title: 'Success',

@@ -98,26 +98,8 @@ exports.api_form = {
 		},
 		action: {
 			title: 'Action',
-			type: 'object',
-			required: ["method"],
-			properties: {
-				method: {
-					title: 'Method',
-					nullable: true,
-					type: "string",
-					pattern: /^(\w+\.\w+)?$/.source
-				},
-				parameters: {
-					title: 'Parameters',
-					nullable: true,
-					type: "object"
-				}
-			},
-			$filter: {
-				name: 'service',
-				action: "write"
-			},
-			$helper: 'service',
+			description: 'Choose a service',
+			$ref: '/services?$action=write'
 		},
 		redirection: {
 			title: 'Success',

@@ -24,7 +24,7 @@ class FormBlock {
 			} else if (schema.anyOf) {
 				hint = 'any of: ' + schema.anyOf.map(item => item.const).join(', ');
 			} else if (schema.oneOf) {
-				hint = 'one of: ' + schema.anyOf.map(item => item.const).join(', ');
+				hint = 'one of: ' + schema.oneOf.map(item => item.const).join(', ');
 			}
 			copy.type = 'string';
 			copy.format = 'singleline';
@@ -118,12 +118,13 @@ class FormBlock {
 			const schema = { ...this.el, type: 'object' };
 
 			let form = this.form;
-			if (!form) form = this.form = new Pageboard.Semafor(
+			if (!form) form = this.form = new Pageboard.Semafor({
 				schema,
-				this.node,
-				this.customFilter.bind(this),
-				this.customHelper.bind(this)
-			);
+				node: this.node,
+				filter: this.customFilter.bind(this),
+				helper: this.customHelper.bind(this),
+				schemas: Pageboard.schemas
+			});
 
 			if (!sameMode || Object.keys(this.filters).length > 0) {
 				form.update(form.schema);
@@ -205,6 +206,11 @@ class FormBlock {
 	}
 	customFilter(key, prop, parentProp) {
 		let opts = prop.$filter;
+		if (!opts && prop.discriminator) {
+			opts = {
+				name: 'discriminator'
+			};
+		}
 		if (this.mode == "lock") {
 			if (key == null) return {
 				type: 'object',
@@ -234,7 +240,7 @@ class FormBlock {
 			if (!inst) {
 				inst = this.filters[key] = new Filter(key, opts, prop, parentProp);
 			}
-			prop = inst.update?.(this.block, prop) || prop;
+			prop = inst.update?.(this.block, prop, this.form) || prop;
 		}
 		if (this.mode == "expr") {
 			prop = FormBlock.propToMeta(prop);
