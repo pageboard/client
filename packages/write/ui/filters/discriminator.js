@@ -18,12 +18,12 @@ Pageboard.schemaFilters.discriminator = class {
 		});
 		if (!sub) {
 			console.warn("discriminator not found", disc, val);
-			return;
 		}
+		const props = sub?.properties ?? {};
 		copy.type = 'object';
-		copy.properties = { ...sub.properties,
+		copy.properties = { ...props,
 			[disc]: {
-				title: sub.properties[disc].title,
+				title: sub ? props[disc].title : prop.oneOf[0]?.properties[disc].title,
 				oneOf: prop.oneOf.map(item => {
 					return { ...item.properties[disc], title: item.title };
 				})
