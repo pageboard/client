@@ -12,7 +12,7 @@ exports.fetch = {
 	},
 	html: `<element-template
 		action="/.api/query/[name|else:$id][action?.method|prune:-]"
-		data-auto="[action?.auto]"
+		data-auto="[auto]"
 		data-offset-name="[$expr?.action?.parameters?.offset|as:expressions]"
 		parameters="[$expr?.action?.parameters|as:expressions]"
 		success="[redirection.url][redirection.parameters|as:query]"
@@ -20,6 +20,9 @@ exports.fetch = {
 		unauthorized="[unauthorized.url][unauthorized.parameters|as:query]"
 		notfound="[notfound.url][notfound.parameters|as:query]"
 	><template block-content="template"></template></element-template>`,
+	upgrade: {
+		'data.action.auto': 'data.auto'
+	},
 	properties: {
 		name: {
 			title: 'Name',
@@ -27,6 +30,11 @@ exports.fetch = {
 			type: 'string',
 			format: 'id',
 			nullable: true
+		},
+		auto: {
+			title: 'Automatic pagination',
+			type: 'boolean',
+			default: false
 		},
 		action: {
 			title: 'Action',
