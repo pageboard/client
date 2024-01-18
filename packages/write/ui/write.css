@@ -386,7 +386,7 @@ body[data-mode="read"] #pageboard-read > iframe {
 }
 
 #form label > small {
-	display: inline-block;
+	display: none;
 	font-weight:normal;
 	margin:0;
 	padding:0;
@@ -394,31 +394,16 @@ body[data-mode="read"] #pageboard-read > iframe {
 	color:#777;
 	text-transform: lowercase;
 	max-width: none;
-	margin-left: 0.3em;
-}
-#form label > span + small {
-	position:relative;
-	max-width:none;
+	z-index:1;
+	background-color:white;
 }
 
-#form .inline.field > label > small,
-#form .inline.fields > label > small {
-	display: block;
-	margin-top: -0.1em;
-	position:relative;
-	max-width: none;
-	margin-bottom: -0.5em;
-	margin-left: 0;
+label:hover > small {
+	display:block !important;
+	position:absolute !important;
+	top:100%;
 }
 
-#form .long.field > label > small,
-#form .field > label.toggle > small {
-	display: block;
-	margin-top: -0.1em;
-	position:relative;
-	margin-bottom: -0.1em;
-	margin-left: 0;
-}
 #form .field > .toggle {
 	margin: 0;
 	justify-content: space-between;
@@ -433,10 +418,7 @@ body[data-mode="read"] #pageboard-read > iframe {
 #form .fields .field > label.toggle > span {
 	font-weight:normal;
 }
-#form .field > label.toggle > small {
-	top: 85%;
-	position: absolute;
-}
+
 #form input[type="number"],
 #form input[type="text"],
 #form input.ui.input {
