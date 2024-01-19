@@ -246,12 +246,6 @@ body[data-fold-width] {
 }
 
 @media print {
-	.page-sheet-right {
-		padding-right: 0;
-	}
-	.page-sheet-left {
-		padding-left: 0;
-	}
 	body + div.pdf-menu {
 		display:none;
 	}
