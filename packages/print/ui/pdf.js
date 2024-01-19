@@ -40,7 +40,8 @@ class HTMLElementBodyPrint extends Page.create(HTMLBodyElement) {
 			return;
 		}
 		const className = 'page-sheet';
-		this.#autobreakFn(className);
+		// disabled for now
+		// this.#autobreakFn(className);
 		this.#pageNumbering(opts.counterOffset, className);
 
 		if (state.vars.pages) {
