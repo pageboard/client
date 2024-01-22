@@ -142,7 +142,7 @@ class HTMLElementTemplate extends Page.Element {
 		};
 		if (initial != null) {
 			auto.node = view.querySelector(`[data-auto-repeat="${auto.name}"]`);
-			if (offset <= initial) {
+			if (offset < initial) {
 				append = false;
 			} else if (offset > initial + limit) {
 				replace = true;
@@ -155,6 +155,8 @@ class HTMLElementTemplate extends Page.Element {
 		} else {
 			this.dataset.offset = Infinity;
 		}
+		if (count != null) this.dataset.count = count;
+		else delete this.dataset.count;
 
 		const el = {
 			name: 'element_template_' + String(Math.round(Date.now() * Math.random())).slice(-6),
@@ -163,7 +165,7 @@ class HTMLElementTemplate extends Page.Element {
 				before: {
 					repeat(ctx, v, args) {
 						if (auto.enabled && args.length <= 2) {
-							args.push('repeatPlacer');
+							args[1] = 'repeatPlacer';
 						}
 					}
 				},

@@ -14,13 +14,12 @@ class HTMLElementPagination extends Page.create(HTMLAnchorElement) {
 			console.warn("pagination does not find fetch node", this.dataset.fetch);
 			return;
 		}
-		const name = node.dataset.pagination;
-		const start = parseInt(node.dataset.start) || 0;
-		const stop = parseInt(node.dataset.stop) || 0;
+		const name = node.dataset.offsetName;
+		const offset = parseInt(node.dataset.offset) || 0;
 		const limit = parseInt(node.dataset.limit) || 10;
 		const count = parseInt(node.dataset.count) || 0;
 		const sign = this.dataset.dir == "-" ? -1 : +1;
-		const cur = sign > 0 ? stop : (start - limit);
+		const cur = sign > 0 ? offset : (offset - 2 * limit);
 
 		this.setAttribute('href', Page.format({
 			pathname: state.pathname,
@@ -29,7 +28,7 @@ class HTMLElementPagination extends Page.create(HTMLAnchorElement) {
 				[name]: cur || undefined
 			}
 		}));
-		this.disabled = sign < 0 && cur + limit <= 0 || sign > 0 && count < limit;
+		this.disabled = sign < 0 && offset <= limit || sign > 0 && offset >= count;
 	}
 	handleClick(e) {
 		if (this.disabled) {
