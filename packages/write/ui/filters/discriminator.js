@@ -7,7 +7,7 @@ Pageboard.schemaFilters.discriminator = class {
 	update(block, prop, semafor) {
 		const disc = prop.discriminator.propertyName;
 		if (!disc) return;
-		const val = block.data[this.key][disc];
+		const val = block.data[this.key]?.[disc];
 		if (val === undefined) return;
 		const copy = Object.assign({}, prop);
 		delete copy.discriminator;
