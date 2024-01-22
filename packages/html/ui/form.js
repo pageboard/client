@@ -320,6 +320,9 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 			for (const node of prelist) {
 				await node.presubmit(state);
 			}
+			form.enable();
+			scope.$request = form.read(true, e.submitter);
+			form.disable();
 			form.classList.add('loading');
 			scope.$response = await state.fetch(form.method, Page.format({
 				pathname: form.getAttribute('action'),
