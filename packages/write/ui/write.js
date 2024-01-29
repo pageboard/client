@@ -5,7 +5,6 @@ Object.assign(window.Pageboard, {
 	Controls: {},
 	schemaHelpers: {},
 	schemaFilters: {},
-	schemas: {},
 	trigger(node, event, detail) {
 		const opts = {
 			view: window,
@@ -41,17 +40,3 @@ Object.assign(window.Pageboard, {
 	}
 });
 
-for (const name of ['elements', 'services']) {
-	const definitions = window.Pageboard[name];
-	// TODO this hard-coded translation could be avoided
-	window.Pageboard.schemas[name] = {
-		$id: '/' + name,
-		definitions,
-		discriminator: {
-			propertyName: name == 'elements' ? 'type' : 'method'
-		},
-		oneOf: Object.keys(definitions).map(key => {
-			return { $ref: '#/definitions/' + key };
-		})
-	};
-}

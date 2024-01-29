@@ -86,7 +86,7 @@ export default class Scope {
 	#state;
 
 	static init(state) {
-		const elts = Pageboard.elements ??= {};
+		const elts = Pageboard.schemas?.elements?.definitions ?? {};
 		Object.assign(elts, baseElements);
 
 		let { scope } = state;
@@ -202,7 +202,7 @@ export default class Scope {
 		if (this.$element || !res?.item?.type) {
 			el = { scripts: [], stylesheets: [] };
 		} else {
-			el = this.$element ??= { ...Pageboard.elements[res?.item.type] };
+			el = this.$element ??= { ...Pageboard.schemas.elements.definitions[res?.item.type] };
 			if (window.parent.Pageboard.Editor) types.add('editor');
 		}
 

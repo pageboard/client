@@ -218,7 +218,7 @@ class FormBlock {
 					lock: {
 						title: 'Locks',
 						type: 'array',
-						items: Pageboard.elements.settings.properties.grants.items
+						items: '#/definitions/settings/properties/data/properties/grants/items'
 					}
 				}
 			};

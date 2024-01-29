@@ -99,7 +99,7 @@ exports.api_form = {
 		action: {
 			title: 'Action',
 			description: 'Choose a service',
-			$ref: '/services?$action=write'
+			$ref: '/writes'
 		},
 		redirection: {
 			title: 'Success',

@@ -39,7 +39,7 @@ exports.fetch = {
 		action: {
 			title: 'Action',
 			description: 'Choose a service',
-			$ref: '/services?$action=read'
+			$ref: '/reads'
 		},
 		redirection: {
 			title: 'Success',
