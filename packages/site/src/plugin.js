@@ -31,10 +31,10 @@ export const hooks = {
 				ctx.$data = null;
 			}
 		},
-		lang({ expr }, str, [lang]) {
-			if (str && expr.filter == expr.filters.length) {
+		lang(ctx, str, [lang]) {
+			if (str && ctx.expr.filter == ctx.expr.filters.length) {
 				if (lang) lang = '~' + lang;
-				return str.replace(/(~\w{2})?(\.\w{3,4})?$/, `${lang}$2`);
+				return str.replace(/^((?:\/[\w-]*)+)(~\w{2})?(.*)/, `$1${lang}$2$3`);
 			} else {
 				return str;
 			}
