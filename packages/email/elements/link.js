@@ -30,6 +30,6 @@ exports.mail_link = {
 	contents: "text*",
 	inline: true,
 	group: "mail_inline",
-	html: '<a href="[url]" hreflang="[lang]"></a>'
+	html: '<a href="[url|lang:[lang]]" hreflang="[lang]"></a>'
 };
 

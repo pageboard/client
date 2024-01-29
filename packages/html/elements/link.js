@@ -44,7 +44,7 @@ exports.link = {
 	inline: true,
 	group: "inline",
 	tag: 'a:not([block-type]),a[block-type="link"]',
-	html: '<a href="[url]" hreflang="[lang]" class="[button|alt:ui button]" id="[id]"></a>',
+	html: '<a href="[url|lang:[lang]]" hreflang="[lang]" class="[button|alt:ui button]" id="[id]"></a>',
 	stylesheets: [
 		'../ui/components/button.css'
 	]
@@ -111,7 +111,7 @@ exports.link_button = {
 	contents: "text*",
 	group: "block",
 	tag: 'a.ui.button',
-	html: '<a href="[url]" hreflang="[lang]" class="ui [full|alt:fluid:] [icon] [compact] [float|post:%20floated] button"></a>',
+	html: '<a href="[url|lang:[lang]]" hreflang="[lang]" class="ui [full|alt:fluid:] [icon] [compact] [float|post:%20floated] button"></a>',
 	stylesheets: [
 		'../ui/components/button.css'
 	]

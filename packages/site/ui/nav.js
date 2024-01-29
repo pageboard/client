@@ -29,14 +29,6 @@ const statePush = Page.constructor.prototype.push;
 Page.constructor.prototype.push = function (loc, opts) {
 	this.scope.transition?.cancel();
 	if (typeof loc == "string") loc = this.parse(loc);
-	if (loc.pathname) {
-		const { $lang } = this.scope;
-		const suffix = `~${$lang}`;
-		const suffixed = this.pathname.endsWith(suffix);
-		if (suffixed && !/~\w{2}$/.test(loc.pathname)) {
-			loc.pathname += suffix;
-		}
-	}
 	return statePush.call(this, loc, opts);
 };
 
@@ -47,8 +39,6 @@ Page.connect(new class {
 
 	patch(state) {
 		state.finish(() => {
-			const { $lang } = state.scope;
-			const suffixed = state.pathname.endsWith(`~${$lang}`);
 			for (const a of document.querySelectorAll('a[href]')) {
 				const loc = state.parse(a.href);
 				if (loc.hostname && loc.hostname != document.location.hostname) {
@@ -56,15 +46,8 @@ Page.connect(new class {
 					a.rel = "noopener";
 				} else if (/^\.\w+\//.test(loc.pathname)) {
 					a.target = "_blank";
-				} else {
-					const ext = /\.\w{3,4}$/.exec(loc.pathname)?.[0] ?? '';
-					if (ext) a.target = "_blank";
-					if (suffixed || a.hreflang) {
-						const bare = loc.pathname.slice(0, -ext.length || undefined);
-						if (!/~\w{2}$/.test(bare)) {
-							a.pathname = `${bare}~${a.hreflang || $lang}${ext}`;
-						}
-					}
+				} else if (/\.\w{3,4}$/.test(loc.pathname)) {
+					a.target = "_blank";
 				}
 			}
 		});

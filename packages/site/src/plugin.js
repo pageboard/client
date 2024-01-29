@@ -30,6 +30,14 @@ export const hooks = {
 				ctx.data = ctx.$data;
 				ctx.$data = null;
 			}
+		},
+		lang({ expr }, str, [lang]) {
+			if (expr.filter == expr.filters.length) {
+				if (lang) lang = '~' + lang;
+				return str.replace(/(~\w{2})?(\.\w{3,4})?$/, `${lang}$2`);
+			} else {
+				return str;
+			}
 		}
 	}
 };

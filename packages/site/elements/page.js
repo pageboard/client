@@ -74,7 +74,7 @@ exports.page = {
 		<meta name="description" content="[$content.description|fail:*]">
 		<base href="[$loc.origin]">
 		<link rel="canonical" href="[$loc.origin][$loc.pathname][$loc.search][noindex|not:prune:*::1]">
-		<link rel="alternate" hreflang="[$parent.data.languages|repeat:lang]" href="[$loc.origin][$loc.pathname]~[lang][$loc.search]">
+		<link rel="alternate" hreflang="[$parent.data.languages|repeat:lang]" href="[$loc.origin][$loc.pathname|lang:[lang]][$loc.search]">
 		<link rel="icon" href="[$parent.data.favicon|post:?format=ico|or:data%3A,]">
 		<link rel="stylesheet" href="[$element.stylesheets|repeat:]" data-priority="[$element.priority]">
 		<script defer src="[$element.scripts|repeat:]" data-priority="[$element.priority]"></script>
