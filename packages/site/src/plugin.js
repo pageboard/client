@@ -32,7 +32,7 @@ export const hooks = {
 			}
 		},
 		lang({ expr }, str, [lang]) {
-			if (expr.filter == expr.filters.length) {
+			if (str && expr.filter == expr.filters.length) {
 				if (lang) lang = '~' + lang;
 				return str.replace(/(~\w{2})?(\.\w{3,4})?$/, `${lang}$2`);
 			} else {
