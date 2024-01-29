@@ -14,10 +14,6 @@ Pageboard.schemaFilters.service = class ServiceFilter {
 		} else {
 			props.parameters = { ...service, type: 'object'};
 		}
-		if (props.auto) {
-			// FIXME this has nothing to do here
-			props.auto.$disabled = service.$action != "read" || service.method != "search";
-		}
 	}
 	constructor(key, opts, schema) {
 		const list = [];
