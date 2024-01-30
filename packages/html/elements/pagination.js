@@ -7,7 +7,7 @@ exports.pagination = {
 	isolating: true,
 	properties: {
 		fetch: {
-			title: 'Fetch block',
+			title: 'Name of fetch block',
 			type: 'string',
 			format: 'id',
 			$filter: {
