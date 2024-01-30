@@ -162,8 +162,10 @@ class HTMLElementTemplate extends Page.Element {
 		} else {
 			replace = true;
 		}
-		this.dataset.limit = limit;
-		this.dataset.offset = offset;
+		if (limit != null) this.dataset.limit = limit;
+		else delete this.dataset.limit;
+		if (offset != null) this.dataset.offset = offset;
+		else delete this.dataset.offset;
 		if (count != null) this.dataset.count = count;
 		else delete this.dataset.count;
 
