@@ -5,9 +5,19 @@ class HTMLElementTemplate extends Page.Element {
 	#locked;
 
 	#autoOffset(state) {
-		const { offset, offsetName, auto } = this.dataset;
-		if (auto == "true" && !(offsetName in state.query) && offset != 'Infinity') {
-			return parseInt(offset) || 0;
+		const { offset, offsetName, auto, count } = this.dataset;
+		if (!offsetName || auto != "true" || offsetName in state.query) {
+			return false;
+		}
+
+		if (offset == null) return false;
+		const limit = parseInt(this.dataset.limit) || 10;
+		const cur = parseInt(offset);
+		if (Number.isNaN(cur)) return false;
+		if (cur + limit > count) {
+			return false;
+		} else {
+			return cur + limit;
 		}
 	}
 
@@ -33,7 +43,7 @@ class HTMLElementTemplate extends Page.Element {
 
 		if (action) try {
 			const offset = this.#autoOffset(state);
-			if (offset != null) {
+			if (offset !== false) {
 				const { offsetName } = this.dataset;
 				state.ivars.add(offsetName);
 				request[offsetName] = offset;
@@ -132,29 +142,28 @@ class HTMLElementTemplate extends Page.Element {
 		}
 
 		const { offset, limit, count } = data;
-		const initial = this.#autoOffset(state);
+
+		// determine if data must replace, or be prepended, or be appended
+		const curAutoOffset = this.#autoOffset(state);
 
 		let append = true;
 		let replace = false;
 		const auto = {
 			name: "$items",
-			enabled: Boolean(this.dataset.auto)
+			enabled: this.dataset.auto == "true"
 		};
-		if (initial != null) {
+		if (curAutoOffset !== false) {
 			auto.node = view.querySelector(`[data-auto-repeat="${auto.name}"]`);
-			if (offset < initial) {
+			if (offset < curAutoOffset) {
 				append = false;
-			} else if (offset > initial + limit) {
+			} else if (offset > curAutoOffset) {
 				replace = true;
 			}
 		} else {
 			replace = true;
 		}
-		if (offset + limit < count) {
-			this.dataset.offset = offset + limit;
-		} else {
-			this.dataset.offset = Infinity;
-		}
+		this.dataset.limit = limit;
+		this.dataset.offset = offset;
 		if (count != null) this.dataset.count = count;
 		else delete this.dataset.count;
 
@@ -232,11 +241,13 @@ class HTMLElementTemplate extends Page.Element {
 		);
 	}
 
-	#more() {
+	#more(state) {
 		if (!this.#queue) return;
 		this.#locked = true;
 		this.#queue = this.#queue.then(async () => {
-			await Page.reload({ vary: 'patch' });
+			if (this.#autoOffset(state) !== false) {
+				await Page.reload({ vary: 'patch' });
+			}
 			this.#locked = false;
 		});
 	}
@@ -248,7 +259,7 @@ class HTMLElementTemplate extends Page.Element {
 		this.#observer = new IntersectionObserver(entries => {
 			entries.forEach(entry => {
 				if (entry.isIntersecting) {
-					if (!this.#locked) this.#more();
+					if (!this.#locked) this.#more(state);
 				}
 			});
 		}, {

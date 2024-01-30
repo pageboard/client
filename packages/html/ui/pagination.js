@@ -7,28 +7,29 @@ class HTMLElementPagination extends Page.create(HTMLAnchorElement) {
 	}
 
 	#update(state) {
+		const { fetch } = this.dataset;
 		const node = this.ownerDocument.querySelector(
-			`element-template[action="/.api/query/${this.dataset.fetch}"]`
+			`element-template[action="/.api/query/${fetch}"]`
 		);
 		if (!node) {
-			console.warn("pagination does not find fetch node", this.dataset.fetch);
+			console.warn("pagination does not find fetch node", fetch);
 			return;
 		}
-		const name = node.dataset.offsetName;
+		const { offsetName } = node.dataset;
 		const offset = parseInt(node.dataset.offset) || 0;
 		const limit = parseInt(node.dataset.limit) || 10;
 		const count = parseInt(node.dataset.count) || 0;
 		const sign = this.dataset.dir == "-" ? -1 : +1;
-		const cur = sign > 0 ? offset : (offset - 2 * limit);
+		const cur = sign > 0 ? offset + limit : offset - limit;
 
 		this.setAttribute('href', Page.format({
 			pathname: state.pathname,
 			query: {
 				...state.query,
-				[name]: cur || undefined
+				[offsetName]: cur
 			}
 		}));
-		this.disabled = sign < 0 && offset <= limit || sign > 0 && offset >= count;
+		this.disabled = sign < 0 && cur < 0 || sign > 0 && cur >= count;
 	}
 	handleClick(e) {
 		if (this.disabled) {
