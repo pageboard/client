@@ -256,7 +256,7 @@ class HTMLElementTemplate extends Page.Element {
 
 	setup(state) {
 		if (state.scope.$write) return;
-		if (this.#autoOffset(state) == null) return;
+		if (this.#autoOffset(state) === false) return;
 		this.#queue = Promise.resolve();
 		this.#observer = new IntersectionObserver(entries => {
 			entries.forEach(entry => {
