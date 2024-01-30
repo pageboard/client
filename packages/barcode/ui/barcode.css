@@ -1,13 +1,7 @@
 [block-type="barcode"] {
 	display: inline-flex;
-}
-[block-type="barcode"] > img {
-	width: auto;
-	max-height:100%;
 	image-rendering: pixelated;
 }
-[block-type="barcode"] > img.error {
+[block-type="barcode"].error {
 	background-color: rgb(255 0 0 / 50%);
-	display:inline-block;
-	visibility: visible;
 }

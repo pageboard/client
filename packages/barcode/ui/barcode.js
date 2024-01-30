@@ -11,13 +11,8 @@ class HTMLElementBarcode extends Page.Element {
 	};
 
 	async patch(state) {
-		const doc = this.ownerDocument;
-		const canvas = doc.createElement('canvas');
-		const img = this.querySelector('img') || this.appendChild(doc.createElement('img'));
-		img.classList.remove('error');
-		img.width = this.options.scaleX;
-		img.height = this.options.scaleY;
-		img.style.height = this.options.dimension;
+		this.classList.remove('error');
+
 		const opts = {
 			text: this.options.text,
 			bcid: this.options.bcid,
@@ -32,10 +27,13 @@ class HTMLElementBarcode extends Page.Element {
 		};
 		const bwipFn = Pageboard.Bwip[opts.bcid.replace(/-/g, '_')];
 		try {
-			bwipFn(canvas, opts);
-			img.src = canvas.toDataURL('image/png');
+			const svg = bwipFn(opts, Pageboard.Bwip.drawingSVG());
+			this.style.width = this.style.height = this.options.dimension;
+			const svgDoc = new DOMParser().parseFromString(svg, 'application/xml');
+			this.textContent = '';
+			this.appendChild(svgDoc.documentElement);
 		} catch (e) {
-			img.classList.add('error');
+			this.classList.add('error');
 		}
 	}
 }

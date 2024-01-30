@@ -1,3 +1,3 @@
-import { qrcode, ean13, upca, isbn } from 'bwip-js';
+import { drawingSVG, qrcode, ean13, upca, isbn } from 'bwip-js';
 
-Pageboard.Bwip = { qrcode, ean13, upca, isbn };
+Pageboard.Bwip = { drawingSVG, qrcode, ean13, upca, isbn };
