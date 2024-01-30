@@ -1,6 +1,6 @@
 {
   "name": "@pageboard/email",
-  "version": "0.14.13",
+  "version": "0.14.14",
   "description": "",
   "main": "index.js",
   "scripts": {
