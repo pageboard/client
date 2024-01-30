@@ -3,8 +3,7 @@ Page.constructor.serialize = function (state, type) {
 	const doc = document;
 	for (const node of doc.querySelectorAll('element-template')) {
 		const template = node.firstElementChild;
-		const view = node.lastElementChild;
-		template.remove();
+		const view = template.nextElementSibling;
 		while (view.firstChild) node.parentNode.insertBefore(view.firstChild, node);
 		node.remove();
 	}
