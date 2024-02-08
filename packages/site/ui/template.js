@@ -385,13 +385,13 @@ Page.constructor.prototype.templatesQuery = function (node, collector) {
 		...scope.$hooks,
 		afterAll: function (ctx, val) {
 			const { path } = ctx.expr;
+			const key = path[1];
 			if (val === undefined) {
 				// it is the duty of the fetch block to redirect 400 if needed
-				collector?.miss(path[1]);
+				collector?.miss(key);
 			} else if (path.length > 2) {
 				console.error("parameters with unescaped key", path);
 			} else if (path.length == 2) {
-				const key = path[1];
 				state.vars[key] = true;
 				if (val != null) $query[key] = val;
 			} else if (path.length == 1 && path[0].startsWith('$')) {
