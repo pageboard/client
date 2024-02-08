@@ -82,10 +82,9 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 				if (masked) toggles.push(submit);
 				state.vars.submit = true;
 			}
-			const vars = state.templatesQuery(this) || {};
-			for (const [key, val] of Object.entries(vars)) {
-				this.setAttribute('data-' + key, val);
-			}
+			const actionLoc = Page.parse(this.getAttribute('action'));
+			Object.assign(actionLoc.query, state.templatesQuery(this));
+			this.setAttribute('action', Page.format(actionLoc));
 			this.restore(state.scope);
 		} else {
 			for (const name of this.fill(state.query)) {
@@ -324,10 +323,9 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 			scope.$request = form.read(true, e.submitter);
 			form.disable();
 			form.classList.add('loading');
-			scope.$response = await state.fetch(form.method, Page.format({
-				pathname: form.getAttribute('action'),
-				query: form.dataset // because patch populates data from parameters
-			}), scope.$request);
+			scope.$response = await state.fetch(
+				form.method, form.getAttribute('action'), scope.$request
+			);
 		} catch (err) {
 			scope.$response = err;
 		}
