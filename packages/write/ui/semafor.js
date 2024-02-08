@@ -295,7 +295,7 @@ class Semafor {
 						}
 						continue;
 					} else if (!field?.properties && !field.oneOf && !field.anyOf) {
-						obj[key] = JSON.stringify(val);
+						obj[key] = Object.isEmpty(val) ? null : JSON.stringify(val);
 						continue;
 					}
 				} else {
@@ -362,19 +362,20 @@ class Semafor {
 						val = val == "true";
 						break;
 					case "object":
-						if (!field.properties && (field.oneOf || field.anyOf)) {
-							const listNoNull = (field.oneOf || field.anyOf).filter(
-								(item) => item.type != "null"
-							);
-							if (listNoNull.length == 1 && listNoNull[0].properties) {
-								field = listNoNull[0];
-							}
-						}
 						if (!field.properties) {
-							try {
-								val = val ? JSON.parse(val) : val;
-							} catch (ex) {
-								console.error(ex);
+							if (field.oneOf || field.anyOf) {
+								const listNoNull = (field.oneOf || field.anyOf).filter(
+									(item) => item.type != "null"
+								);
+								if (listNoNull.length == 1 && listNoNull[0].properties) {
+									field = listNoNull[0];
+								}
+							} else {
+								try {
+									val = val ? JSON.parse(val) : val;
+								} catch (ex) {
+									console.error(ex);
+								}
 							}
 						} else {
 							val = this.convert(val, field);

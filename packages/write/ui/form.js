@@ -2,11 +2,14 @@ class FormBlock {
 	static propToMeta(schema) {
 		const copy = {};
 		let hint = '';
-		if (schema.properties || schema.type == "object") {
+		if (schema.discriminator) {
+			Object.assign(copy, schema);
+			delete copy.required;
+		} else if (schema.properties) {
 			copy.type = 'object';
-			if (schema.nullable) copy.nullable = schema.nullable;
-			if (schema.properties) {
-				copy.properties = Object.assign(schema.properties);
+			copy.properties = Object.assign({}, schema.properties);
+			for (const [key, sub] of Object.entries(copy.properties)) {
+				copy.properties[key] = this.propToMeta(sub);
 			}
 		} else if (schema.type == "array") {
 			if (!schema.items) {
@@ -31,9 +34,9 @@ class FormBlock {
 			if (schema.pattern) hint = schema.pattern;
 			else if (schema.format) hint = schema.format;
 		} else {
-			return schema;
+			return Object.assign({}, schema);
 		}
-
+		if (schema.nullable) copy.nullable = schema.nullable;
 		if (schema.default !== undefined) hint += ` (default: ${schema.default})`;
 		copy.placeholder = hint;
 		copy.title = schema.title;
@@ -255,7 +258,7 @@ class FormBlock {
 			if (e.type == "input" && ["checkbox", "radio", "select"].includes(e.target.type)) return; // change events only
 		}
 		const editor = this.editor;
-		let formData = FormBlock.pruneObj(this.form.get(), this.form.schema) ?? {};
+		let formData = FormBlock.pruneObj(this.form.get(), this.form.filteredSchema) ?? {};
 		const mode = this.mode;
 		if (mode == "lock") formData = formData.lock ?? [];
 
