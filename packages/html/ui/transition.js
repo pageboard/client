@@ -26,11 +26,11 @@ const loader = new class {
 	update(state) {
 		document.documentElement.dataset.stage = state.stage;
 	}
-	setup(state) {
+	async setup(state) {
 		const tr = state.scope.transition;
+		await document.fonts?.ready;
+		document.body.hidden = false;
 		state.finish(async () => {
-			await document.fonts?.ready;
-			document.body.hidden = false;
 			if (tr?.ok) return tr.start();
 		});
 		tr?.end();
