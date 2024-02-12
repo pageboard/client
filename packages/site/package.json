@@ -20,10 +20,10 @@
   "devDependencies": {
     "@pageboard/pagecut": "^0.14.10",
     "class-deferred": "^1.0.1",
-    "debounce": "^1.2.1",
-    "matchdom": "^13.2.1",
-    "postinstall": "^0.8.0",
-    "postinstall-bundle": "^0.9.3",
+    "debounce": "^2.0.0",
+    "matchdom": "^14.0.0",
+    "postinstall": "^0.9.0",
+    "postinstall-bundle": "^0.9.4",
     "window-page": "^19.1.0"
   },
   "prepare": {
