@@ -122,7 +122,15 @@ class ElementProperty {
 		try {
 			const el = ElementProperty.buildSchema(block);
 			if (!el) return null;
-			return ElementProperty.asPaths(el, {}, this.#prefix);
+			const prefix = ['data'].concat(this.#prefix);
+			const paths = ElementProperty.asPaths(el, {}, prefix);
+			prefix.shift();
+			prefix.unshift('content');
+			for (const content of el.contents?.list ?? []) {
+				const cur = prefix.concat([content.id]);
+				paths[cur.join('.')] = content;
+			}
+			return paths;
 		} catch(err) {
 			console.error(err);
 		}
@@ -132,8 +140,35 @@ class ElementProperty {
 	#buildSelector(formBlock) {
 		const content = Pageboard.editor.element(formBlock.type)
 			.contents.get(formBlock);
-		const paths = this.pathsProperties(formBlock, content);
-		if (!paths) return;
+		const formProps = this.pathsProperties(formBlock, content);
+		if (!formProps) return;
+		const formKeys = Object.keys(formProps);
+		const mapKeys = new Map();
+		const scope = Page.scope.copy();
+		let currentPrefix;
+		scope.$request = {};
+		scope.$hooks = {
+			after: {
+				get(ctx, val, path) {
+					if (ctx.expr.path[0] == "$request") {
+						// requested
+						let tail = ctx.expr.path.slice(1).join('.');
+						if (tail) tail += ".";
+						for (const key of formKeys) {
+							if (key.startsWith(currentPrefix)) {
+								mapKeys.set(key, tail + key.substring(currentPrefix.length));
+							}
+						}
+					}
+				}
+			}
+		};
+		for (const [prefix, expr] of Object.entries(
+			formBlock.expr?.action?.parameters ?? []
+		)) {
+			currentPrefix = prefix + '.';
+			expr.fuse({}, scope);
+		}
 		const doc = this.#input.ownerDocument;
 
 		this.#select = doc.dom(`<select></select>`);
@@ -146,7 +181,8 @@ class ElementProperty {
 		context.parent.appendChild(doc.dom(`<option hidden value=""></option>`));
 
 		const dateFormats = ["date", "time", "date-time"];
-		for (const [key, prop] of Object.entries(paths)) {
+		for (const [key, name] of mapKeys.entries()) {
+			const prop = formProps[key];
 			const parts = key.split('.');
 			const pkey = parts.slice(0, -1).join('.');
 			if (context.key && context.key != pkey) {
@@ -168,7 +204,6 @@ class ElementProperty {
 				context.level++;
 				context.key = key;
 			} else {
-				const name = key;
 				const node = doc.dom(`<option value="${name}">${prop.title}</option>`);
 				context.parent.appendChild(node);
 				if (!this.existing) node.disabled = Boolean(
@@ -176,7 +211,7 @@ class ElementProperty {
 				);
 			}
 		}
-		if (Object.keys(paths).length == 0) {
+		if (mapKeys.size == 0) {
 			context.parent.appendChild(doc.dom(`<option disabled>No inputs</option>`));
 		}
 		this.#field.insertBefore(this.#select, this.#input);
