@@ -224,6 +224,7 @@ function schemaFn(ctx, val, schemaPath, pathToSchema) {
 }
 
 function query(ctx, query) {
+	if (typeof query == "string") return query;
 	if (ctx.expr.path.length == 1 && ctx.expr.path[0] == "$query" && query) {
 		for (const name of Object.keys(query)) ctx.scope.var(name);
 	}
