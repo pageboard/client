@@ -50,7 +50,7 @@ exports.write = {
 					<i class="cog large icon"></i>
 				</a>
 				<a class="vertically fitted item" data-command="translate" title="Translation" href="/admin/translations">
-					<i class="translate large icon"></i>[$parent.data.languages|prune:a]
+					<i class="language large icon"></i>[$parent.data.languages|prune:a]
 				</a>
 				<a class="vertically fitted item" hidden data-command="code" title="HTML Mode">
 					<i class="code large icon"></i>
