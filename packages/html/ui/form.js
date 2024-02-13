@@ -357,7 +357,7 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 			form.backup();
 		}
 
-		const loc = Page.parse(redirect).fuse({}, scope);
+		const loc = Page.parse(redirect.fuse({}, scope));
 		let vary = false;
 		if (loc.samePathname(state)) {
 			if (res.granted) {
