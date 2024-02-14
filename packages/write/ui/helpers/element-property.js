@@ -2,7 +2,6 @@ class ElementProperty {
 	#field;
 	#input;
 	#select;
-	#prefix;
 
 	constructor(input, opts, props) {
 		this.#field = input.closest('.field');
@@ -68,7 +67,6 @@ class ElementProperty {
 			`Cannot create input, DOM node not found for block ${block.id}`
 		);
 		this.dom = dom;
-		this.#prefix = dom.closest('[block-type="fieldset_list"]')?.prefix ?? [];
 		const form = dom.closest('form');
 		const formId = form.getAttribute('block-id');
 		const formBlock = Pageboard.editor.blocks.get(formId);
@@ -122,7 +120,7 @@ class ElementProperty {
 		try {
 			const el = ElementProperty.buildSchema(block);
 			if (!el) return null;
-			const prefix = ['data'].concat(this.#prefix);
+			const prefix = ['data'];
 			const paths = ElementProperty.asPaths(el, {}, prefix);
 			prefix.shift();
 			prefix.unshift('content');
@@ -167,7 +165,7 @@ class ElementProperty {
 			formBlock.expr?.action?.parameters ?? []
 		)) {
 			currentPrefix = prefix + '.';
-			expr.fuse({}, scope);
+			expr?.fuse({}, scope);
 		}
 		const doc = this.#input.ownerDocument;
 
