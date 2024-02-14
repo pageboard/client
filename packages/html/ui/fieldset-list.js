@@ -224,14 +224,28 @@ class HTMLElementFieldsetList extends Page.Element {
 		}
 	}
 
-	#findIndex(btn) {
+	#findIndex(btn, add) {
 		let node = btn;
 		const sel = `[name^="${this.#prefixStr}"]`;
 		while ((node = node.parentNode)) {
-			const input = Array.from(node.querySelectorAll(sel)).pop();
-			if (!input) continue;
+			const list = Array.from(node.querySelectorAll(sel));
+			if (!list.length) continue;
+			const first = list[0];
+			const last = list.pop();
+			let offset = 0;
+			let input;
+			if (btn.compareDocumentPosition(last) & Node.DOCUMENT_POSITION_PRECEDING) {
+				// after last
+				if (add) offset += 1;
+				input = last;
+			} else if (first.compareDocumentPosition(btn) & Node.DOCUMENT_POSITION_PRECEDING) {
+				input = first;
+			}
+
 			const { index } = this.#parseName(input.name);
-			if (index >= 0 && index < this.#list.length) return index;
+			if (index >= 0 && index < this.#list.length) {
+				return index + offset;
+			}
 		}
 	}
 
@@ -246,7 +260,7 @@ class HTMLElementFieldsetList extends Page.Element {
 
 		switch (action) {
 			case "add":
-				list.splice((this.#findIndex(btn) ?? 0), 0, { ...this.#model });
+				list.splice((this.#findIndex(btn, true) ?? 0), 0, { ...this.#model });
 				break;
 			case "del":
 				list.splice(this.#findIndex(btn) ?? 0, 1);
