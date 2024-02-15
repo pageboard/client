@@ -25,6 +25,9 @@
 				right:0;
 			}
 		}
+		&.fullwidth {
+			width: calc(100% - 2 * var(--page-margin));
+		}
 	}
 	&.bleed-left {
 		margin-left: calc(-1 * var(--page-margin));
