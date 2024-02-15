@@ -1,6 +1,5 @@
 [block-type="barcode"] {
 	display: inline-flex;
-	image-rendering: pixelated;
 }
 [block-type="barcode"].error {
 	background-color: rgb(255 0 0 / 50%);
