@@ -34,6 +34,17 @@
 	&.column {
 		flex-direction: column;
 		align-items:stretch;
+
+		& > img,
+		&.left > img {
+			align-self:flex-start;
+		}
+		&.hcenter >	img {
+			align-self:center;
+		}
+		&.right >	img {
+			align-self:flex-end;
+		}
 	}
 
 	&.top {
@@ -67,17 +78,7 @@
 		justify-content: flex-end;
 	}
 
-	&.column {
-		> img, &.left > img {
-			align-self:flex-start;
-		}
-		&.hcenter > img {
-			align-self:center;
-		}
-		&.right > img {
-			align-self:flex-end;
-		}
-	}
+
 
 	&.fullwidth {
 		width:100%;
