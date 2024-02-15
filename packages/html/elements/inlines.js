@@ -103,21 +103,25 @@ exports.style = {
 				title: 'Default',
 				icon: '<span class="icon">∅</span>'
 			}, {
+				const: 'tiny',
+				title: 'Tiny',
+				icon: '<span class="icon char" style="font-size:0.6em;margin-inline:0.6rem">aA</span>'
+			}, {
 				const: 'small',
 				title: 'Small',
-				icon: '<span class="icon char" style="font-size:0.6em">aA</span>'
+				icon: '<span class="icon char" style="font-size:0.8em;margin-inline:0.6rem">aA</span>'
 			}, {
 				const: 'base',
 				title: 'Base',
-				icon: '<span class="icon char" style="font-size:0.8em">aA</span>'
+				icon: '<span class="icon char" style="font-size:1em;margin-inline:0.6rem">aA</span>'
 			}, {
 				const: 'large',
 				title: 'Large',
-				icon: '<span class="icon char" style="font-size:1.2em">aA</span>'
+				icon: '<span class="icon char" style="font-size:1.2em;margin-inline:0.6rem">aA</span>'
 			}, {
 				const: 'extra',
 				title: 'Extra',
-				icon: '<span class="icon char" style="font-size:1.6em">aA</span>'
+				icon: '<span class="icon char" style="font-size:1.6em;margin-inline:0.6rem">aA</span>'
 			}]
 		},
 		transform: {

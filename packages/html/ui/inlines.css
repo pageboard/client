@@ -37,6 +37,9 @@ span.blue {
 span.purple {
 	color: purple;
 }
+span.tiny {
+	font-size: 0.5715em;
+}
 span.small {
 	font-size: 0.8em;
 }
