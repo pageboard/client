@@ -474,6 +474,7 @@ class Semafor {
 	}
 
 	resolveRef(schema, parentId) {
+		if (!schema) return schema;
 		const { $ref } = schema;
 		if (!$ref) return schema;
 		const refUrl = new URL($ref, "http://a.a" + parentId);

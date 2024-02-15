@@ -205,7 +205,7 @@ class FormBlock {
 		let inst = this.helpers[key];
 		inst?.destroy?.();
 		inst = this.helpers[key] = new Helper(node.querySelector(`[name="${key}"]`), opts, prop, parentProp);
-		inst.init?.(this.block, prop);
+		inst.init?.(this.block, prop, this.form);
 	}
 	customFilter(key, prop, parentProp) {
 		let opts = prop.$filter;

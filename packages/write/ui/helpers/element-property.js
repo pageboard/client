@@ -9,17 +9,28 @@ class ElementProperty {
 		this.#input = input;
 	}
 
+	static contentAsSchema(list = []) {
+		const props = {};
+		for (const prop of list) {
+			props[prop.id] = {
+				title: prop.title
+			};
+		}
+		return props;
+	}
+
 	static asPaths(obj, ret, prefix = []) {
 		if (!ret) ret = {};
 		const [discKey, discList] = this.discriminator(obj) ?? [];
 		if (discKey) {
+			// FIXME shouldn't be this simply resolved by semafor ?
 			const discProp = obj.properties?.[discKey];
 			for (const [discValue, subSchema] of discList) {
 				const discCase = (discProp?.oneOf ?? discProp?.anyOf ?? []).find(it => {
 					return it.const == discValue;
 				});
 				const subRet = {};
-				ElementProperty.asPaths(subSchema, subRet, prefix.concat([discKey, discValue]));
+				this.asPaths(subSchema, subRet, prefix.concat([discKey, discValue]));
 				if (discCase) for (const subProp of Object.values(subRet)) {
 					subProp.title = `${discCase.title}: ${subProp.title}`;
 				}
@@ -34,7 +45,7 @@ class ElementProperty {
 			for (const [key, val] of Object.entries(props)) {
 				const cur = prefix.concat([key]);
 				ret[cur.join('.')] = { ...val };
-				ElementProperty.asPaths(val, ret, cur);
+				this.asPaths(val, ret, cur);
 			}
 		} else if (obj.type == "array" && obj.items && !Array.isArray(obj.items)) {
 			return this.asPaths(obj.items, ret, prefix);
@@ -61,7 +72,8 @@ class ElementProperty {
 		}
 	}
 
-	init(block) {
+	init(block, prop, semafor) {
+		this.semafor = semafor;
 		const dom = Pageboard.editor.blocks.domQuery(block.id);
 		if (!dom) throw new Error(
 			`Cannot create input, DOM node not found for block ${block.id}`
@@ -75,20 +87,25 @@ class ElementProperty {
 	}
 
 	static buildSchema(block) {
-		let cand = null;
+		let types = null;
 		if (block.type == "query_form") {
-			cand = block.data?.type;
+			types = block.data?.type;
+			if (!types) return;
 		} else if (block.type == "api_form") {
-			cand = block.data?.action?.parameters?.type;
-		}
-		if (!cand) {
-			return;
+			types = block.data?.action?.parameters?.type;
+			if (!types) {
+				const method = block.data?.action?.method;
+				if (method) {
+					const service = Pageboard.schemas.services.definitions[method];
+					return service.properties.parameters;
+				} else {
+					return;
+				}
+			}
 		}
 
-		let el;
-
-		if (Array.isArray(cand)) {
-			const list = cand.map(type => {
+		if (Array.isArray(types)) {
+			const list = types.map(type => {
 				const el = Pageboard.editor.element(type);
 				if (!el) throw new Error(
 					`Unknown type in parent form ${block.type}: ${type}`
@@ -98,7 +115,7 @@ class ElementProperty {
 					title: el.title
 				};
 			});
-			el = {
+			return {
 				type: 'object',
 				properties: {
 					type: {
@@ -107,28 +124,27 @@ class ElementProperty {
 					}
 				}
 			};
-		} else {
-			el = Pageboard.editor.element(cand);
 		}
+
+		const el = Pageboard.editor.element(types);
 		if (!el) throw new Error(
-			`Unknown type in parent form ${block.type}: ${cand}`
+			`Unknown type in parent form ${block.type}: ${types}`
 		);
-		return el;
+		return {
+			title: el.title,
+			type: 'object',
+			properties: {
+				data: { type: 'object', properties: el.properties },
+				content: { title: 'Content', type: 'object', properties: this.contentAsSchema(el.contents?.list) }
+			}
+		};
 	}
 
 	pathsProperties(block) {
 		try {
-			const el = ElementProperty.buildSchema(block);
+			const el = this.semafor.resolveRef(ElementProperty.buildSchema(block));
 			if (!el) return null;
-			const prefix = ['data'];
-			const paths = ElementProperty.asPaths(el, {}, prefix);
-			prefix.shift();
-			prefix.unshift('content');
-			for (const content of el.contents?.list ?? []) {
-				const cur = prefix.concat([content.id]);
-				paths[cur.join('.')] = content;
-			}
-			return paths;
+			return ElementProperty.asPaths(el, {});
 		} catch(err) {
 			console.error(err);
 		}
@@ -150,10 +166,9 @@ class ElementProperty {
 				get(ctx, val, path) {
 					if (ctx.expr.path[0] == "$request") {
 						// requested
-						let tail = ctx.expr.path.slice(1).join('.');
-						if (tail) tail += ".";
+						const tail = ctx.expr.path.slice(1).join('.');
 						for (const key of formKeys) {
-							if (key.startsWith(currentPrefix)) {
+							if (key == currentPrefix || key.startsWith(currentPrefix) && key[currentPrefix.length] == ".") {
 								mapKeys.set(key, tail + key.substring(currentPrefix.length));
 							}
 						}
@@ -164,7 +179,7 @@ class ElementProperty {
 		for (const [prefix, expr] of Object.entries(
 			formBlock.expr?.action?.parameters ?? []
 		)) {
-			currentPrefix = prefix + '.';
+			currentPrefix = prefix;
 			expr?.fuse({}, scope);
 		}
 		const doc = this.#input.ownerDocument;
@@ -179,27 +194,31 @@ class ElementProperty {
 		context.parent.appendChild(doc.dom(`<option hidden value=""></option>`));
 
 		const dateFormats = ["date", "time", "date-time"];
-		for (const [key, name] of mapKeys.entries()) {
+		const sortedKeys = Array.from(mapKeys.keys()).sort((a, b) => {
+			return a.localeCompare(b);
+		});
+		for (const key of sortedKeys) {
+			const name = mapKeys.get(key);
 			const prop = formProps[key];
 			const parts = key.split('.');
 			const pkey = parts.slice(0, -1).join('.');
+			if (!prop.title) continue;
 			if (context.key && context.key != pkey) {
-				context.level--;
+				context.level++;
 				context.key = pkey;
 				context.parent = context.parent.parentNode || context.parent;
 			}
-			if (!prop.title) continue;
 			if (prop.type == "object" && prop.properties && !(Object.keys(prop.properties).sort().join(' ') == "end start" && dateFormats.includes(prop.properties.start.format) && dateFormats.includes(prop.properties.end.format))) {
-				context.parent = context.parent.appendChild(
+				context.parent = this.#select.appendChild(
 					doc.dom(`<optgroup label="${prop.title}"></optgroup>`)
 				);
-				context.level++;
+				context.level--;
 				context.key = key;
 			} else if (prop.type == "array" && prop.items?.properties) {
-				context.parent = context.parent.appendChild(
+				context.parent = this.#select.appendChild(
 					doc.dom(`<optgroup label="${prop.title}"></optgroup>`)
 				);
-				context.level++;
+				context.level--;
 				context.key = key;
 			} else {
 				const node = doc.dom(`<option value="${name}">${prop.title}</option>`);
