@@ -53,11 +53,6 @@ exports.pdf = {
 					type: 'number',
 					default: 10
 				},
-				trim: {
-					title: 'Trim margins after print',
-					description: 'About 2.5mm',
-					type: 'boolean'
-				},
 				fold: {
 					title: 'Fold',
 					type: 'object',
