@@ -375,6 +375,37 @@ exports.sheetcount = {
 	]
 };
 
+exports.numbering = {
+	title: 'Numbering',
+	menu: "pdf",
+	bundle: 'pdf',
+	group: "inline",
+	inline: true,
+	inplace: true,
+	context: "pdf//",
+	icon: '<b class="icon">n/N</b>',
+	properties: {
+		separator: {
+			title: 'Separator for total count',
+			description: 'Set empty to hide total count',
+			type: 'string',
+			format: 'singleline',
+			nullable: true
+		}
+	},
+	parse: function (dom) {
+		return { separator: dom.dataset.separator };
+	},
+	tag: 'span.page-sheet-count',
+	html: '<span class="page-sheet-count" data-separator="[separator]"></span>',
+	stylesheets: [
+		"../ui/pdf.css"
+	],
+	scripts: [
+		'../ui/pdf.js'
+	]
+};
+
 
 exports.layout.properties.bleed = exports.sheet.properties.bleed = {
 	title: 'Bleed',
