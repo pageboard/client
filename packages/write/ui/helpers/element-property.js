@@ -151,37 +151,46 @@ class ElementProperty {
 		return null;
 	}
 
+	#trackFuse(formKeys, mapKeys, obj, scope, prefix) {
+		scope.$request = {};
+		let curPrefix;
+		scope.$hooks = {
+			after: {
+				get(ctx, val, path) {
+					const root = ctx.expr.path;
+					if (root[0] == "$request") {
+						// requested
+						const tail = root.slice(1).join('.');
+						for (const key of formKeys) {
+							if (key == curPrefix || key.startsWith(curPrefix) && key[curPrefix.length] == ".") {
+								mapKeys.set(key, tail + key.substring(curPrefix.length));
+							}
+						}
+					} else if (root[0] == "$default" && root.length == 1) {
+						// curPrefix is banned from mapKeys
+						const index = formKeys.indexOf(curPrefix);
+						if (index >= 0) formKeys.splice(index, 1);
+					}
+				}
+			}
+		};
+		for (const [key, expr] of Object.entries(obj)) {
+			curPrefix = prefix ? prefix + '.' + key : key;
+			if (expr == null) continue;
+			else if (typeof expr == "string") expr?.fuse({}, scope);
+			else this.#trackFuse(formKeys, mapKeys, expr, scope, curPrefix);
+		}
+	}
+
 	#buildSelector(formBlock) {
 		const content = Pageboard.editor.element(formBlock.type)
 			.contents.get(formBlock);
 		const formProps = this.pathsProperties(formBlock, content);
 		if (!formProps) return;
-		const formKeys = Object.keys(formProps);
 		const mapKeys = new Map();
 		const scope = Page.scope.copy();
-		let currentPrefix;
-		scope.$request = {};
-		scope.$hooks = {
-			after: {
-				get(ctx, val, path) {
-					if (ctx.expr.path[0] == "$request") {
-						// requested
-						const tail = ctx.expr.path.slice(1).join('.');
-						for (const key of formKeys) {
-							if (key == currentPrefix || key.startsWith(currentPrefix) && key[currentPrefix.length] == ".") {
-								mapKeys.set(key, tail + key.substring(currentPrefix.length));
-							}
-						}
-					}
-				}
-			}
-		};
-		for (const [prefix, expr] of Object.entries(
-			formBlock.expr?.action?.parameters ?? []
-		)) {
-			currentPrefix = prefix;
-			expr?.fuse({}, scope);
-		}
+		this.#trackFuse(Object.keys(formProps), mapKeys, formBlock.expr?.action?.parameters ?? {}, scope);
+
 		const doc = this.#input.ownerDocument;
 
 		this.#select = doc.dom(`<select></select>`);
