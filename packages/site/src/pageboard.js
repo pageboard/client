@@ -37,13 +37,13 @@ const Pageboard = window.Pageboard ??= {};
 const PageProto = Page.constructor.prototype;
 
 for (const key in Class) {
-	Object.defineProperty(PageProto, key, {
+	if (!Object.hasOwn(PageProto, key)) Object.defineProperty(PageProto, key, {
 		value: Class[key]
 	});
 }
 
 let Element;
-Object.defineProperty(PageProto, 'Element', {
+if (!Object.hasOwn(PageProto, 'Element')) Object.defineProperty(PageProto, 'Element', {
 	get() {
 		Element ??= Class.create(HTMLElement);
 		return Element;

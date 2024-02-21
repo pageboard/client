@@ -95,7 +95,7 @@ export default class Scope {
 			scope = state.scope = state.referrer.scope.copy();
 		}
 
-		if (!scope) {
+		if (!scope || !(scope instanceof Scope)) {
 			scope = state.scope = new Scope(state, {
 				$filters: {},
 				$elements: elts
