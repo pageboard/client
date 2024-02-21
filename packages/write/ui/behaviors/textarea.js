@@ -1,4 +1,4 @@
-class HTMLElementTextArea extends HTMLTextAreaElement {
+class HTMLSemaforTextArea extends HTMLTextAreaElement {
 
 	connectedCallback() {
 		this.addEventListener('change', this);
@@ -19,4 +19,4 @@ class HTMLElementTextArea extends HTMLTextAreaElement {
 		});
 	}
 }
-window.customElements.define('element-textarea', HTMLElementTextArea, { extends: "textarea" });
+window.customElements.define('semafor-textarea', HTMLSemaforTextArea, { extends: "textarea" });

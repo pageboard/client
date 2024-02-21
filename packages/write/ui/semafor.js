@@ -540,7 +540,7 @@ Semafor.types.string = function (key, schema, node, inst) {
 	if (multiline && !short) {
 		return node.appendChild(`<div class="field">
 			<label>[title|else:$key]<small>[description|as:text|fail:*]</small></label>
-			<textarea name="[$key]"	placeholder="[placeholder|else:default]" is="element-textarea"></textarea>
+			<textarea name="[$key]"	placeholder="[placeholder|else:default]" is="semafor-textarea"></textarea>
 		</div>`.fuse(schema, { $key: key }));
 	} else if (short) {
 		return node.appendChild(`<div class="short inline field">
