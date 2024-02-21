@@ -19,8 +19,8 @@
   },
   "homepage": "https://github.com/pageboard/client#readme",
   "dependencies": {
-    "postinstall": "^0.8.0",
-    "postinstall-bundle": "^0.9.1"
+    "postinstall": "^0.9.0",
+    "postinstall-bundle": "^0.9.4"
   },
   "devDependencies": {
     "@pageboard/pagecut": "^0.14.10"
