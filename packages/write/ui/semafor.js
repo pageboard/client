@@ -156,6 +156,11 @@ class Semafor {
 		this.fields = {};
 		const originalFilteredSchema = filteredSchema && Pageboard.utils.stableStringify(filteredSchema);
 		this.filteredSchema = this.process(null, newSchema || this.schema, this.node)?.shift();
+		// adjust select[multiple][size]
+		if (this.node.children.length == 1) {
+			const selmul = this.node.querySelector('select[multiple]');
+			if (selmul) selmul.size = selmul.options.length + 1;
+		}
 		if (originalFilteredSchema && originalFilteredSchema == Pageboard.utils.stableStringify(this.filteredSchema)) {
 			this.node = node;
 			this.fields = fields;
@@ -770,22 +775,23 @@ Semafor.types.null = function (key, schema, node, inst) {
 };
 
 Semafor.types.array = function (key, schema, node, inst) {
-	if (Array.isArray(schema.items)) {
+	const items = inst.resolveRef(schema.items);
+	if (Array.isArray(items)) {
 		const fieldset = `<fieldset><legend>[title]</legend></fieldset>`.fuse(schema, {});
 		node.appendChild(fieldset);
-		schema.items.forEach((item, i) => {
+		items.forEach((item, i) => {
 			inst.process(`${key}.${i}`, item, fieldset, schema);
 		});
 		return fieldset;
-	} else if (schema.items.type == "string") {
+	} else if (items.type == "string") {
 		return Semafor.types.string(key, schema, node, inst);
-	} else if (schema.items.anyOf) {
-		const allStrings = schema.items.anyOf.every(item => {
+	} else if (items.anyOf) {
+		const allStrings = items.anyOf.every(item => {
 			return item.type == "string";
 		});
 		if (allStrings) {
 			return Semafor.types.string(key, schema, node, inst);
-		} else if (schema.items.anyOf.length <= 4) {
+		} else if (items.anyOf.length <= 4) {
 			const fieldset = `<fieldset>
 				<legend>[title|else:$key]<small>[description|as:text|fail:*]</small></legend>
 				<div class="inline field">
@@ -810,7 +816,7 @@ Semafor.types.array = function (key, schema, node, inst) {
 	} else {
 		console.warn("FIXME: array type supports only items: [schemas], or items.anyOf", schema);
 		return inst.process(key, {
-			...schema.items,
+			...items,
 			title: schema.title
 		}, node, schema)?.pop();
 	}

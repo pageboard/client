@@ -220,8 +220,7 @@ class FormBlock {
 				properties: {
 					lock: {
 						title: 'Locks',
-						type: 'array',
-						items: '#/definitions/settings/properties/data/properties/grants/items'
+						$ref: "/elements#/definitions/settings/properties/data/properties/grants"
 					}
 				}
 			};
