@@ -19,7 +19,7 @@ const Pageboard = window.Pageboard ??= {};
 	});
 	if (polyfills.length) {
 		const url = new URL(
-			`/.files/polyfill.js`,
+			`/.api/polyfills`,
 			document.location
 		);
 		url.searchParams.set('features', polyfills.join('+'));
