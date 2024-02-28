@@ -306,7 +306,7 @@ exports.sheet = {
 };
 
 exports.sheetmatch = {
-	title: 'Match',
+	// title: 'Match', // deprecated, use layout side
 	menu: "pdf",
 	bundle: 'pdf',
 	group: "block",
@@ -336,7 +336,7 @@ exports.sheetmatch = {
 		}
 	},
 	contents: "block+",
-	html: '<div class="page-sheet-match" data-match="[match]"></div>',
+	html: '<div class="[match|map:pre:page-match-|join: ]"></div>',
 	stylesheets: [
 		"../ui/pdf.css"
 	],
@@ -344,6 +344,25 @@ exports.sheetmatch = {
 		'../ui/pdf.js'
 	]
 };
+
+exports.layout.properties.side = {
+	title: 'Side',
+	anyOf: [{
+		title: 'Both',
+		type: 'null'
+	}, {
+		title: 'Left',
+		const: 'left'
+	}, {
+		title: 'Right',
+		const: 'right'
+	}]
+};
+exports.layout.fragments.push({
+	attributes: {
+		className: "[side|pre:page-match-]"
+	}
+});
 
 exports.sheetcount = {
 	title: 'Count',

@@ -176,10 +176,12 @@ body[data-fold-width] {
 	}
 }
 
-.page-sheet-match {
+.page-match-left,.page-match-right {
 	visibility: hidden;
 
-	[contenteditable] &, .page-sheet-left &[data-match="left"], .page-sheet-right &[data-match="right"], .page-sheet-first &[data-match="first"], .page-sheet-last &[data-match="last"] {
+	[contenteditable] &,
+	.page-sheet-left &.page-match-left,
+	.page-sheet-right &.page-match-right {
 		visibility:initial;
 	}
 }
