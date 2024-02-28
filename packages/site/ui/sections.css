@@ -1,0 +1,15 @@
+p.tiny, span.tiny {
+	font-size: 0.5715em;
+}
+p.small, span.small {
+	font-size: 0.8em;
+}
+p.base, span.base {
+	font-size: 1.2em;
+}
+p.large, span.large {
+	font-size: 1.6em;
+}
+p.extra, span.extra {
+	font-size: 2em;
+}

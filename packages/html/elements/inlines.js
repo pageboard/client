@@ -95,35 +95,7 @@ exports.style = {
 	group: "inline nolink",
 	tag: 'span.style',
 	properties: {
-		size: {
-			title: 'Size',
-			default: null,
-			anyOf: [{
-				const: null,
-				title: 'Default',
-				icon: '<span class="icon">∅</span>'
-			}, {
-				const: 'tiny',
-				title: 'Tiny',
-				icon: '<span class="icon char" style="font-size:0.6em;margin-inline:0.6rem">aA</span>'
-			}, {
-				const: 'small',
-				title: 'Small',
-				icon: '<span class="icon char" style="font-size:0.8em;margin-inline:0.6rem">aA</span>'
-			}, {
-				const: 'base',
-				title: 'Base',
-				icon: '<span class="icon char" style="font-size:1em;margin-inline:0.6rem">aA</span>'
-			}, {
-				const: 'large',
-				title: 'Large',
-				icon: '<span class="icon char" style="font-size:1.2em;margin-inline:0.6rem">aA</span>'
-			}, {
-				const: 'extra',
-				title: 'Extra',
-				icon: '<span class="icon char" style="font-size:1.6em;margin-inline:0.6rem">aA</span>'
-			}]
-		},
+		size: exports.paragraph.properties.size,
 		transform: {
 			title: 'Transform',
 			default: null,
@@ -197,18 +169,7 @@ exports.style = {
 			nullable: true
 		}
 	},
-	parse: function(dom) {
-		const data = {};
-		for (const [key, schema] of Object.entries(this.properties)) {
-			if (schema.anyOf) for (const item of schema.anyOf) {
-				if (item.const && dom.classList.contains(item.const)) {
-					data[key] = item.const;
-				}
-			}
-		}
-		if (dom.translate === false) data.idiom = true;
-		return data;
-	},
+	parse: exports.paragraph.parse,
 	html: '<span class="style [size] [transform] [color]" translate="[idiom|alt:no:]"></span>',
 	stylesheets: [
 		'../ui/inlines.css'
