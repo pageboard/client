@@ -8,9 +8,6 @@ class FormBlock {
 		} else if (schema.properties) {
 			copy.type = 'object';
 			copy.properties = Object.assign({}, schema.properties);
-			for (const [key, sub] of Object.entries(copy.properties)) {
-				copy.properties[key] = this.propToMeta(sub);
-			}
 		} else if (schema.type == "array") {
 			if (!schema.items) {
 				// this is probably an error, skip
@@ -30,7 +27,7 @@ class FormBlock {
 				hint = 'one of: ' + schema.oneOf.map(item => item.const).join(', ');
 			}
 			copy.type = 'string';
-			copy.format = 'singleline';
+			copy.format = schema.type == "object" ? null : 'singleline';
 			if (schema.pattern) hint = schema.pattern;
 			else if (schema.format) hint = schema.format;
 		} else {
