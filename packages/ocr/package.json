@@ -1,0 +1,36 @@
+{
+  "name": "@pageboard/ocr",
+  "version": "0.14.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "postinstall"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pageboard/client.git"
+  },
+  "author": "Jérémy Lal <kapouer@melix.org>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pageboard/client/issues"
+  },
+  "homepage": "https://github.com/pageboard/client#readme",
+  "devDependencies": {
+    "postinstall": "^0.9.0",
+    "postinstall-bundle": "^0.9.4",
+    "tesseract-wasm": "^0.10.0"
+  },
+  "prepare": {
+    "./src/bwip.js": "bundle lib/"
+  },
+  "pageboard": {
+    "directories": [
+      "element",
+      "lib",
+      "ui"
+    ],
+    "elements": "element/"
+  }
+}
