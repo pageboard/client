@@ -18,12 +18,13 @@
   },
   "homepage": "https://github.com/pageboard/client#readme",
   "devDependencies": {
-    "postinstall-bundle": "^0.9.4",
     "postinstall": "^0.10.3",
     "tesseract-wasm": "^0.10.0"
   },
   "prepare": {
-    "./src/bwip.js": "bundle lib/"
+    "tesseract-wasm/dist/tesseract-worker.js": "link lib/",
+    "tesseract-wasm/dist/tesseract-core.wasm": "link lib/",
+    "tesseract-wasm/dist/tesseract-core-fallback.wasm": "link lib/"
   },
   "pageboard": {
     "directories": [
