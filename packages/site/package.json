@@ -27,7 +27,7 @@
     "window-page": "^19.1.0"
   },
   "prepare": {
-    "./src/pageboard.js": "bundle --extend=true --name=window lib/"
+    ".": "bundle --extend=true --name=window lib/"
   },
   "pageboard": {
     "priority": -100,
