@@ -30,9 +30,11 @@
     "@pageboard/gallery": "file:packages/gallery",
     "@pageboard/google": "file:packages/google",
     "@pageboard/html": "file:packages/html",
+    "@pageboard/ocr": "file:packages/ocr",
     "@pageboard/pagecut": "file:packages/pagecut",
     "@pageboard/print": "file:packages/print",
     "@pageboard/site": "file:packages/site",
+    "@pageboard/stripe": "file:packages/stripe",
     "@pageboard/write": "file:packages/write"
   },
   "pageboard": true,
