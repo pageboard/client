@@ -39,10 +39,10 @@
   "devDependencies": {
     "@kapouer/eslint-config": "^2.0.0",
     "@kapouer/stylelint-config": "^1.7.0",
-    "eslint": "8.51.0",
-    "eslint-plugin-mocha": "^10.2.0",
-    "mocha": "^10.2.0",
-    "stylelint": "^15.10.3"
+    "eslint": "8.57.0",
+    "eslint-plugin-mocha": "^10.4.1",
+    "mocha": "^10.3.0",
+    "stylelint": "^16.2.1"
   },
   "mocha": {
     "spec": "tests/*.test.js",
