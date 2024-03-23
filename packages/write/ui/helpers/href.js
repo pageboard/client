@@ -317,11 +317,11 @@ Pageboard.schemaHelpers.href = class Href {
 		input.click();
 
 		const obj = await defer;
-		const files = Array.isArray(obj) ? obj : obj?.items ?? [];
-		for (const file of files) {
-			await this.insert(file);
+		const hrefs = obj?.hrefs ?? [];
+		for (const item of hrefs) {
+			await this.insert(item);
 		}
-		if (files.length == 1) Pageboard.trigger(this.input, 'change');
+		if (hrefs.length == 1) Pageboard.trigger(this.input, 'change');
 	}
 
 	uploadStop() { }
@@ -355,16 +355,17 @@ Pageboard.schemaHelpers.href = class Href {
 		return obj.item;
 	}
 
-	async insert(url) {
-		url = Href.normUrl(url);
-		const result = await Pageboard.uiLoad(
-			this.node.querySelector(`[data-action]`),
-			Page.fetch('post', '/.api/href', {
-				url: url
-			})
-		);
-		this.cache([result.item]);
-		this.input.value = result.item.url;
+	async insert(item) {
+		if (typeof item == "string") {
+			item = (await Pageboard.uiLoad(
+				this.node.querySelector(`[data-action]`),
+				Page.fetch('post', '/.api/href', {
+					url: Href.normUrl(item)
+				})
+			)).item;
+		}
+		this.cache([item]);
+		this.input.value = item.url;
 		this.searchStop();
 	}
 

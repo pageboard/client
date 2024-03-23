@@ -73,9 +73,10 @@ class HTMLElementInputFile extends Page.create(HTMLInputElement) {
 			this.#defer = null;
 		};
 		const pass = (obj) => {
-			if (!obj.items || obj.items.length == 0) return fail(new Error("File rejected"));
-			const val = obj.items[0];
-			this.value = val;
+			if (!obj.items || obj.items.length == 0) {
+				return fail(new Error("File rejected"));
+			}
+			this.value = obj.hrefs[0]?.pathname;
 			field.classList.add('success');
 			field.classList.remove('loading');
 			this.#xhr = null;
