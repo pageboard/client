@@ -4,3 +4,6 @@
 [block-type="barcode"].error {
 	background-color: rgb(255 0 0 / 50%);
 }
+[block-type="barcode"] > svg {
+	shape-rendering: crispedges;
+}
