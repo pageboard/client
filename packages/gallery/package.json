@@ -19,7 +19,7 @@
   "homepage": "https://github.com/pageboard/client#readme",
   "devDependencies": {
     "@pageboard/flickity": "^2.3.2",
-    "postinstall": "^0.9.0"
+    "postinstall": "^0.10.3"
   },
   "prepare": {
     "src/flickity.js": "bundle lib/",
@@ -34,6 +34,6 @@
     "elements": "element/"
   },
   "dependencies": {
-    "postinstall-bundle": "^0.9.3"
+    "postinstall-bundle": "^0.9.4"
   }
 }

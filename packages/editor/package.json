@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/pageboard/client#readme",
   "dependencies": {
-    "postinstall": "^0.9.0",
+    "postinstall": "^0.10.3",
     "postinstall-bundle": "^0.9.4"
   },
   "devDependencies": {

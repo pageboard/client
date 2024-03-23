@@ -31,7 +31,7 @@
   "devDependencies": {
     "europa": "^6.0.0",
     "foundation-emails": "^2.4.0",
-    "postinstall": "^0.9.0",
+    "postinstall": "^0.10.3",
     "postinstall-bundle": "^0.9.4"
   },
   "prepare": {
