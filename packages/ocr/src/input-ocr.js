@@ -14,8 +14,9 @@ class HTMLElementInputOcr extends Page.create(HTMLInputElement) {
 			const canvas = new OffscreenCanvas(myVideo.clientWidth, myVideo.clientHeight);
 			canvas.getContext("2d").drawImage(myVideo, 0, 0);
 			const { data } = await this.#ocr.recognize(canvas, {
-				// TODO recognition on center zone
-				// rectangle: { top: 0, left: 0, width: 100, height: 100 },
+				rectangle: { top: 25, left: 25, width: 50, height: 50 },
+			}, {
+				blocks: true
 			});
 			const re = new RegExp(this.getAttribute('regexp'), 'i');
 			const block = data.blocks.find(block => re.test(block.text));
@@ -59,8 +60,13 @@ class HTMLElementInputOcr extends Page.create(HTMLInputElement) {
 		requestAnimationFrame(() => this.#try());
 	}
 	async #destroy() {
-		this.#video?.remove();
 		await this.#ocr?.terminate();
+		this.#ocr = null;
+		const video = this.#video;
+		if (video) {
+			video.srcObject.getTracks().forEach(track => track.stop());
+			video.remove();
+		}
 	}
 }
 
