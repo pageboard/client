@@ -4,8 +4,17 @@ exports.input_ocr = {
 	menu: "form",
 	group: "block input_field",
 	context: 'form//',
+	csp: {
+		script: ["'wasm-unsafe-eval'"],
+		connect: ["data:"],
+		worker: ["'self'", "blob:"]
+	},
 	properties: Object.assign({}, exports.input_text.properties, {
-
+		regexp: {
+			title: 'RegExp',
+			type: 'string',
+			format: 'singleline'
+		}
 	}),
 	contents: {
 		id: 'label',
@@ -14,18 +23,17 @@ exports.input_ocr = {
 	html: `<div class="field">
 		<label block-content="label">Label</label>
 		<input required="[required]" disabled="[disabled]" is="element-input-ocr"
-			value="[value]"
-			name="[name]" />
+			value="[value]" name="[name]" regexp="[regexp]" />
 	</div>`,
 	stylesheets: [
 		'../ui/input-ocr.css'
 	],
 	scripts: [
-		'../lib/tesseract-worker.js',
-		'../ui/input-ocr.js'
+		'../lib/input-ocr.js'
 	],
 	resources: {
 		fallback: '../lib/tesseract-core-fallback.wasm',
 		core: '../lib/tesseract-core.wasm',
+		fra: '../lib/fra.traineddata'
 	}
 };

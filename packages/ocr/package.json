@@ -19,19 +19,25 @@
   "homepage": "https://github.com/pageboard/client#readme",
   "devDependencies": {
     "postinstall": "^0.10.3",
-    "tesseract-wasm": "^0.10.0"
+    "postinstall-bundle": "^0.9.4"
   },
   "prepare": {
-    "tesseract-wasm/dist/tesseract-worker.js": "link lib/",
-    "tesseract-wasm/dist/tesseract-core.wasm": "link lib/",
-    "tesseract-wasm/dist/tesseract-core-fallback.wasm": "link lib/"
+    "tesseract.js/dist/worker.min.js": "link lib/",
+    "tesseract.js-core/*.wasm.js": "link lib/core/",
+    "@tesseract.js-data/fra/*_best_int/*.traineddata.gz": "link lib/data/",
+    "./src/input-ocr.js": "bundle lib/"
   },
   "pageboard": {
     "directories": [
-      "element",
+      "elements",
       "lib",
       "ui"
     ],
-    "elements": "element/"
+    "elements": "elements/"
+  },
+  "dependencies": {
+    "@tesseract.js-data/fra": "^1.0.0",
+    "tesseract.js": "^5.0.5",
+    "tesseract.js-core": "^5.0.0"
   }
 }
