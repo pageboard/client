@@ -27,10 +27,10 @@
   },
   "pageboard": {
     "directories": [
-      "element",
+      "elements",
       "lib",
       "ui"
     ],
-    "elements": "element/"
+    "elements": "elements/"
   }
 }
