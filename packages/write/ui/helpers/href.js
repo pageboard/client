@@ -348,11 +348,10 @@ Pageboard.schemaHelpers.href = class Href {
 		};
 	}
 
-	async get(href) {
-		const obj = Href.cache[Href.normUrl(href)] ?? await Pageboard.uiLoad(this.node, Page.fetch('get', '/.api/href', {
-			url: href
-		}));
-		return obj.item;
+	async get(url) {
+		const { href } = Href.cache[Href.normUrl(url)]
+			?? await Pageboard.uiLoad(this.node, Page.fetch('get', '/.api/href', { url }));
+		return href;
 	}
 
 	async insert(item) {
@@ -362,7 +361,7 @@ Pageboard.schemaHelpers.href = class Href {
 				Page.fetch('post', '/.api/href', {
 					url: Href.normUrl(item)
 				})
-			)).item;
+			)).href;
 		}
 		this.cache([item]);
 		this.input.value = item.url;
