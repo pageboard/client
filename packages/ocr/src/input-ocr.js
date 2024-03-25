@@ -53,6 +53,15 @@ class HTMLElementInputOcr extends Page.create(HTMLInputElement) {
 			video: { facingMode: "environment" },
 			audio: false
 		});
+		const [track] = stream.getVideoTracks();
+		const imageCapture = new ImageCapture(track);
+		// const frame = await imageCapture.grabFrame(); (takePhoto encodes the image, useless)
+		const capabilities = track.getCapabilities();
+		// const settings = track.getSettings();
+		track.applyConstraints({
+			width: { max: capabilities.width.max, ideal: capabilities.width.max },
+			height: { max: capabilities.height.max, ideal: capabilities.height.max }
+		});
 		const myVideo = this.#video;
 		myVideo.srcObject = stream;
 		myVideo.play();
@@ -64,7 +73,7 @@ class HTMLElementInputOcr extends Page.create(HTMLInputElement) {
 		this.#ocr = null;
 		const video = this.#video;
 		if (video) {
-			video.srcObject.getTracks().forEach(track => track.stop());
+			video.srcObject?.getTracks().forEach(track => track.stop());
 			video.remove();
 		}
 	}
