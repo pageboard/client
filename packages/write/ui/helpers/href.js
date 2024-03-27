@@ -100,10 +100,10 @@ Pageboard.schemaHelpers.href = class Href {
 				return Pageboard.uiLoad(
 					this.node,
 					Page.fetch('get', '/.api/hrefs', filter)
-				).then(({ items }) => {
-					if (!items || items.length == 0) return true;
-					me.cache(items);
-					me.renderList(items, true);
+				).then(({ hrefs }) => {
+					if (!hrefs?.length) return true;
+					me.cache(hrefs);
+					me.renderList(hrefs, true);
 				});
 			}
 		})(this.container.nextElementSibling);
