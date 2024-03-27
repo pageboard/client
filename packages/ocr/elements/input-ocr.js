@@ -1,6 +1,7 @@
 exports.input_ocr = {
 	title: 'OCR',
 	icon: '<i class="eye icon"></i>',
+	bundle: true,
 	menu: "form",
 	group: "block input_field",
 	context: 'form//',
@@ -30,10 +31,5 @@ exports.input_ocr = {
 	],
 	scripts: [
 		'../lib/input-ocr.js'
-	],
-	resources: {
-		fallback: '../lib/tesseract-core-fallback.wasm',
-		core: '../lib/tesseract-core.wasm',
-		fra: '../lib/fra.traineddata'
-	}
+	]
 };
