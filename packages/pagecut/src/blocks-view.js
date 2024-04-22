@@ -164,8 +164,7 @@ export default class BlocksView {
 						continue;
 					}
 					console.warn("missing block for", parent.nodeName, '>', node.nodeName, id);
-					// FIXME find another way
-					//parent.replaceChild(node.ownerDocument.createTextNode('∅'), node);
+					parent.removeChild(node);
 					continue;
 				}
 				const frag = this.renderFrom(child, blocks, store, {
