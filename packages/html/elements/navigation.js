@@ -20,7 +20,7 @@ exports.nav = {
 		}
 	},
 	group: "block",
-	html: `<a class="ui icon button [$links.[relation]|as:array|.first|alt::disabled]" href="[$links.[relation]|as:array|.first.url]" title="[$links.[relation]|as:array|.first.title]"><i class="icon [rel]"></i></a>`
+	html: `<a class="ui icon button [$links.[relation]|as:array|.first|alt::disabled]" href="[$links.[relation]|as:array|.first.url]" title="[$links.[relation]|as:array|.first.title]"><i class="icon [relation]"></i></a>`
 };
 
 exports.scrollLink = {
