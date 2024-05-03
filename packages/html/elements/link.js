@@ -108,7 +108,7 @@ exports.link_button = {
 			default: null
 		}
 	},
-	contents: "text*",
+	contents: "inline*",
 	group: "block",
 	html: '<a href="[url|lang:[lang]]" hreflang="[lang]" class="ui [full|alt:fluid:] [icon] [compact] [float|post:%20floated] button"></a>',
 	stylesheets: [
