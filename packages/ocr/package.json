@@ -40,6 +40,6 @@
     "@tesseract.js-data/eng": "^1.0.0",
     "@tesseract.js-data/fra": "^1.0.0",
     "tesseract.js": "^5.0.5",
-    "tesseract.js-core": "^5.0.0"
+    "tesseract.js-core": "^5.1.0"
   }
 }
