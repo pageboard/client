@@ -3,7 +3,6 @@ import { DiffDOM } from 'diff-dom';
 
 const innerDiff = new DiffDOM({
 	filterOuterDiff(a, b, diffs) {
-		// this works only with diff-dom@4.2.2
 		const cname = a.attributes?.['block-content'];
 		if (cname) {
 			a.innerDone = true;
@@ -13,7 +12,8 @@ const innerDiff = new DiffDOM({
 		if (info.diff.action.endsWith("Attribute") && info.diff.name.startsWith("block-")) {
 			return true;
 		}
-	}
+	},
+	caseSensitive: false
 });
 
 export {
