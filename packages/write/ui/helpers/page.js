@@ -62,7 +62,7 @@ Pageboard.schemaHelpers.page = class PageHelper {
 				filter.offset = page * filter.limit;
 				return Pageboard.uiLoad(
 					this.node,
-					Page.fetch('get', '/.api/pages', filter)
+					Page.fetch('get', '/@api/pages', filter)
 				).then(({ items: data }) => {
 					if (!data || data.length == 0) return true;
 					const node = me.container.ownerDocument.createElement('div');

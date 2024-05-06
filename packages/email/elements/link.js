@@ -23,7 +23,7 @@ exports.mail_link = {
 			nullable: true,
 			$helper: {
 				name: 'datalist',
-				url: '/.api/languages'
+				url: '/@api/languages'
 			}
 		}
 	},

@@ -125,7 +125,7 @@ class HTMLElementInputFile extends Page.create(HTMLInputElement) {
 			fail(err);
 		});
 		try {
-			xhr.open("POST", `/.api/upload/${this.id}`, true);
+			xhr.open("POST", `/@api/upload/${this.id}`, true);
 			xhr.setRequestHeader('Accept', "application/json; q=1.0");
 			xhr.send(fd);
 			this.#xhr = xhr;

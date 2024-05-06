@@ -50,7 +50,7 @@ exports.input_property = {
 			return node;
 		}
 		// list[0] = "data";
-		// /.api/form wraps it into block.data
+		// /@api/form wraps it into block.data
 		list.shift();
 		name = list.join('.');
 		const id = scope.$id;

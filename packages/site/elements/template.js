@@ -11,7 +11,7 @@ exports.fetch = {
 		expressions: true
 	},
 	html: `<element-template
-		action="/.api/query/[name|else:$id][action?.method|prune:-]"
+		action="/@api/query/[name|else:$id][action?.method|prune:-]"
 		data-auto="[auto]"
 		data-offset-name="[$expr?.action?.parameters?.offset|as:expressions]"
 		parameters="[$expr?.action?.parameters|as:expressions]"
@@ -26,7 +26,7 @@ exports.fetch = {
 	properties: {
 		name: {
 			title: 'Name',
-			description: "Exposes /.api/query/$name",
+			description: "Exposes /@api/query/$name",
 			type: 'string',
 			format: 'id',
 			nullable: true
@@ -49,7 +49,7 @@ exports.fetch = {
 					title: 'Page',
 					nullable: true,
 					type: "string",
-					format: "pathname",
+					format: "page",
 					$helper: "page"
 				},
 				parameters: {
@@ -68,7 +68,7 @@ exports.fetch = {
 					title: 'Page',
 					nullable: true,
 					type: "string",
-					format: "pathname",
+					format: "page",
 					$helper: "page"
 				},
 				parameters: {
@@ -87,7 +87,7 @@ exports.fetch = {
 					title: 'Page',
 					nullable: true,
 					type: "string",
-					format: "pathname",
+					format: "page",
 					$helper: "page"
 				},
 				parameters: {
@@ -106,7 +106,7 @@ exports.fetch = {
 					title: 'Page',
 					nullable: true,
 					type: "string",
-					format: "pathname",
+					format: "page",
 					$helper: "page"
 				},
 				parameters: {

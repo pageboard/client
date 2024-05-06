@@ -99,7 +99,7 @@ Pageboard.schemaHelpers.href = class Href {
 				filter.offset = page * filter.limit;
 				return Pageboard.uiLoad(
 					this.node,
-					Page.fetch('get', '/.api/hrefs', filter)
+					Page.fetch('get', '/@api/hrefs', filter)
 				).then(({ hrefs }) => {
 					if (!hrefs?.length) return true;
 					me.cache(hrefs);
@@ -277,7 +277,7 @@ Pageboard.schemaHelpers.href = class Href {
 				fd.append("files", input.files[i]);
 			}
 			const xhr = new XMLHttpRequest();
-			xhr.open("POST", "/.api/upload", true);
+			xhr.open("POST", "/@api/upload", true);
 			xhr.setRequestHeader('Accept', "application/json; q=1.0");
 			const tracker = this.uploading();
 			tracker(0);
@@ -350,7 +350,7 @@ Pageboard.schemaHelpers.href = class Href {
 
 	async get(url) {
 		const { href } = Href.cache[Href.normUrl(url)]
-			?? await Pageboard.uiLoad(this.node, Page.fetch('get', '/.api/href', { url }));
+			?? await Pageboard.uiLoad(this.node, Page.fetch('get', '/@api/href', { url }));
 		return href;
 	}
 
@@ -358,7 +358,7 @@ Pageboard.schemaHelpers.href = class Href {
 		if (typeof item == "string") {
 			item = (await Pageboard.uiLoad(
 				this.node.querySelector(`[data-action]`),
-				Page.fetch('post', '/.api/href', {
+				Page.fetch('post', '/@api/href', {
 					url: Href.normUrl(item)
 				})
 			)).href;

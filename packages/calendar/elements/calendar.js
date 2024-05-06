@@ -19,7 +19,7 @@ exports.event = {
 		url: {
 			title: 'Event page',
 			type: "string",
-			format: "pathname",
+			format: "page",
 			nullable: true,
 			$helper: {
 				name: 'page',

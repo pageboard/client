@@ -8,7 +8,7 @@ class HTMLElementBlogs extends Page.Element {
 		this.dataset.url = blogPath; // see write's page-title input helper
 		const topics = this.options.topics;
 		// if (topics && !Array.isArray(topics)) topics = [topics];
-		const res = await state.fetch('get', '/.api/blocks', {
+		const res = await state.fetch('get', '/@api/blocks', {
 			type: 'blog',
 			data: {
 				'url:start': blogPath + (blogPath != '/' ? '/' : ''),

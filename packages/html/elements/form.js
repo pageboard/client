@@ -38,7 +38,7 @@ exports.query_form = {
 					title: 'Page',
 					nullable: true,
 					type: "string",
-					format: "pathname",
+					format: "page",
 					$helper: "page"
 				},
 				parameters: {
@@ -79,7 +79,7 @@ exports.api_form = {
 	properties: {
 		name: {
 			title: 'Name',
-			description: "Used by query 'submit' or 'toggle'\nExposes /.api/form/$name",
+			description: "Used by query 'submit' or 'toggle'\nExposes /@api/form/$name",
 			type: 'string',
 			format: 'id',
 			nullable: true
@@ -109,7 +109,7 @@ exports.api_form = {
 					title: 'Page',
 					nullable: true,
 					type: "string",
-					format: "pathname",
+					format: "page",
 					$helper: "page"
 				},
 				parameters: {
@@ -160,7 +160,7 @@ exports.api_form = {
 	contents: 'block+',
 	tag: 'form[method="post"]',
 	html: `<form is="element-form" method="post" name="[name]" masked="[masked]"
-		action="/.api/form/[name|else:$id]"
+		action="/@api/form/[name|else:$id]"
 		parameters="[$expr?.action?.parameters|as:expressions]"
 		success="[redirection.url][redirection.parameters|as:query]"
 		badrequest="[badrequest.url][badrequest.parameters|as:query]"

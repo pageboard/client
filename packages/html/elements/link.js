@@ -29,7 +29,7 @@ exports.link = {
 			nullable: true,
 			$helper: {
 				name: 'datalist',
-				url: '/.api/languages'
+				url: '/@api/languages'
 			}
 		},
 		id: {
@@ -75,7 +75,7 @@ exports.link_button = {
 			nullable: true,
 			$helper: {
 				name: 'datalist',
-				url: '/.api/languages'
+				url: '/@api/languages'
 			}
 		},
 		full: {
