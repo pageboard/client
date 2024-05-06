@@ -290,7 +290,7 @@ class HTMLElementInputHTML extends Page.create(HTMLTextAreaElement) {
 		}
 	};
 
-	setup(state) {
+	paint(state) {
 		if (state.scope.$write) return;
 		const doc = this.ownerDocument;
 		if (this.previousElementSibling?.matches('.textarea')) return;
