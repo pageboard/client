@@ -10,8 +10,6 @@ export function create(Superclass) {
 		}
 		async attributeChangedCallback(name, src, dst, ns) {
 			if (src == dst) return;
-			if (Object.hasOwnProperty.call(this.constructor, 'defaults') && !this.options) return;
-			this.#options(Page, true);
 			if (this.patch) await Page.patch(state => {
 				return this.patch(state);
 			});
@@ -20,12 +18,13 @@ export function create(Superclass) {
 				return this.paint(state);
 			});
 		}
+
+		get options() {
+			const state = Page;
+			return nodeOptions(state, this);
+		}
 		connectedCallback() {
 			this.prepare?.(Page.scope.$write);
-			if (this.build) Page.build(state => this.#options(state, true));
-			if (this.patch) Page.patch(state => this.#options(state, true));
-			if (this.setup) Page.setup(state => this.#options(state));
-			if (this.paint) Page.paint(state => this.#options(state));
 			if (this.reveal) {
 				Page.paint(state => this.#paint(state));
 				Page.setup(state => this.#setup(state));
@@ -39,20 +38,15 @@ export function create(Superclass) {
 				this.#close(Page);
 			}
 		}
-		#options(state, refresh) {
-			if (!this.options || refresh) this.options = nodeOptions(state, this);
-		}
 		#paint(state) {
 			if (this.reveal && !this.currentSrc) {
 				state.finish(() => {
-					this.#options(state);
 					return state.reveal(this);
 				});
 			}
 		}
 		#setup(state) {
 			if (this.reveal && !this.currentSrc) {
-				this.#options(state);
 				if (state.scope.observer) {
 					state.scope.observer.observe(this);
 				} else state.finish(() => {
@@ -134,12 +128,13 @@ function nodeOptions(state, node) {
 	const defaults = node.constructor.internalDefaults;
 	if (!defaults) return;
 	const is = node.constructor.is;
-	const params = stateOptions(node.id, defaults, state);
 	const opts = {};
-	for (const [name, {attr, isData, def}] of Object.entries(defaults)) {
+	for (const [name, { attr, isData, def }] of Object.entries(defaults)) {
 		let val;
-		if (Object.hasOwnProperty.call(params, name)) {
-			val = params[name];
+		const stateKey = node.id && isData ? `${node.id}.${name}` : null;
+		if (stateKey && Object.hasOwnProperty.call(state.query, stateKey)) {
+			val = state.query[stateKey];
+			state.vars[stateKey] = true;
 		} else if (isData) {
 			val = node.dataset[name];
 		} else if (is && node[name] !== undefined) {
@@ -169,16 +164,3 @@ function nodeOptions(state, node) {
 	return opts;
 }
 
-function stateOptions(id, defaults, state) {
-	const opts = {};
-	for (const key of Object.keys(state.query)) {
-		const [qid, name] = key.split('.');
-		if (name == null || qid != id) continue;
-		const { isData } = defaults[name] ?? {};
-		if (isData) {
-			opts[name] = state.query[key];
-			state.vars[key] = true;
-		}
-	}
-	return opts;
-}
