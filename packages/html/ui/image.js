@@ -106,7 +106,7 @@ const HTMLElementImageConstructor = Superclass => class extends Superclass {
 				r.height = rect.height;
 			}
 		}
-		if (!r.width == 0 && !r.height) {
+		if (!r.width && !r.height) {
 			// don't show
 			return;
 		}
