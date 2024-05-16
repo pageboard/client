@@ -133,6 +133,64 @@ exports.layout = {
 		heightUnits: {
 			$ref: "#/definitions/units/properties/data/properties/block"
 		},
+		column: {
+			title: 'Column',
+			nullable: true,
+			properties: {
+				count: {
+					title: 'Count',
+					description: 'empty for auto',
+					type: 'integer',
+					nullable: true,
+					minimum: 1
+				},
+				width: {
+					title: 'Width',
+					properties: {
+						length: {
+							title: 'Length',
+							type: 'number',
+							default: 0,
+							minimum: 0,
+							multipleOf: 0.01,
+							nullable: true
+						},
+						unit: {
+							$ref: "#/definitions/units/properties/data/properties/inline"
+						}
+					}
+				},
+				fill: {
+					title: 'Fill',
+					anyOf: [{
+						type: 'null',
+						title: 'Auto'
+					}, {
+						const: 'balance',
+						title: 'Balance'
+					}, {
+						const: 'balance-all',
+						title: 'Balance All'
+					}]
+				},
+				gap: {
+					title: 'Gap',
+					properties: {
+						length: {
+							title: 'Length',
+							type: 'number',
+							default: 0,
+							minimum: 0,
+							multipleOf: 0.01,
+							nullable: true
+						},
+						unit: {
+							$ref: "#/definitions/units/properties/data/properties/inline"
+						}
+					}
+				}
+			}
+		},
 		margins: {
 			title: 'Margins',
 			type: 'object',
@@ -391,6 +449,10 @@ exports.layout = {
 		style-background-repeat="[background.repeat]"
 		style-background-attachment="[background.attachment]"
 		style-background-position="[background.position]"
+		style-column-gap="[column.gap.length|fail:][column.gap.unit]"
+		style-column-fill="[column.fill|or:auto]"
+		style-column-count="[column.count|or:auto]"
+		style-column-width="[column.width.length|fail:][column.width.unit]"
 	></div>`,
 	stylesheets: [
 		'../ui/components/container.css',
@@ -400,4 +462,3 @@ exports.layout = {
 		'../ui/layout.js'
 	]
 };
-
