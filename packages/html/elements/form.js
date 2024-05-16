@@ -101,6 +101,16 @@ exports.api_form = {
 			description: 'Choose a service',
 			$ref: '/writes'
 		},
+		request: {
+			title: 'Map inputs',
+			type: 'object',
+			nullable: true
+		},
+		response: {
+			title: 'Map outputs',
+			type: 'object',
+			nullable: true
+		},
 		redirection: {
 			title: 'Success',
 			type: 'object',
