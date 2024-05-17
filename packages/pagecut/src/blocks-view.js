@@ -2,11 +2,7 @@ import str2dom from './str2dom';
 
 function htmlToFrag(str, {doc, ns}) {
 	try {
-		return str2dom(str, {
-			doc: doc,
-			frag: true,
-			ns: ns
-		});
+		return str2dom(str, { doc, ns, frag: true });
 	} catch(ex) {
 		console.error(ex);
 	}
@@ -41,7 +37,7 @@ export default class BlocksView {
 
 		el.contents.each(block, (content, def) => {
 			if (!(content instanceof Node)) {
-				el.contents.set(copy, def.id, htmlToFrag(content, { doc: doc, ns: el.ns }));
+				el.contents.set(copy, def.id, htmlToFrag(content, { doc, ns: el.ns }));
 			}
 		});
 		return copy;
