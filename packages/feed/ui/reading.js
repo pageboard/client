@@ -8,6 +8,7 @@ class HTMLElementReading extends Page.Element {
 		state.finish(() => {
 			const sel = this.options.for;
 			const body = this.closest('main');
+			if (!body) return;
 			const node = sel ? body.querySelector(sel) : this.closest('.view') ?? body;
 			if (!node) {
 				this.innerText = 'n/a';
