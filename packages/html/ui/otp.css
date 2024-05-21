@@ -1,0 +1,28 @@
+form .otp.field > input[is="element-input-otp"] {
+	--otp-digits: 6;
+	--otp-ls: 2ch;
+	--otp-gap: 1.25;
+	--otp-fz: 1.5em;
+	--otp-pb: 0.5ch;
+
+	/* private consts */
+	--otp-bgsz: calc(var(--otp-ls) + 1ch);
+	--otp-digit: 0;
+
+	all: unset;
+	background:
+		linear-gradient(90deg, var(--otp-bg, #BBB) calc(var(--otp-gap) * var(--otp-ls)),
+		transparent 0),
+		linear-gradient(90deg, var(--otp-bg, #EEE) calc(var(--otp-gap) * var(--otp-ls)),
+		transparent 0) !important;
+	background-position: calc(var(--otp-digit) * var(--otp-bgsz)) 0, 0 0 !important;
+	background-repeat: no-repeat, repeat-x !important;
+	background-size: var(--otp-bgsz) 100% !important;
+	caret-color: var(--otp-cc, #222);
+	clip-path: inset(0% calc(var(--otp-ls) / 2) 0% 0%);
+	font-size: var(--otp-fz, 2.5em);
+	inline-size: calc(var(--otp-digits) * var(--otp-bgsz));
+	letter-spacing: var(--otp-ls);
+	padding-block: var(--otp-pb, 1ch);
+	padding-inline-start: calc(((var(--otp-ls) - 1ch) / 2) * var(--otp-gap));
+}
