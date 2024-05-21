@@ -42,9 +42,9 @@
     "prosemirror-inputrules": "1.4.0",
     "prosemirror-keymap": "1.2.2",
     "prosemirror-menu": "1.2.4",
-    "prosemirror-model": "1.20.0",
+    "prosemirror-model": "1.21.0",
     "prosemirror-state": "1.4.3",
-    "prosemirror-transform": "1.8.0",
+    "prosemirror-transform": "1.9.0",
     "prosemirror-view": "1.33.6"
   },
   "prepare": {
