@@ -1,37 +1,41 @@
 Pageboard.schemaFilters['element-content'] = class ElementContentFilter {
 	#key;
-	#which;
 	constructor(key, opts, schema) {
 		this.schema = Object.assign({}, schema);
-		const which = ['anyOf', 'oneOf'].find(key => Boolean(schema[key]));
-		const alts = schema[which];
-		if (!alts) {
-			console.error("Cannot adapt schema to element-content:", schema);
+		if (!schema.items) {
+			console.error("element-content filter expects type array and items:", schema);
 			return;
 		}
-		this.schema[which] = alts.filter(item => item.const !== undefined);
-		this.#which = which;
 		this.#key = key;
 	}
 	update(block) {
 		const schema = { ...this.schema };
-		schema[this.#which] = schema[this.#which].slice();
+		if (!schema.items) return;
+		schema.items = { ...schema.items, anyOf: [] };
 		const path = this.#key.split('.');
 		path.splice(-1, 1, 'type');
 		let type = path.reduce((obj, name) => obj?.[name], block.data);
-		if (!type) return schema;
-		if (typeof type == "string") type = [type];
-		if (type.length == 1) {
+		if (!type) {
+			schema.$disabled = true;
+		} else if (typeof type == "string") {
+			type = [type];
+		}
+		if (type?.length == 1) {
 			const el = Pageboard.editor.element(type[0]);
 			if (el) {
 				const contents = el.contents?.list.map(item => ({
-					title: item.title,
+					title: item.title ?? item.id,
 					"const": item.id
 				}));
-				schema[this.#which].push(...contents);
+				schema.items.anyOf.push(...contents);
+				schema.$disabled = false;
+				delete schema.items.type;
+				delete schema.items.format;
 			} else {
 				console.warn("element type not found", type);
 			}
+		} else {
+			schema.$disabled = true;
 		}
 		return schema;
 	}

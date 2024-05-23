@@ -792,16 +792,18 @@ Semafor.types.array = function (key, schema, node, inst) {
 		if (allStrings) {
 			return Semafor.types.string(key, schema, node, inst);
 		} else if (items.anyOf.length <= 4) {
-			const fieldset = `<fieldset>
-				<legend>[title|else:$key]<small>[description|as:text|fail:*]</small></legend>
-				<div class="inline field">
-					<label class="ui checkbox">
-						<input type="checkbox"
-							name="[$key]" value="[items.anyOf|at:.field|repeat:item|.const]"/>
-						<span>[item.title]</span>
-					</label>
+			const fieldset = `<div class="inline fields rtl">
+				<label for="[$key]">[title|else:$key]<small>[description|as:text|fail:*]</small></label>
+				<div class="inline fields rtl">
+					<div class="inline field">
+						<label class="ui checkbox">
+							<input type="checkbox" name="[$key]" value="[items.anyOf|at:div|repeat:item|.const]">
+							<span>[item.title]</span>
+							<small>[item.description]</small>
+						</label>
+					</div>
 				</div>
-			</fieldset>`
+			</div>`
 				.fuse(schema, { $key: key });
 			node.appendChild(fieldset);
 			return fieldset;

@@ -240,6 +240,10 @@ body[data-mode="read"] #pageboard-read > iframe {
 	flex: 1 0 auto;
 	line-height: 1.3em;
 }
+#form .field > label.ui.checkbox > span {
+	font-weight:normal;
+	margin-left:0.5ch;
+}
 
 #form .inline.fields > label {
 	flex: 1 0;
