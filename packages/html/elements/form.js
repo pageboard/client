@@ -101,81 +101,6 @@ exports.api_form = {
 			description: 'Choose a service',
 			$ref: '/writes'
 		},
-		request: {
-			title: 'Map inputs',
-			description: `
-				expr is supposed to be used to merge stuff into html,
-				not really to merge stuff into methods parameters
-				Also expr has a bad design because
-			  - it can be replaced by a binding element inside the block
-				- it forces the expression to be in a specific attribute,
-				  and mostly when a block has no content (so a binding cannot be used)
-				- the editor is ugly and shows fields that might not even be merged into html
-				Use cases
-				- links in anchors, images
-				- input or buttons values, checked attributes
-				- hidden attributes
-				- show/hide blocks depending on response
-				The "expr" mecanism could instead be a list of expressions like
-				[url|as:url|assign:.query.reservation:$query.reservation]
-				[url][$query|pick:text:cover|as:query]
-
-				Things to solve:
-				- do we want expr to be able to do changes outside the DOM of the block itself ? (no, this should be done by a binding element)
-				- do we want expr to change only data before merge - outside of any dom context ? Possibly ! In which case the current system is not that bad,
-				but it should not use matchdom dom plugin at all
-				- how to deal with "template" expressions when one cannot insert a binding
-				element ? Is it really something that happens ?
-
-
-
-			`,
-			type: 'object',
-			nullable: true
-		},
-		response: {
-			title: 'Map outputs',
-			description: `
-				'item.id': '[item.data.id]'
-				'item.title': '[item.content.title]'
-				// etc...
-			`,
-			type: 'object',
-			nullable: true
-		},
-		redirection: {
-			title: 'Success',
-			description: `
-				redirection can be used by client,
-				to change the page state. In which case the "url" is not an api url.
-				It can be used by the server, in which case the "url" is an api url.
-				The parameters for a page url make the query, and $query, $request, $response are available.
-				The parameters for a user api call are...?
-				The user api endpoint is a real url (/@api/xxx) that can expect
-				a body ($request) and a query ($query) too.
-				Currently client pages use a trick to redirect and submit: a specific parameter triggers a form submit on the redirected page. This makes sense in the context of page navigation - the body is filled by the form that is triggered by the parameters.
-				How can that be transposed for internal user api redirection ?
-				1. since it redirects, output mapping can be done to format the $response
-				2. in the next api call, parameters mean $query, $response becomes $request ?
-				3. this works if output can merge $query, $request as well
-			`,
-			type: 'object',
-			properties: {
-				url: {
-					title: 'Page',
-					nullable: true,
-					type: "string",
-					format: "page",
-					$helper: "page"
-				},
-				parameters: {
-					title: 'Parameters',
-					nullable: true,
-					type: "object"
-				}
-			},
-			nullable: true
-		},
 		badrequest: {
 			title: 'Bad request',
 			type: 'object',
@@ -217,7 +142,7 @@ exports.api_form = {
 	tag: 'form[method="post"]',
 	html: `<form is="element-form" method="post" name="[name]" masked="[masked]"
 		action="/@api/form/[name|else:$id]"
-		parameters="[$expr?.action?.parameters|as:expressions]"
+		parameters="[action?.request|as:expressions]"
 		success="[redirection.url][redirection.parameters|as:query]"
 		badrequest="[badrequest.url][badrequest.parameters|as:query]"
 		unauthorized="[unauthorized.url][unauthorized.parameters|as:query]"

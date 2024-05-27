@@ -13,8 +13,8 @@ exports.fetch = {
 	html: `<element-template
 		action="/@api/query/[name|else:$id][action?.method|prune:-]"
 		data-auto="[auto]"
-		data-offset-name="[$expr?.action?.parameters?.offset|as:expressions]"
-		parameters="[$expr?.action?.parameters|as:expressions]"
+		data-offset-name="[action?.request?.offset|as:expressions]"
+		parameters="[action?.request|as:expressions]"
 		success="[redirection.url][redirection.parameters|as:query]"
 		badrequest="[badrequest.url][badrequest.parameters|as:query]"
 		unauthorized="[unauthorized.url][unauthorized.parameters|as:query]"
