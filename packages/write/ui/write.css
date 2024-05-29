@@ -190,6 +190,39 @@ body[data-mode="read"] #pageboard-read > iframe {
 .ui.form .nullable.fieldset:last-child {
 	margin-bottom:0;
 }
+.ui.form .array.fieldset > fieldset,
+.ui.form fieldset.array.fieldset {
+	padding-left:0;
+	padding-right:0;
+	border:0;
+	margin: 0;
+}
+#form .nullable.fieldset > fieldset > legend {
+	margin-left: -0.9em;
+	margin-bottom: -0.9em;
+}
+#form .array.fieldset > fieldset > legend {
+	margin-left:0;
+	direction: rtl;
+}
+#form .array.fieldset > fieldset > legend > label,
+#form .array.fieldset > legend {
+	font-size: 0.9286em;
+	font-weight: bold;
+	margin-bottom: -0.9em;
+}
+#form .array.fieldset > fieldset > legend > label > input + span::before {
+	margin-left: 0.4em;
+}
+#form .array.fieldset > .field > label {
+	display:none;
+}
+#form .array.fieldset > fieldset > .field > label {
+	display:none;
+}
+#form .nullable.fieldset.array {
+	margin-bottom:0.5em;
+}
 
 .ui.form .inline.field,
 .ui.form .inline.fields {
@@ -208,10 +241,6 @@ body[data-mode="read"] #pageboard-read > iframe {
 	position:absolute;
 	left: 0;
 	z-index: 1;
-}
-#form .nullable.fieldset > fieldset > legend {
-	margin-left: -0.9em;
-	margin-bottom: -0.9em;
 }
 
 #form fieldset:disabled {
@@ -240,6 +269,7 @@ body[data-mode="read"] #pageboard-read > iframe {
 	flex: 1 0 auto;
 	line-height: 1.3em;
 }
+
 #form .field > label.ui.checkbox > span {
 	font-weight:normal;
 	margin-left:0.5ch;

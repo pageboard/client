@@ -775,14 +775,32 @@ Semafor.types.null = function (key, schema, node, inst) {
 };
 
 Semafor.types.array = function (key, schema, node, inst) {
+	if (schema.nullable) {
+		const fieldset = `<div class="nullable array fieldset">
+			<fieldset name="[$key]" class="field" disabled>
+				<legend>
+					<label class="checkbox">
+						<input type="checkbox">
+						<span>[title]</span>
+						<small>[description|as:text|fail:*]</small>
+					</label>
+				</legend>
+			</fieldset>
+		</div>`.fuse(schema, { $key: key });
+		node = node.appendChild(fieldset).lastElementChild;
+		node.querySelector('input:not([name])').addEventListener('change', inst);
+	} else {
+		const fieldset = `<fieldset name="[$key]" class="array fieldset">
+			<legend>[title]<small>[description|as:text|fail:*]</small></legend>
+		</fieldset>`.fuse(schema, { $key: key });
+		node = node.appendChild(fieldset);
+	}
 	const items = inst.resolveRef(schema.items);
 	if (Array.isArray(items)) {
-		const fieldset = `<fieldset><legend>[title]</legend></fieldset>`.fuse(schema, {});
-		node.appendChild(fieldset);
 		items.forEach((item, i) => {
-			inst.process(`${key}.${i}`, item, fieldset, schema);
+			inst.process(`${key}.${i}`, item, node, schema);
 		});
-		return fieldset;
+		return node;
 	} else if (items.type == "string") {
 		return Semafor.types.string(key, schema, node, inst);
 	} else if (items.anyOf) {
@@ -791,25 +809,21 @@ Semafor.types.array = function (key, schema, node, inst) {
 		});
 		if (allStrings) {
 			return Semafor.types.string(key, schema, node, inst);
-		} else if (items.anyOf.length <= 4) {
-			const fieldset = `<div class="inline fields rtl">
-				<label for="[$key]">[title|else:$key]<small>[description|as:text|fail:*]</small></label>
-				<div class="inline fields rtl">
-					<div class="inline field">
-						<label class="ui checkbox">
-							<input type="checkbox" name="[$key]" value="[items.anyOf|at:div|repeat:item|.const]">
-							<span>[item.title]</span>
-							<small>[item.description]</small>
-						</label>
-					</div>
+		} else if (items.anyOf) {
+			const fields = `<div class="inline fields rtl">
+				<div class="inline field">
+					<label class="ui checkbox">
+						<input type="checkbox" name="[$key]" value="[items.anyOf|at:div|repeat:item|.const]">
+						<span>[item.title]</span>
+						<small>[item.description]</small>
+					</label>
 				</div>
 			</div>`
 				.fuse(schema, { $key: key });
-			node.appendChild(fieldset);
-			return fieldset;
+			node.appendChild(fields);
+			return fields;
 		} else {
 			return node.appendChild(`<div class="inline field">
-				<label>[title|else:$key]<small>[description|as:text|fail:*]</small></label>
 				<select multiple name="[$key]">
 					<option value="[items.anyOf|repeat:item|.const]">[item.title|else:item.const]</option>
 				</select>
