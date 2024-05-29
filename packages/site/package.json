@@ -18,10 +18,10 @@
   },
   "homepage": "https://github.com/pageboard/client#readme",
   "devDependencies": {
-    "@pageboard/pagecut": "^0.14.10",
+    "@pageboard/pagecut": "^0.15.0",
     "class-deferred": "^1.0.1",
-    "debounce": "^2.0.0",
-    "matchdom": "^14.2.0",
+    "debounce": "^2.1.0",
+    "matchdom": "^14.3.0",
     "postinstall": "^0.10.3",
     "postinstall-bundle": "^0.9.4",
     "window-page": "^19.1.0"
