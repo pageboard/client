@@ -23,6 +23,7 @@ exports.fetch = {
 	upgrade: {
 		'data.action.auto': 'data.auto'
 	},
+	unique: ["name"],
 	properties: {
 		name: {
 			title: 'Name',
