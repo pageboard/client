@@ -57,7 +57,7 @@ class HTMLElementInputMap extends HTMLInputElement {
 			val.forEach((val, j) => {
 				body.appendChild(this.dom(`<tr>
 					<td><input class="ui input" name="$key-${name}.${i}-${j}" value="${key}" /></td>
-					<td><input class="ui input" name="$val-${name}.${i}-${j}" value="${val}" /></td>
+					<td><textarea  name="$val-${name}.${i}-${j}" is="semafor-textarea">${val}</textarea></td>
 				</tr>`));
 			});
 		});

@@ -324,6 +324,7 @@ body[data-mode="read"] #pageboard-read > iframe {
 }
 #form .table.compact td {
 	padding:0;
+	vertical-align: top;
 }
 #form .table.compact td input {
 	border: 0;
@@ -355,6 +356,17 @@ body[data-mode="read"] #pageboard-read > iframe {
 	height: 3em;
 	min-height: 2.4em;
 	padding: 0.5em;
+}
+
+#form .table.compact td > textarea {
+	height:1em;
+	min-height: 0;
+	padding:0.31em;
+	border:0;
+	overflow:hidden;
+	resize:none;
+	line-height: 1.3em;
+	font-size: 0.9286em;
 }
 
 .ui.toggle.checkbox {

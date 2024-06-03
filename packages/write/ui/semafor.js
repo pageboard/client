@@ -777,7 +777,7 @@ Semafor.types.null = function (key, schema, node, inst) {
 Semafor.types.array = function (key, schema, node, inst) {
 	if (schema.nullable) {
 		const fieldset = `<div class="nullable array fieldset">
-			<fieldset name="[$key]" class="field" disabled>
+			<fieldset class="field" disabled>
 				<legend>
 					<label class="checkbox">
 						<input type="checkbox">
@@ -790,7 +790,7 @@ Semafor.types.array = function (key, schema, node, inst) {
 		node = node.appendChild(fieldset).lastElementChild;
 		node.querySelector('input:not([name])').addEventListener('change', inst);
 	} else {
-		const fieldset = `<fieldset name="[$key]" class="array fieldset">
+		const fieldset = `<fieldset class="array fieldset">
 			<legend>[title]<small>[description|as:text|fail:*]</small></legend>
 		</fieldset>`.fuse(schema, { $key: key });
 		node = node.appendChild(fieldset);
