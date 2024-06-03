@@ -102,6 +102,26 @@ exports.api_form = {
 			description: 'Choose a service',
 			$ref: '/writes'
 		},
+		redirection: {
+			title: 'Success',
+			description: 'Page state or action',
+			type: 'object',
+			properties: {
+				url: {
+					title: 'Page',
+					nullable: true,
+					type: "string",
+					format: "page",
+					$helper: "page"
+				},
+				parameters: {
+					title: 'Parameters',
+					nullable: true,
+					type: "object"
+				}
+			},
+			nullable: true
+		},
 		badrequest: {
 			title: 'Bad request',
 			type: 'object',
