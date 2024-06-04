@@ -188,7 +188,7 @@ Pageboard.Controls.Store = class Store {
 		this.saving = true;
 		changes.recursive = true;
 
-		const p = Page.fetch('put', '/@api/page', changes).then(result => {
+		const p = Page.fetch('post', '/@api/page', changes).then(result => {
 			if (!result) return;
 			if (result.status == 404 && result.blocks) {
 				let allStandalones = true;
