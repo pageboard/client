@@ -1,6 +1,6 @@
 import {
 	Matchdom,
-	TextPlugin,
+	StringPlugin,
 	OpsPlugin,
 	ArrayPlugin,
 	JsonPlugin,
@@ -18,7 +18,7 @@ export { str2dom };
 import * as CustomPlugin from './plugin';
 
 const sharedMd = new Matchdom(
-	TextPlugin,
+	StringPlugin,
 	OpsPlugin,
 	ArrayPlugin,
 	JsonPlugin,
