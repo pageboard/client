@@ -21,24 +21,14 @@ class HTMLElementSheet extends Page.create(HTMLDivElement) {
 			this.style.removeProperty('--width');
 			this.style.removeProperty('--height');
 		}
-		const r = this.crop;
+		const srcLoc = Page.parse(this.options.src);
+		const reqSrc = this.requestSrc(srcLoc);
 
-		const loc = Page.parse(this.options.src);
-
-		if (r.x != 50 || r.y != 50 || r.w != 100 || r.h != 100) {
-			if (Math.round((r.x - r.w / 2) * 100) < 0 || Math.round((r.x + r.w / 2) * 100) > 10000) {
-				r.w = 2 * Math.min(r.x, 100 - r.x);
-			}
-			if (Math.round((r.y - r.h / 2) * 100) < 0 || Math.round((r.y + r.h / 2) * 100) > 10000) {
-				r.h = 2 * Math.min(r.y, 100 - r.y);
-			}
-			loc.query.ex = `x-${r.x}_y-${r.y}_w-${r.w}_h-${r.h}`;
-		}
-
-		const curSrc = loc.toString();
-		if (curSrc != this.currentSrc) {
+		if (!reqSrc) {
+			this.style.removeProperty('--image');
+		} else if (reqSrc != this.currentSrc) {
 			try {
-				this.currentSrc = curSrc;
+				this.currentSrc = reqSrc;
 			} catch (e) {
 				// pass
 			}
@@ -49,8 +39,8 @@ class HTMLElementSheet extends Page.create(HTMLDivElement) {
 			img.addEventListener('error',
 				e => this.#defer.reject(new Error(this.currentSrc))
 			);
-			img.src = curSrc;
-			this.style.setProperty('--image', `url("${curSrc}")`);
+			img.src = reqSrc;
+			this.style.setProperty('--image', `url("${reqSrc}")`);
 			return this.#defer;
 		}
 	}
@@ -60,7 +50,7 @@ class HTMLElementSheet extends Page.create(HTMLDivElement) {
 }
 
 (function (HTMLElementImage) {
-	for (const name of ['crop']) {
+	for (const name of ['crop', 'dimensions', 'requestSrc']) {
 		Object.defineProperty(
 			HTMLElementSheet.prototype,
 			name,
