@@ -6,6 +6,7 @@ class HTMLElementInputOtp extends Page.create(HTMLInputElement) {
 		this.value = "";
 	}
 	paint() {
+		if (this.isContentEditable) return;
 		this.focus();
 	}
 }
