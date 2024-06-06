@@ -41,7 +41,7 @@ Pageboard.Controls.Mode = class Mode {
 		e.preventDefault();
 		const com = item.dataset.command;
 		if (com == "logout") {
-			return state.fetch("get", "/@api/logout")
+			return state.fetch("post", "/@api/login/out")
 				.then(() => state.reload(true));
 		}
 		if (com == "translate") {
