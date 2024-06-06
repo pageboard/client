@@ -3,7 +3,6 @@ import {
 	StringPlugin,
 	OpsPlugin,
 	ArrayPlugin,
-	JsonPlugin,
 	NumPlugin,
 	DatePlugin,
 	RepeatPlugin,
@@ -17,18 +16,28 @@ export { str2dom };
 
 import * as CustomPlugin from './plugin';
 
-const sharedMd = new Matchdom(
+const mSym = Matchdom.Symbols;
+const reFuse = new RegExp(`\\${mSym.open}[^\\${mSym.open}\\${mSym.close}]+\\${mSym.close}`);
+
+const dataMd = new Matchdom(
 	StringPlugin,
 	OpsPlugin,
 	ArrayPlugin,
-	JsonPlugin,
 	NumPlugin,
 	DatePlugin,
-	RepeatPlugin,
 	DomPlugin,
 	UrlPlugin,
 	CustomPlugin
 );
+
+const templateMd = dataMd.copy().extend(RepeatPlugin).extend({
+	types: {
+		query(ctx, obj) {
+			if (typeof obj == "string" && reFuse.test(obj)) return obj;
+			else return UrlPlugin.types.query(ctx, obj);
+		}
+	}
+});
 
 Document.prototype.dom = function() {
 	return str2dom(Array.prototype.join.call(arguments, '\n'), {
@@ -56,15 +65,12 @@ Node.prototype.dom = function() {
 	});
 };
 
-const mSym = Matchdom.Symbols;
-const reFuse = new RegExp(`\\${mSym.open}[^\\${mSym.open}\\${mSym.close}]+\\${mSym.close}`);
-
 const fuse = (obj, data, scope) => {
-	const md = (scope.$filters || scope.$hooks || scope.$formats) ? new Matchdom(sharedMd, {
+	const md = (scope.$filters || scope.$hooks || scope.$formats) ? new Matchdom(templateMd, {
 		filters: scope.$filters,
 		hooks: scope.$hooks,
 		formats: scope.$formats
-	}) : sharedMd;
+	}) : templateMd;
 	return md.merge(obj, data, scope);
 };
 
