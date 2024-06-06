@@ -94,6 +94,8 @@ export default class Scope {
 			state.data.response = state.referrer.data.response;
 			scope = state.scope = state.referrer.scope.copy();
 		}
+		state.vars = {};
+		state.ivars = new Set();
 
 		if (!scope || !(scope instanceof Scope)) {
 			scope = state.scope = new Scope(state, {

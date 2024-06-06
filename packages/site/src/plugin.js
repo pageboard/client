@@ -1,17 +1,16 @@
 export const formats = {
 	as: {
 		csp, xid, colnums, block, binding,
-		query, render, meta, expressions
+		render, meta, expressions
 	},
 	date: { utc }
 };
 
 export const filters = {
-	sum,
+	sum, urltpl,
 	schema: ['?', 'path?', 'path?', schemaFn],
 	content: ['block', 'str', contentFn],
 	children: ['block', 'str', childrenFn],
-	urltpl,
 	form: ['?', 'enable|disable|fill', 'str?', formFn]
 };
 
@@ -38,6 +37,21 @@ export const hooks = {
 			} else {
 				return str;
 			}
+		}
+	},
+	afterAll(ctx, obj) {
+		// see also template collector
+		const { path } = ctx.expr;
+		if (obj === undefined || path[0] != "$query") return obj;
+		const { scope } = ctx;
+		if (path.length == 1) {
+			if (obj != null && typeof obj == "object") {
+				for (const [k, v] of Object.entries(obj)) {
+					if (v !== undefined) scope.var(k);
+				}
+			}
+		} else {
+			scope.var(path.slice(1).join('.'));
 		}
 	}
 };
@@ -221,14 +235,6 @@ function schemaFn(ctx, val, schemaPath, pathToSchema) {
 		console.warn("Cannot find path in schema", schemaPath, pathToSchema);
 	}
 	return val;
-}
-
-function query(ctx, query) {
-	if (typeof query == "string") return query;
-	if (ctx.expr.path.length == 1 && ctx.expr.path[0] == "$query" && query) {
-		for (const name of Object.keys(query)) ctx.scope.var(name);
-	}
-	return Page.format({ pathname: '/', query }).slice(1);
 }
 
 function urltpl(ctx, obj, pName = 'pathname', qName = 'query') {

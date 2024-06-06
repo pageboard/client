@@ -106,6 +106,4 @@ Page.route(async state => {
 Page.ready(state => {
 	Scope.init(state);
 	state.scope.$lang ??= document.documentElement.lang;
-	state.vars = {};
-	state.ivars = new Set();
 });
