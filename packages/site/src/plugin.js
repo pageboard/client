@@ -46,7 +46,7 @@ export const hooks = {
 		const { scope } = ctx;
 		if (path.length == 1) {
 			if (obj != null && typeof obj == "object") {
-				for (const [k, v] of Object.entries(obj)) {
+				for (const [k, v] of (typeof obj.entries == "function" ? obj.entries() : Object.entries(obj))) {
 					if (v !== undefined) scope.var(k);
 				}
 			}
