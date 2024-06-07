@@ -15,7 +15,7 @@ class HTMLSemaforTextArea extends HTMLTextAreaElement {
 	#resize() {
 		requestAnimationFrame(() => {
 			this.style.height = 0;
-			this.style.height = `${this.scrollHeight}px`;
+			this.style.height = `${this.scrollHeight + 2}px`;
 		});
 	}
 }
