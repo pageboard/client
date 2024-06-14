@@ -81,15 +81,16 @@ const HTMLElementImageConstructor = Superclass => class extends Superclass {
 		const { w, h } = this.dimensions;
 		if (w) this.image.width = w || d.width;
 		if (h) this.image.height = h || d.height;
-		if (!this.currentSrc) {
+		const cur = this.currentSrc;
+		if (!cur) {
 			this.placeholder();
+		} else if (cur.startsWith('data:')) {
+			this.image.setAttribute('src', cur);
 		}
 	}
 
 	get currentSrc() {
-		const src = this.image?.currentSrc;
-		if (src?.startsWith('data:image/svg')) return null;
-		else return src;
+		return this.image?.currentSrc;
 	}
 
 	requestSrc(srcLoc) {

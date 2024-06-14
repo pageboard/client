@@ -447,7 +447,9 @@ body[data-mode="read"] #pageboard-read > iframe {
 label:hover > small {
 	display:block !important;
 	position:absolute !important;
-	top:100%;
+	bottom: 100%;
+	box-shadow: 0 -5px 5px 2px #FFF;
+	pointer-events: none;
 }
 
 #form .field > .toggle {
