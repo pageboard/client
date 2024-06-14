@@ -71,7 +71,7 @@ class FormBlock {
 		}
 		el = this.el = { ...el };
 		if (el.properties) {
-			el.properties = JSON.parse(JSON.stringify(el.properties));
+			el.properties = structuredClone(el.properties);
 		}
 
 		this.helpers = {};
@@ -108,7 +108,7 @@ class FormBlock {
 				}
 			}
 			this.block = { ...block };
-			this.block[mode] = JSON.parse(JSON.stringify(block[mode] ?? {}));
+			this.block[mode] = structuredClone(block[mode]);
 		}
 		if (parents) {
 			this.parents = parents;
@@ -131,13 +131,13 @@ class FormBlock {
 				form.clear();
 			}
 			let recheck = false;
+			const obj = structuredClone(this.block[mode]);
 			if (mode == "expr") {
-				const expr = JSON.parse(JSON.stringify(this.block.expr));
-				this.fillExpr(expr, form.schema.properties);
-				form.set(expr);
+				this.fillExpr(obj, form.schema.properties);
+				form.set(obj);
 				recheck = true;
 			} else if (mode == "lock") {
-				form.set({ lock: this.block.lock });
+				form.set({ lock: obj });
 			} else {
 				form.set(this.block[mode]);
 			}
@@ -265,7 +265,7 @@ class FormBlock {
 
 		// this must be done after reselecting with breadcrumb.click
 		const block = { ...this.block };
-		block[mode] = formData;
+		block[mode] = structuredClone(formData);
 
 		const tr = editor.state.tr;
 		let dispatch = false;

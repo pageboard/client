@@ -53,8 +53,9 @@ class Semafor {
 				if (!Array.isArray(old)) {
 					old = [old];
 					query.set(key, old);
+				} else if (!old.includes(val)) {
+					old.push(val);
 				}
-				old.push(val);
 			}
 		}
 		return query;
@@ -86,6 +87,7 @@ class Semafor {
 					child.disabled = elem.disabled;
 				}
 				elem.querySelector('input:not([name])').checked = Boolean(realVal);
+				continue;
 			}
 			switch (elem.type) {
 				case 'submit':
@@ -777,7 +779,7 @@ Semafor.types.null = function (key, schema, node, inst) {
 Semafor.types.array = function (key, schema, node, inst) {
 	if (schema.nullable) {
 		const fieldset = `<div class="nullable array fieldset">
-			<fieldset class="field" disabled>
+			<fieldset class="field" disabled name="[$key]">
 				<legend>
 					<label class="checkbox">
 						<input type="checkbox">
