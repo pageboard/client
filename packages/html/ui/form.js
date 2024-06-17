@@ -212,7 +212,7 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 	save() {
 		this.classList.remove('unsaved');
 		for (const node of this.querySelectorAll("element-fieldset-list")) {
-			node.save();
+			node.save?.();
 		}
 		for (const node of this.elements) {
 			node.save?.();
