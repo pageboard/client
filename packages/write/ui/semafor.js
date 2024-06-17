@@ -62,7 +62,8 @@ class Semafor {
 	}
 	static formSet(form, values, obj) {
 		function asPaths(obj, ret, pre) {
-			if (!ret) ret = {};
+			obj ??= {};
+			ret ??= {};
 			for (const [key, val] of Object.entries(obj)) {
 				const cur = `${pre || ""}${key}`;
 				if (val == null || typeof val != "object" || Array.isArray(val)) {
