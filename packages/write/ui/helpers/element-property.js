@@ -189,7 +189,7 @@ class ElementProperty {
 		if (!formProps) return;
 		const mapKeys = new Map();
 		const scope = Page.scope.copy();
-		this.#trackFuse(Object.keys(formProps), mapKeys, formBlock.expr?.action?.parameters ?? {}, scope);
+		this.#trackFuse(Object.keys(formProps), mapKeys, formBlock.action?.request ?? {}, scope);
 
 		const doc = this.#input.ownerDocument;
 
