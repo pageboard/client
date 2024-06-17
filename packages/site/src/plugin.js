@@ -44,6 +44,8 @@ export const hooks = {
 		const { path } = ctx.expr;
 		if (obj === undefined || path[0] != "$query") return obj;
 		const { scope } = ctx;
+		// scope can be just an object in e.g. fieldset-list
+		if (typeof scope.var != "function") return;
 		if (path.length == 1) {
 			if (obj != null && typeof obj == "object") {
 				for (const [k, v] of (typeof obj.entries == "function" ? obj.entries() : Object.entries(obj))) {
