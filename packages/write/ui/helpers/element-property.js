@@ -2,6 +2,7 @@ class ElementProperty {
 	#field;
 	#input;
 	#select;
+	#formBlock;
 
 	constructor(input, opts, props) {
 		this.#field = input.closest('.field');
@@ -83,6 +84,7 @@ class ElementProperty {
 		const formId = form.getAttribute('block-id');
 		const formBlock = Pageboard.editor.blocks.get(formId);
 		if (!formBlock) throw new Error("Cannot find form block for " + formId);
+		this.#formBlock = formBlock;
 		this.#buildSelector(formBlock);
 	}
 
@@ -189,7 +191,7 @@ class ElementProperty {
 		if (!formProps) return;
 		const mapKeys = new Map();
 		const scope = Page.scope.copy();
-		this.#trackFuse(Object.keys(formProps), mapKeys, formBlock.action?.request ?? {}, scope);
+		this.#trackFuse(Object.keys(formProps), mapKeys, formBlock.data.action?.request ?? {}, scope);
 
 		const doc = this.#input.ownerDocument;
 
@@ -242,6 +244,16 @@ class ElementProperty {
 		}
 		this.#field.insertBefore(this.#select, this.#input);
 		this.#select.addEventListener('change', this);
+	}
+
+	update(block) {
+		const content = Pageboard.editor.element(this.#formBlock.type)
+			.contents.get(this.#formBlock);
+		for (const node of this.#select) {
+			if (node.value) node.disabled = Boolean(
+				content.querySelector(`[name="${node.value}"]`)
+			);
+		}
 	}
 
 	handleEvent(e) {
