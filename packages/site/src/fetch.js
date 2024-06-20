@@ -52,9 +52,12 @@ export default function(method, url, data) {
 				}
 				obj.status = res.status;
 				obj.statusText ??= res.statusText;
-				obj.locks = (res.headers.get('X-Upcache-Lock') ?? "").split(',').map(str => str.trim()).filter(str => Boolean(str.length));
-				obj.granted = res.headers.get('X-Granted') ? true : false;
-				obj.lang = res.headers.get('Content-Language') ?? "";
+				const h = res.headers;
+				obj.locks = (h.get('X-Upcache-Lock') ?? "").split(',').map(str => str.trim()).filter(str => Boolean(str.length));
+				obj.granted = h.get('X-Pageboard-Granted') ? true : false;
+				obj.grants = h.get('X-Pageboard-Grants')?.split(',') ?? [];
+				obj.types = h.get('X-Pageboard-Elements')?.split(',') ?? [];
+				obj.lang = h.get('Content-Language') ?? "";
 				return obj;
 			});
 		}
