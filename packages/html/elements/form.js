@@ -107,12 +107,11 @@ exports.api_form = {
 			description: 'Page state or action',
 			type: 'object',
 			properties: {
-				url: {
-					title: 'Page',
+				name: {
+					title: 'Form or Fetch Name',
 					nullable: true,
-					type: "string",
-					format: "page",
-					$helper: "page"
+					type: 'string',
+					format: 'name'
 				},
 				parameters: {
 					title: 'Parameters',
@@ -126,6 +125,12 @@ exports.api_form = {
 			title: 'Bad request',
 			type: 'object',
 			properties: {
+				name: {
+					title: 'Form or Fetch Name',
+					nullable: true,
+					type: 'string',
+					format: 'name'
+				},
 				parameters: {
 					title: 'Parameters',
 					type: "object",
@@ -138,6 +143,12 @@ exports.api_form = {
 			title: 'Unauthorized request',
 			type: 'object',
 			properties: {
+				name: {
+					title: 'Form or Fetch Name',
+					nullable: true,
+					type: 'string',
+					format: 'name'
+				},
 				parameters: {
 					title: 'Parameters',
 					type: "object",
@@ -150,6 +161,12 @@ exports.api_form = {
 			title: 'Request not found',
 			type: 'object',
 			properties: {
+				name: {
+					title: 'Form or Fetch Name',
+					nullable: true,
+					type: 'string',
+					format: 'name'
+				},
 				parameters: {
 					title: 'Parameters',
 					type: "object",
@@ -164,10 +181,10 @@ exports.api_form = {
 	html: `<form is="element-form" method="post" name="[name]" masked="[masked]"
 		action="/@api/form/[name|else:$id]"
 		parameters="[action?.request|as:expressions]"
-		success="[redirection.url][redirection.parameters|as:query]"
-		badrequest="[badrequest.url][badrequest.parameters|as:query]"
-		unauthorized="[unauthorized.url][unauthorized.parameters|as:query]"
-		notfound="[notfound.url][notfound.parameters|as:query]"
+		success="[redirection.parameters|as:query]"
+		badrequest="[badrequest.parameters|as:query]"
+		unauthorized="[unauthorized.parameters|as:query]"
+		notfound="[notfound.parameters|as:query]"
 		class="ui form [hidden]"></form>`,
 	stylesheets: [
 		'../ui/components/form.css',

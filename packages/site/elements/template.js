@@ -15,10 +15,10 @@ exports.fetch = {
 		data-auto="[auto]"
 		data-offset-name="[action?.request?.offset|as:expressions]"
 		parameters="[action?.request|as:expressions]"
-		success="[redirection.url][redirection.parameters|as:query]"
-		badrequest="[badrequest.url][badrequest.parameters|as:query]"
-		unauthorized="[unauthorized.url][unauthorized.parameters|as:query]"
-		notfound="[notfound.url][notfound.parameters|as:query]"
+		success="[redirection.parameters|as:query]"
+		badrequest="[badrequest.parameters|as:query]"
+		unauthorized="[unauthorized.parameters|as:query]"
+		notfound="[notfound.parameters|as:query]"
 	><template block-content="template"></template></element-template>`,
 	upgrade: {
 		'data.action.auto': 'data.auto'
@@ -46,12 +46,11 @@ exports.fetch = {
 			title: 'Success',
 			type: 'object',
 			properties: {
-				url: {
-					title: 'Page',
+				name: {
+					title: 'Form or Fetch Name',
 					nullable: true,
-					type: "string",
-					format: "page",
-					$helper: "page"
+					type: 'string',
+					format: 'name'
 				},
 				parameters: {
 					title: 'Parameters',
@@ -65,12 +64,11 @@ exports.fetch = {
 			title: 'Bad request',
 			type: 'object',
 			properties: {
-				url: {
-					title: 'Page',
+				name: {
+					title: 'Form or Fetch Name',
 					nullable: true,
-					type: "string",
-					format: "page",
-					$helper: "page"
+					type: 'string',
+					format: 'name'
 				},
 				parameters: {
 					title: 'Parameters',
@@ -84,12 +82,11 @@ exports.fetch = {
 			title: 'Unauthorized request',
 			type: 'object',
 			properties: {
-				url: {
-					title: 'Page',
+				name: {
+					title: 'Form or Fetch Name',
 					nullable: true,
-					type: "string",
-					format: "page",
-					$helper: "page"
+					type: 'string',
+					format: 'name'
 				},
 				parameters: {
 					title: 'Parameters',
@@ -103,12 +100,11 @@ exports.fetch = {
 			title: 'Request not found',
 			type: 'object',
 			properties: {
-				url: {
-					title: 'Page',
+				name: {
+					title: 'Form or Fetch Name',
 					nullable: true,
-					type: "string",
-					format: "page",
-					$helper: "page"
+					type: 'string',
+					format: 'name'
 				},
 				parameters: {
 					title: 'Parameters',
