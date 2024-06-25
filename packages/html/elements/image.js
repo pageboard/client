@@ -27,7 +27,7 @@ exports.image = {
 				}
 			},
 			$file: {
-				size: 50_000_000,
+				size: 50000000,
 				types: ["image/*"]
 			}
 		},
@@ -175,7 +175,7 @@ exports.inlineImage = {
 				}
 			},
 			$file: {
-				size: 200_000,
+				size: 200000,
 				types: ["image/*"]
 			}
 		},
