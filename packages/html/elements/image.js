@@ -25,6 +25,10 @@ exports.image = {
 				filter: {
 					type: ["image"]
 				}
+			},
+			$file: {
+				size: 50_000_000,
+				types: ["image/*"]
 			}
 		},
 		display: {
@@ -169,6 +173,10 @@ exports.inlineImage = {
 					maxWidth: 320,
 					maxHeight: 320
 				}
+			},
+			$file: {
+				size: 200_000,
+				types: ["image/*"]
 			}
 		},
 		display: {
