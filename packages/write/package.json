@@ -1,6 +1,6 @@
 {
   "name": "@pageboard/write",
-  "version": "0.15.3",
+  "version": "0.15.4",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -23,7 +23,7 @@
     "postinstall": "^0.10.3"
   },
   "devDependencies": {
-    "@pageboard/pagecut": "^0.15.0",
+    "@pageboard/pagecut": "^0.15.1",
     "cropperjs": "^1.6.2",
     "duration-relativetimeformat": "^2.0.4",
     "fast-safe-stringify": "^2.1.1",
