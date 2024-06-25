@@ -80,9 +80,9 @@ exports.api_form = {
 	properties: {
 		name: {
 			title: 'Name',
-			description: "Used by query 'submit' or 'toggle'\nExposes /@api/form/$name",
+			description: "Exposes /@api/$name\nUsed by query 'submit' or 'toggle'",
 			type: 'string',
-			format: 'id',
+			format: 'name',
 			nullable: true
 		},
 		hidden: {

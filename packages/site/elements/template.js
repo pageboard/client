@@ -27,9 +27,9 @@ exports.fetch = {
 	properties: {
 		name: {
 			title: 'Name',
-			description: "Exposes /@api/query/$name",
+			description: "Exposes /@api/$name",
 			type: 'string',
-			format: 'id',
+			format: 'name',
 			nullable: true
 		},
 		auto: {
