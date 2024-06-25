@@ -1,6 +1,6 @@
 {
   "name": "@pageboard/barcode",
-  "version": "0.14.8",
+  "version": "0.15.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -20,7 +20,7 @@
   "devDependencies": {
     "postinstall": "^0.10.3",
     "postinstall-bundle": "^0.9.4",
-    "bwip-js": "^4.3.2"
+    "bwip-js": "^4.4.0"
   },
   "prepare": {
     "./src/bwip.js": "bundle lib/"
