@@ -111,7 +111,7 @@ exports.api_form = {
 					title: 'Form or Fetch Name',
 					nullable: true,
 					type: 'string',
-					format: 'name'
+					format: 'singleline'
 				},
 				parameters: {
 					title: 'Parameters',
@@ -129,7 +129,7 @@ exports.api_form = {
 					title: 'Form or Fetch Name',
 					nullable: true,
 					type: 'string',
-					format: 'name'
+					format: 'singleline'
 				},
 				parameters: {
 					title: 'Parameters',
@@ -147,7 +147,7 @@ exports.api_form = {
 					title: 'Form or Fetch Name',
 					nullable: true,
 					type: 'string',
-					format: 'name'
+					format: 'singleline'
 				},
 				parameters: {
 					title: 'Parameters',
@@ -165,7 +165,7 @@ exports.api_form = {
 					title: 'Form or Fetch Name',
 					nullable: true,
 					type: 'string',
-					format: 'name'
+					format: 'singleline'
 				},
 				parameters: {
 					title: 'Parameters',
