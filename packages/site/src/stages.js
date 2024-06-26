@@ -34,8 +34,6 @@ Page.connect(new class {
 					if (state.vars[key] === false) missing.push(key);
 				}
 				if (extra.length > 0) {
-					// eslint-disable-next-line no-console
-					console.warn("Removing extra query parameters", extra);
 					status = 301;
 					statusText = 'Extra Query Parameters';
 					location = Page.format({ pathname: state.pathname, query });
@@ -51,6 +49,10 @@ Page.connect(new class {
 
 				if (state.status) {
 					metas.Status = `${state.status} ${state.statusText || ""}`.trim();
+					if (state.status != 200) {
+						// eslint-disable-next-line no-console
+						console.warn(metas.Status);
+					}
 				}
 				if (state.location) {
 					if (state.location != state.toString()) {
