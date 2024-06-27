@@ -249,7 +249,7 @@ class ElementProperty {
 	update(block) {
 		const content = Pageboard.editor.element(this.#formBlock.type)
 			.contents.get(this.#formBlock);
-		for (const node of this.#select) {
+		if (this.#select) for (const node of this.#select) {
 			if (node.value) node.disabled = Boolean(
 				content.querySelector(`[name="${node.value}"]`)
 			);
