@@ -1,4 +1,8 @@
 
+Page.paint(state => {
+	state.scope.observer?.disconnect();
+	delete state.scope.observer;
+});
 Page.constructor.serialize = function (state, type) {
 	const doc = document;
 	for (const node of doc.querySelectorAll('element-template')) {
