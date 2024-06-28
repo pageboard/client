@@ -1,7 +1,6 @@
 
 Page.paint(state => {
-	state.scope.observer?.disconnect();
-	delete state.scope.observer;
+	state.revealAll();
 });
 Page.constructor.serialize = function (state, type) {
 	const doc = document;

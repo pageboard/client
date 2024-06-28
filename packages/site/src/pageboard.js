@@ -63,6 +63,14 @@ PageProto.reveal = function (node) {
 	if (p) this.scope.reveals.push(p.catch(err => err));
 };
 
+PageProto.revealAll = function () {
+	if (!this.scope.observer) return;
+	const list = this.scope.observer.unobserveAll();
+	this.scope.observer.disconnect();
+	delete this.scope.observer;
+	for (const node of list) this.reveal(node);
+};
+
 PageProto.fetch = fetchHelper;
 
 PageProto.debounce = function (fn, to) {

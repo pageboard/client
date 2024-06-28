@@ -1,6 +1,30 @@
 
 import * as equivs from './equivs';
 
+class TrackingIntersectionObserver extends IntersectionObserver {
+	#targets = new Set();
+	observe(node) {
+		this.#targets.add(node);
+		return super.observe(node);
+	}
+	unobserve(node) {
+		this.#targets.delete(node);
+		return super.unobserve(node);
+	}
+	disconnect() {
+		this.#targets.clear();
+		return super.disconnect();
+	}
+	unobserveAll() {
+		const list = new Set(this.#targets);
+		for (const node of this.#targets) {
+			super.unobserve(node);
+		}
+		this.#targets.clear();
+		return list;
+	}
+}
+
 Page.connect(new class {
 	#adv = false;
 
@@ -98,7 +122,7 @@ Page.connect(new class {
 		} catch (ex) {
 			// ignore
 		}
-		state.scope.observer = new IntersectionObserver((entries, observer) => {
+		state.scope.observer = new TrackingIntersectionObserver((entries, observer) => {
 			entries.forEach(entry => {
 				const target = entry.target;
 				const ratio = entry.intersectionRatio || 0;
@@ -127,6 +151,7 @@ Page.connect(new class {
 			});
 		}
 	}
+
 	close(state) {
 		if (state.scope.observer) {
 			state.scope.observer.disconnect();
@@ -134,4 +159,3 @@ Page.connect(new class {
 		}
 	}
 });
-

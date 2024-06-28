@@ -53,8 +53,7 @@ class HTMLElementBodyPrint extends Page.create(HTMLBodyElement) {
 		if (state.pathname.endsWith('.pdf') == false) {
 			this.#showPrintButtons(state, opts.preset);
 		} else {
-			state.scope.observer?.disconnect();
-			delete state.scope.observer;
+			state.revealAll();
 		}
 	}
 	close() {
