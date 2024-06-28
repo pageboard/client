@@ -132,7 +132,6 @@ const HTMLElementImageConstructor = Superclass => class extends Superclass {
 	}
 
 	reveal(state) {
-		const img = this.image;
 		if (!this.options.src) {
 			this.placeholder(true);
 			return;
@@ -140,6 +139,7 @@ const HTMLElementImageConstructor = Superclass => class extends Superclass {
 		if (this.classList.contains('loading')) {
 			return;
 		}
+		const img = this.image;
 		const srcLoc = Page.parse(this.options.src);
 		const reqSrc = this.requestSrc(srcLoc);
 		if (!reqSrc) {
