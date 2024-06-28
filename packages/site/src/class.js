@@ -2,6 +2,7 @@ let extendCache;
 
 export function create(Superclass) {
 	return class extends Superclass {
+		#creating = true;
 		constructor() {
 			super();
 			if (this.constructor.is) {
@@ -9,11 +10,11 @@ export function create(Superclass) {
 			}
 		}
 		async attributeChangedCallback(name, src, dst, ns) {
-			if (src == dst) return;
+			if (src == dst || this.#creating) return;
 			if (this.patch) await Page.patch(state => {
 				return this.patch(state);
 			});
-			await Promise.resolve().then(() => this.reveal?.(Page));
+			if (this.reveal) await Promise.resolve().then(() => this.reveal?.(Page));
 			if (this.paint) await Page.paint(state => {
 				return this.paint(state);
 			});
@@ -40,19 +41,16 @@ export function create(Superclass) {
 		}
 		#paint(state) {
 			if (this.reveal && !this.currentSrc) {
-				state.finish(() => {
-					return state.reveal(this);
-				});
-			}
-		}
-		#setup(state) {
-			if (this.reveal && !this.currentSrc) {
 				if (state.scope.observer) {
 					state.scope.observer.observe(this);
 				} else state.finish(() => {
 					return state.reveal(this);
 				});
 			}
+		}
+		#setup(state) {
+			this.#creating = false;
+			this.#paint(state);
 		}
 		#close(state) {
 			if (this.reveal && !this.currentSrc) {
