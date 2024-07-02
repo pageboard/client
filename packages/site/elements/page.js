@@ -92,7 +92,7 @@ exports.page = {
 		<link rel="canonical" href="[$loc.origin][$loc.pathname][$loc.search][noindex|prune:*]">
 		<link rel="icon" href="[$site.favicon|post:?format=ico|or:data%3A,]">
 		<link rel="stylesheet" href="[$element.stylesheets|repeat:]" data-priority="[$element.priority]">
-		<script crossorigin="anonymous" defer src="https://cdn.polyfill.io/v3/polyfill.min.js?flags=gated&unknown=polyfill&features=[$elements|as:polyfills|enc:url|fail:*]" data-priority="-10000"></script>
+		<script crossorigin="anonymous" defer src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?flags=gated&unknown=polyfill&features=[$elements|as:polyfills|enc:url|fail:*]" data-priority="-10000"></script>
 		<script defer src="[$element.scripts|repeat:]" data-priority="[$element.priority]"></script>
 	</head>
 	<body block-content="body"></body></html>`,
@@ -114,7 +114,7 @@ exports.page = {
 		'form-action': ["'self'"],
 		connect: ["'self'"],
 		object: ["'none'"],
-		script: ["'self'", "https://cdn.polyfill.io"],
+		script: ["'self'", "https://cdnjs.cloudflare.com"],
 		frame: ["https:"],
 		style: ["'self'", "'unsafe-inline'"],
 		font: ["'self'", "data:", "https:"],
