@@ -1,6 +1,6 @@
 {
   "name": "@pageboard/site",
-  "version": "0.12.32",
+  "version": "0.12.33",
   "description": "",
   "main": "index.js",
   "scripts": {
