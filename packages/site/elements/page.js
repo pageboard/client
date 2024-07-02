@@ -91,9 +91,11 @@ exports.page = {
 		'customElementsBuiltin',
 		'Element.prototype.dataset',
 		'fetch',
+		'URL',
 		'es2015', 'es2016', 'es2017', 'es2018',
-		'Intl.NumberFormat.~locale.[$lang]',
-		`Intl.DateTimeFormat.~locale.[$lang]`,
+		'Intl.NumberFormat.~locale.*',
+		'Intl.DateTimeFormat.~locale.*',
+		'Intl.RelativeTimeFormat.~locale.*',
 		'console.debug',
 		'smoothscroll'
 	],

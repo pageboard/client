@@ -15,7 +15,10 @@ const Pageboard = window.Pageboard ??= {};
 (async () => {
 	const polyfills = [];
 	Object.entries(Pageboard.polyfills ?? {}).map(([name, ok]) => {
-		if (!ok) polyfills.push(name);
+		if (ok) return;
+		const { lang } = document.documentElement;
+		if (name.endsWith('*')) name = name.slice(0, -1) + lang;
+		polyfills.push(name);
 	});
 	if (polyfills.length) {
 		const url = new URL(
