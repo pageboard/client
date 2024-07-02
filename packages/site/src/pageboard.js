@@ -25,7 +25,7 @@ const Pageboard = window.Pageboard ??= {};
 			`/@api/polyfills`,
 			document.location
 		);
-		url.searchParams.set('features', polyfills.join('+'));
+		url.searchParams.set('features', polyfills.join('!'));
 		await loadScript(url.pathname + url.search, document, -1000);
 	}
 	if (document.documentElement.dataset.prerender == "true") {
