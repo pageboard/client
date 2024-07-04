@@ -308,7 +308,7 @@ function contentFn(ctx, block, name) {
 	const dom = scope.render({ item: block }, el);
 	const frag = scope.$doc.createDocumentFragment();
 	while (dom.childNodes.length) frag.appendChild(dom.firstChild);
-	return ctx.filter(frag, 'as', 'html');
+	return frag;
 }
 
 function childrenFn(ctx, block, name) {
