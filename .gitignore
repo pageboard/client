@@ -63,4 +63,5 @@ typings/
 # always ignore TODO
 TODO*
 
-yarn.lock
+/yarn.lock
+/pnpm-lock.yaml
