@@ -75,7 +75,7 @@ Page.connect(new class {
 					metas.Status = `${state.status} ${state.statusText || ""}`.trim();
 					if (state.status != 200) {
 						// eslint-disable-next-line no-console
-						console.warn(metas.Status);
+						console.info(metas.Status);
 					}
 				}
 				if (state.location) {
