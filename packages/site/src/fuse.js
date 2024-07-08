@@ -7,7 +7,8 @@ import {
 	DatePlugin,
 	RepeatPlugin,
 	DomPlugin,
-	UrlPlugin
+	UrlPlugin,
+	JsonPlugin
 } from 'matchdom';
 
 import str2dom from '@pageboard/pagecut/src/str2dom.js';
@@ -38,6 +39,8 @@ const templateMd = dataMd.copy().extend(RepeatPlugin).extend({
 		}
 	}
 });
+
+const objectMd = templateMd.copy().extend(JsonPlugin);
 
 Document.prototype.dom = function() {
 	return str2dom(Array.prototype.join.call(arguments, '\n'), {
@@ -74,12 +77,20 @@ const fuse = (obj, data, scope) => {
 	return md.merge(obj, data, scope);
 };
 
+Object.getPrototypeOf(Page.constructor).prototype.fuse = function (data, scope) {
+	if (!scope) console.warn("Missing scope param");
+	this.pathname = objectMd.merge(this.pathname, data, scope);
+	this.query = objectMd.merge(this.query, data, scope);
+	return this;
+};
+
 Node.prototype.fuse = function (data, scope) {
 	// eslint-disable-next-line no-console
 	if (!scope) console.warn("Missing scope param");
 	return fuse(this, data, scope);
 };
-String.prototype.fuse = function(data, scope, plugin) {
+
+String.prototype.fuse = function(data, scope) {
 	if (data == null && scope == null) return reFuse.test(this.toString());
 	return fuse(this.toString(), data, scope);
 };

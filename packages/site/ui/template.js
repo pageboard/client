@@ -318,17 +318,6 @@ HTMLScriptElement.prototype.prerender = function () {
 	return tmpl;
 };
 
-Object.getPrototypeOf(Page.constructor).prototype.fuse = function (data, scope) {
-	this.pathname = this.pathname.fuse(data, scope);
-	const q = this.query;
-	// FIXME this should use scope.$request ?
-	for (const [key, val] of Object.entries(q)) {
-		q[key] = typeof val == "string" ? val.fuse(data, scope) : val;
-	}
-	return this;
-};
-
-
 class QueryCollectorFilter {
 	#missings = new Set();
 	#query;
