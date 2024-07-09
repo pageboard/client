@@ -5,3 +5,14 @@
 [contenteditable] [action] .ui.message {
 	display:block !important;
 }
+
+.ui.message.visible[data-fading] {
+	animation-name: message-out;
+	animation-duration: 1s;
+}
+
+@keyframes message-out {
+	0% {opacity: 1;}
+	50% {opacity: 1;}
+	100% {opacity: 0;}
+}

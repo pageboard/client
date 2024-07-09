@@ -366,7 +366,13 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 				vary = "patch";
 			}
 		}
-		state.push(loc, { vary });
+		state.debounce(
+			() => {
+				msg.classList.remove('visible');
+				return state.push(loc, { vary });
+			},
+			msg.dataset.fading ? 1000 : 100
+		)();
 	}
 }
 window.HTMLElementForm = HTMLElementForm;

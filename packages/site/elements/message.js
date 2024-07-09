@@ -19,7 +19,7 @@ exports.message = {
 			}]
 		},
 		status: {
-			title: 'status',
+			title: 'Status',
 			description: 'Match form response http status code',
 			anyOf: [
 				{
@@ -46,10 +46,14 @@ exports.message = {
 					title: 'Conflict'
 				}
 			]
+		},
+		fading: {
+			title: 'Fading',
+			type: 'boolean',
+			default: false
 		}
 	},
 	contents: "block+",
-	html: '<div class="ui message [type]" data-status="[status]"><p>Message</p></div>',
+	html: '<div class="ui message [type]" data-status="[status]" data-fading="[fading]"><p>Message</p></div>',
 	stylesheets: ['../ui/message.css']
 };
-
