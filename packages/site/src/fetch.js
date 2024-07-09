@@ -9,10 +9,17 @@ export default function(method, url, data) {
 		},
 		credentials: "same-origin"
 	};
-	const langs = window.navigator.languages;
-	if (langs?.length > 0) {
-		fetchOpts.headers['Accept-Language'] = langs.join(',');
+	const langs = [];
+	const { languages = [] } = window.navigator;
+	for (const lang of languages ?? []) {
+		langs.push(lang);
+		const parts = lang.split('-');
+		if (parts.length > 1 && !languages.includes(parts[0])) {
+			langs.push(parts[0]);
+		}
 	}
+	if (langs.length) fetchOpts.headers['Accept-Language'] = langs.join(',');
+
 	if (method == "get" || method == "delete") {
 		url = Object.assign(Page.parse(url), {query: data}).toString();
 		const pending = pendings[url];
