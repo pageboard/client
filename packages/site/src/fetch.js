@@ -11,7 +11,7 @@ export default function(method, url, data) {
 	};
 	const langs = window.navigator.languages;
 	if (langs?.length > 0) {
-		fetchOpts.headers['Accept-Language'] = langs.join(', ');
+		fetchOpts.headers['Accept-Language'] = langs.join(',');
 	}
 	if (method == "get" || method == "delete") {
 		url = Object.assign(Page.parse(url), {query: data}).toString();
