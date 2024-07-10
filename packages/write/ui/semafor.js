@@ -598,7 +598,9 @@ Semafor.types.oneOf = function (key, schema, node, inst) {
 	let oneOfType;
 	let icons = false;
 	const disc = schema.discriminator?.propertyName;
-	if (disc) {
+	if (alts.length == 0) {
+		// do nothing
+	} else if (disc) {
 		scope.$list = listOf.map(item => {
 			item = inst.resolveRef(item, schema.$id); // often needed here
 			return item.properties[disc];
