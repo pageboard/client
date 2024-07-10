@@ -368,10 +368,10 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 		}
 		state.debounce(
 			() => {
-				msg.classList.remove('visible');
+				msg?.classList.remove('visible');
 				return state.push(loc, { vary });
 			},
-			msg.dataset.fading ? 1000 : 100
+			msg?.dataset.fading ? 1000 : 100
 		)();
 	}
 }
