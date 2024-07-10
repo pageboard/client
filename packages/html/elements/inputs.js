@@ -38,7 +38,7 @@ exports.input_button = {
 			type: "string",
 			format: "singleline"
 		},
-		target: {
+		form: {
 			title: 'Target form',
 			type: 'string',
 			format: 'name',
@@ -83,7 +83,7 @@ exports.input_button = {
 			default: null
 		}
 	},
-	html: '<button type="[type]" disabled="[disabled]" class="ui [full|alt:fluid:] [icon] [compact] [float|post:%20floated] button" name="[name]" value="[value]">[type|schema:title]</button>',
+	html: '<button type="[type]" form="[form]" disabled="[disabled]" class="ui [full|alt:fluid:] [icon] [compact] [float|post:%20floated] button" name="[name]" value="[value]">[type|schema:title]</button>',
 	stylesheets: [
 		'../ui/components/button.css',
 		'../ui/button.css'
