@@ -30,7 +30,7 @@ Object.assign(window.Pageboard, {
 			what.classList.add('loading');
 		}
 		return p.catch(err => {
-			window.Pageboard.notify("Request Error" + (err.status ? ` ${err.status}` : ''), {
+			window.Pageboard.notify("Error" + (err.status ? ` ${err.status}` : ''), {
 				message: err.statusText
 			});
 			// rethrow, we don't want to show any result

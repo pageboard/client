@@ -54,7 +54,7 @@ export default function(method, url, data) {
 		} else {
 			return res.json().then(obj => {
 				if (obj.item?.type == "error") {
-					obj.statusText = obj.item.data?.message ?? "";
+					obj.statusText = obj.item.content ?? obj.item.data?.message ?? "";
 					delete obj.item;
 				}
 				obj.status = res.status;
