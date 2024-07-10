@@ -38,6 +38,16 @@ exports.input_button = {
 			type: "string",
 			format: "singleline"
 		},
+		target: {
+			title: 'Target form',
+			type: 'string',
+			format: 'name',
+			nullable: true,
+			$filter: {
+				name: 'action',
+				action: 'write'
+			}
+		},
 		disabled: {
 			title: 'Disabled',
 			type: 'boolean',
