@@ -7,9 +7,9 @@ exports.pagination = {
 	isolating: true,
 	properties: {
 		fetch: {
-			title: 'Name of fetch block',
+			title: 'Target fetch',
 			type: 'string',
-			format: 'id',
+			format: 'name',
 			$filter: {
 				name: 'action',
 				action: 'read'

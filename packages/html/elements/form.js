@@ -9,7 +9,7 @@ exports.query_form = {
 			title: 'Name',
 			description: 'Useful for query tags',
 			type: 'string',
-			format: 'id',
+			format: 'name',
 			nullable: true
 		},
 		masked: {
