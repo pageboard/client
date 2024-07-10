@@ -52,7 +52,7 @@ exports.query_form = {
 	},
 	contents: 'block+',
 	tag: 'form[method="get"]',
-	html: `<form is="element-form" method="get" name="[name]" masked="[masked]"
+	html: `<form is="element-form" method="get" id="[name|else:$id]" masked="[masked]"
 		action="[redirection.url][redirection.parameters|as:query]"
 		autocomplete="off" class="ui form"></form>`,
 	stylesheets: [
@@ -178,7 +178,8 @@ exports.api_form = {
 	},
 	contents: 'block+',
 	tag: 'form[method="post"]',
-	html: `<form is="element-form" method="post" name="[name]" masked="[masked]"
+	html: `<form is="element-form" method="post" masked="[masked]"
+		id="[name|else:$id]"
 		action="/@api/form/[name|else:$id]"
 		parameters="[action?.request|as:expressions]"
 		success="[redirection.parameters|as:query]"

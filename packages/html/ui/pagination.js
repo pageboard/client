@@ -9,7 +9,7 @@ class HTMLElementPagination extends Page.create(HTMLAnchorElement) {
 	#update(state) {
 		const { fetch } = this.dataset;
 		const node = this.ownerDocument.querySelector(
-			`element-template[action="/@api/query/${fetch}"]`
+			`element-template[id="${fetch}"]`
 		);
 		if (!node) {
 			console.warn("pagination does not find fetch node", fetch);
