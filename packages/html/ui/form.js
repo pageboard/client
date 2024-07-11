@@ -74,12 +74,10 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 		if (typeof toggle == "string") toggles.push(...toggle.split('-'));
 		else if (Array.isArray(toggle)) toggles.push(...toggle);
 
-		const masked = this.hasAttribute('masked');
-
 		if (this.method != "get") {
 			// ?submit=<name> for auto-submit
 			if (submit && submit == this.name) {
-				if (masked) toggles.push(submit);
+				if (this.hidden) toggles.push(submit);
 				state.vars.submit = true;
 			}
 			const actionLoc = Page.parse(this.getAttribute('action'));
@@ -94,9 +92,9 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 		if (toggles.includes(this.name)) {
 			// ?toggle=<name> for toggling hidden state
 			if (toggle) state.vars.toggle = true;
-			this.disabled = this.hidden = !masked;
+			this.disabled = !this.hidden;
 		} else {
-			this.disabled = this.hidden = masked;
+			this.disabled = this.hidden;
 		}
 	}
 	paint(state) {

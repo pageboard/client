@@ -12,9 +12,9 @@ exports.query_form = {
 			format: 'name',
 			nullable: true
 		},
-		masked: {
-			title: 'Masked',
-			description: 'Hidden and disabled, unmasked by $query.toggle',
+		hidden: {
+			title: 'Hidden',
+			description: 'Hidden and disabled\nShown by $query.toggle',
 			type: 'boolean',
 			default: false
 		},
@@ -52,7 +52,7 @@ exports.query_form = {
 	},
 	contents: 'block+',
 	tag: 'form[method="get"]',
-	html: `<form is="element-form" method="get" id="[name|else:$id]" masked="[masked]"
+	html: `<form is="element-form" method="get" id="[name|else:$id]" hidden="[hidden]"
 		action="[redirection.url][redirection.parameters|as:query]"
 		autocomplete="off" class="ui form"></form>`,
 	stylesheets: [
@@ -87,15 +87,10 @@ exports.api_form = {
 		},
 		hidden: {
 			title: 'Hidden',
+			description: 'Hidden and disabled\nShown by $query.toggle',
 			type: 'boolean',
 			default: false,
 			context: 'template'
-		},
-		masked: {
-			title: 'Masked',
-			description: 'Hidden and disabled, unmasked by $query.toggle',
-			type: 'boolean',
-			default: false
 		},
 		action: {
 			title: 'Action',
@@ -178,7 +173,7 @@ exports.api_form = {
 	},
 	contents: 'block+',
 	tag: 'form[method="post"]',
-	html: `<form is="element-form" method="post" masked="[masked]"
+	html: `<form is="element-form" method="post" hidden="[hidden]"
 		id="[name|else:$id]"
 		action="/@api/form/[name|else:$id]"
 		parameters="[action?.request|as:expressions]"
@@ -186,7 +181,7 @@ exports.api_form = {
 		badrequest="[badrequest.parameters|as:query]"
 		unauthorized="[unauthorized.parameters|as:query]"
 		notfound="[notfound.parameters|as:query]"
-		class="ui form [hidden]"></form>`,
+		class="ui form"></form>`,
 	stylesheets: [
 		'../ui/components/form.css',
 		'../ui/form.css'
