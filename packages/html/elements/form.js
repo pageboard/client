@@ -175,7 +175,7 @@ exports.api_form = {
 	tag: 'form[method="post"]',
 	html: `<form is="element-form" method="post" hidden="[hidden]"
 		id="[name|else:$id]"
-		action="/@api/form/[name|else:$id]"
+		action="/@api/form/[$id]"
 		parameters="[action?.request|as:expressions]"
 		success="[redirection.parameters|as:query]"
 		badrequest="[badrequest.parameters|as:query]"
