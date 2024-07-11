@@ -33,7 +33,7 @@ body {
 	padding: 0.5rem;
 	padding-top:0 !important;
 	user-select: none;
-	overflow-y: auto;
+	overflow-y: scroll;
 }
 #pageboard-write.loading > [id] {
 	display:none;
@@ -52,6 +52,7 @@ body[data-mode="read"] #pageboard-write {
 	flex: 0 1 auto;
 	padding-bottom:0;
 	margin-bottom: 0;
+	overflow-y:hidden;
 }
 body[data-mode="read"][data-scroll-over-top="false"] #pageboard-write {
 	transform: translateY(-100%);
