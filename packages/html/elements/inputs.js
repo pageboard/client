@@ -489,8 +489,8 @@ exports.input_select = {
 	html: `<div class="field">
 		<label block-content="label">Label</label>
 		<element-select class="ui selection dropdown [multiple]"
-			name="[name]" disabled="[disabled]" required="[required]"
-			multiple="[multiple]"
+			name="[name]" disabled="[disabled|as:batt]" required="[required|as:batt]"
+			multiple="[multiple|as:batt]"
 			value="[value]"
 		>
 			<i class="dropdown icon"></i><div class="text"></div><select></select>
