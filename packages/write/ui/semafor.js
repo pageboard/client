@@ -674,7 +674,7 @@ Semafor.types.oneOf = function (key, schema, node, inst) {
 		field = `<div class="inline field">
 			<label>[title|else:$key]<small>[description|as:text|fail:*]</small></label>
 			<select name="[$key]" class="ui compact dropdown">
-				<option value="[$list|repeat:item|.const]" selected="[item.const|eq:$def]">[item.title|else:item.const]</option>
+				<option value="[$list|repeat:item|.const|or:]" selected="[item.const|eq:$def]">[item.title|else:item.const]</option>
 			</select>
 		</div>`.fuse(schema, scope);
 		node.appendChild(field);
@@ -830,7 +830,7 @@ Semafor.types.array = function (key, schema, node, inst) {
 		} else {
 			return node.appendChild(`<div class="inline field">
 				<select multiple name="[$key]">
-					<option value="[items.anyOf|repeat:item|.const]">[item.title|else:item.const]</option>
+					<option value="[items.anyOf|repeat:item|.const|or:]">[item.title|else:item.const]</option>
 				</select>
 			</div>`.fuse(schema, { $key: key }));
 		}
