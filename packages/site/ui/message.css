@@ -6,9 +6,10 @@
 	display:block !important;
 }
 
-.ui.message.visible[data-fading] {
+.ui.message.visible[data-fading="true"] {
 	animation-name: message-out;
 	animation-duration: 1s;
+	animation-fill-mode: forwards;
 }
 
 @keyframes message-out {
