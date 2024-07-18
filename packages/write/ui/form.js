@@ -116,7 +116,7 @@ class FormBlock {
 
 		if (!sameData || !sameMode) {
 			const schema = { ...this.el, type: 'object' };
-			if (this.el.contents.attrs) {
+			if (this.el.contents.attrs.length) {
 				const contentProps = {};
 				schema.properties = {
 					...schema.properties,
