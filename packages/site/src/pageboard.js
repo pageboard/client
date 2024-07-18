@@ -22,7 +22,7 @@ const Pageboard = window.Pageboard ??= {};
 	});
 	if (polyfills.length) {
 		const url = new URL(
-			`/@api/polyfills`,
+			`/@api/polyfill/bundle`,
 			document.location
 		);
 		url.searchParams.set('features', polyfills.join('!'));
@@ -88,7 +88,7 @@ Page.route(async state => {
 	const { data } = state;
 	const nested = window.parent != window ? 1 : undefined;
 	if (data.response == null) {
-		data.response = await fetchHelper('get', '/@api/page', {
+		data.response = await fetchHelper('get', '/@api/page/get', {
 			url: state.pathname, nested
 		});
 		if (!data.response.item) data.response.item = {

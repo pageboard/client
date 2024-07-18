@@ -5,7 +5,7 @@ class HTMLElementInputUrl extends Page.create(HTMLInputElement) {
 		if (!this.value) return;
 		field.classList.add('loading');
 		try {
-			const { href } = await state.fetch('post', "/@api/href", { url: this.value });
+			const { href } = await state.fetch('post', "/@api/href/add", { url: this.value });
 			const acceptList = this.getAttribute('accept')?.split(',') ?? [];
 			if (!acceptList.includes(href.type)) {
 				const err = new Error(`Unacceptable url type: ${href.type}`);
