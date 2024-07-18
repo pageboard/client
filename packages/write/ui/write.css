@@ -537,4 +537,5 @@ label:hover > small {
 }
 .ui.blue.buttons .button, .ui.blue.button {
 	background-color: #4165A0;
+	margin-right: 0;
 }
