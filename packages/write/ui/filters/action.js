@@ -10,7 +10,7 @@ Pageboard.schemaFilters.action = function ActionFilter(key, opts, schema) {
 		if (!service || service.$action != opts.action) continue;
 		schema.anyOf.push({
 			const: block.data.name ?? block.id,
-			title: block.data.name
+			title: block.data.name ?? service.title
 		});
 	}
 };
