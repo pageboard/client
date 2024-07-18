@@ -280,6 +280,7 @@ body[data-mode="read"] #pageboard-read > iframe {
 #form .inline.fields > label {
 	flex: 1 0;
 	margin-right: 0;
+	text-wrap: nowrap;
 }
 #form .inline.fields > label + .field {
 	max-width: 77%;
