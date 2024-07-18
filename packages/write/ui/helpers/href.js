@@ -181,7 +181,7 @@ Pageboard.schemaHelpers.href = class Href {
 			this.uiInput.value = val;
 		}
 		if (val && !this.infinite.active) {
-			this.get(val).then(this.cache).then(list => {
+			this.get(val).then(href => this.cache(href)).then(list => {
 				this.set(val);
 			});
 		} else {
@@ -350,7 +350,7 @@ Pageboard.schemaHelpers.href = class Href {
 
 	async get(url) {
 		const { href } = Href.cache[Href.normUrl(url)]
-			?? await Pageboard.uiLoad(this.node, Page.fetch('get', '/@api/href/get', { url }));
+			?? await Pageboard.uiLoad(this.node, Page.fetch('get', '/@api/href/find', { url }));
 		return href;
 	}
 

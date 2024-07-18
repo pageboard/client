@@ -88,7 +88,7 @@ Page.route(async state => {
 	const { data } = state;
 	const nested = window.parent != window ? 1 : undefined;
 	if (data.response == null) {
-		data.response = await fetchHelper('get', '/@api/page/get', {
+		data.response = await fetchHelper('get', '/@api/page/find', {
 			url: state.pathname, nested
 		});
 		if (!data.response.item) data.response.item = {
