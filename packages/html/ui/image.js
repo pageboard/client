@@ -1,7 +1,8 @@
 const HTMLElementImageConstructor = Superclass => class extends Superclass {
 	static defaults = {
 		src: null,
-		crop: null
+		crop: null,
+		alt: null
 	};
 
 	static defaultWidth = 240;
@@ -66,26 +67,33 @@ const HTMLElementImageConstructor = Superclass => class extends Superclass {
 	}
 
 	patch(state) {
+		const {
+			dataset: d,
+			image,
+			dimensions: { w, h },
+			constructor,
+			currentSrc
+		} = this;
 		this.classList.remove('loading');
-		if (this.currentSrc != this.options.src) {
+		if (currentSrc != this.options.src) {
 			this.classList.remove('error');
 		}
-		const d = this.dataset;
+
 		if (d.width == null || d.height == null) {
 			const meta = state.scope.$hrefs?.[this.options.src];
 			if (meta?.width) d.width = meta.width;
 			if (meta?.height) d.height = meta.height;
 		}
-		d.width ??= this.constructor.defaultWidth || "";
-		d.height ??= this.constructor.defaultHeight || "";
-		const { w, h } = this.dimensions;
-		if (w) this.image.width = w || d.width;
-		if (h) this.image.height = h || d.height;
-		const cur = this.currentSrc;
+		d.width ??= constructor.defaultWidth || "";
+		d.height ??= constructor.defaultHeight || "";
+		if (w) image.width = w || d.width;
+		if (h) image.height = h || d.height;
+		image.alt = d.alt ?? "";
+		const cur = currentSrc;
 		if (!cur) {
 			this.placeholder();
 		} else if (cur.startsWith('data:')) {
-			this.image.setAttribute('src', cur);
+			image.setAttribute('src', cur);
 		}
 	}
 

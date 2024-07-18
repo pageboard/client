@@ -4,14 +4,6 @@ exports.image = {
 	menu: 'media',
 	icon: '<i class="icon image"></i>',
 	properties: {
-		alt: {
-			title: 'Alternative text',
-			type: "string",
-			$helper: {
-				name: 'describe',
-				using: 'url'
-			}
-		},
 		url: {
 			title: 'Address',
 			anyOf: [{
@@ -129,14 +121,20 @@ exports.image = {
 	},
 	group: "block media",
 	tag: 'element-image',
-	contents: {
+	contents: [{
 		id: 'legend',
 		title: 'legend',
 		nodes: "inline*"
-	},
+	}, {
+		id: 'alt',
+		title: 'Alternative Text',
+		$helper: {
+			name: 'describe'
+		}
+	}],
 	html: `<element-image
 		class="[display.fit|or:none] [display.horizontal?] [display.vertical?]"
-		alt="[alt]"
+		data-alt="[$content.alt]"
 		data-src="[url]"
 		data-crop="[crop.x|or:50];[crop.y|or:50];[crop.width|or:100];[crop.height|or:100];[crop.zoom|or:100]"
 	>
