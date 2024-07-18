@@ -128,13 +128,13 @@ exports.image = {
 	}, {
 		id: 'alt',
 		title: 'Alternative Text',
+		name: 'data-alt',
 		$helper: {
 			name: 'describe'
 		}
 	}],
 	html: `<element-image
 		class="[display.fit|or:none] [display.horizontal?] [display.vertical?]"
-		data-alt="[$content.alt]"
 		data-src="[url]"
 		data-crop="[crop.x|or:50];[crop.y|or:50];[crop.width|or:100];[crop.height|or:100];[crop.zoom|or:100]"
 	>

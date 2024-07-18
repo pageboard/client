@@ -93,6 +93,7 @@ export class RootNodeView {
 		if (uBlock.data) block.data = uBlock.data;
 		if (uBlock.expr) block.expr = uBlock.expr;
 		if (uBlock.lock) block.lock = uBlock.lock;
+		if (uBlock.content) Object.assign(block.content, uBlock.content);
 
 		// consider it's the same data when it's initializing
 		let sameData = false;
@@ -100,6 +101,13 @@ export class RootNodeView {
 			sameData = view.utils.equal(oldBlock.data ?? {}, block.data ?? {});
 			if (sameData && block.expr) {
 				sameData = view.utils.equal(oldBlock.expr ?? {}, block.expr ?? {});
+			}
+			if (uBlock.content) {
+				if (!oldBlock.content) {
+					sameData = false;
+				}	else for (const [name, attr] of Object.entries(uBlock.content)) {
+					if (oldBlock.content?.[name] != attr) sameData = false;
+				}
 			}
 		}
 		const sameFocus = oldBlock?.focused == node.attrs.focused;

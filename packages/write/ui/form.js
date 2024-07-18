@@ -116,6 +116,20 @@ class FormBlock {
 
 		if (!sameData || !sameMode) {
 			const schema = { ...this.el, type: 'object' };
+			if (this.el.contents.attrs) {
+				const contentProps = {};
+				schema.properties = {
+					...schema.properties,
+					$content: {
+						title: 'Contents',
+						type: 'object',
+						properties: contentProps
+					}
+				};
+				for (const spec of this.el.contents.attrs) {
+					contentProps[spec.id] = { ...spec, type: 'string' };
+				}
+			}
 
 			let form = this.form;
 			if (!form) form = this.form = new Pageboard.Semafor({
@@ -138,6 +152,15 @@ class FormBlock {
 				recheck = true;
 			} else if (mode == "lock") {
 				form.set({ lock: obj });
+			} else if (mode == "data") {
+				const data = { ...this.block.data };
+				if (this.el.contents.attrs) {
+					data.$content = {};
+					for (const spec of this.el.contents.attrs) {
+						data.$content[spec.id] = this.block.content[spec.id];
+					}
+				}
+				form.set(data);
 			} else {
 				form.set(this.block[mode]);
 			}
@@ -258,13 +281,22 @@ class FormBlock {
 		const mode = this.mode;
 		if (mode == "lock") formData = formData.lock ?? [];
 
-		const same = Pageboard.utils.stableStringify(this.block[mode]) == Pageboard.utils.stableStringify(formData);
+		let same = Pageboard.utils.stableStringify(this.block[mode]) == Pageboard.utils.stableStringify(formData);
+
+		const { $content: content } = formData;
+		delete formData.$content;
+		if (content) {
+			for (const key of Object.keys(content)) {
+				if (content[key] != this.block.content[key]) same = false;
+			}
+		}
 		if (same) return;
 
 		const id = this.block.id;
 
 		// this must be done after reselecting with breadcrumb.click
 		const block = { ...this.block };
+		if (content) block.content = { ...this.block.content, ...content };
 		block[mode] = structuredClone(formData);
 
 		const tr = editor.state.tr;

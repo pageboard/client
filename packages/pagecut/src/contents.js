@@ -85,12 +85,18 @@ export default class Contents {
 	prune(block) {
 		const copy = {};
 		const content = block.content;
-		if (content) this.list.forEach(def => {
-			if (!def.virtual) {
-				const cont = content[def.id || ""];
-				if (cont !== undefined) copy[def.id || ""] = cont;
+		if (content) {
+			for (const def of this.list) {
+				if (!def.virtual) {
+					const cont = content[def.id || ""];
+					if (cont !== undefined) copy[def.id || ""] = cont;
+				}
 			}
-		});
+			for (const def of this.attrs) {
+				const cont = content[def.id];
+				if (cont !== undefined) copy[def.id] = cont;
+			}
+		}
 		if (block.virtual && Object.keys(copy).length == 0) return;
 		else return copy;
 	}

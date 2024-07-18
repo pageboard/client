@@ -53,13 +53,14 @@ export default class Blocks extends BlocksView {
 	fromAttrs(attrs) {
 		const block = {};
 		for (const [name, att] of Object.entries(attrs)) {
-			if (!name.startsWith("_") && name != "content") {
+			if (!name.startsWith("_")) {
 				block[name] = att;
 			}
 		}
-		if (block.data) block.data = JSON.parse(block.data);
-		if (block.expr) block.expr = JSON.parse(block.expr);
-		if (block.lock) block.lock = JSON.parse(block.lock);
+		if (attrs.data) block.data = JSON.parse(attrs.data);
+		if (attrs.expr) block.expr = JSON.parse(attrs.expr);
+		if (attrs.lock) block.lock = JSON.parse(attrs.lock);
+		if (attrs.content) block.content = JSON.parse(attrs.content);
 
 		if (attrs.standalone == "true") block.standalone = true;
 		else delete block.standalone;
@@ -69,6 +70,7 @@ export default class Blocks extends BlocksView {
 	toAttrs(block) {
 		const attrs = {};
 		if (!block) return attrs;
+		if (block.type == null) console.warn("Missing type", block);
 		if (block.id != null) attrs.id = block.id;
 		if (block.type != null) attrs.type = block.type;
 		if (block.data) attrs.data = JSON.stringify(block.data);
@@ -76,6 +78,14 @@ export default class Blocks extends BlocksView {
 		if (block.lock) attrs.lock = JSON.stringify(block.lock);
 		if (block.focused) attrs.focused = block.focused;
 		if (block.standalone) attrs.standalone = "true";
+		const el = this.view.element(block.type);
+		if (el.contents.attrs.length) {
+			const obj = {};
+			for (const item of el.contents.attrs) {
+				obj[item.id] = block.content[item.id];
+			}
+			attrs.content = JSON.stringify(obj);
+		}
 		return attrs;
 	}
 
@@ -203,7 +213,9 @@ export default class Blocks extends BlocksView {
 			if (!block.standalone) {
 				console.warn("block without content", block, dom);
 			}
-		} else elt.contents.each(block, (content, def) => {
+			return;
+		}
+		elt.contents.each(block, (content, def) => {
 			if (!def.id || def.id == dom.getAttribute('block-content') || elt.inline) {
 				elt.contents.set(block, def.id, dom);
 			} else {
@@ -215,6 +227,12 @@ export default class Blocks extends BlocksView {
 				}
 			}
 		});
+		for (const attr of elt.contents.attrs ?? []) {
+			const name = attr.name ?? attr.id;
+			if (dom.hasAttribute(name)) {
+				block.content[attr.id] = dom.getAttribute(name);
+			}
+		}
 	}
 
 	to() {

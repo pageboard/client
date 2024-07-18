@@ -95,6 +95,13 @@ export class CustomElement extends Element {
 				}
 			}
 		}
+		if (el.contents.attrs.length) {
+			for (const attr of el.contents.attrs) {
+				if (block.content[attr.id] != null) {
+					dom.setAttribute(attr.name ?? attr.id, block.content[attr.id]);
+				}
+			}
+		}
 		if (dom.dataset?.src) {
 			const { width, height, source, title } = scope.$hrefs?.[dom.dataset.src] ?? {};
 			if (width != null) dom.dataset.width ??= width;

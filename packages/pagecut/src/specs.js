@@ -173,6 +173,7 @@ function createRootSpec(elt, obj, viewer) {
 	const defaultAttrs = {
 		id: null,
 		focused: null,
+		content: null,
 		data: null,
 		expr: null,
 		lock: null,
@@ -192,7 +193,14 @@ function createRootSpec(elt, obj, viewer) {
 			const data = dom.getAttribute('block-data');
 			const expr = dom.getAttribute('block-expr');
 			const lock = dom.getAttribute('block-lock');
+			const content = {};
+			for (const attr of elt.contents.attrs ?? []) {
+				if (dom.hasAttribute(attr.name ?? attr.id)) {
+					content[attr.id] = dom.getAttribute(attr.name ?? attr.id);
+				}
+			}
 			const attrs = {};
+			attrs.content = JSON.stringify(content);
 			if (expr) attrs.expr = expr;
 			if (lock) attrs.lock = lock;
 			if (data) {
@@ -214,6 +222,7 @@ function createRootSpec(elt, obj, viewer) {
 				if (oldBlock) {
 					// update the stored block and keep default data
 					block.data = { ...oldBlock.data, ...block.data };
+					if (block.content) block.content = { ...oldBlock.content, ...block.content };
 					Object.assign(oldBlock, block);
 					block = oldBlock;
 				}
