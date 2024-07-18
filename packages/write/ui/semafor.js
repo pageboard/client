@@ -5,7 +5,7 @@ class Semafor {
 			const elem = form.elements[i];
 			const key = elem.name;
 			if (!key) continue;
-			if (key.startsWith('$')) continue;
+			if (key.startsWith('!')) continue;
 			if (elem.disabled) {
 				query.set(key, null);
 				continue;
@@ -79,7 +79,7 @@ class Semafor {
 		for (let i = 0; i < form.elements.length; i++) {
 			const elem = form.elements[i];
 			if (!elem.name) continue;
-			if (elem.name.startsWith('$')) continue;
+			if (elem.name.startsWith('!')) continue;
 			let val = flats[elem.name];
 			if (elem.parentNode.matches('.fieldset.nullable')) {
 				const realVal = Semafor.findPath(obj, elem.name);

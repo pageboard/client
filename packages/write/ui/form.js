@@ -250,7 +250,7 @@ class FormBlock {
 	handleEvent(e) {
 		if (!this.block || this.ignoreEvents || !this.form) return;
 		if (e?.target) {
-			if (!e.target.matches('.nullable') && !e.target.name || e.target.name.startsWith('$')) return;
+			if (!e.target.matches('.nullable') && !e.target.name || e.target.name.startsWith('!')) return;
 			if (e.type == "input" && ["checkbox", "radio", "select"].includes(e.target.type)) return; // change events only
 		}
 		const editor = this.editor;
