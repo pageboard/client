@@ -238,8 +238,8 @@ Pageboard.schemaHelpers.crop = class Crop {
 		};
 	}
 
-	getField(prop) {
-		return Pageboard.Semafor.findPath(this.block.data, prop);
+	getField(prop, block) {
+		return Pageboard.Semafor.findPath((block ?? this.block).data, prop);
 	}
 
 	updateData() {
@@ -250,8 +250,16 @@ Pageboard.schemaHelpers.crop = class Crop {
 	update(block) {
 		// FIXME cropperjs does not support being called without being visible
 		// however update(block) is called once.
+		const curData = this.getField(this.prefix + 'crop');
+		const curUrl = this.getField(this.urlProp);
+		const newData = this.getField(this.prefix + 'crop', block);
+		const newUrl = this.getField(this.urlProp, block);
 		this.block = block;
-		this.load();
+		if (!this.cropper || newUrl != curUrl) {
+			this.load();
+		} else if (Pageboard.utils.stableStringify(curData) != Pageboard.utils.stableStringify(newData)) {
+			this.updateData();
+		}
 	}
 
 	destroy() {
