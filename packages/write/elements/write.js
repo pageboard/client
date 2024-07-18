@@ -143,6 +143,7 @@ exports.write = {
 		"../ui/filters/discriminator.js",
 		"../ui/helpers/color.js",
 		"../ui/helpers/datalist.js",
+		"../ui/helpers/describe.js",
 		"../ui/filters/element.js",
 		"../ui/helpers/element-property.js",
 		"../ui/filters/element-value.js",

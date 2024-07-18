@@ -6,8 +6,11 @@ exports.image = {
 	properties: {
 		alt: {
 			title: 'Alternative text',
-			description: 'Short contextual description.\nLeave empty when used in links.',
-			type: "string"
+			type: "string",
+			$helper: {
+				name: 'describe',
+				using: 'url'
+			}
 		},
 		url: {
 			title: 'Address',
