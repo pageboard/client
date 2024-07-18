@@ -22,6 +22,6 @@ export default class Element {
 		return el;
 	}
 	get leaf() {
-		return this.contents.size == 0;
+		return this.contents.leaf;
 	}
 }

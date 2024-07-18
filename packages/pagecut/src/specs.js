@@ -80,7 +80,7 @@ export default function define(viewer, elt, schema, nodeViews) {
 		} else if (["root", "container"].includes(type) && !elt.leaf) {
 			const def = contents.find(obj.contentDOM.getAttribute('block-content'));
 			if (def) {
-				const nodes = def.nodes;
+				const { nodes } = def;
 				if (nodes) {
 					spec.content = nodes;
 					if (nodes != "text*" && !nodes.endsWith("inline*") && nodes.indexOf(' ') < 0) {

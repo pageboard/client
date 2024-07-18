@@ -3,10 +3,18 @@ export default class Contents {
 		if (!list) list = [];
 		else if (typeof list == "string") list = [{ nodes: list }];
 		else if (!Array.isArray(list)) list = [list];
+		this.attrs = [];
+		list = list.filter(c => {
+			if (!c.nodes && !c.marks) {
+				this.attrs.push(c);
+			} else {
+				return true;
+			}
+		});
 		this.list = list;
-		this.size = this.list.length;
-		if (this.size == 1 && this.list[0].id == null) this.unnamed = true;
-		this.leaf = this.size == 0;
+		this.size = list.length;
+		if (this.size == 1 && list[0].id == null) this.unnamed = true;
+		this.leaf = list.length == 0;
 	}
 	get(block, name) {
 		if (name == null && !this.unnamed) throw new Error("Missing name parameter");
