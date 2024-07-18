@@ -107,7 +107,7 @@ class HTMLElementBlogs extends Page.Element {
 		const url = doc.location.toString();
 		const feed = {
 			title: scope.$page.content.title,
-			description: scope.$page.data.description ??scope.$parent.data.title,
+			description: scope.$page.data.description ?? scope.$parent.data.title,
 			url: url.replace('.rss', ''),
 			categories: topics,
 			date: latestDate,
