@@ -1,6 +1,6 @@
 {
   "name": "@pageboard/site",
-  "version": "0.15.15",
+  "version": "0.15.17",
   "description": "",
   "main": "src/pageboard.js",
   "scripts": {
@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/pageboard/client#readme",
   "devDependencies": {
-    "@pageboard/pagecut": "^0.15.4",
+    "@pageboard/pagecut": "^0.15.5",
     "class-deferred": "^1.0.1",
     "debounce": "^2.1.0",
     "matchdom": "^17.0.0",
