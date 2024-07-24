@@ -1,6 +1,6 @@
 {
   "name": "@pageboard/editor",
-  "version": "0.15.3",
+  "version": "0.15.4",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -23,7 +23,7 @@
     "postinstall-bundle": "^0.9.4"
   },
   "devDependencies": {
-    "@pageboard/pagecut": "^0.15.4"
+    "@pageboard/pagecut": "^0.15.5"
   },
   "prepare": {
     "src/editor.js": "bundle lib/",
