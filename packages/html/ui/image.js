@@ -86,8 +86,8 @@ const HTMLElementImageConstructor = Superclass => class extends Superclass {
 		}
 		d.width ??= constructor.defaultWidth || "";
 		d.height ??= constructor.defaultHeight || "";
-		if (w) image.width = w || d.width;
-		if (h) image.height = h || d.height;
+		image.width = w || d.width;
+		image.height = h || d.height;
 		image.alt = d.alt ?? "";
 		const cur = currentSrc;
 		if (!cur) {
