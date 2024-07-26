@@ -219,9 +219,7 @@ class Semafor {
 					prev[list[i - 1]] = cur = [];
 				}
 				if (cur?.[key] == null) {
-					if (val == null) {
-						if (i == 0) cur[key] = null;
-					} else if (i < list.length - 1) {
+					if (i < list.length - 1) {
 						cur[key] = {};
 					} else {
 						cur[key] = val;

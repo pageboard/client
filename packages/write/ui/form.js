@@ -46,7 +46,7 @@ class FormBlock {
 				if (val != null) val = this.pruneObj(val, prop);
 				return [key, val];
 			} else if (val == null || val === "" || typeof val == "number" && Number.isNaN(val)) {
-				return null;
+				return prop?.nullable ? [key, null] : null;
 			}
 			return [key, val];
 		}).filter(entry => entry != null);
@@ -127,7 +127,7 @@ class FormBlock {
 					}
 				};
 				for (const spec of this.el.contents.attrs) {
-					contentProps[spec.id] = { ...spec, type: 'string' };
+					contentProps[spec.id] = { ...spec, nullable: true, type: 'string' };
 				}
 			}
 
