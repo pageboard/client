@@ -25,7 +25,7 @@ Pageboard.schemaHelpers.describe = class Describe {
 		if (!this.#url) return;
 		this.input.value = (await Pageboard.uiLoad(
 			this.button,
-			Page.fetch('get', '/@api/ai/describe', {
+			Page.fetch('get', '/@api/ai/depict', {
 				url: this.#url
 			})
 		)).item.data.text;
