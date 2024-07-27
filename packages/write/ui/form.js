@@ -40,17 +40,24 @@ class FormBlock {
 		return copy;
 	}
 	static pruneObj(obj, schema) {
+		let allNulls = true;
 		const entries = Object.entries(obj).map(([key, val]) => {
 			const prop = schema.properties?.[key];
-			if (prop?.type == "object") {
-				if (val != null) val = this.pruneObj(val, prop);
-				return [key, val];
-			} else if (val == null || val === "" || typeof val == "number" && Number.isNaN(val)) {
-				return prop?.nullable ? [key, null] : null;
+			if (prop?.type == "object" && val != null) {
+				val = this.pruneObj(val, prop);
+				if (val == null) return null;
 			}
-			return [key, val];
-		}).filter(entry => entry != null);
-		if (entries.length == 0) return null;
+			if (val === "" && prop?.nullable) val = null;
+			if (val == null || typeof val == "number" && Number.isNaN(val)) {
+				return prop?.nullable ? [key, null] : null;
+			} else {
+				return [key, val];
+			}
+		}).filter(entry => {
+			if (entry != null && entry[1] != null) allNulls = false;
+			return entry != null;
+		});
+		if (entries.length == 0 || allNulls) return null;
 		if (Array.isArray(obj)) {
 			return entries.map(([key, val]) => val);
 		} else {
