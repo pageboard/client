@@ -99,7 +99,7 @@ class ElementProperty {
 				const method = block.data?.action?.method;
 				if (method) {
 					const service = Pageboard.schemas.services.definitions[method];
-					return service.properties.parameters;
+					return service?.properties?.parameters;
 				} else {
 					return;
 				}
