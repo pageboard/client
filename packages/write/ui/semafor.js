@@ -649,7 +649,7 @@ Semafor.types.oneOf = function (key, schema, node, inst) {
 			<label for="[$key]">[title|else:$key]<small>[description|as:text|fail:*]</small></label>
 			<div class="ui compact icon menu">
 				<label class="ui radio checkbox item">
-					<input type="radio" name="[$key]" value="[$list|at:label|repeat:item|.const]" checked="[item.const|eq:$def]">
+					<input type="radio" name="[$key]" value="[$list|at:label|repeat:item|.const|or:]" checked="[item.const|eq:$def]">
 					<span>[item.icon|as:html]</span>
 					<small>[item.description|fail:*]</small>
 				</label>
@@ -661,7 +661,7 @@ Semafor.types.oneOf = function (key, schema, node, inst) {
 			<label for="[$key]">[title|else:$key]<small>[description|as:text|fail:*]</small></label>
 			<div class="inline field">
 				<label class="ui radio checkbox">
-					<input type="radio" name="[$key]" value="[$list|at:div|repeat:item|.const]" checked="[item.const|eq:$def]">
+					<input type="radio" name="[$key]" value="[$list|at:div|repeat:item|.const|or:]" checked="[item.const|eq:$def]">
 					<span>[item.title]</span>
 					<small>[item.description]</small>
 				</label>
