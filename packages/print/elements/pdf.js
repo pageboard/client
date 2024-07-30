@@ -287,9 +287,6 @@ exports.sheet = {
 		id: "page",
 		nodes: "block+"
 	},
-	upgrade: {
-		'content.' : 'content.page'
-	},
 	html: `<div class="page-sheet [skip|alt:page-sheet-skip] [bleed?.left|and:bleed-left] [bleed?.right|and:bleed-right] [bleed?.top|and:bleed-top] [bleed?.bottom|and:bleed-bottom]" block-content="page"
 		is="element-sheet" data-src="[background.image]"
 		data-crop="[background.crop.x];[background.crop.y];[background.crop.width];[background.crop.height];[background.crop.zoom]"

@@ -32,9 +32,6 @@ exports.units = {
 exports.layout = {
 	title: "Layout",
 	icon: '<i class="icon move"></i>',
-	upgrade: {
-		'data.invert': 'data.background.invert'
-	},
 	properties: {
 		horizontal: {
 			title: 'Horizontal',

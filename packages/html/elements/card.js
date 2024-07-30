@@ -4,9 +4,6 @@ exports.cards = {
 	icon: '<i class="icon address card outline"></i>',
 	group: "block",
 	contents: "(card|cardlink)+",
-	upgrade: {
-		'data.columnCount' : 'data.columns'
-	},
 	properties: {
 		columns: {
 			title: 'Column count',

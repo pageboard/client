@@ -16,9 +16,6 @@ exports.consent_form = {
 		id: "content",
 		nodes: "block+"
 	},
-	upgrade: {
-		'content.': 'content.content'
-	},
 	html: `<form is="element-consent" class="ui form" data-transient="[transient]">
 		<x[transient|alt:template:div|at:-] block-content="content"></x[transient|alt:template:div|at:-]>
 	</form>`,

@@ -2,9 +2,6 @@ exports.menu = {
 	title: "Menu",
 	icon: '<b class="icon">Menu</b>',
 	menu: "link",
-	upgrade: {
-		'content.items': 'content.'
-	},
 	contents: "(menu_item|menu_group)+",
 	properties: {
 		direction: {

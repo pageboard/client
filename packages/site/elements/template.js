@@ -21,9 +21,6 @@ exports.fetch = {
 		unauthorized="[unauthorized.parameters|as:query]"
 		notfound="[notfound.parameters|as:query]"
 	><template block-content="template"></template></element-template>`,
-	upgrade: {
-		'data.action.auto': 'data.auto'
-	},
 	unique: ["name"],
 	properties: {
 		name: {
