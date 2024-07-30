@@ -212,6 +212,14 @@ body[data-mode="read"] #pageboard-read > iframe {
 	font-size: 0.9286em;
 	font-weight: bold;
 	margin-bottom: -0.9em;
+	width: 100%;
+}
+.ui.form .array.fieldset > legend > small {
+	float:right;
+	font-weight:normal;
+	position: relative;
+	top:0.1em;
+	margin-top:0;
 }
 #form .array.fieldset > fieldset > legend > label > input + span::before {
 	margin-left: 0.4em;
