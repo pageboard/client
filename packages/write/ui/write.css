@@ -79,7 +79,8 @@ body[data-mode="code"] #store > .text.menu,
 body[data-mode="read"] #mode [data-command="read"],
 body[data-mode="read"] #mode [data-command="code"],
 body[data-mode="code"] #mode [data-command="code"],
-body[data-mode="write"] #mode [data-command="write"] {
+body[data-mode="write"] #mode [data-command="write"],
+body[data-mode="write"] #store [data-command="logout"] {
 	display:none !important;
 }
 
