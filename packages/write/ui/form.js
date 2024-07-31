@@ -33,10 +33,10 @@ class FormBlock {
 		} else {
 			return Object.assign({}, schema);
 		}
-		if (schema.nullable) copy.nullable = schema.nullable;
 		if (schema.default !== undefined) hint += ` (default: ${schema.default})`;
 		copy.placeholder = hint;
 		copy.title = schema.title;
+		copy.nullable = true;
 		return copy;
 	}
 
@@ -158,7 +158,7 @@ class FormBlock {
 		if (!props) return;
 		for (const [key, schema] of Object.entries(props)) {
 			if (schema.type != 'object') continue;
-			const obj = expr[key] ??= {};
+			const obj = expr[key] ?? {};
 			if (schema.templates) {
 				for (const [key, value] of Object.entries(schema.templates)) {
 					if (obj[key] == null) {
@@ -167,6 +167,7 @@ class FormBlock {
 				}
 			}
 			if (schema.properties) this.fillExpr(obj, schema.properties);
+			if (!expr[key] && Object.isEmpty(obj)) delete expr[key];
 		}
 	}
 
