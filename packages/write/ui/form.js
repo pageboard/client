@@ -123,12 +123,10 @@ class FormBlock {
 				form.update(form.schema);
 				form.clear();
 			}
-			let recheck = false;
 			const obj = structuredClone(this.block[mode]);
 			if (mode == "expr") {
 				this.fillExpr(obj, form.schema.properties);
 				form.set(obj);
-				recheck = true;
 			} else if (mode == "lock") {
 				form.set({ lock: obj });
 			} else if (mode == "data") {
@@ -150,7 +148,6 @@ class FormBlock {
 			this.node.addEventListener('change', this);
 			this.node.addEventListener('input', this);
 			this.ignoreEvents = false;
-			if (recheck) this.handleEvent({});
 		}
 	}
 
