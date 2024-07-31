@@ -53,7 +53,8 @@ class Semafor {
 				if (!Array.isArray(old)) {
 					old = [old];
 					query.set(key, old);
-				} else if (!old.includes(val)) {
+				}
+				if (!old.includes(val)) {
 					old.push(val);
 				}
 			}
