@@ -39,35 +39,7 @@ class FormBlock {
 		copy.title = schema.title;
 		return copy;
 	}
-	static pruneObj(obj, schema) {
-		let allNulls = true;
-		const entries = Object.entries(obj).map(([key, val]) => {
-			const prop = schema.properties?.[key];
-			if (prop?.type == "object" && val != null) {
-				val = this.pruneObj(val, prop);
-				if (val == null) return null;
-			}
-			if (val === "" && prop?.nullable) val = null;
-			if (val == null || typeof val == "number" && Number.isNaN(val)) {
-				return prop?.nullable ? [key, null] : null;
-			} else {
-				return [key, val];
-			}
-		}).filter(entry => {
-			if (entry != null && entry[1] != null) allNulls = false;
-			return entry != null;
-		});
-		if (entries.length == 0 || allNulls) return null;
-		if (Array.isArray(obj)) {
-			return entries.map(([key, val]) => val);
-		} else {
-			const copy = {};
-			for (const [key, val] of entries) {
-				copy[key] = val;
-			}
-			return copy;
-		}
-	}
+
 	constructor(editor, node, type) {
 		this.node = node.appendChild(document.createElement('form'));
 		this.node.setAttribute('autocomplete', 'off');
@@ -284,7 +256,7 @@ class FormBlock {
 			if (e.type == "input" && ["checkbox", "radio", "select"].includes(e.target.type)) return; // change events only
 		}
 		const editor = this.editor;
-		let formData = FormBlock.pruneObj(this.form.get(), this.form.filteredSchema) ?? {};
+		let formData = this.form.get();
 		const mode = this.mode;
 		if (mode == "lock") formData = formData.lock ?? [];
 

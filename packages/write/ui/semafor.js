@@ -182,7 +182,7 @@ class Semafor {
 	get() {
 		const vals = Semafor.formGet(this.node);
 		const formVals = Semafor.unflatten(vals);
-		return this.convert(formVals, this.filteredSchema);
+		return this.convert(formVals, this.filteredSchema) || {};
 	}
 
 	set(obj) {
@@ -317,90 +317,98 @@ class Semafor {
 		}
 		return obj;
 	}
-	convert(vals, pfield) {
+
+	convert(vals, schema) {
 		const obj = {};
 		if (vals == null) return obj;
-		const schema = pfield.properties;
+		let allNulls = true;
 		for (const name of Object.keys(vals)) {
-			let field = schema[name];
+			let field = schema.properties[name];
 			let val = vals[name];
-			if (field) {
-				let type = field.type;
-				const listOf = Array.isArray(type) && type
-					|| Array.isArray(field.oneOf) && field.oneOf
-					|| Array.isArray(field.anyOf) && field.anyOf
-					|| null;
-				let nullable = Boolean(field.nullable);
-				if (listOf && !field.properties) {
-					// we support promotion to null and that's it
-					const listOfNo = listOf.filter(item => {
-						if (typeof item == "string") {
-							return item != "null";
-						} else {
-							return item.type != "null";
-						}
-					});
-					if (listOfNo.length != listOf.length) {
-						nullable = true;
-					}
-					if (listOfNo.length == 1) {
-						type = listOfNo[0].type || listOfNo[0];
-					} else if (listOfNo.every(item => item.const !== undefined)) {
-						// nothing
-					} else if (listOfNo.every(item => {
-						return item == "string" || item.type === undefined || item.type == "string";
-					})) {
-						type = "string";
+			if (!field) {
+				console.error("Cannot find schema for property", name, "of", schema);
+			}
+			let type = field.type;
+			let nullable = Boolean(field.nullable);
+			const listOf = Array.isArray(type) && type
+				|| Array.isArray(field.oneOf) && field.oneOf
+				|| Array.isArray(field.anyOf) && field.anyOf
+				|| null;
+
+			if (listOf && !field.properties) {
+				// we support promotion to null and that's it
+				const listOfNo = listOf.filter(item => {
+					if (typeof item == "string") {
+						return item != "null";
 					} else {
-						console.warn("Unsupported type in schema:", field);
+						return item.type != "null";
 					}
+				});
+				if (listOfNo.length != listOf.length) {
+					nullable = true;
 				}
-				switch (type) {
-					case "integer":
-						val = parseInt(val);
-						if (Number.isNaN(val) && nullable) val = null;
-						break;
-					case "number":
-						val = parseFloat(val);
-						if (Number.isNaN(val) && nullable) val = null;
-						break;
-					case "boolean":
-						if (val === "" && nullable) val = null; // not really useful
-						val = val == "true";
-						break;
-					case "object":
-						if (!field.properties) {
-							if (field.oneOf || field.anyOf) {
-								const listNoNull = (field.oneOf || field.anyOf).filter(
-									(item) => item.type != "null"
-								);
-								if (listNoNull.length == 1 && listNoNull[0].properties) {
-									field = listNoNull[0];
-								}
-							} else {
-								try {
-									val = val ? JSON.parse(val) : val;
-								} catch (ex) {
-									console.error(ex);
-								}
-							}
-						} else {
-							val = this.convert(val, field);
-						}
-						if (val != null && Object.keys(val).length == 0 && nullable) val = null;
-						break;
-					case "array":
-						if (typeof val == "string") {
-							val = val.split('\n').filter(str => str.length > 0);
-						}
-						break;
-					default:
-						if (nullable && val === "") val = null;
-						break;
+				if (listOfNo.length == 1) {
+					type = listOfNo[0].type || listOfNo[0];
+				} else if (listOfNo.every(item => item.const !== undefined)) {
+					// nothing
+				} else if (listOfNo.every(item => {
+					return item == "string" || item.type === undefined || item.type == "string";
+				})) {
+					type = "string";
+				} else {
+					console.warn("Unsupported type in schema:", field);
 				}
 			}
-			obj[name] = val;
+			switch (type) {
+				case "integer":
+					val = parseInt(val);
+					if (Number.isNaN(val) && nullable) val = null;
+					break;
+				case "number":
+					val = parseFloat(val);
+					if (Number.isNaN(val) && nullable) val = null;
+					break;
+				case "boolean":
+					val = val == "true";
+					break;
+				case "object":
+					if (!field.properties) {
+						if (field.oneOf || field.anyOf) {
+							const listNoNull = (field.oneOf || field.anyOf).filter(
+								(item) => item.type != "null"
+							);
+							if (listNoNull.length == 1 && listNoNull[0].properties) {
+								field = listNoNull[0];
+							}
+						} else {
+							try {
+								val = val ? JSON.parse(val) : val;
+							} catch (ex) {
+								console.error(ex);
+							}
+						}
+					} else {
+						val = this.convert(val, field);
+					}
+					if (val == null && !nullable) val = {};
+					break;
+				case "array":
+					if (typeof val == "string") {
+						val = val.split('\n').filter(str => str.length > 0);
+					}
+					break;
+				case "string":
+					if (nullable && val === "") val = null;
+					break;
+				default:
+					if (!listOf) console.warn("Unsupported schema type in convert", field);
+					break;
+			}
+			if (val != null) allNulls = false;
+			if (val === field.default);
+			else if (val != null || nullable) obj[name] = val;
 		}
+		if (allNulls) return;
 		return obj;
 	}
 	process(key, schema, node, parent) {
