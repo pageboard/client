@@ -42,8 +42,12 @@ class HTMLElementInputMap extends HTMLInputElement {
 		this.#table = null;
 	}
 	handleEvent(e) {
-		if (e.type == "change" && e.target != this) this.#changed(e);
-		else if (e.type == "input" || e.type == "focus") this.#focused(e);
+		if (e.type == "change" && e.target != this) {
+			// let focus happen first to save selection
+			setTimeout(() => this.#changed(e));
+		} else if (e.type == "input" || e.type == "focus") {
+			this.#focused(e);
+		}
 	}
 	#render(obj = {}) {
 		const flat = Pageboard.Semafor.flatten(obj);
@@ -57,14 +61,14 @@ class HTMLElementInputMap extends HTMLInputElement {
 			val.forEach((val, j) => {
 				body.appendChild(this.dom(`<tr>
 					<td><input class="ui input" name="!key-${name}.${i}-${j}" value="${key}" /></td>
-					<td><textarea  name="!val-${name}.${i}-${j}" is="semafor-textarea">${val}</textarea></td>
+					<td><textarea name="!val-${name}.${i}-${j}" is="semafor-textarea">${val}</textarea></td>
 				</tr>`));
 			});
 		});
 		this.#restoreSel();
 	}
 	#focused(e) {
-		if (e.target.matches('input')) {
+		if (e.target.matches('input,textarea')) {
 			this.#saveSel(e.target);
 		}
 	}
