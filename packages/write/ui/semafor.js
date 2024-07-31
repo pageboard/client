@@ -479,7 +479,7 @@ class Semafor {
 		const bool = !e.target.checked;
 		let node;
 		fieldset.disabled = bool;
-		for (node of fieldset.querySelectorAll('[name]')) {
+		for (node of fieldset.querySelectorAll('[name]:not(.nullable > fieldset)')) {
 			node.disabled = bool;
 		}
 		if (node) node.dispatchEvent(new Event("change", {
