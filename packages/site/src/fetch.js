@@ -9,16 +9,8 @@ export default function(method, url, data) {
 		},
 		credentials: "same-origin"
 	};
-	const langs = [];
-	const { languages = [] } = window.navigator;
-	for (const lang of languages ?? []) {
-		langs.push(lang);
-		const parts = lang.split('-');
-		if (parts.length > 1 && !languages.includes(parts[0])) {
-			langs.push(parts[0]);
-		}
-	}
-	if (langs.length) fetchOpts.headers['Accept-Language'] = langs.join(',');
+
+	fetchOpts.headers['Accept-Language'] = document.documentElement.lang;
 
 	if (method == "get" || method == "delete") {
 		url = Object.assign(Page.parse(url), {query: data}).toString();
