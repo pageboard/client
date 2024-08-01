@@ -263,8 +263,11 @@ class FormBlock {
 
 		const { $content: content } = formData;
 		delete formData.$content;
-		if (content) {
-			for (const key of Object.keys(content)) {
+		const contSchema = this.form.schema.properties.$content?.properties;
+
+		if (contSchema) {
+			for (const key of Object.keys(contSchema)) {
+				if (content[key] === undefined) content[key] = null;
 				if (content[key] != this.block.content[key]) same = false;
 			}
 		}
