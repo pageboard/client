@@ -3,6 +3,9 @@ class HTMLSemaforTextArea extends HTMLTextAreaElement {
 		super.value = str;
 		this.#resize();
 	}
+	get value() {
+		return super.value;
+	}
 	connectedCallback() {
 		this.addEventListener('input', this);
 	}

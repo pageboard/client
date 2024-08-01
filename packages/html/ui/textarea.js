@@ -3,6 +3,9 @@ class HTMLElementTextArea extends Page.create(HTMLTextAreaElement) {
 		super.value = str;
 		this.#resize();
 	}
+	get value() {
+		return super.value;
+	}
 	handleInput() {
 		this.#resize();
 	}
