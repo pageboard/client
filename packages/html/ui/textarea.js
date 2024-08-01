@@ -1,18 +1,15 @@
 class HTMLElementTextArea extends Page.create(HTMLTextAreaElement) {
-	handleChange(e, state) {
-		this.#resize(state);
+	set value(str) {
+		super.value = str;
+		this.#resize();
 	}
-	handleInput(e, state) {
-		this.#resize(state);
+	handleInput() {
+		this.#resize();
 	}
-	setup(state) {
-		this.#resize(state);
+	setup() {
+		this.#resize();
 	}
-	#resize(state) {
-		if (state.scope.$write) {
-			delete this.style.height;
-			return;
-		}
+	#resize() {
 		requestAnimationFrame(() => {
 			this.style.height = 0;
 			this.style.height = `calc(${this.scrollHeight}px + 1em)`;
