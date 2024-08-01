@@ -1,12 +1,12 @@
 class HTMLSemaforTextArea extends HTMLTextAreaElement {
-
-	connectedCallback() {
-		this.addEventListener('change', this);
-		this.addEventListener('input', this);
+	set value(str) {
+		super.value = str;
 		this.#resize();
 	}
+	connectedCallback() {
+		this.addEventListener('input', this);
+	}
 	disconnectedCallback() {
-		this.removeEventListener('change', this);
 		this.removeEventListener('input', this);
 	}
 	handleEvent(e) {
