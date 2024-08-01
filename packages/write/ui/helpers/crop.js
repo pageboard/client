@@ -183,18 +183,23 @@ Pageboard.schemaHelpers.crop = class Crop {
 
 		const x = 100 * (obj.x + obj.width / 2) / W;
 		if (!Number.isNaN(x)) crop.x = this.round(x);
+		else crop.x = 50;
 
 		const y = 100 * (obj.y + obj.height / 2) / H;
 		if (!Number.isNaN(y)) crop.y = this.round(y);
+		else crop.y = 50;
 
-		const w = 100 * obj.width / W;
+		const w = 100 * obj.width / W || 100;
 		if (!Number.isNaN(w)) crop.width = this.round(w);
+		else crop.width = 100;
 
-		const h = 100 * obj.height / H;
+		const h = 100 * obj.height / H || 100;
 		if (!Number.isNaN(h)) crop.height = this.round(h);
+		else crop.height = 100;
 
 		const z = 100 * obj.scaleX;
 		if (!Number.isNaN(z)) crop.zoom = this.round(z);
+		else crop.zoom = 100;
 		return crop;
 	}
 
