@@ -18,7 +18,7 @@ Object.assign(window.Pageboard, {
 		} else {
 			e = new Event(event, opts);
 		}
-		window.queueMicrotask(() => node.dispatchEvent(e));
+		window.queueMicrotask(async () => node.dispatchEvent(e));
 	},
 	uiLoad(what, p) {
 		const icon = what.querySelector('.icon:not(.buttons)');
