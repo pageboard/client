@@ -371,7 +371,7 @@ body[data-mode="read"] #pageboard-read > iframe {
 }
 
 #form .table.compact td > textarea {
-	height:1em;
+	height: 2em;
 	min-height: 0;
 	padding:0.31em;
 	border:0;

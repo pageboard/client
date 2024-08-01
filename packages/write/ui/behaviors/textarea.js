@@ -8,6 +8,7 @@ class HTMLSemaforTextArea extends HTMLTextAreaElement {
 	}
 	connectedCallback() {
 		this.addEventListener('input', this);
+		this.#resize();
 	}
 	disconnectedCallback() {
 		this.removeEventListener('input', this);
