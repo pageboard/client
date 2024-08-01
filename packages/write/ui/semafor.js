@@ -370,6 +370,7 @@ class Semafor {
 					break;
 				case "boolean":
 					val = val == "true";
+					if (!val && !field.default) val = undefined;
 					break;
 				case "object":
 					if (!field.properties) {
