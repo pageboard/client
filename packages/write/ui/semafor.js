@@ -362,11 +362,11 @@ class Semafor {
 			switch (type) {
 				case "integer":
 					val = parseInt(val);
-					if (Number.isNaN(val) && nullable) val = null;
+					if (Number.isNaN(val)) val = undefined;
 					break;
 				case "number":
 					val = parseFloat(val);
-					if (Number.isNaN(val) && nullable) val = null;
+					if (Number.isNaN(val)) val = undefined;
 					break;
 				case "boolean":
 					val = val == "true";
