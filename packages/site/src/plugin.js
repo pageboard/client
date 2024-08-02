@@ -17,9 +17,18 @@ export const filters = {
 export const hooks = {
 	before: {
 		get(ctx, val, [path]) {
-			if (path[0]?.startsWith('$') && ctx.$data == null) {
-				ctx.$data = ctx.data;
-				ctx.data = ctx.scope;
+			if (path[0]?.startsWith('$')) {
+				if (ctx.$data == null) {
+					ctx.$data = ctx.data;
+					ctx.data = ctx.scope;
+				}
+			} else if (ctx.scope.$element) {
+				const el = ctx.scope.$element;
+				const prop = ctx.expr.get(el, [''].concat(path).join('.properties.').split('.').slice(1));
+				if (prop) {
+					prop.$rendered = true;
+					if (val === undefined) return prop.default;
+				}
 			}
 		}
 	},
