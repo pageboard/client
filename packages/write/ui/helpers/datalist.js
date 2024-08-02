@@ -14,7 +14,7 @@ Pageboard.schemaHelpers.datalist = class Datalist {
 
 		const res = await Page.fetch('get', this.opts.url, {});
 		this.select.textContent = '';
-		this.select.append(`<option value="">--</option>
+		this.select.append(doc.dom`<option value="">--</option>
 			<option value="[item.data.lang]">[items|repeat:item|.content.]</option>`.fuse(res, Page.scope));
 
 		this.select.addEventListener('change', this.toInput.bind(this));
