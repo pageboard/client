@@ -7,7 +7,7 @@ class Semafor {
 			if (!key) continue;
 			if (key.startsWith('!')) continue;
 			if (elem.disabled) {
-				query.set(key, null);
+				query.set(key, elem.parentNode.matches('.fieldset.nullable') ? {} : null);
 				continue;
 			}
 			let old = query.get(key);
@@ -125,9 +125,10 @@ class Semafor {
 					break;
 				case 'file':
 					if (val) elem.setAttribute("value", val);
+					else elem.removeAttribute('value');
 					break;
 				default:
-					if (val) elem.value = val;
+					elem.value = val ?? null;
 			}
 		}
 	}
