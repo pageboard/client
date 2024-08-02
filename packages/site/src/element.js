@@ -57,7 +57,7 @@ export class CustomElement extends Element {
 					at: function (ctx, val) {
 						return ctx.raw;
 					},
-					prune: function (ctx, val) {
+					fail: function (ctx, val) {
 						return ctx.raw;
 					},
 					to: function (ctx, val) {
