@@ -8,7 +8,8 @@ import {
 	RepeatPlugin,
 	DomPlugin,
 	UrlPlugin,
-	JsonPlugin
+	JsonPlugin,
+	TextPlugin
 } from 'matchdom';
 
 import str2dom from '@pageboard/pagecut/src/str2dom.js';
@@ -20,27 +21,28 @@ import * as CustomPlugin from './plugin';
 const mSym = Matchdom.Symbols;
 const reFuse = new RegExp(`\\${mSym.open}[^\\${mSym.open}\\${mSym.close}]+\\${mSym.close}`);
 
-const dataMd = new Matchdom(
+const baseMd = new Matchdom(
 	StringPlugin,
 	OpsPlugin,
 	ArrayPlugin,
 	NumPlugin,
 	DatePlugin,
-	DomPlugin,
 	UrlPlugin,
-	CustomPlugin
-);
-
-const templateMd = dataMd.copy().extend(RepeatPlugin).extend({
-	types: {
-		query(ctx, obj) {
-			if (typeof obj == "string" && reFuse.test(obj)) return obj;
-			else return UrlPlugin.types.query(ctx, obj);
+	RepeatPlugin,
+	CustomPlugin,
+	{
+		types: {
+			query(ctx, obj) {
+				if (typeof obj == "string" && reFuse.test(obj)) return obj;
+				else return UrlPlugin.types.query(ctx, obj);
+			}
 		}
 	}
-});
+);
 
-const objectMd = templateMd.copy().extend(JsonPlugin);
+const domMd = baseMd.copy().extend(DomPlugin);
+const jsonMd = baseMd.copy().extend(JsonPlugin);
+const textMd = baseMd.copy().extend(TextPlugin);
 
 Document.prototype.dom = function() {
 	return str2dom(Array.prototype.join.call(arguments, '\n'), {
@@ -68,31 +70,31 @@ Node.prototype.dom = function() {
 	});
 };
 
-const fuse = (obj, data, scope) => {
-	const md = (scope.$filters || scope.$hooks || scope.$formats) ? new Matchdom(templateMd, {
+const fuse = (md, obj, data, scope) => {
+	md = (scope.$filters || scope.$hooks || scope.$formats) ? md.copy().extend({
 		filters: scope.$filters,
 		hooks: scope.$hooks,
 		formats: scope.$formats
-	}) : templateMd;
+	}) : md;
 	return md.merge(obj, data, scope);
 };
 
 Object.getPrototypeOf(Page.constructor).prototype.fuse = function (data, scope) {
 	if (!scope) console.warn("Missing scope param");
-	this.pathname = objectMd.merge(this.pathname, data, scope);
-	this.query = objectMd.merge(this.query, data, scope);
+	this.pathname = jsonMd.merge(this.pathname, data, scope);
+	this.query = jsonMd.merge(this.query, data, scope);
 	return this;
 };
 
 Node.prototype.fuse = function (data, scope) {
 	// eslint-disable-next-line no-console
 	if (!scope) console.warn("Missing scope param");
-	return fuse(this, data, scope);
+	return fuse(domMd, this, data, scope);
 };
 
 String.prototype.fuse = function(data, scope) {
 	if (data == null && scope == null) return reFuse.test(this.toString());
-	return fuse(this.toString(), data, scope);
+	return fuse(textMd, this.toString(), data, scope);
 };
 
 

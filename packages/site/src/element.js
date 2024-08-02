@@ -53,17 +53,6 @@ export class CustomElement extends Element {
 			if (typeof v != "string") return;
 			return v.fuse({}, {
 				$default: c,
-				$filters: {
-					at: function (ctx, val) {
-						return ctx.raw;
-					},
-					fail: function (ctx, val) {
-						return ctx.raw;
-					},
-					to: function (ctx, val) {
-						return ctx.raw;
-					}
-				},
 				$hooks: {
 					afterAll: function (ctx, val) {
 						if (ctx.expr.path[0] != "$default") {
