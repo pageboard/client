@@ -36,7 +36,7 @@ Pageboard.schemaHelpers.crop = class Crop {
 		this.valueChange = this.valueChange.bind(this);
 		this.valueFocus = this.valueFocus.bind(this);
 
-		this.debouncedChange = Page.debounce(async obj => this.change(obj), 500);
+		this.debouncedChange = Page.debounce(obj => this.change(obj), 500);
 
 		this.block = block;
 
