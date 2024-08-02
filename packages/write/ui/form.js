@@ -1,42 +1,29 @@
 class FormBlock {
-	static propToMeta(schema) {
-		const copy = {};
-		let hint = '';
-		if (schema.discriminator) {
-			Object.assign(copy, schema);
-			delete copy.required;
-		} else if (schema.properties) {
+	static schemaToMeta(schema) {
+		const copy = {
+			title: schema.title,
+			nullable: true,
+			placeholder: schema.format ?? schema.pattern ?? schema.type
+		};
+		if (schema.anyOf) copy.placeholder = 'any of';
+		if (schema.oneOf) copy.placeholder = 'one of';
+		if (schema.type == "object" || schema.properties) {
 			copy.type = 'object';
-			copy.properties = Object.assign({}, schema.properties);
-		} else if (schema.type == "array") {
-			if (!schema.items) {
-				// this is probably an error, skip
-				copy.type = 'string';
-			} else if (Array.isArray(schema.items)) {
-				copy.type = 'array';
-				copy.items = schema.items;
-			} else {
-				copy.type = 'string';
-			}
-		} else if (schema.type || schema.anyOf || schema.oneOf) {
-			if (schema.type) {
-				hint = schema.type;
-			} else if (schema.anyOf) {
-				hint = 'any of: ' + schema.anyOf.map(item => item.const).join(', ');
-			} else if (schema.oneOf) {
-				hint = 'one of: ' + schema.oneOf.map(item => item.const).join(', ');
-			}
-			copy.type = 'string';
-			copy.format = schema.type == "object" ? null : 'singleline';
-			if (schema.pattern) hint = schema.pattern;
-			else if (schema.format) hint = schema.format;
-		} else {
-			return Object.assign({}, schema);
+			copy.properties = schema.properties;
+			return copy;
+		} else if (!schema.$rendered || schema.$attr) {
+			// //FIXME block.expr stores only data expressions
+			return {};
 		}
-		if (schema.default !== undefined) hint += ` (default: ${schema.default})`;
-		copy.placeholder = hint;
-		copy.title = schema.title;
-		copy.nullable = true;
+		if (schema.type == "array") {
+			copy.type = 'array';
+			copy.items = { type: 'string' };
+		} else if (schema.const) {
+			// makes no sense to allow expressions in there
+			return;
+		} else {
+			copy.type = 'string';
+		}
 		return copy;
 	}
 
@@ -95,7 +82,7 @@ class FormBlock {
 
 		if (!sameData || !sameMode) {
 			const schema = { ...this.el, type: 'object' };
-			if (this.el.contents.attrs.length) {
+			if (mode == "data" && this.el.contents.attrs.length) {
 				const contentProps = {};
 				schema.properties = {
 					...schema.properties,
@@ -118,6 +105,7 @@ class FormBlock {
 				helper: this.customHelper.bind(this),
 				schemas: Pageboard.schemas
 			});
+			else form.schema = schema;
 
 			if (!sameMode || Object.keys(this.filters).length > 0) {
 				form.update(form.schema);
@@ -243,7 +231,7 @@ class FormBlock {
 			prop = inst.update?.(this.block, prop, this.form) || prop;
 		}
 		if (this.mode == "expr") {
-			prop = FormBlock.propToMeta(prop);
+			prop = FormBlock.schemaToMeta(prop);
 		}
 		return prop;
 	}
@@ -265,7 +253,7 @@ class FormBlock {
 		delete formData.$content;
 		const contSchema = this.form.schema.properties.$content?.properties;
 
-		if (contSchema) {
+		if (content && contSchema) {
 			for (const key of Object.keys(contSchema)) {
 				if (content[key] === undefined) content[key] = null;
 				if (content[key] != this.block.content[key]) same = false;
