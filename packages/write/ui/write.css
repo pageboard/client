@@ -206,8 +206,6 @@ body[data-mode="read"] #pageboard-read > iframe {
 	margin-bottom: -0.9em;
 }
 #form .array.fieldset > fieldset > legend {
-	margin-left:0;
-	direction: rtl;
 }
 #form .array.fieldset > fieldset > legend > label,
 #form .array.fieldset > legend {
@@ -227,10 +225,8 @@ body[data-mode="read"] #pageboard-read > iframe {
 	margin-left: 0.4em;
 }
 #form .array.fieldset > .field > label {
-	display:none;
 }
 #form .array.fieldset > fieldset > .field > label {
-	display:none;
 }
 #form .nullable.fieldset.array {
 	margin-bottom:0.5em;
