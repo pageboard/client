@@ -406,7 +406,7 @@ class Semafor {
 					break;
 			}
 			if (val != null) allNulls = false;
-			if (val != null || field.default != null) obj[name] = val;
+			if (val != null || field.default != null && nullable) obj[name] = val;
 		}
 		if (allNulls) return;
 		return obj;
