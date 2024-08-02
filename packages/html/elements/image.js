@@ -128,7 +128,7 @@ exports.image = {
 	}, {
 		id: 'alt',
 		title: 'Alternative Text',
-		name: 'data-alt',
+		$attr: 'data-alt',
 		$helper: {
 			name: 'describe'
 		}
