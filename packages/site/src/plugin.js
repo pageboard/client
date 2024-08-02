@@ -24,11 +24,8 @@ export const hooks = {
 				}
 			} else if (ctx.scope.$element) {
 				const el = ctx.scope.$element;
-				const prop = ctx.expr.get(el, [''].concat(path).join('.properties.').split('.').slice(1));
-				if (prop) {
-					prop.$rendered = true;
-					if (val === undefined) return prop.default;
-				}
+				el.$rendered ??= new Set();
+				el.$rendered.add(path.join('.'));
 			}
 		}
 	},

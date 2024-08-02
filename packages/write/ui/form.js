@@ -1,5 +1,5 @@
 class FormBlock {
-	static schemaToMeta(schema) {
+	static schemaToMeta(schema, rendered) {
 		const copy = {
 			title: schema.title,
 			nullable: true,
@@ -11,7 +11,7 @@ class FormBlock {
 			copy.type = 'object';
 			copy.properties = schema.properties;
 			return copy;
-		} else if (!schema.$rendered || schema.$attr) {
+		} else if (!rendered || schema.$attr) {
 			// //FIXME block.expr stores only data expressions
 			return {};
 		}
@@ -231,7 +231,7 @@ class FormBlock {
 			prop = inst.update?.(this.block, prop, this.form) || prop;
 		}
 		if (this.mode == "expr") {
-			prop = FormBlock.schemaToMeta(prop);
+			prop = FormBlock.schemaToMeta(prop, this.el.$rendered?.has(key));
 		}
 		return prop;
 	}
