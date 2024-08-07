@@ -1,6 +1,7 @@
 class HTMLElementInputMap extends HTMLInputElement {
 	#table;
 	#selection;
+	#value;
 
 	constructor() {
 		super();
@@ -8,22 +9,13 @@ class HTMLElementInputMap extends HTMLInputElement {
 		this.hidden = true;
 	}
 
-	#parse(str) {
-		try {
-			return JSON.parse(str || '{}');
-		} catch (ex) {
-			console.error(ex);
-		}
-	}
-
 	get value() {
-		return this.getAttribute('value');
+		return this.#value;
 	}
 
-	set value(str) {
-		if (str == this.getAttribute('value')) return;
-		this.setAttribute('value', str);
-		this.#render(this.#parse(str));
+	set value(obj) {
+		this.#value = obj;
+		this.#render(obj);
 	}
 	connectedCallback() {
 		this.#table = this.parentNode.insertBefore(this.dom(`<table class="ui very compact celled striped attached table">
@@ -32,7 +24,6 @@ class HTMLElementInputMap extends HTMLInputElement {
 		this.#table.addEventListener('change', this, false);
 		this.#table.addEventListener('input', this, false);
 		this.#table.addEventListener('focus', this, true);
-		this.#render(this.#parse(this.value));
 	}
 	disconnectedCallback() {
 		this.#table.removeEventListener('focus', this, true);
@@ -49,13 +40,13 @@ class HTMLElementInputMap extends HTMLInputElement {
 			this.#focused(e);
 		}
 	}
-	#render(obj = {}) {
-		const flat = Pageboard.Semafor.flatten(obj);
+	#render(obj) {
+		if (!obj) obj = new Map();
 		const body = this.#table.querySelector('tbody');
 		body.textContent = '';
 		const name = this.name;
-		Object.keys(flat).concat([""]).forEach((key, i) => {
-			let val = flat[key];
+		const flats = Pageboard.Semafor.flatten(Object.fromEntries(obj.entries()));
+		Object.entries(flats).concat([["", null]]).forEach(([key, val], i) => {
 			if (val === undefined || val === null) val = '';
 			if (!Array.isArray(val)) val = [val];
 			val.forEach((val, j) => {
@@ -68,7 +59,7 @@ class HTMLElementInputMap extends HTMLInputElement {
 		this.#restoreSel();
 	}
 	#focused(e) {
-		if (e.target.matches('input,textarea')) {
+		if (e.target?.matches('input,textarea')) {
 			this.#saveSel(e.target);
 		}
 	}
@@ -109,7 +100,7 @@ class HTMLElementInputMap extends HTMLInputElement {
 				removals.push(tr);
 			}
 		}
-		this.value = JSON.stringify(Pageboard.Semafor.unflatten(map));
+		this.#value = map;
 		for (const node of removals) node.remove();
 		Pageboard.trigger(this, 'change');
 	}

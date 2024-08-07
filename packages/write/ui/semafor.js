@@ -67,7 +67,7 @@ class Semafor {
 			ret ??= {};
 			for (const [key, val] of Object.entries(obj)) {
 				const cur = `${pre || ""}${key}`;
-				if (val == null || typeof val != "object" || Array.isArray(val)) {
+				if (val == null || typeof val != "object" || Array.isArray(val) || val instanceof Map) {
 					ret[cur] = val;
 				} else if (typeof val == "object") {
 					asPaths(val, ret, cur + '.');
@@ -265,7 +265,7 @@ class Semafor {
 					val = {};
 				}
 			}
-			if (val != null && typeof val == "object") {
+			if (val != null && typeof val == "object" && !(val instanceof Map)) {
 				if (field && !field.properties && (field.oneOf || field.anyOf)) {
 					const listNoNull = (field.oneOf || field.anyOf).filter(item => {
 						return item.type != "null";
@@ -303,7 +303,7 @@ class Semafor {
 						}
 						continue;
 					} else if (!field?.properties && !field.oneOf && !field.anyOf) {
-						obj[key] = Object.isEmpty(val) ? null : JSON.stringify(val);
+						obj[key] = Object.isEmpty(val) ? null : new Map(Object.entries(val));
 						continue;
 					}
 				} else {
@@ -382,12 +382,8 @@ class Semafor {
 							if (listNoNull.length == 1 && listNoNull[0].properties) {
 								field = listNoNull[0];
 							}
-						} else {
-							try {
-								val = val ? JSON.parse(val) : val;
-							} catch (ex) {
-								console.error(ex);
-							}
+						} else if (val instanceof Map) {
+							val = Object.fromEntries(val.entries());
 						}
 					} else {
 						val = this.convert(val, field);
