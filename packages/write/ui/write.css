@@ -271,12 +271,12 @@ body[data-mode="read"] #pageboard-read > iframe {
 #form .inline.fields {
 	margin-top: 0.5em;
 	position: relative;
+	align-items: center;
 }
 #form .field > label {
 	margin-bottom:0;
 	position: relative;
 	flex: 1 0 auto;
-	line-height: 1.3em;
 }
 
 #form .field > label.ui.checkbox > span {
