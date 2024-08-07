@@ -403,7 +403,9 @@ class Semafor {
 					if (nullable && val === "") val = null;
 					break;
 				default:
-					if (!listOf) console.warn("Unsupported schema type in convert", field);
+					if (!listOf && field.const === undefined) {
+						console.warn("Unsupported schema type in convert", field);
+					}
 					break;
 			}
 			if (val != null) allNulls = false;
