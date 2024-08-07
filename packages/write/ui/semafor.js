@@ -79,7 +79,7 @@ class Semafor {
 
 		for (let i = 0; i < form.elements.length; i++) {
 			const elem = form.elements[i];
-			if (!elem.name) continue;
+			if (!elem.name || elem.readOnly) continue;
 			if (elem.name.startsWith('!')) continue;
 			let val = flats[elem.name];
 			if (elem.parentNode.matches('.fieldset.nullable')) {
@@ -856,6 +856,7 @@ Semafor.types.const = function (key, schema, node, inst) {
 	if (!schema.title) field.classList.add('hidden');
 	else input.hidden = true;
 	input.setAttribute('value', schema.const);
+	input.readOnly = true;
 	return field;
 };
 
