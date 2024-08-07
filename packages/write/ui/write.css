@@ -153,10 +153,11 @@ body[data-mode="read"] #pageboard-read > iframe {
 	margin: 0 -0.5rem 1rem !important;
 }
 .wide.bottom {
-	width: calc(100% + 1em);
-	position: sticky !important;
-	margin: -0.5em !important;
-	bottom: -0.5em !important;
+	width: calc(358px - 1.5em);
+	margin: 0 !important;
+	bottom: 0 !important;
+	display: block;
+	position: fixed !important;
 }
 
 .ui .left.icon {
