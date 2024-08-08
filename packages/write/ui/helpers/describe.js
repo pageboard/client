@@ -17,7 +17,7 @@ Pageboard.schemaHelpers.describe = class Describe {
 	}
 
 	update(block) {
-		this.#url = block.data[this.opts.property ?? 'url'];
+		this.#url = block.data?.[this.opts.property ?? 'url'];
 		this.button.disabled = !this.#url;
 	}
 

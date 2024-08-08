@@ -230,6 +230,7 @@ export default class Blocks extends BlocksView {
 		for (const attr of elt.contents.attrs ?? []) {
 			const name = attr.name ?? attr.id;
 			if (dom.hasAttribute(name)) {
+				if (!block.content) block.content = {};
 				block.content[attr.id] = dom.getAttribute(name);
 			}
 		}

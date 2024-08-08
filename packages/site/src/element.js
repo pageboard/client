@@ -86,7 +86,7 @@ export class CustomElement extends Element {
 		}
 		if (el.contents.attrs.length) {
 			for (const attr of el.contents.attrs) {
-				if (block.content[attr.id] != null) {
+				if (block.content?.[attr.id] != null) {
 					dom.setAttribute(attr.$attr ?? attr.id, block.content[attr.id]);
 				}
 			}
