@@ -57,7 +57,6 @@ class HTMLElementCarousel extends Page.Element {
 	}
 
 	handleClick(e, state) {
-		// FIXME
 		const node = e.target.closest('.fullview[role="button"]');
 		if (!node) return;
 		e.stopImmediatePropagation();
@@ -70,7 +69,7 @@ class HTMLElementCarousel extends Page.Element {
 			delete query[`${this.id}.index`];
 			delete query[keyFv];
 		} else if (this.options.fullview) {
-			delete query[keyFv];
+			query[keyFv] = this.dataset.fullview == "true" ? null : undefined;
 		} else {
 			query[keyFv] = true;
 		}
