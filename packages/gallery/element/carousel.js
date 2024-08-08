@@ -112,7 +112,7 @@ exports.carousel = {
 		'../ui/carousel.css'
 	],
 	scripts: [
-		'../lib/carousel.js'
+		'../ui/carousel.js'
 	]
 };
 

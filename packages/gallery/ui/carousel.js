@@ -57,6 +57,7 @@ class HTMLElementCarousel extends Page.Element {
 	}
 
 	handleClick(e, state) {
+		// FIXME
 		const node = e.target.closest('.fullview[role="button"]');
 		if (!node) return;
 		e.stopImmediatePropagation();
