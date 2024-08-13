@@ -16,11 +16,6 @@ class HTMLElementLayout extends Page.create(HTMLDivElement) {
 		}
 		const srcLoc = Page.parse(this.options.src);
 		const reqSrc = this.requestSrc(srcLoc);
-		try {
-			this.currentSrc = reqSrc;
-		} catch (e) {
-			// pass
-		}
 		if (!reqSrc) {
 			this.style.backgroundImage = '';
 		} else if (reqSrc != this.currentSrc) {
@@ -31,7 +26,7 @@ class HTMLElementLayout extends Page.create(HTMLDivElement) {
 			img.addEventListener('error',
 				e => this.#defer.reject(new Error(this.currentSrc))
 			);
-			img.src = reqSrc;
+			img.src = this.currentSrc = reqSrc;
 			this.style.backgroundImage = `url("${reqSrc}")`;
 			return this.#defer;
 		}
