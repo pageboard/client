@@ -52,13 +52,13 @@ class HTMLElementMailImage extends Page.create(HTMLImageElement) {
 				r.width = w;
 				r.height = h;
 			} else {
-				const rect = this.getBoundingClientRect();
-				r.width = rect.width;
-				r.height = rect.height;
+				const { clientWidth, clientHeight } = this.offsetParent ?? {};
+				r.width = clientWidth;
+				r.height = clientHeight;
 			}
 		}
-		if (!r.width && !r.height) {
-			// don't show
+		if (this.classList.toggle("no-size", !r.width && !r.height)) {
+			// Image container must have dimensions
 			return;
 		}
 		if (crop.x != 50 || crop.y != 50 || crop.w != 100 || crop.h != 100) {

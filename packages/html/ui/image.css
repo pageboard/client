@@ -8,6 +8,10 @@ element-image {
 	min-height: auto;
 }
 
+element-image.no-size::after {
+	content: "⤡" !important;
+}
+
 element-image > [block-content="legend"] {
 	position:absolute;
 	font-size:0.8rem;
