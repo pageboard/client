@@ -16,10 +16,10 @@ exports.fetch = {
 		data-auto="[auto]"
 		data-offset-name="[action?.request?.offset|as:expressions]"
 		parameters="[action?.request|as:expressions]"
-		success="[redirection.parameters|as:query]"
-		badrequest="[badrequest.parameters|as:query]"
-		unauthorized="[unauthorized.parameters|as:query]"
-		notfound="[notfound.parameters|as:query]"
+		success="[redirection.parameters|as:query|as:null]"
+		badrequest="[badrequest.parameters|as:query|as:null]"
+		unauthorized="[unauthorized.parameters|as:query|as:null]"
+		notfound="[notfound.parameters|as:query|as:null]"
 	><template block-content="template"></template></element-template>`,
 	unique: ["name"],
 	properties: {
