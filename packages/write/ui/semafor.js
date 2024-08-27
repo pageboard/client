@@ -98,7 +98,7 @@ class Semafor {
 				case 'checkbox':
 					if (val == null) val = [''];
 					else if (!Array.isArray(val)) val = [val];
-					elem.checked = val.some(val => val.toString() == elem.value);
+					elem.checked = val.some(val => (val ?? '').toString() == elem.value);
 					break;
 				case 'select-one':
 					if (val) {
@@ -393,9 +393,15 @@ class Semafor {
 				case "array":
 					if (!Array.isArray(val)) val = val != null ? [val] : [];
 					if (Array.isArray(field.items)) {
-						val = field.items.map((itemField, i) => this.convert(val[i], itemField));
+						val = field.items.map((itemField, i) => this.convert({ item: val[i] }, {
+							properties: { item: itemField }
+						}).item);
 					} else {
-						val = val.map(v => this.convert(v, field.items));
+						val = val.map(v => this.convert({ item: v }, {
+							properties: {
+								item: field.items
+							}
+						}).item);
 					}
 					if (field.nullable && val.length == 0) val = null;
 					break;
