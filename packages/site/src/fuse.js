@@ -44,8 +44,8 @@ const domMd = baseMd.copy().extend(DomPlugin);
 const jsonMd = baseMd.copy().extend(JsonPlugin);
 const textMd = baseMd.copy().extend(TextPlugin);
 
-Document.prototype.dom = function() {
-	return str2dom(Array.prototype.join.call(arguments, '\n'), {
+Document.prototype.dom = function (strings, ...substitutions) {
+	return str2dom(String.raw({ raw: strings }, ...substitutions), {
 		doc: this
 	});
 };
@@ -63,8 +63,8 @@ Document.prototype.fuse = XMLDocument.prototype.fuse = function(obj, scope) {
 	return this;
 };
 
-Node.prototype.dom = function() {
-	return str2dom(Array.prototype.join.call(arguments, '\n'), {
+Node.prototype.dom = function (strings, ...substitutions) {
+	return str2dom(String.raw({ raw: strings }, ...substitutions), {
 		doc: this.ownerDocument,
 		ns: this.namespaceURI
 	});
