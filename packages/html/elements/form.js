@@ -89,8 +89,7 @@ exports.api_form = {
 			title: 'Hidden',
 			description: 'Hidden and disabled\nShown by $query.toggle',
 			type: 'boolean',
-			default: false,
-			context: 'template'
+			default: false
 		},
 		action: {
 			title: 'Action',
