@@ -103,13 +103,13 @@ exports.input_submit = {
 		action: {
 			title: 'Action',
 			type: 'string',
-			format: 'name',
+			format: 'pathname',
 			nullable: true,
-			$filter: {
+			$helper: {
 				name: 'datalist',
 				url: '/@api/block/search?type=api_form&limit=20&data.name:not&order=data.name',
-				value: '/@api/form/[item.data.name]',
-				title: '[item.data.name]'
+				value: '/@api/form/[data.name]',
+				title: '[$services.[data.action.method|enc:path].title] / [data.name|else:id]'
 			}
 		},
 		name: {

@@ -322,7 +322,9 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 			form.disable();
 			form.classList.add('loading');
 			scope.$response = await state.fetch(
-				form.method, form.getAttribute('action'), scope.$request
+				form.method,
+				e.submitter?.getAttribute('formaction') || form.action,
+				scope.$request
 			);
 		} catch (err) {
 			scope.$response = err;
