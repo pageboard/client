@@ -1,5 +1,14 @@
 (function(Pageboard) {
-
+Object.defineProperty(Page.scope.constructor.prototype, '$services', {
+	configurable: true,
+	enumerable: true,
+	get() {
+		return Pageboard.schemas?.services?.definitions ?? {};
+	},
+	set(v) {
+		// do nothing
+	}
+});
 Page.patch(state => {
 	// write mode accepts all params at the moment
 	for (const key of Object.keys(state.query)) {
