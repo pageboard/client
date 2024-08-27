@@ -2,6 +2,11 @@ exports.attachment = {
 	title: "Attach",
 	icon: '<i class="icon file"></i>',
 	properties: {
+		link: {
+			title: 'Link',
+			type: 'boolean',
+			default: false
+		},
 		filename: {
 			title: 'File name',
 			type: 'string',
@@ -22,6 +27,5 @@ exports.attachment = {
 	contents: "text*",
 	inline: true,
 	group: "mail_inline",
-	html: '<a href="[href]" download="[filename]"></a>'
+	html: '<a href="[href]" download="[filename]" target=[link|alt:_blank]></a>'
 };
-

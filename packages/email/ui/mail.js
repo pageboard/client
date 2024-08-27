@@ -42,7 +42,7 @@ Page.constructor.serialize = function (state, type) {
 	}
 
 	const attachments = [];
-	for (const node of doc.querySelectorAll('a[download]')) {
+	for (const node of doc.querySelectorAll('a[download]:not([target])')) {
 		attachments.push({
 			filename: node.download,
 			href: node.href
