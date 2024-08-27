@@ -224,6 +224,7 @@ body[data-mode="read"] #pageboard-read > iframe {
 }
 #form .array.fieldset > fieldset > legend > label > input + span::before {
 	margin-left: 0.4em;
+	background-color: white;
 }
 #form .array.fieldset > .field > label {
 }
