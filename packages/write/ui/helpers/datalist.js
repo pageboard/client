@@ -11,11 +11,10 @@ Pageboard.schemaHelpers.datalist = class Datalist {
 		this.field.classList.add('inline');
 		this.select = doc.dom`<select class="ui compact dropdown"></select>`;
 		this.field.appendChild(this.select);
-
 		const res = await Page.fetch('get', this.opts.url, {});
 		this.select.textContent = '';
 		this.select.append(doc.dom`<option value="">--</option>
-			<option value="[item.data.lang]">[items|repeat:item|.content.]</option>`.fuse(res, Page.scope));
+			<option value="${this.opts.value}">[items|repeat:item]${this.opts.title}</option>`.fuse(res, Page.scope));
 
 		this.select.addEventListener('change', this.toInput.bind(this));
 		this.update(block);
