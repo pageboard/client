@@ -13,8 +13,7 @@ exports.input_button = {
 			title: 'Type',
 			default: 'submit',
 			anyOf: [{
-				title: 'Submit',
-				const: 'submit'
+				const: 'submit' // deprecated
 			}, {
 				title: 'Reset',
 				const: 'reset'
@@ -84,6 +83,93 @@ exports.input_button = {
 		}
 	},
 	html: '<button type="[type]" form="[form]" disabled="[disabled]" class="ui [full|alt:fluid:] [icon] [compact] [float|post:%20floated] button" name="[name]" value="[value]">[type|schema:title]</button>',
+	stylesheets: [
+		'../ui/components/button.css',
+		'../ui/button.css'
+	]
+};
+
+exports.input_submit = {
+	title: 'Submit',
+	icon: '<i class="icons"><i class="hand pointer icon"></i><i class="corner write icon"></i></i>',
+	menu: "form",
+	group: "block input_field",
+	context: 'form//',
+	contents: {
+		nodes: "inline*",
+		marks: "nolink"
+	},
+	properties: {
+		action: {
+			title: 'Action',
+			type: 'string',
+			format: 'name',
+			nullable: true,
+			$filter: {
+				name: 'datalist',
+				url: '/@api/block/search?type=api_form&limit=20&data.name:not&order=data.name',
+				value: '/@api/form/[item.data.name]',
+				title: '[item.data.name]'
+			}
+		},
+		name: {
+			title: "Name",
+			description: "The form object key",
+			type: "string",
+			format: "singleline"
+		},
+		value: {
+			title: "Default value",
+			nullable: true,
+			type: "string",
+			format: "singleline"
+		},
+		form: {
+			title: 'Target form',
+			type: 'string',
+			format: 'name',
+			nullable: true,
+			$filter: {
+				name: 'action',
+				action: 'write'
+			}
+		},
+		disabled: {
+			title: 'Disabled',
+			type: 'boolean',
+			default: false
+		},
+		full: {
+			title: 'Fluid',
+			type: 'boolean',
+			default: false
+		},
+		icon: {
+			title: 'Icon',
+			type: 'boolean',
+			default: false
+		},
+		compact: {
+			title: 'Compact',
+			type: 'boolean',
+			default: false
+		},
+		float: {
+			title: 'Float',
+			anyOf: [{
+				type: 'null',
+				title: 'No'
+			}, {
+				const: 'left',
+				title: 'Left'
+			}, {
+				const: 'right',
+				title: 'Right'
+			}],
+			default: null
+		}
+	},
+	html: '<button type="submit" formaction="[action]" form="[form]" disabled="[disabled]" class="ui [full|alt:fluid:] [icon] [compact] [float|post:%20floated] button" name="[name]" value="[value]">Submit</button>',
 	stylesheets: [
 		'../ui/components/button.css',
 		'../ui/button.css'
