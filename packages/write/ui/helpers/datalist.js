@@ -11,10 +11,13 @@ Pageboard.schemaHelpers.datalist = class Datalist {
 		this.field.classList.add('inline');
 		this.select = doc.dom`<select class="ui compact dropdown"></select>`;
 		this.field.appendChild(this.select);
-		const res = await Page.fetch('get', this.opts.url, {});
+		const url = new URL(this.opts.url, document.location);
+		const res = await Page.fetch('get', url.pathname, Object.fromEntries(
+			url.searchParams
+		));
 		this.select.textContent = '';
 		this.select.append(doc.dom`<option value="">--</option>
-			<option value="${this.opts.value}">[items|repeat:item]${this.opts.title}</option>`.fuse(res, Page.scope));
+			<option value="${this.opts.value}">[items|repeat:]${this.opts.title}</option>`.fuse(res, Page.scope));
 
 		this.select.addEventListener('change', this.toInput.bind(this));
 		this.update(block);
