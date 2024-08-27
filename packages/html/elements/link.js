@@ -30,8 +30,8 @@ exports.link = {
 			$helper: {
 				name: 'datalist',
 				url: '/@api/translate/languages',
-				value: '[item.data.lang]',
-				title: '[item.content.]'
+				value: '[data.lang]',
+				title: '[content.]'
 			}
 		},
 		id: {
@@ -78,8 +78,8 @@ exports.link_button = {
 			$helper: {
 				name: 'datalist',
 				url: '/@api/translate/languages',
-				value: '[item.data.lang]',
-				title: '[item.content.]'
+				value: '[data.lang]',
+				title: '[content.]'
 			}
 		},
 		full: {
