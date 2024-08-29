@@ -36,16 +36,16 @@
     "postinstall-patch": "^0.7.2",
     "prosemirror-commands": "1.6.0",
     "prosemirror-dropcursor": "1.8.1",
-    "prosemirror-example-setup": "1.2.2",
+    "prosemirror-example-setup": "1.2.3",
     "prosemirror-gapcursor": "1.3.2",
     "prosemirror-history": "1.4.1",
     "prosemirror-inputrules": "1.4.0",
     "prosemirror-keymap": "1.2.2",
     "prosemirror-menu": "1.2.4",
-    "prosemirror-model": "1.22.2",
+    "prosemirror-model": "1.22.3",
     "prosemirror-state": "1.4.3",
-    "prosemirror-transform": "1.9.0",
-    "prosemirror-view": "1.33.9"
+    "prosemirror-transform": "1.10.0",
+    "prosemirror-view": "1.34.1"
   },
   "prepare": {
     "prosemirror-model": "patch patches/prosemirror-model-pr-39.patch",
