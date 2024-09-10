@@ -42,6 +42,7 @@
     "./src/editor.js": "bundle lib/pagecut/"
   },
   "pageboard": {
+    "version": "^0.15",
     "priority": -1000,
     "directories": [
       "elements",

@@ -26,6 +26,7 @@
     "@pageboard/flickity/css/flickity.css": "copy lib/"
   },
   "pageboard": {
+    "version": "^0.15",
     "directories": [
       "element",
       "lib",

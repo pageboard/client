@@ -30,6 +30,7 @@
     ".": "bundle --extend=true --name=window lib/"
   },
   "pageboard": {
+    "version": "^0.15",
     "priority": -100,
     "elements": [
       "elements/"

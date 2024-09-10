@@ -29,6 +29,7 @@
     "./src/input-ocr.js": "bundle lib/"
   },
   "pageboard": {
+    "version": "^0.15",
     "directories": [
       "elements",
       "lib",

@@ -23,6 +23,7 @@
   },
   "prepare": {},
   "pageboard": {
+    "version": "^0.15",
     "directories": [
       "element",
       "lib",
