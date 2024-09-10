@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "postinstall",
     "prepare": "postinstall"
   },
   "repository": {
@@ -21,11 +22,13 @@
     "postinstall": "^0.10.3",
     "postinstall-bundle": "^0.9.4"
   },
-  "prepare": {
+  "postinstall": {
     "tesseract.js/dist/worker.min.js": "link lib/",
     "tesseract.js-core/*.wasm.js": "link lib/core/",
     "@tesseract.js-data/fra/*_best_int/*.traineddata.gz": "link lib/data/",
-    "@tesseract.js-data/eng/*_best_int/*.traineddata.gz": "link lib/data/",
+    "@tesseract.js-data/eng/*_best_int/*.traineddata.gz": "link lib/data/"
+  },
+  "prepare": {
     "./src/input-ocr.js": "bundle lib/"
   },
   "pageboard": {
@@ -40,7 +43,7 @@
   "dependencies": {
     "@tesseract.js-data/eng": "^1.0.0",
     "@tesseract.js-data/fra": "^1.0.0",
-    "tesseract.js": "^5.0.5",
-    "tesseract.js-core": "^5.1.0"
+    "tesseract.js": "^5.1.1",
+    "tesseract.js-core": "^5.1.1"
   }
 }
