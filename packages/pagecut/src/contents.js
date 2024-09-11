@@ -5,7 +5,8 @@ export default class Contents {
 		else if (!Array.isArray(list)) list = [list];
 		this.attrs = [];
 		list = list.filter(c => {
-			if (!c.nodes && !c.marks) {
+			if (!c.nodes) {
+				if (!c.marks) console("contents has marks without nodes", list);
 				this.attrs.push(c);
 			} else {
 				return true;
