@@ -1,6 +1,6 @@
 {
   "name": "@pageboard/write",
-  "version": "0.15.17",
+  "version": "0.16.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -42,7 +42,7 @@
     "./src/editor.js": "bundle lib/pagecut/"
   },
   "pageboard": {
-    "version": "^0.15",
+    "version": "^0.16",
     "priority": -1000,
     "directories": [
       "elements",

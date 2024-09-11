@@ -1,6 +1,6 @@
 {
   "name": "@pageboard/html",
-  "version": "0.15.14",
+  "version": "0.16.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -31,7 +31,7 @@
     "nouislider/dist/nouislider.css": "copy lib/"
   },
   "pageboard": {
-    "version": "^0.15",
+    "version": "^0.16",
     "priority": -10,
     "directories": [
       "elements",

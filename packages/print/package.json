@@ -1,6 +1,6 @@
 {
   "name": "@pageboard/print",
-  "version": "0.15.1",
+  "version": "0.16.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/pageboard/client#readme",
   "pageboard": {
-    "version": "^0.15",
+    "version": "^0.16",
     "priority": -1,
     "directories": [
       "elements",

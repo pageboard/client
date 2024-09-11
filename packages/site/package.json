@@ -1,6 +1,6 @@
 {
   "name": "@pageboard/site",
-  "version": "0.15.20",
+  "version": "0.16.0",
   "description": "",
   "main": "src/pageboard.js",
   "scripts": {
@@ -30,7 +30,7 @@
     ".": "bundle --extend=true --name=window lib/"
   },
   "pageboard": {
-    "version": "^0.15",
+    "version": "^0.16",
     "priority": -100,
     "elements": [
       "elements/"

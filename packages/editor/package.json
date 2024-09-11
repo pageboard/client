@@ -1,6 +1,6 @@
 {
   "name": "@pageboard/editor",
-  "version": "0.15.4",
+  "version": "0.16.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -30,7 +30,7 @@
     "@pageboard/pagecut/src/*.css": "copy lib/"
   },
   "pageboard": {
-    "version": "^0.15",
+    "version": "^0.16",
     "priority": -5,
     "directories": [
       "elements",

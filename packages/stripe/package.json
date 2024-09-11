@@ -1,6 +1,6 @@
 {
   "name": "@pageboard/stripe",
-  "version": "0.14.0",
+  "version": "0.16.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -23,7 +23,7 @@
   },
   "prepare": {},
   "pageboard": {
-    "version": "^0.15",
+    "version": "^0.16",
     "directories": [
       "element",
       "lib",

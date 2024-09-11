@@ -1,6 +1,6 @@
 {
   "name": "@pageboard/calendar",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "description": "Manage calendar/events in pageboard",
   "main": "index.js",
   "scripts": {
@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/pageboard/client#readme",
   "pageboard": {
-    "version": "^0.15",
+    "version": "^0.16",
     "directories": [
       "elements",
       "lib",
