@@ -19,8 +19,8 @@
   },
   "homepage": "https://github.com/pageboard/client#readme",
   "dependencies": {
-    "fomantic-ui-css": "2.7.2",
-    "postinstall": "^0.10.3"
+    "postinstall": "^0.10.3",
+    "fomantic-ui-css": "2.7.8"
   },
   "devDependencies": {
     "@pageboard/pagecut": "^0.15.6",
