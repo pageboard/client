@@ -11,7 +11,7 @@ class FormBlock {
 			copy.type = 'object';
 			copy.properties = schema.properties;
 			return copy;
-		} else if (!rendered || schema.$attr) {
+		} else if (!rendered || !schema.nodes) {
 			// //FIXME block.expr stores only data expressions
 			return {};
 		}
