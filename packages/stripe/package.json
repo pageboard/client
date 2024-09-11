@@ -21,7 +21,6 @@
     "postinstall": "^0.10.3",
     "postinstall-bundle": "^0.9.4"
   },
-  "prepare": {},
   "pageboard": {
     "version": "^0.16",
     "directories": [

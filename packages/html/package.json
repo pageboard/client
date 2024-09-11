@@ -24,8 +24,6 @@
     "nouislider": "^15.8.1",
     "postinstall": "^0.10.3"
   },
-  "postinstall": {
-  },
   "prepare": {
     "nouislider/dist/nouislider.js": "copy lib/",
     "nouislider/dist/nouislider.css": "copy lib/"
