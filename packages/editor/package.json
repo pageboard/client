@@ -19,15 +19,17 @@
   },
   "homepage": "https://github.com/pageboard/client#readme",
   "dependencies": {
-    "postinstall": "^0.10.3",
+    "postinstall": "^0.11.0",
     "postinstall-bundle": "^0.9.4"
   },
   "devDependencies": {
     "@pageboard/pagecut": "^0.15.6"
   },
+  "postinstall": {
+    "@pageboard/pagecut/src/*.css": "link lib/"
+  },
   "prepare": {
-    "src/editor.js": "bundle lib/",
-    "@pageboard/pagecut/src/*.css": "copy lib/"
+    "src/editor.js": "bundle lib/"
   },
   "pageboard": {
     "version": "^0.16",

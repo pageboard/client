@@ -22,11 +22,11 @@
   },
   "devDependencies": {
     "nouislider": "^15.8.1",
-    "postinstall": "^0.10.3"
+    "postinstall": "^0.11.0"
   },
-  "prepare": {
-    "nouislider/dist/nouislider.js": "copy lib/",
-    "nouislider/dist/nouislider.css": "copy lib/"
+  "postinstall": {
+    "nouislider/dist/nouislider.js": "link lib/",
+    "nouislider/dist/nouislider.css": "link lib/"
   },
   "pageboard": {
     "version": "^0.16",

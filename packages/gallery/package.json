@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "postintall": "postinstall",
     "prepare": "postinstall"
   },
   "repository": {
@@ -19,11 +20,13 @@
   "homepage": "https://github.com/pageboard/client#readme",
   "devDependencies": {
     "@pageboard/flickity": "^2.3.2",
-    "postinstall": "^0.10.3"
+    "postinstall": "^0.11.0"
+  },
+  "postinstall": {
+    "@pageboard/flickity/css/flickity.css": "link lib/"
   },
   "prepare": {
-    "src/flickity.js": "bundle lib/",
-    "@pageboard/flickity/css/flickity.css": "copy lib/"
+    "src/flickity.js": "bundle lib/"
   },
   "pageboard": {
     "version": "^0.16",

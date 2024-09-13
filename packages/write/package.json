@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/pageboard/client#readme",
   "dependencies": {
-    "postinstall": "^0.10.3",
+    "postinstall": "^0.11.0",
     "fomantic-ui-css": "2.7.8"
   },
   "devDependencies": {
@@ -33,11 +33,12 @@
   },
   "postinstall": {
     "fomantic-ui-css/components": "link lib/components",
-    "fomantic-ui-css/themes": "link lib/themes"
+    "fomantic-ui-css/themes": "link lib/themes",
+    "cropperjs/dist/cropper.css": "link lib/",
+    "cropperjs/dist/cropper.js": "link lib/",
+    "@pageboard/pagecut/src/*.css": "link lib/pagecut/"
   },
   "prepare": {
-    "cropperjs/dist/cropper.css": "copy lib/",
-    "@pageboard/pagecut/src/*.css": "copy lib/pagecut/",
     "./src/utils.js": "bundle lib/",
     "./src/editor.js": "bundle lib/pagecut/"
   },

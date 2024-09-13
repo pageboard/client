@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "postinstall",
     "prepare": "postinstall"
   },
   "repository": {
@@ -32,11 +33,13 @@
   "devDependencies": {
     "europa": "^6.0.0",
     "foundation-emails": "^2.4.0",
-    "postinstall": "^0.10.3",
+    "postinstall": "^0.11.0",
     "postinstall-bundle": "^0.9.4"
   },
+  "postinstall": {
+    "foundation-emails": "link lib/foundation-emails.css"
+  },
   "prepare": {
-    "foundation-emails": "copy lib/foundation-emails.css",
     "src/europa.js": "bundle lib/"
   }
 }
