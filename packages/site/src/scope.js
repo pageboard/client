@@ -104,6 +104,7 @@ export default class Scope {
 			});
 		} else {
 			scope.#state = state;
+			delete scope.$element;
 		}
 
 		return scope;
@@ -194,8 +195,6 @@ export default class Scope {
 	}
 
 	async import(res) {
-		this.#state.doc ??= document.cloneNode();
-
 		const types = new Set();
 		if (res?.types) for (const type of res.types) types.add(type);
 		if (res?.items) for (const item of res.items) types.add(item.type);
@@ -210,8 +209,14 @@ export default class Scope {
 
 		this.#install(types, el);
 
-		if (el.name) this.viewer.setElement(el);
-		else await load.bundle(this.#state, el);
+		if (el.name) {
+			// element in page group has head template
+			this.viewer.setElement(el);
+		} else {
+			// live document
+			this.#state.doc = document;
+			await load.bundle(this.#state, el);
+		}
 
 		if (res) for (const [key, item] of Object.entries(res)) {
 			this[`$${key}`] = item;
