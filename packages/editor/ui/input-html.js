@@ -192,6 +192,7 @@ class HTMLElementInputHTML extends Page.create(HTMLTextAreaElement) {
 			inline: true,
 			inplace: true,
 			group: "inline",
+			excludes: 'sub',
 			tag: 'sup',
 			html: '<sup></sup>'
 		},
@@ -201,6 +202,7 @@ class HTMLElementInputHTML extends Page.create(HTMLTextAreaElement) {
 			inline: true,
 			inplace: true,
 			group: "inline",
+			excludes: 'sup',
 			tag: 'sub',
 			html: '<sub></sub>',
 			icon: {
