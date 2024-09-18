@@ -38,3 +38,6 @@ span.purple {
 	color: purple;
 }
 
+[contenteditable] span[translate="no"] {
+	text-decoration: dashed underline;
+}
