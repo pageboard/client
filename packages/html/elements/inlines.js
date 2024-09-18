@@ -270,6 +270,6 @@ exports.notranslate = {
 	group: "inline nolink",
 	icon: '<i class="large translate icon"></i>',
 	tag: 'span[translate="no"]',
-	html: '<span translate="no"></span>'
+	html: '<span translate="no" spellcheck="false"></span>'
 };
 
