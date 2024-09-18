@@ -1,6 +1,6 @@
 {
   "name": "@pageboard/write",
-  "version": "0.14.26",
+  "version": "0.14.28",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -19,12 +19,12 @@
   },
   "homepage": "https://github.com/pageboard/client#readme",
   "dependencies": {
+    "cropperjs": "^1.6.2",
     "fomantic-ui-css": "2.7.2",
     "postinstall": "^0.9.0"
   },
   "devDependencies": {
     "@pageboard/pagecut": "^0.14.10",
-    "cropperjs": "^1.6.2",
     "duration-relativetimeformat": "^2.0.4",
     "fast-safe-stringify": "^2.1.1",
     "postinstall-bundle": "^0.9.4",
@@ -34,11 +34,11 @@
   "postinstall": {
     "fomantic-ui-css/components": "link lib/components",
     "fomantic-ui-css/themes": "link lib/themes",
-	"cropperjs/dist/cropper.css": "link lib/",
-    "cropperjs/dist/cropper.js": "link lib/",
-    "@pageboard/pagecut/src/*.css": "link lib/pagecut/"
+    "cropperjs/dist/cropper.css": "link lib/",
+    "cropperjs/dist/cropper.js": "link lib/"
   },
   "prepare": {
+    "@pageboard/pagecut/src/*.css": "copy lib/pagecut/",
     "./src/utils.js": "bundle lib/",
     "./src/editor.js": "bundle lib/pagecut/"
   },
