@@ -300,7 +300,12 @@ class HTMLElementInputHTML extends Page.create(HTMLTextAreaElement) {
 		const toolbar = doc.dom(`<div class="toolbar"></div>`);
 		this.parentNode.insertBefore(toolbar, textarea);
 
-		const elts = this.constructor.elements;
+		const elts = Object.assign({}, this.constructor.elements);
+		const actives = this.getAttribute('inlines')?.split(' ') ?? [];
+
+		for (const [name, el] of Object.entries(elts)) {
+			if (el.title && !actives.includes(name)) delete elts[name];
+		}
 		elts.fragment.bundle = Object.keys(elts);
 		const scope = state.scope.copy({ $elements: elts });
 		scope.viewer.prepare();

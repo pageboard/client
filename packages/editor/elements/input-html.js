@@ -34,6 +34,32 @@ exports.input_html = {
 			title: 'Read only',
 			type: 'boolean',
 			default: false
+		},
+		inlines: {
+			title: 'Inlines',
+			type: 'array',
+			nullable: true,
+			items: {
+				anyOf: [{
+					const: 'sup',
+					title: 'Sup'
+				}, {
+					const: 'sub',
+					title: 'Sub'
+				}, {
+					const: 'strong',
+					title: 'Strong'
+				}, {
+					const: 'em',
+					title: 'Em'
+				}, {
+					const: 'link',
+					title: 'Link'
+				}, {
+					const: 'notranslate',
+					title: 'No Translate'
+				}]
+			}
 		}
 	},
 	contents: {
@@ -47,6 +73,7 @@ exports.input_html = {
 			required="[required]"
 			readonly="[readonly]"
 			disabled="[disabled]"
+			inlines="[inlines|join: |as:null]"
 		>[value|as:html]</textarea>
 	</div>`,
 	scripts: [
