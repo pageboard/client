@@ -203,6 +203,7 @@ exports.write = {
 
 exports.editor = {
 	bundle: true,
+	priority: Infinity,
 	scripts: [
 		"../lib/pagecut/editor.js",
 		"../ui/editor.js"
