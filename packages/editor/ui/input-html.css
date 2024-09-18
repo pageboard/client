@@ -9,6 +9,9 @@
 	min-height: 5em;
 	border: 1px solid gray;
 }
+[block-type="input_html"] [contenteditable] [block-type="notranslate"] {
+	text-decoration: dashed underline;
+}
 [block-type="input_html"] .textarea + textarea {
 	display:none;
 }
@@ -28,14 +31,12 @@
 .ProseMirror-menuitem {
 	margin: 0;
 }
-.ProseMirror-menuitem button {
-}
 .ProseMirror-menuitem:last-of-type {
 	flex: 1 0 auto;
 	margin-left: 0;
+	display:inline-flex;
 }
 .ProseMirror-icon {
-	line-height:initial;
 	vertical-align:initial;
 	padding:0.3em 0.5em;
 	min-width: 2em;
@@ -52,7 +53,9 @@
 .ProseMirror-menu > .ProseMirror-menuitem > form.prosemirror-dialog > input {
 	padding: 0.25em;
 	background: white;
-	border: 1px solid lightgray;
+	border: 0;
+	border-left: 1px solid black;
+	border-radius: 0;
 }
 
 .ProseMirror-menu > .ProseMirror-menuitem > form.prosemirror-dialog > input:invalid {
