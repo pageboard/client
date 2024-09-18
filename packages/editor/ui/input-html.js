@@ -254,6 +254,19 @@ class HTMLElementInputHTML extends Page.create(HTMLTextAreaElement) {
 			tag: 'em,i',
 			html: '<em></em>'
 		},
+		notranslate: {
+			title: "Untranslatable",
+			contents: "text*",
+			inplace: true,
+			inline: true,
+			group: "inline",
+			icon: {
+				width: 52, height: 52,
+				path: "m39 19h-4l-4 11a29 29 0 0 1-11-5 29 29 0 0 0 7-14h5a2 2 0 0 0 0-4h-13v-4a2 2 0 1 0-4 0v4h-13a2 2 0 0 0 0 4h5a29 29 0 0 0 7 14 30 30 0 0 1-11 5 2 2 0 0 0 0.4 4 2 2 0 0 0 0.4-0.05 33 33 0 0 0 14-6 32 32 0 0 0 12 6l-7 18h5l3-8h13l3 8h5zm-15-8a24 24 0 0 1-6 12 24 24 0 0 1-6-12zm9 29 5-14 5 14z"
+			},
+			tag: 'span[translate="no"]',
+			html: '<span translate="no" spellcheck="false"></span>'
+		},
 		link: {
 			title: "Link",
 			icon: {
