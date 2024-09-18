@@ -9,6 +9,12 @@
 	min-height: 5em;
 	border: 1px solid gray;
 }
+[block-type="input_html"] .textarea.ProseMirror-focused {
+	border-color: rgb(129 165 255);
+}
+[block-type="input_html"] .textarea.ProseMirror-focused [block-focused="last"] {
+	outline: none !important;
+}
 [block-type="input_html"] [contenteditable] [block-type="notranslate"] {
 	text-decoration: dashed underline;
 }
@@ -61,3 +67,4 @@
 .ProseMirror-menu > .ProseMirror-menuitem > form.prosemirror-dialog > input:invalid {
 	background:lightcoral;
 }
+
