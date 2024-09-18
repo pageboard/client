@@ -321,6 +321,11 @@ class HTMLElementInputHTML extends Page.create(HTMLTextAreaElement) {
 		for (const [name, el] of Object.entries(elts)) {
 			if (el.title && !actives.includes(name)) delete elts[name];
 		}
+		for (const el of Object.values(elts)) {
+			if (el.excludes && !elts[el.excludes]) {
+				delete el.excludes;
+			}
+		}
 		elts.fragment.bundle = Object.keys(elts);
 		const scope = state.scope.copy({ $elements: elts });
 		scope.viewer.prepare();
