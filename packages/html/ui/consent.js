@@ -23,21 +23,17 @@ class HTMLElementConsent extends Page.create(HTMLFormElement) {
 		state.consent(this);
 	}
 	chainConsent(state) {
-		window.HTMLElementForm.prototype.fill.call(this, {
-			consent: state.scope.$consent
-		});
+		window.HTMLElementForm.prototype.fill.call(this, state.scope.$consent);
 		if (this.options.transient) this.classList.remove('visible');
 	}
 	handleSubmit(e, state) {
 		if (e.type == "submit") e.preventDefault();
 		if (state.scope.$write) return;
-		const fd = window.HTMLElementForm.prototype.read.call(this);
-		const consent = fd.consent;
-		if (consent == null) {
-			return;
+		const consents = window.HTMLElementForm.prototype.read.call(this);
+		for (const [key, val] of Object.entries(consents)) {
+			state.scope.storage.set('consent.' + key, val);
 		}
-		state.scope.storage.set('consent', consent);
-		state.scope.$consent = consent;
+		state.scope.$consent = consents;
 		state.copy().runChain('consent');
 	}
 	handleChange(e, state) {
@@ -59,29 +55,32 @@ class HTMLElementConsent extends Page.create(HTMLFormElement) {
 	}
 }
 
-Page.constructor.prototype.consent = function (fn) {
-	const initial = this.scope.$consent === undefined;
-	let consent = this.scope.storage.get('consent');
-	if (consent == null && initial) consent = undefined;
-	this.scope.$consent = consent;
-	this.chain('consent', fn);
-	if (consent === undefined) {
+Page.constructor.prototype.consent = function (listener) {
+	this.scope.$consent ??= {};
+	const { consent } = listener.constructor;
+	const val = this.scope.storage.get('consent.' + consent);
+	this.scope.$consent[consent] = val;
+	this.chain('consent', listener);
+	if (val === undefined) {
 		HTMLElementConsent.waiting = true;
-	} else if (consent === null) {
+	} else if (val === null) {
 		// setup finished but no consent is done yet, ask consent
 		this.reconsent();
 	}
 };
 
-Page.constructor.prototype.reconsent = function (fn) {
-	if (fn) this.consent(fn);
-	const consent = this.scope.$consent;
+Page.constructor.prototype.reconsent = function (listener) {
+	if (listener) this.consent(listener);
+	const consents = this.scope.$consent;
 	let asking = false;
-	if (consent != "yes") {
-		asking = HTMLElementConsent.ask();
-	}
-	if (!asking) {
-		if (consent == null) this.scope.$consent = "yes";
+	for (const [key, val] of Object.entries(consents)) {
+		if (listener && key != listener.constructor.consent) continue;
+		if (val != "yes") {
+			asking = HTMLElementConsent.ask();
+		}
+		if (!asking) {
+			if (val == null) consents[key] = "yes";
+		}
 	}
 	return asking;
 };

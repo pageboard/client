@@ -55,3 +55,8 @@ exports.embed = {
 		'../ui/linkable.css'
 	]
 };
+
+exports.input_radio_yes.properties.consent.anyOf.push({
+	title: "Embeds",
+	const: "embed"
+});

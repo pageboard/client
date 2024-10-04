@@ -38,6 +38,11 @@ exports.google_tag = {
 	]
 };
 
+exports.input_radio_yes.properties.consent.anyOf.push({
+	title: "Google",
+	const: "google"
+});
+
 exports.page.fragments.push({
 	path: 'head',
 	position: 'beforeend',

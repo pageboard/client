@@ -1,4 +1,5 @@
 class HTMLElementEmbed extends Page.Element {
+	static consent = "embed";
 	static defaults = {
 		src: null,
 		query: null,
@@ -21,7 +22,7 @@ class HTMLElementEmbed extends Page.Element {
 		if (width && height) this.style.paddingBottom = `calc(${height} / ${width} * 100%)`;
 	}
 	consent(state) {
-		const consent = state.scope.$consent;
+		const consent = state.scope.$consent[this.constructor.consent];
 		this.classList.toggle('denied', consent == "no");
 		this.classList.toggle('waiting', consent == null);
 
@@ -57,7 +58,7 @@ class HTMLElementEmbed extends Page.Element {
 		}
 	}
 	captureClick(e, state) {
-		if (this.matches('.denied')) state.reconsent();
+		if (this.matches('.denied')) state.reconsent(this);
 	}
 	captureLoad() {
 		this.classList.remove('loading');
