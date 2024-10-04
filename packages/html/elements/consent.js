@@ -26,20 +26,28 @@ exports.consent_form = {
 	stylesheets: ['../ui/consent.css']
 };
 
+const consents = [];
+
 exports.input_radio_yes = {
 	title: 'Yes',
 	icon: '<i class="thumbs up icon"></i>',
 	menu: "form",
 	group: "block",
 	context: 'consent_form//',
+	properties: {
+		consent: {
+			title: 'Consent',
+			anyOf: consents
+		}
+	},
 	contents: {
 		id: 'label',
 		nodes: 'inline*'
 	},
 	html: `<div class="field">
 		<div class="ui radio checkbox">
-			<input type="radio" name="consent" value="yes" id="for-consent-yes" />
-			<label block-content="label" for="for-consent-yes">Yes</label>
+			<input type="radio" name="consent.[consent]" value="yes" id="for-consent-yes-[consent]" />
+			<label block-content="label" for="for-consent-yes-[consent]">Yes</label>
 		</div>
 	</div>`
 };
@@ -50,14 +58,20 @@ exports.input_radio_no = {
 	menu: "form",
 	group: "block",
 	context: 'consent_form//',
+	properties: {
+		consent: {
+			title: 'Consent',
+			anyOf: consents
+		}
+	},
 	contents: {
 		id: 'label',
 		nodes: 'inline*'
 	},
 	html: `<div class="field">
 		<div class="ui radio checkbox">
-			<input type="radio" name="consent" value="no" id="for-consent-no" />
-			<label block-content="label" for="for-consent-no">No</label>
+			<input type="radio" name="consent.[consent]" value="no" id="for-consent-no-[consent]" />
+			<label block-content="label" for="for-consent-no-[consent]">No</label>
 		</div>
 	</div>`
 };

@@ -36,3 +36,7 @@ exports.embed = {
 	]
 };
 
+exports.input_radio_yes.properties.consent.anyOf.push({
+	title: "Embeds",
+	const: "embed"
+});

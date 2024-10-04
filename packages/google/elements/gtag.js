@@ -45,3 +45,8 @@ exports.google_tag = {
 		'../ui/gtag.js'
 	]
 };
+
+exports.input_radio_yes.properties.consent.anyOf.push({
+	title: "Google",
+	const: "google"
+});
