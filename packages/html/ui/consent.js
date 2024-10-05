@@ -80,17 +80,18 @@ Page.State.prototype.consent = function (listener) {
 Page.State.prototype.reconsent = function (listener) {
 	if (listener) this.consent(listener);
 	const consents = this.scope.$consent;
-	let asking = false;
+	let someAsking = false;
 	for (const [key, val] of Object.entries(consents)) {
 		if (listener && key != listener.constructor.consent) continue;
-		if (val != "yes") {
-			asking = HTMLCustomConsentElement.ask();
+		let asking = false;
+		if (val != "yes" && !someAsking) {
+			someAsking = asking = HTMLCustomConsentElement.ask();
 		}
 		if (!asking) {
 			if (val == null) consents[key] = "yes";
 		}
 	}
-	return asking;
+	return someAsking;
 };
 
 Page.paint((state) => {
