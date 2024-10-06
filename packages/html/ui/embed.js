@@ -1,5 +1,5 @@
 class HTMLElementEmbed extends VirtualHTMLElement {
-	static consent = "embed";
+	static consent = "consent.embed";
 	static defaults = {
 		src: null,
 		hash: null
@@ -19,7 +19,7 @@ class HTMLElementEmbed extends VirtualHTMLElement {
 		return this.promise;
 	}
 	consent(state) {
-		const consent = state.scope.$consent[this.constructor.consent];
+		const consent = Page.storage.get(this.constructor.consent);
 		this.classList.toggle('denied', consent == "no");
 		this.classList.toggle('waiting', consent == null);
 
@@ -57,7 +57,7 @@ class HTMLElementEmbed extends VirtualHTMLElement {
 		}
 	}
 	captureClick(e, state) {
-		if (this.matches('.denied')) state.reconsent(this);
+		if (this.matches('.denied')) state.consent(this, true);
 	}
 	captureLoad() {
 		this.promise.done();
