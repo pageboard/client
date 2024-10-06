@@ -1,43 +1,28 @@
 class UserStore {
+	#store = window.localStorage ?? {};
+	all() {
+		return this.#store;
+	}
 	get(key) {
-		let storage = window.localStorage;
-		let val;
-		if (storage) {
-			try {
-				val = storage.getItem(key);
-			} catch(ex) {
-				storage = null;
-			}
+		try {
+			return this.#store.getItem(key);
+		} catch (ex) {
+			console.error(ex);
 		}
-		if (!storage) {
-			val = this.getCookies()[key];
-		}
-		return val;
 	}
 	set(key, val) {
-		let storage = window.localStorage;
-		if (storage) {
-			try {
-				storage.setItem(key, val);
-			} catch(ex) {
-				storage = null;
-			}
-		}
-		if (!storage) {
-			this.setCookie(key, val);
+		try {
+			if (val == null) return this.del(key);
+			else return this.#store.setItem(key, val);
+		} catch (ex) {
+			console.error(ex);
 		}
 	}
 	del(key) {
-		let storage = window.localStorage;
-		if (storage) {
-			try {
-				storage.removeItem(key);
-			} catch(ex) {
-				storage = null;
-			}
-		}
-		if (!storage) {
-			this.clearCookie(key);
+		try {
+			return this.#store.removeItem(key);
+		} catch (ex) {
+			console.error(ex);
 		}
 	}
 	clearCookies(re) {
@@ -68,5 +53,5 @@ class UserStore {
 	}
 }
 
-Page.setup(state => state.scope.storage = new UserStore());
+Page.paint(state => state.scope.storage = new UserStore());
 

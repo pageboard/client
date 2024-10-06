@@ -11,7 +11,7 @@ class HTMLElementConsent extends Page.create(HTMLFormElement) {
 		this.explicit = forms.length > 0;
 		for (const node of forms) {
 			node.classList.add('visible');
-			tacit = consent && !node.querySelector(`[name="consent.${consent}"]`) || false;
+			tacit = consent && !node.querySelector(`[name="${consent}"]`) || false;
 		}
 		return tacit ? "yes" : null;
 	}
@@ -24,7 +24,7 @@ class HTMLElementConsent extends Page.create(HTMLFormElement) {
 		state.chain('consent', this);
 	}
 	chainConsent(state) {
-		window.HTMLElementForm.prototype.fill.call(this, state.scope.$consent || {});
+		window.HTMLElementForm.prototype.fill.call(this, state.scope.storage.all());
 		if (this.options.transient) this.classList.remove('visible');
 	}
 	handleChange(e, state) {
@@ -38,7 +38,6 @@ class HTMLElementConsent extends Page.create(HTMLFormElement) {
 		const consents = window.HTMLElementForm.prototype.read.call(this);
 		for (const [key, val] of Object.entries(consents)) {
 			state.scope.storage.set(key, val);
-			state.scope.$consent[key.split('.').pop()] = val;
 		}
 		state.copy().runChain('consent');
 	}
@@ -56,14 +55,16 @@ class HTMLElementConsent extends Page.create(HTMLFormElement) {
 	}
 }
 
-Page.constructor.prototype.consent = function (listener) {
-	this.scope.$consent ??= {};
+Page.constructor.prototype.consent = function (listener, ask) {
 	const { consent } = listener.constructor;
 	if (!consent) {
 		console.warn("Expected a static consent field", listener);
 		return;
 	}
-	this.scope.$consent[consent] = this.scope.storage.get('consent.' + consent) || HTMLElementConsent.ask(consent);
+	const cur = this.scope.storage.get(consent);
+	if (cur == null || ask) {
+		this.scope.storage.set(consent, HTMLElementConsent.ask(consent));
+	}
 	this.chain('consent', listener);
 };
 
