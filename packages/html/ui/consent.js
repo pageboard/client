@@ -3,14 +3,17 @@ class HTMLElementConsent extends Page.create(HTMLFormElement) {
 		dataTransient: false
 	};
 
-	static ask() {
-		this.waiting = false;
+	static explicit;
+
+	static ask(consent) {
 		let tacit = true;
-		for (const node of document.querySelectorAll('[block-type="consent_form"]')) {
+		const forms = document.querySelectorAll('[block-type="consent_form"]');
+		this.explicit = forms.length > 0;
+		for (const node of forms) {
 			node.classList.add('visible');
-			tacit = false;
+			tacit = consent && !node.querySelector(`[name="consent.${consent}"]`) || false;
 		}
-		return !tacit;
+		return tacit ? "yes" : null;
 	}
 	setup(state) {
 		if (state.scope.$write) return;
@@ -21,21 +24,23 @@ class HTMLElementConsent extends Page.create(HTMLFormElement) {
 		state.chain('consent', this);
 	}
 	chainConsent(state) {
-		window.HTMLElementForm.prototype.fill.call(this, state.scope.$consent);
+		window.HTMLElementForm.prototype.fill.call(this, state.scope.$consent || {});
 		if (this.options.transient) this.classList.remove('visible');
+	}
+	handleChange(e, state) {
+		if (e.type == "submit" || !this.elements.find(item => item.type == "submit")) {
+			this.handleSubmit(e, state);
+		}
 	}
 	handleSubmit(e, state) {
 		if (e.type == "submit") e.preventDefault();
 		if (state.scope.$write) return;
 		const consents = window.HTMLElementForm.prototype.read.call(this);
 		for (const [key, val] of Object.entries(consents)) {
-			state.scope.storage.set('consent.' + key, val);
+			state.scope.storage.set(key, val);
+			state.scope.$consent[key.split('.').pop()] = val;
 		}
-		state.scope.$consent = consents;
 		state.copy().runChain('consent');
-	}
-	handleChange(e, state) {
-		this.handleSubmit(e, state);
 	}
 	patch(state) {
 		if (state.scope.$write) return;
@@ -54,32 +59,12 @@ class HTMLElementConsent extends Page.create(HTMLFormElement) {
 Page.constructor.prototype.consent = function (listener) {
 	this.scope.$consent ??= {};
 	const { consent } = listener.constructor;
-	const val = this.scope.storage.get('consent.' + consent);
-	this.scope.$consent[consent] = val;
+	if (!consent) {
+		console.warn("Expected a static consent field", listener);
+		return;
+	}
+	this.scope.$consent[consent] = this.scope.storage.get('consent.' + consent) || HTMLElementConsent.ask(consent);
 	this.chain('consent', listener);
-	if (val === undefined) {
-		HTMLElementConsent.waiting = true;
-	} else if (val === null) {
-		// setup finished but no consent is done yet, ask consent
-		this.reconsent();
-	}
-};
-
-Page.constructor.prototype.reconsent = function (listener) {
-	if (listener) this.consent(listener);
-	const consents = this.scope.$consent;
-	let someAsking = false;
-	for (const [key, val] of Object.entries(consents)) {
-		if (listener && key != listener.constructor.consent) continue;
-		let asking = false;
-		if (val != "yes" && !someAsking) {
-			someAsking = asking = HTMLElementConsent.ask();
-		}
-		if (!asking) {
-			if (val == null) consents[key] = "yes";
-		}
-	}
-	return someAsking;
 };
 
 Page.define(`element-consent`, HTMLElementConsent, 'form');
@@ -87,12 +72,7 @@ Page.define(`element-consent`, HTMLElementConsent, 'form');
 
 Page.paint(state => {
 	state.finish(() => {
-		let run = true;
-		if (HTMLElementConsent.waiting) {
-			if (state.reconsent()) run = false;
-		}
-		if (run) {
-			// do not change current state stage
+		if (!HTMLElementConsent.explicit) {
 			state.copy().runChain('consent');
 		}
 	});
