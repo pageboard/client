@@ -28,7 +28,7 @@ class HTMLCustomConsentElement extends HTMLFormElement {
 		state.chain('consent', this);
 	}
 	chainConsent(state) {
-		window.HTMLCustomFormElement.prototype.fill.call(this, state.scope.storage.all());
+		window.HTMLCustomFormElement.prototype.fill.call(this, Page.storage.all());
 		if (this.options.transient) this.classList.remove('visible');
 	}
 	handleChange(e, state) {
