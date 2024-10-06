@@ -25,7 +25,7 @@ footer [block-type="consent_form"][data-transient="true"] {
 	min-height:1em;
 }
 
-[contenteditable] [block-focused="last"] > .form[block-type="consent_form"][data-transient="true"],
+[contenteditable] [block-focused="middle"] > .form[block-type="consent_form"][data-transient="true"],
 .form[block-type="consent_form"][data-transient="true"][block-focused] {
 	display: block;
 }

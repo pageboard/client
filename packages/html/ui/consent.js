@@ -7,20 +7,23 @@ class HTMLCustomConsentElement extends HTMLFormElement {
 		dataTransient: false
 	};
 
-	static explicit;
+	static explicits = new Set();
 
 	static ask(consent) {
 		let tacit = true;
 		const forms = document.querySelectorAll('[block-type="consent_form"]');
-		this.explicit = forms.length > 0;
+		const consents = Page.storage.all();
 		for (const node of forms) {
+			window.HTMLCustomFormElement.prototype.fill.call(node, consents);
 			node.classList.add('visible');
 			tacit = consent && !node.querySelector(`[name="${consent}"]`) || false;
 		}
+		if (!tacit) this.explicits.add(consent);
 		return tacit ? "yes" : null;
 	}
 	setup(state) {
 		if (this.isContentEditable) return;
+		this.constructor.explicits = new Set();
 		const view = this.ownView;
 		view.textContent = '';
 		const tmpl = this.ownTpl.prerender();
@@ -28,8 +31,11 @@ class HTMLCustomConsentElement extends HTMLFormElement {
 		state.chain('consent', this);
 	}
 	chainConsent(state) {
-		window.HTMLCustomFormElement.prototype.fill.call(this, Page.storage.all());
-		if (this.options.transient) this.classList.remove('visible');
+		if (this.options.transient) {
+			this.classList.remove('visible');
+		} else {
+			window.HTMLCustomFormElement.prototype.fill.call(this, Page.storage.all());
+		}
 	}
 	handleChange(e, state) {
 		if (e.type == "submit" || !this.elements.find(item => item.type == "submit")) {
@@ -40,6 +46,10 @@ class HTMLCustomConsentElement extends HTMLFormElement {
 		if (e.type == "submit") e.preventDefault();
 		if (this.isContentEditable) return;
 		const consents = window.HTMLCustomFormElement.prototype.read.call(this);
+		if (Array.from(this.constructor.explicits).some(c => consents[c] == null)) {
+			// not all explicit consents have been answered
+			return;
+		}
 		for (const [key, val] of Object.entries(consents)) {
 			Page.storage.set(key, val);
 		}
@@ -78,7 +88,7 @@ Page.ready(() => {
 
 Page.paint(state => {
 	state.finish(() => {
-		if (!HTMLCustomConsentElement.explicit) {
+		if (!HTMLCustomConsentElement.explicits.size) {
 			state.runChain('consent');
 		}
 	});
