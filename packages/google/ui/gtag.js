@@ -21,7 +21,7 @@ class HTMLElementGTMScript extends HTMLScriptElement {
 		this.#id = loc.query.id;
 	}
 	consent(state) {
-		if (!this.#id) return;
+		if (!this.#id || state.scope.$write) return;
 		const agreed = Page.storage.get(this.constructor.consent) == "yes";
 		window['ga-disable-' + this.#id] = !agreed;
 		if (this.#type == "gtm") this.#gtm(agreed, state);
