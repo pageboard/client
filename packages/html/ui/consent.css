@@ -13,9 +13,16 @@ footer [block-type="consent_form"][data-transient="true"] {
 [block-type="consent_form"][data-transient="true"]:not(.visible) {
 	display:none;
 }
-.visible[block-type="consent_form"][data-transient="true"] > template {
-	display:block !important;
-	position: relative;
+
+[block-type="consent_form"] > [block-content="content"] {
+	display:none;
+}
+[block-type="consent_form"] > .view {
+	position:relative;
+}
+[contenteditable] [block-type="consent_form"] > [block-content="content"] {
+	display:block;
+	min-height:1em;
 }
 
 [contenteditable] [block-focused="last"] > .form[block-type="consent_form"][data-transient="true"],

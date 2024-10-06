@@ -14,13 +14,11 @@ class HTMLElementConsent extends Page.create(HTMLFormElement) {
 	}
 	setup(state) {
 		if (state.scope.$write) return;
-		if (this.options.transient) {
-			const tmpl = this.ownTpl.prerender();
-			if (tmpl.content && tmpl.children.length == 0) {
-				tmpl.appendChild(tmpl.content);
-			}
-		}
-		state.consent(this);
+		const view = this.ownView;
+		view.textContent = '';
+		const tmpl = this.ownTpl.prerender();
+		view.appendChild(tmpl.content.cloneNode(true));
+		state.chain('consent', this);
 	}
 	chainConsent(state) {
 		window.HTMLElementForm.prototype.fill.call(this, state.scope.$consent);
@@ -41,9 +39,7 @@ class HTMLElementConsent extends Page.create(HTMLFormElement) {
 	}
 	patch(state) {
 		if (state.scope.$write) return;
-		if (this.options.transient) {
-			this.ownTpl.prerender();
-		}
+		this.ownTpl.prerender();
 	}
 	get ownTpl() {
 		return this.children.find(
