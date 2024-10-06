@@ -1,5 +1,5 @@
 class HTMLElementGoogleTranslate extends VirtualHTMLElement {
-	static consent = "google";
+	static consent = "consent.google";
 	#inst;
 	#observer;
 	#shown;
@@ -37,7 +37,7 @@ class HTMLElementGoogleTranslate extends VirtualHTMLElement {
 		}
 	}
 	consent(state) {
-		const agreed = state.scope.$consent[this.constructor.consent] == "yes";
+		const agreed = Page.storage.get(this.constructor.consent) == "yes";
 		if (!agreed || document.body.isContentEditable) return;
 		delete window.google?.translate;
 		this.id = `id${Date.now()}`;

@@ -2,7 +2,7 @@ window.dataLayer = window.dataLayer || [];
 
 // debug using https://tagassistant.google.com/
 class HTMLElementGTMScript extends HTMLScriptElement {
-	static consent = "google";
+	static consent = "consent.google";
 	#type;
 	#id;
 	#started;
@@ -22,7 +22,7 @@ class HTMLElementGTMScript extends HTMLScriptElement {
 	}
 	consent(state) {
 		if (!this.#id) return;
-		const agreed = state.scope.$consent[this.constructor.consent] == "yes";
+		const agreed = Page.storage.get(this.constructor.consent) == "yes";
 		window['ga-disable-' + this.#id] = !agreed;
 		if (this.#type == "gtm") this.#gtm(agreed, state);
 		else if (this.#type == "gtag") this.#gtag(agreed, state);
