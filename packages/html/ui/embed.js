@@ -12,7 +12,7 @@ class HTMLElementEmbed extends Page.Element {
 		state.consent(this);
 	}
 	get currentSrc() {
-		return this.querySelector('iframe')?.src ?? "about:blank";
+		return this.querySelector('iframe')?.getAttribute('src');
 	}
 	patch(state) {
 		const { src } = this.options;
