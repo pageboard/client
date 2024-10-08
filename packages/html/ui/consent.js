@@ -48,7 +48,7 @@ class HTMLCustomConsentElement extends HTMLFormElement {
 		const consents = window.HTMLCustomFormElement.prototype.read.call(this);
 		const names = new Set();
 		for (const node of this.elements) {
-			if (node.name?.startsWith('consent.')) names.push(node.name);
+			if (node.name?.startsWith('consent.')) names.add(node.name);
 		}
 		const def = consents.consent;
 		if (def != "custom") for (const consent of names) {
