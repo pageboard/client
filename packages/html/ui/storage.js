@@ -1,5 +1,6 @@
 class UserStore {
-	#store = window.localStorage ?? {};
+	#store = window.localStorage ?? { setItem() { }, getItem() { }, removeItem() { } };
+
 	all() {
 		return this.#store;
 	}
