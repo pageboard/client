@@ -42,7 +42,12 @@ class HTMLElementConsent extends Page.create(HTMLFormElement) {
 		if (e.type == "submit") e.preventDefault();
 		if (state.scope.$write) return;
 		const consents = window.HTMLElementForm.prototype.read.call(this);
-		if (Array.from(this.constructor.explicits).some(c => consents[c] == null)) {
+		const list = Array.from(this.constructor.explicits);
+		const def = consents.consent;
+		for (const consent of list) {
+			if (def != "custom") consents[consent] = def;
+		}
+		if (list.some(c => consents[c] == null)) {
 			// not all explicit consents have been answered
 			return;
 		}
