@@ -2,7 +2,7 @@ exports.consent_form = {
 	priority: 11,
 	title: 'Consent',
 	icon: '<i class="handshake icon"></i>',
-	group: "block",
+	group: "block form",
 	menu: 'form',
 	properties: {
 		transient: {
@@ -26,8 +26,41 @@ exports.consent_form = {
 
 const consents = [];
 
+exports.input_radio_consent = {
+	title: 'Consent custom',
+	icon: '<i class="hand scissors icon"></i>',
+	menu: "form",
+	group: "block",
+	context: 'consent_form//',
+	properties: {
+		value: {
+			title: 'Consent',
+			anyOf: [{
+				const: 'custom',
+				title: 'Custom'
+			}, {
+				const: 'yes',
+				title: 'All'
+			}, {
+				const: 'no',
+				title: 'None'
+			}]
+		}
+	},
+	contents: {
+		id: 'label',
+		nodes: 'inline*'
+	},
+	html: `<div class="field">
+		<div class="ui radio checkbox">
+			<input type="radio" name="consent" value="[value]" id="for-consent-[value]" />
+			<label block-content="label" for="for-consent-[value]">Custom</label>
+		</div>
+	</div>`
+};
+
 exports.input_radio_yes = {
-	title: 'Yes',
+	title: 'Consent yes',
 	icon: '<i class="thumbs up icon"></i>',
 	menu: "form",
 	group: "block",
@@ -51,7 +84,7 @@ exports.input_radio_yes = {
 };
 
 exports.input_radio_no = {
-	title: 'No',
+	title: 'Consent no',
 	icon: '<i class="thumbs down icon"></i>',
 	menu: "form",
 	group: "block",
