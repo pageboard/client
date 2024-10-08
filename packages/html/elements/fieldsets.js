@@ -9,20 +9,12 @@ exports.fieldset = {
 			title: 'Show if input named',
 			type: 'string',
 			format: 'singleline',
-			nullable: true,
-			$helper: {
-				name: 'element-property',
-				existing: true
-			}
+			nullable: true
 		},
 		value: {
 			title: 'matches this value',
 			type: 'string',
-			format: 'singleline',
-			$filter: {
-				name: 'element-value',
-				using: 'name'
-			}
+			format: 'singleline'
 		},
 		plain: {
 			title: 'Without borders',
