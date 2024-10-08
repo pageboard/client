@@ -136,9 +136,9 @@ class ElementProperty {
 	#buildSelector(formBlock, el) {
 		const doc = this.#input.ownerDocument;
 		const paths = ElementProperty.asPaths(el, {}, el.name + '.' + this.#prefix);
-		const el = ElementProperty.element(formBlock.type);
-		if (!el.contents.unnamed) return;
-		const content = el.contents.get(formBlock);
+		const formEl = ElementProperty.element(formBlock.type);
+		if (!formEl.contents.unnamed) return;
+		const content = formEl.contents.get(formBlock);
 		const existing = this.#existing;
 		this.#select = doc.dom(`<select class="ui compact dropdown">
 			<option value="">--</option>
