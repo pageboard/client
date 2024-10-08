@@ -100,8 +100,6 @@ class ElementProperty {
 			if (!cand) {
 				throw new Error("Please select a type to bind the form to");
 			}
-		} else {
-			throw new Error(`Unknown parent form type: ${block.type}`);
 		}
 
 		if (Array.isArray(cand)) {
@@ -127,6 +125,7 @@ class ElementProperty {
 			};
 			cand = vblock;
 		}
+		if (!cand) return;
 		const el = ElementProperty.element(cand);
 		if (!el) throw new Error(
 			`Unknown type in parent form ${block.type}: ${cand}`
@@ -137,8 +136,9 @@ class ElementProperty {
 	#buildSelector(formBlock, el) {
 		const doc = this.#input.ownerDocument;
 		const paths = ElementProperty.asPaths(el, {}, el.name + '.' + this.#prefix);
-		const content = ElementProperty.element(formBlock.type)
-			.contents.get(formBlock);
+		const el = ElementProperty.element(formBlock.type);
+		if (!el.contents.unnamed) return;
+		const content = el.contents.get(formBlock);
 		const existing = this.#existing;
 		this.#select = doc.dom(`<select class="ui compact dropdown">
 			<option value="">--</option>
