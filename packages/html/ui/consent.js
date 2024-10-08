@@ -28,6 +28,7 @@ class HTMLCustomConsentElement extends HTMLFormElement {
 		view.textContent = '';
 		const tmpl = this.ownTpl.prerender();
 		view.appendChild(tmpl.content.cloneNode(true));
+		window.HTMLCustomFormElement.prototype.fill.call(this, Page.storage.all());
 		state.chain('consent', this);
 	}
 	chainConsent(state) {
