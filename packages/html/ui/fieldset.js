@@ -20,6 +20,9 @@ class HTMLCustomFieldSetElement extends HTMLFieldSetElement {
 	patch() {
 		this.#update();
 	}
+	paint() {
+		this.#update();
+	}
 	setup() {
 		this.#update();
 		this.form?.addEventListener('change', this);

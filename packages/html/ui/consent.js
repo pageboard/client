@@ -21,15 +21,17 @@ class HTMLCustomConsentElement extends HTMLFormElement {
 		if (!tacit) this.explicits.add(consent);
 		return tacit ? "yes" : null;
 	}
-	paint(state) {
+	setup(state) {
 		if (this.isContentEditable) return;
 		this.constructor.explicits = new Set();
 		const view = this.ownView;
 		view.textContent = '';
 		const tmpl = this.ownTpl.prerender();
 		view.appendChild(tmpl.content.cloneNode(true));
-		window.HTMLCustomFormElement.prototype.fill.call(this, Page.storage.all());
 		state.chain('consent', this);
+	}
+	paint() {
+		window.HTMLCustomFormElement.prototype.fill.call(this, Page.storage.all());
 	}
 	chainConsent(state) {
 		if (this.options.transient) {
