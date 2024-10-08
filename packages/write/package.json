@@ -20,19 +20,19 @@
   "homepage": "https://github.com/pageboard/client#readme",
   "dependencies": {
     "fomantic-ui-css": "2.7.2",
-    "postinstall": "^0.7.4"
+    "postinstall": "0.7.5"
   },
   "devDependencies": {
-    "@pageboard/pagecut": "^0.10.1",
-    "cropperjs": "^1.5.12",
-    "duration-relativetimeformat": "^2.0.2",
-    "fast-safe-stringify": "^2.1.1",
-    "postinstall-bundle": "^0.7.4",
-    "pretty-bytes": "^5.6.0",
-    "prosemirror-dev-tools": "^3.1.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "speakingurl": "^14.0.1"
+    "@pageboard/pagecut": "0.10.1",
+    "cropperjs": "1.5.12",
+    "duration-relativetimeformat": "2.0.2",
+    "fast-safe-stringify": "2.1.1",
+    "postinstall-bundle": "0.7.5",
+    "pretty-bytes": "5.6.0",
+    "prosemirror-dev-tools": "3.1.0",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "speakingurl": "14.0.1"
   },
   "postinstall": {
     "fomantic-ui-css/components": "link lib/components",
