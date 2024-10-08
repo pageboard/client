@@ -21,7 +21,7 @@ class HTMLCustomConsentElement extends HTMLFormElement {
 		if (!tacit) this.explicits.add(consent);
 		return tacit ? "yes" : null;
 	}
-	setup(state) {
+	paint(state) {
 		if (this.isContentEditable) return;
 		this.constructor.explicits = new Set();
 		const view = this.ownView;

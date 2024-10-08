@@ -9,7 +9,13 @@ class HTMLCustomFieldSetElement extends HTMLFieldSetElement {
 		const name = this.dataset.name.split(".").slice(1).join('.');
 		const vals = this.form ? window.HTMLCustomFormElement.prototype.read.call(this.form, true) : {};
 		const val = vals[name];
+		const wasOff = this.disabled;
 		this.disabled = this.hidden = val != this.dataset.value;
+		if (!this.disabled && wasOff) {
+			for (const node of this.querySelectorAll('[name]')) {
+				if (node.reset) node.reset();
+			}
+		}
 	}
 	patch() {
 		this.#update();
