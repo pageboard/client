@@ -15,11 +15,11 @@ class HTMLCustomFieldSetElement extends HTMLFieldSetElement {
 		const val = vals[name];
 		this.disabled = this.hidden = val != this.options.value;
 	}
-
 	patch() {
 		this.#update();
 	}
 	setup() {
+		this.#update();
 		this.form?.addEventListener('change', this);
 	}
 	close() {
