@@ -93,7 +93,7 @@ class ElementProperty {
 		if (block.type == "query_form") {
 			types = block.data?.type;
 			if (!types) return;
-		} else if (block.type == "api_form") {
+		} else if (block.type == "api_form" || block.type == "consent_form") {
 			types = block.data?.action?.parameters?.type;
 			if (!types) {
 				const method = block.data?.action?.method;
@@ -185,15 +185,10 @@ class ElementProperty {
 	}
 
 	#buildSelector(formBlock) {
-		const content = Pageboard.editor.element(formBlock.type)
-			.contents.get(formBlock);
-		const formProps = this.pathsProperties(formBlock, content);
-		if (!formProps) return;
 		const mapKeys = new Map();
 		const scope = Page.scope.copy();
-		this.#trackFuse(Object.keys(formProps), mapKeys, formBlock.data.action?.request ?? {}, scope);
-
 		const doc = this.#input.ownerDocument;
+		const dateFormats = ["date", "time", "date-time"];
 
 		this.#select = doc.dom(`<select></select>`);
 		const context = {
@@ -201,10 +196,15 @@ class ElementProperty {
 			key: null,
 			parent: this.#select
 		};
-
 		context.parent.appendChild(doc.dom(`<option hidden value=""></option>`));
-
-		const dateFormats = ["date", "time", "date-time"];
+		const formProps = {};
+		const el = Pageboard.editor.element(formBlock.type);
+		el.contents.each(formBlock, content => {
+			const props = this.pathsProperties(formBlock, content);
+			if (!props) return;
+			Object.assign(formProps, props);
+			this.#trackFuse(Object.keys(props), mapKeys, formBlock.data.action?.request ?? {}, scope);
+		});
 		const sortedKeys = Array.from(mapKeys.keys()).sort((a, b) => {
 			return a.localeCompare(b);
 		});
@@ -234,9 +234,11 @@ class ElementProperty {
 			} else {
 				const node = doc.dom(`<option value="${name}">${prop.title}</option>`);
 				context.parent.appendChild(node);
-				if (!this.existing) node.disabled = Boolean(
-					content.querySelector(`[name="${name}"]`)
-				);
+				if (!this.existing) {
+					el.contents.each(formBlock, content => {
+						if (content.querySelector(`[name="${name}"]`)) node.disabled = true;
+					});
+				}
 			}
 		}
 		if (mapKeys.size == 0) {
@@ -247,13 +249,19 @@ class ElementProperty {
 	}
 
 	update(block) {
-		const content = Pageboard.editor.element(this.#formBlock.type)
-			.contents.get(this.#formBlock);
-		if (this.#select) for (const node of this.#select) {
-			if (node.value) node.disabled = Boolean(
-				content.querySelector(`[name="${node.value}"]`)
-			);
+		if (!this.#select || this.existing) return;
+		for (const node of this.#select) {
+			if (node.value) node.disabled = false;
 		}
+		const el = Pageboard.editor.element(this.#formBlock.type);
+
+		el.contents.each(this.#formBlock, content => {
+			for (const node of this.#select) {
+				if (node.value && content.querySelector(`[name="${node.value}"]`)) {
+					node.disabled = true;
+				}
+			}
+		});
 	}
 
 	handleEvent(e) {
