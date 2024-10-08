@@ -46,13 +46,16 @@ class HTMLCustomConsentElement extends HTMLFormElement {
 		if (e.type == "submit") e.preventDefault();
 		if (this.isContentEditable) return;
 		const consents = window.HTMLCustomFormElement.prototype.read.call(this);
-		const list = Array.from(this.constructor.explicits);
-		const def = consents.consent;
-		for (const consent of list) {
-			if (def != "custom") consents[consent] = def;
+		const names = new Set();
+		for (const node of this.elements) {
+			if (node.name?.startsWith('consent.')) names.push(node.name);
 		}
-		if (list.some(c => consents[c] == null)) {
-			// not all explicit consents have been answered
+		const def = consents.consent;
+		if (def != "custom") for (const consent of names) {
+			consents[consent] = def;
+		}
+		if (Array.from(names).some(c => consents[c] == null)) {
+			// not all consents have been answered
 			return;
 		}
 		for (const [key, val] of Object.entries(consents)) {
