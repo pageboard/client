@@ -39,7 +39,10 @@ class HTMLCustomConsentElement extends HTMLFormElement {
 	}
 	handleChange(e, state) {
 		if (e.type == "submit" || !this.elements.find(item => item.type == "submit")) {
-			this.handleSubmit(e, state);
+			setTimeout(() => {
+				// let fieldset handle change first
+				this.handleSubmit(e, state);
+			}, 10);
 		}
 	}
 	handleSubmit(e, state) {
