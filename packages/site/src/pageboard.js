@@ -22,9 +22,10 @@ const Pageboard = window.Pageboard ??= {};
 	});
 	if (polyfills.length) {
 		const url = new URL(
-			`/@api/polyfill/bundle`,
+			`/@file/polyfill.js`,
 			document.location
 		);
+		url.searchParams.set('version', Pageboard.polyfills.version);
 		url.searchParams.set('features', polyfills.join('!'));
 		await loadScript(url.pathname + url.search, document, -1000);
 	}
