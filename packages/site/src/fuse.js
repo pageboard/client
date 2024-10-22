@@ -81,7 +81,7 @@ const fuse = (md, obj, data, scope) => {
 
 Object.getPrototypeOf(Page.constructor).prototype.fuse = function (data, scope) {
 	if (!scope) console.warn("Missing scope param");
-	this.pathname = jsonMd.merge(this.pathname, data, scope);
+	this.pathname = textMd.merge(this.pathname, data, scope);
 	this.query = jsonMd.merge(this.query, data, scope);
 	return this;
 };
