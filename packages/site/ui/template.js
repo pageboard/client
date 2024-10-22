@@ -50,7 +50,9 @@ class HTMLElementTemplate extends Page.Element {
 		}
 		this.#source = new EventSource(url);
 		this.#source.onerror = e => {
-			setTimeout(() => this.#stream(state), 1000);
+			this.#source.close();
+			this.#source = null;
+			setTimeout(() => this.#stream(state), 5000);
 		};
 		this.#source.onmessage = e => {
 			this.#run(state);
