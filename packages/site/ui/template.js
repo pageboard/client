@@ -3,6 +3,7 @@ class HTMLElementTemplate extends Page.Element {
 	#observer;
 	#queue;
 	#locked;
+	#source;
 
 	#autoOffset(state) {
 		const { offset, offsetName, auto, count } = this.dataset;
@@ -23,13 +24,41 @@ class HTMLElementTemplate extends Page.Element {
 
 	async patch(state) {
 		this.ownTpl.prerender();
-		if (state.scope.$write || this.loading) return;
+		if (state.scope.$write) return;
 		if (this.closest('[block-content="template"]')) {
 			console.warn("patch within template shouldn't happen");
 			return;
 		}
+		await this.#run(state);
+	}
 
-		const scope = state.scope.copy();
+	async paint(state) {
+		if (state.scope.$write) return;
+		this.ownTpl.prerender();
+		if (this.dataset.reactions) this.#stream(state);
+	}
+
+	#stream(state) {
+		const url = this.getAttribute('action')?.replace('/query/', '/stream/');
+		if (!url) return;
+		if (this.#source) {
+			if (this.#source.url != url) {
+				this.#source.close();
+			} else {
+				return;
+			}
+		}
+		this.#source = new EventSource(url);
+		this.#source.onerror = e => {
+			setTimeout(() => this.#stream(state), 1000);
+		};
+		this.#source.onmessage = e => {
+			this.#run(state);
+		};
+	}
+
+	async #run(state) {
+		if (this.loading) return;
 		let action = this.getAttribute('action');
 		let response = {};
 		const collector = state.collector();
@@ -40,6 +69,7 @@ class HTMLElementTemplate extends Page.Element {
 		} else if (action == null) {
 			response.status = 200;
 		}
+		const scope = state.scope.copy();
 
 		if (action) try {
 			const offset = this.#autoOffset(state);
@@ -279,6 +309,10 @@ class HTMLElementTemplate extends Page.Element {
 			this.#observer.unobserve(this.lastElementChild);
 			this.#observer.disconnect();
 			this.#observer = null;
+		}
+		if (this.#source) {
+			this.#source.close();
+			this.#source = null;
 		}
 	}
 }

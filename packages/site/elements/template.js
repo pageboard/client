@@ -15,6 +15,7 @@ exports.fetch = {
 		action="/@api/query/[$id][action?.method|prune:-]"
 		data-auto="[auto]"
 		data-offset-name="[action?.request?.offset|as:expressions]"
+		data-reactions="[reactions?.length|gt:0|fail:-]"
 		parameters="[action?.request|as:expressions]"
 		success="[redirection.parameters|as:query|as:null]"
 		badrequest="[badrequest.parameters|as:query|as:null]"
@@ -39,6 +40,16 @@ exports.fetch = {
 			title: 'Action',
 			description: 'Choose a service',
 			$ref: '/reads'
+		},
+		reactions: {
+			title: 'Reactions',
+			description: 'Update when one of these forms are submitted',
+			type: 'array',
+			items: {
+				title: 'Form name',
+				type: 'string',
+				format: 'name'
+			}
 		},
 		redirection: {
 			title: 'Success',
