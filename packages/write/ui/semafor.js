@@ -796,6 +796,45 @@ Semafor.types.null = function (key, schema, node, inst) {
 };
 
 Semafor.types.array = function (key, schema, node, inst) {
+	const items = inst.resolveRef(schema.items);
+	const frag = node.ownerDocument.createDocumentFragment();
+	if (Array.isArray(items)) {
+		items.forEach((item, i) => {
+			inst.process(`${key}.${i}`, item, frag, schema);
+		});
+	} else if (items.type == "string") {
+		return Semafor.types.string(key, schema, node, inst);
+	} else if (items.anyOf) {
+		const allStrings = items.anyOf.every(item => {
+			return item.type == "string";
+		});
+		if (allStrings) {
+			return Semafor.types.string(key, schema, node, inst);
+		} else if (items.anyOf) {
+			const fields = node.dom(`<div class="inline fields rtl">
+				<div class="inline field">
+					<label class="ui checkbox">
+						<input type="checkbox" name="[$key]" value="[items.anyOf|at:div|repeat:item|.const]">
+						<span>[item.title]</span>
+						<small>[item.description]</small>
+					</label>
+				</div>
+			</div>`).fuse(schema, { $key: key });
+			frag.appendChild(fields);
+		} else {
+			frag.appendChild(node.dom(`<div class="inline field">
+				<select multiple name="[$key]">
+					<option value="[items.anyOf|repeat:item|.const|or:]">[item.title|else:item.const]</option>
+				</select>
+			</div>`).fuse(schema, { $key: key }));
+		}
+	} else {
+		console.warn("FIXME: array type supports only items: [schemas], or items.anyOf", schema);
+		return inst.process(key, {
+			...items,
+			title: schema.title
+		}, node, schema)?.pop();
+	}
 	if (schema.nullable) {
 		const fieldset = node.dom(`<div class="nullable array fieldset">
 			<fieldset class="field" disabled name="[$key]">
@@ -816,46 +855,8 @@ Semafor.types.array = function (key, schema, node, inst) {
 		</fieldset>`).fuse(schema, { $key: key });
 		node = node.appendChild(fieldset);
 	}
-	const items = inst.resolveRef(schema.items);
-	if (Array.isArray(items)) {
-		items.forEach((item, i) => {
-			inst.process(`${key}.${i}`, item, node, schema);
-		});
-		return node;
-	} else if (items.type == "string") {
-		return Semafor.types.string(key, schema, node, inst);
-	} else if (items.anyOf) {
-		const allStrings = items.anyOf.every(item => {
-			return item.type == "string";
-		});
-		if (allStrings) {
-			return Semafor.types.string(key, schema, node, inst);
-		} else if (items.anyOf) {
-			const fields = node.dom(`<div class="inline fields rtl">
-				<div class="inline field">
-					<label class="ui checkbox">
-						<input type="checkbox" name="[$key]" value="[items.anyOf|at:div|repeat:item|.const]">
-						<span>[item.title]</span>
-						<small>[item.description]</small>
-					</label>
-				</div>
-			</div>`).fuse(schema, { $key: key });
-			node.appendChild(fields);
-			return fields;
-		} else {
-			return node.appendChild(node.dom(`<div class="inline field">
-				<select multiple name="[$key]">
-					<option value="[items.anyOf|repeat:item|.const|or:]">[item.title|else:item.const]</option>
-				</select>
-			</div>`).fuse(schema, { $key: key }));
-		}
-	} else {
-		console.warn("FIXME: array type supports only items: [schemas], or items.anyOf", schema);
-		return inst.process(key, {
-			...items,
-			title: schema.title
-		}, node, schema)?.pop();
-	}
+	node.appendChild(frag);
+	return node;
 };
 
 Semafor.types.const = function (key, schema, node, inst) {
