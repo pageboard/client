@@ -28,11 +28,11 @@ Pageboard.schemaFilters['element-content'] = class ElementContentFilter {
 					"const": item.id
 				}));
 				schema.items.anyOf.push(...contents);
-				schema.$disabled = false;
+				schema.$disabled = !contents.length;
 				delete schema.items.type;
 				delete schema.items.format;
 			} else {
-				console.warn("element type not found", type);
+				schema.$disabled = true;
 			}
 		} else {
 			schema.$disabled = true;
