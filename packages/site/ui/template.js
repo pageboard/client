@@ -35,12 +35,12 @@ class HTMLElementTemplate extends Page.Element {
 	async paint(state) {
 		if (state.scope.$write) return;
 		this.ownTpl.prerender();
-		if (this.dataset.reactions) this.#stream(state);
+		this.#stream(state);
 	}
 
 	#stream(state) {
-		const url = this.getAttribute('action')?.replace('/query/', '/stream/');
-		if (!url) return;
+		if (!this.id || !this.dataset.reactions) return;
+		const url = "/@stream/" + this.id;
 		if (this.#source) {
 			if (this.#source.url != url) {
 				this.#source.close();
