@@ -140,6 +140,12 @@ export default class Scope {
 	set $doc(v) {
 		// ignore it
 	}
+	get $navigator() {
+		return window.navigator;
+	}
+	set $navigator(v) {
+		// ignore it
+	}
 	get $elements() {
 		return this.viewer.elements;
 	}

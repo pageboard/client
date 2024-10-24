@@ -245,7 +245,6 @@ class HTMLElementTemplate extends Page.Element {
 				scope[key] = val;
 			}
 		}
-		scope.$navigator = window.navigator;
 
 		const frag = scope.render(data, el);
 		if (collector.failed) scope.$status = 400;
