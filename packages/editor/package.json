@@ -23,7 +23,7 @@
     "postinstall-bundle": "^0.9.4"
   },
   "devDependencies": {
-    "@pageboard/pagecut": "^0.15.6"
+    "@pageboard/pagecut": "^0.16.2"
   },
   "postinstall": {
     "@pageboard/pagecut/src/*.css": "link lib/"
