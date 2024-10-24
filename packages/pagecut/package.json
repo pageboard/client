@@ -49,10 +49,7 @@
   },
   "prepare": {
     "prosemirror-model": "patch patches/prosemirror-model-pr-39.patch",
-    "prosemirror-view": [
-      "patch patches/prosemirror-view-pr-40.patch",
-      "patch patches/prosemirror-view-parse-from-clipboard-dom.patch"
-    ],
+    "prosemirror-view": "patch patches/prosemirror-view.patch",
     "prosemirror-dropcursor": "patch patches/prosemirror-dropcursor-offset-parent.patch",
     "prosemirror-gapcursor/style/gapcursor.css": "copy src/prosemirror-gapcursor.css",
     "prosemirror-view/style/prosemirror.css": "copy src/prosemirror.css",
