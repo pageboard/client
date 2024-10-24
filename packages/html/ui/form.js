@@ -421,8 +421,8 @@ HTMLButtonElement.prototype.fill = HTMLInputElement.prototype.fill = function (v
 			this.checked = true;
 		} else {
 			this.checked = (Array.isArray(val) ? val : [val]).some(str => {
-				if (str == false && this.value == "") return true;
-				return str.toString() == this.value;
+				if ((str == false || str == null) && this.value == "") return true;
+				return (str ?? '').toString() == this.value;
 			});
 		}
 	} else {
