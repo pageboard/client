@@ -101,11 +101,15 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 		if (state.scope.$write) return;
 		const name = state.query.submit; // explicit auto-submit
 		if (name && name == this.name || this.elements.length == 0 && this.action != state.toString()) {
-			delete state.query.submit;
-			state.finish(() => {
-				if (state.status != 200) return;
-				state.dispatch(this, 'submit');
-			});
+			if (state.scope.$read) {
+				console.info("form#paint would auto-submit:", this.action);
+			} else {
+				delete state.query.submit;
+				state.finish(() => {
+					if (state.status != 200) return;
+					state.dispatch(this, 'submit');
+				});
+			}
 		}
 	}
 	read(withDefaults = false, submitter) {
