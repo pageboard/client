@@ -20,7 +20,7 @@ Object.assign(window.Pageboard, {
 		}
 		window.queueMicrotask(() => node.dispatchEvent(e));
 	},
-	uiLoad(what, p) {
+	async uiLoad(what, p) {
 		window.Pageboard.notify.clear();
 		const icon = what.querySelector('.icon:not(.buttons)');
 		let classes;
@@ -30,16 +30,20 @@ Object.assign(window.Pageboard, {
 		} else {
 			what.classList.add('loading');
 		}
-		return p.catch(err => {
+		try {
+			const ret = await p;
+			if (ret?.status && ret.status >= 400) throw ret;
+			return ret;
+		} catch (err) {
 			window.Pageboard.notify("Error" + (err.status ? ` ${err.status}` : ''), {
 				message: err.statusText
 			});
 			// rethrow, we don't want to show any result
 			throw err;
-		}).finally(() => {
+		} finally {
 			if (icon) icon.className = classes;
 			else what.classList.remove('loading');
-		});
+		}
 	}
 });
 
