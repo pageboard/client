@@ -31,15 +31,20 @@ exports.query_form = {
 			}
 		},
 		redirection: {
-			title: 'Target Address',
+			title: 'Target',
 			type: 'object',
 			properties: {
 				url: {
-					title: 'Page',
+					title: 'Address',
 					nullable: true,
 					type: "string",
-					format: "page",
-					$helper: "page"
+					format: 'uri-reference',
+					$helper: {
+						name: 'href',
+						filter: {
+							type: ["link", "file", "archive"]
+						}
+					}
 				},
 				parameters: {
 					title: 'Parameters',
