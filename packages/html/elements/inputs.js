@@ -292,8 +292,8 @@ exports.input_text = {
 		nodes: 'inline*'
 	},
 	patterns: {
-		tel: /^(\(\d+\))? *\d+([ .-]?\d+)*$/.source,
-		email: /^[\w.!#$%&'*+/=?^`{|}~-]+@\w(?:[\w-]{0,61}\w)?(?:\.\w(?:[\w-]{0,61}\w)?)*$/.source
+		tel: /^(\(\d+\))? *\d+([ .\-]?\d+)*$/v.source,
+		email: /[\w.!#$%&'*+\/=?^`\{\|\}~\-]+@\w(?:[\w\-]{0,61}\w)?(?:\.\w(?:[\w\-]{0,61}\w)?)*/v.source
 	},
 	html: `<div class="[width|as:colnums|post: wide] field [type|if:eq:hidden]">
 		<label block-content="label">Label</label>
