@@ -22,19 +22,24 @@ class HTMLElementTemplate extends Page.Element {
 		}
 	}
 
+	#bindings(node = this.ownTpl.content) {
+		return node.querySelectorAll('[block-type="binding"],[block-type="block_binding"]');
+	}
+
 	async patch(state) {
-		this.ownTpl.prerender();
+		const tpl = this.ownTpl;
+		tpl.prerender();
 		if (state.scope.$write) return;
-		if (this.closest('[block-content="template"]')) {
-			console.warn("patch within template shouldn't happen");
-			return;
+		if (this.getAttribute('action') && this.#bindings(tpl.content).length == 0) {
+			this.removeAttribute('action');
 		}
 		await this.#run(state);
 	}
 
 	async paint(state) {
-		if (state.scope.$write) return;
-		this.ownTpl.prerender();
+		const tpl = this.ownTpl;
+		tpl.prerender();
+		if (state.scope.$write || this.#bindings(tpl.content).length == 0) return;
 		this.#stream(state);
 	}
 
@@ -163,7 +168,7 @@ class HTMLElementTemplate extends Page.Element {
 		// allow sub-templates to merge current data
 		for (const tpl of tmpl.querySelectorAll('template')) {
 			if (tpl.parentNode.nodeName == this.nodeName || !tpl.content) continue;
-			for (const node of tpl.content.querySelectorAll('[block-type="binding"],[block-type="block_binding"]')) {
+			for (const node of this.#bindings(tpl.content)) {
 				node.fuse(data, scope);
 			}
 			// get rid of block-id in those templates to avoid
