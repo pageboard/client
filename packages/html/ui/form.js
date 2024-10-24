@@ -98,16 +98,15 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 		}
 	}
 	paint(state) {
-		// ?submit=<name> for auto-submit
-		// WORKAROUND use Page instead of state
-		const name = state.query.submit;
-		if (!name || name != this.name) return;
-		// make sure to not resubmit in case of self-redirection
-		delete state.query.submit;
-		state.finish(() => {
-			if (state.status != 200) return;
-			state.dispatch(this, 'submit');
-		});
+		if (state.scope.$write) return;
+		const name = state.query.submit; // explicit auto-submit
+		if (name && name == this.name || this.elements.length == 0 && this.action != state.toString()) {
+			delete state.query.submit;
+			state.finish(() => {
+				if (state.status != 200) return;
+				state.dispatch(this, 'submit');
+			});
+		}
 	}
 	read(withDefaults = false, submitter) {
 		const fd = new FormData(this, submitter);
