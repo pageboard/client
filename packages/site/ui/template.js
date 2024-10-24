@@ -32,6 +32,7 @@ class HTMLElementTemplate extends Page.Element {
 		if (state.scope.$write) return;
 		if (this.getAttribute('action') && this.#bindings(tpl.content).length == 0) {
 			this.removeAttribute('action');
+			this.removeAttribute('parameters');
 		}
 		await this.#run(state);
 	}
