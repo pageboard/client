@@ -29,6 +29,7 @@ Page.setup(state => {
 });
 
 Pageboard.adopt = function(win, readState) {
+	readState.scope.$read = true;
 	Page.setup(writeState => {
 		readState.finish(() => {
 			window.document.title = win.document.title;
