@@ -1,6 +1,6 @@
 {
   "name": "@pageboard/editor",
-  "version": "0.16.0",
+  "version": "0.16.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -19,11 +19,9 @@
   },
   "homepage": "https://github.com/pageboard/client#readme",
   "dependencies": {
+    "@pageboard/pagecut": "^0.16.2",
     "postinstall": "^0.11.0",
     "postinstall-bundle": "^0.9.4"
-  },
-  "devDependencies": {
-    "@pageboard/pagecut": "^0.16.2"
   },
   "postinstall": {
     "@pageboard/pagecut/src/*.css": "link lib/"

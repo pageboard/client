@@ -1,6 +1,6 @@
 {
   "name": "@pageboard/html",
-  "version": "0.16.0",
+  "version": "0.16.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -19,8 +19,6 @@
   },
   "homepage": "https://github.com/pageboard/client#readme",
   "dependencies": {
-  },
-  "devDependencies": {
     "nouislider": "^15.8.1",
     "postinstall": "^0.11.0"
   },
