@@ -51,8 +51,10 @@ exports.page = {
 		}
 	},
 	contents: [{
+		title: 'Title',
 		id: 'title'
 	}, {
+		title: 'Description',
 		id: 'description'
 	}, {
 		nodes: 'header? main+ footer?',
