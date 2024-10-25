@@ -34,13 +34,15 @@ class HTMLElementTemplate extends Page.Element {
 			this.removeAttribute('action');
 			this.removeAttribute('parameters');
 		}
+		if (!this.dataset.prerender) return;
 		await this.#run(state);
 	}
 
 	async paint(state) {
 		const tpl = this.ownTpl;
 		tpl.prerender();
-		if (state.scope.$write || this.#bindings(tpl.content).length == 0) return;
+		if (state.scope.$write) return;
+		if (this.dataset.prerender) await this.#run(state);
 		this.#stream(state);
 	}
 
@@ -286,7 +288,7 @@ class HTMLElementTemplate extends Page.Element {
 		this.#locked = true;
 		this.#queue = this.#queue.then(async () => {
 			if (this.#autoOffset(state) !== false) {
-				await Page.reload({ vary: 'patch' });
+				await Page.reload({ vary: 'paint' });
 			}
 			this.#locked = false;
 		});
