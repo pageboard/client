@@ -259,8 +259,17 @@ class HTMLElementTemplate extends Page.Element {
 
 		const frag = scope.render(data, el);
 		if (collector.failed) scope.$status = 400;
-		if (collector.postrender && !this.dataset.prerender) {
+		if (collector.prerender && !this.dataset.prerender) {
 			console.warn("fetch must be prerendered", this);
+			scope.$status = 400;
+		}
+		if (collector.postrender && this.dataset.prerender) {
+			console.warn("fetch must be not be prerendered", this);
+			scope.$status = 400;
+		}
+		if (collector.prerender && collector.postrender) {
+			console.warn("fetch cannot be rendered at all", this);
+			scope.$status = 400;
 		}
 
 		if (scope.$status != 200) {
@@ -379,11 +388,17 @@ class QueryCollectorFilter {
 	}
 	filter(ctx, val) {
 		const path = ctx.expr.path;
-		if (path[0] == "$navigator" || path[0] == "$locks") {
-			this.postrender = true;
-			return val;
-		} else if (path[0] != "$query") {
-			return val;
+		switch (path[0]) {
+			case "$query":
+				break;
+			case "$navigator":
+				this.postrender = true;
+				return val;
+			case "$locks":
+				this.prerender = true;
+				return val;
+			default:
+				return val;
 		}
 		const { query, vars } = this.#state;
 		if (path.length > 1) {
