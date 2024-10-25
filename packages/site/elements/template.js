@@ -13,7 +13,7 @@ exports.fetch = {
 	html: `<element-template
 		id="[name|else:$id]"
 		action="/@api/query/[$id][action?.method|prune:-]"
-		data-auto="[auto]" data-prerender="[prerender]"
+		data-auto="[auto]" data-prerender="[prerender|fail:-]"
 		data-offset-name="[action?.request?.offset|as:expressions]"
 		data-reactions="[reactions?.length|gt:0|fail:-]"
 		parameters="[action?.request|as:expressions]"

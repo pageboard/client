@@ -34,15 +34,18 @@ class HTMLElementTemplate extends Page.Element {
 			this.removeAttribute('action');
 			this.removeAttribute('parameters');
 		}
-		if (!this.dataset.prerender) return;
-		await this.#run(state);
+		if (this.dataset.prerender) {
+			await this.#run(state);
+		}
 	}
 
 	async paint(state) {
 		const tpl = this.ownTpl;
 		tpl.prerender();
 		if (state.scope.$write) return;
-		if (this.dataset.prerender) await this.#run(state);
+		if (!this.dataset.prerender) {
+			await this.#run(state);
+		}
 		this.#stream(state);
 	}
 
@@ -256,6 +259,9 @@ class HTMLElementTemplate extends Page.Element {
 
 		const frag = scope.render(data, el);
 		if (collector.failed) scope.$status = 400;
+		if (collector.postrender && !this.dataset.prerender) {
+			console.warn("fetch must be prerendered", this);
+		}
 
 		if (scope.$status != 200) {
 			view.textContent = '';
@@ -373,7 +379,12 @@ class QueryCollectorFilter {
 	}
 	filter(ctx, val) {
 		const path = ctx.expr.path;
-		if (path[0] != "$query") return val;
+		if (path[0] == "$navigator" || path[0] == "$locks") {
+			this.postrender = true;
+			return val;
+		} else if (path[0] != "$query") {
+			return val;
+		}
 		const { query, vars } = this.#state;
 		if (path.length > 1) {
 			const key = path.slice(1).join('.');
