@@ -81,17 +81,12 @@ class HTMLElementMailImage extends Page.create(HTMLImageElement) {
 		return srcLoc.toString();
 	}
 
-	patch(state) {
+	#meta() {
 		this.classList.remove('loading');
 		if (this.currentSrc != this.options.src) {
 			this.classList.remove('error');
 		}
 		const d = this.dataset;
-		if (d.width == null || d.height == null) {
-			const meta = state.scope.$hrefs?.[this.options.src];
-			if (meta?.width) d.width = meta.width;
-			if (meta?.height) d.height = meta.height;
-		}
 		d.width ??= this.constructor.defaultWidth || "";
 		d.height ??= this.constructor.defaultHeight || "";
 		const { w, h } = this.dimensions;
@@ -103,6 +98,12 @@ class HTMLElementMailImage extends Page.create(HTMLImageElement) {
 		} else if (cur.startsWith('data:')) {
 			this.image.setAttribute('src', cur);
 		}
+	}
+	patch() {
+		this.#meta();
+	}
+	paint() {
+		this.#meta();
 	}
 	reveal(state) {
 		if (!this.options.src) {

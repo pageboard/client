@@ -84,13 +84,6 @@ export class CustomElement extends Element {
 				}
 			}
 		}
-		if (dom.dataset?.src) {
-			const { width, height, source, title } = scope.$hrefs?.[dom.dataset.src] ?? {};
-			if (width != null) dom.dataset.width ??= width;
-			if (height != null) dom.dataset.height ??= height;
-			if (source != null) dom.dataset.source ??= source;
-			if (title != null) dom.title ??= title;
-		}
 		return dom;
 	}
 }

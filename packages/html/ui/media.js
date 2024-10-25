@@ -1,9 +1,6 @@
 const HTMLElementMediaConstructor = Superclass => class extends Superclass {
-
-	patch(state) {
-		this.classList.remove('error', 'loading');
-	}
 	reveal(state) {
+		this.classList.remove('error', 'loading');
 		const curSrc = this.options.src;
 		if (curSrc != this.currentSrc) {
 			try {
@@ -31,15 +28,6 @@ class HTMLElementVideo extends HTMLElementMediaConstructor(Page.create(HTMLVideo
 	static defaults = {
 		dataSrc: null
 	};
-	patch(state) {
-		super.patch(state);
-		const { url } = this.options;
-		if (!url) return;
-		const { title, width, height } = state.scope.$hrefs?.[url] ?? {};
-		if (title) this.title = title;
-		if (width) this.width = width;
-		if (height) this.height = height;
-	}
 }
 Page.define('element-video', HTMLElementVideo, 'video');
 

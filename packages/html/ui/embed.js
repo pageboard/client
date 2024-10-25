@@ -14,12 +14,15 @@ class HTMLElementEmbed extends Page.Element {
 	get currentSrc() {
 		return this.querySelector('iframe')?.getAttribute('src');
 	}
-	patch(state) {
-		const { src } = this.options;
-		if (!src) return;
-		const { width, height, source } = state.scope.$hrefs?.[src] ?? {};
-		if (source) this.dataset.source = source;
+	#meta() {
+		const { width, height } = this.dataset;
 		if (width && height) this.style.paddingBottom = `calc(${height} / ${width} * 100%)`;
+	}
+	patch(state) {
+		this.#meta(state);
+	}
+	paint(state) {
+		this.#meta(state);
 	}
 	consent(state) {
 		const consent = state.scope.storage.get(this.constructor.consent);

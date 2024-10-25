@@ -40,7 +40,20 @@ const baseMd = new Matchdom(
 	}
 );
 
-const domMd = baseMd.copy().extend(DomPlugin);
+const domMd = baseMd.copy().extend(DomPlugin).extend({
+	hooks: {
+		afterAll(ctx, val) {
+			if (ctx.dest.attr == "data-src") {
+				const { node } = ctx.dest;
+				const { width, height, source, title } = ctx.scope.$hrefs[val] ?? {};
+				if (width != null) node.dataset.width ??= width;
+				if (height != null) node.dataset.height ??= height;
+				if (source != null) node.dataset.source ??= source;
+				if (title != null) node.title ??= title;
+			}
+		}
+	}
+});
 const jsonMd = baseMd.copy().extend(JsonPlugin);
 const textMd = baseMd.copy().extend(TextPlugin);
 

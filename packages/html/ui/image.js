@@ -66,7 +66,7 @@ const HTMLElementImageConstructor = Superclass => class extends Superclass {
 		return img;
 	}
 
-	patch(state) {
+	#meta() {
 		const {
 			dataset: d,
 			image,
@@ -79,11 +79,6 @@ const HTMLElementImageConstructor = Superclass => class extends Superclass {
 			this.classList.remove('error');
 		}
 
-		if (d.width == null || d.height == null) {
-			const meta = state.scope.$hrefs?.[this.options.src];
-			if (meta?.width) d.width = meta.width;
-			if (meta?.height) d.height = meta.height;
-		}
 		d.width ??= constructor.defaultWidth || "";
 		d.height ??= constructor.defaultHeight || "";
 		image.width = w || d.width;
@@ -95,6 +90,13 @@ const HTMLElementImageConstructor = Superclass => class extends Superclass {
 		} else if (cur.startsWith('data:')) {
 			image.setAttribute('src', cur);
 		}
+	}
+
+	patch() {
+		this.#meta();
+	}
+	paint() {
+		this.#meta();
 	}
 
 	get currentSrc() {
