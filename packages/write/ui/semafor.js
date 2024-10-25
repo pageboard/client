@@ -497,7 +497,7 @@ class Semafor {
 		}));
 	}
 
-	resolveRef(schema, parentId) {
+	resolveRef(schema, parentId = '') {
 		if (!schema) return schema;
 		const { $ref } = schema;
 		if (!$ref) return schema;
@@ -512,7 +512,7 @@ class Semafor {
 			if (rel.length >= 2 && rel[0] != 'properties' && rel[1] != 'data') {
 				console.error("Cannot resolve", $ref);
 			} else {
-				ref = rel.slice(2).reduce((schema, key) => schema[key], ref);
+				ref = rel.slice(2).reduce((schema, key) => schema?.[key], ref);
 				if (ref) Object.assign(schema, ref);
 				else console.error("$ref not found", $ref);
 			}
