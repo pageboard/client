@@ -24,8 +24,7 @@ Pageboard.schemaFilters.discriminator = class {
 				oneOf: prop.oneOf.map(item => {
 					item = semafor.resolveRef(item);
 					return { ...item.properties[disc], title: item.title };
-				}),
-				nullable: true
+				})
 			}
 		};
 		return copy;
