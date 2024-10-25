@@ -34,7 +34,7 @@ class HTMLElementTemplate extends Page.Element {
 			this.removeAttribute('action');
 			this.removeAttribute('parameters');
 		}
-		if (this.dataset.prerender) {
+		if (!this.dataset.postrender) {
 			await this.#run(state);
 		}
 	}
@@ -43,7 +43,7 @@ class HTMLElementTemplate extends Page.Element {
 		const tpl = this.ownTpl;
 		tpl.prerender();
 		if (state.scope.$write) return;
-		if (!this.dataset.prerender) {
+		if (this.dataset.postrender) {
 			await this.#run(state);
 		}
 		this.#stream(state);
@@ -259,12 +259,12 @@ class HTMLElementTemplate extends Page.Element {
 
 		const frag = scope.render(data, el);
 		if (collector.failed) scope.$status = 400;
-		if (collector.prerender && !this.dataset.prerender) {
+		if (collector.prerender && this.dataset.postrender) {
 			console.warn("fetch must be prerendered", this);
 			scope.$status = 400;
 		}
-		if (collector.postrender && this.dataset.prerender) {
-			console.warn("fetch must be not be prerendered", this);
+		if (collector.postrender && !this.dataset.postrender) {
+			console.warn("fetch must be postrendered", this);
 			scope.$status = 400;
 		}
 		if (collector.prerender && collector.postrender) {
@@ -390,6 +390,7 @@ class QueryCollectorFilter {
 		const path = ctx.expr.path;
 		switch (path[0]) {
 			case "$query":
+				this.prerender = true;
 				break;
 			case "$navigator":
 				this.postrender = true;
