@@ -139,8 +139,6 @@ class Transition {
 		this.root.classList.remove('transition', 'transitioning');
 		this.root.scrollTop = top;
 		this.root.scrollLeft = left;
-		delete this.from;
-		delete this.to;
 		delete this.state.scope.transition;
 		delete this.state;
 	}
