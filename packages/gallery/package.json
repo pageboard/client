@@ -1,11 +1,11 @@
 {
   "name": "@pageboard/gallery",
-  "version": "0.16.2",
+  "version": "0.16.3",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postintall": "postinstall",
+    "postinstall": "postinstall",
     "prepare": "postinstall"
   },
   "repository": {
@@ -29,7 +29,7 @@
     "@pageboard/flickity/css/flickity.css": "link lib/"
   },
   "prepare": {
-    "src/flickity.js": "bundle lib/"
+    "./src/flickity.js": "bundle lib/"
   },
   "pageboard": {
     "version": "^0.16",
@@ -38,6 +38,8 @@
       "lib",
       "ui"
     ],
-    "elements": "element/"
+    "elements": [
+      "element/"
+    ]
   }
 }
