@@ -41,7 +41,6 @@ exports.write = {
 				<div class="header item">[$parent.data.title|or:-]</div>
 				<div class="item">[$parent.data.env]</div>
 				<div class="item">[$parent.data.languages?.0|else:$parent.data.lang]</div>
-				<div class="item">[$parent.data.module] [$parent.data.version|slice:0:12|or:head]</div>
 			</div>
 			<div id="mode" class="right menu">
 				<a class="vertically fitted item" title="Site map" data-command="map" href="/admin/map">
