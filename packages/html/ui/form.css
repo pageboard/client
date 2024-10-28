@@ -32,6 +32,9 @@ element-select.active.ui.dropdown .menu {
 .ui.form {
 	width: 100%;
 }
+.layout > .ui.form {
+	width: auto;
+}
 .ui.form .inline.fluid.fields {
 	width:100%;
 	column-gap: 1em;
