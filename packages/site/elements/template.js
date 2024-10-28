@@ -43,7 +43,6 @@ exports.fetch = {
 		},
 		action: {
 			title: 'Action',
-			description: 'Choose a service',
 			$ref: '/reads'
 		},
 		reactions: {
