@@ -9,6 +9,6 @@ exports.page.properties.beacons = {
 exports.page.fragments.push({
 	path: 'head',
 	position: 'beforeend',
-	html: `<meta name="beacons" is="element-beacons" content="[beacons|as:query]">`
+	html: `<meta name="beacons" is="element-beacons" content="[beacons|fail:*|as:query]">`
 });
 exports.page.scripts.push("../ui/beacons.js");
