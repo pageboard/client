@@ -203,8 +203,8 @@ body[data-mode="read"] #pageboard-read > iframe {
 	margin: 0;
 }
 #form .nullable.fieldset > fieldset > legend {
-	margin-left: -0.9em;
-	margin-bottom: -0.6em;
+	margin-left: -0.5em;
+	margin-bottom: -0.5em;
 }
 #form .array.fieldset > fieldset > legend {
 }
