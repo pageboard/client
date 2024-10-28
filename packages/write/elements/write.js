@@ -39,8 +39,10 @@ exports.write = {
 			</div>
 			<div class="text menu">
 				<div class="header item">[$parent.data.title|or:-]</div>
-				<div class="item">[$parent.data.env]</div>
 				<div class="item">[$parent.data.languages?.0|else:$parent.data.lang]</div>
+				<div class="item">[$parent.data.server]</div>
+				<div class="item">[$parent.data.env]</div>
+				<div class="item">[$parent.updated_at|date:Y:MM:DD:HH:mm]</div>
 			</div>
 			<div id="mode" class="right menu">
 				<a class="vertically fitted item" title="Site map" data-command="map" href="/admin/map">
