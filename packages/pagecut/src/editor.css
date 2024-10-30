@@ -71,10 +71,7 @@ li.ProseMirror-selectednode::after {
 	outline: 2px solid rgb(121 153 238 / 60%) !important;
 	outline-offset: -1px !important;
 	border:none;
-	left: -2em;
-	right: 0;
-	top: 0;
-	bottom: 0;
+	inset: 0 0 0 -2em;
 }
 .ProseMirror-selectednode:not(img) {
 	min-width:1em;
