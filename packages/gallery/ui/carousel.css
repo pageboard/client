@@ -55,9 +55,6 @@ body.fullview {
 	overflow:hidden;
 }
 
-body.fullview element-gallery[block-content="galleries"] > :not(element-carousel) {
-	display:none;
-}
 body.fullview element-carousel.fullview {
 	display:block;
 	position:fixed;

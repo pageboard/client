@@ -58,7 +58,7 @@ exports.menu_group = {
 		nodes: "menu_item+"
 	},
 	html: `<element-menu class="[position] menu">
-		<div block-content="items"></div>
+		<div class="items" block-content="items"></div>
 		<div tabindex="0" class="ui fixed popup item [responsive|eq:popup|prune:*]">
 			<div class="icon">≡</div>
 			<div class="dropdown placer"><div class="menu"></div></div>

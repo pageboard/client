@@ -6,15 +6,6 @@ element-content {
 	width: 100%;
 }
 
-element-template > [block-content="template"] {
-	display:none;
-}
-
-[contenteditable] element-template > [block-content="template"] {
-	display:block;
-	min-height:1em;
-}
-
 [contenteditable] [block-id][data-label]:is([block-type="binding"],[block-type="block_binding"]) {
 	letter-spacing:-9999px;
 	word-spacing:-9999px;

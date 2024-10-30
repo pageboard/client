@@ -14,15 +14,8 @@ footer [block-type="consent_form"][data-transient="true"] {
 	display:none;
 }
 
-[block-type="consent_form"] > [block-content="content"] {
-	display:none;
-}
 [block-type="consent_form"] > .view {
 	position:relative;
-}
-[contenteditable] [block-type="consent_form"] > [block-content="content"] {
-	display:block;
-	min-height:1em;
 }
 
 [contenteditable] [block-focused="last"] > .form[block-type="consent_form"][data-transient="true"],

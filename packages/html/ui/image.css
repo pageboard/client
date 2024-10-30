@@ -12,7 +12,7 @@ element-image.no-size::after {
 	content: "⤡" !important;
 }
 
-element-image > [block-content="legend"] {
+element-image > div {
 	position:absolute;
 	font-size:0.8rem;
 	line-height:1rem;
@@ -144,6 +144,6 @@ img[is="element-img"] {
 	height:auto;
 }
 
-element-image[block-focused="last"] > [block-content="legend"] {
+element-image[block-focused="last"] > div {
 	background-color: rgb(255 255 255 / 50%);
 }

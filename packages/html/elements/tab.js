@@ -22,7 +22,7 @@ exports.tabs = {
 	}],
 	html: `<element-tabs id="[name|as:xid]">
 		<div class="ui top attached tabular menu" block-content="items"></div>
-		<div block-content="tabs"></div>
+		<div class="tabs" block-content="tabs"></div>
 	</element-tabs>`,
 	stylesheets: [
 		'../ui/components/tab.css',

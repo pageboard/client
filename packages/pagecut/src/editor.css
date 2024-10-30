@@ -42,12 +42,10 @@ pagecut-placeholder::after {
 	font-weight: normal;
 	font-variant: normal;
 }
-[block-focused][block-type] [block-type]:not([block-focused]) > pagecut-placeholder,
-[block-focused][block-type] [block-type]:not([block-focused]) [block-content] > pagecut-placeholder {
+[block-focused][block-type] [block-type]:not([block-focused]) pagecut-placeholder {
 	display:none;
 }
-[block-focused][block-type] > pagecut-placeholder,
-[block-focused][block-type] [block-content] > pagecut-placeholder {
+[block-focused][block-type] > pagecut-placeholder {
 	display:inline-block;
 }
 

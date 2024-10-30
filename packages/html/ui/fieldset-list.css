@@ -2,16 +2,3 @@ element-fieldset-list {
 	display: block;
 	position: relative;
 }
-
-element-fieldset-list > [block-content="template"] {
-	display: none;
-}
-
-[contenteditable] element-fieldset-list > [block-content="template"] {
-	display: block;
-	min-height: 1em;
-}
-
-[contenteditable] element-fieldset-list > .view {
-	display: none;
-}

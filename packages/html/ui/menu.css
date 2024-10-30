@@ -97,10 +97,10 @@ element-menu {
 element-menu > .menu {
 	position: relative;
 }
-element-menu > [block-content="items"] {
+element-menu > .items {
 	display:flex;
 }
-element-menu.burger > [block-content="items"] {
+element-menu.burger > .items {
 	left:0;
 	position: absolute;
 	pointer-events: none;
@@ -122,7 +122,7 @@ element-menu.burger > .item .popup.item {
 element-menu.burger .placer .popup.active .title {
 	margin-bottom:0.5em;
 }
-element-menu.burger > [block-content="items"] > * {
+element-menu.burger > .items > * {
 	visibility:hidden;
 }
 element-menu.burger .popup.item.active > .placer > div {

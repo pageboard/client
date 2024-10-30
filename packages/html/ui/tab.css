@@ -14,7 +14,7 @@ element-tabs > .ui.tabular.menu {
 element-tabs > .ui.tabular.menu::after {
 	content:none;
 }
-element-tabs > .ui.tabular.menu + div[block-content="tabs"] > .segment {
+element-tabs > .ui.tabular.menu + div.tabs > .segment {
 	border-top: none;
 	margin:0 0 1rem;
 	width: 100%;

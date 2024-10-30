@@ -17,7 +17,7 @@ exports.query_tags = {
 		nodes: 'inline*'
 	},
 	html: `<element-query-tags for="[form]">
-		<div block-content="title">Filters:</div>
+		<div class="title" block-content="title">Filters:</div>
 		<div class="ui labels"></div>
 	</element-query-tags>`,
 	stylesheets: [
