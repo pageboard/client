@@ -1,6 +1,6 @@
 {
   "name": "@pageboard/site",
-  "version": "0.16.5",
+  "version": "0.16.6",
   "description": "",
   "main": "src/pageboard.js",
   "scripts": {
@@ -24,7 +24,7 @@
     "matchdom": "^17.4.0",
     "postinstall": "^0.11.0",
     "postinstall-bundle": "^0.9.4",
-    "window-page": "^19.1.0"
+    "window-page": "^19.1.1"
   },
   "prepare": {
     ".": "bundle --extend=true --name=window lib/"
