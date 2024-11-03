@@ -53,7 +53,7 @@ class HTMLElementBlogs extends Page.Element {
 			if (!node) {
 				node = document.head.querySelector('link,script');
 				node.before(node.dom(`
-					<link rel="alternate" type="application/rss+xml" title="[$page.data.title]" href="[link]">
+					<link rel="alternate" type="application/rss+xml" title="[$title]" href="[link]">
 				`).fuse({
 					link:link
 				}, state.scope));
@@ -106,8 +106,8 @@ class HTMLElementBlogs extends Page.Element {
 
 		const url = doc.location.toString();
 		const feed = {
-			title: scope.$page.content.title,
-			description: scope.$page.data.description ?? scope.$parent.data.title,
+			title: scope.$title,
+			description: scope.$description,
 			url: url.replace('.rss', ''),
 			categories: topics,
 			date: latestDate,

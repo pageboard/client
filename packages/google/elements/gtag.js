@@ -47,5 +47,5 @@ exports.page.fragments.push({
 	path: 'head',
 	position: 'beforeend',
 	html: `<script async is="element-gtm-script" src="https://www.googletagmanager.com/gtag/js?id=[$parent.data.extra?.google_analytics|enc:url|fail:*]">[$parent.data.env|eq:production|prune:*]</script>
-	<script async is="element-gtm-script" src="https://www.googletagmanager.com/gtm.js?id=[$parent.data.extra?.google_tag_manager|enc:url|fail:*]">[$parent.data.env|eq:production|prune:*]</script><meta name="google-site-verification" content="[$parent.data.extra?.google_site_verification|fail:*][$page.data.url|eq:%2F|prune:*]">`
+	<script async is="element-gtm-script" src="https://www.googletagmanager.com/gtm.js?id=[$parent.data.extra?.google_tag_manager|enc:url|fail:*]">[$parent.data.env|eq:production|prune:*]</script><meta name="google-site-verification" content="[$parent.data.extra?.google_site_verification|fail:*][$pathname|eq:%2F|prune:*]">`
 });

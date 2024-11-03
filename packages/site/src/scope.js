@@ -94,6 +94,7 @@ export default class Scope {
 			state.data.response = state.referrer.data.response;
 			scope = state.scope = state.referrer.scope.copy();
 		}
+		state.locks = new Set();
 		state.vars = {};
 		state.ivars = new Set();
 
@@ -143,9 +144,13 @@ export default class Scope {
 	get $navigator() {
 		return window.navigator;
 	}
-	set $navigator(v) {
-		// ignore it
+	get $locks() {
+		return Array.from(this.#state.locks);
 	}
+	set $locks(list) {
+		this.#state.locks.add(...list);
+	}
+
 	get $elements() {
 		return this.viewer.elements;
 	}

@@ -60,7 +60,7 @@ exports.page = {
 		nodes: 'header? main+ footer?',
 		id: 'body'
 	}],
-	html: `<html lang="[$lang]">
+	html: `<html lang="[$lang]" prefix="og: http://ogp.me/ns#">
 	<head>
 		<title>[$content.title][$parent.data.title?|pre: - ]</title>
 		<meta http-equiv="Status" content="[$status|or:200] [$statusText|or:OK][redirect|not:prune:*]">
@@ -71,6 +71,8 @@ exports.page = {
 		<meta http-equiv="Content-Security-Policy" content="[$elements|as:csp]">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="robots" content="[noindex|fail:*]">
+		<meta name="locks" content="[$locks|join:,|fail:*]">
+		<meta property="og:site_name" content="[$parent.data.title|fail:*]">
 		<meta name="description" content="[$content.description|fail:*]">
 		<base href="[$loc.origin]">
 		<link rel="canonical" href="[$loc.origin][$loc.pathname][$loc.search][noindex|not:prune:*::1]">
