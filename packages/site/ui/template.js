@@ -63,10 +63,11 @@ class HTMLElementTemplate extends Page.Element {
 		this.#source.onerror = e => {
 			this.#source.close();
 			this.#source = null;
-			setTimeout(() => this.#stream(state), 5000);
+			setTimeout(() => this.#stream(state), 1000);
 		};
 		this.#source.onmessage = e => {
-			this.#run(state);
+			const data = JSON.parse(e.data);
+			if (data.type == "write") this.#run(state);
 		};
 	}
 
