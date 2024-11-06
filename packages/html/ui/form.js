@@ -340,15 +340,15 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 		form.classList.remove('loading');
 
 		// messages shown inside form, no navigation
-		const msg = form.toggleMessages(res.status);
-		if (msg) msg.fuse({}, scope);
+		const msgs = form.toggleMessages(res.status);
+		for (const node of msgs) node.fuse({}, scope);
 		const ok = res.status >= 200 && res.status < 300;
 		let redirect = form.getRedirect(res.status);
 
 		if (ok) {
 			form.forget();
 			form.save();
-			if (!redirect && form.closest('element-template') && !msg) {
+			if (!redirect && form.closest('element-template') && !msgs.length) {
 				redirect = state.toString();
 			}
 		}
@@ -371,10 +371,10 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 		}
 		state.debounce(
 			() => {
-				msg?.classList.remove('visible');
+				for (const node of msgs) node.classList.remove('visible');
 				return state.push(loc, { vary });
 			},
-			msg?.dataset.fading ? 1000 : 100
+			msgs.some(node => node.dataset.fading) ? 1000 : 100
 		)();
 	}
 }

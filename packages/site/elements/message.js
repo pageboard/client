@@ -25,8 +25,10 @@ exports.message = {
 				{
 					const: null,
 					title: 'Any status'
-				},
-				{
+				}, {
+					const: '200',
+					title: 'Success'
+				}, {
 					const: '400',
 					title: 'Bad Request'
 				}, {

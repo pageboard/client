@@ -114,9 +114,9 @@ class HTMLElementTemplate extends Page.Element {
 			state.statusText = `Form Redirection ${scope.$status}`;
 			state.location = loc.toString();
 		} else {
-			const msg = this.toggleMessages(scope.$status, frag);
-			if (msg) {
-				if (!this.contains(frag)) this.ownView.appendChild(msg);
+			const msgs = this.toggleMessages(scope.$status, frag);
+			if (msgs.length) {
+				if (!this.contains(frag)) this.ownView.append(...msgs);
 			} else if (scope.$status == 400 && collector.failed) {
 				scope.$status = 200;
 				scope.$statusText = "OK";
@@ -145,22 +145,18 @@ class HTMLElementTemplate extends Page.Element {
 			else if (n >= 400 && n < 500) return "warning";
 			else if (n || n === 0) return "error";
 		})(n);
-		let statusMsg, classMsg;
+		const list = [];
 		for (const node of parent.querySelectorAll(`[block-type="message"]`)) {
 			const action = node.closest('[action]');
 			if (action && action != this) continue;
 			node.classList.remove('visible');
 			const { status } = node.dataset;
-			if (n && n == status) statusMsg = node;
-			else if (name && node.classList.contains(name)) classMsg = node;
+			if ((n && n == status) || name && node.classList.contains(name)) {
+				list.push(node);
+				node.classList.add('visible');
+			}
 		}
-		let node = statusMsg;
-		if (classMsg) {
-			if (node) classMsg.classList.remove('visible');
-			else node = classMsg;
-		}
-		if (node) node.classList.add('visible');
-		return node;
+		return list;
 	}
 
 	async #render(state, scope, data, collector) {
