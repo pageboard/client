@@ -26,7 +26,7 @@ class HTMLElementTemplate extends Page.Element {
 		return node.querySelectorAll('[block-type="binding"],[block-type="block_binding"]');
 	}
 
-	async patch(state) {
+	async #prerender(state, at) {
 		const tpl = this.ownTpl;
 		tpl.prerender();
 		if (state.scope.$write) return;
@@ -34,18 +34,19 @@ class HTMLElementTemplate extends Page.Element {
 			this.removeAttribute('action');
 			this.removeAttribute('parameters');
 		}
-		if (!this.dataset.postrender) {
-			await this.#run(state);
-		}
+		if ((this.dataset.state || "patch") == at) await this.#run(state);
+	}
+
+	async build(state) {
+		await this.#prerender(state, "build");
+	}
+
+	async patch(state) {
+		await this.#prerender(state, "patch");
 	}
 
 	async paint(state) {
-		const tpl = this.ownTpl;
-		tpl.prerender();
-		if (state.scope.$write) return;
-		if (this.dataset.postrender) {
-			await this.#run(state);
-		}
+		await this.#prerender(state, "paint");
 		this.#stream(state);
 	}
 
@@ -256,18 +257,6 @@ class HTMLElementTemplate extends Page.Element {
 
 		const frag = scope.render(data, el);
 		if (collector.failed) scope.$status = 400;
-		if (collector.prerender && this.dataset.postrender) {
-			console.warn("fetch must be prerendered", this);
-			scope.$status = 400;
-		}
-		if (collector.postrender && !this.dataset.postrender) {
-			console.warn("fetch must be postrendered", this);
-			scope.$status = 400;
-		}
-		if (collector.prerender && collector.postrender) {
-			console.warn("fetch cannot be rendered at all", this);
-			scope.$status = 400;
-		}
 
 		if (scope.$status != 200) {
 			view.textContent = '';
@@ -385,19 +374,7 @@ class QueryCollectorFilter {
 	}
 	filter(ctx, val) {
 		const path = ctx.expr.path;
-		switch (path[0]) {
-			case "$query":
-				this.prerender = true;
-				break;
-			case "$navigator":
-				this.postrender = true;
-				return val;
-			case "$locks":
-				this.prerender = true;
-				return val;
-			default:
-				return val;
-		}
+		if (path[0] != "$query") return val;
 		const { query, vars } = this.#state;
 		if (path.length > 1) {
 			const key = path.slice(1).join('.');
