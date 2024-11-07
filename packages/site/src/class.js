@@ -113,10 +113,18 @@ function inherits(Child, Parent) {
 	const cp = Child.prototype;
 	const props = Object.getOwnPropertyDescriptors(pp);
 	for (const [name, desc] of Object.entries(props)) {
-		if (!Object.prototype.hasOwnProperty.call(cp, name)) {
+		if (name == "constructor") continue;
+		if (!Object.hasOwn(cp, name)) {
 			Object.defineProperty(cp, name, desc);
-		} else if (name != 'constructor') {
-			console.warn(Parent, name, "skipped because defined in", Child);
+		} else {
+			const childDesc = Object.getOwnPropertyDescriptor(cp, name);
+			Object.defineProperty(cp, name, {
+				...desc,
+				async value(...args) {
+					await childDesc.value.apply(this, args);
+					return desc.value.apply(this, args);
+				}
+			});
 		}
 	}
 	return Child;
