@@ -26,6 +26,14 @@ class HTMLElementTemplate extends Page.Element {
 		return node.querySelectorAll('[block-type="binding"],[block-type="block_binding"]');
 	}
 
+	#needs() {
+		for (const node of this.#bindings()) {
+			if (node.textContent.startsWith('[$navigator.')) return 'paint';
+			else if (node.textContent.startsWith('[$links.')) return 'build';
+		}
+		return 'patch';
+	}
+
 	async #prerender(state, at) {
 		const tpl = this.ownTpl;
 		tpl.prerender();
@@ -34,7 +42,8 @@ class HTMLElementTemplate extends Page.Element {
 			this.removeAttribute('action');
 			this.removeAttribute('parameters');
 		}
-		if ((this.dataset.state || "patch") == at) await this.#run(state);
+		const needs = this.#needs();
+		if (needs == at) await this.#run(state);
 	}
 
 	async build(state) {
