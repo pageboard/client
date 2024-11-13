@@ -14,6 +14,10 @@ class HTMLElementInputMap extends HTMLInputElement {
 	}
 
 	set value(obj) {
+		if (obj != null && !(obj instanceof Map)) {
+			Pageboard.notify("Unsupported value in input map", { message: obj });
+			obj = null;
+		}
 		this.#value = obj;
 		this.#render(obj);
 	}
