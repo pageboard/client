@@ -30,7 +30,7 @@ Page.connect(new class {
 
 	patch(state) {
 		if (state.scope.$write) return;
-		const metas = equivs.read();
+		const metas = Object.assign(state.scope.$equivs, equivs.read());
 		if (metas.Status) {
 			// eat it
 			const doc = state.doc ?? document;
@@ -85,7 +85,6 @@ Page.connect(new class {
 						console.warn("Not redirecting to same url", state.location);
 					}
 				}
-
 				equivs.write(metas);
 			});
 		});

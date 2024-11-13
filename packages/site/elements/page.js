@@ -70,7 +70,6 @@ exports.page = {
 		<meta http-equiv="Location" content="[$links?.found|fail:*::1]">
 		<meta http-equiv="Content-Security-Policy" content="[$elements|as:csp]">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta name="locks" content="[$locks|join:,|fail:*]">
 		<meta name="robots" content="[noindex|alt:noindex|fail:*]">
 		<meta property="og:site_name" content="[$parent.data.title|fail:*]">
 		<meta name="description" content="[$content.description|fail:*]">
