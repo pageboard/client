@@ -1,6 +1,4 @@
 
-import * as equivs from './equivs';
-
 class TrackingIntersectionObserver extends IntersectionObserver {
 	#targets = new Set();
 	observe(node) {
@@ -28,18 +26,55 @@ class TrackingIntersectionObserver extends IntersectionObserver {
 Page.connect(new class {
 	#adv = false;
 
+	#getEquiv(name) {
+		const node = document.head.querySelector(`meta[http-equiv="${name}"]`);
+		return this.#parseEquiv(node?.content);
+	}
+
+	#setEquiv(name, value) {
+		const { head } = document;
+		let node = head.querySelector(`meta[http-equiv="${name}"]`);
+		if (value === null) {
+			node?.remove();
+		} else {
+			let curs;
+			if (!node) {
+				const meta = head.querySelector('meta');
+				node = head.dom(`<meta http-equiv="${name}">`);
+				head.insertBefore(node, meta?.nextElementSibling);
+				curs = [];
+			} else {
+				curs = this.#parseEquiv(node.content);
+			}
+			const adds = this.#parseEquiv(value);
+			for (const tok of adds) if (!curs.includes(tok)) curs.push(tok);
+			node.content = curs.join(', ');
+		}
+	}
+
+	#parseEquiv(str) {
+		if (!str) return [];
+		if (Array.isArray(str)) return str;
+		return str.split(',').map(str => str.trim()).filter(str => Boolean(str.length));
+	}
+
+	ready(state) {
+		state.scope.$locks = this.#getEquiv('X-Upcache-Lock');
+	}
+
 	patch(state) {
 		if (state.scope.$write) return;
-		const metas = Object.assign(state.scope.$equivs, equivs.read());
-		if (metas.Status) {
-			// eat it
-			const doc = state.doc ?? document;
-			doc.head.querySelector('meta[http-equiv="Status"]').remove();
-			state.status = parseInt(metas.Status);
-			state.statusText = metas.Status.substring(state.status.toString().length).trim();
+		state.scope.$locks = this.#parseEquiv(state.scope.$locks);
+		let [equivStatus] = this.#getEquiv('Status');
+		if (equivStatus) {
+			this.#setEquiv('Status', null); // eat it
+			state.status = parseInt(equivStatus);
+			state.statusText = equivStatus.substring(state.status.toString().length).trim();
 		}
 		state.finish(() => {
 			state.finish(() => {
+				this.#setEquiv('X-Upcache-Lock', state.scope.$locks);
+				this.#setEquiv('X-Upcache-Tag', state.scope.$tags);
 				const query = {};
 				const extra = [];
 				const missing = [];
@@ -72,20 +107,20 @@ Page.connect(new class {
 				}
 
 				if (state.status) {
-					metas.Status = `${state.status} ${state.statusText || ""}`.trim();
+					equivStatus = `${state.status} ${state.statusText || ""}`.trim();
 					if (state.status != 200) {
 						// eslint-disable-next-line no-console
-						console.info(metas.Status);
+						console.info(equivStatus);
 					}
+					this.#setEquiv('Status', equivStatus);
 				}
 				if (state.location) {
 					if (state.location != state.toString()) {
-						metas.Location = state.location;
+						this.#setEquiv('Location', state.location);
 					} else {
 						console.warn("Not redirecting to same url", state.location);
 					}
 				}
-				equivs.write(metas);
 			});
 		});
 	}

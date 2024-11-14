@@ -84,7 +84,6 @@ const baseElements = {
 
 export default class Scope {
 	#state;
-	$equivs = {};
 
 	static init(state) {
 		const elts = Pageboard.schemas?.elements?.definitions ?? {};
@@ -107,7 +106,6 @@ export default class Scope {
 			scope.#state = state;
 			delete scope.$element;
 		}
-
 		return scope;
 	}
 
@@ -145,21 +143,6 @@ export default class Scope {
 		return window.navigator;
 	}
 
-	#parseLocks(str) {
-		if (!str) return [];
-		return str.split(',').map(str => str.trim()).filter(str => Boolean(str.length));
-	}
-	get $locks() {
-		return this.#parseLocks(this.$equivs['X-Upcache-Lock']);
-	}
-	set $locks(str) {
-		if (!str) return;
-		const curLocks = this.$locks;
-		const locks = this.#parseLocks(str);
-		for (const lock of locks) if (!curLocks.includes(lock)) curLocks.push(lock);
-		this.$equivs['X-Upcache-Lock'] = curLocks.join(',');
-	}
-
 	get $elements() {
 		return this.viewer.elements;
 	}
@@ -182,7 +165,6 @@ export default class Scope {
 	}
 	copy(extra) {
 		const scope = new Scope(this.#state, this);
-		scope.$equivs = this.$equivs;
 		scope.viewer = this.viewer;
 		scope.viewer.scope = this;
 		if (extra) Object.assign(scope, extra);

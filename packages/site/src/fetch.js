@@ -53,6 +53,7 @@ export default function(method, url, data) {
 				obj.statusText ??= res.statusText;
 				const h = res.headers;
 				obj.locks = h.get('X-Upcache-Lock');
+				obj.tags = h.get('X-Upcache-Tag');
 				obj.granted = h.get('X-Pageboard-Granted') ? true : false;
 				obj.grants = h.get('X-Pageboard-Grants')?.split(',') ?? [];
 				obj.types = h.get('X-Pageboard-Elements')?.split(',') ?? [];
