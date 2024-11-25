@@ -51,6 +51,9 @@ exports.write = {
 				<a class="vertically fitted item" title="Settings" data-command="settings" href="/admin/settings">
 					<i class="cog large icon"></i>
 				</a>
+				<a class="vertically fitted item" title="Users" data-command="users" href="/admin/users">
+					<i class="user large icon"></i>
+				</a>
 				<a class="vertically fitted item" data-command="translate" title="Translation" href="/admin/translations">
 					<i class="language large icon"></i>[$parent.data.languages|prune:a]
 				</a>
