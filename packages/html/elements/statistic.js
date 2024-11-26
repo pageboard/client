@@ -17,13 +17,35 @@ exports.statistic = {
 			title: 'Precision',
 			type: 'integer',
 			default: 0
+		},
+		size: {
+			title: 'Size',
+			anyOf: [{
+				type: 'null',
+				title: 'Default'
+			}, {
+				const: 'mini',
+				title: 'Mini'
+			}, {
+				const: 'tiny',
+				title: 'Tiny'
+			}, {
+				const: 'small',
+				title: 'Small'
+			}, {
+				const: 'large',
+				title: 'Large'
+			}, {
+				const: 'huge',
+				title: 'Huge'
+			}]
 		}
 	},
 	contents: {
 		id: "label",
 		nodes: "block+"
 	},
-	html: `<div class="ui statistic">
+	html: `<div class="ui [size] statistic">
 		<div class="value" title="[name]">[value|digits:[precision]]</div>
 		<div class="label" block-content="label"></div>
 	</div>`,
