@@ -1,5 +1,5 @@
 class HTMLElementEmbed extends Page.Element {
-	static consent = "consent.embed";
+	static consent = "marketing";
 	static defaults = {
 		src: null,
 		query: null,
@@ -25,12 +25,12 @@ class HTMLElementEmbed extends Page.Element {
 		this.#meta(state);
 	}
 	consent(state) {
-		const consent = state.scope.storage.get(this.constructor.consent);
-		this.classList.toggle('denied', consent == "no");
-		this.classList.toggle('waiting', consent == null);
+		const consent = state.consents(this.constructor.consent);
+		this.classList.toggle('denied', consent === false);
+		this.classList.toggle('waiting', consent === null);
 
 		const iframe = this.querySelector('iframe');
-		if (consent != "yes") {
+		if (consent !== true) {
 			iframe.src = "";
 			return;
 		}

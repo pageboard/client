@@ -70,15 +70,30 @@ class HTMLElementConsent extends Page.create(HTMLFormElement) {
 	}
 }
 
+Page.constructor.prototype.consents = function (name, val) {
+	const { storage } = this.scope;
+	const key = "consent." + name;
+	if (val === null) {
+		storage.remove(key);
+	} else if (val !== undefined) {
+		storage.set(key, val ? "yes" : "no");
+	} else {
+		const str = storage.get(key);
+		if (str == "yes") return true;
+		else if (str == "no") return false;
+		else return null;
+	}
+};
+
 Page.constructor.prototype.consent = function (listener, ask) {
 	const { consent } = listener.constructor;
 	if (!consent) {
 		console.warn("Expected a static consent field", listener);
 		return;
 	}
-	const cur = this.scope.storage.get(consent);
+	const cur = this.consents(consent);
 	if (cur == null || ask) {
-		this.scope.storage.set(consent, HTMLElementConsent.ask(this, consent));
+		this.consents(consent, HTMLElementConsent.ask(this, consent));
 	}
 	this.chain('consent', listener);
 };
@@ -89,6 +104,7 @@ Page.define(`element-consent`, HTMLElementConsent, 'form');
 Page.paint(state => {
 	state.finish(() => {
 		if (!HTMLElementConsent.explicits.size) {
+			// last chance for implicit consents
 			state.copy().runChain('consent');
 		}
 	});

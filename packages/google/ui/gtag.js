@@ -6,7 +6,7 @@ class HTMLElementGTMScript extends Page.create(HTMLScriptElement) {
 	#id;
 	#started;
 
-	static consent = "consent.google";
+	static consent = "statistics";
 
 	constructor() {
 		super();
@@ -21,7 +21,7 @@ class HTMLElementGTMScript extends Page.create(HTMLScriptElement) {
 	}
 	consent(state) {
 		if (!this.#id) return;
-		const agreed = state.scope.storage.get(this.constructor.consent) == "yes";
+		const agreed = state.consents(this.constructor.consent);
 		window['ga-disable-' + this.#id] = !agreed;
 		if (this.#type == "gtm") this.#gtm(agreed, state);
 		else if (this.#type == "gtag") this.#gtag(agreed, state);

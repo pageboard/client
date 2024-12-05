@@ -1,0 +1,29 @@
+{
+  "name": "@pageboard/cookiebot",
+  "version": "0.16.0",
+  "description": "Elements exposing cookiebot for pageboard",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pageboard/client.git"
+  },
+  "author": "Jérémy Lal <kapouer@melix.org>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pageboard/client/issues"
+  },
+  "homepage": "https://github.com/pageboard/client#readme",
+  "pageboard": {
+    "version": "^0.16",
+    "directories": [
+      "elements",
+      "ui"
+    ],
+    "elements": [
+      "elements/"
+    ]
+  }
+}
