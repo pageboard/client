@@ -39,10 +39,13 @@ class HTMLElementGTMScript extends Page.create(HTMLScriptElement) {
 		}
 	}
 	#gtag(agreed, state) {
+		// https://developers.google.com/tag-platform/security/guides/consent
 		const val = agreed ? 'granted' : 'denied';
 		const opts = {
 			ad_storage: val,
-			analytics_storage: val
+			analytics_storage: val,
+			ad_personalization: val,
+			ad_user_data: val
 		};
 		if (!this.#started) {
 			this.#started = true;
