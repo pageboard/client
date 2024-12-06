@@ -22,7 +22,6 @@ class HTMLElementGTMScript extends Page.create(HTMLScriptElement) {
 	consent(state) {
 		if (!this.#id) return;
 		const agreed = state.consents(this.constructor.consent);
-		window['ga-disable-' + this.#id] = !agreed;
 		if (this.#type == "gtm") this.#gtm(agreed, state);
 		else if (this.#type == "gtag") this.#gtag(agreed, state);
 	}
