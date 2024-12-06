@@ -40,11 +40,11 @@
   "pageboard": true,
   "devDependencies": {
     "@kapouer/eslint-config": "^2.0.0",
-    "@kapouer/stylelint-config": "^1.7.0",
-    "eslint": "8.57.0",
+    "@kapouer/stylelint-config": "^2.0.0",
+    "eslint": "9.16.0",
     "eslint-plugin-mocha": "^10.5.0",
-    "mocha": "^10.7.3",
-    "stylelint": "^16.9.0"
+    "mocha": "^11.0.1",
+    "stylelint": "^16.11.0"
   },
   "mocha": {
     "spec": "tests/*.test.js",
