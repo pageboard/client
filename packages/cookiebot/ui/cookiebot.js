@@ -4,6 +4,9 @@ Page.connect(new class {
 	setup(state) {
 		if (!window.Cookiebot) return;
 		const cla = this.#cla = window.customElements.get("element-consent");
+		cla.explicits.add('preferences');
+		cla.explicits.add('marketing');
+		cla.explicits.add('statistics');
 		cla.ask = function (state, name) {
 			cla.explicits.add(name);
 			window.Cookiebot.show();
