@@ -6,6 +6,8 @@ class HTMLElementGTMScript extends Page.create(HTMLScriptElement) {
 	#id;
 	#started;
 
+	static consent = "statistics";
+
 	constructor() {
 		super();
 		const loc = Page.parse(this.src);
@@ -24,8 +26,7 @@ class HTMLElementGTMScript extends Page.create(HTMLScriptElement) {
 	}
 	consent(state) {
 		if (!this.#id) return;
-		const agreed = state.scope.$consent == "yes";
-		window['ga-disable-' + this.#id] = !agreed;
+		const agreed = state.consents(this.constructor.consent);
 		if (this.#type == "gtm") this.#gtm(agreed, state);
 		else if (this.#type == "gtag") this.#gtag(agreed, state);
 	}
@@ -42,10 +43,13 @@ class HTMLElementGTMScript extends Page.create(HTMLScriptElement) {
 		}
 	}
 	#gtag(agreed, state) {
+		// https://developers.google.com/tag-platform/security/guides/consent
 		const val = agreed ? 'granted' : 'denied';
 		const opts = {
 			ad_storage: val,
-			analytics_storage: val
+			analytics_storage: val,
+			ad_personalization: val,
+			ad_user_data: val
 		};
 		if (!this.#started) {
 			this.#started = true;

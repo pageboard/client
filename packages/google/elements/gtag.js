@@ -20,8 +20,8 @@ exports.site.properties.google_site_verification = {
 };
 
 exports.google_tag = {
-	priority: 10,
 	group: "block",
+	priority: 10,
 	csp: {
 		script: [
 			"[$commons.csp.script.google_analytics]"
