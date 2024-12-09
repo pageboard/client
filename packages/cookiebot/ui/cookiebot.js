@@ -19,7 +19,7 @@ Page.connect(new class {
 		if (consent.method == "explicit") for (const name of this.#cla.explicits) {
 			Page.consents(name, consent[name]);
 		}
-		Page.copy().runChain('consent');
+		Page.runChain('consent');
 	}
 });
 

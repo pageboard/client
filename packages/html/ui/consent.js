@@ -54,7 +54,7 @@ class HTMLElementConsent extends Page.create(HTMLFormElement) {
 		for (const [key, val] of Object.entries(consents)) {
 			state.scope.storage.set(key, val);
 		}
-		state.copy().runChain('consent');
+		state.runChain('consent');
 	}
 	patch(state) {
 		if (state.scope.$write) return;
