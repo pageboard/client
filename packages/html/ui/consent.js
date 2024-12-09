@@ -3,51 +3,62 @@ class HTMLElementConsent extends Page.create(HTMLFormElement) {
 		dataTransient: false
 	};
 
-	static ask() {
-		this.waiting = false;
+	static explicits = new Set();
+
+	static ask(state, consent) {
 		let tacit = true;
-		for (const node of document.querySelectorAll('[block-type="consent_form"]')) {
+		const forms = document.querySelectorAll('[block-type="consent_form"]');
+		const consents = state.scope.storage.all();
+		for (const node of forms) {
+			window.HTMLElementForm.prototype.fill.call(node, consents);
 			node.classList.add('visible');
-			tacit = false;
+			tacit = consent && !node.querySelector(`[name="${consent}"]`) || false;
 		}
-		return !tacit;
+		if (!tacit) this.explicits.add(consent);
+		return tacit ? "yes" : null;
 	}
 	setup(state) {
 		if (state.scope.$write) return;
-		if (this.options.transient) {
-			const tmpl = this.ownTpl.prerender();
-			if (tmpl.content && tmpl.children.length == 0) {
-				tmpl.appendChild(tmpl.content);
-			}
-		}
-		state.consent(this);
+		this.constructor.explicits = new Set();
+		const view = this.ownView;
+		view.textContent = '';
+		const tmpl = this.ownTpl.prerender();
+		view.appendChild(tmpl.content.cloneNode(true));
+		state.chain('consent', this);
 	}
 	chainConsent(state) {
-		window.HTMLElementForm.prototype.fill.call(this, {
-			consent: state.scope.$consent
-		});
-		if (this.options.transient) this.classList.remove('visible');
+		if (this.options.transient) {
+			this.classList.remove('visible');
+		} else {
+			window.HTMLElementForm.prototype.fill.call(this, state.scope.storage.all());
+		}
+	}
+	handleChange(e, state) {
+		if (e.type == "submit" || !this.elements.find(item => item.type == "submit")) {
+			this.handleSubmit(e, state);
+		}
 	}
 	handleSubmit(e, state) {
 		if (e.type == "submit") e.preventDefault();
 		if (state.scope.$write) return;
-		const fd = window.HTMLElementForm.prototype.read.call(this);
-		const consent = fd.consent;
-		if (consent == null) {
+		const consents = window.HTMLElementForm.prototype.read.call(this);
+		const list = Array.from(this.constructor.explicits);
+		const def = consents.consent;
+		for (const consent of list) {
+			if (def != "custom") consents[consent] = def;
+		}
+		if (list.some(c => consents[c] == null)) {
+			// not all explicit consents have been answered
 			return;
 		}
-		state.scope.storage.set('consent', consent);
-		state.scope.$consent = consent;
-		state.runChain('consent');
-	}
-	handleChange(e, state) {
-		this.handleSubmit(e, state);
+		for (const [key, val] of Object.entries(consents)) {
+			state.scope.storage.set(key, val);
+		}
+		state.copy().runChain('consent');
 	}
 	patch(state) {
 		if (state.scope.$write) return;
-		if (this.options.transient) {
-			this.ownTpl.prerender();
-		}
+		this.ownTpl.prerender();
 	}
 	get ownTpl() {
 		return this.children.find(
@@ -59,43 +70,42 @@ class HTMLElementConsent extends Page.create(HTMLFormElement) {
 	}
 }
 
+Page.constructor.prototype.consents = function (name, val) {
+	const { storage } = this.scope;
+	const key = "consent." + name;
+	if (val === null) {
+		storage.remove(key);
+	} else if (val !== undefined) {
+		storage.set(key, val ? "yes" : "no");
+	} else {
+		const str = storage.get(key);
+		if (str == "yes") return true;
+		else if (str == "no") return false;
+		else return null;
+	}
+};
+
+Page.constructor.prototype.consent = function (listener, ask) {
+	const { consent } = listener.constructor;
+	if (!consent) {
+		console.warn("Expected a static consent field", listener);
+		return;
+	}
+	const cur = this.consents(consent);
+	if (cur == null || ask) {
+		this.consents(consent, HTMLElementConsent.ask(this, consent));
+	}
+	this.chain('consent', listener);
+};
 
 Page.define(`element-consent`, HTMLElementConsent, 'form');
 
 
-Page.constructor.prototype.consent = function (fn) {
-	const initial = this.scope.$consent === undefined;
-	let consent = this.scope.storage.get('consent');
-	if (consent == null && initial) consent = undefined;
-	this.scope.$consent = consent;
-	this.chain('consent', fn);
-	if (consent === undefined) {
-		HTMLElementConsent.waiting = true;
-	} else if (consent === null) {
-		// setup finished but no consent is done yet, ask consent
-		this.reconsent();
-	}
-};
-
-Page.constructor.prototype.reconsent = function (fn) {
-	if (fn) this.consent(fn);
-	const consent = this.scope.$consent;
-	let asking = false;
-	if (consent != "yes") {
-		asking = HTMLElementConsent.ask();
-	}
-	if (!asking) {
-		if (consent == null) this.scope.$consent = "yes";
-	}
-	return asking;
-};
-
 Page.paint(state => {
 	state.finish(() => {
-		let run = true;
-		if (HTMLElementConsent.waiting) {
-			if (state.reconsent()) run = false;
+		if (!HTMLElementConsent.explicits.size) {
+			// last chance for implicit consents
+			state.runChain('consent');
 		}
-		if (run) state.runChain('consent');
 	});
 });

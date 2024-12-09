@@ -1,4 +1,5 @@
 class HTMLElementEmbed extends Page.Element {
+	static consent = "marketing";
 	static defaults = {
 		src: null,
 		query: null,
@@ -21,12 +22,12 @@ class HTMLElementEmbed extends Page.Element {
 		if (width && height) this.style.paddingBottom = `calc(${height} / ${width} * 100%)`;
 	}
 	consent(state) {
-		const consent = state.scope.$consent;
-		this.classList.toggle('denied', consent == "no");
-		this.classList.toggle('waiting', consent == null);
+		const consent = state.consents(this.constructor.consent);
+		this.classList.toggle('denied', consent === false);
+		this.classList.toggle('waiting', consent === null);
 
 		const iframe = this.querySelector('iframe');
-		if (consent != "yes") {
+		if (consent !== true) {
 			iframe.src = "";
 			return;
 		}
@@ -57,7 +58,9 @@ class HTMLElementEmbed extends Page.Element {
 		}
 	}
 	captureClick(e, state) {
-		if (this.matches('.denied')) state.reconsent();
+		if (this.matches('.denied')) {
+			state.consent(this, true);
+		}
 	}
 	captureLoad() {
 		this.classList.remove('loading');
