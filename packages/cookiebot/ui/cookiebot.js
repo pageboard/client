@@ -1,14 +1,19 @@
 Page.connect(new class {
 	#cla;
 
-	setup() {
+	setup(state) {
 		if (!window.Cookiebot) return;
 		const cla = this.#cla = window.customElements.get("element-consent");
 		cla.ask = function (state, name) {
 			cla.explicits.add(name);
+			window.Cookiebot.show();
 			window.Cookiebot.renew();
 		};
 		window.addEventListener('CookiebotOnConsentReady', this);
+		if (state.referrer && !state.samePathname(state.referrer)) {
+			window.Cookiebot.widget = null;
+			window.Cookiebot.initWidget();
+		}
 	}
 	close() {
 		window.removeEventListener('CookiebotOnConsentReady', this);
