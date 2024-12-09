@@ -10,6 +10,8 @@ Page.connect(new class {
 			window.Cookiebot.renew();
 		};
 		window.addEventListener('CookiebotOnConsentReady', this);
+	}
+	paint(state) {
 		if (state.referrer && !state.samePathname(state.referrer)) {
 			window.Cookiebot.widget = null;
 			window.Cookiebot.initWidget();
