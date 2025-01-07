@@ -65,7 +65,7 @@ class HTMLElementGTMScript extends Page.create(HTMLScriptElement) {
 		}
 	}
 	paint(state) {
-		if (this.#id) state.consent(this);
+		state.consent(this);
 	}
 }
 
