@@ -186,6 +186,7 @@ class HTMLElementTemplate extends Page.Element {
 			if (tpl.parentNode.nodeName == this.nodeName || !tpl.content) continue;
 			for (const node of this.#bindings(tpl.content)) {
 				node.fuse(data, scope);
+				if (node.childNodes.length == 0 && !node.dataset.attr) node.remove();
 			}
 			// get rid of block-id in those templates to avoid
 			// pagecut from dying on them
