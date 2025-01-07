@@ -39,8 +39,8 @@ exports.google_tag = {
 };
 
 exports.input_radio_yes.properties.consent.anyOf.push({
-	title: "Google",
-	const: "google"
+	title: "Statistics",
+	const: "statistics"
 });
 
 exports.page.fragments.push({
