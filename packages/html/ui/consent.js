@@ -7,6 +7,7 @@ class HTMLElementConsent extends Page.create(HTMLFormElement) {
 
 	static ask(state, consent) {
 		let tacit = true;
+		if (consent) consent = 'consent.' + consent;
 		const forms = document.querySelectorAll('[block-type="consent_form"]');
 		const consents = state.scope.storage.all();
 		for (const node of forms) {
