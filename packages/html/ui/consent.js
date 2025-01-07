@@ -46,7 +46,8 @@ class HTMLElementConsent extends Page.create(HTMLFormElement) {
 		const list = Array.from(this.constructor.explicits);
 		const def = consents.consent;
 		for (const consent of list) {
-			if (def != "custom") consents[consent] = def;
+			if (def && def != "custom") consents[consent] = def;
+			else consents[consent] ??= null;
 		}
 		if (list.some(c => consents[c] == null)) {
 			// not all explicit consents have been answered
