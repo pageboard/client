@@ -55,7 +55,7 @@ class HTMLElementEmbed extends Page.Element {
 		} else if (cur.hash != prev.hash) {
 			try {
 				iframe.contentWindow.location.replace(curSrc);
-			} catch (err) {
+			} catch {
 				iframe.src = curSrc;
 			}
 		}
