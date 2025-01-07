@@ -75,7 +75,7 @@ Page.constructor.prototype.consents = function (name, val) {
 	const { storage } = this.scope;
 	const key = "consent." + name;
 	if (val === null) {
-		storage.remove(key);
+		storage.del(key);
 	} else if (val !== undefined) {
 		storage.set(key, val ? "yes" : "no");
 	} else {
