@@ -1,5 +1,8 @@
 .field.button > .radio > input {
-	display:none;
+	/* none or hidden doesn't allow focus when validating form */
+	position: absolute;
+	height:0px;
+	opacity:0;
 }
 .field.button > .radio > input + label {
 	opacity: 0.5;
