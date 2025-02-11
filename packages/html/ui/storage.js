@@ -4,14 +4,14 @@ class UserStore {
 		return this.#store;
 	}
 	get(key) {
-			try {
+		try {
 			return this.#store.getItem(key);
 		} catch (ex) {
 			console.error(ex);
-			}
+		}
 	}
 	set(key, val) {
-			try {
+		try {
 			if (val == null) return this.del(key);
 			else return this.#store.setItem(key, val);
 		} catch (ex) {
@@ -19,7 +19,7 @@ class UserStore {
 		}
 	}
 	del(key) {
-			try {
+		try {
 			return this.#store.removeItem(key);
 		} catch (ex) {
 			console.error(ex);
