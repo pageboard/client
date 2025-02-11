@@ -15,6 +15,7 @@ Page.connect(new class {
 		window.addEventListener('CookiebotOnConsentReady', this);
 	}
 	paint(state) {
+		if (!window.Cookiebot) return;
 		if (state.referrer && !state.samePathname(state.referrer)) {
 			window.Cookiebot.widget = null;
 			window.Cookiebot.initWidget();
@@ -24,6 +25,7 @@ Page.connect(new class {
 		window.removeEventListener('CookiebotOnConsentReady', this);
 	}
 	handleEvent(e) {
+		if (!window.Cookiebot) return;
 		const { consent } = window.Cookiebot;
 
 		if (consent.method == "explicit") for (const name of this.#cla.explicits) {
