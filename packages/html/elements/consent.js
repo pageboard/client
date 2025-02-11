@@ -20,7 +20,7 @@ exports.consent_form = {
 		<template block-content="content"></template>
 		<div class="view"></div>
 	</form>`,
-	scripts: ['../ui/storage.js', '../ui/consent.js'],
+	scripts: ['../ui/consent.js'],
 	stylesheets: ['../ui/consent.css']
 };
 
