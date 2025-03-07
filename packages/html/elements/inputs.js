@@ -458,8 +458,8 @@ exports.input_checkbox = {
 		<div class="ui [toggle] checkbox">
 			<input type="checkbox" required="[required]" disabled="[disabled]"
 				name="[name]" value="[value]" checked="[checked]"
-				id="for-[name][value|pre:-]" />
-			<label block-content="label" for="for-[name][value|pre:-]">Label</label>
+				id="for-[name]" />
+			<label block-content="label" for="for-[name]">Label</label>
 		</div>
 	</div>`,
 	stylesheets: [
@@ -516,8 +516,8 @@ exports.input_radio = {
 		<div class="ui radio [button|alt::checkbox]">
 			<input type="radio" disabled="[disabled]" required="[required]"
 				name="[name]" value="[value]" checked="[checked]"
-				id="for-[name][value|pre:-]" />
-			<label block-content="label" for="for-[name][value|pre:-]">Label</label>
+				id="for-[name]" />
+			<label block-content="label" for="for-[name]">Label</label>
 		</div>
 	</div>`,
 	stylesheets: [

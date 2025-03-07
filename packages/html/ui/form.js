@@ -20,15 +20,13 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 
 	static patch(state) {
 		state.finish(() => {
-			let index = 0;
-			for (const node of document.querySelectorAll('label[for]')) {
-				const prev = node.previousElementSibling;
-				if (prev?.nodeName != "INPUT") continue;
-				const others = document.querySelectorAll(`input[id="${node.htmlFor}"]`);
-				if (others.length > 1) {
-					node.htmlFor += `-${index++}`;
-					prev.id = node.htmlFor;
-				}
+			const indexes = {};
+			for (const label of document.querySelectorAll('input+label[for^="for-"]')) {
+				const { previousElementSibling: input, htmlFor } = label;
+				const [pre, name] = htmlFor.split('-');
+				if (input.name != name) continue;
+				const index = indexes[name] = (indexes[name] ?? 0) + 1;
+				input.id = label.htmlFor = `${pre}-${name}-${index}`;
 			}
 		});
 	}
