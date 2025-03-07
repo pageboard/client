@@ -137,7 +137,11 @@ class HTMLElementFieldsetList extends Page.Element {
 			}
 		}
 
+		const view = this.ownView;
+		view.textContent = '';
+
 		const subtpl = inputs.map(node => node.closest('.fields') ?? node).ancestor();
+		if (!subtpl) return;
 		subtpl.appendChild(
 			subtpl.ownerDocument.createTextNode(
 				`[$fields|at:${this.dataset.at || '*'}|repeat:field|const:]`
@@ -186,8 +190,6 @@ class HTMLElementFieldsetList extends Page.Element {
 			node.disabled = list.length >= max;
 		});
 
-		const view = this.ownView;
-		view.textContent = '';
 		view.appendChild(tpl);
 	}
 
