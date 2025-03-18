@@ -57,6 +57,7 @@ Pageboard.schemaHelpers.crop = class Crop {
 			checkOrientation: false,
 			checkCrossOrigin: false,
 			toggleDragModeOnDblclick: false,
+			responsive: false,
 			ready: () => {
 				this.ready();
 			},
