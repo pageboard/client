@@ -20,7 +20,7 @@
   "devDependencies": {
     "postinstall": "^0.11.0",
     "postinstall-bundle": "^0.9.4",
-    "bwip-js": "^4.5.1"
+    "bwip-js": "^4.5.2"
   },
   "prepare": {
     "./src/bwip.js": "bundle lib/"
