@@ -30,7 +30,7 @@ class HTMLElementTemplate extends Page.Element {
 		// NB: returning "build" when a template is using "[$links."
 		// makes the assumption that fetch only receives
 		// { items, links } when requesting during build phase.
-		// which isn't always true (links: Get pages returns links too)
+		// which isn't always true (links.get returns links too)
 		for (const node of this.#bindings()) {
 			if (node.textContent.startsWith('[$navigator.')) return 'paint';
 		}
