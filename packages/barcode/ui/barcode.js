@@ -36,7 +36,7 @@ class HTMLElementBarcode extends Page.Element {
 			const svgDoc = new DOMParser().parseFromString(svg, 'application/xml');
 			this.textContent = '';
 			this.appendChild(svgDoc.documentElement);
-		} catch (e) {
+		} catch {
 			this.classList.add('error');
 		}
 	}
