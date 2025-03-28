@@ -130,7 +130,7 @@ exports.fieldlist_button = {
 		float: {
 			title: 'Float',
 			anyOf: [{
-				type: 'null',
+				const: null,
 				title: 'No'
 			}, {
 				const: 'left',

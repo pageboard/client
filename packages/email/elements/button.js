@@ -23,7 +23,7 @@ exports.mail_button = {
 		label: {
 			title: 'Label',
 			anyOf: [{
-				type:'null',
+				const: null,
 				title:'None'
 			}, {
 				const: 'secondary',
@@ -42,7 +42,7 @@ exports.mail_button = {
 		size: {
 			title: 'Size',
 			anyOf: [{
-				type:'null',
+				const: null,
 				title:'Default'
 			}, {
 				const: 'tiny',

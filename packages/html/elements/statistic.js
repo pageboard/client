@@ -21,7 +21,7 @@ exports.statistic = {
 		size: {
 			title: 'Size',
 			anyOf: [{
-				type: 'null',
+				const: null,
 				title: 'Default'
 			}, {
 				const: 'mini',

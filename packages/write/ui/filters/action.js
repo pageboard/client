@@ -1,7 +1,7 @@
 Pageboard.schemaFilters.action = function ActionFilter(key, opts, schema) {
 	delete schema.type;
 	schema.anyOf = [{
-		type: 'null',
+		const: null,
 		title: 'Default'
 	}];
 	const blocks = Pageboard.editor.blocks.find([opts.action == "write" ? "api_form" : "fetch"]);

@@ -101,7 +101,7 @@ exports.barcode = {
 		rotate: {
 			title: 'Rotate',
 			anyOf: [{
-				type: 'null',
+				const: null,
 				title: 'No'
 			}, {
 				const: 'R',

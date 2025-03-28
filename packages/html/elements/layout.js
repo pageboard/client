@@ -89,7 +89,7 @@ exports.layout = {
 		wrap: {
 			title: 'Wrap',
 			anyOf: [{
-				type: 'null',
+				const: null,
 				title: 'No wrap'
 			}, {
 				const: 'wrap',
@@ -160,7 +160,7 @@ exports.layout = {
 				fill: {
 					title: 'Fill',
 					anyOf: [{
-						type: 'null',
+						const: null,
 						title: 'Auto'
 					}, {
 						const: 'balance',

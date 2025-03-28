@@ -70,7 +70,7 @@ exports.pdf = {
 					title: 'Preset',
 					description: 'Default pdf export',
 					anyOf: [{
-						type: 'null',
+						const: null,
 						title: 'Screen'
 					}, {
 						const: 'ebook',
@@ -346,7 +346,7 @@ exports.layout.properties.side = {
 	title: 'Side',
 	anyOf: [{
 		title: 'Both',
-		type: 'null'
+		const: null
 	}, {
 		title: 'Left',
 		const: 'left'

@@ -50,7 +50,7 @@ exports.segment = {
 				const: 'mini',
 				title: 'Mini'
 			}, {
-				type: 'null',
+				const: null,
 				title: 'Normal'
 			}, {
 				const: 'large',

@@ -7,7 +7,7 @@ exports.grid = {
 		width: {
 			title: 'Width',
 			anyOf: [{
-				type: 'null',
+				const: null,
 				title: 'normal'
 			}, {
 				const: "min",
@@ -24,7 +24,7 @@ exports.grid = {
 			title: 'Responsive',
 			anyOf: [{
 				title: 'No',
-				type: 'null'
+				const: null
 			}, {
 				title: 'Stackable',
 				const: 'stackable'
@@ -76,7 +76,7 @@ exports.grid_row = {
 			title: 'Responsive',
 			anyOf: [{
 				title: 'No',
-				type: 'null'
+				const: null
 			}, {
 				title: 'Stackable',
 				const: 'stackable'

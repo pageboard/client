@@ -70,7 +70,7 @@ exports.input_button = {
 		float: {
 			title: 'Float',
 			anyOf: [{
-				type: 'null',
+				const: null,
 				title: 'No'
 			}, {
 				const: 'left',
@@ -157,7 +157,7 @@ exports.input_submit = {
 		float: {
 			title: 'Float',
 			anyOf: [{
-				type: 'null',
+				const: null,
 				title: 'No'
 			}, {
 				const: 'left',
