@@ -102,7 +102,7 @@ exports.layout = {
 		width: {
 			title: 'Width',
 			anyOf: [{
-				type: "null",
+				const: null,
 				title: "None"
 			}, {
 				const: "full",

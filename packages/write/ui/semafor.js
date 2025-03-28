@@ -602,7 +602,7 @@ Semafor.types.oneOf = function (key, schema, node, inst) {
 	let { nullable } = schema;
 	let hasNullOption = false;
 	const alts = listOf.filter(item => {
-		if (item.type == "null") {
+		if (item.type == "null" || item.const === null) {
 			nullable = true;
 			hasNullOption = true;
 			return false;
