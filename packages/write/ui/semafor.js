@@ -391,7 +391,13 @@ class Semafor {
 					if (val == null && !nullable) val = {};
 					break;
 				case "array":
-					if (!Array.isArray(val)) val = val != null ? [val] : [];
+					if (!Array.isArray(val)) {
+						if (typeof val == "string" && field.items?.format == "singleline") {
+							val = val.split('\n');
+						} else {
+							val = val != null ? [val] : [];
+						}
+					}
 					if (Array.isArray(field.items)) {
 						val = field.items.map((itemField, i) => this.convert({ item: val[i] }, {
 							properties: { item: itemField }
