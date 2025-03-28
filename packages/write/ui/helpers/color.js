@@ -27,16 +27,26 @@ Pageboard.schemaHelpers.color = class ColorHelper {
 		if (!rgba.startsWith('#')) {
 			rgba = this.input.value = '#' + rgba;
 		}
-		if (rgba.length == 7 && this.opts.alpha) rgba += "FF";
-		if (rgba.length != 9) return;
-		const alpha = parseInt(rgba.slice(-2), 16);
-		const rgb = this.opts.alpha ? rgba.slice(0, -2) : rgba;
+		let rgb;
+		if (this.opts.alpha) {
+			if (rgba.length == 7) rgba += "FF";
+			if (rgba.length != 9) return;
+			rgb = rgba.slice(0, -2);
+			const alpha = parseInt(rgba.slice(-2), 16);
+			try {
+				this.node.querySelector('[type="range"]').value = alpha;
+			} catch {
+				// pass
+			}
+		} else {
+			if (rgba.length != 7) return;
+			rgb = rgba;
+		}
 		try {
 			this.node.querySelector('[type="color"]').value = rgb;
-		} catch(ex) {
-			
+		} catch {
+			// pass
 		}
-		if (this.opts.alpha) this.node.querySelector('[type="range"]').value = alpha;
 	}
 
 	handleEvent(e) {
@@ -56,7 +66,7 @@ Pageboard.schemaHelpers.color = class ColorHelper {
 				} else {
 					this.input.value = color.toUpperCase();
 				}
-	
+
 			}
 			Pageboard.trigger(this.input, 'change');
 		});
