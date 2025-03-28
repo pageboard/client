@@ -32,7 +32,7 @@ class HTMLElementBarcode extends Page.Element {
 		const bwipFn = Pageboard.Bwip[opts.bcid.replace(/-/g, '_')];
 		try {
 			const svg = bwipFn(opts, Pageboard.Bwip.drawingSVG());
-			this.style.width = this.style.height = this.options.dimension;
+			this.style.width = this.options.dimension;
 			const svgDoc = new DOMParser().parseFromString(svg, 'application/xml');
 			this.textContent = '';
 			this.appendChild(svgDoc.documentElement);
