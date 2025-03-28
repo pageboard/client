@@ -26,20 +26,16 @@ export function create(Superclass) {
 		}
 		connectedCallback() {
 			this.prepare?.(Page.scope.$write);
-			if (this.reveal) {
-				Page.paint(state => this.#paint(state));
-				Page.setup(state => this.#setup(state));
-				Page.close(state => this.#close(state));
-			}
+			Page.paint(state => this.#paint(state));
+			Page.close(state => this.#close(state));
 			Page.connect(this);
 		}
 		disconnectedCallback() {
 			Page.disconnect(this);
-			if (this.reveal) {
-				this.#close(Page);
-			}
+			this.#close(Page);
 		}
 		#paint(state) {
+			this.#creating = false;
 			if (this.reveal && !this.currentSrc) {
 				if (state.scope.observer) {
 					state.scope.observer.observe(this);
@@ -47,10 +43,6 @@ export function create(Superclass) {
 					return state.reveal(this);
 				});
 			}
-		}
-		#setup(state) {
-			this.#creating = false;
-			this.#paint(state);
 		}
 		#close(state) {
 			if (this.reveal && !this.currentSrc) {
