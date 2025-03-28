@@ -7,7 +7,9 @@ class HTMLElementBarcode extends Page.Element {
 		colorFront: '',
 		rotate: null,
 		scaleX: x => parseInt(x) || 0,
-		scaleY: x => parseInt(x) || 0
+		scaleY: x => parseInt(x) || 0,
+		paddingWidth: x => parseInt(x) || 0,
+		paddingHeight: x => parseInt(x) || 0
 	};
 
 	async patch(state) {
@@ -23,7 +25,9 @@ class HTMLElementBarcode extends Page.Element {
 			backgroundcolor: this.options.colorBack,
 			textcolor: this.options.colorFront,
 			barcolor: this.options.colorFront,
-			bordercolor: this.options.colorFront
+			bordercolor: this.options.colorFront,
+			paddingwidth: this.options.paddingWidth,
+			paddingheight: this.options.paddingHeight
 		};
 		const bwipFn = Pageboard.Bwip[opts.bcid.replace(/-/g, '_')];
 		try {

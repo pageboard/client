@@ -38,6 +38,16 @@ exports.barcode = {
 			type: 'integer',
 			default: 2
 		},
+		paddingWidth: {
+			title: 'Padding Width',
+			type: 'integer',
+			default: 0
+		},
+		paddingHeight: {
+			title: 'Padding Height',
+			type: 'integer',
+			default: 0
+		},
 		color: {
 			type: 'object',
 			properties: {
@@ -105,7 +115,7 @@ exports.barcode = {
 			}]
 		}
 	},
-	html: `<element-barcode data-bcid="[bcid]" data-text="[text]" data-scale-x="[scaleX]" data-scale-y="[scaleY]" data-dimension="[dimension.length][dimension.unit]" data-color-front="[color?.front]" data-color-back="[color?.back]" data-rotate="[rotate]"></element-barcode>`,
+	html: `<element-barcode data-bcid="[bcid]" data-text="[text]" data-scale-x="[scaleX]" data-scale-y="[scaleY]" data-dimension="[dimension.length][dimension.unit]" data-color-front="[color?.front]" data-color-back="[color?.back]" data-rotate="[rotate]" data-padding-width="[paddingWidth]" data-padding-height="[paddingHeight]"></element-barcode>`,
 	scripts: [
 		'../lib/bwip.js',
 		'../ui/barcode.js'
