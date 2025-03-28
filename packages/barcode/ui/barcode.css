@@ -1,9 +1,9 @@
-[block-type="barcode"] {
+element-barcode {
 	display: inline-flex;
 }
-[block-type="barcode"].error {
-	background-color: rgb(255 0 0 / 50%);
+element-barcode.error {
+	outline-color: rgb(255 0 0 / 50%) !important;
 }
-[block-type="barcode"] > svg {
+element-barcode[data-bcid="qrcode"] > svg {
 	shape-rendering: crispedges;
 }
