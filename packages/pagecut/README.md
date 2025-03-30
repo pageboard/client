@@ -38,12 +38,6 @@ An editor instance can be rendered to DOM using `pagecut.get()`.
 Basic setup
 -----------
 
-Bunbled files are available as
-
-* dist/editor.js (already containing the viewer)
-* dist/viewer.js (for view-only purpose)
-* dist/editor.css (for editor)
-
 A basic editor setup without anything interesting:
 
 ```js
