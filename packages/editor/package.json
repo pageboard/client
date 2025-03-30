@@ -5,7 +5,6 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "postinstall",
     "prepare": "postinstall"
   },
   "repository": {
@@ -18,16 +17,14 @@
     "url": "https://github.com/pageboard/client/issues"
   },
   "homepage": "https://github.com/pageboard/client#readme",
-  "dependencies": {
-    "@pageboard/pagecut": "^0.16.2",
-    "postinstall": "^0.11.0",
-    "postinstall-bundle": "^0.9.4"
-  },
-  "postinstall": {
-    "@pageboard/pagecut/src/*.css": "link lib/"
+  "devDependencies": {
+    "@pageboard/pagecut": "^0.17.1",
+    "postinstall": "^0.11.1",
+    "postinstall-pack": "^0.11.2"
   },
   "prepare": {
-    "src/editor.js": "bundle lib/"
+    "src/editor.js": "pack lib/",
+    "@pageboard/pagecut/src/editor.css": "pack lib/"
   },
   "pageboard": {
     "version": "^0.16",

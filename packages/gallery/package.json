@@ -18,18 +18,15 @@
     "url": "https://github.com/pageboard/client/issues"
   },
   "homepage": "https://github.com/pageboard/client#readme",
-  "dependencies": {
-    "@pageboard/flickity": "^2.3.2",
-    "postinstall": "^0.11.0"
-  },
   "devDependencies": {
-    "postinstall-bundle": "^0.9.4"
-  },
-  "postinstall": {
-    "@pageboard/flickity/css/flickity.css": "link lib/"
+    "@pageboard/flickity": "^2.3.2",
+    "@pageboard/pagecut": "^0.17.1",
+    "postinstall": "^0.11.1",
+    "postinstall-pack": "^0.11.2"
   },
   "prepare": {
-    "./src/flickity.js": "bundle lib/"
+    "./src/flickity.js": "pack lib/",
+    "@pageboard/flickity/css/flickity.css": "pack lib/"
   },
   "pageboard": {
     "version": "^0.16",
