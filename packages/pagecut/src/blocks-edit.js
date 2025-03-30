@@ -1,4 +1,4 @@
-import BlocksView from './blocks-view';
+import BlocksView from './blocks-view.js';
 
 export default class Blocks extends BlocksView {
 	mutate(node, data) {

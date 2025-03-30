@@ -5,7 +5,7 @@ import {
 	ContainerNodeView,
 	WrapNodeView,
 	flagDom, findContent, tryJSON, domAttrsMap, saveDomAttrs, staticHtml
-} from './node-views';
+} from './node-views.js';
 
 export default function define(viewer, elt, schema, nodeViews) {
 	if (!viewer.tags) viewer.tags = {};

@@ -1,5 +1,5 @@
-import Element from './element';
-import BlocksView from './blocks-view';
+import Element from './element.js';
+import BlocksView from './blocks-view.js';
 
 export default class Viewer {
 

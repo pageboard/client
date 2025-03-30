@@ -10,15 +10,15 @@ import { gapCursor } from "prosemirror-gapcursor";
 import * as History from "prosemirror-history";
 import OrderedMap from "orderedmap";
 
-import IdPlugin from "./id-plugin";
-import FocusPlugin from "./focus-plugin";
-import KeymapPlugin from "./keymap-plugin";
-import InputPlugin from "./input-plugin";
+import IdPlugin from "./id-plugin.js";
+import FocusPlugin from "./focus-plugin.js";
+import KeymapPlugin from "./keymap-plugin.js";
+import InputPlugin from "./input-plugin.js";
 
-import Utils from "./utils";
-import DefineSpecs from "./specs";
-import BlocksEdit from "./blocks-edit";
-import { MenuItem, MenuBar } from "./menubar";
+import Utils from "./utils.js";
+import DefineSpecs from "./specs.js";
+import BlocksEdit from "./blocks-edit.js";
+import { MenuItem, MenuBar } from "./menubar.js";
 
 const mac = typeof navigator != "undefined" ? /Mac/.test(navigator.platform) : false;
 

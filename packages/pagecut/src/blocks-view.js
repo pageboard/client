@@ -1,4 +1,4 @@
-import str2dom from './str2dom';
+import str2dom from './str2dom.js';
 
 function htmlToFrag(str, {doc, ns}) {
 	try {

@@ -1,4 +1,4 @@
-import Contents from './contents';
+import Contents from './contents.js';
 
 export default class Element {
 	constructor(elt) {
