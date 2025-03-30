@@ -27,7 +27,7 @@
   "devDependencies": {
     "duration-relativetimeformat": "^2.0.4",
     "fast-safe-stringify": "^2.1.1",
-    "postinstall-pack": "0.11.1",
+    "postinstall-pack": "^0.11.2",
     "pretty-bytes": "^6.1.1",
     "speakingurl": "^14.0.1"
   },
