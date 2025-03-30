@@ -19,7 +19,6 @@
   },
   "homepage": "https://github.com/pageboard/client#readme",
   "dependencies": {
-    "@pageboard/pagecut": "^0.17.1",
     "cropperjs": "^1.6.2",
     "postinstall": "^0.11.1",
     "fomantic-ui-css": "2.7.8"
@@ -27,6 +26,7 @@
   "devDependencies": {
     "duration-relativetimeformat": "^2.0.4",
     "fast-safe-stringify": "^2.1.1",
+    "@pageboard/pagecut": "^0.17.2",
     "postinstall-pack": "^0.11.2",
     "pretty-bytes": "^6.1.1",
     "speakingurl": "^14.0.1"
