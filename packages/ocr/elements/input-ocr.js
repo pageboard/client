@@ -30,6 +30,6 @@ exports.input_ocr = {
 		'../ui/input-ocr.css'
 	],
 	scripts: [
-		'../lib/input-ocr.js'
+		'../lib/input-ocr.mjs'
 	]
 };

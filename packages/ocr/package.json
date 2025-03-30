@@ -19,8 +19,7 @@
   },
   "homepage": "https://github.com/pageboard/client#readme",
   "devDependencies": {
-    "postinstall": "^0.11.0",
-    "postinstall-bundle": "^0.9.4"
+    "postinstall-pack": "^0.11.2"
   },
   "postinstall": {
     "tesseract.js/dist/worker.min.js": "link lib/",
@@ -29,7 +28,7 @@
     "@tesseract.js-data/eng/*_best_int/*.traineddata.gz": "link lib/data/"
   },
   "prepare": {
-    "./src/input-ocr.js": "bundle lib/"
+    "./src/input-ocr.mjs": "pack lib/"
   },
   "pageboard": {
     "version": "^0.16",
@@ -41,9 +40,10 @@
     "elements": "elements/"
   },
   "dependencies": {
+    "postinstall": "^0.11.1",
     "@tesseract.js-data/eng": "^1.0.0",
     "@tesseract.js-data/fra": "^1.0.0",
-    "tesseract.js": "^5.1.1",
-    "tesseract.js-core": "^5.1.1"
+    "tesseract.js": "^6.0.0",
+    "tesseract.js-core": "^6.0.0"
   }
 }
