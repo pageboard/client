@@ -147,7 +147,7 @@
 }
 
 .field.href .items {
-	margin: 1em 0 0;
+	margin: 0.5em 0 0;
 	display: flex;
 	flex-direction: column;
 	width:100%;
