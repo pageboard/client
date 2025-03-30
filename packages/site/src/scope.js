@@ -1,5 +1,4 @@
 import Viewer from '@pageboard/pagecut/src/viewer.js';
-import BlocksView from '@pageboard/pagecut/src/blocks-view.js';
 
 import * as fuse from './fuse';
 import * as load from './load';
@@ -148,12 +147,11 @@ export default class Scope {
 	}
 	set $elements(elts) {
 		if (elts == this.viewer?.elements) return;
-		const v = this.viewer = new CustomViewer({
+		this.viewer = new CustomViewer({
 			elements: elts,
 			document: this.$doc,
 			scope: this
 		});
-		v.blocks = new BlocksView(v);
 	}
 
 	get $groups() {
