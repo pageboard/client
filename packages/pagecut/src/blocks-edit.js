@@ -1,4 +1,5 @@
 import BlocksView from './blocks-view';
+
 export default class Blocks extends BlocksView {
 	mutate(node, data) {
 		let nodes = [], block, id;

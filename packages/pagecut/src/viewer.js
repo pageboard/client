@@ -1,4 +1,5 @@
 import Element from './element';
+import BlocksView from './blocks-view';
 
 export default class Viewer {
 
@@ -7,6 +8,7 @@ export default class Viewer {
 		this.scope = opts.scope;
 		this.elements = opts.elements;
 		this.init();
+		this.blocks = new BlocksView(this);
 	}
 
 	init() {

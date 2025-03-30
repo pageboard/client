@@ -1,6 +1,8 @@
-@import url('./prosemirror.css');
+@import url('prosemirror-view/style/prosemirror.css');
 
-@import url('./prosemirror-gapcursor.css');
+@import url('prosemirror-gapcursor/style/gapcursor.css');
+
+@import url('prosemirror-menu/style/menu.css');
 
 .ProseMirror {
 	white-space: normal;

@@ -36,13 +36,4 @@ jspm_packages
 # Optional REPL history
 .node_repl_history
 
-font/*
-.fontello
-dist/*
-pm
-TODO
-
-sample/dom-template-strings.js
-sample/diffDOM.js
-sample/agent.js
-src/prosemirror*.css
+/dist/*
