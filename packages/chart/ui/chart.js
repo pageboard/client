@@ -3,8 +3,10 @@ class HTMLElementChartCell extends Page.create(HTMLTableCellElement) {
 		dataValue: x => parseFloat(x) || 0
 	};
 	patch(state) {
-		this.textContent = this.options.value;
-		//return this.closest('table')?.patch(state);
+		const { precision, unit } = this.closest('table')?.options ?? {};
+		let val = this.options.value.toFixed(precision);
+		if (unit) val += ' ' + unit;
+		this.textContent = val;
 	}
 }
 
@@ -38,13 +40,14 @@ class HTMLElementChartTable extends Page.create(HTMLTableElement) {
 			td.style.removeProperty('--size');
 			const cur = value / sum;
 			if (progressive) {
-				td.style.setProperty('--start', prev.toPrecision(precision));
+				td.style.setProperty('--start', prev);
 				if (cumulative) prev += cur;
 				else prev = cur;
-				td.style.setProperty('--end', prev.toPrecision(precision));
+				td.style.setProperty('--end', prev);
 			} else if (chart) {
-				td.style.setProperty('--size', cur.toPrecision(precision));
+				td.style.setProperty('--size', cur);
 			}
+			value = value.toFixed(precision);
 			if (unit) value += ' ' + unit;
 			td.textContent = value;
 		}

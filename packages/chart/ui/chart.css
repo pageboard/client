@@ -1,10 +1,21 @@
-table.charts-css.area tbody > tr:first-of-type {
+table.charts-css:is(.area,.line) > tbody > tr:first-of-type {
 	width: 0;
 	flex-grow: 0;
 }
-table.charts-css.area tbody > tr:first-of-type > td {
+table.charts-css:is(.area,.line) > tbody > tr:first-of-type > td {
 	width: max-content;
 }
-table.charts-css.area tbody > tr:first-of-type > td::before {
+table.charts-css:is(.area,.line) > tbody > tr:first-of-type > td::before {
 	display: none;
+}
+
+
+table.charts-css.pie > tbody > tr > td {
+	--half: calc(pi * (var(--start) + var(--end)));
+	--place: 0.98;
+
+	padding-top: calc(50% * (1 - var(--place) * cos(var(--half))));
+	padding-left: calc(50% * (1 + var(--place) * sin(var(--half))));
+	white-space: nowrap;
+	text-align:center;
 }
