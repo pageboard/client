@@ -7,7 +7,7 @@ exports.settings.properties.grants.items.anyOf.push({
 
 exports.event = {
 	title: 'Event',
-	menu: "Calendar",
+	menu: "calendar",
 	bundle: true,
 	standalone: true,
 	required: ['title'],
@@ -107,7 +107,7 @@ exports.event = {
 
 exports.event_date = {
 	title: 'Date',
-	menu: "Calendar",
+	menu: "calendar",
 	bundle: 'event',
 	standalone: true,
 	properties: {
@@ -186,7 +186,7 @@ exports.event_date = {
 
 exports.event_reservation = {
 	title: 'Reservation',
-	menu: "Calendar",
+	menu: "calendar",
 	bundle: 'event',
 	standalone: true,
 	required: [],
