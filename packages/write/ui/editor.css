@@ -1,4 +1,4 @@
-@import url("../lib/pagecut/editor.css");
+@import url("../lib/editor.css");
 
 [contenteditable] .hidden[block-id] {
 	display: block !important;
