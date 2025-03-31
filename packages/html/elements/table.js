@@ -175,7 +175,7 @@ exports.table_cell = {
 };
 
 exports.table_head_cell = {
-	title: "Cell",
+	title: "Head Cell",
 	menu: 'widget',
 	icon: '<i class="icons"><b class="icon">head</b><i class="corner add icon"></i></i>',
 	properties: {
