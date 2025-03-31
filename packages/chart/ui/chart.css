@@ -1,0 +1,10 @@
+table.charts-css.area tbody > tr:first-of-type {
+	width: 0;
+	flex-grow: 0;
+}
+table.charts-css.area tbody > tr:first-of-type > td {
+	width: max-content;
+}
+table.charts-css.area tbody > tr:first-of-type > td::before {
+	display: none;
+}
