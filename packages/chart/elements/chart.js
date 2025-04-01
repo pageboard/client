@@ -43,6 +43,10 @@ exports.chart = {
 			title: 'Stacked',
 			type: 'boolean'
 		},
+		showLabels: {
+			title: 'Show labels',
+			type: 'boolean'
+		},
 		hideData: {
 			title: 'Hide values',
 			type: 'boolean'
@@ -122,7 +126,7 @@ exports.chart = {
 		}
 	},
 	contents: "table_caption? table_head? chart_body table_foot?",
-	html: `<table is="element-chart-table" class="ui table show-heading [stacked|pre:multiple ] [labels] [axes.primary|and:show-primary-axis] [axes.secondary|pre:show-|post:-secondary-axes] [axes.data|and:show-data-axes] [spacing.data|pre:data-spacing-] [spacing.datasets|pre:dataset-spacing-] [hideData|case:kebab] [position|pre:data-] [orientation.reverse] [orientation.reverseLabels|case:kebab] [orientation.reverseData|case:kebab] [orientation.reverseDatasets|case:kebab]" data-precision="[precision]" data-unit="[unit]" data-chart="[chart]"></table>`,
+	html: `<table is="element-chart-table" class="ui table show-heading [stacked|pre:multiple ] [showLabels|alt:show-labels] [axes.primary|and:show-primary-axis] [axes.secondary|pre:show-|post:-secondary-axes] [axes.data|and:show-data-axes] [spacing.data|pre:data-spacing-] [spacing.datasets|pre:dataset-spacing-] [hideData|alt:hide-data] [position|pre:data-] [orientation.reverse] [orientation.reverseLabels|alt:reverse-labels] [orientation.reverseData|alt:reverse-data] [orientation.reverseDatasets|alt:reverse-datasets]" data-precision="[precision]" data-unit="[unit]" data-chart="[chart]"></table>`,
 	stylesheets: [
 		'../lib/charts.css',
 		'../ui/chart.css'
@@ -181,7 +185,7 @@ exports.chart_legend = {
 exports.chart_list_item = {
 	title: 'Item',
 	bundle: 'chart',
-	context: 'chart_legend//',
+	context: 'chart_legend/',
 	menu: 'widget',
 	inplace: true,
 	contents: "inline*",
@@ -192,7 +196,7 @@ exports.chart_list_item = {
 exports.chart_body = {
 	...exports.table_body,
 	bundle: 'chart',
-	context: 'chart//',
+	context: 'chart/',
 	menu: 'widget',
 	contents: 'chart_row+'
 };
@@ -200,7 +204,7 @@ exports.chart_body = {
 exports.chart_row = {
 	...exports.table_row,
 	bundle: 'chart',
-	context: 'chart//',
+	context: 'chart_body/',
 	menu: 'widget',
 	contents: '(chart_cell|chart_head_cell)? chart_value+'
 };
@@ -209,7 +213,8 @@ exports.chart_cell = {
 	...exports.table_cell,
 	bundle: 'chart',
 	context: 'chart_row/',
-	contents: 'inline*'
+	contents: 'inline*',
+	tag: 'td:not([is="element-chart-value"])'
 };
 
 exports.chart_head_cell = {
@@ -219,11 +224,12 @@ exports.chart_head_cell = {
 	contents: 'inline*'
 };
 
+exports.table_cell.tag = 'td:not([is="element-chart-value"])';
 exports.chart_value = {
 	title: "Cell",
 	bundle: 'chart',
 	menu: 'widget',
-	context: 'chart_table//',
+	context: 'chart_row/',
 	icon: '<i class="icons"><b class="icon">cell</b><i class="corner add icon"></i></i>',
 	properties: {
 		value: {
@@ -232,9 +238,9 @@ exports.chart_value = {
 		}
 	},
 	parse: function (dom) {
-		return { value: parseInt(dom.dataset.value) };
+		return { value: parseFloat(dom.dataset.value) || 0 };
 	},
 	inplace: true,
-	tag: 'td',
-	html: '<td is="element-chart-cell" data-value="[value]"></td>'
+	tag: 'td[is="element-chart-value"]',
+	html: '<td is="element-chart-value" data-value="[value]"></td>'
 };

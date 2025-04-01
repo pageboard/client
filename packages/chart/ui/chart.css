@@ -9,13 +9,23 @@ table.charts-css:is(.area,.line) > tbody > tr:first-of-type > td::before {
 	display: none;
 }
 
+table.charts-css.pie > tbody > tr > td > .data {
+	--angle: calc(0.5turn * var(--start, 0) + 0.5turn * var(--end, 0));
+	--offset: 50%;
 
-table.charts-css.pie > tbody > tr > td {
-	--half: calc(pi * (var(--start) + var(--end)));
-	--place: 0.98;
+	transform:
+		rotate(var(--angle))
+		translateY(calc(-1 * var(--offset)))
+		rotate(calc(-1 * var(--angle)))
+		translateY(var(--offset));
+}
 
-	padding-top: calc(50% * (1 - var(--place) * cos(var(--half))));
-	padding-left: calc(50% * (1 + var(--place) * sin(var(--half))));
-	white-space: nowrap;
-	text-align:center;
+.charts-css {
+	width:auto;
+	flex: 1 0 auto;
+	color:black;
+}
+
+.charts-css.legend:not(.legend-inline) {
+	flex: 0 0 auto;
 }

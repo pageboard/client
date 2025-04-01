@@ -1,16 +1,19 @@
-class HTMLElementChartCell extends Page.create(HTMLTableCellElement) {
+class HTMLElementChartValue extends Page.create(HTMLTableCellElement) {
 	static defaults = {
 		dataValue: x => parseFloat(x) || 0
 	};
 	patch(state) {
-		const { precision, unit } = this.closest('table')?.options ?? {};
-		let val = this.options.value.toFixed(precision);
-		if (unit) val += ' ' + unit;
-		this.textContent = val;
+		this.update(this.closest('table')?.options ?? {});
+	}
+	update({ precision, unit }) {
+		let { value } = this.options;
+		value = value.toFixed(precision);
+		if (unit) value += ' ' + unit;
+		this.innerHTML = `<span class="data">${value}</span>`;
 	}
 }
 
-Page.define('element-chart-cell', HTMLElementChartCell, 'td');
+Page.define('element-chart-value', HTMLElementChartValue, 'td');
 
 class HTMLElementChartTable extends Page.create(HTMLTableElement) {
 	static defaults = {
@@ -19,7 +22,7 @@ class HTMLElementChartTable extends Page.create(HTMLTableElement) {
 		dataUnit: null
 	};
 	patch(state) {
-		const { precision, unit, chart } = this.options;
+		const { chart } = this.options;
 		this.classList.remove('pie', 'bar', 'column', 'line', 'area', 'ui', 'table', 'charts-css');
 		if (chart) {
 			this.classList.add('charts-css', chart);
@@ -28,17 +31,16 @@ class HTMLElementChartTable extends Page.create(HTMLTableElement) {
 		}
 		const tds = this.querySelectorAll('tbody th + td');
 		const vals = tds.map(td => td.options.value);
-		const sum = vals.reduce((a, b) => a + b, 0) || 1;
 		let prev = 0;
 		const progressive = ['pie', 'area', 'line'].includes(chart);
 		const cumulative = chart == "pie";
 		if (progressive && !cumulative) prev = vals[0];
+		const max = cumulative ? vals.reduce((a, b) => a + b, 0) || 1 : Math.max(...vals.map(x => Math.abs(x)));
 		for (const td of tds) {
-			let { value } = td.options;
 			td.style.removeProperty('--start');
 			td.style.removeProperty('--end');
 			td.style.removeProperty('--size');
-			const cur = value / sum;
+			const cur = td.options.value / max;
 			if (progressive) {
 				td.style.setProperty('--start', prev);
 				if (cumulative) prev += cur;
@@ -47,9 +49,7 @@ class HTMLElementChartTable extends Page.create(HTMLTableElement) {
 			} else if (chart) {
 				td.style.setProperty('--size', cur);
 			}
-			value = value.toFixed(precision);
-			if (unit) value += ' ' + unit;
-			td.textContent = value;
+			td.update(this.options);
 		}
 	}
 }
