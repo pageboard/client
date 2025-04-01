@@ -48,14 +48,14 @@ exports.event = {
 			description: 'Hours before start of event date',
 			type: 'integer',
 			nullable: true,
-			minimum: 0,
+			minimum: 0
 		},
 		closing: {
 			title: 'Close reservations',
 			description: 'Hours before start of event date',
 			type: 'integer',
 			default: 0,
-			minimum: 0,
+			minimum: 0
 		},
 		reservationRequired: {
 			title: 'Require reservation',
