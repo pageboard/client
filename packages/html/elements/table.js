@@ -113,7 +113,7 @@ exports.table_row = {
 	title: "Row",
 	menu: 'widget',
 	icon: '<b class="icon">row</b>',
-	contents: 'table_cell+',
+	contents: '(table_cell|table_head_cell)+',
 	inplace: true,
 	html: '<tr></tr>'
 };
@@ -201,12 +201,25 @@ exports.table_head_cell = {
 			minimum: 1,
 			maximum: 1000,
 			default: 1
+		},
+		scope: {
+			title: 'Scope',
+			anyOf: [{
+				const: null,
+				title: 'None'
+			}, {
+				const: 'row',
+				title: 'Row'
+			}, {
+				const: 'col',
+				title: 'Column'
+			}]
 		}
 	},
 	contents: "block+",
 	tag: 'th',
 	inplace: true,
-	html: '<th class="[align|post: aligned] [width|as:colnums|post: wide]" rowspan="[rowspan]" colspan="[colspan]"></th>',
+	html: '<th class="[align|post: aligned] [width|as:colnums|post: wide]" rowspan="[rowspan]" colspan="[colspan]" scope="[scope]"></th>',
 	stylesheets: [
 		"../ui/table.css"
 	]

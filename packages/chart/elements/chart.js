@@ -2,6 +2,7 @@ exports.chart = {
 	title: "Chart",
 	priority: 21,
 	bundle: true,
+	group: 'block',
 	menu: 'widget',
 	icon: '<i class="chart pie icon"></i>',
 	properties: {
@@ -37,10 +38,91 @@ exports.chart = {
 			type: 'string',
 			format: 'singleline',
 			nullable: true
+		},
+		stacked: {
+			title: 'Stacked',
+			type: 'boolean'
+		},
+		hideData: {
+			title: 'Hide values',
+			type: 'boolean'
+		},
+		position: {
+			title: 'Position',
+			anyOf: [{
+				const: null,
+				title: 'End'
+			}, {
+				const: 'start',
+				title: 'Start'
+			}, {
+				const: 'center',
+				title: 'Center'
+			}, {
+				const: 'outside',
+				title: 'Outside'
+			}]
+		},
+		axes: {
+			title: 'Axes',
+			properties: {
+				primary: {
+					title: 'Show primary axe',
+					type: 'boolean'
+				},
+				data: {
+					title: 'Show data axes',
+					type: 'boolean'
+				},
+				secondary: {
+					title: 'Secondary lines',
+					type: 'integer',
+					minimum: 0,
+					maximum: 10
+				}
+			}
+		},
+		spacing: {
+			title: 'Spacing',
+			properties: {
+				data: {
+					title: 'Data',
+					type: 'integer',
+					minimum: 0,
+					maximum: 20
+				},
+				dataset: {
+					title: 'Datasets',
+					type: 'integer',
+					minimum: 0,
+					maximum: 20
+				}
+			}
+		},
+		orientation: {
+			title: 'Orientation',
+			properties: {
+				reverse: {
+					title: 'Reverse',
+					type: 'boolean'
+				},
+				reverseLabels: {
+					title: 'Reverse labels',
+					type: 'boolean'
+				},
+				reverseData: {
+					title: 'Reverse data',
+					type: 'boolean'
+				},
+				reverseDatasets: {
+					title: 'Reverse datasets',
+					type: 'boolean'
+				}
+			}
 		}
 	},
-	contents: "table_caption? table_head? chart_table_body table_foot?",
-	html: `<table is="element-chart-table" class="ui table [heading] [labels] [primaryAxis] [secondaryAxis] [dataAxes] [spacing] [hideData]" data-precision="[precision]" data-unit="[unit]" data-chart="[chart]"></table>`,
+	contents: "table_caption? table_head? chart_body table_foot?",
+	html: `<table is="element-chart-table" class="ui table show-heading [stacked|pre:multiple ] [labels] [axes.primary|and:show-primary-axis] [axes.secondary|pre:show-|post:-secondary-axes] [axes.data|and:show-data-axes] [spacing.data|pre:data-spacing-] [spacing.datasets|pre:dataset-spacing-] [hideData] [position|pre:data-] [orientation.reverse] [orientation.reverseLabels] [orientation.reverseData] [orientation.reverseDatasets]" data-precision="[precision]" data-unit="[unit]" data-chart="[chart]"></table>`,
 	stylesheets: [
 		'../lib/charts.css',
 		'../ui/chart.css'
@@ -85,7 +167,6 @@ exports.chart_legend = {
 	contents: "chart_list_item+",
 	group: "block",
 	icon: '<i class="icons"><i class="chart pie icon"></i><i class="corner question circle outline icon"></i></i>',
-	tag: 'ul',
 	parse: function (dom) {
 		let marker = null;
 		const style = dom.style.listStyleType;
@@ -100,6 +181,7 @@ exports.chart_legend = {
 exports.chart_list_item = {
 	title: 'Item',
 	bundle: 'chart',
+	context: 'chart_legend//',
 	menu: 'widget',
 	inplace: true,
 	contents: "inline*",
@@ -107,24 +189,25 @@ exports.chart_list_item = {
 	html: `<li></li>`,
 };
 
-exports.chart_table_body = {
+exports.chart_body = {
 	...exports.table_body,
 	bundle: 'chart',
+	context: 'chart//',
 	menu: 'widget',
-	contents: 'chart_table_row+'
+	contents: 'chart_row+'
 };
-exports.chart_table_row = {
+exports.chart_row = {
 	...exports.table_row,
 	bundle: 'chart',
+	context: 'chart//',
 	menu: 'widget',
-	contents: 'table_cell chart_table_cell+'
+	contents: '(table_cell|table_head_cell) chart_cell+'
 };
 
-exports.chart_table_cell = {
+exports.chart_cell = {
 	title: "Cell",
 	bundle: 'chart',
 	menu: 'widget',
-	group: 'table_cell',
 	context: 'chart_table//',
 	icon: '<i class="icons"><b class="icon">cell</b><i class="corner add icon"></i></i>',
 	properties: {
