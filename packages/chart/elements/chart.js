@@ -196,15 +196,30 @@ exports.chart_body = {
 	menu: 'widget',
 	contents: 'chart_row+'
 };
+
 exports.chart_row = {
 	...exports.table_row,
 	bundle: 'chart',
 	context: 'chart//',
 	menu: 'widget',
-	contents: '(table_cell|table_head_cell) chart_cell+'
+	contents: '(chart_cell|chart_head_cell) chart_value+'
 };
 
 exports.chart_cell = {
+	...exports.table_cell,
+	bundle: 'chart',
+	context: 'chart_row/',
+	contents: 'inline*'
+};
+
+exports.chart_head_cell = {
+	...exports.table_head_cell,
+	bundle: 'chart',
+	context: 'chart_row/',
+	contents: 'inline*'
+};
+
+exports.chart_value = {
 	title: "Cell",
 	bundle: 'chart',
 	menu: 'widget',
