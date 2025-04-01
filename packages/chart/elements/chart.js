@@ -122,7 +122,7 @@ exports.chart = {
 		}
 	},
 	contents: "table_caption? table_head? chart_body table_foot?",
-	html: `<table is="element-chart-table" class="ui table show-heading [stacked|pre:multiple ] [labels] [axes.primary|and:show-primary-axis] [axes.secondary|pre:show-|post:-secondary-axes] [axes.data|and:show-data-axes] [spacing.data|pre:data-spacing-] [spacing.datasets|pre:dataset-spacing-] [hideData] [position|pre:data-] [orientation.reverse] [orientation.reverseLabels] [orientation.reverseData] [orientation.reverseDatasets]" data-precision="[precision]" data-unit="[unit]" data-chart="[chart]"></table>`,
+	html: `<table is="element-chart-table" class="ui table show-heading [stacked|pre:multiple ] [labels] [axes.primary|and:show-primary-axis] [axes.secondary|pre:show-|post:-secondary-axes] [axes.data|and:show-data-axes] [spacing.data|pre:data-spacing-] [spacing.datasets|pre:dataset-spacing-] [hideData|case:kebab] [position|pre:data-] [orientation.reverse] [orientation.reverseLabels|case:kebab] [orientation.reverseData|case:kebab] [orientation.reverseDatasets|case:kebab]" data-precision="[precision]" data-unit="[unit]" data-chart="[chart]"></table>`,
 	stylesheets: [
 		'../lib/charts.css',
 		'../ui/chart.css'
@@ -202,7 +202,7 @@ exports.chart_row = {
 	bundle: 'chart',
 	context: 'chart//',
 	menu: 'widget',
-	contents: '(chart_cell|chart_head_cell) chart_value+'
+	contents: '(chart_cell|chart_head_cell)? chart_value+'
 };
 
 exports.chart_cell = {
