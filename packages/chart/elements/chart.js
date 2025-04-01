@@ -18,6 +18,7 @@ exports.chart = {
 
 exports.chart_table = {
 	title: "Table",
+	bundle: 'chart',
 	menu: 'widget',
 	icon: '<i class="table icon"></i>',
 	properties: {
@@ -60,15 +61,79 @@ exports.chart_table = {
 };
 
 exports.chart_legend = {
-	contents: "list_item+",
-	html: `<ul class="charts-css legend [inline] [shape]"></ul>`
+	title: 'Legend',
+	bundle: 'chart',
+	menu: 'widget',
+	properties: {
+		marker: {
+			title: 'Marker',
+			anyOf: [{
+				const: null,
+				title: 'Default'
+			}, {
+				const: 'rectangle',
+				title: 'Rectangle'
+			}, {
+				const: 'square',
+				title: 'Square'
+			}, {
+				const: 'circle',
+				title: 'Circle'
+			}, {
+				const: 'rhombus',
+				title: 'Rhombus'
+			}, {
+				const: 'line',
+				title: 'Line'
+			}]
+		},
+		inline: {
+			title: 'Inline',
+			type: 'boolean'
+		}
+	},
+	inplace: true,
+	contents: "chart_list_item+",
+	group: "block",
+	icon: '<i class="list ul icon"></i>',
+	tag: 'ul',
+	parse: function (dom) {
+		let marker = null;
+		const style = dom.style.listStyleType;
+		if (style && this.properties.marker.anyOf.some(item => item.const == style)) {
+			marker = style;
+		}
+		return { marker };
+	},
+	html: `<ul class="charts-css legend [marker|pre:legend-] [inline|and:legend-inline]"></ul>`
 };
 
-exports.chart_table_body = { ...exports.table_body, contents: 'chart_table_row+' };
-exports.chart_table_row = { ...exports.table_row, contents: 'chart_table_head_cell chart_table_cell' };
+exports.chart_list_item = {
+	title: 'Item',
+	bundle: 'chart',
+	menu: 'widget',
+	inplace: true,
+	contents: "inline*",
+	icon: '<i class="list icon"></i>',
+	html: `<li></li>`,
+};
+
+exports.chart_table_body = {
+	...exports.table_body,
+	bundle: 'chart',
+	menu: 'widget',
+	contents: 'chart_table_row+'
+};
+exports.chart_table_row = {
+	...exports.table_row,
+	bundle: 'chart',
+	menu: 'widget',
+	contents: 'chart_table_head_cell chart_table_cell'
+};
 
 exports.chart_table_head_cell = {
 	title: "Head Cell",
+	bundle: 'chart',
 	menu: 'widget',
 	group: 'table_cell',
 	context: 'chart_table//',
@@ -81,6 +146,7 @@ exports.chart_table_head_cell = {
 
 exports.chart_table_cell = {
 	title: "Cell",
+	bundle: 'chart',
 	menu: 'widget',
 	group: 'table_cell',
 	context: 'chart_table//',
