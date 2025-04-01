@@ -226,7 +226,7 @@ exports.chart_head_cell = {
 
 exports.table_cell.tag = 'td:not([is="element-chart-value"])';
 exports.chart_value = {
-	title: "Cell",
+	title: "Value",
 	bundle: 'chart',
 	menu: 'widget',
 	context: 'chart_row/',
