@@ -1,26 +1,9 @@
 exports.chart = {
 	title: "Chart",
 	priority: 21,
-	icon: '<i class="chart line icon"></i>',
-	menu: "widget",
 	bundle: true,
-	group: 'block',
-	contents: "(chart_table|chart_legend)+",
-	html: `<div></div>`,
-	stylesheets: [
-		'../lib/charts.css',
-		'../ui/chart.css'
-	],
-	scripts: [
-		'../ui/chart.js'
-	]
-};
-
-exports.chart_table = {
-	title: "Table",
-	bundle: 'chart',
 	menu: 'widget',
-	icon: '<i class="table icon"></i>',
+	icon: '<i class="chart pie icon"></i>',
 	properties: {
 		chart: {
 			title: 'Chart',
@@ -57,11 +40,18 @@ exports.chart_table = {
 		}
 	},
 	contents: "table_caption? table_head? chart_table_body table_foot?",
-	html: `<table is="element-chart-table" class="ui table [heading] [labels] [primaryAxis] [secondaryAxis] [dataAxes] [spacing] [hideData]" data-precision="[precision]" data-unit="[unit]" data-chart="[chart]"></table>`
+	html: `<table is="element-chart-table" class="ui table [heading] [labels] [primaryAxis] [secondaryAxis] [dataAxes] [spacing] [hideData]" data-precision="[precision]" data-unit="[unit]" data-chart="[chart]"></table>`,
+	stylesheets: [
+		'../lib/charts.css',
+		'../ui/chart.css'
+	],
+	scripts: [
+		'../ui/chart.js'
+	]
 };
 
 exports.chart_legend = {
-	title: 'Legend',
+	title: 'Chart Legend',
 	bundle: 'chart',
 	menu: 'widget',
 	properties: {
@@ -92,10 +82,9 @@ exports.chart_legend = {
 			type: 'boolean'
 		}
 	},
-	inplace: true,
 	contents: "chart_list_item+",
 	group: "block",
-	icon: '<i class="list ul icon"></i>',
+	icon: '<i class="icons"><i class="chart pie icon"></i><i class="corner question circle outline icon"></i></i>',
 	tag: 'ul',
 	parse: function (dom) {
 		let marker = null;
@@ -128,20 +117,7 @@ exports.chart_table_row = {
 	...exports.table_row,
 	bundle: 'chart',
 	menu: 'widget',
-	contents: 'chart_table_head_cell chart_table_cell'
-};
-
-exports.chart_table_head_cell = {
-	title: "Head Cell",
-	bundle: 'chart',
-	menu: 'widget',
-	group: 'table_cell',
-	context: 'chart_table//',
-	icon: '<i class="icons"><b class="icon">cell</b><i class="corner add icon"></i></i>',
-	inplace: true,
-	tag: 'th',
-	contents: "inline*",
-	html: '<th is="element-chart-cell" data-value="[value]" class="[width|as:colnums|post: wide]"></th>'
+	contents: 'table_cell chart_table_cell+'
 };
 
 exports.chart_table_cell = {
@@ -162,5 +138,5 @@ exports.chart_table_cell = {
 	},
 	inplace: true,
 	tag: 'td',
-	html: '<td is="element-chart-cell" data-value="[value]" class="[width|as:colnums|post: wide]"></td>'
+	html: '<td is="element-chart-cell" data-value="[value]"></td>'
 };
