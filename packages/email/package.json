@@ -39,7 +39,9 @@
     "postinstall-pack": "^0.11.2"
   },
   "prepare": {
-    "src/europa.js": "pack lib/",
+    "src/europa.js": "pack lib/"
+  },
+  "postinstall": {
     "foundation-emails": "link lib/foundation-emails.css"
   }
 }
