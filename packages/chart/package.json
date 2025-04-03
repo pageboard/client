@@ -1,11 +1,10 @@
 {
   "name": "@pageboard/chart",
-  "version": "0.16.1",
+  "version": "0.16.2",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "postinstall"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -17,9 +16,6 @@
     "url": "https://github.com/pageboard/client/issues"
   },
   "homepage": "https://github.com/pageboard/client#readme",
-  "postinstall": {
-    "charts.css/dist/charts.css": "link lib/"
-  },
   "pageboard": {
     "version": "^0.16",
     "directories": [
@@ -29,8 +25,7 @@
     ],
     "elements": "elements/"
   },
-  "dependencies": {
-    "charts.css": "^1.1.0",
-    "postinstall": "^0.11.1"
+  "devDependencies": {
+    "charts.css": "^1.1.0"
   }
 }
