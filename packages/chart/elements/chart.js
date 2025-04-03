@@ -51,6 +51,15 @@ exports.chart = {
 			title: 'Hide values',
 			type: 'boolean'
 		},
+		labelsSize: {
+			title: 'Labels size',
+			description: 'Unit: px',
+			type: 'integer',
+			default: 80,
+			minimum: 50,
+			maximum: 200,
+			nullable: true
+		},
 		position: {
 			title: 'Position',
 			anyOf: [{
@@ -126,7 +135,7 @@ exports.chart = {
 		}
 	},
 	contents: "table_caption? table_head? chart_body table_foot?",
-	html: `<table is="element-chart-table" class="ui table show-heading [stacked|pre:multiple ] [showLabels|alt:show-labels] [axes.primary|and:show-primary-axis] [axes.secondary|pre:show-|post:-secondary-axes] [axes.data|and:show-data-axes] [spacing.data|pre:data-spacing-] [spacing.datasets|pre:dataset-spacing-] [hideData|alt:hide-data] [position|pre:data-] [orientation.reverse] [orientation.reverseLabels|alt:reverse-labels] [orientation.reverseData|alt:reverse-data] [orientation.reverseDatasets|alt:reverse-datasets]" data-precision="[precision]" data-unit="[unit]" data-chart="[chart]"></table>`,
+	html: `<table is="element-chart-table" class="ui table show-heading [stacked|pre:multiple ] [showLabels|alt:show-labels] [axes.primary|and:show-primary-axis] [axes.secondary|pre:show-|post:-secondary-axes] [axes.data|and:show-data-axes] [spacing.data|pre:data-spacing-] [spacing.datasets|pre:dataset-spacing-] [hideData|alt:hide-data] [position|pre:data-] [orientation.reverse] [orientation.reverseLabels|alt:reverse-labels] [orientation.reverseData|alt:reverse-data] [orientation.reverseDatasets|alt:reverse-datasets]" data-precision="[precision]" data-unit="[unit]" data-chart="[chart]" style---labels-size="[labelsSize|post:px]"></table>`,
 	stylesheets: [
 		'../lib/charts.css',
 		'../ui/chart.css'
