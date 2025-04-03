@@ -125,9 +125,8 @@ exports.table_cell = {
 	properties: {
 		align: {
 			title: 'Align',
-			default: "",
 			anyOf: [{
-				const: "",
+				const: null,
 				title: "Left",
 				icon: '<i class="icon align left"></i>'
 			}, {
@@ -166,9 +165,11 @@ exports.table_cell = {
 	tag: 'td',
 	parse: function(dom) {
 		const d = {};
-		if (dom.matches('.center')) d.align = 'center';
-		else if (dom.matches('.right')) d.align = 'right';
-		if (dom.matches('.selectable')) d.selectable = true;
+		if (dom.classList.contains('center')) d.align = 'center';
+		else if (dom.classList.contains('right')) d.align = 'right';
+		if (dom.classList.contains('selectable')) d.selectable = true;
+		if (dom.rowspan) d.rowspan = dom.rowspan;
+		if (dom.colspan) d.colspan = dom.colspan;
 		return d;
 	},
 	html: '<td class="[align|post: aligned] [selectable]" rowspan="[rowspan]" colspan="[colspan]"></td>'
@@ -216,10 +217,21 @@ exports.table_head_cell = {
 			}]
 		}
 	},
+	parse: function (dom) {
+		const d = {};
+		if (dom.classList.contains('center')) d.align = 'center';
+		else if (dom.classList.contains('right')) d.align = 'right';
+		if (dom.classList.contains('selectable')) d.selectable = true;
+		if (dom.rowspan) d.rowspan = dom.rowspan;
+		if (dom.colspan) d.colspan = dom.colspan;
+		if (dom.scope) d.scope = dom.scope;
+		if (dom.dataset.width) d.width = parseInt(dom.dataset.width) || null;
+		return d;
+	},
 	contents: "block+",
 	tag: 'th',
 	inplace: true,
-	html: '<th class="[align|post: aligned] [width|as:colnums|post: wide]" rowspan="[rowspan]" colspan="[colspan]" scope="[scope]"></th>',
+	html: '<th class="[align|post: aligned] [width|as:colnums|post: wide]" data-width="[width]" rowspan="[rowspan]" colspan="[colspan]" scope="[scope]"></th>',
 	stylesheets: [
 		"../ui/table.css"
 	]
