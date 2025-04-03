@@ -42,13 +42,19 @@ exports.barcode = {
 					title: 'Front',
 					type: 'string',
 					format: 'hex-color',
-					$helper: 'color'
+					$helper: {
+						name: 'color',
+						alpha: true
+					}
 				},
 				back: {
 					title: 'Back',
 					type: 'string',
 					format: 'hex-color',
-					$helper: 'color'
+					$helper: {
+						name: 'color',
+						alpha: true
+					}
 				}
 			},
 			nullable: true
