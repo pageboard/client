@@ -1,10 +1,12 @@
-element-barcode {
+element-qrcode {
 	display: inline-flex;
 }
-element-barcode.error {
+element-qrcode.error {
 	outline-color: rgb(255 0 0 / 50%) !important;
 }
-element-barcode > svg {
+element-qrcode > svg {
 	width:100%;
 	height:auto;
+	shape-rendering: crispedges;
 }
+

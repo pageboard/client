@@ -1,34 +1,15 @@
-exports.barcode = {
-	title: "Barcode",
+exports.qrcode = {
+	title: "QRCode",
 	priority: 21,
-	icon: '<i class="barcode icon"></i>',
+	icon: '<i class="qrcode icon"></i>',
 	menu: "media",
 	bundle: true,
 	group: 'block',
 	properties: {
-		format: {
-			title: 'Format',
-			anyOf: [{
-				const: 'ean13',
-				title: 'EAN-13'
-			}, {
-				const: 'upca',
-				title: 'UPC-A'
-			}, {
-				const: 'ean8',
-				title: 'EAN-8'
-			}],
-			default: 'ean13'
-		},
 		text: {
 			title: 'Text to encode',
 			type: 'string',
 			format: 'singleline'
-		},
-		ratio: {
-			title: 'Ratio',
-			type: 'integer',
-			default: 50
 		},
 		padding: {
 			title: 'Padding',
@@ -86,11 +67,11 @@ exports.barcode = {
 			}
 		}
 	},
-	html: `<element-barcode data-format="[format]" data-text="[text]" data-ratio="[ratio]" data-dimension="[dimension.length][dimension.unit]" data-color-front="[color?.front]" data-color-back="[color?.back]" data-padding="[padding]"></element-barcode>`,
+	html: `<element-qrcode data-text="[text]" data-dimension="[dimension.length][dimension.unit]" data-color-front="[color?.front]" data-color-back="[color?.back]" data-padding="[padding]"></element-qrcode>`,
 	scripts: [
-		'../lib/barcode.js'
+		'../lib/qrcode.js'
 	],
 	stylesheets: [
-		'../ui/barcode.css'
+		'../ui/qrcode.css'
 	]
 };

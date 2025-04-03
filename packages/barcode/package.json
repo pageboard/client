@@ -1,6 +1,6 @@
 {
   "name": "@pageboard/barcode",
-  "version": "0.16.2",
+  "version": "0.16.3",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -18,12 +18,14 @@
   },
   "homepage": "https://github.com/pageboard/client#readme",
   "devDependencies": {
+    "jsbarcode": "^3.11.6",
     "postinstall": "^0.11.1",
     "postinstall-pack": "^0.11.2",
-    "bwip-js": "^4.5.3"
+    "qrcode": "^1.5.4"
   },
   "prepare": {
-    "./src/bwip.js": "pack lib/"
+    "./src/barcode.js": "pack lib/",
+    "./src/qrcode.js": "pack lib/"
   },
   "pageboard": {
     "version": "^0.16",
