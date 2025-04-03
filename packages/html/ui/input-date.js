@@ -1,6 +1,7 @@
 class HTMLElementInputDate extends Page.create(HTMLInputElement) {
 	patch() {
 		if (this.type == "date") this.removeAttribute('step');
+		if (this.hasAttribute('value')) this.setAttribute('value', this.getAttribute('value'));
 	}
 
 	setAttribute(name, value) {
