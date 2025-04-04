@@ -233,7 +233,6 @@ exports.chart_head_cell = {
 	contents: 'inline*'
 };
 
-exports.table_cell.tag = 'td:not([is="element-chart-value"])';
 exports.chart_value = {
 	title: "Value",
 	bundle: 'chart',

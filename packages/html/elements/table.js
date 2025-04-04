@@ -162,7 +162,7 @@ exports.table_cell = {
 	},
 	inplace: true,
 	contents: "block+",
-	tag: 'td',
+	tag: 'td:not([is])',
 	parse: function(dom) {
 		const d = {};
 		if (dom.classList.contains('center')) d.align = 'center';
