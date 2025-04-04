@@ -371,7 +371,11 @@ class Semafor {
 					break;
 				case "boolean":
 					val = val == "true";
-					if (!val && !field.default) val = undefined;
+					if (field.default != null) {
+						if (val == field.default) val = undefined;
+					} else if (nullable && val === false) {
+						val = null;
+					}
 					break;
 				case "object":
 					if (!field.properties) {
@@ -420,10 +424,12 @@ class Semafor {
 					}
 					break;
 			}
-			if (val != null) allNulls = false;
-			if (val != null || field.default != null && nullable) obj[name] = val;
+			if (val !== undefined) {
+				if (val != field.default) allNulls = false;
+				if (val != null || field.default != null && nullable) obj[name] = val;
+			}
 		}
-		if (allNulls) return;
+		if (allNulls) return null;
 		return obj;
 	}
 	process(key, schema, node, parent) {
