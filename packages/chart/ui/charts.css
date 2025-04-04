@@ -1207,20 +1207,29 @@ ol.charts-css li {
 	height: 100%;
 	inset: 0;
 }
-.charts-css.pie tbody tr td .data {
-	--angle: calc(0.5turn * var(--start, 0) + 0.5turn * var(--end, 0));
-	--offset: 50%;
 
-	display: flex;
-	justify-content: center;
-	border-radius: 50%;
-	position: absolute;
+.charts-css.pie tbody tr td .data {
+	--pie-angle: calc(0.5turn * var(--start,0) + 0.5turn * var(--end,0));
+	--pie-offset: 50%;
+	--pie-position: -0.8em;
+
 	width: 100%;
 	height: 100%;
-	inset: 0;
 	transform:
-		rotate(var(--angle))
-		translateY(calc(-1 * var(--offset)))
-		rotate(calc(-1 * var(--angle)))
-		translateY(var(--offset));
+		rotate(var(--pie-angle))
+		translateY(calc(-1*var(--pie-offset) - var(--pie-position)))
+		rotate(calc(-1*var(--pie-angle)))
+		translateY(calc(var(--pie-offset) + var(--pie-position)));
+	border-radius: 50%;
+	justify-content: center;
+	display: flex;
+	position: absolute;
+	inset: 0;
+	margin-top: 0.4em;
+}
+
+.charts-css.pie.data-outside tbody tr td .data {
+	--pie-position: 0.5em;
+
+	margin-top: -1em;
 }
