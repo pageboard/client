@@ -18,13 +18,13 @@
   },
   "homepage": "https://github.com/pageboard/client/packages/elements-semantic-ui#readme",
   "dependencies": {
-    "formdata-polyfill": "^3.0.11",
-    "nouislider": "^11.1.0",
-    "object-fit-images": "^3.2.3",
-    "postinstall": "^0.4.0",
-    "postinstall-browserify": "^0.1.0",
-    "semantic-ui-css": "^2.3.2",
-    "stickyfilljs": "^2.1.0"
+    "formdata-polyfill": "3.0.11",
+    "nouislider": "11.1.0",
+    "object-fit-images": "3.2.3",
+    "postinstall": "0.4.0",
+    "postinstall-browserify": "0.1.0",
+    "semantic-ui-css": "2.3.2",
+    "stickyfilljs": "2.1.0"
   },
   "postinstall": {
     "semantic-ui-css/components": "link semantic-ui",
