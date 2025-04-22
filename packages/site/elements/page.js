@@ -103,6 +103,7 @@ exports.page = {
 	csp: {
 		default: ["'none'"],
 		'form-action': ["'self'"],
+    'frame-ancestors': ["'self'"],
 		connect: ["'self'"],
 		object: ["'none'"],
 		script: ["'self'"],
