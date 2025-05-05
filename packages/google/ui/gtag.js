@@ -26,14 +26,12 @@ class HTMLElementGTMScript extends Page.create(HTMLScriptElement) {
 		else if (this.#type == "gtag") this.#gtag(agreed, state);
 	}
 	#gtm(agreed, state) {
-		if (!agreed) {
-			state.scope.storage.clearCookies(/^_g/);
-		} else if (!this.#started) {
+		if (!this.#started) {
 			this.#started = true;
 			this.#push({
 				'gtm.start': new Date().getTime(),
 				event: 'gtm.js',
-				anonymize_ip: true
+				anonymize_ip: !agreed
 			});
 		}
 	}
