@@ -12,7 +12,12 @@ exports.mail = {
 			title: 'Address',
 			type: "string",
 			format: 'page',
-			$helper: 'href',
+			$helper: {
+				name: 'href',
+				filter: {
+					type: ["link"]
+				}
+			},
 			$filter: {
 				name: 'helper',
 				helper: 'pageUrl'
