@@ -17,13 +17,15 @@ exports.event = {
 			type: "string"
 		},
 		url: {
-			title: 'Event page',
+			title: 'Event link',
 			type: "string",
-			format: "page",
+			format: "uri-reference",
 			nullable: true,
 			$helper: {
-				name: 'page',
-				type: 'page'
+				name: 'href',
+				filter: {
+					type: ["link", "file", "archive"]
+				}
 			}
 		},
 		groupsOnly: {
