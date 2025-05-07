@@ -20,7 +20,7 @@
   "homepage": "https://github.com/pageboard/client#readme",
   "dependencies": {
     "nouislider": "^15.8.1",
-    "postinstall": "^0.11.1"
+    "postinstall": "^0.11.2"
   },
   "postinstall": {
     "nouislider/dist/nouislider.js": "link lib/",
