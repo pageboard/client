@@ -6,7 +6,8 @@ exports.page = {
 	dependencies: ['core'],
 	bundle: true,
 	standalone: true,
-	required: ['url'],
+	required: ["url"],
+	unique: ["url"],
 	properties: {
 		url: {
 			type: "string",
@@ -14,7 +15,7 @@ exports.page = {
 			$helper: {
 				name: 'href',
 				filter: {
-					type: ["link"]
+					type: ["link"] // a page url is a link to itself
 				}
 			},
 			$filter: {
