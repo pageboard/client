@@ -4,6 +4,8 @@ exports.blog = {
 	standalone: true,
 	bundle: true,
 	group: 'block',
+	required: ["url"],
+	unique: ["url"],
 	properties: {
 		url: {
 			title: 'Address',
