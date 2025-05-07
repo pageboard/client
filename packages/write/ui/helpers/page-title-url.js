@@ -75,6 +75,9 @@ Pageboard.schemaHelpers.pageUrl = class PageUrl {
 	}
 
 	check() {
+		// the url unicity is now checked by the backend (unique field of schema)
+		// the prefix could be also handled by the schema
+		// This helper could be removed
 		let { value } = this.input;
 		if (this.block.data?.prefix) {
 			this.notPrefix.remove();
