@@ -8,7 +8,6 @@ exports.write = {
 	html: `<html lang="[$lang]">
 	<head>
 		<title>[title][$parent.data.title?|pre: - ]</title>
-		<meta http-equiv="Content-Security-Policy" content="[$elements|as:csp]">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<base href="[$loc.origin]">
 		<link rel="stylesheet" href="[$element.stylesheets|repeat:]" data-priority="[$element.priority]" />

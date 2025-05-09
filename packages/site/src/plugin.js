@@ -1,6 +1,6 @@
 export const formats = {
 	as: {
-		csp, xid, colnums, block, binding,
+		xid, colnums, block, binding,
 		render, meta, expressions
 	},
 	date: { utc }
@@ -89,47 +89,6 @@ function utc(ctx, val) {
 	if (!val) return val;
 	return val.toUTCString();
 }
-
-function csp(ctx, $elements) {
-	const csp = {};
-	for (const el of Object.values($elements)) {
-		if (el.scripts) for (const src of el.scripts) {
-			const origin = /(^https?:\/\/[.-\w]+)/.exec(src);
-			if (origin) {
-				if (!el.csp) el.csp = {};
-				if (!el.csp.script) el.csp.script = [];
-				el.csp.script.push(origin[0]);
-			}
-		}
-		if (el.stylesheets) for (const src of el.stylesheets) {
-			const origin = /(^https?:\/\/[.-\w]+)/.exec(src);
-			if (origin) {
-				if (!el.csp) el.csp = {};
-				if (!el.csp.style) el.csp.style = [];
-				el.csp.style.push(origin[0]);
-			}
-		}
-		if (!el.csp) continue;
-		for (const src of Object.keys(el.csp)) {
-			let gcsp = csp[src];
-			if (!gcsp) csp[src] = gcsp = [];
-			let list = el.csp[src];
-			if (!list) continue;
-			if (typeof list == "string") list = [list];
-			for (const item of list) {
-				if (gcsp.includes(item) == false) gcsp.push(item);
-			}
-		}
-	}
-	const list = Object.keys(csp)
-		.filter(src => csp[src].length > 0)
-		.map(src => {
-			const key = src.indexOf('-') > 0 ? src : `${src}-src`;
-			return `${key} ${csp[src].join(' ')}`.trim().fuse({}, ctx.scope);
-		});
-	return list.join('; ');
-}
-
 
 function xid(ctx, id) {
 	if (id) return id;

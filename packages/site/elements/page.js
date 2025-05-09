@@ -74,7 +74,6 @@ exports.page = {
 		<meta http-equiv="Location" content="[redirect|switch:[url]:|fail:*::1][$loc.search]">
 		<meta http-equiv="Status" content="301 Matching Location">
 		<meta http-equiv="Location" content="[$links?.found|fail:*::1]">
-		<meta http-equiv="Content-Security-Policy" content="[$elements|as:csp]">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="robots" content="[noindex|alt:noindex|fail:*]">
 		<meta property="og:site_name" content="[$parent.data.title|fail:*]">
