@@ -1,7 +1,7 @@
 exports.write = {
 	title: 'Write',
 	priority: 100,
-	dependencies: ['core', 'services'],
+	dependencies: ['site', 'services'],
 	bundle: true,
 	standalone: true,
 	virtual: true,
@@ -190,18 +190,7 @@ exports.write = {
 		`Intl.RelativeTimeFormat.~locale.*`,
 		'smoothscroll',
 		'queueMicrotask'
-	],
-	csp: {
-		default: ["'none'"],
-		'form-action': ["'self'"],
-		connect: ["'self'"],
-		object: ["'none'"],
-		script: ["'self'"],
-		frame: ["'self'"],
-		style: ["'self'", "'unsafe-inline'"],
-		font: ["'self'", "data:", "https:"],
-		img: ["'self'", "data:", "https:"]
-	}
+	]
 };
 
 exports.editor = {

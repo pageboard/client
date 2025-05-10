@@ -3,7 +3,7 @@ exports.mail = {
 	priority: -100,
 	icon: '<i class="icon file outline"></i>',
 	group: 'page',
-	dependencies: ['core'],
+	dependencies: ['site'],
 	bundle: true,
 	standalone: true,
 	required: ['url'],
@@ -53,8 +53,7 @@ exports.mail = {
 	stylesheets: [
 		'../lib/foundation-emails.css',
 		'../ui/mail.css'
-	],
-	csp: { ...exports.page.csp }
+	]
 };
 
 exports.mail_body = {

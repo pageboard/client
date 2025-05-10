@@ -20,10 +20,6 @@ exports.pdf = {
 	scripts: [ ...exports.page.scripts,
 		'../ui/pdf.js'
 	],
-	csp: {
-		...exports.page.csp,
-		style: ["'self'", "'unsafe-inline'", 'https:']
-	},
 	properties: {
 		...exports.page.properties,
 		url: {

@@ -1,9 +1,11 @@
+exports.site.scripts.push("../lib/pageboard.js");
+
 exports.page = {
 	title: 'Page',
 	priority: -100,
 	icon: '<i class="icon file outline"></i>',
 	group: 'page',
-	dependencies: ['core'],
+	dependencies: ['site'],
 	bundle: true,
 	standalone: true,
 	required: ["url"],
@@ -104,26 +106,14 @@ exports.page = {
 		'Intl.RelativeTimeFormat.~locale.*',
 		'console.debug',
 		'smoothscroll'
-	],
-	csp: {
-		default: ["'none'"],
-		'form-action': ["'self'"],
-		'frame-ancestors': ["'self'"],
-		connect: ["'self'"],
-		object: ["'none'"],
-		script: ["'self'"],
-		frame: ["https:"],
-		style: ["'self'", "'unsafe-inline'"],
-		font: ["'self'", "data:", "https:"],
-		img: ["'self'", "data:", "https:"]
-	}
+	]
 };
 
 exports.redirection = {
 	title: 'Redirection',
 	priority: -100,
 	icon: '<i class="icon random"></i>',
-	dependencies: ['core'],
+	dependencies: ['site'],
 	bundle: true,
 	standalone: true,
 	group: 'page',
