@@ -13,15 +13,13 @@ exports.cookiebot = {
 	priority: 10,
 	csp: {
 		script: [
-			"https://consentcdn.cookiebot.com",
-			"https://consent.cookiebot.com"
+			"https://*.cookiebot.com"
 		],
 		connect: [
-			"https://consentcdn.cookiebot.com",
-			"https://consent.cookiebot.com"
+			"https://*.cookiebot.com"
 		],
 		frame: [
-			"https://consentcdn.cookiebot.com"
+			"https://*.cookiebot.com"
 		]
 	},
 	html: `<div data-src="https://consent.cookiebot.com/[$parent.data.extra?.cookiebot|fail:*]/cd.js" is="element-cookiebot-declaration">Cookie Bot Declaration</div>`,
