@@ -154,7 +154,7 @@ const HTMLElementImageConstructor = Superclass => class extends Superclass {
 		const reqSrc = this.requestSrc(srcLoc);
 		if (!reqSrc) {
 			img.setAttribute('src', '');
-		}	else if (reqSrc != this.currentSrc) {
+		} else if (reqSrc != this.currentSrc) {
 			this.classList.add('loading');
 			this.#defer?.resolve();
 			this.#defer = new Deferred();
