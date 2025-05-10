@@ -20,7 +20,7 @@ class HTMLElementBodyPrint extends Page.create(HTMLBodyElement) {
 			state.vars.foldWidth = true;
 		}
 	}
-	paint(state) {
+	async paint(state) {
 		this.#removePrintButtons();
 		const opts = this.options;
 		if (window.devicePixelRatio < 4 && window.matchMedia('print').matches) {
