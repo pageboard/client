@@ -3,7 +3,7 @@
 const roots = {};
 const list = [];
 
-Pageboard.notify = function(title, obj) {
+Pageboard.notify = function (title, obj) {
 	let type = 'info';
 	let text;
 	if (!obj && typeof title != "string") {
@@ -73,7 +73,7 @@ function withText(text) {
 	else return '';
 }
 
-Pageboard.notify.dom = function(where) {
+Pageboard.notify.dom = function (where) {
 	if (!where) where = 'write';
 	if (roots[where]) return roots[where];
 	const root = document.querySelector(`#pageboard-${where} > .notifications`);
@@ -92,12 +92,12 @@ Pageboard.notify.dom = function(where) {
 	return root;
 };
 
-Pageboard.notify.clear = function(where) {
+Pageboard.notify.clear = function (where) {
 	const parent = Pageboard.notify.dom(where);
 	if (parent) parent.textContent = "";
 };
 
-Pageboard.notify.destroy = function() {
+Pageboard.notify.destroy = function () {
 	// TODO
 };
 

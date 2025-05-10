@@ -1,6 +1,6 @@
 const Arr = Array.prototype;
 
-Arr.ancestor = function() {
+Arr.ancestor = function () {
 	const list = this.slice();
 	let parent = list.shift();
 	if (!parent) return;
@@ -24,7 +24,7 @@ for (const name of [
 	HTMLCollection.prototype[name] ??= Arr[name];
 }
 
-Node.prototype.queryClosest = function(sel) {
+Node.prototype.queryClosest = function (sel) {
 	if (this.matches(sel)) return this;
 	else return this.querySelector(sel);
 };

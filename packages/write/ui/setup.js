@@ -28,7 +28,7 @@ Page.setup(state => {
 	iframe.setAttribute('src', src);
 });
 
-Pageboard.adopt = function(win, readState) {
+Pageboard.adopt = function (win, readState) {
 	readState.scope.$read = true;
 	Page.setup(writeState => {
 		readState.finish(() => {

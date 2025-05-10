@@ -63,7 +63,7 @@ Document.prototype.dom = function (strings, ...substitutions) {
 	});
 };
 
-Document.prototype.fragment = function(...args) {
+Document.prototype.fragment = function (...args) {
 	const node = this.dom(...args);
 	if (node.nodeType == Document.DOCUMENT_FRAGMENT_NODE) return node;
 	const frag = this.createDocumentFragment();
@@ -71,7 +71,7 @@ Document.prototype.fragment = function(...args) {
 	return frag;
 };
 
-Document.prototype.fuse = XMLDocument.prototype.fuse = function(obj, scope) {
+Document.prototype.fuse = XMLDocument.prototype.fuse = function (obj, scope) {
 	this.documentElement.fuse(obj, scope);
 	return this;
 };
@@ -105,7 +105,7 @@ Node.prototype.fuse = function (data, scope) {
 	return fuse(domMd, this, data, scope);
 };
 
-String.prototype.fuse = function(data, scope) {
+String.prototype.fuse = function (data, scope) {
 	if (data == null && scope == null) return reFuse.test(this.toString());
 	return fuse(textMd, this.toString(), data, scope);
 };

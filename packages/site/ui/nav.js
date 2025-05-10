@@ -1,4 +1,4 @@
-Page.constructor.prototype.scroll = function(opts) {
+Page.constructor.prototype.scroll = function (opts) {
 	if (opts.once) {
 		if (!this.data.scroll.once) {
 			this.data.scroll.once = true;
