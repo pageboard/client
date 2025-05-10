@@ -24,13 +24,13 @@ exports.google_tag = {
 	priority: 10,
 	csp: {
 		script: [
-			"[$commons.csp.script.google_analytics]"
+			"[script.google_analytics]"
 		],
 		img: [
-			"[$commons.csp.img.google_analytics]"
+			"[img.google_analytics]"
 		],
 		connect: [
-			"[$commons.csp.connect.google_analytics]"
+			"[connect.google_analytics]"
 		]
 	},
 	scripts: [
