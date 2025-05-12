@@ -43,6 +43,36 @@ class HTMLElementMailImage extends Page.create(HTMLImageElement) {
 	set crop({ x, y, w, h, z }) {
 		this.dataset.crop = [x, y, w, h, z].join(';');
 	}
+
+	patch() {
+		const {
+			dataset: d,
+			image,
+			dimensions: { w, h },
+			constructor,
+			currentSrc: src
+		} = this;
+		this.classList.remove('loading');
+		if (src != this.options.src) {
+			this.classList.remove('error');
+		}
+
+		d.width ??= constructor.defaultWidth || "";
+		d.height ??= constructor.defaultHeight || "";
+		image.width = w || d.width;
+		image.height = h || d.height;
+		image.alt = d.alt ?? "";
+		if (!src) {
+			this.placeholder();
+		} else if (src.startsWith('data:')) {
+			image.setAttribute('src', src);
+		}
+	}
+
+	get currentSrc() {
+		return this.image?.currentSrc;
+	}
+
 	requestSrc(srcLoc) {
 		const { crop, fit } = this;
 		const { w, h } = this.dimensions;
@@ -81,40 +111,18 @@ class HTMLElementMailImage extends Page.create(HTMLImageElement) {
 		return srcLoc.toString();
 	}
 
-	#meta() {
-		this.classList.remove('loading');
-		if (this.currentSrc != this.options.src) {
-			this.classList.remove('error');
-		}
-		const d = this.dataset;
-		d.width ??= this.constructor.defaultWidth || "";
-		d.height ??= this.constructor.defaultHeight || "";
-		const { w, h } = this.dimensions;
-		if (w) this.image.width = w || d.width;
-		if (h) this.image.height = h || d.height;
-		const cur = this.currentSrc;
-		if (!cur) {
-			this.placeholder();
-		} else if (cur.startsWith('data:')) {
-			this.image.setAttribute('src', cur);
-		}
-	}
-	patch() {
-		this.#meta();
-	}
-	paint() {
-		this.#meta();
-	}
 	reveal(state) {
-		if (!this.options.src) {
-			this.placeholder(true);
+		const { src } = this.options;
+		if (!src) {
+			this.placeholder("Empty image");
 			return;
 		}
 		if (this.classList.contains('loading')) {
 			return;
 		}
 		const img = this.image;
-		const srcLoc = Page.parse(this.options.src);
+		const srcLoc = Page.parse(src);
+		// This cannot be done by changing Accept like with a pdf because the URL is sent in the email
 		if (this.dataset.mime == "image/svg+xml") srcLoc.query.format = 'png';
 		const reqSrc = this.requestSrc(srcLoc);
 		if (!reqSrc) {
@@ -134,11 +142,11 @@ class HTMLElementMailImage extends Page.create(HTMLImageElement) {
 	captureError(e) {
 		this.classList.remove('loading');
 		this.classList.add('error');
-		this.placeholder(true);
-		this.#defer?.reject(new Error(this.currentSrc));
+		this.placeholder(this.options.src);
 	}
-	placeholder(error) {
+	placeholder(src) {
 		this.image.removeAttribute('src');
+		if (src) this.#defer?.reject(new Error(src));
 	}
 	close() {
 		this.#defer?.resolve();

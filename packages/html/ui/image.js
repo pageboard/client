@@ -10,6 +10,14 @@ const HTMLElementImageConstructor = Superclass => class extends Superclass {
 
 	#defer;
 
+	get image() {
+		let img = this.firstElementChild;
+		if (!img || !img.matches('img')) {
+			img = this.insertBefore(this.ownerDocument.createElement('img'), this.firstChild);
+		}
+		return img;
+	}
+
 	get dimensions() {
 		// dimension in pixels of the (extracted) source image
 		let w = parseInt(this.dataset.width);
@@ -58,24 +66,17 @@ const HTMLElementImageConstructor = Superclass => class extends Superclass {
 	set crop({ x, y, w, h, z }) {
 		this.dataset.crop = [x, y, w, h, z].join(';');
 	}
-	get image() {
-		let img = this.firstElementChild;
-		if (!img || !img.matches('img')) {
-			img = this.insertBefore(this.ownerDocument.createElement('img'), this.firstChild);
-		}
-		return img;
-	}
 
-	#meta() {
+	patch() {
 		const {
 			dataset: d,
 			image,
 			dimensions: { w, h },
 			constructor,
-			currentSrc
+			currentSrc: src
 		} = this;
 		this.classList.remove('loading');
-		if (currentSrc != this.options.src) {
+		if (src != this.options.src) {
 			this.classList.remove('error');
 		}
 
@@ -84,19 +85,11 @@ const HTMLElementImageConstructor = Superclass => class extends Superclass {
 		image.width = w || d.width;
 		image.height = h || d.height;
 		image.alt = d.alt ?? "";
-		const cur = currentSrc;
-		if (!cur) {
+		if (!src) {
 			this.placeholder();
-		} else if (cur.startsWith('data:')) {
-			image.setAttribute('src', cur);
+		} else if (src.startsWith('data:')) {
+			image.setAttribute('src', src);
 		}
-	}
-
-	patch() {
-		this.#meta();
-	}
-	paint() {
-		this.#meta();
 	}
 
 	get currentSrc() {
@@ -142,15 +135,16 @@ const HTMLElementImageConstructor = Superclass => class extends Superclass {
 	}
 
 	reveal(state) {
-		if (!this.options.src) {
-			this.placeholder(true);
+		const { src } = this.options;
+		if (!src) {
+			this.placeholder("Empty image");
 			return;
 		}
 		if (this.classList.contains('loading')) {
 			return;
 		}
 		const img = this.image;
-		const srcLoc = Page.parse(this.options.src);
+		const srcLoc = Page.parse(src);
 		const reqSrc = this.requestSrc(srcLoc);
 		if (!reqSrc) {
 			img.setAttribute('src', '');
@@ -169,11 +163,11 @@ const HTMLElementImageConstructor = Superclass => class extends Superclass {
 	captureError(e) {
 		this.classList.remove('loading');
 		this.classList.add('error');
-		this.placeholder(true);
-		this.#defer?.reject(new Error(this.currentSrc));
+		this.placeholder(this.options.src);
 	}
-	placeholder(error) {
+	placeholder(src) {
 		this.image.removeAttribute('src');
+		if (src) this.#defer?.reject(new Error(src));
 	}
 	close() {
 		this.#defer?.resolve();
@@ -192,10 +186,10 @@ class HTMLElementInlineImage extends HTMLElementImageConstructor(Page.create(HTM
 		return this;
 	}
 
-	placeholder(error) {
-		if (error) {
+	placeholder(src) {
+		if (src) {
 			this.image.src = "data:image/svg+xml," + encodeURIComponent(
-				`<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 ${this.image.width} ${this.image.height}"><text text-anchor="middle" dominant-baseline="central" x="50%" y="50%" fill="#aaa">${error ? '∅' : ''}</text></svg>`);
+				`<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 ${this.image.width} ${this.image.height}"><text text-anchor="middle" dominant-baseline="central" x="50%" y="50%" fill="#aaa">∅</text></svg>`);
 		} else {
 			this.image.removeAttribute('src');
 		}
