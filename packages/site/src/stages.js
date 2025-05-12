@@ -168,9 +168,9 @@ Page.connect(new class {
 			});
 		}, {
 			threshold: [
-				0.001,	// images
-				0.2,		// embeds
-				1				// headings
+				0.001, // images
+				0.2, // embeds
+				1 // headings
 			],
 			rootMargin: "30px"
 		});
