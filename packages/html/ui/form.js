@@ -18,16 +18,20 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 		return obj;
 	}
 
+	static improveHtmlFor(node) {
+		const indexes = {};
+		for (const label of node.querySelectorAll('input+label[for^="for-"]')) {
+			const { previousElementSibling: input, htmlFor } = label;
+			const [pre, name] = htmlFor.split('-');
+			if (input.name != name) continue;
+			const index = indexes[name] = (indexes[name] ?? 0) + 1;
+			input.id = label.htmlFor = `${pre}-${name}-${index}`;
+		}
+	}
+
 	static patch(state) {
 		state.finish(() => {
-			const indexes = {};
-			for (const label of document.querySelectorAll('input+label[for^="for-"]')) {
-				const { previousElementSibling: input, htmlFor } = label;
-				const [pre, name] = htmlFor.split('-');
-				if (input.name != name) continue;
-				const index = indexes[name] = (indexes[name] ?? 0) + 1;
-				input.id = label.htmlFor = `${pre}-${name}-${index}`;
-			}
+			HTMLElementForm.improveHtmlFor(document);
 		});
 	}
 
@@ -187,6 +191,7 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 		const vars = [];
 		for (const node of this.querySelectorAll("element-fieldset-list")) {
 			if (node.fill) vars.push(...node.fill(query));
+			HTMLElementForm.improveHtmlFor(node);
 		}
 
 		for (const elem of this.elements) {
