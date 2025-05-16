@@ -386,15 +386,17 @@ Page.define(`element-form`, HTMLElementForm, 'form');
 
 /* these methods must be available even on non-upgraded elements */
 HTMLFormElement.prototype.enable = function () {
-	for (let i = 0; i < this.elements.length; i++) {
-		const elem = this.elements[i];
+	for (const elem of this.elements) {
+		if (elem.matches('fieldset')) continue;
+		const fieldset = elem.closest('fieldset');
+		if (fieldset?.disabled) continue;
 		elem.disabled = false;
 		if (elem.hasAttribute('disabled')) elem.removeAttribute('disabled');
 	}
 };
 HTMLFormElement.prototype.disable = function () {
-	for (let i = 0; i < this.elements.length; i++) {
-		const elem = this.elements[i];
+	for (const elem of this.elements) {
+		if (elem.matches('fieldset')) continue;
 		elem.disabled = true;
 	}
 };
