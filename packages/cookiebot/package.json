@@ -1,6 +1,6 @@
 {
   "name": "@pageboard/cookiebot",
-  "version": "0.16.0",
+  "version": "0.17.0",
   "description": "Elements exposing cookiebot for pageboard",
   "main": "index.js",
   "scripts": {
