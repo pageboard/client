@@ -403,19 +403,18 @@ HTMLFormElement.prototype.disable = function () {
 
 HTMLSelectElement.prototype.fill = function (val) {
 	if (!Array.isArray(val)) val = [val];
-	for (let i = 0; i < this.options.length; i++) {
-		const opt = this.options[i];
+	for (const opt of this.options) {
 		opt.selected = val.includes(opt.value);
 	}
 };
 HTMLSelectElement.prototype.reset = function () {
-	for (let i = 0; i < this.options.length; i++) {
-		this.options[i].selected = this.options[i].defaultSelected;
+	for (const opt of this.options) {
+		opt.selected = opt.defaultSelected;
 	}
 };
 HTMLSelectElement.prototype.save = function () {
-	for (let i = 0; i < this.options.length; i++) {
-		this.options[i].defaultSelected = this.options[i].selected;
+	for (const opt of this.options) {
+		opt.defaultSelected = opt.selected;
 	}
 };
 
