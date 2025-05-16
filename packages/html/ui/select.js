@@ -56,7 +56,9 @@ class HTMLElementSelect extends Page.Element {
 	set value(v) {
 		this.getAttribute('value', v);
 	}
-
+	captureAllClick(e, state) {
+		if (this.classList.contains('active')) this.classList.remove('active');
+	}
 	handleClick(e, state) {
 		if (state.scope.$write) return;
 		if (this.disabled) return;
