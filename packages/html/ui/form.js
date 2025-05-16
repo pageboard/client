@@ -315,7 +315,6 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 		}
 
 		const scope = state.scope.copy();
-		scope.$request = form.read(true, e.submitter);
 		try {
 			const prelist = Array.from(form.elements)
 				.filter(node => Boolean(node.presubmit) && !node.disabled);
@@ -323,10 +322,14 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 			for (const node of prelist) {
 				await node.presubmit(state);
 			}
-			form.enable();
-			scope.$request = form.read(true, e.submitter);
-			form.disable();
-			form.classList.add('loading');
+		} catch (err) {
+			scope.$response = err;
+		}
+		form.enable();
+		scope.$request = form.read(true, e.submitter);
+		form.disable();
+		form.classList.add('loading');
+		try {
 			scope.$response = await state.fetch(
 				form.method,
 				e.submitter?.getAttribute('formaction') || form.action,
