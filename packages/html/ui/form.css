@@ -47,6 +47,11 @@ element-select.active.ui.dropdown .menu {
 	position:relative;
 }
 
+.ui.form .inline.fields {
+	align-items: end;
+	margin:0;
+}
+
 .ui.form[method="post"].unsaved button[type="submit"] {
 	text-decoration:underline;
 }
