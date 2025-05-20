@@ -45,7 +45,7 @@
     "prosemirror-state": "1.4.3",
     "prosemirror-tables": "^1.7.1",
     "prosemirror-transform": "1.10.4",
-    "prosemirror-view": "1.39.2"
+    "prosemirror-view": "1.39.3"
   },
   "prepare": {
     "prosemirror-model": "patch patches/prosemirror-model-pr-39.patch",
