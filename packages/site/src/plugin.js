@@ -11,7 +11,15 @@ export const filters = {
 	schema: ['?', 'path?', 'path?', schemaFn],
 	content: ['block', 'str', contentFn],
 	children: ['block', 'str', childrenFn],
-	form: ['?', 'enable|disable|fill', 'str?', formFn]
+	form: ['?', 'enable|disable|fill', 'str?', formFn],
+	lang(ctx, str, lang) {
+		if (str) {
+			if (lang) lang = '~' + lang;
+			return str.replace(/^((?:\/[\w-]*)+)(?:~[a-z]{2}(?:-[a-z]{2})?)?(.*)/, `$1${lang}$2`);
+		} else {
+			return str;
+		}
+	}
 };
 
 export const hooks = {
@@ -34,14 +42,6 @@ export const hooks = {
 			if (ctx.$data != null) {
 				ctx.data = ctx.$data;
 				ctx.$data = null;
-			}
-		},
-		lang(ctx, str, [lang]) {
-			if (str && ctx.expr.filter == ctx.expr.filters.length) {
-				if (lang) lang = '~' + lang;
-				return str.replace(/^((?:\/[\w-]*)+)(?:~[a-z]{2}(?:-[a-z]{2})?)?(.*)/, `$1${lang}$2`);
-			} else {
-				return str;
 			}
 		}
 	},
