@@ -69,10 +69,6 @@ class HTMLElementMailImage extends Page.create(HTMLImageElement) {
 		}
 	}
 
-	get currentSrc() {
-		return this.image?.currentSrc;
-	}
-
 	requestSrc(srcLoc) {
 		const { crop, fit } = this;
 		const { w, h } = this.dimensions;
