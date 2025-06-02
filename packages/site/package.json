@@ -21,7 +21,7 @@
     "@pageboard/pagecut": "^0.17.3",
     "class-deferred": "^1.0.1",
     "debounce": "^2.2.0",
-    "matchdom": "^19.0.0",
+    "matchdom": "^19.0.1",
     "postinstall": "^0.11.2",
     "postinstall-pack": "^0.11.2",
     "window-page": "^20.0.0"
