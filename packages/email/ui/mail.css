@@ -13,3 +13,13 @@ table.body {
 table.container {
 	background: initial;
 }
+
+[contenteditable] [block-id][data-label]:is([block-type="mail_binding"]) {
+	letter-spacing:-9999px;
+	word-spacing:-9999px;
+}
+[contenteditable] [block-id][data-label]:is([block-type="mail_binding"])::after {
+	content:"[" attr(data-label) "]";
+	letter-spacing:normal;
+	word-spacing:normal;
+}
