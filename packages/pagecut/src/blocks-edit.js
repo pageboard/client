@@ -288,10 +288,14 @@ export default class Blocks extends BlocksView {
 		return data;
 	}
 
-	genId(len) {
-		if (!len) len = 8;
-		// weak and simple unique id generator
-		return String(Date.now() * Math.round(Math.random() * 1e4)).substring(0, len);
+	genId() {
+		const bytes = new Uint8Array(10);
+		crypto.getRandomValues(bytes);
+		return btoa(String.fromCharCode(...bytes)).slice(0, 14)
+			.replace(/=+$/, '')
+			.replaceAll(/[/+]/g, () => {
+				return String.fromCharCode(Math.round(Math.random() * 25) + 97);
+			});
 	}
 
 	domQuery(id, opts) {
