@@ -5,12 +5,11 @@ export default function(method, url, data) {
 	const fetchOpts = {
 		method: method,
 		headers: {
-			'Accept': 'application/json'
+			'Accept': 'application/json',
+			'Accept-Language': document.documentElement.lang
 		},
 		credentials: "same-origin"
 	};
-
-	fetchOpts.headers['Accept-Language'] = document.documentElement.lang;
 
 	if (method == "get" || method == "delete") {
 		url = Object.assign(Page.parse(url), {query: data}).toString();
