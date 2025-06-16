@@ -96,6 +96,7 @@ class HTMLElementBodyPrint extends Page.create(HTMLBodyElement) {
 			if (i < start || i > end) sheets[i - 1].remove();
 		}
 	}
+	/*
 	#autobreakFn(className) {
 		function checkRange(rect, range) {
 			const rangeRect = range.getBoundingClientRect();
@@ -156,6 +157,7 @@ class HTMLElementBodyPrint extends Page.create(HTMLBodyElement) {
 			fillSheet(sheet);
 		}
 	}
+	*/
 
 	#pageNumbering(start, className) {
 		const sheets = document.querySelectorAll(`.${className}`);
