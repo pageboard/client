@@ -31,7 +31,8 @@ const Pageboard = window.Pageboard ??= {};
 	}
 	if (document.documentElement.dataset.prerender == "true") {
 		for (const node of document.head.querySelectorAll('script[data-src]')) {
-			node.setAttribute('src', node.dataset.src);
+			node.async = false; // firefox
+			node.src = node.dataset.src;
 			node.removeAttribute('data-src');
 		}
 	}
