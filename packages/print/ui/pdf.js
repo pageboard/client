@@ -209,15 +209,11 @@ class HTMLElementBodyPrint extends Page.create(HTMLBodyElement) {
 	}
 
 	#roundDims(box) {
-		let w = Math.round(box.width);
-		const h = box.height;
-		const ch = w * (box.height / box.width);
-		if (ch > h) w += -1;
 		return {
-			margin: Math.round(box.margin),
-			foldWidth: Math.round(box.foldWidth),
-			width: w,
-			height: Math.floor(h)
+			margin: Math.round(100 * box.margin) / 100,
+			foldWidth: Math.round(100 * box.foldWidth) / 100,
+			width: Math.round(100 * box.width) / 100,
+			height: Math.round(100 * box.height) / 100
 		};
 	}
 }
