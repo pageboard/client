@@ -36,7 +36,7 @@ class HTMLElementLayout extends Page.create(HTMLDivElement) {
 	}
 }
 
-(function(HTMLElementImage) {
+(function (HTMLElementImage) {
 	for (const name of ['crop', 'dimensions', 'requestSrc']) {
 		Object.defineProperty(
 			HTMLElementLayout.prototype,
