@@ -36,6 +36,7 @@
       "elements/"
     ],
     "directories": [
+      "src",
       "elements",
       "lib",
       "ui"
