@@ -115,6 +115,12 @@ exports.api_form = {
 					title: 'Parameters',
 					nullable: true,
 					type: "object"
+				},
+				grant: {
+					title: 'Grant',
+					nullable: true,
+					type: 'string',
+					format: 'grant'
 				}
 			},
 			nullable: true
