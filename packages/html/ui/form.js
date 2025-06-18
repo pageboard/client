@@ -82,6 +82,12 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 				if (this.hidden) toggles.push(submit);
 				state.vars.submit = true;
 			}
+			// these are merged after the fact, so merge now to collect state.vars
+			for (const n of [200, 400, 401, 403, 404, 500]) {
+				const attr = this.getRedirect(n);
+				if (attr) Page.parse(attr).fuse({}, state.scope);
+			}
+
 			const actionLoc = Page.parse(this.getAttribute('action'));
 			Object.assign(actionLoc.query, state.templatesQuery(this.getAttribute('parameters')));
 			this.setAttribute('action', Page.format(actionLoc));
