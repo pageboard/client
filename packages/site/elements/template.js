@@ -15,7 +15,7 @@ exports.fetch = {
 		action="/@api/query/[$id][action?.method|prune:-]"
 		data-auto="[auto]"
 		data-offset-name="[action?.request?.offset|as:expressions]"
-		data-reactions="[reactions?.length|gt:0|fail:-]"
+		data-reactions="[reactions|join:%20]"
 		parameters="[action?.request|as:expressions]"
 		success="[redirection.parameters|as:query|as:null]"
 		badrequest="[badrequest.parameters|as:query|as:null]"
@@ -42,7 +42,7 @@ exports.fetch = {
 		},
 		reactions: {
 			title: 'Reactions',
-			description: 'Update when one of these forms are submitted',
+			description: 'Refetch when writing to forms having these names, or after this TTL',
 			type: 'array',
 			items: {
 				title: 'Form name',

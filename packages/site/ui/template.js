@@ -4,6 +4,7 @@ class HTMLElementTemplate extends Page.Element {
 	#queue;
 	#locked;
 	#source;
+	#refresh;
 
 	#autoOffset(state) {
 		const { offset, offsetName, auto, count } = this.dataset;
@@ -63,7 +64,19 @@ class HTMLElementTemplate extends Page.Element {
 	}
 
 	#stream(state) {
-		if (!this.id || !this.dataset.reactions) return;
+		if (!this.dataset.reactions) return;
+		const list = this.dataset.reactions.split(' ');
+		if (list.length == 1) {
+			const ttl = Number.parseFloat(list[0]);
+			if (ttl && Number.isInteger(ttl)) {
+				this.#refresh = setTimeout(async () => {
+					await this.#run(state);
+					this.#stream(state);
+				}, ttl * 1000);
+				return;
+			}
+		}
+		if (!this.id) return;
 		const url = "/@stream/" + this.id;
 		if (this.#source) {
 			if (this.#source.url != url) {
@@ -89,7 +102,7 @@ class HTMLElementTemplate extends Page.Element {
 		let action = this.getAttribute('action');
 		let response = {};
 		const collector = state.collector();
-		const request = state.templatesQuery(this, collector);
+		const request = state.templatesQuery(this.getAttribute('parameters'), collector);
 		if (collector.failed) {
 			action = null; // missing parameters
 			response.status = 400;
@@ -337,6 +350,10 @@ class HTMLElementTemplate extends Page.Element {
 		if (this.#source) {
 			this.#source.close();
 			this.#source = null;
+		}
+		if (this.#refresh) {
+			clearTimeout(this.#refresh);
+			this.#refresh = null;
 		}
 	}
 }
