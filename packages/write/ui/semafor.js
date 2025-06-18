@@ -84,11 +84,11 @@ class Semafor {
 			let val = flats[elem.name];
 			if (elem.parentNode.matches('.fieldset.nullable')) {
 				const realVal = Semafor.findPath(obj, elem.name);
-				elem.disabled = !realVal;
+				elem.disabled = Object.isEmpty(realVal);
 				for (const child of Array.from(elem.querySelectorAll('[name]'))) {
 					child.disabled = elem.disabled;
 				}
-				elem.querySelector('input:not([name])').checked = Boolean(realVal);
+				elem.querySelector('input:not([name])').checked = !elem.disabled;
 				continue;
 			}
 			switch (elem.type) {
@@ -503,10 +503,6 @@ class Semafor {
 		for (node of fieldset.querySelectorAll('[name]:not(.nullable > fieldset)')) {
 			node.disabled = bool;
 		}
-		if (node) node.dispatchEvent(new Event("change", {
-			bubbles: true,
-			cancelable: true
-		}));
 	}
 
 	resolveRef(schema, parentId = '') {
