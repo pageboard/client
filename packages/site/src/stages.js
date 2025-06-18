@@ -78,7 +78,7 @@ Page.connect(new class {
 				const query = {};
 				const extra = [];
 				const missing = [];
-				let status = 200, statusText = "OK";
+				let status = 200, statusText = "OK", info = "";
 				let location;
 				if (!state.status) state.status = 200;
 
@@ -95,10 +95,12 @@ Page.connect(new class {
 				if (extra.length > 0) {
 					status = 301;
 					statusText = 'Extra Query Parameters';
+					info = extra;
 					location = Page.format({ pathname: state.pathname, query });
 				} else if (missing.length > 0) {
 					status = 400;
 					statusText = 'Missing Query Parameters';
+					info = missing;
 				}
 				if (status > state.status) {
 					state.status = status;
@@ -110,7 +112,7 @@ Page.connect(new class {
 					equivStatus = `${state.status} ${state.statusText || ""}`.trim();
 					if (state.status != 200) {
 						// eslint-disable-next-line no-console
-						console.info(equivStatus);
+						console.info(equivStatus, info);
 					}
 					this.#setEquiv('Status', equivStatus);
 				}
