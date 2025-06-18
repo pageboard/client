@@ -402,8 +402,9 @@ class QueryCollectorFilter {
 		this.#query = query;
 		this.#state = state;
 	}
+
 	filter(ctx, val) {
-		const path = ctx.expr.path;
+		const { path } = ctx.expr;
 		if (path[0] != "$query") return val;
 		const { query, vars } = this.#state;
 		if (path.length > 1) {
@@ -440,10 +441,10 @@ Page.constructor.prototype.collector = function (query) {
 	return new QueryCollectorFilter(this, query);
 };
 
-Page.constructor.prototype.templatesQuery = function (node, collector) {
+Page.constructor.prototype.templatesQuery = function (attr, collector) {
 	const state = this;
-	const params = node.getAttribute('parameters') || '';
 	const $query = {};
+	if (!attr) return $query;
 	const scope = state.scope.copy();
 	scope.$hooks = {
 		...scope.$hooks,
@@ -463,7 +464,7 @@ Page.constructor.prototype.templatesQuery = function (node, collector) {
 			}
 		}
 	};
-	params.split(' ').map(str => {
+	attr.split(' ').map(str => {
 		return `[${str}]`;
 	}).join('').fuse({}, scope);
 	return $query;

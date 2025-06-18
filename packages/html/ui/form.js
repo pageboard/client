@@ -83,7 +83,7 @@ class HTMLElementForm extends Page.create(HTMLFormElement) {
 				state.vars.submit = true;
 			}
 			const actionLoc = Page.parse(this.getAttribute('action'));
-			Object.assign(actionLoc.query, state.templatesQuery(this));
+			Object.assign(actionLoc.query, state.templatesQuery(this.getAttribute('parameters')));
 			this.setAttribute('action', Page.format(actionLoc));
 			this.restore(state.scope);
 		} else {
