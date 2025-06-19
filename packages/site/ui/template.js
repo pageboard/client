@@ -69,6 +69,7 @@ class HTMLElementTemplate extends Page.Element {
 		if (list.length == 1) {
 			const ttl = Number.parseFloat(list[0]);
 			if (ttl && Number.isInteger(ttl)) {
+				clearTimeout(this.#refresh);
 				this.#refresh = setTimeout(async () => {
 					await this.#run(state);
 					this.#stream(state);
