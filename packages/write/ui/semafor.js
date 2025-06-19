@@ -675,7 +675,7 @@ Semafor.types.oneOf = function (key, schema, node, inst) {
 			<label for="[$key]">[title|else:$key]<small>[description|as:text|fail:*]</small></label>
 			<div class="ui compact icon menu">
 				<label class="ui radio checkbox item">
-					<input type="radio" name="[$key]" value="[$list|at:label|repeat:item|.const|or:]" checked="[item.const|eq:$def]">
+					<input type="radio" name="[$key]" value="[$list|at:label|repeat:item|.const|or:]" checked="[item.const|eq:$def]" title="[item.const]">
 					<span>[item.icon|as:html]</span>
 					<small>[item.description|fail:*]</small>
 				</label>
@@ -687,7 +687,7 @@ Semafor.types.oneOf = function (key, schema, node, inst) {
 			<label for="[$key]">[title|else:$key]<small>[description|as:text|fail:*]</small></label>
 			<div class="inline field">
 				<label class="ui radio checkbox">
-					<input type="radio" name="[$key]" value="[$list|at:div|repeat:item|.const|or:]" checked="[item.const|eq:$def]">
+					<input type="radio" name="[$key]" value="[$list|at:div|repeat:item|.const|or:]" checked="[item.const|eq:$def]" title="[item.const]">
 					<span>[item.title]</span>
 					<small>[item.description]</small>
 				</label>
@@ -698,7 +698,7 @@ Semafor.types.oneOf = function (key, schema, node, inst) {
 		field = node.dom(`<div class="inline field">
 			<label>[title|else:$key]<small>[description|as:text|fail:*]</small></label>
 			<select name="[$key]" class="ui compact dropdown">
-				<option value="[$list|repeat:item|.const|or:]" selected="[item.const|eq:$def]">[item.title|else:item.const]</option>
+				<option value="[$list|repeat:item|.const|or:]" selected="[item.const|eq:$def]" title="[item.const]">[item.title|else:item.const]</option>
 			</select>
 		</div>`).fuse(schema, scope);
 		node.appendChild(field);
@@ -822,7 +822,7 @@ Semafor.types.array = function (key, schema, node, inst) {
 			const fields = node.dom(`<div class="inline fields rtl">
 				<div class="inline field">
 					<label class="ui checkbox">
-						<input type="checkbox" name="[$key]" value="[items.anyOf|at:div|repeat:item|.const]">
+						<input type="checkbox" name="[$key]" value="[items.anyOf|at:div|repeat:item|.const]" title="[item.const]">
 						<span>[item.title]</span>
 						<small>[item.description]</small>
 					</label>
@@ -832,7 +832,7 @@ Semafor.types.array = function (key, schema, node, inst) {
 		} else {
 			frag.appendChild(node.dom(`<div class="inline field">
 				<select multiple name="[$key]">
-					<option value="[items.anyOf|repeat:item|.const|or:]">[item.title|else:item.const]</option>
+					<option value="[items.anyOf|repeat:item|.const|or:]" title="[item.const]">[item.title|else:item.const]</option>
 				</select>
 			</div>`).fuse(schema, { $key: key }));
 		}
