@@ -1,6 +1,6 @@
 {
   "name": "@pageboard/site",
-  "version": "0.17.9",
+  "version": "0.17.10",
   "description": "",
   "main": "src/pageboard.js",
   "scripts": {
