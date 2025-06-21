@@ -15,7 +15,7 @@ class HTMLElementLayout extends Page.create(HTMLDivElement) {
 			return;
 		}
 		const srcLoc = Page.parse(this.options.src);
-		const reqSrc = this.requestSrc(srcLoc);
+		const reqSrc = this.requestSrc(srcLoc, true);
 		if (!reqSrc) {
 			this.style.backgroundImage = '';
 		} else if (reqSrc != this.currentSrc) {

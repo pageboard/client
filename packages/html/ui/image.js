@@ -96,7 +96,7 @@ const HTMLElementImageConstructor = Superclass => class extends Superclass {
 		return this.image?.currentSrc;
 	}
 
-	requestSrc(srcLoc) {
+	requestSrc(srcLoc, self) {
 		const { crop, fit } = this;
 		const { w, h } = this.dimensions;
 		const r = {};
@@ -105,7 +105,10 @@ const HTMLElementImageConstructor = Superclass => class extends Superclass {
 				r.width = w;
 				r.height = h;
 			} else {
-				const { clientWidth, clientHeight } = this.offsetParent ?? {};
+				const {
+					clientWidth,
+					clientHeight
+				} = self ? this : (this.offsetParent ?? {});
 				r.width = clientWidth;
 				r.height = clientHeight;
 			}
