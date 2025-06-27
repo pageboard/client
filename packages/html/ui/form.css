@@ -50,6 +50,7 @@ element-select.active.ui.dropdown .menu {
 .ui.form .inline.fields {
 	align-items: end;
 	margin:0;
+	flex-wrap: wrap;
 }
 
 .ui.form[method="post"].unsaved button[type="submit"] {
