@@ -403,15 +403,15 @@ class Semafor {
 						}
 					}
 					if (Array.isArray(field.items)) {
-						val = field.items.map((itemField, i) => this.convert({ item: val[i] }, {
-							properties: { item: itemField }
-						}).item);
+						val = field.items.map((itemField, i) => this.convert(
+							{ item: val[i] },
+							{ properties: { item: itemField } }
+						)?.item).filter(item => item !== undefined);
 					} else {
-						val = val.map(v => this.convert({ item: v }, {
-							properties: {
-								item: field.items
-							}
-						}).item);
+						val = val.map(v => this.convert(
+							{ item: v },
+							{ properties: { item: field.items } }
+						)?.item).filter(item => item !== undefined);
 					}
 					if (field.nullable && val.length == 0) val = null;
 					break;
