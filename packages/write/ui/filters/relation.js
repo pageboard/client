@@ -19,8 +19,11 @@ Pageboard.schemaFilters.relation = class RelationFilter {
 			if (!type) return;
 			el = Pageboard.editor.element(type);
 		}
-		if (!el?.parents) return {};
-		if (!el.parents.title) el.parents.title = schema.title;
-		return el.parents;
+		const nullable = schema.nullable || (schema.anyOf || schema.oneOf || []).some(obj => obj.type == "null");
+		const rschema = { nullable };
+		if (!el?.parents) return rschema;
+		Object.assign(rschema, el.parents);
+		if (!rschema.title) rschema.title = schema.title;
+		return rschema;
 	}
 };
