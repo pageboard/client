@@ -20,7 +20,7 @@ class HTMLElementLayout extends Page.create(HTMLDivElement) {
 			this.style.backgroundImage = '';
 		} else if (reqSrc != this.currentSrc) {
 			this.#defer?.resolve();
-			this.#defer = new Deferred();
+			this.#defer = Promise.withResolvers();
 			const img = new Image();
 			img.addEventListener('load', this.#defer.resolve);
 			img.addEventListener('error',
@@ -28,7 +28,7 @@ class HTMLElementLayout extends Page.create(HTMLDivElement) {
 			);
 			img.src = this.currentSrc = reqSrc;
 			this.style.backgroundImage = `url("${reqSrc}")`;
-			return this.#defer;
+			return this.#defer.promise;
 		}
 	}
 	close() {

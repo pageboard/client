@@ -33,7 +33,7 @@ class HTMLElementSheet extends Page.create(HTMLDivElement) {
 				// pass
 			}
 			this.#defer?.resolve();
-			this.#defer = new Deferred();
+			this.#defer = Promise.withResolvers();
 			const img = new Image();
 			img.addEventListener('load', this.#defer.resolve);
 			img.addEventListener('error',
@@ -41,7 +41,7 @@ class HTMLElementSheet extends Page.create(HTMLDivElement) {
 			);
 			img.src = reqSrc;
 			this.style.setProperty('--image', `url("${reqSrc}")`);
-			return this.#defer;
+			return this.#defer.promise;
 		}
 	}
 	close() {

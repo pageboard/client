@@ -55,8 +55,7 @@
     "globals": {
       "Page": true,
       "Pageboard": true,
-      "VirtualHTMLElement": true,
-      "Deferred": true
+      "VirtualHTMLElement": true
     },
     "ignorePatterns": [
       "!**/*.js",

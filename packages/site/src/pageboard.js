@@ -6,9 +6,6 @@ import './utils';
 import 'window-page';
 import Scope from './scope';
 import './stages';
-import { Deferred } from 'class-deferred';
-
-window.Deferred = Deferred;
 
 const Pageboard = window.Pageboard ??= {};
 

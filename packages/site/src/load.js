@@ -1,7 +1,5 @@
-import { Deferred } from 'class-deferred';
-
 function load(node, head, priority = 0) {
-	const d = new Deferred();
+	const d = Promise.withResolvers();
 	const isLink = node.tagName == "LINK";
 	const live = node.ownerDocument == document && !(isLink && document.hidden);
 	if (live) {
@@ -21,7 +19,7 @@ function load(node, head, priority = 0) {
 	if (!cursor && isLink) cursor = head.querySelector('script');
 	head.insertBefore(node, cursor);
 	if (!live) d.resolve();
-	return d;
+	return d.promise;
 }
 
 export async function bundle(state, { scripts, stylesheets, priority }) {

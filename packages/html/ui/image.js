@@ -154,9 +154,9 @@ const HTMLElementImageConstructor = Superclass => class extends Superclass {
 		} else if (reqSrc != this.currentSrc) {
 			this.classList.add('loading');
 			this.#defer?.resolve();
-			this.#defer = new Deferred();
+			this.#defer = Promise.withResolvers();
 			img.setAttribute('src', reqSrc);
-			return this.#defer;
+			return this.#defer.promise;
 		}
 	}
 	captureLoad() {

@@ -24,9 +24,9 @@ window.Pageboard.InfiniteScroll = class {
 		});
 	}
 	waitRepaint() {
-		const d = new Deferred();
+		const d = Promise.withResolvers();
 		setTimeout(d.resolve, 250);
-		return d;
+		return d.promise;
 	}
 	start() {
 		this.active = true;

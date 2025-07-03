@@ -269,7 +269,7 @@ Pageboard.schemaHelpers.href = class Href {
 		const input = document.createElement('input');
 		input.type = "file";
 		input.multiple = true;
-		const defer = new Deferred();
+		const defer = Promise.withResolvers();
 		input.addEventListener('change', () => {
 			const fd = new FormData();
 			if (input.files.length == 0) return defer.resolve();
@@ -316,7 +316,7 @@ Pageboard.schemaHelpers.href = class Href {
 		input.value = null;
 		input.click();
 
-		const obj = await defer;
+		const obj = await defer.promise;
 		const hrefs = obj?.hrefs ?? [];
 		for (const item of hrefs) {
 			await this.insert(item);

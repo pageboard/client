@@ -40,7 +40,6 @@ Page.connect(loader);
 loader.update(Page);
 
 class Transition {
-	#defer;
 
 	static event(name) {
 		const low = name.toLowerCase();
@@ -78,7 +77,6 @@ class Transition {
 		from.after(to);
 	}
 	start() {
-		this.#defer = new Deferred();
 		if (!this.ok) {
 			this.destroy();
 		} else {
@@ -95,19 +93,11 @@ class Transition {
 	cancel() {
 		this.ok = false;
 		this.root.classList.remove('transitioning');
-		if (this.#defer) {
-			this.#defer.resolve();
-			this.#defer = null;
-		}
 	}
 	end() {
 		this.ok = false;
 		this.from.remove();
 		this.destroy();
-		if (this.#defer) {
-			this.#defer.resolve();
-			this.#defer = null;
-		}
 	}
 	scrollTo(obj) {
 		this.to.scrollTop = obj.top;

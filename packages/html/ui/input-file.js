@@ -53,7 +53,7 @@ class HTMLElementInputFile extends Page.create(HTMLInputElement) {
 	}
 
 	presubmit(state) {
-		if (this.#defer) return this.#defer;
+		if (this.#defer) return this.#defer.promise;
 		if (!this.files.length) return Promise.resolve();
 		const field = this.closest('.field');
 		field.classList.remove('success', 'error');
@@ -63,7 +63,7 @@ class HTMLElementInputFile extends Page.create(HTMLInputElement) {
 		}
 		track(0);
 		field.classList.add('loading');
-		this.#defer = new Deferred();
+		this.#defer = Promise.withResolvers();
 
 		const fail = (err) => {
 			field.classList.add('error');
@@ -132,7 +132,7 @@ class HTMLElementInputFile extends Page.create(HTMLInputElement) {
 		} catch (err) {
 			fail(err);
 		}
-		return this.#defer;
+		return this.#defer.promise;
 	}
 }
 

@@ -98,6 +98,7 @@ exports.page = {
 		'default',
 		'customElementsBuiltin',
 		'Element.prototype.dataset',
+		'Promise.withResolvers',
 		'fetch',
 		'URL',
 		'es2015', 'es2016', 'es2017', 'es2018',
