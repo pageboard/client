@@ -26,9 +26,8 @@ class HTMLElementQRCode extends Page.Element {
 				}
 			});
 			const svg = await p;
-			const svgDoc = new DOMParser().parseFromString(svg, 'application/xml');
-			this.textContent = '';
-			this.appendChild(svgDoc.documentElement);
+			this.innerHTML = '<img src="data:image/svg+xml,[svg|enc:url]" />';
+			this.fuse({ svg }, state.scope);
 		} catch (err) {
 			console.error(err);
 			this.classList.add('error');

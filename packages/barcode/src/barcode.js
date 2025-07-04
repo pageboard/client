@@ -27,8 +27,8 @@ class HTMLElementBarcode extends Page.Element {
 				textMargin: 0,
 				font: 'monospace; transform: scaleX(1.1) scaleY(0.8) translateX(-1.5%) translateY(21%); letter-spacing: 0.5px; font-weight: bold;' // this is more in the spirit of a barcode font
 			});
-			this.textContent = '';
-			this.appendChild(svgDoc.documentElement);
+			this.innerHTML = '<img src="data:image/svg+xml,[svg|enc:url]" />';
+			this.fuse({ svg: svgDoc.documentElement.outerHTML }, state.scope);
 		} catch (err) {
 			console.error(err);
 			this.classList.add('error');
