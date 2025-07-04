@@ -23,7 +23,7 @@
     "matchdom": "^19.2.1",
     "postinstall": "^0.11.2",
     "postinstall-pack": "^0.11.2",
-    "window-page": "^20.0.0"
+    "window-page": "^21.0.0"
   },
   "prepare": {
     ".": "pack lib/"
