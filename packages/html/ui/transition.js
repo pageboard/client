@@ -6,12 +6,6 @@ Object.defineProperty(document, 'body', {
 });
 
 const loader = new class {
-	ready(state) {
-		this.update(state.stage);
-	}
-	build(state) {
-		if (!document.hidden) document.body.hidden = true;
-	}
 	patch(state) {
 		this.update(state);
 	}
@@ -27,13 +21,12 @@ const loader = new class {
 		document.documentElement.dataset.stage = state.stage;
 	}
 	async setup(state) {
-		const tr = state.scope.transition;
-		await document.fonts?.ready;
-		document.body.hidden = false;
+		const { transition: tr } = state.scope;
+		if (!tr) return;
 		state.finish(async () => {
-			if (tr?.ok) return tr.start();
+			if (tr.ok) return tr.start();
 		});
-		tr?.end();
+		tr.end();
 	}
 };
 Page.connect(loader);

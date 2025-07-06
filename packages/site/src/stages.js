@@ -23,9 +23,12 @@ class TrackingIntersectionObserver extends IntersectionObserver {
 	}
 }
 
+Page.ready(state => {
+	if (!document.hidden) document.body.hidden = true;
+});
+
 Page.connect(new class {
 	#adv = false;
-
 	#getEquiv(name) {
 		const node = document.head.querySelector(`meta[http-equiv="${name}"]`);
 		return this.#parseEquiv(node?.content);
@@ -56,10 +59,6 @@ Page.connect(new class {
 		if (!str) return [];
 		if (Array.isArray(str)) return str;
 		return str.split(',').map(str => str.trim()).filter(str => Boolean(str.length));
-	}
-
-	ready(state) {
-		state.scope.$locks = this.#getEquiv('X-Upcache-Lock');
 	}
 
 	patch(state) {
@@ -128,7 +127,9 @@ Page.connect(new class {
 	}
 
 	paint(state) {
-		state.finish(() => {
+		state.finish(async () => {
+			await document.fonts?.ready;
+			document.body.hidden = false;
 			if (state.scope.$write || state.location == null) return;
 			const loc = Page.parse(state.location);
 			let same = true;
@@ -152,7 +153,7 @@ Page.connect(new class {
 		});
 	}
 
-	setup(state) {
+	async setup(state) {
 		try {
 			window.getSelection().removeAllRanges();
 		} catch (ex) {
