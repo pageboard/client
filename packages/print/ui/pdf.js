@@ -19,6 +19,13 @@ class HTMLElementBodyPrint extends Page.create(HTMLBodyElement) {
 			document.body.dataset.foldWidth = foldWidth;
 			state.vars.foldWidth = true;
 		}
+		const opts = this.options;
+		this.#setBodyStyle(this.#roundDims(this.#convertToPx({
+			width: `${opts.width}mm`,
+			height: `${opts.height}mm`,
+			margin: `${opts.margin}mm`,
+			foldWidth: `${opts.foldWidth}mm`
+		})), opts);
 	}
 	async paint(state) {
 		this.#removePrintButtons();
@@ -26,16 +33,7 @@ class HTMLElementBodyPrint extends Page.create(HTMLBodyElement) {
 		if (window.devicePixelRatio < 4 && window.matchMedia('print').matches) {
 			// TODO
 		}
-
-		this.#insertPrintStyle(
-			this.#roundDims(this.#convertToPx({
-				width: `${opts.width}mm`,
-				height: `${opts.height}mm`,
-				margin: `${opts.margin}mm`,
-				foldWidth: `${opts.foldWidth}mm`
-			})),
-			opts
-		);
+		this.#insertPrintStyle(opts);
 		if (state.scope.$write) {
 			return;
 		}
@@ -62,23 +60,24 @@ class HTMLElementBodyPrint extends Page.create(HTMLBodyElement) {
 		);
 		this.#stylesheet = null;
 	}
-	// https://unused-css.com/tools/border-gradient-generator
-	#insertPrintStyle(sheet, page) {
+	#setBodyStyle(sheet, page) {
 		const { margin, width, height, foldWidth } = sheet;
 		const actualWidth = page.width * (page.foldWidth ? 2 : 1) + page.foldWidth;
 		const actualHeight = page.height;
+		const { style } = document.body;
+		style.setProperty('--print-width', `${actualWidth}mm`);
+		style.setProperty('--print-height', `${actualHeight}mm`);
+		style.setProperty('--page-width', `${width}px`);
+		style.setProperty('--page-height', `${height}px`);
+		style.setProperty('--page-margin', `${margin}px`);
+		style.setProperty('--page-fold-width', `${foldWidth}px`);
+		style.setProperty('--page-fold-smooth', `${foldWidth ? 2 : 0}mm`);
+	}
+	#insertPrintStyle(page) {
+		const actualWidth = page.width * (page.foldWidth ? 2 : 1) + page.foldWidth;
+		const actualHeight = page.height;
 		const effectiveSheet = new CSSStyleSheet();
-		// candidate for https://css-tricks.com/css-modules-the-native-ones/
 		const printSheet = `
-			body {
-				--print-width: ${actualWidth}mm;
-				--print-height: ${actualHeight}mm;
-				--page-width: ${width}px;
-				--page-height: ${height}px;
-				--page-margin:${margin}px;
-				--page-fold-width: ${foldWidth}px;
-				--page-fold-smooth: ${foldWidth ? 2 : 0}mm;
-			}
 			@page {
 				size: ${actualWidth}mm ${actualHeight}mm;
 				margin: 0;

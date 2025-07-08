@@ -126,10 +126,10 @@ Page.connect(new class {
 		});
 	}
 
-	paint(state) {
-		state.finish(async () => {
-			await document.fonts?.ready;
-			document.body.hidden = false;
+	async paint(state) {
+		await document.fonts?.ready;
+		document.body.hidden = false;
+		state.finish(() => {
 			if (state.scope.$write || state.location == null) return;
 			const loc = Page.parse(state.location);
 			let same = true;
