@@ -4,8 +4,9 @@ element-qrcode {
 element-qrcode.error {
 	outline-color: rgb(255 0 0 / 50%) !important;
 }
-element-qrcode > img {
+element-qrcode > svg {
 	width:100%;
 	height:auto;
 	shape-rendering: crispedges;
 }
+

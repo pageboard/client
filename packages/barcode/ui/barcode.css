@@ -4,7 +4,7 @@ element-barcode {
 element-barcode.error {
 	outline-color: rgb(255 0 0 / 50%) !important;
 }
-element-barcode > img {
+element-barcode > svg {
 	width:100%;
 	height:auto;
 }
