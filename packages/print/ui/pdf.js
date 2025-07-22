@@ -20,12 +20,7 @@ class HTMLElementBodyPrint extends Page.create(HTMLBodyElement) {
 			state.vars.foldWidth = true;
 		}
 		const opts = this.options;
-		this.#setBodyStyle(this.#roundDims(this.#convertToPx({
-			width: `${opts.width}mm`,
-			height: `${opts.height}mm`,
-			margin: `${opts.margin}mm`,
-			foldWidth: `${opts.foldWidth}mm`
-		})), opts);
+		this.#setBodyStyle(opts);
 	}
 	async paint(state) {
 		this.#removePrintButtons();
@@ -60,18 +55,17 @@ class HTMLElementBodyPrint extends Page.create(HTMLBodyElement) {
 		);
 		this.#stylesheet = null;
 	}
-	#setBodyStyle(sheet, page) {
-		const { margin, width, height, foldWidth } = sheet;
+	#setBodyStyle(page) {
 		const actualWidth = page.width * (page.foldWidth ? 2 : 1) + page.foldWidth;
 		const actualHeight = page.height;
 		const { style } = document.body;
 		style.setProperty('--print-width', `${actualWidth}mm`);
 		style.setProperty('--print-height', `${actualHeight}mm`);
-		style.setProperty('--page-width', `${width}px`);
-		style.setProperty('--page-height', `${height}px`);
-		style.setProperty('--page-margin', `${margin}px`);
-		style.setProperty('--page-fold-width', `${foldWidth}px`);
-		style.setProperty('--page-fold-smooth', `${foldWidth ? 2 : 0}mm`);
+		style.setProperty('--page-width', `${page.width}mm`);
+		style.setProperty('--page-height', `${page.height}mm`);
+		style.setProperty('--page-margin', `${page.margin}mm`);
+		style.setProperty('--page-fold-width', `${page.foldWidth}mm`);
+		style.setProperty('--page-fold-smooth', `${page.foldWidth ? 2 : 0}mm`);
 	}
 	#insertPrintStyle(page) {
 		const actualWidth = page.width * (page.foldWidth ? 2 : 1) + page.foldWidth;
@@ -195,27 +189,6 @@ class HTMLElementBodyPrint extends Page.create(HTMLBodyElement) {
 
 	#removePrintButtons() {
 		document.querySelector('html > .pdf-menu')?.remove();
-	}
-
-	#convertToPx(styles) {
-		const d = document.body.appendChild(document.createElement('div'));
-		d.style.position = 'absolute';
-		const obj = {};
-		for (const [name, value] of Object.entries(styles)) {
-			d.style.width = value;
-			obj[name] = parseFloat(window.getComputedStyle(d).width);
-		}
-		d.remove();
-		return obj;
-	}
-
-	#roundDims(box) {
-		return {
-			margin: Math.round(100 * box.margin) / 100,
-			foldWidth: Math.round(100 * box.foldWidth) / 100,
-			width: Math.round(100 * box.width) / 100,
-			height: Math.round(100 * box.height) / 100
-		};
 	}
 }
 Page.define(`element-print`, HTMLElementBodyPrint, 'body');
