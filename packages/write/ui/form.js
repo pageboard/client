@@ -414,7 +414,7 @@ Pageboard.Controls.Form = class Form {
 		this.toggleExpr.classList.toggle('disabled', !canShowExpressions);
 		this.toggleExpr.classList.toggle('active', this.mode == "expr");
 		this.toggleExpr.firstElementChild.classList.toggle('yellow',
-			allBlocks.some(b => b.expr && Object.keys(b.expr).length)
+			allBlocks.some(b => b.expr && !Object.isEmpty(b.expr))
 		);
 
 		const unlocked = !allBlocks.some(
