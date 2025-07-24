@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/pageboard/client#readme",
   "devDependencies": {
-    "@pageboard/pagecut": "^0.17.5",
+    "@pageboard/pagecut": "^0.17.6",
     "postinstall": "^0.11.2",
     "postinstall-pack": "^0.11.3"
   },
