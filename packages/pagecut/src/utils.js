@@ -718,9 +718,9 @@ export default class Utils {
 	parseHTML(html) {
 		const metas = /(\s*<meta [^>]*>)*/.exec(html);
 		if (metas) {
-			html = html.slice(metas[0].length);
+			html = html.slice(metas[metas.length - 1].length);
 		}
-		const firstTag = /(?:<meta [^>]*>)*<([a-z][^>\s]+)/i.exec(html);
+		const firstTag = /<([a-z][^>\s]+)/i.exec(html);
 		let elt = Utils.offdoc.createElement("div");
 		let wrap;
 		let depth = 0;

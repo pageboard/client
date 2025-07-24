@@ -247,7 +247,7 @@ function createRootSpec(elt, obj, viewer) {
 		contentElement: function(dom) { return findContent(elt, dom, "root"); }
 	};
 	if (elt.context) {
-		if (elt.context.split(/\s*\|\s*/).some(tok => {
+		if (elt.context.split(/\s?\|\s?/).some(tok => {
 			while (tok.endsWith('/')) tok = tok.slice(0, -1);
 			return tok.indexOf('/') >= 0;
 		})) {

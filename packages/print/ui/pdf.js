@@ -12,7 +12,7 @@ class HTMLElementBodyPrint extends Page.create(HTMLBodyElement) {
 
 	patch(state) {
 		const { pages, foldWidth } = state.query;
-		if (pages != null && /^\d+-?\d*$/.test(pages)) {
+		if (pages != null && /^\d{1,3}-?\d{0,3}$/.test(pages)) {
 			state.vars.pages = true;
 		}
 		if (foldWidth != null) {

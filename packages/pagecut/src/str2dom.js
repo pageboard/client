@@ -1,15 +1,3 @@
-let innerHTMLBug = false;
-let bugTestDiv;
-if (typeof document !== 'undefined') {
-	bugTestDiv = document.createElement('div');
-	// Setup
-	bugTestDiv.innerHTML = '	<link/><table></table><a href="/a">a</a><input type="checkbox"/>';
-	// Make sure that link elements get serialized correctly by innerHTML
-	// This requires a wrapper element in IE
-	innerHTMLBug = !bugTestDiv.getElementsByTagName('link').length;
-	bugTestDiv = undefined;
-}
-
 const map = {
 	legend: [1, '<fieldset>', '</fieldset>'],
 	tr: [2, '<table><tbody>', '</tbody></table>'],
@@ -17,7 +5,7 @@ const map = {
 };
 // for script/link/style tags to work in IE6-8, you have to wrap
 // in a div with a non-whitespace character in front, ha!
-const defaultWrap = innerHTMLBug ? [1, 'X<div>', '</div>'] : [0, '', ''];
+const defaultWrap = [0, '', ''];
 
 map.td =
 map.th = [3, '<table><tbody><tr>', '</tr></tbody></table>'];
@@ -64,7 +52,7 @@ export default function parse(html, {doc, ns, frag}) {
 		return resultStr(html, doc, frag);
 	}
 
-	html = html.replace(/^\s+|\s+$/g, ''); // Remove leading/trailing whitespace
+	html = html.trim();
 
 	const tag = m[1];
 	let el;

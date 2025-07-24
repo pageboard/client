@@ -292,7 +292,7 @@ export default class Blocks extends BlocksView {
 		const bytes = new Uint8Array(10);
 		crypto.getRandomValues(bytes);
 		return btoa(String.fromCharCode(...bytes)).slice(0, 14)
-			.replace(/=+$/, '')
+			.replace(/={1,2}$/, '')
 			.replaceAll(/[/+]/g, () => {
 				return String.fromCharCode(Math.round(Math.random() * 25) + 97);
 			});
