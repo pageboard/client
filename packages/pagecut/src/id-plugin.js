@@ -11,11 +11,6 @@ export default class IdPlugin {
 
 	view(editor) {
 		this.editor = editor;
-		// FIXME is this really needed here ?
-		// const tr = editor.state.tr;
-		// if (this.processStandalone(tr, editor.state.doc, 0, false)) {
-		// 	editor.dispatch(tr);
-		// }
 		return {};
 	}
 	appendTransaction(trs, oldState, newState) {

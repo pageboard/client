@@ -135,9 +135,6 @@ export default class BlocksView {
 			}
 			delete block.children;
 		}
-		// if (block.blocks) {
-		// 	Object.assign(blocks, block.blocks);
-		// }
 		if (!fragment || !fragment.querySelectorAll) return;
 
 		const fragments = [fragment.nodeName == "BODY" ? fragment.parentNode : fragment];
