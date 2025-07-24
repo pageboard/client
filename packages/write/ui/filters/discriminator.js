@@ -10,8 +10,8 @@ Pageboard.schemaFilters.discriminator = class {
 		const copy = Object.assign({}, prop);
 		delete copy.discriminator;
 		delete copy.oneOf;
-		
-		const val = block.data[this.key]?.[disc];		
+
+		const val = block.data[this.key]?.[disc];
 		const sub = val !== undefined ? prop.oneOf.find(item => {
 			item = semafor.resolveRef(item);
 			return item.properties[disc]?.const == val;

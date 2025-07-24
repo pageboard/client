@@ -142,7 +142,7 @@ function nodeOptions(state, node) {
 		}
 		if (typeof def == "function") {
 			val = def(val);
-		}	else if (typeof def == "boolean") {
+		} else if (typeof def == "boolean") {
 			if (typeof val != "boolean") {
 				if (def === true) val = val != "false";
 				else val = val == "true";

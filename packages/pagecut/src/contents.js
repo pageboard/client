@@ -8,6 +8,7 @@ export default class Contents {
 			if (!c.nodes) {
 				if (c.marks) console.warn("contents has marks without nodes", list);
 				this.attrs.push(c);
+				return false;
 			} else {
 				return true;
 			}
@@ -98,7 +99,6 @@ export default class Contents {
 				if (cont !== undefined) copy[def.id] = cont;
 			}
 		}
-		if (block.virtual && Object.keys(copy).length == 0) return;
-		else return copy;
+		if (!block.virtual || Object.keys(copy).length > 0) return copy;
 	}
 }

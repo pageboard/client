@@ -105,7 +105,7 @@ export class RootNodeView {
 			if (uBlock.content) {
 				if (!oldBlock.content) {
 					sameData = false;
-				}	else for (const [name, attr] of Object.entries(uBlock.content)) {
+				} else for (const [name, attr] of Object.entries(uBlock.content)) {
 					if (oldBlock.content?.[name] != attr) sameData = false;
 				}
 			}

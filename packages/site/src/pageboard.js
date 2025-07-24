@@ -11,7 +11,7 @@ const Pageboard = window.Pageboard ??= {};
 
 (async () => {
 	const polyfills = [];
-	Object.entries(Pageboard.polyfills ?? {}).map(([name, ok]) => {
+	Object.entries(Pageboard.polyfills ?? {}).forEach(([name, ok]) => {
 		if (ok) return;
 		const { lang } = document.documentElement;
 		if (name.endsWith('*')) name = name.slice(0, -1) + lang;

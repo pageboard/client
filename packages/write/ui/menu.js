@@ -146,12 +146,16 @@ Pageboard.Controls.Menu = class Menu {
 		});
 		this.inlinesMenu.textContent = '';
 		if (inlineSpans.length && !isRootSelection) {
-			inlineSpans.forEach(dom => this.inlinesMenu.append(dom));
+			inlineSpans.forEach(dom => {
+				this.inlinesMenu.append(dom);
+			});
 		}
 		if (inlineBlocks.length) {
 			const inlineBlocksMenu = this.inlines.dom(`<div class="right menu"></div>`);
 			this.inlines.appendChild(inlineBlocksMenu);
-			inlineBlocks.forEach(dom => inlineBlocksMenu.appendChild(dom));
+			inlineBlocks.forEach(dom => {
+				inlineBlocksMenu.appendChild(dom);
+			});
 		}
 		if (isBlockSelection) {
 			if (!activeTab) {

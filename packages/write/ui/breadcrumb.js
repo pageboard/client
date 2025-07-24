@@ -110,7 +110,7 @@ Pageboard.Controls.Breadcrumb = class Breadcrumb {
 				if (item.dataset.focused == "last") subFocused = true;
 			}
 			selectors.push(sel);
-			if (item == target) return true;
+			return item === target;
 		});
 		const selector = selectors.join(' ');
 		const node = editor.root.querySelector(selector);

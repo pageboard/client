@@ -74,9 +74,7 @@ function binding(ctx, str) {
 }
 
 function block(ctx, obj) {
-	if (!obj) return;
-	if (typeof obj == "object" && obj.type && obj.id) return obj;
-	else return;
+	if (obj && typeof obj == "object" && obj.type && obj.id) return obj;
 }
 
 function render(ctx, block) {

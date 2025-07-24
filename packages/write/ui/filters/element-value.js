@@ -45,7 +45,6 @@ Pageboard.schemaFilters['element-value'] = class ElementValueFilter {
 			return { ...prop, ...empty };
 		} catch (err) {
 			console.warn("Cannot update element-value", formBlock, err);
-			return;
 		}
 	}
 };

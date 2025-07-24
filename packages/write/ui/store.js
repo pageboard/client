@@ -67,6 +67,7 @@ Pageboard.Controls.Store = class Store {
 			if (bid != rootId && block.data) {
 				return block.data.url == url && editor.element(block.type).group == "page";
 			}
+			return false;
 		});
 		return blocks[id];
 	}
@@ -460,8 +461,7 @@ Pageboard.Controls.Store = class Store {
 
 	static getParentBlock(id, initial, pre) {
 		const parent = initial[id] || pre[id];
-		if (!parent) return;
-		else if (parent.virtual) return this.getParentBlock(parent.virtual, initial, pre);
+		if (parent?.virtual) return this.getParentBlock(parent.virtual, initial, pre);
 		else return parent;
 	}
 
