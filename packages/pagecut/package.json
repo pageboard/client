@@ -1,6 +1,6 @@
 {
   "name": "@pageboard/pagecut",
-  "version": "0.17.5",
+  "version": "0.17.6",
   "description": "Extensible web content editor",
   "scripts": {
     "prepare": "postinstall",
@@ -41,11 +41,11 @@
     "prosemirror-inputrules": "1.5.0",
     "prosemirror-keymap": "1.2.3",
     "prosemirror-menu": "1.2.5",
-    "prosemirror-model": "1.25.1",
+    "prosemirror-model": "1.25.2",
     "prosemirror-state": "1.4.3",
     "prosemirror-tables": "^1.7.1",
     "prosemirror-transform": "1.10.4",
-    "prosemirror-view": "1.40.0"
+    "prosemirror-view": "1.40.1"
   },
   "prepare": {
     "prosemirror-model": "patch patches/prosemirror-model-pr-39.patch",
