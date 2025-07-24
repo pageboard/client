@@ -20,7 +20,7 @@
   "devDependencies": {
     "jsbarcode": "^3.12.1",
     "postinstall": "^0.11.2",
-    "postinstall-pack": "^0.11.2",
+    "postinstall-pack": "^0.11.3",
     "qrcode": "^1.5.4"
   },
   "prepare": {

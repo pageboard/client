@@ -21,7 +21,7 @@
   "devDependencies": {
     "@pageboard/flickity": "^2.3.2",
     "postinstall": "^0.11.2",
-    "postinstall-pack": "^0.11.2"
+    "postinstall-pack": "^0.11.3"
   },
   "prepare": {
     "./src/flickity.js": "pack lib/",

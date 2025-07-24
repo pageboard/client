@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "europa": "^6.0.0",
-    "postinstall-pack": "^0.11.2"
+    "postinstall-pack": "^0.11.3"
   },
   "prepare": {
     "src/europa.js": "pack lib/"

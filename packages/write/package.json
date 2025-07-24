@@ -27,7 +27,7 @@
     "duration-relativetimeformat": "^2.0.4",
     "fast-safe-stringify": "^2.1.1",
     "@pageboard/pagecut": "^0.17.5",
-    "postinstall-pack": "^0.11.2",
+    "postinstall-pack": "^0.11.3",
     "pretty-bytes": "^7.0.0",
     "speakingurl": "^14.0.1"
   },

@@ -19,7 +19,7 @@
   "homepage": "https://github.com/pageboard/client#readme",
   "devDependencies": {
     "postinstall": "^0.11.2",
-    "postinstall-pack": "^0.11.2"
+    "postinstall-pack": "^0.11.3"
   },
   "pageboard": {
     "version": "^0.16",
