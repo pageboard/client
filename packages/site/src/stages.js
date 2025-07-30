@@ -24,7 +24,15 @@ class TrackingIntersectionObserver extends IntersectionObserver {
 }
 
 Page.ready(state => {
-	if (!document.hidden) document.body.hidden = true;
+	// three(?) cases
+	// 1. the document is shown for the first time
+	// > await fonts to be ready ?
+	// 2. the navigation changed the pathname (build called)
+	// > keep current body, wait for new (hidden) body be built with fonts,
+	// > then show new body and remove old one (transition)
+	// 3. the navigation changed the query (patch called)
+	// > do not hide the body, do nothing or if possible freeze screen
+	// if (!document.hidden) document.body.hidden = true;
 });
 
 Page.connect(new class {
@@ -127,8 +135,6 @@ Page.connect(new class {
 	}
 
 	async paint(state) {
-		await document.fonts?.ready;
-		document.body.hidden = false;
 		state.finish(() => {
 			if (state.scope.$write || state.location == null) return;
 			const loc = Page.parse(state.location);
