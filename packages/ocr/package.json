@@ -40,10 +40,10 @@
     "elements": "elements/"
   },
   "dependencies": {
-    "postinstall": "^0.11.1",
+    "postinstall": "^0.11.2",
     "@tesseract.js-data/eng": "^1.0.0",
     "@tesseract.js-data/fra": "^1.0.0",
-    "tesseract.js": "^6.0.0",
+    "tesseract.js": "^6.0.1",
     "tesseract.js-core": "^6.0.0"
   }
 }
