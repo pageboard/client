@@ -44,16 +44,14 @@ Pageboard.Controls.Store = class Store {
 		this.window.removeEventListener('keydown', this.keydown, false);
 	}
 
-	static genId(len) {
-		if (!len) len = 8;
-		const arr = new Uint8Array(len);
-		window.crypto.getRandomValues(arr);
-		let str = "", byte;
-		for (let i = 0; i < arr.length; i++) {
-			byte = arr[i].toString(16);
-			if (byte.length == 1) byte = "0" + byte;
-			str += byte;
-		}
+	static genId(len = 14) {
+		const bytes = new Uint8Array(Math.round(len * 3 / 4));
+		crypto.getRandomValues(bytes);
+		const str = btoa(String.fromCharCode(...bytes)).slice(0, len)
+			.replace(/={1,2}$/, '')
+			.replaceAll(/[/+]/g, () => {
+				return String.fromCharCode(Math.round(Math.random() * 25) + 97);
+			});
 		Store.generated[str] = true;
 		return str;
 	}
