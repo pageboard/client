@@ -28,7 +28,7 @@
     "./src/qrcode.js": "pack lib/"
   },
   "pageboard": {
-    "version": "^0.16",
+    "version": "^0.17",
     "directories": [
       "elements",
       "lib",

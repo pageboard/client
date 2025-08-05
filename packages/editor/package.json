@@ -28,7 +28,7 @@
     "@pageboard/pagecut/src/menu.css": "pack lib/"
   },
   "pageboard": {
-    "version": "^0.16",
+    "version": "^0.17",
     "priority": -5,
     "directories": [
       "elements",

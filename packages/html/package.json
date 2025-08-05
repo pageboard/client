@@ -27,7 +27,7 @@
     "nouislider/dist/nouislider.css": "link lib/"
   },
   "pageboard": {
-    "version": "^0.16",
+    "version": "^0.17",
     "priority": -10,
     "directories": [
       "elements",

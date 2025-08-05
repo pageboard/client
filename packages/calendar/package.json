@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/pageboard/client#readme",
   "pageboard": {
-    "version": "^0.16",
+    "version": "^0.17",
     "directories": [
       "elements",
       "lib",

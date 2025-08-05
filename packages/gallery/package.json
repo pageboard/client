@@ -28,7 +28,7 @@
     "@pageboard/flickity/css/flickity.css": "pack lib/"
   },
   "pageboard": {
-    "version": "^0.16",
+    "version": "^0.17",
     "directories": [
       "element",
       "lib",

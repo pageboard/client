@@ -43,7 +43,7 @@
     "@pageboard/pagecut/src/editor.css": "pack lib/"
   },
   "pageboard": {
-    "version": "^0.16",
+    "version": "^0.17",
     "priority": -1000,
     "directories": [
       "elements",
