@@ -716,9 +716,9 @@ export default class Utils {
 	static offdoc = document.cloneNode(false);
 
 	parseHTML(html) {
-		const metas = /(\s*<meta [^>]*>)*/.exec(html);
-		if (metas) {
-			html = html.slice(metas[metas.length - 1].length);
+		const metas = /(\s*<meta [^>]*>)*/.exec(html)?.at(-1);
+		if (metas?.length) {
+			html = html.slice(metas.length);
 		}
 		const firstTag = /<([a-z][^>\s]+)/i.exec(html);
 		let elt = Utils.offdoc.createElement("div");

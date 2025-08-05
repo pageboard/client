@@ -97,6 +97,7 @@ exports.page = {
 	polyfills: [
 		'default',
 		'customElementsBuiltin',
+		'Array.prototype.at',
 		'Element.prototype.dataset',
 		'Promise.withResolvers',
 		'Promise.allSettled',
