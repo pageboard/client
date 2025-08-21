@@ -66,6 +66,14 @@
 #menu .ui.mini.menu:not(.vertical) .item {
 	padding: 0.3em 0.7em;
 }
+#menu .ui.labeled.icon.menu .item.deprecated {
+	display:none;
+}
+#menu .ui.labeled.icon.menu .item.active.deprecated {
+	display:flex;
+	background:red;
+	color:black;
+}
 
 #menu .icon.menu > .item:not([title]):not(.active) {
 	display:none;

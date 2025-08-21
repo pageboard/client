@@ -94,6 +94,7 @@ exports.card = {
 
 exports.cardlink = {
 	title: "Card Link",
+	deprecated: true,
 	menu: 'widget',
 	icon: '<i class="icons"><i class="linkify icon"></i><i class="corner add icon"></i></i>',
 	properties: {
