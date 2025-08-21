@@ -71,8 +71,9 @@
 }
 #menu .ui.labeled.icon.menu .item.active.deprecated {
 	display:flex;
-	background:red;
+	background-color:#ff000087;
 	color:black;
+	text-decoration: line-through;
 }
 
 #menu .icon.menu > .item:not([title], .active) {
