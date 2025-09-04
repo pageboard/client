@@ -76,7 +76,7 @@ class HTMLElementInputFile extends Page.create(HTMLInputElement) {
 			if (!obj.hrefs?.length) {
 				return fail(new Error("File rejected"));
 			}
-			this.value = obj.hrefs[0]?.pathname;
+			this.value = obj.hrefs[0]?.url;
 			field.classList.add('success');
 			field.classList.remove('loading');
 			this.#xhr = null;
