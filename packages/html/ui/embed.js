@@ -51,11 +51,13 @@ class HTMLElementEmbed extends Page.Element {
 			if (!state.scope.$write) {
 				iframe.allow = "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture";
 			}
+			iframe.src = '';
 			iframe.src = curSrc;
 		} else if (cur.hash != prev.hash) {
 			try {
 				iframe.contentWindow.location.replace(curSrc);
 			} catch {
+				iframe.src = '';
 				iframe.src = curSrc;
 			}
 		}
